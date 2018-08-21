@@ -55,7 +55,7 @@ setMethod("validateSummary", c("factor", "matrix"),
     predicted <- if(n > 2) {
       factor(max.col(predicted), levels = 1:n, labels = levels(observed))
     } else {
-      predicted[,2]
+      predicted[,n]
     }
     validateSummary(observed, predicted, ...)
   }
