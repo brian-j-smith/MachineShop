@@ -1,0 +1,36 @@
+import(methods)
+import(survival)
+
+importClassesFrom(party, RandomForest)
+
+importFrom(caret, createMultiFolds)
+importFrom(foreach, foreach, "%dopar%")
+importFrom(Hmisc, rcorr.cens)
+importFrom(irr, kappa2)
+importFrom(magrittr, "%>%")
+importFrom(ModelMetrics, auc, brier, ce, kappa, mae, rmse, sensitivity,
+           specificity)
+importFrom(R6, R6Class)
+importFrom(stats, approx, cor, model.frame, model.response, predict)
+importFrom(survivalROC, survivalROC)
+importFrom(utils, tail)
+
+
+export(create,
+       fit,
+       resample)
+
+export(AbstractModel,
+       CForestModel,
+       CoxModel,
+       CoxStepAICModel,
+       GBMModel,
+       GLMNetModel)
+
+export(AbstractControl,
+       CVControl)
+
+S3method(predict, CForestFit)
+S3method(predict, CoxFit)
+S3method(predict, GBMFit)
+S3method(predict, GLMNetFit)
