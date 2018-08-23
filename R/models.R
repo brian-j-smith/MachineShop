@@ -12,10 +12,10 @@ setMethod("initialize", "CForestModel",
       as(mfit, "CForestFit")
     }
     .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
-                                times = NULL, ...) {
+                                times = numeric(), ...) {
       object <- as(object, extends(class(object))[2])
       pred <- if(object@responses@is_censored) {
-        if(is.numeric(times)) {
+        if(length(times)) {
           predict(object, newdata = data, type = "prob") %>%
             sapply(function(fit) probs.survfit(fit, times)) %>%
             t
@@ -53,9 +53,9 @@ setMethod("initialize", "CoxModel",
       structure(mfit, class = c("CoxFit", class(mfit)))
     }
     .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
-                                times = NULL, ...) {
+                                times = numeric(), ...) {
       class(object) <- class(object)[-1]
-      pred <- if(is.numeric(times)) {
+      pred <- if(length(times)) {
         timevar <- all.vars(object$formula)[1]
         sapply(times, function(time) {
           data[[timevar]] <- time
@@ -93,7 +93,7 @@ setMethod("initialize", "CoxStepAICModel",
       structure(mfit, class = c("CoxFit", class(mfit)))
     }
     .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
-                                times = NULL, ...) {
+                                times = numeric(), ...) {
       CoxModel()@predict(object, data, type = type, times = times,
                          cutoff = cutoff)
     }
@@ -114,10 +114,10 @@ setMethod("initialize", "GBMModel",
       structure(mfit, class = c("GBMFit", class(mfit)))
     }
     .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
-                                times = NULL, ...) {
+                                times = numeric(), ...) {
       class(object) <- class(object)[-1]
       pred <- if(object$distribution$name == "coxph") {
-        if(is.numeric(times)) {
+        if(length(times)) {
           lp <- predict(object, n.trees = object$n.trees, type = "link")
           newlp <- predict(object, newdata = data, n.trees = object$n.trees,
                            type = "link")
@@ -157,14 +157,14 @@ setMethod("initialize", "GLMNetModel",
       structure(c(mfit, list(mf = mf)), class = c("GLMNetFit", class(mfit)))
     }
     .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
-                                times = NULL, ...) {
+                                times = numeric(), ...) {
       class(object) <- class(object)[-1]
       obj_terms <- terms(object$mf)
       newmf <- model.frame(obj_terms, data, na.action = NULL)
       newx <- model.matrix(obj_terms, newmf)[, -1, drop = FALSE]
       y <- model.response(object$mf)
       pred <- if(is.Surv(y)) {
-        if(is.numeric(times)) {
+        if(length(times)) {
           x <- model.matrix(obj_terms, object$mf)[, -1, drop = FALSE]
           lp <- predict(object, newx = x, type = "link") %>% drop
           newlp <- predict(object, newx = newx, type = "link") %>% drop

@@ -1,36 +1,16 @@
-AbstractControl <- R6Class(
-  "AbstractControl",
-  list(
-    summary = NULL,
-    cutoff = NULL,
-    cutoff.index = NULL,
-    survtimes = NULL,
-    initialize = function(summary = validateSummary, cutoff = 0.5,
-                          cutoff.index = function(sens, spec) sens + spec,
-                          survtimes = NULL) {
-      self$summary <- summary
-      self$cutoff <- cutoff
-      self$cutoff.index <- cutoff.index
-      self$survtimes <- sort(unique(survtimes))
-      self
-    }
-  )
-)
+setClass("CVControl",
+  slots = c(folds = "numeric", repeats = "numeric"),
+  contains = "AbstractControl")
 
+CVControl <- function(...) new("CVControl", ...)
 
-CVControl <- R6Class(
-  "CVControl",
-  inherit = AbstractControl,
-  list(
-    folds = NULL,
-    repeats = NULL,
-    initialize = function(folds = 10, repeats = 1, ...) {
-      super$initialize(...)
-      self$folds <- folds
-      self$repeats <- repeats
-      self
-    }
-  )
+setMethod("initialize", "CVControl",
+  function(.Object, folds = 10, repeats = 1, ...) {
+    .Object <- callNextMethod(.Object, ...)
+    .Object@folds <- folds
+    .Object@repeats <- repeats
+    .Object
+  }
 )
 
 

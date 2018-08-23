@@ -1,2 +1,0 @@
-setOldClass("AbstractControl")
-setOldClass("CVControl")

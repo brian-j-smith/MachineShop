@@ -20,8 +20,10 @@ export(create,
        fit,
        resample)
 
-export(AbstractControl,
-       CVControl)
+export(CVControl)
+
+exportClasses(AbstractControl,
+              CVControl)
 
 export(CForestModel,
        CoxModel,
