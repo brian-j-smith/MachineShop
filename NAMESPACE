@@ -20,15 +20,21 @@ export(create,
        fit,
        resample)
 
-export(AbstractModel,
-       CForestModel,
+export(AbstractControl,
+       CVControl)
+
+export(CForestModel,
        CoxModel,
        CoxStepAICModel,
        GBMModel,
        GLMNetModel)
 
-export(AbstractControl,
-       CVControl)
+exportClasses(AbstractModel,
+              CForestModel,
+              CoxModel,
+              CoxStepAICModel,
+              GBMModel,
+              GLMNetModel)
 
 S3method(predict, CForestFit)
 S3method(predict, CoxFit)

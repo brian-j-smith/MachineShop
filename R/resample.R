@@ -23,8 +23,8 @@ setMethod(".resample", "CVControl",
 
 
 validate <- function(formula, train, test, model, control) {
-  mfit <- model$fit(formula = formula, data = train)
-  pred <- model$predict(object = mfit, data = test, type = "prob",
+  mfit <- fit(formula, train, model)
+  pred <- model@predict(object = mfit, data = test, type = "prob",
                         times = control$survtimes)
   obs <- model.response(model.frame(formula, test, na.action = NULL))
   do.call(control$summary,

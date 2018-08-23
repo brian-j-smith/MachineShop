@@ -1,32 +1,18 @@
-AbstractModel <- R6Class(
-  "AbstractModel",
-  public = list(
-    params = NULL,
-    initialize = function(...) {
-      self$params <- list(...)
-      self
-    },
-    fit = function(formula, data) {
-      NULL
-    },
-    predict = function(object, data, ...) {
-      NULL
-    }
-  )
-)
+setClass("CForestFit", contains = "RandomForest")
 
+setClass("CForestModel", contains = "AbstractModel")
 
-CForestModel <- R6Class(
-  "CForestModel",
-  inherit = AbstractModel,
-  public = list(
-    fit = function(formula, data) {
-      mfit <- do.call(function(...) party::cforest(formula, data = data, ...),
-                      self$params)
+CForestModel <- function(...) new("CForestModel", ...)
+
+setMethod("initialize", "CForestModel",
+  function(.Object, ...) {
+    .Object <- callNextMethod(.Object, ...)
+    .Object@fit <- function(formula, data, ...) {
+      mfit <- party::cforest(formula, data = data, ...)
       as(mfit, "CForestFit")
-    },
-    predict = function(object, data, type = "response", cutoff = 0.5,
-                       times = NULL, ...) {
+    }
+    .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
+                                times = NULL, ...) {
       object <- as(object, extends(class(object))[2])
       pred <- if(object@responses@is_censored) {
         if(is.numeric(times)) {
@@ -50,21 +36,24 @@ CForestModel <- R6Class(
         pred
       }
     }
-  )
+    .Object
+  }
 )
 
 
-CoxModel <- R6Class(
-  "CoxModel",
-  inherit = AbstractModel,
-  public = list(
-    fit = function(formula, data) {
-      mfit <- do.call(function(...) coxph(formula, data = data, x = TRUE, ...),
-                      self$params)
+setClass("CoxModel", contains = "AbstractModel")
+
+CoxModel <- function(...) new("CoxModel", ...)
+
+setMethod("initialize", "CoxModel",
+  function(.Object, ...) {
+    .Object <- callNextMethod(.Object, ...)
+    .Object@fit <- function(formula, data, ...) {
+      mfit <- coxph(formula, data = data, x = TRUE, ...)
       structure(mfit, class = c("CoxFit", class(mfit)))
-    },
-    predict = function(object, data, type = "response", cutoff = 0.5,
-                       times = NULL, ...) {
+    }
+    .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
+                                times = NULL, ...) {
       class(object) <- class(object)[-1]
       pred <- if(is.numeric(times)) {
         timevar <- all.vars(object$formula)[1]
@@ -77,58 +66,55 @@ CoxModel <- R6Class(
       }
       if(type == "response") convert(object$y, pred, cutoff = cutoff) else pred
     }
-  )
+    .Object
+  }
 )
 
 
-CoxStepAICModel <- R6Class(
-  "CoxStepAICModel",
-  inherit = AbstractModel,
-  public = list(
-    scope = NULL,
-    direction = NULL,
-    k = NULL,
-    trace = NULL,
-    initialize = function(scope, direction = c("both", "backward", "forward"),
-                          trace = 0, k = 2, ...) {
-      super$initialize(...)
-      if(!missing(scope)) self$scope <- scope
-      self$direction <- match.arg(direction)
-      self$trace <- trace
-      self$k <- k
-    },
-    fit = function(formula, data) {
-      scope <- self$scope
+setClass("CoxStepAICModel", contains = "AbstractModel")
+
+CoxStepAICModel <- function(...) new("CoxStepAICModel", ...)
+
+setMethod("initialize", "CoxStepAICModel",
+  function(.Object, ...) {
+    .Object <- callNextMethod(.Object, ...)
+    .Object@fit <- function(formula, data, scope = list(),
+                            direction = c("both", "backward", "forward"),
+                            trace = 0, k = 2, ...) {
       if(is.null(scope$lower)) scope$lower <- ~ 1
       if(is.null(scope$upper)) scope$upper <- formula[-2]
-      rhs <- if(self$direction == "backward") scope$upper else scope$lower
+      direction <- match.arg(direction)
+      rhs <- if(direction == "backward") scope$upper else scope$lower
       formula <- update(formula, rhs)
       environment(formula) <- environment()
-      fit0 <- do.call(function(...) coxph(formula, data = data, x = TRUE, ...),
-                      self$params)
-      mfit <- MASS::stepAIC(fit0, scope = scope, direction = self$direction,
-                            trace = self$trace, k = self$k)
+      fit0 <- coxph(formula, data = data, x = TRUE, ...)
+      mfit <- MASS::stepAIC(fit0, scope = scope, direction = direction,
+                            trace = trace, k = k)
       structure(mfit, class = c("CoxFit", class(mfit)))
-    },
-    predict = function(object, data, type = "response", cutoff = 0.5,
-                       times = NULL, ...) {
-      CoxModel$new()$predict(object, data, type = type, times = times)
     }
-  )
+    .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
+                                times = NULL, ...) {
+      CoxModel()@predict(object, data, type = type, times = times,
+                         cutoff = cutoff)
+    }
+    .Object
+  }
 )
 
 
-GBMModel <- R6Class(
-  "GBMModel",
-  inherit = AbstractModel,
-  public = list(
-    fit = function(formula, data) {
-      mfit <- do.call(function(...) gbm::gbm(formula, data = data, ...),
-                      self$params)
+setClass("GBMModel", contains = "AbstractModel")
+
+GBMModel <- function(...) new("GBMModel", ...)
+
+setMethod("initialize", "GBMModel",
+  function(.Object, ...) {
+    .Object <- callNextMethod(.Object, ...)
+    .Object@fit <- function(formula, data, ...) {
+      mfit <- gbm::gbm(formula, data = data, ...)
       structure(mfit, class = c("GBMFit", class(mfit)))
-    },
-    predict = function(object, data, type = "response", cutoff = 0.5,
-                       times = NULL, ...) {
+    }
+    .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
+                                times = NULL, ...) {
       class(object) <- class(object)[-1]
       pred <- if(object$distribution$name == "coxph") {
         if(is.numeric(times)) {
@@ -151,24 +137,27 @@ GBMModel <- R6Class(
         pred
       }
     }
-  )
+    .Object
+  }
 )
 
 
-GLMNetModel <- R6Class(
-  "GLMNetModel",
-  inherit = AbstractModel,
-  public = list(
-    fit = function(formula, data) {
+setClass("GLMNetModel", contains = "AbstractModel")
+
+GLMNetModel <- function(...) new("GLMNetModel", ...)
+
+setMethod("initialize", "GLMNetModel",
+  function(.Object, ...) {
+    .Object <- callNextMethod(.Object, ...)
+    .Object@fit <- function(formula, data, ...) {
       mf <- model.frame(formula, data, na.action = NULL)
       x <- model.matrix(formula, mf)[, -1, drop = FALSE]
       y <- model.response(mf)
-      mfit <- do.call(function(...) glmnet::glmnet(x, y, nlambda = 1, ...),
-                      self$params)
+      mfit <- glmnet::glmnet(x, y, nlambda = 1, ...)
       structure(c(mfit, list(mf = mf)), class = c("GLMNetFit", class(mfit)))
-    },
-    predict = function(object, data, type = "response", cutoff = 0.5,
-                       times = NULL, ...) {
+    }
+    .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
+                                times = NULL, ...) {
       class(object) <- class(object)[-1]
       obj_terms <- terms(object$mf)
       newmf <- model.frame(obj_terms, data, na.action = NULL)
@@ -189,5 +178,6 @@ GLMNetModel <- R6Class(
       }
       if(type == "response") convert(y, pred, cutoff = cutoff) else pred
     }
-  )
+    .Object
+  }
 )

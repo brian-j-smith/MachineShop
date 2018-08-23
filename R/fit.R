@@ -3,13 +3,11 @@ fit <- function(formula, data, model) {
 }
 
 
-setGeneric(".fit", function(object, ...) standardGeneric(".fit"))
+setGeneric(".fit", function(object, x, ...) standardGeneric(".fit"))
 
 
-lapply(.modelNames, function(signature) {
-  setMethod(".fit", signature,
-    function(object, formula, data) {
-      object$fit(formula, data)
-    }
-  )
-})
+setMethod(".fit", c("AbstractModel", "formula"),
+  function(object, x, data) {
+    do.call(object@fit, c(list(formula = x, data = data), object@params))
+  }
+)
