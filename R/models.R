@@ -130,14 +130,12 @@ GBMModel <- R6Class(
     predict = function(object, data, type = "response", cutoff = 0.5,
                        times = NULL, ...) {
       class(object) <- class(object)[-1]
-      pred <- if(object$distribution == "coxph") {
+      pred <- if(object$distribution$name == "coxph") {
         if(is.numeric(times)) {
           lp <- predict(object, n.trees = object$n.trees, type = "link")
           newlp <- predict(object, newdata = data, n.trees = object$n.trees,
                            type = "link")
-          idx <- order(object$data$i.timeorder)
-          cumhaz <- basehaz(Surv(object$data$y[idx], object$data$Misc[idx]),
-                            exp(lp), times)
+          cumhaz <- basehaz(response.gbm(object), exp(lp), times)
           exp(exp(newlp - mean(lp)) %o% -cumhaz)
         } else {
           exp(predict(object, newdata = data, n.trees = object$n.trees,
@@ -148,9 +146,7 @@ GBMModel <- R6Class(
                 type = "response") %>% drop
       }
       if(type == "response") {
-        model.frame(object$Terms, df) %>%
-          model.response %>%
-          convert(pred, cutoff = cutoff)
+        convert(response.gbm(object), pred, cutoff = cutoff)
       } else {
         pred
       }
