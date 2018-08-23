@@ -11,7 +11,7 @@ importFrom(magrittr, "%>%")
 importFrom(ModelMetrics, auc, brier, ce, kappa, mae, rmse, sensitivity,
            specificity)
 importFrom(R6, R6Class)
-importFrom(stats, approx, cor, model.frame, model.response, predict)
+importFrom(stats, approx, cor, median, model.frame, model.response, predict, sd)
 importFrom(survivalROC, survivalROC)
 importFrom(utils, tail)
 
@@ -34,3 +34,4 @@ S3method(predict, CForestFit)
 S3method(predict, CoxFit)
 S3method(predict, GBMFit)
 S3method(predict, GLMNetFit)
+S3method(summary, Resamples)

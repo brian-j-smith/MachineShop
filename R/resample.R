@@ -15,7 +15,9 @@ setMethod(".resample", "CVControl",
             .packages = c("survival", "MLModels"),
             .combine = "rbind") %dopar% {
               validate(formula, data[foldid,], data[-foldid,], model, object)
-            } %>% as.data.frame
+            } %>%
+      as.data.frame %>%
+      structure(class = c("Resamples", "data.frame"))
   }
 )
 
