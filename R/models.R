@@ -9,7 +9,7 @@ AbstractModel <- R6Class(
     fit = function(formula, data) {
       NULL
     },
-    predict = function(object, data, times = NULL) {
+    predict = function(object, data, ...) {
       NULL
     }
   )
@@ -25,20 +25,29 @@ CForestModel <- R6Class(
                       self$params)
       as(mfit, "CForestFit")
     },
-    predict = function(object, data, times = NULL) {
+    predict = function(object, data, type = "response", cutoff = 0.5,
+                       times = NULL, ...) {
       object <- as(object, extends(class(object))[2])
-      if(object@responses@is_censored) {
+      pred <- if(object@responses@is_censored) {
         if(is.numeric(times)) {
           predict(object, newdata = data, type = "prob") %>%
             sapply(function(fit) probs.survfit(fit, times)) %>%
             t
+        } else if(type == "response") {
+          predict(object, newdata = data, type = "response")
         } else {
           log(2) / predict(object, newdata = data, type = "response")
         }
       } else {
         predict(object, newdata = data, type = "prob") %>%
           unlist %>%
-          matrix(nrow = nrow(data), byrow = TRUE)
+          matrix(nrow = nrow(data), byrow = TRUE) %>%
+          drop
+      }
+      if(type == "response") {
+        convert(object@responses@variables[[1]], pred, cutoff = cutoff)
+      } else {
+        pred
       }
     }
   )
@@ -54,9 +63,10 @@ CoxModel <- R6Class(
                       self$params)
       structure(mfit, class = c("CoxFit", class(mfit)))
     },
-    predict = function(object, data, times = NULL) {
+    predict = function(object, data, type = "response", cutoff = 0.5,
+                       times = NULL, ...) {
       class(object) <- class(object)[-1]
-      if(is.numeric(times)) {
+      pred <- if(is.numeric(times)) {
         timevar <- all.vars(object$formula)[1]
         sapply(times, function(time) {
           data[[timevar]] <- time
@@ -65,6 +75,7 @@ CoxModel <- R6Class(
       } else {
         predict(object, newdata = data, type = "risk")
       }
+      if(type == "response") convert(object$y, pred, cutoff = cutoff) else pred
     }
   )
 )
@@ -99,8 +110,9 @@ CoxStepAICModel <- R6Class(
                             trace = self$trace, k = self$k)
       structure(mfit, class = c("CoxFit", class(mfit)))
     },
-    predict = function(object, data, times = NULL) {
-      CoxModel$new()$predict(object, data, times)
+    predict = function(object, data, type = "response", cutoff = 0.5,
+                       times = NULL, ...) {
+      CoxModel$new()$predict(object, data, type = type, times = times)
     }
   )
 )
@@ -115,9 +127,10 @@ GBMModel <- R6Class(
                       self$params)
       structure(mfit, class = c("GBMFit", class(mfit)))
     },
-    predict = function(object, data, times = NULL) {
+    predict = function(object, data, type = "response", cutoff = 0.5,
+                       times = NULL, ...) {
       class(object) <- class(object)[-1]
-      if(object$distribution == "coxph") {
+      pred <- if(object$distribution == "coxph") {
         if(is.numeric(times)) {
           lp <- predict(object, n.trees = object$n.trees, type = "link")
           newlp <- predict(object, newdata = data, n.trees = object$n.trees,
@@ -133,6 +146,13 @@ GBMModel <- R6Class(
       } else {
         predict(object, newdata = data, n.trees = object$n.trees,
                 type = "response") %>% drop
+      }
+      if(type == "response") {
+        model.frame(object$Terms, df) %>%
+          model.response %>%
+          convert(pred, cutoff = cutoff)
+      } else {
+        pred
       }
     }
   )
@@ -151,13 +171,14 @@ GLMNetModel <- R6Class(
                       self$params)
       structure(c(mfit, list(mf = mf)), class = c("GLMNetFit", class(mfit)))
     },
-    predict = function(object, data, times = NULL) {
+    predict = function(object, data, type = "response", cutoff = 0.5,
+                       times = NULL, ...) {
       class(object) <- class(object)[-1]
       obj_terms <- terms(object$mf)
       newmf <- model.frame(obj_terms, data, na.action = NULL)
       newx <- model.matrix(obj_terms, newmf)[, -1, drop = FALSE]
       y <- model.response(object$mf)
-      if(is.Surv(y)) {
+      pred <- if(is.Surv(y)) {
         if(is.numeric(times)) {
           x <- model.matrix(obj_terms, object$mf)[, -1, drop = FALSE]
           lp <- predict(object, newx = x, type = "link") %>% drop
@@ -170,6 +191,7 @@ GLMNetModel <- R6Class(
       } else {
         predict(object, newx = newx, type = "response") %>% drop
       }
+      if(type == "response") convert(y, pred, cutoff = cutoff) else pred
     }
   )
 )

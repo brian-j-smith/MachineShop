@@ -1,21 +1,26 @@
-predict.R6 <- function(class, ...) class$new()$predict(...)
-
-
-predict.CForestFit <- function(object, data, times = NULL, ...) {
-  predict.R6(CForestModel, object, data, times)
+predict.CForestFit <- function(object, data, type = "response", cutoff = 0.5,
+                               times = NULL, ...) {
+  CForestModel$new()$predict(object, data, type = type, cutoff = cutoff,
+                             times = times)
 }
 
 
-predict.CoxFit <- function(object, data, times = NULL, ...) {
-  predict.R6(CoxModel, object, data, times)
+predict.CoxFit <- function(object, data, type = "response", cutoff = 0.5,
+                           times = NULL, ...) {
+  CoxModel$new()$predict(object, data, type = type, cutoff = cutoff,
+                         times = times)
 }
 
 
-predict.GBMFit <- function(object, data, times = NULL, ...) {
-  predict.R6(GBMModel, object, data, times)
+predict.GBMFit <- function(object, data, type = "response", cutoff = 0.5,
+                           times = NULL, ...) {
+  GBMModel$new()$predict(object, data, type = type, cutoff = cutoff,
+                         times = times)
 }
 
 
-predict.GLMNetFit <- function(object, data, times = NULL, ...) {
-  predict.R6(GLMNetModel, object, data, times)
+predict.GLMNetFit <- function(object, data, type = "response", cutoff = 0.5,
+                              times = NULL, ...) {
+  GLMNetModel$new()$predict(object, data, type = type, cutoff = cutoff,
+                            times = times)
 }
