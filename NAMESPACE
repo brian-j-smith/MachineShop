@@ -10,14 +10,12 @@ importFrom(irr, kappa2)
 importFrom(magrittr, "%>%")
 importFrom(ModelMetrics, auc, brier, ce, kappa, mae, rmse, sensitivity,
            specificity)
-importFrom(R6, R6Class)
 importFrom(stats, approx, cor, median, model.frame, model.response, predict, sd)
 importFrom(survivalROC, survivalROC)
 importFrom(utils, tail)
 
 
-export(create,
-       fit,
+export(fit,
        resample)
 
 export(CVControl)

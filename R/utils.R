@@ -1,12 +1,3 @@
-create <- function(class, ...) {
-  if(is.character(class) || isClassDef(class)) {
-    new(class, ...)
-  } else {
-    class$new(...)
-  }
-}
-
-
 basehaz <- function(y, risk, times) {
   y_times <- unique(y[,"time"]) %>% sort
   nrisk <- rowsum(risk, y[,"time"]) %>% rev %>% cumsum %>% rev
