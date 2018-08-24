@@ -1,4 +1,4 @@
-setClass("CForestFit", contains = "RandomForest")
+setClass("CForestFit", contains = c("AbstractModelFit", "RandomForest"))
 
 setClass("CForestModel", contains = "AbstractModel")
 
@@ -8,12 +8,12 @@ setMethod("initialize", "CForestModel",
   function(.Object, ...) {
     .Object <- callNextMethod(.Object, ...)
     .Object@fit <- function(formula, data, ...) {
-      mfit <- party::cforest(formula, data = data, ...)
-      as(mfit, "CForestFit")
+      party::cforest(formula, data = data, ...) %>%
+        asModelFit("CForestFit", "CForestModel")
     }
     .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
                                 times = numeric(), ...) {
-      object <- as(object, extends(class(object))[2])
+      object <- as(object, "RandomForest")
       pred <- if(object@responses@is_censored) {
         if(length(times)) {
           predict(object, newdata = data, type = "prob") %>%
@@ -49,12 +49,12 @@ setMethod("initialize", "CoxModel",
   function(.Object, ...) {
     .Object <- callNextMethod(.Object, ...)
     .Object@fit <- function(formula, data, ...) {
-      mfit <- coxph(formula, data = data, x = TRUE, ...)
-      structure(mfit, class = c("CoxFit", class(mfit)))
+      coxph(formula, data = data, x = TRUE, ...) %>%
+        asModelFit("CoxFit", "CoxModel")
     }
     .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
                                 times = numeric(), ...) {
-      class(object) <- class(object)[-1]
+      class(object) <- class(object)[-(1:2)]
       pred <- if(length(times)) {
         timevar <- all.vars(object$formula)[1]
         sapply(times, function(time) {
@@ -88,9 +88,9 @@ setMethod("initialize", "CoxStepAICModel",
       formula <- update(formula, rhs)
       environment(formula) <- environment()
       fit0 <- coxph(formula, data = data, x = TRUE, ...)
-      mfit <- MASS::stepAIC(fit0, scope = scope, direction = direction,
-                            trace = trace, k = k)
-      structure(mfit, class = c("CoxFit", class(mfit)))
+      MASS::stepAIC(fit0, scope = scope, direction = direction, trace = trace,
+                    k = k) %>%
+        asModelFit("CoxFit", "CoxStepAICModel")
     }
     .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
                                 times = numeric(), ...) {
@@ -110,12 +110,12 @@ setMethod("initialize", "GBMModel",
   function(.Object, ...) {
     .Object <- callNextMethod(.Object, ...)
     .Object@fit <- function(formula, data, ...) {
-      mfit <- gbm::gbm(formula, data = data, ...)
-      structure(mfit, class = c("GBMFit", class(mfit)))
+      gbm::gbm(formula, data = data, ...) %>%
+        asModelFit("GBMFit", "GBMModel")
     }
     .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
                                 times = numeric(), ...) {
-      class(object) <- class(object)[-1]
+      class(object) <- class(object)[-(1:2)]
       pred <- if(object$distribution$name == "coxph") {
         if(length(times)) {
           lp <- predict(object, n.trees = object$n.trees, type = "link")
@@ -154,11 +154,12 @@ setMethod("initialize", "GLMNetModel",
       x <- model.matrix(formula, mf)[, -1, drop = FALSE]
       y <- model.response(mf)
       mfit <- glmnet::glmnet(x, y, nlambda = 1, ...)
-      structure(c(mfit, list(mf = mf)), class = c("GLMNetFit", class(mfit)))
+      mfit$mf <- mf
+      asModelFit(mfit, "GLMNetFit", "GLMNetModel")
     }
     .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
                                 times = numeric(), ...) {
-      class(object) <- class(object)[-1]
+      class(object) <- class(object)[-(1:2)]
       obj_terms <- terms(object$mf)
       newmf <- model.frame(obj_terms, data, na.action = NULL)
       newx <- model.matrix(obj_terms, newmf)[, -1, drop = FALSE]

@@ -35,3 +35,21 @@ setMethod("initialize", "AbstractModel",
     .Object
   }
 )
+
+
+setClass("AbstractModelFit", slots = c(.predict = "function"),
+         contains ="VIRTUAL")
+
+asModelFit <- function(object, Class, ModelClass) {
+  predict <- new(ModelClass)@predict
+  if(isS4(object)) {
+    object <- as(object, Class)
+    object@.predict <- predict
+  } else if(is.list(object)) {
+    class(object) <- c(Class, "AbstractModelFit", class(object))
+    object$.predict <- predict
+  } else {
+    stop("invalid class object")
+  }
+  object
+}

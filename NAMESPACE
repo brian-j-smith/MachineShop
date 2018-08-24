@@ -16,9 +16,6 @@ importFrom(survivalROC, survivalROC)
 importFrom(utils, tail)
 
 
-export(fit,
-       resample)
-
 export(CVControl)
 
 exportClasses(AbstractControl,
@@ -37,8 +34,10 @@ exportClasses(AbstractModel,
               GBMModel,
               GLMNetModel)
 
-S3method(predict, CForestFit)
-S3method(predict, CoxFit)
-S3method(predict, GBMFit)
-S3method(predict, GLMNetFit)
+exportClasses(AbstractModelFit)
+
+exportMethods(fit,
+              resample)
+
+S3method(predict, AbstractModelFit)
 S3method(summary, Resamples)
