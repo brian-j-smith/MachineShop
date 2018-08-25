@@ -14,12 +14,12 @@ setMethod("initialize", "CVControl",
 )
 
 
-setGeneric("validateSummary", function(observed, predicted, ...) {
-  standardGeneric("validateSummary")
+setGeneric("resampleSummary", function(observed, predicted, ...) {
+  standardGeneric("resampleSummary")
 })
 
 
-setMethod("validateSummary", c("factor", "factor"),
+setMethod("resampleSummary", c("factor", "factor"),
   function(observed, predicted, ...) {
     ratings <- cbind(observed, predicted)
     c("Accuracy" = 1 - ce(observed, predicted),
@@ -29,7 +29,7 @@ setMethod("validateSummary", c("factor", "factor"),
 )
 
 
-setMethod("validateSummary", c("factor", "matrix"),
+setMethod("resampleSummary", c("factor", "matrix"),
   function(observed, predicted, ...) {
     n <- nlevels(observed)
     predicted <- if(n > 2) {
@@ -37,12 +37,12 @@ setMethod("validateSummary", c("factor", "matrix"),
     } else {
       predicted[,n]
     }
-    validateSummary(observed, predicted, ...)
+    resampleSummary(observed, predicted, ...)
   }
 )
 
 
-setMethod("validateSummary", c("factor", "numeric"),
+setMethod("resampleSummary", c("factor", "numeric"),
   function(observed, predicted, cutoff, cutoff.index, ...) {
     observed <- observed == levels(observed)[2]
     sens <- sensitivity(observed, predicted, cutoff)
@@ -58,7 +58,7 @@ setMethod("validateSummary", c("factor", "numeric"),
 )
 
 
-setMethod("validateSummary", c("numeric"),
+setMethod("resampleSummary", c("numeric"),
   function(observed, predicted, ...) {
     c("RMSE" = rmse(observed, predicted),
       "RSquare" = cor(observed, predicted, use = "pairwise.complete.obs")^2,
@@ -67,7 +67,7 @@ setMethod("validateSummary", c("numeric"),
 )
 
 
-setMethod("validateSummary", c("Surv", "matrix"),
+setMethod("resampleSummary", c("Surv", "matrix"),
   function(observed, predicted, survtimes, ...) {
     ntimes <- length(survtimes)
     roc <- brier <- rep(NA, ntimes)
@@ -87,7 +87,7 @@ setMethod("validateSummary", c("Surv", "matrix"),
 )
 
 
-setMethod("validateSummary", c("Surv", "numeric"),
+setMethod("resampleSummary", c("Surv", "numeric"),
   function(observed, predicted, ...) {
     c("CIndex" = rcorr.cens(-predicted, observed)[[1]])
   }

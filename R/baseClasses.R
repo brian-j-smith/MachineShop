@@ -5,7 +5,7 @@ setClass("AbstractControl",
 )
 
 setMethod("initialize", "AbstractControl",
-  function(.Object, summary = validateSummary, cutoff = 0.5,
+  function(.Object, summary = resampleSummary, cutoff = 0.5,
            cutoff.index = function(sens, spec) sens + spec,
            survtimes = numeric(), ...) {
     callNextMethod(.Object, summary = summary, cutoff = cutoff,
