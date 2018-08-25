@@ -8,7 +8,7 @@ setMethod("fit", c("formula", "data.frame"),
 )
 
 
-setMethod("fit", c("AbstractModel", "formula"),
+setMethod("fit", c("MLModel", "formula"),
   function(object, x, data, ...) {
     do.call(object@fit, c(list(formula = x, data = data), object@params))
   }

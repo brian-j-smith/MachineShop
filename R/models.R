@@ -1,19 +1,16 @@
-setClass("CForestFit", contains = c("AbstractModelFit", "RandomForest"))
+setClass("CForestFit", contains = c("MLModelFit", "RandomForest"))
 
-setClass("CForestModel", contains = "AbstractModel")
-
-CForestModel <- function(...) new("CForestModel", ...)
-
-setMethod("initialize", "CForestModel",
-  function(.Object, ...) {
-    .Object <- callNextMethod(.Object, ...)
-    .Object@fit <- function(formula, data, ...) {
+CForestModel <- function(...) {
+  MLModel(
+    name = "CForestModel",
+    params = list(...),
+    fit = function(formula, data, ...) {
       party::cforest(formula, data = data, ...) %>%
-        asModelFit("CForestFit", "CForestModel")
-    }
-    .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
-                                times = numeric(), ...) {
-      object <- as(object, "RandomForest")
+        asMLModelFit("CForestFit", CForestModel())
+    },
+    predict = function(object, data, type = "response", cutoff = 0.5,
+                       times = numeric(), ...) {
+      object <- asParentFit(object)
       pred <- if(object@responses@is_censored) {
         if(length(times)) {
           predict(object, newdata = data, type = "prob") %>%
@@ -36,25 +33,21 @@ setMethod("initialize", "CForestModel",
         pred
       }
     }
-    .Object
-  }
-)
+  )
+}
 
 
-setClass("CoxModel", contains = "AbstractModel")
-
-CoxModel <- function(...) new("CoxModel", ...)
-
-setMethod("initialize", "CoxModel",
-  function(.Object, ...) {
-    .Object <- callNextMethod(.Object, ...)
-    .Object@fit <- function(formula, data, ...) {
+CoxModel <- function(...) {
+  MLModel(
+    name = "CoxModel",
+    params = list(...),
+    fit = function(formula, data, ...) {
       coxph(formula, data = data, x = TRUE, ...) %>%
-        asModelFit("CoxFit", "CoxModel")
-    }
-    .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
-                                times = numeric(), ...) {
-      class(object) <- class(object)[-(1:2)]
+        asMLModelFit("CoxFit", CoxModel())
+    },
+    predict = function(object, data, type = "response", cutoff = 0.5,
+                       times = numeric(), ...) {
+      object <- asParentFit(object)
       pred <- if(length(times)) {
         timevar <- all.vars(object$formula)[1]
         sapply(times, function(time) {
@@ -66,21 +59,17 @@ setMethod("initialize", "CoxModel",
       }
       if(type == "response") convert(object$y, pred, cutoff = cutoff) else pred
     }
-    .Object
-  }
-)
+  )
+}
 
 
-setClass("CoxStepAICModel", contains = "AbstractModel")
-
-CoxStepAICModel <- function(...) new("CoxStepAICModel", ...)
-
-setMethod("initialize", "CoxStepAICModel",
-  function(.Object, ...) {
-    .Object <- callNextMethod(.Object, ...)
-    .Object@fit <- function(formula, data, scope = list(),
-                            direction = c("both", "backward", "forward"),
-                            trace = 0, k = 2, ...) {
+CoxStepAICModel <- function(...) {
+  MLModel(
+    name = "CoxStepAICModel",
+    params = list(...),
+    fit = function(formula, data, scope = list(),
+                   direction = c("both", "backward", "forward"), trace = 0,
+                   k = 2, ...) {
       if(is.null(scope$lower)) scope$lower <- ~ 1
       if(is.null(scope$upper)) scope$upper <- formula[-2]
       direction <- match.arg(direction)
@@ -90,32 +79,24 @@ setMethod("initialize", "CoxStepAICModel",
       fit0 <- coxph(formula, data = data, x = TRUE, ...)
       MASS::stepAIC(fit0, scope = scope, direction = direction, trace = trace,
                     k = k) %>%
-        asModelFit("CoxFit", "CoxStepAICModel")
-    }
-    .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
-                                times = numeric(), ...) {
-      CoxModel()@predict(object, data, type = type, times = times,
-                         cutoff = cutoff)
-    }
-    .Object
-  }
-)
+        asMLModelFit("CoxFit", CoxModel())
+    },
+    predict = CoxModel()@predict
+  )
+}
 
 
-setClass("GBMModel", contains = "AbstractModel")
-
-GBMModel <- function(...) new("GBMModel", ...)
-
-setMethod("initialize", "GBMModel",
-  function(.Object, ...) {
-    .Object <- callNextMethod(.Object, ...)
-    .Object@fit <- function(formula, data, ...) {
+GBMModel <- function(...) {
+  MLModel(
+    name = "GBMModel",
+    params = list(...),
+    fit = function(formula, data, ...) {
       gbm::gbm(formula, data = data, ...) %>%
-        asModelFit("GBMFit", "GBMModel")
-    }
-    .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
-                                times = numeric(), ...) {
-      class(object) <- class(object)[-(1:2)]
+        asMLModelFit("GBMFit", GBMModel())
+    },
+    predict = function(object, data, type = "response", cutoff = 0.5,
+                       times = numeric(), ...) {
+      object <- asParentFit(object)
       pred <- if(object$distribution$name == "coxph") {
         if(length(times)) {
           lp <- predict(object, n.trees = object$n.trees, type = "link")
@@ -137,36 +118,33 @@ setMethod("initialize", "GBMModel",
         pred
       }
     }
-    .Object
-  }
-)
+  )
+}
 
 
-setClass("GLMNetModel", contains = "AbstractModel")
-
-GLMNetModel <- function(...) new("GLMNetModel", ...)
-
-setMethod("initialize", "GLMNetModel",
-  function(.Object, ...) {
-    .Object <- callNextMethod(.Object, ...)
-    .Object@fit <- function(formula, data, ...) {
+GLMNetModel <- function(...) {
+  MLModel(
+    name = "GLMNetModel",
+    params = list(...),
+    fit = function(formula, data, ...) {
       mf <- model.frame(formula, data, na.action = NULL)
       x <- model.matrix(formula, mf)[, -1, drop = FALSE]
       y <- model.response(mf)
       mfit <- glmnet::glmnet(x, y, nlambda = 1, ...)
       mfit$mf <- mf
-      asModelFit(mfit, "GLMNetFit", "GLMNetModel")
-    }
-    .Object@predict <- function(object, data, type = "response", cutoff = 0.5,
-                                times = numeric(), ...) {
-      class(object) <- class(object)[-(1:2)]
-      obj_terms <- terms(object$mf)
+      asMLModelFit(mfit, "GLMNetFit", GLMNetModel())
+    },
+    predict = function(object, data, type = "response", cutoff = 0.5,
+                       times = numeric(), ...) {
+      mf <- object$mf
+      object <- asParentFit(object)
+      obj_terms <- terms(mf)
       newmf <- model.frame(obj_terms, data, na.action = NULL)
       newx <- model.matrix(obj_terms, newmf)[, -1, drop = FALSE]
-      y <- model.response(object$mf)
+      y <- model.response(mf)
       pred <- if(is.Surv(y)) {
         if(length(times)) {
-          x <- model.matrix(obj_terms, object$mf)[, -1, drop = FALSE]
+          x <- model.matrix(obj_terms, mf)[, -1, drop = FALSE]
           lp <- predict(object, newx = x, type = "link") %>% drop
           newlp <- predict(object, newx = newx, type = "link") %>% drop
           cumhaz <- basehaz(y, exp(lp), times)
@@ -179,6 +157,5 @@ setMethod("initialize", "GLMNetModel",
       }
       if(type == "response") convert(y, pred, cutoff = cutoff) else pred
     }
-    .Object
-  }
-)
+  )
+}
