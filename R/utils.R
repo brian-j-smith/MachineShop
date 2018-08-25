@@ -17,7 +17,17 @@ probs.survfit <- function(object, times) {
 }
 
 
-response.gbm <- function(object) {
+response <- function(object, ...) {
+  UseMethod("response", object)
+}
+
+
+response.formula <- function(object, data, ...) {
+  eval(object[[2]], data)
+}
+
+
+response.gbm <- function(object, ...) {
   switch(object$distribution$name,
          "multinomial" = matrix(object$data$y, ncol = object$num.classes) %>%
            max.col %>%

@@ -102,7 +102,7 @@ GBMModel <- function(...) {
           lp <- predict(object, n.trees = object$n.trees, type = "link")
           newlp <- predict(object, newdata = data, n.trees = object$n.trees,
                            type = "link")
-          cumhaz <- basehaz(response.gbm(object), exp(lp), times)
+          cumhaz <- basehaz(response(object), exp(lp), times)
           exp(exp(newlp - mean(lp)) %o% -cumhaz)
         } else {
           exp(predict(object, newdata = data, n.trees = object$n.trees,
