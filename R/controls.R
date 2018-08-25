@@ -1,6 +1,6 @@
 setClass("CVControl",
   slots = c(folds = "numeric", repeats = "numeric"),
-  contains = "AbstractControl")
+  contains = "MLControl")
 
 CVControl <- function(...) new("CVControl", ...)
 

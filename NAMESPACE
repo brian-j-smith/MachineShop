@@ -18,7 +18,7 @@ importFrom(utils, tail)
 
 export(CVControl)
 
-exportClasses(AbstractControl,
+exportClasses(MLControl,
               CVControl)
 
 export(MLModel,

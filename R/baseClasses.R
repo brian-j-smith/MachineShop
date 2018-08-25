@@ -1,10 +1,10 @@
-setClass("AbstractControl",
+setClass("MLControl",
   slots = c(summary = "function", cutoff = "numeric", cutoff.index = "function",
             survtimes = "numeric"),
   contains = "VIRTUAL"
 )
 
-setMethod("initialize", "AbstractControl",
+setMethod("initialize", "MLControl",
   function(.Object, summary = resampleSummary, cutoff = 0.5,
            cutoff.index = function(sens, spec) sens + spec,
            survtimes = numeric(), ...) {
@@ -13,7 +13,7 @@ setMethod("initialize", "AbstractControl",
   }
 )
 
-setAs("AbstractControl", "list",
+setAs("MLControl", "list",
   function(from) {
     list(cutoff = from@cutoff,
          cutoff.index = from@cutoff.index,
