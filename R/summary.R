@@ -1,10 +1,14 @@
-summary.Resamples <- function(object, ...) {
-  sapply(object, function(metric, na.rm = TRUE, ...) {
-    c("Mean" = mean(metric, na.rm = na.rm),
-      "Median" = median(metric, na.rm = na.rm),
-      "SD" = sd(metric, na.rm = na.rm),
-      "Min" = min(metric, na.rm = na.rm),
-      "Max" = max(metric, na.rm = na.rm),
-      "NA" = mean(is.na(metric)))
-  })
+summary.Resamples <- function(object,
+                              stats = c("Mean" = mean,
+                                        "Median" = median,
+                                        "SD" = sd,
+                                        "Min" = min,
+                                        "Max" = max),
+                              na.rm = TRUE, ...) {
+  f <- function(x) {
+    sapply(stats, function(stat) {
+      c(stat(x, na.rm = na.rm))
+    }) %>% c("NA" = mean(is.na(x)))
+  }
+  sapply(object, f)
 }
