@@ -18,8 +18,7 @@ importFrom(utils, tail)
 
 export(CVControl)
 
-exportClasses(MLControl,
-              CVControl)
+exportClasses(MLControl)
 
 export(MLModel,
        CForestModel,
