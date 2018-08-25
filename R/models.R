@@ -42,7 +42,7 @@ CoxModel <- function(...) {
     name = "CoxModel",
     params = list(...),
     fit = function(formula, data, ...) {
-      coxph(formula, data = data, x = TRUE, ...) %>%
+      survival::coxph(formula, data = data, x = TRUE, ...) %>%
         asMLModelFit("CoxFit", CoxModel())
     },
     predict = function(object, data, type = "response", cutoff = 0.5,
@@ -76,7 +76,7 @@ CoxStepAICModel <- function(...) {
       rhs <- if(direction == "backward") scope$upper else scope$lower
       formula <- update(formula, rhs)
       environment(formula) <- environment()
-      fit0 <- coxph(formula, data = data, x = TRUE, ...)
+      fit0 <- survival::coxph(formula, data = data, x = TRUE, ...)
       MASS::stepAIC(fit0, scope = scope, direction = direction, trace = trace,
                     k = k) %>%
         asMLModelFit("CoxFit", CoxModel())
