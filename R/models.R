@@ -14,7 +14,7 @@ CForestModel <- function(...) {
       pred <- if(object@responses@is_censored) {
         if(length(times)) {
           predict(object, newdata = data, type = "prob") %>%
-            sapply(function(fit) probs.survfit(fit, times)) %>%
+            sapply(function(fit) predict(fit, times)) %>%
             t
         } else if(type == "response") {
           predict(object, newdata = data, type = "response")

@@ -10,7 +10,7 @@ brierSurv <- function(observed, predicted, time) {
   fitcens <- survfit(Surv(obs_times, 1 - obs_events) ~ 1)
   is_obs_after <- obs_times > time
   weights <- (obs_events == 1 | is_obs_after) /
-    probs.survfit(fitcens, pmin(obs_times, time))
+    predict(fitcens, pmin(obs_times, time))
   mean(weights * (is_obs_after - predicted)^2)
 }
 

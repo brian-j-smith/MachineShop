@@ -9,14 +9,6 @@ basehaz <- function(y, risk, times) {
 }
 
 
-probs.survfit <- function(object, times) {
-  survtimes <- c(0, object$time)
-  survprobs <- c(1, object$surv)
-  idx <- sapply(times, function(x) max(which(survtimes <= x)))
-  survprobs[idx]
-}
-
-
 response <- function(object, ...) {
   UseMethod("response", object)
 }
