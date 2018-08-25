@@ -13,15 +13,12 @@ setMethod("resample", c("BootControl", "formula"),
     datafit <- fit(x, data, model)
     obs <- eval(x[[2]], data)
     bootids <- createResample(obs, times = object@number)
-    foreach(bootid = bootids,
-            .packages = c("survival", "MLModels"),
+    foreach(bootid = bootids, .packages = c("survival", "MLModels"),
             .combine = "rbind") %dopar% {
-              pred <- predict(datafit, data[bootid,], type = "prob",
-                              times = object@survtimes)
-              do.call(control@summary,
-                      c(list(observed = obs, predicted = pred),
-                        as(control, "list")))
-            } %>%
+      pred <- predict(datafit, data[bootid,], type = "prob",
+                      times = object@survtimes)
+      summary(object, obs, pred)
+    } %>%
       as.data.frame %>%
       structure(class = c("Resamples", "data.frame"))
   }
@@ -33,22 +30,16 @@ setMethod("resample", c("CVControl", "formula"),
     foldids <- createMultiFolds(eval(x[[2]], data),
                                 k = object@folds,
                                 times = object@repeats)
-    foreach(foldid = foldids,
-            .packages = c("survival", "MLModels"),
+    foreach(foldid = foldids, .packages = c("survival", "MLModels"),
             .combine = "rbind") %dopar% {
-              validate(x, data[foldid,], data[-foldid,], model, object)
-            } %>%
+      train <- data[foldid,]
+      test <- data[-foldid,]
+      trainfit <- fit(x, train, model)
+      obs <- eval(x[[2]], test)
+      pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
+      summary(object, obs, pred)
+    } %>%
       as.data.frame %>%
       structure(class = c("Resamples", "data.frame"))
   }
 )
-
-
-validate <- function(formula, train, test, model, control) {
-  mfit <- fit(formula, train, model)
-  pred <- predict(object = mfit, data = test, type = "prob",
-                  times = control@survtimes)
-  obs <- eval(formula[[2]], test)
-  do.call(control@summary,
-          c(list(observed = obs, predicted = pred), as(control, "list")))
-}

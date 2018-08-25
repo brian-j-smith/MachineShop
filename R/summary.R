@@ -12,3 +12,9 @@ summary.Resamples <- function(object,
   }
   sapply(object, f)
 }
+
+
+summary.MLControl <- function(object, observed, predicted, ...) {
+  do.call(object@summary, c(list(observed = observed, predicted = predicted),
+                            as(object, "list")))
+}
