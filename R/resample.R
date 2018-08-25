@@ -8,6 +8,26 @@ setMethod("resample", c("formula", "data.frame"),
 )
 
 
+setMethod("resample", c("BootControl", "formula"),
+  function(object, x, data, model) {
+    datafit <- fit(x, data, model)
+    obs <- eval(x[[2]], data)
+    bootids <- createResample(obs, times = object@number)
+    foreach(bootid = bootids,
+            .packages = c("survival", "MLModels"),
+            .combine = "rbind") %dopar% {
+              pred <- predict(datafit, data[bootid,], type = "prob",
+                              times = object@survtimes)
+              do.call(control@summary,
+                      c(list(observed = obs, predicted = pred),
+                        as(control, "list")))
+            } %>%
+      as.data.frame %>%
+      structure(class = c("Resamples", "data.frame"))
+  }
+)
+
+
 setMethod("resample", c("CVControl", "formula"),
   function(object, x, data, model) {
     foldids <- createMultiFolds(eval(x[[2]], data),

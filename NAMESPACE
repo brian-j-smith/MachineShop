@@ -3,7 +3,7 @@ import(survival)
 
 importClassesFrom(party, RandomForest)
 
-importFrom(caret, createMultiFolds)
+importFrom(caret, createMultiFolds, createResample)
 importFrom(foreach, foreach, "%dopar%")
 importFrom(Hmisc, rcorr.cens)
 importFrom(irr, kappa2)
@@ -16,7 +16,8 @@ importFrom(survivalROC, survivalROC)
 importFrom(utils, tail)
 
 
-export(CVControl)
+export(BootControl,
+       CVControl)
 
 exportClasses(MLControl)
 
