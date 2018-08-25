@@ -59,3 +59,10 @@ asParentFit <- function(object) {
     structure(object, class = class(object)[-(1:2)])
   }
 }
+
+
+setClass("Resamples", contains = "data.frame")
+
+setAs("matrix", "Resamples",
+  function(from) new("Resamples", as.data.frame(from))
+)

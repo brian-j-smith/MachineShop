@@ -18,9 +18,7 @@ setMethod("resample", c("BootControl", "formula"),
       pred <- predict(datafit, data[bootid,], type = "prob",
                       times = object@survtimes)
       summary(object, obs, pred)
-    } %>%
-      as.data.frame %>%
-      structure(class = c("Resamples", "data.frame"))
+    } %>% as("Resamples")
   }
 )
 
@@ -38,8 +36,6 @@ setMethod("resample", c("CVControl", "formula"),
       obs <- response(x, test)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
-    } %>%
-      as.data.frame %>%
-      structure(class = c("Resamples", "data.frame"))
+    } %>% as("Resamples")
   }
 )
