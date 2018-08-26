@@ -28,3 +28,8 @@ response.gbm <- function(object, ...) {
          object$data$y
   )
 }
+
+
+response.glm <- function(object, ...) {
+  response(object$formula, object$data)
+}

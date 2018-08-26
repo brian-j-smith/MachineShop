@@ -120,6 +120,27 @@ GBMModel <- function(...) {
 }
 
 
+GLMModel <- function(...) {
+  MLModel(
+    name = "GLMModel",
+    params = list(...),
+    fit = function(formula, data, ...) {
+      stats::glm(formula, data = data, ...) %>%
+        asMLModelFit("GLMFit", GLMModel())
+    },
+    predict = function(object, data, type = "response", cutoff = 0.5, ...) {
+      object <- asParentFit(object)
+      pred <- predict(object, newdata = data, type = "response")
+      if(type == "response") {
+        convert(response(object), pred, cutoff = cutoff)
+      } else {
+        pred
+      }
+    }
+  )
+}
+
+
 GLMNetModel <- function(...) {
   MLModel(
     name = "GLMNetModel",
