@@ -22,6 +22,26 @@ setAs("MLControl", "list",
 )
 
 
+setClass("BootControl",
+  slots = c(number = "numeric"),
+  contains = "MLControl"
+)
+
+BootControl <- function(number = 25, ...) {
+  new("BootControl", number = number, ...)
+}
+
+
+setClass("CVControl",
+  slots = c(folds = "numeric", repeats = "numeric"),
+  contains = "MLControl"
+)
+
+CVControl <- function(folds = 10, repeats = 1, ...) {
+  new("CVControl", folds = folds, repeats = repeats, ...)
+}
+
+
 setClass("MLModel",
   slots = c(name = "character", params = "list", fit = "function",
             predict = "function")
@@ -59,6 +79,9 @@ asParentFit <- function(object) {
     structure(object, class = class(object)[-(1:2)])
   }
 }
+
+
+setClass("CForestFit", contains = c("MLModelFit", "RandomForest"))
 
 
 setClass("Resamples", contains = "data.frame")

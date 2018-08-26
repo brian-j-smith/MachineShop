@@ -1,5 +1,3 @@
-setClass("CForestFit", contains = c("MLModelFit", "RandomForest"))
-
 CForestModel <- function(...) {
   MLModel(
     name = "CForestModel",
