@@ -3,6 +3,11 @@ response <- function(object, ...) {
 }
 
 
+response.coxph <- function(object, ...) {
+  object$y
+}
+
+
 response.formula <- function(object, data, ...) {
   eval(object[[2]], data)
 }
@@ -21,4 +26,9 @@ response.gbm <- function(object, ...) {
 
 response.glm <- function(object, ...) {
   response(object$formula, object$data)
+}
+
+
+response.RandomForest <- function(object, ...) {
+  object@responses@variables[[1]]
 }

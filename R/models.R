@@ -26,10 +26,9 @@ CForestModel <- function(...) {
           drop
       }
       if(type == "response") {
-        convert(object@responses@variables[[1]], pred, cutoff = cutoff)
-      } else {
-        pred
+        pred <- convert(response(object), pred, cutoff = cutoff)
       }
+      pred
     }
   )
 }
@@ -55,7 +54,10 @@ CoxModel <- function(...) {
       } else {
         predict(object, newdata = data, type = "risk")
       }
-      if(type == "response") convert(object$y, pred, cutoff = cutoff) else pred
+      if(type == "response") {
+        pred <- convert(response(object), pred, cutoff = cutoff)
+      }
+      pred
     }
   )
 }
@@ -111,10 +113,9 @@ GBMModel <- function(...) {
                 type = "response") %>% drop
       }
       if(type == "response") {
-        convert(response.gbm(object), pred, cutoff = cutoff)
-      } else {
-        pred
+        pred <- convert(response(object), pred, cutoff = cutoff)
       }
+      pred
     }
   )
 }
@@ -132,10 +133,9 @@ GLMModel <- function(...) {
       object <- asParentFit(object)
       pred <- predict(object, newdata = data, type = "response")
       if(type == "response") {
-        convert(response(object), pred, cutoff = cutoff)
-      } else {
-        pred
+        pred <- convert(response(object), pred, cutoff = cutoff)
       }
+      pred
     }
   )
 }
@@ -174,7 +174,10 @@ GLMNetModel <- function(...) {
       } else {
         predict(object, newx = newx, type = "response") %>% drop
       }
-      if(type == "response") convert(y, pred, cutoff = cutoff) else pred
+      if(type == "response") {
+        pred <- convert(y, pred, cutoff = cutoff)
+      }
+      pred
     }
   )
 }
