@@ -27,7 +27,7 @@ setClass("BootControl",
   contains = "MLControl"
 )
 
-BootControl <- function(number = 25, ...) {
+BootControl <- function(number = 100, ...) {
   new("BootControl", number = number, ...)
 }
 

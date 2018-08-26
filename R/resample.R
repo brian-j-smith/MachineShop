@@ -10,13 +10,12 @@ setMethod("resample", c("formula", "data.frame"),
 
 setMethod("resample", c("BootControl", "formula"),
   function(object, x, data, model) {
-    datafit <- fit(x, data, model)
     obs <- response(x, data)
     bootids <- createResample(obs, times = object@number)
     foreach(bootid = bootids, .packages = c("survival", "MLModels"),
             .combine = "rbind") %dopar% {
-      pred <- predict(datafit, data[bootid,], type = "prob",
-                      times = object@survtimes)
+      trainfit <- fit(x, data[bootid,], model)
+      pred <- predict(trainfit, data, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
     } %>% as("Resamples")
   }
