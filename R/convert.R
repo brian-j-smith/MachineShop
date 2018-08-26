@@ -27,6 +27,15 @@ setMethod("convert", c("factor", "numeric"),
 )
 
 
+setMethod("convert", c("integer", "numeric"),
+  function(object, x, cutoff = 0.5, ...) {
+    pm <- sign(x)
+    abs_x <- abs(x)
+    pm * ifelse(abs_x %% 1 > cutoff, ceiling(abs_x), floor(abs_x))
+  }
+)
+
+
 setMethod("convert", c("Surv", "matrix"),
   function(object, x, cutoff = 0.5, ...) {
     x <- x <= cutoff
