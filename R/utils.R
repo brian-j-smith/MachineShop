@@ -7,3 +7,9 @@ basehaz <- function(y, risk, times) {
                 f = 0, yleft = 0, yright = length(y_times))$y
   c(0, cumhaz)[idx + 1]
 }
+
+
+params <- function(env) {
+  x <- as.list(env)
+  x[!sapply(x, is.name)]
+}

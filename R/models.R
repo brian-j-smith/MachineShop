@@ -1,7 +1,7 @@
-CForestModel <- function(...) {
+CForestModel <- function(control) {
   MLModel(
     name = "CForestModel",
-    params = list(...),
+    params = params(environment()),
     fit = function(formula, data, ...) {
       party::cforest(formula, data = data, ...) %>%
         asMLModelFit("CForestFit", CForestModel())
@@ -34,10 +34,10 @@ CForestModel <- function(...) {
 }
 
 
-CoxModel <- function(...) {
+CoxModel <- function(ties, control) {
   MLModel(
     name = "CoxModel",
-    params = list(...),
+    params = params(environment()),
     fit = function(formula, data, ...) {
       survival::coxph(formula, data = data, x = TRUE, ...) %>%
         asMLModelFit("CoxFit", CoxModel())
@@ -63,13 +63,12 @@ CoxModel <- function(...) {
 }
 
 
-CoxStepAICModel <- function(...) {
+CoxStepAICModel <- function(ties, control, direction, scope, k, trace, steps) {
   MLModel(
     name = "CoxStepAICModel",
-    params = list(...),
-    fit = function(formula, data, scope = list(),
-                   direction = c("both", "backward", "forward"), trace = 0,
-                   k = 2, ...) {
+    params = params(environment()),
+    fit = function(formula, data, direction = c("both", "backward", "forward"),
+                   scope = list(), k = 2, trace = 0, steps = 1000, ...) {
       if(is.null(scope$lower)) scope$lower <- ~ 1
       if(is.null(scope$upper)) scope$upper <- formula[-2]
       direction <- match.arg(direction)
@@ -77,8 +76,8 @@ CoxStepAICModel <- function(...) {
       formula <- update(formula, rhs)
       environment(formula) <- environment()
       fit0 <- survival::coxph(formula, data = data, x = TRUE, ...)
-      MASS::stepAIC(fit0, scope = scope, direction = direction, trace = trace,
-                    k = k) %>%
+      MASS::stepAIC(fit0, direction = direction, scope = scope, k = k,
+                    trace = trace, steps = steps) %>%
         asMLModelFit("CoxFit", CoxModel())
     },
     predict = CoxModel()@predict
@@ -86,10 +85,11 @@ CoxStepAICModel <- function(...) {
 }
 
 
-GBMModel <- function(...) {
+GBMModel <- function(distribution, n.trees, interaction.depth, n.minobsinnode,
+                     shrinkage, bag.fraction) {
   MLModel(
     name = "GBMModel",
-    params = list(...),
+    params = params(environment()),
     fit = function(formula, data, ...) {
       gbm::gbm(formula, data = data, ...) %>%
         asMLModelFit("GBMFit", GBMModel())
@@ -121,10 +121,10 @@ GBMModel <- function(...) {
 }
 
 
-GLMModel <- function(...) {
+GLMModel <- function(family, control) {
   MLModel(
     name = "GLMModel",
-    params = list(...),
+    params = params(environment()),
     fit = function(formula, data, ...) {
       stats::glm(formula, data = data, ...) %>%
         asMLModelFit("GLMFit", GLMModel())
@@ -141,10 +141,11 @@ GLMModel <- function(...) {
 }
 
 
-GLMNetModel <- function(...) {
+GLMNetModel <- function(family, alpha, lambda, standardize, thresh, maxit,
+                        type.gaussian, type.logistic, type.multinomial) {
   MLModel(
     name = "GLMNetModel",
-    params = list(...),
+    params = params(environment()),
     fit = function(formula, data, ...) {
       mf <- model.frame(formula, data, na.action = NULL)
       x <- model.matrix(formula, mf)[, -1, drop = FALSE]
