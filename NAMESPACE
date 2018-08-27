@@ -27,6 +27,7 @@ export(MLModel,
        CoxStepAICModel,
        GBMModel,
        GLMModel,
+       GLMStepAICModel,
        GLMNetModel)
 
 exportClasses(MLModel,

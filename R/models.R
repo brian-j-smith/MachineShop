@@ -141,6 +141,29 @@ GLMModel <- function(family, control) {
 }
 
 
+GLMStepAICModel <- function(family, control, direction, scope, k, trace, steps)
+  {
+  MLModel(
+    name = "GLMStepAICModel",
+    params = params(environment()),
+    fit = function(formula, data, direction = c("both", "backward", "forward"),
+                   scope = list(), k = 2, trace = 0, steps = 1000, ...) {
+      if(is.null(scope$lower)) scope$lower <- ~ 1
+      if(is.null(scope$upper)) scope$upper <- formula[-2]
+      direction <- match.arg(direction)
+      rhs <- if(direction == "backward") scope$upper else scope$lower
+      formula <- update(formula, rhs)
+      environment(formula) <- environment()
+      fit0 <- stats::glm(formula, data = data, ...)
+      MASS::stepAIC(fit0, scope = scope, direction = direction, trace = trace,
+                    steps = steps, k = k) %>%
+        asMLModelFit("GLMFit", GLMModel())
+    },
+    predict = GLMModel()@predict
+  )
+}
+
+
 GLMNetModel <- function(family, alpha, lambda, standardize, thresh, maxit,
                         type.gaussian, type.logistic, type.multinomial) {
   MLModel(
