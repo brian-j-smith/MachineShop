@@ -1,13 +1,6 @@
 setGeneric("resample", function(object, x, ...) standardGeneric("resample"))
 
 
-setMethod("resample", c("formula", "data.frame"),
-  function(object, x, model, control) {
-    resample(control, object, x, model)
-  }
-)
-
-
 setMethod("resample", c("MLModel", "formula"),
   function(object, x, data, control) {
     resample(control, x, data, object)
@@ -21,7 +14,7 @@ setMethod("resample", c("BootControl", "formula"),
     bootids <- createResample(obs, times = object@number)
     foreach(bootid = bootids, .packages = c("survival", "MLModels"),
             .combine = "rbind") %dopar% {
-      trainfit <- fit(x, data[bootid,], model)
+      trainfit <- fit(model, x, data[bootid,])
       pred <- predict(trainfit, data, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
     } %>% as("Resamples")
@@ -38,7 +31,7 @@ setMethod("resample", c("CVControl", "formula"),
             .combine = "rbind") %dopar% {
       train <- data[foldid,]
       test <- data[-foldid,]
-      trainfit <- fit(x, train, model)
+      trainfit <- fit(model, x, train)
       obs <- response(x, test)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
