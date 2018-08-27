@@ -8,6 +8,13 @@ setMethod("resample", c("formula", "data.frame"),
 )
 
 
+setMethod("resample", c("MLModel", "formula"),
+  function(object, x, data, control) {
+    resample(control, x, data, object)
+  }
+)
+
+
 setMethod("resample", c("BootControl", "formula"),
   function(object, x, data, model) {
     obs <- response(x, data)
