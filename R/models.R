@@ -205,3 +205,25 @@ GLMNetModel <- function(family, alpha, lambda, standardize, thresh, maxit,
     }
   )
 }
+
+
+RandomForestModel <- function(ntree, mtry, replace, nodesize, maxnodes) {
+  MLModel(
+    name = "RandomForestModel",
+    params = params(environment()),
+    fit = function(formula, data, ...) {
+      randomForest::randomForest(formula, data = data, ...) %>%
+        asMLModelFit("RandomForestFit", RandomForestModel())
+    },
+    predict = function(object, data, type = "response", cutoff = 0.5, ...) {
+      object <- asParentFit(object)
+      obs <- response(object)
+      pred <- predict(object, newdata = data,
+                      type = ifelse(is.factor(obs), "prob", "response"))
+      if(type == "response") {
+        pred <- convert(obs, pred, cutoff = cutoff)
+      }
+      pred
+    }
+  )
+}

@@ -29,6 +29,11 @@ response.glm <- function(object, ...) {
 }
 
 
+response.randomForest <- function(object, ...) {
+  object$y
+}
+
+
 response.RandomForest <- function(object, ...) {
   object@responses@variables[[1]]
 }

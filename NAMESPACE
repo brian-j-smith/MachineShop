@@ -28,7 +28,8 @@ export(MLModel,
        GBMModel,
        GLMModel,
        GLMStepAICModel,
-       GLMNetModel)
+       GLMNetModel,
+       RandomForestModel)
 
 exportClasses(MLModel,
               MLModelFit)
