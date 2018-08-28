@@ -215,6 +215,31 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
 }
 
 
+NNetModel <- function(size, linout = NULL, entropy = NULL, softmax = NULL,
+                      censored = NULL, skip = NULL, rang = NULL, decay = NULL,
+                      maxit = NULL, Hess = NULL, trace = NULL, MaxNWts = NULL,
+                      abstol = NULL, reltol = NULL) {
+  MLModel(
+    name = "NNetModel",
+    packages = "nnet",
+    responses = c("factor", "numeric"),
+    params = params(environment()),
+    fit = function(formula, data, ...) {
+      mfit <- nnet::nnet(formula, data = data, trace = FALSE, ...)
+      mfit$y <- response(formula, data)
+      asMLModelFit(mfit, "NNetFit", NNetModel(...))
+    },
+    predict = function(object, data, type = "response", cutoff = 0.5, ...) {
+      obs <- object$y
+      object <- asParentFit(object)
+      pred <- predict(object, newdata = data, type = "raw")
+      if(type == "response") pred <- convert(obs, pred, cutoff = cutoff)
+      pred
+    }
+  )
+}
+
+
 RandomForestModel <- function(ntree = NULL, mtry = NULL, replace = NULL,
                               nodesize = NULL, maxnodes = NULL) {
   MLModel(

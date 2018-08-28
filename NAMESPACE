@@ -30,6 +30,7 @@ export(MLModel,
        GLMModel,
        GLMStepAICModel,
        GLMNetModel,
+       NNetModel,
        RandomForestModel,
        SurvRegModel,
        SurvRegStepAICModel)
