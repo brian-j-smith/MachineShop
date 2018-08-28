@@ -17,11 +17,14 @@ setMethod("modelmetrics", c("factor", "matrix"),
   function(observed, predicted, ...) {
     n <- nlevels(observed)
     predicted <- if(n > 2) {
-      factor(max.col(predicted), levels = 1:n, labels = levels(observed))
+      metrics <- c("MLogLoss" = MultiLogLoss(predicted, observed))
+      predicted <- factor(max.col(predicted), levels = 1:n,
+                          labels = levels(observed))
+      metrics <- c(modelmetrics(observed, predicted, ...), metrics)
     } else {
-      predicted[,n]
+      metrics <- modelmetrics(observed, predicted[,ncol(predicted)], ...)
     }
-    modelmetrics(observed, predicted, ...)
+    metrics
   }
 )
 
@@ -34,7 +37,8 @@ setMethod("modelmetrics", c("factor", "numeric"),
     c("Accuracy" = 1 - ce(observed, predicted > cutoff),
       "Kappa" = kappa(observed, predicted, cutoff),
       "Brier" = brier(observed, predicted),
-      "ROC" = auc(observed, predicted),
+      "ROCAUC" = auc(observed, predicted),
+      "PRAUC" = PRAUC(predicted, observed),
       "Sensitivity" = sens,
       "Specificity" = spec,
       "Index" = cutoff.index(sens, spec))
@@ -45,7 +49,7 @@ setMethod("modelmetrics", c("factor", "numeric"),
 setMethod("modelmetrics", c("numeric"),
   function(observed, predicted, ...) {
     c("RMSE" = rmse(observed, predicted),
-      "RSquare" = cor(observed, predicted, use = "pairwise.complete.obs")^2,
+      "RSquare" = cor(observed, predicted)^2,
       "MAE" = mae(observed, predicted))
   }
 )
