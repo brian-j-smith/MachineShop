@@ -30,7 +30,9 @@ export(MLModel,
        GLMModel,
        GLMStepAICModel,
        GLMNetModel,
-       RandomForestModel)
+       RandomForestModel,
+       SurvRegModel,
+       SurvRegStepAICModel)
 
 exportClasses(MLModel,
               MLModelFit)

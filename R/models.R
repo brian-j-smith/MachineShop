@@ -75,15 +75,9 @@ CoxStepAICModel <- function(ties, control, direction, scope, k, trace, steps) {
     params = params(environment()),
     fit = function(formula, data, direction = c("both", "backward", "forward"),
                    scope = list(), k = 2, trace = 0, steps = 1000, ...) {
-      if(is.null(scope$lower)) scope$lower <- ~ 1
-      if(is.null(scope$upper)) scope$upper <- formula[-2]
-      direction <- match.arg(direction)
-      rhs <- if(direction == "backward") scope$upper else scope$lower
-      formula <- update(formula, rhs)
-      environment(formula) <- environment()
-      fit0 <- survival::coxph(formula, data = data, x = TRUE, ...)
-      MASS::stepAIC(fit0, direction = direction, scope = scope, k = k,
-                    trace = trace, steps = steps) %>%
+      fitStepAIC(function(formula, data) {
+        survival::coxph(formula, data = data, x = TRUE, ...)
+      }, data, formula, match.arg(direction), scope, k, trace, steps) %>%
         asMLModelFit("CoxFit", CoxModel())
     },
     predict = CoxModel()@predict
@@ -160,15 +154,9 @@ GLMStepAICModel <- function(family, control, direction, scope, k, trace, steps)
     params = params(environment()),
     fit = function(formula, data, direction = c("both", "backward", "forward"),
                    scope = list(), k = 2, trace = 0, steps = 1000, ...) {
-      if(is.null(scope$lower)) scope$lower <- ~ 1
-      if(is.null(scope$upper)) scope$upper <- formula[-2]
-      direction <- match.arg(direction)
-      rhs <- if(direction == "backward") scope$upper else scope$lower
-      formula <- update(formula, rhs)
-      environment(formula) <- environment()
-      fit0 <- stats::glm(formula, data = data, ...)
-      MASS::stepAIC(fit0, scope = scope, direction = direction, trace = trace,
-                    steps = steps, k = k) %>%
+      fitStepAIC(function(formula, data) {
+        stats::glm(formula, data = data, ...)
+      }, data, formula, match.arg(direction), scope, k, trace, steps) %>%
         asMLModelFit("GLMFit", GLMModel())
     },
     predict = GLMModel()@predict
@@ -241,5 +229,54 @@ RandomForestModel <- function(ntree, mtry, replace, nodesize, maxnodes) {
       }
       pred
     }
+  )
+}
+
+
+SurvRegModel <- function(dist, scale, parms, control) {
+  MLModel(
+    name = "SurvRegModel",
+    packages = c("rms", "survival"),
+    responses = "Surv",
+    params = params(environment()),
+    fit = function(formula, data, ...) {
+      rms::psm(formula, data = data, ...) %>%
+        asMLModelFit("SurvRegFit", SurvRegModel())
+    },
+    predict = function(object, data, type = "response", cutoff = 0.5,
+                       times = numeric(), ...) {
+      object <- asParentFit(object)
+      if(length(times)) {
+        pred <- rms::survest(object, newdata = data, times = times,
+                             conf.int = FALSE)
+        if(inherits(pred, "survest.psm")) pred <- as.matrix(pred$surv)
+      } else {
+        pred <- predict(object, newdata = data, type = "risk")
+      }
+      if(type == "response") {
+        pred <- convert(response(object), pred, cutoff = cutoff)
+      }
+      pred
+      
+    }
+  )
+}
+
+
+SurvRegStepAICModel <- function(dist, scale, parms, control, direction, scope,
+                                k, trace, steps) {
+  MLModel(
+    name = "SurvRegStepAICModel",
+    packages = c("MASS", "rms", "survival"),
+    responses = "Surv",
+    params = params(environment()),
+    fit = function(formula, data, direction = c("both", "backward", "forward"),
+                   scope = list(), k = 2, trace = 0, steps = 1000, ...) {
+      fitStepAIC(function(formula, data) {
+        rms::psm(formula, data = data, ...)
+      }, data, formula, match.arg(direction), scope, k, trace, steps) %>%
+        asMLModelFit("SurvRegFit", SurvRegModel())
+    },
+    predict = SurvRegModel()@predict
   )
 }

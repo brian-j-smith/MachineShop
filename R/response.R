@@ -37,3 +37,8 @@ response.randomForest <- function(object, ...) {
 response.RandomForest <- function(object, ...) {
   object@responses@variables[[1]]
 }
+
+
+response.survreg <- function(object, ...) {
+  object$y
+}
