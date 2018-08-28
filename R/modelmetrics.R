@@ -1,9 +1,9 @@
-setGeneric("resampleSummary", function(observed, predicted, ...) {
-  standardGeneric("resampleSummary")
+setGeneric("modelmetrics", function(observed, predicted, ...) {
+  standardGeneric("modelmetrics")
 })
 
 
-setMethod("resampleSummary", c("factor", "factor"),
+setMethod("modelmetrics", c("factor", "factor"),
   function(observed, predicted, ...) {
     ratings <- cbind(observed, predicted)
     c("Accuracy" = 1 - ce(observed, predicted),
@@ -13,7 +13,7 @@ setMethod("resampleSummary", c("factor", "factor"),
 )
 
 
-setMethod("resampleSummary", c("factor", "matrix"),
+setMethod("modelmetrics", c("factor", "matrix"),
   function(observed, predicted, ...) {
     n <- nlevels(observed)
     predicted <- if(n > 2) {
@@ -21,12 +21,12 @@ setMethod("resampleSummary", c("factor", "matrix"),
     } else {
       predicted[,n]
     }
-    resampleSummary(observed, predicted, ...)
+    modelmetrics(observed, predicted, ...)
   }
 )
 
 
-setMethod("resampleSummary", c("factor", "numeric"),
+setMethod("modelmetrics", c("factor", "numeric"),
   function(observed, predicted, cutoff, cutoff.index, ...) {
     observed <- observed == levels(observed)[2]
     sens <- sensitivity(observed, predicted, cutoff)
@@ -42,7 +42,7 @@ setMethod("resampleSummary", c("factor", "numeric"),
 )
 
 
-setMethod("resampleSummary", c("numeric"),
+setMethod("modelmetrics", c("numeric"),
   function(observed, predicted, ...) {
     c("RMSE" = rmse(observed, predicted),
       "RSquare" = cor(observed, predicted, use = "pairwise.complete.obs")^2,
@@ -51,7 +51,7 @@ setMethod("resampleSummary", c("numeric"),
 )
 
 
-setMethod("resampleSummary", c("Surv", "matrix"),
+setMethod("modelmetrics", c("Surv", "matrix"),
   function(observed, predicted, survtimes, ...) {
     ntimes <- length(survtimes)
     roc <- brier <- rep(NA, ntimes)
@@ -71,7 +71,30 @@ setMethod("resampleSummary", c("Surv", "matrix"),
 )
 
 
-setMethod("resampleSummary", c("Surv", "numeric"),
+rocSurv <- function(observed, predicted, time) {
+  survivalROC(observed[,"time"], observed[,"status"], 1 - predicted,
+              predict.time = time, method = "KM")$AUC
+}
+
+
+brierSurv <- function(observed, predicted, time) {
+  obs_times <- observed[,"time"]
+  obs_events <- observed[,"status"]
+  fitcens <- survfit(Surv(obs_times, 1 - obs_events) ~ 1)
+  is_obs_after <- obs_times > time
+  weights <- (obs_events == 1 | is_obs_after) /
+    predict(fitcens, pmin(obs_times, time))
+  mean(weights * (is_obs_after - predicted)^2)
+}
+
+
+meanSurvMetric <- function(x, times) {
+  weights <- diff(c(0, times)) / tail(times, 1)
+  sum(weights * x)
+}
+
+
+setMethod("modelmetrics", c("Surv", "numeric"),
   function(observed, predicted, ...) {
     c("CIndex" = rcorr.cens(-predicted, observed)[[1]])
   }

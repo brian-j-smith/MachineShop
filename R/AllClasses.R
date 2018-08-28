@@ -5,7 +5,7 @@ setClass("MLControl",
 )
 
 setMethod("initialize", "MLControl",
-  function(.Object, summary = resampleSummary, cutoff = 0.5,
+  function(.Object, summary = modelmetrics, cutoff = 0.5,
            cutoff.index = function(sens, spec) sens + spec,
            survtimes = numeric(), ...) {
     callNextMethod(.Object, summary = summary, cutoff = cutoff,
