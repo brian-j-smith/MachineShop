@@ -11,5 +11,8 @@ basehaz <- function(y, risk, times) {
 
 params <- function(env) {
   x <- as.list(env)
-  x[!sapply(x, is.name)]
+  missing_args <- names(x)[sapply(x, is.name)]
+  if(length(missing_args)) stop("missing values for required argument(s) ",
+                                paste0(missing_args, collapse = ", "))
+  x[!sapply(x, is.null)]
 }

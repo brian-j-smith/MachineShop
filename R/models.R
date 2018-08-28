@@ -1,4 +1,4 @@
-CForestModel <- function(control) {
+CForestModel <- function(control = NULL) {
   MLModel(
     name = "CForestModel",
     packages = "party",
@@ -6,7 +6,7 @@ CForestModel <- function(control) {
     params = params(environment()),
     fit = function(formula, data, ...) {
       party::cforest(formula, data = data, ...) %>%
-        asMLModelFit("CForestFit", CForestModel())
+        asMLModelFit("CForestFit", CForestModel(...))
     },
     predict = function(object, data, type = "response", cutoff = 0.5,
                        times = numeric(), ...) {
@@ -36,7 +36,7 @@ CForestModel <- function(control) {
 }
 
 
-CoxModel <- function(ties, control) {
+CoxModel <- function(ties = NULL, control = NULL) {
   MLModel(
     name = "CoxModel",
     packages = "survival",
@@ -44,7 +44,7 @@ CoxModel <- function(ties, control) {
     params = params(environment()),
     fit = function(formula, data, ...) {
       survival::coxph(formula, data = data, x = TRUE, ...) %>%
-        asMLModelFit("CoxFit", CoxModel())
+        asMLModelFit("CoxFit", CoxModel(...))
     },
     predict = function(object, data, type = "response", cutoff = 0.5,
                        times = numeric(), ...) {
@@ -67,7 +67,9 @@ CoxModel <- function(ties, control) {
 }
 
 
-CoxStepAICModel <- function(ties, control, direction, scope, k, trace, steps) {
+CoxStepAICModel <- function(ties = NULL, control = NULL, direction = NULL,
+                            scope = NULL, k = NULL, trace = NULL, steps = NULL)
+  {
   MLModel(
     name = "CoxStepAICModel",
     packages = c("MASS", "survival"),
@@ -78,15 +80,16 @@ CoxStepAICModel <- function(ties, control, direction, scope, k, trace, steps) {
       fitStepAIC(function(formula, data) {
         survival::coxph(formula, data = data, x = TRUE, ...)
       }, data, formula, match.arg(direction), scope, k, trace, steps) %>%
-        asMLModelFit("CoxFit", CoxModel())
+        asMLModelFit("CoxFit", CoxModel(...))
     },
     predict = CoxModel()@predict
   )
 }
 
 
-GBMModel <- function(distribution, n.trees, interaction.depth, n.minobsinnode,
-                     shrinkage, bag.fraction) {
+GBMModel <- function(distribution = NULL, n.trees = NULL,
+                     interaction.depth = NULL, n.minobsinnode = NULL,
+                     shrinkage = NULL, bag.fraction = NULL) {
   MLModel(
     name = "GBMModel",
     packages = "gbm",
@@ -94,7 +97,7 @@ GBMModel <- function(distribution, n.trees, interaction.depth, n.minobsinnode,
     params = params(environment()),
     fit = function(formula, data, ...) {
       gbm::gbm(formula, data = data, ...) %>%
-        asMLModelFit("GBMFit", GBMModel())
+        asMLModelFit("GBMFit", GBMModel(...))
     },
     predict = function(object, data, type = "response", cutoff = 0.5,
                        times = numeric(), ...) {
@@ -123,7 +126,7 @@ GBMModel <- function(distribution, n.trees, interaction.depth, n.minobsinnode,
 }
 
 
-GLMModel <- function(family, control) {
+GLMModel <- function(family = NULL, control = NULL) {
   MLModel(
     name = "GLMModel",
     packages = "stats",
@@ -131,7 +134,7 @@ GLMModel <- function(family, control) {
     params = params(environment()),
     fit = function(formula, data, ...) {
       stats::glm(formula, data = data, ...) %>%
-        asMLModelFit("GLMFit", GLMModel())
+        asMLModelFit("GLMFit", GLMModel(...))
     },
     predict = function(object, data, type = "response", cutoff = 0.5, ...) {
       object <- asParentFit(object)
@@ -145,7 +148,8 @@ GLMModel <- function(family, control) {
 }
 
 
-GLMStepAICModel <- function(family, control, direction, scope, k, trace, steps)
+GLMStepAICModel <- function(family = NULL, control = NULL, direction = NULL,
+                            scope = NULL, k = NULL, trace = NULL, steps = NULL)
   {
   MLModel(
     name = "GLMStepAICModel",
@@ -157,15 +161,17 @@ GLMStepAICModel <- function(family, control, direction, scope, k, trace, steps)
       fitStepAIC(function(formula, data) {
         stats::glm(formula, data = data, ...)
       }, data, formula, match.arg(direction), scope, k, trace, steps) %>%
-        asMLModelFit("GLMFit", GLMModel())
+        asMLModelFit("GLMFit", GLMModel(...))
     },
     predict = GLMModel()@predict
   )
 }
 
 
-GLMNetModel <- function(family, alpha, lambda, standardize, thresh, maxit,
-                        type.gaussian, type.logistic, type.multinomial) {
+GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
+                        standardize = NULL, thresh = NULL, maxit = NULL,
+                        type.gaussian = NULL, type.logistic = NULL,
+                        type.multinomial = NULL) {
   MLModel(
     name = "GLMNetModel",
     packages = "glmnet",
@@ -177,7 +183,7 @@ GLMNetModel <- function(family, alpha, lambda, standardize, thresh, maxit,
       y <- model.response(mf)
       mfit <- glmnet::glmnet(x, y, nlambda = 1, ...)
       mfit$mf <- mf
-      asMLModelFit(mfit, "GLMNetFit", GLMNetModel())
+      asMLModelFit(mfit, "GLMNetFit", GLMNetModel(...))
     },
     predict = function(object, data, type = "response", cutoff = 0.5,
                        times = numeric(), ...) {
@@ -209,7 +215,8 @@ GLMNetModel <- function(family, alpha, lambda, standardize, thresh, maxit,
 }
 
 
-RandomForestModel <- function(ntree, mtry, replace, nodesize, maxnodes) {
+RandomForestModel <- function(ntree = NULL, mtry = NULL, replace = NULL,
+                              nodesize = NULL, maxnodes = NULL) {
   MLModel(
     name = "RandomForestModel",
     packages = "randomForest",
@@ -217,7 +224,7 @@ RandomForestModel <- function(ntree, mtry, replace, nodesize, maxnodes) {
     params = params(environment()),
     fit = function(formula, data, ...) {
       randomForest::randomForest(formula, data = data, ...) %>%
-        asMLModelFit("RandomForestFit", RandomForestModel())
+        asMLModelFit("RandomForestFit", RandomForestModel(...))
     },
     predict = function(object, data, type = "response", cutoff = 0.5, ...) {
       object <- asParentFit(object)
@@ -233,7 +240,8 @@ RandomForestModel <- function(ntree, mtry, replace, nodesize, maxnodes) {
 }
 
 
-SurvRegModel <- function(dist, scale, parms, control) {
+SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
+                         control = NULL) {
   MLModel(
     name = "SurvRegModel",
     packages = c("rms", "survival"),
@@ -241,7 +249,7 @@ SurvRegModel <- function(dist, scale, parms, control) {
     params = params(environment()),
     fit = function(formula, data, ...) {
       rms::psm(formula, data = data, ...) %>%
-        asMLModelFit("SurvRegFit", SurvRegModel())
+        asMLModelFit("SurvRegFit", SurvRegModel(...))
     },
     predict = function(object, data, type = "response", cutoff = 0.5,
                        times = numeric(), ...) {
@@ -263,8 +271,9 @@ SurvRegModel <- function(dist, scale, parms, control) {
 }
 
 
-SurvRegStepAICModel <- function(dist, scale, parms, control, direction, scope,
-                                k, trace, steps) {
+SurvRegStepAICModel <- function(dist = NULL, scale = NULL, parms = NULL,
+                                control = NULL, direction = NULL, scope = NULL,
+                                k = NULL, trace = NULL, steps = NULL) {
   MLModel(
     name = "SurvRegStepAICModel",
     packages = c("MASS", "rms", "survival"),
@@ -275,7 +284,7 @@ SurvRegStepAICModel <- function(dist, scale, parms, control, direction, scope,
       fitStepAIC(function(formula, data) {
         rms::psm(formula, data = data, ...)
       }, data, formula, match.arg(direction), scope, k, trace, steps) %>%
-        asMLModelFit("SurvRegFit", SurvRegModel())
+        asMLModelFit("SurvRegFit", SurvRegModel(...))
     },
     predict = SurvRegModel()@predict
   )
