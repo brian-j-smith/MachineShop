@@ -43,8 +43,8 @@ CVControl <- function(folds = 10, repeats = 1, ...) {
 
 
 setClass("MLModel",
-  slots = c(name = "character", params = "list", fit = "function",
-            predict = "function")
+  slots = c(name = "character", packages = "character", responses = "character",
+            params = "list", fit = "function", predict = "function")
 )
 
 MLModel <- function(...) new("MLModel", ...)

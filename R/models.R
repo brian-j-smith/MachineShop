@@ -1,6 +1,8 @@
 CForestModel <- function(control) {
   MLModel(
     name = "CForestModel",
+    packages = "party",
+    responses = c("factor", "numeric", "Surv"),
     params = params(environment()),
     fit = function(formula, data, ...) {
       party::cforest(formula, data = data, ...) %>%
@@ -37,6 +39,8 @@ CForestModel <- function(control) {
 CoxModel <- function(ties, control) {
   MLModel(
     name = "CoxModel",
+    packages = "survival",
+    responses = "Surv",
     params = params(environment()),
     fit = function(formula, data, ...) {
       survival::coxph(formula, data = data, x = TRUE, ...) %>%
@@ -66,6 +70,8 @@ CoxModel <- function(ties, control) {
 CoxStepAICModel <- function(ties, control, direction, scope, k, trace, steps) {
   MLModel(
     name = "CoxStepAICModel",
+    packages = c("MASS", "survival"),
+    responses = "Surv",
     params = params(environment()),
     fit = function(formula, data, direction = c("both", "backward", "forward"),
                    scope = list(), k = 2, trace = 0, steps = 1000, ...) {
@@ -89,6 +95,8 @@ GBMModel <- function(distribution, n.trees, interaction.depth, n.minobsinnode,
                      shrinkage, bag.fraction) {
   MLModel(
     name = "GBMModel",
+    packages = "gbm",
+    responses = c("factor", "numeric", "Surv"),
     params = params(environment()),
     fit = function(formula, data, ...) {
       gbm::gbm(formula, data = data, ...) %>%
@@ -124,6 +132,8 @@ GBMModel <- function(distribution, n.trees, interaction.depth, n.minobsinnode,
 GLMModel <- function(family, control) {
   MLModel(
     name = "GLMModel",
+    packages = "stats",
+    responses = c("factor", "numeric"),
     params = params(environment()),
     fit = function(formula, data, ...) {
       stats::glm(formula, data = data, ...) %>%
@@ -145,6 +155,8 @@ GLMStepAICModel <- function(family, control, direction, scope, k, trace, steps)
   {
   MLModel(
     name = "GLMStepAICModel",
+    packages = c("MASS", "stats"),
+    responses = c("factor", "numeric"),
     params = params(environment()),
     fit = function(formula, data, direction = c("both", "backward", "forward"),
                    scope = list(), k = 2, trace = 0, steps = 1000, ...) {
@@ -168,6 +180,8 @@ GLMNetModel <- function(family, alpha, lambda, standardize, thresh, maxit,
                         type.gaussian, type.logistic, type.multinomial) {
   MLModel(
     name = "GLMNetModel",
+    packages = "glmnet",
+    responses = c("factor", "numeric", "Surv"),
     params = params(environment()),
     fit = function(formula, data, ...) {
       mf <- model.frame(formula, data, na.action = NULL)
@@ -210,6 +224,8 @@ GLMNetModel <- function(family, alpha, lambda, standardize, thresh, maxit,
 RandomForestModel <- function(ntree, mtry, replace, nodesize, maxnodes) {
   MLModel(
     name = "RandomForestModel",
+    packages = "randomForest",
+    responses = c("factor", "numeric"),
     params = params(environment()),
     fit = function(formula, data, ...) {
       randomForest::randomForest(formula, data = data, ...) %>%
