@@ -1,7 +1,7 @@
-predict.MLModelFit <- function(object, data, type = c("response", "prob"),
+predict.MLModelFit <- function(object, newdata, type = c("response", "prob"),
                                cutoff = 0.5, times = NULL, ...) {
   predict <- if(isS4(object)) object@.predict else object$.predict
-  predict(object, data, type = match.arg(type), cutoff = cutoff, times = times)
+  predict(object, newdata, type = match.arg(type), cutoff = cutoff, times = times)
 }
 
 

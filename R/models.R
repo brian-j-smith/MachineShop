@@ -8,23 +8,23 @@ CForestModel <- function(control = NULL) {
       party::cforest(formula, data = data, ...) %>%
         asMLModelFit("CForestFit", CForestModel(...))
     },
-    predict = function(object, data, type = "response", cutoff = 0.5,
+    predict = function(object, newdata, type = "response", cutoff = 0.5,
                        times = numeric(), ...) {
       object <- asParentFit(object)
       pred <- if(object@responses@is_censored) {
         if(length(times)) {
-          predict(object, newdata = data, type = "prob") %>%
+          predict(object, newdata = newdata, type = "prob") %>%
             sapply(function(fit) predict(fit, times)) %>%
             t
         } else if(type == "response") {
-          predict(object, newdata = data, type = "response")
+          predict(object, newdata = newdata, type = "response")
         } else {
-          log(2) / predict(object, newdata = data, type = "response")
+          log(2) / predict(object, newdata = newdata, type = "response")
         }
       } else {
-        predict(object, newdata = data, type = "prob") %>%
+        predict(object, newdata = newdata, type = "prob") %>%
           unlist %>%
-          matrix(nrow = nrow(data), byrow = TRUE) %>%
+          matrix(nrow = nrow(newdata), byrow = TRUE) %>%
           drop
       }
       if(type == "response") {
@@ -46,17 +46,17 @@ CoxModel <- function(ties = NULL, control = NULL) {
       survival::coxph(formula, data = data, x = TRUE, ...) %>%
         asMLModelFit("CoxFit", CoxModel(...))
     },
-    predict = function(object, data, type = "response", cutoff = 0.5,
+    predict = function(object, newdata, type = "response", cutoff = 0.5,
                        times = numeric(), ...) {
       object <- asParentFit(object)
       pred <- if(length(times)) {
         timevar <- all.vars(object$formula)[1]
         sapply(times, function(time) {
-          data[[timevar]] <- time
-          exp(-predict(object, newdata = data, type = "expected"))
+          newdata[[timevar]] <- time
+          exp(-predict(object, newdata = newdata, type = "expected"))
         })
       } else {
-        predict(object, newdata = data, type = "risk")
+        predict(object, newdata = newdata, type = "risk")
       }
       if(type == "response") {
         pred <- convert(response(object), pred, cutoff = cutoff)
@@ -99,22 +99,22 @@ GBMModel <- function(distribution = NULL, n.trees = NULL,
       gbm::gbm(formula, data = data, ...) %>%
         asMLModelFit("GBMFit", GBMModel(...))
     },
-    predict = function(object, data, type = "response", cutoff = 0.5,
+    predict = function(object, newdata, type = "response", cutoff = 0.5,
                        times = numeric(), ...) {
       object <- asParentFit(object)
       pred <- if(object$distribution$name == "coxph") {
         if(length(times)) {
           lp <- predict(object, n.trees = object$n.trees, type = "link")
-          newlp <- predict(object, newdata = data, n.trees = object$n.trees,
+          newlp <- predict(object, newdata = newdata, n.trees = object$n.trees,
                            type = "link")
           cumhaz <- basehaz(response(object), exp(lp), times)
           exp(exp(newlp - mean(lp)) %o% -cumhaz)
         } else {
-          exp(predict(object, newdata = data, n.trees = object$n.trees,
+          exp(predict(object, newdata = newdata, n.trees = object$n.trees,
                       type = "link"))
         }
       } else {
-        predict(object, newdata = data, n.trees = object$n.trees,
+        predict(object, newdata = newdata, n.trees = object$n.trees,
                 type = "response") %>% drop
       }
       if(type == "response") {
@@ -136,9 +136,9 @@ GLMModel <- function(family = NULL, control = NULL) {
       stats::glm(formula, data = data, ...) %>%
         asMLModelFit("GLMFit", GLMModel(...))
     },
-    predict = function(object, data, type = "response", cutoff = 0.5, ...) {
+    predict = function(object, newdata, type = "response", cutoff = 0.5, ...) {
       object <- asParentFit(object)
-      pred <- predict(object, newdata = data, type = "response")
+      pred <- predict(object, newdata = newdata, type = "response")
       if(type == "response") {
         pred <- convert(response(object), pred, cutoff = cutoff)
       }
@@ -185,12 +185,12 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
       mfit$mf <- mf
       asMLModelFit(mfit, "GLMNetFit", GLMNetModel(...))
     },
-    predict = function(object, data, type = "response", cutoff = 0.5,
+    predict = function(object, newdata, type = "response", cutoff = 0.5,
                        times = numeric(), ...) {
       mf <- object$mf
       object <- asParentFit(object)
       obj_terms <- terms(mf)
-      newmf <- model.frame(obj_terms, data, na.action = NULL)
+      newmf <- model.frame(obj_terms, newdata, na.action = NULL)
       newx <- model.matrix(obj_terms, newmf)[, -1, drop = FALSE]
       y <- model.response(mf)
       pred <- if(is.Surv(y)) {
@@ -229,10 +229,10 @@ NNetModel <- function(size, linout = NULL, entropy = NULL, softmax = NULL,
       mfit$y <- response(formula, data)
       asMLModelFit(mfit, "NNetFit", NNetModel(...))
     },
-    predict = function(object, data, type = "response", cutoff = 0.5, ...) {
+    predict = function(object, newdata, type = "response", cutoff = 0.5, ...) {
       obs <- object$y
       object <- asParentFit(object)
-      pred <- predict(object, newdata = data, type = "raw")
+      pred <- predict(object, newdata = newdata, type = "raw")
       if(type == "response") pred <- convert(obs, pred, cutoff = cutoff)
       pred
     }
@@ -251,10 +251,10 @@ RandomForestModel <- function(ntree = NULL, mtry = NULL, replace = NULL,
       randomForest::randomForest(formula, data = data, ...) %>%
         asMLModelFit("RandomForestFit", RandomForestModel(...))
     },
-    predict = function(object, data, type = "response", cutoff = 0.5, ...) {
+    predict = function(object, newdata, type = "response", cutoff = 0.5, ...) {
       object <- asParentFit(object)
       obs <- response(object)
-      pred <- predict(object, newdata = data,
+      pred <- predict(object, newdata = newdata,
                       type = ifelse(is.factor(obs), "prob", "response"))
       if(type == "response") {
         pred <- convert(obs, pred, cutoff = cutoff)
@@ -276,15 +276,15 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
       rms::psm(formula, data = data, ...) %>%
         asMLModelFit("SurvRegFit", SurvRegModel(...))
     },
-    predict = function(object, data, type = "response", cutoff = 0.5,
+    predict = function(object, newdata, type = "response", cutoff = 0.5,
                        times = numeric(), ...) {
       object <- asParentFit(object)
       if(length(times)) {
-        pred <- rms::survest(object, newdata = data, times = times,
+        pred <- rms::survest(object, newdata = newdata, times = times,
                              conf.int = FALSE)
         if(inherits(pred, "survest.psm")) pred <- as.matrix(pred$surv)
       } else {
-        pred <- predict(object, newdata = data, type = "risk")
+        pred <- predict(object, newdata = newdata, type = "risk")
       }
       if(type == "response") {
         pred <- convert(response(object), pred, cutoff = cutoff)
