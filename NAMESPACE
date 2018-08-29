@@ -33,6 +33,7 @@ export(MLModel,
        GLMNetModel,
        KSVMModel,
        NNetModel,
+       PLSModel,
        RandomForestModel,
        SurvRegModel,
        SurvRegStepAICModel)
