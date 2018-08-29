@@ -24,6 +24,7 @@ export(BootControl,
 exportClasses(MLControl)
 
 export(MLModel,
+       C50Model,
        CForestModel,
        CoxModel,
        CoxStepAICModel,
@@ -34,6 +35,7 @@ export(MLModel,
        KSVMModel,
        NNetModel,
        PLSModel,
+       POLRModel,
        RandomForestModel,
        SurvRegModel,
        SurvRegStepAICModel)

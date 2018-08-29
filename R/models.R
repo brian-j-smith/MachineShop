@@ -1,3 +1,26 @@
+C50Model <- function(trials = NULL, rules = NULL, control = NULL, costs = NULL)
+  {
+  MLModel(
+    name = "C50Model",
+    packages = "C50",
+    responses = "factor",
+    params = params(environment()),
+    fit = function(formula, data, ...) {
+      C50::C5.0(formula, data = data, ...) %>%
+        asMLModelFit("C50Fit", C50Model(...))
+    },
+    predict = function(object, newdata, type = "response", cutoff = 0.5, ...) {
+      object <- asParentFit(object)
+      pred <- predict(object, newdata = newdata, type = "prob")
+      if(type == "response") {
+        pred <- convert(factor(object$levels), pred, cutoff = cutoff)
+      }
+      pred
+    }
+  )
+}
+
+
 CForestModel <- function(control = NULL) {
   MLModel(
     name = "CForestModel",
@@ -288,6 +311,28 @@ PLSModel <- function(ncomp, scale = NULL) {
       pred <- predict(object, newdata = newdata, ncomp = object$ncomp,
                       type = "response") %>% drop
       if(type == "response") pred <- convert(obs, pred, cutoff = cutoff)
+      pred
+    }
+  )
+}
+
+
+POLRModel <- function(method = NULL) {
+  MLModel(
+    name = "POLRModel",
+    packages = "MASS",
+    responses = "ordered",
+    params = params(environment()),
+    fit = function(formula, data, ...) {
+      MASS::polr(formula, data = data, ...) %>%
+        asMLModelFit("POLRModel", POLRModel(...))
+    },
+    predict = function(object, newdata, type = "response", cutoff = 0.5, ...) {
+      object <- asParentFit(object)
+      pred <- predict(object, newdata = newdata, type = "probs")
+      if(type == "response") {
+        pred <- convert(factor(object$lev), pred, cutoff = cutoff)
+      }
       pred
     }
   )
