@@ -29,6 +29,15 @@ response.glm <- function(object, ...) {
 }
 
 
+response.ksvm <- function(object, ...) {
+  if(is.character(object@lev)) {
+    factor(object@ymatrix, levels = 1:object@nclass, labels = object@lev)
+  } else {
+    object@ymatrix
+  }
+}
+
+
 response.randomForest <- function(object, ...) {
   object$y
 }

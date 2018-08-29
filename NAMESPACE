@@ -1,5 +1,6 @@
 import(methods)
 
+importClassesFrom(kernlab, ksvm)
 importClassesFrom(party, RandomForest)
 
 importFrom(caret, createMultiFolds, createResample)
@@ -30,6 +31,7 @@ export(MLModel,
        GLMModel,
        GLMStepAICModel,
        GLMNetModel,
+       KSVMModel,
        NNetModel,
        RandomForestModel,
        SurvRegModel,
