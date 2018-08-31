@@ -25,6 +25,9 @@ CForestModel <- function(control = NULL) {
           matrix(nrow = nrow(newdata), byrow = TRUE) %>%
           drop
       }
+    },
+    response = function(object, ...) {
+      object@responses@variables[[1]]
     }
   )
 }

@@ -12,11 +12,16 @@ SVMModel <- function(scaled = NULL, type = NULL, kernel = NULL, kpar = NULL,
         asMLModelFit("SVMFit", SVMModel(...))
     },
     predict = function(object, newdata, ...) {
-      obs <- response(object)
-      object <- asParentFit(object)
-      pred <- kernlab::predict(object, newdata = newdata,
-                               type = ifelse(is.factor(obs),
-                                             "probabilities", "response"))
+      kernlab::predict(asParentFit(object), newdata = newdata,
+                       type = ifelse(is.factor(response(object)),
+                                     "probabilities", "response"))
+    },
+    response = function(object, ...) {
+      if(is.character(object@lev)) {
+        factor(object@ymatrix, levels = 1:object@nclass, labels = object@lev)
+      } else {
+        object@ymatrix
+      }
     }
   )
 }

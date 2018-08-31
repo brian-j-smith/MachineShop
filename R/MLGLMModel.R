@@ -10,8 +10,10 @@ GLMModel <- function(family = NULL, control = NULL) {
         asMLModelFit("GLMFit", GLMModel(...))
     },
     predict = function(object, newdata, ...) {
-      object <- asParentFit(object)
-      predict(object, newdata = newdata, type = "response")
+      predict(asParentFit(object), newdata = newdata, type = "response")
+    },
+    response = function(object, ...) {
+      response(object$formula, object$data)
     }
   )
 }
@@ -35,7 +37,6 @@ GLMStepAICModel <- function(family = NULL, control = NULL, direction = NULL,
         MASS::stepAIC(direction = direction, scope = args$scope, k = k,
                       trace = trace, steps = steps) %>%
         asMLModelFit("GLMFit", GLMModel(...))
-    },
-    predict = GLMModel()@predict
+    }
   )
 }

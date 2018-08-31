@@ -35,6 +35,9 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
       } else {
         predict(object, newx = newx, type = "response") %>% drop
       }
+    },
+    response = function(object, ...) {
+      response(object$mf)
     }
   )
 }

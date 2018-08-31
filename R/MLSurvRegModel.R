@@ -19,6 +19,9 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
       } else {
         exp(predict(object, newdata = newdata, type = "lp"))
       }
+    },
+    response = function(object, ...) {
+      object$y
     }
   )
 }
@@ -42,7 +45,6 @@ SurvRegStepAICModel <- function(dist = NULL, scale = NULL, parms = NULL,
         MASS::stepAIC(direction = direction, scope = args$scope, k = k,
                       trace = trace, steps = steps) %>%
         asMLModelFit("SurvRegFit", SurvRegModel(...))
-    },
-    predict = SurvRegModel()@predict
+    }
   )
 }

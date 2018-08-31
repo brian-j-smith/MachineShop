@@ -17,9 +17,11 @@ PLSModel <- function(ncomp, scale = NULL) {
       asMLModelFit(mfit, "PLSFit", PLSModel(...))
     },
     predict = function(object, newdata, ...) {
-      object <- asParentFit(object)
-      predict(object, newdata = newdata, ncomp = object$ncomp,
+      predict(asParentFit(object), newdata = newdata, ncomp = object$ncomp,
               type = "response") %>% drop
+    },
+    response = function(object, ...) {
+      object$y
     }
   )
 }

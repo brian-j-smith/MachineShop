@@ -10,8 +10,10 @@ POLRModel <- function(method = NULL) {
         asMLModelFit("POLRFit", POLRModel(...))
     },
     predict = function(object, newdata, ...) {
-      object <- asParentFit(object)
-      predict(object, newdata = newdata, type = "probs")
+      predict(asParentFit(object), newdata = newdata, type = "probs")
+    },
+    response = function(object, ...) {
+      object$model[[1]]
     }
   )
 }

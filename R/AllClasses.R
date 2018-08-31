@@ -43,28 +43,37 @@ CVControl <- function(folds = 10, repeats = 1, ...) {
 
 
 setClass("MLModel",
-  slots = c(name = "character", packages = "character", responses = "character",
-            params = "list", fit = "function", predict = "function")
+  slots = c(name = "character",
+            packages = "character",
+            responses = "character",
+            params = "list",
+            fit = "function",
+            predict = "function",
+            response = "function")
 )
 
 MLModel <- function(...) new("MLModel", ...)
 
 
 setClass("MLModelFit",
-  slots = c(.predict = "function"),
+  slots = c(.predict = "function",
+            .response = "function"),
   contains ="VIRTUAL"
 )
 
 asMLModelFit <- function(object, Class, model) {
   if(!inherits(model, "MLModel")) stop("model not of class MLModel")
   predict <- model@predict
+  response <- model@response
   if(isS4(object)) {
     object <- as(object, Class)
     if(!inherits(object, "MLModelFit")) stop("Class not from MLModelFit")
     object@.predict <- predict
+    object@.response <- response
   } else if(is.list(object)) {
     class(object) <- c(Class, "MLModelFit", class(object))
     object$.predict <- predict
+    object$.response <- response
   } else {
     stop("unsupported object class")
   }

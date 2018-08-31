@@ -18,6 +18,9 @@ CoxModel <- function(ties = NULL, control = NULL) {
       } else {
         exp(predict(object, newdata = newdata, type = "lp"))
       }
+    },
+    response = function(object, ...) {
+      object$y
     }
   )
 }
@@ -42,7 +45,6 @@ CoxStepAICModel <- function(ties = NULL, control = NULL, direction = NULL,
         MASS::stepAIC(direction = direction, scope = args$scope, k = k,
                       trace = trace, steps = steps) %>%
         asMLModelFit("CoxFit", CoxModel(...))
-    },
-    predict = CoxModel()@predict
+    }
   )
 }

@@ -12,8 +12,10 @@ C50Model <- function(trials = NULL, rules = NULL, control = NULL, costs = NULL)
       asMLModelFit(mfit, "C50Fit", C50Model(...))
     },
     predict = function(object, newdata, ...) {
-      object <- asParentFit(object)
-      predict(object, newdata = newdata, type = "prob")
+      predict(asParentFit(object), newdata = newdata, type = "prob")
+    },
+    response = function(object, ...) {
+      object$y
     }
   )
 }
