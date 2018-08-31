@@ -14,12 +14,10 @@ NNetModel <- function(size, linout = NULL, entropy = NULL, softmax = NULL,
       mfit$y <- response(formula, data)
       asMLModelFit(mfit, "NNetFit", NNetModel(...))
     },
-    predict = function(object, newdata, type = "response", cutoff = 0.5, ...) {
+    predict = function(object, newdata, ...) {
       obs <- object$y
       object <- asParentFit(object)
-      pred <- predict(object, newdata = newdata, type = "raw")
-      if(type == "response") pred <- convert(obs, pred, cutoff = cutoff)
-      pred
+      predict(object, newdata = newdata, type = "raw")
     }
   )
 }

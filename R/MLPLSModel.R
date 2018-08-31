@@ -16,13 +16,10 @@ PLSModel <- function(ncomp, scale = NULL) {
       mfit$y <- y
       asMLModelFit(mfit, "PLSFit", PLSModel(...))
     },
-    predict = function(object, newdata, type = "response", cutoff = 0.5, ...) {
-      obs <- object$y
+    predict = function(object, newdata, ...) {
       object <- asParentFit(object)
-      pred <- predict(object, newdata = newdata, ncomp = object$ncomp,
-                      type = "response") %>% drop
-      if(type == "response") pred <- convert(obs, pred, cutoff = cutoff)
-      pred
+      predict(object, newdata = newdata, ncomp = object$ncomp,
+              type = "response") %>% drop
     }
   )
 }

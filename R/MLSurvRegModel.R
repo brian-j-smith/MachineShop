@@ -10,20 +10,15 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
       rms::psm(formula, data = data, weights = weights, ...) %>%
         asMLModelFit("SurvRegFit", SurvRegModel(...))
     },
-    predict = function(object, newdata, type = "response", cutoff = 0.5,
-                       times = numeric(), ...) {
+    predict = function(object, newdata, times = numeric(), ...) {
       object <- asParentFit(object)
       if(length(times)) {
         pred <- rms::survest(object, newdata = newdata, times = times,
                              conf.int = FALSE)
-        if(inherits(pred, "survest.psm")) pred <- as.matrix(pred$surv)
+        if(inherits(pred, "survest.psm")) as.matrix(pred$surv) else pred
       } else {
-        pred <- exp(predict(object, newdata = newdata, type = "lp"))
+        exp(predict(object, newdata = newdata, type = "lp"))
       }
-      if(type == "response") {
-        pred <- convert(response(object), pred, cutoff = cutoff)
-      }
-      pred
     }
   )
 }

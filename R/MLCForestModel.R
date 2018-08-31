@@ -9,16 +9,13 @@ CForestModel <- function(control = NULL) {
       party::cforest(formula, data = data, weights = weights, ...) %>%
         asMLModelFit("CForestFit", CForestModel(...))
     },
-    predict = function(object, newdata, type = "response", cutoff = 0.5,
-                       times = numeric(), ...) {
+    predict = function(object, newdata, times = numeric(), ...) {
       object <- asParentFit(object)
-      pred <- if(object@responses@is_censored) {
+      if(object@responses@is_censored) {
         if(length(times)) {
           predict(object, newdata = newdata, type = "prob") %>%
             lapply(function(fit) predict(fit, times)) %>%
             (function(args) do.call(rbind, args))
-        } else if(type == "response") {
-          predict(object, newdata = newdata, type = "response")
         } else {
           log(2) / predict(object, newdata = newdata, type = "response")
         }
@@ -28,10 +25,6 @@ CForestModel <- function(control = NULL) {
           matrix(nrow = nrow(newdata), byrow = TRUE) %>%
           drop
       }
-      if(type == "response") {
-        pred <- convert(response(object), pred, cutoff = cutoff)
-      }
-      pred
     }
   )
 }

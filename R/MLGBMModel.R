@@ -11,15 +11,15 @@ GBMModel <- function(distribution = NULL, n.trees = NULL,
       gbm::gbm(formula, data = data, weights = weights, ...) %>%
         asMLModelFit("GBMFit", GBMModel(...))
     },
-    predict = function(object, newdata, type = "response", cutoff = 0.5,
-                       times = numeric(), ...) {
+    predict = function(object, newdata, times = numeric(), ...) {
+      obs <- response(object)
       object <- asParentFit(object)
-      pred <- if(object$distribution$name == "coxph") {
+      if(object$distribution$name == "coxph") {
         if(length(times)) {
           lp <- predict(object, n.trees = object$n.trees, type = "link")
           newlp <- predict(object, newdata = newdata, n.trees = object$n.trees,
                            type = "link")
-          cumhaz <- basehaz(response(object), exp(lp), times)
+          cumhaz <- basehaz(obs, exp(lp), times)
           exp(exp(newlp - mean(lp)) %o% -cumhaz)
         } else {
           exp(predict(object, newdata = newdata, n.trees = object$n.trees,
@@ -29,10 +29,6 @@ GBMModel <- function(distribution = NULL, n.trees = NULL,
         predict(object, newdata = newdata, n.trees = object$n.trees,
                 type = "response") %>% drop
       }
-      if(type == "response") {
-        pred <- convert(response(object), pred, cutoff = cutoff)
-      }
-      pred
     }
   )
 }

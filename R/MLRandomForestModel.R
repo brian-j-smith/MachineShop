@@ -10,15 +10,11 @@ RandomForestModel <- function(ntree = NULL, mtry = NULL, replace = NULL,
       randomForest::randomForest(formula, data = data, ...) %>%
         asMLModelFit("RandomForestFit", RandomForestModel(...))
     },
-    predict = function(object, newdata, type = "response", cutoff = 0.5, ...) {
-      object <- asParentFit(object)
+    predict = function(object, newdata, ...) {
       obs <- response(object)
+      object <- asParentFit(object)
       pred <- predict(object, newdata = newdata,
                       type = ifelse(is.factor(obs), "prob", "response"))
-      if(type == "response") {
-        pred <- convert(obs, pred, cutoff = cutoff)
-      }
-      pred
     }
   )
 }

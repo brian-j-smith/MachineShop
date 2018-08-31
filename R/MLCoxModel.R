@@ -10,19 +10,14 @@ CoxModel <- function(ties = NULL, control = NULL) {
                surv = TRUE, y = TRUE, ...) %>%
         asMLModelFit("CoxFit", CoxModel(...))
     },
-    predict = function(object, newdata, type = "response", cutoff = 0.5,
-                       times = numeric(), ...) {
+    predict = function(object, newdata, times = numeric(), ...) {
       object <- asParentFit(object)
-      pred <- if(length(times)) {
+      if(length(times)) {
         rms::survest(object, newdata = newdata, times = times,
                      conf.int = FALSE, se.fit = FALSE)$surv %>% as.matrix
       } else {
         exp(predict(object, newdata = newdata, type = "lp"))
       }
-      if(type == "response") {
-        pred <- convert(response(object), pred, cutoff = cutoff)
-      }
-      pred
     }
   )
 }

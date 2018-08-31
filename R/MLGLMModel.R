@@ -9,13 +9,9 @@ GLMModel <- function(family = NULL, control = NULL) {
       stats::glm(formula, data = data, weights = weights, ...) %>%
         asMLModelFit("GLMFit", GLMModel(...))
     },
-    predict = function(object, newdata, type = "response", cutoff = 0.5, ...) {
+    predict = function(object, newdata, ...) {
       object <- asParentFit(object)
-      pred <- predict(object, newdata = newdata, type = "response")
-      if(type == "response") {
-        pred <- convert(response(object), pred, cutoff = cutoff)
-      }
-      pred
+      predict(object, newdata = newdata, type = "response")
     }
   )
 }

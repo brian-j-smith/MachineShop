@@ -1,7 +1,9 @@
 predict.MLModelFit <- function(object, newdata, type = c("response", "prob"),
                                cutoff = 0.5, times = NULL, ...) {
+  obs <- response(object)
   predict <- if(isS4(object)) object@.predict else object$.predict
-  predict(object, newdata, type = match.arg(type), cutoff = cutoff, times = times)
+  pred <- predict(object, newdata, times = times)
+  if(type == "response") convert(obs, pred, cutoff = cutoff) else pred
 }
 
 

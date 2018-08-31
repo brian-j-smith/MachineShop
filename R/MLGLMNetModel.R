@@ -15,15 +15,14 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
       mfit$mf <- mf
       asMLModelFit(mfit, "GLMNetFit", GLMNetModel(...))
     },
-    predict = function(object, newdata, type = "response", cutoff = 0.5,
-                       times = numeric(), ...) {
+    predict = function(object, newdata, times = numeric(), ...) {
       mf <- object$mf
       object <- asParentFit(object)
       obj_terms <- terms(mf)
       newmf <- model.frame(obj_terms, newdata, na.action = NULL)
       newx <- model.matrix(obj_terms, newmf)[, -1, drop = FALSE]
       y <- model.response(mf)
-      pred <- if(is.Surv(y)) {
+      if(is.Surv(y)) {
         if(length(times)) {
           x <- model.matrix(obj_terms, mf)[, -1, drop = FALSE]
           lp <- predict(object, newx = x, type = "link") %>% drop
@@ -36,10 +35,6 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
       } else {
         predict(object, newx = newx, type = "response") %>% drop
       }
-      if(type == "response") {
-        pred <- convert(y, pred, cutoff = cutoff)
-      }
-      pred
     }
   )
 }
