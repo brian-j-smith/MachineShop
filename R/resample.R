@@ -17,7 +17,7 @@ setMethod("resample", c("MLModel", "formula"),
 
 setMethod("resample", c("BootControl", "data.frame"),
   function(object, x, model) {
-    obs <- model.response(x)
+    obs <- response(x)
     bootids <- createResample(obs, times = object@number)
     foreach(bootid = bootids, .packages = c("survival", "MLModels"),
             .combine = "rbind") %dopar% {
@@ -31,7 +31,7 @@ setMethod("resample", c("BootControl", "data.frame"),
 
 setMethod("resample", c("CVControl", "data.frame"),
   function(object, x, model) {
-    foldids <- createMultiFolds(model.response(x),
+    foldids <- createMultiFolds(response(x),
                                 k = object@folds,
                                 times = object@repeats)
     foreach(foldid = foldids, .packages = c("survival", "MLModels"),
@@ -39,7 +39,7 @@ setMethod("resample", c("CVControl", "data.frame"),
       train <- x[foldid,]
       test <- x[-foldid,]
       trainfit <- fit(model, train)
-      obs <- model.response(test)
+      obs <- response(test)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
     } %>% as("Resamples")

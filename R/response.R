@@ -8,6 +8,11 @@ response.cph <- function(object, ...) {
 }
 
 
+response.data.frame <- function(object, ...) {
+  model.response(object)
+}
+
+
 response.formula <- function(object, data, ...) {
   eval(object[[2]], data)
 }
