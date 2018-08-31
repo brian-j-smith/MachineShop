@@ -1,0 +1,25 @@
+NNetModel <- function(size, linout = NULL, entropy = NULL, softmax = NULL,
+                      censored = NULL, skip = NULL, rang = NULL, decay = NULL,
+                      maxit = NULL, Hess = NULL, trace = NULL, MaxNWts = NULL,
+                      abstol = NULL, reltol = NULL) {
+  MLModel(
+    name = "NNetModel",
+    packages = "nnet",
+    responses = c("factor", "numeric"),
+    params = params(environment()),
+    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+      environment(formula) <- environment()
+      mfit <- nnet::nnet(formula, data = data, weights = weights, trace = FALSE,
+                         ...)
+      mfit$y <- response(formula, data)
+      asMLModelFit(mfit, "NNetFit", NNetModel(...))
+    },
+    predict = function(object, newdata, type = "response", cutoff = 0.5, ...) {
+      obs <- object$y
+      object <- asParentFit(object)
+      pred <- predict(object, newdata = newdata, type = "raw")
+      if(type == "response") pred <- convert(obs, pred, cutoff = cutoff)
+      pred
+    }
+  )
+}

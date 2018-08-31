@@ -32,13 +32,13 @@ export(MLModel,
        GLMModel,
        GLMStepAICModel,
        GLMNetModel,
-       KSVMModel,
        NNetModel,
        PLSModel,
        POLRModel,
        RandomForestModel,
        SurvRegModel,
-       SurvRegStepAICModel)
+       SurvRegStepAICModel,
+       SVMModel)
 
 exportClasses(MLModel,
               MLModelFit)

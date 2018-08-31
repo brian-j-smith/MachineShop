@@ -81,7 +81,7 @@ asParentFit <- function(object) {
 }
 
 
-setClass("KSVMFit", contain = c("MLModelFit", "ksvm"))
+setClass("SVMFit", contain = c("MLModelFit", "ksvm"))
 setClass("CForestFit", contains = c("MLModelFit", "RandomForest"))
 
 

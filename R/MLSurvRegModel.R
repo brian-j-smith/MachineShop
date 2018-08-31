@@ -1,0 +1,53 @@
+SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
+                         control = NULL) {
+  MLModel(
+    name = "SurvRegModel",
+    packages = c("rms", "survival"),
+    responses = "Surv",
+    params = params(environment()),
+    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+      environment(formula) <- environment()
+      rms::psm(formula, data = data, weights = weights, ...) %>%
+        asMLModelFit("SurvRegFit", SurvRegModel(...))
+    },
+    predict = function(object, newdata, type = "response", cutoff = 0.5,
+                       times = numeric(), ...) {
+      object <- asParentFit(object)
+      if(length(times)) {
+        pred <- rms::survest(object, newdata = newdata, times = times,
+                             conf.int = FALSE)
+        if(inherits(pred, "survest.psm")) pred <- as.matrix(pred$surv)
+      } else {
+        pred <- exp(predict(object, newdata = newdata, type = "lp"))
+      }
+      if(type == "response") {
+        pred <- convert(response(object), pred, cutoff = cutoff)
+      }
+      pred
+    }
+  )
+}
+
+
+SurvRegStepAICModel <- function(dist = NULL, scale = NULL, parms = NULL,
+                                control = NULL, direction = NULL, scope = NULL,
+                                k = NULL, trace = NULL, steps = NULL) {
+  MLModel(
+    name = "SurvRegStepAICModel",
+    packages = c("MASS", "rms", "survival"),
+    responses = "Surv",
+    params = params(environment()),
+    fit = function(formula, data, weights = rep(1, nrow(data)),
+                   direction = c("both", "backward", "forward"), scope = list(),
+                   k = 2, trace = 0, steps = 1000, ...) {
+      environment(formula) <- environment()
+      direction <- match.arg(direction)
+      args <- argsStepAIC(formula, direction, scope)
+      rms::psm(args$formula, data = data, weights = weights, ...) %>%
+        MASS::stepAIC(direction = direction, scope = args$scope, k = k,
+                      trace = trace, steps = steps) %>%
+        asMLModelFit("SurvRegFit", SurvRegModel(...))
+    },
+    predict = SurvRegModel()@predict
+  )
+}
