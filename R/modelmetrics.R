@@ -63,14 +63,16 @@ setMethod("modelmetrics", c("Surv", "matrix"),
       roc[i] <- rocSurv(observed, predicted[,i], survtimes[i])
       brier[i] <- brierSurv(observed, predicted[,i], survtimes[i])
     }
-    statnames <- c("ROC", "Brier")
     if(ntimes > 1) {
-      roc <- c(meanSurvMetric(roc, survtimes), roc)
-      brier <- c(meanSurvMetric(brier, survtimes), brier)
-      statnames <- c(statnames, paste(rep(statnames, each = ntimes),
-                                      1:ntimes, sep = ".t"))
+      data.frame(
+        ROC = meanSurvMetric(roc, survtimes),
+        Brier = meanSurvMetric(brier, survtimes),
+        ROCTime = I(t(roc)),
+        BrierTime = I(t(brier))
+      )
+    } else {
+      c(ROC = roc, Brier = brier)
     }
-    structure(c(roc[1], brier[1], roc[-1], brier[-1]), names = statnames)
   }
 )
 

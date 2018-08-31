@@ -10,7 +10,7 @@ summary.Resamples <- function(object,
       c(stat(x, na.rm = na.rm))
     }) %>% c("NA" = mean(is.na(x)))
   }
-  sapply(object, f)
+  apply(object, 2, f)
 }
 
 
