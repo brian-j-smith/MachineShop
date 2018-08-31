@@ -5,8 +5,9 @@ C50Model <- function(trials = NULL, rules = NULL, control = NULL, costs = NULL)
     packages = "C50",
     responses = "factor",
     params = params(environment()),
-    fit = function(formula, data, ...) {
-      C50::C5.0(formula, data = data, ...) %>%
+    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+      environment(formula) <- environment()
+      C50::C5.0(formula, data = data, weights = weights, ...) %>%
         asMLModelFit("C50Fit", C50Model(...))
     },
     predict = function(object, newdata, type = "response", cutoff = 0.5, ...) {
@@ -27,8 +28,9 @@ CForestModel <- function(control = NULL) {
     packages = "party",
     responses = c("factor", "numeric", "Surv"),
     params = params(environment()),
-    fit = function(formula, data, ...) {
-      party::cforest(formula, data = data, ...) %>%
+    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+      environment(formula) <- environment()
+      party::cforest(formula, data = data, weights = weights, ...) %>%
         asMLModelFit("CForestFit", CForestModel(...))
     },
     predict = function(object, newdata, type = "response", cutoff = 0.5,
@@ -62,24 +64,23 @@ CForestModel <- function(control = NULL) {
 CoxModel <- function(ties = NULL, control = NULL) {
   MLModel(
     name = "CoxModel",
-    packages = "survival",
+    packages = c("rms", "survival"),
     responses = "Surv",
     params = params(environment()),
-    fit = function(formula, data, ...) {
-      survival::coxph(formula, data = data, x = TRUE, ...) %>%
+    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+      environment(formula) <- environment()
+      rms::cph(formula, data = data, weights = weights, singular.ok = TRUE,
+               surv = TRUE, y = TRUE, ...) %>%
         asMLModelFit("CoxFit", CoxModel(...))
     },
     predict = function(object, newdata, type = "response", cutoff = 0.5,
                        times = numeric(), ...) {
       object <- asParentFit(object)
       pred <- if(length(times)) {
-        timevar <- all.vars(object$formula)[1]
-        sapply(times, function(time) {
-          newdata[[timevar]] <- time
-          exp(-predict(object, newdata = newdata, type = "expected"))
-        })
+        rms::survest(object, newdata = newdata, times = times,
+                     conf.int = FALSE, se.fit = FALSE)$surv %>% as.matrix
       } else {
-        predict(object, newdata = newdata, type = "risk")
+        exp(predict(object, newdata = newdata, type = "lp"))
       }
       if(type == "response") {
         pred <- convert(response(object), pred, cutoff = cutoff)
@@ -95,14 +96,19 @@ CoxStepAICModel <- function(ties = NULL, control = NULL, direction = NULL,
   {
   MLModel(
     name = "CoxStepAICModel",
-    packages = c("MASS", "survival"),
+    packages = c("MASS", "rms", "survival"),
     responses = "Surv",
     params = params(environment()),
-    fit = function(formula, data, direction = c("both", "backward", "forward"),
-                   scope = list(), k = 2, trace = 0, steps = 1000, ...) {
-      fitStepAIC(function(formula, data) {
-        survival::coxph(formula, data = data, x = TRUE, ...)
-      }, data, formula, match.arg(direction), scope, k, trace, steps) %>%
+    fit = function(formula, data, weights = rep(1, nrow(data)),
+                   direction = c("both", "backward", "forward"), scope = list(),
+                   k = 2, trace = 0, steps = 1000, ...) {
+      environment(formula) <- environment()
+      direction <- match.arg(direction)
+      args <- argsStepAIC(formula, direction, scope)
+      rms::cph(args$formula, data = data, weights = weights, singular.ok = TRUE,
+               surv = TRUE, y = TRUE, ...) %>%
+        MASS::stepAIC(direction = direction, scope = args$scope, k = k,
+                      trace = trace, steps = steps) %>%
         asMLModelFit("CoxFit", CoxModel(...))
     },
     predict = CoxModel()@predict
@@ -118,8 +124,9 @@ GBMModel <- function(distribution = NULL, n.trees = NULL,
     packages = "gbm",
     responses = c("factor", "numeric", "Surv"),
     params = params(environment()),
-    fit = function(formula, data, ...) {
-      gbm::gbm(formula, data = data, ...) %>%
+    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+      environment(formula) <- environment()
+      gbm::gbm(formula, data = data, weights = weights, ...) %>%
         asMLModelFit("GBMFit", GBMModel(...))
     },
     predict = function(object, newdata, type = "response", cutoff = 0.5,
@@ -155,8 +162,9 @@ GLMModel <- function(family = NULL, control = NULL) {
     packages = "stats",
     responses = c("factor", "numeric"),
     params = params(environment()),
-    fit = function(formula, data, ...) {
-      stats::glm(formula, data = data, ...) %>%
+    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+      environment(formula) <- environment()
+      stats::glm(formula, data = data, weights = weights, ...) %>%
         asMLModelFit("GLMFit", GLMModel(...))
     },
     predict = function(object, newdata, type = "response", cutoff = 0.5, ...) {
@@ -179,11 +187,15 @@ GLMStepAICModel <- function(family = NULL, control = NULL, direction = NULL,
     packages = c("MASS", "stats"),
     responses = c("factor", "numeric"),
     params = params(environment()),
-    fit = function(formula, data, direction = c("both", "backward", "forward"),
-                   scope = list(), k = 2, trace = 0, steps = 1000, ...) {
-      fitStepAIC(function(formula, data) {
-        stats::glm(formula, data = data, ...)
-      }, data, formula, match.arg(direction), scope, k, trace, steps) %>%
+    fit = function(formula, data, weights = rep(1, nrow(data)),
+                   direction = c("both", "backward", "forward"), scope = list(),
+                   k = 2, trace = 0, steps = 1000, ...) {
+      environment(formula) <- environment()
+      direction <- match.arg(direction)
+      args <- argsStepAIC(formula, direction, scope)
+      stats::glm(args$formula, data = data, weights = weights, ...) %>%
+        MASS::stepAIC(direction = direction, scope = args$scope, k = k,
+                      trace = trace, steps = steps) %>%
         asMLModelFit("GLMFit", GLMModel(...))
     },
     predict = GLMModel()@predict
@@ -200,11 +212,11 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
     packages = "glmnet",
     responses = c("factor", "numeric", "Surv"),
     params = params(environment()),
-    fit = function(formula, data, ...) {
+    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
       mf <- model.frame(formula, data, na.action = NULL)
       x <- model.matrix(formula, mf)[, -1, drop = FALSE]
       y <- model.response(mf)
-      mfit <- glmnet::glmnet(x, y, nlambda = 1, ...)
+      mfit <- glmnet::glmnet(x, y, weights = weights, nlambda = 1, ...)
       mfit$mf <- mf
       asMLModelFit(mfit, "GLMNetFit", GLMNetModel(...))
     },
@@ -247,6 +259,7 @@ KSVMModel <- function(scaled = NULL, type = NULL, kernel = NULL, kpar = NULL,
     responses = c("factor", "numeric"),
     params = params(environment()),
     fit = function(formula, data, ...) {
+      environment(formula) <- environment()
       kernlab::ksvm(formula, data = data, prob.model = TRUE, ...) %>%
         asMLModelFit("KSVMFit", KSVMModel(...))
     },
@@ -272,8 +285,10 @@ NNetModel <- function(size, linout = NULL, entropy = NULL, softmax = NULL,
     packages = "nnet",
     responses = c("factor", "numeric"),
     params = params(environment()),
-    fit = function(formula, data, ...) {
-      mfit <- nnet::nnet(formula, data = data, trace = FALSE, ...)
+    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+      environment(formula) <- environment()
+      mfit <- nnet::nnet(formula, data = data, weights = weights, trace = FALSE,
+                         ...)
       mfit$y <- response(formula, data)
       asMLModelFit(mfit, "NNetFit", NNetModel(...))
     },
@@ -295,6 +310,7 @@ PLSModel <- function(ncomp, scale = NULL) {
     responses = c("factor", "numeric"),
     params = params(environment()),
     fit = function(formula, data, ...) {
+      environment(formula) <- environment()
       y <- response(formula, data)
       if(is.factor(y)) {
         varname <- all.vars(formula)[1]
@@ -323,8 +339,9 @@ POLRModel <- function(method = NULL) {
     packages = "MASS",
     responses = "ordered",
     params = params(environment()),
-    fit = function(formula, data, ...) {
-      MASS::polr(formula, data = data, ...) %>%
+    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+      environment(formula) <- environment()
+      MASS::polr(formula, data = data, weights = weights, ...) %>%
         asMLModelFit("POLRModel", POLRModel(...))
     },
     predict = function(object, newdata, type = "response", cutoff = 0.5, ...) {
@@ -347,6 +364,7 @@ RandomForestModel <- function(ntree = NULL, mtry = NULL, replace = NULL,
     responses = c("factor", "numeric"),
     params = params(environment()),
     fit = function(formula, data, ...) {
+      environment(formula) <- environment()
       randomForest::randomForest(formula, data = data, ...) %>%
         asMLModelFit("RandomForestFit", RandomForestModel(...))
     },
@@ -371,8 +389,9 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
     packages = c("rms", "survival"),
     responses = "Surv",
     params = params(environment()),
-    fit = function(formula, data, ...) {
-      rms::psm(formula, data = data, ...) %>%
+    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+      environment(formula) <- environment()
+      rms::psm(formula, data = data, weights = weights, ...) %>%
         asMLModelFit("SurvRegFit", SurvRegModel(...))
     },
     predict = function(object, newdata, type = "response", cutoff = 0.5,
@@ -383,13 +402,12 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
                              conf.int = FALSE)
         if(inherits(pred, "survest.psm")) pred <- as.matrix(pred$surv)
       } else {
-        pred <- predict(object, newdata = newdata, type = "risk")
+        pred <- exp(predict(object, newdata = newdata, type = "lp"))
       }
       if(type == "response") {
         pred <- convert(response(object), pred, cutoff = cutoff)
       }
       pred
-      
     }
   )
 }
@@ -403,11 +421,15 @@ SurvRegStepAICModel <- function(dist = NULL, scale = NULL, parms = NULL,
     packages = c("MASS", "rms", "survival"),
     responses = "Surv",
     params = params(environment()),
-    fit = function(formula, data, direction = c("both", "backward", "forward"),
-                   scope = list(), k = 2, trace = 0, steps = 1000, ...) {
-      fitStepAIC(function(formula, data) {
-        rms::psm(formula, data = data, ...)
-      }, data, formula, match.arg(direction), scope, k, trace, steps) %>%
+    fit = function(formula, data, weights = rep(1, nrow(data)),
+                   direction = c("both", "backward", "forward"), scope = list(),
+                   k = 2, trace = 0, steps = 1000, ...) {
+      environment(formula) <- environment()
+      direction <- match.arg(direction)
+      args <- argsStepAIC(formula, direction, scope)
+      rms::psm(args$formula, data = data, weights = weights, ...) %>%
+        MASS::stepAIC(direction = direction, scope = args$scope, k = k,
+                      trace = trace, steps = steps) %>%
         asMLModelFit("SurvRegFit", SurvRegModel(...))
     },
     predict = SurvRegModel()@predict

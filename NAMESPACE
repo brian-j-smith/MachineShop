@@ -11,8 +11,8 @@ importFrom(magrittr, "%>%")
 importFrom(MLmetrics, MultiLogLoss, PRAUC)
 importFrom(ModelMetrics, auc, brier, ce, kappa, mae, rmse, sensitivity,
            specificity)
-importFrom(stats, approx, cor, median, model.frame, model.matrix,
-           model.response, predict, sd, terms, update)
+importFrom(stats, approx, cor, formula, median, model.frame, model.matrix,
+           model.response, model.weights, predict, sd, terms, update)
 importFrom(survival, is.Surv, Surv, survfit)
 importFrom(survivalROC, survivalROC)
 importFrom(utils, tail)

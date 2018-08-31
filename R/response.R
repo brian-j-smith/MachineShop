@@ -3,7 +3,7 @@ response <- function(object, ...) {
 }
 
 
-response.coxph <- function(object, ...) {
+response.cph <- function(object, ...) {
   object$y
 }
 
