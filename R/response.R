@@ -14,6 +14,6 @@ response.formula <- function(object, data, ...) {
 
 
 response.MLModelFit <- function(object, ...) {
-  response <- if(isS4(object)) object@.response else object$.response
+  response <- field(object, ".response")
   response(object, ...)
 }

@@ -9,6 +9,16 @@ basehaz <- function(y, risk, times) {
 }
 
 
+field <- function(object, name) {
+  if(isS4(object)) slot(object, name) else object[[name]]
+}
+
+"field<-" <- function(object, name, value) {
+  if(isS4(object)) slot(object, name) <- value else object[[name]] <- value
+  object
+}
+
+
 params <- function(env) {
   x <- as.list(env)
   missing_args <- names(x)[sapply(x, is.name)]

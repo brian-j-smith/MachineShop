@@ -63,24 +63,20 @@ setClass("MLModelFit",
   contains ="VIRTUAL"
 )
 
-asMLModelFit <- function(object, Class, model) {
-  if(!inherits(model, "MLModel")) stop("model not of class MLModel")
-  predict <- model@predict
-  response <- model@response
-  varimp <- model@varimp
+asMLModelFit <- function(object, Class, model = NULL) {
   if(isS4(object)) {
     object <- as(object, Class)
     if(!inherits(object, "MLModelFit")) stop("Class not from MLModelFit")
-    object@.predict <- predict
-    object@.response <- response
-    object@.varimp <- varimp
   } else if(is.list(object)) {
     class(object) <- c(Class, "MLModelFit", class(object))
-    object$.predict <- predict
-    object$.response <- response
-    object$.varimp <- varimp
   } else {
     stop("unsupported object class")
+  }
+  if(!is.null(model)) {
+    if(!inherits(model, "MLModel")) stop("model not of class MLModel")
+    field(object, ".predict") <- model@predict
+    field(object, ".response") <- model@response
+    field(object, ".varimp") <- model@varimp
   }
   object
 }
@@ -88,9 +84,15 @@ asMLModelFit <- function(object, Class, model) {
 asParentFit <- function(object) {
   if(!inherits(object, "MLModelFit")) stop("object not of class MLModelFit")
   if(isS4(object)) {
-    as(object, extends(class(object))[3])
+    classes <- extends(class(object))
+    from <- match("MLModelFit", classes) + 1
+    as(object, classes[from])
   } else {
-    structure(object, class = class(object)[-(1:2)])
+    object[c(".predict", ".response", ".varimp")] <- NULL
+    classes <- class(object)
+    from <- match("MLModelFit", classes) + 1
+    to <- length(classes)
+    structure(object, class = classes[from:to])
   }
 }
 
