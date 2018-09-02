@@ -4,7 +4,8 @@ PLSModel <- function(ncomp = 1, scale = NULL) {
     packages = "pls",
     responses = c("factor", "numeric"),
     params = params(environment()),
-    fit = function(formula, data, ...) {
+    fit = function(formula, data, weights = NULL, ...) {
+      if(!is.null(weights)) warning("weights are unsupported and will be ignored")
       environment(formula) <- environment()
       y <- response(formula, data)
       if(is.factor(y)) {

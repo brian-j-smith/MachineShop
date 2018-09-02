@@ -6,7 +6,8 @@ SVMModel <- function(scaled = NULL, type = NULL, kernel = NULL, kpar = NULL,
     packages = "kernlab",
     responses = c("factor", "numeric"),
     params = params(environment()),
-    fit = function(formula, data, ...) {
+    fit = function(formula, data, weights = NULL, ...) {
+      if(!is.null(weights)) warning("weights are unsupported and will be ignored")
       environment(formula) <- environment()
       kernlab::ksvm(formula, data = data, prob.model = TRUE, ...) %>%
         asMLModelFit("SVMFit", SVMModel(...))

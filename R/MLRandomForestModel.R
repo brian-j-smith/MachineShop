@@ -5,7 +5,8 @@ RandomForestModel <- function(ntree = NULL, mtry = NULL, replace = NULL,
     packages = "randomForest",
     responses = c("factor", "numeric"),
     params = params(environment()),
-    fit = function(formula, data, ...) {
+    fit = function(formula, data, weights = NULL, ...) {
+      if(!is.null(weights)) warning("weights are unsupported and will be ignored")
       environment(formula) <- environment()
       randomForest::randomForest(formula, data = data, ...) %>%
         asMLModelFit("RandomForestFit", RandomForestModel(...))
