@@ -8,7 +8,16 @@ GBMModel <- function(distribution = NULL, n.trees = NULL,
     params = params(environment()),
     fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
       environment(formula) <- environment()
-      gbm::gbm(formula, data = data, weights = weights, ...) %>%
+      args <- list(...)
+      distribution <- args$distribution
+      if(is.null(distribution)) {
+        distribution <- switch(class(response(formula, data)),
+                               "factor" = "multinomial",
+                               "numeric" = "gaussian",
+                               "Surv" = "coxph")
+      }
+      gbm::gbm(formula, data = data, distribution = distribution,
+               weights = weights, ...) %>%
         asMLModelFit("GBMFit", GBMModel(...))
     },
     predict = function(object, newdata, times = numeric(), ...) {

@@ -32,7 +32,7 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
 
 SurvRegStepAICModel <- function(dist = NULL, scale = NULL, parms = NULL,
                                 control = NULL, direction = NULL, scope = NULL,
-                                k = NULL, trace = NULL, steps = NULL) {
+                                k = NULL, trace = FALSE, steps = NULL) {
   MLModel(
     name = "SurvRegStepAICModel",
     packages = c("MASS", "rms", "survival"),
@@ -40,7 +40,7 @@ SurvRegStepAICModel <- function(dist = NULL, scale = NULL, parms = NULL,
     params = params(environment()),
     fit = function(formula, data, weights = rep(1, nrow(data)),
                    direction = c("both", "backward", "forward"), scope = list(),
-                   k = 2, trace = 0, steps = 1000, ...) {
+                   k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()
       direction <- match.arg(direction)
       args <- argsStepAIC(formula, direction, scope)

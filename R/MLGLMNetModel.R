@@ -11,7 +11,16 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
       mf <- model.frame(formula, data, na.action = NULL)
       x <- model.matrix(formula, mf)[, -1, drop = FALSE]
       y <- model.response(mf)
-      mfit <- glmnet::glmnet(x, y, weights = weights, nlambda = 1, ...)
+      args <- list(...)
+      family <- args$family
+      if(is.null(family)) {
+        family <- switch(class(y),
+                         "factor" = "multinomial",
+                         "numeric" = "gaussian",
+                         "Surv" = "cox")
+      }
+      mfit <- glmnet::glmnet(x, y, family = family, weights = weights,
+                             nlambda = 1, ...)
       mfit$mf <- mf
       asMLModelFit(mfit, "GLMNetFit", GLMNetModel(...))
     },

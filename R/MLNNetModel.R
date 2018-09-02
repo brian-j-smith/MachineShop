@@ -1,6 +1,6 @@
-NNetModel <- function(size, linout = NULL, entropy = NULL, softmax = NULL,
+NNetModel <- function(size = 1, linout = NULL, entropy = NULL, softmax = NULL,
                       censored = NULL, skip = NULL, rang = NULL, decay = NULL,
-                      maxit = NULL, Hess = NULL, trace = NULL, MaxNWts = NULL,
+                      maxit = NULL, Hess = NULL, trace = FALSE, MaxNWts = NULL,
                       abstol = NULL, reltol = NULL) {
   MLModel(
     name = "NNetModel",
@@ -9,8 +9,7 @@ NNetModel <- function(size, linout = NULL, entropy = NULL, softmax = NULL,
     params = params(environment()),
     fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
       environment(formula) <- environment()
-      mfit <- nnet::nnet(formula, data = data, weights = weights, trace = FALSE,
-                         ...)
+      mfit <- nnet::nnet(formula, data = data, weights = weights, ...)
       mfit$y <- response(formula, data)
       asMLModelFit(mfit, "NNetFit", NNetModel(...))
     },

@@ -1,4 +1,4 @@
-PLSModel <- function(ncomp, scale = NULL) {
+PLSModel <- function(ncomp = 1, scale = NULL) {
   MLModel(
     name = "PLSModel",
     packages = "pls",

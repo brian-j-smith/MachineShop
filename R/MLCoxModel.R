@@ -30,7 +30,7 @@ CoxModel <- function(ties = NULL, control = NULL) {
 
 
 CoxStepAICModel <- function(ties = NULL, control = NULL, direction = NULL,
-                            scope = NULL, k = NULL, trace = NULL, steps = NULL)
+                            scope = NULL, k = NULL, trace = FALSE, steps = NULL)
   {
   MLModel(
     name = "CoxStepAICModel",
@@ -39,7 +39,7 @@ CoxStepAICModel <- function(ties = NULL, control = NULL, direction = NULL,
     params = params(environment()),
     fit = function(formula, data, weights = rep(1, nrow(data)),
                    direction = c("both", "backward", "forward"), scope = list(),
-                   k = 2, trace = 0, steps = 1000, ...) {
+                   k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()
       direction <- match.arg(direction)
       args <- argsStepAIC(formula, direction, scope)
