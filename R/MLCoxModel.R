@@ -1,7 +1,7 @@
 CoxModel <- function(ties = NULL, control = NULL) {
   MLModel(
     name = "CoxModel",
-    packages = c("rms", "survival"),
+    packages = "rms",
     responses = "Surv",
     params = params(environment()),
     fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
@@ -34,7 +34,7 @@ CoxStepAICModel <- function(ties = NULL, control = NULL, direction = NULL,
   {
   MLModel(
     name = "CoxStepAICModel",
-    packages = c("MASS", "rms", "survival"),
+    packages = c("MASS", "rms"),
     responses = "Surv",
     params = params(environment()),
     fit = function(formula, data, weights = rep(1, nrow(data)),

@@ -2,7 +2,7 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
                          control = NULL) {
   MLModel(
     name = "SurvRegModel",
-    packages = c("rms", "survival"),
+    packages = "rms",
     responses = "Surv",
     params = params(environment()),
     fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
@@ -35,7 +35,7 @@ SurvRegStepAICModel <- function(dist = NULL, scale = NULL, parms = NULL,
                                 k = NULL, trace = FALSE, steps = NULL) {
   MLModel(
     name = "SurvRegStepAICModel",
-    packages = c("MASS", "rms", "survival"),
+    packages = c("MASS", "rms"),
     responses = "Surv",
     params = params(environment()),
     fit = function(formula, data, weights = rep(1, nrow(data)),
