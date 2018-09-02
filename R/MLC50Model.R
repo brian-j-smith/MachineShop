@@ -16,6 +16,9 @@ C50Model <- function(trials = NULL, rules = NULL, control = NULL, costs = NULL)
     },
     response = function(object, ...) {
       object$y
+    },
+    varimp = function(object, ...) {
+      C50::C5imp(object, ...)
     }
   )
 }

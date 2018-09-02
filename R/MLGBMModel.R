@@ -38,6 +38,9 @@ GBMModel <- function(distribution = NULL, n.trees = NULL,
         "coxph" = with(object$data, Surv(y, Misc)[order(i.timeorder),]),
         object$data$y
       )
+    },
+    varimp = function(object, n.trees = object$n.trees, ...) {
+      gbm::relative.influence(object, n.trees = n.trees, ...)
     }
   )
 }

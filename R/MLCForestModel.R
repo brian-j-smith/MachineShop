@@ -28,6 +28,9 @@ CForestModel <- function(control = NULL) {
     },
     response = function(object, ...) {
       object@responses@variables[[1]]
+    },
+    varimp = function(object, ...) {
+      party::varimp(object, ...)
     }
   )
 }

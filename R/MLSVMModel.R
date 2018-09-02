@@ -22,6 +22,9 @@ SVMModel <- function(scaled = NULL, type = NULL, kernel = NULL, kpar = NULL,
       } else {
         object@ymatrix
       }
+    },
+    varimp = function(object, ...) {
+      stop("variable importance not available")
     }
   )
 }

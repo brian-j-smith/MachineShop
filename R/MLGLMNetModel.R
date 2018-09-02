@@ -38,6 +38,11 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
     },
     response = function(object, ...) {
       response(object$mf)
+    },
+    varimp = function(object, ...) {
+      convert <- function(x) drop(as.matrix(x))
+      beta <- object$beta
+      if(is.list(beta)) as.data.frame(lapply(beta, convert)) else convert(beta)
     }
   )
 }

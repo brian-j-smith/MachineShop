@@ -16,6 +16,9 @@ RandomForestModel <- function(ntree = NULL, mtry = NULL, replace = NULL,
     },
     response = function(object, ...) {
       object$y
+    },
+    varimp = function(object, ...) {
+      drop(randomForest::importance(object, ...))
     }
   )
 }

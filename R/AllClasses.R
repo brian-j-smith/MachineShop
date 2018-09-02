@@ -49,7 +49,8 @@ setClass("MLModel",
             params = "list",
             fit = "function",
             predict = "function",
-            response = "function")
+            response = "function",
+            varimp = "function")
 )
 
 MLModel <- function(...) new("MLModel", ...)
@@ -57,7 +58,8 @@ MLModel <- function(...) new("MLModel", ...)
 
 setClass("MLModelFit",
   slots = c(.predict = "function",
-            .response = "function"),
+            .response = "function",
+            .varimp = "function"),
   contains ="VIRTUAL"
 )
 
@@ -65,15 +67,18 @@ asMLModelFit <- function(object, Class, model) {
   if(!inherits(model, "MLModel")) stop("model not of class MLModel")
   predict <- model@predict
   response <- model@response
+  varimp <- model@varimp
   if(isS4(object)) {
     object <- as(object, Class)
     if(!inherits(object, "MLModelFit")) stop("Class not from MLModelFit")
     object@.predict <- predict
     object@.response <- response
+    object@.varimp <- varimp
   } else if(is.list(object)) {
     class(object) <- c(Class, "MLModelFit", class(object))
     object$.predict <- predict
     object$.response <- response
+    object$.varimp <- varimp
   } else {
     stop("unsupported object class")
   }
@@ -99,3 +104,32 @@ setClass("Resamples", contains = "data.frame")
 setAs("matrix", "Resamples",
   function(from) new("Resamples", as.data.frame(from))
 )
+
+
+setClass("VarImp", contains = "data.frame")
+
+setMethod("initialize", "VarImp",
+  function(.Object, .Data, scale = FALSE, ...) {
+    idx <- order(.Data[[1]], decreasing = TRUE)
+    idx <- idx * (rownames(.Data)[idx] != "(Intercept)")
+    .Data <- .Data[idx, , drop = FALSE]
+    if(scale) .Data <- 100 * (.Data - min(.Data)) / diff(range(.Data))
+    callNextMethod(.Object, .Data, ...)
+  }
+)
+
+setAs("data.frame", "VarImp",
+  function(from) new("VarImp", from)
+)
+
+setAs("matrix", "VarImp",
+  function(from) as(as.data.frame(from), "VarImp")
+)
+
+setAs("vector", "VarImp",
+  function(from) as(data.frame(Overall = from), "VarImp")
+)
+
+setValidity("VarImp", function(object) {
+  !(nrow(object) && is.null(rownames(object)))
+})

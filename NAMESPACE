@@ -1,3 +1,4 @@
+import(ggplot2)
 import(methods)
 
 importClassesFrom(kernlab, ksvm)
@@ -11,12 +12,15 @@ importFrom(magrittr, "%>%")
 importFrom(MLmetrics, MultiLogLoss, PRAUC)
 importFrom(ModelMetrics, auc, brier, ce, kappa, mae, rmse, sensitivity,
            specificity)
-importFrom(stats, approx, cor, formula, median, model.frame, model.matrix,
-           model.response, model.weights, predict, sd, terms, update)
+importFrom(stats, approx, coef, cor, formula, median, model.frame, model.matrix,
+           model.response, model.weights, pchisq, predict, sd, terms, update,
+           vcov)
 importFrom(survival, is.Surv, Surv, survfit)
 importFrom(survivalROC, survivalROC)
-importFrom(utils, tail)
+importFrom(utils, head, stack, tail)
 
+
+export(varimp)
 
 export(BootControl,
        CVControl)
@@ -46,5 +50,6 @@ exportClasses(MLModel,
 exportMethods(fit,
               resample)
 
+S3method(plot, VarImp)
 S3method(predict, MLModelFit)
 S3method(summary, Resamples)

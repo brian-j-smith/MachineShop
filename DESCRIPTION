@@ -6,6 +6,6 @@ Date: 2018-08-21
 Author: person("Brian J", "Smith", email = "brian-j-smith@uiowa.edu", role = c("aut", "cre"))
 Maintainer: Brian J Smith <brian-j-smith@uiowa.edu>
 Description: More about what it does (maybe more than one line)
-Imports: caret, foreach, Hmisc, irr, kernlab, magrittr, methods, MLmetrics,
-         ModelMetrics, party, survival, survivalROC, utils
+Imports: caret, foreach, ggplot2, Hmisc, irr, kernlab, magrittr, methods,
+         MLmetrics, ModelMetrics, party, survival, survivalROC, utils
 License: GPL-3

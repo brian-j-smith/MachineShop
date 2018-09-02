@@ -21,6 +21,9 @@ CoxModel <- function(ties = NULL, control = NULL) {
     },
     response = function(object, ...) {
       object$y
+    },
+    varimp = function(object, ...) {
+      pchisq(coef(object)^2 / diag(vcov(object)), 1)
     }
   )
 }

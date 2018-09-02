@@ -9,7 +9,9 @@ PLSModel <- function(ncomp, scale = NULL) {
       y <- response(formula, data)
       if(is.factor(y)) {
         varname <- all.vars(formula)[1]
-        data[[varname]] <- I(model.matrix(~ y - 1))
+        mm <- model.matrix(~ y - 1)
+        colnames(mm) <- levels(y)
+        data[[varname]] <- I(mm)
         formula[[2]] <- as.symbol(varname)
       }
       mfit <- pls::plsr(formula, data = data, ...)
@@ -22,6 +24,17 @@ PLSModel <- function(ncomp, scale = NULL) {
     },
     response = function(object, ...) {
       object$y
+    },
+    varimp = function(object, ...) {
+      beta <- coef(object, comps = 1:object$ncomp)
+      perf <- quote(MSEP.mvr(x)$val[1, , , drop = FALSE]) %>%
+        eval(list(x = object), asNamespace("pls"))
+      vi <- sapply(1:dim(beta)[2], function(i) {
+        as.matrix(abs(beta[, i, ])) %*% prop.table(-diff(perf[, i, ]))
+      })
+      dimnames(vi) <- dimnames(beta)[1:2]
+      if(ncol(vi) <= 2) vi <- vi[,1]
+      vi
     }
   )
 }

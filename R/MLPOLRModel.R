@@ -6,7 +6,7 @@ POLRModel <- function(method = NULL) {
     params = params(environment()),
     fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
       environment(formula) <- environment()
-      MASS::polr(formula, data = data, weights = weights, ...) %>%
+      MASS::polr(formula, data = data, weights = weights, Hess = TRUE, ...) %>%
         asMLModelFit("POLRFit", POLRModel(...))
     },
     predict = function(object, newdata, ...) {
@@ -14,6 +14,11 @@ POLRModel <- function(method = NULL) {
     },
     response = function(object, ...) {
       object$model[[1]]
+    },
+    varimp = function(object, ...) {
+      beta <- coef(object)
+      s2 <- head(diag(vcov(object)), length(beta))
+      pchisq(beta^2 / s2, 1)
     }
   )
 }
