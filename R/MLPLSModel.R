@@ -9,7 +9,7 @@ PLSModel <- function(ncomp = 1, scale = NULL) {
       environment(formula) <- environment()
       y <- response(formula, data)
       if(is.factor(y)) {
-        varname <- all.vars(formula)[1]
+        varname <- response(terms(formula))
         mm <- model.matrix(~ y - 1)
         colnames(mm) <- levels(y)
         data[[varname]] <- I(mm)

@@ -13,6 +13,12 @@ response.formula <- function(object, data, ...) {
 }
 
 
+response.terms <- function(object, ...) {
+  i <- attr(object, "response")
+  all.vars(object)[i]
+}
+
+
 response.MLModelFit <- function(object, ...) {
   response <- field(object, ".response")
   response(object, ...)
