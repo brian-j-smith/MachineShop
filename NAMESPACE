@@ -12,6 +12,8 @@ importFrom(magrittr, "%>%")
 importFrom(MLmetrics, MultiLogLoss, PRAUC)
 importFrom(ModelMetrics, auc, brier, ce, kappa, mae, rmse, sensitivity,
            specificity)
+importFrom(recipes, bake, juice, prep)
+importFrom(rsample, assessment, bootstraps, prepper, vfold_cv)
 importFrom(stats, approx, coef, cor, formula, median, model.frame, model.matrix,
            model.response, model.weights, pchisq, predict, sd, terms, update,
            vcov)

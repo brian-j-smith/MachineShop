@@ -16,6 +16,14 @@ setMethod("fit", c("MLModel", "formula"),
 )
 
 
+setMethod("fit", c("MLModel", "recipe"),
+  function(object, x, ...) {
+    x <- prep(x, retain = TRUE)
+    fit(object, formula(x), juice(x))
+  }
+)
+
+
 argsStepAIC <- function(formula, direction, scope) {
   if(is.null(scope$lower)) scope$lower <- ~ 1
   if(is.null(scope$upper)) scope$upper <- formula[-2]

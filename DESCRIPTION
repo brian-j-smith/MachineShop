@@ -7,5 +7,6 @@ Author: person("Brian J", "Smith", email = "brian-j-smith@uiowa.edu", role = c("
 Maintainer: Brian J Smith <brian-j-smith@uiowa.edu>
 Description: More about what it does (maybe more than one line)
 Imports: caret, foreach, ggplot2, Hmisc, irr, kernlab, magrittr, methods,
-         MLmetrics, ModelMetrics, party, survival, survivalROC, utils
+         MLmetrics, ModelMetrics, party, recipes, rsample, survival,
+         survivalROC, utils
 License: GPL-3

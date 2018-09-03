@@ -1,3 +1,6 @@
+setOldClass("recipe")
+
+
 setClass("MLControl",
   slots = c(summary = "function", cutoff = "numeric", cutoff.index = "function",
             survtimes = "numeric"),
@@ -27,7 +30,7 @@ setClass("BootControl",
   contains = "MLControl"
 )
 
-BootControl <- function(number = 100, ...) {
+BootControl <- function(number = 25, ...) {
   new("BootControl", number = number, ...)
 }
 
