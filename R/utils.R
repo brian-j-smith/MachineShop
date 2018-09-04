@@ -1,3 +1,9 @@
+.onLoad <- function(libname, pkgname) {
+  registerDoSEQ()
+  invisible()
+}
+
+
 basehaz <- function(y, risk, times) {
   y_times <- unique(y[,"time"]) %>% sort
   nrisk <- rowsum(risk, y[,"time"]) %>% rev %>% cumsum %>% rev

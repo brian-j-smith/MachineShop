@@ -5,7 +5,7 @@ importClassesFrom(kernlab, ksvm)
 importClassesFrom(party, RandomForest)
 
 importFrom(caret, createMultiFolds, createResample)
-importFrom(foreach, foreach, "%dopar%")
+importFrom(foreach, "%dopar%", foreach, registerDoSEQ)
 importFrom(Hmisc, rcorr.cens)
 importFrom(irr, kappa2)
 importFrom(magrittr, "%>%")
