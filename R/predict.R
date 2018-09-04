@@ -1,9 +1,20 @@
 predict.MLModelFit <- function(object, newdata, type = c("response", "prob"),
                                cutoff = 0.5, times = NULL, ...) {
   obs <- response(object)
-  predict <- field(object, ".predict")
-  pred <- predict(object, newdata, times = times)
+  pred <- predict_sub(object, newdata, times = times)
   if(type == "response") convert(obs, pred, cutoff = cutoff) else pred
+}
+
+
+predict_sub <- function(object, ...) {
+  UseMethod("predict_sub", object)
+}
+
+
+predict_sub.MLModelFit <- function(object, newdata, times, ...) {
+  requireModelNamespaces(field(object, ".packages"))
+  predict <- field(object, ".predict")
+  predict(object, newdata, times = times)
 }
 
 

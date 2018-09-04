@@ -70,7 +70,8 @@ MLModel <- function(...) new("MLModel", ...)
 
 
 setClass("MLModelFit",
-  slots = c(.predict = "function",
+  slots = c(.packages = "character",
+            .predict = "function",
             .response = "function",
             .varimp = "function"),
   contains ="VIRTUAL"
@@ -87,6 +88,7 @@ asMLModelFit <- function(object, Class, model = NULL) {
   }
   if(!is.null(model)) {
     if(!inherits(model, "MLModel")) stop("model not of class MLModel")
+    field(object, ".packages") <- model@packages
     field(object, ".predict") <- model@predict
     field(object, ".response") <- model@response
     field(object, ".varimp") <- model@varimp
@@ -101,7 +103,7 @@ asParentFit <- function(object) {
     from <- match("MLModelFit", classes) + 1
     as(object, classes[from])
   } else {
-    object[c(".predict", ".response", ".varimp")] <- NULL
+    object[c(".packages", ".predict", ".response", ".varimp")] <- NULL
     classes <- class(object)
     from <- match("MLModelFit", classes) + 1
     to <- length(classes)

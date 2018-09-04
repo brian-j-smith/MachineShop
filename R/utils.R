@@ -32,3 +32,8 @@ params <- function(env) {
                                 paste0(missing_args, collapse = ", "))
   x[!sapply(x, is.null)]
 }
+
+
+requireModelNamespaces <- function(packages) {
+  lapply(packages, requireNamespace)
+}
