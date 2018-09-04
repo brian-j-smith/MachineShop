@@ -45,6 +45,16 @@ CVControl <- function(folds = 10, repeats = 1, ...) {
 }
 
 
+setClass("OOBControl",
+  slots = c(number = "numeric"),
+  contains = "MLControl"
+)
+
+OOBControl <- function(number = 25, ...) {
+  new("OOBControl", number = number, ...)
+}
+
+
 setClass("MLModel",
   slots = c(name = "character",
             packages = "character",

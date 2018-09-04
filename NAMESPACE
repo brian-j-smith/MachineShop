@@ -25,7 +25,8 @@ importFrom(utils, head, stack, tail)
 export(varimp)
 
 export(BootControl,
-       CVControl)
+       CVControl,
+       OOBControl)
 
 exportClasses(MLControl)
 

@@ -29,7 +29,7 @@ setMethod("resample", c("BootControl", "data.frame"),
     foreach(bootid = bootids,
             .packages = c("MLModels", "survival"),
             .combine = "rbind") %dopar% {
-      trainfit <- fit(model, x[bootid,])
+      trainfit <- fit(model, x[bootid, , drop = FALSE])
       pred <- predict(trainfit, x, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
     } %>% as("Resamples")
@@ -65,8 +65,8 @@ setMethod("resample", c("CVControl", "data.frame"),
     foreach(foldid = foldids,
             .packages = c("MLModels", "survival"),
             .combine = "rbind") %dopar% {
-      train <- x[foldid,]
-      test <- x[-foldid,]
+      train <- x[foldid, , drop = FALSE]
+      test <- x[-foldid, , drop = FALSE]
       trainfit <- fit(model, train)
       obs <- response(test)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
@@ -87,6 +87,44 @@ setMethod("resample", c("CVControl", "recipe"),
             .combine = "rbind") %dopar% {
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
       test <- bake(train, newdata = assessment(split))
+      trainfit <- fit(model, train)
+      obs <- response(formula(train), test)
+      pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
+      summary(object, obs, pred)
+    } %>% as("Resamples")
+  }
+)
+
+
+setMethod("resample", c("OOBControl", "data.frame"),
+  function(object, x, model) {
+    bootids <- createResample(response(x), times = object@number)
+    foreach(bootid = bootids,
+            .packages = c("MLModels", "survival"),
+            .combine = "rbind") %dopar% {
+      train <- x[bootid, , drop = FALSE]
+      test <- x[setdiff(1:nrow(x), bootid), , drop = FALSE]
+      if(nrow(test) == 0) return(NA)
+      trainfit <- fit(model, train)
+      obs <- response(test)
+      pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
+      summary(object, obs, pred)
+    } %>% as("Resamples")
+  }
+)
+
+
+setMethod("resample", c("OOBControl", "recipe"),
+  function(object, x, model) {
+    bt_samples <- bootstraps(x$template,
+                             times = object@number,
+                             strata = prep(x) %>% formula %>% terms %>% response)
+    foreach(split = bt_samples$splits,
+            .packages = c("MLModels", "recipes", "survival"),
+            .combine = "rbind") %dopar% {
+      train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
+      test <- bake(train, newdata = assessment(split))
+      if(nrow(test) == 0) return(NA)
       trainfit <- fit(model, train)
       obs <- response(formula(train), test)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
