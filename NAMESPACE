@@ -9,7 +9,7 @@ importFrom(foreach, foreach, "%dopar%")
 importFrom(Hmisc, rcorr.cens)
 importFrom(irr, kappa2)
 importFrom(magrittr, "%>%")
-importFrom(MLmetrics, MultiLogLoss, PRAUC)
+importFrom(MLmetrics, PRAUC)
 importFrom(ModelMetrics, auc, brier, ce, kappa, mae, rmse, sensitivity,
            specificity)
 importFrom(recipes, bake, juice, prep)

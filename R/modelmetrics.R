@@ -17,7 +17,7 @@ setMethod("modelmetrics", c("factor", "matrix"),
   function(observed, predicted, ...) {
     n <- nlevels(observed)
     predicted <- if(n > 2) {
-      metrics <- c("MLogLoss" = MultiLogLoss(predicted, observed))
+      metrics <- c("MLogLoss" = multinomLogLoss(observed, predicted))
       predicted <- factor(max.col(predicted), levels = 1:n,
                           labels = levels(observed))
       metrics <- c(modelmetrics(observed, predicted, ...), metrics)
@@ -27,6 +27,14 @@ setMethod("modelmetrics", c("factor", "matrix"),
     metrics
   }
 )
+
+
+multinomLogLoss <- function(observed, predicted) {
+  if(!is.matrix(observed)) observed <- model.matrix(~ observed - 1)
+  eps <- 1e-15
+  predicted <- pmax(pmin(predicted, 1 - eps), eps)
+  -sum(observed * log(predicted)) / nrow(predicted)
+}
 
 
 setMethod("modelmetrics", c("factor", "numeric"),
