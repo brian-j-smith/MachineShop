@@ -21,19 +21,20 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
       }
       mfit <- glmnet::glmnet(x, y, family = family, weights = weights,
                              nlambda = 1, ...)
-      mfit$mf <- mf
+      mfit$x <- x
+      mfit$y <- y
+      mfit$formula <- formula
       asMLModelFit(mfit, "GLMNetFit", GLMNetModel(...))
     },
     predict = function(object, newdata, times = numeric(), ...) {
-      mf <- object$mf
+      x <- object$x
+      y <- object$y
+      fo <- object$formula[-2]
       object <- asParentFit(object)
-      obj_terms <- terms(mf)
-      newmf <- model.frame(obj_terms, newdata, na.action = NULL)
-      newx <- model.matrix(obj_terms, newmf)[, -1, drop = FALSE]
-      y <- model.response(mf)
+      newmf <- model.frame(fo, newdata, na.action = NULL)
+      newx <- model.matrix(fo, newmf)[, -1, drop = FALSE]
       if(is.Surv(y)) {
         if(length(times)) {
-          x <- model.matrix(obj_terms, mf)[, -1, drop = FALSE]
           lp <- predict(object, newx = x, type = "link") %>% drop
           newlp <- predict(object, newx = newx, type = "link") %>% drop
           cumhaz <- basehaz(y, exp(lp), times)
@@ -46,7 +47,7 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
       }
     },
     response = function(object, ...) {
-      response(object$mf)
+      object$y
     },
     varimp = function(object, ...) {
       convert <- function(x) drop(as.matrix(x))
