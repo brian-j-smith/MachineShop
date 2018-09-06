@@ -19,6 +19,7 @@
 #' 
 predict.MLModelFit <- function(object, newdata, type = c("response", "prob"),
                                cutoff = 0.5, times = NULL, ...) {
+  type <- match.arg(type)
   obs <- response(object)
   pred <- predict_sub(object, newdata, times = times)
   if(type == "response") convert(obs, pred, cutoff = cutoff) else pred
