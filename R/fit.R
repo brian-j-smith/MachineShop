@@ -23,7 +23,7 @@ setGeneric("fit", function(object, x, ...) standardGeneric("fit"))
 setMethod("fit", c("MLModel", "data.frame"),
   function(object, x, ...) {
     requireModelNamespaces(object@packages)
-    args <- list(formula = formula(x), data = x)
+    args <- list(formula = formula(terms(x)), data = x)
     args$weights <- model.weights(x)
     do.call(object@fit, c(args, object@params))
   }
