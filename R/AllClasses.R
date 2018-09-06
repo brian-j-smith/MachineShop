@@ -222,7 +222,7 @@ setClass("VarImp", contains = "data.frame")
 
 setMethod("initialize", "VarImp",
   function(.Object, .Data, scale = FALSE, ...) {
-    idx <- order(.Data[[1]], decreasing = TRUE)
+    idx <- order(rowSums(.Data), decreasing = TRUE)
     idx <- idx * (rownames(.Data)[idx] != "(Intercept)")
     .Data <- .Data[idx, , drop = FALSE]
     if(scale) .Data <- 100 * (.Data - min(.Data)) / diff(range(.Data))
