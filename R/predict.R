@@ -1,3 +1,22 @@
+#' Model Prediction
+#' 
+#' Predict outcomes with a fitted model.
+#' 
+#' @name predict
+#' 
+#' @param object MLModelFit object from a model fit.
+#' @param newdata data frame with which to obtain predictions.
+#' @param type specifies prediction on the original outcome scale
+#' (\code{"response"}) or on a probability distribution scale (\code{"prob"}).
+#' @param cutoff threshold above which probabilities are classified as success
+#' for factor outcomes and which expected values are rounded for integer
+#' outcomes.
+#' @param times numeric vector of follow-up times at which to predict
+#' survival events.
+#' @param ... arguments passed to model-specific prediction functions.
+#' 
+#' @seealso \code{\link{fit}}
+#' 
 predict.MLModelFit <- function(object, newdata, type = c("response", "prob"),
                                cutoff = 0.5, times = NULL, ...) {
   obs <- response(object)

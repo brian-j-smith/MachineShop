@@ -1,3 +1,28 @@
+#' GLM Lasso or Elasticnet Model
+#'
+#' Fit a generalized linear model via penalized maximum likelihood.
+#'
+#' @param family response type.
+#' @param alpha elasticnet mixing parameter.
+#' @param lambda regularization parameter.
+#' @param standardize logical flag for predictor variable standardization, prior
+#' to model fitting.
+#' @param thresh convergence threshold for coordinate descent.
+#' @param maxit maximum number of passes over the data for all lambda values.
+#' @param type.gaussian algorithm type for guassian models.
+#' @param type.logistic algorithm type for logistic models.
+#' @param type.multinomial algorithm type for multinomial models.
+#' 
+#' @details 
+#' \describe{
+#' \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
+#' }
+#' 
+#' Default values for the \code{NULL} arguments and further model
+#' details can be found in the source link below.
+#' 
+#' @seealso \code{\link[glmnet]{glmnet}}
+#'
 GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
                         standardize = NULL, thresh = NULL, maxit = NULL,
                         type.gaussian = NULL, type.logistic = NULL,
@@ -5,7 +30,7 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
   MLModel(
     name = "GLMNetModel",
     packages = "glmnet",
-    responses = c("factor", "numeric", "Surv"),
+    types = c("factor", "numeric", "Surv"),
     params = params(environment()),
     fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
       mf <- model.frame(formula, data, na.action = NULL)

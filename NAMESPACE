@@ -47,8 +47,7 @@ export(MLModel,
        SurvRegStepAICModel,
        SVMModel)
 
-exportClasses(MLModel,
-              MLModelFit)
+exportClasses(MLModelFit)
 
 exportMethods(fit,
               resample)

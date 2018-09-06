@@ -1,28 +1,65 @@
+#' Resampling Estimation of Model Performance
+#' 
+#' Estimation of the predictive performance of a model estimated and evaluated
+#' on training and test samples generated from an observed data set.
+#' 
+#' @name resample
+#' @rdname resample-methods
+#' 
+#' @param object prediction model object.
+#' @param x defined relationship between model predictors and an outcome.  May
+#' be a model.frame (data.frame) containing a formula, data, and optionally case
+#' weights; a formula; or a recipe.
+#' @param ... further arguments passed to other methods.
+#' 
 setGeneric("resample", function(object, x, ...) standardGeneric("resample"))
 
 
+#' @rdname resample-methods
+#' @aliases resample,MLModel,data.frame-method
+#' 
+#' @param control \code{\linkS4class{MLControl}} object defining and controlling
+#' the resampling method to be employed.
+#' 
+#' @seealso \code{\link[stats]{model.frame}}, \code{\link[recipes]{recipe}},
+#' \code{\link{BootControl}}, \code{\link{CVControl}}, \code{\link{OOBControl}},
+#' \code{\link[MLModels]{summary}}
+#' 
 setMethod("resample", c("MLModel", "data.frame"),
   function(object, x, control) {
-    resample(control, x, object)
+    resample_sub(control, x, object)
   }
 )
 
 
+#' @rdname resample-methods
+#' @aliases resample,MLModel,formula-method
+#' 
+#' @param data data frame containing observed predictors and outcomes.
+#' 
 setMethod("resample", c("MLModel", "formula"),
   function(object, x, data, control) {
-    resample(control, model.frame(x, data), object)
+    resample_sub(control, model.frame(x, data), object)
   }
 )
 
 
+#' @rdname resample-methods
+#' @aliases resample,MLModel,recipe-method
+#' 
 setMethod("resample", c("MLModel", "recipe"),
   function(object, x, control) {
-    resample(control, x, object)
+    resample_sub(control, x, object)
   }
 )
 
 
-setMethod("resample", c("BootControl", "data.frame"),
+setGeneric("resample_sub", function(object, x, ...) {
+ standardGeneric("resample_sub") 
+})
+
+
+setMethod("resample_sub", c("BootControl", "data.frame"),
   function(object, x, model) {
     obs <- response(x)
     bootids <- createResample(obs, times = object@number)
@@ -37,7 +74,7 @@ setMethod("resample", c("BootControl", "data.frame"),
 )
 
 
-setMethod("resample", c("BootControl", "recipe"),
+setMethod("resample_sub", c("BootControl", "recipe"),
   function(object, x, model) {
     x_prep <- prep(x, retain = TRUE)
     bt_samples <- bootstraps(x$template,
@@ -57,7 +94,7 @@ setMethod("resample", c("BootControl", "recipe"),
 )
 
 
-setMethod("resample", c("CVControl", "data.frame"),
+setMethod("resample_sub", c("CVControl", "data.frame"),
   function(object, x, model) {
     foldids <- createMultiFolds(response(x),
                                 k = object@folds,
@@ -76,7 +113,7 @@ setMethod("resample", c("CVControl", "data.frame"),
 )
 
 
-setMethod("resample", c("CVControl", "recipe"),
+setMethod("resample_sub", c("CVControl", "recipe"),
   function(object, x, model) {
     cv_samples <- vfold_cv(x$template,
                            v = object@folds,
@@ -96,7 +133,7 @@ setMethod("resample", c("CVControl", "recipe"),
 )
 
 
-setMethod("resample", c("OOBControl", "data.frame"),
+setMethod("resample_sub", c("OOBControl", "data.frame"),
   function(object, x, model) {
     bootids <- createResample(response(x), times = object@number)
     foreach(bootid = bootids,
@@ -114,7 +151,7 @@ setMethod("resample", c("OOBControl", "data.frame"),
 )
 
 
-setMethod("resample", c("OOBControl", "recipe"),
+setMethod("resample_sub", c("OOBControl", "recipe"),
   function(object, x, model) {
     bt_samples <- bootstraps(x$template,
                              times = object@number,

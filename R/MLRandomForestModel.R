@@ -1,9 +1,31 @@
+#' Random Forest Model
+#' 
+#' Implementation of Breiman's random forest algorithm (based on Breiman and
+#' Cutler's original Fortran code) for classification and regression.
+#' 
+#' @param ntree number of trees to grow.
+#' @param mtry number of variables randomly sampled as candidates at each split.
+#' @param replace should sampling of cases be done with or without replacement?
+#' @param nodesize minimum size of terminal nodes.
+#' @param maxnodes maximum number of terminal nodes trees in the forest can
+#' have.
+#' 
+#' @details
+#' \describe{
+#' \item{Response Types:}{\code{factor}, \code{numeric}}
+#' }
+#' 
+#' Default values for the \code{NULL} arguments and further model
+#' details can be found in the source link below.
+#' 
+#' @seealso \code{\link[randomForest]{randomForest}}
+#' 
 RandomForestModel <- function(ntree = NULL, mtry = NULL, replace = NULL,
                               nodesize = NULL, maxnodes = NULL) {
   MLModel(
     name = "RandomForestModel",
     packages = "randomForest",
-    responses = c("factor", "numeric"),
+    types = c("factor", "numeric"),
     params = params(environment()),
     fit = function(formula, data, weights = NULL, ...) {
       if(!is.null(weights)) warning("weights are unsupported and will be ignored")

@@ -1,8 +1,26 @@
+#' Partial Least Squares Model
+#'
+#' Function to perform partial least squares regression.
+#' 
+#' @param ncomp number of components to include in the model.
+#' @param scale logical indicating whether to scale the predictors by the
+#' sample standard deviation.
+#' 
+#' @details
+#' \describe{
+#' \item{Response Types:}{\code{factor}, \code{numeric}}
+#' }
+#' 
+#' Default values for the \code{NULL} arguments and further model
+#' details can be found in the source link below.
+#' 
+#' @seealso \code{\link[pls]{mvr}}
+#'
 PLSModel <- function(ncomp = 1, scale = NULL) {
   MLModel(
     name = "PLSModel",
     packages = "pls",
-    responses = c("factor", "numeric"),
+    types = c("factor", "numeric"),
     params = params(environment()),
     fit = function(formula, data, weights = NULL, ...) {
       if(!is.null(weights)) warning("weights are unsupported and will be ignored")

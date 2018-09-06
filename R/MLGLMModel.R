@@ -1,8 +1,27 @@
+#' Generalized Linear Model
+#' 
+#' Fits generalized linear models, specified by giving a symbolic description of
+#' the linear predictor and a description of the error distribution.
+#' 
+#' @param family description of the error distribution and link function to be
+#' used in the model.
+#' @param control list of parameters for controlling the fitting process.
+#' 
+#' @details
+#' \describe{
+#' \item{Response Types:}{\code{factor} (two-levels), \code{numeric}}
+#' }
+#' 
+#' Default values for the \code{NULL} arguments and further model
+#' details can be found in the source link below.
+#' 
+#' @seealso \code{\link[stats]{glm}}
+#' 
 GLMModel <- function(family = NULL, control = NULL) {
   MLModel(
     name = "GLMModel",
     packages = "stats",
-    responses = c("factor", "numeric"),
+    types = c("factor", "numeric"),
     params = params(environment()),
     fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
       environment(formula) <- environment()
@@ -30,13 +49,34 @@ GLMModel <- function(family = NULL, control = NULL) {
 }
 
 
+#' @name GLMStepAICModel
+#' @rdname GLMModel
+#' 
+#' @param direction mode of stepwise search, can be one of \code{"both"}
+#' (default), \code{"backward"}, or \code{"forward"}.
+#' @param scope defines the range of models examined in the stepwise search.
+#' This should be a list containing components \code{upper} and
+#' \code{lower}, both formulae.
+#' @param k multiple of the number of degrees of freedom used for the penalty.
+#' Only \code{k = 2} gives the genuine AIC: \code{k = log(n)} is sometimes
+#' referred to as BIC or SBC.
+#' @param trace if positive, information is printed during the running of
+#' \code{stepAIC}. Larger values may give more information on the fitting
+#' process.
+#' @param steps maximum number of steps to be considered.
+#' 
+#' @details Default values for the \code{NULL} arguments and further model
+#' details can be found in the source links below.
+#'
+#' @seealso \code{\link[MASS]{stepAIC}}
+#'
 GLMStepAICModel <- function(family = NULL, control = NULL, direction = NULL,
                             scope = NULL, k = NULL, trace = FALSE, steps = NULL)
   {
   MLModel(
     name = "GLMStepAICModel",
     packages = c("MASS", "stats"),
-    responses = c("factor", "numeric"),
+    types = c("factor", "numeric"),
     params = params(environment()),
     fit = function(formula, data, weights = rep(1, nrow(data)),
                    direction = c("both", "backward", "forward"), scope = list(),

@@ -1,9 +1,30 @@
-C50Model <- function(trials = NULL, rules = NULL, control = NULL, costs = NULL)
+#' C5.0 Decision Trees and Rule-Based Model
+#' 
+#' Fit classification tree models or rule-based models using Quinlan's C5.0
+#' algorithm.
+#'
+#' @param trials integer number of boosting iterations. A value of one indicates
+#' that a single model is used.
+#' @param rules logical indicating whether the tree is decomposed into a
+#' rule-based model
+#' @param control list of control parameters.
+#'
+#' @details
+#' \describe{
+#' \item{Response Types:}{\code{factor}}
+#' }
+#' 
+#' Default values for the \code{NULL} arguments and further model
+#' details can be found in the source link below.
+#' 
+#' @seealso \code{\link[C50]{C5.0}}
+#'
+C50Model <- function(trials = NULL, rules = NULL, control = NULL)
   {
   MLModel(
     name = "C50Model",
     packages = "C50",
-    responses = "factor",
+    types = "factor",
     params = params(environment()),
     fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
       environment(formula) <- environment()

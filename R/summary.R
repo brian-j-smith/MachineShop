@@ -1,3 +1,19 @@
+#' Model Performance Summary
+#' 
+#' Summary statistics for resampled model performance metrics.
+#' 
+#' @name summary
+#' 
+#' @param object object of resampled metrics as returned by
+#' \code{\link{resample}}.
+#' @param stats list of named functions to include in the calculation of summary
+#' statistics.  Supplied functions should contain a \code{na.rm} argument in
+#' their definitions.
+#' @param na.rm logical indicating whether to exclude missing values.
+#' @param ... arguments to be passed to other methods.
+#' 
+#' @seealso \code{\link{resample}}
+#' 
 summary.Resamples <- function(object,
                               stats = c("Mean" = mean,
                                         "Median" = median,

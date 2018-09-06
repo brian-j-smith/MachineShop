@@ -2,11 +2,12 @@ Package: MLModels
 Type: Package
 Title: Machine Learning Models and Tools
 Version: 0.1
-Date: 2018-08-21
+Date: 2018-09-05
 Author: person("Brian J", "Smith", email = "brian-j-smith@uiowa.edu", role = c("aut", "cre"))
 Maintainer: Brian J Smith <brian-j-smith@uiowa.edu>
-Description: More about what it does (maybe more than one line)
+Description: Meta-package for machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Supports predictive modeling of numerical, categorical, and censored time-to-event outcomes.
 Imports: caret, foreach, ggplot2, Hmisc, irr, kernlab, magrittr, methods,
          MLmetrics, ModelMetrics, party, recipes, rsample, survival,
          survivalROC, utils
 License: GPL-3
+RoxygenNote: 6.1.0

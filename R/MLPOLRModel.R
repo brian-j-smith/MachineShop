@@ -1,8 +1,25 @@
+#' Ordered Logistic or Probit Regression Model
+#' 
+#' Fit a logistic or probit regression model to an ordered factor response.
+#' 
+#' @param method logistic or probit or (complementary) log-log or cauchit
+#' (corresponding to a Cauchy latent variable).
+#' 
+#' @details
+#' \describe{
+#' \item{Response Types:}{\code{ordered}}
+#' }
+#' 
+#' Default values for the \code{NULL} arguments and further model
+#' details can be found in the source link below.
+#' 
+#' @seealso \code{\link[MASS]{polr}}
+#' 
 POLRModel <- function(method = NULL) {
   MLModel(
     name = "POLRModel",
     packages = "MASS",
-    responses = "ordered",
+    types = "ordered",
     params = params(environment()),
     fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
       environment(formula) <- environment()

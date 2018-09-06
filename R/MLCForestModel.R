@@ -1,8 +1,25 @@
-CForestModel <- function(control = NULL) {
+#' Conditional Random Forest Model
+#' 
+#' An implementation of the random forest and bagging ensemble algorithms
+#' utilizing conditional inference trees as base learners.
+#'
+#' @param controls an object of class \code{\linkS4class{ForestControl}}.
+#' 
+#' @details
+#' \describe{
+#' \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
+#' }
+#' 
+#' Default values for the \code{NULL} arguments and further model
+#' details can be found in the source link below.
+#' 
+#' @seealso \code{\link[party]{cforest}}
+#'
+CForestModel <- function(controls = NULL) {
   MLModel(
     name = "CForestModel",
     packages = "party",
-    responses = c("factor", "numeric", "Surv"),
+    types = c("factor", "numeric", "Surv"),
     params = params(environment()),
     fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
       environment(formula) <- environment()

@@ -1,12 +1,46 @@
 setOldClass("recipe")
 
 
+#' Resampling Classes and Methods
+#'
+#' @name MLControl-class
+#' @rdname MLControl-class
+#' 
+#' @slot summary function to compute model performance metrics.
+#' @slot cutoff threshold above which probabilities are classified as success
+#' for factor outcomes and which expected values are rounded for integer
+#' outcomes.
+#' @slot cutoff.index function to calculate a desired sensitivity-specificity
+#' tradeoff.
+#' @slot survtimes numeric vector of follow-up times at which to predict
+#' survival events.
+#' 
 setClass("MLControl",
   slots = c(summary = "function", cutoff = "numeric", cutoff.index = "function",
             survtimes = "numeric"),
   contains = "VIRTUAL"
 )
 
+
+#' The base MLControl constructor initializes a set of parameters that are common
+#' to all resampling methods.
+#' 
+#' @rdname MLControl-class
+#' @aliases initialize,MLControl-method
+#' 
+#' @param .Object class object being initialized.
+#' @param summary function to compute model performance metrics.
+#' @param cutoff threshold above which probabilities are classified as success
+#' for factor outcomes and which expected values are rounded for integer
+#' outcomes.
+#' @param cutoff.index function to calculate a desired sensitivity-specificity
+#' tradeoff.
+#' @param survtimes numeric vector of follow-up times at which to predict
+#' survival events.
+#' @param ...  arguments to be passed to or from other methods.
+#' 
+#' @seealso \code{\link{resample}}
+#' 
 setMethod("initialize", "MLControl",
   function(.Object, summary = modelmetrics, cutoff = 0.5,
            cutoff.index = function(sens, spec) sens + spec,
@@ -30,6 +64,15 @@ setClass("BootControl",
   contains = "MLControl"
 )
 
+#' \code{BootControl} constructs an MLControl object for simple bootstrap
+#' resampling in which models are estimated with bootstrap resampled data sets
+#' and evaluated on the full data set.
+#' 
+#' @name BootControl
+#' @rdname MLControl-class
+#' 
+#' @param number number of bootstrap resamples.
+#' 
 BootControl <- function(number = 25, ...) {
   new("BootControl", number = number, ...)
 }
@@ -40,6 +83,17 @@ setClass("CVControl",
   contains = "MLControl"
 )
 
+#' \code{CVControl} constructs an MLControl object for repeated K-fold
+#' cross-validation.  In this procedure, the data set is repeatedly partitioned
+#' into K-folds.  Evaluation is performed on each of the K folds with models
+#' estimated on the remaining folds.
+#' 
+#' @name CVControl
+#' @rdname MLControl-class
+#' 
+#' @param folds number of cross-validation folds (K).
+#' @param repeats number of cross-validation replicates.
+#' 
 CVControl <- function(folds = 10, repeats = 1, ...) {
   new("CVControl", folds = folds, repeats = repeats, ...)
 }
@@ -50,6 +104,13 @@ setClass("OOBControl",
   contains = "MLControl"
 )
 
+#' \code{OOBControl} constructs an MLControl object for out-of-bag bootstrap
+#' resampling in which models are estimated on bootstrap resampled data sets and
+#' evaluated on unsampled cases.
+#' 
+#' @name OOBControl
+#' @rdname MLControl-class
+#' 
 OOBControl <- function(number = 25, ...) {
   new("OOBControl", number = number, ...)
 }
@@ -58,7 +119,7 @@ OOBControl <- function(number = 25, ...) {
 setClass("MLModel",
   slots = c(name = "character",
             packages = "character",
-            responses = "character",
+            types = "character",
             params = "list",
             fit = "function",
             predict = "function",
@@ -66,9 +127,43 @@ setClass("MLModel",
             varimp = "function")
 )
 
-MLModel <- function(...) new("MLModel", ...)
+#' MLModel Class Constructor
+#' 
+#' @param name character string name for the instantiated MLModel object.
+#' @param packages character vector of packages required by the object.
+#' @param types character vector of response variable types on which the model
+#' can be fit.
+#' @param params list of user-specified model parameters.
+#' @param fit model fitting function.
+#' @param predict model prediction function.
+#' @param response function to extract the response variable from a model fit.
+#' @param varimp variable importance function.
+#' 
+MLModel <- function(name = "MLModel", packages = character(0),
+                    types = character(0), params = list(),
+                    fit = function(...) stop("no fit function"),
+                    predict = function(...) stop("no predict function"),
+                    response = function(...) stop("no response function"),
+                    varimp = function(...) stop("no varimp function")) {
+  new("MLModel", name = name, packages = packages, types = types,
+      params = params, fit = fit, predict = predict, response = response,
+      varimp = varimp)
+}
 
 
+#' Model Fit Class
+#' 
+#' MLModelFit is the base class for model fit objects.  Direct calls to the
+#' MLModelFit constructor are not necessary unless implementing custom models.
+#'
+#' @name MLModelFit-class
+#' @rdname MLModelFit-class
+#' 
+#' @slot .packages character vector of packages required by the object.
+#' @slot .predict model prediction function.
+#' @slot .response function to extract the response variable from a model fit.
+#' @slot .varimp variable importance function.
+#' 
 setClass("MLModelFit",
   slots = c(.packages = "character",
             .predict = "function",
