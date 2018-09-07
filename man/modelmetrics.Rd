@@ -45,5 +45,5 @@ were predicted.}
 Compute measures of model performance.
 }
 \seealso{
-\code{\link{predict}}
+\code{\link{predict}}, \code{\linkS4class{MLControl}}
 }

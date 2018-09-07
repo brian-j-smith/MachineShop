@@ -51,7 +51,8 @@ exportClasses(MLModelFit)
 
 exportMethods(fit,
               modelmetrics,
-              resample)
+              resample,
+              tune)
 
 S3method(plot, VarImp)
 S3method(predict, MLModelFit)

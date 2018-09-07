@@ -53,5 +53,5 @@ details can be found in the source links below.
 \code{\link[survival]{coxph}}
 
 \code{\link[MASS]{stepAIC}}, \code{\link{fit}},
-\code{\link{resample}}
+\code{\link{resample}}, \code{\link{tune}}
 }

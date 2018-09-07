@@ -49,5 +49,5 @@ details can be found in the source link below.
 }
 \seealso{
 \code{\link[kernlab]{ksvm}}, \code{\link{fit}},
-\code{\link{resample}}
+\code{\link{resample}}, \code{\link{tune}}
 }

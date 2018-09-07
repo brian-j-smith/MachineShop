@@ -57,5 +57,5 @@ details can be found in the source links below.
 \code{\link[rms]{psm}}, \code{\link[survival]{survreg}}
 
 \code{\link[MASS]{stepAIC}}, \code{\link{fit}},
-\code{\link{resample}}
+\code{\link{resample}}, \code{\link{tune}}
 }

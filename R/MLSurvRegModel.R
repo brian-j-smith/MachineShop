@@ -69,7 +69,7 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
 #' @return MLModel class object.
 #' 
 #' @seealso \code{\link[MASS]{stepAIC}}, \code{\link{fit}},
-#' \code{\link{resample}}
+#' \code{\link{resample}}, \code{\link{tune}}
 #'
 SurvRegStepAICModel <- function(dist = NULL, scale = NULL, parms = NULL,
                                 control = NULL, direction = NULL, scope = NULL,

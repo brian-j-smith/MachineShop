@@ -26,5 +26,5 @@ details can be found in the source link below.
 }
 \seealso{
 \code{\link[party]{cforest}}, \code{\link{fit}},
-\code{\link{resample}}
+\code{\link{resample}}, \code{\link{tune}}
 }

@@ -16,7 +16,7 @@
 #' @return MLModel class object.
 #' 
 #' @seealso \code{\link[party]{cforest}}, \code{\link{fit}},
-#' \code{\link{resample}}
+#' \code{\link{resample}}, \code{\link{tune}}
 #'
 CForestModel <- function(controls = NULL) {
   MLModel(

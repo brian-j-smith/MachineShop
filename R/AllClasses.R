@@ -153,6 +153,12 @@ MLModel <- function(name = "MLModel", packages = character(0),
 }
 
 
+MLModelTune <- setClass("MLModelTune",
+  slots = c(grid = "data.frame", perf = "data.frame", selected = "numeric"),
+  contains = "MLModel"
+)
+
+
 #' Model Fit Class
 #' 
 #' MLModelFit is the base class for model fit objects.  Direct calls to the

@@ -24,7 +24,7 @@
 #' @return MLModel class object.
 #' 
 #' @seealso \code{\link[glmnet]{glmnet}}, \code{\link{fit}},
-#' \code{\link{resample}}
+#' \code{\link{resample}}, \code{\link{tune}}
 #'
 GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
                         standardize = NULL, thresh = NULL, maxit = NULL,

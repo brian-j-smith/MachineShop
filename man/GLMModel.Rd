@@ -52,7 +52,8 @@ Default values for the \code{NULL} arguments and further model
 details can be found in the source links below.
 }
 \seealso{
-\code{\link[stats]{glm}}, \code{\link{fit}}, \code{\link{resample}}
+\code{\link[stats]{glm}}, \code{\link{fit}}, \code{\link{resample}},
+\code{\link{tune}}
 
 \code{\link[MASS]{stepAIC}}
 }

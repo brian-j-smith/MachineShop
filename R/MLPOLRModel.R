@@ -15,7 +15,8 @@
 #' 
 #' @return MLModel class object.
 #' 
-#' @seealso \code{\link[MASS]{polr}}, \code{\link{fit}}, \code{\link{resample}}
+#' @seealso \code{\link[MASS]{polr}}, \code{\link{fit}}, \code{\link{resample}},
+#' \code{\link{tune}}
 #' 
 POLRModel <- function(method = NULL) {
   MLModel(

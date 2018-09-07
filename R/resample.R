@@ -25,7 +25,7 @@ setGeneric("resample", function(object, x, ...) standardGeneric("resample"))
 #' 
 #' @seealso \code{\link[stats]{model.frame}}, \code{\link[recipes]{recipe}},
 #' \code{\link{BootControl}}, \code{\link{CVControl}}, \code{\link{OOBControl}},
-#' \code{\link{summary}}
+#' \code{\link{tune}}, \code{\link{summary}}
 #' 
 setMethod("resample", c("MLModel", "data.frame"),
   function(object, x, control) {

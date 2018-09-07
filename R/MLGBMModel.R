@@ -23,7 +23,8 @@
 #' 
 #' @return MLModel class object.
 #' 
-#' @seealso \code{\link[gbm]{gbm}}, \code{\link{fit}}, \code{\link{resample}}
+#' @seealso \code{\link[gbm]{gbm}}, \code{\link{fit}}, \code{\link{resample}},
+#' \code{\link{tune}}
 #'
 GBMModel <- function(distribution = NULL, n.trees = NULL,
                      interaction.depth = NULL, n.minobsinnode = NULL,

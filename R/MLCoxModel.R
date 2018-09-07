@@ -68,7 +68,7 @@ CoxModel <- function(ties = NULL, control = NULL) {
 #' @return MLModel class object.
 #' 
 #' @seealso \code{\link[MASS]{stepAIC}}, \code{\link{fit}},
-#' \code{\link{resample}}
+#' \code{\link{resample}}, \code{\link{tune}}
 #'
 CoxStepAICModel <- function(ties = NULL, control = NULL, direction = NULL,
                             scope = NULL, k = NULL, trace = FALSE, steps = NULL)

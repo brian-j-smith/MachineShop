@@ -8,7 +8,7 @@
 #' @param predicted model-predicted responses.
 #' @param ... arguments to be passed to or from other methods.
 #' 
-#' @seealso \code{\link{predict}}
+#' @seealso \code{\link{predict}}, \code{\linkS4class{MLControl}}
 #' 
 setGeneric("modelmetrics", function(observed, predicted, ...) {
   standardGeneric("modelmetrics")
@@ -81,8 +81,9 @@ setMethod("modelmetrics", c("factor", "numeric"),
 #' 
 setMethod("modelmetrics", c("numeric"),
   function(observed, predicted, ...) {
-    c("RMSE" = rmse(observed, predicted),
-      "RSquare" = cor(observed, predicted)^2,
+    c("R2" =
+        1 - sum((observed - predicted)^2) / sum((observed - mean(observed))^2),
+      "RMSE" = rmse(observed, predicted),
       "MAE" = mae(observed, predicted))
   }
 )

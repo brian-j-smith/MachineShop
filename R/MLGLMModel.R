@@ -17,7 +17,8 @@
 #' 
 #' @return MLModel class object.
 #' 
-#' @seealso \code{\link[stats]{glm}}, \code{\link{fit}}, \code{\link{resample}}
+#' @seealso \code{\link[stats]{glm}}, \code{\link{fit}}, \code{\link{resample}},
+#' \code{\link{tune}}
 #' 
 GLMModel <- function(family = NULL, control = NULL) {
   MLModel(

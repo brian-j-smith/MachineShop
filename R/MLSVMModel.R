@@ -28,7 +28,7 @@
 #' @return MLModel class object.
 #' 
 #' @seealso \code{\link[kernlab]{ksvm}}, \code{\link{fit}},
-#' \code{\link{resample}}
+#' \code{\link{resample}}, \code{\link{tune}}
 #'
 SVMModel <- function(scaled = NULL, type = NULL, kernel = NULL, kpar = NULL,
                       C = NULL, nu = NULL, epsilon = NULL, cache = NULL,

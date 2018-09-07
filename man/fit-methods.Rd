@@ -35,5 +35,5 @@ Fit a model to estimate its parameters from a data set.
 }
 \seealso{
 \code{\link[stats]{model.frame}}, \code{\link[recipes]{recipe}},
-\code{\link{predict}}, \code{\link{varimp}}
+\code{\link{predict}}, \code{\link{tune}}, \code{\link{varimp}}
 }

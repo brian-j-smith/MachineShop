@@ -16,7 +16,8 @@
 #' 
 #' @return MLModel class object.
 #' 
-#' @seealso \code{\link[pls]{mvr}}, \code{\link{fit}}, \code{\link{resample}}
+#' @seealso \code{\link[pls]{mvr}}, \code{\link{fit}}, \code{\link{resample}},
+#' \code{\link{tune}}
 #'
 PLSModel <- function(ncomp = 1, scale = NULL) {
   MLModel(

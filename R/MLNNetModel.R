@@ -30,7 +30,8 @@
 #' 
 #' @return MLModel class object.
 #' 
-#' @seealso \code{\link[nnet]{nnet}}, \code{\link{fit}}, \code{\link{resample}}
+#' @seealso \code{\link[nnet]{nnet}}, \code{\link{fit}}, \code{\link{resample}},
+#' \code{\link{tune}}
 #' 
 NNetModel <- function(size = 1, linout = NULL, entropy = NULL, softmax = NULL,
                       censored = NULL, skip = NULL, rang = NULL, decay = NULL,

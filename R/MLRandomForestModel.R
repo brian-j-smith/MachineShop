@@ -21,7 +21,7 @@
 #' @return MLModel class object.
 #' 
 #' @seealso \code{\link[randomForest]{randomForest}}, \code{\link{fit}},
-#' \code{\link{resample}}
+#' \code{\link{resample}}, \code{\link{tune}}
 #' 
 RandomForestModel <- function(ntree = NULL, mtry = NULL, replace = NULL,
                               nodesize = NULL, maxnodes = NULL) {

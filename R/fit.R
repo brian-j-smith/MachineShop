@@ -14,7 +14,7 @@
 #' @return MLModelFit class object.
 #' 
 #' @seealso \code{\link[stats]{model.frame}}, \code{\link[recipes]{recipe}},
-#' \code{\link{predict}}, \code{\link{varimp}}
+#' \code{\link{predict}}, \code{\link{tune}}, \code{\link{varimp}}
 #' 
 setGeneric("fit", function(object, x, ...) standardGeneric("fit"))
 

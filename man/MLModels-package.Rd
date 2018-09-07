@@ -33,13 +33,14 @@ be used.
   \code{\link{SVMModel}}            \tab x \tab x \tab   \tab   \cr
 }
 
-The following set of standard model fitting, prediction, and performance
-assessment functions are available for the model objects.
+The following set of standard model fitting, prediction, performance
+assessment, and tuning functions are available for the model objects.
 
 \tabular{ll}{
   \code{\link{fit}} \tab Model Fitting \cr
   \code{\link{predict}} \tab Model Prediction \cr
   \code{\link{resample}} \tab Resample Estimation of Model Performance \cr
+  \code{\link{tune}} \tab Model Tuning \cr
   \code{\link{varimp}} \tab Variable Importance \cr
 }
 

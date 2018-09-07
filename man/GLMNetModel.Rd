@@ -45,5 +45,5 @@ details can be found in the source link below.
 }
 \seealso{
 \code{\link[glmnet]{glmnet}}, \code{\link{fit}},
-\code{\link{resample}}
+\code{\link{resample}}, \code{\link{tune}}
 }

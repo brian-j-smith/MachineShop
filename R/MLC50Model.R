@@ -19,7 +19,8 @@
 #' 
 #' @return MLModel class object.
 #' 
-#' @seealso \code{\link[C50]{C5.0}}, \code{\link{fit}}, \code{\link{resample}}
+#' @seealso \code{\link[C50]{C5.0}}, \code{\link{fit}}, \code{\link{resample}},
+#' \code{\link{tune}}
 #'
 C50Model <- function(trials = NULL, rules = NULL, control = NULL)
   {
