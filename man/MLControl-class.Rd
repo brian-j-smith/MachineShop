@@ -42,6 +42,9 @@ survival events.}
 
 \item{repeats}{number of cross-validation replicates.}
 }
+\value{
+MLControl class object.
+}
 \description{
 Resampling Classes and Methods
 

@@ -21,7 +21,10 @@
 #' Default values for the \code{NULL} arguments and further model
 #' details can be found in the source link below.
 #' 
-#' @seealso \code{\link[glmnet]{glmnet}}
+#' @return MLModel class object.
+#' 
+#' @seealso \code{\link[glmnet]{glmnet}}, \code{\link{fit}},
+#' \code{\link{resample}}
 #'
 GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
                         standardize = NULL, thresh = NULL, maxit = NULL,

@@ -40,6 +40,9 @@ an essentially perfect fit.}
 \item{reltol}{stop if the optimizer is unable to reduce the fit criterion by
 a factor of at least \code{1 - reltol}.}
 }
+\value{
+MLModel class object.
+}
 \description{
 Fit single-hidden-layer neural network, possibly with skip-layer connections.
 }
@@ -52,5 +55,5 @@ Default values for the \code{NULL} arguments and further model
 details can be found in the source link below.
 }
 \seealso{
-\code{\link[nnet]{nnet}}
+\code{\link[nnet]{nnet}}, \code{\link{fit}}, \code{\link{resample}}
 }

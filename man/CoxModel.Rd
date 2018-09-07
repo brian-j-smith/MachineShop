@@ -33,6 +33,9 @@ process.}
 
 \item{steps}{maximum number of steps to be considered.}
 }
+\value{
+MLModel class object.
+}
 \description{
 Fits a Cox proportional hazards regression model. Time dependent variables,
 time dependent strata, multiple events per subject, and other extensions are
@@ -49,5 +52,6 @@ details can be found in the source links below.
 \seealso{
 \code{\link[survival]{coxph}}
 
-\code{\link[MASS]{stepAIC}}
+\code{\link[MASS]{stepAIC}}, \code{\link{fit}},
+\code{\link{resample}}
 }

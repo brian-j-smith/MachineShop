@@ -11,6 +11,8 @@
 #' weights; a formula; or a recipe.
 #' @param ... further arguments passed to other methods.
 #' 
+#' @return MLModelFit class object.
+#' 
 #' @seealso \code{\link[stats]{model.frame}}, \code{\link[recipes]{recipe}},
 #' \code{\link{predict}}, \code{\link{varimp}}
 #' 

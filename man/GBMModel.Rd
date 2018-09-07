@@ -25,6 +25,9 @@ nodes.}
 \item{bag.fraction}{fraction of the training set observations randomly
 selected to propose the next tree in the expansion.}
 }
+\value{
+MLModel class object.
+}
 \description{
 Fits generalized boosted regression models.
 }
@@ -37,5 +40,5 @@ Default values for the \code{NULL} arguments and further model
 details can be found in the source link below.
 }
 \seealso{
-\code{\link[gbm]{gbm}}
+\code{\link[gbm]{gbm}}, \code{\link{fit}}, \code{\link{resample}}
 }

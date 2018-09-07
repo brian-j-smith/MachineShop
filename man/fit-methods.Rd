@@ -27,6 +27,9 @@ weights; a formula; or a recipe.}
 
 \item{data}{data frame containing observed predictors and outcomes.}
 }
+\value{
+MLModelFit class object.
+}
 \description{
 Fit a model to estimate its parameters from a data set.
 }

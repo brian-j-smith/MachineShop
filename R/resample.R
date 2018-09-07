@@ -1,4 +1,4 @@
-#' Resampling Estimation of Model Performance
+#' Resample Estimation of Model Performance
 #' 
 #' Estimation of the predictive performance of a model estimated and evaluated
 #' on training and test samples generated from an observed data set.
@@ -21,9 +21,11 @@ setGeneric("resample", function(object, x, ...) standardGeneric("resample"))
 #' @param control \code{\linkS4class{MLControl}} object defining and controlling
 #' the resampling method to be employed.
 #' 
+#' @return Resamples class object.
+#' 
 #' @seealso \code{\link[stats]{model.frame}}, \code{\link[recipes]{recipe}},
 #' \code{\link{BootControl}}, \code{\link{CVControl}}, \code{\link{OOBControl}},
-#' \code{\link[MLModels]{summary}}
+#' \code{\link{summary}}
 #' 
 setMethod("resample", c("MLModel", "data.frame"),
   function(object, x, control) {

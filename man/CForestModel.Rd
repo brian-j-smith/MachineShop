@@ -9,6 +9,9 @@ CForestModel(controls = NULL)
 \arguments{
 \item{controls}{an object of class \code{\linkS4class{ForestControl}}.}
 }
+\value{
+MLModel class object.
+}
 \description{
 An implementation of the random forest and bagging ensemble algorithms
 utilizing conditional inference trees as base learners.
@@ -22,5 +25,6 @@ Default values for the \code{NULL} arguments and further model
 details can be found in the source link below.
 }
 \seealso{
-\code{\link[party]{cforest}}
+\code{\link[party]{cforest}}, \code{\link{fit}},
+\code{\link{resample}}
 }

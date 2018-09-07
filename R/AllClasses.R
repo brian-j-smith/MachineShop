@@ -39,6 +39,8 @@ setClass("MLControl",
 #' survival events.
 #' @param ...  arguments to be passed to or from other methods.
 #' 
+#' @return MLControl class object.
+#' 
 #' @seealso \code{\link{resample}}
 #' 
 setMethod("initialize", "MLControl",

@@ -13,7 +13,10 @@
 #' Default values for the \code{NULL} arguments and further model
 #' details can be found in the source link below.
 #' 
-#' @seealso \code{\link[party]{cforest}}
+#' @return MLModel class object.
+#' 
+#' @seealso \code{\link[party]{cforest}}, \code{\link{fit}},
+#' \code{\link{resample}}
 #'
 CForestModel <- function(controls = NULL) {
   MLModel(

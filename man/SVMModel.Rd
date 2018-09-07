@@ -31,6 +31,9 @@ nu-svr and eps-bsvm}
 
 \item{shrinking}{whether to use the shrinking-heuristics.}
 }
+\value{
+MLModel class object.
+}
 \description{
 Fits the well known C-svc, nu-svc, (classification) one-class-svc (novelty)
 eps-svr, nu-svr (regression) formulations along with native multi-class
@@ -45,5 +48,6 @@ Default values for the \code{NULL} arguments and further model
 details can be found in the source link below.
 }
 \seealso{
-\code{\link[kernlab]{ksvm}}
+\code{\link[kernlab]{ksvm}}, \code{\link{fit}},
+\code{\link{resample}}
 }

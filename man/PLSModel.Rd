@@ -12,6 +12,9 @@ PLSModel(ncomp = 1, scale = NULL)
 \item{scale}{logical indicating whether to scale the predictors by the
 sample standard deviation.}
 }
+\value{
+MLModel class object.
+}
 \description{
 Function to perform partial least squares regression.
 }
@@ -24,5 +27,5 @@ Default values for the \code{NULL} arguments and further model
 details can be found in the source link below.
 }
 \seealso{
-\code{\link[pls]{mvr}}
+\code{\link[pls]{mvr}}, \code{\link{fit}}, \code{\link{resample}}
 }

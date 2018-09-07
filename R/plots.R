@@ -2,6 +2,8 @@
 #' 
 #' Plot measures of the relative importance of predictors in a model.
 #' 
+#' @name plot
+#' 
 #' @param x variable importance object as returned by \code{\link{varimp}}.
 #' @param n number of most important variables to include in the plot
 #' (default: all).

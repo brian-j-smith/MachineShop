@@ -66,7 +66,10 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
 #' Default values for the \code{NULL} arguments and further model
 #' details can be found in the source links below.
 #'
-#' @seealso \code{\link[MASS]{stepAIC}}
+#' @return MLModel class object.
+#' 
+#' @seealso \code{\link[MASS]{stepAIC}}, \code{\link{fit}},
+#' \code{\link{resample}}
 #'
 SurvRegStepAICModel <- function(dist = NULL, scale = NULL, parms = NULL,
                                 control = NULL, direction = NULL, scope = NULL,

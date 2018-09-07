@@ -6,7 +6,7 @@
 \alias{resample,MLModel,data.frame-method}
 \alias{resample,MLModel,formula-method}
 \alias{resample,MLModel,recipe-method}
-\title{Resampling Estimation of Model Performance}
+\title{Resample Estimation of Model Performance}
 \usage{
 resample(object, x, ...)
 
@@ -30,6 +30,9 @@ the resampling method to be employed.}
 
 \item{data}{data frame containing observed predictors and outcomes.}
 }
+\value{
+Resamples class object.
+}
 \description{
 Estimation of the predictive performance of a model estimated and evaluated
 on training and test samples generated from an observed data set.
@@ -37,5 +40,5 @@ on training and test samples generated from an observed data set.
 \seealso{
 \code{\link[stats]{model.frame}}, \code{\link[recipes]{recipe}},
 \code{\link{BootControl}}, \code{\link{CVControl}}, \code{\link{OOBControl}},
-\code{\link[MLModels]{summary}}
+\code{\link{summary}}
 }

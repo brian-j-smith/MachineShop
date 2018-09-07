@@ -65,7 +65,10 @@ CoxModel <- function(ties = NULL, control = NULL) {
 #' Default values for the \code{NULL} arguments and further model
 #' details can be found in the source links below.
 #'
-#' @seealso \code{\link[MASS]{stepAIC}}
+#' @return MLModel class object.
+#' 
+#' @seealso \code{\link[MASS]{stepAIC}}, \code{\link{fit}},
+#' \code{\link{resample}}
 #'
 CoxStepAICModel <- function(ties = NULL, control = NULL, direction = NULL,
                             scope = NULL, k = NULL, trace = FALSE, steps = NULL)

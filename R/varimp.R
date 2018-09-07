@@ -7,7 +7,9 @@
 #' to range from 0 to 100.
 #' @param ... arguments passed to model-specific variable importance functions.
 #' 
-#' @seealso \code{\link{fit}}, \code{\link[MLModels:plot.VarImp]{plot}}
+#' @return VarImp class object.
+#' 
+#' @seealso \code{\link{fit}}, \code{\link{plot}}
 #'
 varimp <- function(object, scale = TRUE, ...) {
   new("VarImp", as(varimp_sub(object, ...), "VarImp"), scale = scale)

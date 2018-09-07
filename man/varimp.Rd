@@ -14,9 +14,12 @@ to range from 0 to 100.}
 
 \item{...}{arguments passed to model-specific variable importance functions.}
 }
+\value{
+VarImp class object.
+}
 \description{
 Calculate measures of the relative importance of predictors in a model.
 }
 \seealso{
-\code{\link{fit}}, \code{\link[MLModels:plot.VarImp]{plot}}
+\code{\link{fit}}, \code{\link{plot}}
 }

@@ -19,6 +19,9 @@ RandomForestModel(ntree = NULL, mtry = NULL, replace = NULL,
 \item{maxnodes}{maximum number of terminal nodes trees in the forest can
 have.}
 }
+\value{
+MLModel class object.
+}
 \description{
 Implementation of Breiman's random forest algorithm (based on Breiman and
 Cutler's original Fortran code) for classification and regression.
@@ -32,5 +35,6 @@ Default values for the \code{NULL} arguments and further model
 details can be found in the source link below.
 }
 \seealso{
-\code{\link[randomForest]{randomForest}}
+\code{\link[randomForest]{randomForest}}, \code{\link{fit}},
+\code{\link{resample}}
 }

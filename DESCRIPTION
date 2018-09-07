@@ -10,4 +10,6 @@ Imports: caret, foreach, ggplot2, Hmisc, irr, kernlab, magrittr, methods,
          MLmetrics, ModelMetrics, party, recipes, rsample, survival,
          survivalROC, utils
 License: GPL-3
+URL: https://github.com/brian-j-smith/MLModels
+Bugreports: https://github.com/brian-j-smith/MLModels/issues
 RoxygenNote: 6.1.0

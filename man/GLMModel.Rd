@@ -33,6 +33,9 @@ process.}
 
 \item{steps}{maximum number of steps to be considered.}
 }
+\value{
+MLModel class object.
+}
 \description{
 Fits generalized linear models, specified by giving a symbolic description of
 the linear predictor and a description of the error distribution.
@@ -49,7 +52,7 @@ Default values for the \code{NULL} arguments and further model
 details can be found in the source links below.
 }
 \seealso{
-\code{\link[stats]{glm}}
+\code{\link[stats]{glm}}, \code{\link{fit}}, \code{\link{resample}}
 
 \code{\link[MASS]{stepAIC}}
 }

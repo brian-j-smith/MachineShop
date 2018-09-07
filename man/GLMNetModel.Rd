@@ -29,6 +29,9 @@ to model fitting.}
 
 \item{type.multinomial}{algorithm type for multinomial models.}
 }
+\value{
+MLModel class object.
+}
 \description{
 Fit a generalized linear model via penalized maximum likelihood.
 }
@@ -41,5 +44,6 @@ Default values for the \code{NULL} arguments and further model
 details can be found in the source link below.
 }
 \seealso{
-\code{\link[glmnet]{glmnet}}
+\code{\link[glmnet]{glmnet}}, \code{\link{fit}},
+\code{\link{resample}}
 }

@@ -39,6 +39,9 @@ process.}
 
 \item{steps}{maximum number of steps to be considered.}
 }
+\value{
+MLModel class object.
+}
 \description{
 Fits the accelerated failure time family of parametric survival models.
 }
@@ -53,5 +56,6 @@ details can be found in the source links below.
 \seealso{
 \code{\link[rms]{psm}}, \code{\link[survival]{survreg}}
 
-\code{\link[MASS]{stepAIC}}
+\code{\link[MASS]{stepAIC}}, \code{\link{fit}},
+\code{\link{resample}}
 }

@@ -17,7 +17,9 @@
 #' Default values for the \code{NULL} arguments and further model
 #' details can be found in the source link below.
 #' 
-#' @seealso \code{\link[C50]{C5.0}}
+#' @return MLModel class object.
+#' 
+#' @seealso \code{\link[C50]{C5.0}}, \code{\link{fit}}, \code{\link{resample}}
 #'
 C50Model <- function(trials = NULL, rules = NULL, control = NULL)
   {

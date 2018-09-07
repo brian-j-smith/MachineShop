@@ -25,7 +25,10 @@
 #' Default values for the \code{NULL} arguments and further model
 #' details can be found in the source link below.
 #' 
-#' @seealso \code{\link[kernlab]{ksvm}}
+#' @return MLModel class object.
+#' 
+#' @seealso \code{\link[kernlab]{ksvm}}, \code{\link{fit}},
+#' \code{\link{resample}}
 #'
 SVMModel <- function(scaled = NULL, type = NULL, kernel = NULL, kpar = NULL,
                       C = NULL, nu = NULL, epsilon = NULL, cache = NULL,

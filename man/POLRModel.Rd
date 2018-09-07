@@ -10,6 +10,9 @@ POLRModel(method = NULL)
 \item{method}{logistic or probit or (complementary) log-log or cauchit
 (corresponding to a Cauchy latent variable).}
 }
+\value{
+MLModel class object.
+}
 \description{
 Fit a logistic or probit regression model to an ordered factor response.
 }
@@ -22,5 +25,5 @@ Default values for the \code{NULL} arguments and further model
 details can be found in the source link below.
 }
 \seealso{
-\code{\link[MASS]{polr}}
+\code{\link[MASS]{polr}}, \code{\link{fit}}, \code{\link{resample}}
 }

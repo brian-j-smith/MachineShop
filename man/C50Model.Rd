@@ -15,6 +15,9 @@ rule-based model}
 
 \item{control}{list of control parameters.}
 }
+\value{
+MLModel class object.
+}
 \description{
 Fit classification tree models or rule-based models using Quinlan's C5.0
 algorithm.
@@ -28,5 +31,5 @@ Default values for the \code{NULL} arguments and further model
 details can be found in the source link below.
 }
 \seealso{
-\code{\link[C50]{C5.0}}
+\code{\link[C50]{C5.0}}, \code{\link{fit}}, \code{\link{resample}}
 }
