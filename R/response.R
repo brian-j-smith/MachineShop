@@ -20,16 +20,16 @@ response.terms <- function(object, ...) {
 
 
 response.MLModelFit <- function(object, ...) {
-  response_sub(object, ...)
+  .response(object, ...)
 }
 
 
-response_sub <- function(object, ...) {
-  UseMethod("response_sub", object)
+.response <- function(object, ...) {
+  UseMethod(".response", object)
 }
 
 
-response_sub.MLModelFit <- function(object, ...) {
+.response.MLModelFit <- function(object, ...) {
   response <- field(object, ".response")
   response(object, ...)
 }

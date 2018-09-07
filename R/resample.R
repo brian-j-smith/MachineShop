@@ -29,7 +29,7 @@ setGeneric("resample", function(object, x, ...) standardGeneric("resample"))
 #' 
 setMethod("resample", c("MLModel", "data.frame"),
   function(object, x, control) {
-    resample_sub(control, x, object)
+    .resample(control, x, object)
   }
 )
 
@@ -41,7 +41,7 @@ setMethod("resample", c("MLModel", "data.frame"),
 #' 
 setMethod("resample", c("MLModel", "formula"),
   function(object, x, data, control) {
-    resample_sub(control, model.frame(x, data), object)
+    .resample(control, model.frame(x, data), object)
   }
 )
 
@@ -51,17 +51,17 @@ setMethod("resample", c("MLModel", "formula"),
 #' 
 setMethod("resample", c("MLModel", "recipe"),
   function(object, x, control) {
-    resample_sub(control, x, object)
+    .resample(control, x, object)
   }
 )
 
 
-setGeneric("resample_sub", function(object, x, ...) {
- standardGeneric("resample_sub") 
+setGeneric(".resample", function(object, x, ...) {
+ standardGeneric(".resample") 
 })
 
 
-setMethod("resample_sub", c("BootControl", "data.frame"),
+setMethod(".resample", c("BootControl", "data.frame"),
   function(object, x, model) {
     obs <- response(x)
     splits <- createResample(obs, times = object@number)
@@ -79,7 +79,7 @@ setMethod("resample_sub", c("BootControl", "data.frame"),
 )
 
 
-setMethod("resample_sub", c("BootControl", "recipe"),
+setMethod(".resample", c("BootControl", "recipe"),
   function(object, x, model) {
     x_prep <- prep(x, retain = TRUE)
     strata <- x_prep %>% formula %>% terms %>% response
@@ -103,7 +103,7 @@ setMethod("resample_sub", c("BootControl", "recipe"),
 )
 
 
-setMethod("resample_sub", c("CVControl", "data.frame"),
+setMethod(".resample", c("CVControl", "data.frame"),
   function(object, x, model) {
     splits <- createMultiFolds(response(x),
                                k = object@folds,
@@ -125,7 +125,7 @@ setMethod("resample_sub", c("CVControl", "data.frame"),
 )
 
 
-setMethod("resample_sub", c("CVControl", "recipe"),
+setMethod(".resample", c("CVControl", "recipe"),
   function(object, x, model) {
     strata <- prep(x) %>% formula %>% terms %>% response
     splits <- vfold_cv(x$template,
@@ -149,7 +149,7 @@ setMethod("resample_sub", c("CVControl", "recipe"),
 )
 
 
-setMethod("resample_sub", c("OOBControl", "data.frame"),
+setMethod(".resample", c("OOBControl", "data.frame"),
   function(object, x, model) {
     splits <- createResample(response(x), times = object@number)
     seeds <- sample.int(.Machine$integer.max, length(splits))
@@ -170,7 +170,7 @@ setMethod("resample_sub", c("OOBControl", "data.frame"),
 )
 
 
-setMethod("resample_sub", c("OOBControl", "recipe"),
+setMethod(".resample", c("OOBControl", "recipe"),
   function(object, x, model) {
     strata <- prep(x) %>% formula %>% terms %>% response
     splits <- bootstraps(x$template,
