@@ -1,8 +1,22 @@
+#' Model Performance Metrices
+#' 
+#' Compute measures of model performance.
+#' 
+#' @rdname modelmetrics
+#' 
+#' @param observed vector of observed responses.
+#' @param predicted model-predicted responses.
+#' @param ... arguments to be passed to or from other methods.
+#' 
+#' @seealso \code{\link{predict}}
+#' 
 setGeneric("modelmetrics", function(observed, predicted, ...) {
   standardGeneric("modelmetrics")
 })
 
 
+#' @rdname modelmetrics
+#' 
 setMethod("modelmetrics", c("factor", "factor"),
   function(observed, predicted, ...) {
     ratings <- cbind(observed, predicted)
@@ -13,6 +27,8 @@ setMethod("modelmetrics", c("factor", "factor"),
 )
 
 
+#' @rdname modelmetrics
+#' 
 setMethod("modelmetrics", c("factor", "matrix"),
   function(observed, predicted, ...) {
     n <- nlevels(observed)
@@ -37,8 +53,15 @@ multinomLogLoss <- function(observed, predicted) {
 }
 
 
+#' @rdname modelmetrics
+#' 
+#' @param cutoff threshold above which probabilities are classified as success.
+#' @param cutoff.index function to calculate a desired sensitivity-specificity
+#' tradeoff.
+#' 
 setMethod("modelmetrics", c("factor", "numeric"),
-  function(observed, predicted, cutoff, cutoff.index, ...) {
+  function(observed, predicted, cutoff = 0.5,
+           cutoff.index = function(sens, spec) sens + spec, ...) {
     observed <- observed == levels(observed)[2]
     sens <- sensitivity(observed, predicted, cutoff)
     spec <- specificity(observed, predicted, cutoff)
@@ -54,6 +77,8 @@ setMethod("modelmetrics", c("factor", "numeric"),
 )
 
 
+#' @rdname modelmetrics
+#' 
 setMethod("modelmetrics", c("numeric"),
   function(observed, predicted, ...) {
     c("RMSE" = rmse(observed, predicted),
@@ -63,6 +88,11 @@ setMethod("modelmetrics", c("numeric"),
 )
 
 
+#' @rdname modelmetrics
+#' 
+#' @param survtimes numeric vector of follow-up times at which survival events
+#' were predicted.
+#' 
 setMethod("modelmetrics", c("Surv", "matrix"),
   function(observed, predicted, survtimes, ...) {
     ntimes <- length(survtimes)
@@ -108,6 +138,8 @@ meanSurvMetric <- function(x, times) {
 }
 
 
+#' @rdname modelmetrics
+#' 
 setMethod("modelmetrics", c("Surv", "numeric"),
   function(observed, predicted, ...) {
     c("CIndex" = rcorr.cens(-predicted, observed)[[1]])

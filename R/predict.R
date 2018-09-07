@@ -15,7 +15,7 @@
 #' survival events.
 #' @param ... arguments passed to model-specific prediction functions.
 #' 
-#' @seealso \code{\link{fit}}
+#' @seealso \code{\link{fit}}, \code{\link{modelmetrics}}
 #' 
 predict.MLModelFit <- function(object, newdata, type = c("response", "prob"),
                                cutoff = 0.5, times = NULL, ...) {

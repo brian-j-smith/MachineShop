@@ -81,5 +81,5 @@ survival events.}
 }}
 
 \seealso{
-\code{\link{resample}}
+\code{\link{resample}}, \code{\link{modelmetrics}}
 }

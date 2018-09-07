@@ -41,7 +41,7 @@ setClass("MLControl",
 #' 
 #' @return MLControl class object.
 #' 
-#' @seealso \code{\link{resample}}
+#' @seealso \code{\link{resample}}, \code{\link{modelmetrics}}
 #' 
 setMethod("initialize", "MLControl",
   function(.Object, summary = modelmetrics, cutoff = 0.5,

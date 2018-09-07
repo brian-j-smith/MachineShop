@@ -29,5 +29,5 @@ survival events.}
 Predict outcomes with a fitted model.
 }
 \seealso{
-\code{\link{fit}}
+\code{\link{fit}}, \code{\link{modelmetrics}}
 }

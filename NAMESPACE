@@ -50,6 +50,7 @@ export(MLModel,
 exportClasses(MLModelFit)
 
 exportMethods(fit,
+              modelmetrics,
               resample)
 
 S3method(plot, VarImp)
