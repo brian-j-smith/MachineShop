@@ -64,11 +64,14 @@ setGeneric("resample_sub", function(object, x, ...) {
 setMethod("resample_sub", c("BootControl", "data.frame"),
   function(object, x, model) {
     obs <- response(x)
-    bootids <- createResample(obs, times = object@number)
-    foreach(bootid = bootids,
+    splits <- createResample(obs, times = object@number)
+    seeds <- sample.int(.Machine$integer.max, length(splits))
+    foreach(i = seq(splits),
             .packages = c("MLModels", "survival"),
             .combine = "rbind") %dopar% {
-      trainfit <- fit(model, x[bootid, , drop = FALSE])
+      set.seed(seeds[i])
+      split <- splits[[i]]
+      trainfit <- fit(model, x[split, , drop = FALSE])
       pred <- predict(trainfit, x, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
     } %>% as("Resamples")
@@ -79,14 +82,18 @@ setMethod("resample_sub", c("BootControl", "data.frame"),
 setMethod("resample_sub", c("BootControl", "recipe"),
   function(object, x, model) {
     x_prep <- prep(x, retain = TRUE)
-    bt_samples <- bootstraps(x$template,
-                             times = object@number,
-                             strata = x_prep %>% formula %>% terms %>% response)
+    strata <- x_prep %>% formula %>% terms %>% response
+    splits <- bootstraps(x$template,
+                         times = object@number,
+                         strata = strata)$splits
+    seeds <- sample.int(.Machine$integer.max, length(splits))
     test <- juice(x_prep)
     obs <- response(formula(test), test)
-    foreach(split = bt_samples$splits,
+    foreach(i = seq(splits),
             .packages = c("MLModels", "recipes", "survival"),
             .combine = "rbind") %dopar% {
+      set.seed(seeds[i])
+      split <- splits[[i]]
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
       trainfit <- fit(model, train)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
@@ -98,14 +105,17 @@ setMethod("resample_sub", c("BootControl", "recipe"),
 
 setMethod("resample_sub", c("CVControl", "data.frame"),
   function(object, x, model) {
-    foldids <- createMultiFolds(response(x),
-                                k = object@folds,
-                                times = object@repeats)
-    foreach(foldid = foldids,
+    splits <- createMultiFolds(response(x),
+                               k = object@folds,
+                               times = object@repeats)
+    seeds <- sample.int(.Machine$integer.max, length(splits))
+    foreach(i = seq(splits),
             .packages = c("MLModels", "survival"),
             .combine = "rbind") %dopar% {
-      train <- x[foldid, , drop = FALSE]
-      test <- x[-foldid, , drop = FALSE]
+      set.seed(seeds[i])
+      split <- splits[[i]]
+      train <- x[split, , drop = FALSE]
+      test <- x[-split, , drop = FALSE]
       trainfit <- fit(model, train)
       obs <- response(test)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
@@ -117,13 +127,17 @@ setMethod("resample_sub", c("CVControl", "data.frame"),
 
 setMethod("resample_sub", c("CVControl", "recipe"),
   function(object, x, model) {
-    cv_samples <- vfold_cv(x$template,
-                           v = object@folds,
-                           repeats = object@repeats,
-                           strata = prep(x) %>% formula %>% terms %>% response)
-    foreach(split = cv_samples$splits,
+    strata <- prep(x) %>% formula %>% terms %>% response
+    splits <- vfold_cv(x$template,
+                       v = object@folds,
+                       repeats = object@repeats,
+                       strata = strata)$splits
+    seeds <- sample.int(.Machine$integer.max, length(splits))
+    foreach(i = seq(splits),
             .packages = c("MLModels", "recipes", "survival"),
             .combine = "rbind") %dopar% {
+      set.seed(seeds[i])
+      split <- splits[[i]]
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
       test <- bake(train, newdata = assessment(split))
       trainfit <- fit(model, train)
@@ -137,12 +151,15 @@ setMethod("resample_sub", c("CVControl", "recipe"),
 
 setMethod("resample_sub", c("OOBControl", "data.frame"),
   function(object, x, model) {
-    bootids <- createResample(response(x), times = object@number)
-    foreach(bootid = bootids,
+    splits <- createResample(response(x), times = object@number)
+    seeds <- sample.int(.Machine$integer.max, length(splits))
+    foreach(i = seq(splits),
             .packages = c("MLModels", "survival"),
             .combine = "rbind") %dopar% {
-      train <- x[bootid, , drop = FALSE]
-      test <- x[setdiff(1:nrow(x), bootid), , drop = FALSE]
+      set.seed(seeds[i])
+      split <- splits[[i]]
+      train <- x[split, , drop = FALSE]
+      test <- x[setdiff(1:nrow(x), split), , drop = FALSE]
       if(nrow(test) == 0) return(NA)
       trainfit <- fit(model, train)
       obs <- response(test)
@@ -155,12 +172,16 @@ setMethod("resample_sub", c("OOBControl", "data.frame"),
 
 setMethod("resample_sub", c("OOBControl", "recipe"),
   function(object, x, model) {
-    bt_samples <- bootstraps(x$template,
-                             times = object@number,
-                             strata = prep(x) %>% formula %>% terms %>% response)
-    foreach(split = bt_samples$splits,
+    strata <- prep(x) %>% formula %>% terms %>% response
+    splits <- bootstraps(x$template,
+                         times = object@number,
+                         strata = strata)$splits
+    seeds <- sample.int(.Machine$integer.max, length(splits))
+    foreach(i = seq(splits),
             .packages = c("MLModels", "recipes", "survival"),
             .combine = "rbind") %dopar% {
+      set.seed(seeds[i])
+      split <- splits[[i]]
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
       test <- bake(train, newdata = assessment(split))
       if(nrow(test) == 0) return(NA)
