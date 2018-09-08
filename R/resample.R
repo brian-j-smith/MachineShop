@@ -28,7 +28,7 @@ setGeneric("resample", function(object, x, ...) standardGeneric("resample"))
 #' \code{\link{tune}}, \code{\link{summary}}
 #' 
 setMethod("resample", c("MLModel", "data.frame"),
-  function(object, x, control) {
+  function(object, x, control = CVControl()) {
     .resample(control, x, object)
   }
 )
@@ -40,7 +40,7 @@ setMethod("resample", c("MLModel", "data.frame"),
 #' @param data data frame containing observed predictors and outcomes.
 #' 
 setMethod("resample", c("MLModel", "formula"),
-  function(object, x, data, control) {
+  function(object, x, data, control = CVControl()) {
     .resample(control, model.frame(x, data), object)
   }
 )
@@ -50,7 +50,7 @@ setMethod("resample", c("MLModel", "formula"),
 #' @aliases resample,MLModel,recipe-method
 #' 
 setMethod("resample", c("MLModel", "recipe"),
-  function(object, x, control) {
+  function(object, x, control = CVControl()) {
     .resample(control, x, object)
   }
 )

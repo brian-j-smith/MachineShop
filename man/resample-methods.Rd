@@ -10,11 +10,12 @@
 \usage{
 resample(object, x, ...)
 
-\S4method{resample}{MLModel,data.frame}(object, x, control)
+\S4method{resample}{MLModel,data.frame}(object, x, control = CVControl())
 
-\S4method{resample}{MLModel,formula}(object, x, data, control)
+\S4method{resample}{MLModel,formula}(object, x, data,
+  control = CVControl())
 
-\S4method{resample}{MLModel,recipe}(object, x, control)
+\S4method{resample}{MLModel,recipe}(object, x, control = CVControl())
 }
 \arguments{
 \item{object}{prediction model object.}

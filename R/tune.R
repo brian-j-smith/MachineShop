@@ -37,8 +37,8 @@ setGeneric("tune", function(object, x, ...) standardGeneric("tune"))
 #' \code{\link{fit}}, \code{\link{resample}}
 #' 
 setMethod("tune", c("function", "data.frame"),
-  function(object, x, control, grid = data.frame(), metric = 1, stat = mean,
-           maximize = TRUE) {
+  function(object, x, control = CVControl(), grid = data.frame(), metric = 1,
+           stat = mean, maximize = TRUE) {
     .tune(object, x, control, grid = grid, metric = metric, stat = stat,
           maximize = maximize)
   }
@@ -51,8 +51,8 @@ setMethod("tune", c("function", "data.frame"),
 #' @param data data frame containing observed predictors and outcomes.
 #' 
 setMethod("tune", c("function", "formula"),
-  function(object, x, data, control, grid = data.frame(), metric = 1,
-           stat = mean, maximize = TRUE) {
+  function(object, x, data, control = CVControl(), grid = data.frame(),
+           metric = 1, stat = mean, maximize = TRUE) {
     .tune(object, x, data, control, grid = grid, metric = metric, stat = stat,
           maximize = maximize)
   }
@@ -63,8 +63,8 @@ setMethod("tune", c("function", "formula"),
 #' @aliases tune,function,recipe-method
 #' 
 setMethod("tune", c("function", "recipe"),
-  function(object, x, control, grid = data.frame(), metric = 1, stat = mean,
-           maximize = TRUE) {
+  function(object, x, control = CVControl(), grid = data.frame(), metric = 1,
+           stat = mean, maximize = TRUE) {
     .tune(object, x, control, grid = grid, metric = metric, stat = stat,
           maximize = maximize)
   }

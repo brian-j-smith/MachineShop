@@ -10,13 +10,14 @@
 \usage{
 tune(object, x, ...)
 
-\S4method{tune}{`function`,data.frame}(object, x, control,
+\S4method{tune}{`function`,data.frame}(object, x, control = CVControl(),
   grid = data.frame(), metric = 1, stat = mean, maximize = TRUE)
 
-\S4method{tune}{`function`,formula}(object, x, data, control,
-  grid = data.frame(), metric = 1, stat = mean, maximize = TRUE)
+\S4method{tune}{`function`,formula}(object, x, data,
+  control = CVControl(), grid = data.frame(), metric = 1,
+  stat = mean, maximize = TRUE)
 
-\S4method{tune}{`function`,recipe}(object, x, control,
+\S4method{tune}{`function`,recipe}(object, x, control = CVControl(),
   grid = data.frame(), metric = 1, stat = mean, maximize = TRUE)
 }
 \arguments{
