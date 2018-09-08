@@ -15,8 +15,7 @@ importFrom(ModelMetrics, auc, brier, ce, kappa, mae, rmse, sensitivity,
 importFrom(recipes, bake, juice, prep)
 importFrom(rsample, assessment, bootstraps, prepper, vfold_cv)
 importFrom(stats, approx, coef, cor, formula, median, model.frame, model.matrix,
-           model.response, model.weights, pchisq, predict, sd, terms, update,
-           vcov)
+           model.response, model.weights, pchisq, predict, sd, terms, vcov)
 importFrom(survival, is.Surv, Surv, survfit)
 importFrom(survivalROC, survivalROC)
 importFrom(utils, head, stack, tail)
