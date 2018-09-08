@@ -153,6 +153,20 @@ MLModel <- function(name = "MLModel", packages = character(0),
 }
 
 
+setMethod("show", "MLModel",
+  function(object) {
+    cat("An object of class \"", class(object), "\"\n\n",
+        "name: ", object@name, "\n\n",
+        "packages: ", paste(object@packages, collapse = ", "), "\n\n",
+        "types: ", paste(object@types, collapse = ", "), "\n\n",
+        "params:\n",
+        sep = "")
+    print(object@params)
+    invisible()
+  }
+)
+
+
 MLModelTune <- setClass("MLModelTune",
   slots = c(grid = "data.frame", perf = "data.frame", selected = "numeric"),
   contains = "MLModel"
