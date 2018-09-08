@@ -167,8 +167,59 @@ setMethod("show", "MLModel",
 )
 
 
+#' Resamples Class Contructor
+#' 
+#' Create an object of resampled performance metrics from one or more models.
+#' 
+#' @param ... named or unnamed resample output from one or more models.
+#' 
+#' @return Resamples class object.
+#' 
+#' @seealso \code{\link{resample}}, \code{\link{plot}}, \code{\link{summary}}
+#' 
+Resamples <- setClass("Resamples", contains = "array")
+
+setMethod("initialize", "Resamples",
+  function(.Object, ...) {
+    args <- list(...)
+    if(length(args) == 0) stop("no values given")
+    if(!all(sapply(args, function(x) is.matrix(x) || is.data.frame(x)))) {
+      stop("values must be of type matrix or data.frame")
+    }
+    argsdim <- dim(args[[1]])
+    if(!all(sapply(args, dim) == argsdim)) {
+      stop("values have different dimensions")
+    }
+    if(!all(sapply(args, colnames) == colnames(args[[1]]))) {
+      stop("values have different column names")
+    }
+    modelnames <- names(args)
+    if(is.null(modelnames)) modelnames <- paste0("Model", seq(args))
+    names(args) <- NULL
+    args$along = 3
+    args$new.names = list(1:argsdim[1], NULL, modelnames)
+    .Data <- do.call(abind, args)
+    if(dim(.Data)[3] == 1) .Data <- adrop(.Data, drop = 3)
+    callNextMethod(.Object, .Data)
+  }
+)
+
+
+setMethod("show", "Resamples",
+  function(object) {
+    cat("An object of class \"", class(object), "\"\n\n", sep = "")
+    dns <- dimnames(object)
+    if(length(dns) > 2) cat("models: ", paste(dns[[3]], collapse = ", "),
+                            "\n\n", sep = "")
+    cat("metrics: ", paste(dns[[2]], collapse = ", "), "\n\n",
+        "resamples: ", dim(object)[1], "\n\n", sep = "")
+    invisible()
+  }
+)
+
+
 MLModelTune <- setClass("MLModelTune",
-  slots = c(grid = "data.frame", perf = "data.frame", selected = "numeric"),
+  slots = c(grid = "data.frame", resamples = "Resamples", selected = "numeric"),
   contains = "MLModel"
 )
 
@@ -231,13 +282,6 @@ asParentFit <- function(object) {
 
 setClass("SVMFit", contain = c("MLModelFit", "ksvm"))
 setClass("CForestFit", contains = c("MLModelFit", "RandomForest"))
-
-
-setClass("Resamples", contains = "data.frame")
-
-setAs("matrix", "Resamples",
-  function(from) new("Resamples", as.data.frame(from))
-)
 
 
 setClass("VarImp", contains = "data.frame")

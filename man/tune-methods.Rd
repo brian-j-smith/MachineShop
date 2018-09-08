@@ -57,5 +57,6 @@ according to resample estimation of predictive performance.
 \seealso{
 \code{\link[stats]{model.frame}}, \code{\link[recipes]{recipe}},
 \code{\link{BootControl}}, \code{\link{CVControl}}, \code{\link{OOBControl}},
-\code{\link{fit}}, \code{\link{resample}}
+\code{\link{fit}}, \code{\link{resample}}, \code{\link{plot}},
+\code{\link{summary}}
 }

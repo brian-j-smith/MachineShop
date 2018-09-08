@@ -34,7 +34,8 @@ setGeneric("tune", function(object, x, ...) standardGeneric("tune"))
 #' 
 #' @seealso \code{\link[stats]{model.frame}}, \code{\link[recipes]{recipe}},
 #' \code{\link{BootControl}}, \code{\link{CVControl}}, \code{\link{OOBControl}},
-#' \code{\link{fit}}, \code{\link{resample}}
+#' \code{\link{fit}}, \code{\link{resample}}, \code{\link{plot}},
+#' \code{\link{summary}}
 #' 
 setMethod("tune", c("function", "data.frame"),
   function(object, x, control = CVControl(), grid = data.frame(), metric = 1,
@@ -73,23 +74,25 @@ setMethod("tune", c("function", "recipe"),
 
 .tune <- function(object, ..., grid, metric, stat, maximize) {
   models <-list()
+  resamples <- list()
   perf <- list()
   seed <- sample.int(.Machine$integer.max, 1)
   for(i in 1:max(1, nrow(grid))) {
     set.seed(seed)
     models[[i]] <- do.call(object, grid[i, , drop = FALSE])
-    perf[[i]] <- resample(models[[i]], ...) %>%
+    resamples[[i]] <- resample(models[[i]], ...)
+    perf[[i]] <- resamples[[i]] %>%
       apply(2, stat, na.rm = TRUE)
   }
   perf <- as.data.frame(do.call(rbind, perf))
   lookup <- structure(seq(perf), names = names(perf))
-  if(is.na(lookup[metric])) {
-    metric <- 1
-    warning("specified metric not found; tuning on ", names(lookup)[metric],
-            " instead")
+  metric <- na.omit(names(lookup)[lookup[metric]])
+  if(length(metric) == 0) {
+    metric <- names(lookup)[1]
+    warning("specified metric not found; tuning on ", metric, " instead")
   }
-  metric <- names(lookup)[lookup[metric]]
   selected <- ifelse(maximize, which.max, which.min)(perf[[metric]])
-  MLModelTune(models[[selected]], grid = grid, perf = perf,
+  MLModelTune(models[[selected]], grid = grid,
+              resamples = do.call(Resamples, resamples),
               selected = structure(selected, names = metric))
 }

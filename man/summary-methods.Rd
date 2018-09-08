@@ -2,15 +2,18 @@
 % Please edit documentation in R/summary.R
 \name{summary}
 \alias{summary}
+\alias{summary.MLModelTune}
 \alias{summary.Resamples}
 \title{Model Performance Summary}
 \usage{
+\method{summary}{MLModelTune}(object, stats = c(Mean = mean, Median =
+  median, SD = sd, Min = min, Max = max), na.rm = TRUE, ...)
+
 \method{summary}{Resamples}(object, stats = c(Mean = mean, Median =
   median, SD = sd, Min = min, Max = max), na.rm = TRUE, ...)
 }
 \arguments{
-\item{object}{object of resampled metrics as returned by
-\code{\link{resample}}.}
+\item{object}{object to summarize.}
 
 \item{stats}{list of named functions to include in the calculation of summary
 statistics.  Supplied functions should contain a \code{na.rm} argument in
@@ -24,5 +27,5 @@ their definitions.}
 Summary statistics for resampled model performance metrics.
 }
 \seealso{
-\code{\link{resample}}
+\code{\link{resample}}, \code{\link{Resamples}}, \code{\link{tune}}
 }

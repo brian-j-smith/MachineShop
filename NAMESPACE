@@ -4,8 +4,10 @@ import(methods)
 importClassesFrom(kernlab, ksvm)
 importClassesFrom(party, RandomForest)
 
+importFrom(abind, abind, adrop)
 importFrom(caret, createMultiFolds, createResample)
 importFrom(foreach, "%dopar%", foreach, registerDoSEQ)
+importFrom(graphics, plot)
 importFrom(Hmisc, rcorr.cens)
 importFrom(irr, kappa2)
 importFrom(magrittr, "%>%")
@@ -15,13 +17,14 @@ importFrom(ModelMetrics, auc, brier, ce, kappa, mae, rmse, sensitivity,
 importFrom(recipes, bake, juice, prep)
 importFrom(rsample, assessment, bootstraps, prepper, vfold_cv)
 importFrom(stats, approx, coef, cor, formula, median, model.frame, model.matrix,
-           model.response, model.weights, pchisq, predict, sd, terms, vcov)
+           model.response, model.weights, na.omit, pchisq, predict, sd, terms,
+           vcov)
 importFrom(survival, is.Surv, Surv, survfit)
 importFrom(survivalROC, survivalROC)
 importFrom(utils, head, stack, tail)
 
 
-export(varimp)
+export(Resamples, varimp)
 
 export(BootControl,
        CVControl,
@@ -53,6 +56,9 @@ exportMethods(fit,
               resample,
               tune)
 
+S3method(plot, MLModelTune)
+S3method(plot, Resamples)
 S3method(plot, VarImp)
 S3method(predict, MLModelFit)
+S3method(summary, MLModelTune)
 S3method(summary, Resamples)

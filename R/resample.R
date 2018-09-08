@@ -23,9 +23,10 @@ setGeneric("resample", function(object, x, ...) standardGeneric("resample"))
 #' 
 #' @return Resamples class object.
 #' 
-#' @seealso \code{\link[stats]{model.frame}}, \code{\link[recipes]{recipe}},
-#' \code{\link{BootControl}}, \code{\link{CVControl}}, \code{\link{OOBControl}},
-#' \code{\link{tune}}, \code{\link{summary}}
+#' @seealso \code{\link{tune}}, \code{\link[stats]{model.frame}},
+#' \code{\link[recipes]{recipe}}, \code{\link{BootControl}},
+#' \code{\link{CVControl}}, \code{\link{OOBControl}}, \code{\link{Resamples}},
+#' \code{\link{plot}}, \code{\link{summary}}
 #' 
 setMethod("resample", c("MLModel", "data.frame"),
   function(object, x, control = CVControl()) {
@@ -74,7 +75,7 @@ setMethod(".resample", c("BootControl", "data.frame"),
       trainfit <- fit(model, x[split, , drop = FALSE])
       pred <- predict(trainfit, x, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
-    } %>% as("Resamples")
+    } %>% Resamples
   }
 )
 
@@ -98,7 +99,7 @@ setMethod(".resample", c("BootControl", "recipe"),
       trainfit <- fit(model, train)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
-    } %>% as("Resamples")
+    } %>% Resamples
   }
 )
 
@@ -120,7 +121,7 @@ setMethod(".resample", c("CVControl", "data.frame"),
       obs <- response(test)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
-    } %>% as("Resamples")
+    } %>% Resamples
   }
 )
 
@@ -144,7 +145,7 @@ setMethod(".resample", c("CVControl", "recipe"),
       obs <- response(formula(train), test)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
-    } %>% as("Resamples")
+    } %>% Resamples
   }
 )
 
@@ -165,7 +166,7 @@ setMethod(".resample", c("OOBControl", "data.frame"),
       obs <- response(test)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
-    } %>% as("Resamples")
+    } %>% Resamples
   }
 )
 
@@ -189,6 +190,6 @@ setMethod(".resample", c("OOBControl", "recipe"),
       obs <- response(formula(train), test)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
-    } %>% as("Resamples")
+    } %>% Resamples
   }
 )

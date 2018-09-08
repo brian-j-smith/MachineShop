@@ -39,7 +39,8 @@ Estimation of the predictive performance of a model estimated and evaluated
 on training and test samples generated from an observed data set.
 }
 \seealso{
-\code{\link[stats]{model.frame}}, \code{\link[recipes]{recipe}},
-\code{\link{BootControl}}, \code{\link{CVControl}}, \code{\link{OOBControl}},
-\code{\link{tune}}, \code{\link{summary}}
+\code{\link{tune}}, \code{\link[stats]{model.frame}},
+\code{\link[recipes]{recipe}}, \code{\link{BootControl}},
+\code{\link{CVControl}}, \code{\link{OOBControl}}, \code{\link{Resamples}},
+\code{\link{plot}}, \code{\link{summary}}
 }
