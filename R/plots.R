@@ -1,4 +1,4 @@
-#' Model Performance Plot
+#' Model Performance Plots
 #' 
 #' Plot measures of model performance and predictor variable importance.
 #'  
@@ -17,7 +17,8 @@
 #' @seealso \code{\link{resample}}, \code{\link{Resamples}}, \code{\link{tune}}
 #' 
 plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
-                           type = c("boxplot", "violin", "errorbar"), ...) {
+                           type = c("boxplot", "density", "errorbar", "violin"),
+                           ...) {
   plot(x@resamples, metrics = metrics, stat = stat, type = type, ...)
 }
 
@@ -25,7 +26,8 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
 #' @rdname plot-method
 #' 
 plot.Resamples <- function(x, metrics = NULL, stat = mean,
-                           type = c("boxplot", "violin", "errorbar"), ...) {
+                           type = c("boxplot", "density", "errorbar", "violin"),
+                           ...) {
   df <- as.data.frame.table(x)
   if(length(dim(x)) <= 2) df$Var3 <- factor("Model")
   lookup <- structure(1:nlevels(df$Var2), names = levels(df$Var2))
@@ -43,15 +45,24 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
   sortedlevels <- tapply(firstmetric$Freq, firstmetric$Var3, stat,
                          na.rm = TRUE) %>% sort %>% names
   df$Var3 <- factor(df$Var3, sortedlevels)
-  p <- ggplot(df, aes(Var3, Freq))
+  p <- ggplot(df)
   p <- switch(match.arg(type),
-              "boxplot" = p + geom_boxplot(),
-              "violin" = p + geom_violin(),
-              "errorbar" = p + stat_summary(fun.data = mean_se,
-                                            geom = "errorbar"))
-  p <- p + stat_summary(fun.y = mean, geom = "point") +
-        labs(x = "", y = "Values") +
-        coord_flip()
+              "boxplot" = p + geom_boxplot(aes(Var3, Freq)) +
+                stat_summary(aes(Var3, Freq), fun.y = mean, geom = "point") +
+                labs(x = "", y = "Values") +
+                coord_flip(),
+              "density" = p + geom_density(aes(Freq, color = Var3)) +
+                labs(x = "Values", y = "Density", color = ""),
+              "errorbar" = p + stat_summary(aes(Var3, Freq),
+                                            fun.data = mean_se,
+                                            geom = "errorbar") +
+                stat_summary(aes(Var3, Freq), fun.y = mean, geom = "point") +
+                labs(x = "", y = "Values") +
+                coord_flip(),
+              "violin" = p + geom_violin(aes(Var3, Freq)) +
+                stat_summary(aes(Var3, Freq), fun.y = mean, geom = "point") +
+                labs(x = "", y = "Values") +
+                coord_flip())
   if(nlevels(df$Var2) > 1) p <- p + facet_wrap(~ Var2, scales = "free")
   p
 }

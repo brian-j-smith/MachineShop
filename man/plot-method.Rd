@@ -5,13 +5,13 @@
 \alias{plot.MLModelTune}
 \alias{plot.Resamples}
 \alias{plot.VarImp}
-\title{Model Performance Plot}
+\title{Model Performance Plots}
 \usage{
 \method{plot}{MLModelTune}(x, metrics = NULL, stat = mean,
-  type = c("boxplot", "violin", "errorbar"), ...)
+  type = c("boxplot", "density", "errorbar", "violin"), ...)
 
 \method{plot}{Resamples}(x, metrics = NULL, stat = mean,
-  type = c("boxplot", "violin", "errorbar"), ...)
+  type = c("boxplot", "density", "errorbar", "violin"), ...)
 
 \method{plot}{VarImp}(x, n = NULL, ...)
 }
