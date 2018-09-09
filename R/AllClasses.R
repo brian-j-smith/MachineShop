@@ -162,6 +162,7 @@ setMethod("show", "MLModel",
         "params:\n",
         sep = "")
     print(object@params)
+    if(length(object@params) == 0) cat("\n")
     invisible()
   }
 )
@@ -221,6 +222,21 @@ setMethod("show", "Resamples",
 MLModelTune <- setClass("MLModelTune",
   slots = c(grid = "data.frame", resamples = "Resamples", selected = "numeric"),
   contains = "MLModel"
+)
+
+
+setMethod("show", "MLModelTune",
+  function(object) {
+    callNextMethod(object)
+    cat("grid:\n")
+    print(object@grid)
+    cat("\nresamples:\n")
+    print(object@resamples)
+    if(length(dim(object@resamples)) > 2) {
+      cat("selected: Model", object@selected, " (", names(object@selected),
+          ")\n\n", sep = "")
+    }
+  }
 )
 
 
