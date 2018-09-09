@@ -54,6 +54,27 @@ MLModelTune class object that inherits from MLModel.
 Evaluate a model over a grid of tuning parameters and select the best one
 according to resample estimation of predictive performance.
 }
+\examples{
+## Survival analysis example
+library(survival)
+
+fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
+                           meal.cal + wt.loss
+
+(gbmtune <- tune(GBMModel, fo, data = lung,
+                 control = CVControl(folds = 10, repeats = 5,
+                                     survtimes = 365 * c(0.5, 1, 1.5)),
+                 grid = expand.grid(n.trees = c(100, 200, 300),
+                                    interaction.depth = 1:3,
+                                    n.minobsinnode = c(5, 10))))
+summary(gbmtune)
+plot(gbmtune, type = "line", metrics = c("ROC", "Brier"))
+
+gbmfit <- fit(gbmtune, fo, data = lung)
+(vi <- varimp(gbmfit))
+plot(vi)
+
+}
 \seealso{
 \code{\link[stats]{model.frame}}, \code{\link[recipes]{recipe}},
 \code{\link{BootControl}}, \code{\link{CVControl}}, \code{\link{OOBControl}},

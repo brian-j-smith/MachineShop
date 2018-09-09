@@ -17,6 +17,16 @@
 #' 
 #' @seealso \code{\link{fit}}, \code{\link{modelmetrics}}
 #' 
+#' @examples
+#' ## Survival analysis example
+#' library(survival)
+#' 
+#' gbmfit <- fit(GBMModel(),
+#'               Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
+#'                                    pat.karno + meal.cal + wt.loss,
+#'               data = lung)
+#' predict(gbmfit, lung, times = 365 * c(0.5, 1, 1.5), type = "prob")
+#' 
 predict.MLModelFit <- function(object, newdata, type = c("response", "prob"),
                                cutoff = 0.5, times = NULL, ...) {
   type <- match.arg(type)

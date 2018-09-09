@@ -13,8 +13,19 @@
 #' 
 #' @return MLModelFit class object.
 #' 
-#' @seealso \code{\link[stats]{model.frame}}, \code{\link[recipes]{recipe}},
-#' \code{\link{predict}}, \code{\link{tune}}, \code{\link{varimp}}
+#' @seealso  \code{\link{tune}}, \code{\link[stats]{model.frame}},
+#' \code{\link[recipes]{recipe}}, \code{\link{predict}},\code{\link{varimp}}
+#' 
+#' @examples
+#' ## Survival analysis example
+#' library(survival)
+#' 
+#' gbmfit <- fit(GBMModel(),
+#'               Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
+#'                                    pat.karno + meal.cal + wt.loss,
+#'               data = lung)
+#' (vi <- varimp(gbmfit))
+#' plot(vi)
 #' 
 setGeneric("fit", function(object, x, ...) standardGeneric("fit"))
 

@@ -28,6 +28,17 @@ survival events.}
 \description{
 Predict outcomes with a fitted model.
 }
+\examples{
+## Survival analysis example
+library(survival)
+
+gbmfit <- fit(GBMModel(),
+              Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
+                                   pat.karno + meal.cal + wt.loss,
+              data = lung)
+predict(gbmfit, lung, times = 365 * c(0.5, 1, 1.5), type = "prob")
+
+}
 \seealso{
 \code{\link{fit}}, \code{\link{modelmetrics}}
 }

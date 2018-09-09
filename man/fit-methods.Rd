@@ -33,7 +33,19 @@ MLModelFit class object.
 \description{
 Fit a model to estimate its parameters from a data set.
 }
+\examples{
+## Survival analysis example
+library(survival)
+
+gbmfit <- fit(GBMModel(),
+              Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
+                                   pat.karno + meal.cal + wt.loss,
+              data = lung)
+(vi <- varimp(gbmfit))
+plot(vi)
+
+}
 \seealso{
-\code{\link[stats]{model.frame}}, \code{\link[recipes]{recipe}},
-\code{\link{predict}}, \code{\link{tune}}, \code{\link{varimp}}
+\code{\link{tune}}, \code{\link[stats]{model.frame}},
+\code{\link[recipes]{recipe}}, \code{\link{predict}},\code{\link{varimp}}
 }

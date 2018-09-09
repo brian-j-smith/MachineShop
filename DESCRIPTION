@@ -6,8 +6,8 @@ Date: 2018-09-05
 Author: person("Brian J", "Smith", email = "brian-j-smith@uiowa.edu", role = c("aut", "cre"))
 Maintainer: Brian J Smith <brian-j-smith@uiowa.edu>
 Description: Meta-package for machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Supports predictive modeling of numerical, categorical, and censored time-to-event outcomes.
-Imports: abind, caret, foreach, ggplot2, Hmisc, irr, kernlab, magrittr, methods,
-         MLmetrics, ModelMetrics, party, recipes, rsample, survival,
+Imports: abind, caret, foreach, gbm, ggplot2, Hmisc, irr, kernlab, magrittr,
+         methods, MLmetrics, ModelMetrics, party, recipes, rsample, survival,
          survivalROC, utils
 License: GPL-3
 URL: https://github.com/brian-j-smith/MLModels

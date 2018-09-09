@@ -38,6 +38,20 @@ Resamples class object.
 Estimation of the predictive performance of a model estimated and evaluated
 on training and test samples generated from an observed data set.
 }
+\examples{
+## Survival analysis example
+library(survival)
+
+(gbmperf <- resample(GBMModel(),
+                     Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
+                                          pat.karno + meal.cal + wt.loss,
+                     data = lung,
+                     control = CVControl(folds = 10, repeats = 5,
+                                         survtimes = 365 * c(0.5, 1, 1.5))))
+summary(gbmperf)
+plot(gbmperf)
+
+}
 \seealso{
 \code{\link{tune}}, \code{\link[stats]{model.frame}},
 \code{\link[recipes]{recipe}}, \code{\link{BootControl}},
