@@ -85,12 +85,7 @@ setMethod("tune", c("function", "recipe"),
       apply(2, stat, na.rm = TRUE)
   }
   perf <- as.data.frame(do.call(rbind, perf))
-  lookup <- structure(seq(perf), names = names(perf))
-  metric <- na.omit(names(lookup)[lookup[metric]])
-  if(length(metric) == 0) {
-    metric <- names(lookup)[1]
-    warning("specified metric not found; tuning on ", metric, " instead")
-  }
+  metric <- match.indices(metric, names(perf))
   selected <- ifelse(maximize, which.max, which.min)(perf[[metric]])
   MLModelTune(models[[selected]], grid = grid,
               resamples = do.call(Resamples, resamples),

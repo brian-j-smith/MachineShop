@@ -25,6 +25,17 @@ field <- function(object, name) {
 }
 
 
+match.indices <- function(indices, choices) {
+  lookup <- structure(seq(choices), names = choices)
+  indices <- na.omit(names(lookup)[lookup[indices]])
+  if(length(indices) == 0) {
+    indices <- names(lookup)[1]
+    warning("specified indices not found; using ", indices, " instead")
+  }
+  indices
+}
+
+
 params <- function(env) {
   x <- as.list(env)
   missing_args <- names(x)[sapply(x, is.name)]

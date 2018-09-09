@@ -9,17 +9,53 @@
 #' @param metrics vector of numeric indexes or character names of the performance
 #' metrics to plot.
 #' @param stat function to compute a summary statistic on resampled values for
-#' sorting of the plotted models.  The supplied function should contain a
-#' \code{na.rm} argument in its definition.
+#' MLModelTune line plots and Resamples model sorting.  The supplied function
+#' should contain a \code{na.rm} argument in its definition.
 #' @param type type of plot to construct.
 #' @param ... arguments to be passed to other methods.
 #' 
 #' @seealso \code{\link{resample}}, \code{\link{Resamples}}, \code{\link{tune}}
 #' 
 plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
-                           type = c("boxplot", "density", "errorbar", "violin"),
-                           ...) {
-  plot(x@resamples, metrics = metrics, stat = stat, type = type, ...)
+                             type = c("boxplot", "density", "errorbar", "line",
+                                      "violin"), ...) {
+  resamples <- x@resamples
+  type <- match.arg(type)
+  if(type == "line") {
+    grid <- x@grid
+    if(any(dim(grid) == 0)) stop("no tuning parameters to plot")
+    stats <- as.data.frame.table(apply(resamples, c(3, 2), stat, na.rm = TRUE))
+    df <- data.frame(
+      x = grid[[1]],
+      y = stats$Freq,
+      metric = stats$Var2
+    )
+    
+    metriclevels <- levels(df$metric)
+    if(is.null(metrics)) {
+      metrics <- metriclevels
+    } else {
+      metrics <- match.indices(metrics, metriclevels)
+      df <- df[df$metric %in% metrics, , drop = FALSE]
+    }
+    df$metric <- factor(df$metric, metrics)
+    
+    mapping <- if(ncol(grid) > 1) {
+      df$group <- do.call(interaction, grid[-1])
+      aes(x, y, color = group, shape = group)
+    } else {
+      aes(x, y)
+    }
+    p <- ggplot(df, mapping) +
+      geom_line() +
+      geom_point() +
+      labs(x = names(grid)[1], y = "Values", color = "Params Group",
+           shape = "Params Group")
+    if(nlevels(df$metric) > 1) p <- p + facet_wrap(~ metric, scales = "free")
+    p
+  } else {
+    plot(resamples, metrics = metrics, stat = stat, type = type, ...)
+  }
 }
 
 
@@ -30,40 +66,42 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
                            ...) {
   df <- as.data.frame.table(x)
   if(length(dim(x)) <= 2) df$Var3 <- factor("Model")
-  lookup <- structure(1:nlevels(df$Var2), names = levels(df$Var2))
-  if(!is.null(metrics)) {
-    metrics <- na.omit(names(lookup)[lookup[metrics]])
-    if(length(metrics) == 0) {
-      metrics <- names(lookup)[1]
-      warning("specified metrics not found; plotting ", metrics, " instead")
-    }
-    df <- df[df$Var2 %in% metrics, , drop = FALSE]
+  orderednames <- match(c("Var1", "Var2", "Var3", "Freq"), names(df))
+  names(df)[orderednames] <- c("resample", "metric", "model", "y")
+  
+  metriclevels <- levels(df$metric)
+  if(is.null(metrics)) {
+    metrics <- metriclevels
   } else {
-    metrics <- names(lookup)
+    metrics <- match.indices(metrics, metriclevels)
+    df <- df[df$metric %in% metrics, , drop = FALSE]
   }
-  firstmetric <- df[df$Var2 == metrics[1], , drop = FALSE]
-  sortedlevels <- tapply(firstmetric$Freq, firstmetric$Var3, stat,
+  df$metric <- factor(df$metric, metrics)
+  
+  firstmetric <- df[df$metric == metrics[1], , drop = FALSE]
+  sortedlevels <- tapply(firstmetric$y, firstmetric$model, stat,
                          na.rm = TRUE) %>% sort %>% names
-  df$Var3 <- factor(df$Var3, sortedlevels)
+  df$model <- factor(df$model, sortedlevels)
+  
   p <- ggplot(df)
   p <- switch(match.arg(type),
-              "boxplot" = p + geom_boxplot(aes(Var3, Freq)) +
-                stat_summary(aes(Var3, Freq), fun.y = mean, geom = "point") +
+              "boxplot" = p + geom_boxplot(aes(model, y)) +
+                stat_summary(aes(model, y), fun.y = mean, geom = "point") +
                 labs(x = "", y = "Values") +
                 coord_flip(),
-              "density" = p + geom_density(aes(Freq, color = Var3)) +
+              "density" = p + geom_density(aes(y, color = model)) +
                 labs(x = "Values", y = "Density", color = ""),
-              "errorbar" = p + stat_summary(aes(Var3, Freq),
+              "errorbar" = p + stat_summary(aes(model, y),
                                             fun.data = mean_se,
                                             geom = "errorbar") +
-                stat_summary(aes(Var3, Freq), fun.y = mean, geom = "point") +
+                stat_summary(aes(model, y), fun.y = mean, geom = "point") +
                 labs(x = "", y = "Values") +
                 coord_flip(),
-              "violin" = p + geom_violin(aes(Var3, Freq)) +
-                stat_summary(aes(Var3, Freq), fun.y = mean, geom = "point") +
+              "violin" = p + geom_violin(aes(model, y)) +
+                stat_summary(aes(model, y), fun.y = mean, geom = "point") +
                 labs(x = "", y = "Values") +
                 coord_flip())
-  if(nlevels(df$Var2) > 1) p <- p + facet_wrap(~ Var2, scales = "free")
+  if(nlevels(df$metric) > 1) p <- p + facet_wrap(~ metric, scales = "free")
   p
 }
 

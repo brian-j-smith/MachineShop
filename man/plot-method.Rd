@@ -8,7 +8,7 @@
 \title{Model Performance Plots}
 \usage{
 \method{plot}{MLModelTune}(x, metrics = NULL, stat = mean,
-  type = c("boxplot", "density", "errorbar", "violin"), ...)
+  type = c("boxplot", "density", "errorbar", "line", "violin"), ...)
 
 \method{plot}{Resamples}(x, metrics = NULL, stat = mean,
   type = c("boxplot", "density", "errorbar", "violin"), ...)
@@ -22,8 +22,8 @@
 metrics to plot.}
 
 \item{stat}{function to compute a summary statistic on resampled values for
-sorting of the plotted models.  The supplied function should contain a
-\code{na.rm} argument in its definition.}
+MLModelTune line plots and Resamples model sorting.  The supplied function
+should contain a \code{na.rm} argument in its definition.}
 
 \item{type}{type of plot to construct.}
 
