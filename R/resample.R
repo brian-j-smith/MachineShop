@@ -78,14 +78,16 @@ setGeneric(".resample", function(object, x, ...) {
 setMethod(".resample", c("BootControl", "data.frame"),
   function(object, x, model) {
     obs <- response(x)
-    splits <- createResample(obs, times = object@number)
-    seeds <- sample.int(.Machine$integer.max, length(splits))
-    foreach(i = seq(splits),
+    splits <- bootstraps(data.frame(strata = strata(obs)),
+                         times = object@number,
+                         strata = "strata") %>% rsample2caret
+    index <- splits$index
+    seeds <- sample.int(.Machine$integer.max, length(index))
+    foreach(i = seq(index),
             .packages = c("MLModels", "survival"),
             .combine = "rbind") %dopar% {
       set.seed(seeds[i])
-      split <- splits[[i]]
-      trainfit <- fit(model, x[split, , drop = FALSE])
+      trainfit <- fit(model, x[index[[i]], , drop = FALSE])
       pred <- predict(trainfit, x, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
     } %>% Resamples
@@ -119,17 +121,18 @@ setMethod(".resample", c("BootControl", "recipe"),
 
 setMethod(".resample", c("CVControl", "data.frame"),
   function(object, x, model) {
-    splits <- createMultiFolds(response(x),
-                               k = object@folds,
-                               times = object@repeats)
-    seeds <- sample.int(.Machine$integer.max, length(splits))
-    foreach(i = seq(splits),
+    splits <- vfold_cv(data.frame(strata = strata(response(x))),
+                       v = object@folds,
+                       repeats = object@repeats,
+                       strata = "strata") %>% rsample2caret
+    index <- splits$index
+    seeds <- sample.int(.Machine$integer.max, length(index))
+    foreach(i = seq(index),
             .packages = c("MLModels", "survival"),
             .combine = "rbind") %dopar% {
       set.seed(seeds[i])
-      split <- splits[[i]]
-      train <- x[split, , drop = FALSE]
-      test <- x[-split, , drop = FALSE]
+      train <- x[index[[i]], , drop = FALSE]
+      test <- x[-index[[i]], , drop = FALSE]
       trainfit <- fit(model, train)
       obs <- response(test)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
@@ -165,15 +168,18 @@ setMethod(".resample", c("CVControl", "recipe"),
 
 setMethod(".resample", c("OOBControl", "data.frame"),
   function(object, x, model) {
-    splits <- createResample(response(x), times = object@number)
-    seeds <- sample.int(.Machine$integer.max, length(splits))
-    foreach(i = seq(splits),
+    splits <- bootstraps(data.frame(strata = strata(response(x))),
+                         times = object@number,
+                         strata = "strata") %>% rsample2caret
+    index <- splits$index
+    indexOut <- splits$indexOut
+    seeds <- sample.int(.Machine$integer.max, length(index))
+    foreach(i = seq(index),
             .packages = c("MLModels", "survival"),
             .combine = "rbind") %dopar% {
       set.seed(seeds[i])
-      split <- splits[[i]]
-      train <- x[split, , drop = FALSE]
-      test <- x[setdiff(1:nrow(x), split), , drop = FALSE]
+      train <- x[index[[i]], , drop = FALSE]
+      test <- x[indexOut[[i]], , drop = FALSE]
       if(nrow(test) == 0) return(NA)
       trainfit <- fit(model, train)
       obs <- response(test)

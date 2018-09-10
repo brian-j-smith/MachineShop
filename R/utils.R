@@ -48,3 +48,18 @@ params <- function(env) {
 requireModelNamespaces <- function(packages) {
   lapply(packages, requireNamespace)
 }
+
+
+strata <- function(object, ...) {
+  UseMethod("strata", object)
+}
+
+
+strata.default <- function(object, ...) {
+  object
+}
+
+
+strata.Surv <- function(object, ...) {
+  object[, "status"]
+}

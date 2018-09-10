@@ -5,7 +5,6 @@ importClassesFrom(kernlab, ksvm)
 importClassesFrom(party, RandomForest)
 
 importFrom(abind, abind, adrop)
-importFrom(caret, createMultiFolds, createResample)
 importFrom(foreach, "%dopar%", foreach, registerDoSEQ)
 importFrom(graphics, plot)
 importFrom(Hmisc, rcorr.cens)
@@ -15,7 +14,7 @@ importFrom(MLmetrics, PRAUC)
 importFrom(ModelMetrics, auc, brier, ce, kappa, mae, rmse, sensitivity,
            specificity)
 importFrom(recipes, bake, juice, prep)
-importFrom(rsample, assessment, bootstraps, prepper, vfold_cv)
+importFrom(rsample, assessment, bootstraps, prepper, rsample2caret, vfold_cv)
 importFrom(stats, approx, coef, cor, formula, median, model.frame, model.matrix,
            model.response, model.weights, na.omit, pchisq, predict, sd, terms,
            vcov)
