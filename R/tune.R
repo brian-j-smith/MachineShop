@@ -96,9 +96,7 @@ setMethod("tune", c("function", "recipe"),
   models <-list()
   resamples <- list()
   perf <- list()
-  seed <- sample.int(.Machine$integer.max, 1)
   for(i in 1:max(1, nrow(grid))) {
-    set.seed(seed)
     models[[i]] <- do.call(object, grid[i, , drop = FALSE])
     resamples[[i]] <- resample(models[[i]], ...)
     perf[[i]] <- resamples[[i]] %>%

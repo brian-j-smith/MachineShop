@@ -77,6 +77,7 @@ setGeneric(".resample", function(object, x, ...) {
 
 setMethod(".resample", c("BootControl", "data.frame"),
   function(object, x, model) {
+    set.seed(object@seed)
     obs <- response(x)
     splits <- bootstraps(data.frame(strata = strata(obs)),
                          times = object@number,
@@ -97,13 +98,13 @@ setMethod(".resample", c("BootControl", "data.frame"),
 
 setMethod(".resample", c("BootControl", "recipe"),
   function(object, x, model) {
-    x_prep <- prep(x, retain = TRUE)
-    strata <- x_prep %>% formula %>% terms %>% response
+    strataname <- prep(x) %>% formula %>% terms %>% response
+    set.seed(object@seed)
     splits <- bootstraps(x$template,
                          times = object@number,
-                         strata = strata)$splits
+                         strata = strataname)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
-    test <- juice(x_prep)
+    test <- juice(prep(x, retain = TRUE))
     obs <- response(formula(test), test)
     foreach(i = seq(splits),
             .packages = c("MLModels", "recipes", "survival"),
@@ -121,6 +122,7 @@ setMethod(".resample", c("BootControl", "recipe"),
 
 setMethod(".resample", c("CVControl", "data.frame"),
   function(object, x, model) {
+    set.seed(object@seed)
     splits <- vfold_cv(data.frame(strata = strata(response(x))),
                        v = object@folds,
                        repeats = object@repeats,
@@ -144,11 +146,12 @@ setMethod(".resample", c("CVControl", "data.frame"),
 
 setMethod(".resample", c("CVControl", "recipe"),
   function(object, x, model) {
-    strata <- prep(x) %>% formula %>% terms %>% response
+    strataname <- prep(x) %>% formula %>% terms %>% response
+    set.seed(object@seed)
     splits <- vfold_cv(x$template,
                        v = object@folds,
                        repeats = object@repeats,
-                       strata = strata)$splits
+                       strata = strataname)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     foreach(i = seq(splits),
             .packages = c("MLModels", "recipes", "survival"),
@@ -168,6 +171,7 @@ setMethod(".resample", c("CVControl", "recipe"),
 
 setMethod(".resample", c("OOBControl", "data.frame"),
   function(object, x, model) {
+    set.seed(object@seed)
     splits <- bootstraps(data.frame(strata = strata(response(x))),
                          times = object@number,
                          strata = "strata") %>% rsample2caret
@@ -192,10 +196,11 @@ setMethod(".resample", c("OOBControl", "data.frame"),
 
 setMethod(".resample", c("OOBControl", "recipe"),
   function(object, x, model) {
-    strata <- prep(x) %>% formula %>% terms %>% response
+    strataname <- prep(x) %>% formula %>% terms %>% response
+    set.seed(object@seed)
     splits <- bootstraps(x$template,
                          times = object@number,
-                         strata = strata)$splits
+                         strata = strataname)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     foreach(i = seq(splits),
             .packages = c("MLModels", "recipes", "survival"),

@@ -11,7 +11,7 @@
 \usage{
 \S4method{initialize}{MLControl}(.Object, summary = modelmetrics,
   cutoff = 0.5, cutoff.index = function(sens, spec) sens + spec,
-  survtimes = numeric(), ...)
+  survtimes = numeric(), seed = NULL, ...)
 
 BootControl(number = 25, ...)
 
@@ -33,6 +33,9 @@ tradeoff.}
 
 \item{survtimes}{numeric vector of follow-up times at which to predict
 survival events.}
+
+\item{seed}{integer to set the seed at the start of resampling.  This is set
+to a random integer by default (NULL).}
 
 \item{...}{arguments to be passed to or from other methods.}
 
@@ -78,6 +81,8 @@ tradeoff.}
 
 \item{\code{survtimes}}{numeric vector of follow-up times at which to predict
 survival events.}
+
+\item{\code{seed}}{integer to set the seed at the start of resampling.}
 }}
 
 \seealso{

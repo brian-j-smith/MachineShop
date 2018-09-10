@@ -14,10 +14,11 @@ setOldClass("recipe")
 #' tradeoff.
 #' @slot survtimes numeric vector of follow-up times at which to predict
 #' survival events.
+#' @slot seed integer to set the seed at the start of resampling.
 #' 
 setClass("MLControl",
   slots = c(summary = "function", cutoff = "numeric", cutoff.index = "function",
-            survtimes = "numeric"),
+            survtimes = "numeric", seed = "numeric"),
   contains = "VIRTUAL"
 )
 
@@ -37,6 +38,8 @@ setClass("MLControl",
 #' tradeoff.
 #' @param survtimes numeric vector of follow-up times at which to predict
 #' survival events.
+#' @param seed integer to set the seed at the start of resampling.  This is set
+#' to a random integer by default (NULL).
 #' @param ...  arguments to be passed to or from other methods.
 #' 
 #' @return MLControl class object.
@@ -46,9 +49,11 @@ setClass("MLControl",
 setMethod("initialize", "MLControl",
   function(.Object, summary = modelmetrics, cutoff = 0.5,
            cutoff.index = function(sens, spec) sens + spec,
-           survtimes = numeric(), ...) {
+           survtimes = numeric(), seed = NULL, ...) {
+    if(is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
     callNextMethod(.Object, summary = summary, cutoff = cutoff,
-                   cutoff.index = cutoff.index, survtimes = survtimes, ...)
+                   cutoff.index = cutoff.index, survtimes = survtimes,
+                   seed = seed, ...)
   }
 )
 
