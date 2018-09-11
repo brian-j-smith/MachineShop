@@ -14,7 +14,8 @@
 #' @param type type of plot to construct.
 #' @param ... arguments passed to other methods.
 #' 
-#' @seealso \code{\link{resample}}, \code{\link{Resamples}}, \code{\link{tune}}
+#' @seealso \code{\link{diff}}, \code{\link{resample}}, \code{\link{Resamples}},
+#' \code{\link{tune}}
 #' 
 plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
                              type = c("boxplot", "density", "errorbar", "line",

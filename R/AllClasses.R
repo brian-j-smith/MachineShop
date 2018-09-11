@@ -10,14 +10,14 @@ setOldClass("recipe")
 #' @slot cutoff threshold above which probabilities are classified as success
 #' for factor outcomes and which expected values are rounded for integer
 #' outcomes.
-#' @slot cutoff.index function to calculate a desired sensitivity-specificity
+#' @slot index.cutoff function to calculate a desired sensitivity-specificity
 #' tradeoff.
 #' @slot survtimes numeric vector of follow-up times at which to predict
 #' survival events.
 #' @slot seed integer to set the seed at the start of resampling.
 #' 
 setClass("MLControl",
-  slots = c(summary = "function", cutoff = "numeric", cutoff.index = "function",
+  slots = c(summary = "function", cutoff = "numeric", index.cutoff = "function",
             survtimes = "numeric", seed = "numeric"),
   contains = "VIRTUAL"
 )
@@ -34,7 +34,7 @@ setClass("MLControl",
 #' @param cutoff threshold above which probabilities are classified as success
 #' for factor outcomes and which expected values are rounded for integer
 #' outcomes.
-#' @param cutoff.index function to calculate a desired sensitivity-specificity
+#' @param index.cutoff function to calculate a desired sensitivity-specificity
 #' tradeoff.
 #' @param survtimes numeric vector of follow-up times at which to predict
 #' survival events.
@@ -48,11 +48,11 @@ setClass("MLControl",
 #' 
 setMethod("initialize", "MLControl",
   function(.Object, summary = modelmetrics, cutoff = 0.5,
-           cutoff.index = function(sens, spec) sens + spec,
+           index.cutoff = function(sens, spec) sens + spec,
            survtimes = numeric(), seed = NULL, ...) {
     if(is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
     callNextMethod(.Object, summary = summary, cutoff = cutoff,
-                   cutoff.index = cutoff.index, survtimes = survtimes,
+                   index.cutoff = index.cutoff, survtimes = survtimes,
                    seed = seed, ...)
   }
 )
@@ -60,7 +60,7 @@ setMethod("initialize", "MLControl",
 setAs("MLControl", "list",
   function(from) {
     list(cutoff = from@cutoff,
-         cutoff.index = from@cutoff.index,
+         index.cutoff = from@index.cutoff,
          survtimes = from@survtimes)
   }
 )

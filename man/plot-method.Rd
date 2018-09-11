@@ -36,7 +36,8 @@ should contain a \code{na.rm} argument in its definition.}
 Plot measures of model performance and predictor variable importance.
 }
 \seealso{
-\code{\link{resample}}, \code{\link{Resamples}}, \code{\link{tune}}
+\code{\link{diff}}, \code{\link{resample}}, \code{\link{Resamples}},
+\code{\link{tune}}
 
 \code{\link{varimp}}
 }

@@ -18,7 +18,7 @@ modelmetrics(observed, predicted, ...)
 \S4method{modelmetrics}{factor,matrix}(observed, predicted, ...)
 
 \S4method{modelmetrics}{factor,numeric}(observed, predicted,
-  cutoff = 0.5, cutoff.index = function(sens, spec) sens + spec, ...)
+  cutoff = 0.5, index.cutoff = function(sens, spec) sens + spec, ...)
 
 \S4method{modelmetrics}{numeric,ANY}(observed, predicted, ...)
 
@@ -35,7 +35,7 @@ modelmetrics(observed, predicted, ...)
 
 \item{cutoff}{threshold above which probabilities are classified as success.}
 
-\item{cutoff.index}{function to calculate a desired sensitivity-specificity
+\item{index.cutoff}{function to calculate a desired sensitivity-specificity
 tradeoff.}
 
 \item{survtimes}{numeric vector of follow-up times at which survival events

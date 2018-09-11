@@ -56,12 +56,12 @@ multinomLogLoss <- function(observed, predicted) {
 #' @rdname modelmetrics
 #' 
 #' @param cutoff threshold above which probabilities are classified as success.
-#' @param cutoff.index function to calculate a desired sensitivity-specificity
+#' @param index.cutoff function to calculate a desired sensitivity-specificity
 #' tradeoff.
 #' 
 setMethod("modelmetrics", c("factor", "numeric"),
   function(observed, predicted, cutoff = 0.5,
-           cutoff.index = function(sens, spec) sens + spec, ...) {
+           index.cutoff = function(sens, spec) sens + spec, ...) {
     observed <- observed == levels(observed)[2]
     sens <- sensitivity(observed, predicted, cutoff)
     spec <- specificity(observed, predicted, cutoff)
@@ -72,7 +72,7 @@ setMethod("modelmetrics", c("factor", "numeric"),
       "PRAUC" = PRAUC(predicted, observed),
       "Sensitivity" = sens,
       "Specificity" = spec,
-      "Index" = cutoff.index(sens, spec))
+      "Index" = index.cutoff(sens, spec))
   }
 )
 

@@ -10,7 +10,7 @@
 \title{Resampling Classes and Methods}
 \usage{
 \S4method{initialize}{MLControl}(.Object, summary = modelmetrics,
-  cutoff = 0.5, cutoff.index = function(sens, spec) sens + spec,
+  cutoff = 0.5, index.cutoff = function(sens, spec) sens + spec,
   survtimes = numeric(), seed = NULL, ...)
 
 BootControl(number = 25, ...)
@@ -28,7 +28,7 @@ OOBControl(number = 25, ...)
 for factor outcomes and which expected values are rounded for integer
 outcomes.}
 
-\item{cutoff.index}{function to calculate a desired sensitivity-specificity
+\item{index.cutoff}{function to calculate a desired sensitivity-specificity
 tradeoff.}
 
 \item{survtimes}{numeric vector of follow-up times at which to predict
@@ -76,7 +76,7 @@ evaluated on unsampled cases.
 for factor outcomes and which expected values are rounded for integer
 outcomes.}
 
-\item{\code{cutoff.index}}{function to calculate a desired sensitivity-specificity
+\item{\code{index.cutoff}}{function to calculate a desired sensitivity-specificity
 tradeoff.}
 
 \item{\code{survtimes}}{numeric vector of follow-up times at which to predict
