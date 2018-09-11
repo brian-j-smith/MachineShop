@@ -46,7 +46,10 @@ params <- function(env) {
 
 
 requireModelNamespaces <- function(packages) {
-  lapply(packages, requireNamespace)
+  pass <- sapply(packages, requireNamespace)
+  if(!all(pass)) stop("install required packages: ",
+                      paste(packages[!pass], collapse = ", "))
+  invisible(pass)
 }
 
 
