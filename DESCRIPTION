@@ -2,13 +2,14 @@ Package: MLModels
 Type: Package
 Title: Machine Learning Models and Tools
 Version: 0.1
-Date: 2018-09-05
+Date: 2018-09-10
 Author: person("Brian J", "Smith", email = "brian-j-smith@uiowa.edu", role = c("aut", "cre"))
 Maintainer: Brian J Smith <brian-j-smith@uiowa.edu>
-Description: Meta-package for machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Supports predictive modeling of numerical, categorical, and censored time-to-event outcomes.
-Imports: abind, foreach, gbm, ggplot2, Hmisc, irr, kernlab, magrittr, methods,
+Description: Meta-package for machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Supports predictive modeling of numerical, categorical, and censored time-to-event outcomes and resample (bootstrap and cross-validation) estimation of model performance.
+Imports: abind, foreach, ggplot2, Hmisc, irr, kernlab, magrittr, methods,
          MLmetrics, ModelMetrics, party, recipes, rsample, survival,
          survivalROC, utils
+Suggests: gbm
 License: GPL-3
 URL: https://github.com/brian-j-smith/MLModels
 Bugreports: https://github.com/brian-j-smith/MLModels/issues
