@@ -6,7 +6,7 @@
 \alias{MLModels-package}
 \title{MLModels: Machine Learning Models and Tools}
 \description{
-Meta-package for machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Supports predictive modeling of numerical, categorical, and censored time-to-event outcomes.
+Meta-package for machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Supports predictive modeling of numerical, categorical, and censored time-to-event outcomes and resample (bootstrap and cross-validation) estimation of model performance.
 }
 \details{
 MLModels provides a common interface to machine learning and statistical
@@ -41,6 +41,7 @@ assessment, and tuning functions are available for the model objects.
   \code{\link{predict}} \tab Model Prediction \cr
   \code{\link{resample}} \tab Resample Estimation of Model Performance \cr
   \code{\link{tune}} \tab Model Tuning \cr
+  \code{\link{diff}} \tab Model Performance Differences \cr
   \code{\link{varimp}} \tab Variable Importance \cr
 }
 

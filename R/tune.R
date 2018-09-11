@@ -38,6 +38,7 @@ setGeneric("tune", function(object, x, ...) standardGeneric("tune"))
 #' \code{\link{summary}}
 #' 
 #' @examples
+#' \donttest{
 #' ## Survival analysis example
 #' library(survival)
 #' 
@@ -47,7 +48,7 @@ setGeneric("tune", function(object, x, ...) standardGeneric("tune"))
 #' (gbmtune <- tune(GBMModel, fo, data = lung,
 #'                  control = CVControl(folds = 10, repeats = 5,
 #'                                      survtimes = 365 * c(0.5, 1, 1.5)),
-#'                  grid = expand.grid(n.trees = c(100, 200, 300),
+#'                  grid = expand.grid(n.trees = c(25, 50, 100),
 #'                                     interaction.depth = 1:3,
 #'                                     n.minobsinnode = c(5, 10))))
 #' summary(gbmtune)
@@ -56,6 +57,7 @@ setGeneric("tune", function(object, x, ...) standardGeneric("tune"))
 #' gbmfit <- fit(gbmtune, fo, data = lung)
 #' (vi <- varimp(gbmfit))
 #' plot(vi)
+#' }
 #' 
 setMethod("tune", c("function", "data.frame"),
   function(object, x, control = CVControl(), grid = data.frame(), metric = 1,

@@ -189,23 +189,26 @@ setMethod("initialize", "Resamples",
   function(.Object, ...) {
     args <- list(...)
     if(length(args) == 0) stop("no values given")
-    if(!all(sapply(args, function(x) is.matrix(x) || is.data.frame(x)))) {
-      stop("values must be of type matrix or data.frame")
+    .Data <- args[[1]]
+    if(length(args) == 1) {
+      if(is.data.frame(.Data)) .Data <- as.matrix(.Data)
+    } else {
+      if(!all(sapply(args, function(x) is.matrix(x) || is.data.frame(x)))) {
+        stop("values must be of type matrix or data.frame")
+      }
+      if(!all(sapply(args, dim) == dim(.Data))) {
+        stop("values have different dimensions")
+      }
+      if(!all(sapply(args, colnames) == colnames(.Data))) {
+        stop("values have different column names")
+      }
+      modelnames <- names(args)
+      if(is.null(modelnames)) modelnames <- paste0("Model", seq(args))
+      names(args) <- NULL
+      args$along = 3
+      args$new.names = list(1:nrow(.Data), NULL, modelnames)
+      .Data <- do.call(abind, args)
     }
-    argsdim <- dim(args[[1]])
-    if(!all(sapply(args, dim) == argsdim)) {
-      stop("values have different dimensions")
-    }
-    if(!all(sapply(args, colnames) == colnames(args[[1]]))) {
-      stop("values have different column names")
-    }
-    modelnames <- names(args)
-    if(is.null(modelnames)) modelnames <- paste0("Model", seq(args))
-    names(args) <- NULL
-    args$along = 3
-    args$new.names = list(1:argsdim[1], NULL, modelnames)
-    .Data <- do.call(abind, args)
-    if(dim(.Data)[3] == 1) .Data <- adrop(.Data, drop = 3)
     callNextMethod(.Object, .Data)
   }
 )
@@ -241,6 +244,39 @@ setMethod("show", "MLModelTune",
       cat("selected: Model", object@selected, " (", names(object@selected),
           ")\n\n", sep = "")
     }
+  }
+)
+
+
+ResamplesDiff <- setClass("ResamplesDiff",
+  slots = c("modelnames" = "character"),
+  contains = "Resamples"
+)
+
+
+setMethod("initialize", "ResamplesDiff",
+  function(.Object, modelnames, ...) {
+    .Object <- callNextMethod(.Object, ...)
+    .Object@modelnames <- modelnames
+    .Object
+  }
+)
+
+
+ResamplesHTest <- setClass("ResamplesHTest",
+  slots = c("adjust" = "character"),
+  contains = "array"
+)
+
+
+setMethod("show", "ResamplesHTest",
+  function(object) {
+    cat("An object of class \"", class(object), "\"\n\n",
+        "upper diagonal: mean differences (row - column)\n",
+        "lower diagonal: p-values\n",
+        "p-value adjustment: ", object@adjust, "\n\n",
+        sep = "")
+    print(object@.Data)
   }
 )
 

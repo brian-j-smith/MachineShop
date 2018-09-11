@@ -31,6 +31,7 @@
 #'   \code{\link{predict}} \tab Model Prediction \cr
 #'   \code{\link{resample}} \tab Resample Estimation of Model Performance \cr
 #'   \code{\link{tune}} \tab Model Tuning \cr
+#'   \code{\link{diff}} \tab Model Performance Differences \cr
 #'   \code{\link{varimp}} \tab Variable Importance \cr
 #' }
 #' 
