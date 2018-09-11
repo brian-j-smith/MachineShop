@@ -23,9 +23,15 @@ their definitions.}
 
 \item{...}{arguments passed to other methods.}
 }
+\value{
+array with summmary statistics in the second dimension, metrics in
+the first for single models, and models and metrics in the first and third,
+respectively, for multiple models.
+}
 \description{
 Summary statistics for resampled model performance metrics.
 }
 \seealso{
-\code{\link{resample}}, \code{\link{Resamples}}, \code{\link{tune}}
+\code{\link{diff}}, \code{\link{resample}}, \code{\link{Resamples}},
+\code{\link{tune}}
 }

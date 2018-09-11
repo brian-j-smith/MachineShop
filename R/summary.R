@@ -12,7 +12,12 @@
 #' @param na.rm logical indicating whether to exclude missing values.
 #' @param ... arguments passed to other methods.
 #' 
-#' @seealso \code{\link{resample}}, \code{\link{Resamples}}, \code{\link{tune}}
+#' @return array with summmary statistics in the second dimension, metrics in
+#' the first for single models, and models and metrics in the first and third,
+#' respectively, for multiple models.
+#' 
+#' @seealso \code{\link{diff}}, \code{\link{resample}}, \code{\link{Resamples}},
+#' \code{\link{tune}}
 #' 
 summary.MLModelTune <- function(object,
                               stats = c("Mean" = mean,
@@ -39,8 +44,13 @@ summary.Resamples <- function(object,
       c(stat(x, na.rm = na.rm))
     }) %>% c("NA" = mean(is.na(x)))
   }
-  margins <- if(length(dim(object)) > 2) c(3, 2) else 2
-  apply(object, margins, f)
+  margins <- 2
+  perm <- c(2, 1)
+  if(length(dim(object)) > 2) {
+    margins <- c(3, margins)
+    perm <- c(perm, 3)
+  }
+  aperm(apply(object, margins, f), perm = perm)
 }
 
 
