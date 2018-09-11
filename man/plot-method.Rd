@@ -27,7 +27,7 @@ should contain a \code{na.rm} argument in its definition.}
 
 \item{type}{type of plot to construct.}
 
-\item{...}{arguments to be passed to other methods.}
+\item{...}{arguments passed to other methods.}
 
 \item{n}{number of most important variables to include in the plot
 (default: all).}

@@ -24,7 +24,7 @@ resample(object, x, ...)
 be a model.frame (data.frame) containing a formula, data, and optionally case
 weights; a formula; or a recipe.}
 
-\item{...}{further arguments passed to other methods.}
+\item{...}{arguments passed to other methods.}
 
 \item{control}{\code{\linkS4class{MLControl}} object defining and controlling
 the resampling method to be employed.}

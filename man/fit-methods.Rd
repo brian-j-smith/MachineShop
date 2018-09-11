@@ -23,7 +23,7 @@ fit(object, x, ...)
 be a model.frame (data.frame) containing a formula, data, and optionally case
 weights; a formula; or a recipe.}
 
-\item{...}{further arguments passed to other methods.}
+\item{...}{arguments passed to other methods.}
 
 \item{data}{data frame containing observed predictors and outcomes.}
 }

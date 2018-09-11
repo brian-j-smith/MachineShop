@@ -12,7 +12,7 @@
 #' MLModelTune line plots and Resamples model sorting.  The supplied function
 #' should contain a \code{na.rm} argument in its definition.
 #' @param type type of plot to construct.
-#' @param ... arguments to be passed to other methods.
+#' @param ... arguments passed to other methods.
 #' 
 #' @seealso \code{\link{resample}}, \code{\link{Resamples}}, \code{\link{tune}}
 #' 

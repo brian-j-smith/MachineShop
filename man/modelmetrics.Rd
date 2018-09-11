@@ -31,7 +31,7 @@ modelmetrics(observed, predicted, ...)
 
 \item{predicted}{model-predicted responses.}
 
-\item{...}{arguments to be passed to or from other methods.}
+\item{...}{arguments passed to or from other methods.}
 
 \item{cutoff}{threshold above which probabilities are classified as success.}
 

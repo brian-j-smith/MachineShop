@@ -21,7 +21,7 @@ their definitions.}
 
 \item{na.rm}{logical indicating whether to exclude missing values.}
 
-\item{...}{arguments to be passed to other methods.}
+\item{...}{arguments passed to other methods.}
 }
 \description{
 Summary statistics for resampled model performance metrics.

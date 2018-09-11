@@ -10,7 +10,7 @@
 #' statistics.  Supplied functions should contain a \code{na.rm} argument in
 #' their definitions.
 #' @param na.rm logical indicating whether to exclude missing values.
-#' @param ... arguments to be passed to other methods.
+#' @param ... arguments passed to other methods.
 #' 
 #' @seealso \code{\link{resample}}, \code{\link{Resamples}}, \code{\link{tune}}
 #' 

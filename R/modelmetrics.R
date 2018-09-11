@@ -6,7 +6,7 @@
 #' 
 #' @param observed vector of observed responses.
 #' @param predicted model-predicted responses.
-#' @param ... arguments to be passed to or from other methods.
+#' @param ... arguments passed to or from other methods.
 #' 
 #' @seealso \code{\link{predict}}, \code{\linkS4class{MLControl}}
 #' 

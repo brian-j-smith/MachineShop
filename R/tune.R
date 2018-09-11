@@ -10,7 +10,7 @@
 #' @param x defined relationship between model predictors and an outcome.  May
 #' be a model.frame (data.frame) containing a formula, data, and optionally case
 #' weights; a formula; or a recipe.
-#' @param ... further arguments passed to other methods.
+#' @param ... arguments passed to other methods.
 #' 
 setGeneric("tune", function(object, x, ...) standardGeneric("tune"))
 
