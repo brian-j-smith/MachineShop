@@ -85,7 +85,7 @@ setMethod(".resample", c("BootControl", "data.frame"),
     index <- splits$index
     seeds <- sample.int(.Machine$integer.max, length(index))
     foreach(i = seq(index),
-            .packages = c("MLModels", "survival"),
+            .packages = c("MachineShop", "survival"),
             .combine = "rbind") %dopar% {
       set.seed(seeds[i])
       trainfit <- fit(model, x[index[[i]], , drop = FALSE])
@@ -107,7 +107,7 @@ setMethod(".resample", c("BootControl", "recipe"),
     test <- juice(prep(x, retain = TRUE))
     obs <- response(formula(test), test)
     foreach(i = seq(splits),
-            .packages = c("MLModels", "recipes", "survival"),
+            .packages = c("MachineShop", "recipes", "survival"),
             .combine = "rbind") %dopar% {
       set.seed(seeds[i])
       split <- splits[[i]]
@@ -130,7 +130,7 @@ setMethod(".resample", c("CVControl", "data.frame"),
     index <- splits$index
     seeds <- sample.int(.Machine$integer.max, length(index))
     foreach(i = seq(index),
-            .packages = c("MLModels", "survival"),
+            .packages = c("MachineShop", "survival"),
             .combine = "rbind") %dopar% {
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
@@ -154,7 +154,7 @@ setMethod(".resample", c("CVControl", "recipe"),
                        strata = strataname)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     foreach(i = seq(splits),
-            .packages = c("MLModels", "recipes", "survival"),
+            .packages = c("MachineShop", "recipes", "survival"),
             .combine = "rbind") %dopar% {
       set.seed(seeds[i])
       split <- splits[[i]]
@@ -179,7 +179,7 @@ setMethod(".resample", c("OOBControl", "data.frame"),
     indexOut <- splits$indexOut
     seeds <- sample.int(.Machine$integer.max, length(index))
     foreach(i = seq(index),
-            .packages = c("MLModels", "survival"),
+            .packages = c("MachineShop", "survival"),
             .combine = "rbind") %dopar% {
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
@@ -203,7 +203,7 @@ setMethod(".resample", c("OOBControl", "recipe"),
                          strata = strataname)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     foreach(i = seq(splits),
-            .packages = c("MLModels", "recipes", "survival"),
+            .packages = c("MachineShop", "recipes", "survival"),
             .combine = "rbind") %dopar% {
       set.seed(seeds[i])
       split <- splits[[i]]

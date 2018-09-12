@@ -1,8 +1,8 @@
-Package: MLModels
+Package: MachineShop
 Type: Package
-Title: Machine Learning Models and Tools
+Title: MachineShop: Machine Learning Models and Tools
 Version: 0.1
-Date: 2018-09-10
+Date: 2018-09-11
 Author: person("Brian J", "Smith", email = "brian-j-smith@uiowa.edu", role = c("aut", "cre"))
 Maintainer: Brian J Smith <brian-j-smith@uiowa.edu>
 Description: Meta-package for machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Supports predictive modeling of numerical, categorical, and censored time-to-event outcomes and resample (bootstrap and cross-validation) estimation of model performance.
@@ -11,6 +11,6 @@ Imports: abind, foreach, ggplot2, Hmisc, irr, kernlab, magrittr, methods,
          survivalROC, utils
 Suggests: gbm
 License: GPL-3
-URL: https://github.com/brian-j-smith/MLModels
-Bugreports: https://github.com/brian-j-smith/MLModels/issues
+URL: https://github.com/brian-j-smith/MachineShop
+Bugreports: https://github.com/brian-j-smith/MachineShop/issues
 RoxygenNote: 6.1.0
