@@ -23,7 +23,7 @@ importFrom(survivalROC, survivalROC)
 importFrom(utils, combn, head, stack, tail)
 
 
-export(Resamples, varimp)
+export(Resamples, response, varimp)
 
 export(BootControl,
        CVControl,
@@ -61,6 +61,7 @@ S3method(plot, MLModelTune)
 S3method(plot, Resamples)
 S3method(plot, VarImp)
 S3method(predict, MLModelFit)
+S3method(response, formula)
 S3method(summary, MLModelTune)
 S3method(summary, Resamples)
 S3method(t.test, ResamplesDiff)

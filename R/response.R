@@ -1,3 +1,12 @@
+#' Extract Response Variable
+#' 
+#' Extract the response variable from an object.
+#' 
+#' @rdname response-methods
+#' 
+#' @param object object containing a response.
+#' @param ... arguments passed to other methods.
+#' 
 response <- function(object, ...) {
   UseMethod("response", object)
 }
@@ -8,6 +17,10 @@ response.data.frame <- function(object, ...) {
 }
 
 
+#' @rdname response-methods
+#' 
+#' @param data data frame containing the values of a response variable defined in a formula.
+#' 
 response.formula <- function(object, data, ...) {
   eval(object[[2]], data)
 }
