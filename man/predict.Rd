@@ -36,7 +36,7 @@ gbmfit <- fit(GBMModel(),
               Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
                                    pat.karno + meal.cal + wt.loss,
               data = lung)
-predict(gbmfit, lung, times = 365 * c(0.5, 1, 1.5), type = "prob")
+predict(gbmfit, lung, times = c(180, 360, 540), type = "prob")
 
 }
 \seealso{

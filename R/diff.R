@@ -25,7 +25,7 @@
 #' gbmperf2 <- resample(GBMModel(n.trees = 50), fo, lung, control)
 #' gbmperf3 <- resample(GBMModel(n.trees = 100), fo, lung, control)
 #' 
-#' perf <- Resamples(gbm1 = gbmperf1, gbm2 = gbmperf2, gbm3 = gbmperf3)
+#' perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
 #' summary(perf)
 #' plot(perf)
 #' 

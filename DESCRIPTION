@@ -9,8 +9,9 @@ Description: Meta-package for machine learning with a common interface for model
 Imports: abind, foreach, ggplot2, Hmisc, irr, kernlab, magrittr, methods,
          MLmetrics, ModelMetrics, party, recipes, rsample, survival,
          survivalROC, utils
-Suggests: gbm
+Suggests: doParallel, gbm, knitr, MASS, rmarkdown
 License: GPL-3
 URL: https://github.com/brian-j-smith/MachineShop
 Bugreports: https://github.com/brian-j-smith/MachineShop/issues
 RoxygenNote: 6.1.0
+VignetteBuilder: knitr

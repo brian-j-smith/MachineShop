@@ -23,7 +23,9 @@ importFrom(survivalROC, survivalROC)
 importFrom(utils, combn, head, stack, tail)
 
 
-export(Resamples, response, varimp)
+export(Resamples,
+       response,
+       varimp)
 
 export(BootControl,
        CVControl,

@@ -47,7 +47,7 @@ setGeneric("tune", function(object, x, ...) standardGeneric("tune"))
 #' 
 #' (gbmtune <- tune(GBMModel, fo, data = lung,
 #'                  control = CVControl(folds = 10, repeats = 5,
-#'                                      survtimes = 365 * c(0.5, 1, 1.5)),
+#'                                      survtimes = c(180, 360, 540)),
 #'                  grid = expand.grid(n.trees = c(25, 50, 100),
 #'                                     interaction.depth = 1:3,
 #'                                     n.minobsinnode = c(5, 10))))

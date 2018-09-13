@@ -55,17 +55,17 @@ The base MLControl constructor initializes a set of parameters that are common
 to all resampling methods.
 
 \code{BootControl} constructs an MLControl object for simple bootstrap
-resampling in which models are estimated with bootstrap resampled data sets
-and evaluated on the full data set.
+resampling in which models are fit with bootstrap resampled training sets and
+used to predict the full data set.
 
 \code{CVControl} constructs an MLControl object for repeated K-fold
-cross-validation.  In this procedure, the data set is repeatedly partitioned
-into K-folds.  Evaluation is performed on each of the K folds with models
-estimated on the remaining folds.
+cross-validation.  In this procedure, the full data set is repeatedly
+partitioned into K-folds.  Within replicates, prediction is performed on each
+of the K folds with models fit on all remaining folds.
 
 \code{OOBControl} constructs an MLControl object for out-of-bag bootstrap
-resampling in which models are estimated on bootstrap resampled data sets and
-evaluated on unsampled cases.
+resampling in which models are fit with bootstrap resampled training sets and
+used to predict the unsampled cases.
 }
 \section{Slots}{
 

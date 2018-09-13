@@ -72,8 +72,8 @@ setClass("BootControl",
 )
 
 #' \code{BootControl} constructs an MLControl object for simple bootstrap
-#' resampling in which models are estimated with bootstrap resampled data sets
-#' and evaluated on the full data set.
+#' resampling in which models are fit with bootstrap resampled training sets and
+#' used to predict the full data set.
 #' 
 #' @name BootControl
 #' @rdname MLControl-class
@@ -91,9 +91,9 @@ setClass("CVControl",
 )
 
 #' \code{CVControl} constructs an MLControl object for repeated K-fold
-#' cross-validation.  In this procedure, the data set is repeatedly partitioned
-#' into K-folds.  Evaluation is performed on each of the K folds with models
-#' estimated on the remaining folds.
+#' cross-validation.  In this procedure, the full data set is repeatedly
+#' partitioned into K-folds.  Within replicates, prediction is performed on each
+#' of the K folds with models fit on all remaining folds.
 #' 
 #' @name CVControl
 #' @rdname MLControl-class
@@ -112,8 +112,8 @@ setClass("OOBControl",
 )
 
 #' \code{OOBControl} constructs an MLControl object for out-of-bag bootstrap
-#' resampling in which models are estimated on bootstrap resampled data sets and
-#' evaluated on unsampled cases.
+#' resampling in which models are fit with bootstrap resampled training sets and
+#' used to predict the unsampled cases.
 #' 
 #' @name OOBControl
 #' @rdname MLControl-class

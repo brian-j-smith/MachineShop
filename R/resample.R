@@ -37,7 +37,7 @@ setGeneric("resample", function(object, x, ...) standardGeneric("resample"))
 #'                                           pat.karno + meal.cal + wt.loss,
 #'                      data = lung,
 #'                      control = CVControl(folds = 10, repeats = 5,
-#'                                          survtimes = 365 * c(0.5, 1, 1.5))))
+#'                                          survtimes = c(180, 360, 540))))
 #' summary(gbmperf)
 #' plot(gbmperf)
 #' 
