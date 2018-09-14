@@ -162,8 +162,8 @@ setMethod("show", "MLModel",
   function(object) {
     cat("An object of class \"", class(object), "\"\n\n",
         "name: ", object@name, "\n\n",
-        "packages: ", paste(object@packages, collapse = ", "), "\n\n",
-        "types: ", paste(object@types, collapse = ", "), "\n\n",
+        "packages: ", toString(object@packages), "\n\n",
+        "types: ", toString(object@types), "\n\n",
         "params:\n",
         sep = "")
     print(object@params)
@@ -237,9 +237,8 @@ setMethod("show", "Resamples",
   function(object) {
     cat("An object of class \"", class(object), "\"\n\n", sep = "")
     dns <- dimnames(object)
-    if(length(dns) > 2) cat("models: ", paste(dns[[3]], collapse = ", "),
-                            "\n\n", sep = "")
-    cat("metrics: ", paste(dns[[2]], collapse = ", "), "\n\n",
+    if(length(dns) > 2) cat("models: ", toString(dns[[3]]), "\n\n", sep = "")
+    cat("metrics: ", toString(dns[[2]]), "\n\n",
         "method: ", object@method, "\n\n",
         "resamples: ", dim(object)[1], "\n\n", sep = "")
     invisible()

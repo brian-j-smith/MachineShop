@@ -40,15 +40,14 @@ params <- function(env) {
   x <- as.list(env)
   missing_args <- names(x)[sapply(x, is.name)]
   if(length(missing_args)) stop("missing values for required argument(s) ",
-                                paste0(missing_args, collapse = ", "))
+                                toString(missing_args))
   x[!sapply(x, is.null)]
 }
 
 
 requireModelNamespaces <- function(packages) {
   pass <- sapply(packages, requireNamespace)
-  if(!all(pass)) stop("install required packages: ",
-                      paste(packages[!pass], collapse = ", "))
+  if(!all(pass)) stop("install required packages: ", toString(packages[!pass]))
   invisible(pass)
 }
 
