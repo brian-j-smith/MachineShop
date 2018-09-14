@@ -9,7 +9,7 @@ Description: Meta-package for machine learning with a common interface for model
 Imports: abind, foreach, ggplot2, Hmisc, irr, kernlab, magrittr, methods,
          MLmetrics, ModelMetrics, party, recipes, rsample, survival,
          survivalROC, utils
-Suggests: doParallel, gbm, knitr, MASS, rmarkdown
+Suggests: doParallel, gbm, kableExtra, knitr, MASS, rmarkdown
 License: GPL-3
 URL: https://github.com/brian-j-smith/MachineShop
 Bugreports: https://github.com/brian-j-smith/MachineShop/issues

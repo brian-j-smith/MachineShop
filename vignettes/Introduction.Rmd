@@ -15,16 +15,19 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   warning = FALSE,
+  message = FALSE,
   fig.width = 7,
   fig.height = 4,
   fig.align = "center"
 )
+
+library(kableExtra)
 ```
 
 
 ## The MachineShop Package
 
-`MachineShop` is a meta-package for machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes and resample (bootstrap and cross-validation) estimation of model performance.  This vignette introduces the package interface with a survival data analysis example, followed by applications to other types of response variables, supported methods of model specification and data preprocessing, and a list of all currently available models.
+`MachineShop` is a meta-package for machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes and for resample (bootstrap and cross-validation) estimation of model performance.  This vignette introduces the package interface with a survival data analysis example, followed by applications to other types of response variables, supported methods of model specification and data preprocessing, and a list of all currently available models.
 
 
 ## Model Fitting and Prediction
@@ -353,23 +356,20 @@ varimp(gbmfit)
 
 Currently available model functions are summarized in the table below according to the types of response variables with which each model can be used.  The package additionally supplies a generic `MLModel` function for users to create their own custom models.
 
-| Model Constructor   | factor | numeric | ordered | Surv |
-|:--------------------|:------:|:-------:|:-------:|:----:|
-| C50Model            | x      |         |         |      |
-| CForestModel        | x      | x       |         | x    |
-| CoxModel            |        |         |         | x    |
-| CoxStepAICModel     |        |         |         | x    |
-| GBMModel            | x      | x       |         | x    |
-| GLMModel            | x      | x       |         |      |
-| GLMStepAICModel     | x      | x       |         |      |
-| GLMNetModel         | x      | x       |         | x    |
-| NNetModel           | x      | x       |         |      |
-| PLSModel            | x      | x       |         |      |
-| POLRModel           |        |         | x       |      |
-| RandomForestModel   | x      | x       |         |      |
-| SurvRegModel        |        |         |         | x    |
-| SurvRegStepAICModel |        |         |         | x    |
-| SVMModel            | x      | x       |         |      |
+```{r echo = FALSE}
+df <- data.frame(factor = character(), numeric = character(), ordered = character(), Surv = character(), stringsAsFactors = FALSE)
+
+modelnames <- c("C50Model", "CForestModel", "CoxModel", "CoxStepAICModel", "GLMModel", "GLMStepAICModel", "GBMModel", "GLMNetModel", "NNetModel", "PLSModel", "POLRModel", "RandomForestModel", "SurvRegModel", "SurvRegStepAICModel", "SVMModel")
+
+for(modelname in modelnames) {
+  model <- get(modelname)()
+  df[modelname,] <- ifelse(names(df) %in% model@types, "x", "")
+}
+
+kable(df, align = "c") %>%
+  kable_styling("striped", full_width = FALSE, position = "center") %>%
+  add_header_above(c(" " = 1, "Response Variable Types" = 4))
+```
 
 
 ## References

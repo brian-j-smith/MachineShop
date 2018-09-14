@@ -1,0 +1,130 @@
+---
+output: github_document
+always_allow_html: yes
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  fig.align = "center",
+  message = FALSE,
+  warning = FALSE
+)
+
+library(kableExtra)
+```
+
+# MachineShop: Machine Learning Models and Tools
+
+## Overview
+
+`MachineShop` is a meta-package for machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes, including those listed in the table below, and for resample (bootstrap and cross-validation) estimation of model performance.
+
+<div>
+```{r echo = FALSE}
+library(MachineShop)
+
+df <- data.frame(factor = character(), numeric = character(), ordered = character(), Surv = character(), stringsAsFactors = FALSE)
+
+models <- c("C5.0 Classification" = C50Model,
+            "Conditional Inference Trees" = CForestModel,
+            "Cox Regression" = CoxModel,
+            "Generalized Linear Models" = GLMModel,
+            "Gradient Boosted Models" = GBMModel,
+            "Lasso and Elastic-Net" = GLMNetModel,
+            "Feed-Forward Neural Networks" = NNetModel,
+            "Partial Least Squares" = PLSModel,
+            "Ordered Logistic Regression" = POLRModel,
+            "Random Forests" = RandomForestModel,
+            "Parametric Survival Regression" = SurvRegModel,
+            "Support Vector Machines" = SVMModel)
+
+for(modelname in names(models)) {
+  model <- models[[modelname]]()
+  df[modelname,] <- ifelse(names(df) %in% model@types, "x", "")
+}
+
+kable(df, align = "c") %>%
+  kable_styling("striped", full_width = FALSE, position = "center") %>%
+  add_header_above(c(" " = 1, "Response Variable Types" = 4))
+```
+</div>
+
+## Installation
+
+```{r eval = FALSE}
+# Development version from GitHub
+# install.packages("devtools")
+devtools::install_github("brian-j-smith/MachineShop")
+```
+
+
+## Example
+
+The following is a brief example using the package to apply gradient boosted models to predict the species of flowers in Edgar Anderson's iris dataset.
+
+```{r}
+## Load the package
+library(MachineShop)
+library(magrittr)
+
+## Iris flower species (3 level response)
+df <- iris
+df$Species <- factor(df$Species)
+
+## Create training and test sets
+set.seed(123)
+trainindices <- sample(nrow(df), nrow(df) * 2 / 3)
+train <- df[trainindices, ]
+test <- df[-trainindices, ]
+
+## Gradient boosted mode fit to training set
+gbmfit <- fit(GBMModel(), Species ~ ., data = train)
+
+## Variable importance
+(vi <- varimp(gbmfit))
+
+plot(vi)
+```
+
+```{r}
+## Test set predicted probabilities
+predict(gbmfit, newdata = test, type = "prob") %>% head
+
+## Test set predicted classification
+predict(gbmfit, newdata = test) %>% head
+```
+
+```{r, fig.height = 4}
+## Resample estimation of model performance
+(perf <- resample(GBMModel(), Species ~ ., data = df))
+
+summary(perf)
+
+plot(perf, metrics = c("Accuracy", "Kappa", "MLogLoss"))
+```
+
+```{r, fig.height = 4}
+## Model tuning
+gbmtune <- tune(GBMModel, Species ~ ., data = df,
+                grid = expand.grid(n.trees = c(25, 50, 100),
+                                    interaction.depth = 1:3,
+                                    n.minobsinnode = c(5, 10)))
+
+plot(gbmtune, type = "line", metrics = c("Accuracy", "Kappa", "MLogLoss"))
+```
+
+## Documentation
+
+Once the package is installed, general documentation on its usage can be viewed with the following console commands.
+
+```{r eval = FALSE, message = FALSE}
+library(MachineShop)
+?MachineShop
+RShowDoc("Introduction", package = "MachineShop")
+```
+
