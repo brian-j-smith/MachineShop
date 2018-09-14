@@ -173,35 +173,51 @@ setMethod("show", "MLModel",
 )
 
 
+setClass("Resamples",
+  slots = c("method" = "character"),
+  contains = "array"
+)
+
+
 #' Resamples Class Contructor
 #' 
 #' Create an object of resampled performance metrics from one or more models.
 #' 
+#' @param method character string indicating the type of resampling method.
+#' This need only be specified if the supplied output is not a Resamples object.
 #' @param ... named or unnamed resample output from one or more models.
 #' 
 #' @return Resamples class object.
 #' 
 #' @seealso \code{\link{resample}}, \code{\link{plot}}, \code{\link{summary}}
 #' 
-Resamples <- setClass("Resamples", contains = "array")
+Resamples <- function(..., method = NULL) {
+  new("Resamples", ..., method = method)  
+}
+
 
 setMethod("initialize", "Resamples",
-  function(.Object, ...) {
+  function(.Object, ..., method = NULL) {
     args <- list(...)
     if(length(args) == 0) stop("no values given")
     .Data <- args[[1]]
     if(length(args) == 1) {
-      if(is.data.frame(.Data)) .Data <- as.matrix(.Data)
-    } else {
-      if(!all(sapply(args, function(x) is.matrix(x) || is.data.frame(x)))) {
-        stop("values must be of type matrix or data.frame")
+      if(is(.Data, "Resamples")) {
+        method = .Object@method
+      } else if(is.data.frame(.Data)) {
+        .Data <- as.matrix(.Data)
       }
-      if(!all(sapply(args, dim) == dim(.Data))) {
-        stop("values have different dimensions")
+    } else {
+      if(!all(sapply(args, function(x) is(x, "Resamples") && is.matrix(x)))) {
+        stop("values to combine must be 2 dimensional Resamples objects")
+      }
+      if(!all(sapply(args, slot, name = "method") == .Data@method)) {
+        stop("values have different resampling methods")
       }
       if(!all(sapply(args, colnames) == colnames(.Data))) {
         stop("values have different column names")
       }
+      method <- .Data@method
       modelnames <- names(args)
       if(is.null(modelnames)) modelnames <- paste0("Model", seq(args))
       names(args) <- NULL
@@ -209,7 +225,7 @@ setMethod("initialize", "Resamples",
       args$new.names = list(1:nrow(.Data), NULL, modelnames)
       .Data <- do.call(abind, args)
     }
-    callNextMethod(.Object, .Data)
+    callNextMethod(.Object, .Data, method = method)
   }
 )
 
@@ -221,6 +237,7 @@ setMethod("show", "Resamples",
     if(length(dns) > 2) cat("models: ", paste(dns[[3]], collapse = ", "),
                             "\n\n", sep = "")
     cat("metrics: ", paste(dns[[2]], collapse = ", "), "\n\n",
+        "method: ", object@method, "\n\n",
         "resamples: ", dim(object)[1], "\n\n", sep = "")
     invisible()
   }

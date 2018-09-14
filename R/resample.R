@@ -91,7 +91,7 @@ setMethod(".resample", c("BootControl", "data.frame"),
       trainfit <- fit(model, x[index[[i]], , drop = FALSE])
       pred <- predict(trainfit, x, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
-    } %>% Resamples
+    } %>% Resamples(method = method(object))
   }
 )
 
@@ -115,7 +115,7 @@ setMethod(".resample", c("BootControl", "recipe"),
       trainfit <- fit(model, train)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
-    } %>% Resamples
+    } %>% Resamples(method = method(object))
   }
 )
 
@@ -139,7 +139,7 @@ setMethod(".resample", c("CVControl", "data.frame"),
       obs <- response(test)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
-    } %>% Resamples
+    } %>% Resamples(method = method(object))
   }
 )
 
@@ -164,7 +164,7 @@ setMethod(".resample", c("CVControl", "recipe"),
       obs <- response(formula(train), test)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
-    } %>% Resamples
+    } %>% Resamples(method = method(object))
   }
 )
 
@@ -189,7 +189,7 @@ setMethod(".resample", c("OOBControl", "data.frame"),
       obs <- response(test)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
-    } %>% Resamples
+    } %>% Resamples(method = method(object))
   }
 )
 
@@ -214,6 +214,6 @@ setMethod(".resample", c("OOBControl", "recipe"),
       obs <- response(formula(train), test)
       pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
       summary(object, obs, pred)
-    } %>% Resamples
+    } %>% Resamples(method = method(object))
   }
 )

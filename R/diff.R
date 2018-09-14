@@ -49,7 +49,7 @@ diff.Resamples <- function(x, ...) {
   xdiff <- x[, , indices1, drop = FALSE] - x[, , indices2, drop = FALSE]
   modelnames <- dimnames(x)[[3]]
   dimnames(xdiff)[[3]] <- paste(modelnames[indices1], "-", modelnames[indices2])
-  ResamplesDiff(xdiff, modelnames = modelnames)
+  ResamplesDiff(xdiff, method = x@method, modelnames = modelnames)
 }
 
 
