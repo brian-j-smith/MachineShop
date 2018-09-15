@@ -267,7 +267,7 @@ ResamplesHTest <- setClass("ResamplesHTest",
 )
 
 
-setClass("VarImp", contains = "data.frame")
+VarImp <- setClass("VarImp", contains = "data.frame")
 
 
 setMethod("initialize", "VarImp",

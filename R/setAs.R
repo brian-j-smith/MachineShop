@@ -1,5 +1,5 @@
 setAs("data.frame", "VarImp",
-  function(from) new("VarImp", from)
+  function(from) VarImp(from)
 )
 
 

@@ -12,7 +12,7 @@
 #' @seealso \code{\link{fit}}, \code{\link{plot}}
 #'
 varimp <- function(object, scale = TRUE, ...) {
-  new("VarImp", as(.varimp(object, ...), "VarImp"), scale = scale)
+  VarImp(as(.varimp(object, ...), "VarImp"), scale = scale)
 }
 
 
