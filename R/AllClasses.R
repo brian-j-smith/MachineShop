@@ -58,11 +58,6 @@ setMethod("initialize", "MLControl",
 )
 
 
-setClass("BootControl",
-  slots = c(number = "numeric"),
-  contains = "MLControl"
-)
-
 #' \code{BootControl} constructs an MLControl object for simple bootstrap
 #' resampling in which models are fit with bootstrap resampled training sets and
 #' used to predict the full data set.
@@ -77,10 +72,11 @@ BootControl <- function(number = 25, ...) {
 }
 
 
-setClass("CVControl",
-  slots = c(folds = "numeric", repeats = "numeric"),
+setClass("BootControl",
+  slots = c(number = "numeric"),
   contains = "MLControl"
 )
+
 
 #' \code{CVControl} constructs an MLControl object for repeated K-fold
 #' cross-validation.  In this procedure, the full data set is repeatedly
@@ -98,10 +94,11 @@ CVControl <- function(folds = 10, repeats = 1, ...) {
 }
 
 
-setClass("OOBControl",
-  slots = c(number = "numeric"),
+setClass("CVControl",
+  slots = c(folds = "numeric", repeats = "numeric"),
   contains = "MLControl"
 )
+
 
 #' \code{OOBControl} constructs an MLControl object for out-of-bag bootstrap
 #' resampling in which models are fit with bootstrap resampled training sets and
@@ -115,16 +112,11 @@ OOBControl <- function(number = 25, ...) {
 }
 
 
-setClass("MLModel",
-  slots = c(name = "character",
-            packages = "character",
-            types = "character",
-            params = "list",
-            fit = "function",
-            predict = "function",
-            response = "function",
-            varimp = "function")
+setClass("OOBControl",
+  slots = c(number = "numeric"),
+  contains = "MLControl"
 )
+
 
 #' MLModel Class Constructor
 #' 
@@ -150,10 +142,42 @@ MLModel <- function(name = "MLModel", packages = character(0),
 }
 
 
-setClass("Resamples",
-  slots = c("method" = "character"),
-  contains = "array"
+setClass("MLModel",
+  slots = c(name = "character",
+            packages = "character",
+            types = "character",
+            params = "list",
+            fit = "function",
+            predict = "function",
+            response = "function",
+            varimp = "function")
 )
+
+
+#' Model Fit Class
+#' 
+#' MLModelFit is the base class for model fit objects.  Direct calls to the
+#' MLModelFit constructor are not necessary unless implementing custom models.
+#'
+#' @name MLModelFit-class
+#' @rdname MLModelFit-class
+#' 
+#' @slot .packages character vector of packages required by the object.
+#' @slot .predict model prediction function.
+#' @slot .response function to extract the response variable from a model fit.
+#' @slot .varimp variable importance function.
+#' 
+setClass("MLModelFit",
+  slots = c(.packages = "character",
+            .predict = "function",
+            .response = "function",
+            .varimp = "function"),
+  contains ="VIRTUAL"
+)
+
+
+setClass("SVMFit", contain = c("MLModelFit", "ksvm"))
+setClass("CForestFit", contains = c("MLModelFit", "RandomForest"))
 
 
 #' Resamples Class Contructor
@@ -171,6 +195,12 @@ setClass("Resamples",
 Resamples <- function(..., method = NULL) {
   new("Resamples", ..., method = method)  
 }
+
+
+setClass("Resamples",
+  slots = c("method" = "character"),
+  contains = "array"
+)
 
 
 setMethod("initialize", "Resamples",
@@ -237,33 +267,8 @@ ResamplesHTest <- setClass("ResamplesHTest",
 )
 
 
-#' Model Fit Class
-#' 
-#' MLModelFit is the base class for model fit objects.  Direct calls to the
-#' MLModelFit constructor are not necessary unless implementing custom models.
-#'
-#' @name MLModelFit-class
-#' @rdname MLModelFit-class
-#' 
-#' @slot .packages character vector of packages required by the object.
-#' @slot .predict model prediction function.
-#' @slot .response function to extract the response variable from a model fit.
-#' @slot .varimp variable importance function.
-#' 
-setClass("MLModelFit",
-  slots = c(.packages = "character",
-            .predict = "function",
-            .response = "function",
-            .varimp = "function"),
-  contains ="VIRTUAL"
-)
-
-
-setClass("SVMFit", contain = c("MLModelFit", "ksvm"))
-setClass("CForestFit", contains = c("MLModelFit", "RandomForest"))
-
-
 setClass("VarImp", contains = "data.frame")
+
 
 setMethod("initialize", "VarImp",
   function(.Object, .Data, scale = FALSE, ...) {
@@ -274,6 +279,7 @@ setMethod("initialize", "VarImp",
     callNextMethod(.Object, .Data, ...)
   }
 )
+
 
 setValidity("VarImp", function(object) {
   !(nrow(object) && is.null(rownames(object)))
