@@ -212,10 +212,13 @@ setMethod("initialize", "Resamples",
         stop("values to combine must be 2 dimensional Resamples objects")
       }
       if(!all(sapply(args, slot, name = "method") == .Data@method)) {
-        stop("values have different resampling methods")
+        stop("resamples use different methods")
       }
       if(!all(sapply(args, colnames) == colnames(.Data))) {
-        stop("values have different column names")
+        stop("resamples contain different metrics")
+      }
+      if(!all(sapply(args, nrow) == nrow(.Data))) {
+        stop("resamples have different numbers of evaluations")
       }
       method <- .Data@method
       modelnames <- names(args)
