@@ -3,13 +3,26 @@
 #' An implementation of the random forest and bagging ensemble algorithms
 #' utilizing conditional inference trees as base learners.
 #'
-#' @param controls an object of class \code{\linkS4class{ForestControl}}.
+#' @param teststat character specifying the type of the test statistic to be
+#' applied.
+#' @param testtype character specifying how to compute the distribution of the
+#' test statistic.
+#' @param mincriterion  value of the test statistic that must be exceeded in
+#' order to implement a split.
+#' @param replace logical indicating whether sampling of observations is done
+#' with or without replacement.
+#' @param fraction fraction of number of observations to draw without
+#' replacement (only relevant if \code{replace = FALSE}).
+#' @param ntree number of trees to grow in a forest.
+#' @param mtry number of input variables randomly sampled as candidates at each
+#' node for random forest like algorithms.
 #' 
 #' @details
 #' \describe{
 #' \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
 #' }
 #' 
+#' Supplied arguments are passed to \code{\link[party]{cforest_unbiased}}.
 #' Default values for the \code{NULL} arguments and further model
 #' details can be found in the source link below.
 #' 
@@ -18,16 +31,20 @@
 #' @seealso \code{\link[party]{cforest}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
 #'
-CForestModel <- function(controls = NULL) {
+CForestModel <- function(teststat = NULL, testtype = NULL, mincriterion = NULL,
+                         ntree = NULL, mtry = NULL, replace = NULL,
+                         fraction = NULL) {
+  args <- params(environment())
+  requireModelNamespaces("party")
   MLModel(
     name = "CForestModel",
     packages = "party",
     types = c("factor", "numeric", "Surv"),
-    params = params(environment()),
+    params = list(controls = do.call(party::cforest_unbiased, args)),
     fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
       environment(formula) <- environment()
       party::cforest(formula, data = data, weights = weights, ...) %>%
-        asMLModelFit("CForestFit", CForestModel(...))
+        asMLModelFit("CForestFit", do.call(CForestModel, args))
     },
     predict = function(object, newdata, times = numeric(), ...) {
       object <- asParentFit(object)

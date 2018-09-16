@@ -4,10 +4,29 @@
 \alias{CForestModel}
 \title{Conditional Random Forest Model}
 \usage{
-CForestModel(controls = NULL)
+CForestModel(teststat = NULL, testtype = NULL, mincriterion = NULL,
+  ntree = NULL, mtry = NULL, replace = NULL, fraction = NULL)
 }
 \arguments{
-\item{controls}{an object of class \code{\linkS4class{ForestControl}}.}
+\item{teststat}{character specifying the type of the test statistic to be
+applied.}
+
+\item{testtype}{character specifying how to compute the distribution of the
+test statistic.}
+
+\item{mincriterion}{value of the test statistic that must be exceeded in
+order to implement a split.}
+
+\item{ntree}{number of trees to grow in a forest.}
+
+\item{mtry}{number of input variables randomly sampled as candidates at each
+node for random forest like algorithms.}
+
+\item{replace}{logical indicating whether sampling of observations is done
+with or without replacement.}
+
+\item{fraction}{fraction of number of observations to draw without
+replacement (only relevant if \code{replace = FALSE}).}
 }
 \value{
 MLModel class object.
@@ -21,6 +40,7 @@ utilizing conditional inference trees as base learners.
 \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
 }
 
+Supplied arguments are passed to \code{\link[party]{cforest_unbiased}}.
 Default values for the \code{NULL} arguments and further model
 details can be found in the source link below.
 }
