@@ -172,7 +172,7 @@ setClass("MLModelFit",
             .predict = "function",
             .response = "function",
             .varimp = "function"),
-  contains ="VIRTUAL"
+  contains = "VIRTUAL"
 )
 
 
@@ -210,7 +210,7 @@ setMethod("initialize", "Resamples",
     .Data <- args[[1]]
     if(length(args) == 1) {
       if(is(.Data, "Resamples")) {
-        method = .Object@method
+        method <- .Data@method
       } else if(is.data.frame(.Data)) {
         .Data <- as.matrix(.Data)
       }
@@ -231,8 +231,8 @@ setMethod("initialize", "Resamples",
       modelnames <- names(args)
       if(is.null(modelnames)) modelnames <- paste0("Model", seq(args))
       names(args) <- NULL
-      args$along = 3
-      args$new.names = list(1:nrow(.Data), NULL, modelnames)
+      args$along <- 3
+      args$new.names <- list(1:nrow(.Data), NULL, modelnames)
       .Data <- do.call(abind, args)
     }
     callNextMethod(.Object, .Data, method = method)

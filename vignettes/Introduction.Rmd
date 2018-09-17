@@ -115,7 +115,7 @@ metrics <- c("ROC", "Brier")
 
 ### Single Model
 
-Resampling of a single model is performed with the `resample` function applied to a model object (e.g. `GMBModel()`) and a control object like the one defined previously (`control`).  Summary statistics and plots can be obtained with the `summary` and `plot` functions.
+Resampling of a single model is performed with the `resample` function applied to a model object (e.g. `GBMModel()`) and a control object like the one defined previously (`control`).  Summary statistics and plots can be obtained with the `summary` and `plot` functions.
 
 ```{r}
 ## Resample estimation

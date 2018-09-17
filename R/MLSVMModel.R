@@ -12,7 +12,7 @@
 #' the Lagrange formulation.
 #' @param nu parameter needed for nu-svc, one-svc, and nu-svr.
 #' @param epsilon parameter in the insensitive-loss function used for eps-svr,
-#' nu-svr and eps-bsvm
+#' nu-svr and eps-bsvm.
 #' @param cache cache memory in MB.
 #' @param tol tolerance of termination criterion.
 #' @param shrinking whether to use the shrinking-heuristics.
@@ -31,8 +31,8 @@
 #' \code{\link{resample}}, \code{\link{tune}}
 #'
 SVMModel <- function(scaled = NULL, type = NULL, kernel = NULL, kpar = NULL,
-                      C = NULL, nu = NULL, epsilon = NULL, cache = NULL,
-                      tol = NULL, shrinking = NULL) {
+                     C = NULL, nu = NULL, epsilon = NULL, cache = NULL,
+                     tol = NULL, shrinking = NULL) {
   MLModel(
     name = "SVMModel",
     packages = "kernlab",

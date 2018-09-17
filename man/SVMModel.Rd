@@ -23,7 +23,7 @@ the Lagrange formulation.}
 \item{nu}{parameter needed for nu-svc, one-svc, and nu-svr.}
 
 \item{epsilon}{parameter in the insensitive-loss function used for eps-svr,
-nu-svr and eps-bsvm}
+nu-svr and eps-bsvm.}
 
 \item{cache}{cache memory in MB.}
 

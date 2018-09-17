@@ -13,7 +13,7 @@ setMethod("convert", c("factor", "matrix"),
     x <- if(n > 2) {
       factor(max.col(x), levels = 1:n, labels = levels(object))
     } else {
-      x[,ncol(x)]
+      x[, ncol(x)]
     }
     convert(object, x, ...)
   }

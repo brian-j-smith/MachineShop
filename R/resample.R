@@ -70,9 +70,7 @@ setMethod("resample", c("MLModel", "recipe"),
 )
 
 
-setGeneric(".resample", function(object, x, ...) {
- standardGeneric(".resample") 
-})
+setGeneric(".resample", function(object, x, ...) standardGeneric(".resample"))
 
 
 setMethod(".resample", c("BootControl", "data.frame"),

@@ -55,7 +55,7 @@ PLSModel <- function(ncomp = 1, scale = NULL) {
         as.matrix(abs(beta[, i, ])) %*% prop.table(-diff(perf[, i, ]))
       })
       dimnames(vi) <- dimnames(beta)[1:2]
-      if(ncol(vi) <= 2) vi <- vi[,1]
+      if(ncol(vi) <= 2) vi <- vi[, 1]
       vi
     }
   )

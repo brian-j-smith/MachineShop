@@ -20,12 +20,12 @@
 #' \code{\link{tune}}
 #' 
 summary.MLModelTune <- function(object,
-                              stats = c("Mean" = mean,
-                                        "Median" = median,
-                                        "SD" = sd,
-                                        "Min" = min,
-                                        "Max" = max),
-                              na.rm = TRUE, ...) {
+                                stats = c("Mean" = mean,
+                                          "Median" = median,
+                                          "SD" = sd,
+                                          "Min" = min,
+                                          "Max" = max),
+                                na.rm = TRUE, ...) {
   summary(object@resamples, stats = stats, na.rm = na.rm, ...)
 }
 

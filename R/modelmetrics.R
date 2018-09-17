@@ -38,7 +38,7 @@ setMethod("modelmetrics", c("factor", "matrix"),
                           labels = levels(observed))
       metrics <- c(modelmetrics(observed, predicted, ...), metrics)
     } else {
-      metrics <- modelmetrics(observed, predicted[,ncol(predicted)], ...)
+      metrics <- modelmetrics(observed, predicted[, ncol(predicted)], ...)
     }
     metrics
   }
@@ -99,32 +99,32 @@ setMethod("modelmetrics", c("Surv", "matrix"),
     ntimes <- length(survtimes)
     roc <- brier <- rep(NA, ntimes)
     for(i in 1:ntimes) {
-      roc[i] <- rocSurv(observed, predicted[,i], survtimes[i])
-      brier[i] <- brierSurv(observed, predicted[,i], survtimes[i])
+      roc[i] <- rocSurv(observed, predicted[, i], times[i])
+      brier[i] <- brierSurv(observed, predicted[, i], times[i])
     }
     if(ntimes > 1) {
       data.frame(
-        ROC = meanSurvMetric(roc, survtimes),
-        Brier = meanSurvMetric(brier, survtimes),
-        ROCTime = I(t(roc)),
-        BrierTime = I(t(brier))
+        "ROC" = meanSurvMetric(roc, survtimes),
+        "Brier" = meanSurvMetric(brier, survtimes),
+        "ROCTime" = I(t(roc)),
+        "BrierTime" = I(t(brier))
       )
     } else {
-      c(ROC = roc, Brier = brier)
+      c("ROC" = roc, "Brier" = brier)
     }
   }
 )
 
 
 rocSurv <- function(observed, predicted, time) {
-  survivalROC(observed[,"time"], observed[,"status"], 1 - predicted,
+  survivalROC(observed[, "time"], observed[, "status"], 1 - predicted,
               predict.time = time, method = "KM")$AUC
 }
 
 
 brierSurv <- function(observed, predicted, time) {
-  obs_times <- observed[,"time"]
-  obs_events <- observed[,"status"]
+  obs_times <- observed[, "time"]
+  obs_events <- observed[, "status"]
   fitcens <- survfit(Surv(obs_times, 1 - obs_events) ~ 1)
   is_obs_after <- obs_times > time
   weights <- (obs_events == 1 | is_obs_after) /
