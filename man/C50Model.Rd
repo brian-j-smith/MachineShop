@@ -4,16 +4,41 @@
 \alias{C50Model}
 \title{C5.0 Decision Trees and Rule-Based Model}
 \usage{
-C50Model(trials = NULL, rules = NULL, control = NULL)
+C50Model(trials = NULL, rules = NULL, subset = NULL, bands = NULL,
+  winnow = NULL, noGlobalPruning = NULL, CF = NULL,
+  minCases = NULL, fuzzyThreshold = NULL, sample = NULL,
+  earlyStopping = NULL)
 }
 \arguments{
-\item{trials}{integer number of boosting iterations. A value of one indicates
-that a single model is used.}
+\item{trials}{integer number of boosting iterations.}
 
-\item{rules}{logical indicating whether the tree is decomposed into a
-rule-based model}
+\item{rules}{logical indicating whether to decompose the tree into a
+rule-based model.}
 
-\item{control}{list of control parameters.}
+\item{subset}{logical indicating whether the model should evaluate groups of
+discrete predictors for splits.}
+
+\item{bands}{integer between 2 and 1000.}
+
+\item{winnow}{logical indicating use of predictor winnowing (i.e. feature
+selection).}
+
+\item{noGlobalPruning}{logical indicating a final, global pruning step to
+simplify the tree.}
+
+\item{CF}{number in (0, 1) for the confidence factor.}
+
+\item{minCases}{integer for the smallest number of samples that must be put
+in at least two of the splits.}
+
+\item{fuzzyThreshold}{logical indicating whether to evaluate possible
+advanced splits of the data.}
+
+\item{sample}{value between (0, 0.999) that specifies the random proportion
+of data to use in training the model.}
+
+\item{earlyStopping}{logical indicating whether the internal method for
+stopping boosting should be used.}
 }
 \value{
 MLModel class object.
@@ -27,6 +52,7 @@ algorithm.
 \item{Response Types:}{\code{factor}}
 }
 
+Latter arguments are passed to \code{\link[C50]{C5.0Control}}.
 Default values for the \code{NULL} arguments and further model
 details can be found in the source link below.
 }

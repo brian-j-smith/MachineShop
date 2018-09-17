@@ -3,17 +3,32 @@
 #' Fit classification tree models or rule-based models using Quinlan's C5.0
 #' algorithm.
 #'
-#' @param trials integer number of boosting iterations. A value of one indicates
-#' that a single model is used.
-#' @param rules logical indicating whether the tree is decomposed into a
-#' rule-based model
-#' @param control list of control parameters.
+#' @param trials integer number of boosting iterations.
+#' @param rules logical indicating whether to decompose the tree into a
+#' rule-based model.
+#' @param subset logical indicating whether the model should evaluate groups of
+#' discrete predictors for splits.
+#' @param bands integer between 2 and 1000.
+#' @param winnow logical indicating use of predictor winnowing (i.e. feature
+#' selection).
+#' @param noGlobalPruning logical indicating a final, global pruning step to
+#' simplify the tree.
+#' @param CF number in (0, 1) for the confidence factor.
+#' @param minCases integer for the smallest number of samples that must be put
+#' in at least two of the splits.
+#' @param fuzzyThreshold logical indicating whether to evaluate possible
+#' advanced splits of the data.
+#' @param sample value between (0, 0.999) that specifies the random proportion
+#' of data to use in training the model.
+#' @param earlyStopping logical indicating whether the internal method for
+#' stopping boosting should be used.
 #'
 #' @details
 #' \describe{
 #' \item{Response Types:}{\code{factor}}
 #' }
 #' 
+#' Latter arguments are passed to \code{\link[C50]{C5.0Control}}.
 #' Default values for the \code{NULL} arguments and further model
 #' details can be found in the source link below.
 #' 
@@ -22,18 +37,27 @@
 #' @seealso \code{\link[C50]{C5.0}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}
 #'
-C50Model <- function(trials = NULL, rules = NULL, control = NULL)
-  {
+C50Model <- function(trials = NULL, rules = NULL, subset = NULL, bands = NULL,
+                     winnow = NULL, noGlobalPruning = NULL, CF = NULL,
+                     minCases = NULL, fuzzyThreshold = NULL, sample = NULL,
+                     earlyStopping = NULL) {
+  args <- params(environment())
+  
+  requireModelNamespaces("C50")
+  mainargs <- names(args) %in% c("trials", "rules")
+  params <- args[mainargs]
+  params$control <- do.call(C50::C5.0Control, args[!mainargs])
+  
   MLModel(
     name = "C50Model",
     packages = "C50",
     types = "factor",
-    params = params(environment()),
+    params = params,
     fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
       environment(formula) <- environment()
       mfit <- C50::C5.0(formula, data = data, weights = weights, ...)
       mfit$y <- response(formula, data)
-      asMLModelFit(mfit, "C50Fit", C50Model(...))
+      asMLModelFit(mfit, "C50Fit", do.call(C50Model, args))
     },
     predict = function(object, newdata, ...) {
       predict(asParentFit(object), newdata = newdata, type = "prob")
