@@ -1,0 +1,146 @@
+---
+title: "Conventions for MLModels Implementation"
+author: "Brian J Smith"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: bibliography.bib
+vignette: >
+  %\VignetteIndexEntry{Conventions for MLModels Implementation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+## Model Constructor Components
+
+
+### Constructor Arguments
+
+- Parameters without defaults are required and will trigger an error message if not supplied values when called.
+
+- Parameters that use the source package defaults should have `NULL` default values.  Package defaults should typically be used unless there is a compelling reason to change them.
+
+- Set non `NULL` values when the default is changed from the source package.  Instances where this may be desirable are in suppressing trace output or setting a default when the source package does not have one.
+
+- Model formula, data, and weights are separate from model parameters and should not be included among the constructor arguments.
+
+
+### name Slot
+
+- Use the same name as the constructor.
+
+
+### packages Slot
+
+- Include all packages whose function are called directly from within the constructor.
+
+- Use :: or ::: to reference source package functions.
+
+
+### types Slot
+
+- Include all response variable types (`"factor"`, `"numeric"`, `"ordered"`, and/or `"Surv"`) that can be analyzed with the model.
+
+
+### params Slot
+
+- List of user-supplied arguments to the constructor, typically obtained with with `params(environment())` if all arguments are to be passed to the source package fit function as supplied.  Additional steps may be needed to restructure the user-supplied arguments to pass in a different format; e.g., when some model parameters must be put in a control structure, as in C50Model and CForestModel.
+
+
+### fit Function
+
+- The first three arguments should be `formula`, `data`, and `weights`.
+
+- Set `environment(formula) <- environment()` if the formula will be passed to the source package fit function.  Some fit functions expect the formula to be defined in the same environment as the data and weights belong; i.e., the fit formula environment.
+
+- If weights are not supported, the default value should be `NULL` and the following included in the function:
+
+```{r eval = FALSE}
+if(!is.null(weights)) warning("weights are unsupported and will be ignored")
+
+```
+
+- If weights are supported, set the default to `weights = rep(1, nrow(data))` and pass the `weights` variable to the source package fit function.
+
+- Only add elements to the resulting fit object if they are needed and will be used in the `predict`, `response`, or `varimp` functions.
+
+- Return the fit object with a call to `asMLModelFit` and named as `"<Name>Fit"`.
+
+
+### predict Function
+
+- Extract any new elements added in the fit function and then recast with `asParentModel` to convert the fit object to its original class.
+
+- The predict function should return a vector or matrix of probabilities for 2-level factors, a matrix for factors with more than 2 levels, a vector or matrix of expected responses if numeric, a matrix of survival probabilities if follow-up times are supplied, or a vector of survival risks if no follow-up times.
+
+
+### response Function
+
+- Should return the original response variable supplied to the fit function.
+
+- Sometimes the original response is easily extracted from the fit function result.  At other times, it may be nested within the results and require some extra work to extract (see GBMModel for example).  If it is impossible to extract the response from the source package fit function results, add the response as a new element to the results in the fit function.
+
+
+### varimp Function
+
+- Variable importance results should generally be returned as a vector with elements named after the corresponding predictor variables.  The package will take care of conversions to a data frame and VarImp object.  If there is more than one set of relevant variable importance measures, they can be returned as a matrix or data frame with predictor variable names as the row names.
+
+
+## Documenting an MLModel
+
+
+### Model Parameters
+
+- Include the first sentences from the source package.
+
+- Start sentences with the parameter value type (logical, numeric, character, etc.).
+
+- Start sentences with lowercase.
+
+- Omit indefinite articles (a, an, etc.) from the starting sentences.
+
+
+### Details Section
+
+- Include response types (factor, numeric, ordered, and/or Surv).
+
+- Include the following sentence:
+  
+> Default values for the \code{NULL} arguments and further model
+> details can be found in the source link below.
+
+
+### Return (Value) Section
+
+- Include the following sentence:
+
+> MLModel class object.
+
+
+### See Also Section
+
+- Include a link to the source package function and the other method functions shown below.
+
+```
+\code{\link[<source package>]{<fit function>}}, \code{\link{fit}},
+\code{\link{resample}}, \code{\link{tune}}
+```
+
+## Package Extensions
+
+- For full compatibility with the `MachineShop` package, model constructors must belong to its namespace.
+
+- This can be accomplished by rebulding the package with source code for a new model added; or by defining a new model constructor, say `CustomModel`, and manually adding it to the namespace as follows.
+
+```{r eval = FALSE}
+environment(CustomModel) <- asNamespace("MachineShop")
+```
+
+- If adding a new model to the package, save its source code in a file whose name begins with "ML" followed by the model name, and ending with a .R extension; e.g., `"MLCustomModel.R"`.
