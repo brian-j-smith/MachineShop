@@ -31,16 +31,12 @@ setMethod("modelmetrics", c("factor", "factor"),
 #' 
 setMethod("modelmetrics", c("factor", "matrix"),
   function(observed, predicted, ...) {
-    n <- nlevels(observed)
-    predicted <- if(n > 2) {
-      metrics <- c("MLogLoss" = multinomLogLoss(observed, predicted))
-      predicted <- factor(max.col(predicted), levels = 1:n,
-                          labels = levels(observed))
-      metrics <- c(modelmetrics(observed, predicted, ...), metrics)
+    if(nlevels(observed) > 2) {
+      c(modelmetrics(observed, convert(observed, predicted), ...),
+        "MLogLoss" = multinomLogLoss(observed, predicted))
     } else {
-      metrics <- modelmetrics(observed, predicted[, ncol(predicted)], ...)
+      modelmetrics(observed, predicted[, ncol(predicted)], ...)
     }
-    metrics
   }
 )
 
