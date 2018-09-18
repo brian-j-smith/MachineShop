@@ -10,15 +10,15 @@ setOldClass("recipe")
 #' @slot cutoff threshold above which probabilities are classified as success
 #' for factor outcomes and which expected values are rounded for integer
 #' outcomes.
-#' @slot index.cutoff function to calculate a desired sensitivity-specificity
+#' @slot cutoff_index function to calculate a desired sensitivity-specificity
 #' tradeoff.
-#' @slot survtimes numeric vector of follow-up times at which to predict
+#' @slot surv_times numeric vector of follow-up times at which to predict
 #' survival events.
 #' @slot seed integer to set the seed at the start of resampling.
 #' 
 setClass("MLControl",
-  slots = c(summary = "function", cutoff = "numeric", index.cutoff = "function",
-            survtimes = "numeric", seed = "numeric"),
+  slots = c(summary = "function", cutoff = "numeric", cutoff_index = "function",
+            surv_times = "numeric", seed = "numeric"),
   contains = "VIRTUAL"
 )
 
@@ -34,9 +34,9 @@ setClass("MLControl",
 #' @param cutoff threshold above which probabilities are classified as success
 #' for factor outcomes and which expected values are rounded for integer
 #' outcomes.
-#' @param index.cutoff function to calculate a desired sensitivity-specificity
+#' @param cutoff_index function to calculate a desired sensitivity-specificity
 #' tradeoff.
-#' @param survtimes numeric vector of follow-up times at which to predict
+#' @param surv_times numeric vector of follow-up times at which to predict
 #' survival events.
 #' @param seed integer to set the seed at the start of resampling.  This is set
 #' to a random integer by default (NULL).
@@ -48,11 +48,11 @@ setClass("MLControl",
 #' 
 setMethod("initialize", "MLControl",
   function(.Object, summary = modelmetrics, cutoff = 0.5,
-           index.cutoff = function(sens, spec) sens + spec,
-           survtimes = numeric(), seed = NULL, ...) {
+           cutoff_index = function(sens, spec) sens + spec,
+           surv_times = numeric(), seed = NULL, ...) {
     if(is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
     callNextMethod(.Object, summary = summary, cutoff = cutoff,
-                   index.cutoff = index.cutoff, survtimes = survtimes,
+                   cutoff_index = cutoff_index, surv_times = surv_times,
                    seed = seed, ...)
   }
 )

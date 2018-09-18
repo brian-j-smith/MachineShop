@@ -36,7 +36,7 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
     if(is.null(metrics)) {
       metrics <- metriclevels
     } else {
-      metrics <- match.indices(metrics, metriclevels)
+      metrics <- match_indices(metrics, metriclevels)
       df <- df[df$metric %in% metrics, , drop = FALSE]
     }
     df$metric <- factor(df$metric, metrics)
@@ -74,7 +74,7 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
   if(is.null(metrics)) {
     metrics <- metriclevels
   } else {
-    metrics <- match.indices(metrics, metriclevels)
+    metrics <- match_indices(metrics, metriclevels)
     df <- df[df$metric %in% metrics, , drop = FALSE]
   }
   df$metric <- factor(df$metric, metrics)

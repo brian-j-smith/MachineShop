@@ -84,9 +84,9 @@ SurvRegStepAICModel <- function(dist = NULL, scale = NULL, parms = NULL,
                    k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()
       direction <- match.arg(direction)
-      args <- argsStepAIC(formula, direction, scope)
-      rms::psm(args$formula, data = data, weights = weights, ...) %>%
-        MASS::stepAIC(direction = direction, scope = args$scope, k = k,
+      stepargs <- stepAIC_args(formula, direction, scope)
+      rms::psm(stepargs$formula, data = data, weights = weights, ...) %>%
+        MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,
                       trace = trace, steps = steps) %>%
         asMLModelFit("SurvRegFit", SurvRegModel(...))
     }

@@ -81,7 +81,7 @@ A call to `modelmetrics` with observed and predicted outcomes will produce model
 ## Model performance metrics
 obs <- response(fo, test)
 pred <- predict(gbmfit, test, times = times, type = "prob")
-modelmetrics(obs, pred, survtimes = times)
+modelmetrics(obs, pred, times = times)
 ```
 
 
@@ -105,7 +105,7 @@ In our example, performance of models to predict survival at 180, 360, and 540 d
 control <- CVControl(
   folds = 10,
   repeats = 5,
-  survtimes = c(180, 360, 540)
+  surv_times = c(180, 360, 540)
 )
 
 ## Metrics of interest
@@ -225,7 +225,7 @@ Specificity
   : Proportion of correctly classified values in the first factor level.
 
 Index
-  : A tradeoff function of sensitivity and specificity as defined by `index.cutoff` in the resampling control functions (default: Sensitivity + Specificity).  The function allows for specification of tradeoffs [@perkins:2006:IOC] other than the default of Youden's J statistic [@youden:1950:IRD].
+  : A tradeoff function of sensitivity and specificity as defined by `cutoff_index` in the resampling control functions (default: Sensitivity + Specificity).  The function allows for specification of tradeoffs [@perkins:2006:IOC] other than the default of Youden's J statistic [@youden:1950:IRD].
   
 Brier, ROCAUC, and PRAUC are computed directly on predicted class probabilities.  The others are computed on predicted class membership.  Memberships are defined to be in the second factor level if predicted probabilities are greater than a cutoff value defined in the resampling control functions (default: `cutoff = 0.5`).
 

@@ -25,7 +25,7 @@ field <- function(object, name) {
 }
 
 
-match.indices <- function(indices, choices) {
+match_indices <- function(indices, choices) {
   lookup <- structure(seq(choices), names = choices)
   indices <- na.omit(names(lookup)[lookup[indices]])
   if(length(indices) == 0) {
@@ -49,6 +49,14 @@ requireModelNamespaces <- function(packages) {
   pass <- sapply(packages, requireNamespace)
   if(!all(pass)) stop("install required packages: ", toString(packages[!pass]))
   invisible(pass)
+}
+
+
+stepAIC_args <- function(formula, direction, scope) {
+  if(is.null(scope$lower)) scope$lower <- ~ 1
+  if(is.null(scope$upper)) scope$upper <- formula[-2]
+  formula[-2] <- if(direction == "backward") scope$upper else scope$lower
+  list(formula = formula, scope = scope)
 }
 
 

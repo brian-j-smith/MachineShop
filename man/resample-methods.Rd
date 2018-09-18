@@ -47,7 +47,7 @@ library(survival)
                                           pat.karno + meal.cal + wt.loss,
                      data = lung,
                      control = CVControl(folds = 10, repeats = 5,
-                                         survtimes = c(180, 360, 540))))
+                                         surv_times = c(180, 360, 540))))
 summary(gbmperf)
 plot(gbmperf)
 

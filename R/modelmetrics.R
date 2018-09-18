@@ -52,12 +52,12 @@ multinomLogLoss <- function(observed, predicted) {
 #' @rdname modelmetrics
 #' 
 #' @param cutoff threshold above which probabilities are classified as success.
-#' @param index.cutoff function to calculate a desired sensitivity-specificity
+#' @param cutoff_index function to calculate a desired sensitivity-specificity
 #' tradeoff.
 #' 
 setMethod("modelmetrics", c("factor", "numeric"),
   function(observed, predicted, cutoff = 0.5,
-           index.cutoff = function(sens, spec) sens + spec, ...) {
+           cutoff_index = function(sens, spec) sens + spec, ...) {
     observed <- observed == levels(observed)[2]
     sens <- sensitivity(observed, predicted, cutoff)
     spec <- specificity(observed, predicted, cutoff)
@@ -68,7 +68,7 @@ setMethod("modelmetrics", c("factor", "numeric"),
       "PRAUC" = PRAUC(predicted, observed),
       "Sensitivity" = sens,
       "Specificity" = spec,
-      "Index" = index.cutoff(sens, spec))
+      "Index" = cutoff_index(sens, spec))
   }
 )
 
@@ -87,12 +87,12 @@ setMethod("modelmetrics", c("numeric"),
 
 #' @rdname modelmetrics
 #' 
-#' @param survtimes numeric vector of follow-up times at which survival events
+#' @param times numeric vector of follow-up times at which survival events
 #' were predicted.
 #' 
 setMethod("modelmetrics", c("Surv", "matrix"),
-  function(observed, predicted, survtimes, ...) {
-    ntimes <- length(survtimes)
+  function(observed, predicted, times, ...) {
+    ntimes <- length(times)
     roc <- brier <- rep(NA, ntimes)
     for(i in 1:ntimes) {
       roc[i] <- rocSurv(observed, predicted[, i], times[i])
@@ -100,8 +100,8 @@ setMethod("modelmetrics", c("Surv", "matrix"),
     }
     if(ntimes > 1) {
       data.frame(
-        "ROC" = meanSurvMetric(roc, survtimes),
-        "Brier" = meanSurvMetric(brier, survtimes),
+        "ROC" = meanSurvMetric(roc, times),
+        "Brier" = meanSurvMetric(brier, times),
         "ROCTime" = I(t(roc)),
         "BrierTime" = I(t(brier))
       )

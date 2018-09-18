@@ -93,7 +93,7 @@ GLMStepAICModel <- function(family = NULL, control = NULL, direction = NULL,
                          "numeric" = "gaussian")
       }
       direction <- match.arg(direction)
-      stepargs <- argsStepAIC(formula, direction, scope)
+      stepargs <- stepAIC_args(formula, direction, scope)
       stats::glm(stepargs$formula, data = data, family = family,
                  weights = weights, ...) %>%
         MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,

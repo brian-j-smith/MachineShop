@@ -83,10 +83,10 @@ CoxStepAICModel <- function(ties = NULL, control = NULL, direction = NULL,
                    k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()
       direction <- match.arg(direction)
-      args <- argsStepAIC(formula, direction, scope)
-      rms::cph(args$formula, data = data, weights = weights, singular.ok = TRUE,
+      stepargs <- stepAIC_args(formula, direction, scope)
+      rms::cph(stepargs$formula, data = data, weights = weights, singular.ok = TRUE,
                surv = TRUE, y = TRUE, ...) %>%
-        MASS::stepAIC(direction = direction, scope = args$scope, k = k,
+        MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,
                       trace = trace, steps = steps) %>%
         asMLModelFit("CoxFit", CoxModel(...))
     }

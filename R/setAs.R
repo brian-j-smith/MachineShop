@@ -16,8 +16,8 @@ setAs("vector", "VarImp",
 setAs("MLControl", "list",
   function(from) {
     list(cutoff = from@cutoff,
-         index.cutoff = from@index.cutoff,
-         survtimes = from@survtimes)
+         cutoff_index = from@cutoff_index,
+         times = from@surv_times)
   }
 )
 

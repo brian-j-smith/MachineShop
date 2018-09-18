@@ -68,11 +68,3 @@ setMethod("fit", c("MLModel", "recipe"),
     fit(object, formula(x), juice(x))
   }
 )
-
-
-argsStepAIC <- function(formula, direction, scope) {
-  if(is.null(scope$lower)) scope$lower <- ~ 1
-  if(is.null(scope$upper)) scope$upper <- formula[-2]
-  formula[-2] <- if(direction == "backward") scope$upper else scope$lower
-  list(formula = formula, scope = scope)
-}

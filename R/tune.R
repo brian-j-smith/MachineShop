@@ -47,7 +47,7 @@ setGeneric("tune", function(object, x, ...) standardGeneric("tune"))
 #' 
 #' (gbmtune <- tune(GBMModel, fo, data = lung,
 #'                  control = CVControl(folds = 10, repeats = 5,
-#'                                      survtimes = c(180, 360, 540)),
+#'                                      surv_times = c(180, 360, 540)),
 #'                  grid = expand.grid(n.trees = c(25, 50, 100),
 #'                                     interaction.depth = 1:3,
 #'                                     n.minobsinnode = c(5, 10))))
@@ -105,7 +105,7 @@ setMethod("tune", c("function", "recipe"),
       apply(2, stat, na.rm = TRUE)
   }
   perf <- as.data.frame(do.call(rbind, perf))
-  metric <- match.indices(metric, names(perf))
+  metric <- match_indices(metric, names(perf))
   selected <- ifelse(maximize, which.max, which.min)(perf[[metric]])
   MLModelTune(models[[selected]], grid = grid,
               resamples = do.call(Resamples, resamples),

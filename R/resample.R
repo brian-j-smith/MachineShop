@@ -37,7 +37,7 @@ setGeneric("resample", function(object, x, ...) standardGeneric("resample"))
 #'                                           pat.karno + meal.cal + wt.loss,
 #'                      data = lung,
 #'                      control = CVControl(folds = 10, repeats = 5,
-#'                                          survtimes = c(180, 360, 540))))
+#'                                          surv_times = c(180, 360, 540))))
 #' summary(gbmperf)
 #' plot(gbmperf)
 #' 
@@ -87,7 +87,7 @@ setMethod(".resample", c("BootControl", "data.frame"),
             .combine = "rbind") %dopar% {
       set.seed(seeds[i])
       trainfit <- fit(model, x[index[[i]], , drop = FALSE])
-      pred <- predict(trainfit, x, type = "prob", times = object@survtimes)
+      pred <- predict(trainfit, x, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
     } %>% Resamples(method = method(object))
   }
@@ -111,7 +111,7 @@ setMethod(".resample", c("BootControl", "recipe"),
       split <- splits[[i]]
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
       trainfit <- fit(model, train)
-      pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
+      pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
     } %>% Resamples(method = method(object))
   }
@@ -135,7 +135,7 @@ setMethod(".resample", c("CVControl", "data.frame"),
       test <- x[-index[[i]], , drop = FALSE]
       trainfit <- fit(model, train)
       obs <- response(test)
-      pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
+      pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
     } %>% Resamples(method = method(object))
   }
@@ -160,7 +160,7 @@ setMethod(".resample", c("CVControl", "recipe"),
       test <- bake(train, newdata = assessment(split))
       trainfit <- fit(model, train)
       obs <- response(formula(train), test)
-      pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
+      pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
     } %>% Resamples(method = method(object))
   }
@@ -185,7 +185,7 @@ setMethod(".resample", c("OOBControl", "data.frame"),
       if(nrow(test) == 0) return(NA)
       trainfit <- fit(model, train)
       obs <- response(test)
-      pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
+      pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
     } %>% Resamples(method = method(object))
   }
@@ -210,7 +210,7 @@ setMethod(".resample", c("OOBControl", "recipe"),
       if(nrow(test) == 0) return(NA)
       trainfit <- fit(model, train)
       obs <- response(formula(train), test)
-      pred <- predict(trainfit, test, type = "prob", times = object@survtimes)
+      pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
     } %>% Resamples(method = method(object))
   }

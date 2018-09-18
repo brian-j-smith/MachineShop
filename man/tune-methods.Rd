@@ -64,7 +64,7 @@ fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
 
 (gbmtune <- tune(GBMModel, fo, data = lung,
                  control = CVControl(folds = 10, repeats = 5,
-                                     survtimes = c(180, 360, 540)),
+                                     surv_times = c(180, 360, 540)),
                  grid = expand.grid(n.trees = c(25, 50, 100),
                                     interaction.depth = 1:3,
                                     n.minobsinnode = c(5, 10))))

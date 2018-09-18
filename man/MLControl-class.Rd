@@ -10,8 +10,8 @@
 \title{Resampling Classes and Methods}
 \usage{
 \S4method{initialize}{MLControl}(.Object, summary = modelmetrics,
-  cutoff = 0.5, index.cutoff = function(sens, spec) sens + spec,
-  survtimes = numeric(), seed = NULL, ...)
+  cutoff = 0.5, cutoff_index = function(sens, spec) sens + spec,
+  surv_times = numeric(), seed = NULL, ...)
 
 BootControl(number = 25, ...)
 
@@ -28,10 +28,10 @@ OOBControl(number = 25, ...)
 for factor outcomes and which expected values are rounded for integer
 outcomes.}
 
-\item{index.cutoff}{function to calculate a desired sensitivity-specificity
+\item{cutoff_index}{function to calculate a desired sensitivity-specificity
 tradeoff.}
 
-\item{survtimes}{numeric vector of follow-up times at which to predict
+\item{surv_times}{numeric vector of follow-up times at which to predict
 survival events.}
 
 \item{seed}{integer to set the seed at the start of resampling.  This is set
@@ -76,10 +76,10 @@ used to predict the unsampled cases.
 for factor outcomes and which expected values are rounded for integer
 outcomes.}
 
-\item{\code{index.cutoff}}{function to calculate a desired sensitivity-specificity
+\item{\code{cutoff_index}}{function to calculate a desired sensitivity-specificity
 tradeoff.}
 
-\item{\code{survtimes}}{numeric vector of follow-up times at which to predict
+\item{\code{surv_times}}{numeric vector of follow-up times at which to predict
 survival events.}
 
 \item{\code{seed}}{integer to set the seed at the start of resampling.}
