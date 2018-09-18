@@ -40,7 +40,7 @@ setMethod("fit", c("MLModel", "data.frame"),
     fo[[2]] <- formula(x)[[2]]
     args <- list(formula = fo, data = x)
     args$weights <- model.weights(x)
-    do.call(object@fit, c(args, object@params))
+    do.call(object@fit, c(args, lapply(object@params, eval, args)))
   }
 )
 
@@ -54,7 +54,7 @@ setMethod("fit", c("MLModel", "formula"),
   function(object, x, data, ...) {
     requireModelNamespaces(object@packages)
     args <- list(formula = x, data = data)
-    do.call(object@fit, c(args, object@params))
+    do.call(object@fit, c(args, lapply(object@params, eval, args)))
   }
 )
 
