@@ -75,7 +75,29 @@ setMethod("modelmetrics", c("factor", "numeric"),
 
 #' @rdname modelmetrics
 #' 
-setMethod("modelmetrics", c("numeric"),
+setMethod("modelmetrics", c("matrix", "matrix"),
+  function(observed, predicted, ...) {
+    stopifnot(ncol(observed) == ncol(predicted))
+    sapply(1:ncol(observed), function(i) {
+      modelmetrics(observed[, i], predicted[, i], ...)
+    }) %>% rowMeans
+  }
+)
+
+
+#' @rdname modelmetrics
+#' 
+setMethod("modelmetrics", c("numeric", "matrix"),
+  function(observed, predicted, ...) {
+    stopifnot(ncol(predicted) == 1)
+    modelmetrics(observed, drop(predicted), ...)
+  }
+)
+
+
+#' @rdname modelmetrics
+#' 
+setMethod("modelmetrics", c("numeric", "numeric"),
   function(observed, predicted, ...) {
     c("R2" =
         1 - sum((observed - predicted)^2) / sum((observed - mean(observed))^2),

@@ -6,7 +6,9 @@
 \alias{modelmetrics,factor,factor-method}
 \alias{modelmetrics,factor,matrix-method}
 \alias{modelmetrics,factor,numeric-method}
-\alias{modelmetrics,numeric,ANY-method}
+\alias{modelmetrics,matrix,matrix-method}
+\alias{modelmetrics,numeric,matrix-method}
+\alias{modelmetrics,numeric,numeric-method}
 \alias{modelmetrics,Surv,matrix-method}
 \alias{modelmetrics,Surv,numeric-method}
 \title{Model Performance Metrices}
@@ -20,7 +22,11 @@ modelmetrics(observed, predicted, ...)
 \S4method{modelmetrics}{factor,numeric}(observed, predicted,
   cutoff = 0.5, cutoff_index = function(sens, spec) sens + spec, ...)
 
-\S4method{modelmetrics}{numeric,ANY}(observed, predicted, ...)
+\S4method{modelmetrics}{matrix,matrix}(observed, predicted, ...)
+
+\S4method{modelmetrics}{numeric,matrix}(observed, predicted, ...)
+
+\S4method{modelmetrics}{numeric,numeric}(observed, predicted, ...)
 
 \S4method{modelmetrics}{Surv,matrix}(observed, predicted, times, ...)
 
