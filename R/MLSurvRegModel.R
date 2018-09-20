@@ -23,7 +23,7 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
         asMLModelFit("SurvRegFit", SurvRegModel(...))
     },
     predict = function(object, newdata, times = numeric(), ...) {
-      object <- asParentFit(object)
+      object <- unMLModelFit(object)
       if(length(times)) {
         pred <- rms::survest(object, newdata = newdata, times = times,
                              conf.int = FALSE)

@@ -40,7 +40,7 @@ GLMModel <- function(family = NULL, control = NULL) {
         asMLModelFit("GLMFit", GLMModel(...))
     },
     predict = function(object, newdata, ...) {
-      predict(asParentFit(object), newdata = newdata, type = "response")
+      predict(unMLModelFit(object), newdata = newdata, type = "response")
     },
     response = function(object, ...) {
       response(object$formula, object$data)

@@ -37,7 +37,7 @@ RandomForestModel <- function(ntree = NULL, mtry = NULL, replace = NULL,
         asMLModelFit("RandomForestFit", RandomForestModel(...))
     },
     predict = function(object, newdata, ...) {
-      predict(asParentFit(object), newdata = newdata,
+      predict(unMLModelFit(object), newdata = newdata,
               type = ifelse(is.factor(response(object)), "prob", "response"))
     },
     response = function(object, ...) {

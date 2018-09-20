@@ -23,7 +23,7 @@ CoxModel <- function(ties = NULL, control = NULL) {
         asMLModelFit("CoxFit", CoxModel(...))
     },
     predict = function(object, newdata, times = numeric(), ...) {
-      object <- asParentFit(object)
+      object <- unMLModelFit(object)
       if(length(times)) {
         rms::survest(object, newdata = newdata, times = times,
                      conf.int = FALSE, se.fit = FALSE)$surv %>% as.matrix

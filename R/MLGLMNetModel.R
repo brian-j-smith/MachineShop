@@ -58,7 +58,7 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
       x <- object$x
       y <- object$y
       fo <- object$formula[-2]
-      object <- asParentFit(object)
+      object <- unMLModelFit(object)
       newmf <- model.frame(fo, newdata, na.action = NULL)
       newx <- model.matrix(fo, newmf)[, -1, drop = FALSE]
       if(is.Surv(y)) {

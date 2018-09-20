@@ -30,7 +30,7 @@ POLRModel <- function(method = NULL) {
         asMLModelFit("POLRFit", POLRModel(...))
     },
     predict = function(object, newdata, ...) {
-      predict(asParentFit(object), newdata = newdata, type = "probs")
+      predict(unMLModelFit(object), newdata = newdata, type = "probs")
     },
     response = function(object, ...) {
       object$model[[1]]

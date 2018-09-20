@@ -49,7 +49,7 @@ NNetModel <- function(size = 1, linout = NULL, entropy = NULL, softmax = NULL,
       asMLModelFit(mfit, "NNetFit", NNetModel(...))
     },
     predict = function(object, newdata, ...) {
-      predict(asParentFit(object), newdata = newdata, type = "raw")
+      predict(unMLModelFit(object), newdata = newdata, type = "raw")
     },
     response = function(object, ...) {
       object$y

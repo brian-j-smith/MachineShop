@@ -42,17 +42,14 @@ asMLModelFit <- function(object, Class, model = NULL) {
 }
 
 
-asParentFit <- function(object) {
+unMLModelFit <- function(object) {
   if(!inherits(object, "MLModelFit")) stop("object not of class MLModelFit")
   if(isS4(object)) {
     classes <- extends(class(object))
-    from <- match("MLModelFit", classes) + 1
-    as(object, classes[from])
+    as(object, classes[match("MLModelFit", classes) + 1])
   } else {
     object[c(".packages", ".predict", ".response", ".varimp")] <- NULL
     classes <- class(object)
-    from <- match("MLModelFit", classes) + 1
-    to <- length(classes)
-    structure(object, class = classes[from:to])
+    structure(object, class = tail(classes, -match("MLModelFit", classes)))
   }
 }

@@ -76,7 +76,7 @@ if(!is.null(weights)) warning("weights are unsupported and will be ignored")
 
 ### predict Function
 
-- Extract any new elements added in the fit function and then recast with `asParentModel` to convert the fit object to its original class.
+- Extract any new elements added in the fit function and then recast with `unMLModelFit` to convert the fit object to its original class.
 
 - The predict function should return a vector or matrix of probabilities for 2-level factors, a matrix for factors with more than 2 levels, a vector or matrix of expected responses if numeric, a matrix of survival probabilities if follow-up times are supplied, or a vector of survival risks if no follow-up times.
 

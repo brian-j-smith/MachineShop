@@ -60,7 +60,7 @@ C50Model <- function(trials = NULL, rules = NULL, subset = NULL, bands = NULL,
       asMLModelFit(mfit, "C50Fit", do.call(C50Model, args))
     },
     predict = function(object, newdata, ...) {
-      predict(asParentFit(object), newdata = newdata, type = "prob")
+      predict(unMLModelFit(object), newdata = newdata, type = "prob")
     },
     response = function(object, ...) {
       object$y

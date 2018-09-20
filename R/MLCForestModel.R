@@ -47,7 +47,7 @@ CForestModel <- function(teststat = NULL, testtype = NULL, mincriterion = NULL,
         asMLModelFit("CForestFit", do.call(CForestModel, args))
     },
     predict = function(object, newdata, times = numeric(), ...) {
-      object <- asParentFit(object)
+      object <- unMLModelFit(object)
       if(object@responses@is_censored) {
         if(length(times)) {
           predict(object, newdata = newdata, type = "prob") %>%

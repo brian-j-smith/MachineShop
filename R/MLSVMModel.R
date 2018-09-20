@@ -45,7 +45,7 @@ SVMModel <- function(scaled = NULL, type = NULL, kernel = NULL, kpar = NULL,
         asMLModelFit("SVMFit", SVMModel(...))
     },
     predict = function(object, newdata, ...) {
-      kernlab::predict(asParentFit(object), newdata = newdata,
+      kernlab::predict(unMLModelFit(object), newdata = newdata,
                        type = ifelse(is.factor(response(object)),
                                      "probabilities", "response"))
     },
