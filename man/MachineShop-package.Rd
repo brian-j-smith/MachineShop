@@ -4,9 +4,9 @@
 \name{MachineShop-package}
 \alias{MachineShop}
 \alias{MachineShop-package}
-\title{MachineShop: MachineShop: Machine Learning Models and Tools}
+\title{MachineShop: Machine Learning Models and Tools}
 \description{
-Meta-package for machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Supports predictive modeling of numerical, categorical, and censored time-to-event outcomes and resample (bootstrap and cross-validation) estimation of model performance.
+Meta-package for statistical and machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Supports predictive modeling of numerical, categorical, and censored time-to-event outcomes and resample (bootstrap and cross-validation) estimation of model performance.
 }
 \details{
 MachineShop provides a common interface to machine learning and statistical

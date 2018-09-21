@@ -29,8 +29,8 @@
 #' }
 #' 
 #' Latter arguments are passed to \code{\link[C50]{C5.0Control}}.
-#' Default values for the \code{NULL} arguments and further model
-#' details can be found in the source link below.
+#' Default values for the \code{NULL} arguments and further model details can be
+#' found in the source link below.
 #' 
 #' @return MLModel class object.
 #' 

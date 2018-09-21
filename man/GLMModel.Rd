@@ -45,11 +45,8 @@ the linear predictor and a description of the error distribution.
 \item{Response Types:}{\code{factor} (two-levels), \code{numeric}}
 }
 
-Default values for the \code{NULL} arguments and further model
-details can be found in the source link below.
-
-Default values for the \code{NULL} arguments and further model
-details can be found in the source links below.
+Default values for the \code{NULL} arguments and further model details can be
+found in the source link below.
 }
 \seealso{
 \code{\link[stats]{glm}}, \code{\link{fit}}, \code{\link{resample}},

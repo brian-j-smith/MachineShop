@@ -85,8 +85,8 @@ classification formulations and the bound-constraint SVM formulations.
 
 Arguments \code{kernel} and \code{kpar} are automatically set by the
 kernel-specific constructor functions.
-Default values for the \code{NULL} arguments and further model
-details can be found in the source link below.
+Default values for the \code{NULL} arguments and further model details can be
+found in the source link below.
 }
 \seealso{
 \code{\link[kernlab]{ksvm}}, \code{\link{fit}},

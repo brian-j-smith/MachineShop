@@ -21,8 +21,8 @@ Fit a logistic or probit regression model to an ordered factor response.
 \item{Response Types:}{\code{ordered}}
 }
 
-Default values for the \code{NULL} arguments and further model
-details can be found in the source link below.
+Default values for the \code{NULL} arguments and further model details can be
+found in the source link below.
 }
 \seealso{
 \code{\link[MASS]{polr}}, \code{\link{fit}}, \code{\link{resample}},

@@ -27,7 +27,7 @@ library(kableExtra)
 
 ## The MachineShop Package
 
-`MachineShop` is a meta-package for machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes and for resample (bootstrap and cross-validation) estimation of model performance.  This vignette introduces the package interface with a survival data analysis example, followed by applications to other types of response variables, supported methods of model specification and data preprocessing, and a list of all currently available models.
+`MachineShop` is a meta-package for statistical and machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes and for resample (bootstrap and cross-validation) estimation of model performance.  This vignette introduces the package interface with a survival data analysis example, followed by applications to other types of response variables, supported methods of model specification and data preprocessing, and a list of all currently available models.
 
 
 ## Model Fitting and Prediction
@@ -93,7 +93,7 @@ BootControl
   : Simple bootstrap resampling.  Models are fit with bootstrap resampled training sets and used to predict the full data set.
 
 CVControl
-  : Repeated K-fold cross-validation.  The full data set is repeatedly partitioned into K-folds.  Within replicates, prediction is performed on each of the K folds with models fit on all remaining folds.
+  : Repeated K-fold cross-validation.  The full data set is repeatedly partitioned into K-folds.  Within a partitioning, prediction is performed on each of the K folds with models fit on all remaining folds.
 
 OOBControl
   : Out-of-bag bootstrap resampling.  Models are fit with bootstrap resampled training sets and used to predict the unsampled cases.

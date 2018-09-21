@@ -14,7 +14,7 @@
 #' @return MLModelFit class object.
 #' 
 #' @seealso  \code{\link{tune}}, \code{\link[stats]{model.frame}},
-#' \code{\link[recipes]{recipe}}, \code{\link{predict}},\code{\link{varimp}}
+#' \code{\link[recipes]{recipe}}, \code{\link{predict}}, \code{\link{varimp}}
 #' 
 #' @examples
 #' ## Survival analysis example

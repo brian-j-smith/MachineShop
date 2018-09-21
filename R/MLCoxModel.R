@@ -8,6 +8,16 @@
 #' @param control object of class \code{\link[survival]{coxph.control}}
 #' specifying iteration limit and other control options.
 #' 
+#' @details
+#' \describe{
+#' \item{Response Types:}{\code{Surv}}
+#' }
+#' 
+#' Default values for the \code{NULL} arguments and further model details can be
+#' found in the source link below.
+#'
+#' @return MLModel class object.
+#' 
 #' @seealso \code{\link[survival]{coxph}}
 #' 
 CoxModel <- function(ties = NULL, control = NULL) {
@@ -56,16 +66,6 @@ CoxModel <- function(ties = NULL, control = NULL) {
 #' \code{stepAIC}. Larger values may give more information on the fitting
 #' process.
 #' @param steps maximum number of steps to be considered.
-#' 
-#' @details
-#' \describe{
-#' \item{Response Types:}{\code{Surv}}
-#' }
-#' 
-#' Default values for the \code{NULL} arguments and further model
-#' details can be found in the source links below.
-#'
-#' @return MLModel class object.
 #' 
 #' @seealso \code{\link[MASS]{stepAIC}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}

@@ -15,8 +15,8 @@
 #' \item{Response Types:}{\code{factor}, \code{numeric}}
 #' }
 #' 
-#' Default values for the \code{NULL} arguments and further model
-#' details can be found in the source link below.
+#' Default values for the \code{NULL} arguments and further model details can be
+#' found in the source link below.
 #' 
 #' @return MLModel class object.
 #' 

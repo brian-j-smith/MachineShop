@@ -80,14 +80,14 @@ setClass("BootControl",
 
 #' \code{CVControl} constructs an MLControl object for repeated K-fold
 #' cross-validation.  In this procedure, the full data set is repeatedly
-#' partitioned into K-folds.  Within replicates, prediction is performed on each
+#' partitioned into K-folds.  Within a partitioning, prediction is performed on each
 #' of the K folds with models fit on all remaining folds.
 #' 
 #' @name CVControl
 #' @rdname MLControl-class
 #' 
 #' @param folds number of cross-validation folds (K).
-#' @param repeats number of cross-validation replicates.
+#' @param repeats number of repeats of the K-fold partitioning.
 #' 
 CVControl <- function(folds = 10, repeats = 1, ...) {
   new("CVControl", folds = folds, repeats = repeats, ...)

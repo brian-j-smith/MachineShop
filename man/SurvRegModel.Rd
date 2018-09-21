@@ -50,8 +50,8 @@ Fits the accelerated failure time family of parametric survival models.
 \item{Response Types:}{\code{Surv}}
 }
 
-Default values for the \code{NULL} arguments and further model
-details can be found in the source links below.
+Default values for the \code{NULL} arguments and further model details can be
+found in the source link below.
 }
 \seealso{
 \code{\link[rms]{psm}}, \code{\link[survival]{survreg}}

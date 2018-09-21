@@ -43,7 +43,7 @@ to a random integer by default (NULL).}
 
 \item{folds}{number of cross-validation folds (K).}
 
-\item{repeats}{number of cross-validation replicates.}
+\item{repeats}{number of repeats of the K-fold partitioning.}
 }
 \value{
 MLControl class object.
@@ -60,7 +60,7 @@ used to predict the full data set.
 
 \code{CVControl} constructs an MLControl object for repeated K-fold
 cross-validation.  In this procedure, the full data set is repeatedly
-partitioned into K-folds.  Within replicates, prediction is performed on each
+partitioned into K-folds.  Within a partitioning, prediction is performed on each
 of the K folds with models fit on all remaining folds.
 
 \code{OOBControl} constructs an MLControl object for out-of-bag bootstrap

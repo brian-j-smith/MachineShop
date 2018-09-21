@@ -71,7 +71,7 @@ if(!is.null(weights)) warning("weights are unsupported and will be ignored")
 
 - Only add elements to the resulting fit object if they are needed and will be used in the `predict`, `response`, or `varimp` functions.
 
-- Return the fit object with a call to `asMLModelFit` and named as `"<Name>Fit"`.
+- Return the fit object as a new inherited class with a call to `asMLModelFit` whose arguments are the object; a name for the new class of the form `"<Name>Fit"`; and the corresponding model object obtained with a call to its constructor with the same model parameters as originally supplied.
 
 
 ### predict Function
@@ -113,8 +113,8 @@ if(!is.null(weights)) warning("weights are unsupported and will be ignored")
 
 - Include the following sentence:
   
-> Default values for the \code{NULL} arguments and further model
-> details can be found in the source link below.
+> Default values for the \code{NULL} arguments and further model details can be
+> found in the source link below.
 
 
 ### Return (Value) Section
@@ -137,7 +137,7 @@ if(!is.null(weights)) warning("weights are unsupported and will be ignored")
 
 - For full compatibility with the `MachineShop` package, model constructors must belong to its namespace.
 
-- This can be accomplished by rebulding the package with source code for a new model added; or by defining a new model constructor, say `CustomModel`, and manually adding it to the namespace as follows.
+- This can be accomplished by rebuilding the package with source code for a new model added; or by defining a new model constructor, say `CustomModel`, and manually adding it to the namespace as follows.
 
 ```{r eval = FALSE}
 environment(CustomModel) <- asNamespace("MachineShop")

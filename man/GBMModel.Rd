@@ -36,8 +36,8 @@ Fits generalized boosted regression models.
 \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
 }
 
-Default values for the \code{NULL} arguments and further model
-details can be found in the source link below.
+Default values for the \code{NULL} arguments and further model details can be
+found in the source link below.
 }
 \seealso{
 \code{\link[gbm]{gbm}}, \code{\link{fit}}, \code{\link{resample}},

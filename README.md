@@ -6,7 +6,7 @@ MachineShop: Machine Learning Models and Tools
 Overview
 --------
 
-`MachineShop` is a meta-package for machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results. Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes, including those listed in the table below, and for resample (bootstrap and cross-validation) estimation of model performance.
+`MachineShop` is a meta-package for statistical and machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results. Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes, including those listed in the table below, and for resample (bootstrap and cross-validation) estimation of model performance.
 
 <table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -225,6 +225,9 @@ Installation
 # Development version from GitHub
 # install.packages("devtools")
 devtools::install_github("brian-j-smith/MachineShop")
+
+# Development version with vignettes
+devtools::install_github("brian-j-smith/MachineShop", build_vignettes = TRUE)
 ```
 
 Example
@@ -252,11 +255,11 @@ gbmfit <- fit(GBMModel(), Species ~ ., data = train)
 
 ## Variable importance
 (vi <- varimp(gbmfit))
-#>                 Overall
-#> Petal.Length 100.000000
-#> Petal.Width   12.700153
-#> Sepal.Width    2.140995
-#> Sepal.Length   0.000000
+#>                  Overall
+#> Petal.Length 100.0000000
+#> Petal.Width   12.9638575
+#> Sepal.Width    0.1409401
+#> Sepal.Length   0.0000000
 
 plot(vi)
 ```
@@ -266,13 +269,13 @@ plot(vi)
 ``` r
 ## Test set predicted probabilities
 predict(gbmfit, newdata = test, type = "prob") %>% head
-#>         setosa versicolor virginica
-#> [1,] 0.4216059  0.2975845 0.2808096
-#> [2,] 0.4216059  0.2975845 0.2808096
-#> [3,] 0.4216059  0.2975845 0.2808096
-#> [4,] 0.4216059  0.2975845 0.2808096
-#> [5,] 0.4219454  0.2958235 0.2822311
-#> [6,] 0.4229810  0.2952935 0.2817254
+#>         setosa   versicolor    virginica
+#> [1,] 0.9999755 2.449128e-05 2.828117e-08
+#> [2,] 0.9999365 6.346918e-05 6.535304e-09
+#> [3,] 0.9999365 6.346918e-05 6.535304e-09
+#> [4,] 0.9999755 2.449128e-05 2.828117e-08
+#> [5,] 0.9998941 1.059313e-04 8.577135e-09
+#> [6,] 0.9999291 7.084465e-05 5.736212e-09
 
 ## Test set predicted classification
 predict(gbmfit, newdata = test) %>% head
@@ -292,11 +295,11 @@ predict(gbmfit, newdata = test) %>% head
 #> resamples: 10
 
 summary(perf)
-#>                    Mean    Median         SD       Min       Max NA
-#> Accuracy      0.9400000 0.9333333 0.04919099 0.8666667 1.0000000  0
-#> Kappa         0.9100000 0.9000000 0.07378648 0.8000000 1.0000000  0
-#> WeightedKappa 0.9330032 0.9249531 0.05424416 0.8500000 1.0000000  0
-#> MLogLoss      0.9225421 0.9232478 0.01008958 0.9087998 0.9379053  0
+#>                    Mean    Median         SD          Min       Max NA
+#> Accuracy      0.9400000 0.9333333 0.04919099 0.8666666667 1.0000000  0
+#> Kappa         0.9100000 0.9000000 0.07378648 0.8000000000 1.0000000  0
+#> WeightedKappa 0.9322889 0.9249531 0.05538903 0.8500000000 1.0000000  0
+#> MLogLoss      0.2624184 0.2301317 0.23719156 0.0008299047 0.5474997  0
 
 plot(perf, metrics = c("Accuracy", "Kappa", "MLogLoss"))
 ```
@@ -307,8 +310,8 @@ plot(perf, metrics = c("Accuracy", "Kappa", "MLogLoss"))
 ## Model tuning
 gbmtune <- tune(GBMModel, Species ~ ., data = df,
                 grid = expand.grid(n.trees = c(25, 50, 100),
-                                    interaction.depth = 1:3,
-                                    n.minobsinnode = c(5, 10)))
+                                   interaction.depth = 1:3,
+                                   n.minobsinnode = c(5, 10)))
 
 plot(gbmtune, type = "line", metrics = c("Accuracy", "Kappa", "MLogLoss"))
 ```
@@ -322,6 +325,10 @@ Once the package is installed, general documentation on its usage can be viewed 
 
 ``` r
 library(MachineShop)
+
+# Package help summary
 ?MachineShop
+
+# Vignette
 RShowDoc("Introduction", package = "MachineShop")
 ```

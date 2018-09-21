@@ -8,6 +8,16 @@
 #' @param control a list of control values, in the format produced by
 #' \code{\link[survival]{survreg.control}}.
 #' 
+#' @details
+#' \describe{
+#' \item{Response Types:}{\code{Surv}}
+#' }
+#' 
+#' Default values for the \code{NULL} arguments and further model details can be
+#' found in the source link below.
+#'
+#' @return MLModel class object.
+#' 
 #' @seealso \code{\link[rms]{psm}}, \code{\link[survival]{survreg}}
 #' 
 SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
@@ -57,16 +67,6 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
 #' \code{stepAIC}. Larger values may give more information on the fitting
 #' process.
 #' @param steps maximum number of steps to be considered.
-#' 
-#' @details
-#' \describe{
-#' \item{Response Types:}{\code{Surv}}
-#' }
-#' 
-#' Default values for the \code{NULL} arguments and further model
-#' details can be found in the source links below.
-#'
-#' @return MLModel class object.
 #' 
 #' @seealso \code{\link[MASS]{stepAIC}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
