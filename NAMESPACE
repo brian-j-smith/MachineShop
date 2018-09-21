@@ -48,7 +48,15 @@ export(MLModel,
        RandomForestModel,
        SurvRegModel,
        SurvRegStepAICModel,
-       SVMModel)
+       SVMModel,
+       SVMANOVAModel,
+       SVMBesselModel,
+       SVMLaplaceModel,
+       SVMLinearModel,
+       SVMPolyModel,
+       SVMRadialModel,
+       SVMSplineModel,
+       SVMTanhModel)
 
 exportClasses(MLModelFit)
 

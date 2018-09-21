@@ -2,11 +2,35 @@
 % Please edit documentation in R/MLSVMModel.R
 \name{SVMModel}
 \alias{SVMModel}
-\title{Support Vector Machine Model}
+\alias{SVMANOVAModel}
+\alias{SVMBesselModel}
+\alias{SVMLaplaceModel}
+\alias{SVMLinearModel}
+\alias{SVMPolyModel}
+\alias{SVMRadialModel}
+\alias{SVMSplineModel}
+\alias{SVMTanhModel}
+\title{Support Vector Machine Models}
 \usage{
 SVMModel(scaled = NULL, type = NULL, kernel = NULL, kpar = NULL,
   C = NULL, nu = NULL, epsilon = NULL, cache = NULL, tol = NULL,
   shrinking = NULL)
+
+SVMANOVAModel(sigma = NULL, degree = NULL, ...)
+
+SVMBesselModel(sigma = NULL, order = NULL, degree = NULL, ...)
+
+SVMLaplaceModel(sigma = NULL, ...)
+
+SVMLinearModel(...)
+
+SVMPolyModel(degree = NULL, scale = NULL, offset = NULL, ...)
+
+SVMRadialModel(sigma = NULL, ...)
+
+SVMSplineModel(...)
+
+SVMTanhModel(scale = NULL, offset = NULL, ...)
 }
 \arguments{
 \item{scaled}{logical vector indicating the variables to be scaled.}
@@ -30,6 +54,21 @@ nu-svr and eps-bsvm.}
 \item{tol}{tolerance of termination criterion.}
 
 \item{shrinking}{whether to use the shrinking-heuristics.}
+
+\item{sigma}{inverse kernel width used by the ANOVA, Bessel, and Laplacian
+kernels.}
+
+\item{degree}{degree of the ANOVA, Bessel, and polynomial kernel functions.}
+
+\item{...}{arguments to be passed to \code{SVMModel}.}
+
+\item{order}{order of the Bessel function to be used as a kernel.}
+
+\item{scale}{scaling parameter of the polynomial and hyperbolic tangent
+kernels as a convenient way of normalizing patterns without the need to
+modify the data itself.}
+
+\item{offset}{offset used in polynomial and hyperbolic tangent kernels.}
 }
 \value{
 MLModel class object.
@@ -44,6 +83,8 @@ classification formulations and the bound-constraint SVM formulations.
 \item{Response Types:}{\code{factor}, \code{numeric}}
 }
 
+Arguments \code{kernel} and \code{kpar} are automatically set by the
+kernel-specific constructor functions.
 Default values for the \code{NULL} arguments and further model
 details can be found in the source link below.
 }

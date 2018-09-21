@@ -1,8 +1,10 @@
-#' Support Vector Machine Model
+#' Support Vector Machine Models
 #' 
 #' Fits the well known C-svc, nu-svc, (classification) one-class-svc (novelty)
 #' eps-svr, nu-svr (regression) formulations along with native multi-class
 #' classification formulations and the bound-constraint SVM formulations.
+#' 
+#' @rdname SVMModel
 #' 
 #' @param scaled logical vector indicating the variables to be scaled.
 #' @param type type of support vector machine.
@@ -22,6 +24,8 @@
 #' \item{Response Types:}{\code{factor}, \code{numeric}}
 #' }
 #' 
+#' Arguments \code{kernel} and \code{kpar} are automatically set by the
+#' kernel-specific constructor functions.
 #' Default values for the \code{NULL} arguments and further model
 #' details can be found in the source link below.
 #' 
@@ -57,4 +61,80 @@ SVMModel <- function(scaled = NULL, type = NULL, kernel = NULL, kpar = NULL,
       }
     }
   )
+}
+
+
+#' @rdname SVMModel
+#' 
+#' @param sigma inverse kernel width used by the ANOVA, Bessel, and Laplacian
+#' kernels.
+#' @param degree degree of the ANOVA, Bessel, and polynomial kernel functions.
+#' @param ... arguments to be passed to \code{SVMModel}.
+#' 
+SVMANOVAModel <- function(sigma = NULL, degree = NULL, ...) {
+  .SVMModel("anovadot", environment(), ...)
+}
+
+
+#' @rdname SVMModel
+#' 
+#' @param order order of the Bessel function to be used as a kernel.
+#' 
+SVMBesselModel <- function(sigma = NULL, order = NULL, degree = NULL, ...) {
+  .SVMModel("besseldot", environment(), ...)
+}
+
+
+#' @rdname SVMModel
+#' 
+SVMLaplaceModel <- function(sigma = NULL, ...) {
+  .SVMModel("laplacedot", environment(), ...)
+}
+
+
+#' @rdname SVMModel
+#' 
+SVMLinearModel <- function(...) {
+  .SVMModel("vanilladot", environment(), ...)
+}
+
+
+#' @rdname SVMModel
+#' 
+#' @param scale scaling parameter of the polynomial and hyperbolic tangent
+#' kernels as a convenient way of normalizing patterns without the need to
+#' modify the data itself.
+#' @param offset offset used in polynomial and hyperbolic tangent kernels.
+#' 
+SVMPolyModel <- function(degree = NULL, scale = NULL, offset = NULL, ...) {
+  .SVMModel("polydot", environment(), ...)
+}
+
+
+#' @rdname SVMModel
+#' 
+SVMRadialModel <- function(sigma = NULL, ...) {
+  .SVMModel("rbfdot", environment(), ...)
+}
+
+
+#' @rdname SVMModel
+#' 
+SVMSplineModel <- function(...) {
+  .SVMModel("splinedot", environment(), ...)
+}
+
+
+#' @rdname SVMModel
+#' 
+SVMTanhModel <- function(scale = NULL, offset = NULL, ...) {
+  .SVMModel("tanhdot", environment(), ...)
+}
+
+
+.SVMModel <- function(kernel, envir, ...) {
+  args <- list(...)
+  args$kernel <- kernel
+  if(length(kpar <- params(envir))) args$kpar <- kpar
+  do.call(SVMModel, args)
 }
