@@ -11,7 +11,7 @@
 \usage{
 \S4method{initialize}{MLControl}(.Object, summary = modelmetrics,
   cutoff = 0.5, cutoff_index = function(sens, spec) sens + spec,
-  surv_times = numeric(), seed = NULL, ...)
+  surv_times = numeric(), na.rm = FALSE, seed = NULL, ...)
 
 BootControl(number = 25, ...)
 
@@ -33,6 +33,9 @@ tradeoff.}
 
 \item{surv_times}{numeric vector of follow-up times at which to predict
 survival events.}
+
+\item{na.rm}{logical indicating whether to remove observed or predicted
+responses that are \code{NA} when calculating model metrics.}
 
 \item{seed}{integer to set the seed at the start of resampling.  This is set
 to a random integer by default (NULL).}
@@ -81,6 +84,9 @@ tradeoff.}
 
 \item{\code{surv_times}}{numeric vector of follow-up times at which to predict
 survival events.}
+
+\item{\code{na.rm}}{logical indicating whether to remove observed or predicted
+responses that are \code{NA} when calculating model metrics.}
 
 \item{\code{seed}}{integer to set the seed at the start of resampling.}
 }}

@@ -13,29 +13,39 @@
 \alias{modelmetrics,Surv,numeric-method}
 \title{Model Performance Metrices}
 \usage{
-modelmetrics(observed, predicted, ...)
+modelmetrics(observed, predicted, na.rm = FALSE, ...)
 
-\S4method{modelmetrics}{factor,factor}(observed, predicted, ...)
+\S4method{modelmetrics}{factor,factor}(observed, predicted,
+  na.rm = FALSE, ...)
 
-\S4method{modelmetrics}{factor,matrix}(observed, predicted, ...)
+\S4method{modelmetrics}{factor,matrix}(observed, predicted,
+  na.rm = FALSE, ...)
 
 \S4method{modelmetrics}{factor,numeric}(observed, predicted,
-  cutoff = 0.5, cutoff_index = function(sens, spec) sens + spec, ...)
+  cutoff = 0.5, cutoff_index = function(sens, spec) sens + spec,
+  na.rm = FALSE, ...)
 
-\S4method{modelmetrics}{matrix,matrix}(observed, predicted, ...)
+\S4method{modelmetrics}{matrix,matrix}(observed, predicted,
+  na.rm = FALSE, ...)
 
-\S4method{modelmetrics}{numeric,matrix}(observed, predicted, ...)
+\S4method{modelmetrics}{numeric,matrix}(observed, predicted,
+  na.rm = FALSE, ...)
 
-\S4method{modelmetrics}{numeric,numeric}(observed, predicted, ...)
+\S4method{modelmetrics}{numeric,numeric}(observed, predicted,
+  na.rm = FALSE, ...)
 
-\S4method{modelmetrics}{Surv,matrix}(observed, predicted, times, ...)
+\S4method{modelmetrics}{Surv,matrix}(observed, predicted, times,
+  na.rm = FALSE, ...)
 
-\S4method{modelmetrics}{Surv,numeric}(observed, predicted, ...)
+\S4method{modelmetrics}{Surv,numeric}(observed, predicted, na.rm = FALSE,
+  ...)
 }
 \arguments{
 \item{observed}{vector of observed responses.}
 
 \item{predicted}{model-predicted responses.}
+
+\item{na.rm}{logical indicating whether to remove \code{NA} values.}
 
 \item{...}{arguments passed to or from other methods.}
 

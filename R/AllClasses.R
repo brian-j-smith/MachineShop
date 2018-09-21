@@ -14,11 +14,13 @@ setOldClass("recipe")
 #' tradeoff.
 #' @slot surv_times numeric vector of follow-up times at which to predict
 #' survival events.
+#' @slot na.rm logical indicating whether to remove observed or predicted
+#' responses that are \code{NA} when calculating model metrics.
 #' @slot seed integer to set the seed at the start of resampling.
 #' 
 setClass("MLControl",
   slots = c(summary = "function", cutoff = "numeric", cutoff_index = "function",
-            surv_times = "numeric", seed = "numeric"),
+            surv_times = "numeric", na.rm = "logical", seed = "numeric"),
   contains = "VIRTUAL"
 )
 
@@ -38,6 +40,8 @@ setClass("MLControl",
 #' tradeoff.
 #' @param surv_times numeric vector of follow-up times at which to predict
 #' survival events.
+#' @param na.rm logical indicating whether to remove observed or predicted
+#' responses that are \code{NA} when calculating model metrics.
 #' @param seed integer to set the seed at the start of resampling.  This is set
 #' to a random integer by default (NULL).
 #' @param ...  arguments to be passed to or from other methods.
@@ -49,11 +53,11 @@ setClass("MLControl",
 setMethod("initialize", "MLControl",
   function(.Object, summary = modelmetrics, cutoff = 0.5,
            cutoff_index = function(sens, spec) sens + spec,
-           surv_times = numeric(), seed = NULL, ...) {
+           surv_times = numeric(), na.rm = FALSE, seed = NULL, ...) {
     if(is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
     callNextMethod(.Object, summary = summary, cutoff = cutoff,
                    cutoff_index = cutoff_index, surv_times = surv_times,
-                   seed = seed, ...)
+                   na.rm = na.rm, seed = seed, ...)
   }
 )
 

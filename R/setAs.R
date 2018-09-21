@@ -17,7 +17,8 @@ setAs("MLControl", "list",
   function(from) {
     list(cutoff = from@cutoff,
          cutoff_index = from@cutoff_index,
-         times = from@surv_times)
+         times = from@surv_times,
+         na.rm = from@na.rm)
   }
 )
 
@@ -52,4 +53,11 @@ unMLModelFit <- function(object) {
     classes <- class(object)
     structure(object, class = tail(classes, -match("MLModelFit", classes)))
   }
+}
+
+
+unAsIs <- function(object) {
+  classes <- class(object)
+  if("AsIs" %in% classes) class(object) <- classes[-match("AsIs", classes)]
+  object
 }
