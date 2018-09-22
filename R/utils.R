@@ -1,3 +1,6 @@
+utils::globalVariables(c("group", "i", "model", "values", "variables", "y"))
+
+
 .onLoad <- function(libname, pkgname) {
   registerDoSEQ()
   invisible()
@@ -18,6 +21,7 @@ basehaz <- function(y, risk, times) {
 field <- function(object, name) {
   if(isS4(object)) slot(object, name) else object[[name]]
 }
+
 
 "field<-" <- function(object, name, value) {
   if(isS4(object)) slot(object, name) <- value else object[[name]] <- value
