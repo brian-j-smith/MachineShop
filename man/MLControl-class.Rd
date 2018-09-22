@@ -13,11 +13,11 @@
   cutoff = 0.5, cutoff_index = function(sens, spec) sens + spec,
   surv_times = numeric(), na.rm = FALSE, seed = NULL, ...)
 
-BootControl(number = 25, ...)
+BootControl(samples = 25, ...)
 
 CVControl(folds = 10, repeats = 1, ...)
 
-OOBControl(number = 25, ...)
+OOBControl(samples = 25, ...)
 }
 \arguments{
 \item{.Object}{class object being initialized.}
@@ -42,7 +42,7 @@ to a random integer by default (NULL).}
 
 \item{...}{arguments to be passed to or from other methods.}
 
-\item{number}{number of bootstrap resamples.}
+\item{samples}{number of bootstrap samples.}
 
 \item{folds}{number of cross-validation folds (K).}
 

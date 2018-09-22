@@ -69,15 +69,15 @@ setMethod("initialize", "MLControl",
 #' @name BootControl
 #' @rdname MLControl-class
 #' 
-#' @param number number of bootstrap resamples.
+#' @param samples number of bootstrap samples.
 #' 
-BootControl <- function(number = 25, ...) {
-  new("BootControl", number = number, ...)
+BootControl <- function(samples = 25, ...) {
+  new("BootControl", samples = samples, ...)
 }
 
 
 setClass("BootControl",
-  slots = c(number = "numeric"),
+  slots = c(samples = "numeric"),
   contains = "MLControl"
 )
 
@@ -111,13 +111,13 @@ setClass("CVControl",
 #' @name OOBControl
 #' @rdname MLControl-class
 #' 
-OOBControl <- function(number = 25, ...) {
-  new("OOBControl", number = number, ...)
+OOBControl <- function(samples = 25, ...) {
+  new("OOBControl", samples = samples, ...)
 }
 
 
 setClass("OOBControl",
-  slots = c(number = "numeric"),
+  slots = c(samples = "numeric"),
   contains = "MLControl"
 )
 

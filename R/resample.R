@@ -78,7 +78,7 @@ setMethod(".resample", c("BootControl", "data.frame"),
     set.seed(object@seed)
     obs <- response(x)
     splits <- bootstraps(data.frame(strata = strata(obs)),
-                         times = object@number,
+                         times = object@samples,
                          strata = "strata") %>% rsample2caret
     index <- splits$index
     seeds <- sample.int(.Machine$integer.max, length(index))
@@ -99,7 +99,7 @@ setMethod(".resample", c("BootControl", "recipe"),
     strataname <- prep(x) %>% formula %>% terms %>% response
     set.seed(object@seed)
     splits <- bootstraps(x$template,
-                         times = object@number,
+                         times = object@samples,
                          strata = strataname)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     test <- juice(prep(x, retain = TRUE))
@@ -171,7 +171,7 @@ setMethod(".resample", c("OOBControl", "data.frame"),
   function(object, x, model) {
     set.seed(object@seed)
     splits <- bootstraps(data.frame(strata = strata(response(x))),
-                         times = object@number,
+                         times = object@samples,
                          strata = "strata") %>% rsample2caret
     index <- splits$index
     indexOut <- splits$indexOut
@@ -197,7 +197,7 @@ setMethod(".resample", c("OOBControl", "recipe"),
     strataname <- prep(x) %>% formula %>% terms %>% response
     set.seed(object@seed)
     splits <- bootstraps(x$template,
-                         times = object@number,
+                         times = object@samples,
                          strata = strataname)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     foreach(i = seq(splits),
