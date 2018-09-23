@@ -6,22 +6,34 @@
 #' @name tune
 #' @rdname tune-methods
 #' 
-#' @param object constructor function for the model.
 #' @param x defined relationship between model predictors and an outcome.  May
 #' be a model.frame (data.frame) containing a formula, data, and optionally case
 #' weights; a formula; or a recipe.
 #' @param ... arguments passed to other methods.
 #' 
-setGeneric("tune", function(object, x, ...) standardGeneric("tune"))
+tune <- function(x, ...) {
+  UseMethod("tune", x)
+}
 
 
 #' @rdname tune-methods
-#' @aliases tune,function,data.frame-method
 #' 
+tune.data.frame <- function(x, model, grid = data.frame(),
+                            control = CVControl(), metric = 1, stat = mean,
+                            maximize = TRUE, ...) {
+  .tune(model, grid, control, metric, stat, maximize, x)
+}
+
+
+#' @rdname tune-methods
+#' 
+#' @param data data frame containing observed predictors and outcomes.
+#' @param model constructor function or character string naming a constructor
+#' function that returns an MLModel object.
+#' @param grid data frame containing parameter values over which to evaluate the
+#' \code{model} constructor function.
 #' @param control \code{\linkS4class{MLControl}} object defining and controlling
 #' the resampling method to be employed.
-#' @param grid data frame containing parameter values over which to evaluate the
-#' \code{object} model function.
 #' @param metric numeric index or character name of the performance metric to
 #' use in selecting the best model.
 #' @param stat function to compute a summary statistic on resampled values of
@@ -45,62 +57,43 @@ setGeneric("tune", function(object, x, ...) standardGeneric("tune"))
 #' fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
 #'                            meal.cal + wt.loss
 #' 
-#' (gbmtune <- tune(GBMModel, fo, data = lung,
-#'                  control = CVControl(folds = 10, repeats = 5,
-#'                                      surv_times = c(180, 360, 540)),
+#' (gbmtune <- tune(fo, data = lung, GBMModel,
 #'                  grid = expand.grid(n.trees = c(25, 50, 100),
 #'                                     interaction.depth = 1:3,
-#'                                     n.minobsinnode = c(5, 10))))
+#'                                     n.minobsinnode = c(5, 10)),
+#'                  control = CVControl(folds = 10, repeats = 5,
+#'                                      surv_times = c(180, 360, 540))))
 #' summary(gbmtune)
 #' plot(gbmtune, type = "line", metrics = c("ROC", "Brier"))
 #' 
-#' gbmfit <- fit(gbmtune, fo, data = lung)
+#' gbmfit <- fit(fo, data = lung, gbmtune)
 #' (vi <- varimp(gbmfit))
 #' plot(vi)
 #' }
 #' 
-setMethod("tune", c("function", "data.frame"),
-  function(object, x, control = CVControl(), grid = data.frame(), metric = 1,
-           stat = mean, maximize = TRUE) {
-    .tune(object, x, control, grid = grid, metric = metric, stat = stat,
-          maximize = maximize)
-  }
-)
+tune.formula <- function(x, data, model, grid = data.frame(),
+                         control = CVControl(), metric = 1, stat = mean,
+                         maximize = TRUE, ...) {
+  .tune(model, grid, control, metric, stat, maximize, x, data)
+}
 
 
 #' @rdname tune-methods
-#' @aliases tune,function,formula-method
 #' 
-#' @param data data frame containing observed predictors and outcomes.
-#' 
-setMethod("tune", c("function", "formula"),
-  function(object, x, data, control = CVControl(), grid = data.frame(),
-           metric = 1, stat = mean, maximize = TRUE) {
-    .tune(object, x, data, control, grid = grid, metric = metric, stat = stat,
-          maximize = maximize)
-  }
-)
+tune.recipe <- function(x, model, grid = data.frame(),
+                        control = CVControl(), metric = 1, stat = mean,
+                        maximize = TRUE, ...) {
+  .tune(model, grid, control, metric, stat, maximize, x)
+}
 
 
-#' @rdname tune-methods
-#' @aliases tune,function,recipe-method
-#' 
-setMethod("tune", c("function", "recipe"),
-  function(object, x, control = CVControl(), grid = data.frame(), metric = 1,
-           stat = mean, maximize = TRUE) {
-    .tune(object, x, control, grid = grid, metric = metric, stat = stat,
-          maximize = maximize)
-  }
-)
-
-
-.tune <- function(object, ..., grid, metric, stat, maximize) {
+.tune <- function(model, grid, control, metric, stat, maximize, ...) {
   models <-list()
   resamples <- list()
   perf <- list()
   for(i in 1:max(1, nrow(grid))) {
-    models[[i]] <- do.call(object, grid[i, , drop = FALSE])
-    resamples[[i]] <- resample(models[[i]], ...)
+    models[[i]] <- do.call(model, grid[i, , drop = FALSE])
+    resamples[[i]] <- resample(..., models[[i]], control)
     perf[[i]] <- resamples[[i]] %>%
       apply(2, stat, na.rm = TRUE)
   }

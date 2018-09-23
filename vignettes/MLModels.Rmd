@@ -25,6 +25,8 @@ knitr::opts_chunk$set(
 
 - Parameters without defaults are required and will trigger an error message if not supplied values when called.
 
+- Ideally, the constructor should produce a valid model if called without any arguments; i.e., not have any required arguments.
+
 - Parameters that use the source package defaults should have `NULL` default values.  Package defaults should typically be used unless there is a compelling reason to change them.
 
 - Set non `NULL` values when the default is changed from the source package.  Instances where this may be desirable are in suppressing trace output or setting a default when the source package does not have one.

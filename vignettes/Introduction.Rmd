@@ -57,7 +57,7 @@ Generalized boosted regression models are a tree-based ensemble method that can 
 
 ```{r}
 ## Fit a generalized boosted model
-gbmfit <- fit(GBMModel(), fo, train)
+gbmfit <- fit(fo, train, GBMModel)
 
 ## Predictor variable importance
 (vi <- varimp(gbmfit))
@@ -119,7 +119,7 @@ Resampling of a single model is performed with the `resample` function applied t
 
 ```{r}
 ## Resample estimation
-(perf <- resample(GBMModel(), fo, lung, control))
+(perf <- resample(fo, lung, GBMModel, control))
 
 summary(perf)
 
@@ -132,9 +132,9 @@ Resampled metrics from different models can be combined for comparison with the 
 
 ```{r}
 ## Resample estimation
-gbmperf1 <- resample(GBMModel(n.trees = 25), fo, lung, control)
-gbmperf2 <- resample(GBMModel(n.trees = 50), fo, lung, control)
-gbmperf3 <- resample(GBMModel(n.trees = 100), fo, lung, control)
+gbmperf1 <- resample(fo, lung, GBMModel(n.trees = 25), control)
+gbmperf2 <- resample(fo, lung, GBMModel(n.trees = 50), control)
+gbmperf3 <- resample(fo, lung, GBMModel(n.trees = 100), control)
 
 ## Combine resamples for comparison
 (perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3))
@@ -166,10 +166,11 @@ Modelling functions may have arguments that define parameters in their model fit
 
 ```{r}
 ## Tune over a grid of model parameters
-(gbmtune <- tune(GBMModel, fo, lung, control,
+(gbmtune <- tune(fo, lung, GBMModel,
                  grid = expand.grid(n.trees = c(25, 50, 100),
                                     interaction.depth = 1:3,
-                                    n.minobsinnode = c(5, 10))))
+                                    n.minobsinnode = c(5, 10)),
+                 control = control))
 
 summary(gbmtune)[, , metrics]
 
@@ -180,7 +181,7 @@ The value returned by `tune` contains an object produced by a call to the modell
 
 ```{r}
 ## Fit the tuned model
-gbmfit <- fit(gbmtune, fo, lung)
+gbmfit <- fit(fo, lung, gbmtune)
 (vi <- varimp(gbmfit))
 
 plot(vi)
@@ -234,7 +235,7 @@ Brier, ROCAUC, and PRAUC are computed directly on predicted class probabilities.
 library(MASS)
 df <- Pima.tr
 df$type <- factor(df$type)
-perf <- resample(GBMModel(), type ~ ., df)
+perf <- resample(type ~ ., df, GBMModel)
 summary(perf)
 ```
 
@@ -258,7 +259,7 @@ MLogLoss is computed directly on predicted class probabilities.  The others are 
 ### Iris flowers species (3 levels)
 df <- iris
 df$Species <- factor(df$Species)
-perf <- resample(GBMModel(), Species ~ ., df)
+perf <- resample(Species ~ ., df, GBMModel)
 summary(perf)
 ```
 
@@ -283,7 +284,7 @@ MAE
 ```{r}
 ### Boston housing prices
 library(MASS)
-perf <- resample(GBMModel(), medv ~ ., Boston)
+perf <- resample(medv ~ ., Boston, GBMModel)
 summary(perf)
 ```
 
@@ -295,7 +296,7 @@ Survival responses should be coded as a `Surv` variable.  In addition to the ROC
 ```{r}
 ## Censored lung cancer survival times
 library(survival)
-perf <- resample(GBMModel(), Surv(time, status) ~ ., lung)
+perf <- resample(Surv(time, status) ~ ., lung, GBMModel)
 summary(perf)
 ```
 
@@ -310,7 +311,7 @@ Models may be specified with the traditional formula and data frame pair, as was
 
 ```{r}
 ## Formula specification
-gbmfit <- fit(GBMModel(), medv ~ ., data = Boston)
+gbmfit <- fit(medv ~ ., data = Boston, GBMModel)
 varimp(gbmfit)
 ```
 
@@ -321,7 +322,7 @@ The second specification is similar to the first, except the formula and data fr
 ```{r}
 ## Model frame specification
 mf <- model.frame(medv ~ ., data = Boston)
-gbmfit <- fit(GBMModel(), mf)
+gbmfit <- fit(mf, GBMModel)
 varimp(gbmfit)
 ```
 
@@ -331,7 +332,7 @@ Another advantage is that case weights can be included in the model frame and wi
 ## Model frame specification with case weights
 mf <- model.frame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
                   data = esoph, weights = ncases + ncontrols)
-gbmfit <- fit(GBMModel(), mf)
+gbmfit <- fit(mf, GBMModel)
 varimp(gbmfit)
 ```
 
@@ -347,7 +348,7 @@ rec <- recipe(medv ~ ., data = Boston) %>%
   step_center(all_predictors()) %>%
   step_scale(all_predictors()) %>%
   step_pca(all_predictors())
-gbmfit <- fit(GBMModel(), rec)
+gbmfit <- fit(rec, GBMModel)
 varimp(gbmfit)
 ```
 

@@ -21,9 +21,9 @@
 #'                            meal.cal + wt.loss
 #' control <- CVControl()
 #' 
-#' gbmperf1 <- resample(GBMModel(n.trees = 25), fo, lung, control)
-#' gbmperf2 <- resample(GBMModel(n.trees = 50), fo, lung, control)
-#' gbmperf3 <- resample(GBMModel(n.trees = 100), fo, lung, control)
+#' gbmperf1 <- resample(fo, lung, GBMModel(n.trees = 25), control)
+#' gbmperf2 <- resample(fo, lung, GBMModel(n.trees = 50), control)
+#' gbmperf3 <- resample(fo, lung, GBMModel(n.trees = 100), control)
 #' 
 #' perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
 #' summary(perf)

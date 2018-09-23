@@ -32,10 +32,10 @@ Predict outcomes with a fitted model.
 ## Survival analysis example
 library(survival)
 
-gbmfit <- fit(GBMModel(),
-              Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
+gbmfit <- fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
                                    pat.karno + meal.cal + wt.loss,
-              data = lung)
+              data = lung,
+              GBMModel)
 predict(gbmfit, lung, times = c(180, 360, 540), type = "prob")
 
 }

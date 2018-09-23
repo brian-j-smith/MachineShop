@@ -6,18 +6,28 @@
 #' @name resample
 #' @rdname resample-methods
 #' 
-#' @param object prediction model object.
 #' @param x defined relationship between model predictors and an outcome.  May
 #' be a model.frame (data.frame) containing a formula, data, and optionally case
 #' weights; a formula; or a recipe.
 #' @param ... arguments passed to other methods.
 #' 
-setGeneric("resample", function(object, x, ...) standardGeneric("resample"))
+resample <- function(x, ...) {
+  UseMethod("resample", x)
+}
 
 
 #' @rdname resample-methods
-#' @aliases resample,MLModel,data.frame-method
 #' 
+resample.data.frame <- function(x, model, control = CVControl(), ...) {
+  .resample(control, x, model)
+}
+
+
+#' @rdname resample-methods
+#' 
+#' @param data data frame containing observed predictors and outcomes.
+#' @param model MLModel object, constructor function, or character string
+#' naming a constructor function that returns an MLModel object.
 #' @param control \code{\linkS4class{MLControl}} object defining and controlling
 #' the resampling method to be employed.
 #' 
@@ -32,42 +42,25 @@ setGeneric("resample", function(object, x, ...) standardGeneric("resample"))
 #' ## Survival analysis example
 #' library(survival)
 #' 
-#' (gbmperf <- resample(GBMModel(),
-#'                      Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
+#' (gbmperf <- resample(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
 #'                                           pat.karno + meal.cal + wt.loss,
 #'                      data = lung,
+#'                      GBMModel,
 #'                      control = CVControl(folds = 10, repeats = 5,
 #'                                          surv_times = c(180, 360, 540))))
 #' summary(gbmperf)
 #' plot(gbmperf)
 #' 
-setMethod("resample", c("MLModel", "data.frame"),
-  function(object, x, control = CVControl()) {
-    .resample(control, x, object)
-  }
-)
+resample.formula <- function(x, data, model, control = CVControl(), ...) {
+  resample(model.frame(x, data, na.action = NULL), model, control)
+}
 
 
 #' @rdname resample-methods
-#' @aliases resample,MLModel,formula-method
 #' 
-#' @param data data frame containing observed predictors and outcomes.
-#' 
-setMethod("resample", c("MLModel", "formula"),
-  function(object, x, data, control = CVControl()) {
-    resample(object, model.frame(x, data, na.action = NULL), control)
-  }
-)
-
-
-#' @rdname resample-methods
-#' @aliases resample,MLModel,recipe-method
-#' 
-setMethod("resample", c("MLModel", "recipe"),
-  function(object, x, control = CVControl()) {
-    .resample(control, x, object)
-  }
-)
+resample.recipe <- function(x, model, control = CVControl(), ...) {
+  .resample(control, x, model)
+}
 
 
 setGeneric(".resample", function(object, x, ...) standardGeneric(".resample"))
@@ -86,7 +79,7 @@ setMethod(".resample", c("BootControl", "data.frame"),
             .packages = c("MachineShop", "survival"),
             .combine = "rbind") %dopar% {
       set.seed(seeds[i])
-      trainfit <- fit(model, x[index[[i]], , drop = FALSE])
+      trainfit <- fit(x[index[[i]], , drop = FALSE], model)
       pred <- predict(trainfit, x, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
     } %>% Resamples(method = method(object))
@@ -110,7 +103,7 @@ setMethod(".resample", c("BootControl", "recipe"),
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
-      trainfit <- fit(model, train)
+      trainfit <- fit(train, model)
       pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
     } %>% Resamples(method = method(object))
@@ -133,7 +126,7 @@ setMethod(".resample", c("CVControl", "data.frame"),
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
       test <- x[-index[[i]], , drop = FALSE]
-      trainfit <- fit(model, train)
+      trainfit <- fit(train, model)
       obs <- response(test)
       pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
@@ -158,7 +151,7 @@ setMethod(".resample", c("CVControl", "recipe"),
       split <- splits[[i]]
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
       test <- bake(train, newdata = assessment(split))
-      trainfit <- fit(model, train)
+      trainfit <- fit(train, model)
       obs <- response(formula(train), test)
       pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
@@ -183,7 +176,7 @@ setMethod(".resample", c("OOBControl", "data.frame"),
       train <- x[index[[i]], , drop = FALSE]
       test <- x[indexOut[[i]], , drop = FALSE]
       if(nrow(test) == 0) return(NA)
-      trainfit <- fit(model, train)
+      trainfit <- fit(train, model)
       obs <- response(test)
       pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
@@ -208,7 +201,7 @@ setMethod(".resample", c("OOBControl", "recipe"),
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
       test <- bake(train, newdata = assessment(split))
       if(nrow(test) == 0) return(NA)
-      trainfit <- fit(model, train)
+      trainfit <- fit(train, model)
       obs <- response(formula(train), test)
       pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
