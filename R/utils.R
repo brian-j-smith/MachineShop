@@ -29,6 +29,14 @@ field <- function(object, name) {
 }
 
 
+getMLObject <- function(x, class) {
+  if(is.character(x)) x <- get(x, mode = "function")
+  if(is.function(x)) x <- x()
+  if(!is(x, class)) stop("object not of class ", class)
+  x
+}
+
+
 match_indices <- function(indices, choices) {
   lookup <- structure(seq(choices), names = choices)
   indices <- na.omit(names(lookup)[lookup[indices]])

@@ -10,15 +10,15 @@
 tune(x, ...)
 
 \method{tune}{data.frame}(x, model, grid = data.frame(),
-  control = CVControl(), metric = 1, stat = mean, maximize = TRUE,
+  control = CVControl, metric = 1, stat = mean, maximize = TRUE,
   ...)
 
 \method{tune}{formula}(x, data, model, grid = data.frame(),
-  control = CVControl(), metric = 1, stat = mean, maximize = TRUE,
+  control = CVControl, metric = 1, stat = mean, maximize = TRUE,
   ...)
 
 \method{tune}{recipe}(x, model, grid = data.frame(),
-  control = CVControl(), metric = 1, stat = mean, maximize = TRUE,
+  control = CVControl, metric = 1, stat = mean, maximize = TRUE,
   ...)
 }
 \arguments{
@@ -34,8 +34,9 @@ function that returns an MLModel object.}
 \item{grid}{data frame containing parameter values over which to evaluate the
 \code{model} constructor function.}
 
-\item{control}{\code{\linkS4class{MLControl}} object defining and controlling
-the resampling method to be employed.}
+\item{control}{\code{\linkS4class{MLControl}} object, control function, or
+character string naming a control function defining the resampling method to
+be employed.}
 
 \item{metric}{numeric index or character name of the performance metric to
 use in selecting the best model.}

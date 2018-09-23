@@ -18,8 +18,8 @@ resample <- function(x, ...) {
 
 #' @rdname resample-methods
 #' 
-resample.data.frame <- function(x, model, control = CVControl(), ...) {
-  .resample(control, x, model)
+resample.data.frame <- function(x, model, control = CVControl, ...) {
+  .resample(getMLObject(control, "MLControl"), x, model)
 }
 
 
@@ -28,8 +28,9 @@ resample.data.frame <- function(x, model, control = CVControl(), ...) {
 #' @param data data frame containing observed predictors and outcomes.
 #' @param model MLModel object, constructor function, or character string
 #' naming a constructor function that returns an MLModel object.
-#' @param control \code{\linkS4class{MLControl}} object defining and controlling
-#' the resampling method to be employed.
+#' @param control \code{\linkS4class{MLControl}} object, control function, or
+#' character string naming a control function defining the resampling method to
+#' be employed.
 #' 
 #' @return Resamples class object.
 #' 
@@ -51,15 +52,15 @@ resample.data.frame <- function(x, model, control = CVControl(), ...) {
 #' summary(gbmperf)
 #' plot(gbmperf)
 #' 
-resample.formula <- function(x, data, model, control = CVControl(), ...) {
+resample.formula <- function(x, data, model, control = CVControl, ...) {
   resample(model.frame(x, data, na.action = NULL), model, control)
 }
 
 
 #' @rdname resample-methods
 #' 
-resample.recipe <- function(x, model, control = CVControl(), ...) {
-  .resample(control, x, model)
+resample.recipe <- function(x, model, control = CVControl, ...) {
+  .resample(getMLObject(control, "MLControl"), x, model)
 }
 
 

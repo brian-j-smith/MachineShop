@@ -19,7 +19,7 @@ tune <- function(x, ...) {
 #' @rdname tune-methods
 #' 
 tune.data.frame <- function(x, model, grid = data.frame(),
-                            control = CVControl(), metric = 1, stat = mean,
+                            control = CVControl, metric = 1, stat = mean,
                             maximize = TRUE, ...) {
   .tune(model, grid, control, metric, stat, maximize, x)
 }
@@ -32,8 +32,9 @@ tune.data.frame <- function(x, model, grid = data.frame(),
 #' function that returns an MLModel object.
 #' @param grid data frame containing parameter values over which to evaluate the
 #' \code{model} constructor function.
-#' @param control \code{\linkS4class{MLControl}} object defining and controlling
-#' the resampling method to be employed.
+#' @param control \code{\linkS4class{MLControl}} object, control function, or
+#' character string naming a control function defining the resampling method to
+#' be employed.
 #' @param metric numeric index or character name of the performance metric to
 #' use in selecting the best model.
 #' @param stat function to compute a summary statistic on resampled values of
@@ -72,7 +73,7 @@ tune.data.frame <- function(x, model, grid = data.frame(),
 #' }
 #' 
 tune.formula <- function(x, data, model, grid = data.frame(),
-                         control = CVControl(), metric = 1, stat = mean,
+                         control = CVControl, metric = 1, stat = mean,
                          maximize = TRUE, ...) {
   .tune(model, grid, control, metric, stat, maximize, x, data)
 }
@@ -81,7 +82,7 @@ tune.formula <- function(x, data, model, grid = data.frame(),
 #' @rdname tune-methods
 #' 
 tune.recipe <- function(x, model, grid = data.frame(),
-                        control = CVControl(), metric = 1, stat = mean,
+                        control = CVControl, metric = 1, stat = mean,
                         maximize = TRUE, ...) {
   .tune(model, grid, control, metric, stat, maximize, x)
 }

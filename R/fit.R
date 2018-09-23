@@ -18,12 +18,8 @@ fit <- function(x, ...) {
 #' @rdname fit-methods
 #' 
 fit.data.frame <- function(x, model, ...) {
-  if(is.character(model)) model <- get(model)
-  if(is.function(model)) model <- model()
-  stopifnot(is(model, "MLModel"))
-  
+  model <- getMLObject(model, "MLModel")
   requireModelNamespaces(model@packages)
-  
   fo <- formula(terms(x))
   fo[[2]] <- formula(x)[[2]]
   weights <- model.weights(x)

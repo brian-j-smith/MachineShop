@@ -9,11 +9,11 @@
 \usage{
 resample(x, ...)
 
-\method{resample}{data.frame}(x, model, control = CVControl(), ...)
+\method{resample}{data.frame}(x, model, control = CVControl, ...)
 
-\method{resample}{formula}(x, data, model, control = CVControl(), ...)
+\method{resample}{formula}(x, data, model, control = CVControl, ...)
 
-\method{resample}{recipe}(x, model, control = CVControl(), ...)
+\method{resample}{recipe}(x, model, control = CVControl, ...)
 }
 \arguments{
 \item{x}{defined relationship between model predictors and an outcome.  May
@@ -25,8 +25,9 @@ weights; a formula; or a recipe.}
 \item{model}{MLModel object, constructor function, or character string
 naming a constructor function that returns an MLModel object.}
 
-\item{control}{\code{\linkS4class{MLControl}} object defining and controlling
-the resampling method to be employed.}
+\item{control}{\code{\linkS4class{MLControl}} object, control function, or
+character string naming a control function defining the resampling method to
+be employed.}
 
 \item{data}{data frame containing observed predictors and outcomes.}
 }
