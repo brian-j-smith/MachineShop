@@ -27,7 +27,7 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
     packages = "rms",
     types = "Surv",
     params = params(environment()),
-    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+    fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       rms::psm(formula, data = data, weights = weights, ...) %>%
         asMLModelFit("SurvRegFit", SurvRegModel(...))
@@ -79,7 +79,7 @@ SurvRegStepAICModel <- function(dist = NULL, scale = NULL, parms = NULL,
     packages = c("MASS", "rms"),
     types = "Surv",
     params = params(environment()),
-    fit = function(formula, data, weights = rep(1, nrow(data)),
+    fit = function(formula, data, weights,
                    direction = c("both", "backward", "forward"), scope = list(),
                    k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()

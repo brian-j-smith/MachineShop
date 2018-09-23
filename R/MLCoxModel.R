@@ -26,7 +26,7 @@ CoxModel <- function(ties = NULL, control = NULL) {
     packages = "rms",
     types = "Surv",
     params = params(environment()),
-    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+    fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       rms::cph(formula, data = data, weights = weights, singular.ok = TRUE,
                surv = TRUE, y = TRUE, ...) %>%
@@ -78,7 +78,7 @@ CoxStepAICModel <- function(ties = NULL, control = NULL, direction = NULL,
     packages = c("MASS", "rms"),
     types = "Surv",
     params = params(environment()),
-    fit = function(formula, data, weights = rep(1, nrow(data)),
+    fit = function(formula, data, weights,
                    direction = c("both", "backward", "forward"), scope = list(),
                    k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()

@@ -24,7 +24,7 @@ POLRModel <- function(method = NULL) {
     packages = "MASS",
     types = "ordered",
     params = params(environment()),
-    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+    fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       MASS::polr(formula, data = data, weights = weights, Hess = TRUE, ...) %>%
         asMLModelFit("POLRFit", POLRModel(...))

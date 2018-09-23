@@ -53,7 +53,7 @@ C50Model <- function(trials = NULL, rules = NULL, subset = NULL, bands = NULL,
     packages = "C50",
     types = "factor",
     params = params,
-    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+    fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       mfit <- C50::C5.0(formula, data = data, weights = weights, ...)
       mfit$y <- response(formula, data)

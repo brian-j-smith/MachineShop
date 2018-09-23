@@ -42,7 +42,7 @@ NNetModel <- function(size = 1, linout = NULL, entropy = NULL, softmax = NULL,
     packages = "nnet",
     types = c("factor", "numeric"),
     params = params(environment()),
-    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+    fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       mfit <- nnet::nnet(formula, data = data, weights = weights, ...)
       mfit$y <- response(formula, data)

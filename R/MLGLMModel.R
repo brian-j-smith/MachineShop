@@ -26,7 +26,7 @@ GLMModel <- function(family = NULL, control = NULL) {
     packages = "stats",
     types = c("factor", "numeric"),
     params = params(environment()),
-    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+    fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       args <- list(...)
       family <- args$family
@@ -78,7 +78,7 @@ GLMStepAICModel <- function(family = NULL, control = NULL, direction = NULL,
     packages = c("MASS", "stats"),
     types = c("factor", "numeric"),
     params = params(environment()),
-    fit = function(formula, data, weights = rep(1, nrow(data)),
+    fit = function(formula, data, weights,
                    direction = c("both", "backward", "forward"), scope = list(),
                    k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()

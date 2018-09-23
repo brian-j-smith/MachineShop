@@ -35,7 +35,7 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
     packages = "glmnet",
     types = c("factor", "numeric", "Surv"),
     params = params(environment()),
-    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+    fit = function(formula, data, weights, ...) {
       mf <- model.frame(formula, data, na.action = NULL)
       x <- model.matrix(formula, mf)[, -1, drop = FALSE]
       y <- model.response(mf)

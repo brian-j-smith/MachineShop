@@ -30,8 +30,8 @@ RandomForestModel <- function(ntree = NULL, mtry = NULL, replace = NULL,
     packages = "randomForest",
     types = c("factor", "numeric"),
     params = params(environment()),
-    fit = function(formula, data, weights = NULL, ...) {
-      if(!is.null(weights)) warning("weights are unsupported and will be ignored")
+    fit = function(formula, data, weights, ...) {
+      if(!all(weights == 1)) warning("weights are unsupported and will be ignored")
       environment(formula) <- environment()
       randomForest::randomForest(formula, data = data, ...) %>%
         asMLModelFit("RandomForestFit", RandomForestModel(...))

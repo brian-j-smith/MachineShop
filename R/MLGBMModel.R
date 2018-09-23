@@ -34,7 +34,7 @@ GBMModel <- function(distribution = NULL, n.trees = NULL,
     packages = "gbm",
     types = c("factor", "numeric", "Surv"),
     params = params(environment()),
-    fit = function(formula, data, weights = rep(1, nrow(data)), ...) {
+    fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       args <- list(...)
       distribution <- args$distribution
