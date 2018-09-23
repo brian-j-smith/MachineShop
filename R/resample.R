@@ -55,7 +55,7 @@ setMethod("resample", c("MLModel", "data.frame"),
 #' 
 setMethod("resample", c("MLModel", "formula"),
   function(object, x, data, control = CVControl()) {
-    .resample(control, model.frame(x, data), object)
+    resample(object, model.frame(x, data, na.action = NULL), control)
   }
 )
 
