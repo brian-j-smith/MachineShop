@@ -19,6 +19,12 @@ fit <- function(x, ...) {
 #' 
 fit.data.frame <- function(x, model, ...) {
   model <- getMLObject(model, "MLModel")
+  
+  y <- response(x)
+  if(!any(sapply(model@types, function(type) is(y, type)))) {
+    stop("invalid response type '", class(y)[1], "' for ", model@name)
+  }
+  
   requireModelNamespaces(model@packages)
   fo <- formula(terms(x))
   fo[[2]] <- formula(x)[[2]]
