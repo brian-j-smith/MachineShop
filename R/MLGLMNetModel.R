@@ -41,7 +41,7 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
       y <- model.response(mf)
       args <- list(...)
       family <- args$family
-      if(is.null(family)) {
+      if (is.null(family)) {
         family <- switch_class(y,
                                "factor" = "multinomial",
                                "numeric" = "gaussian",
@@ -61,8 +61,8 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
       object <- unMLModelFit(object)
       newmf <- model.frame(fo, newdata, na.action = NULL)
       newx <- model.matrix(fo, newmf)[, -1, drop = FALSE]
-      if(is.Surv(y)) {
-        if(length(times)) {
+      if (is.Surv(y)) {
+        if (length(times)) {
           lp <- predict(object, newx = x, type = "link") %>% drop
           newlp <- predict(object, newx = newx, type = "link") %>% drop
           cumhaz <- basehaz(y, exp(lp), times)
@@ -80,7 +80,7 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
     varimp = function(object, ...) {
       convert <- function(x) drop(as.matrix(x))
       beta <- object$beta
-      if(is.list(beta)) as.data.frame(lapply(beta, convert)) else convert(beta)
+      if (is.list(beta)) as.data.frame(lapply(beta, convert)) else convert(beta)
     }
   )
 }

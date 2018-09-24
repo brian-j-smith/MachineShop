@@ -22,9 +22,9 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
                                       "violin"), ...) {
   resamples <- x@resamples
   type <- match.arg(type)
-  if(type == "line") {
+  if (type == "line") {
     grid <- x@grid
-    if(any(dim(grid) == 0)) stop("no tuning parameters to plot")
+    if (any(dim(grid) == 0)) stop("no tuning parameters to plot")
     stats <- as.data.frame.table(apply(resamples, c(3, 2), stat, na.rm = TRUE))
     df <- data.frame(
       x = grid[[1]],
@@ -33,7 +33,7 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
     )
     
     metriclevels <- levels(df$metric)
-    if(is.null(metrics)) {
+    if (is.null(metrics)) {
       metrics <- metriclevels
     } else {
       metrics <- match_indices(metrics, metriclevels)
@@ -41,7 +41,7 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
     }
     df$metric <- factor(df$metric, metrics)
     
-    mapping <- if(ncol(grid) > 1) {
+    mapping <- if (ncol(grid) > 1) {
       df$group <- do.call(interaction, grid[-1])
       aes(x, y, color = group, shape = group)
     } else {
@@ -52,7 +52,7 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
       geom_point() +
       labs(x = names(grid)[1], y = "Values", color = "Params Group",
            shape = "Params Group")
-    if(nlevels(df$metric) > 1) p <- p + facet_wrap(~ metric, scales = "free")
+    if (nlevels(df$metric) > 1) p <- p + facet_wrap(~ metric, scales = "free")
     p
   } else {
     plot(resamples, metrics = metrics, stat = stat, type = type, ...)
@@ -66,12 +66,12 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
                            type = c("boxplot", "density", "errorbar", "violin"),
                            ...) {
   df <- as.data.frame.table(x)
-  if(length(dim(x)) <= 2) df$Var3 <- factor("Model")
+  if (length(dim(x)) <= 2) df$Var3 <- factor("Model")
   orderednames <- match(c("Var1", "Var2", "Var3", "Freq"), names(df))
   names(df)[orderednames] <- c("resample", "metric", "model", "y")
   
   metriclevels <- levels(df$metric)
-  if(is.null(metrics)) {
+  if (is.null(metrics)) {
     metrics <- metriclevels
   } else {
     metrics <- match_indices(metrics, metriclevels)
@@ -102,7 +102,7 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
                 stat_summary(aes(model, y), fun.y = mean, geom = "point") +
                 labs(x = "", y = "Values") +
                 coord_flip())
-  if(nlevels(df$metric) > 1) p <- p + facet_wrap(~ metric, scales = "free")
+  if (nlevels(df$metric) > 1) p <- p + facet_wrap(~ metric, scales = "free")
   p
 }
 
@@ -115,13 +115,13 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
 #' @seealso \code{\link{varimp}}
 #' 
 plot.VarImp <- function(x, n = NULL, ...) {
-  if(!is.null(n)) x <- head(x, n)
+  if (!is.null(n)) x <- head(x, n)
   varnames <- rownames(x)
   df <- cbind(stack(x), variables = factor(varnames, rev(varnames)))
   p <- ggplot(df, aes(variables, values)) +
     geom_bar(stat = "identity") +
     labs(x = "Variables", y = "Importance") +
     coord_flip()
-  if(nlevels(df$ind) > 1) p <- p + facet_wrap(~ ind)
+  if (nlevels(df$ind) > 1) p <- p + facet_wrap(~ ind)
   p
 }

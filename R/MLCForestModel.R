@@ -48,8 +48,8 @@ CForestModel <- function(teststat = NULL, testtype = NULL, mincriterion = NULL,
     },
     predict = function(object, newdata, times = numeric(), ...) {
       object <- unMLModelFit(object)
-      if(object@responses@is_censored) {
-        if(length(times)) {
+      if (object@responses@is_censored) {
+        if (length(times)) {
           predict(object, newdata = newdata, type = "prob") %>%
             lapply(function(fit) predict(fit, times)) %>%
             (function(args) do.call(rbind, args))

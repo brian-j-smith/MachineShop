@@ -34,10 +34,10 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
     },
     predict = function(object, newdata, times = numeric(), ...) {
       object <- unMLModelFit(object)
-      if(length(times)) {
+      if (length(times)) {
         pred <- rms::survest(object, newdata = newdata, times = times,
                              conf.int = FALSE)
-        if(is(pred, "survest.psm")) as.matrix(pred$surv) else pred
+        if (is(pred, "survest.psm")) as.matrix(pred$surv) else pred
       } else {
         exp(predict(object, newdata = newdata, type = "lp"))
       }

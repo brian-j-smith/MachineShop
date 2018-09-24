@@ -30,7 +30,7 @@ GLMModel <- function(family = NULL, control = NULL) {
       environment(formula) <- environment()
       args <- list(...)
       family <- args$family
-      if(is.null(family)) {
+      if (is.null(family)) {
         family <- switch_class(response(formula, data),
                                "factor" = "binomial",
                                "numeric" = "gaussian")
@@ -84,7 +84,7 @@ GLMStepAICModel <- function(family = NULL, control = NULL, direction = NULL,
       environment(formula) <- environment()
       args <- list(...)
       family <- args$family
-      if(is.null(family)) {
+      if (is.null(family)) {
         family <- switch_class(response(formula, data),
                                "factor" = "binomial",
                                "numeric" = "gaussian")

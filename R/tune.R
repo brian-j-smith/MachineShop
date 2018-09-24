@@ -93,7 +93,7 @@ tune.recipe <- function(x, model, grid = data.frame(),
   models <-list()
   resamples <- list()
   perf <- list()
-  for(i in 1:max(1, nrow(grid))) {
+  for (i in 1:max(1, nrow(grid))) {
     models[[i]] <- do.call(model, grid[i, , drop = FALSE])
     resamples[[i]] <- resample(..., models[[i]], control)
     perf[[i]] <- resamples[[i]] %>%

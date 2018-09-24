@@ -24,16 +24,16 @@ setAs("MLControl", "list",
 
 
 asMLModelFit <- function(object, Class, model = NULL) {
-  if(isS4(object)) {
+  if (isS4(object)) {
     object <- as(object, Class)
-    if(!is(object, "MLModelFit")) stop("Class not from MLModelFit")
-  } else if(is.list(object)) {
+    if (!is(object, "MLModelFit")) stop("Class not from MLModelFit")
+  } else if (is.list(object)) {
     class(object) <- c(Class, "MLModelFit", class(object))
   } else {
     stop("unsupported object class")
   }
-  if(!is.null(model)) {
-    if(!is(model, "MLModel")) stop("model not of class MLModel")
+  if (!is.null(model)) {
+    if (!is(model, "MLModel")) stop("model not of class MLModel")
     field(object, ".packages") <- model@packages
     field(object, ".predict") <- model@predict
     field(object, ".response") <- model@response
@@ -44,8 +44,8 @@ asMLModelFit <- function(object, Class, model = NULL) {
 
 
 unMLModelFit <- function(object) {
-  if(!is(object, "MLModelFit")) stop("object not of class MLModelFit")
-  if(isS4(object)) {
+  if (!is(object, "MLModelFit")) stop("object not of class MLModelFit")
+  if (isS4(object)) {
     classes <- extends(class(object))
     as(object, classes[match("MLModelFit", classes) + 1])
   } else {
@@ -58,6 +58,6 @@ unMLModelFit <- function(object) {
 
 unAsIs <- function(object) {
   classes <- class(object)
-  if("AsIs" %in% classes) class(object) <- classes[-match("AsIs", classes)]
+  if ("AsIs" %in% classes) class(object) <- classes[-match("AsIs", classes)]
   object
 }

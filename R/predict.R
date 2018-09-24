@@ -29,9 +29,9 @@
 #' 
 predict.MLModelFit <- function(object, newdata, type = c("response", "prob"),
                                cutoff = 0.5, times = NULL, ...) {
-  if(missing(newdata)) stop("newdata is missing")
+  if (missing(newdata)) stop("newdata is missing")
   pred <- .predict(object, newdata, times = times)
-  if(match.arg(type) == "response") {
+  if (match.arg(type) == "response") {
     pred <- convert(response(object), pred, cutoff = cutoff)
   }
   pred

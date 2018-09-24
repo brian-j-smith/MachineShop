@@ -19,20 +19,20 @@ basehaz <- function(y, risk, times) {
 
 
 field <- function(object, name) {
-  if(isS4(object)) slot(object, name) else object[[name]]
+  if (isS4(object)) slot(object, name) else object[[name]]
 }
 
 
 "field<-" <- function(object, name, value) {
-  if(isS4(object)) slot(object, name) <- value else object[[name]] <- value
+  if (isS4(object)) slot(object, name) <- value else object[[name]] <- value
   object
 }
 
 
 getMLObject <- function(x, class) {
-  if(is.character(x)) x <- get(x, mode = "function")
-  if(is.function(x)) x <- x()
-  if(!is(x, class)) stop("object not of class ", class)
+  if (is.character(x)) x <- get(x, mode = "function")
+  if (is.function(x)) x <- x()
+  if (!is(x, class)) stop("object not of class ", class)
   x
 }
 
@@ -40,7 +40,7 @@ getMLObject <- function(x, class) {
 match_indices <- function(indices, choices) {
   lookup <- structure(seq(choices), names = choices)
   indices <- na.omit(names(lookup)[lookup[indices]])
-  if(length(indices) == 0) {
+  if (length(indices) == 0) {
     indices <- names(lookup)[1]
     warning("specified indices not found; using ", indices, " instead")
   }
@@ -50,24 +50,24 @@ match_indices <- function(indices, choices) {
 
 params <- function(env) {
   x <- as.list(env)
-  missing_args <- names(x)[sapply(x, is.name)]
-  if(length(missing_args)) stop("missing values for required argument(s) ",
-                                toString(missing_args))
+  missing_args <- names(x)[sapply(x, is.symbol)]
+  if (length(missing_args)) stop("missing values for required argument(s) ",
+                                 toString(missing_args))
   x[!sapply(x, is.null)]
 }
 
 
 requireModelNamespaces <- function(packages) {
   pass <- sapply(packages, requireNamespace)
-  if(!all(pass)) stop("install required packages: ", toString(packages[!pass]))
+  if (!all(pass)) stop("install required packages: ", toString(packages[!pass]))
   invisible(pass)
 }
 
 
 stepAIC_args <- function(formula, direction, scope) {
-  if(is.null(scope$lower)) scope$lower <- ~ 1
-  if(is.null(scope$upper)) scope$upper <- formula[-2]
-  formula[-2] <- if(direction == "backward") scope$upper else scope$lower
+  if (is.null(scope$lower)) scope$lower <- ~ 1
+  if (is.null(scope$upper)) scope$upper <- formula[-2]
+  formula[-2] <- if (direction == "backward") scope$upper else scope$lower
   list(formula = formula, scope = scope)
 }
 

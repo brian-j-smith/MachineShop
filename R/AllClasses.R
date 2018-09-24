@@ -54,7 +54,7 @@ setMethod("initialize", "MLControl",
   function(.Object, summary = modelmetrics, cutoff = 0.5,
            cutoff_index = function(sens, spec) sens + spec,
            surv_times = numeric(), na.rm = FALSE, seed = NULL, ...) {
-    if(is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
+    if (is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
     callNextMethod(.Object, summary = summary, cutoff = cutoff,
                    cutoff_index = cutoff_index, surv_times = surv_times,
                    na.rm = na.rm, seed = seed, ...)
@@ -216,35 +216,35 @@ setClass("Resamples",
 setMethod("initialize", "Resamples",
   function(.Object, ..., method = NULL, seed = NULL) {
     args <- list(...)
-    if(length(args) == 0) stop("no values given")
+    if (length(args) == 0) stop("no values given")
     .Data <- args[[1]]
-    if(length(args) == 1) {
-      if(is(.Data, "Resamples")) {
+    if (length(args) == 1) {
+      if (is(.Data, "Resamples")) {
         method <- .Data@method
         seed <- .Data@seed
-      } else if(is.data.frame(.Data)) {
+      } else if (is.data.frame(.Data)) {
         .Data <- as.matrix(.Data)
       }
     } else {
-      if(!all(sapply(args, function(x) is(x, "Resamples") && is.matrix(x)))) {
+      if (!all(sapply(args, function(x) is(x, "Resamples") && is.matrix(x)))) {
         stop("values to combine must be 2 dimensional Resamples objects")
       }
-      if(!all(sapply(args, slot, name = "method") == .Data@method)) {
+      if (!all(sapply(args, slot, name = "method") == .Data@method)) {
         stop("resamples use different methods")
       }
-      if(!all(sapply(args, slot, name = "seed") == .Data@seed)) {
+      if (!all(sapply(args, slot, name = "seed") == .Data@seed)) {
         stop("resamples use different seeds")
       }
-      if(!all(sapply(args, colnames) == colnames(.Data))) {
+      if (!all(sapply(args, colnames) == colnames(.Data))) {
         stop("resamples contain different metrics")
       }
-      if(!all(sapply(args, nrow) == nrow(.Data))) {
+      if (!all(sapply(args, nrow) == nrow(.Data))) {
         stop("resamples have different numbers of evaluations")
       }
       method <- .Data@method
       seed <- .Data@seed
       modelnames <- names(args)
-      if(is.null(modelnames)) modelnames <- paste0("Model", seq(args))
+      if (is.null(modelnames)) modelnames <- paste0("Model", seq(args))
       names(args) <- NULL
       args$along <- 3
       args$new.names <- list(1:nrow(.Data), NULL, modelnames)
@@ -290,7 +290,7 @@ setMethod("initialize", "VarImp",
     idx <- order(rowSums(.Data), decreasing = TRUE)
     idx <- idx * (rownames(.Data)[idx] != "(Intercept)")
     .Data <- .Data[idx, , drop = FALSE]
-    if(scale) .Data <- 100 * (.Data - min(.Data)) / diff(range(.Data))
+    if (scale) .Data <- 100 * (.Data - min(.Data)) / diff(range(.Data))
     callNextMethod(.Object, .Data, ...)
   }
 )

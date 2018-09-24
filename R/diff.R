@@ -42,7 +42,7 @@ diff.MLModelTune <- function(x, ...) {
 #' @rdname diff-methods
 #' 
 diff.Resamples <- function(x, ...) {
-  if(length(dim(x)) <= 2) stop("more than one model needed to diff")
+  if (length(dim(x)) <= 2) stop("more than one model needed to diff")
   indices <- combn(dim(x)[3], 2)
   indices1 <- indices[1,]
   indices2 <- indices[2,]

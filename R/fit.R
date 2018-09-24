@@ -21,7 +21,7 @@ fit.data.frame <- function(x, model, ...) {
   model <- getMLObject(model, "MLModel")
   
   y <- response(x)
-  if(!any(sapply(model@types, function(type) is(y, type)))) {
+  if (!any(sapply(model@types, function(type) is(y, type)))) {
     stop("invalid response type '", class(y)[1], "' for ", model@name)
   }
   
@@ -29,7 +29,7 @@ fit.data.frame <- function(x, model, ...) {
   fo <- formula(terms(x))
   fo[[2]] <- formula(x)[[2]]
   weights <- model.weights(x)
-  if(is.null(weights)) weights <- rep(1, nrow(x))
+  if (is.null(weights)) weights <- rep(1, nrow(x))
   params <- lapply(model@params, eval,
                    list(formula = fo, data = x, weights = weights))
   do.call(model@fit, c(list(fo, x, weights), params))

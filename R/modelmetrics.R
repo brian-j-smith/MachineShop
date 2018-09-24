@@ -12,7 +12,7 @@
 #' @seealso \code{\link{predict}}, \code{\linkS4class{MLControl}}
 #' 
 setGeneric("modelmetrics", function(observed, predicted, na.rm = FALSE, ...) {
-  if(na.rm) {
+  if (na.rm) {
     df <- data.frame(
       observed = I(observed),
       predicted = I(predicted)
@@ -31,7 +31,7 @@ setMethod("modelmetrics", c("factor", "factor"),
     ratings <- cbind(observed, predicted)
     metrics <- c("Accuracy" = 1 - ce(observed, predicted),
                  "Kappa" = kappa2(ratings, weight = "unweighted")$value)
-    if(is.ordered(observed)) {
+    if (is.ordered(observed)) {
       metrics["WeightedKappa"] <- kappa2(ratings, weight = "equal")$value
     }
     metrics
@@ -43,7 +43,7 @@ setMethod("modelmetrics", c("factor", "factor"),
 #' 
 setMethod("modelmetrics", c("factor", "matrix"),
   function(observed, predicted, ...) {
-    if(nlevels(observed) > 2) {
+    if (nlevels(observed) > 2) {
       c(modelmetrics(observed, convert(observed, predicted), ...),
         "MLogLoss" = multinomLogLoss(observed, predicted))
     } else {
@@ -121,11 +121,11 @@ setMethod("modelmetrics", c("Surv", "matrix"),
   function(observed, predicted, times, na.rm = FALSE, ...) {
     ntimes <- length(times)
     roc <- brier <- rep(NA, ntimes)
-    for(i in 1:ntimes) {
+    for (i in 1:ntimes) {
       roc[i] <- rocSurv(observed, predicted[, i], times[i])
       brier[i] <- brierSurv(observed, predicted[, i], times[i])
     }
-    if(ntimes > 1) {
+    if (ntimes > 1) {
       data.frame(
         "ROC" = meanSurvMetric(roc, times),
         "Brier" = meanSurvMetric(brier, times),
@@ -166,7 +166,7 @@ meanSurvMetric <- function(x, times) {
 
 
 multinomLogLoss <- function(observed, predicted) {
-  if(!is.matrix(observed)) observed <- model.matrix(~ observed - 1)
+  if (!is.matrix(observed)) observed <- model.matrix(~ observed - 1)
   eps <- 1e-15
   predicted <- pmax(pmin(predicted, 1 - eps), eps)
   -sum(observed * log(predicted)) / nrow(predicted)

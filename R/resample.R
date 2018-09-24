@@ -176,7 +176,7 @@ setMethod(".resample", c("OOBControl", "data.frame"),
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
       test <- x[indexOut[[i]], , drop = FALSE]
-      if(nrow(test) == 0) return(NA)
+      if (nrow(test) == 0) return(NA)
       trainfit <- fit(train, model)
       obs <- response(test)
       pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
@@ -201,7 +201,7 @@ setMethod(".resample", c("OOBControl", "recipe"),
       split <- splits[[i]]
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
       test <- bake(train, newdata = assessment(split))
-      if(nrow(test) == 0) return(NA)
+      if (nrow(test) == 0) return(NA)
       trainfit <- fit(train, model)
       obs <- response(formula(train), test)
       pred <- predict(trainfit, test, type = "prob", times = object@surv_times)

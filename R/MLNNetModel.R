@@ -67,7 +67,7 @@ NNetModel <- function(size = 1, linout = NULL, entropy = NULL, softmax = NULL,
       i2h <- matrix(beta[match(labels, nms)], size, nvars)
       
       idx <- expand.grid(hidden = 1:size,
-                         output = if(nresp == 1) "" else 1:nresp)
+                         output = if (nresp == 1) "" else 1:nresp)
       labels <- paste0("h", idx$hidden, "->o", idx$output)
       h2o <- matrix(beta[match(labels, nms)], size, nresp)
       

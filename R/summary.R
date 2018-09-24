@@ -46,7 +46,7 @@ summary.Resamples <- function(object,
   }
   margins <- 2
   perm <- c(2, 1)
-  if(length(dim(object)) > 2) {
+  if (length(dim(object)) > 2) {
     margins <- c(3, margins)
     perm <- c(perm, 3)
   }

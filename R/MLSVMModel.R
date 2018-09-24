@@ -43,7 +43,7 @@ SVMModel <- function(scaled = NULL, type = NULL, kernel = NULL, kpar = NULL,
     types = c("factor", "numeric"),
     params = params(environment()),
     fit = function(formula, data, weights, ...) {
-      if(!all(weights == 1)) warning("weights are unsupported and will be ignored")
+      if (!all(weights == 1)) warning("weights are unsupported and will be ignored")
       environment(formula) <- environment()
       kernlab::ksvm(formula, data = data, prob.model = TRUE, ...) %>%
         asMLModelFit("SVMFit", SVMModel(...))
@@ -54,7 +54,7 @@ SVMModel <- function(scaled = NULL, type = NULL, kernel = NULL, kpar = NULL,
                                      "probabilities", "response"))
     },
     response = function(object, ...) {
-      if(is.character(object@lev)) {
+      if (is.character(object@lev)) {
         factor(object@ymatrix, levels = 1:object@nclass, labels = object@lev)
       } else {
         object@ymatrix
@@ -135,6 +135,6 @@ SVMTanhModel <- function(scale = NULL, offset = NULL, ...) {
 .SVMModel <- function(kernel, envir, ...) {
   args <- list(...)
   args$kernel <- kernel
-  if(length(kpar <- params(envir))) args$kpar <- kpar
+  if (length(kpar <- params(envir))) args$kpar <- kpar
   do.call(SVMModel, args)
 }

@@ -38,7 +38,7 @@ GBMModel <- function(distribution = NULL, n.trees = NULL,
       environment(formula) <- environment()
       args <- list(...)
       distribution <- args$distribution
-      if(is.null(distribution)) {
+      if (is.null(distribution)) {
         distribution <- switch_class(response(formula, data),
                                      "factor" = "multinomial",
                                      "numeric" = "gaussian",
@@ -51,8 +51,8 @@ GBMModel <- function(distribution = NULL, n.trees = NULL,
     predict = function(object, newdata, times = numeric(), ...) {
       obs <- response(object)
       object <- unMLModelFit(object)
-      if(object$distribution$name == "coxph") {
-        if(length(times)) {
+      if (object$distribution$name == "coxph") {
+        if (length(times)) {
           lp <- predict(object, n.trees = object$n.trees, type = "link")
           newlp <- predict(object, newdata = newdata, n.trees = object$n.trees,
                            type = "link")

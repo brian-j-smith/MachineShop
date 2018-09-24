@@ -26,10 +26,10 @@ PLSModel <- function(ncomp = 1, scale = NULL) {
     types = c("factor", "numeric"),
     params = params(environment()),
     fit = function(formula, data, weights, ...) {
-      if(!all(weights == 1)) warning("weights are unsupported and will be ignored")
+      if (!all(weights == 1)) warning("weights are unsupported and will be ignored")
       environment(formula) <- environment()
       y <- response(formula, data)
-      if(is.factor(y)) {
+      if (is.factor(y)) {
         varname <- response(terms(formula))
         mm <- model.matrix(~ y - 1)
         colnames(mm) <- levels(y)
@@ -55,7 +55,7 @@ PLSModel <- function(ncomp = 1, scale = NULL) {
         as.matrix(abs(beta[, i, ])) %*% prop.table(-diff(perf[, i, ]))
       })
       dimnames(vi) <- dimnames(beta)[1:2]
-      if(ncol(vi) <= 2) vi <- vi[, 1]
+      if (ncol(vi) <= 2) vi <- vi[, 1]
       vi
     }
   )

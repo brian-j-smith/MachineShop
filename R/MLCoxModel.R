@@ -34,7 +34,7 @@ CoxModel <- function(ties = NULL, control = NULL) {
     },
     predict = function(object, newdata, times = numeric(), ...) {
       object <- unMLModelFit(object)
-      if(length(times)) {
+      if (length(times)) {
         rms::survest(object, newdata = newdata, times = times,
                      conf.int = FALSE, se.fit = FALSE)$surv %>% as.matrix
       } else {
