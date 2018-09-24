@@ -108,7 +108,7 @@ predict(gbmfit, newdata = test) %>% head
 
 summary(perf)
 
-plot(perf, metrics = c("Accuracy", "Kappa", "MLogLoss"))
+plot(perf)
 ```
 
 ```{r, fig.height = 4}
@@ -118,7 +118,7 @@ gbmtune <- tune(Species ~ ., data = df, GBMModel,
                                    interaction.depth = 1:3,
                                    n.minobsinnode = c(5, 10)))
 
-plot(gbmtune, type = "line", metrics = c("Accuracy", "Kappa", "MLogLoss"))
+plot(gbmtune, type = "line")
 ```
 
 ## Documentation

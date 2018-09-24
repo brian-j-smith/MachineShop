@@ -29,9 +29,12 @@ setGeneric("modelmetrics", function(observed, predicted, na.rm = FALSE, ...) {
 setMethod("modelmetrics", c("factor", "factor"),
   function(observed, predicted, ...) {
     ratings <- cbind(observed, predicted)
-    c("Accuracy" = 1 - ce(observed, predicted),
-      "Kappa" = kappa2(ratings, weight = "unweighted")$value,
-      "WeightedKappa" = kappa2(ratings, weight = "equal")$value)
+    metrics <- c("Accuracy" = 1 - ce(observed, predicted),
+                 "Kappa" = kappa2(ratings, weight = "unweighted")$value)
+    if(is.ordered(observed)) {
+      metrics["WeightedKappa"] <- kappa2(ratings, weight = "equal")$value
+    }
+    metrics
   }
 )
 

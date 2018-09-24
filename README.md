@@ -288,20 +288,19 @@ predict(gbmfit, newdata = test) %>% head
 (perf <- resample(Species ~ ., data = df, GBMModel))
 #> An object of class "Resamples"
 #> 
-#> metrics: Accuracy, Kappa, WeightedKappa, MLogLoss
+#> metrics: Accuracy, Kappa, MLogLoss
 #> 
 #> method: 10-Fold CV
 #> 
 #> resamples: 10
 
 summary(perf)
-#>                    Mean    Median         SD          Min       Max NA
-#> Accuracy      0.9400000 0.9333333 0.04919099 0.8666666667 1.0000000  0
-#> Kappa         0.9100000 0.9000000 0.07378648 0.8000000000 1.0000000  0
-#> WeightedKappa 0.9322889 0.9249531 0.05538903 0.8500000000 1.0000000  0
-#> MLogLoss      0.2624184 0.2301317 0.23719156 0.0008299047 0.5474997  0
+#>               Mean    Median         SD          Min       Max NA
+#> Accuracy 0.9400000 0.9333333 0.04919099 0.8666666667 1.0000000  0
+#> Kappa    0.9100000 0.9000000 0.07378648 0.8000000000 1.0000000  0
+#> MLogLoss 0.2624184 0.2301317 0.23719156 0.0008299047 0.5474997  0
 
-plot(perf, metrics = c("Accuracy", "Kappa", "MLogLoss"))
+plot(perf)
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
@@ -313,7 +312,7 @@ gbmtune <- tune(Species ~ ., data = df, GBMModel,
                                    interaction.depth = 1:3,
                                    n.minobsinnode = c(5, 10)))
 
-plot(gbmtune, type = "line", metrics = c("Accuracy", "Kappa", "MLogLoss"))
+plot(gbmtune, type = "line")
 ```
 
 <img src="man/figures/README-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />

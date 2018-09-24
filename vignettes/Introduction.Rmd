@@ -248,7 +248,7 @@ Kappa
   : Cohen's kappa statistic measuring relative agreement between observed and predicted classifications.
 
 WeightedKappa
-  : Weighted Cohen's kappa with equally spaced weights.  This metric is appropriate for ordered factor levels.
+  : Weighted Cohen's kappa with equally spaced weights.  This metric is only computed for ordered factor responses.
   
 MLogLoss
   : Multinomial logistic loss or cross entropy loss.
