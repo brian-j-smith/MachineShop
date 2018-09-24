@@ -89,6 +89,7 @@ tune.recipe <- function(x, model, grid = data.frame(),
 
 
 .tune <- function(model, grid, control, metric, stat, maximize, ...) {
+  control <- getMLObject(control, "MLControl")
   models <-list()
   resamples <- list()
   perf <- list()

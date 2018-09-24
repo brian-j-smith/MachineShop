@@ -83,7 +83,7 @@ setMethod(".resample", c("BootControl", "data.frame"),
       trainfit <- fit(x[index[[i]], , drop = FALSE], model)
       pred <- predict(trainfit, x, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
-    } %>% Resamples(method = method(object))
+    } %>% Resamples(method = method(object), seed = object@seed)
   }
 )
 
@@ -107,7 +107,7 @@ setMethod(".resample", c("BootControl", "recipe"),
       trainfit <- fit(train, model)
       pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
-    } %>% Resamples(method = method(object))
+    } %>% Resamples(method = method(object), seed = object@seed)
   }
 )
 
@@ -131,7 +131,7 @@ setMethod(".resample", c("CVControl", "data.frame"),
       obs <- response(test)
       pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
-    } %>% Resamples(method = method(object))
+    } %>% Resamples(method = method(object), seed = object@seed)
   }
 )
 
@@ -156,7 +156,7 @@ setMethod(".resample", c("CVControl", "recipe"),
       obs <- response(formula(train), test)
       pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
-    } %>% Resamples(method = method(object))
+    } %>% Resamples(method = method(object), seed = object@seed)
   }
 )
 
@@ -181,7 +181,7 @@ setMethod(".resample", c("OOBControl", "data.frame"),
       obs <- response(test)
       pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
-    } %>% Resamples(method = method(object))
+    } %>% Resamples(method = method(object), seed = object@seed)
   }
 )
 
@@ -206,6 +206,6 @@ setMethod(".resample", c("OOBControl", "recipe"),
       obs <- response(formula(train), test)
       pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
       summary(object, obs, pred)
-    } %>% Resamples(method = method(object))
+    } %>% Resamples(method = method(object), seed = object@seed)
   }
 )

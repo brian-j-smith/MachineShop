@@ -189,32 +189,39 @@ setClass("CForestFit", contains = c("MLModelFit", "RandomForest"))
 #' Create an object of resampled performance metrics from one or more models.
 #' 
 #' @param method character string indicating the type of resampling method.
-#' This need only be specified if the supplied output is not a Resamples object.
+#' @param seed integer seed from the resampling control object.
 #' @param ... named or unnamed resample output from one or more models.
+#' 
+#' @details Arguments \code{method} and \code{seed} need only be specified if
+#' the supplied output is not a Resamples object.  Output being combined from
+#' more than one model must have been generated with the same resampling
+#' method, random number generator seed, performance metrics, and number of
+#' resampling evaluations.
 #' 
 #' @return Resamples class object.
 #' 
 #' @seealso \code{\link{resample}}, \code{\link{plot}}, \code{\link{summary}}
 #' 
-Resamples <- function(..., method = NULL) {
-  new("Resamples", ..., method = method)  
+Resamples <- function(..., method = NULL, seed = NULL) {
+  new("Resamples", ..., method = method, seed = seed)  
 }
 
 
 setClass("Resamples",
-  slots = c("method" = "character"),
+  slots = c("method" = "character", seed = "numeric"),
   contains = "array"
 )
 
 
 setMethod("initialize", "Resamples",
-  function(.Object, ..., method = NULL) {
+  function(.Object, ..., method = NULL, seed = NULL) {
     args <- list(...)
     if(length(args) == 0) stop("no values given")
     .Data <- args[[1]]
     if(length(args) == 1) {
       if(is(.Data, "Resamples")) {
         method <- .Data@method
+        seed <- .Data@seed
       } else if(is.data.frame(.Data)) {
         .Data <- as.matrix(.Data)
       }
@@ -225,6 +232,9 @@ setMethod("initialize", "Resamples",
       if(!all(sapply(args, slot, name = "method") == .Data@method)) {
         stop("resamples use different methods")
       }
+      if(!all(sapply(args, slot, name = "seed") == .Data@seed)) {
+        stop("resamples use different seeds")
+      }
       if(!all(sapply(args, colnames) == colnames(.Data))) {
         stop("resamples contain different metrics")
       }
@@ -232,6 +242,7 @@ setMethod("initialize", "Resamples",
         stop("resamples have different numbers of evaluations")
       }
       method <- .Data@method
+      seed <- .Data@seed
       modelnames <- names(args)
       if(is.null(modelnames)) modelnames <- paste0("Model", seq(args))
       names(args) <- NULL
@@ -239,7 +250,7 @@ setMethod("initialize", "Resamples",
       args$new.names <- list(1:nrow(.Data), NULL, modelnames)
       .Data <- do.call(abind, args)
     }
-    callNextMethod(.Object, .Data, method = method)
+    callNextMethod(.Object, .Data, method = method, seed = seed)
   }
 )
 

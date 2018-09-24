@@ -4,19 +4,27 @@
 \alias{Resamples}
 \title{Resamples Class Contructor}
 \usage{
-Resamples(..., method = NULL)
+Resamples(..., method = NULL, seed = NULL)
 }
 \arguments{
 \item{...}{named or unnamed resample output from one or more models.}
 
-\item{method}{character string indicating the type of resampling method.
-This need only be specified if the supplied output is not a Resamples object.}
+\item{method}{character string indicating the type of resampling method.}
+
+\item{seed}{integer seed from the resampling control object.}
 }
 \value{
 Resamples class object.
 }
 \description{
 Create an object of resampled performance metrics from one or more models.
+}
+\details{
+Arguments \code{method} and \code{seed} need only be specified if
+the supplied output is not a Resamples object.  Output being combined from
+more than one model must have been generated with the same resampling
+method, random number generator seed, performance metrics, and number of
+resampling evaluations.
 }
 \seealso{
 \code{\link{resample}}, \code{\link{plot}}, \code{\link{summary}}
