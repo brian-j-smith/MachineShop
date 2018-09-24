@@ -39,10 +39,10 @@ GBMModel <- function(distribution = NULL, n.trees = NULL,
       args <- list(...)
       distribution <- args$distribution
       if(is.null(distribution)) {
-        distribution <- switch(class(response(formula, data)),
-                               "factor" = "multinomial",
-                               "numeric" = "gaussian",
-                               "Surv" = "coxph")
+        distribution <- switch_class(response(formula, data),
+                                     "factor" = "multinomial",
+                                     "numeric" = "gaussian",
+                                     "Surv" = "coxph")
       }
       gbm::gbm(formula, data = data, distribution = distribution,
                weights = weights, ...) %>%

@@ -42,10 +42,10 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
       args <- list(...)
       family <- args$family
       if(is.null(family)) {
-        family <- switch(class(y),
-                         "factor" = "multinomial",
-                         "numeric" = "gaussian",
-                         "Surv" = "cox")
+        family <- switch_class(y,
+                               "factor" = "multinomial",
+                               "numeric" = "gaussian",
+                               "Surv" = "cox")
       }
       mfit <- glmnet::glmnet(x, y, family = family, weights = weights,
                              nlambda = 1, ...)

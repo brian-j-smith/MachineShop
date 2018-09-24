@@ -85,3 +85,10 @@ strata.default <- function(object, ...) {
 strata.Surv <- function(object, ...) {
   object[, "status"]
 }
+
+
+switch_class <- function(EXPR, ...) {
+  blocks <- eval(substitute(alist(...)))
+  isClass <- sapply(names(blocks), function(class) is(EXPR, class))
+  eval(blocks[[match(TRUE, isClass)]])
+}

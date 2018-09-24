@@ -31,9 +31,9 @@ GLMModel <- function(family = NULL, control = NULL) {
       args <- list(...)
       family <- args$family
       if(is.null(family)) {
-        family <- switch(class(response(formula, data)),
-                         "factor" = "binomial",
-                         "numeric" = "gaussian")
+        family <- switch_class(response(formula, data),
+                               "factor" = "binomial",
+                               "numeric" = "gaussian")
       }
       stats::glm(formula, data = data, family = family, weights = weights,
                  ...) %>%
@@ -85,9 +85,9 @@ GLMStepAICModel <- function(family = NULL, control = NULL, direction = NULL,
       args <- list(...)
       family <- args$family
       if(is.null(family)) {
-        family <- switch(class(response(formula, data)),
-                         "factor" = "binomial",
-                         "numeric" = "gaussian")
+        family <- switch_class(response(formula, data),
+                               "factor" = "binomial",
+                               "numeric" = "gaussian")
       }
       direction <- match.arg(direction)
       stepargs <- stepAIC_args(formula, direction, scope)
