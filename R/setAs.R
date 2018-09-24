@@ -26,14 +26,14 @@ setAs("MLControl", "list",
 asMLModelFit <- function(object, Class, model = NULL) {
   if(isS4(object)) {
     object <- as(object, Class)
-    if(!inherits(object, "MLModelFit")) stop("Class not from MLModelFit")
+    if(!is(object, "MLModelFit")) stop("Class not from MLModelFit")
   } else if(is.list(object)) {
     class(object) <- c(Class, "MLModelFit", class(object))
   } else {
     stop("unsupported object class")
   }
   if(!is.null(model)) {
-    if(!inherits(model, "MLModel")) stop("model not of class MLModel")
+    if(!is(model, "MLModel")) stop("model not of class MLModel")
     field(object, ".packages") <- model@packages
     field(object, ".predict") <- model@predict
     field(object, ".response") <- model@response
@@ -44,7 +44,7 @@ asMLModelFit <- function(object, Class, model = NULL) {
 
 
 unMLModelFit <- function(object) {
-  if(!inherits(object, "MLModelFit")) stop("object not of class MLModelFit")
+  if(!is(object, "MLModelFit")) stop("object not of class MLModelFit")
   if(isS4(object)) {
     classes <- extends(class(object))
     as(object, classes[match("MLModelFit", classes) + 1])

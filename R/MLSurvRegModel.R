@@ -37,7 +37,7 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
       if(length(times)) {
         pred <- rms::survest(object, newdata = newdata, times = times,
                              conf.int = FALSE)
-        if(inherits(pred, "survest.psm")) as.matrix(pred$surv) else pred
+        if(is(pred, "survest.psm")) as.matrix(pred$surv) else pred
       } else {
         exp(predict(object, newdata = newdata, type = "lp"))
       }
