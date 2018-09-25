@@ -34,19 +34,17 @@ GBMModel <- function(distribution = NULL, n.trees = NULL,
     packages = "gbm",
     types = c("factor", "numeric", "Surv"),
     params = params(environment()),
-    fit = function(formula, data, weights, ...) {
+    fit = function(formula, data, weights, distribution = NULL, ...) {
       environment(formula) <- environment()
-      args <- list(...)
-      distribution <- args$distribution
       if (is.null(distribution)) {
         distribution <- switch_class(response(formula, data),
                                      "factor" = "multinomial",
                                      "numeric" = "gaussian",
                                      "Surv" = "coxph")
       }
-      gbm::gbm(formula, data = data, distribution = distribution,
-               weights = weights, ...) %>%
-        asMLModelFit("GBMFit", GBMModel(...))
+      gbm::gbm(formula, data = data, weights = weights,
+               distribution = distribution, ...) %>%
+        asMLModelFit("GBMFit", GBMModel(distribution, ...))
     },
     predict = function(object, newdata, times = numeric(), ...) {
       obs <- response(object)

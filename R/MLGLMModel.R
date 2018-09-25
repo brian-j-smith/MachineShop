@@ -26,18 +26,16 @@ GLMModel <- function(family = NULL, control = NULL) {
     packages = "stats",
     types = c("factor", "numeric"),
     params = params(environment()),
-    fit = function(formula, data, weights, ...) {
+    fit = function(formula, data, weights, family = NULL, ...) {
       environment(formula) <- environment()
-      args <- list(...)
-      family <- args$family
       if (is.null(family)) {
         family <- switch_class(response(formula, data),
                                "factor" = "binomial",
                                "numeric" = "gaussian")
       }
-      stats::glm(formula, data = data, family = family, weights = weights,
+      stats::glm(formula, data = data, weights = weights, family = family,
                  ...) %>%
-        asMLModelFit("GLMFit", GLMModel(...))
+        asMLModelFit("GLMFit", GLMModel(family, ...))
     },
     predict = function(object, newdata, ...) {
       predict(unMLModelFit(object), newdata = newdata, type = "response")
@@ -78,12 +76,10 @@ GLMStepAICModel <- function(family = NULL, control = NULL, direction = NULL,
     packages = c("MASS", "stats"),
     types = c("factor", "numeric"),
     params = params(environment()),
-    fit = function(formula, data, weights,
+    fit = function(formula, data, weights, family = NULL,
                    direction = c("both", "backward", "forward"), scope = list(),
                    k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()
-      args <- list(...)
-      family <- args$family
       if (is.null(family)) {
         family <- switch_class(response(formula, data),
                                "factor" = "binomial",
@@ -91,11 +87,11 @@ GLMStepAICModel <- function(family = NULL, control = NULL, direction = NULL,
       }
       direction <- match.arg(direction)
       stepargs <- stepAIC_args(formula, direction, scope)
-      stats::glm(stepargs$formula, data = data, family = family,
-                 weights = weights, ...) %>%
+      stats::glm(stepargs$formula, data = data, weights = weights,
+                 family = family, ...) %>%
         MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,
                       trace = trace, steps = steps) %>%
-        asMLModelFit("GLMFit", GLMModel(...))
+        asMLModelFit("GLMFit", GLMModel(family, ...))
     }
   )
 }

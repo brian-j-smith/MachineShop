@@ -35,24 +35,22 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
     packages = "glmnet",
     types = c("factor", "numeric", "Surv"),
     params = params(environment()),
-    fit = function(formula, data, weights, ...) {
+    fit = function(formula, data, weights, family = NULL, ...) {
       mf <- model.frame(formula, data, na.action = NULL)
       x <- model.matrix(formula, mf)[, -1, drop = FALSE]
       y <- model.response(mf)
-      args <- list(...)
-      family <- args$family
       if (is.null(family)) {
         family <- switch_class(y,
                                "factor" = "multinomial",
                                "numeric" = "gaussian",
                                "Surv" = "cox")
       }
-      mfit <- glmnet::glmnet(x, y, family = family, weights = weights,
+      mfit <- glmnet::glmnet(x, y, weights = weights, family = family,
                              nlambda = 1, ...)
       mfit$x <- x
       mfit$y <- y
       mfit$formula <- formula
-      asMLModelFit(mfit, "GLMNetFit", GLMNetModel(...))
+      asMLModelFit(mfit, "GLMNetFit", GLMNetModel(family, ...))
     },
     predict = function(object, newdata, times = numeric(), ...) {
       x <- object$x
