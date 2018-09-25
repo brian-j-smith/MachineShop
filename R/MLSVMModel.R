@@ -135,6 +135,7 @@ SVMTanhModel <- function(scale = NULL, offset = NULL, ...) {
 .SVMModel <- function(kernel, envir, ...) {
   args <- list(...)
   args$kernel <- kernel
-  if (length(kpar <- params(envir))) args$kpar <- kpar
-  do.call(SVMModel, args)
+  kpar <- params(envir)
+  if (length(kpar)) args$kpar <- as.call(c(quote(list), kpar))
+  do.call(SVMModel, args, quote = TRUE)
 }

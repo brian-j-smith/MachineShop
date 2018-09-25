@@ -53,7 +53,7 @@ knitr::opts_chunk$set(
 
 ### params Slot
 
-- List of user-supplied arguments to the constructor, typically obtained with with `params(environment())` if all arguments are to be passed to the source package fit function as supplied.  Additional steps may be needed to restructure the user-supplied arguments to pass in a different format; e.g., when some model parameters must be put in a control structure, as in C50Model and CForestModel.
+- List of user-supplied arguments to the constructor, typically obtained with `params(environment())` if all arguments are to be passed to the source package fit function as supplied.  Additional steps may be needed to restructure the user-supplied arguments to pass in a different format; e.g., when some model parameters must be put in a control structure, as in C50Model and CForestModel.
 
 
 ### fit Function

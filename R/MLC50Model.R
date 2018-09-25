@@ -41,12 +41,11 @@ C50Model <- function(trials = NULL, rules = NULL, subset = NULL, bands = NULL,
                      winnow = NULL, noGlobalPruning = NULL, CF = NULL,
                      minCases = NULL, fuzzyThreshold = NULL, sample = NULL,
                      earlyStopping = NULL) {
-  args <- params(environment())
   
-  requireModelNamespaces("C50")
+  args <- params(environment())
   mainargs <- names(args) %in% c("trials", "rules")
   params <- args[mainargs]
-  params$control <- do.call(C50::C5.0Control, args[!mainargs])
+  params$control <- as.call(c(quote(C50::C5.0Control), args[!mainargs]))
   
   MLModel(
     name = "C50Model",
@@ -57,7 +56,7 @@ C50Model <- function(trials = NULL, rules = NULL, subset = NULL, bands = NULL,
       environment(formula) <- environment()
       mfit <- C50::C5.0(formula, data = data, weights = weights, ...)
       mfit$y <- response(formula, data)
-      asMLModelFit(mfit, "C50Fit", do.call(C50Model, args))
+      asMLModelFit(mfit, "C50Fit", do.call(C50Model, args, quote = TRUE))
     },
     predict = function(object, newdata, ...) {
       predict(unMLModelFit(object), newdata = newdata, type = "prob")

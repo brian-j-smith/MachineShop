@@ -48,12 +48,12 @@ match_indices <- function(indices, choices) {
 }
 
 
-params <- function(env) {
-  x <- as.list(env)
-  missing_args <- names(x)[sapply(x, is.symbol)]
-  if (length(missing_args)) stop("missing values for required argument(s) ",
-                                 toString(missing_args))
-  x[!sapply(x, is.null)]
+params <- function(envir) {
+  args <- as.list(envir)
+  is_missing <- sapply(args, function(x) is.symbol(x) && nchar(x) == 0)
+  if (any(is_missing)) stop("missing values for required argument(s) ",
+                            toString(names(args)[is_missing]))
+  args[!sapply(args, is.null)]
 }
 
 

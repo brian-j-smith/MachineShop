@@ -35,16 +35,15 @@ CForestModel <- function(teststat = NULL, testtype = NULL, mincriterion = NULL,
                          ntree = NULL, mtry = NULL, replace = NULL,
                          fraction = NULL) {
   args <- params(environment())
-  requireModelNamespaces("party")
   MLModel(
     name = "CForestModel",
     packages = "party",
     types = c("factor", "numeric", "Surv"),
-    params = list(controls = do.call(party::cforest_unbiased, args)),
+    params = list(controls = as.call(c(quote(party::cforest_unbiased), args))),
     fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       party::cforest(formula, data = data, weights = weights, ...) %>%
-        asMLModelFit("CForestFit", do.call(CForestModel, args))
+        asMLModelFit("CForestFit", do.call(CForestModel, args, quote = TRUE))
     },
     predict = function(object, newdata, times = numeric(), ...) {
       object <- unMLModelFit(object)
