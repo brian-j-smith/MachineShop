@@ -5,12 +5,12 @@
 \alias{SurvRegStepAICModel}
 \title{Parametric Survival Model}
 \usage{
-SurvRegModel(dist = NULL, scale = NULL, parms = NULL,
+SurvRegModel(dist = "weibull", scale = 0, parms = NULL,
   control = NULL)
 
-SurvRegStepAICModel(dist = NULL, scale = NULL, parms = NULL,
-  control = NULL, direction = NULL, scope = NULL, k = NULL,
-  trace = FALSE, steps = NULL)
+SurvRegStepAICModel(dist = "weibull", scale = 0, parms = NULL,
+  control = NULL, direction = "both", scope = NULL, k = 2,
+  trace = FALSE, steps = 1000)
 }
 \arguments{
 \item{dist}{assumed distribution for y variable.}
@@ -30,7 +30,7 @@ This should be a list containing components \code{upper} and
 \code{lower}, both formulae.}
 
 \item{k}{multiple of the number of degrees of freedom used for the penalty.
-Only \code{k = 2} gives the genuine AIC: \code{k = log(n)} is sometimes
+Only \code{k = 2} gives the genuine AIC: \code{k = log(nobs)} is sometimes
 referred to as BIC or SBC.}
 
 \item{trace}{if positive, information is printed during the running of

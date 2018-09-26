@@ -30,8 +30,11 @@ fit.data.frame <- function(x, model, ...) {
   fo[[2]] <- formula(x)[[2]]
   weights <- model.weights(x)
   if (is.null(weights)) weights <- rep(1, nrow(x))
-  args <- list(formula = fo, data = x, weights = weights)
-  do.call(model@fit, c(args, model@params), envir = list2env(args)) %>%
+  args <- c(list(formula = fo, data = x, weights = weights), model@params)
+  data_params <- list(nobs = nrow(x),
+                      nvars = model@nvars(x[1, , drop = FALSE]),
+                      y = y)
+  do.call(model@fit, args, envir = list2env(c(args, data_params))) %>%
     asMLModelFit(paste0(model@name, "Fit"), model)
 }
 

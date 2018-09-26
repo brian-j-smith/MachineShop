@@ -4,8 +4,9 @@
 \alias{RandomForestModel}
 \title{Random Forest Model}
 \usage{
-RandomForestModel(ntree = NULL, mtry = NULL, replace = NULL,
-  nodesize = NULL, maxnodes = NULL)
+RandomForestModel(ntree = 500, mtry = .(if (is.factor(y))
+  floor(sqrt(nvars)) else max(floor(nvars/3), 1)), replace = TRUE,
+  nodesize = .(if (is.factor(y)) 1 else 5), maxnodes = NULL)
 }
 \arguments{
 \item{ntree}{number of trees to grow.}

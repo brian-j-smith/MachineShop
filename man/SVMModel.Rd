@@ -12,25 +12,25 @@
 \alias{SVMTanhModel}
 \title{Support Vector Machine Models}
 \usage{
-SVMModel(scaled = NULL, type = NULL, kernel = NULL, kpar = NULL,
-  C = NULL, nu = NULL, epsilon = NULL, cache = NULL, tol = NULL,
-  shrinking = NULL)
+SVMModel(scaled = TRUE, type = NULL, kernel = "rbfdot",
+  kpar = "automatic", C = 1, nu = 0.2, epsilon = 0.1, cache = 40,
+  tol = 0.001, shrinking = TRUE)
 
-SVMANOVAModel(sigma = NULL, degree = NULL, ...)
+SVMANOVAModel(sigma = 1, degree = 1, ...)
 
-SVMBesselModel(sigma = NULL, order = NULL, degree = NULL, ...)
+SVMBesselModel(sigma = 1, order = 1, degree = 1, ...)
 
 SVMLaplaceModel(sigma = NULL, ...)
 
 SVMLinearModel(...)
 
-SVMPolyModel(degree = NULL, scale = NULL, offset = NULL, ...)
+SVMPolyModel(degree = 1, scale = 1, offset = 1, ...)
 
 SVMRadialModel(sigma = NULL, ...)
 
 SVMSplineModel(...)
 
-SVMTanhModel(scale = NULL, offset = NULL, ...)
+SVMTanhModel(scale = 1, offset = 1, ...)
 }
 \arguments{
 \item{scaled}{logical vector indicating the variables to be scaled.}

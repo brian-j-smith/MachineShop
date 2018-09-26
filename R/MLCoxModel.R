@@ -20,12 +20,13 @@
 #' 
 #' @seealso \code{\link[survival]{coxph}}
 #' 
-CoxModel <- function(ties = NULL, control = NULL) {
+CoxModel <- function(ties = "efron", control = NULL) {
   MLModel(
     name = "CoxModel",
     packages = "rms",
     types = "Surv",
     params = params(environment()),
+    nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       rms::cph(formula, data = data, weights = weights, singular.ok = TRUE,
@@ -59,7 +60,7 @@ CoxModel <- function(ties = NULL, control = NULL) {
 #' This should be a list containing components \code{upper} and
 #' \code{lower}, both formulae.
 #' @param k multiple of the number of degrees of freedom used for the penalty.
-#' Only \code{k = 2} gives the genuine AIC: \code{k = log(n)} is sometimes
+#' Only \code{k = 2} gives the genuine AIC: \code{k = log(nobs)} is sometimes
 #' referred to as BIC or SBC.
 #' @param trace if positive, information is printed during the running of
 #' \code{stepAIC}. Larger values may give more information on the fitting
@@ -69,16 +70,17 @@ CoxModel <- function(ties = NULL, control = NULL) {
 #' @seealso \code{\link[MASS]{stepAIC}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
 #'
-CoxStepAICModel <- function(ties = NULL, control = NULL, direction = NULL,
-                            scope = NULL, k = NULL, trace = FALSE, steps = NULL)
+CoxStepAICModel <- function(ties = "efron", control = NULL, direction = "both",
+                            scope = NULL, k = 2, trace = FALSE, steps = 1000)
   {
   args <- params(environment())
-  stepmodel <- CoxModel()
+  stepmodel <- CoxModel(ties = ties, control = control)
   MLModel(
     name = "CoxStepAICModel",
     packages = c("MASS", "rms"),
     types = "Surv",
     params = args,
+    nvars = stepmodel@nvars,
     fit = function(formula, data, weights,
                    direction = c("both", "backward", "forward"), scope = list(),
                    k = 2, trace = 1, steps = 1000, ...) {

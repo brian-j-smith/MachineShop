@@ -4,7 +4,7 @@
 \alias{PLSModel}
 \title{Partial Least Squares Model}
 \usage{
-PLSModel(ncomp = 1, scale = NULL)
+PLSModel(ncomp = 1, scale = FALSE)
 }
 \arguments{
 \item{ncomp}{number of components to include in the model.}

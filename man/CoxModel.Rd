@@ -5,10 +5,10 @@
 \alias{CoxStepAICModel}
 \title{Proportional Hazards Regression Model}
 \usage{
-CoxModel(ties = NULL, control = NULL)
+CoxModel(ties = "efron", control = NULL)
 
-CoxStepAICModel(ties = NULL, control = NULL, direction = NULL,
-  scope = NULL, k = NULL, trace = FALSE, steps = NULL)
+CoxStepAICModel(ties = "efron", control = NULL, direction = "both",
+  scope = NULL, k = 2, trace = FALSE, steps = 1000)
 }
 \arguments{
 \item{ties}{character string specifying the method for tie handling.}
@@ -24,7 +24,7 @@ This should be a list containing components \code{upper} and
 \code{lower}, both formulae.}
 
 \item{k}{multiple of the number of degrees of freedom used for the penalty.
-Only \code{k = 2} gives the genuine AIC: \code{k = log(n)} is sometimes
+Only \code{k = 2} gives the genuine AIC: \code{k = log(nobs)} is sometimes
 referred to as BIC or SBC.}
 
 \item{trace}{if positive, information is printed during the running of

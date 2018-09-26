@@ -4,9 +4,8 @@
 \alias{GBMModel}
 \title{Generalized Boosted Regression Model}
 \usage{
-GBMModel(distribution = NULL, n.trees = NULL,
-  interaction.depth = NULL, n.minobsinnode = NULL, shrinkage = NULL,
-  bag.fraction = NULL)
+GBMModel(distribution = NULL, n.trees = 100, interaction.depth = 1,
+  n.minobsinnode = 10, shrinkage = 0.1, bag.fraction = 0.5)
 }
 \arguments{
 \item{distribution}{either a character string specifying the name of the

@@ -34,14 +34,15 @@
 #' @seealso \code{\link[kernlab]{ksvm}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
 #'
-SVMModel <- function(scaled = NULL, type = NULL, kernel = NULL, kpar = NULL,
-                     C = NULL, nu = NULL, epsilon = NULL, cache = NULL,
-                     tol = NULL, shrinking = NULL) {
+SVMModel <- function(scaled = TRUE, type = NULL, kernel = "rbfdot",
+                     kpar = "automatic", C = 1, nu = 0.2, epsilon = 0.1,
+                     cache = 40, tol = 0.001, shrinking = TRUE) {
   MLModel(
     name = "SVMModel",
     packages = "kernlab",
     types = c("factor", "numeric"),
     params = params(environment()),
+    nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
       if (!all(weights == 1)) warning("weights are unsupported and will be ignored")
       environment(formula) <- environment()
@@ -70,7 +71,7 @@ SVMModel <- function(scaled = NULL, type = NULL, kernel = NULL, kpar = NULL,
 #' @param degree degree of the ANOVA, Bessel, and polynomial kernel functions.
 #' @param ... arguments to be passed to \code{SVMModel}.
 #' 
-SVMANOVAModel <- function(sigma = NULL, degree = NULL, ...) {
+SVMANOVAModel <- function(sigma = 1, degree = 1, ...) {
   .SVMModel("anovadot", environment(), ...)
 }
 
@@ -79,7 +80,7 @@ SVMANOVAModel <- function(sigma = NULL, degree = NULL, ...) {
 #' 
 #' @param order order of the Bessel function to be used as a kernel.
 #' 
-SVMBesselModel <- function(sigma = NULL, order = NULL, degree = NULL, ...) {
+SVMBesselModel <- function(sigma = 1, order = 1, degree = 1, ...) {
   .SVMModel("besseldot", environment(), ...)
 }
 
@@ -105,7 +106,7 @@ SVMLinearModel <- function(...) {
 #' modify the data itself.
 #' @param offset offset used in polynomial and hyperbolic tangent kernels.
 #' 
-SVMPolyModel <- function(degree = NULL, scale = NULL, offset = NULL, ...) {
+SVMPolyModel <- function(degree = 1, scale = 1, offset = 1, ...) {
   .SVMModel("polydot", environment(), ...)
 }
 
@@ -126,7 +127,7 @@ SVMSplineModel <- function(...) {
 
 #' @rdname SVMModel
 #' 
-SVMTanhModel <- function(scale = NULL, offset = NULL, ...) {
+SVMTanhModel <- function(scale = 1, offset = 1, ...) {
   .SVMModel("tanhdot", environment(), ...)
 }
 
@@ -135,6 +136,10 @@ SVMTanhModel <- function(scale = NULL, offset = NULL, ...) {
   args <- list(...)
   args$kernel <- kernel
   kpar <- params(envir)
-  if (length(kpar)) args$kpar <- as.call(c(quote(list), kpar))
+  args$kpar <- if (kernel %in% c("laplacedot", "rbfdot") && length(kpar) == 0) {
+    "automatic"
+  } else {
+    as.call(c(quote(list), kpar))
+  }
   do.call(SVMModel, args, quote = TRUE)
 }

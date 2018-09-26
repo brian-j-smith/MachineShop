@@ -22,7 +22,7 @@
 #' \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
 #' }
 #' 
-#' Supplied arguments are passed to \code{\link[party:cforest_control]{cforest_unbiased}}.
+#' Supplied arguments are passed to \code{\link[party]{cforest_control}}.
 #' Default values for the \code{NULL} arguments and further model details can be
 #' found in the source link below.
 #' 
@@ -31,15 +31,16 @@
 #' @seealso \code{\link[party]{cforest}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
 #'
-CForestModel <- function(teststat = NULL, testtype = NULL, mincriterion = NULL,
-                         ntree = NULL, mtry = NULL, replace = NULL,
-                         fraction = NULL) {
+CForestModel <- function(teststat = "quad", testtype = "Univ", mincriterion = 0,
+                         ntree = 500, mtry = 5, replace = TRUE,
+                         fraction = 0.632) {
   args <- params(environment())
   MLModel(
     name = "CForestModel",
     packages = "party",
     types = c("factor", "numeric", "Surv"),
-    params = list(controls = as.call(c(quote(party::cforest_unbiased), args))),
+    params = list(controls = as.call(c(quote(party::cforest_control), args))),
+    nvars = function(data) nvars(data, design = "terms"),
     fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       party::cforest(formula, data = data, weights = weights, ...)

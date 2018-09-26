@@ -4,10 +4,9 @@
 \alias{C50Model}
 \title{C5.0 Decision Trees and Rule-Based Model}
 \usage{
-C50Model(trials = NULL, rules = NULL, subset = NULL, bands = NULL,
-  winnow = NULL, noGlobalPruning = NULL, CF = NULL,
-  minCases = NULL, fuzzyThreshold = NULL, sample = NULL,
-  earlyStopping = NULL)
+C50Model(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
+  winnow = FALSE, noGlobalPruning = FALSE, CF = 0.25, minCases = 2,
+  fuzzyThreshold = FALSE, sample = 0, earlyStopping = TRUE)
 }
 \arguments{
 \item{trials}{integer number of boosting iterations.}

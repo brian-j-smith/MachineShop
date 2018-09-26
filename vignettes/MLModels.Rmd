@@ -27,9 +27,7 @@ knitr::opts_chunk$set(
 
 - Ideally, the constructor should produce a valid model if called without any arguments; i.e., not have any required arguments.
 
-- Parameters that use the source package defaults should have `NULL` default values.  Package defaults should typically be used unless there is a compelling reason to change them.
-
-- Set non `NULL` values when the default is changed from the source package.  Instances where this may be desirable are in suppressing trace output or setting a default when the source package does not have one.
+- The source package defaults will be used for parameters with `NULL` values.
 
 - Model formula, data, and weights are separate from model parameters and should not be included among the constructor arguments.
 
@@ -41,7 +39,7 @@ knitr::opts_chunk$set(
 
 ### packages Slot
 
-- Include all packages whose function are called directly from within the constructor.
+- Include all packages whose functions are called directly from within the constructor.
 
 - Use :: or ::: to reference source package functions.
 
@@ -53,12 +51,17 @@ knitr::opts_chunk$set(
 
 ### params Slot
 
-- List of user-supplied arguments to the constructor, typically obtained with `params(environment())` if all arguments are to be passed to the source package fit function as supplied.  Additional steps may be needed to restructure the user-supplied arguments to pass in a different format; e.g., when some model parameters must be put in a control structure, as in C50Model and CForestModel.
+- List of parameter values set by the constructor, typically obtained with `params(environment())` if all arguments are to be passed to the source package fit function as supplied.  Additional steps may be needed to pass the constructor arguments to the source package in a different format; e.g., when some model parameters must be passed in a control structure, as in C50Model and CForestModel.
+
+
+### nvars Function
+
+- Should have a single `data` argument that represents a model frame and return its number of analytic predictor variables.
 
 
 ### fit Function
 
-- The first three arguments should be `formula`, `data`, and `weights`.
+- The first three arguments should be `formula`, `data`, and `weights` followed by a three dot ellipsis.
 
 - Set `environment(formula) <- environment()` if the formula will be passed to the source package fit function.  Some fit functions expect the formula to be defined in the same environment as the data and weights belong; i.e., the fit formula environment.
 
@@ -75,6 +78,8 @@ if(!all(weights == 1)) warning("weights are unsupported and will be ignored")
 
 ### predict Function
 
+- The arguments are a model fit `object`, `newdata` frame, optionally `time` for prediction at survival time points, and an ellipsis.
+
 - Extract any new elements added in the fit function and then recast with `unMLModelFit` to convert the fit object to its original class.
 
 - The predict function should return a vector or matrix of probabilities for 2-level factors, a matrix for factors with more than 2 levels, a vector or matrix of expected responses if numeric, a matrix of survival probabilities if follow-up times are supplied, or a vector of survival risks if no follow-up times.
@@ -82,12 +87,14 @@ if(!all(weights == 1)) warning("weights are unsupported and will be ignored")
 
 ### response Function
 
-- Should return the original response variable supplied to the fit function.
+- Should have a single model fit `object` argument, followed by an ellipsis, and return the original response variable supplied to the fit function.
 
-- Sometimes the original response is easily extracted from the fit function result.  At other times, it may be nested within the results and require some extra work to extract (see GBMModel for example).  If it is impossible to extract the response from the source package fit function results, add the response as a new element to the results in the fit function.
+- Sometimes the original response is easily extracted from the fit function result.  At other times, it may be nested within the results and require some extra work to extract (see GBMModel).  If it is impossible to extract the response from the source package fit function results, add the response as a new element to the results in the fit function.
 
 
 ### varimp Function
+
+- Should have a single model fit `object` argument followed by an ellipsis.
 
 - Variable importance results should generally be returned as a vector with elements named after the corresponding predictor variables.  The package will take care of conversions to a data frame and VarImp object.  If there is more than one set of relevant variable importance measures, they can be returned as a matrix or data frame with predictor variable names as the row names.
 

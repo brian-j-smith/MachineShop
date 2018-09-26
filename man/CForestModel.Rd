@@ -4,8 +4,8 @@
 \alias{CForestModel}
 \title{Conditional Random Forest Model}
 \usage{
-CForestModel(teststat = NULL, testtype = NULL, mincriterion = NULL,
-  ntree = NULL, mtry = NULL, replace = NULL, fraction = NULL)
+CForestModel(teststat = "quad", testtype = "Univ", mincriterion = 0,
+  ntree = 500, mtry = 5, replace = TRUE, fraction = 0.632)
 }
 \arguments{
 \item{teststat}{character specifying the type of the test statistic to be
@@ -40,7 +40,7 @@ utilizing conditional inference trees as base learners.
 \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
 }
 
-Supplied arguments are passed to \code{\link[party:cforest_control]{cforest_unbiased}}.
+Supplied arguments are passed to \code{\link[party]{cforest_control}}.
 Default values for the \code{NULL} arguments and further model details can be
 found in the source link below.
 }

@@ -26,14 +26,15 @@
 #' @seealso \code{\link[gbm]{gbm}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}
 #'
-GBMModel <- function(distribution = NULL, n.trees = NULL,
-                     interaction.depth = NULL, n.minobsinnode = NULL,
-                     shrinkage = NULL, bag.fraction = NULL) {
+GBMModel <- function(distribution = NULL, n.trees = 100,
+                     interaction.depth = 1, n.minobsinnode = 10,
+                     shrinkage = 0.1, bag.fraction = 0.5) {
   MLModel(
     name = "GBMModel",
     packages = "gbm",
     types = c("factor", "numeric", "Surv"),
     params = params(environment()),
+    nvars = function(data) nvars(data, design = "terms"),
     fit = function(formula, data, weights, distribution = NULL, ...) {
       environment(formula) <- environment()
       if (is.null(distribution)) {

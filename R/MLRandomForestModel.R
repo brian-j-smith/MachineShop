@@ -23,13 +23,18 @@
 #' @seealso \code{\link[randomForest]{randomForest}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
 #' 
-RandomForestModel <- function(ntree = NULL, mtry = NULL, replace = NULL,
-                              nodesize = NULL, maxnodes = NULL) {
+RandomForestModel <- function(ntree = 500,
+                              mtry = .(if (is.factor(y)) floor(sqrt(nvars))
+                                       else max(floor(nvars / 3), 1)),
+                              replace = TRUE,
+                              nodesize = .(if (is.factor(y)) 1 else 5),
+                              maxnodes = NULL) {
   MLModel(
     name = "RandomForestModel",
     packages = "randomForest",
     types = c("factor", "numeric"),
     params = params(environment()),
+    nvars = function(data) nvars(data, design = "terms"),
     fit = function(formula, data, weights, ...) {
       if (!all(weights == 1)) warning("weights are unsupported and will be ignored")
       environment(formula) <- environment()

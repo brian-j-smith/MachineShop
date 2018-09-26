@@ -23,7 +23,8 @@ importFrom(survivalROC, survivalROC)
 importFrom(utils, combn, head, stack, tail)
 
 
-export(fit,
+export(.,
+       fit,
        resample,
        Resamples,
        response,

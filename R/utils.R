@@ -7,6 +7,27 @@ utils::globalVariables(c("group", "i", "model", "values", "variables", "y"))
 }
 
 
+#' Quote Operator
+#' 
+#' Shorthand notation for the \code{\link{quote}} function.  The quote operator
+#' simply returns its argument unevaluated and can be applied to any \R
+#' expression.  Useful for calling model constructors with quoted parameter
+#' values that are defined in terms of a model \code{formula}, \code{data},
+#' \code{weights}, \code{nobs}, \code{nvars}, or \code{y}.
+#' 
+#' @param expr any syntactically valid \R expression.
+#' 
+#' @return 
+#' The quoted (unevaluated) expression.
+#' 
+#' @seealso
+#' \code{\link{quote}}
+#' 
+. <- function(expr) {
+  eval(substitute(quote(expr)))
+}
+
+
 basehaz <- function(y, risk, times) {
   y_times <- unique(y[, "time"]) %>% sort
   nrisk <- rowsum(risk, y[, "time"]) %>% rev %>% cumsum %>% rev
@@ -45,6 +66,17 @@ match_indices <- function(indices, choices) {
     warning("specified indices not found; using ", indices, " instead")
   }
   indices
+}
+
+
+nvars <- function(data, design = c("terms", "model.matrix")) {
+  modelterms <- terms(data)
+  switch(match.arg(design),
+         "terms" = length(labels(modelterms)),
+         "model.matrix" = {
+           ncol(model.matrix(modelterms, data)) - attr(modelterms, "intercept")
+         }
+  )
 }
 
 

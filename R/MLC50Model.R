@@ -37,10 +37,10 @@
 #' @seealso \code{\link[C50]{C5.0}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}
 #'
-C50Model <- function(trials = NULL, rules = NULL, subset = NULL, bands = NULL,
-                     winnow = NULL, noGlobalPruning = NULL, CF = NULL,
-                     minCases = NULL, fuzzyThreshold = NULL, sample = NULL,
-                     earlyStopping = NULL) {
+C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
+                     winnow = FALSE, noGlobalPruning = FALSE, CF = 0.25,
+                     minCases = 2, fuzzyThreshold = FALSE, sample = 0,
+                     earlyStopping = TRUE) {
   
   args <- params(environment())
   mainargs <- names(args) %in% c("trials", "rules")
@@ -52,6 +52,7 @@ C50Model <- function(trials = NULL, rules = NULL, subset = NULL, bands = NULL,
     packages = "C50",
     types = "factor",
     params = params,
+    nvars = function(data) nvars(data, design = "terms"),
     fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       mfit <- C50::C5.0(formula, data = data, weights = weights, ...)

@@ -19,12 +19,13 @@
 #' @seealso \code{\link[pls]{mvr}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}
 #'
-PLSModel <- function(ncomp = 1, scale = NULL) {
+PLSModel <- function(ncomp = 1, scale = FALSE) {
   MLModel(
     name = "PLSModel",
     packages = "pls",
     types = c("factor", "numeric"),
     params = params(environment()),
+    nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
       if (!all(weights == 1)) warning("weights are unsupported and will be ignored")
       environment(formula) <- environment()

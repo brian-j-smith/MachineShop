@@ -129,6 +129,8 @@ setClass("OOBControl",
 #' @param types character vector of response variable types on which the model
 #' can be fit.
 #' @param params list of user-specified model parameters.
+#' @param nvars function to return the number of predictor variables for a
+#' given model frame.
 #' @param fit model fitting function.
 #' @param predict model prediction function.
 #' @param response function to extract the response variable from a model fit.
@@ -136,13 +138,18 @@ setClass("OOBControl",
 #' 
 MLModel <- function(name = "MLModel", packages = character(0),
                     types = character(0), params = list(),
-                    fit = function(...) stop("no fit function"),
-                    predict = function(...) stop("no predict function"),
-                    response = function(...) stop("no response function"),
-                    varimp = function(...) stop("no varimp function")) {
+                    nvars = function(data)
+                      stop("unknown number of predictor variables"),
+                    fit = function(formula, data, weights, ...)
+                      stop("no fit function"),
+                    predict = function(object, newdata, times, ...)
+                      stop("no predict function"),
+                    response = function(object, ...)
+                      stop("no response function"),
+                    varimp = function(object, ...) stop("no varimp function")) {
   new("MLModel", name = name, packages = packages, types = types,
-      params = params, fit = fit, predict = predict, response = response,
-      varimp = varimp)
+      params = params, nvars = nvars, fit = fit, predict = predict,
+      response = response, varimp = varimp)
 }
 
 
@@ -151,6 +158,7 @@ setClass("MLModel",
             packages = "character",
             types = "character",
             params = "list",
+            nvars = "function",
             fit = "function",
             predict = "function",
             response = "function",

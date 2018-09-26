@@ -26,15 +26,18 @@
 #' @seealso \code{\link[glmnet]{glmnet}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
 #'
-GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
-                        standardize = NULL, thresh = NULL, maxit = NULL,
-                        type.gaussian = NULL, type.logistic = NULL,
-                        type.multinomial = NULL) {
+GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0.01,
+                        standardize = TRUE, thresh = 1e-7, maxit = 100000,
+                        type.gaussian =
+                          .(ifelse(nvars < 500, "covariance", "naive")),
+                        type.logistic = "Newton",
+                        type.multinomial = "ungrouped") {
   MLModel(
     name = "GLMNetModel",
     packages = "glmnet",
     types = c("factor", "numeric", "Surv"),
     params = params(environment()),
+    nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, family = NULL, ...) {
       mf <- model.frame(formula, data, na.action = NULL)
       x <- model.matrix(formula, mf)[, -1, drop = FALSE]

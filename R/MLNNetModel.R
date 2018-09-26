@@ -33,15 +33,16 @@
 #' @seealso \code{\link[nnet]{nnet}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}
 #' 
-NNetModel <- function(size = 1, linout = NULL, entropy = NULL, softmax = NULL,
-                      censored = NULL, skip = NULL, rang = NULL, decay = NULL,
-                      maxit = NULL, trace = FALSE, MaxNWts = NULL,
-                      abstol = NULL, reltol = NULL) {
+NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
+                      censored = FALSE, skip = FALSE, rang = 0.7, decay = 0,
+                      maxit = 100, trace = FALSE, MaxNWts = 1000, abstol = 1e-4,
+                      reltol = 1e-8) {
   MLModel(
     name = "NNetModel",
     packages = "nnet",
     types = c("factor", "numeric"),
     params = params(environment()),
+    nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       mfit <- nnet::nnet(formula, data = data, weights = weights, ...)

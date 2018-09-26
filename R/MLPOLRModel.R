@@ -18,12 +18,13 @@
 #' @seealso \code{\link[MASS]{polr}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}
 #' 
-POLRModel <- function(method = NULL) {
+POLRModel <- function(method = "logistic") {
   MLModel(
     name = "POLRModel",
     packages = "MASS",
     types = "ordered",
     params = params(environment()),
+    nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       MASS::polr(formula, data = data, weights = weights, Hess = TRUE, ...)

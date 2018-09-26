@@ -20,13 +20,14 @@
 #' 
 #' @seealso \code{\link[rms]{psm}}, \code{\link[survival]{survreg}}
 #' 
-SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
+SurvRegModel <- function(dist = "weibull", scale = 0, parms = NULL,
                          control = NULL) {
   MLModel(
     name = "SurvRegModel",
     packages = "rms",
     types = "Surv",
     params = params(environment()),
+    nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       rms::psm(formula, data = data, weights = weights, ...)
@@ -60,7 +61,7 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
 #' This should be a list containing components \code{upper} and
 #' \code{lower}, both formulae.
 #' @param k multiple of the number of degrees of freedom used for the penalty.
-#' Only \code{k = 2} gives the genuine AIC: \code{k = log(n)} is sometimes
+#' Only \code{k = 2} gives the genuine AIC: \code{k = log(nobs)} is sometimes
 #' referred to as BIC or SBC.
 #' @param trace if positive, information is printed during the running of
 #' \code{stepAIC}. Larger values may give more information on the fitting
@@ -70,16 +71,18 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
 #' @seealso \code{\link[MASS]{stepAIC}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
 #'
-SurvRegStepAICModel <- function(dist = NULL, scale = NULL, parms = NULL,
-                                control = NULL, direction = NULL, scope = NULL,
-                                k = NULL, trace = FALSE, steps = NULL) {
+SurvRegStepAICModel <- function(dist = "weibull", scale = 0, parms = NULL,
+                                control = NULL, direction = "both", scope = NULL,
+                                k = 2, trace = FALSE, steps = 1000) {
   args <- params(environment())
-  stepmodel <- SurvRegModel()
+  stepmodel <- SurvRegModel(dist = dist, scale = scale, parms = parms,
+                            control = control)
   MLModel(
     name = "SurvRegStepAICModel",
     packages = c("MASS", "rms"),
     types = "Surv",
     params = args,
+    nvars = stepmodel@nvars,
     fit = function(formula, data, weights,
                    direction = c("both", "backward", "forward"), scope = list(),
                    k = 2, trace = 1, steps = 1000, ...) {
