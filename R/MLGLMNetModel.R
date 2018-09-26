@@ -50,7 +50,7 @@ GLMNetModel <- function(family = NULL, alpha = NULL, lambda = NULL,
       mfit$x <- x
       mfit$y <- y
       mfit$formula <- formula
-      asMLModelFit(mfit, "GLMNetFit", GLMNetModel(family, ...))
+      mfit
     },
     predict = function(object, newdata, times = numeric(), ...) {
       x <- object$x

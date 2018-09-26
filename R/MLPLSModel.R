@@ -38,7 +38,7 @@ PLSModel <- function(ncomp = 1, scale = NULL) {
       }
       mfit <- pls::plsr(formula, data = data, ...)
       mfit$y <- y
-      asMLModelFit(mfit, "PLSFit", PLSModel(...))
+      mfit
     },
     predict = function(object, newdata, ...) {
       predict(unMLModelFit(object), newdata = newdata, ncomp = object$ncomp,

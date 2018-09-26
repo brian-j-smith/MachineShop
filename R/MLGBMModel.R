@@ -43,8 +43,7 @@ GBMModel <- function(distribution = NULL, n.trees = NULL,
                                      "Surv" = "coxph")
       }
       gbm::gbm(formula, data = data, weights = weights,
-               distribution = distribution, ...) %>%
-        asMLModelFit("GBMFit", GBMModel(distribution, ...))
+               distribution = distribution, ...)
     },
     predict = function(object, newdata, times = numeric(), ...) {
       obs <- response(object)

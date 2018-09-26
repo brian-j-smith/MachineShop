@@ -26,8 +26,7 @@ POLRModel <- function(method = NULL) {
     params = params(environment()),
     fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
-      MASS::polr(formula, data = data, weights = weights, Hess = TRUE, ...) %>%
-        asMLModelFit("POLRFit", POLRModel(...))
+      MASS::polr(formula, data = data, weights = weights, Hess = TRUE, ...)
     },
     predict = function(object, newdata, ...) {
       predict(unMLModelFit(object), newdata = newdata, type = "probs")

@@ -56,7 +56,7 @@ C50Model <- function(trials = NULL, rules = NULL, subset = NULL, bands = NULL,
       environment(formula) <- environment()
       mfit <- C50::C5.0(formula, data = data, weights = weights, ...)
       mfit$y <- response(formula, data)
-      asMLModelFit(mfit, "C50Fit", do.call(C50Model, args, quote = TRUE))
+      mfit
     },
     predict = function(object, newdata, ...) {
       predict(unMLModelFit(object), newdata = newdata, type = "prob")

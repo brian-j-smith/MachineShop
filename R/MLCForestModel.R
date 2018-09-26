@@ -42,8 +42,7 @@ CForestModel <- function(teststat = NULL, testtype = NULL, mincriterion = NULL,
     params = list(controls = as.call(c(quote(party::cforest_unbiased), args))),
     fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
-      party::cforest(formula, data = data, weights = weights, ...) %>%
-        asMLModelFit("CForestFit", do.call(CForestModel, args, quote = TRUE))
+      party::cforest(formula, data = data, weights = weights, ...)
     },
     predict = function(object, newdata, times = numeric(), ...) {
       object <- unMLModelFit(object)

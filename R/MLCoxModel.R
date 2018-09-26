@@ -29,8 +29,7 @@ CoxModel <- function(ties = NULL, control = NULL) {
     fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       rms::cph(formula, data = data, weights = weights, singular.ok = TRUE,
-               surv = TRUE, y = TRUE, ...) %>%
-        asMLModelFit("CoxFit", CoxModel(...))
+               surv = TRUE, y = TRUE, ...)
     },
     predict = function(object, newdata, times = numeric(), ...) {
       object <- unMLModelFit(object)
@@ -73,11 +72,13 @@ CoxModel <- function(ties = NULL, control = NULL) {
 CoxStepAICModel <- function(ties = NULL, control = NULL, direction = NULL,
                             scope = NULL, k = NULL, trace = FALSE, steps = NULL)
   {
+  args <- params(environment())
+  stepmodel <- CoxModel()
   MLModel(
     name = "CoxStepAICModel",
     packages = c("MASS", "rms"),
     types = "Surv",
-    params = params(environment()),
+    params = args,
     fit = function(formula, data, weights,
                    direction = c("both", "backward", "forward"), scope = list(),
                    k = 2, trace = 1, steps = 1000, ...) {
@@ -87,8 +88,10 @@ CoxStepAICModel <- function(ties = NULL, control = NULL, direction = NULL,
       rms::cph(stepargs$formula, data = data, weights = weights, singular.ok = TRUE,
                surv = TRUE, y = TRUE, ...) %>%
         MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,
-                      trace = trace, steps = steps) %>%
-        asMLModelFit("CoxFit", CoxModel(...))
-    }
+                      trace = trace, steps = steps)
+    },
+    predict = stepmodel@predict,
+    response = stepmodel@response,
+    varimp = stepmodel@varimp
   )
 }

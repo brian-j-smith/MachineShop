@@ -180,8 +180,8 @@ setClass("MLModelFit",
 )
 
 
-setClass("SVMFit", contain = c("MLModelFit", "ksvm"))
-setClass("CForestFit", contains = c("MLModelFit", "RandomForest"))
+setClass("SVMModelFit", contain = c("MLModelFit", "ksvm"))
+setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 
 
 #' Resamples Class Contructor

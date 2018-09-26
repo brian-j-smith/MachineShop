@@ -29,8 +29,7 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
     params = params(environment()),
     fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
-      rms::psm(formula, data = data, weights = weights, ...) %>%
-        asMLModelFit("SurvRegFit", SurvRegModel(...))
+      rms::psm(formula, data = data, weights = weights, ...)
     },
     predict = function(object, newdata, times = numeric(), ...) {
       object <- unMLModelFit(object)
@@ -74,11 +73,13 @@ SurvRegModel <- function(dist = NULL, scale = NULL, parms = NULL,
 SurvRegStepAICModel <- function(dist = NULL, scale = NULL, parms = NULL,
                                 control = NULL, direction = NULL, scope = NULL,
                                 k = NULL, trace = FALSE, steps = NULL) {
+  args <- params(environment())
+  stepmodel <- SurvRegModel()
   MLModel(
     name = "SurvRegStepAICModel",
     packages = c("MASS", "rms"),
     types = "Surv",
-    params = params(environment()),
+    params = args,
     fit = function(formula, data, weights,
                    direction = c("both", "backward", "forward"), scope = list(),
                    k = 2, trace = 1, steps = 1000, ...) {
@@ -87,8 +88,10 @@ SurvRegStepAICModel <- function(dist = NULL, scale = NULL, parms = NULL,
       stepargs <- stepAIC_args(formula, direction, scope)
       rms::psm(stepargs$formula, data = data, weights = weights, ...) %>%
         MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,
-                      trace = trace, steps = steps) %>%
-        asMLModelFit("SurvRegFit", SurvRegModel(...))
-    }
+                      trace = trace, steps = steps)
+    },
+    predict = stepmodel@predict,
+    response = stepmodel@response,
+    varimp = stepmodel@varimp
   )
 }

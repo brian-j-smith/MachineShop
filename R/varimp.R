@@ -12,17 +12,7 @@
 #' @seealso \code{\link{fit}}, \code{\link{plot}}
 #'
 varimp <- function(object, scale = TRUE, ...) {
-  VarImp(as(.varimp(object, ...), "VarImp"), scale = scale)
-}
-
-
-.varimp <- function(object, ...) {
-  UseMethod(".varimp", object)
-}
-
-
-.varimp.MLModelFit <- function(object, ...) {
   requireModelNamespaces(field(object, ".packages"))
   varimp <- field(object, ".varimp")
-  varimp(object, ...)
+  VarImp(as(varimp(object, ...), "VarImp"), scale = scale)
 }

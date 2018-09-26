@@ -70,7 +70,7 @@ if(!all(weights == 1)) warning("weights are unsupported and will be ignored")
 
 - Only add elements to the resulting fit object if they are needed and will be used in the `predict`, `response`, or `varimp` functions.
 
-- Return the fit object as a new inherited class with a call to `asMLModelFit` whose arguments are the object; a name for the new class of the form `"<Name>Fit"`; and the corresponding model object obtained with a call to its constructor with the same model parameters as originally supplied.
+- Return the fit object.
 
 
 ### predict Function

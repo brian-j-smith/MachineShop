@@ -46,7 +46,7 @@ NNetModel <- function(size = 1, linout = NULL, entropy = NULL, softmax = NULL,
       environment(formula) <- environment()
       mfit <- nnet::nnet(formula, data = data, weights = weights, ...)
       mfit$y <- response(formula, data)
-      asMLModelFit(mfit, "NNetFit", NNetModel(...))
+      mfit
     },
     predict = function(object, newdata, ...) {
       predict(unMLModelFit(object), newdata = newdata, type = "raw")

@@ -45,8 +45,7 @@ SVMModel <- function(scaled = NULL, type = NULL, kernel = NULL, kpar = NULL,
     fit = function(formula, data, weights, ...) {
       if (!all(weights == 1)) warning("weights are unsupported and will be ignored")
       environment(formula) <- environment()
-      kernlab::ksvm(formula, data = data, prob.model = TRUE, ...) %>%
-        asMLModelFit("SVMFit", SVMModel(...))
+      kernlab::ksvm(formula, data = data, prob.model = TRUE, ...)
     },
     predict = function(object, newdata, ...) {
       kernlab::predict(unMLModelFit(object), newdata = newdata,

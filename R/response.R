@@ -33,16 +33,6 @@ response.terms <- function(object, ...) {
 
 
 response.MLModelFit <- function(object, ...) {
-  .response(object, ...)
-}
-
-
-.response <- function(object, ...) {
-  UseMethod(".response", object)
-}
-
-
-.response.MLModelFit <- function(object, ...) {
   response <- field(object, ".response")
-  response(object, ...)
+  response(object)
 }

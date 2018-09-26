@@ -33,9 +33,7 @@ GLMModel <- function(family = NULL, control = NULL) {
                                "factor" = "binomial",
                                "numeric" = "gaussian")
       }
-      stats::glm(formula, data = data, weights = weights, family = family,
-                 ...) %>%
-        asMLModelFit("GLMFit", GLMModel(family, ...))
+      stats::glm(formula, data = data, weights = weights, family = family, ...)
     },
     predict = function(object, newdata, ...) {
       predict(unMLModelFit(object), newdata = newdata, type = "response")
@@ -71,11 +69,13 @@ GLMModel <- function(family = NULL, control = NULL) {
 GLMStepAICModel <- function(family = NULL, control = NULL, direction = NULL,
                             scope = NULL, k = NULL, trace = FALSE, steps = NULL)
   {
+  args <- params(environment())
+  stepmodel <- GLMModel()
   MLModel(
     name = "GLMStepAICModel",
     packages = c("MASS", "stats"),
     types = c("factor", "numeric"),
-    params = params(environment()),
+    params = args,
     fit = function(formula, data, weights, family = NULL,
                    direction = c("both", "backward", "forward"), scope = list(),
                    k = 2, trace = 1, steps = 1000, ...) {
@@ -90,8 +90,10 @@ GLMStepAICModel <- function(family = NULL, control = NULL, direction = NULL,
       stats::glm(stepargs$formula, data = data, weights = weights,
                  family = family, ...) %>%
         MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,
-                      trace = trace, steps = steps) %>%
-        asMLModelFit("GLMFit", GLMModel(family, ...))
-    }
+                      trace = trace, steps = steps)
+    },
+    predict = stepmodel@predict,
+    response = stepmodel@response,
+    varimp = stepmodel@varimp
   )
 }
