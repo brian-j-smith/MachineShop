@@ -24,7 +24,9 @@ setAs("MLControl", "list",
 
 
 asMLModelFit <- function(object, Class, model = NULL) {
-  if (isS4(object)) {
+  if (is(object, "MLModelFit")) {
+    object <- object
+  } else if (isS4(object)) {
     object <- as(object, Class)
     if (!is(object, "MLModelFit")) stop("Class not from MLModelFit")
   } else if (is.list(object)) {
