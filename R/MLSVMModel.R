@@ -139,7 +139,7 @@ SVMTanhModel <- function(scale = 1, offset = 1, ...) {
   args$kpar <- if (kernel %in% c("laplacedot", "rbfdot") && length(kpar) == 0) {
     "automatic"
   } else {
-    as.call(c(quote(list), kpar))
+    as.call(c(.(list), kpar))
   }
   do.call(SVMModel, args, quote = TRUE)
 }

@@ -45,7 +45,7 @@ C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
   args <- params(environment())
   mainargs <- names(args) %in% c("trials", "rules")
   params <- args[mainargs]
-  params$control <- as.call(c(quote(C50::C5.0Control), args[!mainargs]))
+  params$control <- as.call(c(.(C50::C5.0Control), args[!mainargs]))
   
   MLModel(
     name = "C50Model",
