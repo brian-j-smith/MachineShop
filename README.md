@@ -251,7 +251,7 @@ train <- df[trainindices, ]
 test <- df[-trainindices, ]
 
 ## Gradient boosted mode fit to training set
-gbmfit <- fit(Species ~ ., data = train, GBMModel)
+gbmfit <- fit(Species ~ ., data = train, model = GBMModel)
 
 ## Variable importance
 (vi <- varimp(gbmfit))
@@ -285,7 +285,7 @@ predict(gbmfit, newdata = test) %>% head
 
 ``` r
 ## Resample estimation of model performance
-(perf <- resample(Species ~ ., data = df, GBMModel))
+(perf <- resample(Species ~ ., data = df, model = GBMModel))
 #> An object of class "Resamples"
 #> 
 #> metrics: Accuracy, Kappa, MLogLoss
@@ -307,7 +307,7 @@ plot(perf)
 
 ``` r
 ## Model tuning
-gbmtune <- tune(Species ~ ., data = df, GBMModel,
+gbmtune <- tune(Species ~ ., data = df, model = GBMModel,
                 grid = expand.grid(n.trees = c(25, 50, 100),
                                    interaction.depth = 1:3,
                                    n.minobsinnode = c(5, 10)))

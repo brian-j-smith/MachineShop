@@ -22,6 +22,7 @@ ResamplesDiff class object that inherits from Resamples.
 Pairwise model differences in resampled performance metrics.
 }
 \examples{
+\donttest{
 ## Survival analysis example
 library(survival)
 
@@ -41,6 +42,7 @@ perfdiff <- diff(perf)
 summary(perfdiff)
 plot(perfdiff)
 t.test(perfdiff)
+}
 
 }
 \seealso{

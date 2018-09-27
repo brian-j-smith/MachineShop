@@ -39,17 +39,19 @@ Estimation of the predictive performance of a model estimated and evaluated
 on training and test samples generated from an observed data set.
 }
 \examples{
+\donttest{
 ## Survival analysis example
 library(survival)
 
 (gbmperf <- resample(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
                                           pat.karno + meal.cal + wt.loss,
                      data = lung,
-                     GBMModel,
+                     model = GBMModel,
                      control = CVControl(folds = 10, repeats = 5,
                                          surv_times = c(180, 360, 540))))
 summary(gbmperf)
 plot(gbmperf)
+}
 
 }
 \seealso{

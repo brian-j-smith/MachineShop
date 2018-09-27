@@ -58,7 +58,7 @@ tune.data.frame <- function(x, model, grid = data.frame(),
 #' fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
 #'                            meal.cal + wt.loss
 #' 
-#' (gbmtune <- tune(fo, data = lung, GBMModel,
+#' (gbmtune <- tune(fo, data = lung, model = GBMModel,
 #'                  grid = expand.grid(n.trees = c(25, 50, 100),
 #'                                     interaction.depth = 1:3,
 #'                                     n.minobsinnode = c(5, 10)),

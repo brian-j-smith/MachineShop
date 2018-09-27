@@ -14,6 +14,7 @@
 #' \code{\link{summary}}, \code{\link{t.test}}
 #' 
 #' @examples
+#' \donttest{
 #' ## Survival analysis example
 #' library(survival)
 #' 
@@ -33,6 +34,7 @@
 #' summary(perfdiff)
 #' plot(perfdiff)
 #' t.test(perfdiff)
+#' }
 #' 
 diff.MLModelTune <- function(x, ...) {
   diff(x@resamples)
