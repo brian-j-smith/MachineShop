@@ -7,12 +7,14 @@
 \usage{
 GLMModel(family = NULL, control = NULL)
 
-GLMStepAICModel(family = NULL, control = NULL, direction = "both",
-  scope = NULL, k = 2, trace = FALSE, steps = 1000)
+GLMStepAICModel(family = NULL, control = NULL, direction = c("both",
+  "backward", "forward"), scope = NULL, k = 2, trace = FALSE,
+  steps = 1000)
 }
 \arguments{
 \item{family}{description of the error distribution and link function to be
-used in the model.}
+used in the model.  Set automatically according to the class type of the
+response variable.}
 
 \item{control}{list of parameters for controlling the fitting process.}
 

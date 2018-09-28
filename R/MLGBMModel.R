@@ -4,7 +4,8 @@
 #'
 #' @param distribution either a character string specifying the name of the
 #' distribution to use or a list with a component \code{name} specifying the
-#' distribution and any additional parameters needed.
+#' distribution and any additional parameters needed.  Set automatically
+#' according to the class type of the response variable.
 #' @param n.trees total number of trees to fit.
 #' @param interaction.depth maximum depth of variable interactions.
 #' @param n.minobsinnode minimum number of observations in the trees terminal

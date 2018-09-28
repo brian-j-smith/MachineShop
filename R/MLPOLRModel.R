@@ -18,7 +18,9 @@
 #' @seealso \code{\link[MASS]{polr}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}
 #' 
-POLRModel <- function(method = "logistic") {
+POLRModel <- function(method = c("logistic", "probit", "loglog", "cloglog",
+                                 "cauchit")) {
+  method <- match.arg(method)
   MLModel(
     name = "POLRModel",
     packages = "MASS",

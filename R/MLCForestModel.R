@@ -31,9 +31,13 @@
 #' @seealso \code{\link[party]{cforest}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
 #'
-CForestModel <- function(teststat = "quad", testtype = "Univ", mincriterion = 0,
-                         ntree = 500, mtry = 5, replace = TRUE,
-                         fraction = 0.632) {
+CForestModel <- function(teststat = c("quad", "max"),
+                         testtype = c("Univariate", "Teststatistic",
+                                      "Bonferroni", "MonteCarlo"),
+                         mincriterion = 0, ntree = 500, mtry = 5,
+                         replace = TRUE, fraction = 0.632) {
+  teststat <- match.arg(teststat)
+  testtype <- match.arg(testtype)
   args <- params(environment())
   MLModel(
     name = "CForestModel",

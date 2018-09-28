@@ -62,6 +62,11 @@ Tabular and graphical summaries of modeling results can be obtained with
 Useful links:
 \itemize{
   \item \url{https://github.com/brian-j-smith/MachineShop}
+  \item Report bugs at \url{https://github.com/brian-j-smith/MachineShop/issues}
 }
+
+}
+\author{
+\strong{Maintainer}: Brian J Smith \email{brian-j-smith@uiowa.edu}
 
 }

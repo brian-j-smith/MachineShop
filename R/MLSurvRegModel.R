@@ -20,8 +20,10 @@
 #' 
 #' @seealso \code{\link[rms]{psm}}, \code{\link[survival]{survreg}}
 #' 
-SurvRegModel <- function(dist = "weibull", scale = 0, parms = NULL,
-                         control = NULL) {
+SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
+                                  "logistic", "lognormal", "logloglogistic"),
+                         scale = 0, parms = NULL, control = NULL) {
+  dist <- match.arg(dist)
   MLModel(
     name = "SurvRegModel",
     packages = "rms",
@@ -71,9 +73,15 @@ SurvRegModel <- function(dist = "weibull", scale = 0, parms = NULL,
 #' @seealso \code{\link[MASS]{stepAIC}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
 #'
-SurvRegStepAICModel <- function(dist = "weibull", scale = 0, parms = NULL,
-                                control = NULL, direction = "both", scope = NULL,
-                                k = 2, trace = FALSE, steps = 1000) {
+SurvRegStepAICModel <- function(dist = c("weibull", "exponential", "gaussian",
+                                         "logistic", "lognormal",
+                                         "logloglogistic"),
+                                scale = 0, parms = NULL, control = NULL,
+                                direction = c("both", "backward", "forward"),
+                                scope = NULL, k = 2, trace = FALSE,
+                                steps = 1000) {
+  dist <- match.arg(dist)
+  direction <- match.arg(direction)
   args <- params(environment())
   stepmodel <- SurvRegModel(dist = dist, scale = scale, parms = parms,
                             control = control)
@@ -83,11 +91,9 @@ SurvRegStepAICModel <- function(dist = "weibull", scale = 0, parms = NULL,
     types = "Surv",
     params = args,
     nvars = stepmodel@nvars,
-    fit = function(formula, data, weights,
-                   direction = c("both", "backward", "forward"), scope = list(),
+    fit = function(formula, data, weights, direction = "both", scope = list(),
                    k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()
-      direction <- match.arg(direction)
       stepargs <- stepAIC_args(formula, direction, scope)
       rms::psm(stepargs$formula, data = data, weights = weights, ...) %>%
         MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,

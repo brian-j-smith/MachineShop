@@ -5,10 +5,11 @@
 \alias{CoxStepAICModel}
 \title{Proportional Hazards Regression Model}
 \usage{
-CoxModel(ties = "efron", control = NULL)
+CoxModel(ties = c("efron", "breslow", "exact"), control = NULL)
 
-CoxStepAICModel(ties = "efron", control = NULL, direction = "both",
-  scope = NULL, k = 2, trace = FALSE, steps = 1000)
+CoxStepAICModel(ties = c("efron", "breslow", "exact"), control = NULL,
+  direction = c("both", "backward", "forward"), scope = NULL, k = 2,
+  trace = FALSE, steps = 1000)
 }
 \arguments{
 \item{ties}{character string specifying the method for tie handling.}
@@ -50,7 +51,7 @@ Default values for the \code{NULL} arguments and further model details can be
 found in the source link below.
 }
 \seealso{
-\code{\link[survival]{coxph}}
+\code{\link[rms]{cph}}, \code{\link[survival]{coxph}}
 
 \code{\link[MASS]{stepAIC}}, \code{\link{fit}},
 \code{\link{resample}}, \code{\link{tune}}

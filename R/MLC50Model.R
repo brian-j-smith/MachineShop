@@ -8,7 +8,8 @@
 #' rule-based model.
 #' @param subset logical indicating whether the model should evaluate groups of
 #' discrete predictors for splits.
-#' @param bands integer between 2 and 1000.
+#' @param bands integer between 2 and 1000 specifying a number of bands into 
+#' which to group rules ordered by their affect on the error rate.
 #' @param winnow logical indicating use of predictor winnowing (i.e. feature
 #' selection).
 #' @param noGlobalPruning logical indicating a final, global pruning step to

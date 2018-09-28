@@ -4,7 +4,8 @@
 \alias{CForestModel}
 \title{Conditional Random Forest Model}
 \usage{
-CForestModel(teststat = "quad", testtype = "Univ", mincriterion = 0,
+CForestModel(teststat = c("quad", "max"), testtype = c("Univariate",
+  "Teststatistic", "Bonferroni", "MonteCarlo"), mincriterion = 0,
   ntree = 500, mtry = 5, replace = TRUE, fraction = 0.632)
 }
 \arguments{

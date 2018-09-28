@@ -7,10 +7,12 @@
 GLMNetModel(family = NULL, alpha = 1, lambda = 0.01,
   standardize = TRUE, thresh = 1e-07, maxit = 1e+05,
   type.gaussian = .(ifelse(nvars < 500, "covariance", "naive")),
-  type.logistic = "Newton", type.multinomial = "ungrouped")
+  type.logistic = c("Newton", "modified.Newton"),
+  type.multinomial = c("ungrouped", "grouped"))
 }
 \arguments{
-\item{family}{response type.}
+\item{family}{response type.  Set automatically according to the class type
+of the response variable.}
 
 \item{alpha}{elasticnet mixing parameter.}
 

@@ -34,9 +34,13 @@
 #' @seealso \code{\link[kernlab]{ksvm}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
 #'
-SVMModel <- function(scaled = TRUE, type = NULL, kernel = "rbfdot",
+SVMModel <- function(scaled = TRUE, type = NULL,
+                     kernel = c("rbfdot", "polydot", "vanilladot", "tanhdot",
+                                "laplacedot", "besseldot", "anovadot",
+                                "splinedot"),
                      kpar = "automatic", C = 1, nu = 0.2, epsilon = 0.1,
                      cache = 40, tol = 0.001, shrinking = TRUE) {
+  kernel <- match.arg(kernel)
   MLModel(
     name = "SVMModel",
     packages = "kernlab",

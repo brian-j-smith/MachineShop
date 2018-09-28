@@ -2,7 +2,8 @@
 #'
 #' Fit a generalized linear model via penalized maximum likelihood.
 #'
-#' @param family response type.
+#' @param family response type.  Set automatically according to the class type
+#' of the response variable.
 #' @param alpha elasticnet mixing parameter.
 #' @param lambda regularization parameter.
 #' @param standardize logical flag for predictor variable standardization, prior
@@ -30,8 +31,10 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0.01,
                         standardize = TRUE, thresh = 1e-7, maxit = 100000,
                         type.gaussian =
                           .(ifelse(nvars < 500, "covariance", "naive")),
-                        type.logistic = "Newton",
-                        type.multinomial = "ungrouped") {
+                        type.logistic = c("Newton", "modified.Newton"),
+                        type.multinomial = c("ungrouped", "grouped")) {
+  type.logistic <- match.arg(type.logistic)
+  type.multinomial <- match.arg(type.multinomial)
   MLModel(
     name = "GLMNetModel",
     packages = "glmnet",

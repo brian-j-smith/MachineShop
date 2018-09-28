@@ -10,7 +10,8 @@ GBMModel(distribution = NULL, n.trees = 100, interaction.depth = 1,
 \arguments{
 \item{distribution}{either a character string specifying the name of the
 distribution to use or a list with a component \code{name} specifying the
-distribution and any additional parameters needed.}
+distribution and any additional parameters needed.  Set automatically
+according to the class type of the response variable.}
 
 \item{n.trees}{total number of trees to fit.}
 

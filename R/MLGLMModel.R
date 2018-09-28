@@ -4,7 +4,8 @@
 #' the linear predictor and a description of the error distribution.
 #' 
 #' @param family description of the error distribution and link function to be
-#' used in the model.
+#' used in the model.  Set automatically according to the class type of the
+#' response variable.
 #' @param control list of parameters for controlling the fitting process.
 #' 
 #' @details
@@ -67,9 +68,11 @@ GLMModel <- function(family = NULL, control = NULL) {
 #' 
 #' @seealso \code{\link[MASS]{stepAIC}}
 #'
-GLMStepAICModel <- function(family = NULL, control = NULL, direction = "both",
+GLMStepAICModel <- function(family = NULL, control = NULL,
+                            direction = c("both", "backward", "forward"),
                             scope = NULL, k = 2, trace = FALSE, steps = 1000)
   {
+  direction <- match.arg(direction)
   args <- params(environment())
   stepmodel <- GLMModel(family = family, control = control)
   MLModel(
@@ -78,16 +81,14 @@ GLMStepAICModel <- function(family = NULL, control = NULL, direction = "both",
     types = c("factor", "numeric"),
     params = args,
     nvars = stepmodel@nvars,
-    fit = function(formula, data, weights, family = NULL,
-                   direction = c("both", "backward", "forward"), scope = list(),
-                   k = 2, trace = 1, steps = 1000, ...) {
+    fit = function(formula, data, weights, family = NULL, direction = "both",
+                   scope = list(), k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()
       if (is.null(family)) {
         family <- switch_class(response(formula, data),
                                "factor" = "binomial",
                                "numeric" = "gaussian")
       }
-      direction <- match.arg(direction)
       stepargs <- stepAIC_args(formula, direction, scope)
       stats::glm(stepargs$formula, data = data, weights = weights,
                  family = family, ...) %>%

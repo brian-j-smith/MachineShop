@@ -5,12 +5,14 @@
 \alias{SurvRegStepAICModel}
 \title{Parametric Survival Model}
 \usage{
-SurvRegModel(dist = "weibull", scale = 0, parms = NULL,
+SurvRegModel(dist = c("weibull", "exponential", "gaussian", "logistic",
+  "lognormal", "logloglogistic"), scale = 0, parms = NULL,
   control = NULL)
 
-SurvRegStepAICModel(dist = "weibull", scale = 0, parms = NULL,
-  control = NULL, direction = "both", scope = NULL, k = 2,
-  trace = FALSE, steps = 1000)
+SurvRegStepAICModel(dist = c("weibull", "exponential", "gaussian",
+  "logistic", "lognormal", "logloglogistic"), scale = 0, parms = NULL,
+  control = NULL, direction = c("both", "backward", "forward"),
+  scope = NULL, k = 2, trace = FALSE, steps = 1000)
 }
 \arguments{
 \item{dist}{assumed distribution for y variable.}

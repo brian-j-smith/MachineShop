@@ -18,9 +18,10 @@
 #'
 #' @return MLModel class object.
 #' 
-#' @seealso \code{\link[survival]{coxph}}
+#' @seealso \code{\link[rms]{cph}}, \code{\link[survival]{coxph}}
 #' 
-CoxModel <- function(ties = "efron", control = NULL) {
+CoxModel <- function(ties = c("efron", "breslow", "exact"), control = NULL) {
+  ties <- match.arg(ties)
   MLModel(
     name = "CoxModel",
     packages = "rms",
@@ -70,9 +71,13 @@ CoxModel <- function(ties = "efron", control = NULL) {
 #' @seealso \code{\link[MASS]{stepAIC}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
 #'
-CoxStepAICModel <- function(ties = "efron", control = NULL, direction = "both",
+CoxStepAICModel <- function(ties = c("efron", "breslow", "exact"),
+                            control = NULL,
+                            direction = c("both", "backward", "forward"),
                             scope = NULL, k = 2, trace = FALSE, steps = 1000)
   {
+  ties <- match.arg(ties)
+  direction <- match.arg(direction)
   args <- params(environment())
   stepmodel <- CoxModel(ties = ties, control = control)
   MLModel(
@@ -81,11 +86,9 @@ CoxStepAICModel <- function(ties = "efron", control = NULL, direction = "both",
     types = "Surv",
     params = args,
     nvars = stepmodel@nvars,
-    fit = function(formula, data, weights,
-                   direction = c("both", "backward", "forward"), scope = list(),
+    fit = function(formula, data, weights, direction = "both", scope = list(),
                    k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()
-      direction <- match.arg(direction)
       stepargs <- stepAIC_args(formula, direction, scope)
       rms::cph(stepargs$formula, data = data, weights = weights, singular.ok = TRUE,
                surv = TRUE, y = TRUE, ...) %>%
