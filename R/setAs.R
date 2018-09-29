@@ -24,9 +24,12 @@ setAs("MLControl", "list",
 
 
 asMLModelFit <- function(object, Class, model = NULL) {
-  if (is(object, "MLModelFit")) {
-    object <- object
-  } else if (isS4(object)) {
+  if (is(object, Class)) {
+    object <- unMLModelFit(object)
+  } else if (is(object, "MLModelFit")) {
+    stop("cannot change MLModelFit class")
+  }
+  if (isS4(object)) {
     object <- as(object, Class)
     if (!is(object, "MLModelFit")) stop("Class not from MLModelFit")
   } else if (is.list(object)) {
@@ -53,7 +56,8 @@ unMLModelFit <- function(object) {
   } else {
     object[c(".packages", ".predict", ".response", ".varimp")] <- NULL
     classes <- class(object)
-    structure(object, class = tail(classes, -match("MLModelFit", classes)))
+    pos <- match("MLModelFit", classes)
+    structure(object, class = classes[-c(pos - 1, pos)])
   }
 }
 
