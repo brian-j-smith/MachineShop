@@ -4,10 +4,11 @@
 \alias{GLMNetModel}
 \title{GLM Lasso or Elasticnet Model}
 \usage{
-GLMNetModel(family = NULL, alpha = 1, lambda = 0.01,
-  standardize = TRUE, thresh = 1e-07, maxit = 1e+05,
-  type.gaussian = .(ifelse(nvars < 500, "covariance", "naive")),
-  type.logistic = c("Newton", "modified.Newton"),
+GLMNetModel(family = NULL, alpha = 1, lambda = 0,
+  standardize = TRUE, intercept = NULL, penalty.factor = .(rep(1,
+  nvars)), standardize.response = FALSE, thresh = 1e-07,
+  maxit = 1e+05, type.gaussian = .(ifelse(nvars < 500, "covariance",
+  "naive")), type.logistic = c("Newton", "modified.Newton"),
   type.multinomial = c("ungrouped", "grouped"))
 }
 \arguments{
@@ -20,6 +21,14 @@ of the response variable.}
 
 \item{standardize}{logical flag for predictor variable standardization, prior
 to model fitting.}
+
+\item{intercept}{logical indicating whether to fit intercepts.}
+
+\item{penalty.factor}{vector of penalty factors to be applied to each
+coefficient.}
+
+\item{standardize.response}{logical indicating whether to standardize
+\code{"mgaussian"} response variables.}
 
 \item{thresh}{convergence threshold for coordinate descent.}
 

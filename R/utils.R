@@ -122,5 +122,5 @@ strata.Surv <- function(object, ...) {
 switch_class <- function(EXPR, ...) {
   blocks <- eval(substitute(alist(...)))
   isClass <- sapply(names(blocks), function(class) is(EXPR, class))
-  eval(blocks[[match(TRUE, isClass)]])
+  eval.parent(blocks[[match(TRUE, isClass)]])
 }

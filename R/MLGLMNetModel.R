@@ -8,6 +8,11 @@
 #' @param lambda regularization parameter.
 #' @param standardize logical flag for predictor variable standardization, prior
 #' to model fitting.
+#' @param intercept logical indicating whether to fit intercepts.
+#' @param penalty.factor vector of penalty factors to be applied to each
+#' coefficient.
+#' @param standardize.response logical indicating whether to standardize
+#' \code{"mgaussian"} response variables.
 #' @param thresh convergence threshold for coordinate descent.
 #' @param maxit maximum number of passes over the data for all lambda values.
 #' @param type.gaussian algorithm type for guassian models.
@@ -27,8 +32,11 @@
 #' @seealso \code{\link[glmnet]{glmnet}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
 #'
-GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0.01,
-                        standardize = TRUE, thresh = 1e-7, maxit = 100000,
+GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
+                        standardize = TRUE, intercept = NULL,
+                        penalty.factor = .(rep(1, nvars)),
+                        standardize.response = FALSE,
+                        thresh = 1e-7, maxit = 100000,
                         type.gaussian =
                           .(ifelse(nvars < 500, "covariance", "naive")),
                         type.logistic = c("Newton", "modified.Newton"),
@@ -47,7 +55,8 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0.01,
       y <- model.response(mf)
       if (is.null(family)) {
         family <- switch_class(y,
-                               "factor" = "multinomial",
+                               "factor" = ifelse(nlevels(y) == 2,
+                                                 "binomial", "multinomial"),
                                "numeric" = "gaussian",
                                "Surv" = "cox")
       }
@@ -82,9 +91,13 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0.01,
       object$y
     },
     varimp = function(object, ...) {
-      convert <- function(x) drop(as.matrix(x))
+      convert <- function(x) abs(drop(as.matrix(x)))
       beta <- object$beta
-      if (is.list(beta)) as.data.frame(lapply(beta, convert)) else convert(beta)
+      if (is.list(beta)) {
+        as.data.frame(lapply(beta, convert), check.names = FALSE)
+      } else {
+        convert(beta)
+      }
     }
   )
 }
