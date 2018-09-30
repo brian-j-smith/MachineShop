@@ -4,3 +4,4 @@
 .Ruserdata
 MachineShop.Rproj
 inst/doc
+tests/testthat/*.pdf
