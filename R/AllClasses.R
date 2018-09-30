@@ -138,15 +138,15 @@ setClass("OOBControl",
 #' 
 MLModel <- function(name = "MLModel", packages = character(0),
                     types = character(0), params = list(),
-                    nvars = function(data)
-                      stop("unknown number of predictor variables"),
+                    nvars = function(data) NULL,
                     fit = function(formula, data, weights, ...)
                       stop("no fit function"),
                     predict = function(object, newdata, times, ...)
                       stop("no predict function"),
                     response = function(object, ...)
                       stop("no response function"),
-                    varimp = function(object, ...) stop("no varimp function")) {
+                    varimp = function(object, ...)
+                      stop("no varimp function")) {
   new("MLModel", name = name, packages = packages, types = types,
       params = params, nvars = nvars, fit = fit, predict = predict,
       response = response, varimp = varimp)

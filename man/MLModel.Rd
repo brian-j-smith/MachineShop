@@ -5,12 +5,12 @@
 \title{MLModel Class Constructor}
 \usage{
 MLModel(name = "MLModel", packages = character(0),
-  types = character(0), params = list(), nvars = function(data)
-  stop("unknown number of predictor variables"), fit = function(formula,
-  data, weights, ...) stop("no fit function"), predict = function(object,
-  newdata, times, ...) stop("no predict function"),
-  response = function(object, ...) stop("no response function"),
-  varimp = function(object, ...) stop("no varimp function"))
+  types = character(0), params = list(), nvars = function(data) NULL,
+  fit = function(formula, data, weights, ...) stop("no fit function"),
+  predict = function(object, newdata, times, ...)
+  stop("no predict function"), response = function(object, ...)
+  stop("no response function"), varimp = function(object, ...)
+  stop("no varimp function"))
 }
 \arguments{
 \item{name}{character string name for the instantiated MLModel object.}
