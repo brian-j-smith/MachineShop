@@ -59,7 +59,7 @@ Generalized boosted regression models are a tree-based ensemble method that can 
 
 ```{r}
 ## Fit a generalized boosted model
-gbmfit <- fit(fo, train, GBMModel)
+gbmfit <- fit(fo, data = train, model = GBMModel)
 
 ## Predictor variable importance
 (vi <- varimp(gbmfit))
@@ -72,9 +72,9 @@ From the model fit, predictions are obtained at 180, 360, and 540 days as surviv
 ```{r}
 ## Predict survival probabilities and outcomes at specified follow-up times
 times <- c(180, 360, 540)
-predict(gbmfit, test, times = times, type = "prob") %>% head
+predict(gbmfit, newdata = test, times = times, type = "prob") %>% head
 
-predict(gbmfit, test, times = times) %>% head
+predict(gbmfit, newdata = test, times = times) %>% head
 ```
 
 A call to `modelmetrics` with observed and predicted outcomes will produce model performance metrics.  The metrics produced will depend on the type of the observed variable.  In this case of a `Surv` variable, the metrics are area under the ROC curve [@heagerty:2004:TDR] and Brier score [@graf:1999:ACP] at the specified times and their time-integrated averages.
@@ -82,7 +82,7 @@ A call to `modelmetrics` with observed and predicted outcomes will produce model
 ```{r}
 ## Model performance metrics
 obs <- response(fo, test)
-pred <- predict(gbmfit, test, times = times, type = "prob")
+pred <- predict(gbmfit, newdata = test, times = times, type = "prob")
 modelmetrics(obs, pred, times = times)
 ```
 
@@ -121,7 +121,7 @@ Resampling of a single model is performed with the `resample` function applied t
 
 ```{r}
 ## Resample estimation
-(perf <- resample(fo, lung, GBMModel, control))
+(perf <- resample(fo, data = lung, model = GBMModel, control = control))
 
 summary(perf)
 
@@ -134,9 +134,9 @@ Resampled metrics from different models can be combined for comparison with the 
 
 ```{r}
 ## Resample estimation
-gbmperf1 <- resample(fo, lung, GBMModel(n.trees = 25), control)
-gbmperf2 <- resample(fo, lung, GBMModel(n.trees = 50), control)
-gbmperf3 <- resample(fo, lung, GBMModel(n.trees = 100), control)
+gbmperf1 <- resample(fo, data = lung, model = GBMModel(n.trees = 25), control = control)
+gbmperf2 <- resample(fo, data = lung, model = GBMModel(n.trees = 50), control = control)
+gbmperf3 <- resample(fo, data = lung, model = GBMModel(n.trees = 100), control = control)
 
 ## Combine resamples for comparison
 (perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3))
@@ -168,7 +168,7 @@ Modelling functions may have arguments that define parameters in their model fit
 
 ```{r}
 ## Tune over a grid of model parameters
-(gbmtune <- tune(fo, lung, GBMModel,
+(gbmtune <- tune(fo, data = lung, model = GBMModel,
                  grid = expand.grid(n.trees = c(25, 50, 100),
                                     interaction.depth = 1:3,
                                     n.minobsinnode = c(5, 10)),
@@ -183,7 +183,7 @@ The value returned by `tune` contains an object produced by a call to the modell
 
 ```{r}
 ## Fit the tuned model
-gbmfit <- fit(fo, lung, gbmtune)
+gbmfit <- fit(fo, data = lung, model = gbmtune)
 (vi <- varimp(gbmfit))
 
 plot(vi)
@@ -235,9 +235,7 @@ Brier, ROCAUC, and PRAUC are computed directly on predicted class probabilities.
 ```{r}
 ### Pima Indians diabetes statuses (2 levels)
 library(MASS)
-df <- Pima.tr
-df$type <- factor(df$type)
-perf <- resample(type ~ ., df, GBMModel)
+perf <- resample(factor(type) ~ ., data = Pima.tr, model = GBMModel)
 summary(perf)
 ```
 
@@ -259,9 +257,7 @@ MLogLoss is computed directly on predicted class probabilities.  The others are 
 
 ```{r}
 ### Iris flowers species (3 levels)
-df <- iris
-df$Species <- factor(df$Species)
-perf <- resample(Species ~ ., df, GBMModel)
+perf <- resample(factor(Species) ~ ., data = iris, model = GBMModel)
 summary(perf)
 ```
 
@@ -286,7 +282,7 @@ MAE
 ```{r}
 ### Boston housing prices
 library(MASS)
-perf <- resample(medv ~ ., Boston, GBMModel)
+perf <- resample(medv ~ ., data = Boston, model = GBMModel)
 summary(perf)
 ```
 
@@ -298,7 +294,7 @@ Survival responses should be coded as a `Surv` variable.  In addition to the ROC
 ```{r}
 ## Censored lung cancer survival times
 library(survival)
-perf <- resample(Surv(time, status) ~ ., lung, GBMModel)
+perf <- resample(Surv(time, status) ~ ., data = lung, model = GBMModel)
 summary(perf)
 ```
 
@@ -313,7 +309,7 @@ Models may be specified with the traditional formula and data frame pair, as was
 
 ```{r}
 ## Formula specification
-gbmfit <- fit(medv ~ ., data = Boston, GBMModel)
+gbmfit <- fit(medv ~ ., data = Boston, model = GBMModel)
 varimp(gbmfit)
 ```
 
@@ -324,7 +320,7 @@ The second specification is similar to the first, except the formula and data fr
 ```{r}
 ## Model frame specification
 mf <- model.frame(medv ~ ., data = Boston)
-gbmfit <- fit(mf, GBMModel)
+gbmfit <- fit(mf, model = GBMModel)
 varimp(gbmfit)
 ```
 
@@ -334,7 +330,7 @@ Another advantage is that case weights can be included in the model frame and wi
 ## Model frame specification with case weights
 mf <- model.frame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
                   data = esoph, weights = ncases + ncontrols)
-gbmfit <- fit(mf, GBMModel)
+gbmfit <- fit(mf, model = GBMModel)
 varimp(gbmfit)
 ```
 
@@ -350,7 +346,7 @@ rec <- recipe(medv ~ ., data = Boston) %>%
   step_center(all_predictors()) %>%
   step_scale(all_predictors()) %>%
   step_pca(all_predictors())
-gbmfit <- fit(rec, GBMModel)
+gbmfit <- fit(rec, model = GBMModel)
 varimp(gbmfit)
 ```
 
