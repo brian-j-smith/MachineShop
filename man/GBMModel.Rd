@@ -39,6 +39,11 @@ Fits generalized boosted regression models.
 Default values for the \code{NULL} arguments and further model details can be
 found in the source link below.
 }
+\examples{
+
+fit(factor(Species) ~ ., data = iris, model = GBMModel())
+
+}
 \seealso{
 \code{\link[gbm]{gbm}}, \code{\link{fit}}, \code{\link{resample}},
 \code{\link{tune}}

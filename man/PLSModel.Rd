@@ -26,6 +26,12 @@ Function to perform partial least squares regression.
 Default values for the \code{NULL} arguments and further model details can be
 found in the source link below.
 }
+\examples{
+library(MASS)
+
+fit(medv ~ ., data = Boston, model = PLSModel())
+
+}
 \seealso{
 \code{\link[pls]{mvr}}, \code{\link{fit}}, \code{\link{resample}},
 \code{\link{tune}}

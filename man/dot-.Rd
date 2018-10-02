@@ -19,6 +19,14 @@ expression.  Useful for calling model constructors with quoted parameter
 values that are defined in terms of a model \code{formula}, \code{data},
 \code{weights}, \code{nobs}, \code{nvars}, or \code{y}.
 }
+\examples{
+## Stepwise variable selection with BIC
+library(MASS)
+
+glmfit <- fit(medv ~ ., Boston, GLMStepAICModel(k = .(log(nobs))))
+varimp(glmfit)
+
+}
 \seealso{
 \code{\link{quote}}
 }

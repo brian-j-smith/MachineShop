@@ -19,3 +19,12 @@ response(object, ...)
 \description{
 Extract the response variable from an object.
 }
+\examples{
+## Survival response example
+library(survival)
+
+fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
+                           meal.cal + wt.loss
+response(fo, lung)
+
+}

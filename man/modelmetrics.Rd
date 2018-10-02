@@ -60,6 +60,19 @@ were predicted.}
 \description{
 Compute measures of model performance.
 }
+\examples{
+## Survival response example
+library(survival)
+
+fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
+                           meal.cal + wt.loss
+gbmfit <- fit(fo, lung, GBMModel)
+
+obs <- response(fo, lung)
+pred <- predict(gbmfit, newdata = lung, type = "prob")
+modelmetrics(obs, pred)
+
+}
 \seealso{
 \code{\link{predict}}, \code{\linkS4class{MLControl}}
 }

@@ -20,6 +20,12 @@
 #' 
 #' @seealso \code{\link[rms]{cph}}, \code{\link[survival]{coxph}}
 #' 
+#' @examples
+#' library(survival)
+#' 
+#' fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno + meal.cal + wt.loss,
+#'     data = lung, model = CoxModel())
+#' 
 CoxModel <- function(ties = c("efron", "breslow", "exact"), control = NULL) {
   ties <- match.arg(ties)
   MLModel(

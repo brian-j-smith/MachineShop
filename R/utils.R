@@ -23,6 +23,13 @@ utils::globalVariables(c("group", "i", "model", "values", "variables", "y"))
 #' @seealso
 #' \code{\link{quote}}
 #' 
+#' @examples
+#' ## Stepwise variable selection with BIC
+#' library(MASS)
+#' 
+#' glmfit <- fit(medv ~ ., Boston, GLMStepAICModel(k = .(log(nobs))))
+#' varimp(glmfit)
+#' 
 . <- function(expr) {
   eval(substitute(quote(expr)))
 }

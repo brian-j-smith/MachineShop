@@ -25,6 +25,22 @@ third dimension.
 Paired t-test comparisons of resampled performance metrics from different
 models.
 }
+\examples{
+## Numeric response example
+library(MASS)
+
+fo <- medv ~ .
+control <- CVControl()
+
+gbmperf1 <- resample(fo, Boston, GBMModel(n.trees = 25), control)
+gbmperf2 <- resample(fo, Boston, GBMModel(n.trees = 50), control)
+gbmperf3 <- resample(fo, Boston, GBMModel(n.trees = 100), control)
+
+perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
+perfdiff <- diff(perf)
+t.test(perfdiff)
+
+}
 \seealso{
 \code{\link{diff}}
 }

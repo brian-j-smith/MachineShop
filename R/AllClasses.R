@@ -71,6 +71,10 @@ setMethod("initialize", "MLControl",
 #' 
 #' @param samples number of bootstrap samples.
 #' 
+#' @examples
+#' ## 100 bootstrap samples
+#' BootControl(samples = 100)
+#' 
 BootControl <- function(samples = 25, ...) {
   new("BootControl", samples = samples, ...)
 }
@@ -93,6 +97,10 @@ setClass("BootControl",
 #' @param folds number of cross-validation folds (K).
 #' @param repeats number of repeats of the K-fold partitioning.
 #' 
+#' @examples
+#' ## 5 repeats of 10-fold cross-validation
+#' CVControl(folds = 10, repeats = 5)
+#' 
 CVControl <- function(folds = 10, repeats = 1, ...) {
   new("CVControl", folds = folds, repeats = repeats, ...)
 }
@@ -110,6 +118,10 @@ setClass("CVControl",
 #' 
 #' @name OOBControl
 #' @rdname MLControl-class
+#' 
+#' @examples
+#' ## 100 out-of-bag bootstrap samples
+#' OOBControl(samples = 100)
 #' 
 OOBControl <- function(samples = 25, ...) {
   new("OOBControl", samples = samples, ...)
@@ -209,6 +221,20 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 #' @return Resamples class object.
 #' 
 #' @seealso \code{\link{resample}}, \code{\link{plot}}, \code{\link{summary}}
+#' 
+#' @examples
+#' ## Factor response example
+#' 
+#' fo <- factor(Species) ~ .
+#' control <- CVControl()
+#' 
+#' gbmperf1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+#' gbmperf2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+#' gbmperf3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+#' 
+#' perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
+#' summary(perf)
+#' plot(perf)
 #' 
 Resamples <- function(..., method = NULL, seed = NULL) {
   new("Resamples", ..., method = method, seed = seed)  

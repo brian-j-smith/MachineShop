@@ -18,6 +18,13 @@
 #' @seealso \code{\link[MASS]{polr}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}
 #' 
+#' @examples
+#' library(MASS)
+#' 
+#' df <- Boston
+#' df$medv <- cut(Boston$medv, breaks = c(0, 15, 20, 25, 50), ordered = TRUE)   
+#' fit(medv ~ ., data = df, model = POLRModel())
+#' 
 POLRModel <- function(method = c("logistic", "probit", "loglog", "cloglog",
                                  "cauchit")) {
   method <- match.arg(method)

@@ -25,6 +25,14 @@ Fit a logistic or probit regression model to an ordered factor response.
 Default values for the \code{NULL} arguments and further model details can be
 found in the source link below.
 }
+\examples{
+library(MASS)
+
+df <- Boston
+df$medv <- cut(Boston$medv, breaks = c(0, 15, 20, 25, 50), ordered = TRUE)   
+fit(medv ~ ., data = df, model = POLRModel())
+
+}
 \seealso{
 \code{\link[MASS]{polr}}, \code{\link{fit}}, \code{\link{resample}},
 \code{\link{tune}}

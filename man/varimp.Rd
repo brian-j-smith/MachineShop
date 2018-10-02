@@ -20,6 +20,17 @@ VarImp class object.
 \description{
 Calculate measures of the relative importance of predictors in a model.
 }
+\examples{
+## Survival response example
+library(survival)
+
+gbmfit <- fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
+                                   pat.karno + meal.cal + wt.loss,
+              data = lung, GBMModel)
+(vi <- varimp(gbmfit))
+plot(vi)
+
+}
 \seealso{
 \code{\link{fit}}, \code{\link{plot}}
 }

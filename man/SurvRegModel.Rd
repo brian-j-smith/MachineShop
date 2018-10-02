@@ -55,6 +55,13 @@ Fits the accelerated failure time family of parametric survival models.
 Default values for the \code{NULL} arguments and further model details can be
 found in the source link below.
 }
+\examples{
+library(survival)
+
+fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno + meal.cal + wt.loss,
+    data = lung, model = SurvRegModel())
+
+}
 \seealso{
 \code{\link[rms]{psm}}, \code{\link[survival]{survreg}}
 

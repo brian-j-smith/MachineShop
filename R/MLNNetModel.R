@@ -33,6 +33,11 @@
 #' @seealso \code{\link[nnet]{nnet}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}
 #' 
+#' @examples
+#' library(MASS)
+#' 
+#' fit(medv ~ ., data = Boston, model = NNetModel())
+#' 
 NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
                       censored = FALSE, skip = FALSE, rang = 0.7, decay = 0,
                       maxit = 100, trace = FALSE, MaxNWts = 1000, abstol = 1e-4,

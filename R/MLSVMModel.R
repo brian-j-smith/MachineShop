@@ -110,6 +110,11 @@ SVMLinearModel <- function(...) {
 #' modify the data itself.
 #' @param offset offset used in polynomial and hyperbolic tangent kernels.
 #' 
+#' @examples
+#' library(MASS)
+#' 
+#' fit(medv ~ ., data = Boston, model = SVMRadialModel())
+#' 
 SVMPolyModel <- function(degree = 1, scale = 1, offset = 1, ...) {
   .SVMModel("polydot", environment(), ...)
 }

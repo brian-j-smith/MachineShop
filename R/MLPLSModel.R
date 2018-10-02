@@ -18,6 +18,11 @@
 #' 
 #' @seealso \code{\link[pls]{mvr}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}
+#' 
+#' @examples
+#' library(MASS)
+#' 
+#' fit(medv ~ ., data = Boston, model = PLSModel())
 #'
 PLSModel <- function(ncomp = 1, scale = FALSE) {
   MLModel(

@@ -21,6 +21,11 @@
 #' @seealso \code{\link[stats]{glm}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}
 #' 
+#' @examples
+#' library(MASS)
+#' 
+#' fit(medv ~ ., data = Boston, model = GLMModel())
+#' 
 GLMModel <- function(family = NULL, control = NULL) {
   MLModel(
     name = "GLMModel",

@@ -22,8 +22,7 @@ ResamplesDiff class object that inherits from Resamples.
 Pairwise model differences in resampled performance metrics.
 }
 \examples{
-\donttest{
-## Survival analysis example
+## Survival response example
 library(survival)
 
 fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
@@ -35,14 +34,9 @@ gbmperf2 <- resample(fo, lung, GBMModel(n.trees = 50), control)
 gbmperf3 <- resample(fo, lung, GBMModel(n.trees = 100), control)
 
 perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
-summary(perf)
-plot(perf)
-
 perfdiff <- diff(perf)
 summary(perfdiff)
 plot(perfdiff)
-t.test(perfdiff)
-}
 
 }
 \seealso{

@@ -40,7 +40,7 @@ on training and test samples generated from an observed data set.
 }
 \examples{
 \donttest{
-## Survival analysis example
+## Survival response example
 library(survival)
 
 (gbmperf <- resample(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +

@@ -50,15 +50,13 @@ fit.data.frame <- function(x, model, ...) {
 #' \code{\link[recipes]{recipe}}, \code{\link{predict}}, \code{\link{varimp}}
 #' 
 #' @examples
-#' ## Survival analysis example
+#' ## Survival response example
 #' library(survival)
 #' 
 #' gbmfit <- fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
 #'                                    pat.karno + meal.cal + wt.loss,
-#'               data = lung,
-#'               GBMModel)
-#' (vi <- varimp(gbmfit))
-#' plot(vi)
+#'               data = lung, GBMModel)
+#' varimp(gbmfit)
 #' 
 fit.formula <- function(x, data, model, ...) {
   fit(model.frame(x, data, na.action = NULL), model)

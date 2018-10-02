@@ -17,6 +17,23 @@
 #' @seealso \code{\link{diff}}, \code{\link{resample}}, \code{\link{Resamples}},
 #' \code{\link{tune}}
 #' 
+#' @examples
+#' ## Factor response example
+#' 
+#' fo <- factor(Species) ~ .
+#' control <- CVControl()
+#' 
+#' gbmfit <- fit(fo, iris, GBMModel, control)
+#' plot(varimp(gbmfit))
+#' 
+#' gbmperf1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+#' gbmperf2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+#' gbmperf3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+#' plot(gbmperf3)
+#' 
+#' perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
+#' plot(perf)
+#' 
 plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
                              type = c("boxplot", "density", "errorbar", "line",
                                       "violin"), ...) {

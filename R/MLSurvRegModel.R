@@ -72,6 +72,12 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
 #' 
 #' @seealso \code{\link[MASS]{stepAIC}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
+#' 
+#' @examples
+#' library(survival)
+#' 
+#' fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno + meal.cal + wt.loss,
+#'     data = lung, model = SurvRegModel())
 #'
 SurvRegStepAICModel <- function(dist = c("weibull", "exponential", "gaussian",
                                          "logistic", "lognormal",

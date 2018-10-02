@@ -31,6 +31,21 @@ respectively, for multiple models.
 \description{
 Summary statistics for resampled model performance metrics.
 }
+\examples{
+## Factor response example
+
+fo <- factor(Species) ~ .
+control <- CVControl()
+
+gbmperf1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+gbmperf2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+gbmperf3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+summary(gbmperf3)
+
+perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
+summary(perf)
+
+}
 \seealso{
 \code{\link{diff}}, \code{\link{resample}}, \code{\link{Resamples}},
 \code{\link{tune}}

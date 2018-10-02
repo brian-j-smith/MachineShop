@@ -50,6 +50,13 @@ incorporated using the counting process formulation of Andersen and Gill.
 Default values for the \code{NULL} arguments and further model details can be
 found in the source link below.
 }
+\examples{
+library(survival)
+
+fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno + meal.cal + wt.loss,
+    data = lung, model = CoxModel())
+
+}
 \seealso{
 \code{\link[rms]{cph}}, \code{\link[survival]{coxph}}
 

@@ -30,6 +30,11 @@
 #' 
 #' @seealso \code{\link[party]{cforest}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
+#' 
+#' @examples
+#' library(MASS)
+#' 
+#' fit(medv ~ ., data = Boston, model = CForestModel())
 #'
 CForestModel <- function(teststat = c("quad", "max"),
                          testtype = c("Univariate", "Teststatistic",

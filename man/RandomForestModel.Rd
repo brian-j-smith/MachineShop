@@ -35,6 +35,12 @@ Cutler's original Fortran code) for classification and regression.
 Default values for the \code{NULL} arguments and further model details can be
 found in the source link below.
 }
+\examples{
+library(MASS)
+
+fit(medv ~ ., data = Boston, model = RandomForestModel())
+
+}
 \seealso{
 \code{\link[randomForest]{randomForest}}, \code{\link{fit}},
 \code{\link{resample}}, \code{\link{tune}}

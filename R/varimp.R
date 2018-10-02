@@ -11,6 +11,16 @@
 #' 
 #' @seealso \code{\link{fit}}, \code{\link{plot}}
 #'
+#' @examples
+#' ## Survival response example
+#' library(survival)
+#' 
+#' gbmfit <- fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
+#'                                    pat.karno + meal.cal + wt.loss,
+#'               data = lung, GBMModel)
+#' (vi <- varimp(gbmfit))
+#' plot(vi)
+#'
 varimp <- function(object, scale = TRUE, ...) {
   requireModelNamespaces(field(object, ".packages"))
   varimp <- field(object, ".varimp")

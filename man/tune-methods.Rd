@@ -59,7 +59,7 @@ according to resample estimation of predictive performance.
 }
 \examples{
 \donttest{
-## Survival analysis example
+## Survival response example
 library(survival)
 
 fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
@@ -75,8 +75,7 @@ summary(gbmtune)
 plot(gbmtune, type = "line", metrics = c("ROC", "Brier"))
 
 gbmfit <- fit(fo, data = lung, gbmtune)
-(vi <- varimp(gbmfit))
-plot(vi)
+varimp(gbmfit)
 }
 
 }

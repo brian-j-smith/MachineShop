@@ -91,6 +91,17 @@ responses that are \code{NA} when calculating model metrics.}
 \item{\code{seed}}{integer to set the seed at the start of resampling.}
 }}
 
+\examples{
+## 100 bootstrap samples
+BootControl(samples = 100)
+
+## 5 repeats of 10-fold cross-validation
+CVControl(folds = 10, repeats = 5)
+
+## 100 out-of-bag bootstrap samples
+OOBControl(samples = 100)
+
+}
 \seealso{
 \code{\link{resample}}, \code{\link{modelmetrics}}
 }

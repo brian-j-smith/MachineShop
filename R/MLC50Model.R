@@ -37,6 +37,9 @@
 #' 
 #' @seealso \code{\link[C50]{C5.0}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}
+#' 
+#' @examples
+#' fit(factor(Species) ~ ., data = iris, model = C50Model())
 #'
 C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
                      winnow = FALSE, noGlobalPruning = FALSE, CF = 0.25,

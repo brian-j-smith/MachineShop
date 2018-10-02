@@ -7,6 +7,14 @@
 #' @param object object containing a response.
 #' @param ... arguments passed to other methods.
 #' 
+#' @examples
+#' ## Survival response example
+#' library(survival)
+#' 
+#' fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
+#'                            meal.cal + wt.loss
+#' response(fo, lung)
+#' 
 response <- function(object, ...) {
   UseMethod("response", object)
 }

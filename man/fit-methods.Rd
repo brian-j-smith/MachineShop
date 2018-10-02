@@ -34,15 +34,13 @@ MLModelFit class object.
 Fit a model to estimate its parameters from a data set.
 }
 \examples{
-## Survival analysis example
+## Survival response example
 library(survival)
 
 gbmfit <- fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
                                    pat.karno + meal.cal + wt.loss,
-              data = lung,
-              GBMModel)
-(vi <- varimp(gbmfit))
-plot(vi)
+              data = lung, GBMModel)
+varimp(gbmfit)
 
 }
 \seealso{

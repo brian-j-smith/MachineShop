@@ -23,6 +23,11 @@
 #' @seealso \code{\link[randomForest]{randomForest}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
 #' 
+#' @examples
+#' library(MASS)
+#' 
+#' fit(medv ~ ., data = Boston, model = RandomForestModel())
+#' 
 RandomForestModel <- function(ntree = 500,
                               mtry = .(if (is.factor(y)) floor(sqrt(nvars))
                                        else max(floor(nvars / 3), 1)),

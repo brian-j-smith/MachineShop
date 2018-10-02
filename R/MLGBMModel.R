@@ -26,6 +26,10 @@
 #' 
 #' @seealso \code{\link[gbm]{gbm}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}
+#' 
+#' @examples
+#' 
+#' fit(factor(Species) ~ ., data = iris, model = GBMModel())
 #'
 GBMModel <- function(distribution = NULL, n.trees = 100,
                      interaction.depth = 1, n.minobsinnode = 10,

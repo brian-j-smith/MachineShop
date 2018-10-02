@@ -26,6 +26,21 @@ more than one model must have been generated with the same resampling
 method, random number generator seed, performance metrics, and number of
 resampling evaluations.
 }
+\examples{
+## Factor response example
+
+fo <- factor(Species) ~ .
+control <- CVControl()
+
+gbmperf1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+gbmperf2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+gbmperf3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+
+perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
+summary(perf)
+plot(perf)
+
+}
 \seealso{
 \code{\link{resample}}, \code{\link{plot}}, \code{\link{summary}}
 }

@@ -14,8 +14,7 @@
 #' \code{\link{summary}}, \code{\link{t.test}}
 #' 
 #' @examples
-#' \donttest{
-#' ## Survival analysis example
+#' ## Survival response example
 #' library(survival)
 #' 
 #' fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
@@ -27,14 +26,9 @@
 #' gbmperf3 <- resample(fo, lung, GBMModel(n.trees = 100), control)
 #' 
 #' perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
-#' summary(perf)
-#' plot(perf)
-#' 
 #' perfdiff <- diff(perf)
 #' summary(perfdiff)
 #' plot(perfdiff)
-#' t.test(perfdiff)
-#' }
 #' 
 diff.MLModelTune <- function(x, ...) {
   diff(x@resamples)
@@ -74,6 +68,21 @@ diff.Resamples <- function(x, ...) {
 #' third dimension.
 #' 
 #' @seealso \code{\link{diff}}
+#' 
+#' @examples
+#' ## Numeric response example
+#' library(MASS)
+#' 
+#' fo <- medv ~ .
+#' control <- CVControl()
+#' 
+#' gbmperf1 <- resample(fo, Boston, GBMModel(n.trees = 25), control)
+#' gbmperf2 <- resample(fo, Boston, GBMModel(n.trees = 50), control)
+#' gbmperf3 <- resample(fo, Boston, GBMModel(n.trees = 100), control)
+#' 
+#' perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
+#' perfdiff <- diff(perf)
+#' t.test(perfdiff)
 #' 
 t.test.ResamplesDiff <- function(x, adjust = "holm", ...)
 {

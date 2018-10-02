@@ -52,7 +52,7 @@ tune.data.frame <- function(x, model, grid = data.frame(),
 #' 
 #' @examples
 #' \donttest{
-#' ## Survival analysis example
+#' ## Survival response example
 #' library(survival)
 #' 
 #' fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
@@ -68,8 +68,7 @@ tune.data.frame <- function(x, model, grid = data.frame(),
 #' plot(gbmtune, type = "line", metrics = c("ROC", "Brier"))
 #' 
 #' gbmfit <- fit(fo, data = lung, gbmtune)
-#' (vi <- varimp(gbmfit))
-#' plot(vi)
+#' varimp(gbmfit)
 #' }
 #' 
 tune.formula <- function(x, data, model, grid = data.frame(),
