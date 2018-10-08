@@ -9,8 +9,7 @@
 #' @param metrics vector of numeric indexes or character names of the performance
 #' metrics to plot.
 #' @param stat function to compute a summary statistic on resampled values for
-#' MLModelTune line plots and Resamples model sorting.  The supplied function
-#' should contain a \code{na.rm} argument in its definition.
+#' MLModelTune line plots and Resamples model sorting.
 #' @param type type of plot to construct.
 #' @param ... arguments passed to other methods.
 #' 
@@ -42,7 +41,8 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
   if (type == "line") {
     grid <- x@grid
     if (any(dim(grid) == 0)) stop("no tuning parameters to plot")
-    stats <- as.data.frame.table(apply(resamples, c(3, 2), stat, na.rm = TRUE))
+    stats <- apply(resamples, c(3, 2), function(x) stat(na.omit(x))) %>%
+      as.data.frame.table
     df <- data.frame(
       x = grid[[1]],
       y = stats$Freq,
@@ -97,8 +97,8 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
   df$metric <- factor(df$metric, metrics)
   
   firstmetric <- df[df$metric == metrics[1], , drop = FALSE]
-  sortedlevels <- tapply(firstmetric$y, firstmetric$model, stat,
-                         na.rm = TRUE) %>% sort %>% names
+  sortedlevels <- tapply(firstmetric$y, firstmetric$model,
+                         function(x) stat(na.omit(x))) %>% sort %>% names
   df$model <- factor(df$model, sortedlevels)
   
   p <- ggplot(df)

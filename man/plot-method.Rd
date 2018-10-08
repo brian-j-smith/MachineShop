@@ -22,8 +22,7 @@
 metrics to plot.}
 
 \item{stat}{function to compute a summary statistic on resampled values for
-MLModelTune line plots and Resamples model sorting.  The supplied function
-should contain a \code{na.rm} argument in its definition.}
+MLModelTune line plots and Resamples model sorting.}
 
 \item{type}{type of plot to construct.}
 

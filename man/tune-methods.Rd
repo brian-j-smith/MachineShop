@@ -42,8 +42,7 @@ be employed.}
 use in selecting the best model.}
 
 \item{stat}{function to compute a summary statistic on resampled values of
-the metric for model selection.  The supplied function should contain a
-\code{na.rm} argument in its definition.}
+the metric for model selection.}
 
 \item{maximize}{logical indicating whether to select the model having the
 maximum or minimum value of the performance metric.}

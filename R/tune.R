@@ -38,8 +38,7 @@ tune.data.frame <- function(x, model, grid = data.frame(),
 #' @param metric numeric index or character name of the performance metric to
 #' use in selecting the best model.
 #' @param stat function to compute a summary statistic on resampled values of
-#' the metric for model selection.  The supplied function should contain a
-#' \code{na.rm} argument in its definition.
+#' the metric for model selection.
 #' @param maximize logical indicating whether to select the model having the
 #' maximum or minimum value of the performance metric.
 #' 
@@ -95,8 +94,7 @@ tune.recipe <- function(x, model, grid = data.frame(),
   for (i in 1:max(1, nrow(grid))) {
     models[[i]] <- do.call(model, grid[i, , drop = FALSE])
     resamples[[i]] <- resample(..., models[[i]], control)
-    perf[[i]] <- resamples[[i]] %>%
-      apply(2, stat, na.rm = TRUE)
+    perf[[i]] <- apply(resamples[[i]], 2, function(x) stat(na.omit(x)))
   }
   perf <- as.data.frame(do.call(rbind, perf))
   metric <- match_indices(metric, names(perf))
