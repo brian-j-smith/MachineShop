@@ -1,6 +1,7 @@
 with_parallel <- function(code) {
-  if(require("doParallel", quietly = TRUE)) {
-    cores <- max(parallel::detectCores() - 1, 1)
+  cores <- as.numeric(Sys.getenv("TEST_CORES"))
+  if (is.na(cores)) cores <- 1
+  if (require("doParallel", quietly = TRUE) && cores > 1) {
     doParallel::registerDoParallel(cores = cores)
     on.exit(doParallel::stopImplicitCluster())
   }
