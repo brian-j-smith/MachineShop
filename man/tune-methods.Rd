@@ -73,7 +73,7 @@ fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
 summary(gbmtune)
 plot(gbmtune, type = "line", metrics = c("ROC", "Brier"))
 
-gbmfit <- fit(fo, data = lung, gbmtune)
+gbmfit <- fit(fo, data = lung, model = gbmtune)
 varimp(gbmfit)
 }
 

@@ -66,7 +66,7 @@ tune.data.frame <- function(x, model, grid = data.frame(),
 #' summary(gbmtune)
 #' plot(gbmtune, type = "line", metrics = c("ROC", "Brier"))
 #' 
-#' gbmfit <- fit(fo, data = lung, gbmtune)
+#' gbmfit <- fit(fo, data = lung, model = gbmtune)
 #' varimp(gbmfit)
 #' }
 #' 
