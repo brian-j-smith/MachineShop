@@ -14,12 +14,10 @@ test_model <- function(formula, data, model, times = numeric()) {
   modelfit <- fit(formula, data, model)
   print(modelfit)
   
-  if (!is(modelfit, "SVMModelFit")) {
-    vi <- varimp(modelfit)
-    print(vi)
-    print(plot(vi))
-  }
-  
+  vi <- varimp(modelfit)
+  print(vi)
+  print(plot(vi))
+
   pred <- head(predict(modelfit, data))
   print(pred)
   pred_prob <- head(predict(modelfit, data, type = "prob"))
