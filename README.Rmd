@@ -68,25 +68,30 @@ devtools::install_github("brian-j-smith/MachineShop", build_vignettes = TRUE)
 
 ## Example
 
-The following is a brief example using the package to apply gradient boosted models to predict the species of flowers in Edgar Anderson's iris dataset.
+The following is a brief example using the package to apply gradient boosted models to predict the species of flowers in Edgar Anderson's iris data set.
+
+### Training and Test Set Analysis
 
 ```{r}
 ## Load the package
 library(MachineShop)
 library(magrittr)
 
-## Iris flower species (3 level response)
+## Iris flower species (3 level response) data set
 df <- iris
 df$Species <- factor(df$Species)
 
-## Create training and test sets
+## Training and test sets
 set.seed(123)
 trainindices <- sample(nrow(df), nrow(df) * 2 / 3)
 train <- df[trainindices, ]
 test <- df[-trainindices, ]
 
+## Model formula
+fo <- Species ~ .
+
 ## Gradient boosted mode fit to training set
-gbmfit <- fit(Species ~ ., data = train, model = GBMModel)
+gbmfit <- fit(fo, data = train, model = GBMModel)
 
 ## Variable importance
 (vi <- varimp(gbmfit))
@@ -98,28 +103,88 @@ plot(vi)
 ## Test set predicted probabilities
 predict(gbmfit, newdata = test, type = "prob") %>% head
 
-## Test set predicted classification
+## Test set predicted classifications
 predict(gbmfit, newdata = test) %>% head
+
+## Test set performance
+obs <- response(fo, data = test)
+pred <- predict(gbmfit, newdata = test, type = "prob")
+modelmetrics(obs, pred)
 ```
+
+### Resampling
 
 ```{r, fig.height = 4}
 ## Resample estimation of model performance
-(perf <- resample(Species ~ ., data = df, model = GBMModel))
+(perf <- resample(fo, data = df, model = GBMModel, control = CVControl))
 
 summary(perf)
 
 plot(perf)
 ```
 
+### Model Tuning
+
 ```{r, fig.height = 4}
 ## Model tuning
-gbmtune <- tune(Species ~ ., data = df, model = GBMModel,
+gbmtune <- tune(fo, data = df, model = GBMModel,
                 grid = expand.grid(n.trees = c(25, 50, 100),
                                    interaction.depth = 1:3,
                                    n.minobsinnode = c(5, 10)))
 
 plot(gbmtune, type = "line")
 ```
+
+```{r}
+## Fit the tuned model
+gbmtunefit <- fit(fo, data = df, model = gbmtune)
+
+varimp(gbmtunefit)
+```
+
+### Model Comparisons
+
+```{r}
+## Model comparisons
+control <- CVControl(folds = 10, repeats = 5)
+
+gbmperf <- resample(fo, data = df, model = GBMModel, control = control)
+rfperf <- resample(fo, data = df, model = RandomForestModel, control = control)
+nnetperf <- resample(fo, data = df, model = NNetModel, control = control)
+
+perf <- Resamples(GBM = gbmperf, RF = rfperf, NNet = nnetperf)
+
+summary(perf)
+
+plot(perf)
+```
+
+```{r}
+## Pairwise model differences and t-tests
+perfdiff <- diff(perf)
+
+summary(perfdiff)
+
+t.test(perfdiff)
+
+plot(perfdiff)
+```
+
+### Recipes
+
+```{r}
+library(recipes)
+
+rec <- recipe(fo, data = df) %>%
+  step_center(all_predictors()) %>%
+  step_scale(all_predictors()) %>%
+  step_pca(all_predictors())
+
+perf <- resample(rec, model = GBMModel, control = CVControl)
+
+summary(perf)
+```
+
 
 ## Documentation
 
