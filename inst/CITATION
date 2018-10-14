@@ -8,4 +8,4 @@ bibentry(bibtype = "Manual",
                            role = c("aut", "cre"))),
          year = year,
          note = note,
-         url = "https://github.com/brian-j-smith/MachineShop")
+         url = "https://cran.r-project.org/package=MachineShop")

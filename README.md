@@ -222,6 +222,9 @@ Installation
 ------------
 
 ``` r
+# Current release from CRAN
+install.packages("MachineShop")
+
 # Development version from GitHub
 # install.packages("devtools")
 devtools::install_github("brian-j-smith/MachineShop")
