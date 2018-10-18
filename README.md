@@ -13,6 +13,8 @@ Overview
 <tr>
 <th style="border-bottom:hidden" colspan="1">
 </th>
+<th style="border-bottom:hidden" colspan="1">
+</th>
 <th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="4">
 Response Variable Types
 
@@ -20,6 +22,9 @@ Response Variable Types
 </tr>
 <tr>
 <th style="text-align:left;">
+</th>
+<th style="text-align:center;">
+Constructor
 </th>
 <th style="text-align:center;">
 factor
@@ -41,6 +46,9 @@ Surv
 C5.0 Classification
 </td>
 <td style="text-align:center;">
+C50Model
+</td>
+<td style="text-align:center;">
 x
 </td>
 <td style="text-align:center;">
@@ -53,6 +61,9 @@ x
 <tr>
 <td style="text-align:left;">
 Conditional Inference Trees
+</td>
+<td style="text-align:center;">
+CForestModel
 </td>
 <td style="text-align:center;">
 x
@@ -71,6 +82,9 @@ x
 Cox Regression
 </td>
 <td style="text-align:center;">
+CoxModel
+</td>
+<td style="text-align:center;">
 </td>
 <td style="text-align:center;">
 </td>
@@ -83,6 +97,9 @@ x
 <tr>
 <td style="text-align:left;">
 Generalized Linear Models
+</td>
+<td style="text-align:center;">
+GLMModel
 </td>
 <td style="text-align:center;">
 x
@@ -98,6 +115,9 @@ x
 <tr>
 <td style="text-align:left;">
 Gradient Boosted Models
+</td>
+<td style="text-align:center;">
+GBMModel
 </td>
 <td style="text-align:center;">
 x
@@ -116,6 +136,9 @@ x
 Lasso and Elastic-Net
 </td>
 <td style="text-align:center;">
+GLMNetModel
+</td>
+<td style="text-align:center;">
 x
 </td>
 <td style="text-align:center;">
@@ -130,6 +153,9 @@ x
 <tr>
 <td style="text-align:left;">
 Feed-Forward Neural Networks
+</td>
+<td style="text-align:center;">
+NNetModel
 </td>
 <td style="text-align:center;">
 x
@@ -147,6 +173,9 @@ x
 Partial Least Squares
 </td>
 <td style="text-align:center;">
+PLSModel
+</td>
+<td style="text-align:center;">
 x
 </td>
 <td style="text-align:center;">
@@ -160,6 +189,9 @@ x
 <tr>
 <td style="text-align:left;">
 Ordered Logistic Regression
+</td>
+<td style="text-align:center;">
+POLRModel
 </td>
 <td style="text-align:center;">
 </td>
@@ -176,6 +208,9 @@ x
 Random Forests
 </td>
 <td style="text-align:center;">
+RandomForestModel
+</td>
+<td style="text-align:center;">
 x
 </td>
 <td style="text-align:center;">
@@ -188,7 +223,30 @@ x
 </tr>
 <tr>
 <td style="text-align:left;">
+Stacked Regression
+</td>
+<td style="text-align:center;">
+StackedModel
+</td>
+<td style="text-align:center;">
+x
+</td>
+<td style="text-align:center;">
+x
+</td>
+<td style="text-align:center;">
+x
+</td>
+<td style="text-align:center;">
+x
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 Parametric Survival Regression
+</td>
+<td style="text-align:center;">
+SurvRegModel
 </td>
 <td style="text-align:center;">
 </td>
@@ -203,6 +261,9 @@ x
 <tr>
 <td style="text-align:left;">
 Support Vector Machines
+</td>
+<td style="text-align:center;">
+SVMModel
 </td>
 <td style="text-align:center;">
 x

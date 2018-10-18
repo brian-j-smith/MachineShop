@@ -356,18 +356,31 @@ varimp(gbmfit)
 Currently available model functions are summarized in the table below according to the types of response variables with which each model can be used.  The package additionally supplies a generic `MLModel` function for users to create their own custom models.
 
 ```{r echo = FALSE}
-df <- data.frame(factor = character(), numeric = character(), ordered = character(), Surv = character(), stringsAsFactors = FALSE)
+modelnames <- c("C5.0 Classification" = "C50Model",
+                "Conditional Inference Trees" = "CForestModel",
+                "Cox Regression" = "CoxModel",
+                "Generalized Linear Models" = "GLMModel",
+                "Gradient Boosted Models" = "GBMModel",
+                "Lasso and Elastic-Net" = "GLMNetModel",
+                "Feed-Forward Neural Networks" = "NNetModel",
+                "Partial Least Squares" = "PLSModel",
+                "Ordered Logistic Regression" = "POLRModel",
+                "Random Forests" = "RandomForestModel",
+                "Stacked Regression" = "StackedModel",
+                "Parametric Survival Regression" = "SurvRegModel",
+                "Support Vector Machines" = "SVMModel")
 
-modelnames <- c("C50Model", "CForestModel", "CoxModel", "CoxStepAICModel", "GLMModel", "GLMStepAICModel", "GBMModel", "GLMNetModel", "NNetModel", "PLSModel", "POLRModel", "RandomForestModel", "SurvRegModel", "SurvRegStepAICModel", "SVMModel")
-
-for(modelname in modelnames) {
+types <- c("factor", "numeric", "ordered", "Surv")
+x <- lapply(modelnames, function(modelname) {
   model <- get(modelname)()
-  df[modelname,] <- ifelse(names(df) %in% model@types, "x", "")
-}
+  structure(c(modelname, ifelse(types %in% model@types, "x", "")),
+            names = c("Constructor", types))
+})
+df <- as.data.frame(do.call(rbind, x))
 
 kable(df, align = "c") %>%
   kable_styling("striped", full_width = FALSE, position = "center") %>%
-  add_header_above(c(" " = 1, "Response Variable Types" = 4))
+  add_header_above(c(" " = 1, " " = 1, "Response Variable Types" = 4))
 ```
 
 

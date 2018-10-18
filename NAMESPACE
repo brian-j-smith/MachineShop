@@ -15,9 +15,11 @@ importFrom(ModelMetrics, auc, brier, ce, kappa, mae, rmse, sensitivity,
            specificity)
 importFrom(recipes, bake, juice, prep)
 importFrom(rsample, assessment, bootstraps, prepper, rsample2caret, vfold_cv)
-importFrom(stats, approx, coef, cor, formula, median, model.frame, model.matrix,
-           model.response, model.weights, na.fail, na.omit, na.pass, p.adjust,
-           pchisq, predict, quantile, sd, t.test, terms, vcov)
+importFrom(Rsolnp, solnp)
+importFrom(stats, approx, coef, complete.cases, cor, formula, median,
+           model.frame, model.matrix, model.response, model.weights, na.fail,
+           na.omit, na.pass, p.adjust, pchisq, predict, quantile, sd, t.test,
+           terms, vcov)
 importFrom(survival, is.Surv, Surv, survfit)
 importFrom(survivalROC, survivalROC)
 importFrom(utils, combn, head, stack, tail)
@@ -53,6 +55,7 @@ export(MLModel,
        PLSModel,
        POLRModel,
        RandomForestModel,
+       StackedModel,
        SurvRegModel,
        SurvRegStepAICModel,
        SVMModel,
