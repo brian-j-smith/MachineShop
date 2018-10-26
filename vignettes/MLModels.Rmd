@@ -85,13 +85,6 @@ if(!all(weights == 1)) warning("weights are unsupported and will be ignored")
 - The predict function should return a vector or matrix of probabilities for 2-level factors, a matrix for factors with more than 2 levels, a vector or matrix of expected responses if numeric, a matrix of survival probabilities if follow-up times are supplied, or a vector of survival risks if no follow-up times.
 
 
-### response Function
-
-- Should have a single model fit `object` argument, followed by an ellipsis, and return the original response variable supplied to the fit function.
-
-- Sometimes the original response is easily extracted from the fit function result.  At other times, it may be nested within the results and require some extra work to extract (see GBMModel).  If it is impossible to extract the response from the source package fit function results, add the response as a new element to the results in the fit function.
-
-
 ### varimp Function
 
 - Should have a single model fit `object` argument followed by an ellipsis.

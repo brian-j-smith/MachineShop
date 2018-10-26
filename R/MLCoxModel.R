@@ -48,9 +48,6 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), control = NULL) {
         exp(predict(object, newdata = newdata, type = "lp"))
       }
     },
-    response = function(object, ...) {
-      object$y
-    },
     varimp = function(object, ...) {
       pchisq(coef(object)^2 / diag(vcov(object)), 1)
     }
@@ -102,7 +99,6 @@ CoxStepAICModel <- function(ties = c("efron", "breslow", "exact"),
                       trace = trace, steps = steps)
     },
     predict = stepmodel@predict,
-    response = stepmodel@response,
     varimp = stepmodel@varimp
   )
 }

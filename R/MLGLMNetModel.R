@@ -68,13 +68,12 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
       mfit <- glmnet::glmnet(x, y, weights = weights, family = family,
                              nlambda = 1, ...)
       mfit$x <- x
-      mfit$y <- y
       mfit$formula <- formula
       mfit
     },
     predict = function(object, newdata, times = numeric(), ...) {
       x <- object$x
-      y <- object$y
+      y <- response(object)
       fo <- object$formula[-2]
       object <- unMLModelFit(object)
       newmf <- model.frame(fo, newdata, na.action = NULL)
@@ -91,9 +90,6 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
       } else {
         predict(object, newx = newx, type = "response") %>% drop
       }
-    },
-    response = function(object, ...) {
-      object$y
     },
     varimp = function(object, ...) {
       convert <- function(x) abs(drop(as.matrix(x)))

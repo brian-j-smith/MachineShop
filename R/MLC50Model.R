@@ -59,15 +59,10 @@ C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
     nvars = function(data) nvars(data, design = "terms"),
     fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
-      mfit <- C50::C5.0(formula, data = data, weights = weights, ...)
-      mfit$y <- response(formula, data)
-      mfit
+      C50::C5.0(formula, data = data, weights = weights, ...)
     },
     predict = function(object, newdata, ...) {
       predict(unMLModelFit(object), newdata = newdata, type = "prob")
-    },
-    response = function(object, ...) {
-      object$y
     },
     varimp = function(object, ...) {
       C50::C5imp(object, ...)

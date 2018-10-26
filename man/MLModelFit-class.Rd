@@ -15,8 +15,8 @@ MLModelFit constructor are not necessary unless implementing custom models.
 
 \item{\code{.predict}}{model prediction function.}
 
-\item{\code{.response}}{function to extract the response variable from a model fit.}
-
 \item{\code{.varimp}}{variable importance function.}
+
+\item{\code{.y}}{observed response variable.}
 }}
 

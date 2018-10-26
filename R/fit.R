@@ -34,7 +34,7 @@ fit.data.frame <- function(x, model, ...) {
   data_params <- list(y = y, nobs = nrow(x))
   data_params$nvars <-  model@nvars(x[1, , drop = FALSE])
   do.call(model@fit, args, envir = list2env(c(args, data_params))) %>%
-    asMLModelFit(paste0(model@name, "Fit"), model)
+    asMLModelFit(paste0(model@name, "Fit"), model, y)
 }
 
 

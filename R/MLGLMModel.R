@@ -45,9 +45,6 @@ GLMModel <- function(family = NULL, control = NULL) {
     predict = function(object, newdata, ...) {
       predict(unMLModelFit(object), newdata = newdata, type = "response")
     },
-    response = function(object, ...) {
-      response(object$formula, object$data)
-    },
     varimp = function(object, ...) {
       pchisq(coef(object)^2 / diag(vcov(object)), 1)
     }
@@ -101,7 +98,6 @@ GLMStepAICModel <- function(family = NULL, control = NULL,
                       trace = trace, steps = steps)
     },
     predict = stepmodel@predict,
-    response = stepmodel@response,
     varimp = stepmodel@varimp
   )
 }

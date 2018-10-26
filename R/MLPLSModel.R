@@ -42,16 +42,11 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
         data[[varname]] <- I(mm)
         formula[[2]] <- as.symbol(varname)
       }
-      mfit <- pls::plsr(formula, data = data, ...)
-      mfit$y <- y
-      mfit
+      pls::plsr(formula, data = data, ...)
     },
     predict = function(object, newdata, ...) {
       predict(unMLModelFit(object), newdata = newdata, ncomp = object$ncomp,
               type = "response") %>% drop
-    },
-    response = function(object, ...) {
-      object$y
     },
     varimp = function(object, ...) {
       beta <- coef(object, comps = 1:object$ncomp)

@@ -71,9 +71,6 @@ CForestModel <- function(teststat = c("quad", "max"),
           drop
       }
     },
-    response = function(object, ...) {
-      object@responses@variables[[1]]
-    },
     varimp = function(object, ...) {
       party::varimp(object, ...)
     }

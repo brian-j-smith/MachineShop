@@ -41,9 +41,6 @@ POLRModel <- function(method = c("logistic", "probit", "loglog", "cloglog",
     predict = function(object, newdata, ...) {
       predict(unMLModelFit(object), newdata = newdata, type = "probs")
     },
-    response = function(object, ...) {
-      object$model[[1]]
-    },
     varimp = function(object, ...) {
       beta <- coef(object)
       s2 <- head(diag(vcov(object)), length(beta))

@@ -8,8 +8,7 @@ MLModel(name = "MLModel", packages = character(0),
   types = character(0), params = list(), nvars = function(data) NULL,
   fit = function(formula, data, weights, ...) stop("no fit function"),
   predict = function(object, newdata, times, ...)
-  stop("no predict function"), response = function(object, ...)
-  stop("no response function"), varimp = function(object, ...)
+  stop("no predict function"), varimp = function(object, ...)
   stop("no varimp function"))
 }
 \arguments{
@@ -28,8 +27,6 @@ given model frame.}
 \item{fit}{model fitting function.}
 
 \item{predict}{model prediction function.}
-
-\item{response}{function to extract the response variable from a model fit.}
 
 \item{varimp}{variable importance function.}
 }

@@ -145,7 +145,6 @@ setClass("OOBControl",
 #' given model frame.
 #' @param fit model fitting function.
 #' @param predict model prediction function.
-#' @param response function to extract the response variable from a model fit.
 #' @param varimp variable importance function.
 #' 
 MLModel <- function(name = "MLModel", packages = character(0),
@@ -155,13 +154,11 @@ MLModel <- function(name = "MLModel", packages = character(0),
                       stop("no fit function"),
                     predict = function(object, newdata, times, ...)
                       stop("no predict function"),
-                    response = function(object, ...)
-                      stop("no response function"),
                     varimp = function(object, ...)
                       stop("no varimp function")) {
   new("MLModel", name = name, packages = packages, types = types,
       params = params, nvars = nvars, fit = fit, predict = predict,
-      response = response, varimp = varimp)
+      varimp = varimp)
 }
 
 
@@ -173,7 +170,6 @@ setClass("MLModel",
             nvars = "function",
             fit = "function",
             predict = "function",
-            response = "function",
             varimp = "function")
 )
 
@@ -188,14 +184,14 @@ setClass("MLModel",
 #' 
 #' @slot .packages character vector of packages required by the object.
 #' @slot .predict model prediction function.
-#' @slot .response function to extract the response variable from a model fit.
 #' @slot .varimp variable importance function.
+#' @slot .y observed response variable.
 #' 
 setClass("MLModelFit",
   slots = c(.packages = "character",
             .predict = "function",
-            .response = "function",
-            .varimp = "function"),
+            .varimp = "function",
+            .y = "ANY"),
   contains = "VIRTUAL"
 )
 
