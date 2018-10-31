@@ -6,8 +6,8 @@
 #' @rdname summary-methods
 #' 
 #' @param object object to summarize.
-#' @param stats list of named functions to include in the calculation of summary
-#' statistics.
+#' @param stats function or list of named functions to include in the
+#' calculation of summary statistics.
 #' @param na.rm logical indicating whether to exclude missing values.
 #' @param ... arguments passed to other methods.
 #' 
@@ -52,11 +52,18 @@ summary.Resamples <- function(object,
                                         "Min" = min,
                                         "Max" = max),
                               na.rm = TRUE, ...) {
+  if (is.list(stats)) {
+    stats <- eval(bquote(
+      function(x) sapply(.(stats), function(stat) stat(x))
+    ))
+  }
+  
   f <- function(x) {
     prop_na <- mean(is.na(x))
     if (na.rm) x <- na.omit(x)
-    sapply(stats, function(stat) stat(x)) %>% c("NA" = prop_na)
+    c(stats(x), "NA" = prop_na)
   }
+  
   margins <- 2
   perm <- c(2, 1)
   if (length(dim(object)) > 2) {
