@@ -18,7 +18,7 @@
 \arguments{
 \item{x}{object to plot.}
 
-\item{metrics}{vector of numeric indexes or character names of the performance
+\item{metrics}{vector of numeric indexes or character names of performance
 metrics to plot.}
 
 \item{stat}{function to compute a summary statistic on resampled values for

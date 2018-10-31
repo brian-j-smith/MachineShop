@@ -6,7 +6,7 @@
 #' @rdname plot-method
 #' 
 #' @param x object to plot.
-#' @param metrics vector of numeric indexes or character names of the performance
+#' @param metrics vector of numeric indexes or character names of performance
 #' metrics to plot.
 #' @param stat function to compute a summary statistic on resampled values for
 #' MLModelTune line plots and Resamples model sorting.
@@ -64,13 +64,12 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
     } else {
       aes(x, y)
     }
-    p <- ggplot(df, mapping) +
+    ggplot(df, mapping) +
       geom_line() +
       geom_point() +
       labs(x = names(grid)[1], y = "Values", color = "Params Group",
-           shape = "Params Group")
-    if (nlevels(df$metric) > 1) p <- p + facet_wrap(~ metric, scales = "free")
-    p
+           shape = "Params Group") +
+      facet_wrap(~ metric, scales = "free")
   } else {
     plot(resamples, metrics = metrics, stat = stat, type = type, ...)
   }
@@ -102,25 +101,24 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
   df$model <- factor(df$model, sortedlevels)
   
   p <- ggplot(df)
-  p <- switch(match.arg(type),
-              "boxplot" = p + geom_boxplot(aes(model, y)) +
-                stat_summary(aes(model, y), fun.y = mean, geom = "point") +
-                labs(x = "", y = "Values") +
-                coord_flip(),
-              "density" = p + geom_density(aes(y, color = model)) +
-                labs(x = "Values", y = "Density", color = ""),
-              "errorbar" = p + stat_summary(aes(model, y),
-                                            fun.data = mean_se,
-                                            geom = "errorbar") +
-                stat_summary(aes(model, y), fun.y = mean, geom = "point") +
-                labs(x = "", y = "Values") +
-                coord_flip(),
-              "violin" = p + geom_violin(aes(model, y)) +
-                stat_summary(aes(model, y), fun.y = mean, geom = "point") +
-                labs(x = "", y = "Values") +
-                coord_flip())
-  if (nlevels(df$metric) > 1) p <- p + facet_wrap(~ metric, scales = "free")
-  p
+  switch(match.arg(type),
+         "boxplot" = p + geom_boxplot(aes(model, y)) +
+           stat_summary(aes(model, y), fun.y = mean, geom = "point") +
+           labs(x = "", y = "Values") +
+           coord_flip(),
+         "density" = p + geom_density(aes(y, color = model)) +
+           labs(x = "Values", y = "Density", color = ""),
+         "errorbar" = p + stat_summary(aes(model, y),
+                                       fun.data = mean_se,
+                                       geom = "errorbar") +
+           stat_summary(aes(model, y), fun.y = mean, geom = "point") +
+           labs(x = "", y = "Values") +
+           coord_flip(),
+         "violin" = p + geom_violin(aes(model, y)) +
+           stat_summary(aes(model, y), fun.y = mean, geom = "point") +
+           labs(x = "", y = "Values") +
+           coord_flip()) +
+    facet_wrap(~ metric, scales = "free")
 }
 
 
