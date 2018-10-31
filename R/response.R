@@ -20,17 +20,17 @@ response <- function(object, ...) {
 }
 
 
-response.data.frame <- function(object, ...) {
-  model.response(object)
-}
-
-
 #' @rdname response-methods
 #' 
 #' @param data data frame containing the values of a response variable defined in a formula.
 #' 
 response.formula <- function(object, data, ...) {
   eval(object[[2]], data)
+}
+
+
+response.ModelFrame <- function(object, ...) {
+  response(formula(terms(object)), object)
 }
 
 

@@ -7,8 +7,8 @@
 #' @rdname resample-methods
 #' 
 #' @param x defined relationship between model predictors and an outcome.  May
-#' be a model.frame (data.frame) containing a formula, data, and optionally case
-#' weights; a formula; or a recipe.
+#' be a ModelFrame containing a formula, data, and optionally case weights; a
+#' formula; or a recipe.
 #' @param ... arguments passed to other methods.
 #' 
 resample <- function(x, ...) {
@@ -18,7 +18,7 @@ resample <- function(x, ...) {
 
 #' @rdname resample-methods
 #' 
-resample.data.frame <- function(x, model, control = CVControl, ...) {
+resample.ModelFrame <- function(x, model, control = CVControl, ...) {
   .resample(getMLObject(control, "MLControl"), x, model)
 }
 
@@ -34,7 +34,7 @@ resample.data.frame <- function(x, model, control = CVControl, ...) {
 #' 
 #' @return Resamples class object.
 #' 
-#' @seealso \code{\link{tune}}, \code{\link[stats]{model.frame}},
+#' @seealso \code{\link{tune}}, \code{\link{ModelFrame}},
 #' \code{\link[recipes]{recipe}}, \code{\link{BootControl}},
 #' \code{\link{CVControl}}, \code{\link{OOBControl}}, \code{\link{Resamples}},
 #' \code{\link{plot}}, \code{\link{summary}}
@@ -55,7 +55,7 @@ resample.data.frame <- function(x, model, control = CVControl, ...) {
 #' }
 #' 
 resample.formula <- function(x, data, model, control = CVControl, ...) {
-  resample(model.frame(x, data, na.action = NULL), model, control)
+  resample(ModelFrame(x, data, na.action = na.pass), model, control)
 }
 
 
@@ -69,7 +69,7 @@ resample.recipe <- function(x, model, control = CVControl, ...) {
 setGeneric(".resample", function(object, x, ...) standardGeneric(".resample"))
 
 
-setMethod(".resample", c("BootControl", "data.frame"),
+setMethod(".resample", c("BootControl", "ModelFrame"),
   function(object, x, model) {
     set.seed(object@seed)
     obs <- response(x)
@@ -114,7 +114,7 @@ setMethod(".resample", c("BootControl", "recipe"),
 )
 
 
-setMethod(".resample", c("CVControl", "data.frame"),
+setMethod(".resample", c("CVControl", "ModelFrame"),
   function(object, x, model) {
     set.seed(object@seed)
     splits <- vfold_cv(data.frame(strata = strata(response(x))),
@@ -163,7 +163,7 @@ setMethod(".resample", c("CVControl", "recipe"),
 )
 
 
-setMethod(".resample", c("OOBControl", "data.frame"),
+setMethod(".resample", c("OOBControl", "ModelFrame"),
   function(object, x, model) {
     set.seed(object@seed)
     splits <- bootstraps(data.frame(strata = strata(response(x))),

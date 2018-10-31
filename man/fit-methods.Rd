@@ -2,14 +2,14 @@
 % Please edit documentation in R/fit.R
 \name{fit}
 \alias{fit}
-\alias{fit.data.frame}
+\alias{fit.ModelFrame}
 \alias{fit.formula}
 \alias{fit.recipe}
 \title{Model Fitting}
 \usage{
 fit(x, ...)
 
-\method{fit}{data.frame}(x, model, ...)
+\method{fit}{ModelFrame}(x, model, ...)
 
 \method{fit}{formula}(x, data, model, ...)
 
@@ -17,8 +17,8 @@ fit(x, ...)
 }
 \arguments{
 \item{x}{defined relationship between model predictors and an outcome.  May
-be a model.frame (data.frame) containing a formula, data, and optionally case
-weights; a formula; or a recipe.}
+be a ModelFrame containing a formula, data, and optionally case weights; a
+formula; or a recipe.}
 
 \item{...}{arguments passed to other methods.}
 

@@ -3,12 +3,15 @@
 \name{plot}
 \alias{plot}
 \alias{plot.MLModelTune}
+\alias{plot.PartialDependence}
 \alias{plot.Resamples}
 \alias{plot.VarImp}
 \title{Model Performance Plots}
 \usage{
 \method{plot}{MLModelTune}(x, metrics = NULL, stat = mean,
   type = c("boxplot", "density", "errorbar", "line", "violin"), ...)
+
+\method{plot}{PartialDependence}(x, stats = NULL, ...)
 
 \method{plot}{Resamples}(x, metrics = NULL, stat = mean,
   type = c("boxplot", "density", "errorbar", "violin"), ...)
@@ -27,6 +30,9 @@ MLModelTune line plots and Resamples model sorting.}
 \item{type}{type of plot to construct.}
 
 \item{...}{arguments passed to other methods.}
+
+\item{stats}{vector of numeric indexes or character names of partial
+dependence summary statistics to plot.}
 
 \item{n}{number of most important variables to include in the plot
 (default: all).}

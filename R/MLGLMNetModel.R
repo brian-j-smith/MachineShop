@@ -55,7 +55,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
     params = params(environment()),
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, family = NULL, ...) {
-      mf <- model.frame(formula, data, na.action = NULL)
+      mf <- model.frame(formula, data, na.action = na.pass)
       x <- model.matrix(formula, mf)[, -1, drop = FALSE]
       y <- model.response(mf)
       if (is.null(family)) {
@@ -76,7 +76,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
       y <- response(object)
       fo <- object$formula[-2]
       object <- unMLModelFit(object)
-      newmf <- model.frame(fo, newdata, na.action = NULL)
+      newmf <- model.frame(fo, newdata, na.action = na.pass)
       newx <- model.matrix(fo, newmf)[, -1, drop = FALSE]
       if (is.Surv(y)) {
         if (length(times)) {

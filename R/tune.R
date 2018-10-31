@@ -7,8 +7,8 @@
 #' @rdname tune-methods
 #' 
 #' @param x defined relationship between model predictors and an outcome.  May
-#' be a model.frame (data.frame) containing a formula, data, and optionally case
-#' weights; a formula; or a recipe.
+#' be a ModelFrame containing a formula, data, and optionally case weights; a
+#' formula; or a recipe.
 #' @param ... arguments passed to other methods.
 #' 
 tune <- function(x, ...) {
@@ -18,7 +18,7 @@ tune <- function(x, ...) {
 
 #' @rdname tune-methods
 #' 
-tune.data.frame <- function(x, model, grid = data.frame(),
+tune.ModelFrame <- function(x, model, grid = data.frame(),
                             control = CVControl, metric = 1, stat = mean,
                             maximize = TRUE, ...) {
   .tune(model, grid, control, metric, stat, maximize, x)
@@ -44,7 +44,7 @@ tune.data.frame <- function(x, model, grid = data.frame(),
 #' 
 #' @return MLModelTune class object that inherits from MLModel.
 #' 
-#' @seealso \code{\link[stats]{model.frame}}, \code{\link[recipes]{recipe}},
+#' @seealso \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
 #' \code{\link{BootControl}}, \code{\link{CVControl}}, \code{\link{OOBControl}},
 #' \code{\link{fit}}, \code{\link{resample}}, \code{\link{plot}},
 #' \code{\link{summary}}

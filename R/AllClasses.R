@@ -1,3 +1,4 @@
+setOldClass("ModelFrame")
 setOldClass("recipe")
 
 
@@ -288,6 +289,11 @@ setMethod("initialize", "Resamples",
 MLModelTune <- setClass("MLModelTune",
   slots = c(grid = "data.frame", resamples = "Resamples", selected = "numeric"),
   contains = "MLModel"
+)
+
+
+PartialDependence <- setClass("PartialDependence",
+  contains = "data.frame"
 )
 
 

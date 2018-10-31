@@ -2,14 +2,14 @@
 % Please edit documentation in R/resample.R
 \name{resample}
 \alias{resample}
-\alias{resample.data.frame}
+\alias{resample.ModelFrame}
 \alias{resample.formula}
 \alias{resample.recipe}
 \title{Resample Estimation of Model Performance}
 \usage{
 resample(x, ...)
 
-\method{resample}{data.frame}(x, model, control = CVControl, ...)
+\method{resample}{ModelFrame}(x, model, control = CVControl, ...)
 
 \method{resample}{formula}(x, data, model, control = CVControl, ...)
 
@@ -17,8 +17,8 @@ resample(x, ...)
 }
 \arguments{
 \item{x}{defined relationship between model predictors and an outcome.  May
-be a model.frame (data.frame) containing a formula, data, and optionally case
-weights; a formula; or a recipe.}
+be a ModelFrame containing a formula, data, and optionally case weights; a
+formula; or a recipe.}
 
 \item{...}{arguments passed to other methods.}
 
@@ -55,7 +55,7 @@ plot(gbmperf)
 
 }
 \seealso{
-\code{\link{tune}}, \code{\link[stats]{model.frame}},
+\code{\link{tune}}, \code{\link{ModelFrame}},
 \code{\link[recipes]{recipe}}, \code{\link{BootControl}},
 \code{\link{CVControl}}, \code{\link{OOBControl}}, \code{\link{Resamples}},
 \code{\link{plot}}, \code{\link{summary}}

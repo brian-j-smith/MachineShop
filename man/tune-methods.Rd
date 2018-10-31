@@ -2,14 +2,14 @@
 % Please edit documentation in R/tune.R
 \name{tune}
 \alias{tune}
-\alias{tune.data.frame}
+\alias{tune.ModelFrame}
 \alias{tune.formula}
 \alias{tune.recipe}
 \title{Model Tuning}
 \usage{
 tune(x, ...)
 
-\method{tune}{data.frame}(x, model, grid = data.frame(),
+\method{tune}{ModelFrame}(x, model, grid = data.frame(),
   control = CVControl, metric = 1, stat = mean, maximize = TRUE,
   ...)
 
@@ -23,8 +23,8 @@ tune(x, ...)
 }
 \arguments{
 \item{x}{defined relationship between model predictors and an outcome.  May
-be a model.frame (data.frame) containing a formula, data, and optionally case
-weights; a formula; or a recipe.}
+be a ModelFrame containing a formula, data, and optionally case weights; a
+formula; or a recipe.}
 
 \item{...}{arguments passed to other methods.}
 
@@ -79,7 +79,7 @@ varimp(gbmfit)
 
 }
 \seealso{
-\code{\link[stats]{model.frame}}, \code{\link[recipes]{recipe}},
+\code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
 \code{\link{BootControl}}, \code{\link{CVControl}}, \code{\link{OOBControl}},
 \code{\link{fit}}, \code{\link{resample}}, \code{\link{plot}},
 \code{\link{summary}}
