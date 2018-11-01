@@ -315,11 +315,11 @@ varimp(gbmfit)
 
 ### Model Frames
 
-The second specification is similar to the first, except the formula and data frame pair are give in a `model.frame`.  The model frame approach has a few subtle advantages.  One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default.  This is often desirable for models that cannot handle missing values.  Note, however, that some models like `GBMModel` do accommodate missing values.  For those, missing values can be retained in the model frame by setting its argument `na.action = NULL`.
+The second specification is similar to the first, except the formula and data frame pair are give in a `ModelFrame`.  The model frame approach has a few subtle advantages.  One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default.  This is often desirable for models that cannot handle missing values.  Note, however, that some models like `GBMModel` do accommodate missing values.  For those, missing values can be retained in the model frame by setting its argument `na.action = na.pass`.
 
 ```{r}
 ## Model frame specification
-mf <- model.frame(medv ~ ., data = Boston)
+mf <- ModelFrame(medv ~ ., data = Boston)
 gbmfit <- fit(mf, model = GBMModel)
 varimp(gbmfit)
 ```
@@ -328,8 +328,8 @@ Another advantage is that case weights can be included in the model frame and wi
 
 ```{r}
 ## Model frame specification with case weights
-mf <- model.frame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
-                  data = esoph, weights = ncases + ncontrols)
+mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
+                 data = esoph, weights = ncases + ncontrols)
 gbmfit <- fit(mf, model = GBMModel)
 varimp(gbmfit)
 ```

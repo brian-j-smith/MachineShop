@@ -81,7 +81,9 @@ nvars <- function(data, design = c("terms", "model.matrix")) {
   switch(match.arg(design),
          "terms" = length(labels(modelterms)),
          "model.matrix" = {
-           ncol(model.matrix(modelterms, data)) - attr(modelterms, "intercept")
+           fo <- formula(modelterms)
+           mf <- model.frame(fo, data)
+           ncol(model.matrix(fo, mf)) - attr(modelterms, "intercept")
          }
   )
 }

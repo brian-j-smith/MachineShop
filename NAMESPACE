@@ -16,8 +16,8 @@ importFrom(ModelMetrics, auc, brier, ce, kappa, mae, rmse, sensitivity,
 importFrom(recipes, bake, juice, prep)
 importFrom(rsample, assessment, bootstraps, prepper, rsample2caret, vfold_cv)
 importFrom(stats, approx, coef, cor, formula, median, model.frame, model.matrix,
-           model.response, model.weights, na.omit, p.adjust, pchisq, predict,
-           sd, t.test, terms, vcov)
+           model.response, model.weights, na.fail, na.omit, na.pass, p.adjust,
+           pchisq, predict, sd, t.test, terms, vcov)
 importFrom(survival, is.Surv, Surv, survfit)
 importFrom(survivalROC, survivalROC)
 importFrom(utils, combn, head, stack, tail)
@@ -25,6 +25,7 @@ importFrom(utils, combn, head, stack, tail)
 
 export(.,
        fit,
+       ModelFrame,
        resample,
        Resamples,
        response,
@@ -68,20 +69,20 @@ exportMethods(modelmetrics)
 
 S3method(diff, MLModelTune)
 S3method(diff, Resamples)
-S3method(fit, data.frame)
+S3method(fit, ModelFrame)
 S3method(fit, formula)
 S3method(fit, recipe)
 S3method(plot, MLModelTune)
 S3method(plot, Resamples)
 S3method(plot, VarImp)
 S3method(predict, MLModelFit)
-S3method(resample, data.frame)
+S3method(resample, ModelFrame)
 S3method(resample, formula)
 S3method(resample, recipe)
 S3method(response, formula)
 S3method(summary, MLModelTune)
 S3method(summary, Resamples)
 S3method(t.test, ResamplesDiff)
-S3method(tune, data.frame)
+S3method(tune, ModelFrame)
 S3method(tune, formula)
 S3method(tune, recipe)

@@ -6,8 +6,8 @@
 #' @rdname fit-methods
 #' 
 #' @param x defined relationship between model predictors and an outcome.  May
-#' be a model.frame (data.frame) containing a formula, data, and optionally case
-#' weights; a formula; or a recipe.
+#' be a ModelFrame containing a formula, data, and optionally case weights; a
+#' formula; or a recipe.
 #' @param ... arguments passed to other methods.
 #' 
 fit <- function(x, ...) {
@@ -17,7 +17,7 @@ fit <- function(x, ...) {
 
 #' @rdname fit-methods
 #' 
-fit.data.frame <- function(x, model, ...) {
+fit.ModelFrame <- function(x, model, ...) {
   model <- getMLObject(model, "MLModel")
   
   y <- response(x)
@@ -27,7 +27,6 @@ fit.data.frame <- function(x, model, ...) {
   
   requireModelNamespaces(model@packages)
   fo <- formula(terms(x))
-  fo[[2]] <- formula(x)[[2]]
   weights <- model.weights(x)
   if (is.null(weights)) weights <- rep(1, nrow(x))
   args <- c(list(formula = fo, data = x, weights = weights), model@params)
@@ -59,7 +58,7 @@ fit.data.frame <- function(x, model, ...) {
 #' varimp(gbmfit)
 #' 
 fit.formula <- function(x, data, model, ...) {
-  fit(model.frame(x, data, na.action = NULL), model)
+  fit(ModelFrame(x, data, na.action = na.pass), model)
 }
 
 

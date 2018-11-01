@@ -1,3 +1,4 @@
+setOldClass("ModelFrame")
 setOldClass("recipe")
 
 
