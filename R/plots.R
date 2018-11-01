@@ -78,6 +78,44 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
 
 #' @rdname plot-method
 #' 
+#' @param stats vector of numeric indexes or character names of partial
+#' dependence summary statistics to plot.
+#' 
+plot.PartialDependence <- function(x, stats = NULL, ...) {
+  varnames <- setdiff(names(x), c("Statistic", "Response", "Value"))
+  
+  if (any(rowSums(!is.na(x[, varnames, drop = FALSE])) > 1)) {
+    stop("partial dependence plots not available for interaction efffects")
+  }
+
+  statlevels <- levels(x$Statistic)
+  if (is.null(stats)) {
+    stats <- statlevels
+  } else {
+    stats <- match_indices(stats, statlevels)
+    x <- x[x$Statistic %in% stats, , drop = FALSE]
+  }
+
+  pl <- list()
+  args <- list(y = "Value")
+  if (nlevels(x$Response) > 1) args$color <- "Response"
+  for (varname in varnames) {
+    args$x <- varname
+    var <- x[[varname]]
+    p <- ggplot(x[!is.na(var), , drop = FALSE], do.call(aes_string, args))
+    if (is.factor(var)) {
+      p <- p + geom_crossbar(aes(ymin = ..y.., ymax = ..y..))
+    } else if (is.numeric(var)) {
+      p <- p + geom_line() + geom_point()
+    }
+    pl[[varname]] <- p + facet_wrap(~ Statistic, scales = "free")
+  }
+  pl
+}
+
+
+#' @rdname plot-method
+#' 
 plot.Resamples <- function(x, metrics = NULL, stat = mean,
                            type = c("boxplot", "density", "errorbar", "violin"),
                            ...) {
