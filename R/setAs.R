@@ -17,8 +17,7 @@ setAs("MLControl", "list",
   function(from) {
     list(cutoff = from@cutoff,
          cutoff_index = from@cutoff_index,
-         times = from@surv_times,
-         na.rm = from@na.rm)
+         times = from@surv_times)
   }
 )
 

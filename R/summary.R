@@ -75,6 +75,14 @@ summary.Resamples <- function(object,
 
 
 summary.MLControl <- function(object, observed, predicted, ...) {
+  if (object@na.rm) {
+    df <- data.frame(
+      observed = I(observed),
+      predicted = I(predicted)
+    ) %>% na.omit
+    observed <- unAsIs(df$observed)
+    predicted <- unAsIs(df$predicted)
+  }
   do.call(object@summary, c(list(observed = observed, predicted = predicted),
                             as(object, "list")))
 }

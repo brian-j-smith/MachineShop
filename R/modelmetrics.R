@@ -6,7 +6,6 @@
 #' 
 #' @param observed vector of observed responses.
 #' @param predicted model-predicted responses.
-#' @param na.rm logical indicating whether to remove \code{NA} values.
 #' @param ... arguments passed to or from other methods.
 #' 
 #' @seealso \code{\link{predict}}, \code{\linkS4class{MLControl}}
@@ -23,17 +22,8 @@
 #' pred <- predict(gbmfit, newdata = lung, type = "prob")
 #' modelmetrics(obs, pred)
 #' 
-setGeneric("modelmetrics", function(observed, predicted, na.rm = FALSE, ...) {
-  if (na.rm) {
-    df <- data.frame(
-      observed = I(observed),
-      predicted = I(predicted)
-    ) %>% na.omit
-    observed <- unAsIs(df$observed)
-    predicted <- unAsIs(df$predicted)
-  }
-  standardGeneric("modelmetrics")
-})
+setGeneric("modelmetrics",
+           function(observed, predicted, ...) standardGeneric("modelmetrics"))
 
 
 #' @rdname modelmetrics
@@ -73,8 +63,7 @@ setMethod("modelmetrics", c("factor", "matrix"),
 #' 
 setMethod("modelmetrics", c("factor", "numeric"),
   function(observed, predicted, cutoff = 0.5,
-           cutoff_index = function(sens, spec) sens + spec,
-           na.rm = FALSE, ...) {
+           cutoff_index = function(sens, spec) sens + spec, ...) {
     observed <- observed == levels(observed)[2]
     sens <- sensitivity(observed, predicted, cutoff)
     spec <- specificity(observed, predicted, cutoff)
@@ -130,7 +119,7 @@ setMethod("modelmetrics", c("numeric", "numeric"),
 #' were predicted.
 #' 
 setMethod("modelmetrics", c("Surv", "matrix"),
-  function(observed, predicted, times, na.rm = FALSE, ...) {
+  function(observed, predicted, times, ...) {
     ntimes <- length(times)
     roc <- brier <- rep(NA, ntimes)
     for (i in 1:ntimes) {
