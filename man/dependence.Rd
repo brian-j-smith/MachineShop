@@ -35,9 +35,10 @@ Calculate partial dependence of a response on select predictor variables.
 }
 \examples{
 gbmfit <- fit(factor(Species) ~ ., data = iris, model = GBMModel)
-dependence(gbmfit, data = iris, select = c(Petal.Length, Petal.Width))
+(pd <- dependence(gbmfit, data = iris, select = c(Petal.Length, Petal.Width)))
+plot(pd)
 
 }
 \seealso{
-\code{\link{fit}}
+\code{\link{fit}}, \code{\link{plot}}
 }

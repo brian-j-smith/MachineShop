@@ -81,34 +81,36 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
 #' @param stats vector of numeric indexes or character names of partial
 #' dependence summary statistics to plot.
 #' 
+#' @seealso \code{\link{dependence}}
+#' 
 plot.PartialDependence <- function(x, stats = NULL, ...) {
-  varnames <- setdiff(names(x), c("Statistic", "Response", "Value"))
-  
-  if (any(rowSums(!is.na(x[, varnames, drop = FALSE])) > 1)) {
+  if (any(rowSums(!is.na(x$Predictors)) > 1)) {
     stop("partial dependence plots not available for interaction efffects")
   }
 
-  statlevels <- levels(x$Statistic)
-  if (is.null(stats)) {
-    stats <- statlevels
-  } else {
-    stats <- match_indices(stats, statlevels)
+  if (!is.null(stats)) {
+    stats <- match_indices(stats, levels(x$Statistic))
     x <- x[x$Statistic %in% stats, , drop = FALSE]
   }
 
+  df <- x[c("Statistic", "Response", "Value")]
+
+  aes_response <- if (nlevels(x$Response) > 1) {
+    aes(x = Predictor, y = Value, color = Response)
+  } else {
+    aes(x = Predictor, y = Value)
+  } 
+
   pl <- list()
-  args <- list(y = "Value")
-  if (nlevels(x$Response) > 1) args$color <- "Response"
-  for (varname in varnames) {
-    args$x <- varname
-    var <- x[[varname]]
-    p <- ggplot(x[!is.na(var), , drop = FALSE], do.call(aes_string, args))
-    if (is.factor(var)) {
-      p <- p + geom_crossbar(aes(ymin = ..y.., ymax = ..y..))
-    } else if (is.numeric(var)) {
-      p <- p + geom_line() + geom_point()
-    }
-    pl[[varname]] <- p + facet_wrap(~ Statistic, scales = "free")
+  for (varname in names(x$Predictors)) {
+    df$Predictor <- x$Predictors[[varname]]
+    p <- ggplot(na.omit(df), aes_response)
+    p <- switch_class(df$Predictor,
+                      "factor" = p +
+                        geom_crossbar(aes(ymin = ..y.., ymax = ..y..)),
+                      "numeric" = p + geom_line() + geom_point()) +
+      labs(x = varname) + facet_wrap(~ Statistic, scales = "free")
+    pl[[varname]] <- p
   }
   pl
 }

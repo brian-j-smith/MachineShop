@@ -17,11 +17,12 @@
 #' 
 #' @return PartialDependence class object.
 #'  
-#' @seealso \code{\link{fit}}
+#' @seealso \code{\link{fit}}, \code{\link{plot}}
 #' 
 #' @examples
 #' gbmfit <- fit(factor(Species) ~ ., data = iris, model = GBMModel)
-#' dependence(gbmfit, data = iris, select = c(Petal.Length, Petal.Width))
+#' (pd <- dependence(gbmfit, data = iris, select = c(Petal.Length, Petal.Width)))
+#' plot(pd)
 #' 
 dependence <- function(object, data, select, interaction = FALSE, n = 10,
                        intervals = c("uniform", "quantile"),
@@ -79,8 +80,9 @@ dependence <- function(object, data, select, interaction = FALSE, n = 10,
       x <- data_select_grid[i, varname]
       if (!is.na(x)) data[[varname]] <- x
     }
-    stats <- predict_stats(data)
-    cbind(data_select_grid[rep(i, nrow(stats)), , drop = FALSE], stats)
+    df <- predict_stats(data)
+    df$Predictors <- data_select_grid[rep(i, nrow(df)), , drop = FALSE]
+    df
   })
   
   PartialDependence(do.call(rbind, dependence_list))

@@ -62,5 +62,7 @@ plot(perf)
 \code{\link{diff}}, \code{\link{resample}}, \code{\link{Resamples}},
 \code{\link{tune}}
 
+\code{\link{dependence}}
+
 \code{\link{varimp}}
 }
