@@ -22,3 +22,8 @@ setMethod("method", "CVControl",
 setMethod("method", "OOBControl",
   function(object, ...) "OOB"
 )
+
+
+setMethod("method", "TrainControl",
+  function(object, ...) "Training Resubstitution"
+)

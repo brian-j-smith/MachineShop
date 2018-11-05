@@ -7,6 +7,7 @@
 \alias{BootControl}
 \alias{CVControl}
 \alias{OOBControl}
+\alias{TrainControl}
 \title{Resampling Classes and Methods}
 \usage{
 \S4method{initialize}{MLControl}(.Object, summary = modelmetrics,
@@ -18,6 +19,8 @@ BootControl(samples = 25, ...)
 CVControl(folds = 10, repeats = 1, ...)
 
 OOBControl(samples = 25, ...)
+
+TrainControl(...)
 }
 \arguments{
 \item{.Object}{class object being initialized.}
@@ -69,6 +72,9 @@ of the K folds with models fit on all remaining folds.
 \code{OOBControl} constructs an MLControl object for out-of-bag bootstrap
 resampling in which models are fit with bootstrap resampled training sets and
 used to predict the unsampled cases.
+
+\code{TrainControl} constructs an MLControl object for training and
+performance evaluation to be performed on the same training set.
 }
 \section{Slots}{
 
@@ -100,6 +106,9 @@ CVControl(folds = 10, repeats = 5)
 
 ## 100 out-of-bag bootstrap samples
 OOBControl(samples = 100)
+
+## 100 out-of-bag bootstrap samples
+TrainControl()
 
 }
 \seealso{

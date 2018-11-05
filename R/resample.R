@@ -190,6 +190,27 @@ setMethod(".resample", c("OOBControl", "recipe"),
 )
 
 
+setMethod(".resample", c("TrainControl", "ModelFrame"),
+  function(object, x, model) {
+    set.seed(object@seed)
+    perf <- .resample_metrics(object, x, x, model)
+    Resamples(perf$metrics, response = cbind(Resample = 1, perf$response),
+              method = method(object), seed = object@seed)
+  }
+)
+
+
+setMethod(".resample", c("OOBControl", "recipe"),
+  function(object, x, model) {
+    set.seed(object@seed)
+    train <- juice(prep(x, retain = TRUE))
+    perf <- .resample_metrics(object, train, train, model)
+    Resamples(perf$metrics, response = cbind(Resample = 1, perf$response),
+              method = method(object), seed = object@seed)
+  }
+)
+
+
 .resample_metrics <- function(control, train, test, model) {
   trainfit <- fit(train, model)
   obs <- response(test)

@@ -35,7 +35,8 @@ export(.,
 
 export(BootControl,
        CVControl,
-       OOBControl)
+       OOBControl,
+       TrainControl)
 
 exportClasses(MLControl)
 

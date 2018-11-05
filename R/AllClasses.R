@@ -135,6 +135,26 @@ setClass("OOBControl",
 )
 
 
+#' \code{TrainControl} constructs an MLControl object for training and
+#' performance evaluation to be performed on the same training set.
+#' 
+#' @name TrainControl
+#' @rdname MLControl-class
+#' 
+#' @examples
+#' ## 100 out-of-bag bootstrap samples
+#' TrainControl()
+#' 
+TrainControl <- function(...) {
+  new("TrainControl", ...)
+}
+
+
+setClass("TrainControl",
+  contains = "MLControl"
+)
+
+
 #' MLModel Class Constructor
 #' 
 #' @param name character string name for the instantiated MLModel object.
