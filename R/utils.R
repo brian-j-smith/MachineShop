@@ -115,7 +115,7 @@ stepAIC_args <- function(formula, direction, scope) {
 
 
 strata <- function(object, ...) {
-  UseMethod("strata", object)
+  UseMethod("strata")
 }
 
 

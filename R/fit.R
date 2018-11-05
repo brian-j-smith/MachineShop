@@ -11,7 +11,7 @@
 #' @param ... arguments passed to other methods.
 #' 
 fit <- function(x, ...) {
-  UseMethod("fit", x)
+  UseMethod("fit")
 }
 
 

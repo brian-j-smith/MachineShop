@@ -12,7 +12,7 @@
 #' @param ... arguments passed to other methods.
 #' 
 resample <- function(x, ...) {
-  UseMethod("resample", x)
+  UseMethod("resample")
 }
 
 

@@ -12,7 +12,7 @@
 #' @param ... arguments passed to other methods.
 #' 
 tune <- function(x, ...) {
-  UseMethod("tune", x)
+  UseMethod("tune")
 }
 
 

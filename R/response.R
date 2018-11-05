@@ -16,7 +16,7 @@
 #' response(fo, lung)
 #' 
 response <- function(object, ...) {
-  UseMethod("response", object)
+  UseMethod("response")
 }
 
 
