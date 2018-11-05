@@ -34,6 +34,11 @@ response.ModelFrame <- function(object, ...) {
 }
 
 
+response.tbl_df <- function(object, ...) {
+  response(formula(object), object)
+}
+
+
 response.terms <- function(object, ...) {
   i <- attr(object, "response")
   all.vars(object)[i]

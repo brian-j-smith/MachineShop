@@ -72,20 +72,17 @@ setGeneric(".resample", function(object, x, ...) standardGeneric(".resample"))
 setMethod(".resample", c("BootControl", "ModelFrame"),
   function(object, x, model) {
     set.seed(object@seed)
-    obs <- response(x)
-    splits <- bootstraps(data.frame(strata = strata(obs)),
+    splits <- bootstraps(data.frame(strata = strata(response(x))),
                          times = object@samples,
                          strata = "strata") %>% rsample2caret
     index <- splits$index
     seeds <- sample.int(.Machine$integer.max, length(index))
     foreach(i = seq(index),
-            .packages = c("MachineShop", "survival"),
-            .combine = "rbind") %dopar% {
+            .packages = c("MachineShop", "survival")) %dopar% {
       set.seed(seeds[i])
-      trainfit <- fit(x[index[[i]], , drop = FALSE], model)
-      pred <- predict(trainfit, x, type = "prob", times = object@surv_times)
-      summary(object, obs, pred)
-    } %>% Resamples(method = method(object), seed = object@seed)
+      train <- x[index[[i]], , drop = FALSE]
+      .resample_metrics(object, train, x, model)
+    } %>% Resamples.list(method = method(object), seed = object@seed)
   }
 )
 
@@ -99,17 +96,13 @@ setMethod(".resample", c("BootControl", "recipe"),
                          strata = strataname)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     test <- juice(prep(x, retain = TRUE))
-    obs <- response(formula(test), test)
     foreach(i = seq(splits),
-            .packages = c("MachineShop", "recipes", "survival"),
-            .combine = "rbind") %dopar% {
+            .packages = c("MachineShop", "recipes", "survival")) %dopar% {
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
-      trainfit <- fit(train, model)
-      pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
-      summary(object, obs, pred)
-    } %>% Resamples(method = method(object), seed = object@seed)
+      .resample_metrics(object, train, test, model)
+    } %>% Resamples.list(method = method(object), seed = object@seed)
   }
 )
 
@@ -124,16 +117,12 @@ setMethod(".resample", c("CVControl", "ModelFrame"),
     index <- splits$index
     seeds <- sample.int(.Machine$integer.max, length(index))
     foreach(i = seq(index),
-            .packages = c("MachineShop", "survival"),
-            .combine = "rbind") %dopar% {
+            .packages = c("MachineShop", "survival")) %dopar% {
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
       test <- x[-index[[i]], , drop = FALSE]
-      trainfit <- fit(train, model)
-      obs <- response(test)
-      pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
-      summary(object, obs, pred)
-    } %>% Resamples(method = method(object), seed = object@seed)
+      .resample_metrics(object, train, test, model)
+    } %>% Resamples.list(method = method(object), seed = object@seed)
   }
 )
 
@@ -148,17 +137,13 @@ setMethod(".resample", c("CVControl", "recipe"),
                        strata = strataname)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     foreach(i = seq(splits),
-            .packages = c("MachineShop", "recipes", "survival"),
-            .combine = "rbind") %dopar% {
+            .packages = c("MachineShop", "recipes", "survival")) %dopar% {
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
       test <- bake(train, newdata = assessment(split))
-      trainfit <- fit(train, model)
-      obs <- response(formula(train), test)
-      pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
-      summary(object, obs, pred)
-    } %>% Resamples(method = method(object), seed = object@seed)
+      .resample_metrics(object, train, test, model)
+    } %>% Resamples.list(method = method(object), seed = object@seed)
   }
 )
 
@@ -173,17 +158,13 @@ setMethod(".resample", c("OOBControl", "ModelFrame"),
     indexOut <- splits$indexOut
     seeds <- sample.int(.Machine$integer.max, length(index))
     foreach(i = seq(index),
-            .packages = c("MachineShop", "survival"),
-            .combine = "rbind") %dopar% {
+            .packages = c("MachineShop", "survival")) %dopar% {
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
       test <- x[indexOut[[i]], , drop = FALSE]
       if (nrow(test) == 0) return(NA)
-      trainfit <- fit(train, model)
-      obs <- response(test)
-      pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
-      summary(object, obs, pred)
-    } %>% Resamples(method = method(object), seed = object@seed)
+      .resample_metrics(object, train, test, model)
+    } %>% Resamples.list(method = method(object), seed = object@seed)
   }
 )
 
@@ -197,17 +178,40 @@ setMethod(".resample", c("OOBControl", "recipe"),
                          strata = strataname)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     foreach(i = seq(splits),
-            .packages = c("MachineShop", "recipes", "survival"),
-            .combine = "rbind") %dopar% {
+            .packages = c("MachineShop", "recipes", "survival")) %dopar% {
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
       test <- bake(train, newdata = assessment(split))
       if (nrow(test) == 0) return(NA)
-      trainfit <- fit(train, model)
-      obs <- response(formula(train), test)
-      pred <- predict(trainfit, test, type = "prob", times = object@surv_times)
-      summary(object, obs, pred)
-    } %>% Resamples(method = method(object), seed = object@seed)
+      .resample_metrics(object, train, test, model)
+    } %>% Resamples.list(method = method(object), seed = object@seed)
   }
 )
+
+
+.resample_metrics <- function(control, train, test, model) {
+  trainfit <- fit(train, model)
+  obs <- response(test)
+  pred <- predict(trainfit, test, type = "prob", times = control@surv_times)
+  
+  response  <- data.frame(Case = row.names(test))
+  response[["Observed"]] <- obs
+  response[["Predicted"]] <- pred
+  
+  list(metrics = as.matrix(rbind(summary(control, obs, pred))),
+       response = response)
+}
+
+
+Resamples.list <- function(x, method, seed) {
+  metrics <- Reduce(append, lapply(x, getElement, name = "metrics"))
+  rownames(metrics) <- seq(x)
+  
+  response_list <- lapply(seq(x), function(i) {
+    cbind(Resample = i, x[[i]]$response)
+  })
+  response <- Reduce(append, response_list)
+
+  Resamples(metrics, response = response, method = method, seed = seed)
+}

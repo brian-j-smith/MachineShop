@@ -47,6 +47,45 @@ basehaz <- function(y, risk, times) {
 }
 
 
+setGeneric("append", function(x, y, ...) standardGeneric("append"))
+
+
+setMethod("append", c("data.frame", "data.frame"),
+  function(x, y) {
+    stopifnot(names(x) == names(y))
+    df <- data.frame(matrix(nrow = nrow(x) + nrow(y), ncol = 0))
+    for (varname in names(x)) {
+      df[[varname]] <- append(x[[varname]], y[[varname]])
+    }
+    df
+  }
+)
+
+
+setMethod("append", c("factor", "factor"),
+  function(x, y) unlist(list(x, y))
+)
+
+
+setMethod("append", c("matrix", "matrix"),
+  function(x, y) rbind(x, y)
+)
+
+
+setMethod("append", c("Surv", "Surv"),
+  function(x, y) {
+    df <- as.data.frame(rbind(x, y))
+    names(df) <- NULL
+    do.call(Surv, df)
+  }
+)
+
+
+setMethod("append", c("vector", "vector"),
+  function(x, y) c(x, y)
+)
+
+
 field <- function(object, name) {
   if (isS4(object)) slot(object, name) else object[[name]]
 }

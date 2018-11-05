@@ -205,15 +205,16 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 #' 
 #' Create an object of resampled performance metrics from one or more models.
 #' 
+#' @param response data frame of resampled observed and predicted resposnes.
 #' @param method character string indicating the type of resampling method.
 #' @param seed integer seed from the resampling control object.
 #' @param ... named or unnamed resample output from one or more models.
 #' 
-#' @details Arguments \code{method} and \code{seed} need only be specified if
-#' the supplied output is not a Resamples object.  Output being combined from
-#' more than one model must have been generated with the same resampling
-#' method, random number generator seed, performance metrics, and number of
-#' resampling evaluations.
+#' @details Arguments \code{response}, \code{method}, and \code{seed} need only
+#' be specified if the supplied output is not a Resamples object.  Output being
+#' combined from more than one model must have been generated with the same
+#' resampling method, random number generator seed, performance metrics, and
+#' number of resampling evaluations.
 #' 
 #' @return Resamples class object.
 #' 
@@ -233,28 +234,28 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 #' summary(perf)
 #' plot(perf)
 #' 
-Resamples <- function(..., method = NULL, seed = NULL) {
-  new("Resamples", ..., method = method, seed = seed)  
+Resamples <- function(..., response = data.frame(), method = NULL,
+                      seed = NULL) {
+  new("Resamples", ..., response = response, method = method, seed = seed)  
 }
 
 
 setClass("Resamples",
-  slots = c("method" = "character", seed = "numeric"),
+  slots = c(response = "data.frame", "method" = "character", seed = "numeric"),
   contains = "array"
 )
 
 
 setMethod("initialize", "Resamples",
-  function(.Object, ..., method = NULL, seed = NULL) {
+  function(.Object, ..., response = data.frame(), method = NULL, seed = NULL) {
     args <- list(...)
     if (length(args) == 0) stop("no values given")
     .Data <- args[[1]]
     if (length(args) == 1) {
       if (is(.Data, "Resamples")) {
+        response <- .Data@response
         method <- .Data@method
         seed <- .Data@seed
-      } else if (is.data.frame(.Data)) {
-        .Data <- as.matrix(.Data)
       }
     } else {
       if (!all(sapply(args, function(x) is(x, "Resamples") && is.matrix(x)))) {
@@ -278,10 +279,11 @@ setMethod("initialize", "Resamples",
       if (is.null(modelnames)) modelnames <- paste0("Model", seq(args))
       names(args) <- NULL
       args$along <- 3
-      args$new.names <- list(1:nrow(.Data), NULL, modelnames)
+      args$new.names <- list(NULL, NULL, modelnames)
       .Data <- do.call(abind, args)
     }
-    callNextMethod(.Object, .Data, method = method, seed = seed)
+    callNextMethod(.Object, .Data, response = response, method = method,
+                   seed = seed)
   }
 )
 
