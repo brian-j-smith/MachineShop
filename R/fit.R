@@ -18,22 +18,7 @@ fit <- function(x, ...) {
 #' @rdname fit-methods
 #' 
 fit.ModelFrame <- function(x, model, ...) {
-  model <- getMLObject(model, "MLModel")
-  
-  y <- response(x)
-  if (!any(sapply(model@types, function(type) is(y, type)))) {
-    stop("invalid response type '", class(y)[1], "' for ", model@name)
-  }
-  
-  requireModelNamespaces(model@packages)
-  fo <- formula(terms(x))
-  weights <- model.weights(x)
-  if (is.null(weights)) weights <- rep(1, nrow(x))
-  args <- c(list(formula = fo, data = x, weights = weights), model@params)
-  data_params <- list(y = y, nobs = nrow(x))
-  data_params$nvars <-  model@nvars(x[1, , drop = FALSE])
-  do.call(model@fit, args, envir = list2env(c(args, data_params))) %>%
-    asMLModelFit(paste0(model@name, "Fit"), model, y)
+  .fit(getMLObject(model, "MLModel"), x)
 }
 
 
@@ -65,6 +50,33 @@ fit.formula <- function(x, data, model, ...) {
 #' @rdname fit-methods
 #' 
 fit.recipe <- function(x, model, ...) {
-  x <- prep(x, retain = TRUE)
-  fit(formula(x), juice(x), model)
+  .fit(getMLObject(model, "MLModel"), x)
 }
+
+
+setMethod(".fit", c("MLModel", "ModelFrame"),
+  function(model, x, ...) {
+    y <- response(x)
+    if (!any(sapply(model@types, function(type) is(y, type)))) {
+      stop("invalid response type '", class(y)[1], "' for ", model@name)
+    }
+    
+    requireModelNamespaces(model@packages)
+    fo <- formula(terms(x))
+    weights <- model.weights(x)
+    if (is.null(weights)) weights <- rep(1, nrow(x))
+    args <- c(list(formula = fo, data = x, weights = weights), model@params)
+    data_params <- list(y = y, nobs = nrow(x))
+    data_params$nvars <-  model@nvars(x[1, , drop = FALSE])
+    do.call(model@fit, args, envir = list2env(c(args, data_params))) %>%
+      asMLModelFit(paste0(model@name, "Fit"), model, y)
+  }
+)
+
+
+setMethod(".fit", c("MLModel", "recipe"),
+  function(model, x, ...) {
+    x <- prep(x, retain = TRUE)
+    fit(formula(x), juice(x), model)
+  }
+)
