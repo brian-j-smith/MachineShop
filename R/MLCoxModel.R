@@ -39,7 +39,7 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), control = NULL) {
       rms::cph(formula, data = data, weights = weights, singular.ok = TRUE,
                surv = TRUE, y = TRUE, ...)
     },
-    predict = function(object, newdata, times = numeric(), ...) {
+    predict = function(object, newdata, times, ...) {
       object <- unMLModelFit(object)
       if (length(times)) {
         rms::survest(object, newdata = newdata, times = times,

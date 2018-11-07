@@ -27,7 +27,7 @@
 #' predict(gbmfit, lung, times = c(180, 360, 540), type = "prob")
 #' 
 predict.MLModelFit <- function(object, newdata, type = c("response", "prob"),
-                               cutoff = 0.5, times = NULL, ...) {
+                               cutoff = 0.5, times = numeric(), ...) {
   if (missing(newdata)) stop("newdata is missing")
   requireModelNamespaces(field(object, ".packages"))
   predict <- field(object, ".predict")

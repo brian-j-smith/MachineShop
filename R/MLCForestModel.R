@@ -54,7 +54,7 @@ CForestModel <- function(teststat = c("quad", "max"),
       environment(formula) <- environment()
       party::cforest(formula, data = data, weights = weights, ...)
     },
-    predict = function(object, newdata, times = numeric(), ...) {
+    predict = function(object, newdata, times, ...) {
       object <- unMLModelFit(object)
       if (object@responses@is_censored) {
         if (length(times)) {

@@ -6,7 +6,7 @@
 \title{Model Prediction}
 \usage{
 \method{predict}{MLModelFit}(object, newdata, type = c("response",
-  "prob"), cutoff = 0.5, times = NULL, ...)
+  "prob"), cutoff = 0.5, times = numeric(), ...)
 }
 \arguments{
 \item{object}{MLModelFit object from a model fit.}

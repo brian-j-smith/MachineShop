@@ -71,7 +71,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
       mfit$formula <- formula
       mfit
     },
-    predict = function(object, newdata, times = numeric(), ...) {
+    predict = function(object, newdata, times, ...) {
       x <- object$x
       y <- response(object)
       fo <- object$formula[-2]
