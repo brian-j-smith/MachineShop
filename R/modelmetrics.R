@@ -127,12 +127,10 @@ setMethod("modelmetrics", c("Surv", "matrix"),
       brier[i] <- brierSurv(observed, predicted[, i], times[i])
     }
     if (ntimes > 1) {
-      data.frame(
-        "ROC" = meanSurvMetric(roc, times),
+      c("ROC" = meanSurvMetric(roc, times),
         "Brier" = meanSurvMetric(brier, times),
-        "ROCTime" = I(t(roc)),
-        "BrierTime" = I(t(brier))
-      )
+        "ROCTime" = roc,
+        "BrierTime" = brier)
     } else {
       c("ROC" = roc, "Brier" = brier)
     }

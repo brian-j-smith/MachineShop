@@ -220,8 +220,7 @@ setMethod(".resample", c("OOBControl", "recipe"),
   response[["Observed"]] <- obs
   response[["Predicted"]] <- pred
   
-  list(metrics = as.matrix(rbind(summary(control, obs, pred))),
-       response = response)
+  list(metrics = rbind(summary(control, obs, pred)), response = response)
 }
 
 
