@@ -17,16 +17,17 @@ importFrom(recipes, bake, juice, prep)
 importFrom(rsample, assessment, bootstraps, initial_split, prepper,
            rsample2caret, testing, vfold_cv)
 importFrom(Rsolnp, solnp)
-importFrom(stats, approx, coef, complete.cases, cor, formula, get_all_vars,
-           median, model.frame, model.matrix, model.response, model.weights,
-           na.fail, na.omit, na.pass, p.adjust, pchisq, predict, quantile,
-           reformulate, sd, t.test, terms, vcov)
+importFrom(stats, aggregate, approx, coef, complete.cases, cor, formula,
+           get_all_vars, median, model.frame, model.matrix, model.response,
+           model.weights, na.fail, na.omit, na.pass, p.adjust, pchisq, predict,
+           quantile, reformulate, sd, t.test, terms, vcov)
 importFrom(survival, is.Surv, Surv, survfit)
 importFrom(survivalROC, survivalROC)
 importFrom(utils, combn, head, stack, tail)
 
 
 export(.,
+       calibration,
        dependence,
        fit,
        ModelFrame,
@@ -86,6 +87,7 @@ S3method(ModelFrame, recipe)
 S3method(plot, MLModelTune)
 S3method(plot, PartialDependence)
 S3method(plot, Resamples)
+S3method(plot, ResamplesCalibration)
 S3method(plot, VarImp)
 S3method(predict, MLModelFit)
 S3method(resample, ModelFrame)

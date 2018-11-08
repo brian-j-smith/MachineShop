@@ -162,6 +162,36 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
 }
 
 
+plot.ResamplesCalibration <- function(x, type = c("line", "point"), 
+                                      se = FALSE, ...) {
+  df <- data.frame(
+    Response = x$Response,
+    Midpoint = x$Midpoint,
+    x$Observed
+  )
+
+  aes_response <- if (nlevels(x$Response) > 1) {
+    aes(x = Midpoint, y = Mean, color = Response)
+  } else {
+    aes(x = Midpoint, y = Mean)
+  }
+  
+  p <- ggplot(df, aes_response) +
+    geom_abline(intercept = 0, slope = 1, color = "gray") +
+    labs(x = "Bin Midpoints", y = "Observed Mean")
+  p <- switch(match.arg(type),
+              "line" = p + geom_line(),
+              "point" = p + geom_point())
+  
+  if (se) {
+    p <- p + geom_errorbar(aes(ymin = Lower, ymax = Upper),
+                           width = 0.05 * diff(range(df$Midpoint)))
+  }
+  
+  p
+}
+
+
 #' @rdname plot-method
 #' 
 #' @param n number of most important variables to include in the plot

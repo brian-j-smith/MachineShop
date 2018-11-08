@@ -41,6 +41,7 @@ assessment, and tuning functions are available for the model objects.
 \tabular{ll}{
   \code{\link{fit}} \tab Model Fitting \cr
   \code{\link{predict}} \tab Model Prediction \cr
+  \code{\link{calibration}} \tab Model Calibration \cr
   \code{\link{dependence}} \tab Parital Dependence \cr
   \code{\link{resample}} \tab Resample Estimation of Model Performance \cr
   \code{\link{tune}} \tab Model Tuning \cr
