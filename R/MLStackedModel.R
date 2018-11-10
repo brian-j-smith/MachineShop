@@ -44,9 +44,9 @@ StackedModel <- function(..., control = CVControl, weights = NULL) {
     params = as.list(environment()),
     predict = function(object, newdata, ...) {
       predicted <- 0
-      for (i in seq(object$stack)) {
+      for (i in seq(object$base_fits)) {
         predicted <- predicted +
-          object$weights[i] * predict(object$stack[[i]], newdata = newdata,
+          object$weights[i] * predict(object$base_fits[[i]], newdata = newdata,
                                       times = object$times, type = "prob")
       }
       predicted
@@ -64,58 +64,48 @@ StackedModel <- function(..., control = CVControl, weights = NULL) {
 setClass("StackedModel", contains = "MLModel")
 
 
-setMethod(".fit", c("StackedModel", "ModelFrame"),
-  function(model, x, ...) {
-    modelfit <- .fit.StackedModel(model, x)
-    modelfit$formula <- formula(terms(x))
-    modelfit
-  }
-)
-
-
-setMethod(".fit", c("StackedModel", "recipe"),
-  function(model, x, ...) {
-    modelfit <- .fit.StackedModel(model, x)
-    modelfit$formula <- formula(prep(x))
-    modelfit
-  }
-)
-
-
-.fit.StackedModel <- function(model, x) {
+.fit.StackedModel <- function(model, x, ...) {
+  mf <- ModelFrame(x)
+  
   base_learners <- model@params$base_learners
   weights <- model@params$weights
   control <-  model@params$control
   times <- control@surv_times
+  
   if (is.null(weights)) {
     num_learners <- length(base_learners)
-    learner_responses <- list()
+    stack <- list()
     complete_responses <- TRUE
     for (i in 1:num_learners) {
-      learner_responses[[i]] <-
+      stack[[i]] <-
         resample(x, model = base_learners[[i]], control = control)@response
       complete_responses <-
-        complete_responses & complete.cases(learner_responses[[i]])
+        complete_responses & complete.cases(stack[[i]])
     }
+    
     if (control@na.rm) {
-      learner_responses <- lapply(learner_responses, function(response) {
+      stack <- lapply(stack, function(response) {
         response[complete_responses, , drop = FALSE]
       })
     }
+    
     weights <- solnp(rep(1 / num_learners, num_learners),
-                     function(x) stacked_eval(x, learner_responses, times),
+                     function(x) eval_stack_loss(x, stack, times),
                      eqfun = function(x) sum(x), eqB = 1,
                      LB = rep(0, num_learners),
                      control = list(trace = FALSE))$pars
   }
-  list(stack = lapply(base_learners, function(learner) fit(x, learner)),
+  
+  list(base_fits = lapply(base_learners,
+                          function(learner) fit(mf, model = learner)),
        weights = weights,
-       times = times) %>%
-    asMLModelFit("StackedModelFit", model, response(x))
+       times = times,
+       formula = formula(terms(mf))) %>%
+    asMLModelFit("StackedModelFit", model, response(mf))
 }
 
 
-stacked_eval <- function(weights, responses, times) {
+eval_stack_loss <- function(weights, responses, times) {
   predicted <- 0
   for (i in seq(responses)) {
     predicted <- predicted + weights[i] * responses[[i]]$Predicted
@@ -123,32 +113,32 @@ stacked_eval <- function(weights, responses, times) {
   df <- responses[[1]]["Observed"]
   df$Predicted <- predicted
   by(df, responses[[1]]$Resample, function(x) {
-    stacked_loss(x$Observed, x$Predicted, times = times)
+    stack_loss(x$Observed, x$Predicted, times = times)
   }) %>% mean(na.rm = TRUE)
 }
 
 
-setGeneric("stacked_loss",
-           function(observed, predicted, ...) standardGeneric("stacked_loss"))
+setGeneric("stack_loss",
+           function(observed, predicted, ...) standardGeneric("stack_loss"))
 
 
-setMethod("stacked_loss", c("factor", "matrix"),
+setMethod("stack_loss", c("factor", "matrix"),
   function(observed, predicted, ...) {
     observed <- model.matrix(~ observed - 1)
     if (ncol(predicted) == 1) predicted <- cbind(predicted, 1 - predicted)
-    stacked_loss(observed, predicted)
+    stack_loss(observed, predicted)
   }
 )
 
 
-setMethod("stacked_loss", c("factor", "numeric"),
+setMethod("stack_loss", c("factor", "numeric"),
   function(observed, predicted, ...) {
-    stacked_loss(observed, as.matrix(predicted))
+    stack_loss(observed, as.matrix(predicted))
   }
 )
 
 
-setMethod("stacked_loss", c("matrix", "matrix"),
+setMethod("stack_loss", c("matrix", "matrix"),
   function(observed, predicted, ...) {
     stopifnot(ncol(observed) == ncol(predicted))
     sum((observed - predicted)^2) / nrow(observed)
@@ -156,21 +146,21 @@ setMethod("stacked_loss", c("matrix", "matrix"),
 )
 
 
-setMethod("stacked_loss", c("numeric", "ANY"),
+setMethod("stack_loss", c("numeric", "ANY"),
   function(observed, predicted, ...) {
-    stacked_loss(as.matrix(observed), as.matrix(predicted))
+    stack_loss(as.matrix(observed), as.matrix(predicted))
   }
 )
 
 
-setMethod("stacked_loss", c("Surv", "matrix"),
+setMethod("stack_loss", c("Surv", "matrix"),
   function(observed, predicted, times, ...) {
     modelmetrics(observed, predicted, times = times)["Brier"]
   }
 )
 
 
-setMethod("stacked_loss", c("Surv", "numeric"),
+setMethod("stack_loss", c("Surv", "numeric"),
   function(observed, predicted, ...) {
     -modelmetrics(observed, predicted)["CIndex"]
   }

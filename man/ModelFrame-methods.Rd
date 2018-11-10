@@ -2,12 +2,24 @@
 % Please edit documentation in R/ModelFrame.R
 \name{ModelFrame}
 \alias{ModelFrame}
+\alias{ModelFrame.formula}
+\alias{ModelFrame.ModelFrame}
+\alias{ModelFrame.recipe}
 \title{ModelFrame Class}
 \usage{
-ModelFrame(formula, data, weights = NULL, na.action = NULL)
+ModelFrame(x, ...)
+
+\method{ModelFrame}{formula}(x, data, weights = NULL, na.action = NULL,
+  ...)
+
+\method{ModelFrame}{ModelFrame}(x, na.action = NULL, ...)
+
+\method{ModelFrame}{recipe}(x, na.action = NULL, ...)
 }
 \arguments{
-\item{formula}{model \code{\link{formula}}.}
+\item{x}{model \code{\link{formula}} or \code{\link[recipes]{recipe}}.}
+
+\item{...}{arguments passed to other methods.}
 
 \item{data}{data frame or an object that can be converted to one.}
 
@@ -30,6 +42,6 @@ varimp(gbmfit)
 
 }
 \seealso{
-\code{\link{formula}}, \code{\link{data.frame}},
+\code{\link{formula}}, \code{\link[recipes]{recipe}},
 \code{\link{na.fail}}, \code{\link{na.omit}}, \code{\link{na.pass}}
 }

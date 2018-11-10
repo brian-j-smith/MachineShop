@@ -54,29 +54,26 @@ fit.recipe <- function(x, model, ...) {
 }
 
 
-setMethod(".fit", c("MLModel", "ModelFrame"),
-  function(model, x, ...) {
-    y <- response(x)
-    if (!any(sapply(model@types, function(type) is(y, type)))) {
-      stop("invalid response type '", class(y)[1], "' for ", model@name)
-    }
-    
-    requireModelNamespaces(model@packages)
-    fo <- formula(terms(x))
-    weights <- model.weights(x)
-    if (is.null(weights)) weights <- rep(1, nrow(x))
-    args <- c(list(formula = fo, data = x, weights = weights), model@params)
-    data_params <- list(y = y, nobs = nrow(x))
-    data_params$nvars <-  model@nvars(x[1, , drop = FALSE])
-    do.call(model@fit, args, envir = list2env(c(args, data_params))) %>%
-      asMLModelFit(paste0(model@name, "Fit"), model, y)
-  }
-)
+.fit <- function(model, x, ...) {
+  UseMethod(".fit")
+}
 
 
-setMethod(".fit", c("MLModel", "recipe"),
-  function(model, x, ...) {
-    x <- prep(x, retain = TRUE)
-    fit(formula(x), juice(x), model)
+.fit.MLModel <- function(model, x, ...) {
+  mf <- ModelFrame(x, na.action = na.pass)
+  
+  y <- response(mf)
+  if (!any(sapply(model@types, function(type) is(y, type)))) {
+    stop("invalid response type '", class(y)[1], "' for ", model@name)
   }
-)
+  
+  requireModelNamespaces(model@packages)
+  fo <- formula(terms(mf))
+  weights <- model.weights(mf)
+  if (is.null(weights)) weights <- rep(1, nrow(mf))
+  args <- c(list(formula = fo, data = mf, weights = weights), model@params)
+  data_params <- list(y = y, nobs = nrow(mf))
+  data_params$nvars <-  model@nvars(mf[1, , drop = FALSE])
+  do.call(model@fit, args, envir = list2env(c(args, data_params))) %>%
+    asMLModelFit(paste0(model@name, "Fit"), model, y)
+}
