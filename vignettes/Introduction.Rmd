@@ -250,10 +250,13 @@ Kappa
 WeightedKappa
   : Weighted Cohen's kappa with equally spaced weights.  This metric is only computed for ordered factor responses.
   
+Brier
+  : Multi-category Brier score.
+  
 MLogLoss
   : Multinomial logistic loss or cross entropy loss.
   
-MLogLoss is computed directly on predicted class probabilities.  The others are computed on predicted class membership, defined as the factor level with the highest predicted probability.
+Brier and MLogLoss are computed directly on predicted class probabilities.  The others are computed on predicted class membership, defined as the factor level with the highest predicted probability.
 
 ```{r}
 ### Iris flowers species (3 levels)

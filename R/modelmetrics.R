@@ -46,8 +46,11 @@ setMethod("modelmetrics", c("factor", "factor"),
 setMethod("modelmetrics", c("factor", "matrix"),
   function(observed, predicted, ...) {
     if (nlevels(observed) > 2) {
-      c(modelmetrics(observed, convert(observed, predicted), ...),
-        "MLogLoss" = multinomLogLoss(observed, predicted))
+      metrics <- modelmetrics(observed, convert(observed, predicted), ...)
+      observed <- model.matrix(~ observed - 1)
+      metrics["Brier"] <- sum((observed - predicted)^2) / nrow(observed)
+      metrics["MLogLoss"] <- multinomLogLoss(observed, predicted)
+      metrics
     } else {
       modelmetrics(observed, predicted[, ncol(predicted)], ...)
     }
@@ -165,7 +168,6 @@ meanSurvMetric <- function(x, times) {
 
 
 multinomLogLoss <- function(observed, predicted) {
-  if (!is.matrix(observed)) observed <- model.matrix(~ observed - 1)
   eps <- 1e-15
   predicted <- pmax(pmin(predicted, 1 - eps), eps)
   -sum(observed * log(predicted)) / nrow(predicted)

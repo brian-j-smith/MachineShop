@@ -375,8 +375,8 @@ predict(gbmfit, newdata = test) %>% head
 obs <- response(fo, data = test)
 pred <- predict(gbmfit, newdata = test, type = "prob")
 modelmetrics(obs, pred)
-#>  Accuracy     Kappa  MLogLoss 
-#> 0.9200000 0.8793727 0.4522663
+#>  Accuracy     Kappa     Brier  MLogLoss 
+#> 0.9200000 0.8793727 0.1570015 0.4522663
 ```
 
 ### Resampling
@@ -386,17 +386,18 @@ modelmetrics(obs, pred)
 (perf <- resample(fo, data = df, model = GBMModel, control = CVControl))
 #> An object of class "Resamples"
 #> 
-#> metrics: Accuracy, Kappa, MLogLoss
+#> metrics: Accuracy, Kappa, Brier, MLogLoss
 #> 
 #> method: 10-Fold CV
 #> 
 #> resamples: 10
 
 summary(perf)
-#>               Mean    Median         SD          Min       Max NA
-#> Accuracy 0.9333333 0.9333333 0.06285394 0.8000000000 1.0000000  0
-#> Kappa    0.9000000 0.9000000 0.09428090 0.7000000000 1.0000000  0
-#> MLogLoss 0.2265341 0.1212854 0.23089382 0.0003321915 0.5716866  0
+#>                Mean     Median         SD          Min       Max NA
+#> Accuracy 0.93333333 0.93333333 0.06285394 8.000000e-01 1.0000000  0
+#> Kappa    0.90000000 0.90000000 0.09428090 7.000000e-01 1.0000000  0
+#> Brier    0.09409409 0.08887763 0.08302550 5.911564e-07 0.2260197  0
+#> MLogLoss 0.22653409 0.12128540 0.23089382 3.321915e-04 0.5716866  0
 
 plot(perf)
 ```
@@ -456,6 +457,13 @@ summary(perf)
 #> RF   0.930    0.9 0.07889544  0.7   1  0
 #> NNet 0.634    0.8 0.40031110 -0.2   1  0
 #> 
+#> , , Brier
+#> 
+#>            Mean     Median         SD          Min       Max NA
+#> GBM  0.10129338 0.11061105 0.08946454 1.107334e-05 0.3572127  0
+#> RF   0.07134018 0.05526187 0.06836264 4.053333e-04 0.3150320  0
+#> NNet 0.26163450 0.20816834 0.25188258 3.593928e-07 0.6666667  0
+#> 
 #> , , MLogLoss
 #> 
 #>           Mean     Median        SD          Min       Max NA
@@ -487,6 +495,13 @@ summary(perfdiff)
 #> GBM - NNet  0.274   0.10 0.39424948 -0.2 1.1  0
 #> RF - NNet   0.296   0.05 0.38859244 -0.2 1.1  0
 #> 
+#> , , Brier
+#> 
+#>                  Mean      Median         SD         Min       Max NA
+#> GBM - RF    0.0299532  0.02470100 0.03682158 -0.01908523 0.1307530  0
+#> GBM - NNet -0.1603411 -0.05156092 0.24631397 -0.66665560 0.1842272  0
+#> RF - NNet  -0.1902943 -0.11429173 0.24189899 -0.66621067 0.1501570  0
+#> 
 #> , , MLogLoss
 #> 
 #>                  Mean      Median        SD         Min        Max NA
@@ -515,6 +530,13 @@ t.test(perfdiff)
 #> RF   1.014730e-02           NA 0.296
 #> NNet 2.074356e-05  6.09709e-06    NA
 #> 
+#> , , Brier
+#> 
+#>               GBM           RF       NNet
+#> GBM            NA 2.995320e-02 -0.1603411
+#> RF   1.687958e-06           NA -0.1902943
+#> NNet 2.973266e-05 2.192459e-06         NA
+#> 
 #> , , MLogLoss
 #> 
 #>               GBM           RF       NNet
@@ -540,10 +562,11 @@ rec <- recipe(fo, data = df) %>%
 perf <- resample(rec, model = GBMModel, control = CVControl)
 
 summary(perf)
-#>               Mean     Median         SD        Min       Max NA
-#> Accuracy 0.9333333 0.93333333 0.05443311 0.86666667 1.0000000  0
-#> Kappa    0.9000000 0.90000000 0.08164966 0.80000000 1.0000000  0
-#> MLogLoss 0.1603888 0.08378907 0.16326216 0.01499845 0.4585311  0
+#>                Mean     Median         SD         Min       Max NA
+#> Accuracy 0.93333333 0.93333333 0.05443311 0.866666667 1.0000000  0
+#> Kappa    0.90000000 0.90000000 0.08164966 0.800000000 1.0000000  0
+#> Brier    0.09167659 0.04705303 0.08709709 0.002942071 0.2504475  0
+#> MLogLoss 0.16038881 0.08378907 0.16326216 0.014998449 0.4585311  0
 ```
 
 Documentation
