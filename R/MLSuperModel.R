@@ -97,7 +97,7 @@ setClass("SuperModel", contains = "MLModel")
        all_vars = params$all_vars,
        times = control@surv_times,
        formula = formula(terms(mf))) %>%
-    asMLModelFit("SuperModelFit", model, response(mf))
+    asMLModelFit("SuperModelFit", model, x, response(mf))
 }
 
 

@@ -138,6 +138,22 @@ params <- function(envir) {
 }
 
 
+preprocess <- function(x, data = NULL, ...) {
+  UseMethod("preprocess")
+}
+
+
+preprocess.default <- function(x, data, ...) {
+  if (is.null(data)) x else data
+}
+
+
+preprocess.recipe <- function(x, data, ...) {
+  x <- prep(x, retain = TRUE)
+  if (is.null(data)) juice(x) else bake(x, newdata = data)
+}
+
+
 requireModelNamespaces <- function(packages) {
   pass <- sapply(packages, requireNamespace)
   if (!all(pass)) stop("install required packages: ", toString(packages[!pass]))
@@ -172,4 +188,12 @@ switch_class <- function(EXPR, ...) {
   blocks <- eval(substitute(alist(...)))
   isClass <- sapply(names(blocks), function(class) is(EXPR, class))
   eval.parent(blocks[[match(TRUE, isClass)]])
+}
+
+
+terms.recipe <- function(x, ...) {
+  info <- summary(x)
+  lhs <- with(info, variable[role == "outcome"])
+  rhs <- with(info, variable[role == "predictor"])
+  terms(reformulate(rhs, lhs))
 }

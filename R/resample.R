@@ -81,7 +81,7 @@ setMethod(".resample", c("BootControl", "ModelFrame"),
             .packages = c("MachineShop", "survival")) %dopar% {
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
-      .resample_metrics(object, train, x, model)
+      resample_metrics(train, x, model, object)
     } %>% Resamples.list(method = method(object), seed = object@seed)
   }
 )
@@ -89,19 +89,18 @@ setMethod(".resample", c("BootControl", "ModelFrame"),
 
 setMethod(".resample", c("BootControl", "recipe"),
   function(object, x, model) {
-    strataname <- prep(x) %>% formula %>% terms %>% response
     set.seed(object@seed)
     splits <- bootstraps(x$template,
                          times = object@samples,
-                         strata = strataname)$splits
+                         strata =  response(terms(x)))$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
-    test <- juice(prep(x, retain = TRUE))
+    test <- ModelFrame(formula(terms(x)), x$template)
     foreach(i = seq(splits),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
-      .resample_metrics(object, train, test, model)
+      resample_metrics(train, test, model, object)
     } %>% Resamples.list(method = method(object), seed = object@seed)
   }
 )
@@ -121,7 +120,7 @@ setMethod(".resample", c("CVControl", "ModelFrame"),
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
       test <- x[-index[[i]], , drop = FALSE]
-      .resample_metrics(object, train, test, model)
+      resample_metrics(train, test, model, object)
     } %>% Resamples.list(method = method(object), seed = object@seed)
   }
 )
@@ -129,20 +128,19 @@ setMethod(".resample", c("CVControl", "ModelFrame"),
 
 setMethod(".resample", c("CVControl", "recipe"),
   function(object, x, model) {
-    strataname <- prep(x) %>% formula %>% terms %>% response
     set.seed(object@seed)
     splits <- vfold_cv(x$template,
                        v = object@folds,
                        repeats = object@repeats,
-                       strata = strataname)$splits
+                       strata =  response(terms(x)))$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     foreach(i = seq(splits),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
-      test <- bake(train, newdata = assessment(split))
-      .resample_metrics(object, train, test, model)
+      test <- ModelFrame(formula(terms(x)), assessment(split))
+      resample_metrics(train, test, model, object)
     } %>% Resamples.list(method = method(object), seed = object@seed)
   }
 )
@@ -163,7 +161,7 @@ setMethod(".resample", c("OOBControl", "ModelFrame"),
       train <- x[index[[i]], , drop = FALSE]
       test <- x[indexOut[[i]], , drop = FALSE]
       if (nrow(test) == 0) return(NA)
-      .resample_metrics(object, train, test, model)
+      resample_metrics(train, test, model, object)
     } %>% Resamples.list(method = method(object), seed = object@seed)
   }
 )
@@ -171,20 +169,19 @@ setMethod(".resample", c("OOBControl", "ModelFrame"),
 
 setMethod(".resample", c("OOBControl", "recipe"),
   function(object, x, model) {
-    strataname <- prep(x) %>% formula %>% terms %>% response
     set.seed(object@seed)
     splits <- bootstraps(x$template,
                          times = object@samples,
-                         strata = strataname)$splits
+                         strata =  response(terms(x)))$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     foreach(i = seq(splits),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
-      test <- bake(train, newdata = assessment(split))
+      test <- ModelFrame(formula(terms(x)), assessment(split))
       if (nrow(test) == 0) return(NA)
-      .resample_metrics(object, train, test, model)
+      resample_metrics(train, test, model, object)
     } %>% Resamples.list(method = method(object), seed = object@seed)
   }
 )
@@ -193,25 +190,25 @@ setMethod(".resample", c("OOBControl", "recipe"),
 setMethod(".resample", c("TrainControl", "ModelFrame"),
   function(object, x, model) {
     set.seed(object@seed)
-    perf <- .resample_metrics(object, x, x, model)
+    perf <- resample_metrics(x, x, model, object)
     Resamples(perf$metrics, response = cbind(Resample = 1, perf$response),
               method = method(object), seed = object@seed)
   }
 )
 
 
-setMethod(".resample", c("OOBControl", "recipe"),
+setMethod(".resample", c("TrainControl", "recipe"),
   function(object, x, model) {
     set.seed(object@seed)
-    train <- juice(prep(x, retain = TRUE))
-    perf <- .resample_metrics(object, train, train, model)
+    test <- ModelFrame(formula(terms(x)), x$template)
+    perf <- resample_metrics(x, test, model, object)
     Resamples(perf$metrics, response = cbind(Resample = 1, perf$response),
               method = method(object), seed = object@seed)
   }
 )
 
 
-.resample_metrics <- function(control, train, test, model) {
+resample_metrics <- function(train, test, model, control) {
   trainfit <- fit(train, model)
   obs <- response(test)
   pred <- predict(trainfit, test, type = "prob", times = control@surv_times)

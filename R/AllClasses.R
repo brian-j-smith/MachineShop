@@ -142,7 +142,6 @@ setClass("OOBControl",
 #' @rdname MLControl-class
 #' 
 #' @examples
-#' ## 100 out-of-bag bootstrap samples
 #' TrainControl()
 #' 
 TrainControl <- function(...) {
@@ -206,12 +205,14 @@ setClass("MLModel",
 #' @slot .packages character vector of packages required by the object.
 #' @slot .predict model prediction function.
 #' @slot .varimp variable importance function.
-#' @slot .y observed response variable.
+#' @slot .x training recipe or ModelFrame.
+#' @slot .y training response variable.
 #' 
 setClass("MLModelFit",
   slots = c(.packages = "character",
             .predict = "function",
             .varimp = "function",
+            .x = "ANY",
             .y = "ANY"),
   contains = "VIRTUAL"
 )

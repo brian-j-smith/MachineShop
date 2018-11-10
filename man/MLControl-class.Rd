@@ -107,7 +107,6 @@ CVControl(folds = 10, repeats = 5)
 ## 100 out-of-bag bootstrap samples
 OOBControl(samples = 100)
 
-## 100 out-of-bag bootstrap samples
 TrainControl()
 
 }

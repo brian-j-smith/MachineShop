@@ -101,7 +101,7 @@ setClass("StackedModel", contains = "MLModel")
        weights = weights,
        times = times,
        formula = formula(terms(mf))) %>%
-    asMLModelFit("StackedModelFit", model, response(mf))
+    asMLModelFit("StackedModelFit", model, x, response(mf))
 }
 
 

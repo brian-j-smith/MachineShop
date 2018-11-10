@@ -5,7 +5,8 @@
 #' @name predict
 #' 
 #' @param object MLModelFit object from a model fit.
-#' @param newdata data frame with which to obtain predictions.
+#' @param newdata optional data frame with which to obtain predictions.  If not
+#' specified, the training data will be used by default.
 #' @param type specifies prediction on the original outcome scale
 #' (\code{"response"}) or on a probability distribution scale (\code{"prob"}).
 #' @param cutoff threshold above which probabilities are classified as success
@@ -26,9 +27,10 @@
 #'               data = lung, GBMModel)
 #' predict(gbmfit, lung, times = c(180, 360, 540), type = "prob")
 #' 
-predict.MLModelFit <- function(object, newdata, type = c("response", "prob"),
-                               cutoff = 0.5, times = numeric(), ...) {
-  if (missing(newdata)) stop("newdata is missing")
+predict.MLModelFit <- function(object, newdata = NULL,
+                               type = c("response", "prob"), cutoff = 0.5,
+                               times = numeric(), ...) {
+  newdata <- preprocess(field(object, ".x"), newdata)
   requireModelNamespaces(field(object, ".packages"))
   predict <- field(object, ".predict")
   pred <- predict(object, newdata, times = times)

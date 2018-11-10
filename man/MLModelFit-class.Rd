@@ -17,6 +17,8 @@ MLModelFit constructor are not necessary unless implementing custom models.
 
 \item{\code{.varimp}}{variable importance function.}
 
-\item{\code{.y}}{observed response variable.}
+\item{\code{.x}}{training recipe or ModelFrame.}
+
+\item{\code{.y}}{training response variable.}
 }}
 

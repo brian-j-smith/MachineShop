@@ -22,7 +22,7 @@ setAs("MLControl", "list",
 )
 
 
-asMLModelFit <- function(object, Class, model, y) {
+asMLModelFit <- function(object, Class, model, x, y) {
   if (is(object, Class)) {
     object <- unMLModelFit(object)
   } else if (is(object, "MLModelFit")) {
@@ -40,6 +40,7 @@ asMLModelFit <- function(object, Class, model, y) {
   field(object, ".packages") <- model@packages
   field(object, ".predict") <- model@predict
   field(object, ".varimp") <- model@varimp
+  field(object, ".x") <- x
   field(object, ".y") <- y
   object
 }
