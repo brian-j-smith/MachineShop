@@ -69,7 +69,7 @@ resample.recipe <- function(x, model, control = CVControl, ...) {
 setGeneric(".resample", function(object, x, ...) standardGeneric(".resample"))
 
 
-setMethod(".resample", c("BootControl", "ModelFrame"),
+setMethod(".resample", c("BootMLControl", "ModelFrame"),
   function(object, x, model) {
     set.seed(object@seed)
     splits <- bootstraps(data.frame(strata = strata(response(x))),
@@ -87,7 +87,7 @@ setMethod(".resample", c("BootControl", "ModelFrame"),
 )
 
 
-setMethod(".resample", c("BootControl", "recipe"),
+setMethod(".resample", c("BootMLControl", "recipe"),
   function(object, x, model) {
     set.seed(object@seed)
     splits <- bootstraps(x$template,
@@ -106,7 +106,7 @@ setMethod(".resample", c("BootControl", "recipe"),
 )
 
 
-setMethod(".resample", c("CVControl", "ModelFrame"),
+setMethod(".resample", c("CVMLControl", "ModelFrame"),
   function(object, x, model) {
     set.seed(object@seed)
     splits <- vfold_cv(data.frame(strata = strata(response(x))),
@@ -126,7 +126,7 @@ setMethod(".resample", c("CVControl", "ModelFrame"),
 )
 
 
-setMethod(".resample", c("CVControl", "recipe"),
+setMethod(".resample", c("CVMLControl", "recipe"),
   function(object, x, model) {
     set.seed(object@seed)
     splits <- vfold_cv(x$template,
@@ -146,7 +146,7 @@ setMethod(".resample", c("CVControl", "recipe"),
 )
 
 
-setMethod(".resample", c("OOBControl", "ModelFrame"),
+setMethod(".resample", c("OOBMLControl", "ModelFrame"),
   function(object, x, model) {
     set.seed(object@seed)
     splits <- bootstraps(data.frame(strata = strata(response(x))),
@@ -167,7 +167,7 @@ setMethod(".resample", c("OOBControl", "ModelFrame"),
 )
 
 
-setMethod(".resample", c("OOBControl", "recipe"),
+setMethod(".resample", c("OOBMLControl", "recipe"),
   function(object, x, model) {
     set.seed(object@seed)
     splits <- bootstraps(x$template,
@@ -187,7 +187,37 @@ setMethod(".resample", c("OOBControl", "recipe"),
 )
 
 
-setMethod(".resample", c("TrainControl", "ModelFrame"),
+setMethod(".resample", c("SplitMLControl", "ModelFrame"),
+  function(object, x, model) {
+    set.seed(object@seed)
+    split <- initial_split(data.frame(strata = strata(response(x))),
+                           prop = object@prop,
+                           strata = "strata")
+    train <- x[split$in_id, , drop = FALSE]
+    test <- x[-split$in_id, , drop = FALSE]
+    perf <- resample_metrics(train, test, model, object)
+    Resamples(perf$metrics, response = cbind(Resample = 1, perf$response),
+              method = method(object), seed = object@seed)
+  }
+)
+
+
+setMethod(".resample", c("SplitMLControl", "recipe"),
+  function(object, x, model) {
+    set.seed(object@seed)
+    split <- initial_split(x$template,
+                           prop = object@prop,
+                           strata =  response(terms(x)))
+    train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
+    test <- ModelFrame(formula(terms(x)), testing(split))
+    perf <- resample_metrics(train, test, model, object)
+    Resamples(perf$metrics, response = cbind(Resample = 1, perf$response),
+              method = method(object), seed = object@seed)
+  }
+)
+
+
+setMethod(".resample", c("TrainMLControl", "ModelFrame"),
   function(object, x, model) {
     set.seed(object@seed)
     perf <- resample_metrics(x, x, model, object)
@@ -197,7 +227,7 @@ setMethod(".resample", c("TrainControl", "ModelFrame"),
 )
 
 
-setMethod(".resample", c("TrainControl", "recipe"),
+setMethod(".resample", c("TrainMLControl", "recipe"),
   function(object, x, model) {
     set.seed(object@seed)
     test <- ModelFrame(formula(terms(x)), x$template)

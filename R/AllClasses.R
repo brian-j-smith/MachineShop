@@ -77,11 +77,11 @@ setMethod("initialize", "MLControl",
 #' BootControl(samples = 100)
 #' 
 BootControl <- function(samples = 25, ...) {
-  new("BootControl", samples = samples, ...)
+  new("BootMLControl", samples = samples, ...)
 }
 
 
-setClass("BootControl",
+setClass("BootMLControl",
   slots = c(samples = "numeric"),
   contains = "MLControl"
 )
@@ -103,11 +103,11 @@ setClass("BootControl",
 #' CVControl(folds = 10, repeats = 5)
 #' 
 CVControl <- function(folds = 10, repeats = 1, ...) {
-  new("CVControl", folds = folds, repeats = repeats, ...)
+  new("CVMLControl", folds = folds, repeats = repeats, ...)
 }
 
 
-setClass("CVControl",
+setClass("CVMLControl",
   slots = c(folds = "numeric", repeats = "numeric"),
   contains = "MLControl"
 )
@@ -125,12 +125,35 @@ setClass("CVControl",
 #' OOBControl(samples = 100)
 #' 
 OOBControl <- function(samples = 25, ...) {
-  new("OOBControl", samples = samples, ...)
+  new("OOBMLControl", samples = samples, ...)
 }
 
 
-setClass("OOBControl",
+setClass("OOBMLControl",
   slots = c(samples = "numeric"),
+  contains = "MLControl"
+)
+
+
+#' \code{SplitControl} constructs an MLControl object for splitting data into a
+#' seperate trianing and test set.
+#' 
+#' @param prop proportion of cases to include in the training set
+#' (\code{0 < prop < 1}).
+#' 
+#' @name SplitControl
+#' @rdname MLControl-class
+#' 
+#' @examples
+#' SplitControl(prop = 2/3)
+#' 
+SplitControl <- function(prop = 2/3, ...) {
+  new("SplitMLControl", prop = prop, ...)
+}
+
+
+setClass("SplitMLControl",
+  slots = c(prop = "numeric"),
   contains = "MLControl"
 )
 
@@ -145,11 +168,11 @@ setClass("OOBControl",
 #' TrainControl()
 #' 
 TrainControl <- function(...) {
-  new("TrainControl", ...)
+  new("TrainMLControl", ...)
 }
 
 
-setClass("TrainControl",
+setClass("TrainMLControl",
   contains = "MLControl"
 )
 

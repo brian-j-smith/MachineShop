@@ -100,6 +100,12 @@ CVControl
 OOBControl
   : Out-of-bag bootstrap resampling.  Models are fit with bootstrap resampled training sets and used to predict the unsampled cases.
   
+SplitControl
+  : Split training and test sets.  The data are randomly partitioned into a training and test set.
+  
+TrainControl
+  : Training resubstitution.  A model is fit on and used to predict the full training set to estimate training, or apparent, error.
+  
 In our example, performance of models to predict survival at 180, 360, and 540 days will be estimated with five repeats of 10-fold cross-validation.  Variable `metrics` is defined for the purpose of reducing the printed and plotted output in this vignette to only the time-integrated ROC and Brier metrics.  Such subsetting of output would not be done in practice if there is interest in looking at all metrics.
 
 ```{r}

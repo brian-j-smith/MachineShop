@@ -54,6 +54,8 @@ Methods for resample estimation include
   \code{\link{BootControl}} \tab Simple Bootstrap \cr
   \code{\link{CVControl}} \tab Repeated K-Fold Cross-Validation \cr
   \code{\link{OOBControl}} \tab Out-of-Bag Bootstrap \cr
+  \code{\link{SplitControl}} \tab Split Training-Testing \cr
+  \code{\link{TrainControl}} \tab Training Resubstitution \cr
 }  
 
 Tabular and graphical summaries of modeling results can be obtained with

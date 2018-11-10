@@ -14,7 +14,8 @@ importFrom(MLmetrics, PRAUC)
 importFrom(ModelMetrics, auc, brier, ce, kappa, mae, rmse, sensitivity,
            specificity)
 importFrom(recipes, bake, juice, prep)
-importFrom(rsample, assessment, bootstraps, prepper, rsample2caret, vfold_cv)
+importFrom(rsample, assessment, bootstraps, initial_split, prepper,
+           rsample2caret, testing, vfold_cv)
 importFrom(Rsolnp, solnp)
 importFrom(stats, approx, coef, complete.cases, cor, formula, get_all_vars,
            median, model.frame, model.matrix, model.response, model.weights,
@@ -38,6 +39,7 @@ export(.,
 export(BootControl,
        CVControl,
        OOBControl,
+       SplitControl,
        TrainControl)
 
 exportClasses(MLControl)

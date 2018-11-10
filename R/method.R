@@ -6,12 +6,12 @@ setMethod("method", "MLControl",
 )
 
 
-setMethod("method", "BootControl",
+setMethod("method", "BootMLControl",
   function(object, ...) "Boot"
 )
 
 
-setMethod("method", "CVControl",
+setMethod("method", "CVMLControl",
   function(object, ...) {
     paste0(ifelse(object@repeats > 1, "Repeated ", ""),
            object@folds, "-Fold CV")
@@ -19,11 +19,16 @@ setMethod("method", "CVControl",
 )
 
 
-setMethod("method", "OOBControl",
+setMethod("method", "OOBMLControl",
   function(object, ...) "OOB"
 )
 
 
-setMethod("method", "TrainControl",
+setMethod("method", "SplitMLControl",
+  function(object, ...) "Split"
+)
+
+
+setMethod("method", "TrainMLControl",
   function(object, ...) "Training Resubstitution"
 )

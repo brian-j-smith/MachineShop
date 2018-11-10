@@ -7,6 +7,7 @@
 \alias{BootControl}
 \alias{CVControl}
 \alias{OOBControl}
+\alias{SplitControl}
 \alias{TrainControl}
 \title{Resampling Classes and Methods}
 \usage{
@@ -19,6 +20,8 @@ BootControl(samples = 25, ...)
 CVControl(folds = 10, repeats = 1, ...)
 
 OOBControl(samples = 25, ...)
+
+SplitControl(prop = 2/3, ...)
 
 TrainControl(...)
 }
@@ -50,6 +53,9 @@ to a random integer by default (NULL).}
 \item{folds}{number of cross-validation folds (K).}
 
 \item{repeats}{number of repeats of the K-fold partitioning.}
+
+\item{prop}{proportion of cases to include in the training set
+(\code{0 < prop < 1}).}
 }
 \value{
 MLControl class object.
@@ -72,6 +78,9 @@ of the K folds with models fit on all remaining folds.
 \code{OOBControl} constructs an MLControl object for out-of-bag bootstrap
 resampling in which models are fit with bootstrap resampled training sets and
 used to predict the unsampled cases.
+
+\code{SplitControl} constructs an MLControl object for splitting data into a
+seperate trianing and test set.
 
 \code{TrainControl} constructs an MLControl object for training and
 performance evaluation to be performed on the same training set.
@@ -106,6 +115,8 @@ CVControl(folds = 10, repeats = 5)
 
 ## 100 out-of-bag bootstrap samples
 OOBControl(samples = 100)
+
+SplitControl(prop = 2/3)
 
 TrainControl()
 
