@@ -19,6 +19,7 @@
 #'   \code{\link{POLRModel}}           \tab   \tab   \tab x \tab   \cr
 #'   \code{\link{RandomForestModel}}   \tab x \tab x \tab   \tab   \cr
 #'   \code{\link{StackedModel}}        \tab x \tab x \tab x \tab x \cr
+#'   \code{\link{SuperModel}}          \tab x \tab x \tab x \tab x \cr
 #'   \code{\link{SurvRegModel}}        \tab   \tab   \tab   \tab x \cr
 #'   \code{\link{SurvRegStepAICModel}} \tab   \tab   \tab   \tab x \cr
 #'   \code{\link{SVMModel}}            \tab x \tab x \tab   \tab   \cr

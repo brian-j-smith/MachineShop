@@ -39,6 +39,7 @@ modelnames <- c("C5.0 Classification" = "C50Model",
                 "Ordered Logistic Regression" = "POLRModel",
                 "Random Forests" = "RandomForestModel",
                 "Stacked Regression" = "StackedModel",
+                "Super Learner" = "SuperModel",
                 "Parametric Survival Regression" = "SurvRegModel",
                 "Support Vector Machines" = "SVMModel")
 

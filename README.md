@@ -243,6 +243,26 @@ x
 </tr>
 <tr>
 <td style="text-align:left;">
+Super Learner
+</td>
+<td style="text-align:center;">
+SuperModel
+</td>
+<td style="text-align:center;">
+x
+</td>
+<td style="text-align:center;">
+x
+</td>
+<td style="text-align:center;">
+x
+</td>
+<td style="text-align:center;">
+x
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 Parametric Survival Regression
 </td>
 <td style="text-align:center;">
