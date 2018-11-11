@@ -82,7 +82,7 @@ setMethod(".resample", c("BootMLControl", "ModelFrame"),
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
       resample_metrics(train, x, model, object)
-    } %>% Resamples.list(method = method(object), seed = object@seed)
+    } %>% Resamples.list(control = object)
   }
 )
 
@@ -101,7 +101,7 @@ setMethod(".resample", c("BootMLControl", "recipe"),
       split <- splits[[i]]
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
       resample_metrics(train, test, model, object)
-    } %>% Resamples.list(method = method(object), seed = object@seed)
+    } %>% Resamples.list(control = object)
   }
 )
 
@@ -121,7 +121,7 @@ setMethod(".resample", c("CVMLControl", "ModelFrame"),
       train <- x[index[[i]], , drop = FALSE]
       test <- x[-index[[i]], , drop = FALSE]
       resample_metrics(train, test, model, object)
-    } %>% Resamples.list(method = method(object), seed = object@seed)
+    } %>% Resamples.list(control = object)
   }
 )
 
@@ -141,7 +141,7 @@ setMethod(".resample", c("CVMLControl", "recipe"),
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
       test <- ModelFrame(formula(terms(x)), assessment(split))
       resample_metrics(train, test, model, object)
-    } %>% Resamples.list(method = method(object), seed = object@seed)
+    } %>% Resamples.list(control = object)
   }
 )
 
@@ -162,7 +162,7 @@ setMethod(".resample", c("OOBMLControl", "ModelFrame"),
       test <- x[indexOut[[i]], , drop = FALSE]
       if (nrow(test) == 0) return(NA)
       resample_metrics(train, test, model, object)
-    } %>% Resamples.list(method = method(object), seed = object@seed)
+    } %>% Resamples.list(control = object)
   }
 )
 
@@ -182,7 +182,7 @@ setMethod(".resample", c("OOBMLControl", "recipe"),
       test <- ModelFrame(formula(terms(x)), assessment(split))
       if (nrow(test) == 0) return(NA)
       resample_metrics(train, test, model, object)
-    } %>% Resamples.list(method = method(object), seed = object@seed)
+    } %>% Resamples.list(control = object)
   }
 )
 
@@ -197,7 +197,7 @@ setMethod(".resample", c("SplitMLControl", "ModelFrame"),
     test <- x[-split$in_id, , drop = FALSE]
     perf <- resample_metrics(train, test, model, object)
     Resamples(perf$metrics, response = cbind(Resample = 1, perf$response),
-              method = method(object), seed = object@seed)
+              control = object)
   }
 )
 
@@ -212,7 +212,7 @@ setMethod(".resample", c("SplitMLControl", "recipe"),
     test <- ModelFrame(formula(terms(x)), testing(split))
     perf <- resample_metrics(train, test, model, object)
     Resamples(perf$metrics, response = cbind(Resample = 1, perf$response),
-              method = method(object), seed = object@seed)
+              control = object)
   }
 )
 
@@ -222,7 +222,7 @@ setMethod(".resample", c("TrainMLControl", "ModelFrame"),
     set.seed(object@seed)
     perf <- resample_metrics(x, x, model, object)
     Resamples(perf$metrics, response = cbind(Resample = 1, perf$response),
-              method = method(object), seed = object@seed)
+              control = object)
   }
 )
 
@@ -233,7 +233,7 @@ setMethod(".resample", c("TrainMLControl", "recipe"),
     test <- ModelFrame(formula(terms(x)), x$template)
     perf <- resample_metrics(x, test, model, object)
     Resamples(perf$metrics, response = cbind(Resample = 1, perf$response),
-              method = method(object), seed = object@seed)
+              control = object)
   }
 )
 
@@ -251,7 +251,7 @@ resample_metrics <- function(train, test, model, control) {
 }
 
 
-Resamples.list <- function(x, method, seed) {
+Resamples.list <- function(x, control) {
   metrics <- Reduce(append, lapply(x, getElement, name = "metrics"))
   rownames(metrics) <- seq(x)
   
@@ -260,5 +260,5 @@ Resamples.list <- function(x, method, seed) {
   })
   response <- Reduce(append, response_list)
 
-  Resamples(metrics, response = response, method = method, seed = seed)
+  Resamples(metrics, control = control, response = response)
 }

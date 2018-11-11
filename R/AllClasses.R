@@ -113,7 +113,7 @@ setClass("CVMLControl",
 )
 
 
-#' \code{OOBControl} constructs an MLControl object for out-of-bag bootstrap
+#' \code{OOBControl} constructs an MLControl object for out-of-bootstrap
 #' resampling in which models are fit with bootstrap resampled training sets and
 #' used to predict the unsampled cases.
 #' 
@@ -121,7 +121,7 @@ setClass("CVMLControl",
 #' @rdname MLControl-class
 #' 
 #' @examples
-#' ## 100 out-of-bag bootstrap samples
+#' ## 100 out-of-bootstrap samples
 #' OOBControl(samples = 100)
 #' 
 OOBControl <- function(samples = 25, ...) {
@@ -250,15 +250,13 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 #' Create an object of resampled performance metrics from one or more models.
 #' 
 #' @param response data frame of resampled observed and predicted resposnes.
-#' @param method character string indicating the type of resampling method.
-#' @param seed integer seed from the resampling control object.
+#' @param control MLControl object used to generate the resample output.
 #' @param ... named or unnamed resample output from one or more models.
 #' 
-#' @details Arguments \code{response}, \code{method}, and \code{seed} need only
-#' be specified if the supplied output is not a Resamples object.  Output being
-#' combined from more than one model must have been generated with the same
-#' resampling method, random number generator seed, performance metrics, and
-#' number of resampling evaluations.
+#' @details Argument \code{control} need only be specified if the supplied
+#' output is not a Resamples object.  Output being combined from more than one
+#' model must have been generated with the same resampling object and
+#' performance metrics.
 #' 
 #' @return Resamples class object.
 #' 
@@ -278,47 +276,39 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 #' summary(perf)
 #' plot(perf)
 #' 
-Resamples <- function(..., response = data.frame(), method = NULL,
-                      seed = NULL) {
-  new("Resamples", ..., response = response, method = method, seed = seed)  
+Resamples <- function(..., control, response = data.frame()) {
+  new("Resamples", ..., control = control, response = response)
 }
 
 
 setClass("Resamples",
-  slots = c(response = "data.frame", "method" = "character", seed = "numeric"),
+  slots = c(control = "MLControl", response = "data.frame"),
   contains = "array"
 )
 
 
 setMethod("initialize", "Resamples",
-  function(.Object, ..., response = data.frame(), method = NULL, seed = NULL) {
+  function(.Object, ..., control, response = data.frame()) {
     args <- list(...)
     if (length(args) == 0) stop("no values given")
     .Data <- args[[1]]
     if (length(args) == 1) {
       if (is(.Data, "Resamples")) {
         response <- .Data@response
-        method <- .Data@method
-        seed <- .Data@seed
+        control <- .Data@control
       }
     } else {
       if (!all(sapply(args, function(x) is(x, "Resamples") && is.matrix(x)))) {
         stop("values to combine must be 2 dimensional Resamples objects")
       }
-      if (!all(sapply(args, slot, name = "method") == .Data@method)) {
-        stop("resamples use different methods")
-      }
-      if (!all(sapply(args, slot, name = "seed") == .Data@seed)) {
-        stop("resamples use different seeds")
+      control <- .Data@control
+      is_equal_control <- function(x) isTRUE(all.equal(x@control, control))
+      if (!all(sapply(args, is_equal_control))) {
+        stop("resamples have different control structures")
       }
       if (!all(sapply(args, colnames) == colnames(.Data))) {
         stop("resamples contain different metrics")
       }
-      if (!all(sapply(args, nrow) == nrow(.Data))) {
-        stop("resamples have different numbers of evaluations")
-      }
-      method <- .Data@method
-      seed <- .Data@seed
       modelnames <- names(args)
       if (is.null(modelnames)) modelnames <- paste0("Model", seq(args))
       names(args) <- NULL
@@ -326,8 +316,7 @@ setMethod("initialize", "Resamples",
       args$new.names <- list(NULL, NULL, modelnames)
       .Data <- do.call(abind, args)
     }
-    callNextMethod(.Object, .Data, response = response, method = method,
-                   seed = seed)
+    callNextMethod(.Object, .Data, control = control, response = response)
   }
 )
 
@@ -350,7 +339,7 @@ ResamplesDiff <- setClass("ResamplesDiff",
 
 
 setMethod("initialize", "ResamplesDiff",
-  function(.Object, modelnames, ...) {
+  function(.Object, ..., modelnames) {
     .Object <- callNextMethod(.Object, ...)
     .Object@modelnames <- modelnames
     .Object

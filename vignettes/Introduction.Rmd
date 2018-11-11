@@ -98,7 +98,7 @@ CVControl
   : Repeated K-fold cross-validation.  The full data set is repeatedly partitioned into K-folds.  Within a partitioning, prediction is performed on each of the K folds with models fit on all remaining folds.
 
 OOBControl
-  : Out-of-bag bootstrap resampling.  Models are fit with bootstrap resampled training sets and used to predict the unsampled cases.
+  : Out-of-bootstrap resampling.  Models are fit with bootstrap resampled training sets and used to predict the unsampled cases.
   
 SplitControl
   : Split training and test sets.  The data are randomly partitioned into a training and test set.

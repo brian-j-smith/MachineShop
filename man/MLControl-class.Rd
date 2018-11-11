@@ -75,7 +75,7 @@ cross-validation.  In this procedure, the full data set is repeatedly
 partitioned into K-folds.  Within a partitioning, prediction is performed on each
 of the K folds with models fit on all remaining folds.
 
-\code{OOBControl} constructs an MLControl object for out-of-bag bootstrap
+\code{OOBControl} constructs an MLControl object for out-of-bootstrap
 resampling in which models are fit with bootstrap resampled training sets and
 used to predict the unsampled cases.
 
@@ -113,7 +113,7 @@ BootControl(samples = 100)
 ## 5 repeats of 10-fold cross-validation
 CVControl(folds = 10, repeats = 5)
 
-## 100 out-of-bag bootstrap samples
+## 100 out-of-bootstrap samples
 OOBControl(samples = 100)
 
 SplitControl(prop = 2/3)

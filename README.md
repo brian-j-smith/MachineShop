@@ -386,11 +386,21 @@ modelmetrics(obs, pred)
 (perf <- resample(fo, data = df, model = GBMModel, control = CVControl))
 #> An object of class "Resamples"
 #> 
-#> metrics: Accuracy, Kappa, Brier, MLogLoss
+#> Metrics: Accuracy, Kappa, Brier, MLogLoss 
 #> 
-#> method: 10-Fold CV
+#> Resamples control object of class "CVMLControl"
 #> 
-#> resamples: 10
+#> Method: K-Fold Cross-Validation
+#> 
+#> Folds: 10
+#> 
+#> Repeats: 1
+#> 
+#> Class cutoff probability: 0.5 
+#> 
+#> Omit missing responses: FALSE
+#> 
+#> Seed: 9279906
 
 summary(perf)
 #>                Mean     Median         SD          Min       Max NA
@@ -512,9 +522,9 @@ summary(perfdiff)
 t.test(perfdiff)
 #> An object of class "ResamplesHTest"
 #> 
-#> upper diagonal: mean differences (row - column)
-#> lower diagonal: p-values
-#> p-value adjustment: holm
+#> Upper diagonal: mean differences (row - column)
+#> Lower diagonal: p-values
+#> P-value adjustment method: holm
 #> 
 #> , , Accuracy
 #> 

@@ -4,16 +4,14 @@
 \alias{Resamples}
 \title{Resamples Class Contructor}
 \usage{
-Resamples(..., response = data.frame(), method = NULL, seed = NULL)
+Resamples(..., control, response = data.frame())
 }
 \arguments{
 \item{...}{named or unnamed resample output from one or more models.}
 
+\item{control}{MLControl object used to generate the resample output.}
+
 \item{response}{data frame of resampled observed and predicted resposnes.}
-
-\item{method}{character string indicating the type of resampling method.}
-
-\item{seed}{integer seed from the resampling control object.}
 }
 \value{
 Resamples class object.
@@ -22,11 +20,10 @@ Resamples class object.
 Create an object of resampled performance metrics from one or more models.
 }
 \details{
-Arguments \code{response}, \code{method}, and \code{seed} need only
-be specified if the supplied output is not a Resamples object.  Output being
-combined from more than one model must have been generated with the same
-resampling method, random number generator seed, performance metrics, and
-number of resampling evaluations.
+Argument \code{control} need only be specified if the supplied
+output is not a Resamples object.  Output being combined from more than one
+model must have been generated with the same resampling object and
+performance metrics.
 }
 \examples{
 ## Factor response example
