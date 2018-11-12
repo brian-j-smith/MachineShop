@@ -45,7 +45,7 @@ resample.ModelFrame <- function(x, model, control = CVControl, ...) {
 #' library(survival)
 #' 
 #' (gbmperf <- resample(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
-#'                                           pat.karno + meal.cal + wt.loss,
+#'                        pat.karno + meal.cal + wt.loss,
 #'                      data = lung,
 #'                      model = GBMModel,
 #'                      control = CVControl(folds = 10, repeats = 5,

@@ -25,8 +25,8 @@ Calculate measures of the relative importance of predictors in a model.
 library(survival)
 
 gbmfit <- fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
-                                   pat.karno + meal.cal + wt.loss,
-              data = lung, GBMModel)
+                pat.karno + meal.cal + wt.loss, data = lung,
+                model = GBMModel)
 (vi <- varimp(gbmfit))
 plot(vi)
 

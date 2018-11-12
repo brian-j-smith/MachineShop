@@ -34,8 +34,8 @@ Predict outcomes with a fitted model.
 library(survival)
 
 gbmfit <- fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
-                                   pat.karno + meal.cal + wt.loss,
-              data = lung, GBMModel)
+                pat.karno + meal.cal + wt.loss, data = lung,
+                model = GBMModel)
 predict(gbmfit, lung, times = c(180, 360, 540), type = "prob")
 
 }

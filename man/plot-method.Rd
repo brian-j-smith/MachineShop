@@ -5,6 +5,7 @@
 \alias{plot.MLModelTune}
 \alias{plot.PartialDependence}
 \alias{plot.Resamples}
+\alias{plot.ResamplesCalibration}
 \alias{plot.VarImp}
 \title{Model Performance Plots}
 \usage{
@@ -15,6 +16,9 @@
 
 \method{plot}{Resamples}(x, metrics = NULL, stat = mean,
   type = c("boxplot", "density", "errorbar", "violin"), ...)
+
+\method{plot}{ResamplesCalibration}(x, type = c("line", "point"),
+  se = FALSE, ...)
 
 \method{plot}{VarImp}(x, n = NULL, ...)
 }
@@ -34,6 +38,8 @@ MLModelTune line plots and Resamples model sorting.}
 \item{stats}{vector of numeric indexes or character names of partial
 dependence summary statistics to plot.}
 
+\item{se}{logical indicating whether to include standard error bars.}
+
 \item{n}{number of most important variables to include in the plot
 (default: all).}
 }
@@ -46,7 +52,7 @@ Plot measures of model performance and predictor variable importance.
 fo <- factor(Species) ~ .
 control <- CVControl()
 
-gbmfit <- fit(fo, iris, GBMModel, control)
+gbmfit <- fit(fo, data = iris, model = GBMModel, control = control)
 plot(varimp(gbmfit))
 
 gbmperf1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
@@ -63,6 +69,8 @@ plot(perf)
 \code{\link{tune}}
 
 \code{\link{dependence}}
+
+\code{\link{calibration}}
 
 \code{\link{varimp}}
 }

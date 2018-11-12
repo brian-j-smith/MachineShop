@@ -59,7 +59,7 @@ found in the source link below.
 library(survival)
 
 fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno + meal.cal + wt.loss,
-    data = lung, model = SurvRegModel())
+      data = lung, model = SurvRegModel())
 
 }
 \seealso{

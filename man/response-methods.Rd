@@ -25,6 +25,6 @@ library(survival)
 
 fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
                            meal.cal + wt.loss
-response(fo, lung)
+response(fo, data = lung)
 
 }

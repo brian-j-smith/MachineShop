@@ -38,8 +38,8 @@ fit.ModelFrame <- function(x, model, ...) {
 #' library(survival)
 #' 
 #' gbmfit <- fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
-#'                                    pat.karno + meal.cal + wt.loss,
-#'               data = lung, GBMModel)
+#'                 pat.karno + meal.cal + wt.loss, data = lung,
+#'                 model = GBMModel)
 #' varimp(gbmfit)
 #' 
 fit.formula <- function(x, data, model, ...) {

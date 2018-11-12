@@ -16,9 +16,9 @@
 #' 
 #' fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
 #'                            meal.cal + wt.loss
-#' gbmfit <- fit(fo, lung, GBMModel)
+#' gbmfit <- fit(fo, data = lung, model = GBMModel)
 #' 
-#' obs <- response(fo, lung)
+#' obs <- response(fo, data = lung)
 #' pred <- predict(gbmfit, newdata = lung, type = "prob")
 #' modelmetrics(obs, pred)
 #' 

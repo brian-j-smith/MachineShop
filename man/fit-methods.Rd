@@ -38,8 +38,8 @@ Fit a model to estimate its parameters from a data set.
 library(survival)
 
 gbmfit <- fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
-                                   pat.karno + meal.cal + wt.loss,
-              data = lung, GBMModel)
+                pat.karno + meal.cal + wt.loss, data = lung,
+                model = GBMModel)
 varimp(gbmfit)
 
 }

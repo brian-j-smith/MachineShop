@@ -22,7 +22,7 @@
 #' fo <- factor(Species) ~ .
 #' control <- CVControl()
 #' 
-#' gbmfit <- fit(fo, iris, GBMModel, control)
+#' gbmfit <- fit(fo, data = iris, model = GBMModel, control = control)
 #' plot(varimp(gbmfit))
 #' 
 #' gbmperf1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
@@ -162,6 +162,12 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
 }
 
 
+#' @rdname plot-method
+#' 
+#' @param se logical indicating whether to include standard error bars.
+#' 
+#' @seealso \code{\link{calibration}}
+#' 
 plot.ResamplesCalibration <- function(x, type = c("line", "point"), 
                                       se = FALSE, ...) {
   df <- data.frame(
@@ -169,6 +175,7 @@ plot.ResamplesCalibration <- function(x, type = c("line", "point"),
     Midpoint = x$Midpoint,
     x$Observed
   )
+  Midpoint_width <- diff(range(df$Midpoint))
 
   aes_response <- if (nlevels(x$Response) > 1) {
     aes(x = Midpoint, y = Mean, color = Response)
@@ -179,16 +186,18 @@ plot.ResamplesCalibration <- function(x, type = c("line", "point"),
   p <- ggplot(df, aes_response) +
     geom_abline(intercept = 0, slope = 1, color = "gray") +
     labs(x = "Bin Midpoints", y = "Observed Mean")
-  p <- switch(match.arg(type),
-              "line" = p + geom_line(),
-              "point" = p + geom_point())
   
+  position <- "identity"
   if (se) {
+    position <- position_dodge(width = 0.025 * Midpoint_width)
     p <- p + geom_errorbar(aes(ymin = Lower, ymax = Upper),
-                           width = 0.05 * diff(range(df$Midpoint)))
+                           width = 0.05 * Midpoint_width,
+                           position = position)
   }
-  
-  p
+
+  switch(match.arg(type),
+         "line" = p + geom_line(position = position),
+         "point" = p + geom_point(position = position))
 }
 
 

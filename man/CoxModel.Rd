@@ -54,7 +54,7 @@ found in the source link below.
 library(survival)
 
 fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno + meal.cal + wt.loss,
-    data = lung, model = CoxModel())
+      data = lung, model = CoxModel())
 
 }
 \seealso{
