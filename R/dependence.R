@@ -27,6 +27,8 @@
 dependence <- function(object, data, select, interaction = FALSE, n = 10,
                        intervals = c("uniform", "quantile"),
                        stats = c("Mean" = mean)) {
+  
+  stopifnot(is(object, "MLModelFit"))
 
   intervals <- match.arg(intervals)
   
@@ -85,6 +87,7 @@ dependence <- function(object, data, select, interaction = FALSE, n = 10,
     df
   })
   
-  PartialDependence(do.call(rbind, dependence_list))
+  structure(do.call(rbind, dependence_list),
+            class = c("PartialDependence", "data.frame"))
 
 }

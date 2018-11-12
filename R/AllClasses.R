@@ -327,11 +327,6 @@ MLModelTune <- setClass("MLModelTune",
 )
 
 
-PartialDependence <- setClass("PartialDependence",
-  contains = "data.frame"
-)
-
-
 ResamplesDiff <- setClass("ResamplesDiff",
   slots = c("modelnames" = "character"),
   contains = "Resamples"
