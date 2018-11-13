@@ -177,6 +177,15 @@ setClass("TrainMLControl",
 )
 
 
+MLFitBits <- setClass("MLFitBits",
+  slots = c(packages = "character",
+            predict = "function",
+            varimp = "function",
+            x = "ANY",
+            y = "ANY")
+)
+
+
 #' MLModel Class Constructor
 #' 
 #' @param name character string name for the instantiated MLModel object.
@@ -199,9 +208,16 @@ MLModel <- function(name = "MLModel", packages = character(0),
                       stop("no predict function"),
                     varimp = function(object, ...)
                       stop("no varimp function")) {
-  new("MLModel", name = name, packages = packages, types = types,
-      params = params, nvars = nvars, fit = fit, predict = predict,
-      varimp = varimp)
+  new("MLModel",
+      name = name,
+      packages = packages,
+      types = types,
+      params = params,
+      nvars = nvars,
+      fit = fit,
+      fitbits = MLFitBits(packages = packages,
+                          predict = predict,
+                          varimp = varimp))
 }
 
 
@@ -212,31 +228,12 @@ setClass("MLModel",
             params = "list",
             nvars = "function",
             fit = "function",
-            predict = "function",
-            varimp = "function")
+            fitbits = "MLFitBits")
 )
 
 
-#' Model Fit Class
-#' 
-#' MLModelFit is the base class for model fit objects.  Direct calls to the
-#' MLModelFit constructor are not necessary unless implementing custom models.
-#'
-#' @name MLModelFit-class
-#' @rdname MLModelFit-class
-#' 
-#' @slot .packages character vector of packages required by the object.
-#' @slot .predict model prediction function.
-#' @slot .varimp variable importance function.
-#' @slot .x training recipe or ModelFrame.
-#' @slot .y training response variable.
-#' 
 setClass("MLModelFit",
-  slots = c(.packages = "character",
-            .predict = "function",
-            .varimp = "function",
-            .x = "ANY",
-            .y = "ANY"),
+  slots = c(fitbits = "MLFitBits"),
   contains = "VIRTUAL"
 )
 

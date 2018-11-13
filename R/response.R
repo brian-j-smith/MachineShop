@@ -46,5 +46,5 @@ response.terms <- function(object, ...) {
 
 
 response.MLModelFit <- function(object, ...) {
-  field(object, ".y")
+  fitbit(object, "y")
 }

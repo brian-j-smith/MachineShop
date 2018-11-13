@@ -72,8 +72,6 @@ export(MLModel,
        SVMSplineModel,
        SVMTanhModel)
 
-exportClasses(MLModelFit)
-
 exportMethods(modelmetrics)
 
 S3method(diff, MLModelTune)

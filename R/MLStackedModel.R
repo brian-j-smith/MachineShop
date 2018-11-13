@@ -42,20 +42,22 @@ StackedModel <- function(..., control = CVControl, weights = NULL) {
     name = "StackedModel",
     types = c("factor", "numeric", "ordered", "Surv"),
     params = as.list(environment()),
-    predict = function(object, newdata, ...) {
-      predicted <- 0
-      for (i in seq(object$base_fits)) {
-        predicted <- predicted +
-          object$weights[i] * predict(object$base_fits[[i]], newdata = newdata,
-                                      times = object$times, type = "prob")
+    fitbits = MLFitBits(
+      predict = function(object, newdata, ...) {
+        predicted <- 0
+        for (i in seq(object$base_fits)) {
+          predicted <- predicted +
+            object$weights[i] * predict(object$base_fits[[i]], newdata = newdata,
+                                        times = object$times, type = "prob")
+        }
+        predicted
+      },
+      varimp = function(object, ...) {
+        warning("variable importance values undefined for StackedModel")
+        varnames <- all.vars(object$formula[[3]])
+        structure(rep(NA_integer_, length(varnames)), names = varnames)
       }
-      predicted
-    },
-    varimp = function(object, ...) {
-      warning("variable importance values undefined for StackedModel")
-      varnames <- all.vars(object$formula[[3]])
-      structure(rep(NA_integer_, length(varnames)), names = varnames)
-    }
+    )
   )
   
 }
@@ -96,12 +98,14 @@ setClass("StackedModel", contains = "MLModel")
                      control = list(trace = FALSE))$pars
   }
   
+  fitbit(model, "x") <- x
+  fitbit(model, "y") <- response(mf)
   list(base_fits = lapply(base_learners,
                           function(learner) fit(mf, model = learner)),
        weights = weights,
        times = times,
        formula = formula(terms(mf))) %>%
-    asMLModelFit("StackedModelFit", model, x, response(mf))
+    asMLModelFit("StackedModelFit", model)
 }
 
 

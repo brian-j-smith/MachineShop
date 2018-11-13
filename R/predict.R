@@ -30,9 +30,9 @@
 predict.MLModelFit <- function(object, newdata = NULL,
                                type = c("response", "prob"), cutoff = 0.5,
                                times = numeric(), ...) {
-  newdata <- preprocess(field(object, ".x"), newdata)
-  requireModelNamespaces(field(object, ".packages"))
-  predict <- field(object, ".predict")
+  newdata <- preprocess(fitbit(object, "x"), newdata)
+  requireModelNamespaces(fitbit(object, "packages"))
+  predict <- fitbit(object, "predict")
   pred <- predict(object, newdata, times = times)
   if (match.arg(type) == "response") {
     pred <- convert(response(object), pred, cutoff = cutoff)

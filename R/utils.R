@@ -87,13 +87,18 @@ setMethod("append", c("vector", "vector"),
 )
 
 
-field <- function(object, name) {
-  if (isS4(object)) slot(object, name) else object[[name]]
+fitbit <- function(object, name) {
+  fitbits <- if (isS4(object)) object@fitbits else object$fitbits
+  slot(fitbits, name)
 }
 
 
-"field<-" <- function(object, name, value) {
-  if (isS4(object)) slot(object, name) <- value else object[[name]] <- value
+"fitbit<-" <- function(object, name, value) {
+  if (isS4(object)) {
+    slot(object@fitbits, name) <- value
+  } else {
+    slot(object$fitbits, name) <- value
+  }
   object
 }
 

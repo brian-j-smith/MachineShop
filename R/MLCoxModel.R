@@ -98,7 +98,7 @@ CoxStepAICModel <- function(ties = c("efron", "breslow", "exact"),
         MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,
                       trace = trace, steps = steps)
     },
-    predict = stepmodel@predict,
-    varimp = stepmodel@varimp
+    predict = fitbit(stepmodel, "predict"),
+    varimp = fitbit(stepmodel, "varimp")
   )
 }

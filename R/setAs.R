@@ -22,26 +22,24 @@ setAs("MLControl", "list",
 )
 
 
-asMLModelFit <- function(object, Class, model, x, y) {
+asMLModelFit <- function(object, Class, model) {
   if (is(object, Class)) {
     object <- unMLModelFit(object)
   } else if (is(object, "MLModelFit")) {
     stop("cannot change MLModelFit class")
   }
+  
+  if (!is(model, "MLModel")) stop("model not of class MLModel")
+  
   if (isS4(object)) {
-    object <- as(object, Class)
-    if (!is(object, "MLModelFit")) stop("Class not from MLModelFit")
+    object <- new(Class, object, fitbits = model@fitbits)
   } else if (is.list(object)) {
+    object$fitbits <- model@fitbits
     class(object) <- c(Class, "MLModelFit", class(object))
   } else {
     stop("unsupported object class")
   }
-  if (!is(model, "MLModel")) stop("model not of class MLModel")
-  field(object, ".packages") <- model@packages
-  field(object, ".predict") <- model@predict
-  field(object, ".varimp") <- model@varimp
-  field(object, ".x") <- x
-  field(object, ".y") <- y
+
   object
 }
 

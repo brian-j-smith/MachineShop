@@ -22,7 +22,7 @@
 #' plot(vi)
 #'
 varimp <- function(object, scale = TRUE, ...) {
-  requireModelNamespaces(field(object, ".packages"))
-  varimp <- field(object, ".varimp")
+  requireModelNamespaces(fitbit(object, "packages"))
+  varimp <- fitbit(object, "varimp")
   VarImp(as(varimp(object, ...), "VarImp"), scale = scale)
 }
