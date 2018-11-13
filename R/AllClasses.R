@@ -54,7 +54,7 @@ setClass("MLControl",
 setMethod("initialize", "MLControl",
   function(.Object, summary = modelmetrics, cutoff = 0.5,
            cutoff_index = function(sens, spec) sens + spec,
-           surv_times = numeric(), na.rm = FALSE, seed = NULL, ...) {
+           surv_times = numeric(), na.rm = TRUE, seed = NULL, ...) {
     if (is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
     callNextMethod(.Object, summary = summary, cutoff = cutoff,
                    cutoff_index = cutoff_index, surv_times = surv_times,

@@ -13,7 +13,7 @@
 \usage{
 \S4method{initialize}{MLControl}(.Object, summary = modelmetrics,
   cutoff = 0.5, cutoff_index = function(sens, spec) sens + spec,
-  surv_times = numeric(), na.rm = FALSE, seed = NULL, ...)
+  surv_times = numeric(), na.rm = TRUE, seed = NULL, ...)
 
 BootControl(samples = 25, ...)
 
