@@ -83,7 +83,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
           lp <- predict(object, newx = x, type = "link") %>% drop
           newlp <- predict(object, newx = newx, type = "link") %>% drop
           cumhaz <- basehaz(y, exp(lp), times)
-          exp(exp(newlp - mean(lp)) %o% -cumhaz)
+          exp(exp(newlp) %o% -cumhaz)
         } else {
           exp(predict(object, newx = newx, type = "link")) %>% drop
         }
