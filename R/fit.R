@@ -17,13 +17,6 @@ fit <- function(x, ...) {
 
 #' @rdname fit-methods
 #' 
-fit.ModelFrame <- function(x, model, ...) {
-  .fit(getMLObject(model, "MLModel"), x)
-}
-
-
-#' @rdname fit-methods
-#' 
 #' @param data data frame containing observed predictors and outcomes.
 #' @param model MLModel object, constructor function, or character string
 #' naming a constructor function that returns an MLModel object.
@@ -44,6 +37,13 @@ fit.ModelFrame <- function(x, model, ...) {
 #' 
 fit.formula <- function(x, data, model, ...) {
   fit(ModelFrame(x, data, na.action = na.pass), model)
+}
+
+
+#' @rdname fit-methods
+#' 
+fit.ModelFrame <- function(x, model, ...) {
+  .fit(getMLObject(model, "MLModel"), x)
 }
 
 

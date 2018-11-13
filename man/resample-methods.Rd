@@ -2,16 +2,16 @@
 % Please edit documentation in R/resample.R
 \name{resample}
 \alias{resample}
-\alias{resample.ModelFrame}
 \alias{resample.formula}
+\alias{resample.ModelFrame}
 \alias{resample.recipe}
 \title{Resample Estimation of Model Performance}
 \usage{
 resample(x, ...)
 
-\method{resample}{ModelFrame}(x, model, control = CVControl, ...)
-
 \method{resample}{formula}(x, data, model, control = CVControl, ...)
+
+\method{resample}{ModelFrame}(x, model, control = CVControl, ...)
 
 \method{resample}{recipe}(x, model, control = CVControl, ...)
 }
@@ -22,14 +22,14 @@ formula; or a recipe.}
 
 \item{...}{arguments passed to other methods.}
 
+\item{data}{data frame containing observed predictors and outcomes.}
+
 \item{model}{MLModel object, constructor function, or character string
 naming a constructor function that returns an MLModel object.}
 
 \item{control}{\code{\linkS4class{MLControl}} object, control function, or
 character string naming a control function defining the resampling method to
 be employed.}
-
-\item{data}{data frame containing observed predictors and outcomes.}
 }
 \value{
 Resamples class object.

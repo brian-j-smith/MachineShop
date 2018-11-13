@@ -18,13 +18,6 @@ resample <- function(x, ...) {
 
 #' @rdname resample-methods
 #' 
-resample.ModelFrame <- function(x, model, control = CVControl, ...) {
-  .resample(getMLObject(control, "MLControl"), x, model)
-}
-
-
-#' @rdname resample-methods
-#' 
 #' @param data data frame containing observed predictors and outcomes.
 #' @param model MLModel object, constructor function, or character string
 #' naming a constructor function that returns an MLModel object.
@@ -56,6 +49,13 @@ resample.ModelFrame <- function(x, model, control = CVControl, ...) {
 #' 
 resample.formula <- function(x, data, model, control = CVControl, ...) {
   resample(ModelFrame(x, data, na.action = na.pass), model, control)
+}
+
+
+#' @rdname resample-methods
+#' 
+resample.ModelFrame <- function(x, model, control = CVControl, ...) {
+  .resample(getMLObject(control, "MLControl"), x, model)
 }
 
 

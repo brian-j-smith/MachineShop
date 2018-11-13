@@ -22,6 +22,7 @@
 #' plot(vi)
 #'
 varimp <- function(object, scale = TRUE, ...) {
+  stopifnot(is(object, "MLModelFit"))
   requireModelNamespaces(fitbit(object, "packages"))
   varimp <- fitbit(object, "varimp")
   VarImp(as(varimp(object, ...), "VarImp"), scale = scale)
