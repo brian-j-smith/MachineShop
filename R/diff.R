@@ -16,14 +16,14 @@
 #' @examples
 #' ## Survival response example
 #' library(survival)
+#' library(MASS)
 #' 
-#' fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
-#'                            meal.cal + wt.loss
+#' fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
 #' control <- CVControl()
 #' 
-#' gbmperf1 <- resample(fo, lung, GBMModel(n.trees = 25), control)
-#' gbmperf2 <- resample(fo, lung, GBMModel(n.trees = 50), control)
-#' gbmperf3 <- resample(fo, lung, GBMModel(n.trees = 100), control)
+#' gbmperf1 <- resample(fo, Melanoma, GBMModel(n.trees = 25), control)
+#' gbmperf2 <- resample(fo, Melanoma, GBMModel(n.trees = 50), control)
+#' gbmperf3 <- resample(fo, Melanoma, GBMModel(n.trees = 100), control)
 #' 
 #' perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
 #' perfdiff <- diff(perf)

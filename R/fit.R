@@ -29,10 +29,10 @@ fit <- function(x, ...) {
 #' @examples
 #' ## Survival response example
 #' library(survival)
+#' library(MASS)
 #' 
-#' gbmfit <- fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
-#'                 pat.karno + meal.cal + wt.loss, data = lung,
-#'                 model = GBMModel)
+#' gbmfit <- fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+#'               data = Melanoma, model = GBMModel)
 #' varimp(gbmfit)
 #' 
 fit.formula <- function(x, data, model, ...) {

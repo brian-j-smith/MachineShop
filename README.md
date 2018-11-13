@@ -398,7 +398,7 @@ modelmetrics(obs, pred)
 #> 
 #> Class cutoff probability: 0.5 
 #> 
-#> Omit missing responses: FALSE
+#> Omit missing responses: TRUE
 #> 
 #> Seed: 9279906
 

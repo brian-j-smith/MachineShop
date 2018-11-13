@@ -6,7 +6,7 @@ TEST_MODEL_COMPARISONS <-
 
 data(Boston, package = "MASS", envir = environment())
 data(Pima.tr, package = "MASS", envir = environment())
-data(lung, package = "survival", envir = environment())
+data(Melanoma, package = "MASS", envir = environment())
 
 
 test_model <- function(formula, data, model, times = numeric()) {
@@ -77,7 +77,6 @@ test_model_ordered <- function(model) {
 
 
 test_model_Surv <- function(model) {
-  test_model(survival::Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
-               pat.karno + meal.cal + wt.loss,
-             data = na.omit(lung), model = model, times = c(180, 360, 540))
+  test_model(survival::Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+             data = Melanoma, model = model, times = 365 * c(2, 5, 10))
 }

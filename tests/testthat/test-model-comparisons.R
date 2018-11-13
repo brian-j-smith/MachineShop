@@ -21,19 +21,16 @@ test_Resamples <- function() {
 
 
 test_tune <- function() {
-  library(survival)
-  fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
-    meal.cal + wt.loss
-  gbmtune <- tune(fo,
-                  data = lung,
-                  model = GBMModel,
+  library(MASS)
+  fo <- medv ~ .
+
+  gbmtune <- tune(fo, data = Boston, model = GBMModel,
                   grid = expand.grid(n.trees = c(25, 50, 100),
                                      interaction.depth = 1:3,
                                      n.minobsinnode = c(5, 10)),
-                  control = CVControl(folds = 10, repeats = 5,
-                                      surv_times = c(180, 360, 540)))
+                 control = CVControl(folds = 10, repeats = 5))
   summary(gbmtune)
-  plot(gbmtune, type = "line", metrics = c("ROC", "Brier"))
+  plot(gbmtune, type = "line")
   
   gbmtunediff <- diff(gbmtune)
   summary(gbmtunediff)

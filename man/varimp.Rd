@@ -23,10 +23,10 @@ Calculate measures of the relative importance of predictors in a model.
 \examples{
 ## Survival response example
 library(survival)
+library(MASS)
 
-gbmfit <- fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
-                pat.karno + meal.cal + wt.loss, data = lung,
-                model = GBMModel)
+gbmfit <- fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+              data = Melanoma, model = GBMModel)
 (vi <- varimp(gbmfit))
 plot(vi)
 

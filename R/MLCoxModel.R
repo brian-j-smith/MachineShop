@@ -22,9 +22,10 @@
 #' 
 #' @examples
 #' library(survival)
+#' library(MASS)
 #' 
-#' fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno + meal.cal + wt.loss,
-#'       data = lung, model = CoxModel())
+#' fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+#'     data = Melanoma, model = CoxModel())
 #' 
 CoxModel <- function(ties = c("efron", "breslow", "exact"), control = NULL) {
   ties <- match.arg(ties)

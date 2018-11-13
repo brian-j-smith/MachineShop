@@ -57,9 +57,10 @@ found in the source link below.
 }
 \examples{
 library(survival)
+library(MASS)
 
-fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno + meal.cal + wt.loss,
-      data = lung, model = SurvRegModel())
+fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+    data = Melanoma, model = SurvRegModel())
 
 }
 \seealso{

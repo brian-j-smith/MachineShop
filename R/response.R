@@ -10,10 +10,10 @@
 #' @examples
 #' ## Survival response example
 #' library(survival)
+#' library(MASS)
 #' 
-#' fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
-#'                            meal.cal + wt.loss
-#' response(fo, data = lung)
+#' fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
+#' response(fo, data = Melanoma)
 #' 
 response <- function(object, ...) {
   UseMethod("response")

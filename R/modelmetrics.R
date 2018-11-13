@@ -13,13 +13,13 @@
 #' @examples
 #' ## Survival response example
 #' library(survival)
+#' library(MASS)
 #' 
-#' fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
-#'                            meal.cal + wt.loss
-#' gbmfit <- fit(fo, data = lung, model = GBMModel)
+#' fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
+#' gbmfit <- fit(fo, data = Melanoma, model = GBMModel)
 #' 
-#' obs <- response(fo, data = lung)
-#' pred <- predict(gbmfit, newdata = lung, type = "prob")
+#' obs <- response(fo, data = Melanoma)
+#' pred <- predict(gbmfit, newdata = Melanoma, type = "prob")
 #' modelmetrics(obs, pred)
 #' 
 setGeneric("modelmetrics",

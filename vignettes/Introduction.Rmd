@@ -34,25 +34,25 @@ set.seed(123)
 
 ## Model Fitting and Prediction
 
-The `lung` dataset from the `survival` package [@therneau:2015:PSA] contains time, in days, to death or censoring for advanced lung cancer patients from the North Central Cancer Treatment Group.  Also provided are potential predictors of the survival outcomes.  We begin by loading the `MachineShop` and `survival` packages required for the analysis as well as the `magrittr` package [@bache:2014:MFP] for its pipe (`%>%`) operator to simplify some of the code syntax.  The dataset is split into a training set to which a survival model will be fit and a test set on which to make predictions.  A global formula `fo` relates the predictors on the right hand side to the survival outcome on the left and will be used in all of the survival models in this vignette example. 
+The `Melanoma` dataset from the `MASS` package [@andersen:1993:SMB] contains time, in days, to death from disease (1), alive at end of study (2), or death from other causes (3) for 205 Denmark patients with malignant melanoma.  Also provided are potential predictors of the survival outcomes.  We begin by loading the `MachineShop` and `survival` packages required for the analysis as well as the `magrittr` package [@bache:2014:MFP] for its pipe (`%>%`) operator to simplify some of the code syntax.  The dataset is split into a training set to which a survival model will be fit and a test set on which to make predictions.  A global formula `fo` relates the predictors on the right hand side to the survival outcome on the left and will be used in all of the survival models in this vignette example. 
 
 ```{r}
 ## Load libraries for the survival analysis
 library(MachineShop)
 library(survival)
+library(MASS)
 library(magrittr)
 
-## Lung cancer dataset
-head(lung)
+## Malignant melanoma cancer dataset
+head(Melanoma)
 
 ## Create training and test sets
-n <- nrow(lung) * 2 / 3
-train <- head(lung, n)
-test <- head(lung, -n)
+n <- nrow(Melanoma) * 2 / 3
+train <- head(Melanoma, n)
+test <- head(Melanoma, -n)
 
 ## Global formula for the analysis
-fo <- Surv(time, status) ~ age + sex + ph.ecog + ph.karno + pat.karno +
-                           meal.cal + wt.loss
+fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
 ```
 
 Generalized boosted regression models are a tree-based ensemble method that can applied to survival outcomes.  They are available in the `MachineShop` with the function `GBMModel`.  A call to the function creates an instance of the model containing any user-specified model parameters and internal machinery for model fitting, prediction, and performance assessment.  Created models can be supplied to the `fit` function to estimate a relationship (`fo`) between predictors and an outcome based on a set of data (`train`).  The importance of variables in a model fit is estimated with the `varimp` function and plotted with `plot`.  Variable importance is a measure of the relative importance of predictors in a model and has a default range of 0 to 100, where 0 corresponds to the least important variables and 100 the most.
@@ -67,11 +67,11 @@ gbmfit <- fit(fo, data = train, model = GBMModel)
 plot(vi)
 ```
 
-From the model fit, predictions are obtained at 180, 360, and 540 days as survival probabilities (`type = "prob"`) and as 0-1 death indicators (default: `type = "response"`).
+From the model fit, predictions are obtained at 2, 5, and 10 years as survival probabilities (`type = "prob"`) and as 0-1 death indicators (default: `type = "response"`).
 
 ```{r}
 ## Predict survival probabilities and outcomes at specified follow-up times
-times <- c(180, 360, 540)
+times <- 365 * c(2, 5, 10)
 predict(gbmfit, newdata = test, times = times, type = "prob") %>% head
 
 predict(gbmfit, newdata = test, times = times) %>% head
@@ -106,14 +106,14 @@ SplitControl
 TrainControl
   : Training resubstitution.  A model is fit on and used to predict the full training set to estimate training, or apparent, error.
   
-In our example, performance of models to predict survival at 180, 360, and 540 days will be estimated with five repeats of 10-fold cross-validation.  Variable `metrics` is defined for the purpose of reducing the printed and plotted output in this vignette to only the time-integrated ROC and Brier metrics.  Such subsetting of output would not be done in practice if there is interest in looking at all metrics.
+In our example, performance of models to predict survival at 2, 5, and 10 years will be estimated with five repeats of 10-fold cross-validation.  Variable `metrics` is defined for the purpose of reducing the printed and plotted output in this vignette to only the time-integrated ROC and Brier metrics.  Such subsetting of output would not be done in practice if there is interest in looking at all metrics.
 
 ```{r}
 ## Control parameters for repeated K-fold cross-validation
 control <- CVControl(
   folds = 10,
   repeats = 5,
-  surv_times = c(180, 360, 540)
+  surv_times = 365 * c(2, 5, 10)
 )
 
 ## Metrics of interest
@@ -127,7 +127,7 @@ Resampling of a single model is performed with the `resample` function applied t
 
 ```{r}
 ## Resample estimation
-(perf <- resample(fo, data = lung, model = GBMModel, control = control))
+(perf <- resample(fo, data = Melanoma, model = GBMModel, control = control))
 
 summary(perf)
 
@@ -140,9 +140,9 @@ Resampled metrics from different models can be combined for comparison with the 
 
 ```{r}
 ## Resample estimation
-gbmperf1 <- resample(fo, data = lung, model = GBMModel(n.trees = 25), control = control)
-gbmperf2 <- resample(fo, data = lung, model = GBMModel(n.trees = 50), control = control)
-gbmperf3 <- resample(fo, data = lung, model = GBMModel(n.trees = 100), control = control)
+gbmperf1 <- resample(fo, data = Melanoma, model = GBMModel(n.trees = 25), control = control)
+gbmperf2 <- resample(fo, data = Melanoma, model = GBMModel(n.trees = 50), control = control)
+gbmperf3 <- resample(fo, data = Melanoma, model = GBMModel(n.trees = 100), control = control)
 
 ## Combine resamples for comparison
 (perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3))
@@ -174,7 +174,7 @@ Modelling functions may have arguments that define parameters in their model fit
 
 ```{r}
 ## Tune over a grid of model parameters
-(gbmtune <- tune(fo, data = lung, model = GBMModel,
+(gbmtune <- tune(fo, data = Melanoma, model = GBMModel,
                  grid = expand.grid(n.trees = c(25, 50, 100),
                                     interaction.depth = 1:3,
                                     n.minobsinnode = c(5, 10)),
@@ -189,7 +189,7 @@ The value returned by `tune` contains an object produced by a call to the modell
 
 ```{r}
 ## Fit the tuned model
-gbmfit <- fit(fo, data = lung, model = gbmtune)
+gbmfit <- fit(fo, data = Melanoma, model = gbmtune)
 (vi <- varimp(gbmfit))
 
 plot(vi)
@@ -301,9 +301,9 @@ summary(perf)
 Survival responses should be coded as a `Surv` variable.  In addition to the ROC and Brier survival metrics described earlier in the vignette, the concordance index [@harrell:1982:EYM] can be obtained if follow-up times are not specified for the prediction.
 
 ```{r}
-## Censored lung cancer survival times
+## Censored melanoma cancer survival times
 library(survival)
-perf <- resample(Surv(time, status) ~ ., data = lung, model = GBMModel)
+perf <- resample(Surv(time, status != 2) ~ ., data = Melanoma, model = GBMModel)
 summary(perf)
 ```
 

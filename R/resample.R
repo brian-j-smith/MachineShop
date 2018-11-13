@@ -36,13 +36,12 @@ resample <- function(x, ...) {
 #' \donttest{
 #' ## Survival response example
 #' library(survival)
+#' library(MASS)
 #' 
-#' (gbmperf <- resample(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
-#'                        pat.karno + meal.cal + wt.loss,
-#'                      data = lung,
-#'                      model = GBMModel,
+#' (gbmperf <- resample(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+#'                      data = Melanoma, model = GBMModel,
 #'                      control = CVControl(folds = 10, repeats = 5,
-#'                                          surv_times = c(180, 360, 540))))
+#'                                          surv_times = 365 * c(2, 5, 10))))
 #' summary(gbmperf)
 #' plot(gbmperf)
 #' }

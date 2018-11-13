@@ -32,11 +32,11 @@ Predict outcomes with a fitted model.
 \examples{
 ## Survival response example
 library(survival)
+library(MASS)
 
-gbmfit <- fit(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
-                pat.karno + meal.cal + wt.loss, data = lung,
-                model = GBMModel)
-predict(gbmfit, lung, times = c(180, 360, 540), type = "prob")
+gbmfit <- fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+              data = Melanoma, model = CoxModel)
+predict(gbmfit, newdata = Melanoma, times = 365 * c(2, 5, 10), type = "prob")
 
 }
 \seealso{

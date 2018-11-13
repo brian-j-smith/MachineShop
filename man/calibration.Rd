@@ -23,11 +23,11 @@ values.
 }
 \examples{
 library(survival)
+library(MASS)
 
-perf <- resample(Surv(time, status) ~ age + sex + ph.ecog + ph.karno +
-                   pat.karno + meal.cal + wt.loss, data = lung,
-                   model = GBMModel,
-                   control = CVControl(surv_times = c(180, 360, 540)))
+perf <- resample(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+                 data = Melanoma, model = CoxModel,
+                 control = CVControl(surv_times = 365 * c(2, 5, 10)))
 (cal <- calibration(perf))
 plot(cal)
 
