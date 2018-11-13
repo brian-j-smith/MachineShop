@@ -2,22 +2,22 @@
 % Please edit documentation in R/tune.R
 \name{tune}
 \alias{tune}
-\alias{tune.ModelFrame}
 \alias{tune.formula}
+\alias{tune.ModelFrame}
 \alias{tune.recipe}
 \title{Model Tuning}
 \usage{
 tune(x, ...)
 
-\method{tune}{ModelFrame}(x, model, grid = data.frame(),
+\method{tune}{formula}(x, data, models, grid = data.frame(),
   control = CVControl, metric = 1, stat = mean, maximize = TRUE,
   ...)
 
-\method{tune}{formula}(x, data, model, grid = data.frame(),
+\method{tune}{ModelFrame}(x, models, grid = data.frame(),
   control = CVControl, metric = 1, stat = mean, maximize = TRUE,
   ...)
 
-\method{tune}{recipe}(x, model, grid = data.frame(),
+\method{tune}{recipe}(x, models, grid = data.frame(),
   control = CVControl, metric = 1, stat = mean, maximize = TRUE,
   ...)
 }
@@ -28,11 +28,14 @@ formula; or a recipe.}
 
 \item{...}{arguments passed to other methods.}
 
-\item{model}{constructor function or character string naming a constructor
-function that returns an MLModel object.}
+\item{data}{data frame containing observed predictors and outcomes.}
 
-\item{grid}{data frame containing parameter values over which to evaluate the
-\code{model} constructor function.}
+\item{models}{MLModel constructor function or character string or a list of
+MLModel contructors or objects.}
+
+\item{grid}{data frame containing parameter values over which to evaluate 
+\code{models} when a single constructor is specified.  Ignored in the case of
+a list of models.}
 
 \item{control}{\code{\linkS4class{MLControl}} object, control function, or
 character string naming a control function defining the resampling method to
@@ -46,8 +49,6 @@ the metric for model selection.}
 
 \item{maximize}{logical indicating whether to select the model having the
 maximum or minimum value of the performance metric.}
-
-\item{data}{data frame containing observed predictors and outcomes.}
 }
 \value{
 MLModelTune class object that inherits from MLModel.
@@ -80,7 +81,6 @@ varimp(gbmfit)
 }
 \seealso{
 \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-\code{\link{BootControl}}, \code{\link{CVControl}}, \code{\link{OOBControl}},
 \code{\link{fit}}, \code{\link{resample}}, \code{\link{plot}},
 \code{\link{summary}}
 }

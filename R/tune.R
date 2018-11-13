@@ -18,20 +18,12 @@ tune <- function(x, ...) {
 
 #' @rdname tune-methods
 #' 
-tune.ModelFrame <- function(x, model, grid = data.frame(),
-                            control = CVControl, metric = 1, stat = mean,
-                            maximize = TRUE, ...) {
-  .tune(model, grid, control, metric, stat, maximize, x)
-}
-
-
-#' @rdname tune-methods
-#' 
 #' @param data data frame containing observed predictors and outcomes.
-#' @param model constructor function or character string naming a constructor
-#' function that returns an MLModel object.
-#' @param grid data frame containing parameter values over which to evaluate the
-#' \code{model} constructor function.
+#' @param models MLModel constructor function or character string or a list of
+#' MLModel contructors or objects.
+#' @param grid data frame containing parameter values over which to evaluate 
+#' \code{models} when a single constructor is specified.  Ignored in the case of
+#' a list of models.
 #' @param control \code{\linkS4class{MLControl}} object, control function, or
 #' character string naming a control function defining the resampling method to
 #' be employed.
@@ -45,7 +37,6 @@ tune.ModelFrame <- function(x, model, grid = data.frame(),
 #' @return MLModelTune class object that inherits from MLModel.
 #' 
 #' @seealso \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-#' \code{\link{BootControl}}, \code{\link{CVControl}}, \code{\link{OOBControl}},
 #' \code{\link{fit}}, \code{\link{resample}}, \code{\link{plot}},
 #' \code{\link{summary}}
 #' 
@@ -70,30 +61,48 @@ tune.ModelFrame <- function(x, model, grid = data.frame(),
 #' varimp(gbmfit)
 #' }
 #' 
-tune.formula <- function(x, data, model, grid = data.frame(),
+tune.formula <- function(x, data, models, grid = data.frame(),
                          control = CVControl, metric = 1, stat = mean,
                          maximize = TRUE, ...) {
-  .tune(model, grid, control, metric, stat, maximize, x, data)
+  tune(ModelFrame(x, data, na.action = na.pass), models, grid, control, metric,
+       stat, maximize)
 }
 
 
 #' @rdname tune-methods
 #' 
-tune.recipe <- function(x, model, grid = data.frame(),
-                        control = CVControl, metric = 1, stat = mean,
-                        maximize = TRUE, ...) {
-  .tune(model, grid, control, metric, stat, maximize, x)
+tune.ModelFrame <- function(x, models, grid = data.frame(),
+                            control = CVControl, metric = 1, stat = mean,
+                            maximize = TRUE, ...) {
+  .tune(x, models, grid, control, metric, stat, maximize)
 }
 
 
-.tune <- function(model, grid, control, metric, stat, maximize, ...) {
+#' @rdname tune-methods
+#' 
+tune.recipe <- function(x, models, grid = data.frame(),
+                        control = CVControl, metric = 1, stat = mean,
+                        maximize = TRUE, ...) {
+  .tune(x, models, grid, control, metric, stat, maximize)
+}
+
+
+.tune <- function(x, models, grid, control, metric, stat, maximize) {
+  
+  if (is.list(models)) {
+    models <- lapply(models, getMLObject, class = "MLModel")
+    grid <- data.frame()
+  } else {
+    models <- split(grid, seq(max(1, nrow(grid)))) %>%
+      lapply(function(params) do.call(models, params))
+  }
+  
   control <- getMLObject(control, "MLControl")
-  models <-list()
+  
   resamples <- list()
   perf <- list()
-  for (i in 1:max(1, nrow(grid))) {
-    models[[i]] <- do.call(model, grid[i, , drop = FALSE])
-    resamples[[i]] <- resample(..., models[[i]], control)
+  for (i in seq(models)) {
+    resamples[[i]] <- resample(x, models[[i]], control)
     perf[[i]] <- apply(resamples[[i]], 2, function(x) stat(na.omit(x)))
   }
   perf <- as.data.frame(do.call(rbind, perf))
@@ -102,4 +111,5 @@ tune.recipe <- function(x, model, grid = data.frame(),
   MLModelTune(models[[selected]], grid = grid,
               resamples = do.call(Resamples, resamples),
               selected = structure(selected, names = metric))
+  
 }
