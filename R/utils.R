@@ -156,7 +156,7 @@ preprocess.default <- function(x, data, ...) {
 
 preprocess.recipe <- function(x, data, ...) {
   x <- prep(x, retain = TRUE)
-  if (is.null(data)) juice(x) else bake(x, newdata = data)
+  if (is.null(data)) juice(x) else bake(x, new_data = data)
 }
 
 
