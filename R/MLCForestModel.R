@@ -67,8 +67,7 @@ CForestModel <- function(teststat = c("quad", "max"),
       } else {
         predict(object, newdata = newdata, type = "prob") %>%
           unlist %>%
-          matrix(nrow = nrow(newdata), byrow = TRUE) %>%
-          drop
+          matrix(nrow = nrow(newdata), byrow = TRUE)
       }
     },
     varimp = function(object, ...) {

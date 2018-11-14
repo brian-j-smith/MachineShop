@@ -128,16 +128,14 @@ setGeneric("stack_loss",
 
 setMethod("stack_loss", c("factor", "matrix"),
   function(observed, predicted, ...) {
-    observed <- model.matrix(~ observed - 1)
-    if (ncol(predicted) == 1) predicted <- cbind(predicted, 1 - predicted)
-    stack_loss(observed, predicted)
+    stack_loss(model.matrix(~ observed - 1), predicted)
   }
 )
 
 
 setMethod("stack_loss", c("factor", "numeric"),
   function(observed, predicted, ...) {
-    stack_loss(observed, as.matrix(predicted))
+    stack_loss(observed, cbind(predicted, 1 - predicted))
   }
 )
 
@@ -150,7 +148,7 @@ setMethod("stack_loss", c("matrix", "matrix"),
 )
 
 
-setMethod("stack_loss", c("numeric", "ANY"),
+setMethod("stack_loss", c("numeric", "numeric"),
   function(observed, predicted, ...) {
     stack_loss(as.matrix(observed), as.matrix(predicted))
   }

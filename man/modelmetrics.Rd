@@ -7,7 +7,6 @@
 \alias{modelmetrics,factor,matrix-method}
 \alias{modelmetrics,factor,numeric-method}
 \alias{modelmetrics,matrix,matrix-method}
-\alias{modelmetrics,numeric,matrix-method}
 \alias{modelmetrics,numeric,numeric-method}
 \alias{modelmetrics,Surv,matrix-method}
 \alias{modelmetrics,Surv,numeric-method}
@@ -23,8 +22,6 @@ modelmetrics(observed, predicted, ...)
   cutoff = 0.5, cutoff_index = function(sens, spec) sens + spec, ...)
 
 \S4method{modelmetrics}{matrix,matrix}(observed, predicted, ...)
-
-\S4method{modelmetrics}{numeric,matrix}(observed, predicted, ...)
 
 \S4method{modelmetrics}{numeric,numeric}(observed, predicted, ...)
 

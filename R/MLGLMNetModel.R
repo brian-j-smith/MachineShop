@@ -88,7 +88,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
           exp(predict(object, newx = newx, type = "link")) %>% drop
         }
       } else {
-        predict(object, newx = newx, type = "response") %>% drop
+        predict(object, newx = newx, type = "response")
       }
     },
     varimp = function(object, ...) {

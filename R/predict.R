@@ -33,12 +33,50 @@ predict.MLModelFit <- function(object, newdata = NULL,
   newdata <- preprocess(fitbit(object, "x"), newdata)
   requireModelNamespaces(fitbit(object, "packages"))
   predict <- fitbit(object, "predict")
-  pred <- predict(object, newdata, times = times)
+  obs <- response(object)
+  pred <- vectorize(obs, predict(object, newdata, times = times))
   if (match.arg(type) == "response") {
-    pred <- convert(response(object), pred, cutoff = cutoff)
+    pred <- convert(obs, pred, cutoff = cutoff)
   }
   pred
 }
+
+
+setGeneric("vectorize", function(object, x) standardGeneric("vectorize"))
+
+
+setMethod("vectorize", c("ANY", "ANY"),
+  function(object, x) x
+)
+
+
+setMethod("vectorize", c("factor", "array"),
+  function(object, x) {
+    vectorize(object, adrop(x, length(dim(x))))
+  }
+)
+
+
+setMethod("vectorize", c("factor", "matrix"),
+  function(object, x) {
+    if (nlevels(object) == 2) x[, ncol(x)] else x
+  }
+)
+
+
+setMethod("vectorize", c("numeric", "array"),
+  function(object, x) {
+    vectorize(object, adrop(x, length(dim(x))))
+  }
+)
+
+
+setMethod("vectorize", c("numeric", "matrix"),
+  function(object, x) {
+    stopifnot(ncol(x) == 1)
+    drop(x)
+  }
+)
 
 
 predict.survfit <- function(object, times, ...) {

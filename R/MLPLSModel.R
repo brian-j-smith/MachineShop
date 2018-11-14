@@ -46,7 +46,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
     },
     predict = function(object, newdata, ...) {
       predict(unMLModelFit(object), newdata = newdata, ncomp = object$ncomp,
-              type = "response") %>% drop
+              type = "response")
     },
     varimp = function(object, ...) {
       beta <- coef(object, comps = 1:object$ncomp)

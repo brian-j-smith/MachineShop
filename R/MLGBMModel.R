@@ -67,7 +67,7 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
         }
       } else {
         predict(object, newdata = newdata, n.trees = object$n.trees,
-                type = "response") %>% drop
+                type = "response")
       }
     },
     varimp = function(object, n.trees = object$n.trees, ...) {

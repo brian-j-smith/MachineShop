@@ -45,15 +45,11 @@ setMethod("modelmetrics", c("factor", "factor"),
 #' 
 setMethod("modelmetrics", c("factor", "matrix"),
   function(observed, predicted, ...) {
-    if (nlevels(observed) > 2) {
-      metrics <- modelmetrics(observed, convert(observed, predicted), ...)
-      observed <- model.matrix(~ observed - 1)
-      metrics["Brier"] <- sum((observed - predicted)^2) / nrow(observed)
-      metrics["MLogLoss"] <- multinomLogLoss(observed, predicted)
-      metrics
-    } else {
-      modelmetrics(observed, predicted[, ncol(predicted)], ...)
-    }
+    metrics <- modelmetrics(observed, convert(observed, predicted), ...)
+    observed <- model.matrix(~ observed - 1)
+    metrics["Brier"] <- sum((observed - predicted)^2) / nrow(observed)
+    metrics["MLogLoss"] <- multinomLogLoss(observed, predicted)
+    metrics
   }
 )
 
@@ -90,16 +86,6 @@ setMethod("modelmetrics", c("matrix", "matrix"),
     sapply(1:ncol(observed), function(i) {
       modelmetrics(observed[, i], predicted[, i], ...)
     }) %>% rowMeans
-  }
-)
-
-
-#' @rdname modelmetrics
-#' 
-setMethod("modelmetrics", c("numeric", "matrix"),
-  function(observed, predicted, ...) {
-    stopifnot(ncol(predicted) == 1)
-    modelmetrics(observed, drop(predicted), ...)
   }
 )
 
