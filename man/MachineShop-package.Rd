@@ -33,6 +33,7 @@ be used.
   \code{\link{SurvRegModel}}        \tab   \tab   \tab   \tab x \cr
   \code{\link{SurvRegStepAICModel}} \tab   \tab   \tab   \tab x \cr
   \code{\link{SVMModel}}            \tab x \tab x \tab   \tab   \cr
+  \code{\link{XGBModel}}            \tab x \tab x \tab   \tab   \cr
 }
 
 The following set of standard model fitting, prediction, performance

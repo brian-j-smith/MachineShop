@@ -378,7 +378,8 @@ modelnames <- c("C5.0 Classification" = "C50Model",
                 "Stacked Regression" = "StackedModel",
                 "Super Learner" = "SuperModel",
                 "Parametric Survival Regression" = "SurvRegModel",
-                "Support Vector Machines" = "SVMModel")
+                "Support Vector Machines" = "SVMModel",
+                "Extreme Gradient Boosting" = "XGBModel")
 
 types <- c("factor", "numeric", "ordered", "Surv")
 x <- lapply(modelnames, function(modelname) {

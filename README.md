@@ -296,6 +296,24 @@ x
 <td style="text-align:center;">
 </td>
 </tr>
+<tr>
+<td style="text-align:left;">
+Extreme Gradient Boosting
+</td>
+<td style="text-align:center;">
+XGBModel
+</td>
+<td style="text-align:center;">
+x
+</td>
+<td style="text-align:center;">
+x
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
 </tbody>
 </table>
 

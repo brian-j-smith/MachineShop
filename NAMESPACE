@@ -20,7 +20,7 @@ importFrom(Rsolnp, solnp)
 importFrom(stats, aggregate, approx, coef, complete.cases, cor, formula,
            get_all_vars, median, model.frame, model.matrix, model.response,
            model.weights, na.fail, na.omit, na.pass, p.adjust, pchisq, predict,
-           quantile, reformulate, sd, t.test, terms, vcov)
+           quantile, reformulate, reshape, sd, t.test, terms, vcov)
 importFrom(survival, is.Surv, Surv, survfit)
 importFrom(survivalROC, survivalROC)
 importFrom(utils, combn, head, stack, tail)
@@ -70,7 +70,11 @@ export(MLModel,
        SVMPolyModel,
        SVMRadialModel,
        SVMSplineModel,
-       SVMTanhModel)
+       SVMTanhModel,
+       XGBModel,
+       XGBDARTModel,
+       XGBLinearModel,
+       XGBTreeModel)
 
 exportMethods(modelmetrics)
 
