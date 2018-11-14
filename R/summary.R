@@ -86,3 +86,8 @@ summary.MLControl <- function(object, observed, predicted, ...) {
   do.call(object@summary, c(list(observed = observed, predicted = predicted),
                             as(object, "list")))
 }
+
+
+summary.MLModelFit <- function(object, ...) {
+  summary(unMLModelFit(object))
+}

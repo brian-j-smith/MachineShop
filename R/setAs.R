@@ -50,7 +50,7 @@ unMLModelFit <- function(object) {
     classes <- extends(class(object))
     as(object, classes[match("MLModelFit", classes) + 1])
   } else {
-    object[c(".packages", ".predict", ".varimp", ".y")] <- NULL
+    object$fitbits <- NULL
     classes <- class(object)
     pos <- match("MLModelFit", classes)
     structure(object, class = classes[-c(pos - 1, pos)])

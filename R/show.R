@@ -1,3 +1,8 @@
+print.MLModelFit <- function(x, ...) {
+  print(unMLModelFit(x))
+}
+
+
 setMethod("show", "MLControl",
   function(object) {
     cat("Class cutoff probability:", object@cutoff, "\n\n")
@@ -82,6 +87,13 @@ setMethod("show", "MLModel",
     print(object@params)
     if (length(object@params) == 0) cat("\n")
     invisible()
+  }
+)
+
+
+setMethod("show", "MLModelFit",
+  function(object) {
+    show(unMLModelFit(object))
   }
 )
 
