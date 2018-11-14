@@ -43,9 +43,11 @@ diff.Resamples <- function(x, ...) {
   indices1 <- indices[1,]
   indices2 <- indices[2,]
   xdiff <- x[, , indices1, drop = FALSE] - x[, , indices2, drop = FALSE]
-  modelnames <- dimnames(x)[[3]]
-  dimnames(xdiff)[[3]] <- paste(modelnames[indices1], "-", modelnames[indices2])
-  ResamplesDiff(xdiff, control = x@control, modelnames = modelnames)
+  model_names <- dimnames(x)[[3]]
+  dimnames(xdiff)[[3]] <-
+    paste(model_names[indices1], "-", model_names[indices2])
+  ResamplesDiff(xdiff, control = x@control, response = x@response,
+                model_names = model_names)
 }
 
 
@@ -90,9 +92,11 @@ t.test.ResamplesDiff <- function(x, adjust = "holm", ...)
     apply(2, p.adjust, method = adjust)
   meandiffs <- apply(x, c(3, 2), mean, na.rm = TRUE)
   
-  nmodels <- length(x@modelnames)
+  nmodels <- length(x@model_names)
   results <- array(NA, dim = c(nmodels, nmodels, dim(x)[2]),
-                   dimnames = list(x@modelnames, x@modelnames, dimnames(x)[[2]]))
+                   dimnames = list(x@model_names,
+                                   x@model_names,
+                                   dimnames(x)[[2]]))
   indices <- lower.tri(results[, , 1])
   results[indices] <- meandiffs
   results <- aperm(results, perm = c(2, 1, 3))

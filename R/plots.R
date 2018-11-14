@@ -170,34 +170,45 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
 #' 
 plot.ResamplesCalibration <- function(x, type = c("line", "point"), 
                                       se = FALSE, ...) {
-  df <- data.frame(
-    Response = x$Response,
-    Midpoint = x$Midpoint,
-    x$Observed
-  )
-  Midpoint_width <- diff(range(df$Midpoint))
-
+  type <- match.arg(type)
+  
   aes_response <- if (nlevels(x$Response) > 1) {
     aes(x = Midpoint, y = Mean, color = Response)
   } else {
     aes(x = Midpoint, y = Mean)
   }
   
-  p <- ggplot(df, aes_response) +
-    geom_abline(intercept = 0, slope = 1, color = "gray") +
-    labs(x = "Bin Midpoints", y = "Observed Mean")
-  
   position <- "identity"
-  if (se) {
-    position <- position_dodge(width = 0.025 * Midpoint_width)
-    p <- p + geom_errorbar(aes(ymin = Lower, ymax = Upper),
-                           width = 0.05 * Midpoint_width,
-                           position = position)
-  }
-
-  switch(match.arg(type),
-         "line" = p + geom_line(position = position),
-         "point" = p + geom_point(position = position))
+  
+  pl <- by(x, x$Model, function(cal) {
+    
+    df <- data.frame(
+      Response = cal$Response,
+      Midpoint = cal$Midpoint,
+      cal$Observed
+    )
+    Midpoint_width <- diff(range(df$Midpoint))
+  
+    p <- ggplot(df, aes_response) +
+      geom_abline(intercept = 0, slope = 1, color = "gray") +
+      labs(title = cal$Model[1], x = "Bin Midpoints", y = "Observed Mean")
+    
+    if (se) {
+      position <- position_dodge(width = 0.025 * Midpoint_width)
+      p <- p + geom_errorbar(aes(ymin = Lower, ymax = Upper),
+                             width = 0.05 * Midpoint_width,
+                             position = position)
+    }
+  
+    switch(type,
+           "line" = p + geom_line(position = position),
+           "point" = p + geom_point(position = position))
+    
+  }, simplify = FALSE)
+  
+  pl <- as(pl, "list")
+  names(pl) <- levels(x$Model)
+  pl
 }
 
 

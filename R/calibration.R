@@ -24,13 +24,17 @@
 #' 
 calibration <- function(x, n = 10, ...) {
   stopifnot(is(x, "Resamples"))
-  if (length(dim(x)) > 2) {
-    stop("calibration not available for multiple models")
-  }
   
-  .calibration(x@response$Observed, x@response$Predicted, n,
-               times = x@control@surv_times) %>%
-    structure(class = c("ResamplesCalibration", "data.frame"))
+  response <- x@response
+  times <- x@control@surv_times
+  
+  cal_list <- by(response, response$Model, function(data) {
+    .calibration(data$Observed, data$Predicted, n, times = times) %>%
+      cbind(Model = data$Model[1])
+  }, simplify = FALSE)
+
+  structure(do.call(rbind, cal_list),
+            class = c("ResamplesCalibration", "data.frame"))
 }
 
 
@@ -109,7 +113,7 @@ setMethod(".calibration", c("Surv", "matrix"),
       result$Observed <- cbind(Mean = Mean, SE = SE, Lower = max(Mean - SE, 0),
                                Upper = min(Mean + SE, 1))
       result
-    })
+    }, simplify = FALSE)
     do.call(rbind, by_results)
   }
 )

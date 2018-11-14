@@ -287,13 +287,19 @@ setClass("Resamples",
 setMethod("initialize", "Resamples",
   function(.Object, ..., control, response = data.frame()) {
     args <- list(...)
+    
     if (length(args) == 0) stop("no values given")
+    
     .Data <- args[[1]]
+    model_names <- names(args)
+    
     if (length(args) == 1) {
       if (is(.Data, "Resamples")) {
-        response <- .Data@response
         control <- .Data@control
+        response <- .Data@response
       }
+      if (is.null(model_names)) model_names <- "Model"
+      response$Model <- factor(model_names)
     } else {
       if (!all(sapply(args, function(x) is(x, "Resamples") && is.matrix(x)))) {
         stop("values to combine must be 2 dimensional Resamples objects")
@@ -306,11 +312,17 @@ setMethod("initialize", "Resamples",
       if (!all(sapply(args, colnames) == colnames(.Data))) {
         stop("resamples contain different metrics")
       }
-      modelnames <- names(args)
-      if (is.null(modelnames)) modelnames <- paste0("Model", seq(args))
+      
+      response <- Reduce(append, lapply(args, slot, name = "response"))
+      
+      if (is.null(model_names)) model_names <- paste0("Model", seq(args))
+      model_names <- make.names(model_names, unique = TRUE)
+      num_times <- sapply(args, function(x) nrow(x@response))
+      response$Model <- factor(rep(model_names, num_times))
+      
       names(args) <- NULL
       args$along <- 3
-      args$new.names <- list(NULL, NULL, modelnames)
+      args$new.names <- list(NULL, NULL, model_names)
       .Data <- do.call(abind, args)
     }
     callNextMethod(.Object, .Data, control = control, response = response)
@@ -325,15 +337,15 @@ MLModelTune <- setClass("MLModelTune",
 
 
 ResamplesDiff <- setClass("ResamplesDiff",
-  slots = c("modelnames" = "character"),
+  slots = c("model_names" = "character"),
   contains = "Resamples"
 )
 
 
 setMethod("initialize", "ResamplesDiff",
-  function(.Object, ..., modelnames) {
+  function(.Object, ..., model_names) {
     .Object <- callNextMethod(.Object, ...)
-    .Object@modelnames <- modelnames
+    .Object@model_names <- model_names
     .Object
   }
 )
