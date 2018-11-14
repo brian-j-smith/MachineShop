@@ -30,6 +30,7 @@ export(.,
        calibration,
        dependence,
        fit,
+       lift,
        ModelFrame,
        resample,
        Resamples,
@@ -91,6 +92,7 @@ S3method(plot, MLModelTune)
 S3method(plot, PartialDependence)
 S3method(plot, Resamples)
 S3method(plot, ResamplesCalibration)
+S3method(plot, ResamplesLift)
 S3method(plot, VarImp)
 S3method(predict, MLModelFit)
 S3method(resample, ModelFrame)

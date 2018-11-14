@@ -6,6 +6,7 @@
 \alias{plot.PartialDependence}
 \alias{plot.Resamples}
 \alias{plot.ResamplesCalibration}
+\alias{plot.ResamplesLift}
 \alias{plot.VarImp}
 \title{Model Performance Plots}
 \usage{
@@ -19,6 +20,8 @@
 
 \method{plot}{ResamplesCalibration}(x, type = c("line", "point"),
   se = FALSE, ...)
+
+\method{plot}{ResamplesLift}(x, found = NULL, ...)
 
 \method{plot}{VarImp}(x, n = NULL, ...)
 }
@@ -39,6 +42,9 @@ MLModelTune line plots and Resamples model sorting.}
 dependence summary statistics to plot.}
 
 \item{se}{logical indicating whether to include standard error bars.}
+
+\item{found}{numeric percent found at which to display reference lines
+indicating the corresponding percent tested in lift plots.}
 
 \item{n}{number of most important variables to include in the plot
 (default: all).}
@@ -71,6 +77,8 @@ plot(perf)
 \code{\link{dependence}}
 
 \code{\link{calibration}}
+
+\code{\link{lift}}
 
 \code{\link{varimp}}
 }

@@ -214,6 +214,45 @@ plot.ResamplesCalibration <- function(x, type = c("line", "point"),
 
 #' @rdname plot-method
 #' 
+#' @param found numeric percent found at which to display reference lines
+#' indicating the corresponding percent tested in lift plots.
+#' 
+#' @seealso
+#' \code{\link{lift}}
+#' 
+plot.ResamplesLift <- function(x, found = NULL, ...) {
+  aes_model <- if (nlevels(x$Model) > 1) {
+    aes(x = Tested, y = Found, color = Model)
+  } else {
+    aes(x = Tested, y = Found)
+  }
+
+  p <- ggplot(x, aes_model) +
+    geom_step() +
+    geom_abline(intercept = 0, slope = 1, color = "gray") +
+    labs(x = "Percent Tested", y = "Percent Found")
+  
+  if (!is.null(found)) {
+    tested <- by(x, x$Model, function(data) {
+      interval <- nrow(data) - findInterval(-found, -rev(data$Found)) + 1
+      data$Tested[interval]
+    })
+    df <- data.frame(
+      Tested = as.numeric(tested),
+      Found = found,
+      Model = names(tested)
+    )
+    p <- p +
+      geom_segment(aes(x = Tested, y = 0, xend = Tested, yend = Found), df) +
+      geom_segment(aes(x = 0, y = Found, xend = Tested, yend = Found), df)
+  }
+  
+  p
+}
+
+
+#' @rdname plot-method
+#' 
 #' @param n number of most important variables to include in the plot
 #' (default: all).
 #' 
