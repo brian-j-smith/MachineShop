@@ -45,7 +45,8 @@ setMethod("modelmetrics", c("factor", "factor"),
 #' 
 setMethod("modelmetrics", c("factor", "matrix"),
   function(observed, predicted, ...) {
-    metrics <- modelmetrics(observed, convert(observed, predicted), ...)
+    metrics <- modelmetrics(observed,
+                            convert_response(observed, predicted), ...)
     observed <- model.matrix(~ observed - 1)
     metrics["Brier"] <- sum((observed - predicted)^2) / nrow(observed)
     metrics["MLogLoss"] <- multinomLogLoss(observed, predicted)
