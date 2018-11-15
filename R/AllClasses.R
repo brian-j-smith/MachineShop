@@ -145,6 +145,7 @@ setClass("OOBMLControl",
 #' @rdname MLControl-class
 #' 
 #' @examples
+#' ## Split sample of 2/3 training and 1/3 testing
 #' SplitControl(prop = 2/3)
 #' 
 SplitControl <- function(prop = 2/3, ...) {
@@ -165,6 +166,7 @@ setClass("SplitMLControl",
 #' @rdname MLControl-class
 #' 
 #' @examples
+#' ## Same training and test set
 #' TrainControl()
 #' 
 TrainControl <- function(...) {

@@ -116,8 +116,10 @@ CVControl(folds = 10, repeats = 5)
 ## 100 out-of-bootstrap samples
 OOBControl(samples = 100)
 
+## Split sample of 2/3 training and 1/3 testing
 SplitControl(prop = 2/3)
 
+## Same training and test set
 TrainControl()
 
 }
