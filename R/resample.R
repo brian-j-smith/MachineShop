@@ -238,13 +238,16 @@ setMethod(".resample", c("TrainMLControl", "recipe"),
 
 
 resample_metrics <- function(train, test, model, control) {
+  model <- getMLObject(model, "MLModel")
+  
   trainfit <- fit(train, model)
   obs <- response(test)
   pred <- predict(trainfit, test, type = "prob", times = control@surv_times)
   
   response  <- data.frame(Case = row.names(test))
-  response[["Observed"]] <- obs
-  response[["Predicted"]] <- pred
+  response$Observed <- obs
+  response$Predicted <- pred
+  response$Model <- factor(model@name)
   
   list(metrics = rbind(summary(control, obs, pred)), response = response)
 }

@@ -296,12 +296,15 @@ setMethod("initialize", "Resamples",
     model_names <- names(args)
     
     if (length(args) == 1) {
-      if (is(.Data, "Resamples")) {
-        control <- .Data@control
-        response <- .Data@response
+      if (is(.Data, "Resamples")) control <- .Data@control
+      if (!is.null(model_names)) {
+        model_names <- factor(model_names)
+        if (is(.Data, "Resamples")) {
+          .Data@response$Model <- model_names
+        } else {
+          response$Model <- model_names
+        }
       }
-      if (is.null(model_names)) model_names <- "Model"
-      response$Model <- factor(model_names)
     } else {
       if (!all(sapply(args, function(x) is(x, "Resamples") && is.matrix(x)))) {
         stop("values to combine must be 2 dimensional Resamples objects")
@@ -317,11 +320,17 @@ setMethod("initialize", "Resamples",
       
       response <- Reduce(append, lapply(args, slot, name = "response"))
       
-      if (is.null(model_names)) model_names <- paste0("Model", seq(args))
+      old_model_names <- sapply(args, function(x) levels(x@response$Model))
+      if (is.null(model_names)) {
+        model_names <- old_model_names
+      } else {
+        model_names <- ifelse(nzchar(model_names), model_names, old_model_names)
+      }
       model_names <- make.names(model_names, unique = TRUE)
       num_times <- sapply(args, function(x) nrow(x@response))
-      response$Model <- factor(rep(model_names, num_times))
-      
+      response$Model <- factor(rep(model_names, num_times),
+                               levels = model_names)
+
       names(args) <- NULL
       args$along <- 3
       args$new.names <- list(NULL, NULL, model_names)
@@ -339,17 +348,7 @@ MLModelTune <- setClass("MLModelTune",
 
 
 ResamplesDiff <- setClass("ResamplesDiff",
-  slots = c("model_names" = "character"),
   contains = "Resamples"
-)
-
-
-setMethod("initialize", "ResamplesDiff",
-  function(.Object, ..., model_names) {
-    .Object <- callNextMethod(.Object, ...)
-    .Object@model_names <- model_names
-    .Object
-  }
 )
 
 
