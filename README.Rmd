@@ -22,7 +22,7 @@ library(kableExtra)
 
 ## Overview
 
-`MachineShop` is a meta-package for statistical and machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes, including those listed in the table below, and for resample (bootstrap and cross-validation) estimation of model performance.
+`MachineShop` is a meta-package for statistical and machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes, including those listed in the table below, and for resample (bootstrap, cross-validation, and split training-test sets) estimation of model performance.
 
 <div>
 ```{r echo = FALSE}
@@ -73,9 +73,24 @@ devtools::install_github("brian-j-smith/MachineShop", build_vignettes = TRUE)
 ```
 
 
+## Documentation
+
+Once the package is installed, general documentation on its usage can be viewed with the following console commands.
+
+```{r eval = FALSE, message = FALSE}
+library(MachineShop)
+
+# Package help summary
+?MachineShop
+
+# Vignette
+RShowDoc("Introduction", package = "MachineShop")
+```
+
+
 ## Example
 
-The following is a brief example using the package to apply gradient boosted models to predict the species of flowers in Edgar Anderson's iris data set.
+The following is a brief example illustrating use of the package to predict the species of flowers in Edgar Anderson's iris data set.
 
 ### Training and Test Set Analysis
 
@@ -133,7 +148,7 @@ plot(perf)
 ### Model Tuning
 
 ```{r, fig.height = 4}
-## Model tuning
+## Select optimal model over a grid of tuning parameters
 gbmtune <- tune(fo, data = df, model = GBMModel,
                 grid = expand.grid(n.trees = c(25, 50, 100),
                                    interaction.depth = 1:3,
@@ -143,9 +158,8 @@ plot(gbmtune, type = "line")
 ```
 
 ```{r}
-## Fit the tuned model
+## Fit the selected model
 gbmtunefit <- fit(fo, data = df, model = gbmtune)
-
 varimp(gbmtunefit)
 ```
 
@@ -160,7 +174,6 @@ rfperf <- resample(fo, data = df, model = RandomForestModel, control = control)
 nnetperf <- resample(fo, data = df, model = NNetModel, control = control)
 
 perf <- Resamples(GBM = gbmperf, RF = rfperf, NNet = nnetperf)
-
 summary(perf)
 
 plot(perf)
@@ -169,7 +182,6 @@ plot(perf)
 ```{r}
 ## Pairwise model differences and t-tests
 perfdiff <- diff(perf)
-
 summary(perfdiff)
 
 t.test(perfdiff)
@@ -177,7 +189,54 @@ t.test(perfdiff)
 plot(perfdiff)
 ```
 
-### Recipes
+### Ensemble Models
+
+```{r}
+## Stacked regression
+stackedperf <- resample(fo, data = df, model = StackedModel(GBMModel, RandomForestModel, NNetModel))
+summary(stackedperf)
+
+## Super learners
+superperf <- resample(fo, data = df, model = SuperModel(GBMModel, RandomForestModel, NNetModel))
+summary(superperf)
+```
+
+### Partial Dependence Plots
+
+```{r results = "hide"}
+pd <- dependence(gbmfit, data = df, select = c(Petal.Length, Petal.Width))
+plot(pd)
+```
+
+### Calibration Curves
+
+```{r results = "hide"}
+cal <- calibration(perf)
+plot(cal, se = TRUE)
+```
+
+### Lift Curves
+
+```{r}
+## Requires binary outcomes
+fo_versicolor <- factor(Species == "versicolor") ~ .
+control = CVControl()
+
+gbmperf_versicolor <- resample(fo_versicolor, data = iris,  model = GBMModel, control = control)
+lf <- lift(gbmperf_versicolor)
+plot(lf)
+```
+
+```{r}
+rfperf_versicolor <- resample(fo_versicolor, data = iris,  model = RandomForestModel, control = control)
+nnetperf_versicolor <- resample(fo_versicolor, data = iris,  model = NNetModel, control = control)
+
+perf_versicolor <- Resamples(gbmperf_versicolor, rfperf_versicolor, nnetperf_versicolor)
+lf <- lift(perf_versicolor)
+plot(lf, find = 75)
+```
+
+### Preprocessing Recipes
 
 ```{r}
 library(recipes)
@@ -187,23 +246,9 @@ rec <- recipe(fo, data = df) %>%
   step_scale(all_predictors()) %>%
   step_pca(all_predictors())
 
-perf <- resample(rec, model = GBMModel, control = CVControl)
+fit_rec <- fit(rec, model = GBMModel)
+varimp(fit_rec)
 
-summary(perf)
+perf_rec <- resample(rec, model = GBMModel, control = CVControl)
+summary(perf_rec)
 ```
-
-
-## Documentation
-
-Once the package is installed, general documentation on its usage can be viewed with the following console commands.
-
-```{r eval = FALSE, message = FALSE}
-library(MachineShop)
-
-# Package help summary
-?MachineShop
-
-# Vignette
-RShowDoc("Introduction", package = "MachineShop")
-```
-
