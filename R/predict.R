@@ -43,8 +43,7 @@ predict.MLModelFit <- function(object, newdata = NULL,
 
 
 predict.survfit <- function(object, times, ...) {
-  survtimes <- c(0, object$time)
-  survprobs <- c(1, object$surv)
-  idx <- sapply(times, function(x) max(which(survtimes <= x)))
-  survprobs[idx]
+  surv_times <- c(0, object$time)
+  surv_probs <- c(1, object$surv)
+  surv_probs[findInterval(times, surv_times)]
 }
