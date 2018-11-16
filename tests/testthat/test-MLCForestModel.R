@@ -1,6 +1,6 @@
-model <- "CForestModel"
+context("CForestModel")
 
-context(model)
+model <- CForestModel(mtry = 3)
 
 test_that("model fitting", {
   skip_if_not(TEST_MODEL_FITTING)
