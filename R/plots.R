@@ -230,7 +230,8 @@ plot.ResamplesLift <- function(x, find = NULL, ...) {
   p <- ggplot(x, aes_model) +
     geom_step() +
     geom_abline(intercept = 0, slope = 1, color = "gray") +
-    labs(x = "Percent Tested", y = "Percent Found")
+    labs(x = "Positive Test Rate (%)",
+         y = "True Positive Finding (%)")
   
   if (!is.null(find)) {
     tested <- by(x, x$Model, function(data) {

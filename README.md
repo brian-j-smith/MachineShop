@@ -263,7 +263,7 @@ x
 </tr>
 <tr>
 <td style="text-align:left;">
-Parametric Survival Regression
+Survival Regression
 </td>
 <td style="text-align:center;">
 SurvRegModel
@@ -347,6 +347,16 @@ library(MachineShop)
 RShowDoc("Introduction", package = "MachineShop")
 ```
 
+Parallel Computing
+------------------
+
+Resampling algorithms will be executed in parallel automatically if a parallel backend for the `foreach` package, such as `doParallel`, is loaded.
+
+``` r
+library(doParallel)
+registerDoParallel(cores = 4)
+```
+
 Example
 -------
 
@@ -360,14 +370,20 @@ library(MachineShop)
 library(magrittr)
 
 ## Iris flower species (3 level response) data set
-df <- iris
-df$Species <- factor(df$Species)
+head(iris)
+#>   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#> 1          5.1         3.5          1.4         0.2  setosa
+#> 2          4.9         3.0          1.4         0.2  setosa
+#> 3          4.7         3.2          1.3         0.2  setosa
+#> 4          4.6         3.1          1.5         0.2  setosa
+#> 5          5.0         3.6          1.4         0.2  setosa
+#> 6          5.4         3.9          1.7         0.4  setosa
 
 ## Training and test sets
 set.seed(123)
-trainindices <- sample(nrow(df), nrow(df) * 2 / 3)
-train <- df[trainindices, ]
-test <- df[-trainindices, ]
+trainindices <- sample(nrow(iris), nrow(iris) * 2 / 3)
+train <- iris[trainindices, ]
+test <- iris[-trainindices, ]
 
 ## Model formula
 fo <- Species ~ .
@@ -386,7 +402,7 @@ gbmfit <- fit(fo, data = train, model = GBMModel)
 plot(vi)
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ## Test set predicted probabilities
@@ -416,7 +432,7 @@ modelmetrics(obs, pred)
 
 ``` r
 ## Resample estimation of model performance
-(perf <- resample(fo, data = df, model = GBMModel, control = CVControl))
+(perf <- resample(fo, data = iris, model = GBMModel, control = CVControl))
 #> An object of class "Resamples"
 #> 
 #> Metrics: Accuracy, Kappa, Brier, MLogLoss 
@@ -445,13 +461,13 @@ summary(perf)
 plot(perf)
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 ### Model Tuning
 
 ``` r
-## Select optimal model over a grid of tuning parameters
-gbmtune <- tune(fo, data = df, model = GBMModel,
+## Tune over a grid of model parameters
+gbmtune <- tune(fo, data = iris, model = GBMModel,
                 grid = expand.grid(n.trees = c(25, 50, 100),
                                    interaction.depth = 1:3,
                                    n.minobsinnode = c(5, 10)))
@@ -459,17 +475,17 @@ gbmtune <- tune(fo, data = df, model = GBMModel,
 plot(gbmtune, type = "line")
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ## Fit the selected model
-gbmtunefit <- fit(fo, data = df, model = gbmtune)
+gbmtunefit <- fit(fo, data = iris, model = gbmtune)
 varimp(gbmtunefit)
-#>               Overall
-#> Petal.Length 100.0000
-#> Petal.Width   41.5202
-#> Sepal.Length   0.0000
-#> Sepal.Width    0.0000
+#>                 Overall
+#> Petal.Length 100.000000
+#> Petal.Width   10.554867
+#> Sepal.Width    5.085895
+#> Sepal.Length   0.000000
 ```
 
 ### Model Comparisons
@@ -478,44 +494,44 @@ varimp(gbmtunefit)
 ## Model comparisons
 control <- CVControl(folds = 10, repeats = 5)
 
-gbmperf <- resample(fo, data = df, model = GBMModel, control = control)
-rfperf <- resample(fo, data = df, model = RandomForestModel, control = control)
-nnetperf <- resample(fo, data = df, model = NNetModel, control = control)
+gbmperf <- resample(fo, data = iris, model = GBMModel(n.tree = 50), control = control)
+rfperf <- resample(fo, data = iris, model = RandomForestModel(ntree = 50), control = control)
+nnetperf <- resample(fo, data = iris, model = NNetModel(size = 5), control = control)
 
 perf <- Resamples(GBM = gbmperf, RF = rfperf, NNet = nnetperf)
 summary(perf)
 #> , , Accuracy
 #> 
-#>           Mean    Median         SD Min Max NA
-#> GBM  0.9386667 0.9333333 0.05360475 0.8   1  0
-#> RF   0.9533333 0.9333333 0.05259696 0.8   1  0
-#> NNet 0.7560000 0.8666667 0.26687407 0.2   1  0
+#>           Mean    Median         SD       Min Max NA
+#> GBM  0.9453333 0.9333333 0.04983419 0.8666667   1  0
+#> RF   0.9546667 0.9333333 0.04750462 0.8666667   1  0
+#> NNet 0.9520000 1.0000000 0.06603785 0.7333333   1  0
 #> 
 #> , , Kappa
 #> 
-#>       Mean Median         SD  Min Max NA
-#> GBM  0.908    0.9 0.08040713  0.7   1  0
-#> RF   0.930    0.9 0.07889544  0.7   1  0
-#> NNet 0.634    0.8 0.40031110 -0.2   1  0
+#>       Mean Median         SD Min Max NA
+#> GBM  0.918    0.9 0.07475129 0.8   1  0
+#> RF   0.932    0.9 0.07125694 0.8   1  0
+#> NNet 0.928    1.0 0.09905678 0.6   1  0
 #> 
 #> , , Brier
 #> 
 #>            Mean     Median         SD          Min       Max NA
-#> GBM  0.10129338 0.11061105 0.08946454 1.107334e-05 0.3572127  0
-#> RF   0.07134018 0.05526187 0.06836264 4.053333e-04 0.3150320  0
-#> NNet 0.26163450 0.20816834 0.25188258 3.593928e-07 0.6666667  0
+#> GBM  0.09073933 0.10303711 0.08115937 4.370886e-05 0.2604297  0
+#> RF   0.06810880 0.07125333 0.06498583 5.333333e-05 0.2156800  0
+#> NNet 0.09106581 0.02038736 0.11696756 1.213283e-14 0.5333263  0
 #> 
 #> , , MLogLoss
 #> 
 #>           Mean     Median        SD          Min       Max NA
-#> GBM  0.2518192 0.16342373 0.2688835 0.0010846265 1.0332245  0
-#> RF   0.1148603 0.08794764 0.1026771 0.0059784000 0.4879684  0
-#> NNet 0.4484417 0.46209826 0.4244811 0.0002317343 1.0986124  0
+#> GBM  0.1814048 0.14354488 0.1766924 4.334678e-03 0.6157033  0
+#> RF   0.1524887 0.10297314 0.3305382 1.346847e-03 2.3429408  0
+#> NNet 0.9542160 0.04028668 1.5209841 4.496824e-08 7.6104295  0
 
 plot(perf)
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ## Pairwise model differences and t-tests
@@ -523,31 +539,31 @@ perfdiff <- diff(perf)
 summary(perfdiff)
 #> , , Accuracy
 #> 
-#>                   Mean     Median         SD        Min        Max NA
-#> GBM - RF   -0.01466667 0.00000000 0.03877957 -0.1333333 0.06666667  0
-#> GBM - NNet  0.18266667 0.06666667 0.26283299 -0.1333333 0.73333333  0
-#> RF - NNet   0.19733333 0.03333333 0.25906162 -0.1333333 0.73333333  0
+#>                    Mean Median         SD         Min        Max NA
+#> GBM - RF   -0.009333333      0 0.02697105 -0.06666667 0.06666667  0
+#> GBM - NNet -0.006666667      0 0.05593971 -0.13333333 0.13333333  0
+#> RF - NNet   0.002666667      0 0.05864687 -0.06666667 0.20000000  0
 #> 
 #> , , Kappa
 #> 
 #>              Mean Median         SD  Min Max NA
-#> GBM - RF   -0.022   0.00 0.05816935 -0.2 0.1  0
-#> GBM - NNet  0.274   0.10 0.39424948 -0.2 1.1  0
-#> RF - NNet   0.296   0.05 0.38859244 -0.2 1.1  0
+#> GBM - RF   -0.014      0 0.04045658 -0.1 0.1  0
+#> GBM - NNet -0.010      0 0.08390957 -0.2 0.2  0
+#> RF - NNet   0.004      0 0.08797031 -0.1 0.3  0
 #> 
 #> , , Brier
 #> 
-#>                  Mean      Median         SD         Min       Max NA
-#> GBM - RF    0.0299532  0.02470100 0.03682158 -0.01908523 0.1307530  0
-#> GBM - NNet -0.1603411 -0.05156092 0.24631397 -0.66665560 0.1842272  0
-#> RF - NNet  -0.1902943 -0.11429173 0.24189899 -0.66621067 0.1501570  0
+#>                     Mean       Median         SD         Min        Max NA
+#> GBM - RF    0.0226305284 0.0142031310 0.02713561 -0.01075742 0.09528808  0
+#> GBM - NNet -0.0003264774 0.0002175011 0.09612968 -0.34598574 0.19728427  0
+#> RF - NNet  -0.0229570059 0.0003485859 0.09467972 -0.35551295 0.15531160  0
 #> 
 #> , , MLogLoss
 #> 
-#>                  Mean      Median        SD         Min        Max NA
-#> GBM - RF    0.1369589  0.06137821 0.1849732 -0.04170943 0.66167256  0
-#> GBM - NNet -0.1966225 -0.01021118 0.4405118 -1.09726064 0.58532527  0
-#> RF - NNet  -0.3335814 -0.22890815 0.4066831 -1.09142835 0.08762133  0
+#>                   Mean       Median        SD       Min       Max NA
+#> GBM - RF    0.02891612  0.037313518 0.2841834 -1.846568 0.3069631  0
+#> GBM - NNet -0.77281119 -0.001118006 1.4439392 -7.336055 0.4442420  0
+#> RF - NNet  -0.80172731 -0.006653868 1.5157124 -7.340321 1.9439951  0
 
 t.test(perfdiff)
 #> An object of class "ResamplesHTest"
@@ -558,67 +574,67 @@ t.test(perfdiff)
 #> 
 #> , , Accuracy
 #> 
-#>               GBM            RF      NNet
-#> GBM            NA -1.466667e-02 0.1826667
-#> RF   1.014730e-02            NA 0.1973333
-#> NNet 2.074356e-05  6.097090e-06        NA
+#>             GBM           RF         NNet
+#> GBM          NA -0.009333333 -0.006666667
+#> RF   0.05412097           NA  0.002666667
+#> NNet 0.80698081  0.806980811           NA
 #> 
 #> , , Kappa
 #> 
-#>               GBM           RF  NNet
-#> GBM            NA -2.20000e-02 0.274
-#> RF   1.014730e-02           NA 0.296
-#> NNet 2.074356e-05  6.09709e-06    NA
+#>             GBM         RF   NNet
+#> GBM          NA -0.0140000 -0.010
+#> RF   0.05412097         NA  0.004
+#> NNet 0.80698081  0.8069808     NA
 #> 
 #> , , Brier
 #> 
-#>               GBM           RF       NNet
-#> GBM            NA 2.995320e-02 -0.1603411
-#> RF   1.687958e-06           NA -0.1902943
-#> NNet 2.973266e-05 2.192459e-06         NA
+#>               GBM         RF          NNet
+#> GBM            NA 0.02263053 -0.0003264774
+#> RF   1.010983e-06         NA -0.0229570059
+#> NNet 9.809383e-01 0.18550403            NA
 #> 
 #> , , MLogLoss
 #> 
-#>               GBM           RF       NNet
-#> GBM            NA 1.369589e-01 -0.1966225
-#> RF   6.863865e-06           NA -0.3335814
-#> NNet 2.733302e-03 1.425115e-06         NA
+#>              GBM          RF       NNet
+#> GBM           NA 0.028916124 -0.7728112
+#> RF   0.475255100          NA -0.8017273
+#> NNet 0.001260848 0.001260848         NA
 
 plot(perfdiff)
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
 
 ### Ensemble Models
 
 ``` r
 ## Stacked regression
-stackedperf <- resample(fo, data = df, model = StackedModel(GBMModel, RandomForestModel, NNetModel))
+stackedperf <- resample(fo, data = iris, model = StackedModel(GBMModel, RandomForestModel, NNetModel))
 summary(stackedperf)
-#>                Mean     Median         SD        Min       Max NA
-#> Accuracy 0.95333333 0.93333333 0.04499657 0.86666667 1.0000000  0
-#> Kappa    0.93000000 0.90000000 0.06749486 0.80000000 1.0000000  0
-#> Brier    0.07173538 0.07422913 0.05626301 0.00721325 0.1604355  0
-#> MLogLoss 0.13189257 0.11165006 0.09045890 0.03491990 0.2853765  0
+#>               Mean     Median         SD         Min       Max NA
+#> Accuracy 0.9600000 0.96666667 0.04661373 0.866666667 1.0000000  0
+#> Kappa    0.9400000 0.95000000 0.06992059 0.800000000 1.0000000  0
+#> Brier    0.0709056 0.05046164 0.06515608 0.003672906 0.1853143  0
+#> MLogLoss 0.1278275 0.07681125 0.10899642 0.023605272 0.2990448  0
 
 ## Super learners
-superperf <- resample(fo, data = df, model = SuperModel(GBMModel, RandomForestModel, NNetModel))
+superperf <- resample(fo, data = iris, model = SuperModel(GBMModel, RandomForestModel, NNetModel))
 summary(superperf)
-#>               Mean     Median         SD          Min       Max NA
-#> Accuracy 0.9466667 0.96666667 0.06126244 8.666667e-01 1.0000000  0
-#> Kappa    0.9200000 0.95000000 0.09189366 8.000000e-01 1.0000000  0
-#> Brier    0.0863423 0.03179952 0.10443637 1.271082e-07 0.2524129  0
-#> MLogLoss 0.1593310 0.05192877 0.19311366 1.043113e-04 0.4880625  0
+#>               Mean    Median         SD          Min       Max NA
+#> Accuracy 0.9400000 0.9333333 0.05837300 8.666667e-01 1.0000000  0
+#> Kappa    0.9100000 0.9000000 0.08755950 8.000000e-01 1.0000000  0
+#> Brier    0.1040008 0.1262466 0.09710084 5.318730e-07 0.2576437  0
+#> MLogLoss 0.2562282 0.2518920 0.29874624 2.488601e-04 0.9773889  0
 ```
 
 ### Partial Dependence Plots
 
 ``` r
-pd <- dependence(gbmfit, data = df, select = c(Petal.Length, Petal.Width))
+pd <- dependence(gbmfit, data = iris, select = c(Petal.Length, Petal.Width))
 plot(pd)
 ```
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-12-2.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-13-1.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-13-2.png" style="display: block; margin: auto;" />
 
 ### Calibration Curves
 
@@ -627,12 +643,12 @@ cal <- calibration(perf)
 plot(cal, se = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-13-2.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-13-3.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-14-1.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-14-2.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-14-3.png" style="display: block; margin: auto;" />
 
 ### Lift Curves
 
 ``` r
-## Requires binary outcomes
+## Requires a binary outcome
 fo_versicolor <- factor(Species == "versicolor") ~ .
 control = CVControl()
 
@@ -641,7 +657,7 @@ lf <- lift(gbmperf_versicolor)
 plot(lf)
 ```
 
-<img src="man/figures/README-unnamed-chunk-14-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
 
 ``` r
 rfperf_versicolor <- resample(fo_versicolor, data = iris,  model = RandomForestModel, control = control)
@@ -652,31 +668,31 @@ lf <- lift(perf_versicolor)
 plot(lf, find = 75)
 ```
 
-<img src="man/figures/README-unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
 
 ### Preprocessing Recipes
 
 ``` r
 library(recipes)
 
-rec <- recipe(fo, data = df) %>%
+rec <- recipe(fo, data = iris) %>%
   step_center(all_predictors()) %>%
   step_scale(all_predictors()) %>%
   step_pca(all_predictors())
 
 fit_rec <- fit(rec, model = GBMModel)
 varimp(fit_rec)
-#>        Overall
-#> PC1 100.000000
-#> PC3   6.012454
-#> PC2   2.980838
-#> PC4   0.000000
+#>         Overall
+#> PC1 100.0000000
+#> PC3   5.7197518
+#> PC2   0.9481558
+#> PC4   0.0000000
 
 perf_rec <- resample(rec, model = GBMModel, control = CVControl)
 summary(perf_rec)
-#>                Mean    Median         SD          Min       Max NA
-#> Accuracy 0.95333333 0.9666667 0.05488484 0.8666666667 1.0000000  0
-#> Kappa    0.93000000 0.9500000 0.08232726 0.8000000000 1.0000000  0
-#> Brier    0.06045794 0.0311148 0.06031867 0.0008898002 0.1500439  0
-#> MLogLoss 0.13134483 0.0598847 0.14605459 0.0098464025 0.4610990  0
+#>                Mean     Median         SD         Min       Max NA
+#> Accuracy 0.94000000 0.93333333 0.06629526 0.800000000 1.0000000  0
+#> Kappa    0.91000000 0.90000000 0.09944289 0.700000000 1.0000000  0
+#> Brier    0.08283346 0.06464323 0.08181849 0.002776405 0.2596434  0
+#> MLogLoss 0.14754289 0.09184872 0.13114012 0.020294960 0.3614867  0
 ```
