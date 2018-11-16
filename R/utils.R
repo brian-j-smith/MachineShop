@@ -137,7 +137,7 @@ nvars <- function(data, design = c("terms", "model.matrix")) {
 
 params <- function(envir) {
   args <- as.list(envir)
-  is_missing <- sapply(args, function(x) is.symbol(x) && nchar(x) == 0)
+  is_missing <- sapply(args, function(x) is.symbol(x) && !nzchar(x))
   if (any(is_missing)) stop("missing values for required argument(s) ",
                             toString(names(args)[is_missing]))
   args[!sapply(args, is.null)]
