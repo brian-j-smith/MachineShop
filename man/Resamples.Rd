@@ -4,7 +4,7 @@
 \alias{Resamples}
 \title{Resamples Class Contructor}
 \usage{
-Resamples(..., control, response = data.frame())
+Resamples(..., control = NULL, response = NULL)
 }
 \arguments{
 \item{...}{named or unnamed resample output from one or more models.}

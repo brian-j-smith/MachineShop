@@ -275,7 +275,7 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 #' summary(perf)
 #' plot(perf)
 #' 
-Resamples <- function(..., control, response = data.frame()) {
+Resamples <- function(..., control = NULL, response = NULL) {
   new("Resamples", ..., control = control, response = response)
 }
 
@@ -287,24 +287,14 @@ setClass("Resamples",
 
 
 setMethod("initialize", "Resamples",
-  function(.Object, ..., control, response = data.frame()) {
+  function(.Object, ..., control = NULL, response = NULL) {
     args <- list(...)
     
-    if (length(args) == 0) stop("no values given")
+    if (length(args) == 0) stop("no resample output given")
     
     .Data <- args[[1]]
-    model_names <- names(args)
-    
     if (length(args) == 1) {
-      if (is(.Data, "Resamples")) control <- .Data@control
-      if (!is.null(model_names)) {
-        model_names <- factor(model_names)
-        if (is(.Data, "Resamples")) {
-          .Data@response$Model <- model_names
-        } else {
-          response$Model <- model_names
-        }
-      }
+      if (is(.Data, "Resamples")) response <- .Data@response
     } else {
       if (!all(sapply(args, function(x) is(x, "Resamples") && is.matrix(x)))) {
         stop("values to combine must be 2 dimensional Resamples objects")
@@ -321,6 +311,7 @@ setMethod("initialize", "Resamples",
       response <- Reduce(append, lapply(args, slot, name = "response"))
       
       old_model_names <- sapply(args, function(x) levels(x@response$Model))
+      model_names <- names(args)
       if (is.null(model_names)) {
         model_names <- old_model_names
       } else {
@@ -336,6 +327,13 @@ setMethod("initialize", "Resamples",
       args$new.names <- list(NULL, NULL, model_names)
       .Data <- do.call(abind, args)
     }
+    
+    response_vars <- c("Resample", "Case", "Observed", "Predicted", "Model")
+    is_missing <- !(response_vars %in% names(response))
+    if (any(is_missing)) {
+      stop("missing response variables: ", toString(response_vars[is_missing]))
+    }
+    
     callNextMethod(.Object, .Data, control = control, response = response)
   }
 )
