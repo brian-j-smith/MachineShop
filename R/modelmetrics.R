@@ -110,15 +110,11 @@ setMethod("modelmetrics", c("numeric", "numeric"),
 #' 
 setMethod("modelmetrics", c("Surv", "matrix"),
   function(observed, predicted, times, ...) {
-    ntimes <- length(times)
-    roc <- brier <- rep(NA, ntimes)
-    for (i in 1:ntimes) {
-      roc[i] <- rocSurv(observed, predicted[, i], times[i])
-      brier[i] <- brierSurv(observed, predicted[, i], times[i])
-    }
-    if (ntimes > 1) {
-      c("ROC" = meanSurvMetric(roc, times),
-        "Brier" = meanSurvMetric(brier, times),
+    roc <- ROC.Surv(observed, predicted, times)
+    brier <- Brier.Surv(observed, predicted, times)
+    if (length(times) > 1) {
+      c("ROC" = mean(roc),
+        "Brier" = mean(brier),
         "ROCTime" = roc,
         "BrierTime" = brier)
     } else {
@@ -132,23 +128,51 @@ setMethod("modelmetrics", c("Surv", "matrix"),
 #' 
 setMethod("modelmetrics", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    c("CIndex" = rcorr.cens(-predicted, observed)[[1]])
+    c("CIndex" = CIndex.Surv(observed, predicted))
   }
 )
 
 
-brierSurv <- function(observed, predicted, time) {
+Brier.Surv <- function(observed, predicted, times) {
+  stopifnot(ncol(predicted) == length(times))
+  
   obs_times <- observed[, "time"]
   obs_events <- observed[, "status"]
   fitcens <- survfit(Surv(obs_times, 1 - obs_events) ~ 1)
-  is_obs_after <- obs_times > time
-  weights <- (obs_events == 1 | is_obs_after) /
-    predict(fitcens, pmin(obs_times, time))
-  mean(weights * (is_obs_after - predicted)^2)
+
+  metrics <- sapply(seq(times), function(i) {
+    time <- times[i]
+    is_obs_after <- obs_times > time
+    weights <- (obs_events == 1 | is_obs_after) /
+      predict(fitcens, pmin(obs_times, time))
+    mean(weights * (is_obs_after - predicted[, i])^2)
+  })
+  attr(metrics, "times") <- times
+  class(metrics) <- c("SurvMetric", "numeric")
+  metrics
 }
 
 
-meanSurvMetric <- function(x, times) {
+CIndex.Surv <- function(observed, predicted) {
+  rcorr.cens(-predicted, observed)[[1]]
+}
+
+
+ROC.Surv <- function(observed, predicted, times) {
+  stopifnot(ncol(predicted) == length(times))
+  
+  metrics <- sapply(seq(times), function(i) {
+    survivalROC(observed[, "time"], observed[, "status"], 1 - predicted[, i],
+                predict.time = times[i], method = "KM")$AUC
+  })
+  attr(metrics, "times") <- times
+  class(metrics) <- c("SurvMetric", "numeric")
+  metrics
+}
+
+
+mean.SurvMetric <- function(x) {
+  times <- attr(x, "times")
   weights <- diff(c(0, times)) / tail(times, 1)
   sum(weights * x)
 }
@@ -158,10 +182,4 @@ multinomLogLoss <- function(observed, predicted) {
   eps <- 1e-15
   predicted <- pmax(pmin(predicted, 1 - eps), eps)
   -sum(observed * log(predicted)) / nrow(predicted)
-}
-
-
-rocSurv <- function(observed, predicted, time) {
-  survivalROC(observed[, "time"], observed[, "status"], 1 - predicted,
-              predict.time = time, method = "KM")$AUC
 }

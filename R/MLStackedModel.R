@@ -157,13 +157,13 @@ setMethod("stack_loss", c("numeric", "numeric"),
 
 setMethod("stack_loss", c("Surv", "matrix"),
   function(observed, predicted, times, ...) {
-    modelmetrics(observed, predicted, times = times)["Brier"]
+    mean(Brier.Surv(observed, predicted, times))
   }
 )
 
 
 setMethod("stack_loss", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    -modelmetrics(observed, predicted)["CIndex"]
+    -CIndex.Surv(observed, predicted)
   }
 )
