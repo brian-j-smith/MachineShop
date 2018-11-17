@@ -127,7 +127,7 @@ Resampling is implemented with the `foreach` package [@microsoft:2017:FPF] and w
 
 ```{r}
 library(doParallel)
-registerDoParallel(cores = 4)
+registerDoParallel(cores = 2)
 ```
 
 
