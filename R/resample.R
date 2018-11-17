@@ -249,6 +249,8 @@ resample_metrics <- function(train, test, model, control) {
   response$Predicted <- pred
   response$Model <- factor(model@name)
   
+  if (is(trainfit, "StackedModel")) control@surv_times <- trainfit$times
+  
   list(metrics = rbind(summary(control, obs, pred)), response = response)
 }
 
