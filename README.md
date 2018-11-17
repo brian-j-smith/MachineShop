@@ -1,324 +1,642 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-MachineShop: Machine Learning Models and Tools
-==============================================
 
-Overview
---------
+# MachineShop: Machine Learning Models and Tools
 
-`MachineShop` is a meta-package for statistical and machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results. Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes, including those listed in the table below, and for resample (bootstrap, cross-validation, and split training-test sets) estimation of model performance.
+## Overview
+
+`MachineShop` is a meta-package for statistical and machine learning
+with a common interface for model fitting, prediction, performance
+assessment, and presentation of results. Support is provided for
+predictive modeling of numerical, categorical, and censored
+time-to-event outcomes, including those listed in the table below, and
+for resample (bootstrap, cross-validation, and split training-test sets)
+estimation of model
+performance.
+
+<div>
 
 <table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+
 <thead>
+
 <tr>
+
 <th style="border-bottom:hidden" colspan="1">
+
 </th>
+
 <th style="border-bottom:hidden" colspan="1">
+
 </th>
+
 <th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="4">
+
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">
+
 Response Variable Types
 
+</div>
+
 </th>
+
 </tr>
+
 <tr>
+
 <th style="text-align:left;">
+
 </th>
+
 <th style="text-align:center;">
+
 Constructor
+
 </th>
+
 <th style="text-align:center;">
+
 factor
+
 </th>
+
 <th style="text-align:center;">
+
 numeric
+
 </th>
+
 <th style="text-align:center;">
+
 ordered
+
 </th>
+
 <th style="text-align:center;">
+
 Surv
+
 </th>
+
 </tr>
+
 </thead>
+
 <tbody>
+
 <tr>
+
 <td style="text-align:left;">
+
 C5.0 Classification
+
 </td>
+
 <td style="text-align:center;">
+
 C50Model
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 </tr>
+
 <tr>
+
 <td style="text-align:left;">
+
 Conditional Inference Trees
+
 </td>
+
 <td style="text-align:center;">
+
 CForestModel
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 </tr>
+
 <tr>
+
 <td style="text-align:left;">
+
 Cox Regression
+
 </td>
+
 <td style="text-align:center;">
+
 CoxModel
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 </tr>
+
 <tr>
+
 <td style="text-align:left;">
+
 Generalized Linear Models
+
 </td>
+
 <td style="text-align:center;">
+
 GLMModel
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 </tr>
+
 <tr>
+
 <td style="text-align:left;">
+
 Gradient Boosted Models
+
 </td>
+
 <td style="text-align:center;">
+
 GBMModel
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 </tr>
+
 <tr>
+
 <td style="text-align:left;">
+
 Lasso and Elastic-Net
+
 </td>
+
 <td style="text-align:center;">
+
 GLMNetModel
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 </tr>
+
 <tr>
+
 <td style="text-align:left;">
+
 Feed-Forward Neural Networks
+
 </td>
+
 <td style="text-align:center;">
+
 NNetModel
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 </tr>
+
 <tr>
+
 <td style="text-align:left;">
+
 Partial Least Squares
+
 </td>
+
 <td style="text-align:center;">
+
 PLSModel
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 </tr>
+
 <tr>
+
 <td style="text-align:left;">
+
 Ordered Logistic Regression
+
 </td>
+
 <td style="text-align:center;">
+
 POLRModel
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 </tr>
+
 <tr>
+
 <td style="text-align:left;">
+
 Random Forests
+
 </td>
+
 <td style="text-align:center;">
+
 RandomForestModel
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 </tr>
+
 <tr>
+
 <td style="text-align:left;">
+
 Stacked Regression
+
 </td>
+
 <td style="text-align:center;">
+
 StackedModel
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 </tr>
+
 <tr>
+
 <td style="text-align:left;">
+
 Super Learner
+
 </td>
+
 <td style="text-align:center;">
+
 SuperModel
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 </tr>
+
 <tr>
+
 <td style="text-align:left;">
+
 Survival Regression
+
 </td>
+
 <td style="text-align:center;">
+
 SurvRegModel
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 </tr>
+
 <tr>
+
 <td style="text-align:left;">
+
 Support Vector Machines
+
 </td>
+
 <td style="text-align:center;">
+
 SVMModel
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 </tr>
+
 <tr>
+
 <td style="text-align:left;">
+
 Extreme Gradient Boosting
+
 </td>
+
 <td style="text-align:center;">
+
 XGBModel
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 x
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 <td style="text-align:center;">
+
 </td>
+
 </tr>
+
 </tbody>
+
 </table>
 
-Installation
-------------
+</div>
+
+## Installation
 
 ``` r
 # Current release from CRAN
@@ -332,10 +650,10 @@ devtools::install_github("brian-j-smith/MachineShop")
 devtools::install_github("brian-j-smith/MachineShop", build_vignettes = TRUE)
 ```
 
-Documentation
--------------
+## Documentation
 
-Once the package is installed, general documentation on its usage can be viewed with the following console commands.
+Once the package is installed, general documentation on its usage can be
+viewed with the following console commands.
 
 ``` r
 library(MachineShop)
@@ -347,20 +665,21 @@ library(MachineShop)
 RShowDoc("Introduction", package = "MachineShop")
 ```
 
-Parallel Computing
-------------------
+## Parallel Computing
 
-Resampling algorithms will be executed in parallel automatically if a parallel backend for the `foreach` package, such as `doParallel`, is loaded.
+Resampling algorithms will be executed in parallel automatically if a
+parallel backend for the `foreach` package, such as `doParallel`, is
+loaded.
 
 ``` r
 library(doParallel)
 registerDoParallel(cores = 4)
 ```
 
-Example
--------
+## Example
 
-The following is a brief example illustrating use of the package to predict the species of flowers in Edgar Anderson's iris data set.
+The following is a brief example illustrating use of the package to
+predict the species of flowers in Edgar Anderson’s iris data set.
 
 ### Training and Test Set Analysis
 
