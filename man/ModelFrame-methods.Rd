@@ -3,8 +3,7 @@
 \name{ModelFrame}
 \alias{ModelFrame}
 \alias{ModelFrame.formula}
-\alias{ModelFrame.ModelFrame}
-\alias{ModelFrame.recipe}
+\alias{ModelFrame.matrix}
 \title{ModelFrame Class}
 \usage{
 ModelFrame(x, ...)
@@ -12,12 +11,11 @@ ModelFrame(x, ...)
 \method{ModelFrame}{formula}(x, data, weights = NULL, na.action = NULL,
   ...)
 
-\method{ModelFrame}{ModelFrame}(x, na.action = NULL, ...)
-
-\method{ModelFrame}{recipe}(x, na.action = NULL, ...)
+\method{ModelFrame}{matrix}(x, y, weights = NULL, na.action = NULL,
+  ...)
 }
 \arguments{
-\item{x}{model \code{\link{formula}} or \code{\link[recipes]{recipe}}.}
+\item{x}{model \code{\link{formula}} or matrix of predictor variables.}
 
 \item{...}{arguments passed to other methods.}
 
@@ -29,6 +27,8 @@ ModelFrame(x, ...)
 is first any \code{na.action} attribute of \code{data}, second a
 \code{na.action} setting of \code{\link{options}}, and third
 \code{\link{na.fail}} if unset.}
+
+\item{y}{response variable.}
 }
 \description{
 Class for storing a data frame, formula, and optionally weights for fitting
@@ -42,6 +42,6 @@ varimp(gbmfit)
 
 }
 \seealso{
-\code{\link{formula}}, \code{\link[recipes]{recipe}},
-\code{\link{na.fail}}, \code{\link{na.omit}}, \code{\link{na.pass}}
+\code{\link{formula}}, \code{\link{na.fail}}, \code{\link{na.omit}},
+\code{\link{na.pass}}
 }

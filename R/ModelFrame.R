@@ -6,10 +6,10 @@
 #' @name ModelFrame
 #' @rdname ModelFrame-methods
 #' 
-#' @param x model \code{\link{formula}} or \code{\link[recipes]{recipe}}.
+#' @param x model \code{\link{formula}} or matrix of predictor variables.
 #' 
-#' @seealso \code{\link{formula}}, \code{\link[recipes]{recipe}},
-#' \code{\link{na.fail}}, \code{\link{na.omit}}, \code{\link{na.pass}}
+#' @seealso \code{\link{formula}}, \code{\link{na.fail}}, \code{\link{na.omit}},
+#' \code{\link{na.pass}}
 #' 
 #' @examples
 #' mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
@@ -56,15 +56,25 @@ ModelFrame.formula <- function(x, data, weights = NULL, na.action = NULL, ...) {
 
 
 #' @rdname ModelFrame-methods
+#' 
+#' @param y response variable.
 #'
+ModelFrame.matrix <- function(x, y, weights = NULL, na.action = NULL, ...) {
+  data <- as.data.frame(x)
+  end <- ncol(x) + 1
+  y_name <- make.unique(c(names(data), "y"))[end]
+  data[[y_name]] <- y
+  data <- cbind(data[end], data[-end])
+  ModelFrame(formula(data), data, weights = weights, na.action = na.action)
+}
+
+
 ModelFrame.ModelFrame <- function(x, na.action = NULL, ...) {
   ModelFrame(formula(terms(x)), x, weights = model.weights(x),
              na.action = na.action)
 }
 
 
-#' @rdname ModelFrame-methods
-#'
 ModelFrame.recipe <- function(x, na.action = NULL, ...) {
   x <- prep(x, retain = TRUE)
   ModelFrame(formula(x), juice(x), na.action = na.action)
