@@ -30,8 +30,7 @@
 #' }
 #' 
 #' Latter arguments are passed to \code{\link[C50]{C5.0Control}}.
-#' Default values for the \code{NULL} arguments and further model details can be
-#' found in the source link below.
+#' Further model details can be found in the source link below.
 #' 
 #' @return MLModel class object.
 #' 
@@ -39,7 +38,7 @@
 #' \code{\link{tune}}
 #' 
 #' @examples
-#' fit(factor(Species) ~ ., data = iris, model = C50Model())
+#' fit(Species ~ ., data = iris, model = C50Model())
 #'
 C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
                      winnow = FALSE, noGlobalPruning = FALSE, CF = 0.25,

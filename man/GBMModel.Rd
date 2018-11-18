@@ -41,7 +41,7 @@ found in the source link below.
 }
 \examples{
 
-fit(factor(Species) ~ ., data = iris, model = GBMModel())
+fit(Species ~ ., data = iris, model = GBMModel())
 
 }
 \seealso{

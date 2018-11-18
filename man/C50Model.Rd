@@ -53,11 +53,10 @@ algorithm.
 }
 
 Latter arguments are passed to \code{\link[C50]{C5.0Control}}.
-Default values for the \code{NULL} arguments and further model details can be
-found in the source link below.
+Further model details can be found in the source link below.
 }
 \examples{
-fit(factor(Species) ~ ., data = iris, model = C50Model())
+fit(Species ~ ., data = iris, model = C50Model())
 
 }
 \seealso{

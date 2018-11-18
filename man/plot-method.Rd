@@ -47,7 +47,7 @@ dependence summary statistics to plot.}
 lines indicating the corresponding percent tested in lift plots.}
 
 \item{n}{number of most important variables to include in the plot
-(default: all).}
+[default: all].}
 }
 \description{
 Plot measures of model performance and predictor variable importance.
@@ -55,7 +55,7 @@ Plot measures of model performance and predictor variable importance.
 \examples{
 ## Factor response example
 
-fo <- factor(Species) ~ .
+fo <- Species ~ .
 control <- CVControl()
 
 gbmfit <- fit(fo, data = iris, model = GBMModel, control = control)

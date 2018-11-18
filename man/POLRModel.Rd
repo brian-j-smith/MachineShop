@@ -22,8 +22,7 @@ Fit a logistic or probit regression model to an ordered factor response.
 \item{Response Types:}{\code{ordered}}
 }
 
-Default values for the \code{NULL} arguments and further model details can be
-found in the source link below.
+Further model details can be found in the source link below.
 }
 \examples{
 library(MASS)

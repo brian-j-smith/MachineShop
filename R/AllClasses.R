@@ -264,7 +264,7 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 #' @examples
 #' ## Factor response example
 #' 
-#' fo <- factor(Species) ~ .
+#' fo <- Species ~ .
 #' control <- CVControl()
 #' 
 #' gbmperf1 <- resample(fo, iris, GBMModel(n.trees = 25), control)

@@ -42,8 +42,7 @@ utilizing conditional inference trees as base learners.
 }
 
 Supplied arguments are passed to \code{\link[party]{cforest_control}}.
-Default values for the \code{NULL} arguments and further model details can be
-found in the source link below.
+Further model details can be found in the source link below.
 }
 \examples{
 library(MASS)

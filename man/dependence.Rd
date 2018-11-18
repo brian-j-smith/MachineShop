@@ -37,7 +37,7 @@ PartialDependence class object.
 Calculate partial dependence of a response on select predictor variables.
 }
 \examples{
-gbmfit <- fit(factor(Species) ~ ., data = iris, model = GBMModel)
+gbmfit <- fit(Species ~ ., data = iris, model = GBMModel)
 (pd <- dependence(gbmfit, select = c(Petal.Length, Petal.Width)))
 plot(pd)
 

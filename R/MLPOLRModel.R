@@ -10,8 +10,7 @@
 #' \item{Response Types:}{\code{ordered}}
 #' }
 #' 
-#' Default values for the \code{NULL} arguments and further model details can be
-#' found in the source link below.
+#' Further model details can be found in the source link below.
 #' 
 #' @return MLModel class object.
 #' 

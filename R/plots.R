@@ -19,7 +19,7 @@
 #' @examples
 #' ## Factor response example
 #' 
-#' fo <- factor(Species) ~ .
+#' fo <- Species ~ .
 #' control <- CVControl()
 #' 
 #' gbmfit <- fit(fo, data = iris, model = GBMModel, control = control)
@@ -255,7 +255,7 @@ plot.ResamplesLift <- function(x, find = NULL, ...) {
 #' @rdname plot-method
 #' 
 #' @param n number of most important variables to include in the plot
-#' (default: all).
+#' [default: all].
 #' 
 #' @seealso \code{\link{varimp}}
 #' 

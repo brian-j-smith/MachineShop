@@ -23,8 +23,7 @@ Function to perform partial least squares regression.
 \item{Response Types:}{\code{factor}, \code{numeric}}
 }
 
-Default values for the \code{NULL} arguments and further model details can be
-found in the source link below.
+Further model details can be found in the source link below.
 }
 \examples{
 library(MASS)

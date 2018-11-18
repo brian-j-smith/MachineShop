@@ -22,7 +22,7 @@
 #' @seealso \code{\link{fit}}, \code{\link{plot}}
 #' 
 #' @examples
-#' gbmfit <- fit(factor(Species) ~ ., data = iris, model = GBMModel)
+#' gbmfit <- fit(Species ~ ., data = iris, model = GBMModel)
 #' (pd <- dependence(gbmfit, select = c(Petal.Length, Petal.Width)))
 #' plot(pd)
 #' 
