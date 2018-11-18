@@ -3,9 +3,11 @@
 #' Calculate partial dependence of a response on select predictor variables.
 #' 
 #' @param object MLModelFit object.
-#' @param data data frame containing all predictor variables.
+#' @param data data frame containing all predictor variables.  If not specified,
+#' the training data will be used by default.
 #' @param select expression indicating predictor variables for which to compute
-#' partial dependence (see \code{\link[base]{subset}} for syntax).
+#' partial dependence (see \code{\link[base]{subset}} for syntax)
+#' [default: all].
 #' @param interaction logical indicating whether to calculate dependence on the
 #' interacted predictors.
 #' @param n number of predictor values at which to perform calculations.
@@ -21,15 +23,25 @@
 #' 
 #' @examples
 #' gbmfit <- fit(factor(Species) ~ ., data = iris, model = GBMModel)
-#' (pd <- dependence(gbmfit, data = iris, select = c(Petal.Length, Petal.Width)))
+#' (pd <- dependence(gbmfit, select = c(Petal.Length, Petal.Width)))
 #' plot(pd)
 #' 
-dependence <- function(object, data, select, interaction = FALSE, n = 10,
-                       intervals = c("uniform", "quantile"),
+dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
+                       n = 10, intervals = c("uniform", "quantile"),
                        stats = c("Mean" = mean)) {
   
   stopifnot(is(object, "MLModelFit"))
 
+  x <- fitbit(object, "x")
+  if (is.null(data)) data <- getdata(x)
+
+  x_labels <- labels(terms(x))
+  indices <- structure(match(x_labels, names(data)), names = x_labels)
+  select <- eval(substitute(select), as.list(indices))
+  select <- if (is.null(select)) indices else intersect(select, indices)
+  if (length(select) == 0) stop("no predictors selected")
+  data_select <- data[, select, drop = FALSE]
+  
   intervals <- match.arg(intervals)
   
   if (is.list(stats)) {
@@ -63,7 +75,6 @@ dependence <- function(object, data, select, interaction = FALSE, n = 10,
     as.data.frame.table(x, responseName = "Value")
   }
   
-  data_select <- eval(substitute(subset(data, select = select)))
   grid_list <- lapply(data_select, select_values)
   
   data_select_grid <- if (interaction) {

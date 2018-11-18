@@ -227,7 +227,7 @@ summary(superperf)
 Partial dependence plots display the marginal effects of predictors on the response variable.  The response scale displayed in the plots will depend on the response type; i.e. probabilities for factor, original scale for numeric, and proportional risk for Surv types.
 
 ```{r results = "hide"}
-pd <- dependence(gbmfit, data = Melanoma, select = c(thickness, age))
+pd <- dependence(gbmfit, select = c(thickness, age))
 plot(pd)
 ```
 

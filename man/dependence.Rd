@@ -4,16 +4,19 @@
 \alias{dependence}
 \title{Partial Dependence}
 \usage{
-dependence(object, data, select, interaction = FALSE, n = 10,
-  intervals = c("uniform", "quantile"), stats = c(Mean = mean))
+dependence(object, data = NULL, select = NULL, interaction = FALSE,
+  n = 10, intervals = c("uniform", "quantile"), stats = c(Mean =
+  mean))
 }
 \arguments{
 \item{object}{MLModelFit object.}
 
-\item{data}{data frame containing all predictor variables.}
+\item{data}{data frame containing all predictor variables.  If not specified,
+the training data will be used by default.}
 
 \item{select}{expression indicating predictor variables for which to compute
-partial dependence (see \code{\link[base]{subset}} for syntax).}
+partial dependence (see \code{\link[base]{subset}} for syntax)
+[default: all].}
 
 \item{interaction}{logical indicating whether to calculate dependence on the
 interacted predictors.}
@@ -35,7 +38,7 @@ Calculate partial dependence of a response on select predictor variables.
 }
 \examples{
 gbmfit <- fit(factor(Species) ~ ., data = iris, model = GBMModel)
-(pd <- dependence(gbmfit, data = iris, select = c(Petal.Length, Petal.Width)))
+(pd <- dependence(gbmfit, select = c(Petal.Length, Petal.Width)))
 plot(pd)
 
 }

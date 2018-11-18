@@ -949,7 +949,7 @@ summary(superperf)
 ### Partial Dependence Plots
 
 ``` r
-pd <- dependence(gbmfit, data = iris, select = c(Petal.Length, Petal.Width))
+pd <- dependence(gbmfit, select = c(Petal.Length, Petal.Width))
 plot(pd)
 ```
 
