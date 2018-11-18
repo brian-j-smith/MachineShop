@@ -5,7 +5,7 @@
 ## 0.2
 
 * Implement partial dependence, calibration, and lift estimation and plotting.
-* Implement stacked regression models (``StackedModel``), super learner models (``SuperModel``), and extreme gradient boosting (``XGBModel``).
+* Implement k-nearest neighbors model (``KNNModel``), stacked regression models (``StackedModel``), super learner models (``SuperModel``), and extreme gradient boosting (``XGBModel``).
 * Implement resampling constructors for training resubstitution (``TrainControl``) and split training and test sets (``SplitControl``).
 * Implement ``ModelFrame`` class for general model formula and dataset specification.
 * Add multi-class Brier score to ``modelmetrics()``.

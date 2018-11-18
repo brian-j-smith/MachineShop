@@ -306,6 +306,44 @@ x
 
 <td style="text-align:left;">
 
+K-Nearest Neighbors Model
+
+</td>
+
+<td style="text-align:center;">
+
+KNNModel
+
+</td>
+
+<td style="text-align:center;">
+
+x
+
+</td>
+
+<td style="text-align:center;">
+
+x
+
+</td>
+
+<td style="text-align:center;">
+
+x
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 Feed-Forward Neural Networks
 
 </td>

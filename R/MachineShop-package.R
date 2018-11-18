@@ -14,6 +14,7 @@
 #'   \code{\link{GLMModel}}            \tab x \tab x \tab   \tab   \cr
 #'   \code{\link{GLMStepAICModel}}     \tab x \tab x \tab   \tab   \cr
 #'   \code{\link{GLMNetModel}}         \tab x \tab x \tab   \tab x \cr
+#'   \code{\link{KNNModel}}            \tab x \tab x \tab x \tab   \cr
 #'   \code{\link{NNetModel}}           \tab x \tab x \tab   \tab   \cr
 #'   \code{\link{PLSModel}}            \tab x \tab x \tab   \tab   \cr
 #'   \code{\link{POLRModel}}           \tab   \tab   \tab x \tab   \cr
