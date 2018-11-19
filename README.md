@@ -206,7 +206,7 @@ GLMModel
 
 <td style="text-align:center;">
 
-x
+2
 
 </td>
 

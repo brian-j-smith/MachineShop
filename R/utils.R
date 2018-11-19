@@ -126,6 +126,15 @@ getMLObject <- function(x, class) {
 }
 
 
+is_response <- function(object, class2) {
+  if (class2 == "binary") {
+    is(object, "factor") && nlevels(object) == 2
+  } else {
+    is(object, class2)
+  }
+}
+
+
 match_indices <- function(indices, choices) {
   lookup <- structure(seq(choices), names = choices)
   indices <- na.omit(names(lookup)[lookup[indices]])

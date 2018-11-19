@@ -44,7 +44,7 @@ the linear predictor and a description of the error distribution.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{factor} (two-levels), \code{numeric}}
+\item{Response Types:}{\code{binary factor}, \code{numeric}}
 }
 
 Default values for the \code{NULL} arguments and further model details can be

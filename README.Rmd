@@ -45,13 +45,15 @@ modelnames <- c("C5.0 Classification" = "C50Model",
                 "Support Vector Machines" = "SVMModel",
                 "Extreme Gradient Boosting" = "XGBModel")
 
-types <- c("factor", "numeric", "ordered", "Surv")
+types <- c("binary", "factor", "numeric", "ordered", "Surv")
 x <- lapply(modelnames, function(modelname) {
   model <- get(modelname)()
   structure(c(modelname, ifelse(types %in% model@types, "x", "")),
             names = c("Constructor", types))
 })
-df <- as.data.frame(do.call(rbind, x))
+df <- as.data.frame(do.call(rbind, x), stringsAsFactors = FALSE)
+df$factor <- with(df, ifelse(!nzchar(factor) & nzchar(binary), "2", factor))
+df$binary <- NULL
 
 kable(df, align = "c") %>%
   kable_styling("striped", full_width = FALSE, position = "center") %>%

@@ -10,7 +10,7 @@
 #' 
 #' @details
 #' \describe{
-#' \item{Response Types:}{\code{factor} (two-levels), \code{numeric}}
+#' \item{Response Types:}{\code{binary factor}, \code{numeric}}
 #' }
 #' 
 #' Default values for the \code{NULL} arguments and further model details can be
@@ -30,7 +30,7 @@ GLMModel <- function(family = NULL, control = NULL) {
   MLModel(
     name = "GLMModel",
     packages = "stats",
-    types = c("factor", "numeric"),
+    types = c("binary", "numeric"),
     params = params(environment()),
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, family = NULL, ...) {
@@ -79,8 +79,8 @@ GLMStepAICModel <- function(family = NULL, control = NULL,
   stepmodel <- GLMModel(family = family, control = control)
   MLModel(
     name = "GLMStepAICModel",
-    packages = c("MASS", "stats"),
-    types = c("factor", "numeric"),
+    packages = c("MASS", stepmodel@packages),
+    types = stepmodel@types,
     params = args,
     nvars = stepmodel@nvars,
     fit = function(formula, data, weights, family = NULL, direction = "both",

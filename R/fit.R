@@ -63,7 +63,7 @@ fit.recipe <- function(x, model, ...) {
   mf <- ModelFrame(x, na.action = na.pass)
   
   y <- response(mf)
-  if (!any(sapply(model@types, function(type) is(y, type)))) {
+  if (!any(sapply(model@types, function(type) is_response(y, type)))) {
     stop("invalid response type '", class(y)[1], "' for ", model@name)
   }
   
