@@ -91,8 +91,8 @@ SurvRegStepAICModel <- function(dist = c("weibull", "exponential", "gaussian",
                             control = control)
   MLModel(
     name = "SurvRegStepAICModel",
-    packages = c("MASS", "rms"),
-    types = "Surv",
+    packages = c("MASS", stepmodel@packages),
+    types = stepmodel@types,
     params = args,
     nvars = stepmodel@nvars,
     fit = function(formula, data, weights, direction = "both", scope = list(),

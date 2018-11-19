@@ -86,8 +86,8 @@ CoxStepAICModel <- function(ties = c("efron", "breslow", "exact"),
   stepmodel <- CoxModel(ties = ties, control = control)
   MLModel(
     name = "CoxStepAICModel",
-    packages = c("MASS", "rms"),
-    types = "Surv",
+    packages = c("MASS", stepmodel@packages),
+    types = stepmodel@types,
     params = args,
     nvars = stepmodel@nvars,
     fit = function(formula, data, weights, direction = "both", scope = list(),
