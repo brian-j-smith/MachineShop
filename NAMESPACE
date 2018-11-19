@@ -13,9 +13,9 @@ importFrom(magrittr, "%>%")
 importFrom(MLmetrics, PRAUC)
 importFrom(ModelMetrics, auc, brier, ce, kappa, mae, rmse, sensitivity,
            specificity)
-importFrom(recipes, bake, juice, prep)
-importFrom(rsample, assessment, bootstraps, initial_split, prepper,
-           rsample2caret, testing, vfold_cv)
+importFrom(recipes, bake, juice, prep, prepper)
+importFrom(rsample, assessment, bootstraps, initial_split, rsample2caret,
+           testing, vfold_cv)
 importFrom(Rsolnp, solnp)
 importFrom(stats, aggregate, approx, coef, complete.cases, cor, formula,
            get_all_vars, median, model.frame, model.matrix, model.response,
