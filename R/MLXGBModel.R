@@ -22,15 +22,28 @@
 #' Default values for the \code{NULL} arguments and further model details can be
 #' found in the source link below.
 #' 
+#' The following variable importance metrics are available for XBMTreeModel:
+#' \enumerate{
+#'   \item \code{Gain} fractional contribution of each predictor to the total
+#'   gain of its splits.
+#'   \item \code{Cover} number of observations related to each predictor.
+#'   \item \code{Frequency} percentage of times each predictor is used in the
+#'   trees.
+#' }
+#' In calls to \code{\link{varimp}} for these tree model fits, the first metric
+#' will be returned by default.  Others may be specified to the \code{metrics}
+#' argument of the function by their names or numeric indices.  Variable
+#' importance is automatically scaled to range from 0 to 100.  To obtain
+#' unscaled importance values, set \code{scale = FALSE}.  See example below.
+#' 
 #' @return MLModel class object.
 #' 
 #' @seealso \code{\link[xgboost:xgb.train]{xgboost}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}
 #'
 #' @examples
-#' library(MASS)
-#' 
-#' fit(medv ~ ., data = Boston, model = XGBTreeModel())
+#' modelfit <- fit(Species ~ ., data = iris, model = XGBTreeModel())
+#' varimp(modelfit, metrics = 1:3, scale = FALSE)
 #' 
 XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
                      print_every_n = 1) {
@@ -71,7 +84,7 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
       }
       pred
     },
-    varimp = function(object, ...) {
+    varimp = function(object, metrics = 1, ...) {
       vi <- xgboost::xgb.importance(model = object, ...)
       if (!is.null(vi$Weight)) {
         if (!is.null(vi$Class)) {
@@ -84,7 +97,8 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
           structure(vi$Weight, names = vi$Feature)
         }
       } else {
-        structure(vi$Gain, names = vi$Feature)
+        metrics <- match_indices(metrics, c("Gain", "Cover", "Frequency"))
+        data.frame(vi[, metrics, drop = FALSE], row.names = vi$Feature)
       }
     }
   )
