@@ -1,14 +1,14 @@
 Package: MachineShop
 Type: Package
 Title: Machine Learning Models and Tools
-Version: 0.1-1
-Date: 2018-10-02
+Version: 0.2.0
+Date: 2018-11-19
 Authors@R: person("Brian J", "Smith", email = "brian-j-smith@uiowa.edu", role = c("aut", "cre"))
 Author: Brian J Smith [aut, cre]
 Maintainer: Brian J Smith <brian-j-smith@uiowa.edu>
 Description: Meta-package for statistical and machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Supports predictive modeling of numerical, categorical, and censored time-to-event outcomes and resample (bootstrap and cross-validation) estimation of model performance.
 Imports: abind, foreach, ggplot2, Hmisc, irr, kernlab, magrittr, methods,
-         MLmetrics, ModelMetrics, party, recipes (>= 0.1.3.9002), rsample, Rsolnp, survival,
+         MLmetrics, ModelMetrics, party, recipes (>= 0.1.4), rsample, Rsolnp, survival,
          survivalROC, utils
 Suggests: C50, doParallel, gbm, glmnet, kableExtra, kknn, knitr, MASS, nnet,
           pls, randomForest, rmarkdown, rms, testthat, xgboost

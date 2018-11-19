@@ -5,7 +5,10 @@
 #' @param family response type.  Set automatically according to the class type
 #' of the response variable.
 #' @param alpha elasticnet mixing parameter.
-#' @param lambda regularization parameter.
+#' @param lambda regularization parameter.  The default value \code{lambda = 0}
+#' performs no regularization and should be increased to avoid model fitting
+#' issues if the number of predictor variables is greater than the number of
+#' observations.
 #' @param standardize logical flag for predictor variable standardization, prior
 #' to model fitting.
 #' @param intercept logical indicating whether to fit intercepts.

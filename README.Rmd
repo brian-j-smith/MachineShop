@@ -3,8 +3,6 @@ output: github_document
 always_allow_html: yes
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -19,6 +17,8 @@ library(kableExtra)
 ```
 
 # MachineShop: Machine Learning Models and Tools
+
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/MachineShop)](http://cran.r-project.org/web/packages/MachineShop)
 
 ## Overview
 

@@ -17,7 +17,10 @@ of the response variable.}
 
 \item{alpha}{elasticnet mixing parameter.}
 
-\item{lambda}{regularization parameter.}
+\item{lambda}{regularization parameter.  The default value \code{lambda = 0}
+performs no regularization and should be increased to avoid model fitting
+issues if the number of predictor variables is greater than the number of
+observations.}
 
 \item{standardize}{logical flag for predictor variable standardization, prior
 to model fitting.}
