@@ -168,12 +168,12 @@ preprocess <- function(x, data = NULL, ...) {
 }
 
 
-preprocess.default <- function(x, data, ...) {
+preprocess.default <- function(x, data = NULL, ...) {
   if (is.null(data)) x else data
 }
 
 
-preprocess.recipe <- function(x, data, ...) {
+preprocess.recipe <- function(x, data = NULL, ...) {
   if (is.null(data)) juice(x) else bake(x, new_data = data)
 }
 
