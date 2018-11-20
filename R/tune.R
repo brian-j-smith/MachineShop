@@ -62,8 +62,7 @@ tune <- function(x, ...) {
 tune.formula <- function(x, data, models, grid = data.frame(),
                          control = CVControl, metric = 1, stat = mean,
                          maximize = TRUE, ...) {
-  tune(ModelFrame(x, data, na.action = na.pass), models, grid, control, metric,
-       stat, maximize)
+  .tune(models, grid, control, metric, stat, maximize, x, data)
 }
 
 
@@ -72,7 +71,7 @@ tune.formula <- function(x, data, models, grid = data.frame(),
 tune.ModelFrame <- function(x, models, grid = data.frame(),
                             control = CVControl, metric = 1, stat = mean,
                             maximize = TRUE, ...) {
-  .tune(x, models, grid, control, metric, stat, maximize)
+  .tune(models, grid, control, metric, stat, maximize, x)
 }
 
 
@@ -81,11 +80,11 @@ tune.ModelFrame <- function(x, models, grid = data.frame(),
 tune.recipe <- function(x, models, grid = data.frame(),
                         control = CVControl, metric = 1, stat = mean,
                         maximize = TRUE, ...) {
-  .tune(x, models, grid, control, metric, stat, maximize)
+  .tune(models, grid, control, metric, stat, maximize, x)
 }
 
 
-.tune <- function(x, models, grid, control, metric, stat, maximize) {
+.tune <- function(models, grid, control, metric, stat, maximize, ...) {
   
   if (is.list(models)) {
     models <- lapply(models, getMLObject, class = "MLModel")
@@ -100,7 +99,7 @@ tune.recipe <- function(x, models, grid = data.frame(),
   resamples <- list()
   perf <- list()
   for (i in seq(models)) {
-    resamples[[i]] <- resample(x, models[[i]], control)
+    resamples[[i]] <- resample(..., models[[i]], control)
     perf[[i]] <- apply(resamples[[i]], 2, function(x) stat(na.omit(x)))
   }
   perf <- as.data.frame(do.call(rbind, perf))

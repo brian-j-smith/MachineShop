@@ -208,6 +208,24 @@ strata.Surv <- function(object, ...) {
 }
 
 
+strata_var <- function(object, ...) {
+  UseMethod("strata_var")
+}
+
+
+strata_var.ModelFrame <- function(object, ...) {
+  if ("(strata)" %in% names(object)) "(strata)" else NULL
+}
+
+
+strata_var.recipe <- function(object, ...) {
+  info <- summary(object)
+  strata_index <- which(info$role %in% "case_strata")
+  if (length(strata_index) > 1) stop("multiple strata variables specified")
+  if (length(strata_index) == 1) info$variable[strata_index] else NULL
+}
+
+
 switch_class <- function(EXPR, ...) {
   blocks <- eval(substitute(alist(...)))
   isClass <- sapply(names(blocks), function(class) is(EXPR, class))

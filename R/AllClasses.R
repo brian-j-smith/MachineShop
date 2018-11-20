@@ -253,6 +253,7 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 #' 
 #' @param response data frame of resampled observed and predicted resposnes.
 #' @param control MLControl object used to generate the resample output.
+#' @param strata character string indicating the strata variable, if any.
 #' @param ... named or unnamed resample output from one or more models.
 #' 
 #' @details Argument \code{control} need only be specified if the supplied
@@ -278,35 +279,47 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 #' summary(perf)
 #' plot(perf)
 #' 
-Resamples <- function(..., control = NULL, response = NULL) {
-  new("Resamples", ..., control = control, response = response)
+Resamples <- function(..., control = NULL, response = NULL,
+                      strata = character()) {
+  new("Resamples", ..., control = control, response = response, strata = strata)
 }
 
 
 setClass("Resamples",
-  slots = c(control = "MLControl", response = "data.frame"),
+  slots = c(control = "MLControl", response = "data.frame",
+            strata = "character"),
   contains = "array"
 )
 
 
 setMethod("initialize", "Resamples",
-  function(.Object, ..., control = NULL, response = NULL) {
+  function(.Object, ..., control, response, strata) {
     args <- list(...)
     
     if (length(args) == 0) stop("no resample output given")
     
     .Data <- args[[1]]
     if (length(args) == 1) {
-      if (is(.Data, "Resamples")) response <- .Data@response
+      if (is(.Data, "Resamples")) {
+        response <- .Data@response
+        strata <- .Data@strata
+      }
     } else {
       if (!all(sapply(args, function(x) is(x, "Resamples") && is.matrix(x)))) {
         stop("values to combine must be 2 dimensional Resamples objects")
       }
+
       control <- .Data@control
       is_equal_control <- function(x) isTRUE(all.equal(x@control, control))
       if (!all(sapply(args, is_equal_control))) {
         stop("resamples have different control structures")
       }
+      
+      strata <- .Data@strata
+      if (!all(sapply(args, function(x) x@strata == strata))) {
+        stop("resamples have different strata variables")
+      }
+      
       if (!all(sapply(args, colnames) == colnames(.Data))) {
         stop("resamples contain different metrics")
       }
@@ -337,7 +350,8 @@ setMethod("initialize", "Resamples",
       stop("missing response variables: ", toString(response_vars[is_missing]))
     }
     
-    callNextMethod(.Object, .Data, control = control, response = response)
+    callNextMethod(.Object, .Data, control = control, response = response,
+                   strata = if (is.character(strata)) strata else character())
   }
 )
 

@@ -38,6 +38,20 @@ Resamples class object.
 Estimation of the predictive performance of a model estimated and evaluated
 on training and test samples generated from an observed data set.
 }
+\details{
+Stratified resampling is performed for the \code{formula} method according to
+values of the response variable; i.e. categorical levels for \code{factor},
+continuous for \code{numeric}, and event status \code{Surv}.
+
+User-specified stratification variables may be specified for
+\code{\link[MachineShop:ModelFrame-methods]{ModelFrames}} upon
+creation with the \code{strata} argument in its constructor.  Resampling of
+this class is unstratified by default.
+
+Variables in a \code{recipe} may be used for stratification by defining a
+"case_strata" \code{\link[recipes:roles]{role}} for them.  Resampling will
+be unstratified if no variables have that role.
+}
 \examples{
 \donttest{
 ## Survival response example

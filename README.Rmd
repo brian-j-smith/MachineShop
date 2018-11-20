@@ -254,6 +254,7 @@ plot(lf, find = 75)
 library(recipes)
 
 rec <- recipe(fo, data = iris) %>%
+  add_role(Species, new_role = "case_strata") %>%
   step_center(all_predictors()) %>%
   step_scale(all_predictors()) %>%
   step_pca(all_predictors())

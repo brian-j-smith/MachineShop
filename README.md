@@ -792,7 +792,11 @@ modelmetrics(obs, pred)
 (perf <- resample(fo, data = iris, model = GBMModel, control = CVControl))
 #> An object of class "Resamples"
 #> 
-#> Metrics: Accuracy, Kappa, Brier, MLogLoss 
+#> Models: GBMModel
+#> 
+#> Metrics: Accuracy, Kappa, Brier, MLogLoss
+#> 
+#> Stratification variable: (strata) 
 #> 
 #> Resamples control object of class "CVMLControl"
 #> 
@@ -1033,6 +1037,7 @@ plot(lf, find = 75)
 library(recipes)
 
 rec <- recipe(fo, data = iris) %>%
+  add_role(Species, new_role = "case_strata") %>%
   step_center(all_predictors()) %>%
   step_scale(all_predictors()) %>%
   step_pca(all_predictors())

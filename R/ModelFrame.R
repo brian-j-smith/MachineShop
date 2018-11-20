@@ -26,13 +26,15 @@ ModelFrame <- function(x, ...) {
 #'
 #' @param data data frame or an object that can be converted to one.
 #' @param weights vector of case weights.
+#' @param strata vector of stratification levels.
 #' @param na.action action to take if cases contain missing values.  The default
 #' is first any \code{na.action} attribute of \code{data}, second a
 #' \code{na.action} setting of \code{\link{options}}, and third
 #' \code{\link{na.fail}} if unset.
 #' @param ... arguments passed to other methods.
 #' 
-ModelFrame.formula <- function(x, data, weights = NULL, na.action = NULL, ...) {
+ModelFrame.formula <- function(x, data, weights = NULL, strata = NULL,
+                               na.action = NULL, ...) {
   data <- as.data.frame(data)
   
   modelterms <- terms(x, data = data)
@@ -42,6 +44,12 @@ ModelFrame.formula <- function(x, data, weights = NULL, na.action = NULL, ...) {
   if (!is.null(weights)) {
     stopifnot(length(weights) == nrow(data))
     modelframe[["(weights)"]] <- weights
+  }
+  
+  strata <- eval(substitute(strata), data)
+  if (!is.null(strata)) {
+    stopifnot(length(strata) == nrow(data))
+    modelframe[["(strata)"]] <- strata
   }
   
   if (is.null(na.action)) na.action <- na.action(data)
@@ -59,30 +67,42 @@ ModelFrame.formula <- function(x, data, weights = NULL, na.action = NULL, ...) {
 #' 
 #' @param y response variable.
 #'
-ModelFrame.matrix <- function(x, y, weights = NULL, na.action = NULL, ...) {
+ModelFrame.matrix <- function(x, y, weights = NULL, strata = NULL,
+                              na.action = NULL, ...) {
   data <- as.data.frame(x)
   end <- ncol(x) + 1
   y_name <- make.unique(c(names(data), "y"))[end]
   data[[y_name]] <- y
   data <- cbind(data[end], data[-end])
-  ModelFrame(formula(data), data, weights = weights, na.action = na.action)
+  
+  do.call(ModelFrame, list(formula(data), data,
+                           weights = weights, strata = strata,
+                           na.action = na.action))
 }
 
 
 ModelFrame.ModelFrame <- function(x, na.action = NULL, ...) {
-  ModelFrame(formula(terms(x)), x, weights = model.weights(x),
-             na.action = na.action)
+  do.call(ModelFrame, list(formula(terms(x)), x,
+                           weights = x[["(weights)"]], strata = x[["(strata)"]],
+                           na.action = na.action))
 }
 
 
-ModelFrame.recipe <- function(x, weights = "case_weight", na.action = NULL,
-                              ...) {
+ModelFrame.recipe <- function(x, na.action = NULL, ...) {
   x <- prep(x, retain = TRUE)
   df <- juice(x)
   
-  weights_indices <- which(summary(x)$role %in% weights)
-  if (length(weights_indices) > 1) stop("multiple case weights specified")
-  weights <- if (length(weights_indices) == 1) df[[weights_indices]] else NULL
+  info <- summary(x)
   
-  ModelFrame(formula(x), df, weights = weights, na.action = na.action)
+  weights_index <- which(info$role %in% "case_weight")
+  if (length(weights_index) > 1) stop("multiple case weights specified")
+  weights <- if (length(weights_index) == 1) df[[weights_index]] else NULL
+  
+  strata_index <- which(info$role %in% "case_strata")
+  if (length(strata_index) > 1) stop("multiple strata variables specified")
+  strata <- if (length(strata_index) == 1) df[[strata_index]] else NULL
+
+  do.call(ModelFrame, list(formula(x), df,
+                           weights = weights, strata = strata,
+                           na.action = na.action))
 }

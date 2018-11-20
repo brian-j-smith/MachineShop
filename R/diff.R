@@ -46,7 +46,8 @@ diff.Resamples <- function(x, ...) {
   model_names <- dimnames(x)[[3]]
   dimnames(xdiff)[[3]] <-
     paste(model_names[indices1], "-", model_names[indices2])
-  ResamplesDiff(xdiff, control = x@control, response = x@response)
+  ResamplesDiff(xdiff, control = x@control, response = x@response,
+                strata = x@strata)
 }
 
 

@@ -375,16 +375,16 @@ varimp(gbmfit)
 
 ### Model Frames
 
-The second specification is similar to the first, except the formula and data frame pair are give in a `ModelFrame`.  The model frame approach has a few subtle advantages.  One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default.  This is often desirable for models that cannot handle missing values.  Note, however, that some models like `GBMModel` do accommodate missing values.  For those, missing values can be retained in the model frame by setting its argument `na.action = na.pass`.
+The second specification is similar to the first, except the formula and data frame pair are give in a `ModelFrame`.  The model frame approach has a few subtle advantages.  One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default.  This is often desirable for models that cannot handle missing values.  Note, however, that some models like `GBMModel` do accommodate missing values.  For those, missing values can be retained in the model frame by setting its argument `na.action = na.pass`.  A second advantage is user-specification of a factor for stratified resampling via the `strata` argument.
 
 ```{r}
 ## Model frame specification
-mf <- ModelFrame(medv ~ ., data = Boston)
-gbmfit <- fit(mf, model = GBMModel)
-varimp(gbmfit)
+mf <- ModelFrame(medv ~ ., data = Boston, strata = medv)
+gbmfit <- resample(mf, model = GBMModel)
+summary(gbmfit)
 ```
 
-Another advantage is that case weights can be included in the model frame and will be passed on to the model fitting functions.
+A third is that case weights can be included in the model frame and will be passed on to the model fitting functions.
 
 ```{r}
 ## Model frame specification with case weights
@@ -397,18 +397,19 @@ varimp(gbmfit)
 
 ### Preprocessing Recipes
 
-The `recipes` package [@kuhn:2018:RPT] provides a framework for defining predictor and response variables and preprocessing steps to be applied to them prior to model fitting.  Using recipes helps to ensure that estimation of predictive performance accounts for all modeling step.  They are also a very convenient way of consistently applying preprocessing to new data.  Recipes currently support `factor` and `numeric` responses, but not generally `Surv`.
+The `recipes` package [@kuhn:2018:RPT] provides a framework for defining predictor and response variables and preprocessing steps to be applied to them prior to model fitting.  Using recipes helps to ensure that estimation of predictive performance accounts for all modeling step.  They are also a very convenient way of consistently applying preprocessing to new data.  Stratified resampling and case weights are supported for recipes via the designations of `"case_strata"` and `"case_weight"` roles, respectively.  Recipes currently support `factor` and `numeric` responses, but not generally `Surv`.
 
 ```{r}
 ## Recipe specification
 library(recipes)
 rec <- recipe(medv ~ ., data = Boston) %>%
+  add_role(medv, new_role = "case_strata") %>%
   step_center(all_predictors()) %>%
   step_scale(all_predictors()) %>%
   step_pca(all_predictors())
 
-gbmfit <- fit(rec, model = GBMModel)
-varimp(gbmfit)
+gbmfit <- resample(rec, model = GBMModel)
+summary(gbmfit)
 ```
 
 

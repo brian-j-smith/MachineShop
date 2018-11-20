@@ -25,6 +25,11 @@ resample <- function(x, ...) {
 #' character string naming a control function defining the resampling method to
 #' be employed.
 #' 
+#' @details
+#' Stratified resampling is performed for the \code{formula} method according to
+#' values of the response variable; i.e. categorical levels for \code{factor},
+#' continuous for \code{numeric}, and event status \code{Surv}.
+#' 
 #' @return Resamples class object.
 #' 
 #' @seealso \code{\link{tune}}, \code{\link{ModelFrame}},
@@ -47,11 +52,18 @@ resample <- function(x, ...) {
 #' }
 #' 
 resample.formula <- function(x, data, model, control = CVControl, ...) {
-  resample(ModelFrame(x, data, na.action = na.pass), model, control)
+  resample(ModelFrame(x, data, strata = strata(response(x, data)),
+                      na.action = na.pass), model, control)
 }
 
 
 #' @rdname resample-methods
+#' 
+#' @details
+#' User-specified stratification variables may be specified for
+#' \code{\link[MachineShop:ModelFrame-methods]{ModelFrames}} upon
+#' creation with the \code{strata} argument in its constructor.  Resampling of
+#' this class is unstratified by default.
 #' 
 resample.ModelFrame <- function(x, model, control = CVControl, ...) {
   .resample(getMLObject(control, "MLControl"), x, model)
@@ -59,6 +71,11 @@ resample.ModelFrame <- function(x, model, control = CVControl, ...) {
 
 
 #' @rdname resample-methods
+#' 
+#' @details
+#' Variables in a \code{recipe} may be used for stratification by defining a
+#' "case_strata" \code{\link[recipes:roles]{role}} for them.  Resampling will
+#' be unstratified if no variables have that role.
 #' 
 resample.recipe <- function(x, model, control = CVControl, ...) {
   .resample(getMLObject(control, "MLControl"), x, model)
@@ -70,10 +87,11 @@ setGeneric(".resample", function(object, x, ...) standardGeneric(".resample"))
 
 setMethod(".resample", c("BootMLControl", "ModelFrame"),
   function(object, x, model) {
+    strata <- strata_var(x)
     set.seed(object@seed)
-    splits <- bootstraps(data.frame(strata = strata(response(x))),
+    splits <- bootstraps(x,
                          times = object@samples,
-                         strata = "strata") %>% rsample2caret
+                         strata = strata) %>% rsample2caret
     index <- splits$index
     seeds <- sample.int(.Machine$integer.max, length(index))
     foreach(i = seq(index),
@@ -81,17 +99,18 @@ setMethod(".resample", c("BootMLControl", "ModelFrame"),
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
       resample_metrics(train, x, model, object)
-    } %>% Resamples.list(control = object)
+    } %>% Resamples.list(control = object, strata = strata)
   }
 )
 
 
 setMethod(".resample", c("BootMLControl", "recipe"),
   function(object, x, model) {
+    strata <- strata_var(x)
     set.seed(object@seed)
     splits <- bootstraps(getdata(x),
                          times = object@samples,
-                         strata =  response(terms(x)))$splits
+                         strata = strata)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     test <- ModelFrame(formula(terms(x)), getdata(x))
     foreach(i = seq(splits),
@@ -100,18 +119,19 @@ setMethod(".resample", c("BootMLControl", "recipe"),
       split <- splits[[i]]
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
       resample_metrics(train, test, model, object)
-    } %>% Resamples.list(control = object)
+    } %>% Resamples.list(control = object, strata = strata)
   }
 )
 
 
 setMethod(".resample", c("CVMLControl", "ModelFrame"),
   function(object, x, model) {
+    strata <- strata_var(x)
     set.seed(object@seed)
-    splits <- vfold_cv(data.frame(strata = strata(response(x))),
+    splits <- vfold_cv(x,
                        v = object@folds,
                        repeats = object@repeats,
-                       strata = "strata") %>% rsample2caret
+                       strata = strata) %>% rsample2caret
     index <- splits$index
     seeds <- sample.int(.Machine$integer.max, length(index))
     foreach(i = seq(index),
@@ -120,18 +140,19 @@ setMethod(".resample", c("CVMLControl", "ModelFrame"),
       train <- x[index[[i]], , drop = FALSE]
       test <- x[-index[[i]], , drop = FALSE]
       resample_metrics(train, test, model, object)
-    } %>% Resamples.list(control = object)
+    } %>% Resamples.list(control = object, strata = strata)
   }
 )
 
 
 setMethod(".resample", c("CVMLControl", "recipe"),
   function(object, x, model) {
+    strata <- strata_var(x)
     set.seed(object@seed)
     splits <- vfold_cv(getdata(x),
                        v = object@folds,
                        repeats = object@repeats,
-                       strata =  response(terms(x)))$splits
+                       strata = strata)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     foreach(i = seq(splits),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
@@ -140,17 +161,18 @@ setMethod(".resample", c("CVMLControl", "recipe"),
       train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
       test <- ModelFrame(formula(terms(x)), assessment(split))
       resample_metrics(train, test, model, object)
-    } %>% Resamples.list(control = object)
+    } %>% Resamples.list(control = object, strata = strata)
   }
 )
 
 
 setMethod(".resample", c("OOBMLControl", "ModelFrame"),
   function(object, x, model) {
+    strata <- strata_var(x)
     set.seed(object@seed)
-    splits <- bootstraps(data.frame(strata = strata(response(x))),
+    splits <- bootstraps(x,
                          times = object@samples,
-                         strata = "strata") %>% rsample2caret
+                         strata = strata) %>% rsample2caret
     index <- splits$index
     indexOut <- splits$indexOut
     seeds <- sample.int(.Machine$integer.max, length(index))
@@ -161,17 +183,18 @@ setMethod(".resample", c("OOBMLControl", "ModelFrame"),
       test <- x[indexOut[[i]], , drop = FALSE]
       if (nrow(test) == 0) return(NA)
       resample_metrics(train, test, model, object)
-    } %>% Resamples.list(control = object)
+    } %>% Resamples.list(control = object, strata = strata)
   }
 )
 
 
 setMethod(".resample", c("OOBMLControl", "recipe"),
   function(object, x, model) {
+    strata <- strata_var(x)
     set.seed(object@seed)
     splits <- bootstraps(getdata(x),
                          times = object@samples,
-                         strata =  response(terms(x)))$splits
+                         strata = strata)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     foreach(i = seq(splits),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
@@ -181,37 +204,39 @@ setMethod(".resample", c("OOBMLControl", "recipe"),
       test <- ModelFrame(formula(terms(x)), assessment(split))
       if (nrow(test) == 0) return(NA)
       resample_metrics(train, test, model, object)
-    } %>% Resamples.list(control = object)
+    } %>% Resamples.list(control = object, strata = strata)
   }
 )
 
 
 setMethod(".resample", c("SplitMLControl", "ModelFrame"),
   function(object, x, model) {
+    strata <- strata_var(x)
     set.seed(object@seed)
-    split <- initial_split(data.frame(strata = strata(response(x))),
+    split <- initial_split(x,
                            prop = object@prop,
-                           strata = "strata")
+                           strata = strata)
     train <- x[split$in_id, , drop = FALSE]
     test <- x[-split$in_id, , drop = FALSE]
     perf <- resample_metrics(train, test, model, object)
     Resamples(perf$metrics, response = cbind(Resample = 1, perf$response),
-              control = object)
+              control = object, strata = strata)
   }
 )
 
 
 setMethod(".resample", c("SplitMLControl", "recipe"),
   function(object, x, model) {
+    strata <- strata_var(x)
     set.seed(object@seed)
     split <- initial_split(getdata(x),
                            prop = object@prop,
-                           strata =  response(terms(x)))
+                           strata = strata)
     train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
     test <- ModelFrame(formula(terms(x)), testing(split))
     perf <- resample_metrics(train, test, model, object)
     Resamples(perf$metrics, response = cbind(Resample = 1, perf$response),
-              control = object)
+              control = object, strata = strata)
   }
 )
 
@@ -255,7 +280,7 @@ resample_metrics <- function(train, test, model, control) {
 }
 
 
-Resamples.list <- function(x, control) {
+Resamples.list <- function(x, control, strata) {
   metrics <- Reduce(append, lapply(x, getElement, name = "metrics"))
   rownames(metrics) <- seq(x)
   
@@ -264,5 +289,5 @@ Resamples.list <- function(x, control) {
   })
   response <- Reduce(append, response_list)
 
-  Resamples(metrics, control = control, response = response)
+  Resamples(metrics, control = control, response = response, strata = strata)
 }

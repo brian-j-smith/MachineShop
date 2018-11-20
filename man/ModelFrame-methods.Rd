@@ -8,11 +8,11 @@
 \usage{
 ModelFrame(x, ...)
 
-\method{ModelFrame}{formula}(x, data, weights = NULL, na.action = NULL,
-  ...)
+\method{ModelFrame}{formula}(x, data, weights = NULL, strata = NULL,
+  na.action = NULL, ...)
 
-\method{ModelFrame}{matrix}(x, y, weights = NULL, na.action = NULL,
-  ...)
+\method{ModelFrame}{matrix}(x, y, weights = NULL, strata = NULL,
+  na.action = NULL, ...)
 }
 \arguments{
 \item{x}{model \code{\link{formula}} or matrix of predictor variables.}
@@ -22,6 +22,8 @@ ModelFrame(x, ...)
 \item{data}{data frame or an object that can be converted to one.}
 
 \item{weights}{vector of case weights.}
+
+\item{strata}{vector of stratification levels.}
 
 \item{na.action}{action to take if cases contain missing values.  The default
 is first any \code{na.action} attribute of \code{data}, second a

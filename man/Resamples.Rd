@@ -4,7 +4,7 @@
 \alias{Resamples}
 \title{Resamples Class Contructor}
 \usage{
-Resamples(..., control = NULL, response = NULL)
+Resamples(..., control = NULL, response = NULL, strata = character())
 }
 \arguments{
 \item{...}{named or unnamed resample output from one or more models.}
@@ -12,6 +12,8 @@ Resamples(..., control = NULL, response = NULL)
 \item{control}{MLControl object used to generate the resample output.}
 
 \item{response}{data frame of resampled observed and predicted resposnes.}
+
+\item{strata}{character string indicating the strata variable, if any.}
 }
 \value{
 Resamples class object.
