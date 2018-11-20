@@ -93,16 +93,6 @@ fitbit <- function(object, name) {
 }
 
 
-"fitbit<-" <- function(object, name, value) {
-  if (isS4(object)) {
-    slot(object@fitbits, name) <- value
-  } else {
-    slot(object$fitbits, name) <- value
-  }
-  object
-}
-
-
 getdata <- function(x, ...) {
   UseMethod("getdata")
 }
