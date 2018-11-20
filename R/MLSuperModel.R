@@ -93,15 +93,13 @@ setClass("SuperModel", contains = "MLModel")
   super_mf <- ModelFrame(formula(df), df, na.action = na.action)
   if (params$all_vars) super_mf <- add_predictors(mf, super_mf)
 
-  fitbit(model, "x") <- x
-  fitbit(model, "y") <- response(mf)
   list(base_fits = lapply(base_learners,
                           function(learner) fit(mf, model = learner)),
        super_fit = fit(super_mf, model = super_learner),
        all_vars = params$all_vars,
        times = control@surv_times,
        formula = formula(terms(mf))) %>%
-    asMLModelFit("SuperModelFit", model)
+    asMLModelFit("SuperModelFit", model, x, response(mf))
 }
 
 

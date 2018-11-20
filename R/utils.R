@@ -168,6 +168,11 @@ params <- function(envir) {
 }
 
 
+prep.data.frame <- function(x, ...) {
+  x
+}
+
+
 preprocess <- function(x, data = NULL, ...) {
   UseMethod("preprocess")
 }
@@ -179,7 +184,6 @@ preprocess.default <- function(x, data, ...) {
 
 
 preprocess.recipe <- function(x, data, ...) {
-  x <- prep(x, retain = TRUE)
   if (is.null(data)) juice(x) else bake(x, new_data = data)
 }
 

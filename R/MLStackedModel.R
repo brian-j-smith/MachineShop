@@ -98,14 +98,12 @@ setClass("StackedModel", contains = "MLModel")
                      control = list(trace = FALSE))$pars
   }
   
-  fitbit(model, "x") <- x
-  fitbit(model, "y") <- response(mf)
   list(base_fits = lapply(base_learners,
                           function(learner) fit(mf, model = learner)),
        weights = weights,
        times = times,
        formula = formula(terms(mf))) %>%
-    asMLModelFit("StackedModelFit", model)
+    asMLModelFit("StackedModelFit", model, x, response(mf))
 }
 
 
