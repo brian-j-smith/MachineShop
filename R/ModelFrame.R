@@ -75,7 +75,14 @@ ModelFrame.ModelFrame <- function(x, na.action = NULL, ...) {
 }
 
 
-ModelFrame.recipe <- function(x, na.action = NULL, ...) {
+ModelFrame.recipe <- function(x, weights = "case_weight", na.action = NULL,
+                              ...) {
   x <- prep(x, retain = TRUE)
-  ModelFrame(formula(x), juice(x), na.action = na.action)
+  df <- juice(x)
+  
+  weights_indices <- which(summary(x)$role %in% weights)
+  if (length(weights_indices) > 1) stop("multiple case weights specified")
+  weights <- if (length(weights_indices) == 1) df[[weights_indices]] else NULL
+  
+  ModelFrame(formula(x), df, weights = weights, na.action = na.action)
 }
