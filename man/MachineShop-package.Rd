@@ -15,27 +15,32 @@ table below according to the types of response variables with which each can
 be used.
 
 \tabular{lcccc}{
-  \strong{Model Objects} \tab \strong{factor} \tab \strong{numeric} \tab \strong{ordered} \tab \strong{Surv} \cr
-  \code{\link{C50Model}}            \tab x \tab   \tab   \tab   \cr
-  \code{\link{CForestModel}}        \tab x \tab x \tab   \tab x \cr
-  \code{\link{CoxModel}}            \tab   \tab   \tab   \tab x \cr
-  \code{\link{CoxStepAICModel}}     \tab   \tab   \tab   \tab x \cr
-  \code{\link{GBMModel}}            \tab x \tab x \tab   \tab x \cr
-  \code{\link{GLMModel}}            \tab x \tab x \tab   \tab   \cr
-  \code{\link{GLMStepAICModel}}     \tab x \tab x \tab   \tab   \cr
-  \code{\link{GLMNetModel}}         \tab x \tab x \tab   \tab x \cr
-  \code{\link{KNNModel}}            \tab x \tab x \tab x \tab   \cr
-  \code{\link{NNetModel}}           \tab x \tab x \tab   \tab   \cr
-  \code{\link{PLSModel}}            \tab x \tab x \tab   \tab   \cr
-  \code{\link{POLRModel}}           \tab   \tab   \tab x \tab   \cr
-  \code{\link{RandomForestModel}}   \tab x \tab x \tab   \tab   \cr
-  \code{\link{StackedModel}}        \tab x \tab x \tab x \tab x \cr
-  \code{\link{SuperModel}}          \tab x \tab x \tab x \tab x \cr
-  \code{\link{SurvRegModel}}        \tab   \tab   \tab   \tab x \cr
-  \code{\link{SurvRegStepAICModel}} \tab   \tab   \tab   \tab x \cr
-  \code{\link{SVMModel}}            \tab x \tab x \tab   \tab   \cr
-  \code{\link{XGBModel}}            \tab x \tab x \tab   \tab   \cr
+  \strong{Model Objects} \tab \strong{Categorical} \tab \strong{Continuous}
+  \tab \strong{Survival} \cr
+  \code{\link{C50Model}}            \tab f   \tab     \tab   \cr
+  \code{\link{CForestModel}}        \tab f   \tab n   \tab S \cr
+  \code{\link{CoxModel}}            \tab     \tab     \tab S \cr
+  \code{\link{CoxStepAICModel}}     \tab     \tab     \tab S \cr
+  \code{\link{GBMModel}}            \tab f   \tab n   \tab S \cr
+  \code{\link{GLMModel}}            \tab b   \tab n   \tab   \cr
+  \code{\link{GLMStepAICModel}}     \tab b   \tab n   \tab   \cr
+  \code{\link{GLMNetModel}}         \tab f   \tab m,n \tab S \cr
+  \code{\link{KNNModel}}            \tab f,o \tab n   \tab   \cr
+  \code{\link{NNetModel}}           \tab f   \tab n   \tab   \cr
+  \code{\link{PLSModel}}            \tab f   \tab n   \tab   \cr
+  \code{\link{POLRModel}}           \tab o   \tab     \tab   \cr
+  \code{\link{RandomForestModel}}   \tab f   \tab n   \tab   \cr
+  \code{\link{StackedModel}}        \tab f,o \tab m,n \tab S \cr
+  \code{\link{SuperModel}}          \tab f,o \tab m,n \tab S \cr
+  \code{\link{SurvRegModel}}        \tab     \tab     \tab S \cr
+  \code{\link{SurvRegStepAICModel}} \tab     \tab     \tab S \cr
+  \code{\link{SVMModel}}            \tab f   \tab n   \tab   \cr
+  \code{\link{XGBModel}}            \tab f   \tab n   \tab   \cr
 }
+
+Categorical: b = binary, f = factor, o = ordered;
+Continuous: m = matrix, n = numeric;
+Survival: S = Surv
 
 The following set of standard model fitting, prediction, performance
 assessment, and tuning functions are available for the model objects.

@@ -40,7 +40,7 @@ StackedModel <- function(..., control = CVControl, weights = NULL) {
   
   new("StackedModel",
     name = "StackedModel",
-    types = c("factor", "numeric", "ordered", "Surv"),
+    types = c("factor", "matrix", "numeric", "ordered", "Surv"),
     params = as.list(environment()),
     fitbits = MLFitBits(
       predict = function(object, newdata, ...) {

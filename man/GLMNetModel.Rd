@@ -51,7 +51,8 @@ Fit a generalized linear model via penalized maximum likelihood.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
+\item{Response Types:}{\code{factor}, \code{matrix}, \code{numeric},
+\code{Surv}}
 }
 
 Default values for the \code{NULL} arguments and further model

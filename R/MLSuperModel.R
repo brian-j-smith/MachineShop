@@ -44,7 +44,7 @@ SuperModel <- function(..., model = GBMModel, control = CVControl,
   
   new("SuperModel",
     name = "SuperModel",
-    types = c("factor", "numeric", "ordered", "Surv"),
+    types = c("factor", "matrix", "numeric", "ordered", "Surv"),
     params = as.list(environment()),
     fitbits = MLFitBits(
       predict = function(object, newdata, times, ...) {

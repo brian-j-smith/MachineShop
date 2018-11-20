@@ -211,7 +211,8 @@ MLModel <- function(name = "MLModel", packages = character(0),
                     varimp = function(object, ...)
                       stop("no varimp function")) {
   
-  stopifnot(types %in% c("binary", "factor", "numeric", "ordered", "Surv"))
+  stopifnot(types %in% c("binary", "factor", "matrix", "numeric", "ordered",
+                         "Surv"))
   
   new("MLModel",
       name = name,

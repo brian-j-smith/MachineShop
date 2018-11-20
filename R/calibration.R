@@ -51,7 +51,28 @@ setMethod(".calibration", c("ANY", "ANY"),
 
 setMethod(".calibration", c("factor", "matrix"),
   function(observed, predicted, n, ...) {
-    observed <- stack(as.data.frame(model.matrix(~ observed - 1)))
+    cal <- .calibration(model.matrix(~ observed - 1), predicted, n)
+    bounds <- c("Lower", "Upper")
+    cal$Observed[, bounds] <- pmin(pmax(cal$Observed[, bounds], 0), 1)
+    cal
+  }
+)
+
+
+setMethod(".calibration", c("factor", "numeric"),
+  function(observed, predicted, n, ...) {
+    cal <-
+      .calibration(as.numeric(observed == levels(observed)[2]), predicted, n)
+    bounds <- c("Lower", "Upper")
+    cal$Observed[, bounds] <- pmin(pmax(cal$Observed[, bounds], 0), 1)
+    cal
+  }
+)
+
+
+setMethod(".calibration", c("matrix", "matrix"),
+  function(observed, predicted, n, ...) {
+    observed <- stack(as.data.frame(observed))
     predicted <- stack(as.data.frame(predicted))
     df <- data.frame(Response = predicted$ind,
                      Midpoint = midpoints(predicted$values, n),
@@ -59,23 +80,7 @@ setMethod(".calibration", c("factor", "matrix"),
     aggregate(. ~ Response + Midpoint, df, function(x) {
       Mean <- mean(x)
       SE <- sd(x) / sqrt(length(x))
-      c(Mean = Mean, SE = SE, Lower = max(Mean - SE, 0),
-        Upper = min(Mean + SE, 1))
-    })
-  }
-)
-
-
-setMethod(".calibration", c("factor", "numeric"),
-  function(observed, predicted, n, ...) {
-    df <- data.frame(Response = factor("y"),
-                     Midpoint = midpoints(predicted, n),
-                     Observed = as.numeric(observed == levels(observed)[2]))
-    aggregate(. ~ Response + Midpoint, df, function(x) {
-        Mean <- mean(x)
-        SE <- sd(x) / sqrt(length(x))
-        c(Mean = Mean, SE = SE, Lower = max(Mean - SE, 0),
-          Upper = min(Mean + SE, 1))
+      c(Mean = Mean, SE = SE, Lower = Mean - SE, Upper = Mean + SE)
     })
   }
 )
@@ -83,14 +88,7 @@ setMethod(".calibration", c("factor", "numeric"),
 
 setMethod(".calibration", c("numeric", "numeric"),
   function(observed, predicted, n, ...) {
-    df <- data.frame(Response = factor("y"),
-                     Midpoint = midpoints(predicted, n),
-                     Observed = observed)
-    aggregate(. ~ Response + Midpoint, df, function(x) {
-      Mean <- mean(x)
-      SE <-  sd(x) / sqrt(length(x))
-      c(Mean = Mean, SE = SE, Lower = Mean - SE, Upper = Mean + SE)
-    })
+    .calibration(cbind(y = observed), cbind(y = predicted), n)
   }
 )
 

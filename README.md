@@ -30,7 +30,7 @@ performance.
 
 </th>
 
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="4">
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="3">
 
 <div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">
 
@@ -56,25 +56,19 @@ Constructor
 
 <th style="text-align:center;">
 
-factor
+Categorical<sup>1</sup>
 
 </th>
 
 <th style="text-align:center;">
 
-numeric
+Continuous<sup>2</sup>
 
 </th>
 
 <th style="text-align:center;">
 
-ordered
-
-</th>
-
-<th style="text-align:center;">
-
-Surv
+Survival<sup>3</sup>
 
 </th>
 
@@ -100,11 +94,7 @@ C50Model
 
 <td style="text-align:center;">
 
-x
-
-</td>
-
-<td style="text-align:center;">
+f
 
 </td>
 
@@ -134,23 +124,19 @@ CForestModel
 
 <td style="text-align:center;">
 
-x
+f
 
 </td>
 
 <td style="text-align:center;">
 
-x
+n
 
 </td>
 
 <td style="text-align:center;">
 
-</td>
-
-<td style="text-align:center;">
-
-x
+S
 
 </td>
 
@@ -180,47 +166,7 @@ CoxModel
 
 <td style="text-align:center;">
 
-</td>
-
-<td style="text-align:center;">
-
-x
-
-</td>
-
-</tr>
-
-<tr>
-
-<td style="text-align:left;">
-
-Generalized Linear Models
-
-</td>
-
-<td style="text-align:center;">
-
-GLMModel
-
-</td>
-
-<td style="text-align:center;">
-
-2
-
-</td>
-
-<td style="text-align:center;">
-
-x
-
-</td>
-
-<td style="text-align:center;">
-
-</td>
-
-<td style="text-align:center;">
+S
 
 </td>
 
@@ -242,23 +188,51 @@ GBMModel
 
 <td style="text-align:center;">
 
-x
+f
 
 </td>
 
 <td style="text-align:center;">
 
-x
+n
 
 </td>
 
 <td style="text-align:center;">
 
+S
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Generalized Linear Models
+
 </td>
 
 <td style="text-align:center;">
 
-x
+GLMModel
+
+</td>
+
+<td style="text-align:center;">
+
+b
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
 
 </td>
 
@@ -280,23 +254,19 @@ GLMNetModel
 
 <td style="text-align:center;">
 
-x
+f
 
 </td>
 
 <td style="text-align:center;">
 
-x
+m, n
 
 </td>
 
 <td style="text-align:center;">
 
-</td>
-
-<td style="text-align:center;">
-
-x
+S
 
 </td>
 
@@ -318,19 +288,13 @@ KNNModel
 
 <td style="text-align:center;">
 
-x
+f, o
 
 </td>
 
 <td style="text-align:center;">
 
-x
-
-</td>
-
-<td style="text-align:center;">
-
-x
+n
 
 </td>
 
@@ -356,17 +320,13 @@ NNetModel
 
 <td style="text-align:center;">
 
-x
+f
 
 </td>
 
 <td style="text-align:center;">
 
-x
-
-</td>
-
-<td style="text-align:center;">
+n
 
 </td>
 
@@ -392,17 +352,13 @@ PLSModel
 
 <td style="text-align:center;">
 
-x
+f
 
 </td>
 
 <td style="text-align:center;">
 
-x
-
-</td>
-
-<td style="text-align:center;">
+n
 
 </td>
 
@@ -428,15 +384,11 @@ POLRModel
 
 <td style="text-align:center;">
 
-</td>
-
-<td style="text-align:center;">
+o
 
 </td>
 
 <td style="text-align:center;">
-
-x
 
 </td>
 
@@ -462,17 +414,13 @@ RandomForestModel
 
 <td style="text-align:center;">
 
-x
+f
 
 </td>
 
 <td style="text-align:center;">
 
-x
-
-</td>
-
-<td style="text-align:center;">
+n
 
 </td>
 
@@ -498,25 +446,19 @@ StackedModel
 
 <td style="text-align:center;">
 
-x
+f, o
 
 </td>
 
 <td style="text-align:center;">
 
-x
+m, n
 
 </td>
 
 <td style="text-align:center;">
 
-x
-
-</td>
-
-<td style="text-align:center;">
-
-x
+S
 
 </td>
 
@@ -538,25 +480,19 @@ SuperModel
 
 <td style="text-align:center;">
 
-x
+f, o
 
 </td>
 
 <td style="text-align:center;">
 
-x
+m, n
 
 </td>
 
 <td style="text-align:center;">
 
-x
-
-</td>
-
-<td style="text-align:center;">
-
-x
+S
 
 </td>
 
@@ -586,11 +522,7 @@ SurvRegModel
 
 <td style="text-align:center;">
 
-</td>
-
-<td style="text-align:center;">
-
-x
+S
 
 </td>
 
@@ -612,17 +544,13 @@ SVMModel
 
 <td style="text-align:center;">
 
-x
+f
 
 </td>
 
 <td style="text-align:center;">
 
-x
-
-</td>
-
-<td style="text-align:center;">
+n
 
 </td>
 
@@ -648,17 +576,13 @@ XGBModel
 
 <td style="text-align:center;">
 
-x
+f
 
 </td>
 
 <td style="text-align:center;">
 
-x
-
-</td>
-
-<td style="text-align:center;">
+n
 
 </td>
 
@@ -669,6 +593,40 @@ x
 </tr>
 
 </tbody>
+
+<tfoot>
+
+<tr>
+
+<td style="padding: 0; border: 0;" colspan="100%">
+
+<sup>1</sup> b = binary, f = factor, o = ordered
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="padding: 0; border: 0;" colspan="100%">
+
+<sup>2</sup> m = matrix, n = numeric
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="padding: 0; border: 0;" colspan="100%">
+
+<sup>3</sup> S = Surv
+
+</td>
+
+</tr>
+
+</tfoot>
 
 </table>
 

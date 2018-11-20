@@ -24,7 +24,8 @@
 #' 
 #' @details 
 #' \describe{
-#' \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
+#' \item{Response Types:}{\code{factor}, \code{matrix}, \code{numeric},
+#' \code{Surv}}
 #' }
 #' 
 #' Default values for the \code{NULL} arguments and further model
@@ -54,7 +55,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
   MLModel(
     name = "GLMNetModel",
     packages = "glmnet",
-    types = c("factor", "numeric", "Surv"),
+    types = c("factor", "matrix", "numeric", "Surv"),
     params = params(environment()),
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, family = NULL, ...) {
@@ -65,6 +66,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
         family <- switch_class(y,
                                "factor" = ifelse(nlevels(y) == 2,
                                                  "binomial", "multinomial"),
+                               "matrix" = "mgaussian",
                                "numeric" = "gaussian",
                                "Surv" = "cox")
       }

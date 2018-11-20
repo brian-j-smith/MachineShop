@@ -203,6 +203,11 @@ strata.default <- function(object, ...) {
 }
 
 
+strata.matrix <- function(object, ...) {
+  object[, 1]
+}
+
+
 strata.Surv <- function(object, ...) {
   object[, "status"]
 }
