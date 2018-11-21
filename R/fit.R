@@ -23,7 +23,7 @@ fit <- function(x, ...) {
 #' 
 #' @return MLModelFit class object.
 #' 
-#' @seealso  \code{\link{tune}}, \code{\link[stats]{model.frame}},
+#' @seealso  \code{\link{tune}}, \code{\link{ModelFrame}},
 #' \code{\link[recipes]{recipe}}, \code{\link{predict}}, \code{\link{varimp}}
 #' 
 #' @examples
@@ -42,12 +42,21 @@ fit.formula <- function(x, data, model, ...) {
 
 #' @rdname fit-methods
 #' 
+#' @details
+#' User-specified case weights may be specified for
+#' \code{\link[MachineShop:ModelFrame-methods]{ModelFrames}} upon
+#' creation with the \code{weights} argument in its constructor.
+#' 
 fit.ModelFrame <- function(x, model, ...) {
   .fit(getMLObject(model, "MLModel"), x)
 }
 
 
 #' @rdname fit-methods
+#' 
+#' @details
+#' Variables in a \code{recipe} may be used as case weights by defining a
+#' "case_weight" \code{\link[recipes:roles]{role}} for them.
 #' 
 fit.recipe <- function(x, model, ...) {
   .fit(getMLObject(model, "MLModel"), x)

@@ -38,7 +38,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
         varname <- response(terms(formula))
         mm <- model.matrix(~ y - 1)
         colnames(mm) <- levels(y)
-        data[[varname]] <- I(mm)
+        data[[varname]] <- mm
         formula[[2]] <- as.symbol(varname)
       }
       pls::plsr(formula, data = data, ...)
