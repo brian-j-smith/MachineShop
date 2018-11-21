@@ -38,7 +38,7 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
     params = params(environment()),
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
-      if (!all(weights == 1)) warning("weights are unsupported and will be ignored")
+      assert_equal_weights(weights)
       list(formula = formula, ...)
     },
     predict = function(object, newdata, ...) {

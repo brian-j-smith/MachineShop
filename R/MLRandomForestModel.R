@@ -41,7 +41,7 @@ RandomForestModel <- function(ntree = 500,
     params = params(environment()),
     nvars = function(data) nvars(data, design = "terms"),
     fit = function(formula, data, weights, ...) {
-      if (!all(weights == 1)) warning("weights are unsupported and will be ignored")
+      assert_equal_weights(weights)
       environment(formula) <- environment()
       randomForest::randomForest(formula, data = data, ...)
     },

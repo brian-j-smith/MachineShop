@@ -41,8 +41,8 @@ LMModel <- function() {
       args <- list(formula = formula, data = data, ...)
       if (is_response(y, "numeric")) {
         args$weights <- weights
-      } else if (!all(weights == 1)) {
-        warning("weights are unsupported and will be ignored")
+      } else {
+        assert_equal_weights(weights)
       }
       do.call(stats::lm, args)
     },
