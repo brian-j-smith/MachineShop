@@ -142,4 +142,4 @@ if(!all(weights == 1)) warning("weights are unsupported and will be ignored")
 environment(CustomModel) <- asNamespace("MachineShop")
 ```
 
-- If adding a new model to the package, save its source code in a file whose name begins with "ML" followed by the model name, and ending with a .R extension; e.g., `"MLCustomModel.R"`.
+- If adding a new model to the package, save its source code in a file whose name begins with "ML_" followed by the model name, and ending with a .R extension; e.g., `"ML_CustomModel.R"`.
