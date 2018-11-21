@@ -308,6 +308,36 @@ n
 
 <td style="text-align:left;">
 
+Linear Discriminant Analysis
+
+</td>
+
+<td style="text-align:center;">
+
+LDAModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 Linear Model
 
 </td>
