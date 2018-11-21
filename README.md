@@ -308,6 +308,38 @@ n
 
 <td style="text-align:left;">
 
+Linear Model
+
+</td>
+
+<td style="text-align:center;">
+
+LMModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+m, n
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 Feed-Forward Neural Networks
 
 </td>
