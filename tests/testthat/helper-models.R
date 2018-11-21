@@ -54,13 +54,13 @@ test_model <- function(formula, data, model, times = numeric()) {
 }
 
 
-test_model_factor <- function(model) {
-  test_model(factor(Species) ~ ., data = iris, model = model)
+test_model_binary <- function(model) {
+  test_model(factor(type) ~ ., data = Pima.tr, model = model)
 }
 
 
-test_model_factor2 <- function(model) {
-  test_model(factor(type) ~ ., data = Pima.tr, model = model)
+test_model_factor <- function(model) {
+  test_model(factor(Species) ~ ., data = iris, model = model)
 }
 
 
