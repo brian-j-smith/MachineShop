@@ -48,7 +48,7 @@ SuperModel <- function(..., model = GBMModel, control = CVControl,
     params = as.list(environment()),
     fitbits = MLFitBits(
       predict = function(object, newdata, times, ...) {
-        newdata <- ModelFrame(object$formula, newdata, na.action = na.pass)
+        newdata <- ModelFrame(formula(object), newdata, na.action = na.pass)
         
         learner_predictors <- lapply(object$base_fits, function(fit) {
           predict(fit, newdata = newdata, times = object$times, type = "prob")
@@ -93,8 +93,7 @@ setClass("SuperModel", contains = "MLModel")
                           function(learner) fit(mf, model = learner)),
        super_fit = fit(super_mf, model = super_learner),
        all_vars = params$all_vars,
-       times = control@surv_times,
-       formula = formula(terms(mf))) %>%
+       times = control@surv_times) %>%
     asMLModelFit("SuperModelFit", model, x, response(mf))
 }
 

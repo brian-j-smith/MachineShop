@@ -70,12 +70,10 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
                                       "rank:pairwise", "rank:ndcg", "rank:map")
                    })
       params$objective <- match_indices(params$objective, obj_choices)
-      mfit <- xgboost::xgboost(x, y, weight = weights, params = params, ...)
-      mfit$formula <- formula
-      mfit
+      xgboost::xgboost(x, y, weight = weights, params = params, ...)
     },
     predict = function(object, newdata, ...) {
-      fo <- object$formula[-2]
+      fo <- formula(object)[-2]
       newmf <- model.frame(fo, newdata, na.action = na.pass)
       newx <- model.matrix(fo, newmf)[, -1, drop = FALSE]
       pred <- predict(unMLModelFit(object), newdata = newx)

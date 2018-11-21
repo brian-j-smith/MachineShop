@@ -73,13 +73,12 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
       mfit <- glmnet::glmnet(x, y, weights = weights, family = family,
                              nlambda = 1, ...)
       mfit$x <- x
-      mfit$formula <- formula
       mfit
     },
     predict = function(object, newdata, times, ...) {
       x <- object$x
       y <- response(object)
-      fo <- object$formula[-2]
+      fo <- formula(object)[-2]
       object <- unMLModelFit(object)
       newmf <- model.frame(fo, newdata, na.action = na.pass)
       newx <- model.matrix(fo, newmf)[, -1, drop = FALSE]

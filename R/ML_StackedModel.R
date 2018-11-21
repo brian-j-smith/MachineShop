@@ -97,8 +97,7 @@ setClass("StackedModel", contains = "MLModel")
   list(base_fits = lapply(base_learners,
                           function(learner) fit(mf, model = learner)),
        weights = weights,
-       times = times,
-       formula = formula(terms(mf))) %>%
+       times = times) %>%
     asMLModelFit("StackedModelFit", model, x, response(mf))
 }
 
