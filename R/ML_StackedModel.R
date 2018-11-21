@@ -52,11 +52,7 @@ StackedModel <- function(..., control = CVControl, weights = NULL) {
         }
         predicted
       },
-      varimp = function(object, ...) {
-        warning("variable importance values undefined for StackedModel")
-        varnames <- all.vars(object$formula[[3]])
-        structure(rep(NA_integer_, length(varnames)), names = varnames)
-      }
+      varimp = function(object, ...) NULL
     )
   )
   

@@ -208,8 +208,7 @@ MLModel <- function(name = "MLModel", packages = character(0),
                       stop("no fit function"),
                     predict = function(object, newdata, times, ...)
                       stop("no predict function"),
-                    varimp = function(object, ...)
-                      stop("no varimp function")) {
+                    varimp = function(object, ...) NULL) {
   
   stopifnot(types %in% c("binary", "factor", "matrix", "numeric", "ordered",
                          "Surv"))

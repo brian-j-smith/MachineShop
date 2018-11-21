@@ -24,6 +24,15 @@
 varimp <- function(object, scale = TRUE, ...) {
   stopifnot(is(object, "MLModelFit"))
   requireModelNamespaces(fitbit(object, "packages"))
-  varimp <- fitbit(object, "varimp")
-  VarImp(as(varimp(object, ...), "VarImp"), scale = scale)
+  vi <- fitbit(object, "varimp")(object, ...)
+  if (is.null(vi)) vi <- undef_varimp(object)
+  VarImp(as(vi, "VarImp"), scale = scale)
+}
+
+
+undef_varimp <- function(object) {
+  warning("variable importance not defined for ", class(object)[1],
+          call. = FALSE)
+  varnames <- labels(terms(fitbit(object, "x")))
+  structure(rep(NA_integer_, length(varnames)), names = varnames)
 }

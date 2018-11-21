@@ -60,11 +60,7 @@ SuperModel <- function(..., model = GBMModel, control = CVControl,
         
         predict(object$super_fit, newdata = mf, times = times, type = "prob")
       },
-      varimp = function(object, ...) {
-        warning("variable importance values undefined for SuperModel")
-        varnames <- all.vars(object$formula[[3]])
-        structure(rep(NA_integer_, length(varnames)), names = varnames)
-      }
+      varimp = function(object, ...) NULL
     )
   )
 

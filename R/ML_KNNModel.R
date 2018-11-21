@@ -47,11 +47,6 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
       args$test <- newdata
       pred <- do.call(kknn::kknn, args)
       if (pred$response == "continuous") pred$fitted.values else pred$prob
-    },
-    varimp = function(object, ...) {
-      warning("variable importance values undefined for KNNModel")
-      varnames <- labels(terms(object$formula))
-      structure(rep(NA_integer_, length(varnames)), names = varnames)
     }
   )
 }

@@ -8,8 +8,7 @@ MLModel(name = "MLModel", packages = character(0),
   types = character(0), params = list(), nvars = function(data) NULL,
   fit = function(formula, data, weights, ...) stop("no fit function"),
   predict = function(object, newdata, times, ...)
-  stop("no predict function"), varimp = function(object, ...)
-  stop("no varimp function"))
+  stop("no predict function"), varimp = function(object, ...) NULL)
 }
 \arguments{
 \item{name}{character string name for the instantiated MLModel object.}
