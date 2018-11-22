@@ -1081,6 +1081,29 @@ plot(lf, find = 75)
 
 <img src="man/figures/README-unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
 
+### Confusion Matrices
+
+``` r
+confusion(perf_versicolor)
+#> Model: GBMModel
+#>         Predicted
+#> Observed      FALSE       TRUE
+#>    FALSE 0.63914778 0.02751888
+#>    TRUE  0.03246353 0.30086980
+#> -------------------------------------------------------- 
+#> Model: RandomForestModel
+#>         Predicted
+#> Observed      FALSE       TRUE
+#>    FALSE 0.63516000 0.03150667
+#>    TRUE  0.02830667 0.30502667
+#> -------------------------------------------------------- 
+#> Model: NNetModel
+#>         Predicted
+#> Observed     FALSE      TRUE
+#>    FALSE 0.4916469 0.1750197
+#>    TRUE  0.1923730 0.1409604
+```
+
 ### Preprocessing Recipes
 
 ``` r

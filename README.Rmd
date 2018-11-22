@@ -263,6 +263,12 @@ lf <- lift(perf_versicolor)
 plot(lf, find = 75)
 ```
 
+### Confusion Matrices
+
+```{r}
+confusion(perf_versicolor)
+```
+
 ### Preprocessing Recipes
 
 ```{r}

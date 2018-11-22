@@ -35,18 +35,28 @@
 #' Continuous: m = matrix, n = numeric;
 #' Survival: S = Surv
 #' 
-#' The following set of standard model fitting, prediction, performance
+#' The following set of standard model training, prediction, performance
 #' assessment, and tuning functions are available for the model objects.
 #' 
+#' Training: 
 #' \tabular{ll}{
 #'   \code{\link{fit}} \tab Model Fitting \cr
-#'   \code{\link{predict}} \tab Model Prediction \cr
-#'   \code{\link{calibration}} \tab Model Calibration \cr
-#'   \code{\link{dependence}} \tab Parital Dependence \cr
-#'   \code{\link{lift}} \tab Lift Curves \cr
 #'   \code{\link{resample}} \tab Resample Estimation of Model Performance \cr
 #'   \code{\link{tune}} \tab Model Tuning \cr
+#' }
+#'
+#' Prediction:
+#' \tabular{ll}{
+#'   \code{\link{predict}} \tab Model Prediction \cr
+#' }
+#'
+#' Performance Assessment:
+#' \tabular{ll}{
+#'   \code{\link{calibration}} \tab Model Calibration \cr
+#'   \code{\link{confusion}} \tab Confusion Matrix \cr
+#'   \code{\link{dependence}} \tab Parital Dependence \cr
 #'   \code{\link{diff}} \tab Model Performance Differences \cr
+#'   \code{\link{lift}} \tab Lift Curves \cr
 #'   \code{\link{varimp}} \tab Variable Importance \cr
 #' }
 #' 
