@@ -128,7 +128,7 @@ setMethod("stack_loss", c("factor", "matrix"),
 
 setMethod("stack_loss", c("factor", "numeric"),
   function(observed, predicted, ...) {
-    stack_loss(observed, cbind(predicted, 1 - predicted))
+    stack_loss(observed, cbind(1 - predicted, predicted))
   }
 )
 
