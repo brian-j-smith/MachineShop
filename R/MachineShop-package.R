@@ -21,6 +21,7 @@
 #'   \code{\link{NNetModel}}           \tab f   \tab n   \tab   \cr
 #'   \code{\link{PLSModel}}            \tab f   \tab n   \tab   \cr
 #'   \code{\link{POLRModel}}           \tab o   \tab     \tab   \cr
+#'   \code{\link{QDAModel}}            \tab f   \tab     \tab   \cr
 #'   \code{\link{RandomForestModel}}   \tab f   \tab n   \tab   \cr
 #'   \code{\link{StackedModel}}        \tab f,o \tab m,n \tab S \cr
 #'   \code{\link{SuperModel}}          \tab f,o \tab m,n \tab S \cr
