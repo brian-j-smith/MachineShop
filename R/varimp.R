@@ -31,8 +31,7 @@ varimp <- function(object, scale = TRUE, ...) {
 
 
 undef_varimp <- function(object) {
-  warning("variable importance not defined for ", class(object)[1],
-          call. = FALSE)
+  warn("variable importance not defined for ", class(object)[1])
   varnames <- labels(terms(fitbit(object, "x")))
   structure(rep(NA_integer_, length(varnames)), names = varnames)
 }

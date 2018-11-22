@@ -39,8 +39,7 @@ utils::globalVariables(c("Found", "group", "i", "Lower", "Mean", "Midpoint",
 
 assert_equal_weights <- function(weights) {
   if (any(diff(weights) != 0)) {
-    warning("model weights are not supported and will be ignored",
-            call. = FALSE)
+    warn("model weights are not supported and will be ignored")
   }
 }
 
@@ -143,7 +142,7 @@ match_indices <- function(indices, choices) {
   indices <- na.omit(names(lookup)[lookup[indices]])
   if (length(indices) == 0) {
     indices <- names(lookup)[1]
-    warning("specified indices not found; using ", indices, " instead")
+    warn("specified indices not found; using ", indices, " instead")
   }
   indices
 }
@@ -256,4 +255,9 @@ terms.recipe <- function(x, ...) {
   lhs <- with(info, variable[role == "outcome"])
   rhs <- with(info, variable[role == "predictor"])
   terms(reformulate(rhs, lhs))
+}
+
+
+warn <- function(...) {
+  warning(..., call. = FALSE)
 }
