@@ -2,6 +2,15 @@
 
 ## Version Updates
 
+## 0.3
+* Implement linear models (``LMModel``), linear discriminant analysis (``LDAModel``), and quadratic discriminant analysis (``QDAModel``).
+* Implement confusion matrices.
+* Support matrix response variables.
+* Support user-specified stratification variables for resampling via the ``strata`` argument of ``ModelFrame`` or the role of ``"case_strata"`` for recipe variables. 
+* Support user-specified case weights for model fitting via the role of ``"case_weight"`` for recipe variables.
+* Provide fallback for models with undefined variable importance.
+* #2: Update the importing of ``prepper`` due to its relocation from ``rsample`` to ``recipes``.
+
 ## 0.2
 
 * Implement partial dependence, calibration, and lift estimation and plotting.
