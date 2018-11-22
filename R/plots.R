@@ -212,6 +212,24 @@ plot.CalibrationResamples <- function(x, type = c("line", "point"),
 
 #' @rdname plot-method
 #' 
+#' @seealso \code{\link{confusion}}
+#' 
+plot.ConfusionResamples <- function(x, ...) {
+  pl <- list()
+  for (name in names(x)) {
+    df <- as.data.frame(prop.table(x[[name]]), responseName = "Value")
+    df$Predicted <- with(df, factor(Predicted, rev(levels(Predicted))))
+    pl[[name]] <- ggplot(df, aes(Observed, Predicted, fill = Value)) +
+      geom_raster() +
+      labs(title = name, fill = "Probability") +
+      scale_fill_gradient(trans = "reverse")
+  }
+  pl
+}
+
+
+#' @rdname plot-method
+#' 
 #' @param find numeric percent of observed events at which to display reference
 #' lines indicating the corresponding percent tested in lift plots.
 #' 

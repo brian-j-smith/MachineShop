@@ -1038,15 +1038,6 @@ summary(superperf)
 #> MLogLoss 0.2562282 0.2518920 0.29874624 2.488601e-04 0.9773889  0
 ```
 
-### Partial Dependence Plots
-
-``` r
-pd <- dependence(gbmfit, select = c(Petal.Length, Petal.Width))
-plot(pd)
-```
-
-<img src="man/figures/README-unnamed-chunk-13-1.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-13-2.png" style="display: block; margin: auto;" />
-
 ### Calibration Curves
 
 ``` r
@@ -1054,7 +1045,50 @@ cal <- calibration(perf)
 plot(cal, se = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-14-1.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-14-2.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-14-3.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-13-1.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-13-2.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-13-3.png" style="display: block; margin: auto;" />
+
+### Confusion Matrices
+
+``` r
+(conf <- confusion(gbmperf))
+#> GBMModel :
+#>             Observed
+#> Predicted          setosa   versicolor    virginica
+#>   setosa     249.26950706   0.24607861   0.08790354
+#>   versicolor   0.71654226 230.40961492  26.64600588
+#>   virginica    0.01395068  19.34430647 223.26609058
+
+summary(conf)
+#> GBMModel :
+#> Resampled cases: 750
+#> Accuracy (SE): 0.9372603 (0.008854637)
+#> Majority class: 0.3333333
+#> Kappa: 0.9058904
+#> 
+#>                setosa versicolor virginica
+#> Observed    0.3333333  0.3333333 0.3333333
+#> Predicted   0.3328047  0.3436962 0.3234991
+#> Agreement   0.3323593  0.3072128 0.2976881
+#> Sensitivity 0.9970780  0.9216385 0.8930644
+#> Specificity 0.9993320  0.9452749 0.9612835
+#> PPV         0.9986619  0.8938499 0.9202130
+#> NPV         0.9985402  0.9602006 0.9473094
+```
+
+``` r
+plot(conf)
+```
+
+<img src="man/figures/README-unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
+
+### Partial Dependence Plots
+
+``` r
+pd <- dependence(gbmfit, select = c(Petal.Length, Petal.Width))
+plot(pd)
+```
+
+<img src="man/figures/README-unnamed-chunk-16-1.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-16-2.png" style="display: block; margin: auto;" />
 
 ### Lift Curves
 
@@ -1068,7 +1102,7 @@ lf <- lift(gbmperf_versicolor)
 plot(lf)
 ```
 
-<img src="man/figures/README-unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-17-1.png" style="display: block; margin: auto;" />
 
 ``` r
 rfperf_versicolor <- resample(fo_versicolor, data = iris,  model = RandomForestModel, control = control)
@@ -1079,30 +1113,7 @@ lf <- lift(perf_versicolor)
 plot(lf, find = 75)
 ```
 
-<img src="man/figures/README-unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
-
-### Confusion Matrices
-
-``` r
-confusion(perf_versicolor)
-#> Model: GBMModel
-#>         Predicted
-#> Observed      FALSE       TRUE
-#>    FALSE 0.63914778 0.02751888
-#>    TRUE  0.03246353 0.30086980
-#> -------------------------------------------------------- 
-#> Model: RandomForestModel
-#>         Predicted
-#> Observed      FALSE       TRUE
-#>    FALSE 0.63516000 0.03150667
-#>    TRUE  0.02830667 0.30502667
-#> -------------------------------------------------------- 
-#> Model: NNetModel
-#>         Predicted
-#> Observed     FALSE      TRUE
-#>    FALSE 0.4916469 0.1750197
-#>    TRUE  0.1923730 0.1409604
-```
+<img src="man/figures/README-unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
 
 ### Preprocessing Recipes
 

@@ -1,12 +1,18 @@
 #' Confusion Matrix
 #' 
-#' Calculate confusion matrices summarizing the proportions of cross-classified
-#' observed and predicted responses
+#' Calculate confusion matrices of cross-classified predicted and observed
+#' responses.
 #' 
-#' @param x Resamples object.
+#' @param x \code{Resamples} object.
 #' @param ... arguments passed to other methods.
 #' 
-#' @return \code{by} class object that inherits from \code{list}.
+#' @details
+#' Responses are summed directly over predicted class probabilities for the
+#' cross-classification and will thus appear as decimal numbers that can be
+#' interpreted as expected counts.
+#' 
+#' @return \code{ConfusionResamples} class object that inherits from
+#' \code{list}.
 #'  
 #' @seealso \code{\link{resample}}
 #' 
@@ -17,9 +23,12 @@
 confusion <- function(x, ...) {
   stopifnot(is(x, "Resamples"))
   
-  by(response(x), list(Model = response(x)$Model), function(data) {
+  conf <- by(response(x), list(Model = response(x)$Model), function(data) {
     .confusion(data$Observed, data$Predicted)
   }, simplify = FALSE)
+  
+  structure(as(conf, "list"), names = names(conf),
+            class = c("ConfusionResamples", "listof"))
 }
 
 
@@ -39,7 +48,7 @@ setMethod(".confusion", c("factor", "matrix"),
     df <- aggregate(predicted, list(observed), sum, na.rm = TRUE)
     conf_tbl <- as.table(as.matrix(df[, -1, drop = FALSE]))
     dimnames(conf_tbl) <- list(Observed = df[[1]], Predicted = names(df)[-1])
-    conf_tbl / sum(conf_tbl)
+    t(conf_tbl)
   }
 )
 

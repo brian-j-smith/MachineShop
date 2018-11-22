@@ -373,6 +373,13 @@ HTestResamples <- setClass("HTestResamples",
 )
 
 
+SummaryConfusion <- setClass("SummaryConfusion",
+  slots = c("N" = "numeric", "Accuracy" = "numeric", "Majority" = "numeric",
+            "Kappa" = "numeric"),
+  contains = "matrix"
+)
+
+
 VarImp <- setClass("VarImp", contains = "data.frame")
 
 

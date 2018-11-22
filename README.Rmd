@@ -228,18 +228,30 @@ superperf <- resample(fo, data = iris, model = SuperModel(GBMModel, RandomForest
 summary(superperf)
 ```
 
-### Partial Dependence Plots
-
-```{r results = "hide"}
-pd <- dependence(gbmfit, select = c(Petal.Length, Petal.Width))
-plot(pd)
-```
-
 ### Calibration Curves
 
 ```{r results = "hide"}
 cal <- calibration(perf)
 plot(cal, se = TRUE)
+```
+
+### Confusion Matrices
+
+```{r}
+(conf <- confusion(gbmperf))
+
+summary(conf)
+```
+
+```{r results = "hide"}
+plot(conf)
+```
+
+### Partial Dependence Plots
+
+```{r results = "hide"}
+pd <- dependence(gbmfit, select = c(Petal.Length, Petal.Width))
+plot(pd)
 ```
 
 ### Lift Curves
@@ -261,12 +273,6 @@ nnetperf_versicolor <- resample(fo_versicolor, data = iris,  model = NNetModel, 
 perf_versicolor <- Resamples(gbmperf_versicolor, rfperf_versicolor, nnetperf_versicolor)
 lf <- lift(perf_versicolor)
 plot(lf, find = 75)
-```
-
-### Confusion Matrices
-
-```{r}
-confusion(perf_versicolor)
 ```
 
 ### Preprocessing Recipes

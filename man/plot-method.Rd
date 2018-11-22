@@ -6,6 +6,7 @@
 \alias{plot.PartialDependence}
 \alias{plot.Resamples}
 \alias{plot.CalibrationResamples}
+\alias{plot.ConfusionResamples}
 \alias{plot.LiftResamples}
 \alias{plot.VarImp}
 \title{Model Performance Plots}
@@ -20,6 +21,8 @@
 
 \method{plot}{CalibrationResamples}(x, type = c("line", "point"),
   se = FALSE, ...)
+
+\method{plot}{ConfusionResamples}(x, ...)
 
 \method{plot}{LiftResamples}(x, find = NULL, ...)
 
@@ -77,6 +80,8 @@ plot(perf)
 \code{\link{dependence}}
 
 \code{\link{calibration}}
+
+\code{\link{confusion}}
 
 \code{\link{lift}}
 

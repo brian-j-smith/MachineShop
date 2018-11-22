@@ -7,16 +7,22 @@
 confusion(x, ...)
 }
 \arguments{
-\item{x}{Resamples object.}
+\item{x}{\code{Resamples} object.}
 
 \item{...}{arguments passed to other methods.}
 }
 \value{
-\code{by} class object that inherits from \code{list}.
+\code{ConfusionResamples} class object that inherits from
+\code{list}.
 }
 \description{
-Calculate confusion matrices summarizing the proportions of cross-classified
-observed and predicted responses
+Calculate confusion matrices of cross-classified predicted and observed
+responses.
+}
+\details{
+Responses are summed directly over predicted class probabilities for the
+cross-classification and will thus appear as decimal numbers that can be
+interpreted as expected counts.
 }
 \examples{
 perf <- resample(Species ~ ., data = iris, model = GBMModel)
