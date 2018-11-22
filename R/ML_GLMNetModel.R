@@ -70,10 +70,10 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
                                "numeric" = "gaussian",
                                "Surv" = "cox")
       }
-      mfit <- glmnet::glmnet(x, y, weights = weights, family = family,
-                             nlambda = 1, ...)
-      mfit$x <- x
-      mfit
+      modelfit <- glmnet::glmnet(x, y, weights = weights, family = family,
+                                 nlambda = 1, ...)
+      modelfit$x <- x
+      modelfit
     },
     predict = function(object, newdata, times, ...) {
       x <- object$x
