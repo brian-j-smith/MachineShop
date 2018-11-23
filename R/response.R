@@ -4,7 +4,7 @@
 #' 
 #' @rdname response-methods
 #' 
-#' @param object object containing a response.
+#' @param object object containing response variable values.
 #' @param ... arguments passed to other methods.
 #' 
 #' @examples
@@ -29,8 +29,20 @@ response.formula <- function(object, data, ...) {
 }
 
 
+response.MLModelFit <- function(object, ...) {
+  fitbit(object, "y")
+}
+
+
 response.ModelFrame <- function(object, ...) {
   response(formula(terms(object)), object)
+}
+
+
+#' @rdname response-methods
+#' 
+response.Resamples <- function(object, ...) {
+  object@response
 }
 
 
@@ -42,9 +54,4 @@ response.tbl_df <- function(object, ...) {
 response.terms <- function(object, ...) {
   i <- attr(object, "response")
   all.vars(object)[i]
-}
-
-
-response.MLModelFit <- function(object, ...) {
-  fitbit(object, "y")
 }

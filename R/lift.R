@@ -21,9 +21,7 @@
 lift <- function(x, ...) {
   stopifnot(is(x, "Resamples"))
   
-  response <- x@response
-  
-  lift_list <- by(response, response$Model, function(data) {
+  lift_list <- by(response(x), response(x)$Model, function(data) {
     .lift(data$Observed, data$Predicted) %>%
       cbind(Model = data$Model[1])
   }, simplify = FALSE)

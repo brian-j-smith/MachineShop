@@ -92,7 +92,7 @@ t.test.ResamplesDiff <- function(x, adjust = "holm", ...)
     apply(2, p.adjust, method = adjust)
   meandiffs <- apply(x, c(3, 2), mean, na.rm = TRUE)
   
-  model_names <- levels(x@response$Model)
+  model_names <- levels(response(x)$Model)
   num_models <- length(model_names)
   results <- array(NA, dim = c(num_models, num_models, dim(x)[2]),
                    dimnames = list(model_names, model_names, dimnames(x)[[2]]))

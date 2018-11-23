@@ -105,7 +105,7 @@ setMethod("show", "MLModelTune",
     print(object@grid)
     cat("\nresamples:\n")
     print(object@resamples)
-    model_names <- levels(object@resamples@response$Model)
+    model_names <- levels(response(object@resamples)$Model)
     if (length(model_names) > 1) {
       cat("Selected: ", model_names[object@selected],
           " (", names(object@selected), ")\n\n", sep = "")
@@ -117,7 +117,7 @@ setMethod("show", "MLModelTune",
 setMethod("show", "Resamples",
   function(object) {
     cat("An object of class \"", class(object), "\"\n\n",
-        "Models: ", toString(levels(object@response$Model)), "\n\n",
+        "Models: ", toString(levels(response(object)$Model)), "\n\n",
         "Metrics: ", toString(dimnames(object)[[2]]), "\n\n", sep = "")
     if (length(object@strata)) {
       cat("Stratification variable:", object@strata, "\n\n")

@@ -17,9 +17,7 @@
 confusion <- function(x, ...) {
   stopifnot(is(x, "Resamples"))
   
-  response <- x@response
-  
-  by(response, list(Model = response$Model), function(data) {
+  by(response(x), list(Model = response(x)$Model), function(data) {
     .confusion(data$Observed, data$Predicted)
   }, simplify = FALSE)
 }

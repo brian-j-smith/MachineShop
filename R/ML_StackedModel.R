@@ -76,7 +76,7 @@ setClass("StackedModel", contains = "MLModel")
     complete_responses <- TRUE
     for (i in 1:num_learners) {
       stack[[i]] <-
-        resample(x, model = base_learners[[i]], control = control)@response
+        response(resample(x, model = base_learners[[i]], control = control))
       complete_responses <-
         complete_responses & complete.cases(stack[[i]])
     }

@@ -26,10 +26,9 @@
 calibration <- function(x, n = 10, ...) {
   stopifnot(is(x, "Resamples"))
   
-  response <- x@response
   times <- x@control@surv_times
   
-  cal_list <- by(response, response$Model, function(data) {
+  cal_list <- by(response(x), response(x)$Model, function(data) {
     .calibration(data$Observed, data$Predicted, n, times = times) %>%
       cbind(Model = data$Model[1])
   }, simplify = FALSE)

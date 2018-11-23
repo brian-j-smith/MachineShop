@@ -81,7 +81,7 @@ setClass("SuperModel", contains = "MLModel")
   learner_predictors <- list()
   for (i in seq(base_learners)) {
     response <-
-      resample(x, model = base_learners[[i]], control = control)@response
+      response(resample(x, model = base_learners[[i]], control = control))
     learner_predictors[[i]] <- response$Predicted
   }
   df <- make_super_df(response$Observed, learner_predictors, response$Case)
