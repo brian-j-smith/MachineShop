@@ -977,7 +977,7 @@ summary(perfdiff)
 #> RF - NNet  -0.80172731 -0.006653868 1.5157124 -7.340321 1.9439951  0
 
 t.test(perfdiff)
-#> An object of class "ResamplesHTest"
+#> An object of class "HTestResamples"
 #> 
 #> Upper diagonal: mean differences (row - column)
 #> Lower diagonal: p-values

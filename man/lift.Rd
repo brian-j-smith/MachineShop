@@ -7,12 +7,13 @@
 lift(x, ...)
 }
 \arguments{
-\item{x}{Resamples object.}
+\item{x}{\code{Resamples} object.}
 
 \item{...}{arguments passed to other methods.}
 }
 \value{
-ResamplesLift class object.
+\code{LiftResamples} class object that inherits from
+\code{data.frame}.
 }
 \description{
 Calculate lift estimates from observed and resampled response variable

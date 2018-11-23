@@ -16,10 +16,10 @@ implemented by \code{\link[stats]{p.adjust}}.}
 \item{...}{arguments passed to other metrics.}
 }
 \value{
-ResamplesHTest class object that inherits from array.  p-values and
-mean differences are contained in the lower and upper triangular portions,
-respectively, of the first two dimensions.  Model pairs are contined in the
-third dimension.
+\code{HTestResamples} class object that inherits from \code{array}.
+p-values and mean differences are contained in the lower and upper triangular
+portions, respectively, of the first two dimensions.  Model pairs are
+contined in the third dimension.
 }
 \description{
 Paired t-test comparisons of resampled performance metrics from different

@@ -7,7 +7,7 @@
 calibration(x, n = 10, ...)
 }
 \arguments{
-\item{x}{Resamples object.}
+\item{x}{\code{Resamples} object.}
 
 \item{n}{number of resampled response variable bins within which to
 calculate observed mean values.}
@@ -15,7 +15,8 @@ calculate observed mean values.}
 \item{...}{arguments passed to other methods.}
 }
 \value{
-ResamplesCalibration class object.
+\code{CalibrationResamples} class object that inherits from
+\code{data.frame}.
 }
 \description{
 Calculate calibration estimates from observed and resampled response variable

@@ -168,7 +168,7 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
 #' 
 #' @seealso \code{\link{calibration}}
 #' 
-plot.ResamplesCalibration <- function(x, type = c("line", "point"), 
+plot.CalibrationResamples <- function(x, type = c("line", "point"), 
                                       se = FALSE, ...) {
   type <- match.arg(type)
   
@@ -206,9 +206,7 @@ plot.ResamplesCalibration <- function(x, type = c("line", "point"),
     
   }, simplify = FALSE)
   
-  pl <- as(pl, "list")
-  names(pl) <- levels(x$Model)
-  pl
+  structure(as(pl, "list"), names = levels(x$Model))
 }
 
 
@@ -220,7 +218,7 @@ plot.ResamplesCalibration <- function(x, type = c("line", "point"),
 #' @seealso
 #' \code{\link{lift}}
 #' 
-plot.ResamplesLift <- function(x, find = NULL, ...) {
+plot.LiftResamples <- function(x, find = NULL, ...) {
   aes_model <- if (nlevels(x$Model) > 1) {
     aes(x = Tested, y = Found, color = Model)
   } else {

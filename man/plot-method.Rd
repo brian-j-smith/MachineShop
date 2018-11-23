@@ -5,8 +5,8 @@
 \alias{plot.MLModelTune}
 \alias{plot.PartialDependence}
 \alias{plot.Resamples}
-\alias{plot.ResamplesCalibration}
-\alias{plot.ResamplesLift}
+\alias{plot.CalibrationResamples}
+\alias{plot.LiftResamples}
 \alias{plot.VarImp}
 \title{Model Performance Plots}
 \usage{
@@ -18,10 +18,10 @@
 \method{plot}{Resamples}(x, metrics = NULL, stat = mean,
   type = c("boxplot", "density", "errorbar", "violin"), ...)
 
-\method{plot}{ResamplesCalibration}(x, type = c("line", "point"),
+\method{plot}{CalibrationResamples}(x, type = c("line", "point"),
   se = FALSE, ...)
 
-\method{plot}{ResamplesLift}(x, find = NULL, ...)
+\method{plot}{LiftResamples}(x, find = NULL, ...)
 
 \method{plot}{VarImp}(x, n = NULL, ...)
 }

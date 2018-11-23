@@ -128,7 +128,7 @@ setMethod("show", "Resamples",
 )
 
 
-setMethod("show", "ResamplesHTest",
+setMethod("show", "HTestResamples",
   function(object) {
     cat("An object of class \"", class(object), "\"\n\n",
         "Upper diagonal: mean differences (row - column)\n",

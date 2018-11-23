@@ -367,7 +367,7 @@ ResamplesDiff <- setClass("ResamplesDiff",
 )
 
 
-ResamplesHTest <- setClass("ResamplesHTest",
+HTestResamples <- setClass("HTestResamples",
   slots = c("adjust" = "character"),
   contains = "array"
 )

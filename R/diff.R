@@ -63,10 +63,10 @@ diff.Resamples <- function(x, ...) {
 #' implemented by \code{\link[stats]{p.adjust}}.
 #' @param ... arguments passed to other metrics.
 #' 
-#' @return ResamplesHTest class object that inherits from array.  p-values and
-#' mean differences are contained in the lower and upper triangular portions,
-#' respectively, of the first two dimensions.  Model pairs are contined in the
-#' third dimension.
+#' @return \code{HTestResamples} class object that inherits from \code{array}.
+#' p-values and mean differences are contained in the lower and upper triangular
+#' portions, respectively, of the first two dimensions.  Model pairs are
+#' contined in the third dimension.
 #' 
 #' @seealso \code{\link{diff}}
 #' 
@@ -101,5 +101,5 @@ t.test.ResamplesDiff <- function(x, adjust = "holm", ...)
   results <- aperm(results, perm = c(2, 1, 3))
   results[indices] <- pvalues
 
-  ResamplesHTest(results, adjust = adjust)
+  HTestResamples(results, adjust = adjust)
 }

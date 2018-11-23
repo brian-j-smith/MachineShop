@@ -3,10 +3,11 @@
 #' Calculate lift estimates from observed and resampled response variable
 #' values.
 #' 
-#' @param x Resamples object.
+#' @param x \code{Resamples} object.
 #' @param ... arguments passed to other methods.
 #' 
-#' @return ResamplesLift class object.
+#' @return \code{LiftResamples} class object that inherits from
+#' \code{data.frame}.
 #'  
 #' @seealso \code{\link{resample}}, \code{\link{plot}}
 #' 
@@ -27,7 +28,7 @@ lift <- function(x, ...) {
       cbind(Model = data$Model[1])
   }, simplify = FALSE)
   
-  structure(do.call(rbind, lift_list), class = c("ResamplesLift", "data.frame"))
+  structure(do.call(rbind, lift_list), class = c("LiftResamples", "data.frame"))
 }
 
 

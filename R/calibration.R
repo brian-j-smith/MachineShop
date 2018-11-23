@@ -3,12 +3,13 @@
 #' Calculate calibration estimates from observed and resampled response variable
 #' values.
 #' 
-#' @param x Resamples object.
+#' @param x \code{Resamples} object.
 #' @param n number of resampled response variable bins within which to
 #' calculate observed mean values.
 #' @param ... arguments passed to other methods.
 #' 
-#' @return ResamplesCalibration class object.
+#' @return \code{CalibrationResamples} class object that inherits from
+#' \code{data.frame}.
 #'  
 #' @seealso \code{\link{resample}}, \code{\link{plot}}
 #' 
@@ -34,7 +35,7 @@ calibration <- function(x, n = 10, ...) {
   }, simplify = FALSE)
 
   structure(do.call(rbind, cal_list),
-            class = c("ResamplesCalibration", "data.frame"))
+            class = c("CalibrationResamples", "data.frame"))
 }
 
 
