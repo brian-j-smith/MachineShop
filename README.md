@@ -432,6 +432,36 @@ m, n
 
 <td style="text-align:left;">
 
+Mixture Discriminant Analysis
+
+</td>
+
+<td style="text-align:center;">
+
+MDAModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 Feed-Forward Neural Networks
 
 </td>

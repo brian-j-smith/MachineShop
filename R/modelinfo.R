@@ -27,6 +27,7 @@ modelinfo <- function(...) {
     "KNNModel" = "K-Nearest Neighbors Model",
     "LDAModel" = "Linear Discriminant Analysis",
     "LMModel" = "Linear Model",
+    "MDAModel" = "Mixture Discriminant Analysis",
     "NNetModel" = "Feed-Forward Neural Networks",
     "PLSModel" = "Partial Least Squares",
     "POLRModel" = "Ordered Logistic Regression",
