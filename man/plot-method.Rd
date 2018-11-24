@@ -2,22 +2,20 @@
 % Please edit documentation in R/plots.R
 \name{plot}
 \alias{plot}
-\alias{plot.MLModelTune}
-\alias{plot.PartialDependence}
 \alias{plot.Resamples}
+\alias{plot.MLModelTune}
 \alias{plot.CalibrationResamples}
 \alias{plot.ConfusionResamples}
 \alias{plot.LiftResamples}
+\alias{plot.PartialDependence}
 \alias{plot.VarImp}
 \title{Model Performance Plots}
 \usage{
-\method{plot}{MLModelTune}(x, metrics = NULL, stat = mean,
-  type = c("boxplot", "density", "errorbar", "line", "violin"), ...)
-
-\method{plot}{PartialDependence}(x, stats = NULL, ...)
-
 \method{plot}{Resamples}(x, metrics = NULL, stat = mean,
   type = c("boxplot", "density", "errorbar", "violin"), ...)
+
+\method{plot}{MLModelTune}(x, metrics = NULL, stat = mean,
+  type = c("boxplot", "density", "errorbar", "line", "violin"), ...)
 
 \method{plot}{CalibrationResamples}(x, type = c("line", "point"),
   se = FALSE, ...)
@@ -25,6 +23,8 @@
 \method{plot}{ConfusionResamples}(x, ...)
 
 \method{plot}{LiftResamples}(x, find = NULL, ...)
+
+\method{plot}{PartialDependence}(x, stats = NULL, ...)
 
 \method{plot}{VarImp}(x, n = NULL, ...)
 }
@@ -41,13 +41,13 @@ metrics to plot.}
 
 \item{...}{arguments passed to other methods.}
 
-\item{stats}{vector of numeric indexes or character names of partial
-dependence summary statistics to plot.}
-
 \item{se}{logical indicating whether to include standard error bars.}
 
 \item{find}{numeric percent of observed events at which to display reference
 lines indicating the corresponding percent tested in lift plots.}
+
+\item{stats}{vector of numeric indexes or character names of partial
+dependence summary statistics to plot.}
 
 \item{n}{number of most important variables to include in the plot
 [default: all].}
@@ -74,16 +74,17 @@ plot(perf)
 
 }
 \seealso{
-\code{\link{diff}}, \code{\link{resample}}, \code{\link{Resamples}},
-\code{\link{tune}}
+\code{\link{diff}}, \code{\link{resample}}, \code{\link{Resamples}}
 
-\code{\link{dependence}}
+\code{\link{tune}}
 
 \code{\link{calibration}}
 
 \code{\link{confusion}}
 
 \code{\link{lift}}
+
+\code{\link{dependence}}
 
 \code{\link{varimp}}
 }

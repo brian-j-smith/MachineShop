@@ -15,8 +15,7 @@
 #' the first for single models, and models and metrics in the first and third,
 #' respectively, for multiple models.
 #' 
-#' @seealso \code{\link{diff}}, \code{\link{resample}}, \code{\link{Resamples}},
-#' \code{\link{tune}}
+#' @seealso \code{\link{diff}}, \code{\link{resample}}, \code{\link{Resamples}}
 #' 
 #' @examples
 #' ## Factor response example
@@ -31,19 +30,6 @@
 #' 
 #' perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
 #' summary(perf)
-#' 
-summary.MLModelTune <- function(object,
-                                stats = c("Mean" = mean,
-                                          "Median" = median,
-                                          "SD" = sd,
-                                          "Min" = min,
-                                          "Max" = max),
-                                na.rm = TRUE, ...) {
-  summary(object@resamples, stats = stats, na.rm = na.rm, ...)
-}
-
-
-#' @rdname summary-methods
 #' 
 summary.Resamples <- function(object,
                               stats = c("Mean" = mean,
@@ -71,6 +57,21 @@ summary.Resamples <- function(object,
     perm <- c(perm, 3)
   }
   aperm(apply(object, margins, f), perm = perm)
+}
+
+
+#' @rdname summary-methods
+#' 
+#' @seealso \code{\link{tune}}
+#' 
+summary.MLModelTune <- function(object,
+                                stats = c("Mean" = mean,
+                                          "Median" = median,
+                                          "SD" = sd,
+                                          "Min" = min,
+                                          "Max" = max),
+                                na.rm = TRUE, ...) {
+  summary(object@resamples, stats = stats, na.rm = na.rm, ...)
 }
 
 

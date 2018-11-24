@@ -2,15 +2,15 @@
 % Please edit documentation in R/summary.R
 \name{summary}
 \alias{summary}
-\alias{summary.MLModelTune}
 \alias{summary.Resamples}
+\alias{summary.MLModelTune}
 \alias{summary.ConfusionResamples}
 \title{Model Performance Summary}
 \usage{
-\method{summary}{MLModelTune}(object, stats = c(Mean = mean, Median =
+\method{summary}{Resamples}(object, stats = c(Mean = mean, Median =
   median, SD = sd, Min = min, Max = max), na.rm = TRUE, ...)
 
-\method{summary}{Resamples}(object, stats = c(Mean = mean, Median =
+\method{summary}{MLModelTune}(object, stats = c(Mean = mean, Median =
   median, SD = sd, Min = min, Max = max), na.rm = TRUE, ...)
 
 \method{summary}{ConfusionResamples}(object, ...)
@@ -49,7 +49,8 @@ summary(perf)
 
 }
 \seealso{
-\code{\link{diff}}, \code{\link{resample}}, \code{\link{Resamples}},
+\code{\link{diff}}, \code{\link{resample}}, \code{\link{Resamples}}
+
 \code{\link{tune}}
 
 \code{\link{confusion}}
