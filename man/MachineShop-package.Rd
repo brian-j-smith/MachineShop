@@ -22,6 +22,7 @@ with the \code{\link{modelinfo}} function.
   \code{\link{CForestModel}}        \tab f   \tab n   \tab S \cr
   \code{\link{CoxModel}}            \tab     \tab     \tab S \cr
   \code{\link{CoxStepAICModel}}     \tab     \tab     \tab S \cr
+  \code{\link{FDAModel}}            \tab f   \tab     \tab   \cr
   \code{\link{GBMModel}}            \tab f   \tab n   \tab S \cr
   \code{\link{GLMModel}}            \tab b   \tab n   \tab   \cr
   \code{\link{GLMStepAICModel}}     \tab b   \tab n   \tab   \cr

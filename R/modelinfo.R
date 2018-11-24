@@ -20,6 +20,7 @@ modelinfo <- function(...) {
     "CForestModel" = "Conditional Inference Trees",
     "CoxModel" = "Cox Regression",
     "CoxStepAICModel" = "Cox Regression (Stepwise)",
+    "FDAModel" = "Flexible Discriminant Analysis",
     "GBMModel" = "Gradient Boosted Models",
     "GLMModel" = "Generalized Linear Models",
     "GLMStepAICModel" = "Generalized Linear Models (Stepwise)",

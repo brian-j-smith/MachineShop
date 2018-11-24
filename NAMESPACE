@@ -17,10 +17,11 @@ importFrom(recipes, bake, juice, prep, prepper)
 importFrom(rsample, assessment, bootstraps, initial_split, rsample2caret,
            testing, vfold_cv)
 importFrom(Rsolnp, solnp)
-importFrom(stats, aggregate, approx, coef, complete.cases, cor, formula,
-           get_all_vars, median, model.frame, model.matrix, model.response,
-           model.weights, na.fail, na.omit, na.pass, p.adjust, pchisq, predict,
-           quantile, reformulate, reshape, sd, t.test, terms, vcov)
+importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
+           formula, get_all_vars, median, model.frame, model.matrix,
+           model.response, model.weights, na.fail, na.omit, na.pass, p.adjust,
+           pchisq, predict, quantile, reformulate, reshape, sd, t.test, terms,
+           vcov)
 importFrom(survival, is.Surv, Surv, survfit)
 importFrom(survivalROC, survivalROC)
 importFrom(utils, combn, head, stack, tail)
@@ -53,6 +54,7 @@ export(MLModel,
        CForestModel,
        CoxModel,
        CoxStepAICModel,
+       FDAModel,
        GBMModel,
        GLMModel,
        GLMStepAICModel,
