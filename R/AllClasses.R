@@ -244,6 +244,14 @@ setClass("MLModelFit",
 
 
 setClass("SVMModelFit", contain = c("MLModelFit", "ksvm"))
+setClass("SVMANOVAModelFit", contain = c("MLModelFit", "ksvm"))
+setClass("SVMBesselModelFit", contain = c("MLModelFit", "ksvm"))
+setClass("SVMLaplaceModelFit", contain = c("MLModelFit", "ksvm"))
+setClass("SVMLinearModelFit", contain = c("MLModelFit", "ksvm"))
+setClass("SVMPolyModelFit", contain = c("MLModelFit", "ksvm"))
+setClass("SVMRadialModelFit", contain = c("MLModelFit", "ksvm"))
+setClass("SVMSplineModelFit", contain = c("MLModelFit", "ksvm"))
+setClass("SVMTanhModelFit", contain = c("MLModelFit", "ksvm"))
 setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 
 

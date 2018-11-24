@@ -69,7 +69,9 @@ SVMModel <- function(scaled = TRUE, type = NULL,
 #' @param ... arguments to be passed to \code{SVMModel}.
 #' 
 SVMANOVAModel <- function(sigma = 1, degree = 1, ...) {
-  .SVMModel("anovadot", environment(), ...)
+  model <- .SVMModel("anovadot", environment(), ...)
+  model@name <- "SVMANOVAModel"
+  model
 }
 
 
@@ -78,21 +80,27 @@ SVMANOVAModel <- function(sigma = 1, degree = 1, ...) {
 #' @param order order of the Bessel function to be used as a kernel.
 #' 
 SVMBesselModel <- function(sigma = 1, order = 1, degree = 1, ...) {
-  .SVMModel("besseldot", environment(), ...)
+  model <- .SVMModel("besseldot", environment(), ...)
+  model@name <- "SVMBesselModel"
+  model
 }
 
 
 #' @rdname SVMModel
 #' 
 SVMLaplaceModel <- function(sigma = NULL, ...) {
-  .SVMModel("laplacedot", environment(), ...)
+  model <- .SVMModel("laplacedot", environment(), ...)
+  model@name <- "SVMLaplaceModel"
+  model
 }
 
 
 #' @rdname SVMModel
 #' 
 SVMLinearModel <- function(...) {
-  .SVMModel("vanilladot", environment(), ...)
+  model <- .SVMModel("vanilladot", environment(), ...)
+  model@name <- "SVMLinearModel"
+  model
 }
 
 
@@ -109,28 +117,36 @@ SVMLinearModel <- function(...) {
 #' fit(medv ~ ., data = Boston, model = SVMRadialModel())
 #' 
 SVMPolyModel <- function(degree = 1, scale = 1, offset = 1, ...) {
-  .SVMModel("polydot", environment(), ...)
+  model <- .SVMModel("polydot", environment(), ...)
+  model@name <- "SVMPolyModel"
+  model
 }
 
 
 #' @rdname SVMModel
 #' 
 SVMRadialModel <- function(sigma = NULL, ...) {
-  .SVMModel("rbfdot", environment(), ...)
+  model <- .SVMModel("rbfdot", environment(), ...)
+  model@name <- "SVMRadialModel"
+  model
 }
 
 
 #' @rdname SVMModel
 #' 
 SVMSplineModel <- function(...) {
-  .SVMModel("splinedot", environment(), ...)
+  model <- .SVMModel("splinedot", environment(), ...)
+  model@name <- "SVMSplineModel"
+  model
 }
 
 
 #' @rdname SVMModel
 #' 
 SVMTanhModel <- function(scale = 1, offset = 1, ...) {
-  .SVMModel("tanhdot", environment(), ...)
+  model <- .SVMModel("tanhdot", environment(), ...)
+  model@name <- "SVMTanhModel"
+  model
 }
 
 

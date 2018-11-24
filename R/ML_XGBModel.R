@@ -124,7 +124,9 @@ XGBDARTModel <- function(objective = NULL, base_score = 0.5,
                          grow_policy="depthwise", max_leaves = 0, max_bin = 256,
                          sample_type = "uniform", normalize_type = "tree",
                          rate_drop = 0, one_drop = 0, skip_drop = 0, ...) {
-  .XGBModel("dart", environment(), ...)
+  model <- .XGBModel("dart", environment(), ...)
+  model@name <- "XGBDARTModel"
+  model
 }
 
 
@@ -133,7 +135,9 @@ XGBDARTModel <- function(objective = NULL, base_score = 0.5,
 XGBLinearModel <- function(objective = NULL, base_score = 0.5,
                            lambda = 0, alpha = 0, updater = "shotgun",
                            feature_selector = "cyclic", top_k = 0, ...) {
-  .XGBModel("gblinear", environment(), ...)
+  model <- .XGBModel("gblinear", environment(), ...)
+  model@name <- "XGBLinearModel"
+  model
 }
 
 
@@ -149,7 +153,9 @@ XGBTreeModel <- function(objective = NULL, base_score = 0.5,
                          refresh_leaf = 1, process_type = "default",
                          grow_policy="depthwise", max_leaves = 0, max_bin = 256,
                          ...) {
-  .XGBModel("gbtree", environment(), ...)
+  model <- .XGBModel("gbtree", environment(), ...)
+  model@name <- "XGBTreeModel"
+  model
 }
 
 
