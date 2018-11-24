@@ -2,7 +2,8 @@
 #' \pkg{MachineShop} provides a common interface to machine learning and
 #' statistical models provided by other packages.  Supported models are
 #' summarized in the table below according to the types of response variables
-#' with which each can be used.
+#' with which each can be used.  Additional model information can be obtained
+#' with the \code{\link{modelinfo}} function.
 #' 
 #' \tabular{lcccc}{
 #'   \strong{Model Objects} \tab \strong{Categorical} \tab \strong{Continuous}

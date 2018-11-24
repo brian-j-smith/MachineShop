@@ -28,34 +28,15 @@ library(kableExtra)
 ```{r echo = FALSE}
 library(MachineShop)
 
-modelnames <- c("C5.0 Classification" = "C50Model",
-                "Conditional Inference Trees" = "CForestModel",
-                "Cox Regression" = "CoxModel",
-                "Gradient Boosted Models" = "GBMModel",
-                "Generalized Linear Models" = "GLMModel",
-                "Lasso and Elastic-Net" = "GLMNetModel",
-                "K-Nearest Neighbors Model" = "KNNModel",
-                "Linear Discriminant Analysis" = "LDAModel",
-                "Linear Model" = "LMModel",
-                "Feed-Forward Neural Networks" = "NNetModel",
-                "Partial Least Squares" = "PLSModel",
-                "Ordered Logistic Regression" = "POLRModel",
-                "Quadratic Discriminant Analysis" = "QDAModel",
-                "Random Forests" = "RandomForestModel",
-                "Stacked Regression" = "StackedModel",
-                "Super Learner" = "SuperModel",
-                "Survival Regression" = "SurvRegModel",
-                "Support Vector Machines" = "SVMModel",
-                "Extreme Gradient Boosting" = "XGBModel")
-
+info <- modelinfo()
 types <- c("binary" = "b", "factor" = "f", "matrix" = "m", "numeric" = "n",
            "ordered" = "o", "Surv" = "S")
-x <- lapply(modelnames, function(modelname) {
-  model <- get(modelname)()
-  structure(c(modelname, ifelse(names(types) %in% model@types, types, NA)),
-            names = c("Constructor", names(types)))
+x <- lapply(names(info), function(modelname) {
+  c(modelname, ifelse(names(types) %in% info[[modelname]]$types, types, NA))
 })
 df <- as.data.frame(do.call(rbind, x), stringsAsFactors = FALSE)
+names(df) <- c("Constructor", names(types))
+rownames(df) <- sapply(info, getElement, name = "label")
 
 toString2 <- function(x) toString(na.omit(x))
 df_classes <- data.frame(

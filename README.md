@@ -176,6 +176,36 @@ S
 
 <td style="text-align:left;">
 
+Cox Regression (Stepwise)
+
+</td>
+
+<td style="text-align:center;">
+
+CoxStepAICModel
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+<td style="text-align:center;">
+
+S
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 Gradient Boosted Models
 
 </td>
@@ -217,6 +247,38 @@ Generalized Linear Models
 <td style="text-align:center;">
 
 GLMModel
+
+</td>
+
+<td style="text-align:center;">
+
+b
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Generalized Linear Models (Stepwise)
+
+</td>
+
+<td style="text-align:center;">
+
+GLMStepAICModel
 
 </td>
 
@@ -594,13 +656,43 @@ S
 
 <td style="text-align:left;">
 
-Survival Regression
+Parametric Survival
 
 </td>
 
 <td style="text-align:center;">
 
 SurvRegModel
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+<td style="text-align:center;">
+
+S
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Parametric Survival (Stepwise)
+
+</td>
+
+<td style="text-align:center;">
+
+SurvRegStepAICModel
 
 </td>
 
@@ -656,6 +748,262 @@ n
 
 <td style="text-align:left;">
 
+Support Vector Machines (ANOVA)
+
+</td>
+
+<td style="text-align:center;">
+
+SVMANOVAModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Suplport Vector Machines (Bessel)
+
+</td>
+
+<td style="text-align:center;">
+
+SVMBesselModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Support Vector Machines (Laplace)
+
+</td>
+
+<td style="text-align:center;">
+
+SVMLaplaceModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Support Vector Machines (Linear)
+
+</td>
+
+<td style="text-align:center;">
+
+SVMLinearModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Support Vector Machines (Poly)
+
+</td>
+
+<td style="text-align:center;">
+
+SVMPolyModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Support Vector Machines (Radial)
+
+</td>
+
+<td style="text-align:center;">
+
+SVMRadialModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Support Vector Machines (Spline)
+
+</td>
+
+<td style="text-align:center;">
+
+SVMSplineModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Support Vector Machines (Tanh)
+
+</td>
+
+<td style="text-align:center;">
+
+SVMTanhModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 Extreme Gradient Boosting
 
 </td>
@@ -663,6 +1011,102 @@ Extreme Gradient Boosting
 <td style="text-align:center;">
 
 XGBModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Extreme Gradient Boosting (DART)
+
+</td>
+
+<td style="text-align:center;">
+
+XGBDARTModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Extreme Gradient Boosting (Linear)
+
+</td>
+
+<td style="text-align:center;">
+
+XGBLinearModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Extreme Gradient Boosting (Tree)
+
+</td>
+
+<td style="text-align:center;">
+
+XGBTreeModel
 
 </td>
 
