@@ -732,10 +732,10 @@ install.packages("MachineShop")
 
 # Development version from GitHub
 # install.packages("devtools")
-devtools::install_github("brian-j-smith/MachineShop")
+devtools::install_github("brian-j-smith/MachineShop", ref = "develop")
 
 # Development version with vignettes
-devtools::install_github("brian-j-smith/MachineShop", build_vignettes = TRUE)
+devtools::install_github("brian-j-smith/MachineShop", ref = "develop", build_vignettes = TRUE)
 ```
 
 ## Documentation
