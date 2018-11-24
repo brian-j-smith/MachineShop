@@ -7,9 +7,11 @@
 #' @rdname tune-methods
 #' 
 #' @param x defined relationship between model predictors and an outcome.  May
-#' be a ModelFrame containing a formula, data, and optionally case weights; a
-#' formula; or a recipe.
+#' be a \code{ModelFrame} containing a formula, data, and optionally case
+#' weights; a \code{formula}; or a \code{recipe.}
 #' @param ... arguments passed to other methods.
+#' 
+#' @return \code{MLModelTune} class object that inherits from \code{MLModel}.
 #' 
 tune <- function(x, ...) {
   UseMethod("tune")
@@ -18,12 +20,12 @@ tune <- function(x, ...) {
 
 #' @rdname tune-methods
 #' 
-#' @param data data frame containing observed predictors and outcomes.
-#' @param models MLModel constructor function or character string or a list of
-#' MLModel contructors or objects.
-#' @param grid data frame containing parameter values over which to evaluate 
-#' \code{models} when a single constructor is specified.  Ignored in the case of
-#' a list of models.
+#' @param data \code{data.frame} containing observed predictors and outcomes.
+#' @param models \code{MLModel} constructor function or character string or a
+#' list of \code{MLModel} contructors or objects.
+#' @param grid \code{data.frame} containing parameter values over which to
+#' evaluate \code{models} when a single constructor is specified.  Ignored in
+#' the case of a list of models.
 #' @param control \code{\linkS4class{MLControl}} object, control function, or
 #' character string naming a control function defining the resampling method to
 #' be employed.
@@ -33,8 +35,6 @@ tune <- function(x, ...) {
 #' the metric for model selection.
 #' @param maximize logical indicating whether to select the model having the
 #' maximum or minimum value of the performance metric.
-#' 
-#' @return MLModelTune class object that inherits from MLModel.
 #' 
 #' @seealso \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
 #' \code{\link{fit}}, \code{\link{resample}}, \code{\link{plot}},

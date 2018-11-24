@@ -36,7 +36,7 @@
 #' importance is automatically scaled to range from 0 to 100.  To obtain
 #' unscaled importance values, set \code{scale = FALSE}.  See example below.
 #' 
-#' @return MLModel class object.
+#' @return \code{MLModel} class object.
 #' 
 #' @seealso \code{\link[xgboost:xgb.train]{xgboost}}, \code{\link{fit}},
 #' \code{\link{resample}}, \code{\link{tune}}

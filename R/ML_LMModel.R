@@ -9,7 +9,7 @@
 #' 
 #' Further model details can be found in the source link below.
 #' 
-#' @return MLModel class object.
+#' @return \code{MLModel} class object.
 #' 
 #' @seealso \code{\link[stats]{lm}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}

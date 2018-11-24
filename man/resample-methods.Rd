@@ -22,17 +22,17 @@ formula; or a recipe.}
 
 \item{...}{arguments passed to other methods.}
 
-\item{data}{data frame containing observed predictors and outcomes.}
+\item{data}{\code{data.frame} containing observed predictors and outcomes.}
 
-\item{model}{MLModel object, constructor function, or character string
-naming a constructor function that returns an MLModel object.}
+\item{model}{\code{MLModel} object, constructor function, or character string
+naming a constructor function that returns an \code{MLModel} object.}
 
 \item{control}{\code{\linkS4class{MLControl}} object, control function, or
 character string naming a control function defining the resampling method to
 be employed.}
 }
 \value{
-Resamples class object.
+\code{Resamples} class object.
 }
 \description{
 Estimation of the predictive performance of a model estimated and evaluated

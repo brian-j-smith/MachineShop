@@ -58,7 +58,7 @@ bias.}
 \item{...}{arguments to be passed to \code{XGBModel}.}
 }
 \value{
-MLModel class object.
+\code{MLModel} class object.
 }
 \description{
 Fits models within an efficient implementation of the gradient boosting

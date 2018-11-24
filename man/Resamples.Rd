@@ -9,22 +9,23 @@ Resamples(..., control = NULL, response = NULL, strata = character())
 \arguments{
 \item{...}{named or unnamed resample output from one or more models.}
 
-\item{control}{MLControl object used to generate the resample output.}
+\item{control}{\code{MLControl} object used to generate the resample output.}
 
-\item{response}{data frame of resampled observed and predicted resposnes.}
+\item{response}{\code{data.frame} of resampled observed and predicted
+resposnes.}
 
 \item{strata}{character string indicating the strata variable, if any.}
 }
 \value{
-Resamples class object.
+\code{Resamples} class object.
 }
 \description{
 Create an object of resampled performance metrics from one or more models.
 }
 \details{
 Argument \code{control} need only be specified if the supplied
-output is not a Resamples object.  Output being combined from more than one
-model must have been generated with the same resampling object and
+output is not a \code{Resamples} object.  Output being combined from more
+than one model must have been generated with the same resampling object and
 performance metrics.
 }
 \examples{

@@ -17,18 +17,18 @@ fit(x, ...)
 }
 \arguments{
 \item{x}{defined relationship between model predictors and an outcome.  May
-be a ModelFrame containing a formula, data, and optionally case weights; a
-formula; or a recipe.}
+be a \code{ModelFrame} containing a formula, data, and optionally case
+weights; a \code{formula}; or a \code{recipe}.}
 
 \item{...}{arguments passed to other methods.}
 
-\item{data}{data frame containing observed predictors and outcomes.}
+\item{data}{\code{data.frame} containing observed predictors and outcomes.}
 
-\item{model}{MLModel object, constructor function, or character string
-naming a constructor function that returns an MLModel object.}
+\item{model}{\code{MLModel} object, constructor function, or character string
+naming a constructor function that returns an \code{MLModel} object.}
 }
 \value{
-MLModelFit class object.
+\code{MLModelFit} class object.
 }
 \description{
 Fit a model to estimate its parameters from a data set.

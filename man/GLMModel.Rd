@@ -36,7 +36,7 @@ process.}
 \item{steps}{maximum number of steps to be considered.}
 }
 \value{
-MLModel class object.
+\code{MLModel} class object.
 }
 \description{
 Fits generalized linear models, specified by giving a symbolic description of

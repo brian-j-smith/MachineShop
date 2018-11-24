@@ -2,7 +2,7 @@
 #' 
 #' Fit a stacked regression model from multiple base learners.
 #' 
-#' @param ... MLModel objects to serve as base learners.
+#' @param ... \code{MLModel} objects to serve as base learners.
 #' @param control \code{\linkS4class{MLControl}} object, control function, or
 #' character string naming a control function defining the resampling method to
 #' be employed for the estimation of base learner weights.
@@ -15,7 +15,7 @@
 #' }
 #' }
 #' 
-#' @return StackedModel class object that inherits from MLModel.
+#' @return \code{StackedModel} class object that inherits from \code{MLModel}.
 #' 
 #' @references
 #' Breiman, L. (1996) \emph{Stacked Regression.} Machine Learning, 24, 49--64.

@@ -2,9 +2,9 @@
 #' 
 #' Calculate partial dependence of a response on select predictor variables.
 #' 
-#' @param object MLModelFit object.
-#' @param data data frame containing all predictor variables.  If not specified,
-#' the training data will be used by default.
+#' @param object \code{MLModelFit} object.
+#' @param data \code{data.frame} containing all predictor variables.  If not
+#' specified, the training data will be used by default.
 #' @param select expression indicating predictor variables for which to compute
 #' partial dependence (see \code{\link[base]{subset}} for syntax)
 #' [default: all].
@@ -17,7 +17,8 @@
 #' @param stats function or list of named functions with which to aggregate
 #' the response variable over the non-selected predictor variables.
 #' 
-#' @return PartialDependence class object.
+#' @return \code{PartialDependence} class object that inherits from
+#' \code{data.frame}.
 #'  
 #' @seealso \code{\link{fit}}, \code{\link{plot}}
 #' 

@@ -32,7 +32,7 @@
 #' Latter arguments are passed to \code{\link[C50]{C5.0Control}}.
 #' Further model details can be found in the source link below.
 #' 
-#' @return MLModel class object.
+#' @return \code{MLModel} class object.
 #' 
 #' @seealso \code{\link[C50]{C5.0}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}

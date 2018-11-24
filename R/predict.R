@@ -4,9 +4,9 @@
 #' 
 #' @name predict
 #' 
-#' @param object MLModelFit object from a model fit.
-#' @param newdata optional data frame with which to obtain predictions.  If not
-#' specified, the training data will be used by default.
+#' @param object \code{MLModelFit} object from a model fit.
+#' @param newdata optional \code{data.frame} with which to obtain predictions.
+#' If not specified, the training data will be used by default.
 #' @param type specifies prediction on the original outcome scale
 #' (\code{"response"}) or on a probability distribution scale (\code{"prob"}).
 #' @param cutoff threshold above which probabilities are classified as success

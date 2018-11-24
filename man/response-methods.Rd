@@ -17,7 +17,8 @@ response(object, ...)
 
 \item{...}{arguments passed to other methods.}
 
-\item{data}{data frame containing the values of a response variable defined in a formula.}
+\item{data}{\code{data.frame} containing the values of a response variable
+defined in a formula.}
 }
 \description{
 Extract the response variable from an object.

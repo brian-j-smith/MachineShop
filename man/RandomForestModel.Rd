@@ -21,7 +21,7 @@ RandomForestModel(ntree = 500, mtry = .(if (is.factor(y))
 have.}
 }
 \value{
-MLModel class object.
+\code{MLModel} class object.
 }
 \description{
 Implementation of Breiman's random forest algorithm (based on Breiman and

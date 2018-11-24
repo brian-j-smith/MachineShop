@@ -8,6 +8,8 @@
 #' @param predicted model-predicted responses.
 #' @param ... arguments passed to or from other methods.
 #' 
+#' @return Numeric vector of model metrics.
+#' 
 #' @seealso \code{\link{predict}}, \code{\linkS4class{MLControl}}
 #' 
 #' @examples

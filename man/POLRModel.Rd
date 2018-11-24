@@ -12,7 +12,7 @@ POLRModel(method = c("logistic", "probit", "loglog", "cloglog",
 (corresponding to a Cauchy latent variable).}
 }
 \value{
-MLModel class object.
+\code{MLModel} class object.
 }
 \description{
 Fit a logistic or probit regression model to an ordered factor response.

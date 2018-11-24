@@ -26,8 +26,8 @@ setClass("MLControl",
 )
 
 
-#' The base MLControl constructor initializes a set of parameters that are common
-#' to all resampling methods.
+#' The base \code{MLControl} constructor initializes a set of parameters that
+#' are common to all resampling methods.
 #' 
 #' @rdname MLControl-class
 #' @aliases initialize,MLControl-method
@@ -47,7 +47,7 @@ setClass("MLControl",
 #' to a random integer by default (NULL).
 #' @param ...  arguments to be passed to or from other methods.
 #' 
-#' @return MLControl class object.
+#' @return \code{MLControl} class object.
 #' 
 #' @seealso \code{\link{resample}}, \code{\link{modelmetrics}}
 #' 
@@ -63,7 +63,7 @@ setMethod("initialize", "MLControl",
 )
 
 
-#' \code{BootControl} constructs an MLControl object for simple bootstrap
+#' \code{BootControl} constructs an \code{MLControl} object for simple bootstrap
 #' resampling in which models are fit with bootstrap resampled training sets and
 #' used to predict the full data set.
 #' 
@@ -87,10 +87,10 @@ setClass("BootMLControl",
 )
 
 
-#' \code{CVControl} constructs an MLControl object for repeated K-fold
+#' \code{CVControl} constructs an \code{MLControl} object for repeated K-fold
 #' cross-validation.  In this procedure, the full data set is repeatedly
-#' partitioned into K-folds.  Within a partitioning, prediction is performed on each
-#' of the K folds with models fit on all remaining folds.
+#' partitioned into K-folds.  Within a partitioning, prediction is performed on
+#' each of the K folds with models fit on all remaining folds.
 #' 
 #' @name CVControl
 #' @rdname MLControl-class
@@ -113,7 +113,7 @@ setClass("CVMLControl",
 )
 
 
-#' \code{OOBControl} constructs an MLControl object for out-of-bootstrap
+#' \code{OOBControl} constructs an \code{MLControl} object for out-of-bootstrap
 #' resampling in which models are fit with bootstrap resampled training sets and
 #' used to predict the unsampled cases.
 #' 
@@ -135,8 +135,8 @@ setClass("OOBMLControl",
 )
 
 
-#' \code{SplitControl} constructs an MLControl object for splitting data into a
-#' seperate trianing and test set.
+#' \code{SplitControl} constructs an \code{MLControl} object for splitting data
+#' into a seperate trianing and test set.
 #' 
 #' @param prop proportion of cases to include in the training set
 #' (\code{0 < prop < 1}).
@@ -159,7 +159,7 @@ setClass("SplitMLControl",
 )
 
 
-#' \code{TrainControl} constructs an MLControl object for training and
+#' \code{TrainControl} constructs an \code{MLControl} object for training and
 #' performance evaluation to be performed on the same training set.
 #' 
 #' @name TrainControl
@@ -190,7 +190,7 @@ MLFitBits <- setClass("MLFitBits",
 
 #' MLModel Class Constructor
 #' 
-#' @param name character string name for the instantiated MLModel object.
+#' @param name character string name for the instantiated \code{MLModel} object.
 #' @param packages character vector of packages required by the object.
 #' @param types character vector of response variable types on which the model
 #' can be fit.
@@ -251,17 +251,18 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 #' 
 #' Create an object of resampled performance metrics from one or more models.
 #' 
-#' @param response data frame of resampled observed and predicted resposnes.
-#' @param control MLControl object used to generate the resample output.
+#' @param response \code{data.frame} of resampled observed and predicted
+#' resposnes.
+#' @param control \code{MLControl} object used to generate the resample output.
 #' @param strata character string indicating the strata variable, if any.
 #' @param ... named or unnamed resample output from one or more models.
 #' 
 #' @details Argument \code{control} need only be specified if the supplied
-#' output is not a Resamples object.  Output being combined from more than one
-#' model must have been generated with the same resampling object and
+#' output is not a \code{Resamples} object.  Output being combined from more
+#' than one model must have been generated with the same resampling object and
 #' performance metrics.
 #' 
-#' @return Resamples class object.
+#' @return \code{Resamples} class object.
 #' 
 #' @seealso \code{\link{resample}}, \code{\link{plot}}, \code{\link{summary}}
 #' 

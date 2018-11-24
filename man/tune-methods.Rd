@@ -23,19 +23,19 @@ tune(x, ...)
 }
 \arguments{
 \item{x}{defined relationship between model predictors and an outcome.  May
-be a ModelFrame containing a formula, data, and optionally case weights; a
-formula; or a recipe.}
+be a \code{ModelFrame} containing a formula, data, and optionally case
+weights; a \code{formula}; or a \code{recipe.}}
 
 \item{...}{arguments passed to other methods.}
 
-\item{data}{data frame containing observed predictors and outcomes.}
+\item{data}{\code{data.frame} containing observed predictors and outcomes.}
 
-\item{models}{MLModel constructor function or character string or a list of
-MLModel contructors or objects.}
+\item{models}{\code{MLModel} constructor function or character string or a
+list of \code{MLModel} contructors or objects.}
 
-\item{grid}{data frame containing parameter values over which to evaluate 
-\code{models} when a single constructor is specified.  Ignored in the case of
-a list of models.}
+\item{grid}{\code{data.frame} containing parameter values over which to
+evaluate \code{models} when a single constructor is specified.  Ignored in
+the case of a list of models.}
 
 \item{control}{\code{\linkS4class{MLControl}} object, control function, or
 character string naming a control function defining the resampling method to
@@ -51,7 +51,7 @@ the metric for model selection.}
 maximum or minimum value of the performance metric.}
 }
 \value{
-MLModelTune class object that inherits from MLModel.
+\code{MLModelTune} class object that inherits from \code{MLModel}.
 }
 \description{
 Evaluate a model over a grid of tuning parameters and select the best one

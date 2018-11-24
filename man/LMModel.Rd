@@ -7,7 +7,7 @@
 LMModel()
 }
 \value{
-MLModel class object.
+\code{MLModel} class object.
 }
 \description{
 Fits linear models.

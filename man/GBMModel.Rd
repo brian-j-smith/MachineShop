@@ -26,7 +26,7 @@ nodes.}
 selected to propose the next tree in the expansion.}
 }
 \value{
-MLModel class object.
+\code{MLModel} class object.
 }
 \description{
 Fits generalized boosted regression models.

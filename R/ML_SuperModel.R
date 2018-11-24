@@ -2,8 +2,8 @@
 #' 
 #' Fit a super learner model to predictions from multiple base learners.
 #' 
-#' @param ... MLModel objects to serve as base learners.
-#' @param model MLModel object, constructor function, or character string
+#' @param ... \code{MLModel} objects to serve as base learners.
+#' @param model \code{MLModel} object, constructor function, or character string
 #' naming a constructor function to serve as the super model.
 #' @param control \code{\linkS4class{MLControl}} object, control function, or
 #' character string naming a control function defining the resampling method to
@@ -18,7 +18,7 @@
 #' }
 #' }
 #' 
-#' @return SuperModel class object that inherits from MLModel.
+#' @return \code{SuperModel} class object that inherits from \code{MLModel}.
 #' 
 #' @references
 #' 

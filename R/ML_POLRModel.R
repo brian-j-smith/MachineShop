@@ -12,7 +12,7 @@
 #' 
 #' Further model details can be found in the source link below.
 #' 
-#' @return MLModel class object.
+#' @return \code{MLModel} class object.
 #' 
 #' @seealso \code{\link[MASS]{polr}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}

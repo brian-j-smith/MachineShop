@@ -58,31 +58,31 @@ to a random integer by default (NULL).}
 (\code{0 < prop < 1}).}
 }
 \value{
-MLControl class object.
+\code{MLControl} class object.
 }
 \description{
 Resampling Classes and Methods
 
-The base MLControl constructor initializes a set of parameters that are common
-to all resampling methods.
+The base \code{MLControl} constructor initializes a set of parameters that
+are common to all resampling methods.
 
-\code{BootControl} constructs an MLControl object for simple bootstrap
+\code{BootControl} constructs an \code{MLControl} object for simple bootstrap
 resampling in which models are fit with bootstrap resampled training sets and
 used to predict the full data set.
 
-\code{CVControl} constructs an MLControl object for repeated K-fold
+\code{CVControl} constructs an \code{MLControl} object for repeated K-fold
 cross-validation.  In this procedure, the full data set is repeatedly
-partitioned into K-folds.  Within a partitioning, prediction is performed on each
-of the K folds with models fit on all remaining folds.
+partitioned into K-folds.  Within a partitioning, prediction is performed on
+each of the K folds with models fit on all remaining folds.
 
-\code{OOBControl} constructs an MLControl object for out-of-bootstrap
+\code{OOBControl} constructs an \code{MLControl} object for out-of-bootstrap
 resampling in which models are fit with bootstrap resampled training sets and
 used to predict the unsampled cases.
 
-\code{SplitControl} constructs an MLControl object for splitting data into a
-seperate trianing and test set.
+\code{SplitControl} constructs an \code{MLControl} object for splitting data
+into a seperate trianing and test set.
 
-\code{TrainControl} constructs an MLControl object for training and
+\code{TrainControl} constructs an \code{MLControl} object for training and
 performance evaluation to be performed on the same training set.
 }
 \section{Slots}{

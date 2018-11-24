@@ -72,7 +72,7 @@ modify the data itself.}
 \item{offset}{offset used in polynomial and hyperbolic tangent kernels.}
 }
 \value{
-MLModel class object.
+\code{MLModel} class object.
 }
 \description{
 Fits the well known C-svc, nu-svc, (classification) one-class-svc (novelty)

@@ -16,7 +16,8 @@
 \item{...}{arguments to be passed to other methods.}
 }
 \value{
-ResamplesDiff class object that inherits from Resamples.
+\code{ResamplesDiff} class object that inherits from
+\code{Resamples}.
 }
 \description{
 Pairwise model differences in resampled performance metrics.

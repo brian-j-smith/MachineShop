@@ -25,7 +25,7 @@
 #' Default values for the \code{NULL} arguments and further model details can be
 #' found in the source links below.
 #' 
-#' @return MLModel class object.
+#' @return \code{MLModel} class object.
 #' 
 #' @seealso \code{\link[MASS]{lda}}, \code{\link[MASS]{predict.lda}},
 #' \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}

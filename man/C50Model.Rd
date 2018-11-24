@@ -41,7 +41,7 @@ of data to use in training the model.}
 stopping boosting should be used.}
 }
 \value{
-MLModel class object.
+\code{MLModel} class object.
 }
 \description{
 Fit classification tree models or rule-based models using Quinlan's C5.0

@@ -8,9 +8,9 @@ SuperModel(..., model = GBMModel, control = CVControl,
   all_vars = FALSE)
 }
 \arguments{
-\item{...}{MLModel objects to serve as base learners.}
+\item{...}{\code{MLModel} objects to serve as base learners.}
 
-\item{model}{MLModel object, constructor function, or character string
+\item{model}{\code{MLModel} object, constructor function, or character string
 naming a constructor function to serve as the super model.}
 
 \item{control}{\code{\linkS4class{MLControl}} object, control function, or
@@ -21,7 +21,7 @@ be employed for the estimation of base learner weights.}
 predictor variables in the super model.}
 }
 \value{
-SuperModel class object that inherits from MLModel.
+\code{SuperModel} class object that inherits from \code{MLModel}.
 }
 \description{
 Fit a super learner model to predictions from multiple base learners.

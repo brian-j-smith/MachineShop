@@ -13,7 +13,7 @@ PLSModel(ncomp = 1, scale = FALSE)
 sample standard deviation.}
 }
 \value{
-MLModel class object.
+\code{MLModel} class object.
 }
 \description{
 Function to perform partial least squares regression.

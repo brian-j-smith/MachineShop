@@ -18,7 +18,7 @@ class proportions in the training set otherwise.}
 \item{use}{type of parameter estimation to use for prediction.}
 }
 \value{
-MLModel class object.
+\code{MLModel} class object.
 }
 \description{
 Performs quadratic discriminant analysis.

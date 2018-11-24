@@ -44,6 +44,9 @@ tradeoff.}
 \item{times}{numeric vector of follow-up times at which survival events
 were predicted.}
 }
+\value{
+Numeric vector of model metrics.
+}
 \description{
 Compute measures of model performance.
 }

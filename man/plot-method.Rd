@@ -35,7 +35,7 @@
 metrics to plot.}
 
 \item{stat}{function to compute a summary statistic on resampled values for
-MLModelTune line plots and Resamples model sorting.}
+\code{MLModelTune} line plots and \code{Resamples} model sorting.}
 
 \item{type}{type of plot to construct.}
 

@@ -7,7 +7,7 @@
 varimp(object, scale = TRUE, ...)
 }
 \arguments{
-\item{object}{MLModelFit object from a model fit.}
+\item{object}{\code{MLModelFit} object from a model fit.}
 
 \item{scale}{logical indicating whether importance measures should be scaled
 to range from 0 to 100.}
@@ -15,7 +15,7 @@ to range from 0 to 100.}
 \item{...}{arguments passed to model-specific variable importance functions.}
 }
 \value{
-VarImp class object.
+\code{VarImp} class object.
 }
 \description{
 Calculate measures of the relative importance of predictors in a model.

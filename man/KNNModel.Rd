@@ -19,7 +19,7 @@ standard deviations.}
 \item{kernel}{kernel to use.}
 }
 \value{
-MLModel class object.
+\code{MLModel} class object.
 }
 \description{
 Fit a k-nearest neighbor model for which the k nearest training set vectors

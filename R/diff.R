@@ -8,7 +8,8 @@
 #' @param x object containing resampled metrics.
 #' @param ... arguments to be passed to other methods.
 #' 
-#' @return ResamplesDiff class object that inherits from Resamples.
+#' @return \code{ResamplesDiff} class object that inherits from
+#' \code{Resamples}.
 #' 
 #' @seealso \code{\link{plot}}, \code{\link{resample}}, \code{\link{Resamples}},
 #' \code{\link{summary}}, \code{\link{t.test}}

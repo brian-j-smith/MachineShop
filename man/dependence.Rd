@@ -9,10 +9,10 @@ dependence(object, data = NULL, select = NULL, interaction = FALSE,
   mean))
 }
 \arguments{
-\item{object}{MLModelFit object.}
+\item{object}{\code{MLModelFit} object.}
 
-\item{data}{data frame containing all predictor variables.  If not specified,
-the training data will be used by default.}
+\item{data}{\code{data.frame} containing all predictor variables.  If not
+specified, the training data will be used by default.}
 
 \item{select}{expression indicating predictor variables for which to compute
 partial dependence (see \code{\link[base]{subset}} for syntax)
@@ -31,7 +31,8 @@ spaced according to variable quantiles (\code{"quantile"}) or uniformly
 the response variable over the non-selected predictor variables.}
 }
 \value{
-PartialDependence class object.
+\code{PartialDependence} class object that inherits from
+\code{data.frame}.
 }
 \description{
 Calculate partial dependence of a response on select predictor variables.

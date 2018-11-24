@@ -6,7 +6,9 @@
 #' @name ModelFrame
 #' @rdname ModelFrame-methods
 #' 
-#' @param x model \code{\link{formula}} or matrix of predictor variables.
+#' @param x model \code{\link{formula}} or \code{matrix} of predictor variables.
+#' 
+#' @return \code{ModelFrame} class object that inherits from \code{data.frame}.
 #' 
 #' @seealso \code{\link{formula}}, \code{\link{na.fail}}, \code{\link{na.omit}},
 #' \code{\link{na.pass}}
@@ -24,7 +26,7 @@ ModelFrame <- function(x, ...) {
 
 #' @rdname ModelFrame-methods
 #'
-#' @param data data frame or an object that can be converted to one.
+#' @param data \code{data.frame} or an object that can be converted to one.
 #' @param weights vector of case weights.
 #' @param strata vector of stratification levels.
 #' @param na.action action to take if cases contain missing values.  The default

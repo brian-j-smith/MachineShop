@@ -9,7 +9,7 @@
 #' @param metrics vector of numeric indexes or character names of performance
 #' metrics to plot.
 #' @param stat function to compute a summary statistic on resampled values for
-#' MLModelTune line plots and Resamples model sorting.
+#' \code{MLModelTune} line plots and \code{Resamples} model sorting.
 #' @param type type of plot to construct.
 #' @param ... arguments passed to other methods.
 #' 

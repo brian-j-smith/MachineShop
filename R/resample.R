@@ -11,6 +11,8 @@
 #' formula; or a recipe.
 #' @param ... arguments passed to other methods.
 #' 
+#' @return \code{Resamples} class object.
+#' 
 resample <- function(x, ...) {
   UseMethod("resample")
 }
@@ -18,9 +20,9 @@ resample <- function(x, ...) {
 
 #' @rdname resample-methods
 #' 
-#' @param data data frame containing observed predictors and outcomes.
-#' @param model MLModel object, constructor function, or character string
-#' naming a constructor function that returns an MLModel object.
+#' @param data \code{data.frame} containing observed predictors and outcomes.
+#' @param model \code{MLModel} object, constructor function, or character string
+#' naming a constructor function that returns an \code{MLModel} object.
 #' @param control \code{\linkS4class{MLControl}} object, control function, or
 #' character string naming a control function defining the resampling method to
 #' be employed.
@@ -29,8 +31,6 @@ resample <- function(x, ...) {
 #' Stratified resampling is performed for the \code{formula} method according to
 #' values of the response variable; i.e. categorical levels for \code{factor},
 #' continuous for \code{numeric}, and event status \code{Surv}.
-#' 
-#' @return Resamples class object.
 #' 
 #' @seealso \code{\link{tune}}, \code{\link{ModelFrame}},
 #' \code{\link[recipes]{recipe}}, \code{\link{BootControl}},

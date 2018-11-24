@@ -11,7 +11,7 @@ MLModel(name = "MLModel", packages = character(0),
   stop("no predict function"), varimp = function(object, ...) NULL)
 }
 \arguments{
-\item{name}{character string name for the instantiated MLModel object.}
+\item{name}{character string name for the instantiated \code{MLModel} object.}
 
 \item{packages}{character vector of packages required by the object.}
 

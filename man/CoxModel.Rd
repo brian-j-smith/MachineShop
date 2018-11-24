@@ -35,7 +35,7 @@ process.}
 \item{steps}{maximum number of steps to be considered.}
 }
 \value{
-MLModel class object.
+\code{MLModel} class object.
 }
 \description{
 Fits a Cox proportional hazards regression model. Time dependent variables,

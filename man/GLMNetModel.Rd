@@ -44,7 +44,7 @@ coefficient.}
 \item{type.multinomial}{algorithm type for multinomial models.}
 }
 \value{
-MLModel class object.
+\code{MLModel} class object.
 }
 \description{
 Fit a generalized linear model via penalized maximum likelihood.

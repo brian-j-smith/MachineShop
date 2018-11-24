@@ -30,7 +30,7 @@ with or without replacement.}
 replacement (only relevant if \code{replace = FALSE}).}
 }
 \value{
-MLModel class object.
+\code{MLModel} class object.
 }
 \description{
 An implementation of the random forest and bagging ensemble algorithms

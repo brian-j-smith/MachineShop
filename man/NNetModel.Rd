@@ -41,7 +41,7 @@ an essentially perfect fit.}
 a factor of at least \code{1 - reltol}.}
 }
 \value{
-MLModel class object.
+\code{MLModel} class object.
 }
 \description{
 Fit single-hidden-layer neural network, possibly with skip-layer connections.

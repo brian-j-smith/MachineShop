@@ -9,10 +9,10 @@
   type = c("response", "prob"), cutoff = 0.5, times = numeric(), ...)
 }
 \arguments{
-\item{object}{MLModelFit object from a model fit.}
+\item{object}{\code{MLModelFit} object from a model fit.}
 
-\item{newdata}{optional data frame with which to obtain predictions.  If not
-specified, the training data will be used by default.}
+\item{newdata}{optional \code{data.frame} with which to obtain predictions.
+If not specified, the training data will be used by default.}
 
 \item{type}{specifies prediction on the original outcome scale
 (\code{"response"}) or on a probability distribution scale (\code{"prob"}).}

@@ -15,11 +15,11 @@ ModelFrame(x, ...)
   na.action = NULL, ...)
 }
 \arguments{
-\item{x}{model \code{\link{formula}} or matrix of predictor variables.}
+\item{x}{model \code{\link{formula}} or \code{matrix} of predictor variables.}
 
 \item{...}{arguments passed to other methods.}
 
-\item{data}{data frame or an object that can be converted to one.}
+\item{data}{\code{data.frame} or an object that can be converted to one.}
 
 \item{weights}{vector of case weights.}
 
@@ -31,6 +31,9 @@ is first any \code{na.action} attribute of \code{data}, second a
 \code{\link{na.fail}} if unset.}
 
 \item{y}{response variable.}
+}
+\value{
+\code{ModelFrame} class object that inherits from \code{data.frame}.
 }
 \description{
 Class for storing a data frame, formula, and optionally weights for fitting
