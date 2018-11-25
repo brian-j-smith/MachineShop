@@ -17,7 +17,7 @@
 #' \code{\link[mda]{gen.ridge}} is appropriate.  Other possibilities are
 #' \code{\link[mda]{mars}} for multivariate adaptive regression splines and
 #' \code{\link[mda]{bruto}} for adaptive backfitting of additive splines.  Use
-#' the \code{\link[MachineShop]{.}} operator to quote specified functions.
+#' the \code{\link[MachineShop:dot-]{.}} operator to quote specified functions.
 #' @param trace logical indicating whether iteration information is printed.
 #' @param ... additional arguments to \code{mda.start} and \code{method}.
 #' 
