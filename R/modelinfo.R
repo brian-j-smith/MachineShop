@@ -30,6 +30,7 @@ modelinfo <- function(...) {
     "LMModel" = "Linear Model",
     "MDAModel" = "Mixture Discriminant Analysis",
     "NNetModel" = "Feed-Forward Neural Networks",
+    "PDAModel" = "Penalized Discriminant Analysis",
     "PLSModel" = "Partial Least Squares",
     "POLRModel" = "Ordered Logistic Regression",
     "QDAModel" = "Quadratic Discriminant Analysis",

@@ -524,6 +524,36 @@ n
 
 <td style="text-align:left;">
 
+Penalized Discriminant Analysis
+
+</td>
+
+<td style="text-align:center;">
+
+PDAModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 Partial Least Squares
 
 </td>

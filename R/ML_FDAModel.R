@@ -1,6 +1,8 @@
-#' Flexible Discriminant Analysis Model
+#' Flexible and Penalized Discriminant Analysis Models
 #'
 #' Performs flexible discriminant analysis.
+#' 
+#' @rdname FDAModel
 #' 
 #' @param theta optional matrix of class scores, typically with number of
 #' columns less than one minus the number of classes.
@@ -14,8 +16,9 @@
 #' \code{\link[mda]{gen.ridge}} is appropriate.  Other possibilities are
 #' \code{\link[mda]{mars}} for multivariate adaptive regression splines and
 #' \code{\link[mda]{bruto}} for adaptive backfitting of additive splines.  Use
-#' the \code{\link[MachineShop]{.}} operator to quote specified functions.
-#' @param ... additional arguments to \code{method}.
+#' the \code{\link[MachineShop:dot-]{.}} operator to quote specified functions.
+#' @param ... additional arguments to \code{method} for \code{FDAModel} and to
+#' \code{FDAModel} for \code{PDAModel}.
 #' 
 #' @details
 #' \describe{
@@ -57,4 +60,22 @@ FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
               prior = prior)
     }
   )
+}
+
+
+#' @rdname FDAModel
+#' 
+#' @param lambda shrinkage penalty coefficient.
+#' @param df alternative specification of \code{lambda} in terms of equivalent
+#' degrees of freedom.
+#' 
+#' @examples
+#' fit(Species ~ ., data = iris, model = PDAModel())
+#' 
+PDAModel <- function(lambda = 1, df = NULL, ...) {
+  args <- c(as.list(environment()), list(...))
+  args$method <- .(mda::gen.ridge)
+  model <- do.call(FDAModel, args, quote = TRUE)
+  model@name <- "PDAModel"
+  model
 }

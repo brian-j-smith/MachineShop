@@ -2,10 +2,13 @@
 % Please edit documentation in R/ML_FDAModel.R
 \name{FDAModel}
 \alias{FDAModel}
-\title{Flexible Discriminant Analysis Model}
+\alias{PDAModel}
+\title{Flexible and Penalized Discriminant Analysis Models}
 \usage{
 FDAModel(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
   method = .(mda::polyreg), ...)
+
+PDAModel(lambda = 1, df = NULL, ...)
 }
 \arguments{
 \item{theta}{optional matrix of class scores, typically with number of
@@ -23,9 +26,15 @@ linear regression is provided by \code{\link[mda]{polyreg}} from the
 \code{\link[mda]{gen.ridge}} is appropriate.  Other possibilities are
 \code{\link[mda]{mars}} for multivariate adaptive regression splines and
 \code{\link[mda]{bruto}} for adaptive backfitting of additive splines.  Use
-the \code{\link[MachineShop]{.}} operator to quote specified functions.}
+the \code{\link[MachineShop:dot-]{.}} operator to quote specified functions.}
 
-\item{...}{additional arguments to \code{method}.}
+\item{...}{additional arguments to \code{method} for \code{FDAModel} and to
+\code{FDAModel} for \code{PDAModel}.}
+
+\item{lambda}{shrinkage penalty coefficient.}
+
+\item{df}{alternative specification of \code{lambda} in terms of equivalent
+degrees of freedom.}
 }
 \value{
 \code{MLModel} class object.
@@ -50,6 +59,8 @@ found in the source links below.
 }
 \examples{
 fit(Species ~ ., data = iris, model = FDAModel())
+
+fit(Species ~ ., data = iris, model = PDAModel())
 
 }
 \seealso{
