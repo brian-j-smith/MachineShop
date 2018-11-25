@@ -11,11 +11,9 @@
 #'   \code{\link{C50Model}}            \tab f   \tab     \tab   \cr
 #'   \code{\link{CForestModel}}        \tab f   \tab n   \tab S \cr
 #'   \code{\link{CoxModel}}            \tab     \tab     \tab S \cr
-#'   \code{\link{CoxStepAICModel}}     \tab     \tab     \tab S \cr
 #'   \code{\link{FDAModel}}            \tab f   \tab     \tab   \cr
 #'   \code{\link{GBMModel}}            \tab f   \tab n   \tab S \cr
 #'   \code{\link{GLMModel}}            \tab b   \tab n   \tab   \cr
-#'   \code{\link{GLMStepAICModel}}     \tab b   \tab n   \tab   \cr
 #'   \code{\link{GLMNetModel}}         \tab f   \tab m,n \tab S \cr
 #'   \code{\link{KNNModel}}            \tab f,o \tab n   \tab   \cr
 #'   \code{\link{LDAModel}}            \tab f   \tab     \tab   \cr
@@ -29,7 +27,6 @@
 #'   \code{\link{StackedModel}}        \tab f,o \tab m,n \tab S \cr
 #'   \code{\link{SuperModel}}          \tab f,o \tab m,n \tab S \cr
 #'   \code{\link{SurvRegModel}}        \tab     \tab     \tab S \cr
-#'   \code{\link{SurvRegStepAICModel}} \tab     \tab     \tab S \cr
 #'   \code{\link{SVMModel}}            \tab f   \tab n   \tab   \cr
 #'   \code{\link{XGBModel}}            \tab f   \tab n   \tab   \cr
 #' }
