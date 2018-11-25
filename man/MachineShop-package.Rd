@@ -35,6 +35,7 @@ with the \code{\link{modelinfo}} function.
   \code{\link{POLRModel}}           \tab o   \tab     \tab   \cr
   \code{\link{QDAModel}}            \tab f   \tab     \tab   \cr
   \code{\link{RandomForestModel}}   \tab f   \tab n   \tab   \cr
+  \code{\link{RPartModel}}          \tab f   \tab n   \tab S \cr
   \code{\link{StackedModel}}        \tab f,o \tab m,n \tab S \cr
   \code{\link{SuperModel}}          \tab f,o \tab m,n \tab S \cr
   \code{\link{SurvRegModel}}        \tab     \tab     \tab S \cr

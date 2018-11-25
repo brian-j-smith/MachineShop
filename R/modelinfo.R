@@ -35,6 +35,7 @@ modelinfo <- function(...) {
     "POLRModel" = "Ordered Logistic Regression",
     "QDAModel" = "Quadratic Discriminant Analysis",
     "RandomForestModel" = "Random Forests",
+    "RPartModel" = "Recursive Partitioning and Regression Trees",
     "StackedModel" = "Stacked Regression",
     "SuperModel" = "Super Learner",
     "SurvRegModel" = "Parametric Survival",

@@ -678,6 +678,40 @@ n
 
 <td style="text-align:left;">
 
+Recursive Partitioning and Regression Trees
+
+</td>
+
+<td style="text-align:center;">
+
+RPartModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+S
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 Stacked Regression
 
 </td>
