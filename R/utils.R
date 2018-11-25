@@ -23,8 +23,7 @@ utils::globalVariables(c("Found", "group", "i", "Lower", "Mean", "Midpoint",
 #' @return 
 #' The quoted (unevaluated) expression.
 #' 
-#' @seealso
-#' \code{\link{quote}}
+#' @seealso \code{\link{quote}}
 #' 
 #' @examples
 #' ## Stepwise variable selection with BIC
