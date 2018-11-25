@@ -124,9 +124,7 @@ XGBDARTModel <- function(objective = NULL, base_score = 0.5,
                          grow_policy="depthwise", max_leaves = 0, max_bin = 256,
                          sample_type = "uniform", normalize_type = "tree",
                          rate_drop = 0, one_drop = 0, skip_drop = 0, ...) {
-  model <- .XGBModel("dart", environment(), ...)
-  model@name <- "XGBDARTModel"
-  model
+  .XGBModel("XGBDARTModel", "dart", environment(), ...)
 }
 
 
@@ -135,9 +133,7 @@ XGBDARTModel <- function(objective = NULL, base_score = 0.5,
 XGBLinearModel <- function(objective = NULL, base_score = 0.5,
                            lambda = 0, alpha = 0, updater = "shotgun",
                            feature_selector = "cyclic", top_k = 0, ...) {
-  model <- .XGBModel("gblinear", environment(), ...)
-  model@name <- "XGBLinearModel"
-  model
+  .XGBModel("XGBLinearModel", "gblinear", environment(), ...)
 }
 
 
@@ -153,14 +149,14 @@ XGBTreeModel <- function(objective = NULL, base_score = 0.5,
                          refresh_leaf = 1, process_type = "default",
                          grow_policy="depthwise", max_leaves = 0, max_bin = 256,
                          ...) {
-  model <- .XGBModel("gbtree", environment(), ...)
-  model@name <- "XGBTreeModel"
-  model
+  .XGBModel("XGBTreeModel", "gbtree", environment(), ...)
 }
 
 
-.XGBModel <- function(booster, envir, ...) {
+.XGBModel <- function(name, booster, envir, ...) {
   args <- list(...)
   args$params <- as.call(c(.(list), params(envir), booster = booster))
-  do.call(XGBModel, args, quote = TRUE)
+  model <- do.call(XGBModel, args, quote = TRUE)
+  model@name <- name
+  model
 }
