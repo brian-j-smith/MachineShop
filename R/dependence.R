@@ -38,9 +38,8 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
 
   x_labels <- labels(terms(x))
   indices <- structure(match(x_labels, names(data)), names = x_labels)
-  select <- eval(substitute(select), as.list(indices))
-  select <- if (is.null(select)) indices else intersect(select, indices)
-  if (length(select) == 0) stop("no predictors selected")
+  select <- eval(substitute(select), as.list(indices), parent.frame())
+  if (is.null(select)) select <- indices
   data_select <- data[, select, drop = FALSE]
   
   intervals <- match.arg(intervals)
