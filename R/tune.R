@@ -1,7 +1,8 @@
-#' Model Tuning
+#' Model Tuning and Selection
 #' 
-#' Evaluate a model over a grid of tuning parameters and select the best one
-#' according to resample estimation of predictive performance.
+#' Evaluate a model over a grid of tuning parameters or a list of specified
+#' model objects and select the best one according to resample estimation of
+#' predictive performance.
 #' 
 #' @name tune
 #' @rdname tune-methods

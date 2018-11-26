@@ -44,7 +44,7 @@
 #' \tabular{ll}{
 #'   \code{\link{fit}} \tab Model Fitting \cr
 #'   \code{\link{resample}} \tab Resample Estimation of Model Performance \cr
-#'   \code{\link{tune}} \tab Model Tuning \cr
+#'   \code{\link{tune}} \tab Model Tuning and Selection \cr
 #' }
 #'
 #' Prediction:

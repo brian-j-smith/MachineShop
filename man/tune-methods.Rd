@@ -5,7 +5,7 @@
 \alias{tune.formula}
 \alias{tune.ModelFrame}
 \alias{tune.recipe}
-\title{Model Tuning}
+\title{Model Tuning and Selection}
 \usage{
 tune(x, ...)
 
@@ -54,8 +54,9 @@ maximum or minimum value of the performance metric.}
 \code{MLModelTune} class object that inherits from \code{MLModel}.
 }
 \description{
-Evaluate a model over a grid of tuning parameters and select the best one
-according to resample estimation of predictive performance.
+Evaluate a model over a grid of tuning parameters or a list of specified
+model objects and select the best one according to resample estimation of
+predictive performance.
 }
 \examples{
 \donttest{
