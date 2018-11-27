@@ -1,4 +1,4 @@
-#' Recursive Partitioning and Regression Tree Model
+#' Recursive Partitioning and Regression Tree Models
 #' 
 #' Fit an \code{rpart} model.
 #' 
@@ -41,7 +41,7 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
     packages = c("rpart", "partykit"),
     types = c("factor", "numeric", "Surv"),
     params = args,
-    nvars = function(data) nvars(data, design = "model.matrix"),
+    nvars = function(data) nvars(data, design = "terms"),
     fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       method <- switch_class(response(formula, data),
