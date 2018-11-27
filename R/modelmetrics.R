@@ -58,6 +58,34 @@ modelmetrics.numeric <- function(x, y, ...) {
 
 #' @rdname modelmetrics
 #' 
+modelmetrics.Resamples <- function(x, ...) {
+  control <- x@control
+  x <- x@response
+  if (control@na.rm) x <- na.omit(x)
+  control_list <- as(control, "list")
+  metrics_by <- by(x, x[c("Model", "Resample")], function(x) {
+    if (nrow(x)) {
+      do.call(modelmetrics, c(list(x$Observed, x$Predicted), control_list))
+    } else {
+      NA
+    }
+  }, simplify = FALSE)
+  metrics_list <- tapply(metrics_by,
+                         rep(dimnames(metrics_by)$Model, dim(metrics_by)[2]),
+                         function(metrics) do.call(rbind, metrics),
+                         simplify = FALSE)
+  metrics <- if (length(metrics_list) > 1) {
+    abind(metrics_list, along = 3)
+  } else {
+    metrics_list[[1]]
+  }
+  dimnames(metrics)[[1]] <- dimnames(metrics_by)$Resample
+  metrics
+}
+
+
+#' @rdname modelmetrics
+#' 
 #' @param times numeric vector of follow-up times at which survival events
 #' were predicted.
 #' 

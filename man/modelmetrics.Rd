@@ -5,6 +5,7 @@
 \alias{modelmetrics.factor}
 \alias{modelmetrics.matrix}
 \alias{modelmetrics.numeric}
+\alias{modelmetrics.Resamples}
 \alias{modelmetrics.Surv}
 \title{Model Performance Metrices}
 \usage{
@@ -16,6 +17,8 @@ modelmetrics(x, ...)
 \method{modelmetrics}{matrix}(x, y, ...)
 
 \method{modelmetrics}{numeric}(x, y, ...)
+
+\method{modelmetrics}{Resamples}(x, ...)
 
 \method{modelmetrics}{Surv}(x, y, times = numeric(), ...)
 }
