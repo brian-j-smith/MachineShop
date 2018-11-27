@@ -49,6 +49,7 @@ modelinfo <- function(...) {
     "SVMRadialModel" = "Support Vector Machines (Radial)",
     "SVMSplineModel" = "Support Vector Machines (Spline)",
     "SVMTanhModel" = "Support Vector Machines (Tanh)",
+    "TreeModel" = "Regression and Classification Trees",
     "XGBModel" = "Extreme Gradient Boosting",
     "XGBDARTModel" = "Extreme Gradient Boosting (DART)",
     "XGBLinearModel" = "Extreme Gradient Boosting (Linear)",

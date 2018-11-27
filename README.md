@@ -1128,6 +1128,38 @@ n
 
 <td style="text-align:left;">
 
+Regression and Classification Trees
+
+</td>
+
+<td style="text-align:center;">
+
+TreeModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 Extreme Gradient Boosting
 
 </td>

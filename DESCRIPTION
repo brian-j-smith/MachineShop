@@ -14,7 +14,7 @@ Imports: abind, foreach, ggplot2, Hmisc, irr, kernlab, magrittr, methods,
          survival, survivalROC, utils
 Suggests: C50, doParallel, gbm, glmnet, kableExtra, kknn, knitr, mda, MASS,
           nnet, partykit, pls, randomForest, rmarkdown, rms, rpart, testthat,
-          xgboost
+          tree, xgboost
 License: GPL-3
 URL: https://github.com/brian-j-smith/MachineShop
 BugReports: https://github.com/brian-j-smith/MachineShop/issues
