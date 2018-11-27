@@ -258,6 +258,11 @@ terms.recipe <- function(x, ...) {
 }
 
 
+depwarn <- function(old, new) {
+  warning(old, "\n", new, call. = FALSE)
+}
+
+
 warn <- function(...) {
   warning(..., call. = FALSE)
 }

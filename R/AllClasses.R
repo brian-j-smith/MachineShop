@@ -33,12 +33,12 @@ setClass("MLControl",
 #' @aliases initialize,MLControl-method
 #' 
 #' @param .Object class object being initialized.
-#' @param summary function to compute model performance metrics.
+#' @param summary function to compute model performance metrics (deprecated).
 #' @param cutoff threshold above which probabilities are classified as success
 #' for factor outcomes and which expected values are rounded for integer
-#' outcomes.
+#' outcomes (deprecated).
 #' @param cutoff_index function to calculate a desired sensitivity-specificity
-#' tradeoff.
+#' tradeoff (deprecated).
 #' @param surv_times numeric vector of follow-up times at which to predict
 #' survival events.
 #' @param na.rm logical indicating whether to remove observed or predicted
@@ -47,18 +47,37 @@ setClass("MLControl",
 #' to a random integer by default (NULL).
 #' @param ...  arguments to be passed to or from other methods.
 #' 
+#' @details
+#' Arguments \code{summary}, \code{cutoff}, and \code{cutoff_index} are
+#' deprecated.  The latter two may be specified directly in calls to
+#' \code{\link{modelmetrics}} instead.
+#' 
 #' @return \code{MLControl} class object.
 #' 
 #' @seealso \code{\link{resample}}, \code{\link{modelmetrics}}
 #' 
 setMethod("initialize", "MLControl",
-  function(.Object, summary = modelmetrics, cutoff = 0.5,
-           cutoff_index = function(sens, spec) sens + spec,
+  function(.Object, summary = NULL, cutoff = NULL, cutoff_index = NULL,
            surv_times = numeric(), na.rm = TRUE, seed = NULL, ...) {
+    
+    if (!is.null(summary)) {
+      depwarn("'summary' argument to MLControl is deprecated",
+              "apply the modelmetrics function to Resamples output directly")
+    }
+    
+    if (!is.null(cutoff)) {
+      depwarn("'cutoff' argument to MLContorl is deprecated",
+              "specify in calls to modelmetrics instead")
+    }
+    
+    if (!is.null(cutoff_index)) {
+      depwarn("'cutoff_index' argument to MLControl is deprecated",
+              "specify in calls to modelmetrics instead")
+    }
+    
     if (is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
-    callNextMethod(.Object, summary = summary, cutoff = cutoff,
-                   cutoff_index = cutoff_index, surv_times = surv_times,
-                   na.rm = na.rm, seed = seed, ...)
+    callNextMethod(.Object, surv_times = surv_times, na.rm = na.rm,
+                   seed = seed, ...)
   }
 )
 

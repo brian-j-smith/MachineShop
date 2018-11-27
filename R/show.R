@@ -10,11 +10,8 @@ print.Resamples <- function(x, ...) {
 
 setMethod("show", "MLControl",
   function(object) {
-    cat("Class cutoff probability:", object@cutoff, "\n\n")
-    if (length(object@surv_times)) {
-      cat("Survival times:", toString(object@surv_times), "\n\n")
-    }
-    cat("Omit missing responses: ", object@na.rm, "\n\n",
+    cat("Survival times: ", toString(object@surv_times), "\n\n",
+        "Omit missing responses: ", object@na.rm, "\n\n",
         "Seed: ", object@seed, "\n\n", sep = "")
     invisible()
   }

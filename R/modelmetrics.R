@@ -61,10 +61,11 @@ modelmetrics.numeric <- function(x, y, ...) {
 modelmetrics.Resamples <- function(x, ...) {
   control <- x@control
   if (control@na.rm) x <- na.omit(x)
-  control_list <- as(control, "list")
+  args <- list(...)
+  args$times <- control@surv_times
   metrics_by <- by(x, x[c("Model", "Resample")], function(x) {
     if (nrow(x)) {
-      do.call(modelmetrics, c(list(x$Observed, x$Predicted), control_list))
+      do.call(modelmetrics, c(list(x$Observed, x$Predicted), args))
     } else {
       NA
     }
