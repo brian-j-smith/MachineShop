@@ -146,11 +146,11 @@ modelmetrics(obs, pred)
 
 ```{r, fig.height = 4}
 ## Resample estimation of model performance
-(perf <- resample(fo, data = iris, model = GBMModel, control = CVControl))
+(res <- resample(fo, data = iris, model = GBMModel, control = CVControl))
 
-summary(perf)
+summary(res)
 
-plot(perf)
+plot(res)
 ```
 
 ### Model Tuning
@@ -177,19 +177,19 @@ varimp(gbmtunefit)
 ## Model comparisons
 control <- CVControl(folds = 10, repeats = 5)
 
-gbmperf <- resample(fo, data = iris, model = GBMModel(n.tree = 50), control = control)
-rfperf <- resample(fo, data = iris, model = RandomForestModel(ntree = 50), control = control)
-nnetperf <- resample(fo, data = iris, model = NNetModel(size = 5), control = control)
+gbmres <- resample(fo, data = iris, model = GBMModel(n.tree = 50), control = control)
+rfres <- resample(fo, data = iris, model = RandomForestModel(ntree = 50), control = control)
+nnetres <- resample(fo, data = iris, model = NNetModel(size = 5), control = control)
 
-perf <- Resamples(GBM = gbmperf, RF = rfperf, NNet = nnetperf)
-summary(perf)
+res <- Resamples(GBM = gbmres, RF = rfres, NNet = nnetres)
+summary(res)
 
-plot(perf)
+plot(res)
 ```
 
 ```{r}
 ## Pairwise model differences and t-tests
-perfdiff <- diff(perf)
+perfdiff <- diff(res)
 summary(perfdiff)
 
 t.test(perfdiff)
@@ -201,25 +201,25 @@ plot(perfdiff)
 
 ```{r}
 ## Stacked regression
-stackedperf <- resample(fo, data = iris, model = StackedModel(GBMModel, RandomForestModel, NNetModel))
-summary(stackedperf)
+stackedres <- resample(fo, data = iris, model = StackedModel(GBMModel, RandomForestModel, NNetModel))
+summary(stackedres)
 
 ## Super learners
-superperf <- resample(fo, data = iris, model = SuperModel(GBMModel, RandomForestModel, NNetModel))
-summary(superperf)
+superres <- resample(fo, data = iris, model = SuperModel(GBMModel, RandomForestModel, NNetModel))
+summary(superres)
 ```
 
 ### Calibration Curves
 
 ```{r results = "hide"}
-cal <- calibration(perf)
+cal <- calibration(res)
 plot(cal, se = TRUE)
 ```
 
 ### Confusion Matrices
 
 ```{r}
-(conf <- confusion(gbmperf))
+(conf <- confusion(gbmres))
 
 summary(conf)
 ```
@@ -242,17 +242,17 @@ plot(pd)
 fo_versicolor <- factor(Species == "versicolor") ~ .
 control = CVControl()
 
-gbmperf_versicolor <- resample(fo_versicolor, data = iris,  model = GBMModel, control = control)
-lf <- lift(gbmperf_versicolor)
+gbmres_versicolor <- resample(fo_versicolor, data = iris,  model = GBMModel, control = control)
+lf <- lift(gbmres_versicolor)
 plot(lf)
 ```
 
 ```{r}
-rfperf_versicolor <- resample(fo_versicolor, data = iris,  model = RandomForestModel, control = control)
-nnetperf_versicolor <- resample(fo_versicolor, data = iris,  model = NNetModel, control = control)
+rfres_versicolor <- resample(fo_versicolor, data = iris,  model = RandomForestModel, control = control)
+nnetres_versicolor <- resample(fo_versicolor, data = iris,  model = NNetModel, control = control)
 
-perf_versicolor <- Resamples(gbmperf_versicolor, rfperf_versicolor, nnetperf_versicolor)
-lf <- lift(perf_versicolor)
+res_versicolor <- Resamples(gbmres_versicolor, rfres_versicolor, nnetres_versicolor)
+lf <- lift(res_versicolor)
 plot(lf, find = 75)
 ```
 
@@ -270,6 +270,6 @@ rec <- recipe(fo, data = iris) %>%
 fit_rec <- fit(rec, model = GBMModel)
 varimp(fit_rec)
 
-perf_rec <- resample(rec, model = GBMModel, control = CVControl)
-summary(perf_rec)
+res_rec <- resample(rec, model = GBMModel, control = CVControl)
+summary(res_rec)
 ```

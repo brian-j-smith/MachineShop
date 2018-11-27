@@ -44,9 +44,9 @@ diff.ModelMetrics <- function(x, ...) {
 #' gbmres3 <- resample(fo, Melanoma, GBMModel(n.trees = 100), control)
 #' 
 #' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
-#' resdiff <- diff(res)
-#' summary(resdiff)
-#' plot(resdiff)
+#' perfdiff <- diff(res)
+#' summary(perfdiff)
+#' plot(perfdiff)
 #' 
 diff.Resamples <- function(x, ...) {
   diff(modelmetrics(x))
@@ -91,8 +91,8 @@ diff.MLModelTune <- function(x, ...) {
 #' gbmres3 <- resample(fo, Boston, GBMModel(n.trees = 100), control)
 #' 
 #' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
-#' resdiff <- diff(res)
-#' t.test(resdiff)
+#' perfdiff <- diff(res)
+#' t.test(perfdiff)
 #' 
 t.test.ModelMetricsDiff <- function(x, adjust = "holm", ...)
 {

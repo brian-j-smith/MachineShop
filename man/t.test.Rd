@@ -37,8 +37,8 @@ gbmres2 <- resample(fo, Boston, GBMModel(n.trees = 50), control)
 gbmres3 <- resample(fo, Boston, GBMModel(n.trees = 100), control)
 
 res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
-resdiff <- diff(res)
-t.test(resdiff)
+perfdiff <- diff(res)
+t.test(perfdiff)
 
 }
 \seealso{

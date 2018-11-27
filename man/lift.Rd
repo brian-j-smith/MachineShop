@@ -22,8 +22,8 @@ values.
 \examples{
 library(MASS)
 
-perf <- resample(type ~ ., data = Pima.tr, model = GBMModel)
-(lf <- lift(perf))
+res <- resample(type ~ ., data = Pima.tr, model = GBMModel)
+(lf <- lift(res))
 plot(lf)
 
 }

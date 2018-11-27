@@ -38,9 +38,9 @@ gbmres2 <- resample(fo, Melanoma, GBMModel(n.trees = 50), control)
 gbmres3 <- resample(fo, Melanoma, GBMModel(n.trees = 100), control)
 
 res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
-resdiff <- diff(res)
-summary(resdiff)
-plot(resdiff)
+perfdiff <- diff(res)
+summary(perfdiff)
+plot(perfdiff)
 
 }
 \seealso{
