@@ -23,7 +23,7 @@
 confusion <- function(x, ...) {
   stopifnot(is(x, "Resamples"))
   
-  conf <- by(response(x), list(Model = response(x)$Model), function(data) {
+  conf <- by(x, list(Model = x$Model), function(data) {
     .confusion(data$Observed, data$Predicted)
   }, simplify = FALSE)
   

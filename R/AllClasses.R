@@ -259,16 +259,14 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 #' 
 #' Create an object of resampled performance metrics from one or more models.
 #' 
-#' @param response \code{data.frame} of resampled observed and predicted
-#' resposnes.
 #' @param control \code{MLControl} object used to generate the resample output.
 #' @param strata character string indicating the strata variable, if any.
 #' @param ... named or unnamed resample output from one or more models.
 #' 
 #' @details Argument \code{control} need only be specified if the supplied
 #' output is not a \code{Resamples} object.  Output being combined from more
-#' than one model must have been generated with the same resampling object and
-#' performance metrics.
+#' than one model must have been generated with the same resampling control
+#' object.
 #' 
 #' @return \code{Resamples} class object.
 #' 
@@ -280,29 +278,27 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 #' fo <- Species ~ .
 #' control <- CVControl()
 #' 
-#' gbmperf1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
-#' gbmperf2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
-#' gbmperf3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+#' gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+#' gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+#' gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
 #' 
-#' perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
-#' summary(perf)
-#' plot(perf)
+#' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
+#' summary(res)
+#' plot(res)
 #' 
-Resamples <- function(..., control = NULL, response = NULL,
-                      strata = character()) {
-  new("Resamples", ..., control = control, response = response, strata = strata)
+Resamples <- function(..., control = NULL, strata = character()) {
+  new("Resamples", ..., control = control, strata = strata)
 }
 
 
 setClass("Resamples",
-  slots = c(control = "MLControl", response = "data.frame",
-            strata = "character"),
-  contains = "array"
+  slots = c(control = "MLControl", strata = "character"),
+  contains = "data.frame"
 )
 
 
 setMethod("initialize", "Resamples",
-  function(.Object, ..., control, response, strata) {
+  function(.Object, ..., control, strata) {
     args <- list(...)
     
     if (length(args) == 0) stop("no resample output given")
@@ -310,12 +306,15 @@ setMethod("initialize", "Resamples",
     .Data <- args[[1]]
     if (length(args) == 1) {
       if (is(.Data, "Resamples")) {
-        response <- .Data@response
         strata <- .Data@strata
       }
     } else {
-      if (!all(sapply(args, function(x) is(x, "Resamples") && is.matrix(x)))) {
-        stop("values to combine must be 2 dimensional Resamples objects")
+      if (!all(sapply(args, function(x) is(x, "Resamples")))) {
+        stop("values to combine must be Resamples objects")
+      }
+      
+      if (!all(sapply(args, function(x) nlevels(x$Model) == 1))) {
+        stop("resamples must be from single models")
       }
 
       control <- .Data@control
@@ -328,14 +327,10 @@ setMethod("initialize", "Resamples",
       if (!all(sapply(args, function(x) x@strata == strata))) {
         stop("resamples have different strata variables")
       }
-      
-      if (!all(sapply(args, colnames) == colnames(.Data))) {
-        stop("resamples contain different metrics")
-      }
-      
-      response <- Reduce(append, lapply(args, slot, name = "response"))
-      
-      old_model_names <- sapply(args, function(x) levels(x@response$Model))
+
+      .Data <- Reduce(append, args)
+
+      old_model_names <- sapply(args, function(x) levels(x$Model))
       model_names <- names(args)
       if (is.null(model_names)) {
         model_names <- old_model_names
@@ -343,24 +338,18 @@ setMethod("initialize", "Resamples",
         model_names <- ifelse(nzchar(model_names), model_names, old_model_names)
       }
       model_names <- make.names(model_names, unique = TRUE)
-      num_times <- sapply(args, function(x) nrow(x@response))
-      response$Model <- factor(rep(model_names, num_times),
-                               levels = model_names)
-
-      names(args) <- NULL
-      args$along <- 3
-      args$new.names <- list(NULL, NULL, model_names)
-      .Data <- do.call(abind, args)
+      num_times <- sapply(args, nrow)
+      .Data$Model <- factor(rep(model_names, num_times), levels = model_names)
     }
     
-    response_vars <- c("Resample", "Case", "Observed", "Predicted", "Model")
-    is_missing <- !(response_vars %in% names(response))
+    resample_vars <- c("Model", "Resample", "Case", "Observed", "Predicted")
+    is_missing <- !(resample_vars %in% names(.Data))
     if (any(is_missing)) {
-      stop("missing response variables: ", toString(response_vars[is_missing]))
+      stop("missing resample variables: ", toString(resample_vars[is_missing]))
     }
     
-    callNextMethod(.Object, .Data, control = control, response = response,
-                   strata = if (is.character(strata)) strata else character())
+    callNextMethod(.Object, .Data, control = control,
+                   strata = as.character(strata))
   }
 )
 

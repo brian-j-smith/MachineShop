@@ -94,12 +94,12 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
 plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
                              type = c("boxplot", "density", "errorbar", "line",
                                       "violin"), ...) {
-  resamples <- x@resamples
+  perf <- modelmetrics(x@resamples)
   type <- match.arg(type)
   if (type == "line") {
     grid <- x@grid
     if (any(dim(grid) == 0)) stop("no tuning parameters to plot")
-    stats <- apply(resamples, c(3, 2), function(x) stat(na.omit(x))) %>%
+    stats <- apply(perf, c(3, 2), function(x) stat(na.omit(x))) %>%
       as.data.frame.table
     df <- data.frame(
       x = grid[[1]],
@@ -129,7 +129,7 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
            shape = "Params Group") +
       facet_wrap(~ metric, scales = "free")
   } else {
-    plot(resamples, metrics = metrics, stat = stat, type = type, ...)
+    plot(perf, metrics = metrics, stat = stat, type = type, ...)
   }
 }
 

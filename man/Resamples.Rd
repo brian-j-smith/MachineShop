@@ -4,15 +4,12 @@
 \alias{Resamples}
 \title{Resamples Class Contructor}
 \usage{
-Resamples(..., control = NULL, response = NULL, strata = character())
+Resamples(..., control = NULL, strata = character())
 }
 \arguments{
 \item{...}{named or unnamed resample output from one or more models.}
 
 \item{control}{\code{MLControl} object used to generate the resample output.}
-
-\item{response}{\code{data.frame} of resampled observed and predicted
-resposnes.}
 
 \item{strata}{character string indicating the strata variable, if any.}
 }
@@ -25,8 +22,8 @@ Create an object of resampled performance metrics from one or more models.
 \details{
 Argument \code{control} need only be specified if the supplied
 output is not a \code{Resamples} object.  Output being combined from more
-than one model must have been generated with the same resampling object and
-performance metrics.
+than one model must have been generated with the same resampling control
+object.
 }
 \examples{
 ## Factor response example
@@ -34,13 +31,13 @@ performance metrics.
 fo <- Species ~ .
 control <- CVControl()
 
-gbmperf1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
-gbmperf2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
-gbmperf3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
 
-perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
-summary(perf)
-plot(perf)
+res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
+summary(res)
+plot(res)
 
 }
 \seealso{

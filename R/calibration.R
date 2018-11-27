@@ -28,7 +28,7 @@ calibration <- function(x, n = 10, ...) {
   
   times <- x@control@surv_times
   
-  cal_list <- by(response(x), response(x)$Model, function(data) {
+  cal_list <- by(x, x$Model, function(data) {
     .calibration(data$Observed, data$Predicted, n, times = times) %>%
       cbind(Model = data$Model[1])
   }, simplify = FALSE)

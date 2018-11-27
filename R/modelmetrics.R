@@ -60,7 +60,6 @@ modelmetrics.numeric <- function(x, y, ...) {
 #' 
 modelmetrics.Resamples <- function(x, ...) {
   control <- x@control
-  x <- x@response
   if (control@na.rm) x <- na.omit(x)
   control_list <- as(control, "list")
   metrics_by <- by(x, x[c("Model", "Resample")], function(x) {

@@ -101,7 +101,9 @@ tune.recipe <- function(x, models, grid = data.frame(),
   perf <- list()
   for (i in seq(models)) {
     resamples[[i]] <- resample(..., models[[i]], control)
-    perf[[i]] <- apply(resamples[[i]], 2, function(x) stat(na.omit(x)))
+    perf[[i]] <- apply(modelmetrics(resamples[[i]]), 2, function(x) {
+      stat(na.omit(x))
+    })
   }
   perf <- as.data.frame(do.call(rbind, perf))
   metric <- match_indices(metric, names(perf))

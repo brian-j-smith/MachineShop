@@ -58,12 +58,12 @@ be unstratified if no variables have that role.
 library(survival)
 library(MASS)
 
-(gbmperf <- resample(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-                     data = Melanoma, model = GBMModel,
-                     control = CVControl(folds = 10, repeats = 5,
-                                         surv_times = 365 * c(2, 5, 10))))
-summary(gbmperf)
-plot(gbmperf)
+(gbmres <- resample(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+                    data = Melanoma, model = GBMModel,
+                    control = CVControl(folds = 10, repeats = 5,
+                                        surv_times = 365 * c(2, 5, 10))))
+summary(gbmres)
+plot(gbmres)
 }
 
 }
