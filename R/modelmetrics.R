@@ -4,28 +4,49 @@
 #' 
 #' @rdname modelmetrics
 #' 
-#' @param x observed responses or class of observed and predicted responses.
+#' @param x observed responses or class containing observed and predicted
+#' responses.
 #' @param y predicted responses.
 #' @param ... arguments passed to or from other methods.
 #' 
-#' @return Numeric vector of model metrics.
-#' 
-#' @seealso \code{\link{predict}}, \code{\linkS4class{MLControl}}
-#' 
-#' @examples
-#' ## Survival response example
-#' library(survival)
-#' library(MASS)
-#' 
-#' fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
-#' gbmfit <- fit(fo, data = Melanoma, model = GBMModel)
-#' 
-#' obs <- response(fo, data = Melanoma)
-#' pred <- predict(gbmfit, newdata = Melanoma, type = "prob")
-#' modelmetrics(obs, pred)
-#' 
 modelmetrics <- function(x, ...) {
   UseMethod("modelmetrics")
+}
+
+
+#' @rdname modelmetrics
+#' 
+#' @seealso \code{\link{resample}}, \code{\link{Resamples}}
+#' 
+#' @examples
+#' res <- resample(Species ~ ., data = iris, model = GBMModel)
+#' (metrics <- modelmetrics(res))
+#' summary(metrics)
+#' plot(metrics)
+#' 
+modelmetrics.Resamples <- function(x, ...) {
+  control <- x@control
+  if (control@na.rm) x <- na.omit(x)
+  args <- list(...)
+  args$times <- control@surv_times
+  metrics_by <- by(x, x[c("Model", "Resample")], function(x) {
+    if (nrow(x)) {
+      do.call(modelmetrics, c(list(x$Observed, x$Predicted), args))
+    } else {
+      NA
+    }
+  }, simplify = FALSE)
+  metrics_list <- tapply(metrics_by,
+                         rep(dimnames(metrics_by)$Model, dim(metrics_by)[2]),
+                         function(metrics) do.call(rbind, metrics),
+                         simplify = FALSE)
+  metrics <- if (length(metrics_list) > 1) {
+    abind(metrics_list, along = 3)
+  } else {
+    metrics_list[[1]]
+  }
+  dimnames(metrics)[[1]] <- dimnames(metrics_by)$Resample
+  ModelMetrics(metrics)
 }
 
 
@@ -58,36 +79,22 @@ modelmetrics.numeric <- function(x, y, ...) {
 
 #' @rdname modelmetrics
 #' 
-modelmetrics.Resamples <- function(x, ...) {
-  control <- x@control
-  if (control@na.rm) x <- na.omit(x)
-  args <- list(...)
-  args$times <- control@surv_times
-  metrics_by <- by(x, x[c("Model", "Resample")], function(x) {
-    if (nrow(x)) {
-      do.call(modelmetrics, c(list(x$Observed, x$Predicted), args))
-    } else {
-      NA
-    }
-  }, simplify = FALSE)
-  metrics_list <- tapply(metrics_by,
-                         rep(dimnames(metrics_by)$Model, dim(metrics_by)[2]),
-                         function(metrics) do.call(rbind, metrics),
-                         simplify = FALSE)
-  metrics <- if (length(metrics_list) > 1) {
-    abind(metrics_list, along = 3)
-  } else {
-    metrics_list[[1]]
-  }
-  dimnames(metrics)[[1]] <- dimnames(metrics_by)$Resample
-  ModelMetrics(metrics)
-}
-
-
-#' @rdname modelmetrics
-#' 
 #' @param times numeric vector of follow-up times at which survival events
 #' were predicted.
+#' 
+#' @seealso \code{\link{predict}}, \code{\link{response}}
+#' 
+#' @examples
+#' ## Survival response example
+#' library(survival)
+#' library(MASS)
+#' 
+#' fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
+#' gbmfit <- fit(fo, data = Melanoma, model = GBMModel)
+#' 
+#' obs <- response(fo, data = Melanoma)
+#' pred <- predict(gbmfit, newdata = Melanoma, type = "prob")
+#' modelmetrics(obs, pred)
 #' 
 modelmetrics.Surv <- function(x, y, times = numeric(), ...) {
   .modelmetrics(x, y, times = times)

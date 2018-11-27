@@ -2,14 +2,16 @@
 % Please edit documentation in R/modelmetrics.R
 \name{modelmetrics}
 \alias{modelmetrics}
+\alias{modelmetrics.Resamples}
 \alias{modelmetrics.factor}
 \alias{modelmetrics.matrix}
 \alias{modelmetrics.numeric}
-\alias{modelmetrics.Resamples}
 \alias{modelmetrics.Surv}
 \title{Model Performance Metrices}
 \usage{
 modelmetrics(x, ...)
+
+\method{modelmetrics}{Resamples}(x, ...)
 
 \method{modelmetrics}{factor}(x, y, cutoff = 0.5,
   cutoff_index = function(sens, spec) sens + spec, ...)
@@ -18,12 +20,11 @@ modelmetrics(x, ...)
 
 \method{modelmetrics}{numeric}(x, y, ...)
 
-\method{modelmetrics}{Resamples}(x, ...)
-
 \method{modelmetrics}{Surv}(x, y, times = numeric(), ...)
 }
 \arguments{
-\item{x}{observed responses or class of observed and predicted responses.}
+\item{x}{observed responses or class containing observed and predicted
+responses.}
 
 \item{...}{arguments passed to or from other methods.}
 
@@ -38,13 +39,15 @@ tradeoff.}
 \item{times}{numeric vector of follow-up times at which survival events
 were predicted.}
 }
-\value{
-Numeric vector of model metrics.
-}
 \description{
 Compute measures of model performance.
 }
 \examples{
+res <- resample(Species ~ ., data = iris, model = GBMModel)
+(metrics <- modelmetrics(res))
+summary(metrics)
+plot(metrics)
+
 ## Survival response example
 library(survival)
 library(MASS)
@@ -58,5 +61,7 @@ modelmetrics(obs, pred)
 
 }
 \seealso{
-\code{\link{predict}}, \code{\linkS4class{MLControl}}
+\code{\link{resample}}, \code{\link{Resamples}}
+
+\code{\link{predict}}, \code{\link{response}}
 }
