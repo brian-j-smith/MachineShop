@@ -114,6 +114,17 @@ setMethod("show", "MLModelTune",
 )
 
 
+setMethod("show", "ModelMetrics",
+  function(object) {
+    cat("An object of class \"", class(object), "\"\n\n", sep = "")
+    if (length(dim(object)) > 2) {
+      cat("Models:", toString(dimnames(object)[[3]]), "\n\n")
+    }
+    cat("Metrics:", toString(dimnames(object)[[2]]), "\n\n")
+  }
+)
+
+
 setMethod("show", "Resamples",
   function(object) {
     cat("An object of class \"", class(object), "\"\n\n",

@@ -2,6 +2,7 @@
 % Please edit documentation in R/plots.R
 \name{plot}
 \alias{plot}
+\alias{plot.ModelMetrics}
 \alias{plot.Resamples}
 \alias{plot.MLModelTune}
 \alias{plot.CalibrationResamples}
@@ -11,6 +12,9 @@
 \alias{plot.VarImp}
 \title{Model Performance Plots}
 \usage{
+\method{plot}{ModelMetrics}(x, metrics = NULL, stat = mean,
+  type = c("boxplot", "density", "errorbar", "violin"), ...)
+
 \method{plot}{Resamples}(x, metrics = NULL, stat = mean,
   type = c("boxplot", "density", "errorbar", "violin"), ...)
 
@@ -64,17 +68,19 @@ control <- CVControl()
 gbmfit <- fit(fo, data = iris, model = GBMModel, control = control)
 plot(varimp(gbmfit))
 
-gbmperf1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
-gbmperf2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
-gbmperf3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
-plot(gbmperf3)
+gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+plot(gbmres3)
 
-perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
-plot(perf)
+res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
+plot(res)
 
 }
 \seealso{
-\code{\link{diff}}, \code{\link{resample}}, \code{\link{Resamples}}
+\code{\link{diff}}, \code{\link{modelmetrics}}
+
+\code{\link{resample}}, \code{\link{Resamples}}
 
 \code{\link{tune}}
 

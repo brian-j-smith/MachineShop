@@ -13,28 +13,11 @@
 #' @param type type of plot to construct.
 #' @param ... arguments passed to other methods.
 #' 
-#' @seealso \code{\link{diff}}, \code{\link{resample}}, \code{\link{Resamples}}
+#' @seealso \code{\link{diff}}, \code{\link{modelmetrics}}
 #' 
-#' @examples
-#' ## Factor response example
-#' 
-#' fo <- Species ~ .
-#' control <- CVControl()
-#' 
-#' gbmfit <- fit(fo, data = iris, model = GBMModel, control = control)
-#' plot(varimp(gbmfit))
-#' 
-#' gbmperf1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
-#' gbmperf2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
-#' gbmperf3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
-#' plot(gbmperf3)
-#' 
-#' perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
-#' plot(perf)
-#' 
-plot.Resamples <- function(x, metrics = NULL, stat = mean,
-                           type = c("boxplot", "density", "errorbar", "violin"),
-                           ...) {
+plot.ModelMetrics <- function(x, metrics = NULL, stat = mean,
+                              type = c("boxplot", "density", "errorbar",
+                                       "violin"), ...) {
   df <- as.data.frame.table(x)
   if (length(dim(x)) <= 2) df$Var3 <- factor("Model")
   orderednames <- match(c("Var1", "Var2", "Var3", "Freq"), names(df))
@@ -73,6 +56,34 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
            labs(x = "", y = "Values") +
            coord_flip()) +
     facet_wrap(~ metric, scales = "free")
+}
+
+
+#' @rdname plot-method
+#' 
+#' @seealso \code{\link{resample}}, \code{\link{Resamples}}
+#' 
+#' @examples
+#' ## Factor response example
+#' 
+#' fo <- Species ~ .
+#' control <- CVControl()
+#' 
+#' gbmfit <- fit(fo, data = iris, model = GBMModel, control = control)
+#' plot(varimp(gbmfit))
+#' 
+#' gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+#' gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+#' gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+#' plot(gbmres3)
+#' 
+#' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
+#' plot(res)
+#' 
+plot.Resamples <- function(x, metrics = NULL, stat = mean,
+                           type = c("boxplot", "density", "errorbar", "violin"),
+                           ...) {
+  plot(modelmetrics(x), metrics = metrics, stat = stat, type = type)
 }
 
 
