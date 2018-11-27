@@ -112,7 +112,7 @@ f
 
 <td style="text-align:left;">
 
-Conditional Inference Trees
+Conditional Random Forests
 
 </td>
 
@@ -236,7 +236,7 @@ f
 
 <td style="text-align:left;">
 
-Gradient Boosted Models
+Generalized Boosted Regression
 
 </td>
 

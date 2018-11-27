@@ -17,11 +17,11 @@
 modelinfo <- function(...) {
   model_labels <- c(
     "C50Model" = "C5.0 Classification",
-    "CForestModel" = "Conditional Inference Trees",
+    "CForestModel" = "Conditional Random Forests",
     "CoxModel" = "Cox Regression",
     "CoxStepAICModel" = "Cox Regression (Stepwise)",
     "FDAModel" = "Flexible Discriminant Analysis",
-    "GBMModel" = "Gradient Boosted Models",
+    "GBMModel" = "Generalized Boosted Regression",
     "GLMModel" = "Generalized Linear Models",
     "GLMStepAICModel" = "Generalized Linear Models (Stepwise)",
     "GLMNetModel" = "Lasso and Elastic-Net",
