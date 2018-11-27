@@ -35,6 +35,7 @@ export(.,
        lift,
        ModelFrame,
        modelinfo,
+       modelmetrics,
        resample,
        Resamples,
        response,
@@ -88,8 +89,6 @@ export(MLModel,
        XGBLinearModel,
        XGBTreeModel)
 
-exportMethods(modelmetrics)
-
 S3method(diff, MLModelTune)
 S3method(diff, Resamples)
 S3method(fit, ModelFrame)
@@ -97,6 +96,10 @@ S3method(fit, formula)
 S3method(fit, recipe)
 S3method(ModelFrame, formula)
 S3method(ModelFrame, matrix)
+S3method(modelmetrics, factor)
+S3method(modelmetrics, matrix)
+S3method(modelmetrics, numeric)
+S3method(modelmetrics, Surv)
 S3method(print, MLModelFit)
 S3method(plot, MLModelTune)
 S3method(plot, PartialDependence)

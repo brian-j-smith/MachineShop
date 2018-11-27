@@ -117,8 +117,7 @@ summary.MLControl <- function(object, observed, predicted, ...) {
     observed <- unAsIs(df$observed)
     predicted <- unAsIs(df$predicted)
   }
-  do.call(object@summary, c(list(observed = observed, predicted = predicted),
-                            as(object, "list")))
+  do.call(object@summary, c(list(observed, predicted), as(object, "list")))
 }
 
 
