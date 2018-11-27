@@ -80,7 +80,7 @@ modelmetrics.Resamples <- function(x, ...) {
     metrics_list[[1]]
   }
   dimnames(metrics)[[1]] <- dimnames(metrics_by)$Resample
-  metrics
+  ModelMetrics(metrics)
 }
 
 

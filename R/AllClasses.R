@@ -365,14 +365,20 @@ setMethod("initialize", "Resamples",
 )
 
 
-MLModelTune <- setClass("MLModelTune",
-  slots = c(grid = "data.frame", resamples = "Resamples", selected = "numeric"),
-  contains = "MLModel"
+ModelMetrics <- setClass("ModelMetrics",
+  contains = "array"
 )
 
 
-ResamplesDiff <- setClass("ResamplesDiff",
-  contains = "Resamples"
+ModelMetricsDiff <- setClass("ModelMetricsDiff",
+  slots = c("model_names" = "character"),
+  contains = "ModelMetrics"
+)
+
+
+MLModelTune <- setClass("MLModelTune",
+  slots = c(grid = "data.frame", resamples = "Resamples", selected = "numeric"),
+  contains = "MLModel"
 )
 
 
