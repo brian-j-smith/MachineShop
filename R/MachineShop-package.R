@@ -19,6 +19,7 @@
 #'   \code{\link{LDAModel}}            \tab f   \tab     \tab   \cr
 #'   \code{\link{LMModel}}             \tab f   \tab m,n \tab   \cr
 #'   \code{\link{MDAModel}}            \tab f   \tab     \tab   \cr
+#'   \code{\link{NaiveBayesModel}}     \tab f   \tab     \tab   \cr
 #'   \code{\link{NNetModel}}           \tab f   \tab n   \tab   \cr
 #'   \code{\link{PDAModel}}            \tab f   \tab     \tab   \cr
 #'   \code{\link{PLSModel}}            \tab f   \tab n   \tab   \cr

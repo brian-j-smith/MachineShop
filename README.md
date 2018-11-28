@@ -492,6 +492,36 @@ f
 
 <td style="text-align:left;">
 
+Naive Bayes Classifier
+
+</td>
+
+<td style="text-align:center;">
+
+NaiveBayesModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 Feed-Forward Neural Networks
 
 </td>

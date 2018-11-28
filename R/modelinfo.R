@@ -29,6 +29,7 @@ modelinfo <- function(...) {
     "LDAModel" = "Linear Discriminant Analysis",
     "LMModel" = "Linear Model",
     "MDAModel" = "Mixture Discriminant Analysis",
+    "NaiveBayesModel" = "Naive Bayes Classifier",
     "NNetModel" = "Feed-Forward Neural Networks",
     "PDAModel" = "Penalized Discriminant Analysis",
     "PLSModel" = "Partial Least Squares",
