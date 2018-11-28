@@ -17,13 +17,13 @@
 #' @seealso \code{\link{resample}}
 #' 
 #' @examples
-#' perf <- resample(Species ~ ., data = iris, model = GBMModel)
-#' confusion(perf)
+#' res <- resample(Species ~ ., data = iris, model = GBMModel)
+#' confusion(res)
 #' 
 confusion <- function(x, ...) {
   stopifnot(is(x, "Resamples"))
   
-  conf <- by(response(x), list(Model = response(x)$Model), function(data) {
+  conf <- by(x, list(Model = x$Model), function(data) {
     .confusion(data$Observed, data$Predicted)
   }, simplify = FALSE)
   

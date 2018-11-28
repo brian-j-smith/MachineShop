@@ -17,10 +17,10 @@
 #' library(survival)
 #' library(MASS)
 #' 
-#' perf <- resample(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-#'                  data = Melanoma, model = GBMModel,
-#'                  control = CVControl(surv_times = 365 * c(2, 5, 10)))
-#' (cal <- calibration(perf))
+#' res <- resample(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+#'                 data = Melanoma, model = GBMModel,
+#'                 control = CVControl(surv_times = 365 * c(2, 5, 10)))
+#' (cal <- calibration(res))
 #' plot(cal)
 #' 
 calibration <- function(x, n = 10, ...) {
@@ -28,7 +28,7 @@ calibration <- function(x, n = 10, ...) {
   
   times <- x@control@surv_times
   
-  cal_list <- by(response(x), response(x)$Model, function(data) {
+  cal_list <- by(x, x$Model, function(data) {
     .calibration(data$Observed, data$Predicted, n, times = times) %>%
       cbind(Model = data$Model[1])
   }, simplify = FALSE)

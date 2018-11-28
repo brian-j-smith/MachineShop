@@ -14,14 +14,14 @@
 #' @examples
 #' library(MASS)
 #' 
-#' perf <- resample(type ~ ., data = Pima.tr, model = GBMModel)
-#' (lf <- lift(perf))
+#' res <- resample(type ~ ., data = Pima.tr, model = GBMModel)
+#' (lf <- lift(res))
 #' plot(lf)
 #' 
 lift <- function(x, ...) {
   stopifnot(is(x, "Resamples"))
   
-  lift_list <- by(response(x), response(x)$Model, function(data) {
+  lift_list <- by(x, x$Model, function(data) {
     .lift(data$Observed, data$Predicted) %>%
       cbind(Model = data$Model[1])
   }, simplify = FALSE)

@@ -2,11 +2,15 @@
 % Please edit documentation in R/summary.R
 \name{summary}
 \alias{summary}
+\alias{summary.ModelMetrics}
 \alias{summary.Resamples}
 \alias{summary.MLModelTune}
 \alias{summary.ConfusionResamples}
 \title{Model Performance Summary}
 \usage{
+\method{summary}{ModelMetrics}(object, stats = c(Mean = mean, Median =
+  median, SD = sd, Min = min, Max = max), na.rm = TRUE, ...)
+
 \method{summary}{Resamples}(object, stats = c(Mean = mean, Median =
   median, SD = sd, Min = min, Max = max), na.rm = TRUE, ...)
 
@@ -39,17 +43,19 @@ Summary statistics for resampled model performance metrics.
 fo <- Species ~ .
 control <- CVControl()
 
-gbmperf1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
-gbmperf2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
-gbmperf3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
-summary(gbmperf3)
+gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+summary(gbmres3)
 
-perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
-summary(perf)
+res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
+summary(res)
 
 }
 \seealso{
-\code{\link{diff}}, \code{\link{resample}}, \code{\link{Resamples}}
+\code{\link{diff}}, \code{\link{modelmetrics}}
+
+\code{\link{resample}}, \code{\link{Resamples}}
 
 \code{\link{tune}}
 

@@ -2,10 +2,10 @@
 % Please edit documentation in R/diff.R
 \name{t.test}
 \alias{t.test}
-\alias{t.test.ResamplesDiff}
+\alias{t.test.ModelMetricsDiff}
 \title{Paired t-Tests for Model Comparisons}
 \usage{
-\method{t}{test.ResamplesDiff}(x, adjust = "holm", ...)
+\method{t}{test.ModelMetricsDiff}(x, adjust = "holm", ...)
 }
 \arguments{
 \item{x}{object containing paired differences between resampled metrics.}
@@ -32,12 +32,12 @@ library(MASS)
 fo <- medv ~ .
 control <- CVControl()
 
-gbmperf1 <- resample(fo, Boston, GBMModel(n.trees = 25), control)
-gbmperf2 <- resample(fo, Boston, GBMModel(n.trees = 50), control)
-gbmperf3 <- resample(fo, Boston, GBMModel(n.trees = 100), control)
+gbmres1 <- resample(fo, Boston, GBMModel(n.trees = 25), control)
+gbmres2 <- resample(fo, Boston, GBMModel(n.trees = 50), control)
+gbmres3 <- resample(fo, Boston, GBMModel(n.trees = 100), control)
 
-perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
-perfdiff <- diff(perf)
+res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
+perfdiff <- diff(res)
 t.test(perfdiff)
 
 }

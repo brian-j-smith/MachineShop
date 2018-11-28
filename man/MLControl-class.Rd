@@ -11,9 +11,9 @@
 \alias{TrainControl}
 \title{Resampling Classes and Methods}
 \usage{
-\S4method{initialize}{MLControl}(.Object, summary = modelmetrics,
-  cutoff = 0.5, cutoff_index = function(sens, spec) sens + spec,
-  surv_times = numeric(), na.rm = TRUE, seed = NULL, ...)
+\S4method{initialize}{MLControl}(.Object, summary = NULL,
+  cutoff = NULL, cutoff_index = NULL, surv_times = numeric(),
+  na.rm = TRUE, seed = NULL, ...)
 
 BootControl(samples = 25, ...)
 
@@ -28,14 +28,14 @@ TrainControl(...)
 \arguments{
 \item{.Object}{class object being initialized.}
 
-\item{summary}{function to compute model performance metrics.}
+\item{summary}{function to compute model performance metrics (deprecated).}
 
 \item{cutoff}{threshold above which probabilities are classified as success
 for factor outcomes and which expected values are rounded for integer
-outcomes.}
+outcomes (deprecated).}
 
 \item{cutoff_index}{function to calculate a desired sensitivity-specificity
-tradeoff.}
+tradeoff (deprecated).}
 
 \item{surv_times}{numeric vector of follow-up times at which to predict
 survival events.}
@@ -84,6 +84,11 @@ into a seperate trianing and test set.
 
 \code{TrainControl} constructs an \code{MLControl} object for training and
 performance evaluation to be performed on the same training set.
+}
+\details{
+Arguments \code{summary}, \code{cutoff}, and \code{cutoff_index} are
+deprecated.  The latter two may be specified directly in calls to
+\code{\link{modelmetrics}} instead.
 }
 \section{Slots}{
 

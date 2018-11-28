@@ -40,13 +40,6 @@ response.ModelFrame <- function(object, ...) {
 }
 
 
-#' @rdname response-methods
-#' 
-response.Resamples <- function(object, ...) {
-  object@response
-}
-
-
 response.tbl_df <- function(object, ...) {
   response(formula(object), object)
 }

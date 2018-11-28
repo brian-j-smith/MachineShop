@@ -25,8 +25,8 @@ cross-classification and will thus appear as decimal numbers that can be
 interpreted as expected counts.
 }
 \examples{
-perf <- resample(Species ~ ., data = iris, model = GBMModel)
-confusion(perf)
+res <- resample(Species ~ ., data = iris, model = GBMModel)
+confusion(res)
 
 }
 \seealso{

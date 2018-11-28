@@ -4,13 +4,85 @@
 #' 
 #' @rdname modelmetrics
 #' 
-#' @param observed vector of observed responses.
-#' @param predicted model-predicted responses.
+#' @param x observed responses or class containing observed and predicted
+#' responses.
+#' @param y predicted responses.
 #' @param ... arguments passed to or from other methods.
 #' 
-#' @return Numeric vector of model metrics.
+modelmetrics <- function(x, ...) {
+  UseMethod("modelmetrics")
+}
+
+
+#' @rdname modelmetrics
 #' 
-#' @seealso \code{\link{predict}}, \code{\linkS4class{MLControl}}
+#' @seealso \code{\link{resample}}, \code{\link{Resamples}}
+#' 
+#' @examples
+#' res <- resample(Species ~ ., data = iris, model = GBMModel)
+#' (metrics <- modelmetrics(res))
+#' summary(metrics)
+#' plot(metrics)
+#' 
+modelmetrics.Resamples <- function(x, ...) {
+  control <- x@control
+  if (control@na.rm) x <- na.omit(x)
+  args <- list(...)
+  args$times <- control@surv_times
+  metrics_by <- by(x, x[c("Model", "Resample")], function(x) {
+    if (nrow(x)) {
+      do.call(modelmetrics, c(list(x$Observed, x$Predicted), args))
+    } else {
+      NA
+    }
+  }, simplify = FALSE)
+  metrics_list <- tapply(metrics_by,
+                         rep(dimnames(metrics_by)$Model, dim(metrics_by)[2]),
+                         function(metrics) do.call(rbind, metrics),
+                         simplify = FALSE)
+  metrics <- if (length(metrics_list) > 1) {
+    abind(metrics_list, along = 3)
+  } else {
+    metrics_list[[1]]
+  }
+  dimnames(metrics)[[1]] <- dimnames(metrics_by)$Resample
+  ModelMetrics(metrics)
+}
+
+
+#' @rdname modelmetrics
+#' 
+#' @param cutoff threshold above which probabilities are classified as success
+#' for binary responses.
+#' @param cutoff_index function to calculate a desired sensitivity-specificity
+#' tradeoff.
+#' 
+modelmetrics.factor <- function(x, y, cutoff = 0.5, cutoff_index =
+                                  function(sens, spec) sens + spec, ...) {
+  .modelmetrics(x, y, cutoff = cutoff, cutoff_index = cutoff_index)
+}
+
+
+#' @rdname modelmetrics
+#' 
+modelmetrics.matrix <- function(x, y, ...) {
+  .modelmetrics(x, y)
+}
+
+
+#' @rdname modelmetrics
+#' 
+modelmetrics.numeric <- function(x, y, ...) {
+  .modelmetrics(x, y)
+}
+
+
+#' @rdname modelmetrics
+#' 
+#' @param times numeric vector of follow-up times at which survival events
+#' were predicted.
+#' 
+#' @seealso \code{\link{predict}}, \code{\link{response}}
 #' 
 #' @examples
 #' ## Survival response example
@@ -24,13 +96,16 @@
 #' pred <- predict(gbmfit, newdata = Melanoma, type = "prob")
 #' modelmetrics(obs, pred)
 #' 
-setGeneric("modelmetrics",
-           function(observed, predicted, ...) standardGeneric("modelmetrics"))
+modelmetrics.Surv <- function(x, y, times = numeric(), ...) {
+  .modelmetrics(x, y, times = times)
+}
 
 
-#' @rdname modelmetrics
-#' 
-setMethod("modelmetrics", c("factor", "factor"),
+setGeneric(".modelmetrics",
+           function(observed, predicted, ...) standardGeneric(".modelmetrics"))
+
+
+setMethod(".modelmetrics", c("factor", "factor"),
   function(observed, predicted, ...) {
     ratings <- cbind(observed, predicted)
     metrics <- c("Accuracy" = 1 - ce(observed, predicted),
@@ -43,12 +118,10 @@ setMethod("modelmetrics", c("factor", "factor"),
 )
 
 
-#' @rdname modelmetrics
-#' 
-setMethod("modelmetrics", c("factor", "matrix"),
+setMethod(".modelmetrics", c("factor", "matrix"),
   function(observed, predicted, ...) {
-    metrics <- modelmetrics(observed,
-                            convert_response(observed, predicted), ...)
+    metrics <- .modelmetrics(observed,
+                             convert_response(observed, predicted), ...)
     observed <- model.matrix(~ observed - 1)
     metrics["Brier"] <- sum((observed - predicted)^2) / nrow(observed)
     metrics["MLogLoss"] <- multinomLogLoss(observed, predicted)
@@ -57,15 +130,8 @@ setMethod("modelmetrics", c("factor", "matrix"),
 )
 
 
-#' @rdname modelmetrics
-#' 
-#' @param cutoff threshold above which probabilities are classified as success.
-#' @param cutoff_index function to calculate a desired sensitivity-specificity
-#' tradeoff.
-#' 
-setMethod("modelmetrics", c("factor", "numeric"),
-  function(observed, predicted, cutoff = 0.5,
-           cutoff_index = function(sens, spec) sens + spec, ...) {
+setMethod(".modelmetrics", c("factor", "numeric"),
+  function(observed, predicted, cutoff, cutoff_index, ...) {
     observed <- observed == levels(observed)[2]
     sens <- sensitivity(observed, predicted, cutoff)
     spec <- specificity(observed, predicted, cutoff)
@@ -81,21 +147,17 @@ setMethod("modelmetrics", c("factor", "numeric"),
 )
 
 
-#' @rdname modelmetrics
-#' 
-setMethod("modelmetrics", c("matrix", "matrix"),
+setMethod(".modelmetrics", c("matrix", "matrix"),
   function(observed, predicted, ...) {
     stopifnot(ncol(observed) == ncol(predicted))
     sapply(1:ncol(observed), function(i) {
-      modelmetrics(observed[, i], predicted[, i], ...)
+      .modelmetrics(observed[, i], predicted[, i], ...)
     }) %>% rowMeans
   }
 )
 
 
-#' @rdname modelmetrics
-#' 
-setMethod("modelmetrics", c("numeric", "numeric"),
+setMethod(".modelmetrics", c("numeric", "numeric"),
   function(observed, predicted, ...) {
     c("R2" =
         1 - sum((observed - predicted)^2) / sum((observed - mean(observed))^2),
@@ -105,12 +167,7 @@ setMethod("modelmetrics", c("numeric", "numeric"),
 )
 
 
-#' @rdname modelmetrics
-#' 
-#' @param times numeric vector of follow-up times at which survival events
-#' were predicted.
-#' 
-setMethod("modelmetrics", c("Surv", "matrix"),
+setMethod(".modelmetrics", c("Surv", "matrix"),
   function(observed, predicted, times, ...) {
     roc <- ROC.Surv(observed, predicted, times)
     brier <- Brier.Surv(observed, predicted, times)
@@ -126,9 +183,7 @@ setMethod("modelmetrics", c("Surv", "matrix"),
 )
 
 
-#' @rdname modelmetrics
-#' 
-setMethod("modelmetrics", c("Surv", "numeric"),
+setMethod(".modelmetrics", c("Surv", "numeric"),
   function(observed, predicted, ...) {
     c("CIndex" = CIndex.Surv(observed, predicted))
   }

@@ -137,11 +137,11 @@ Resampling of a single model is performed with the `resample` function applied t
 
 ```{r}
 ## Resample estimation
-(perf <- resample(fo, data = Melanoma, model = GBMModel, control = control))
+(res <- resample(fo, data = Melanoma, model = GBMModel, control = control))
 
-summary(perf)
+summary(res)
 
-plot(perf, metrics = metrics)
+plot(res, metrics = metrics)
 ```
 
 ### Resampling for Model Comparisons
@@ -150,26 +150,26 @@ Resampled metrics from different models can be combined for comparison with the 
 
 ```{r}
 ## Resample estimation
-gbmperf1 <- resample(fo, data = Melanoma, model = GBMModel(n.trees = 25), control = control)
-gbmperf2 <- resample(fo, data = Melanoma, model = GBMModel(n.trees = 50), control = control)
-gbmperf3 <- resample(fo, data = Melanoma, model = GBMModel(n.trees = 100), control = control)
+gbmres1 <- resample(fo, data = Melanoma, model = GBMModel(n.trees = 25), control = control)
+gbmres2 <- resample(fo, data = Melanoma, model = GBMModel(n.trees = 50), control = control)
+gbmres3 <- resample(fo, data = Melanoma, model = GBMModel(n.trees = 100), control = control)
 
 ## Combine resamples for comparison
-(perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3))
+(res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3))
 
-summary(perf)[, , metrics]
+summary(res)[, , metrics]
 
-plot(perf, metrics = metrics)
-plot(perf, metrics = metrics, type = "density")
-plot(perf, metrics = metrics, type = "errorbar")
-plot(perf, metrics = metrics, type = "violin")
+plot(res, metrics = metrics)
+plot(res, metrics = metrics, type = "density")
+plot(res, metrics = metrics, type = "errorbar")
+plot(res, metrics = metrics, type = "violin")
 ```
 
 Pairwise model differences for each metric can be calculated with the `diff` function applied to results from a call to `Resamples`.  The differences can be summarized descriptively with the `summary` and `plot` functions and assessed for statistical significance with the `t.test` function.
 
 ```{r}
 ## Pairwise model comparisons
-(perfdiff <- diff(perf))
+(perfdiff <- diff(res))
 
 summary(perfdiff)[, , metrics]
 
@@ -212,14 +212,14 @@ Ensemble methods combine multiple base learning algorithms as a strategy to impr
 
 ```{r}
 ## Stacked regression
-stackedperf <- resample(fo, data = Melanoma,
-                        model = StackedModel(GBMModel, CForestModel, GLMNetModel(lambda = 0.1)))
-summary(stackedperf)
+stackedres <- resample(fo, data = Melanoma,
+                       model = StackedModel(GBMModel, CForestModel, GLMNetModel(lambda = 0.1)))
+summary(stackedres)
 
 ## Super learner
-superperf <- resample(fo, data = Melanoma,
-                      model = SuperModel(GBMModel, CForestModel, GLMNetModel(lambda = 0.1)))
-summary(superperf)
+superres <- resample(fo, data = Melanoma,
+                     model = SuperModel(GBMModel, CForestModel, GLMNetModel(lambda = 0.1)))
+summary(superres)
 ```
 
 ### Partial Dependence Plots
@@ -237,7 +237,7 @@ plot(pd)
 Agreement between model-predicted and observed values can be visualized with calibration curves.  In the construction of these curves, cases are partitioned into bins according to their (resampled) predicted responses.  Mean observed responses are then calculated within each of the bins and plotted on the vertical axis against the bin midpoints on the horizontal axis.  Calibration curves that are close to the 45-degree line indicate close agreement between observed and predicted responses and a model that is said to be well calibrated. 
 
 ```{r results = "hide"}
-cal <- calibration(perf)
+cal <- calibration(res)
 plot(cal, se = TRUE)
 ```
 
@@ -251,8 +251,8 @@ Lift curves depict the rate at which observed binary responses are identifiable 
 fo_surv5 <- factor(time > 365 * 5) ~ sex + age + year + thickness + ulcer
 df_surv5 <- subset(Melanoma, status != 2)
 
-perf_surv5 <- resample(fo_surv5, data = df_surv5, model = GBMModel)
-lf <- lift(perf_surv5)
+res_surv5 <- resample(fo_surv5, data = df_surv5, model = GBMModel)
+lf <- lift(res_surv5)
 plot(lf, find = 75)
 ```
 
@@ -292,8 +292,8 @@ Brier, ROCAUC, and PRAUC are computed directly on predicted class probabilities.
 ```{r}
 ### Pima Indians diabetes statuses (2 levels)
 library(MASS)
-perf <- resample(factor(type) ~ ., data = Pima.tr, model = GBMModel)
-summary(perf)
+res <- resample(factor(type) ~ ., data = Pima.tr, model = GBMModel)
+summary(res)
 ```
 
 Metrics for factors with more than two levels are as described below.
@@ -317,8 +317,8 @@ Brier and MLogLoss are computed directly on predicted class probabilities.  The 
 
 ```{r}
 ### Iris flowers species (3 levels)
-perf <- resample(factor(Species) ~ ., data = iris, model = GBMModel)
-summary(perf)
+res <- resample(factor(Species) ~ ., data = iris, model = GBMModel)
+summary(res)
 ```
 
 
@@ -342,8 +342,8 @@ MAE
 ```{r}
 ### Boston housing prices
 library(MASS)
-perf <- resample(medv ~ ., data = Boston, model = GBMModel)
-summary(perf)
+res <- resample(medv ~ ., data = Boston, model = GBMModel)
+summary(res)
 ```
 
 
@@ -354,8 +354,8 @@ Survival responses should be coded as a `Surv` variable.  In addition to the ROC
 ```{r}
 ## Censored melanoma cancer survival times
 library(survival)
-perf <- resample(Surv(time, status != 2) ~ ., data = Melanoma, model = GBMModel)
-summary(perf)
+res <- resample(Surv(time, status != 2) ~ ., data = Melanoma, model = GBMModel)
+summary(res)
 ```
 
 
