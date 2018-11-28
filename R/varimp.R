@@ -25,12 +25,17 @@ varimp <- function(object, scale = TRUE, ...) {
   stopifnot(is(object, "MLModelFit"))
   requireModelNamespaces(fitbit(object, "packages"))
   vi <- fitbit(object, "varimp")(unMLModelFit(object), ...)
-  if (is.null(vi)) vi <- undef_varimp(object)
+  if (is.null(vi)) vi <- varimp_undef(object)
   VarImp(as(vi, "VarImp"), scale = scale)
 }
 
 
-undef_varimp <- function(object) {
+varimp_pchisq <- function(object) {
+  pchisq(coef(object)^2 / diag(vcov(object)), 1)
+}
+
+
+varimp_undef <- function(object) {
   warn("variable importance not defined for ", class(object)[1])
   varnames <- labels(terms(fitbit(object, "x")))
   structure(rep(NA_integer_, length(varnames)), names = varnames)

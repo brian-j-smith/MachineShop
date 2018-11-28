@@ -43,9 +43,7 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
         exp(predict(object, newdata = newdata, type = "lp"))
       }
     },
-    varimp = function(object, ...) {
-      pchisq(coef(object)^2 / diag(vcov(object)), 1)
-    }
+    varimp = function(object, ...) varimp_pchisq(object)
   )
 }
 

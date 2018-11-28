@@ -45,9 +45,7 @@ GLMModel <- function(family = NULL, control = NULL) {
     predict = function(object, newdata, ...) {
       predict(object, newdata = newdata, type = "response")
     },
-    varimp = function(object, ...) {
-      pchisq(coef(object)^2 / diag(vcov(object)), 1)
-    }
+    varimp = function(object, ...) varimp_pchisq(object)
   )
 }
 

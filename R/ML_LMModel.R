@@ -49,8 +49,6 @@ LMModel <- function() {
     predict = function(object, newdata, ...) {
       predict(object, newdata = newdata)
     },
-    varimp = function(object, ...) {
-      pchisq(coef(object)^2 / diag(vcov(object)), 1)
-    }
+    varimp = function(object, ...) varimp_pchisq(object)
   )
 }
