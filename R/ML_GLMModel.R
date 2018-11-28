@@ -43,7 +43,7 @@ GLMModel <- function(family = NULL, control = NULL) {
       stats::glm(formula, data = data, weights = weights, family = family, ...)
     },
     predict = function(object, newdata, ...) {
-      predict(unMLModelFit(object), newdata = newdata, type = "response")
+      predict(object, newdata = newdata, type = "response")
     },
     varimp = function(object, ...) {
       pchisq(coef(object)^2 / diag(vcov(object)), 1)

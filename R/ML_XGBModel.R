@@ -57,6 +57,7 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
       mf <- model.frame(formula, data, na.action = na.pass)
       x <- model.matrix(formula, mf)[, -1, drop = FALSE]
       y <- model.response(mf)
+      response_levels <- levels(y)
       if (is.null(params$objective)) params$objective <- 1
       switch_class(y,
                    "factor" = {
@@ -70,13 +71,15 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
                                       "rank:pairwise", "rank:ndcg", "rank:map")
                    })
       params$objective <- match_indices(params$objective, obj_choices)
-      xgboost::xgboost(x, y, weight = weights, params = params, ...)
+      modelfit <- xgboost::xgboost(x, y, weight = weights, params = params, ...)
+      modelfit$levels <- response_levels
+      modelfit
     },
-    predict = function(object, newdata, ...) {
-      fo <- formula(object)[-2]
+    predict = function(object, newdata, fitbits, ...) {
+      fo <- formula(fitbits)[-2]
       newmf <- model.frame(fo, newdata, na.action = na.pass)
       newx <- model.matrix(fo, newmf)[, -1, drop = FALSE]
-      pred <- predict(unMLModelFit(object), newdata = newx)
+      pred <- predict(object, newdata = newx)
       if (object$params$objective == "multi:softprob") {
         pred <- matrix(pred, nrow = nrow(newx), byrow = TRUE)
       }
@@ -86,9 +89,8 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
       vi <- xgboost::xgb.importance(model = object, ...)
       if (!is.null(vi$Weight)) {
         if (!is.null(vi$Class)) {
-          y <- fitbit(object, "y")
           vi <- reshape(vi, idvar = "Feature", timevar = "Class",
-                        v.names = "Weight", varying = list(levels(y)),
+                        v.names = "Weight", varying = list(object$levels),
                         direction = "wide")
           data.frame(vi[, -1], row.names = vi$Feature)
         } else {

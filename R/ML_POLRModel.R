@@ -38,7 +38,7 @@ POLRModel <- function(method = c("logistic", "probit", "loglog", "cloglog",
       MASS::polr(formula, data = data, weights = weights, Hess = TRUE, ...)
     },
     predict = function(object, newdata, ...) {
-      predict(unMLModelFit(object), newdata = newdata, type = "probs")
+      predict(object, newdata = newdata, type = "probs")
     },
     varimp = function(object, ...) {
       beta <- coef(object)

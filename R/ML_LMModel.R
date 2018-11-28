@@ -47,7 +47,7 @@ LMModel <- function() {
       do.call(stats::lm, args)
     },
     predict = function(object, newdata, ...) {
-      predict(unMLModelFit(object), newdata = newdata)
+      predict(object, newdata = newdata)
     },
     varimp = function(object, ...) {
       pchisq(coef(object)^2 / diag(vcov(object)), 1)

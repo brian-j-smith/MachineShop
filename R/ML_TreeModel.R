@@ -37,7 +37,7 @@ TreeModel <- function(mincut = 5, minsize = 10, mindev = 0.01,
       tree::tree(formula, data = data, weights = weights, split = split, ...)
     },
     predict = function(object, newdata, times, ...) {
-      predict(unMLModelFit(object), newdata = newdata)
+      predict(object, newdata = newdata)
     }
   )
 }

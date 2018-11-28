@@ -39,13 +39,11 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
-      list(formula = formula, ...)
+      list(formula = formula, train = data, ...)
     },
     predict = function(object, newdata, ...) {
-      args <- unMLModelFit(object)
-      args$train <- preprocess(fitbit(object, "x"))
-      args$test <- newdata
-      pred <- do.call(kknn::kknn, args)
+      object$test <- newdata
+      pred <- do.call(kknn::kknn, object)
       if (pred$response == "continuous") pred$fitted.values else pred$prob
     }
   )

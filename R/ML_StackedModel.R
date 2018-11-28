@@ -47,7 +47,8 @@ StackedModel <- function(..., control = CVControl, weights = NULL) {
         predicted <- 0
         for (i in seq(object$base_fits)) {
           predicted <- predicted +
-            object$weights[i] * predict(object$base_fits[[i]], newdata = newdata,
+            object$weights[i] * predict(object$base_fits[[i]],
+                                        newdata = newdata,
                                         times = object$times, type = "prob")
         }
         predicted

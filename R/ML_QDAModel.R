@@ -51,7 +51,7 @@ QDAModel <- function(prior = NULL, method = c("moment", "mle", "mve", "t"),
       modelfit
     },
     predict = function(object, newdata, prior = object$prior, ...) {
-      predict(unMLModelFit(object), newdata = newdata, prior = prior,
+      predict(object, newdata = newdata, prior = prior,
               method = object$use)$posterior
     }
   )

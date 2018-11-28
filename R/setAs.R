@@ -48,7 +48,7 @@ asMLModelFit <- function(object, Class, model, x, y) {
 
 
 unMLModelFit <- function(object) {
-  if (!is(object, "MLModelFit")) stop("object not of class MLModelFit")
+  if (!is(object, "MLModelFit")) return(object)
   if (isS4(object)) {
     classes <- extends(class(object))
     as(object, classes[match("MLModelFit", classes) + 1])

@@ -61,7 +61,7 @@ C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
       C50::C5.0(formula, data = data, weights = weights, ...)
     },
     predict = function(object, newdata, ...) {
-      predict(unMLModelFit(object), newdata = newdata, type = "prob")
+      predict(object, newdata = newdata, type = "prob")
     },
     varimp = function(object, ...) {
       C50::C5imp(object, ...)

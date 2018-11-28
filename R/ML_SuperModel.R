@@ -47,8 +47,8 @@ SuperModel <- function(..., model = GBMModel, control = CVControl,
     types = c("factor", "matrix", "numeric", "ordered", "Surv"),
     params = as.list(environment()),
     fitbits = MLFitBits(
-      predict = function(object, newdata, times, ...) {
-        newdata <- ModelFrame(formula(object), newdata, na.action = na.pass)
+      predict = function(object, newdata, fitbits, times, ...) {
+        newdata <- ModelFrame(formula(fitbits), newdata, na.action = na.pass)
         
         learner_predictors <- lapply(object$base_fits, function(fit) {
           predict(fit, newdata = newdata, times = object$times, type = "prob")

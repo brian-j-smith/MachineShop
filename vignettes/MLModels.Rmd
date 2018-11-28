@@ -80,8 +80,6 @@ if(!all(weights == 1)) warning("weights are unsupported and will be ignored")
 
 - The arguments are a model fit `object`, `newdata` frame, optionally `time` for prediction at survival time points, and an ellipsis.
 
-- Extract any new elements added in the fit function and then recast with `unMLModelFit` to convert the fit object to its original class.
-
 - The predict function should return a vector or matrix of probabilities for 2-level factors, a matrix for factors with more than 2 levels, a vector or matrix of expected responses if numeric, a matrix of survival probabilities if follow-up times are supplied, or a vector of survival risks if no follow-up times.
 
 

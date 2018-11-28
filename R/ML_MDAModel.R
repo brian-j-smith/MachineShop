@@ -59,8 +59,7 @@ MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
       mda::mda(formula, data = data, ...)
     },
     predict = function(object, newdata, prior = object$prior, ...) {
-      predict(unMLModelFit(object), newdata = newdata, type = "posterior",
-              prior = prior)
+      predict(object, newdata = newdata, type = "posterior", prior = prior)
     }
   )
 }

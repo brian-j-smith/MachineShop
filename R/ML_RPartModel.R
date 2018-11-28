@@ -51,14 +51,14 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
       rpart::rpart(formula, data = data, weights = weights, na.action = na.pass,
                    method = method, ...)
     },
-    predict = function(object, newdata, times, ...) {
-      if (is.Surv(response(object)) && length(times)) {
+    predict = function(object, newdata, fitbits, times, ...) {
+      if (is.Surv(response(fitbits)) && length(times)) {
         predict(partykit::as.party(object), newdata = newdata,
                 type = "prob") %>%
           lapply(function(fit) predict(fit, times)) %>%
           (function(args) do.call(rbind, args))
       } else {
-        predict(unMLModelFit(object), newdata = newdata)
+        predict(object, newdata = newdata)
       }
     },
     varimp = function(object, ...) {

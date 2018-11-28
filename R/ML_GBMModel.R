@@ -50,9 +50,8 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
       gbm::gbm(formula, data = data, weights = weights,
                distribution = distribution, ...)
     },
-    predict = function(object, newdata, times, ...) {
-      obs <- response(object)
-      object <- unMLModelFit(object)
+    predict = function(object, newdata, fitbits, times, ...) {
+      obs <- response(fitbits)
       if (object$distribution$name == "coxph") {
         if (length(times)) {
           lp <- predict(object, n.trees = object$n.trees, type = "link")

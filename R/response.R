@@ -20,6 +20,11 @@ response <- function(object, ...) {
 }
 
 
+response.MLFitBits <- function(object, ...) {
+  object@y
+}
+
+
 #' @rdname response-methods
 #' 
 #' @param data \code{data.frame} containing the values of a response variable
@@ -31,7 +36,7 @@ response.formula <- function(object, data, ...) {
 
 
 response.MLModelFit <- function(object, ...) {
-  fitbit(object, "y")
+  response(field(object, "fitbits"))
 }
 
 

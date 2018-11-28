@@ -94,14 +94,23 @@ setMethod("append", c("vector", "vector"),
 )
 
 
+formula.MLFitBits <- function(object) {
+  formula(terms(object@x))
+}
+
+
 formula.MLModelFit <- function(object) {
-  formula(terms(fitbit(object, "x")))
+  formula(field(object, "fitbits"))
+}
+
+
+field <- function(object, name) {
+  if (isS4(object)) slot(object, name) else object[[name]]
 }
 
 
 fitbit <- function(object, name) {
-  fitbits <- if (isS4(object)) object@fitbits else object$fitbits
-  slot(fitbits, name)
+  slot(field(object, "fitbits"), name)
 }
 
 

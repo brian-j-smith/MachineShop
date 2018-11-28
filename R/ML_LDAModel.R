@@ -55,8 +55,8 @@ LDAModel <- function(prior = NULL, tol = 1e-4,
       modelfit
     },
     predict = function(object, newdata, prior = object$prior, ...) {
-      predict(unMLModelFit(object), newdata = newdata, prior = prior,
-              dimen = object$dimen, method = object$use)$posterior
+      predict(object, newdata = newdata, prior = prior, dimen = object$dimen,
+              method = object$use)$posterior
     }
   )
 }

@@ -45,9 +45,9 @@ RandomForestModel <- function(ntree = 500,
       environment(formula) <- environment()
       randomForest::randomForest(formula, data = data, ...)
     },
-    predict = function(object, newdata, ...) {
-      predict(unMLModelFit(object), newdata = newdata,
-              type = ifelse(is.factor(response(object)), "prob", "response"))
+    predict = function(object, newdata, fitbits, ...) {
+      predict(object, newdata = newdata,
+              type = ifelse(is.factor(response(fitbits)), "prob", "response"))
     },
     varimp = function(object, ...) {
       drop(randomForest::importance(object, ...))

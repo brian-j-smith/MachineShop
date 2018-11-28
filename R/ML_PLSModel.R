@@ -44,7 +44,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
       pls::plsr(formula, data = data, ...)
     },
     predict = function(object, newdata, ...) {
-      predict(unMLModelFit(object), newdata = newdata, ncomp = object$ncomp,
+      predict(object, newdata = newdata, ncomp = object$ncomp,
               type = "response")
     },
     varimp = function(object, ...) {

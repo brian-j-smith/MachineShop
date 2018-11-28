@@ -33,7 +33,9 @@ predict.MLModelFit <- function(object, newdata = NULL,
   newdata <- preprocess(fitbit(object, "x"), newdata)
   requireModelNamespaces(fitbit(object, "packages"))
   obs <- response(object)
-  pred <- fitbit(object, "predict")(object, newdata, times = times, ...)
+  pred <- fitbit(object, "predict")(unMLModelFit(object), newdata,
+                                    fitbits = field(object, "fitbits"),
+                                    times = times, ...)
   pred <- convert_dim(obs, pred)
   if (match.arg(type) == "response") {
     pred <- convert_response(obs, pred, cutoff = cutoff)

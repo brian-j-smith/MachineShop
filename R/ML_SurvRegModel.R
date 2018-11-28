@@ -35,7 +35,6 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
       rms::psm(formula, data = data, weights = weights, ...)
     },
     predict = function(object, newdata, times, ...) {
-      object <- unMLModelFit(object)
       if (length(times)) {
         pred <- rms::survest(object, newdata = newdata, times = times,
                              conf.int = FALSE)

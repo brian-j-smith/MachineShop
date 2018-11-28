@@ -75,11 +75,10 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
       modelfit$x <- x
       modelfit
     },
-    predict = function(object, newdata, times, ...) {
+    predict = function(object, newdata, fitbits, times, ...) {
       x <- object$x
-      y <- response(object)
-      fo <- formula(object)[-2]
-      object <- unMLModelFit(object)
+      y <- response(fitbits)
+      fo <- formula(fitbits)[-2]
       newmf <- model.frame(fo, newdata, na.action = na.pass)
       newx <- model.matrix(fo, newmf)[, -1, drop = FALSE]
       if (is.Surv(y)) {

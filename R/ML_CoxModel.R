@@ -41,7 +41,6 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), control = NULL) {
                surv = TRUE, y = TRUE, ...)
     },
     predict = function(object, newdata, times, ...) {
-      object <- unMLModelFit(object)
       if (length(times)) {
         rms::survest(object, newdata = newdata, times = times,
                      conf.int = FALSE, se.fit = FALSE)$surv %>% as.matrix

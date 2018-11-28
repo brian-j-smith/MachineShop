@@ -56,8 +56,7 @@ FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
       mda::fda(formula, data = data, weights = weights, ...)
     },
     predict = function(object, newdata, prior = object$prior, ...) {
-      predict(unMLModelFit(object), newdata = newdata, type = "posterior",
-              prior = prior)
+      predict(object, newdata = newdata, type = "posterior", prior = prior)
     }
   )
 }

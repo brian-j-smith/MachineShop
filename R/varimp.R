@@ -24,7 +24,7 @@
 varimp <- function(object, scale = TRUE, ...) {
   stopifnot(is(object, "MLModelFit"))
   requireModelNamespaces(fitbit(object, "packages"))
-  vi <- fitbit(object, "varimp")(object, ...)
+  vi <- fitbit(object, "varimp")(unMLModelFit(object), ...)
   if (is.null(vi)) vi <- undef_varimp(object)
   VarImp(as(vi, "VarImp"), scale = scale)
 }

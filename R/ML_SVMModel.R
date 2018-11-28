@@ -52,9 +52,9 @@ SVMModel <- function(scaled = TRUE, type = NULL,
       environment(formula) <- environment()
       kernlab::ksvm(formula, data = data, prob.model = TRUE, ...)
     },
-    predict = function(object, newdata, ...) {
-      kernlab::predict(unMLModelFit(object), newdata = newdata,
-                       type = ifelse(is.factor(response(object)),
+    predict = function(object, newdata, fitbits, ...) {
+      kernlab::predict(object, newdata = newdata,
+                       type = ifelse(is.factor(response(fitbits)),
                                      "probabilities", "response"))
     }
   )

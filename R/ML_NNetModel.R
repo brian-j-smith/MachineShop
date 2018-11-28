@@ -53,7 +53,7 @@ NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
       nnet::nnet(formula, data = data, weights = weights, ...)
     },
     predict = function(object, newdata, ...) {
-      predict(unMLModelFit(object), newdata = newdata, type = "raw")
+      predict(object, newdata = newdata, type = "raw")
     },
     varimp = function(object, ...) {
       nvars <- object$n[1]
