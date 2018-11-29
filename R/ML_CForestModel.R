@@ -53,14 +53,19 @@ CForestModel <- function(teststat = c("quad", "max"),
       environment(formula) <- environment()
       party::cforest(formula, data = data, weights = weights, ...)
     },
-    predict = function(object, newdata, times, ...) {
+    predict = function(object, newdata, fitbits, times, ...) {
       if (object@responses@is_censored) {
+        pred <- predict(object, newdata = newdata, type = "prob")
         if (length(times)) {
-          predict(object, newdata = newdata, type = "prob") %>%
-            lapply(function(fit) predict(fit, times)) %>%
-            (function(args) do.call(rbind, args))
+          pred_list <- lapply(pred, function(fit) predict(fit, times))
+          do.call(rbind, pred_list)
         } else {
-          log(2) / predict(object, newdata = newdata, type = "response")
+          max_time <- max(response(fitbits)[, "time"])
+          sapply(pred, function(fit) {
+            x <- c(1, fit$surv, 0)
+            fx <- c(fit$time, max_time)
+            -1 / sum(fx * diff(x))
+          })
         }
       } else {
         predict(object, newdata = newdata, type = "prob") %>%
