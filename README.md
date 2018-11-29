@@ -46,6 +46,8 @@ Response Variable Types
 
 <th style="text-align:left;">
 
+Method
+
 </th>
 
 <th style="text-align:center;">
