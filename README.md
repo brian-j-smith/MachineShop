@@ -710,6 +710,40 @@ n
 
 <td style="text-align:left;">
 
+Fast Random Forests
+
+</td>
+
+<td style="text-align:center;">
+
+RangerModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+S
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 Recursive Partitioning and Regression Trees
 
 </td>
