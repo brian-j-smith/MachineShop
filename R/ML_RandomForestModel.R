@@ -50,7 +50,7 @@ RandomForestModel <- function(ntree = 500,
               type = ifelse(is.factor(response(fitbits)), "prob", "response"))
     },
     varimp = function(object, ...) {
-      drop(randomForest::importance(object, ...))
+      randomForest::importance(object)
     }
   )
 }

@@ -54,6 +54,12 @@ algorithm.
 
 Latter arguments are passed to \code{\link[C50]{C5.0Control}}.
 Further model details can be found in the source link below.
+
+In calls to \code{\link{varimp}} for \code{C50Model}, argument \code{metric}
+may be spedified as \code{"usage"} (default) for the percentage of training
+set samples that fall into all terminal nodes after the split of each
+predictor or as \code{"splits"} for the percentage of splits associated with
+each predictor.
 }
 \examples{
 fit(Species ~ ., data = iris, model = C50Model())

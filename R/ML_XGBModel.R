@@ -22,7 +22,8 @@
 #' Default values for the \code{NULL} arguments and further model details can be
 #' found in the source link below.
 #' 
-#' The following variable importance metrics are available for XBMTreeModel:
+#' The following variable importance metrics are available for
+#' \code{XBMTreeModel}:
 #' \enumerate{
 #'   \item \code{Gain} fractional contribution of each predictor to the total
 #'   gain of its splits.

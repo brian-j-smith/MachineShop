@@ -68,8 +68,8 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
                 type = "response")
       }
     },
-    varimp = function(object, n.trees = object$n.trees, ...) {
-      gbm::relative.influence(object, n.trees = n.trees, ...)
+    varimp = function(object, ...) {
+      gbm::relative.influence(object, n.trees = object$n.trees)
     }
   )
 }
