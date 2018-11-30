@@ -42,6 +42,12 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
       list(formula = formula, train = data, ...)
     },
     predict = function(object, newdata, ...) {
+      attachment(list(
+        contr.dummy = kknn::contr.dummy,
+        contr.ordinal = kknn::contr.ordinal,
+        contr.metrics = kknn::contr.metric
+      ), name = "kknn_exports")
+
       object$test <- newdata
       pred <- do.call(kknn::kknn, object)
       if (pred$response == "continuous") pred$fitted.values else pred$prob

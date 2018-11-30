@@ -53,10 +53,10 @@ EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
     params = params(environment()),
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
-      earth_exports <- list(
+      attachment(list(
         contr.earth.response = earth::contr.earth.response
-      )
-      attach(earth_exports); on.exit(detach(earth_exports))
+      ), name = "earth_exports")
+
       environment(formula) <- environment()
       family <- switch_class(response(formula, data),
                              "factor" = "binomial",
