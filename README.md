@@ -208,6 +208,38 @@ S
 
 <td style="text-align:left;">
 
+Multivariate Adaptive Regression Splines
+
+</td>
+
+<td style="text-align:center;">
+
+EarthModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 Flexible Discriminant Analysis
 
 </td>
