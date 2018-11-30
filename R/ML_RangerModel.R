@@ -8,7 +8,6 @@
 #' @param min.node.size minimum node size.
 #' @param replace logical indicating whether to sample with replacement.
 #' @param sample.fraction fraction of observations to sample.
-#' @param class.weights weights for the outcome classes in the splitting rule.
 #' @param splitrule splitting rule.
 #' @param num.random.splits number of random splits to consider for each
 #' candidate splitting variable in the \code{"extratrees"} rule.
@@ -46,9 +45,8 @@ RangerModel <- function(num.trees = 500, mtry = NULL,
                                        "permutation"),
                         min.node.size = NULL, replace = TRUE,
                         sample.fraction = ifelse(replace, 1, 0.632),
-                        class.weights = NULL, splitrule = NULL,
-                        num.random.splits = 1, alpha = 0.5, minprop = 0.1,
-                        split.select.weights = NULL,
+                        splitrule = NULL, num.random.splits = 1, alpha = 0.5,
+                        minprop = 0.1, split.select.weights = NULL,
                         always.split.variables = NULL,
                         respect.unordered.factors = NULL,
                         scale.permutation.importance = FALSE, verbose = FALSE) {
