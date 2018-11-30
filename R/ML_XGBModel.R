@@ -22,20 +22,14 @@
 #' Default values for the \code{NULL} arguments and further model details can be
 #' found in the source link below.
 #' 
-#' The following variable importance metrics are available for
-#' \code{XBMTreeModel}:
-#' \enumerate{
-#'   \item \code{Gain} fractional contribution of each predictor to the total
-#'   gain of its splits.
-#'   \item \code{Cover} number of observations related to each predictor.
-#'   \item \code{Frequency} percentage of times each predictor is used in the
-#'   trees.
-#' }
-#' In calls to \code{\link{varimp}} for these tree model fits, the first metric
-#' will be returned by default.  Others may be specified to the \code{metrics}
-#' argument of the function by their names or numeric indices.  Variable
-#' importance is automatically scaled to range from 0 to 100.  To obtain
-#' unscaled importance values, set \code{scale = FALSE}.  See example below.
+#' In calls to \code{\link{varimp}} for \code{XGBTreeModel}, argument
+#' \code{metric} may be spedified as \code{"Gain"} (default) for the fractional
+#' contribution of each predictor to the total gain of its splits, as
+#' \code{"Cover"} for the number of observations related to each predictor, or
+#' as \code{"Frequency"} for the percentage of times each predictor is used in
+#' the trees.  Variable importance is automatically scaled to range from 0 to
+#' 100.  To obtain unscaled importance values, set \code{scale = FALSE}.  See
+#' example below.
 #' 
 #' @return \code{MLModel} class object.
 #' 
@@ -44,7 +38,7 @@
 #'
 #' @examples
 #' modelfit <- fit(Species ~ ., data = iris, model = XGBTreeModel())
-#' varimp(modelfit, metrics = 1:3, scale = FALSE)
+#' varimp(modelfit, metric = "Frequency", scale = FALSE)
 #' 
 XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
                      print_every_n = 1) {
@@ -86,7 +80,7 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
       }
       pred
     },
-    varimp = function(object, metrics = 1, ...) {
+    varimp = function(object, metric = c("Gain", "Cover", "Frequency"), ...) {
       vi <- xgboost::xgb.importance(model = object, ...)
       if (!is.null(vi$Weight)) {
         if (!is.null(vi$Class)) {
@@ -98,8 +92,8 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
           structure(vi$Weight, names = vi$Feature)
         }
       } else {
-        metrics <- match_indices(metrics, c("Gain", "Cover", "Frequency"))
-        data.frame(vi[, metrics, drop = FALSE], row.names = vi$Feature)
+        data.frame(vi[, match.arg(metric), drop = FALSE],
+                   row.names = vi$Feature)
       }
     }
   )
