@@ -52,6 +52,7 @@ exportClasses(MLControl)
 
 export(MLModel,
        AdaBagModel,
+       AdaBoostModel,
        C50Model,
        CForestModel,
        CoxModel,
