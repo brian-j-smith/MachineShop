@@ -8,6 +8,7 @@
 #' \tabular{lcccc}{
 #'   \strong{Model Objects} \tab \strong{Categorical} \tab \strong{Continuous}
 #'   \tab \strong{Survival} \cr
+#'   \code{\link{AdaBagModel}}         \tab f   \tab     \tab   \cr
 #'   \code{\link{C50Model}}            \tab f   \tab     \tab   \cr
 #'   \code{\link{CForestModel}}        \tab f   \tab n   \tab S \cr
 #'   \code{\link{CoxModel}}            \tab     \tab     \tab S \cr

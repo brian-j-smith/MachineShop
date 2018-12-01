@@ -84,6 +84,36 @@ Survival<sup>3</sup>
 
 <td style="text-align:left;">
 
+Bagging with Classification Trees
+
+</td>
+
+<td style="text-align:center;">
+
+AdaBagModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 C5.0 Classification
 
 </td>

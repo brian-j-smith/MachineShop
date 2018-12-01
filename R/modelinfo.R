@@ -16,6 +16,7 @@
 #' 
 modelinfo <- function(...) {
   model_labels <- c(
+    "AdaBagModel" = "Bagging with Classification Trees",
     "C50Model" = "C5.0 Classification",
     "CForestModel" = "Conditional Random Forests",
     "CoxModel" = "Cox Regression",

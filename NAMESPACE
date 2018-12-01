@@ -51,6 +51,7 @@ export(BootControl,
 exportClasses(MLControl)
 
 export(MLModel,
+       AdaBagModel,
        C50Model,
        CForestModel,
        CoxModel,
