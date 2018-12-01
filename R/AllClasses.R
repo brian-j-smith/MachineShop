@@ -373,6 +373,12 @@ setMethod("initialize", "Resamples",
 )
 
 
+MLModelTune <- setClass("MLModelTune",
+  slots = c(grid = "data.frame", resamples = "Resamples", selected = "numeric"),
+  contains = "MLModel"
+)
+
+
 ModelMetrics <- setClass("ModelMetrics",
   contains = "array"
 )
@@ -381,12 +387,6 @@ ModelMetrics <- setClass("ModelMetrics",
 ModelMetricsDiff <- setClass("ModelMetricsDiff",
   slots = c("model_names" = "character"),
   contains = "ModelMetrics"
-)
-
-
-MLModelTune <- setClass("MLModelTune",
-  slots = c(grid = "data.frame", resamples = "Resamples", selected = "numeric"),
-  contains = "MLModel"
 )
 
 

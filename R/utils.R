@@ -37,31 +37,6 @@ utils::globalVariables(c("Found", "group", "i", "Lower", "Mean", "Midpoint",
 }
 
 
-assert_equal_weights <- function(weights) {
-  if (any(diff(weights) != 0)) {
-    warn("model weights are not supported and will be ignored")
-  }
-}
-
-
-attachment <- function(what, pos = 2L,
-                       name = deparse(substitute(what), backtick = FALSE)) {
-  attach(what, pos, name, warn.conflicts = FALSE)
-  do.call(on.exit, list(substitute(detach(name))), envir = parent.frame())
-}
-
-
-basehaz <- function(y, risk, times) {
-  y_times <- unique(y[, "time"]) %>% sort
-  nrisk <- rowsum(risk, y[, "time"]) %>% rev %>% cumsum %>% rev
-  nevent <- rowsum(y[, "status"], y[, "time"])[, 1]
-  cumhaz <- cumsum(nevent / nrisk) %>% structure(names = NULL)
-  idx <- approx(y_times, seq(y_times), times, method = "constant",
-                f = 0, yleft = 0, yright = length(y_times))$y
-  c(0, cumhaz)[idx + 1]
-}
-
-
 setGeneric("append", function(x, y, ...) standardGeneric("append"))
 
 
@@ -101,13 +76,28 @@ setMethod("append", c("vector", "vector"),
 )
 
 
-formula.MLFitBits <- function(object) {
-  formula(terms(object@x))
+assert_equal_weights <- function(weights) {
+  if (any(diff(weights) != 0)) {
+    warn("model weights are not supported and will be ignored")
+  }
 }
 
 
-formula.MLModelFit <- function(object) {
-  formula(field(object, "fitbits"))
+attachment <- function(what, pos = 2L,
+                       name = deparse(substitute(what), backtick = FALSE)) {
+  attach(what, pos, name, warn.conflicts = FALSE)
+  do.call(on.exit, list(substitute(detach(name))), envir = parent.frame())
+}
+
+
+basehaz <- function(y, risk, times) {
+  y_times <- unique(y[, "time"]) %>% sort
+  nrisk <- rowsum(risk, y[, "time"]) %>% rev %>% cumsum %>% rev
+  nevent <- rowsum(y[, "status"], y[, "time"])[, 1]
+  cumhaz <- cumsum(nevent / nrisk) %>% structure(names = NULL)
+  idx <- approx(y_times, seq(y_times), times, method = "constant",
+                f = 0, yleft = 0, yright = length(y_times))$y
+  c(0, cumhaz)[idx + 1]
 }
 
 
@@ -118,6 +108,16 @@ field <- function(object, name) {
 
 fitbit <- function(object, name) {
   slot(field(object, "fitbits"), name)
+}
+
+
+formula.MLFitBits <- function(object) {
+  formula(terms(object@x))
+}
+
+
+formula.MLModelFit <- function(object) {
+  formula(field(object, "fitbits"))
 }
 
 
@@ -274,11 +274,11 @@ terms.recipe <- function(x, ...) {
 }
 
 
-depwarn <- function(old, new) {
-  warning(old, "\n", new, call. = FALSE)
+warn <- function(...) {
+  warning(..., call. = FALSE)
 }
 
 
-warn <- function(...) {
-  warning(..., call. = FALSE)
+depwarn <- function(old, new) {
+  warning(old, "\n", new, call. = FALSE)
 }
