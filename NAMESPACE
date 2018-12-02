@@ -10,9 +10,7 @@ importFrom(graphics, plot)
 importFrom(Hmisc, rcorr.cens)
 importFrom(irr, kappa2)
 importFrom(magrittr, "%>%")
-importFrom(MLmetrics, PRAUC)
-importFrom(ModelMetrics, auc, brier, ce, kappa, mae, rmse, sensitivity,
-           specificity)
+importFrom(MLmetrics, AUC, PRAUC)
 importFrom(recipes, bake, juice, prep, prepper)
 importFrom(rsample, assessment, bootstraps, initial_split, rsample2caret,
            testing, vfold_cv)
@@ -41,6 +39,22 @@ export(.,
        response,
        tune,
        varimp)
+
+export(accuracy,
+       brier,
+       cindex,
+       cross_entropy,
+       kappa,
+       mae,
+       mse,
+       pr_auc,
+       r2,
+       rmse,
+       roc_auc,
+       roc_index,
+       sensitivity,
+       specificity,
+       weighted_kappa)
 
 export(BootControl,
        CVControl,

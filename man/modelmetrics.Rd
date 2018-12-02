@@ -7,20 +7,26 @@
 \alias{modelmetrics.matrix}
 \alias{modelmetrics.numeric}
 \alias{modelmetrics.Surv}
-\title{Model Performance Metrices}
+\title{Model Performance Metrics}
 \usage{
 modelmetrics(x, ...)
 
 \method{modelmetrics}{Resamples}(x, ...)
 
-\method{modelmetrics}{factor}(x, y, cutoff = 0.5,
-  cutoff_index = function(sens, spec) sens + spec, ...)
+\method{modelmetrics}{factor}(x, y, metrics = c(Accuracy = accuracy,
+  Kappa = kappa, WeightedKappa = weighted_kappa, Brier = brier,
+  CrossEntropy = cross_entropy, ROCAUC = roc_auc, PRAUC = pr_auc,
+  Sensitivity = sensitivity, Specificity = specificity, Index = roc_index),
+  cutoff = 0.5, cutoff_index = function(sens, spec) sens + spec, ...)
 
-\method{modelmetrics}{matrix}(x, y, ...)
+\method{modelmetrics}{matrix}(x, y, metrics = c(R2 = r2, RMSE = rmse, MAE
+  = mae), ...)
 
-\method{modelmetrics}{numeric}(x, y, ...)
+\method{modelmetrics}{numeric}(x, y, metrics = c(R2 = r2, RMSE = rmse,
+  MAE = mae), ...)
 
-\method{modelmetrics}{Surv}(x, y, times = numeric(), ...)
+\method{modelmetrics}{Surv}(x, y, metrics = c(CIndex = cindex, ROC =
+  roc_auc, Brier = brier), times = numeric(), ...)
 }
 \arguments{
 \item{x}{observed responses or class containing observed and predicted
@@ -29,6 +35,9 @@ responses.}
 \item{...}{arguments passed to or from other methods.}
 
 \item{y}{predicted responses.}
+
+\item{metrics}{function or list of named functions to include in the
+calculation of performance metrics.}
 
 \item{cutoff}{threshold above which probabilities are classified as success
 for binary responses.}
@@ -61,7 +70,8 @@ modelmetrics(obs, pred)
 
 }
 \seealso{
-\code{\link{resample}}, \code{\link{Resamples}}
+\code{\link{metrics}}, \code{\link{resample}},
+\code{\link{Resamples}}
 
 \code{\link{predict}}, \code{\link{response}}
 }

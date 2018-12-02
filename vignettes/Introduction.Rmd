@@ -117,7 +117,7 @@ control <- CVControl(
 )
 
 ## Metrics of interest
-metrics <- c("ROC", "Brier")
+metrics <- c("ROC.Mean", "Brier.Mean")
 ```
 
 
@@ -310,10 +310,10 @@ WeightedKappa
 Brier
   : Multi-class Brier score.
   
-MLogLoss
-  : Multinomial logistic loss, or cross entropy loss.
+CrossEntropy
+  : Average cross entropy loss.
   
-Brier and MLogLoss are computed directly on predicted class probabilities.  The others are computed on predicted class membership, defined as the factor level with the highest predicted probability.
+Brier and CrossEntropy are computed directly on predicted class probabilities.  The others are computed on predicted class membership, defined as the factor level with the highest predicted probability.
 
 ```{r}
 ### Iris flowers species (3 levels)

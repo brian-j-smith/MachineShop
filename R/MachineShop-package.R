@@ -65,6 +65,7 @@
 #'   \code{\link{dependence}} \tab Parital Dependence \cr
 #'   \code{\link{diff}} \tab Model Performance Differences \cr
 #'   \code{\link{lift}} \tab Lift Curves \cr
+#'   \code{\link{modelmetrics}} \tab Model Performance Metrics \cr
 #'   \code{\link{varimp}} \tab Variable Importance \cr
 #' }
 #' 
