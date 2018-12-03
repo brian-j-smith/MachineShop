@@ -13,9 +13,9 @@ SuperModel(..., model = GBMModel, control = CVControl,
 \item{model}{\code{MLModel} object, constructor function, or character string
 naming a constructor function to serve as the super model.}
 
-\item{control}{\code{\linkS4class{MLControl}} object, control function, or
-character string naming a control function defining the resampling method to
-be employed for the estimation of base learner weights.}
+\item{control}{\code{\link{MLControl}} object, control function, or character
+string naming a control function defining the resampling method to be
+employed for the estimation of base learner weights.}
 
 \item{all_vars}{logical indicating whether to include the original
 predictor variables in the super model.}

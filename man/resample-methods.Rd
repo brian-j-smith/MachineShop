@@ -27,9 +27,9 @@ formula; or a recipe.}
 \item{model}{\code{MLModel} object, constructor function, or character string
 naming a constructor function that returns an \code{MLModel} object.}
 
-\item{control}{\code{\linkS4class{MLControl}} object, control function, or
-character string naming a control function defining the resampling method to
-be employed.}
+\item{control}{\code{\link{MLControl}} object, control function, or character
+string naming a control function defining the resampling method to be
+employed.}
 }
 \value{
 \code{Resamples} class object.

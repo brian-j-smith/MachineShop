@@ -23,9 +23,9 @@ resample <- function(x, ...) {
 #' @param data \code{data.frame} containing observed predictors and outcomes.
 #' @param model \code{MLModel} object, constructor function, or character string
 #' naming a constructor function that returns an \code{MLModel} object.
-#' @param control \code{\linkS4class{MLControl}} object, control function, or
-#' character string naming a control function defining the resampling method to
-#' be employed.
+#' @param control \code{\link{MLControl}} object, control function, or character
+#' string naming a control function defining the resampling method to be
+#' employed.
 #' 
 #' @details
 #' Stratified resampling is performed for the \code{formula} method according to

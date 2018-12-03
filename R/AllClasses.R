@@ -2,37 +2,14 @@ setOldClass("ModelFrame")
 setOldClass("recipe")
 
 
-#' Resampling Classes and Methods
-#'
-#' @name MLControl-class
-#' @rdname MLControl-class
+#' Resampling Controls
 #' 
-#' @slot summary function to compute model performance metrics.
-#' @slot cutoff threshold above which probabilities are classified as success
-#' for factor outcomes and which expected values are rounded for integer
-#' outcomes.
-#' @slot cutoff_index function to calculate a desired sensitivity-specificity
-#' tradeoff.
-#' @slot surv_times numeric vector of follow-up times at which to predict
-#' survival events.
-#' @slot na.rm logical indicating whether to remove observed or predicted
-#' responses that are \code{NA} when calculating model metrics.
-#' @slot seed integer to set the seed at the start of resampling.
+#' @description
+#' The base \code{MLControl} constructor initializes a set of control parameters
+#' that are common to all resampling methods.
 #' 
-setClass("MLControl",
-  slots = c(summary = "function", cutoff = "numeric", cutoff_index = "function",
-            surv_times = "numeric", na.rm = "logical", seed = "numeric"),
-  contains = "VIRTUAL"
-)
-
-
-#' The base \code{MLControl} constructor initializes a set of parameters that
-#' are common to all resampling methods.
+#' @rdname MLControl
 #' 
-#' @rdname MLControl-class
-#' @aliases initialize,MLControl-method
-#' 
-#' @param .Object class object being initialized.
 #' @param summary function to compute model performance metrics (deprecated).
 #' @param cutoff threshold above which probabilities are classified as success
 #' for factor outcomes and which expected values are rounded for integer
@@ -45,7 +22,7 @@ setClass("MLControl",
 #' responses that are \code{NA} when calculating model metrics (deprecated).
 #' @param seed integer to set the seed at the start of resampling.  This is set
 #' to a random integer by default (NULL).
-#' @param ...  arguments to be passed to or from other methods.
+#' @param ...  arguments to be passed to \code{MLControl}.
 #' 
 #' @details
 #' Arguments \code{summary}, \code{cutoff}, \code{cutoff_index}, and
@@ -56,10 +33,8 @@ setClass("MLControl",
 #' 
 #' @seealso \code{\link{resample}}, \code{\link{modelmetrics}}
 #' 
-setMethod("initialize", "MLControl",
-  function(.Object, summary = NULL, cutoff = NULL, cutoff_index = NULL,
-           surv_times = numeric(), na.rm = NULL, seed = NULL, ...) {
-    
+MLControl <- function(summary = NULL, cutoff = NULL, cutoff_index = NULL,
+                      surv_times = numeric(), na.rm = NULL, seed = NULL) {
     if (!is.null(summary)) {
       depwarn("'summary' argument to MLControl is deprecated",
               "apply the modelmetrics function to Resamples output directly")
@@ -81,18 +56,22 @@ setMethod("initialize", "MLControl",
     }
     
     if (is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
-    callNextMethod(.Object, surv_times = surv_times, na.rm = TRUE,
-                   seed = seed, ...)
-  }
+    new("MLControl", surv_times = surv_times, na.rm = TRUE, seed = seed)
+}
+
+
+setClass("MLControl",
+  slots = c(summary = "function", cutoff = "numeric", cutoff_index = "function",
+            surv_times = "numeric", na.rm = "logical", seed = "numeric")
 )
 
 
+#' @description
 #' \code{BootControl} constructs an \code{MLControl} object for simple bootstrap
 #' resampling in which models are fit with bootstrap resampled training sets and
 #' used to predict the full data set.
 #' 
-#' @name BootControl
-#' @rdname MLControl-class
+#' @rdname MLControl
 #' 
 #' @param samples number of bootstrap samples.
 #' 
@@ -101,7 +80,7 @@ setMethod("initialize", "MLControl",
 #' BootControl(samples = 100)
 #' 
 BootControl <- function(samples = 25, ...) {
-  new("BootMLControl", samples = samples, ...)
+  new("BootMLControl", MLControl(...), samples = samples)
 }
 
 
@@ -111,13 +90,13 @@ setClass("BootMLControl",
 )
 
 
+#' @description
 #' \code{CVControl} constructs an \code{MLControl} object for repeated K-fold
 #' cross-validation.  In this procedure, the full data set is repeatedly
 #' partitioned into K-folds.  Within a partitioning, prediction is performed on
 #' each of the K folds with models fit on all remaining folds.
 #' 
-#' @name CVControl
-#' @rdname MLControl-class
+#' @rdname MLControl
 #' 
 #' @param folds number of cross-validation folds (K).
 #' @param repeats number of repeats of the K-fold partitioning.
@@ -127,7 +106,7 @@ setClass("BootMLControl",
 #' CVControl(folds = 10, repeats = 5)
 #' 
 CVControl <- function(folds = 10, repeats = 1, ...) {
-  new("CVMLControl", folds = folds, repeats = repeats, ...)
+  new("CVMLControl", MLControl(...), folds = folds, repeats = repeats)
 }
 
 
@@ -137,19 +116,19 @@ setClass("CVMLControl",
 )
 
 
+#' @description
 #' \code{OOBControl} constructs an \code{MLControl} object for out-of-bootstrap
 #' resampling in which models are fit with bootstrap resampled training sets and
 #' used to predict the unsampled cases.
 #' 
-#' @name OOBControl
-#' @rdname MLControl-class
+#' @rdname MLControl
 #' 
 #' @examples
 #' ## 100 out-of-bootstrap samples
 #' OOBControl(samples = 100)
 #' 
 OOBControl <- function(samples = 25, ...) {
-  new("OOBMLControl", samples = samples, ...)
+  new("OOBMLControl", MLControl(...), samples = samples)
 }
 
 
@@ -159,21 +138,21 @@ setClass("OOBMLControl",
 )
 
 
+#' @description
 #' \code{SplitControl} constructs an \code{MLControl} object for splitting data
 #' into a seperate trianing and test set.
 #' 
+#' @rdname MLControl
+#' 
 #' @param prop proportion of cases to include in the training set
 #' (\code{0 < prop < 1}).
-#' 
-#' @name SplitControl
-#' @rdname MLControl-class
 #' 
 #' @examples
 #' ## Split sample of 2/3 training and 1/3 testing
 #' SplitControl(prop = 2/3)
 #' 
 SplitControl <- function(prop = 2/3, ...) {
-  new("SplitMLControl", prop = prop, ...)
+  new("SplitMLControl", MLControl(...), prop = prop)
 }
 
 
@@ -183,18 +162,18 @@ setClass("SplitMLControl",
 )
 
 
+#' @description
 #' \code{TrainControl} constructs an \code{MLControl} object for training and
 #' performance evaluation to be performed on the same training set.
 #' 
-#' @name TrainControl
-#' @rdname MLControl-class
+#' @rdname MLControl
 #' 
 #' @examples
 #' ## Same training and test set
 #' TrainControl()
 #' 
 TrainControl <- function(...) {
-  new("TrainMLControl", ...)
+  new("TrainMLControl", MLControl(...))
 }
 
 

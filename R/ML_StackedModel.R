@@ -3,9 +3,9 @@
 #' Fit a stacked regression model from multiple base learners.
 #' 
 #' @param ... \code{MLModel} objects to serve as base learners.
-#' @param control \code{\linkS4class{MLControl}} object, control function, or
-#' character string naming a control function defining the resampling method to
-#' be employed for the estimation of base learner weights.
+#' @param control \code{\link{MLControl}} object, control function, or character
+#' string naming a control function defining the resampling method to be
+#' employed for the estimation of base learner weights.
 #' @param weights optional fixed base learner weights.
 #' 
 #' @details

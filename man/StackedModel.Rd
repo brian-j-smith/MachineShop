@@ -9,9 +9,9 @@ StackedModel(..., control = CVControl, weights = NULL)
 \arguments{
 \item{...}{\code{MLModel} objects to serve as base learners.}
 
-\item{control}{\code{\linkS4class{MLControl}} object, control function, or
-character string naming a control function defining the resampling method to
-be employed for the estimation of base learner weights.}
+\item{control}{\code{\link{MLControl}} object, control function, or character
+string naming a control function defining the resampling method to be
+employed for the estimation of base learner weights.}
 
 \item{weights}{optional fixed base learner weights.}
 }

@@ -37,9 +37,9 @@ list of \code{MLModel} contructors or objects.}
 evaluate \code{models} when a single constructor is specified.  Ignored in
 the case of a list of models.}
 
-\item{control}{\code{\linkS4class{MLControl}} object, control function, or
-character string naming a control function defining the resampling method to
-be employed.}
+\item{control}{\code{\link{MLControl}} object, control function, or character
+string naming a control function defining the resampling method to be
+employed.}
 
 \item{metrics}{function, one or more function names, or list of named
 functions to include in the calculation of performance metrics.  The default

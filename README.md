@@ -1614,8 +1614,6 @@ modelmetrics(obs, pred)
 #> 
 #> Survival times: 
 #> 
-#> Omit missing responses: TRUE
-#> 
 #> Seed: 9279906
 
 summary(res)

@@ -62,9 +62,8 @@ export(BootControl,
        SplitControl,
        TrainControl)
 
-exportClasses(MLControl)
-
-export(MLModel,
+export(MLControl,
+       MLModel,
        AdaBagModel,
        AdaBoostModel,
        C50Model,

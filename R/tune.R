@@ -27,9 +27,9 @@ tune <- function(x, ...) {
 #' @param grid \code{data.frame} containing parameter values over which to
 #' evaluate \code{models} when a single constructor is specified.  Ignored in
 #' the case of a list of models.
-#' @param control \code{\linkS4class{MLControl}} object, control function, or
-#' character string naming a control function defining the resampling method to
-#' be employed.
+#' @param control \code{\link{MLControl}} object, control function, or character
+#' string naming a control function defining the resampling method to be
+#' employed.
 #' @param metrics function, one or more function names, or list of named
 #' functions to include in the calculation of performance metrics.  The default
 #' \code{\link{modelmetrics}} are used unless otherwise specified.  Model
