@@ -30,8 +30,10 @@ tune <- function(x, ...) {
 #' @param control \code{\linkS4class{MLControl}} object, control function, or
 #' character string naming a control function defining the resampling method to
 #' be employed.
-#' @param metric numeric index or character name of the performance metric to
-#' use in selecting the best model.
+#' @param metrics function, one or more function names, or list of named
+#' functions to include in the calculation of performance metrics.  The default
+#' \code{\link{modelmetrics}} are used unless otherwise specified.  Model
+#' selection is based on the first specified metric.
 #' @param stat function to compute a summary statistic on resampled values of
 #' the metric for model selection.
 #' @param maximize logical indicating whether to select the model having the
@@ -61,31 +63,32 @@ tune <- function(x, ...) {
 #' }
 #' 
 tune.formula <- function(x, data, models, grid = data.frame(),
-                         control = CVControl, metric = 1, stat = mean,
+                         control = CVControl, metrics = NULL, stat = mean,
                          maximize = TRUE, ...) {
-  .tune(models, grid, control, metric, stat, maximize, x, data)
+  .tune(x, data, models, grid, control, metrics, stat, maximize, ...)
 }
 
 
 #' @rdname tune-methods
 #' 
 tune.ModelFrame <- function(x, models, grid = data.frame(),
-                            control = CVControl, metric = 1, stat = mean,
+                            control = CVControl, metrics = NULL, stat = mean,
                             maximize = TRUE, ...) {
-  .tune(models, grid, control, metric, stat, maximize, x)
+  .tune(x, NULL, models, grid, control, metrics, stat, maximize, ...)
 }
 
 
 #' @rdname tune-methods
 #' 
 tune.recipe <- function(x, models, grid = data.frame(),
-                        control = CVControl, metric = 1, stat = mean,
+                        control = CVControl, metrics = NULL, stat = mean,
                         maximize = TRUE, ...) {
-  .tune(models, grid, control, metric, stat, maximize, x)
+  .tune(x, NULL, models, grid, control, metrics, stat, maximize, ...)
 }
 
 
-.tune <- function(models, grid, control, metric, stat, maximize, ...) {
+.tune <- function(x, data, models, grid, control, metrics, stat, maximize,
+                  ...) {
   
   if (is.list(models)) {
     models <- lapply(models, getMLObject, class = "MLModel")
@@ -97,19 +100,23 @@ tune.recipe <- function(x, models, grid = data.frame(),
   
   control <- getMLObject(control, "MLControl")
   
+  modelmetrics_tune <-
+    ifelse(is.null(metrics),
+           function(x) modelmetrics(x, ...),
+           function(x) modelmetrics(x, metrics = metrics, ...))
+
   resamples <- list()
-  perf <- list()
+  perf <- numeric()
   for (i in seq(models)) {
-    resamples[[i]] <- resample(..., models[[i]], control)
-    perf[[i]] <- apply(modelmetrics(resamples[[i]]), 2, function(x) {
-      stat(na.omit(x))
-    })
+    resamples[[i]] <- resample(x, data = data, model = models[[i]],
+                               control = control)
+    modmets <- modelmetrics_tune(resamples[[i]])
+    perf[i] <- stat(na.omit(modmets[, 1]))
   }
-  perf <- as.data.frame(do.call(rbind, perf))
-  metric <- match_indices(metric, names(perf))
-  selected <- ifelse(maximize, which.max, which.min)(perf[[metric]])
+  selected <- ifelse(maximize, which.max, which.min)(perf)
+  
   MLModelTune(models[[selected]], grid = grid,
               resamples = do.call(Resamples, resamples),
-              selected = structure(selected, names = metric))
+              selected = structure(selected, names = colnames(modmets)[1]))
   
 }

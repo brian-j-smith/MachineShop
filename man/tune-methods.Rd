@@ -10,16 +10,16 @@
 tune(x, ...)
 
 \method{tune}{formula}(x, data, models, grid = data.frame(),
-  control = CVControl, metric = 1, stat = mean, maximize = TRUE,
-  ...)
+  control = CVControl, metrics = NULL, stat = mean,
+  maximize = TRUE, ...)
 
 \method{tune}{ModelFrame}(x, models, grid = data.frame(),
-  control = CVControl, metric = 1, stat = mean, maximize = TRUE,
-  ...)
+  control = CVControl, metrics = NULL, stat = mean,
+  maximize = TRUE, ...)
 
 \method{tune}{recipe}(x, models, grid = data.frame(),
-  control = CVControl, metric = 1, stat = mean, maximize = TRUE,
-  ...)
+  control = CVControl, metrics = NULL, stat = mean,
+  maximize = TRUE, ...)
 }
 \arguments{
 \item{x}{defined relationship between model predictors and an outcome.  May
@@ -41,8 +41,10 @@ the case of a list of models.}
 character string naming a control function defining the resampling method to
 be employed.}
 
-\item{metric}{numeric index or character name of the performance metric to
-use in selecting the best model.}
+\item{metrics}{function, one or more function names, or list of named
+functions to include in the calculation of performance metrics.  The default
+\code{\link{modelmetrics}} are used unless otherwise specified.  Model
+selection is based on the first specified metric.}
 
 \item{stat}{function to compute a summary statistic on resampled values of
 the metric for model selection.}
