@@ -6,8 +6,8 @@
 #' @rdname summary-methods
 #' 
 #' @param object object to summarize.
-#' @param stats function or list of named functions to include in the
-#' calculation of summary statistics.
+#' @param stats function, one or more function names, or list of named functions
+#' to include in the calculation of summary statistics.
 #' @param na.rm logical indicating whether to exclude missing values.
 #' @param ... arguments passed to other methods.
 #' 

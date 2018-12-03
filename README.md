@@ -1630,6 +1630,24 @@ plot(res)
 
 <img src="man/figures/README-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
+### Model Metrics
+
+``` r
+## Default metrics
+modelmetrics(res) %>% summary
+#>                    Mean     Median         SD          Min       Max NA
+#> Accuracy     0.93333333 0.93333333 0.06285394 8.000000e-01 1.0000000  0
+#> Kappa        0.90000000 0.90000000 0.09428090 7.000000e-01 1.0000000  0
+#> Brier        0.09409409 0.08887763 0.08302550 5.911564e-07 0.2260197  0
+#> CrossEntropy 0.22653409 0.12128540 0.23089382 3.321915e-04 0.5716866  0
+
+## User-specified metrics
+modelmetrics(res, c("accuracy", "brier")) %>% summary
+#>                Mean     Median         SD          Min       Max NA
+#> accuracy 0.93333333 0.93333333 0.06285394 8.000000e-01 1.0000000  0
+#> brier    0.09409409 0.08887763 0.08302550 5.911564e-07 0.2260197  0
+```
+
 ### Model Tuning
 
 ``` r
@@ -1642,7 +1660,7 @@ gbmtune <- tune(fo, data = iris, model = GBMModel,
 plot(gbmtune, type = "line")
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ## Fit the selected model
@@ -1698,7 +1716,7 @@ summary(res)
 plot(res)
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
 
 ``` r
 ## Pairwise model differences and t-tests
@@ -1770,7 +1788,7 @@ t.test(perfdiff)
 plot(perfdiff)
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
 
 ### Ensemble Models
 
@@ -1801,7 +1819,7 @@ cal <- calibration(res)
 plot(cal, se = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-13-2.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-13-3.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-14-1.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-14-2.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-14-3.png" style="display: block; margin: auto;" />
 
 ### Confusion Matrices
 
@@ -1835,7 +1853,7 @@ summary(conf)
 plot(conf)
 ```
 
-<img src="man/figures/README-unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
 
 ### Partial Dependence Plots
 
@@ -1844,7 +1862,7 @@ pd <- dependence(gbmfit, select = c(Petal.Length, Petal.Width))
 plot(pd)
 ```
 
-<img src="man/figures/README-unnamed-chunk-16-1.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-16-2.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-17-1.png" style="display: block; margin: auto;" /><img src="man/figures/README-unnamed-chunk-17-2.png" style="display: block; margin: auto;" />
 
 ### Lift Curves
 
@@ -1858,7 +1876,7 @@ lf <- lift(gbmres_versicolor)
 plot(lf)
 ```
 
-<img src="man/figures/README-unnamed-chunk-17-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
 
 ``` r
 rfres_versicolor <- resample(fo_versicolor, data = iris,  model = RandomForestModel, control = control)
@@ -1869,7 +1887,7 @@ lf <- lift(res_versicolor)
 plot(lf, find = 75)
 ```
 
-<img src="man/figures/README-unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
 
 ### Preprocessing Recipes
 

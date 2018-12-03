@@ -14,8 +14,9 @@
 #' @param intervals character string specifying whether the \code{n} values are
 #' spaced according to variable quantiles (\code{"quantile"}) or uniformly
 #' (\code{"uniform"}).
-#' @param stats function or list of named functions with which to aggregate
-#' the response variable over the non-selected predictor variables.
+#' @param stats function, one or more function names, or list of named functions
+#' with which to aggregate the response variable over the non-selected predictor
+#' variables.
 #' 
 #' @return \code{PartialDependence} class object that inherits from
 #' \code{data.frame}.

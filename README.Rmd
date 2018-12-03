@@ -154,6 +154,16 @@ summary(res)
 plot(res)
 ```
 
+### Model Metrics
+
+```{r}
+## Default metrics
+modelmetrics(res) %>% summary
+
+## User-specified metrics
+modelmetrics(res, c("accuracy", "brier")) %>% summary
+```
+
 ### Model Tuning
 
 ```{r, fig.height = 4}

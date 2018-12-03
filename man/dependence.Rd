@@ -27,8 +27,9 @@ interacted predictors.}
 spaced according to variable quantiles (\code{"quantile"}) or uniformly
 (\code{"uniform"}).}
 
-\item{stats}{function or list of named functions with which to aggregate
-the response variable over the non-selected predictor variables.}
+\item{stats}{function, one or more function names, or list of named functions
+with which to aggregate the response variable over the non-selected predictor
+variables.}
 }
 \value{
 \code{PartialDependence} class object that inherits from

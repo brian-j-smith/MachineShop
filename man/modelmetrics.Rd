@@ -39,8 +39,8 @@ responses that are \code{NA} when calculating model metrics.}
 
 \item{y}{predicted responses.}
 
-\item{metrics}{function or list of named functions to include in the
-calculation of performance metrics.}
+\item{metrics}{function, one or more function names, or list of named
+functions to include in the calculation of performance metrics.}
 
 \item{cutoff}{threshold above which probabilities are classified as success
 for binary responses.}

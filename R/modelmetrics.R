@@ -56,8 +56,8 @@ modelmetrics.Resamples <- function(x, na.rm = TRUE, ...) {
 
 #' @rdname modelmetrics
 #' 
-#' @param metrics function or list of named functions to include in the
-#' calculation of performance metrics.
+#' @param metrics function, one or more function names, or list of named
+#' functions to include in the calculation of performance metrics.
 #' @param cutoff threshold above which probabilities are classified as success
 #' for binary responses.
 #' @param cutoff_index function to calculate a desired sensitivity-specificity

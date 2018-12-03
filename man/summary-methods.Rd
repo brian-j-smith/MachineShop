@@ -22,8 +22,8 @@
 \arguments{
 \item{object}{object to summarize.}
 
-\item{stats}{function or list of named functions to include in the
-calculation of summary statistics.}
+\item{stats}{function, one or more function names, or list of named functions
+to include in the calculation of summary statistics.}
 
 \item{na.rm}{logical indicating whether to exclude missing values.}
 

@@ -154,12 +154,17 @@ is_response <- function(object, class2) {
 
 
 list2function <- function(x) {
-  if (is.list(x)) {
-    x <- eval(bquote(
+  if (is.character(x)) x <- mget(x, mode = "function", inherits = TRUE)
+  if (is.list(x) && all(sapply(x, is.function))) {
+    eval(bquote(
       function(...) unlist(lapply(.(x), function(x) x(...)))
     ))
+  } else if (is.function(x)) {
+    x
+  } else {
+    stop("'", deparse(substitute(x)), "' must be a function, ",
+         "one or more function names, or a list of named functions")
   }
-  x
 }
 
 
