@@ -117,7 +117,7 @@ control <- CVControl(
 )
 
 ## Metrics of interest
-metrics <- c("ROC.Mean", "Brier.Mean")
+metrics <- c("ROC.mean", "Brier.mean")
 ```
 
 

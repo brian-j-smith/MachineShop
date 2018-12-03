@@ -112,7 +112,7 @@ setMethod(".brier", c("Surv", "matrix"),
     })
     
     if (length(times) > 1) {
-      c("Mean" = mean.SurvMetrics(metrics, times), "Time" = metrics)
+      c("mean" = mean.SurvMetrics(metrics, times), "time" = metrics)
     } else {
       metrics
     }
@@ -376,7 +376,7 @@ setMethod(".roc_auc", c("Surv", "matrix"),
     })
     
     if (length(times) > 1) {
-      c("Mean" = mean.SurvMetrics(metrics, times), "Time" = metrics)
+      c("mean" = mean.SurvMetrics(metrics, times), "time" = metrics)
     } else {
       metrics
     }
