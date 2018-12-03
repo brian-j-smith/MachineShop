@@ -6,8 +6,9 @@
 #' 
 #' @param x observed responses or class containing observed and predicted
 #' responses.
+#' @param ... arguments passed to the \code{\link{metrics}} functions and from
+#' the \code{Resamples} method to the others.
 #' @param y predicted responses.
-#' @param ... arguments passed to or from other methods.
 #' 
 modelmetrics <- function(x, ...) {
   UseMethod("modelmetrics")
@@ -28,7 +29,7 @@ modelmetrics <- function(x, ...) {
 #' summary(metrics)
 #' plot(metrics)
 #' 
-modelmetrics.Resamples <- function(x, na.rm = TRUE, ...) {
+modelmetrics.Resamples <- function(x, ..., na.rm = TRUE) {
   control <- x@control
   if (na.rm) x <- na.omit(x)
   args <- list(...)
@@ -58,10 +59,6 @@ modelmetrics.Resamples <- function(x, na.rm = TRUE, ...) {
 #' 
 #' @param metrics function, one or more function names, or list of named
 #' functions to include in the calculation of performance metrics.
-#' @param cutoff threshold above which probabilities are classified as success
-#' for binary responses.
-#' @param cutoff_index function to calculate a desired sensitivity-specificity
-#' tradeoff.
 #' 
 modelmetrics.factor <- function(x, y,
                                 metrics = c("Accuracy" = accuracy,
@@ -73,11 +70,9 @@ modelmetrics.factor <- function(x, y,
                                             "PRAUC" = pr_auc,
                                             "Sensitivity" = sensitivity,
                                             "Specificity" = specificity,
-                                            "Index" = roc_index),
-                                cutoff = 0.5, cutoff_index =
-                                  function(sens, spec) sens + spec, ...) {
+                                            "Index" = roc_index), ...) {
   metrics <- list2function(metrics)
-  metrics(x, y, cutoff = cutoff, cutoff_index = cutoff_index)
+  metrics(x, y, ...)
 }
 
 
@@ -88,7 +83,7 @@ modelmetrics.matrix <- function(x, y,
                                             "RMSE" = rmse,
                                             "MAE" = mae), ...) {
   metrics <- list2function(metrics)
-  metrics(x, y)
+  metrics(x, y, ...)
 }
 
 
@@ -99,14 +94,11 @@ modelmetrics.numeric <- function(x, y,
                                              "RMSE" = rmse,
                                              "MAE" = mae), ...) {
   metrics <- list2function(metrics)
-  metrics(x, y)
+  metrics(x, y, ...)
 }
 
 
 #' @rdname modelmetrics
-#' 
-#' @param times numeric vector of follow-up times at which survival events
-#' were predicted.
 #' 
 #' @seealso \code{\link{predict}}, \code{\link{response}}
 #' 
@@ -125,8 +117,7 @@ modelmetrics.numeric <- function(x, y,
 modelmetrics.Surv <- function(x, y,
                               metrics = c("CIndex" = cindex,
                                           "ROC" = roc_auc,
-                                          "Brier" = brier),
-                              times = numeric(), ...) {
+                                          "Brier" = brier), ...) {
   metrics <- list2function(metrics)
-  metrics(x, y, times = times)
+  metrics(x, y, ...)
 }

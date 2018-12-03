@@ -11,13 +11,13 @@
 \usage{
 modelmetrics(x, ...)
 
-\method{modelmetrics}{Resamples}(x, na.rm = TRUE, ...)
+\method{modelmetrics}{Resamples}(x, ..., na.rm = TRUE)
 
 \method{modelmetrics}{factor}(x, y, metrics = c(Accuracy = accuracy,
   Kappa = kappa, WeightedKappa = weighted_kappa, Brier = brier,
   CrossEntropy = cross_entropy, ROCAUC = roc_auc, PRAUC = pr_auc,
   Sensitivity = sensitivity, Specificity = specificity, Index = roc_index),
-  cutoff = 0.5, cutoff_index = function(sens, spec) sens + spec, ...)
+  ...)
 
 \method{modelmetrics}{matrix}(x, y, metrics = c(R2 = r2, RMSE = rmse, MAE
   = mae), ...)
@@ -26,13 +26,14 @@ modelmetrics(x, ...)
   MAE = mae), ...)
 
 \method{modelmetrics}{Surv}(x, y, metrics = c(CIndex = cindex, ROC =
-  roc_auc, Brier = brier), times = numeric(), ...)
+  roc_auc, Brier = brier), ...)
 }
 \arguments{
 \item{x}{observed responses or class containing observed and predicted
 responses.}
 
-\item{...}{arguments passed to or from other methods.}
+\item{...}{arguments passed to the \code{\link{metrics}} functions and from
+the \code{Resamples} method to the others.}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating model metrics.}
@@ -41,15 +42,6 @@ responses that are \code{NA} when calculating model metrics.}
 
 \item{metrics}{function, one or more function names, or list of named
 functions to include in the calculation of performance metrics.}
-
-\item{cutoff}{threshold above which probabilities are classified as success
-for binary responses.}
-
-\item{cutoff_index}{function to calculate a desired sensitivity-specificity
-tradeoff.}
-
-\item{times}{numeric vector of follow-up times at which survival events
-were predicted.}
 }
 \description{
 Compute measures of model performance.
