@@ -84,8 +84,7 @@ setClass("SuperModel", contains = "MLModel")
     learner_predictors[[i]] <- response$Predicted
   }
   df <- make_super_df(response$Observed, learner_predictors, response$Case)
-  na.action <- ifelse(control@na.rm, na.omit, na.pass)
-  super_mf <- ModelFrame(formula(df), df, na.action = na.action)
+  super_mf <- ModelFrame(formula(df), df, na.action = na.omit)
   if (params$all_vars) super_mf <- add_predictors(mf, super_mf)
 
   list(base_fits = lapply(base_learners,

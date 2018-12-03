@@ -42,15 +42,15 @@ setClass("MLControl",
 #' @param surv_times numeric vector of follow-up times at which to predict
 #' survival events.
 #' @param na.rm logical indicating whether to remove observed or predicted
-#' responses that are \code{NA} when calculating model metrics.
+#' responses that are \code{NA} when calculating model metrics (deprecated).
 #' @param seed integer to set the seed at the start of resampling.  This is set
 #' to a random integer by default (NULL).
 #' @param ...  arguments to be passed to or from other methods.
 #' 
 #' @details
-#' Arguments \code{summary}, \code{cutoff}, and \code{cutoff_index} are
-#' deprecated.  The latter two may be specified directly in calls to
-#' \code{\link{modelmetrics}} instead.
+#' Arguments \code{summary}, \code{cutoff}, \code{cutoff_index}, and
+#' \code{na.rm} are deprecated.  The latter three may be specified directly in
+#' calls to \code{\link{modelmetrics}} instead.
 #' 
 #' @return \code{MLControl} class object.
 #' 
@@ -58,7 +58,7 @@ setClass("MLControl",
 #' 
 setMethod("initialize", "MLControl",
   function(.Object, summary = NULL, cutoff = NULL, cutoff_index = NULL,
-           surv_times = numeric(), na.rm = TRUE, seed = NULL, ...) {
+           surv_times = numeric(), na.rm = NULL, seed = NULL, ...) {
     
     if (!is.null(summary)) {
       depwarn("'summary' argument to MLControl is deprecated",
@@ -75,8 +75,13 @@ setMethod("initialize", "MLControl",
               "specify in calls to modelmetrics instead")
     }
     
+    if (!is.null(na.rm)) {
+      depwarn("'na.rm' argument to MLControl is deprecated",
+              "specify in calls to modelmetrics instead")
+    }
+    
     if (is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
-    callNextMethod(.Object, surv_times = surv_times, na.rm = na.rm,
+    callNextMethod(.Object, surv_times = surv_times, na.rm = TRUE,
                    seed = seed, ...)
   }
 )

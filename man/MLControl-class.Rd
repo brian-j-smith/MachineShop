@@ -13,7 +13,7 @@
 \usage{
 \S4method{initialize}{MLControl}(.Object, summary = NULL,
   cutoff = NULL, cutoff_index = NULL, surv_times = numeric(),
-  na.rm = TRUE, seed = NULL, ...)
+  na.rm = NULL, seed = NULL, ...)
 
 BootControl(samples = 25, ...)
 
@@ -41,7 +41,7 @@ tradeoff (deprecated).}
 survival events.}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
-responses that are \code{NA} when calculating model metrics.}
+responses that are \code{NA} when calculating model metrics (deprecated).}
 
 \item{seed}{integer to set the seed at the start of resampling.  This is set
 to a random integer by default (NULL).}
@@ -86,9 +86,9 @@ into a seperate trianing and test set.
 performance evaluation to be performed on the same training set.
 }
 \details{
-Arguments \code{summary}, \code{cutoff}, and \code{cutoff_index} are
-deprecated.  The latter two may be specified directly in calls to
-\code{\link{modelmetrics}} instead.
+Arguments \code{summary}, \code{cutoff}, \code{cutoff_index}, and
+\code{na.rm} are deprecated.  The latter three may be specified directly in
+calls to \code{\link{modelmetrics}} instead.
 }
 \section{Slots}{
 

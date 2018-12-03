@@ -11,7 +11,7 @@
 \usage{
 modelmetrics(x, ...)
 
-\method{modelmetrics}{Resamples}(x, ...)
+\method{modelmetrics}{Resamples}(x, na.rm = TRUE, ...)
 
 \method{modelmetrics}{factor}(x, y, metrics = c(Accuracy = accuracy,
   Kappa = kappa, WeightedKappa = weighted_kappa, Brier = brier,
@@ -33,6 +33,9 @@ modelmetrics(x, ...)
 responses.}
 
 \item{...}{arguments passed to or from other methods.}
+
+\item{na.rm}{logical indicating whether to remove observed or predicted
+responses that are \code{NA} when calculating model metrics.}
 
 \item{y}{predicted responses.}
 

@@ -16,6 +16,9 @@ modelmetrics <- function(x, ...) {
 
 #' @rdname modelmetrics
 #' 
+#' @param na.rm logical indicating whether to remove observed or predicted
+#' responses that are \code{NA} when calculating model metrics.
+#' 
 #' @seealso \code{\link{metrics}}, \code{\link{resample}},
 #' \code{\link{Resamples}}
 #' 
@@ -25,9 +28,9 @@ modelmetrics <- function(x, ...) {
 #' summary(metrics)
 #' plot(metrics)
 #' 
-modelmetrics.Resamples <- function(x, ...) {
+modelmetrics.Resamples <- function(x, na.rm = TRUE, ...) {
   control <- x@control
-  if (control@na.rm) x <- na.omit(x)
+  if (na.rm) x <- na.omit(x)
   args <- list(...)
   args$times <- control@surv_times
   metrics_by <- by(x, x[c("Model", "Resample")], function(x) {

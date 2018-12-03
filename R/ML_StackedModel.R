@@ -81,12 +81,10 @@ setClass("StackedModel", contains = "MLModel")
         complete_responses & complete.cases(stack[[i]])
     }
     
-    if (control@na.rm) {
-      stack <- lapply(stack, function(response) {
-        response[complete_responses, , drop = FALSE]
-      })
-    }
-    
+    stack <- lapply(stack, function(response) {
+      response[complete_responses, , drop = FALSE]
+    })
+
     weights <- solnp(rep(1 / num_learners, num_learners),
                      function(x) eval_stack_loss(x, stack, times),
                      eqfun = function(x) sum(x), eqB = 1,
