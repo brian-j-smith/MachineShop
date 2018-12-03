@@ -29,17 +29,19 @@ LMModel <- function() {
     fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
       y <- response(formula, data)
+      y_name <- response(terms(formula))
       if (is_response(y, "binary")) {
         y <- y == levels(y)[2]
-      } else if (is_response(y, "factor")) {
-        varname <- response(terms(formula))
+        data[[y_name]] <- y
+        formula[[2]] <- as.symbol(y_name)
+      } else if (is(y, "factor")) {
         mm <- model.matrix(~ y - 1)
         colnames(mm) <- levels(y)
-        data[[varname]] <- mm
-        formula[[2]] <- as.symbol(varname)
+        data[[y_name]] <- mm
+        formula[[2]] <- as.symbol(y_name)
       }
       args <- list(formula = formula, data = data, ...)
-      if (is_response(y, "numeric")) {
+      if (is(y, "numeric")) {
         args$weights <- weights
       } else {
         assert_equal_weights(weights)
