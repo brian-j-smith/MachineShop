@@ -153,6 +153,16 @@ is_response <- function(object, class2) {
 }
 
 
+list2function <- function(x) {
+  if (is.list(x)) {
+    x <- eval(bquote(
+      function(...) unlist(lapply(.(x), function(x) x(...)))
+    ))
+  }
+  x
+}
+
+
 match_indices <- function(indices, choices) {
   lookup <- structure(seq(choices), names = choices)
   indices <- na.omit(names(lookup)[lookup[indices]])

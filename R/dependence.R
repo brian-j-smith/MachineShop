@@ -44,12 +44,8 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
   
   intervals <- match.arg(intervals)
   
-  if (is.list(stats)) {
-    stats <- eval(bquote(
-      function(x) sapply(.(stats), function(stat) stat(x))
-    ))
-  }
-  
+  stats <- list2function(stats)
+
   select_values <- function(x) {
     if (is.factor(x)) {
       unique(x)

@@ -24,12 +24,8 @@ summary.ModelMetrics <- function(object,
                                            "Min" = min,
                                            "Max" = max),
                                  na.rm = TRUE, ...) {
-  if (is.list(stats)) {
-    stats <- eval(bquote(
-      function(x) sapply(.(stats), function(stat) stat(x))
-    ))
-  }
-  
+  stats <- list2function(stats)
+
   f <- function(x) {
     prop_na <- mean(is.na(x))
     if (na.rm) x <- na.omit(x)
