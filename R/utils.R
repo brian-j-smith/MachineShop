@@ -62,6 +62,14 @@ setMethod("append", c("matrix", "matrix"),
 )
 
 
+setMethod("append", c("ordered", "ordered"),
+  function(x, y) {
+    xy <- unlist(list(x, y))
+    if (all(levels(x) == levels(y))) as.ordered(xy) else xy
+  }
+)
+
+
 setMethod("append", c("Surv", "Surv"),
   function(x, y) {
     df <- as.data.frame(rbind(x, y))

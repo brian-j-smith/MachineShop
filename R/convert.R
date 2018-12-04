@@ -80,6 +80,13 @@ setMethod("convert_response", c("integer", "numeric"),
 )
 
 
+setMethod("convert_response", c("ordered", "matrix"),
+  function(object, x, ...) {
+    ordered(max.col(x), levels = 1:nlevels(object), labels = levels(object))
+  }
+)
+
+
 setMethod("convert_response", c("Surv", "matrix"),
   function(object, x, cutoff = 0.5, ...) {
     x <- x <= cutoff
