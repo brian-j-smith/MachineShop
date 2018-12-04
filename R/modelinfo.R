@@ -71,7 +71,7 @@ modelinfo <- function(...) {
       label = model_labels[[model@name]],
       packages = model@packages,
       types = model@types,
-      arguments = args(model@name),
+      arguments = args(get(model@name, mode = "function")),
       varimp = !is.null(body(fitbit(model, "varimp")))
     )
   }
