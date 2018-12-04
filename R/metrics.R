@@ -15,6 +15,8 @@
 #' were predicted.
 #' @param ... arguments passed to or from other methods.
 #' 
+#' @seealso \code{\link{modelmetrics}}
+#' 
 accuracy <- function(observed, predicted, cutoff = 0.5, ...) {
   .accuracy(observed, predicted, cutoff = cutoff)
 }
@@ -77,20 +79,8 @@ setMethod(".brier", c("factor", "matrix"),
 
 
 setMethod(".brier", c("factor", "numeric"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".brier", c("numeric", "numeric"),
   function(observed, predicted, ...) {
-    mse(observed, predicted)
-  }
-)
-
-
-setMethod(".brier", c("matrix", "matrix"),
-  function(observed, predicted, ...) {
-    mse(observed, predicted)
+    mse(as.numeric(observed == levels(observed)[2]), predicted)
   }
 )
 
@@ -145,7 +135,7 @@ setMethod(".cindex", c("factor", "numeric"),
 
 setMethod(".cindex", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    rcorr.cens(-predicted, observed)[[1]]
+    rcorr.cens(-predicted, observed)[["C Index"]]
   }
 )
 
@@ -175,6 +165,40 @@ setMethod(".cross_entropy", c("factor", "matrix"),
   }
 )
 
+setMethod(".cross_entropy", c("factor", "numeric"),
+  function(observed, predicted, ...) {
+    cross_entropy(observed, cbind(1 - predicted, predicted))
+  }
+)
+
+
+#' @rdname metrics
+#' 
+#' @param beta relative importance of recall to precision in the calculation of
+#' \code{f_score} [default: F1 score].
+#' 
+f_score <- function(observed, predicted, cutoff = 0.5, beta = 1, ...) {
+  .f_score(observed, predicted, cutoff = cutoff, beta = beta)
+}
+
+
+setGeneric(".f_score",
+           function(observed, predicted, ...) standardGeneric(".f_score"))
+
+
+setMethod(".f_score", c("ANY", "ANY"),
+  function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".f_score", c("factor", "numeric"),
+  function(observed, predicted, cutoff, beta, ...) {
+    n <- confusion(observed, predicted, cutoff = cutoff)
+    beta2 <- beta^2
+    (1 + beta2) * n[2, 2] / ((1 + beta2) * n[2, 2] + beta2 * n[1, 2] + n[2, 1])
+  }
+)
+
 
 #' @rdname metrics
 #' 
@@ -194,7 +218,7 @@ setMethod(".kappa", c("ANY", "ANY"),
 
 setMethod(".kappa", c("factor", "factor"),
   function(observed, predicted, ...) {
-    p <- prop.table(table(predicted, observed))
+    p <- prop.table(confusion(observed, predicted))
     1 - (1 - sum(diag(p))) / (1 - sum(rowSums(p) * colSums(p)))
   }
 )
@@ -285,6 +309,54 @@ setMethod(".mse", c("matrix", "matrix"),
 
 #' @rdname metrics
 #' 
+npv <- function(observed, predicted, cutoff = 0.5, ...) {
+  .npv(observed, predicted, cutoff = cutoff)
+}
+
+
+setGeneric(".npv",
+           function(observed, predicted, ...) standardGeneric(".npv"))
+
+
+setMethod(".npv", c("ANY", "ANY"),
+  function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".npv", c("factor", "numeric"),
+  function(observed, predicted, cutoff, ...) {
+    n <- confusion(observed, predicted, cutoff = cutoff)
+    n[1, 1] / (n[1, 1] + n[1, 2])
+  }
+)
+
+
+#' @rdname metrics
+#' 
+ppv <- function(observed, predicted, cutoff = 0.5, ...) {
+  .ppv(observed, predicted, cutoff = cutoff)
+}
+
+
+setGeneric(".ppv",
+           function(observed, predicted, ...) standardGeneric(".ppv"))
+
+
+setMethod(".ppv", c("ANY", "ANY"),
+  function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".ppv", c("factor", "numeric"),
+  function(observed, predicted, cutoff, ...) {
+    n <- confusion(observed, predicted, cutoff = cutoff)
+    n[2, 2] / (n[2, 1] + n[2, 2])
+  }
+)
+
+
+#' @rdname metrics
+#' 
 pr_auc <- function(observed, predicted, ...) {
   .pr_auc(observed, predicted)
 }
@@ -301,6 +373,29 @@ setMethod(".pr_auc", c("ANY", "ANY"),
 setMethod(".pr_auc", c("factor", "numeric"),
   function(observed, predicted, ...) {
     PRAUC(predicted, observed == levels(observed)[2])
+  }
+)
+
+
+#' @rdname metrics
+#' 
+precision <- function(observed, predicted, cutoff = 0.5, ...) {
+  .precision(observed, predicted, cutoff = cutoff)
+}
+
+
+setGeneric(".precision",
+           function(observed, predicted, ...) standardGeneric(".precision"))
+
+
+setMethod(".precision", c("ANY", "ANY"),
+  function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".precision", c("factor", "numeric"),
+  function(observed, predicted, cutoff, ...) {
+    ppv(observed, predicted, cutoff = cutoff)
   }
 )
 
@@ -338,9 +433,48 @@ setMethod(".r2", c("matrix", "matrix"),
 
 #' @rdname metrics
 #' 
-rmse <- function(observed, predicted, ...) {
-  sqrt(mse(observed, predicted))
+recall <- function(observed, predicted, cutoff = 0.5, ...) {
+  .recall(observed, predicted, cutoff = cutoff)
 }
+
+
+setGeneric(".recall",
+           function(observed, predicted, ...) standardGeneric(".recall"))
+
+
+setMethod(".recall", c("ANY", "ANY"),
+  function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".recall", c("factor", "numeric"),
+  function(observed, predicted, cutoff, ...) {
+    sensitivity(observed, predicted, cutoff = cutoff)
+  }
+)
+
+
+#' @rdname metrics
+#' 
+rmse <- function(observed, predicted, ...) {
+  .rmse(observed, predicted)
+}
+
+
+setGeneric(".rmse",
+           function(observed, predicted, ...) standardGeneric(".rmse"))
+
+
+setMethod(".rmse", c("ANY", "ANY"),
+  function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".rmse", c("numeric", "numeric"),
+  function(observed, predicted, ...) {
+    sqrt(mse(observed, predicted))
+  }
+)
 
 
 #' @rdname metrics
@@ -361,7 +495,11 @@ setMethod(".roc_auc", c("ANY", "ANY"),
 
 setMethod(".roc_auc", c("factor", "numeric"),
   function(observed, predicted, ...) {
-    AUC(predicted, observed == levels(observed)[2])
+    R <- rank(predicted)
+    is_event <- observed == levels(observed)[2]
+    n_event <- sum(is_event)
+    n_nonevent <- length(observed) - n_event
+    (sum(R[is_event]) - n_event * (n_event + 1) / 2) / (n_event * n_nonevent)
   }
 )
 
@@ -428,9 +566,8 @@ setMethod(".sensitivity", c("ANY", "ANY"),
 
 setMethod(".sensitivity", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
-    predicted <- convert_response(observed, predicted, cutoff = cutoff)
-    p <- prop.table(table(predicted, observed))
-    p[2, 2] / sum(p[, 2])
+    n <- confusion(observed, predicted, cutoff = cutoff)
+    n[2, 2] / (n[1, 2] + n[2, 2])
   }
 )
 
@@ -453,17 +590,21 @@ setMethod(".specificity", c("ANY", "ANY"),
 
 setMethod(".specificity", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
-    predicted <- convert_response(observed, predicted, cutoff = cutoff)
-    p <- prop.table(table(predicted, observed))
-    p[1, 1] / sum(p[, 1])
+    n <- confusion(observed, predicted, cutoff = cutoff)
+    n[1, 1] / (n[1, 1] + n[2, 1])
   }
 )
 
 
 #' @rdname metrics
 #' 
-weighted_kappa <- function(observed, predicted, ...) {
-  .weighted_kappa(observed, predicted)
+#' @param weight definition of weights for the kappa metric as linear
+#' (\code{"equal"}) or squared (\code{"squared"}) distance between ordinal
+#' categories.
+#' 
+weighted_kappa <- function(observed, predicted, weight = c("equal", "squared"),
+                           ...) {
+  .weighted_kappa(observed, predicted, weight = match.arg(weight))
 }
 
 
@@ -477,8 +618,16 @@ setMethod(".weighted_kappa", c("ANY", "ANY"),
 
 
 setMethod(".weighted_kappa", c("ordered", "factor"),
-  function(observed, predicted, ...) {
+  function(observed, predicted, weight, ...) {
     ratings <- cbind(observed, predicted)
-    kappa2(ratings, weight = "equal")$value
+    kappa2(ratings, weight = weight)$value
+  }
+)
+
+
+setMethod(".weighted_kappa", c("ordered", "matrix"),
+  function(observed, predicted, weight, ...) {
+    predicted <- convert_response(observed, predicted)
+    weighted_kappa(observed, predicted, weight = weight)
   }
 )

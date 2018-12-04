@@ -6,11 +6,16 @@
 \alias{brier}
 \alias{cindex}
 \alias{cross_entropy}
+\alias{f_score}
 \alias{kappa}
 \alias{mae}
 \alias{mse}
+\alias{npv}
+\alias{ppv}
 \alias{pr_auc}
+\alias{precision}
 \alias{r2}
+\alias{recall}
 \alias{rmse}
 \alias{roc_auc}
 \alias{roc_index}
@@ -27,15 +32,25 @@ cindex(observed, predicted, ...)
 
 cross_entropy(observed, predicted, ...)
 
+f_score(observed, predicted, cutoff = 0.5, beta = 1, ...)
+
 kappa(observed, predicted, cutoff = 0.5, ...)
 
 mae(observed, predicted, ...)
 
 mse(observed, predicted, ...)
 
+npv(observed, predicted, cutoff = 0.5, ...)
+
+ppv(observed, predicted, cutoff = 0.5, ...)
+
 pr_auc(observed, predicted, ...)
 
+precision(observed, predicted, cutoff = 0.5, ...)
+
 r2(observed, predicted, ...)
+
+recall(observed, predicted, cutoff = 0.5, ...)
 
 rmse(observed, predicted, ...)
 
@@ -48,7 +63,7 @@ sensitivity(observed, predicted, cutoff = 0.5, ...)
 
 specificity(observed, predicted, cutoff = 0.5, ...)
 
-weighted_kappa(observed, predicted, ...)
+weighted_kappa(observed, predicted, weight = c("equal", "squared"), ...)
 }
 \arguments{
 \item{observed}{observed responses.}
@@ -63,9 +78,19 @@ for binary responses.}
 \item{times}{numeric vector of follow-up times at which survival events
 were predicted.}
 
+\item{beta}{relative importance of recall to precision in the calculation of
+\code{f_score} [default: F1 score].}
+
 \item{cutoff_index}{function to calculate a desired sensitivity-specificity
 tradeoff.}
+
+\item{weight}{definition of weights for the kappa metric as linear
+(\code{"equal"}) or squared (\code{"squared"}) distance between ordinal
+categories.}
 }
 \description{
 Compute measures of agreement between observed and predicted responses.
+}
+\seealso{
+\code{\link{modelmetrics}}
 }
