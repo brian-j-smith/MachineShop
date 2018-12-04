@@ -303,5 +303,5 @@ warn <- function(...) {
 
 
 depwarn <- function(old, new) {
-  warning(old, "\n", new, call. = FALSE)
+  warn(old, "\n", new)
 }
