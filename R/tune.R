@@ -10,7 +10,7 @@
 #' @param x defined relationship between model predictors and an outcome.  May
 #' be a \code{ModelFrame} containing a formula, data, and optionally case
 #' weights; a \code{formula}; or a \code{recipe.}
-#' @param ... arguments passed to other methods.
+#' @param ... arguments passed to the \code{metrics} functions.
 #' 
 #' @return \code{MLModelTune} class object that inherits from \code{MLModel}.
 #' 

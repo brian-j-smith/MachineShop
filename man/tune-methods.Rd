@@ -26,7 +26,7 @@ tune(x, ...)
 be a \code{ModelFrame} containing a formula, data, and optionally case
 weights; a \code{formula}; or a \code{recipe.}}
 
-\item{...}{arguments passed to other methods.}
+\item{...}{arguments passed to the \code{metrics} functions.}
 
 \item{data}{\code{data.frame} containing observed predictors and outcomes.}
 

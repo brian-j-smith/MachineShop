@@ -3,8 +3,9 @@
 #' Display information about models provided by the \pkg{MachineShop} package.
 #' 
 #' @param ... \code{MLModel} objects, constructor functions, or character
-#' strings naming constructor functions for which to display information.  By
-#' default, information is returned on all available models.
+#' strings naming constructor functions for which to display information.  If
+#' none are specified, information is returned on all available models by
+#' default.
 #' 
 #' @return List of named models containing the \code{"label"}, required
 #' \code{"packages"}, supported response variable \code{"types"}, the

@@ -12,8 +12,8 @@
 #' interacted predictors.
 #' @param n number of predictor values at which to perform calculations.
 #' @param intervals character string specifying whether the \code{n} values are
-#' spaced according to variable quantiles (\code{"quantile"}) or uniformly
-#' (\code{"uniform"}).
+#' spaced uniformly (\code{"uniform"}) or according to variable quantiles
+#' (\code{"quantile"}).
 #' @param stats function, one or more function names, or list of named functions
 #' with which to aggregate the response variable over the non-selected predictor
 #' variables.

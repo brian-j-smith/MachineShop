@@ -8,8 +8,9 @@ modelinfo(...)
 }
 \arguments{
 \item{...}{\code{MLModel} objects, constructor functions, or character
-strings naming constructor functions for which to display information.  By
-default, information is returned on all available models.}
+strings naming constructor functions for which to display information.  If
+none are specified, information is returned on all available models by
+default.}
 }
 \value{
 List of named models containing the \code{"label"}, required
