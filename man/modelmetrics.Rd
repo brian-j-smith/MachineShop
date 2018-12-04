@@ -14,10 +14,8 @@ modelmetrics(x, ...)
 \method{modelmetrics}{Resamples}(x, ..., na.rm = TRUE)
 
 \method{modelmetrics}{factor}(x, y, metrics = c(Accuracy = accuracy,
-  Kappa = kappa, WeightedKappa = weighted_kappa, Brier = brier,
-  CrossEntropy = cross_entropy, ROCAUC = roc_auc, PRAUC = pr_auc,
-  Sensitivity = sensitivity, Specificity = specificity, Index = roc_index),
-  ...)
+  Kappa = kappa, ROCAUC = roc_auc, Sensitivity = sensitivity, Specificity =
+  specificity, Brier = brier), ...)
 
 \method{modelmetrics}{matrix}(x, y, metrics = c(R2 = r2, RMSE = rmse, MAE
   = mae), ...)

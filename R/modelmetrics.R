@@ -63,14 +63,10 @@ modelmetrics.Resamples <- function(x, ..., na.rm = TRUE) {
 modelmetrics.factor <- function(x, y,
                                 metrics = c("Accuracy" = accuracy,
                                             "Kappa" = kappa,
-                                            "WeightedKappa" = weighted_kappa,
-                                            "Brier" = brier,
-                                            "CrossEntropy" = cross_entropy,
                                             "ROCAUC" = roc_auc,
-                                            "PRAUC" = pr_auc,
                                             "Sensitivity" = sensitivity,
                                             "Specificity" = specificity,
-                                            "Index" = roc_index), ...) {
+                                            "Brier" = brier), ...) {
   metrics <- list2function(metrics)
   metrics(x, y, ...)
 }

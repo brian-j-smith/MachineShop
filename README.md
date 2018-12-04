@@ -1589,8 +1589,8 @@ predict(gbmfit, newdata = test) %>% head
 obs <- response(fo, data = test)
 pred <- predict(gbmfit, newdata = test, type = "prob")
 modelmetrics(obs, pred)
-#>     Accuracy        Kappa        Brier CrossEntropy 
-#>    0.9200000    0.8793727    0.1570015    0.4522663
+#>  Accuracy     Kappa     Brier 
+#> 0.9200000 0.8793727 0.1570015
 ```
 
 ### Resampling
@@ -1617,11 +1617,10 @@ modelmetrics(obs, pred)
 #> Seed: 9279906
 
 summary(res)
-#>                    Mean     Median         SD          Min       Max NA
-#> Accuracy     0.93333333 0.93333333 0.06285394 8.000000e-01 1.0000000  0
-#> Kappa        0.90000000 0.90000000 0.09428090 7.000000e-01 1.0000000  0
-#> Brier        0.09409409 0.08887763 0.08302550 5.911564e-07 0.2260197  0
-#> CrossEntropy 0.22653409 0.12128540 0.23089382 3.321915e-04 0.5716866  0
+#>                Mean     Median         SD          Min       Max NA
+#> Accuracy 0.93333333 0.93333333 0.06285394 8.000000e-01 1.0000000  0
+#> Kappa    0.90000000 0.90000000 0.09428090 7.000000e-01 1.0000000  0
+#> Brier    0.09409409 0.08887763 0.08302550 5.911564e-07 0.2260197  0
 
 plot(res)
 ```
@@ -1633,17 +1632,18 @@ plot(res)
 ``` r
 ## Default metrics
 modelmetrics(res) %>% summary
-#>                    Mean     Median         SD          Min       Max NA
-#> Accuracy     0.93333333 0.93333333 0.06285394 8.000000e-01 1.0000000  0
-#> Kappa        0.90000000 0.90000000 0.09428090 7.000000e-01 1.0000000  0
-#> Brier        0.09409409 0.08887763 0.08302550 5.911564e-07 0.2260197  0
-#> CrossEntropy 0.22653409 0.12128540 0.23089382 3.321915e-04 0.5716866  0
+#>                Mean     Median         SD          Min       Max NA
+#> Accuracy 0.93333333 0.93333333 0.06285394 8.000000e-01 1.0000000  0
+#> Kappa    0.90000000 0.90000000 0.09428090 7.000000e-01 1.0000000  0
+#> Brier    0.09409409 0.08887763 0.08302550 5.911564e-07 0.2260197  0
 
 ## User-specified metrics
-modelmetrics(res, c("accuracy", "brier")) %>% summary
-#>                Mean     Median         SD          Min       Max NA
-#> accuracy 0.93333333 0.93333333 0.06285394 8.000000e-01 1.0000000  0
-#> brier    0.09409409 0.08887763 0.08302550 5.911564e-07 0.2260197  0
+modelmetrics(res, c("accuracy", "kappa", "brier", "cross_entropy")) %>% summary
+#>                     Mean     Median         SD          Min       Max NA
+#> accuracy      0.93333333 0.93333333 0.06285394 8.000000e-01 1.0000000  0
+#> kappa         0.90000000 0.90000000 0.09428090 7.000000e-01 1.0000000  0
+#> brier         0.09409409 0.08887763 0.08302550 5.911564e-07 0.2260197  0
+#> cross_entropy 0.22653409 0.12128540 0.23089382 3.321915e-04 0.5716866  0
 ```
 
 ### Model Tuning
@@ -1703,13 +1703,6 @@ summary(res)
 #> GBM  0.07783400 0.05344164 0.08337132  4.209652e-05 0.3737446  0
 #> NNet 0.08817998 0.07923248 0.10063333 1.534123e-128 0.3461743  0
 #> RF   0.06661013 0.05184000 0.06626315  1.066667e-04 0.2900267  0
-#> 
-#> , , CrossEntropy
-#> 
-#>           Mean     Median        SD          Min      Max NA
-#> GBM  0.1604127 0.07742612 0.1814859 4.246844e-03 0.698241  0
-#> NNet 0.9616760 0.10613138 1.4459688 9.992007e-16 4.616531  0
-#> RF   0.1493899 0.08163460 0.3270301 2.693694e-03 2.309432  0
 
 plot(res)
 ```
@@ -1740,13 +1733,6 @@ summary(perfdiff)
 #> GBM - NNet -0.01034598  0.0001118562 0.09446451 -0.2806182 0.1947900  0
 #> GBM - RF    0.01122386  0.0010026275 0.02685602 -0.0466223 0.0837179  0
 #> NNet - RF   0.02156984 -0.0004582727 0.09079066 -0.1456573 0.2819733  0
-#> 
-#> , , CrossEntropy
-#> 
-#>                   Mean        Median       SD       Min       Max NA
-#> GBM - NNet -0.80126332 -0.0020344090 1.368773 -4.545699 0.4079516  0
-#> GBM - RF    0.01102275  0.0023308900 0.301429 -1.968996 0.3030778  0
-#> NNet - RF   0.81228607 -0.0005722104 1.463221 -2.276271 4.5255550  0
 
 t.test(perfdiff)
 #> An object of class "HTestResamples"
@@ -1775,13 +1761,6 @@ t.test(perfdiff)
 #> GBM          NA -0.01034598 0.01122386
 #> NNet 0.44239148          NA 0.02156984
 #> RF   0.01437771  0.19867388         NA
-#> 
-#> , , CrossEntropy
-#> 
-#>               GBM          NNet         RF
-#> GBM            NA -0.8012633185 0.01102275
-#> NNet 0.0004099413            NA 0.81228607
-#> RF   0.7970447305  0.0005407729         NA
 
 plot(perfdiff)
 ```
@@ -1794,20 +1773,18 @@ plot(perfdiff)
 ## Stacked regression
 stackedres <- resample(fo, data = iris, model = StackedModel(GBMModel, RandomForestModel, NNetModel))
 summary(stackedres)
-#>                    Mean     Median         SD          Min       Max NA
-#> Accuracy     0.95333333 1.00000000 0.07062333 0.8000000000 1.0000000  0
-#> Kappa        0.93000000 1.00000000 0.10593499 0.7000000000 1.0000000  0
-#> Brier        0.07335238 0.03767302 0.07811142 0.0004827869 0.2078096  0
-#> CrossEntropy 0.12530271 0.08386945 0.09860897 0.0081014136 0.2687249  0
+#>                Mean     Median         SD          Min       Max NA
+#> Accuracy 0.95333333 1.00000000 0.07062333 0.8000000000 1.0000000  0
+#> Kappa    0.93000000 1.00000000 0.10593499 0.7000000000 1.0000000  0
+#> Brier    0.07335238 0.03767302 0.07811142 0.0004827869 0.2078096  0
 
 ## Super learners
 superres <- resample(fo, data = iris, model = SuperModel(GBMModel, RandomForestModel, NNetModel))
 summary(superres)
-#>                    Mean     Median         SD          Min       Max NA
-#> Accuracy     0.96000000 1.00000000 0.06440612 0.8000000000 1.0000000  0
-#> Kappa        0.94000000 1.00000000 0.09660918 0.7000000000 1.0000000  0
-#> Brier        0.07929339 0.01444121 0.11627751 0.0002255191 0.3615479  0
-#> CrossEntropy 0.24601571 0.02924794 0.33266195 0.0040190790 0.8840239  0
+#>                Mean     Median         SD          Min       Max NA
+#> Accuracy 0.96000000 1.00000000 0.06440612 0.8000000000 1.0000000  0
+#> Kappa    0.94000000 1.00000000 0.09660918 0.7000000000 1.0000000  0
+#> Brier    0.07929339 0.01444121 0.11627751 0.0002255191 0.3615479  0
 ```
 
 ### Calibration Curves
@@ -1832,7 +1809,7 @@ plot(cal, se = TRUE)
 
 summary(conf)
 #> GBMModel :
-#> Resampled cases: 750
+#> Number of responses: 750
 #> Accuracy (SE): 0.9440408 (0.008392678)
 #> Majority class: 0.3333333
 #> Kappa: 0.9160612
@@ -1908,9 +1885,8 @@ varimp(fit_rec)
 
 res_rec <- resample(rec, model = GBMModel, control = CVControl)
 summary(res_rec)
-#>                    Mean     Median         SD          Min       Max NA
-#> Accuracy     0.96666667 0.96666667 0.03513642 0.9333333333 1.0000000  0
-#> Kappa        0.95000000 0.95000000 0.05270463 0.9000000000 1.0000000  0
-#> Brier        0.06610658 0.04903953 0.06497069 0.0001102322 0.1538771  0
-#> CrossEntropy 0.13447047 0.07707345 0.13933180 0.0034826883 0.3941076  0
+#>                Mean     Median         SD          Min       Max NA
+#> Accuracy 0.96666667 0.96666667 0.03513642 0.9333333333 1.0000000  0
+#> Kappa    0.95000000 0.95000000 0.05270463 0.9000000000 1.0000000  0
+#> Brier    0.06610658 0.04903953 0.06497069 0.0001102322 0.1538771  0
 ```

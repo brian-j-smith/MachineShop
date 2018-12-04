@@ -161,7 +161,7 @@ plot(res)
 modelmetrics(res) %>% summary
 
 ## User-specified metrics
-modelmetrics(res, c("accuracy", "brier")) %>% summary
+modelmetrics(res, c("accuracy", "kappa", "brier", "cross_entropy")) %>% summary
 ```
 
 ### Model Tuning
