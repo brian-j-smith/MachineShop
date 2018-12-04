@@ -15,7 +15,7 @@
 #' were predicted.
 #' @param ... arguments passed to or from other methods.
 #' 
-#' @seealso \code{\link{modelmetrics}}
+#' @seealso \code{\link{metricinfo}}, \code{\link{modelmetrics}}
 #' 
 accuracy <- function(observed, predicted, cutoff = 0.5, ...) {
   .accuracy(observed, predicted, cutoff = cutoff)

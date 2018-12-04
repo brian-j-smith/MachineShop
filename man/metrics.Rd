@@ -92,5 +92,5 @@ categories.}
 Compute measures of agreement between observed and predicted responses.
 }
 \seealso{
-\code{\link{modelmetrics}}
+\code{\link{metricinfo}}, \code{\link{modelmetrics}}
 }
