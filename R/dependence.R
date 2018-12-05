@@ -95,7 +95,6 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
     df
   })
   
-  structure(do.call(rbind, dependence_list),
-            class = c("PartialDependence", "data.frame"))
+  PartialDependence(do.call(rbind, dependence_list))
 
 }

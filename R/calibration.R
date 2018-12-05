@@ -33,8 +33,7 @@ calibration <- function(x, n = 10, ...) {
       cbind(Model = data$Model[1])
   }, simplify = FALSE)
 
-  structure(do.call(rbind, cal_list),
-            class = c("CalibrationResamples", "data.frame"))
+  CalibrationResamples(do.call(rbind, cal_list))
 }
 
 

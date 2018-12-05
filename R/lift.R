@@ -26,7 +26,7 @@ lift <- function(x, ...) {
       cbind(Model = data$Model[1])
   }, simplify = FALSE)
   
-  structure(do.call(rbind, lift_list), class = c("LiftResamples", "data.frame"))
+  LiftResamples(do.call(rbind, lift_list))
 }
 
 

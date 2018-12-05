@@ -30,12 +30,10 @@ confusion <- function(x, ...) {
 #' 
 confusion.Resamples <- function(x, ...) {
   conf <- by(x, list(Model = x$Model), function(data) {
-    structure(.confusion.Resamples(data$Observed, data$Predicted),
-              class = c("ConfusionMatrix", "table"))
+    ConfusionMatrix(.confusion.Resamples(data$Observed, data$Predicted))
   }, simplify = FALSE)
-  
-  structure(as(conf, "list"), names = names(conf),
-            class = c("ConfusionResamples", "listof"))
+
+  ConfusionResamples(structure(as(conf, "list"), names = names(conf)))
 }
 
 
@@ -48,8 +46,7 @@ confusion.Resamples <- function(x, ...) {
 #' @return \code{ConfusionMatrix} class object that inherits from \code{table}.
 #'  
 confusion.factor <- function(x, y, cutoff = 0.5, ...) {
-  structure(.confusion(x, y, cutoff = cutoff),
-            class = c("ConfusionMatrix", "table"))
+  ConfusionMatrix(.confusion(x, y, cutoff = cutoff))
 }
 
 

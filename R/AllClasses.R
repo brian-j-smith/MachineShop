@@ -363,6 +363,32 @@ MLModelTune <- setClass("MLModelTune",
 )
 
 
+CalibrationResamples <- function(object) {
+  structure(object, class = c("CalibrationResamples", "data.frame"))
+}
+
+
+ConfusionMatrix <- function(object) {
+   structure(object, class = c("ConfusionMatrix", "table"))
+}
+
+
+ConfusionResamples <- function(object) {
+  structure(object, class = c("ConfusionResamples", "listof"))
+}
+
+
+HTestResamples <- setClass("HTestResamples",
+  slots = c("adjust" = "character"),
+  contains = "array"
+)
+
+
+LiftResamples <- function(object) {
+  structure(object, class = c("LiftResamples", "data.frame"))
+}
+
+
 ModelMetrics <- setClass("ModelMetrics",
   contains = "array"
 )
@@ -374,10 +400,9 @@ ModelMetricsDiff <- setClass("ModelMetricsDiff",
 )
 
 
-HTestResamples <- setClass("HTestResamples",
-  slots = c("adjust" = "character"),
-  contains = "array"
-)
+PartialDependence <- function(object) {
+  structure(object, class = c("PartialDependence", "data.frame"))
+}
 
 
 SummaryConfusion <- setClass("SummaryConfusion",
