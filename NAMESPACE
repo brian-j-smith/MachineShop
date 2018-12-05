@@ -114,8 +114,6 @@ export(MLControl,
        XGBLinearModel,
        XGBTreeModel)
 
-S3method(confusion, factor)
-S3method(confusion, Resamples)
 S3method(diff, MLModelTune)
 S3method(diff, Resamples)
 S3method(fit, ModelFrame)

@@ -1799,7 +1799,7 @@ plot(cal, se = TRUE)
 ### Confusion Matrices
 
 ``` r
-(conf <- confusion(gbmres))
+(conf <- confusion(gbmres, cutoff = NULL))
 #> GBMModel :
 #>             Observed
 #> Predicted          setosa   versicolor    virginica
