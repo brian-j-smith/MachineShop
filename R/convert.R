@@ -54,7 +54,14 @@ setGeneric("convert_response",
            function(object, x, ...) standardGeneric("convert_response"))
 
 
-setMethod("convert_response", c("ANY", "ANY"), function(object, x, ...) x)
+setMethod("convert_response", c("ANY", "ANY"),
+  function(object, x, ...) x
+)
+
+
+setMethod("convert_response", c("factor", "factor"),
+  function(object, x, ...) x
+)
 
 
 setMethod("convert_response", c("factor", "matrix"),
