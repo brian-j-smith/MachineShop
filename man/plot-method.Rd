@@ -6,6 +6,7 @@
 \alias{plot.Resamples}
 \alias{plot.MLModelTune}
 \alias{plot.CalibrationResamples}
+\alias{plot.ConfusionMatrix}
 \alias{plot.ConfusionResamples}
 \alias{plot.LiftResamples}
 \alias{plot.PartialDependence}
@@ -23,6 +24,8 @@
 
 \method{plot}{CalibrationResamples}(x, type = c("line", "point"),
   se = FALSE, ...)
+
+\method{plot}{ConfusionMatrix}(x, ...)
 
 \method{plot}{ConfusionResamples}(x, ...)
 

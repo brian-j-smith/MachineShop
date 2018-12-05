@@ -155,7 +155,7 @@ setMethod("show", "SummaryConfusion",
   function(object) {
     n <- object@N
     acc <- object@Accuracy
-    cat("Resampled cases: ", n, "\n",
+    cat("Number of responses: ", n, "\n",
         "Accuracy (SE): ", acc, " (", sqrt(acc * (1 - acc) / n), ")\n",
         "Majority class: ", object@Majority, "\n",
         "Kappa: ", object@Kappa, "\n\n", sep = "")

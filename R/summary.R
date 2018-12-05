@@ -90,32 +90,37 @@ summary.MLModelTune <- function(object,
 #' 
 #' @seealso \code{\link{confusion}}
 #' 
+summary.ConfusionMatrix <- function(object, ...) {
+  n <- sum(object)
+  object <- object / n
+  
+  observed <- colSums(object)
+  predicted <- rowSums(object)
+  agreement <- diag(object)
+  
+  metrics <- rbind(
+    Observed = observed,
+    Predicted = predicted,
+    Agreement = agreement,
+    Sensitivity = agreement / observed,
+    Specificity = (1 - observed - predicted + agreement) / (1 - observed),
+    PPV = agreement / predicted,
+    NPV = (1 - observed - predicted + agreement) / (1 - predicted)
+  )
+  
+  SummaryConfusion(metrics,
+                   N = n,
+                   Accuracy = sum(agreement),
+                   Majority = max(observed),
+                   Kappa = 1 - (1 - sum(agreement)) /
+                     (1 - sum(observed * predicted))) 
+}
+
+
+#' @rdname summary-methods
+#' 
 summary.ConfusionResamples <- function(object, ...) {
-  lapply(object, function(conf) {
-    n <- sum(conf)
-    conf <- conf / n
-    
-    observed <- colSums(conf)
-    predicted <- rowSums(conf)
-    agreement <- diag(conf)
-    
-    metrics <- rbind(
-      Observed = observed,
-      Predicted = predicted,
-      Agreement = agreement,
-      Sensitivity = agreement / observed,
-      Specificity = (1 - observed - predicted + agreement) / (1 - observed),
-      PPV = agreement / predicted,
-      NPV = (1 - observed - predicted + agreement) / (1 - predicted)
-    )
-    
-    SummaryConfusion(metrics,
-                     N = n,
-                     Accuracy = sum(agreement),
-                     Majority = max(observed),
-                     Kappa = 1 - (1 - sum(agreement)) /
-                       (1 - sum(observed * predicted))) 
-  }) %>% structure(class = "listof")
+  structure(lapply(object, summary), class = "listof")
 }
 
 

@@ -5,6 +5,7 @@
 \alias{summary.ModelMetrics}
 \alias{summary.Resamples}
 \alias{summary.MLModelTune}
+\alias{summary.ConfusionMatrix}
 \alias{summary.ConfusionResamples}
 \title{Model Performance Summary}
 \usage{
@@ -16,6 +17,8 @@
 
 \method{summary}{MLModelTune}(object, stats = c(Mean = mean, Median =
   median, SD = sd, Min = min, Max = max), na.rm = TRUE, ...)
+
+\method{summary}{ConfusionMatrix}(object, ...)
 
 \method{summary}{ConfusionResamples}(object, ...)
 }

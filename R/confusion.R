@@ -1,30 +1,37 @@
 #' Confusion Matrix
 #' 
-#' Calculate confusion matrices of cross-classified predicted and observed
-#' responses.
+#' Calculate confusion matrices of predicted and observed responses.
 #' 
-#' @param x \code{Resamples} object.
+#' @rdname confusion-methods
+#' 
+#' @param x observed responses or class containing observed and predicted
+#' responses.
 #' @param ... arguments passed to other methods.
 #' 
+confusion <- function(x, ...) {
+  UseMethod("confusion")
+}
+
+#' @rdname confusion-methods
+#' 
 #' @details
-#' Responses are summed directly over predicted class probabilities for the
-#' cross-classification and will thus appear as decimal numbers that can be
-#' interpreted as expected counts.
+#' \code{Resamples} responses are summed directly over predicted class
+#' probabilities for the cross-classification and will thus appear as decimal
+#' numbers that can be interpreted as expected counts.
 #' 
 #' @return \code{ConfusionResamples} class object that inherits from
 #' \code{list}.
 #'  
-#' @seealso \code{\link{resample}}
+#' @seealso \code{\link{resample}}, \code{\link{plot}}, \code{\link{summary}}
 #' 
 #' @examples
 #' res <- resample(Species ~ ., data = iris, model = GBMModel)
 #' confusion(res)
 #' 
-confusion <- function(x, ...) {
-  stopifnot(is(x, "Resamples"))
-  
+confusion.Resamples <- function(x, ...) {
   conf <- by(x, list(Model = x$Model), function(data) {
-    .confusion(data$Observed, data$Predicted)
+    structure(.confusion.Resamples(data$Observed, data$Predicted),
+              class = c("ConfusionMatrix", "table"))
   }, simplify = FALSE)
   
   structure(as(conf, "list"), names = names(conf),
@@ -32,31 +39,72 @@ confusion <- function(x, ...) {
 }
 
 
+#' @rdname confusion-methods
+#' 
+#' @param y predicted responses.
+#' @param cutoff threshold above which probabilities are classified as success
+#' for binary responses.
+#'
+#' @return \code{ConfusionMatrix} class object that inherits from \code{table}.
+#'  
+confusion.factor <- function(x, y, cutoff = 0.5, ...) {
+  structure(.confusion(x, y, cutoff = cutoff),
+            class = c("ConfusionMatrix", "table"))
+}
+
+
 setGeneric(".confusion", function(observed, predicted, ...)
   standardGeneric(".confusion"))
 
 
-setMethod(".confusion", c("ANY", "ANY"),
+setMethod(".confusion", c("factor", "factor"),
   function(observed, predicted, ...) {
-    stop("confusion matrix requires a factor response variable")
+    table(Predicted = predicted, Observed = observed)
   }
 )
 
 
 setMethod(".confusion", c("factor", "matrix"),
   function(observed, predicted, ...) {
-    df <- aggregate(predicted, list(observed), sum, na.rm = TRUE)
-    conf_tbl <- as.table(as.matrix(df[, -1, drop = FALSE]))
-    dimnames(conf_tbl) <- list(Observed = df[[1]], Predicted = names(df)[-1])
-    t(conf_tbl)
+    predicted <- convert_response(observed, predicted)
+    confusion(observed, predicted)
   }
 )
 
 
 setMethod(".confusion", c("factor", "numeric"),
+  function(observed, predicted, cutoff, ...) {
+    predicted <- convert_response(observed, predicted, cutoff = cutoff)
+    confusion(observed, predicted)
+  }
+)
+
+
+setGeneric(".confusion.Resamples", function(observed, predicted, ...)
+  standardGeneric(".confusion.Resamples"))
+
+
+setMethod(".confusion.Resamples", c("ANY", "ANY"),
+  function(observed, predicted, ...) {
+    stop("confusion matrix requires a factor response variable")
+  }
+)
+
+
+setMethod(".confusion.Resamples", c("factor", "matrix"),
+  function(observed, predicted, ...) {
+    df <- aggregate(predicted, list(observed), sum, na.rm = TRUE)
+    conf_tbl <- as.table(as.matrix(df[, -1, drop = FALSE]))
+    dimnames(conf_tbl) <- list(Observed = df[[1]], Predicted = df[[1]])
+    t(conf_tbl)
+  }
+)
+
+
+setMethod(".confusion.Resamples", c("factor", "numeric"),
   function(observed, predicted, ...) {
     predicted <- cbind(1 - predicted, predicted)
     colnames(predicted) <- levels(observed)
-    .confusion(observed, predicted)
+    .confusion.Resamples(observed, predicted)
   }
 )

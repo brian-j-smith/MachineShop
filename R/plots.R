@@ -186,15 +186,22 @@ plot.CalibrationResamples <- function(x, type = c("line", "point"),
 #' 
 #' @seealso \code{\link{confusion}}
 #' 
+plot.ConfusionMatrix <- function(x, ...) {
+  df <- as.data.frame(prop.table(x), responseName = "Value")
+  df$Predicted <- with(df, factor(Predicted, rev(levels(Predicted))))
+  ggplot(df, aes(Observed, Predicted, fill = Value)) +
+    geom_raster() +
+    labs(fill = "Probability") +
+    scale_fill_gradient(trans = "reverse")
+}
+
+
+#' @rdname plot-method
+#' 
 plot.ConfusionResamples <- function(x, ...) {
   pl <- list()
   for (name in names(x)) {
-    df <- as.data.frame(prop.table(x[[name]]), responseName = "Value")
-    df$Predicted <- with(df, factor(Predicted, rev(levels(Predicted))))
-    pl[[name]] <- ggplot(df, aes(Observed, Predicted, fill = Value)) +
-      geom_raster() +
-      labs(title = name, fill = "Probability") +
-      scale_fill_gradient(trans = "reverse")
+    pl[[name]] <- plot(x[[name]]) + labs(title = name)
   }
   pl
 }
