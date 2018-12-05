@@ -3,11 +3,14 @@
 \name{response}
 \alias{response}
 \alias{response.formula}
+\alias{response.recipe}
 \title{Extract Response Variable}
 \usage{
 response(object, ...)
 
 \method{response}{formula}(object, data, ...)
+
+\method{response}{recipe}(object, data, ...)
 }
 \arguments{
 \item{object}{object containing response variable values.}

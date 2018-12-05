@@ -45,6 +45,14 @@ response.ModelFrame <- function(object, ...) {
 }
 
 
+#' @rdname response-methods
+#' 
+response.recipe <- function(object, data, ...) {
+  object <- prep(object)
+  response(formula(object), bake(object, data))
+}
+
+
 response.tbl_df <- function(object, ...) {
   response(formula(object), object)
 }
