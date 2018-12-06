@@ -1630,14 +1630,38 @@ plot(res)
 ### Model Metrics
 
 ``` r
-## Default metrics
+## Default model metrics
 modelmetrics(res) %>% summary
 #>                Mean     Median         SD          Min       Max NA
 #> Accuracy 0.93333333 0.93333333 0.06285394 8.000000e-01 1.0000000  0
 #> Kappa    0.90000000 0.90000000 0.09428090 7.000000e-01 1.0000000  0
 #> Brier    0.09409409 0.08887763 0.08302550 5.911564e-07 0.2260197  0
 
-## User-specified metrics
+## All available metric functions
+metricinfo() %>% names
+#>  [1] "accuracy"       "brier"          "cindex"         "cross_entropy" 
+#>  [5] "f_score"        "kappa"          "mae"            "mse"           
+#>  [9] "npv"            "ppv"            "pr_auc"         "precision"     
+#> [13] "r2"             "recall"         "roc_auc"        "roc_index"     
+#> [17] "sensitivity"    "specificity"    "weighted_kappa"
+
+## Metric functions by observed and predicted response types
+metricinfo(factor(0)) %>% names
+#>  [1] "accuracy"      "brier"         "cindex"        "cross_entropy"
+#>  [5] "f_score"       "kappa"         "npv"           "ppv"          
+#>  [9] "pr_auc"        "precision"     "recall"        "roc_auc"      
+#> [13] "roc_index"     "sensitivity"   "specificity"
+metricinfo(factor(0), factor(0)) %>% names
+#> [1] "accuracy" "kappa"
+metricinfo(factor(0), matrix(0)) %>% names
+#> [1] "accuracy"      "brier"         "cross_entropy" "kappa"
+metricinfo(factor(0), numeric(0)) %>% names
+#>  [1] "accuracy"      "brier"         "cindex"        "cross_entropy"
+#>  [5] "f_score"       "kappa"         "npv"           "ppv"          
+#>  [9] "pr_auc"        "precision"     "recall"        "roc_auc"      
+#> [13] "roc_index"     "sensitivity"   "specificity"
+
+## User-specified model metrics
 modelmetrics(res, c("accuracy", "kappa", "brier", "cross_entropy")) %>% summary
 #>                     Mean     Median         SD          Min       Max NA
 #> accuracy      0.93333333 0.93333333 0.06285394 8.000000e-01 1.0000000  0

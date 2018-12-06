@@ -157,10 +157,19 @@ plot(res)
 ### Model Metrics
 
 ```{r}
-## Default metrics
+## Default model metrics
 modelmetrics(res) %>% summary
 
-## User-specified metrics
+## All available metric functions
+metricinfo() %>% names
+
+## Metric functions by observed and predicted response types
+metricinfo(factor(0)) %>% names
+metricinfo(factor(0), factor(0)) %>% names
+metricinfo(factor(0), matrix(0)) %>% names
+metricinfo(factor(0), numeric(0)) %>% names
+
+## User-specified model metrics
 modelmetrics(res, c("accuracy", "kappa", "brier", "cross_entropy")) %>% summary
 ```
 

@@ -7,8 +7,8 @@
 metricinfo(...)
 }
 \arguments{
-\item{...}{one or more metric function names, observed and predicted
-responses, or a \code{Resamples} object.  If none are specified,
+\item{...}{one or more metric function names, observed response, observed and
+predicted responses, or a \code{Resamples} object.  If none are specified,
 information is returned on all available metrics by default.}
 }
 \value{
@@ -20,7 +20,14 @@ and supported response variable \code{"types"}.
 Display information about metrics provided by the \pkg{MachineShop} package.
 }
 \examples{
+## All metrics
 metricinfo()
+
+## Metrics by observed and predicted response types
+names(metricinfo(factor(0)))
+names(metricinfo(factor(0), factor(0)))
+names(metricinfo(factor(0), matrix(0)))
+names(metricinfo(factor(0), numeric(0)))
 
 }
 \seealso{
