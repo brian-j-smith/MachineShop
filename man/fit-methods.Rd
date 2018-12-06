@@ -52,6 +52,7 @@ varimp(gbmfit)
 
 }
 \seealso{
-\code{\link{tune}}, \code{\link{ModelFrame}},
-\code{\link[recipes]{recipe}}, \code{\link{predict}}, \code{\link{varimp}}
+\code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
+\code{\link{modelinfo}}, \code{\link{tune}}, \code{\link{predict}},
+\code{\link{varimp}}
 }

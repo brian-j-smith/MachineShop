@@ -81,19 +81,8 @@ plot(res)
 
 }
 \seealso{
-\code{\link{diff}}, \code{\link{modelmetrics}}
-
-\code{\link{resample}}, \code{\link{Resamples}}
-
-\code{\link{tune}}
-
-\code{\link{calibration}}
-
-\code{\link{confusion}}
-
-\code{\link{lift}}
-
-\code{\link{dependence}}
-
+\code{\link{modelmetrics}},  \code{\link{resample}},
+\code{\link{diff}}, \code{\link{tune}}, \code{\link{calibration}},
+\code{\link{confusion}}, \code{\link{lift}}, \code{\link{dependence}},
 \code{\link{varimp}}
 }

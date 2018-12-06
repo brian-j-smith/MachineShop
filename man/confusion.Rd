@@ -33,5 +33,6 @@ confusion(res)
 
 }
 \seealso{
+\code{\link{response}}, \code{\link{predict}},
 \code{\link{resample}}, \code{\link{plot}}, \code{\link{summary}}
 }

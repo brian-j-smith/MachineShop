@@ -23,8 +23,9 @@ fit <- function(x, ...) {
 #' 
 #' @return \code{MLModelFit} class object.
 #' 
-#' @seealso  \code{\link{tune}}, \code{\link{ModelFrame}},
-#' \code{\link[recipes]{recipe}}, \code{\link{predict}}, \code{\link{varimp}}
+#' @seealso \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
+#' \code{\link{modelinfo}}, \code{\link{tune}}, \code{\link{predict}},
+#' \code{\link{varimp}}
 #' 
 #' @examples
 #' ## Survival response example

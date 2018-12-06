@@ -32,9 +32,8 @@ resample <- function(x, ...) {
 #' values of the response variable; i.e. categorical levels for \code{factor},
 #' continuous for \code{numeric}, and event status \code{Surv}.
 #' 
-#' @seealso \code{\link{tune}}, \code{\link{ModelFrame}},
-#' \code{\link[recipes]{recipe}}, \code{\link{BootControl}},
-#' \code{\link{CVControl}}, \code{\link{OOBControl}}, \code{\link{Resamples}},
+#' @seealso \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
+#' \code{\link{modelinfo}}, \code{\link{MLControl}}, \code{\link{Resamples}},
 #' \code{\link{plot}}, \code{\link{summary}}
 #' 
 #' @examples

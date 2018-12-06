@@ -82,6 +82,6 @@ varimp(gbmfit)
 }
 \seealso{
 \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-\code{\link{fit}}, \code{\link{resample}}, \code{\link{plot}},
-\code{\link{summary}}
+\code{\link{modelinfo}}, \code{\link{MLControl}}, \code{\link{fit}},
+\code{\link{plot}}, \code{\link{summary}}
 }

@@ -10,7 +10,7 @@
 #' containing a descriptive \code{"label"}, the functions' \code{"arguments"},
 #' and supported response variable \code{"types"}.
 #' 
-#' @seealso \code{\link{metrics}}, \code{\link{Resamples}}
+#' @seealso \code{\link{metrics}}, \code{\link{resample}}
 #' 
 #' @examples
 #' ## All metrics

@@ -17,8 +17,8 @@
 #' modelinfo()
 #' 
 #' ## Models by response types
-#' modelinfo(factor(0))
-#' modelinfo(factor(0), numeric(0))
+#' names(modelinfo(factor(0)))
+#' names(modelinfo(factor(0), numeric(0)))
 #' 
 modelinfo <- function(...) {
   args <- list(...)

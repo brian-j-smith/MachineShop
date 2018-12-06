@@ -68,8 +68,7 @@ plot(gbmres)
 
 }
 \seealso{
-\code{\link{tune}}, \code{\link{ModelFrame}},
-\code{\link[recipes]{recipe}}, \code{\link{BootControl}},
-\code{\link{CVControl}}, \code{\link{OOBControl}}, \code{\link{Resamples}},
+\code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
+\code{\link{modelinfo}}, \code{\link{MLControl}}, \code{\link{Resamples}},
 \code{\link{plot}}, \code{\link{summary}}
 }

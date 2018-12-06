@@ -20,8 +20,8 @@ modelmetrics <- function(x, ...) {
 #' @param na.rm logical indicating whether to remove observed or predicted
 #' responses that are \code{NA} when calculating model metrics.
 #' 
-#' @seealso \code{\link{metrics}}, \code{\link{resample}},
-#' \code{\link{Resamples}}
+#' @seealso \code{\link{response}}, \code{\link{predict}},
+#' \code{\link{resample}}, \code{\link{metrics}}
 #' 
 #' @examples
 #' res <- resample(Species ~ ., data = iris, model = GBMModel)
@@ -95,8 +95,6 @@ modelmetrics.numeric <- function(x, y,
 
 
 #' @rdname modelmetrics
-#' 
-#' @seealso \code{\link{predict}}, \code{\link{response}}
 #' 
 #' @examples
 #' ## Survival response example

@@ -11,8 +11,9 @@
 #' @return \code{ModelMetricsDiff} class object that inherits from
 #' \code{ModelMetrics}.
 #' 
-#' @seealso \code{\link{plot}}, \code{\link{modelmetrics}},
-#' \code{\link{summary}}, \code{\link{t.test}}
+#' @seealso \code{\link{modelmetrics}}, \code{\link{resample}},
+#' \code{\link{tune}}, \code{\link{plot}}, \code{\link{summary}},
+#' \code{\link{t.test}}
 #' 
 diff.ModelMetrics <- function(x, ...) {
   if (length(dim(x)) <= 2) stop("more than one model needed to diff")
@@ -28,8 +29,6 @@ diff.ModelMetrics <- function(x, ...) {
 
 
 #' @rdname diff-methods
-#' 
-#' @seealso \code{\link{resample}}, \code{\link{Resamples}}
 #' 
 #' @examples
 #' ## Survival response example

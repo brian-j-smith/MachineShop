@@ -16,7 +16,8 @@
 #' survival events.
 #' @param ... arguments passed to model-specific prediction functions.
 #' 
-#' @seealso \code{\link{fit}}, \code{\link{modelmetrics}}
+#' @seealso \code{\link{fit}}, \code{\link{confusion}},
+#' \code{\link{modelmetrics}}
 #' 
 #' @examples
 #' ## Survival response example

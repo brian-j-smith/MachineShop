@@ -63,8 +63,6 @@ modelmetrics(obs, pred)
 
 }
 \seealso{
-\code{\link{metrics}}, \code{\link{resample}},
-\code{\link{Resamples}}
-
-\code{\link{predict}}, \code{\link{response}}
+\code{\link{response}}, \code{\link{predict}},
+\code{\link{resample}}, \code{\link{metrics}}
 }

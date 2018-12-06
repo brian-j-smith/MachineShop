@@ -15,7 +15,8 @@
 #' the first for single models, and models and metrics in the first and third,
 #' respectively, for multiple models.
 #' 
-#' @seealso \code{\link{diff}}, \code{\link{modelmetrics}}
+#' @seealso \code{\link{modelmetrics}}, \code{\link{resample}},
+#' \code{\link{diff}}, \code{\link{tune}}, \code{\link{confusion}}
 #' 
 summary.ModelMetrics <- function(object,
                                  stats = c("Mean" = mean,
@@ -44,8 +45,6 @@ summary.ModelMetrics <- function(object,
 
 #' @rdname summary-methods
 #' 
-#' @seealso \code{\link{resample}}, \code{\link{Resamples}}
-#' 
 #' @examples
 #' ## Factor response example
 #' 
@@ -73,8 +72,6 @@ summary.Resamples <- function(object,
 
 #' @rdname summary-methods
 #' 
-#' @seealso \code{\link{tune}}
-#' 
 summary.MLModelTune <- function(object,
                                 stats = c("Mean" = mean,
                                           "Median" = median,
@@ -87,8 +84,6 @@ summary.MLModelTune <- function(object,
 
 
 #' @rdname summary-methods
-#' 
-#' @seealso \code{\link{confusion}}
 #' 
 summary.ConfusionMatrix <- function(object, ...) {
   n <- sum(object)

@@ -56,11 +56,6 @@ summary(res)
 
 }
 \seealso{
-\code{\link{diff}}, \code{\link{modelmetrics}}
-
-\code{\link{resample}}, \code{\link{Resamples}}
-
-\code{\link{tune}}
-
-\code{\link{confusion}}
+\code{\link{modelmetrics}}, \code{\link{resample}},
+\code{\link{diff}}, \code{\link{tune}}, \code{\link{confusion}}
 }

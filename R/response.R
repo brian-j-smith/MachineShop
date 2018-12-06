@@ -7,6 +7,8 @@
 #' @param object object containing response variable values.
 #' @param ... arguments passed to other methods.
 #' 
+#' @seealso \code{\link[recipes]{recipe}}
+#' 
 #' @examples
 #' ## Survival response example
 #' library(survival)

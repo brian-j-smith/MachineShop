@@ -26,7 +26,7 @@ Display information about models provided by the \pkg{MachineShop} package.
 modelinfo()
 
 ## Models by response types
-modelinfo(factor(0))
-modelinfo(factor(0), numeric(0))
+names(modelinfo(factor(0)))
+names(modelinfo(factor(0), numeric(0)))
 
 }

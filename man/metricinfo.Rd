@@ -31,5 +31,5 @@ names(metricinfo(factor(0), numeric(0)))
 
 }
 \seealso{
-\code{\link{metrics}}, \code{\link{Resamples}}
+\code{\link{metrics}}, \code{\link{resample}}
 }

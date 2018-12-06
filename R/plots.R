@@ -3,7 +3,7 @@
 #' Plot measures of model performance and predictor variable importance.
 #'  
 #' @name plot
-#' @rdname plot-method
+#' @rdname plot-methods
 #' 
 #' @param x object to plot.
 #' @param metrics vector of numeric indexes or character names of performance
@@ -13,7 +13,10 @@
 #' @param type type of plot to construct.
 #' @param ... arguments passed to other methods.
 #' 
-#' @seealso \code{\link{diff}}, \code{\link{modelmetrics}}
+#' @seealso \code{\link{modelmetrics}},  \code{\link{resample}},
+#' \code{\link{diff}}, \code{\link{tune}}, \code{\link{calibration}},
+#' \code{\link{confusion}}, \code{\link{lift}}, \code{\link{dependence}},
+#' \code{\link{varimp}}
 #' 
 plot.ModelMetrics <- function(x, metrics = NULL, stat = mean,
                               type = c("boxplot", "density", "errorbar",
@@ -59,9 +62,7 @@ plot.ModelMetrics <- function(x, metrics = NULL, stat = mean,
 }
 
 
-#' @rdname plot-method
-#' 
-#' @seealso \code{\link{resample}}, \code{\link{Resamples}}
+#' @rdname plot-methods
 #' 
 #' @examples
 #' ## Factor response example
@@ -87,9 +88,7 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
 }
 
 
-#' @rdname plot-method
-#' 
-#' @seealso \code{\link{tune}}
+#' @rdname plot-methods
 #' 
 plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
                              type = c("boxplot", "density", "errorbar", "line",
@@ -134,11 +133,9 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
 }
 
 
-#' @rdname plot-method
+#' @rdname plot-methods
 #' 
 #' @param se logical indicating whether to include standard error bars.
-#' 
-#' @seealso \code{\link{calibration}}
 #' 
 plot.CalibrationResamples <- function(x, type = c("line", "point"), 
                                       se = FALSE, ...) {
@@ -182,9 +179,7 @@ plot.CalibrationResamples <- function(x, type = c("line", "point"),
 }
 
 
-#' @rdname plot-method
-#' 
-#' @seealso \code{\link{confusion}}
+#' @rdname plot-methods
 #' 
 plot.ConfusionMatrix <- function(x, ...) {
   df <- as.data.frame(prop.table(x), responseName = "Value")
@@ -196,7 +191,7 @@ plot.ConfusionMatrix <- function(x, ...) {
 }
 
 
-#' @rdname plot-method
+#' @rdname plot-methods
 #' 
 plot.ConfusionResamples <- function(x, ...) {
   pl <- list()
@@ -207,12 +202,10 @@ plot.ConfusionResamples <- function(x, ...) {
 }
 
 
-#' @rdname plot-method
+#' @rdname plot-methods
 #' 
 #' @param find numeric percent of observed events at which to display reference
 #' lines indicating the corresponding percent tested in lift plots.
-#' 
-#' @seealso \code{\link{lift}}
 #' 
 plot.LiftResamples <- function(x, find = NULL, ...) {
   aes_model <- if (nlevels(x$Model) > 1) {
@@ -246,12 +239,10 @@ plot.LiftResamples <- function(x, find = NULL, ...) {
 }
 
 
-#' @rdname plot-method
+#' @rdname plot-methods
 #' 
 #' @param stats vector of numeric indexes or character names of partial
 #' dependence summary statistics to plot.
-#' 
-#' @seealso \code{\link{dependence}}
 #' 
 plot.PartialDependence <- function(x, stats = NULL, ...) {
   if (any(rowSums(!is.na(x$Predictors)) > 1)) {
@@ -286,12 +277,10 @@ plot.PartialDependence <- function(x, stats = NULL, ...) {
 }
 
 
-#' @rdname plot-method
+#' @rdname plot-methods
 #' 
 #' @param n number of most important variables to include in the plot
 #' [default: all].
-#' 
-#' @seealso \code{\link{varimp}}
 #' 
 plot.VarImp <- function(x, n = NULL, ...) {
   if (!is.null(n)) x <- head(x, n)

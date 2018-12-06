@@ -40,8 +40,8 @@ tune <- function(x, ...) {
 #' maximum or minimum value of the performance metric.
 #' 
 #' @seealso \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-#' \code{\link{fit}}, \code{\link{resample}}, \code{\link{plot}},
-#' \code{\link{summary}}
+#' \code{\link{modelinfo}}, \code{\link{MLControl}}, \code{\link{fit}},
+#' \code{\link{plot}}, \code{\link{summary}}
 #' 
 #' @examples
 #' \donttest{

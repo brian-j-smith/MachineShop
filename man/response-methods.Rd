@@ -32,3 +32,6 @@ fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
 response(fo, data = Melanoma)
 
 }
+\seealso{
+\code{\link[recipes]{recipe}}
+}

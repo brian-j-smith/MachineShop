@@ -44,8 +44,7 @@ plot(perfdiff)
 
 }
 \seealso{
-\code{\link{plot}}, \code{\link{modelmetrics}},
-\code{\link{summary}}, \code{\link{t.test}}
-
-\code{\link{resample}}, \code{\link{Resamples}}
+\code{\link{modelmetrics}}, \code{\link{resample}},
+\code{\link{tune}}, \code{\link{plot}}, \code{\link{summary}},
+\code{\link{t.test}}
 }

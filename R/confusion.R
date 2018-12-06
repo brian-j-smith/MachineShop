@@ -16,7 +16,8 @@
 #' \code{table} if \code{x} is a factor or a \code{ConfusionResamples} object
 #' that inherits from \code{list} if \code{x} is a \code{Resamples} object.
 #'  
-#' @seealso \code{\link{resample}}, \code{\link{plot}}, \code{\link{summary}}
+#' @seealso \code{\link{response}}, \code{\link{predict}},
+#' \code{\link{resample}}, \code{\link{plot}}, \code{\link{summary}}
 #' 
 #' @examples
 #' res <- resample(Species ~ ., data = iris, model = GBMModel)
