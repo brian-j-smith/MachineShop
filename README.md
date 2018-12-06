@@ -1553,16 +1553,49 @@ test <- iris[-trainindices, ]
 ## Model formula
 fo <- Species ~ .
 
+## All available models
+modelinfo() %>% names
+#>  [1] "AdaBagModel"         "AdaBoostModel"       "C50Model"           
+#>  [4] "CForestModel"        "CoxModel"            "CoxStepAICModel"    
+#>  [7] "EarthModel"          "FDAModel"            "GBMModel"           
+#> [10] "GLMModel"            "GLMStepAICModel"     "GLMNetModel"        
+#> [13] "KNNModel"            "LDAModel"            "LMModel"            
+#> [16] "MDAModel"            "NaiveBayesModel"     "NNetModel"          
+#> [19] "PDAModel"            "PLSModel"            "POLRModel"          
+#> [22] "QDAModel"            "RandomForestModel"   "RangerModel"        
+#> [25] "RPartModel"          "StackedModel"        "SuperModel"         
+#> [28] "SurvRegModel"        "SurvRegStepAICModel" "SVMModel"           
+#> [31] "SVMANOVAModel"       "SVMBesselModel"      "SVMLaplaceModel"    
+#> [34] "SVMLinearModel"      "SVMPolyModel"        "SVMRadialModel"     
+#> [37] "SVMSplineModel"      "SVMTanhModel"        "TreeModel"          
+#> [40] "XGBModel"            "XGBDARTModel"        "XGBLinearModel"     
+#> [43] "XGBTreeModel"
+
+## Models by response type
+modelinfo(factor(0)) %>% names
+#>  [1] "AdaBagModel"       "AdaBoostModel"     "C50Model"         
+#>  [4] "CForestModel"      "EarthModel"        "FDAModel"         
+#>  [7] "GBMModel"          "GLMNetModel"       "KNNModel"         
+#> [10] "LDAModel"          "LMModel"           "MDAModel"         
+#> [13] "NaiveBayesModel"   "NNetModel"         "PDAModel"         
+#> [16] "PLSModel"          "QDAModel"          "RandomForestModel"
+#> [19] "RangerModel"       "RPartModel"        "StackedModel"     
+#> [22] "SuperModel"        "SVMModel"          "SVMANOVAModel"    
+#> [25] "SVMBesselModel"    "SVMLaplaceModel"   "SVMLinearModel"   
+#> [28] "SVMPolyModel"      "SVMRadialModel"    "SVMSplineModel"   
+#> [31] "SVMTanhModel"      "TreeModel"         "XGBModel"         
+#> [34] "XGBDARTModel"      "XGBLinearModel"    "XGBTreeModel"
+
 ## Gradient boosted mode fit to training set
 gbmfit <- fit(fo, data = train, model = GBMModel)
 
 ## Variable importance
 (vi <- varimp(gbmfit))
-#>                  Overall
-#> Petal.Length 100.0000000
-#> Petal.Width   12.9638575
-#> Sepal.Width    0.1409401
-#> Sepal.Length   0.0000000
+#>                 Overall
+#> Petal.Length 100.000000
+#> Petal.Width   14.601856
+#> Sepal.Width    1.438558
+#> Sepal.Length   0.000000
 
 plot(vi)
 ```
@@ -1573,12 +1606,12 @@ plot(vi)
 ## Test set predicted probabilities
 predict(gbmfit, newdata = test, type = "prob") %>% head
 #>         setosa   versicolor    virginica
-#> [1,] 0.9999755 2.449128e-05 2.828117e-08
-#> [2,] 0.9999365 6.346918e-05 6.535304e-09
-#> [3,] 0.9999365 6.346918e-05 6.535304e-09
-#> [4,] 0.9999755 2.449128e-05 2.828117e-08
-#> [5,] 0.9998941 1.059313e-04 8.577135e-09
-#> [6,] 0.9999291 7.084465e-05 5.736212e-09
+#> [1,] 0.9999737 2.627994e-05 4.493784e-08
+#> [2,] 0.9999154 8.456383e-05 4.205211e-09
+#> [3,] 0.9999154 8.456383e-05 4.205211e-09
+#> [4,] 0.9999737 2.627994e-05 4.493784e-08
+#> [5,] 0.9998807 1.192834e-04 2.987679e-09
+#> [6,] 0.9999024 9.764241e-05 2.445639e-09
 
 ## Test set predicted classifications
 predict(gbmfit, newdata = test) %>% head
@@ -1590,7 +1623,7 @@ obs <- response(fo, data = test)
 pred <- predict(gbmfit, newdata = test, type = "prob")
 modelmetrics(obs, pred)
 #>  Accuracy     Kappa     Brier 
-#> 0.9200000 0.8793727 0.1570015
+#> 0.9200000 0.8793727 0.1502442
 ```
 
 ### Resampling
@@ -1614,13 +1647,13 @@ modelmetrics(obs, pred)
 #> 
 #> Survival times: 
 #> 
-#> Seed: 9279906
+#> Seed: 253452646
 
 summary(res)
-#>                Mean     Median         SD          Min       Max NA
-#> Accuracy 0.93333333 0.93333333 0.06285394 8.000000e-01 1.0000000  0
-#> Kappa    0.90000000 0.90000000 0.09428090 7.000000e-01 1.0000000  0
-#> Brier    0.09409409 0.08887763 0.08302550 5.911564e-07 0.2260197  0
+#>                Mean    Median         SD          Min       Max NA
+#> Accuracy 0.95333333 0.9333333 0.03220306 9.333333e-01 1.0000000  0
+#> Kappa    0.93000000 0.9000000 0.04830459 9.000000e-01 1.0000000  0
+#> Brier    0.08476969 0.1133233 0.05621648 5.140496e-05 0.1372037  0
 
 plot(res)
 ```
@@ -1632,10 +1665,10 @@ plot(res)
 ``` r
 ## Default model metrics
 modelmetrics(res) %>% summary
-#>                Mean     Median         SD          Min       Max NA
-#> Accuracy 0.93333333 0.93333333 0.06285394 8.000000e-01 1.0000000  0
-#> Kappa    0.90000000 0.90000000 0.09428090 7.000000e-01 1.0000000  0
-#> Brier    0.09409409 0.08887763 0.08302550 5.911564e-07 0.2260197  0
+#>                Mean    Median         SD          Min       Max NA
+#> Accuracy 0.95333333 0.9333333 0.03220306 9.333333e-01 1.0000000  0
+#> Kappa    0.93000000 0.9000000 0.04830459 9.000000e-01 1.0000000  0
+#> Brier    0.08476969 0.1133233 0.05621648 5.140496e-05 0.1372037  0
 
 ## All available metric functions
 metricinfo() %>% names
@@ -1663,11 +1696,11 @@ metricinfo(factor(0), numeric(0)) %>% names
 
 ## User-specified model metrics
 modelmetrics(res, c("accuracy", "kappa", "brier", "cross_entropy")) %>% summary
-#>                     Mean     Median         SD          Min       Max NA
-#> accuracy      0.93333333 0.93333333 0.06285394 8.000000e-01 1.0000000  0
-#> kappa         0.90000000 0.90000000 0.09428090 7.000000e-01 1.0000000  0
-#> brier         0.09409409 0.08887763 0.08302550 5.911564e-07 0.2260197  0
-#> cross_entropy 0.22653409 0.12128540 0.23089382 3.321915e-04 0.5716866  0
+#>                     Mean    Median         SD          Min       Max NA
+#> accuracy      0.95333333 0.9333333 0.03220306 9.333333e-01 1.0000000  0
+#> kappa         0.93000000 0.9000000 0.04830459 9.000000e-01 1.0000000  0
+#> brier         0.08476969 0.1133233 0.05621648 5.140496e-05 0.1372037  0
+#> cross_entropy 0.22809689 0.1745116 0.21892382 2.802783e-03 0.6422832  0
 ```
 
 ### Model Tuning
@@ -1688,11 +1721,11 @@ plot(gbmtune, type = "line")
 ## Fit the selected model
 gbmtunefit <- fit(fo, data = iris, model = gbmtune)
 varimp(gbmtunefit)
-#>                Overall
-#> Petal.Length 100.00000
-#> Petal.Width   21.34343
-#> Sepal.Length   0.00000
-#> Sepal.Width    0.00000
+#>                 Overall
+#> Petal.Length 100.000000
+#> Petal.Width   19.311911
+#> Sepal.Width    2.500572
+#> Sepal.Length   0.000000
 ```
 
 ### Model Comparisons
@@ -1709,24 +1742,24 @@ res <- Resamples(GBM = gbmres, RF = rfres, NNet = nnetres)
 summary(res)
 #> , , Accuracy
 #> 
-#>           Mean    Median         SD       Min Max NA
-#> GBM  0.9506667 0.9333333 0.04820591 0.8000000   1  0
-#> NNet 0.9520000 0.9333333 0.05877047 0.7333333   1  0
-#> RF   0.9546667 0.9333333 0.04750462 0.8000000   1  0
+#>           Mean    Median         SD Min Max NA
+#> GBM  0.9440000 0.9333333 0.05447752 0.8   1  0
+#> NNet 0.9373333 0.9666667 0.08771217 0.6   1  0
+#> RF   0.9520000 0.9333333 0.05720631 0.8   1  0
 #> 
 #> , , Kappa
 #> 
 #>       Mean Median         SD Min Max NA
-#> GBM  0.926    0.9 0.07230886 0.7   1  0
-#> NNet 0.928    0.9 0.08815571 0.6   1  0
-#> RF   0.930    0.9 0.07071068 0.7   1  0
+#> GBM  0.916   0.90 0.08171628 0.7   1  0
+#> NNet 0.892   0.95 0.15758380 0.4   1  0
+#> RF   0.928   0.90 0.08580947 0.7   1  0
 #> 
 #> , , Brier
 #> 
-#>            Mean     Median         SD           Min       Max NA
-#> GBM  0.07783400 0.05344164 0.08337132  4.209652e-05 0.3737446  0
-#> NNet 0.08817998 0.07923248 0.10063333 1.534123e-128 0.3461743  0
-#> RF   0.06661013 0.05184000 0.06626315  1.066667e-04 0.2900267  0
+#>            Mean     Median         SD          Min       Max NA
+#> GBM  0.08739305 0.06993792 0.08997327 5.611940e-05 0.3655810  0
+#> NNet 0.09728523 0.06078362 0.11257530 5.069556e-26 0.3333334  0
+#> RF   0.07043733 0.04421333 0.07650326 5.333333e-05 0.3091200  0
 
 plot(res)
 ```
@@ -1740,23 +1773,23 @@ summary(perfdiff)
 #> , , Accuracy
 #> 
 #>                    Mean Median         SD         Min        Max NA
-#> GBM - NNet  0.001333333      0 0.07061762 -0.13333333 0.33333333  0
-#> GBM - RF   -0.004000000      0 0.02487155 -0.06666667 0.06666667  0
-#> NNet - RF  -0.005333333      0 0.06712766 -0.33333333 0.13333333  0
+#> GBM - NNet  0.022666667      0 0.12749817 -0.13333333 0.40000000  0
+#> GBM - RF   -0.009333333      0 0.03301893 -0.06666667 0.06666667  0
+#> NNet - RF  -0.032000000      0 0.11913521 -0.40000000 0.13333333  0
 #> 
 #> , , Kappa
 #> 
 #>              Mean Median         SD  Min Max NA
-#> GBM - NNet -0.004      0 0.08320126 -0.2 0.2  0
-#> GBM - RF   -0.004      0 0.03475864 -0.1 0.1  0
-#> NNet - RF   0.000      0 0.07559289 -0.2 0.2  0
+#> GBM - NNet  0.022      0 0.15816550 -0.2 0.5  0
+#> GBM - RF   -0.012      0 0.04797959 -0.1 0.1  0
+#> NNet - RF  -0.034      0 0.14653829 -0.5 0.2  0
 #> 
 #> , , Brier
 #> 
-#>                   Mean        Median         SD        Min       Max NA
-#> GBM - NNet -0.01034598  0.0001118562 0.09446451 -0.2806182 0.1947900  0
-#> GBM - RF    0.01122386  0.0010026275 0.02685602 -0.0466223 0.0837179  0
-#> NNet - RF   0.02156984 -0.0004582727 0.09079066 -0.1456573 0.2819733  0
+#>                    Mean        Median         SD         Min        Max NA
+#> GBM - NNet -0.009892183  0.0014628834 0.12230934 -0.33301668 0.21469886  0
+#> GBM - RF    0.016955715  0.0009175387 0.02937316 -0.04403306 0.09662101  0
+#> NNet - RF   0.026847898 -0.0037110334 0.11589380 -0.15451161 0.33221333  0
 
 t.test(perfdiff)
 #> An object of class "HTestResamples"
@@ -1767,24 +1800,24 @@ t.test(perfdiff)
 #> 
 #> , , Accuracy
 #> 
-#>            GBM        NNet           RF
-#> GBM         NA 0.001333333 -0.004000000
-#> NNet 1.0000000          NA -0.005333333
-#> RF   0.7829387 1.000000000           NA
+#>            GBM       NNet           RF
+#> GBM         NA 0.02266667 -0.009333333
+#> NNet 0.2146777         NA -0.032000000
+#> RF   0.1535959 0.15359593           NA
 #> 
 #> , , Kappa
 #> 
-#>      GBM   NNet     RF
-#> GBM   NA -0.004 -0.004
-#> NNet   1     NA  0.000
-#> RF     1  1.000     NA
+#>            GBM      NNet     RF
+#> GBM         NA 0.0220000 -0.012
+#> NNet 0.3301691        NA -0.034
+#> RF   0.2495969 0.2495969     NA
 #> 
 #> , , Brier
 #> 
-#>             GBM        NNet         RF
-#> GBM          NA -0.01034598 0.01122386
-#> NNet 0.44239148          NA 0.02156984
-#> RF   0.01437771  0.19867388         NA
+#>              GBM         NNet         RF
+#> GBM           NA -0.009892183 0.01695572
+#> NNet 0.570006478           NA 0.02684790
+#> RF   0.000493236  0.215623205         NA
 
 plot(perfdiff)
 ```
@@ -1797,18 +1830,18 @@ plot(perfdiff)
 ## Stacked regression
 stackedres <- resample(fo, data = iris, model = StackedModel(GBMModel, RandomForestModel, NNetModel))
 summary(stackedres)
-#>                Mean     Median         SD          Min       Max NA
-#> Accuracy 0.95333333 1.00000000 0.07062333 0.8000000000 1.0000000  0
-#> Kappa    0.93000000 1.00000000 0.10593499 0.7000000000 1.0000000  0
-#> Brier    0.07335238 0.03767302 0.07811142 0.0004827869 0.2078096  0
+#>                Mean     Median         SD         Min       Max NA
+#> Accuracy 0.96000000 0.96666667 0.04661373 0.866666667 1.0000000  0
+#> Kappa    0.94000000 0.95000000 0.06992059 0.800000000 1.0000000  0
+#> Brier    0.06515169 0.06151907 0.06178104 0.005580933 0.1841152  0
 
 ## Super learners
 superres <- resample(fo, data = iris, model = SuperModel(GBMModel, RandomForestModel, NNetModel))
 summary(superres)
-#>                Mean     Median         SD          Min       Max NA
-#> Accuracy 0.96000000 1.00000000 0.06440612 0.8000000000 1.0000000  0
-#> Kappa    0.94000000 1.00000000 0.09660918 0.7000000000 1.0000000  0
-#> Brier    0.07929339 0.01444121 0.11627751 0.0002255191 0.3615479  0
+#>                Mean    Median         SD          Min      Max NA
+#> Accuracy 0.94666667 0.9333333 0.04216370 0.8666666667 1.000000  0
+#> Kappa    0.92000000 0.9000000 0.06324555 0.8000000000 1.000000  0
+#> Brier    0.09841853 0.1106877 0.08111538 0.0000110332 0.259555  0
 ```
 
 ### Calibration Curves
@@ -1827,25 +1860,25 @@ plot(cal, se = TRUE)
 #> GBMModel :
 #>             Observed
 #> Predicted          setosa   versicolor    virginica
-#>   setosa     249.28053687   0.26015948   0.08694185
-#>   versicolor   0.70483083 230.90973797  22.07274081
-#>   virginica    0.01463231  18.83010255 227.84031734
+#>   setosa     249.23098573   0.24569404   0.09285259
+#>   versicolor   0.75679330 230.60018692  25.22138229
+#>   virginica    0.01222097  19.15411904 224.68576512
 
 summary(conf)
 #> GBMModel :
 #> Number of responses: 750
-#> Accuracy (SE): 0.9440408 (0.008392678)
+#> Accuracy (SE): 0.9393559 (0.008715226)
 #> Majority class: 0.3333333
-#> Kappa: 0.9160612
+#> Kappa: 0.9090339
 #> 
 #>                setosa versicolor virginica
 #> Observed    0.3333333  0.3333333 0.3333333
-#> Predicted   0.3328369  0.3382497 0.3289134
-#> Agreement   0.3323740  0.3078797 0.3037871
-#> Sensitivity 0.9971221  0.9236390 0.9113613
-#> Specificity 0.9993058  0.9544449 0.9623105
-#> PPV         0.9986095  0.9102140 0.9236081
-#> NPV         0.9985621  0.9615358 0.9559725
+#> Predicted   0.3327594  0.3421045 0.3251361
+#> Agreement   0.3323080  0.3074669 0.2995810
+#> Sensitivity 0.9969239  0.9224007 0.8987431
+#> Specificity 0.9993229  0.9480436 0.9616673
+#> PPV         0.9986435  0.8987515 0.9214018
+#> NPV         0.9984633  0.9606831 0.9499865
 ```
 
 ``` r
@@ -1901,16 +1934,16 @@ rec <- recipe(fo, data = iris) %>%
 
 fit_rec <- fit(rec, model = GBMModel)
 varimp(fit_rec)
-#>         Overall
-#> PC1 100.0000000
-#> PC3   5.3810367
-#> PC2   0.4155812
-#> PC4   0.0000000
+#>        Overall
+#> PC1 100.000000
+#> PC3   5.734085
+#> PC2   1.780191
+#> PC4   0.000000
 
 res_rec <- resample(rec, model = GBMModel, control = CVControl)
 summary(res_rec)
-#>                Mean     Median         SD          Min       Max NA
-#> Accuracy 0.96666667 0.96666667 0.03513642 0.9333333333 1.0000000  0
-#> Kappa    0.95000000 0.95000000 0.05270463 0.9000000000 1.0000000  0
-#> Brier    0.06610658 0.04903953 0.06497069 0.0001102322 0.1538771  0
+#>               Mean     Median         SD         Min       Max NA
+#> Accuracy 0.9400000 0.93333333 0.06629526 0.800000000 1.0000000  0
+#> Kappa    0.9100000 0.90000000 0.09944289 0.700000000 1.0000000  0
+#> Brier    0.0806202 0.05286238 0.08717373 0.001682667 0.2483078  0
 ```

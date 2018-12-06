@@ -7,10 +7,10 @@
 modelinfo(...)
 }
 \arguments{
-\item{...}{\code{MLModel} objects, constructor functions, or character
-strings naming constructor functions for which to display information.  If
-none are specified, information is returned on all available models by
-default.}
+\item{...}{\code{MLModel} objects, constructor functions, character
+strings naming constructor functions, or supported responses for which to
+display information.  If none are specified, information is returned on all
+available models by default.}
 }
 \value{
 List of named models containing the \code{"label"}, required
@@ -22,6 +22,11 @@ implemented for each.
 Display information about models provided by the \pkg{MachineShop} package.
 }
 \examples{
+## All models
 modelinfo()
+
+## Models by response types
+modelinfo(factor(0))
+modelinfo(factor(0), numeric(0))
 
 }

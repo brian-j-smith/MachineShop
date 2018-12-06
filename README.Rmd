@@ -121,6 +121,12 @@ test <- iris[-trainindices, ]
 ## Model formula
 fo <- Species ~ .
 
+## All available models
+modelinfo() %>% names
+
+## Models by response type
+modelinfo(factor(0)) %>% names
+
 ## Gradient boosted mode fit to training set
 gbmfit <- fit(fo, data = train, model = GBMModel)
 
