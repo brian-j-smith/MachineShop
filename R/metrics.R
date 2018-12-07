@@ -7,10 +7,11 @@
 #' 
 #' @param observed observed responses.
 #' @param predicted predicted responses.
+#' @param beta relative importance of recall to precision in the calculation of
+#' \code{f_score} [default: F1 score].
 #' @param cutoff threshold above which probabilities are classified as success
 #' for binary responses.
-#' @param cutoff_index function to calculate a desired sensitivity-specificity
-#' tradeoff.
+#' @param f function to calculate a desired sensitivity-specificity tradeoff.
 #' @param times numeric vector of follow-up times at which survival events
 #' were predicted.
 #' @param ... arguments passed to or from other methods.
@@ -173,9 +174,6 @@ setMethod(".cross_entropy", c("factor", "numeric"),
 
 
 #' @rdname metrics
-#' 
-#' @param beta relative importance of recall to precision in the calculation of
-#' \code{f_score} [default: F1 score].
 #' 
 f_score <- function(observed, predicted, cutoff = 0.5, beta = 1, ...) {
   .f_score(observed, predicted, cutoff = cutoff, beta = beta)
@@ -524,9 +522,9 @@ setMethod(".roc_auc", c("Surv", "matrix"),
 
 #' @rdname metrics
 #' 
-roc_index <- function(observed, predicted, cutoff = 0.5, cutoff_index =
-                        function(sens, spec) sens + spec, ...) {
-  .roc_index(observed, predicted, cutoff = cutoff, cutoff_index = cutoff_index)
+roc_index <- function(observed, predicted, cutoff = 0.5,
+                      f = function(sens, spec) sens + spec, ...) {
+  .roc_index(observed, predicted, cutoff = cutoff, f = f)
 }
 
 
@@ -540,10 +538,10 @@ setMethod(".roc_index", c("ANY", "ANY"),
 
 
 setMethod(".roc_index", c("factor", "numeric"),
-  function(observed, predicted, cutoff, cutoff_index, ...) {
+  function(observed, predicted, cutoff, f, ...) {
     sens <- sensitivity(observed, predicted, cutoff = cutoff)
     spec <- specificity(observed, predicted, cutoff = cutoff)
-    cutoff_index(sens, spec)
+    f(sens, spec)
   }
 )
 

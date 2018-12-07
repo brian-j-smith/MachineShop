@@ -56,8 +56,8 @@ rmse(observed, predicted, ...)
 
 roc_auc(observed, predicted, times = numeric(), ...)
 
-roc_index(observed, predicted, cutoff = 0.5,
-  cutoff_index = function(sens, spec) sens + spec, ...)
+roc_index(observed, predicted, cutoff = 0.5, f = function(sens, spec)
+  sens + spec, ...)
 
 sensitivity(observed, predicted, cutoff = 0.5, ...)
 
@@ -81,8 +81,7 @@ were predicted.}
 \item{beta}{relative importance of recall to precision in the calculation of
 \code{f_score} [default: F1 score].}
 
-\item{cutoff_index}{function to calculate a desired sensitivity-specificity
-tradeoff.}
+\item{f}{function to calculate a desired sensitivity-specificity tradeoff.}
 
 \item{weight}{definition of weights for the kappa metric as linear
 (\code{"equal"}) or squared (\code{"squared"}) distance between ordinal
