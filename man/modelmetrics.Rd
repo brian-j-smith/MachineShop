@@ -16,7 +16,8 @@ modelmetrics(x, ...)
 \method{modelmetrics}{factor}(x, y, metrics = c(Accuracy =
   MachineShop::accuracy, Kappa = MachineShop::kappa, ROCAUC =
   MachineShop::roc_auc, Sensitivity = MachineShop::sensitivity, Specificity
-  = MachineShop::specificity, Brier = MachineShop::brier), ...)
+  = MachineShop::specificity, Brier = MachineShop::brier), cutoff = 0.5,
+  ...)
 
 \method{modelmetrics}{matrix}(x, y, metrics = c(R2 = MachineShop::r2,
   RMSE = MachineShop::rmse, MAE = MachineShop::mae), ...)
@@ -26,14 +27,13 @@ modelmetrics(x, ...)
 
 \method{modelmetrics}{Surv}(x, y, metrics = c(CIndex =
   MachineShop::cindex, ROC = MachineShop::roc_auc, Brier =
-  MachineShop::brier), ...)
+  MachineShop::brier), times = numeric(), ...)
 }
 \arguments{
 \item{x}{observed responses or class containing observed and predicted
 responses.}
 
-\item{...}{arguments passed to the \code{\link{metrics}} functions and from
-the \code{Resamples} method to the others.}
+\item{...}{arguments passed from the \code{Resamples} method to the others.}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating model metrics.}
@@ -42,6 +42,12 @@ responses that are \code{NA} when calculating model metrics.}
 
 \item{metrics}{function, one or more function names, or list of named
 functions to include in the calculation of performance metrics.}
+
+\item{cutoff}{threshold above which probabilities are classified as success
+for binary responses.}
+
+\item{times}{numeric vector of follow-up times at which survival events
+were predicted.}
 }
 \description{
 Compute measures of model performance.

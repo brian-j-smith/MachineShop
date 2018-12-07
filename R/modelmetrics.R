@@ -6,9 +6,19 @@
 #' 
 #' @param x observed responses or class containing observed and predicted
 #' responses.
-#' @param ... arguments passed to the \code{\link{metrics}} functions and from
-#' the \code{Resamples} method to the others.
 #' @param y predicted responses.
+#' @param metrics function, one or more function names, or list of named
+#' functions to include in the calculation of performance metrics.
+#' @param cutoff threshold above which probabilities are classified as success
+#' for binary responses.
+#' @param times numeric vector of follow-up times at which survival events
+#' were predicted.
+#' @param na.rm logical indicating whether to remove observed or predicted
+#' responses that are \code{NA} when calculating model metrics.
+#' @param ... arguments passed from the \code{Resamples} method to the others.
+#' 
+#' @seealso \code{\link{response}}, \code{\link{predict}},
+#' \code{\link{resample}}, \code{\link{metrics}}
 #' 
 modelmetrics <- function(x, ...) {
   UseMethod("modelmetrics")
@@ -16,12 +26,6 @@ modelmetrics <- function(x, ...) {
 
 
 #' @rdname modelmetrics
-#' 
-#' @param na.rm logical indicating whether to remove observed or predicted
-#' responses that are \code{NA} when calculating model metrics.
-#' 
-#' @seealso \code{\link{response}}, \code{\link{predict}},
-#' \code{\link{resample}}, \code{\link{metrics}}
 #' 
 #' @examples
 #' res <- resample(Species ~ ., data = iris, model = GBMModel)
@@ -57,18 +61,16 @@ modelmetrics.Resamples <- function(x, ..., na.rm = TRUE) {
 
 #' @rdname modelmetrics
 #' 
-#' @param metrics function, one or more function names, or list of named
-#' functions to include in the calculation of performance metrics.
-#' 
 modelmetrics.factor <- function(x, y, metrics =
                                   c("Accuracy" = MachineShop::accuracy,
                                     "Kappa" = MachineShop::kappa,
                                     "ROCAUC" = MachineShop::roc_auc,
                                     "Sensitivity" = MachineShop::sensitivity,
                                     "Specificity" = MachineShop::specificity,
-                                    "Brier" = MachineShop::brier), ...) {
+                                    "Brier" = MachineShop::brier),
+                                cutoff = 0.5, ...) {
   metrics <- list2function(metrics)
-  metrics(x, y, ...)
+  metrics(x, y, cutoff = cutoff)
 }
 
 
@@ -79,7 +81,7 @@ modelmetrics.matrix <- function(x, y, metrics =
                                     "RMSE" = MachineShop::rmse,
                                     "MAE" = MachineShop::mae), ...) {
   metrics <- list2function(metrics)
-  metrics(x, y, ...)
+  metrics(x, y)
 }
 
 
@@ -90,7 +92,7 @@ modelmetrics.numeric <- function(x, y, metrics =
                                      "RMSE" = MachineShop::rmse,
                                      "MAE" = MachineShop::mae), ...) {
   metrics <- list2function(metrics)
-  metrics(x, y, ...)
+  metrics(x, y)
 }
 
 
@@ -111,7 +113,8 @@ modelmetrics.numeric <- function(x, y, metrics =
 modelmetrics.Surv <- function(x, y, metrics =
                                 c("CIndex" = MachineShop::cindex,
                                   "ROC" = MachineShop::roc_auc,
-                                  "Brier" = MachineShop::brier), ...) {
+                                  "Brier" = MachineShop::brier),
+                              times = numeric(), ...) {
   metrics <- list2function(metrics)
-  metrics(x, y, ...)
+  metrics(x, y, times = times)
 }
