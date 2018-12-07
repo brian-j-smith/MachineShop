@@ -15,6 +15,7 @@
 #'   \code{\link{CoxModel}}            \tab     \tab     \tab S \cr
 #'   \code{\link{EarthModel}}          \tab f   \tab n   \tab   \cr
 #'   \code{\link{FDAModel}}            \tab f   \tab     \tab   \cr
+#'   \code{\link{GAMBoostModel}}       \tab f   \tab n   \tab S \cr
 #'   \code{\link{GBMModel}}            \tab f   \tab n   \tab S \cr
 #'   \code{\link{GLMModel}}            \tab b   \tab n   \tab   \cr
 #'   \code{\link{GLMNetModel}}         \tab f   \tab m,n \tab S \cr
