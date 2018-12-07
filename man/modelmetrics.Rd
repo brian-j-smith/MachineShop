@@ -13,18 +13,20 @@ modelmetrics(x, ...)
 
 \method{modelmetrics}{Resamples}(x, ..., na.rm = TRUE)
 
-\method{modelmetrics}{factor}(x, y, metrics = c(Accuracy = accuracy,
-  Kappa = kappa, ROCAUC = roc_auc, Sensitivity = sensitivity, Specificity =
-  specificity, Brier = brier), ...)
+\method{modelmetrics}{factor}(x, y, metrics = c(Accuracy =
+  MachineShop::accuracy, Kappa = MachineShop::kappa, ROCAUC =
+  MachineShop::roc_auc, Sensitivity = MachineShop::sensitivity, Specificity
+  = MachineShop::specificity, Brier = MachineShop::brier), ...)
 
-\method{modelmetrics}{matrix}(x, y, metrics = c(R2 = r2, RMSE = rmse, MAE
-  = mae), ...)
+\method{modelmetrics}{matrix}(x, y, metrics = c(R2 = MachineShop::r2,
+  RMSE = MachineShop::rmse, MAE = MachineShop::mae), ...)
 
-\method{modelmetrics}{numeric}(x, y, metrics = c(R2 = r2, RMSE = rmse,
-  MAE = mae), ...)
+\method{modelmetrics}{numeric}(x, y, metrics = c(R2 = MachineShop::r2,
+  RMSE = MachineShop::rmse, MAE = MachineShop::mae), ...)
 
-\method{modelmetrics}{Surv}(x, y, metrics = c(CIndex = cindex, ROC =
-  roc_auc, Brier = brier), ...)
+\method{modelmetrics}{Surv}(x, y, metrics = c(CIndex =
+  MachineShop::cindex, ROC = MachineShop::roc_auc, Brier =
+  MachineShop::brier), ...)
 }
 \arguments{
 \item{x}{observed responses or class containing observed and predicted

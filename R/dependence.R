@@ -30,7 +30,7 @@
 #' 
 dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
                        n = 10, intervals = c("uniform", "quantile"),
-                       stats = c("Mean" = mean)) {
+                       stats = c("Mean" = base::mean)) {
   
   stopifnot(is(object, "MLModelFit"))
 

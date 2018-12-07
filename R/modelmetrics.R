@@ -60,13 +60,13 @@ modelmetrics.Resamples <- function(x, ..., na.rm = TRUE) {
 #' @param metrics function, one or more function names, or list of named
 #' functions to include in the calculation of performance metrics.
 #' 
-modelmetrics.factor <- function(x, y,
-                                metrics = c("Accuracy" = accuracy,
-                                            "Kappa" = kappa,
-                                            "ROCAUC" = roc_auc,
-                                            "Sensitivity" = sensitivity,
-                                            "Specificity" = specificity,
-                                            "Brier" = brier), ...) {
+modelmetrics.factor <- function(x, y, metrics =
+                                  c("Accuracy" = MachineShop::accuracy,
+                                    "Kappa" = MachineShop::kappa,
+                                    "ROCAUC" = MachineShop::roc_auc,
+                                    "Sensitivity" = MachineShop::sensitivity,
+                                    "Specificity" = MachineShop::specificity,
+                                    "Brier" = MachineShop::brier), ...) {
   metrics <- list2function(metrics)
   metrics(x, y, ...)
 }
@@ -74,10 +74,10 @@ modelmetrics.factor <- function(x, y,
 
 #' @rdname modelmetrics
 #' 
-modelmetrics.matrix <- function(x, y,
-                                metrics = c("R2" = r2,
-                                            "RMSE" = rmse,
-                                            "MAE" = mae), ...) {
+modelmetrics.matrix <- function(x, y, metrics =
+                                  c("R2" = MachineShop::r2,
+                                    "RMSE" = MachineShop::rmse,
+                                    "MAE" = MachineShop::mae), ...) {
   metrics <- list2function(metrics)
   metrics(x, y, ...)
 }
@@ -85,10 +85,10 @@ modelmetrics.matrix <- function(x, y,
 
 #' @rdname modelmetrics
 #' 
-modelmetrics.numeric <- function(x, y,
-                                 metrics = c("R2" = r2,
-                                             "RMSE" = rmse,
-                                             "MAE" = mae), ...) {
+modelmetrics.numeric <- function(x, y, metrics =
+                                   c("R2" = MachineShop::r2,
+                                     "RMSE" = MachineShop::rmse,
+                                     "MAE" = MachineShop::mae), ...) {
   metrics <- list2function(metrics)
   metrics(x, y, ...)
 }
@@ -108,10 +108,10 @@ modelmetrics.numeric <- function(x, y,
 #' pred <- predict(gbmfit, newdata = Melanoma, type = "prob")
 #' modelmetrics(obs, pred)
 #' 
-modelmetrics.Surv <- function(x, y,
-                              metrics = c("CIndex" = cindex,
-                                          "ROC" = roc_auc,
-                                          "Brier" = brier), ...) {
+modelmetrics.Surv <- function(x, y, metrics =
+                                c("CIndex" = MachineShop::cindex,
+                                  "ROC" = MachineShop::roc_auc,
+                                  "Brier" = MachineShop::brier), ...) {
   metrics <- list2function(metrics)
   metrics(x, y, ...)
 }

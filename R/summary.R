@@ -19,11 +19,11 @@
 #' \code{\link{diff}}, \code{\link{tune}}, \code{\link{confusion}}
 #' 
 summary.ModelMetrics <- function(object,
-                                 stats = c("Mean" = mean,
-                                           "Median" = median,
-                                           "SD" = sd,
-                                           "Min" = min,
-                                           "Max" = max),
+                                 stats = c("Mean" = base::mean,
+                                           "Median" = stats::median,
+                                           "SD" = stats::sd,
+                                           "Min" = base::min,
+                                           "Max" = base::max),
                                  na.rm = TRUE, ...) {
   stats <- list2function(stats)
 
@@ -60,11 +60,11 @@ summary.ModelMetrics <- function(object,
 #' summary(res)
 #' 
 summary.Resamples <- function(object,
-                              stats = c("Mean" = mean,
-                                        "Median" = median,
-                                        "SD" = sd,
-                                        "Min" = min,
-                                        "Max" = max),
+                              stats = c("Mean" = base::mean,
+                                        "Median" = stats::median,
+                                        "SD" = stats::sd,
+                                        "Min" = base::min,
+                                        "Max" = base::max),
                               na.rm = TRUE, ...) {
   summary(modelmetrics(object), stats = stats, na.rm = na.rm)
 }
@@ -73,11 +73,11 @@ summary.Resamples <- function(object,
 #' @rdname summary-methods
 #' 
 summary.MLModelTune <- function(object,
-                                stats = c("Mean" = mean,
-                                          "Median" = median,
-                                          "SD" = sd,
-                                          "Min" = min,
-                                          "Max" = max),
+                                stats = c("Mean" = base::mean,
+                                          "Median" = stats::median,
+                                          "SD" = stats::sd,
+                                          "Min" = base::min,
+                                          "Max" = base::max),
                                 na.rm = TRUE, ...) {
   summary(object@resamples, stats = stats, na.rm = na.rm, ...)
 }

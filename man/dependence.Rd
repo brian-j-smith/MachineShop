@@ -6,7 +6,7 @@
 \usage{
 dependence(object, data = NULL, select = NULL, interaction = FALSE,
   n = 10, intervals = c("uniform", "quantile"), stats = c(Mean =
-  mean))
+  base::mean))
 }
 \arguments{
 \item{object}{\code{MLModelFit} object.}

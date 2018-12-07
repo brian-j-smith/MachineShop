@@ -9,14 +9,17 @@
 \alias{summary.ConfusionResamples}
 \title{Model Performance Summary}
 \usage{
-\method{summary}{ModelMetrics}(object, stats = c(Mean = mean, Median =
-  median, SD = sd, Min = min, Max = max), na.rm = TRUE, ...)
+\method{summary}{ModelMetrics}(object, stats = c(Mean = base::mean,
+  Median = stats::median, SD = stats::sd, Min = base::min, Max =
+  base::max), na.rm = TRUE, ...)
 
-\method{summary}{Resamples}(object, stats = c(Mean = mean, Median =
-  median, SD = sd, Min = min, Max = max), na.rm = TRUE, ...)
+\method{summary}{Resamples}(object, stats = c(Mean = base::mean, Median =
+  stats::median, SD = stats::sd, Min = base::min, Max = base::max),
+  na.rm = TRUE, ...)
 
-\method{summary}{MLModelTune}(object, stats = c(Mean = mean, Median =
-  median, SD = sd, Min = min, Max = max), na.rm = TRUE, ...)
+\method{summary}{MLModelTune}(object, stats = c(Mean = base::mean, Median
+  = stats::median, SD = stats::sd, Min = base::min, Max = base::max),
+  na.rm = TRUE, ...)
 
 \method{summary}{ConfusionMatrix}(object, ...)
 
