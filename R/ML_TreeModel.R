@@ -26,6 +26,9 @@
 #'
 TreeModel <- function(mincut = 5, minsize = 10, mindev = 0.01,
                       split = c("deviance", "gini")) {
+  
+  split <- match.arg(split)
+  
   MLModel(
     name = "TreeModel",
     packages = "tree",
