@@ -27,6 +27,7 @@ with the \code{\link{modelinfo}} function.
   \code{\link{FDAModel}}            \tab f   \tab     \tab   \cr
   \code{\link{GAMBoostModel}}       \tab f   \tab n   \tab S \cr
   \code{\link{GBMModel}}            \tab f   \tab n   \tab S \cr
+  \code{\link{GLMBoostModel}}       \tab f   \tab n   \tab S \cr
   \code{\link{GLMModel}}            \tab b   \tab n   \tab   \cr
   \code{\link{GLMNetModel}}         \tab f   \tab m,n \tab S \cr
   \code{\link{KNNModel}}            \tab f,o \tab n   \tab   \cr

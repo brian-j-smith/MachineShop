@@ -398,6 +398,40 @@ S
 
 <td style="text-align:left;">
 
+Gradient Boosting with Linear Models
+
+</td>
+
+<td style="text-align:center;">
+
+GLMBoostModel
+
+</td>
+
+<td style="text-align:center;">
+
+b
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+S
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 Generalized Linear Models
 
 </td>
@@ -1592,18 +1626,18 @@ modelinfo() %>% names
 #>  [1] "AdaBagModel"         "AdaBoostModel"       "C50Model"           
 #>  [4] "CForestModel"        "CoxModel"            "CoxStepAICModel"    
 #>  [7] "EarthModel"          "FDAModel"            "GAMBoostModel"      
-#> [10] "GBMModel"            "GLMModel"            "GLMStepAICModel"    
-#> [13] "GLMNetModel"         "KNNModel"            "LDAModel"           
-#> [16] "LMModel"             "MDAModel"            "NaiveBayesModel"    
-#> [19] "NNetModel"           "PDAModel"            "PLSModel"           
-#> [22] "POLRModel"           "QDAModel"            "RandomForestModel"  
-#> [25] "RangerModel"         "RPartModel"          "StackedModel"       
-#> [28] "SuperModel"          "SurvRegModel"        "SurvRegStepAICModel"
-#> [31] "SVMModel"            "SVMANOVAModel"       "SVMBesselModel"     
-#> [34] "SVMLaplaceModel"     "SVMLinearModel"      "SVMPolyModel"       
-#> [37] "SVMRadialModel"      "SVMSplineModel"      "SVMTanhModel"       
-#> [40] "TreeModel"           "XGBModel"            "XGBDARTModel"       
-#> [43] "XGBLinearModel"      "XGBTreeModel"
+#> [10] "GBMModel"            "GLMBoostModel"       "GLMModel"           
+#> [13] "GLMStepAICModel"     "GLMNetModel"         "KNNModel"           
+#> [16] "LDAModel"            "LMModel"             "MDAModel"           
+#> [19] "NaiveBayesModel"     "NNetModel"           "PDAModel"           
+#> [22] "PLSModel"            "POLRModel"           "QDAModel"           
+#> [25] "RandomForestModel"   "RangerModel"         "RPartModel"         
+#> [28] "StackedModel"        "SuperModel"          "SurvRegModel"       
+#> [31] "SurvRegStepAICModel" "SVMModel"            "SVMANOVAModel"      
+#> [34] "SVMBesselModel"      "SVMLaplaceModel"     "SVMLinearModel"     
+#> [37] "SVMPolyModel"        "SVMRadialModel"      "SVMSplineModel"     
+#> [40] "SVMTanhModel"        "TreeModel"           "XGBModel"           
+#> [43] "XGBDARTModel"        "XGBLinearModel"      "XGBTreeModel"
 
 ## Models by response type
 modelinfo(factor(0)) %>% names
