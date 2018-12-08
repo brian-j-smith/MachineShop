@@ -5,8 +5,7 @@
 #' @param dist assumed distribution for y variable.
 #' @param scale optional fixed value for the scale.
 #' @param parms a list of fixed parameters.
-#' @param control a list of control values, in the format produced by
-#' \code{\link[survival]{survreg.control}}.
+#' @param ... arguments passed to \code{\link[survival]{survreg.control}}.
 #' 
 #' @details
 #' \describe{
@@ -18,17 +17,26 @@
 #'
 #' @return \code{MLModel} class object.
 #' 
-#' @seealso \code{\link[rms]{psm}}, \code{\link[survival]{survreg}}
+#' @seealso \code{\link[rms]{psm}}, \code{\link[survival]{survreg}},
+#' \code{\link[survival]{survreg.control}}, \code{\link[MASS]{stepAIC}},
+#' \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
 #' 
 SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
                                   "logistic", "lognormal", "logloglogistic"),
-                         scale = 0, parms = NULL, control = NULL) {
+                         scale = 0, parms = NULL, ...) {
+  
   dist <- match.arg(dist)
+  
+  args <- params(environment())
+  is_main <- names(args) %in% c("dist", "scale", "parms")
+  params <- args[is_main]
+  params$control <- as.call(c(.(survival::survreg.control), args[!is_main]))
+  
   MLModel(
     name = "SurvRegModel",
     packages = "rms",
     types = "Surv",
-    params = params(environment()),
+    params = params,
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
@@ -45,6 +53,7 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
     },
     varimp = function(object, ...) varimp_pchisq(object)
   )
+  
 }
 
 
@@ -77,20 +86,24 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
 SurvRegStepAICModel <- function(dist = c("weibull", "exponential", "gaussian",
                                          "logistic", "lognormal",
                                          "logloglogistic"),
-                                scale = 0, parms = NULL, control = NULL,
+                                scale = 0, parms = NULL, ...,
                                 direction = c("both", "backward", "forward"),
                                 scope = NULL, k = 2, trace = FALSE,
                                 steps = 1000) {
-  dist <- match.arg(dist)
+  
   direction <- match.arg(direction)
+  
   args <- params(environment())
-  stepmodel <- SurvRegModel(dist = dist, scale = scale, parms = parms,
-                            control = control)
+  is_step <- names(args) %in% c("direction", "scope", "k", "trace", "steps")
+  params <- args[is_step]
+  
+  stepmodel <- SurvRegModel(dist = dist, scale = scale, parms = parms, ...)
+
   MLModel(
     name = "SurvRegStepAICModel",
-    packages = c("MASS", stepmodel@packages),
+    packages = c(stepmodel@packages, "MASS"),
     types = stepmodel@types,
-    params = args,
+    params = c(stepmodel@params, params),
     nvars = stepmodel@nvars,
     fit = function(formula, data, weights, direction = "both", scope = list(),
                    k = 2, trace = 1, steps = 1000, ...) {
@@ -103,4 +116,5 @@ SurvRegStepAICModel <- function(dist = c("weibull", "exponential", "gaussian",
     predict = fitbit(stepmodel, "predict"),
     varimp = fitbit(stepmodel, "varimp")
   )
+  
 }

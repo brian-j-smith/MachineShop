@@ -6,7 +6,7 @@
 #' @param family description of the error distribution and link function to be
 #' used in the model.  Set automatically according to the class type of the
 #' response variable.
-#' @param control list of parameters for controlling the fitting process.
+#' @param ... arguments passed to \code{\link[stats]{glm.control}}.
 #' 
 #' @details
 #' \describe{
@@ -18,7 +18,8 @@
 #' 
 #' @return \code{MLModel} class object.
 #' 
-#' @seealso \code{\link[stats]{glm}}, \code{\link{fit}}, \code{\link{resample}},
+#' @seealso \code{\link[stats]{glm}}, \code{\link[stats]{glm.control}},
+#' \code{\link[MASS]{stepAIC}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}
 #' 
 #' @examples
@@ -26,12 +27,18 @@
 #' 
 #' fit(medv ~ ., data = Boston, model = GLMModel())
 #' 
-GLMModel <- function(family = NULL, control = NULL) {
+GLMModel <- function(family = NULL, ...) {
+  
+  args <- params(environment())
+  is_main <- names(args) %in% "family"
+  params <- args[is_main]
+  params$control <- as.call(c(.(list), args[!is_main]))
+  
   MLModel(
     name = "GLMModel",
     packages = "stats",
     types = c("binary", "numeric"),
-    params = params(environment()),
+    params = params,
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, family = NULL, ...) {
       environment(formula) <- environment()
@@ -47,6 +54,7 @@ GLMModel <- function(family = NULL, control = NULL) {
     },
     varimp = function(object, ...) varimp_pchisq(object)
   )
+  
 }
 
 
@@ -65,21 +73,24 @@ GLMModel <- function(family = NULL, control = NULL) {
 #' \code{stepAIC}. Larger values may give more information on the fitting
 #' process.
 #' @param steps maximum number of steps to be considered.
-#' 
-#' @seealso \code{\link[MASS]{stepAIC}}
 #'
-GLMStepAICModel <- function(family = NULL, control = NULL,
+GLMStepAICModel <- function(family = NULL, ...,
                             direction = c("both", "backward", "forward"),
-                            scope = NULL, k = 2, trace = FALSE, steps = 1000)
-  {
+                            scope = NULL, k = 2, trace = FALSE, steps = 1000) {
+  
   direction <- match.arg(direction)
+  
   args <- params(environment())
-  stepmodel <- GLMModel(family = family, control = control)
+  is_step <- names(args) %in% c("direction", "scope", "k", "trace", "steps")
+  params <- args[is_step]
+  
+  stepmodel <- GLMModel(family = family, ...)
+  
   MLModel(
     name = "GLMStepAICModel",
-    packages = c("MASS", stepmodel@packages),
+    packages = c(stepmodel@packages, "MASS"),
     types = stepmodel@types,
-    params = args,
+    params = c(stepmodel@params, params),
     nvars = stepmodel@nvars,
     fit = function(formula, data, weights, family = NULL, direction = "both",
                    scope = list(), k = 2, trace = 1, steps = 1000, ...) {
@@ -98,4 +109,5 @@ GLMStepAICModel <- function(family = NULL, control = NULL,
     predict = fitbit(stepmodel, "predict"),
     varimp = fitbit(stepmodel, "varimp")
   )
+  
 }

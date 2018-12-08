@@ -5,18 +5,17 @@
 \alias{GLMStepAICModel}
 \title{Generalized Linear Model}
 \usage{
-GLMModel(family = NULL, control = NULL)
+GLMModel(family = NULL, ...)
 
-GLMStepAICModel(family = NULL, control = NULL, direction = c("both",
-  "backward", "forward"), scope = NULL, k = 2, trace = FALSE,
-  steps = 1000)
+GLMStepAICModel(family = NULL, ..., direction = c("both", "backward",
+  "forward"), scope = NULL, k = 2, trace = FALSE, steps = 1000)
 }
 \arguments{
 \item{family}{description of the error distribution and link function to be
 used in the model.  Set automatically according to the class type of the
 response variable.}
 
-\item{control}{list of parameters for controlling the fitting process.}
+\item{...}{arguments passed to \code{\link[stats]{glm.control}}.}
 
 \item{direction}{mode of stepwise search, can be one of \code{"both"}
 (default), \code{"backward"}, or \code{"forward"}.}
@@ -57,8 +56,7 @@ fit(medv ~ ., data = Boston, model = GLMModel())
 
 }
 \seealso{
-\code{\link[stats]{glm}}, \code{\link{fit}}, \code{\link{resample}},
+\code{\link[stats]{glm}}, \code{\link[stats]{glm.control}},
+\code{\link[MASS]{stepAIC}}, \code{\link{fit}}, \code{\link{resample}},
 \code{\link{tune}}
-
-\code{\link[MASS]{stepAIC}}
 }

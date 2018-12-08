@@ -5,17 +5,16 @@
 \alias{CoxStepAICModel}
 \title{Proportional Hazards Regression Model}
 \usage{
-CoxModel(ties = c("efron", "breslow", "exact"), control = NULL)
+CoxModel(ties = c("efron", "breslow", "exact"), ...)
 
-CoxStepAICModel(ties = c("efron", "breslow", "exact"), control = NULL,
+CoxStepAICModel(ties = c("efron", "breslow", "exact"), ...,
   direction = c("both", "backward", "forward"), scope = NULL, k = 2,
   trace = FALSE, steps = 1000)
 }
 \arguments{
 \item{ties}{character string specifying the method for tie handling.}
 
-\item{control}{object of class \code{\link[survival]{coxph.control}}
-specifying iteration limit and other control options.}
+\item{...}{arguments passed to \code{\link[survival]{coxph.control}}.}
 
 \item{direction}{mode of stepwise search, can be one of \code{"both"}
 (default), \code{"backward"}, or \code{"forward"}.}
@@ -59,8 +58,7 @@ fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
 
 }
 \seealso{
-\code{\link[rms]{cph}}, \code{\link[survival]{coxph}}
-
-\code{\link[MASS]{stepAIC}}, \code{\link{fit}},
-\code{\link{resample}}, \code{\link{tune}}
+\code{\link[rms]{cph}}, \code{\link[survival]{coxph}},
+\code{\link[survival]{coxph.control}}, \code{\link[MASS]{stepAIC}},
+\code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
 }
