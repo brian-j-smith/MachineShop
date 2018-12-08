@@ -29,6 +29,7 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
                      kernel = c("optimal", "biweight", "cos", "epanechnikov",
                                 "gaussian", "inv", "rank", "rectangular",
                                 "triangular", "triweight")) {
+  
   kernel <- match.arg(kernel)
   
   MLModel(
@@ -53,4 +54,5 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
       if (pred$response == "continuous") pred$fitted.values else pred$prob
     }
   )
+  
 }

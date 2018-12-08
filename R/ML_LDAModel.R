@@ -37,6 +37,7 @@ LDAModel <- function(prior = NULL, tol = 1e-4,
                      method = c("moment", "mle", "mve", "t"), nu = 5,
                      dimen = NULL,
                      use = c("plug-in", "debiased", "predictive")) {
+  
   method <- match.arg(method)
   use <- match.arg(use)
   
@@ -59,4 +60,5 @@ LDAModel <- function(prior = NULL, tol = 1e-4,
               method = object$use)$posterior
     }
   )
+  
 }

@@ -20,6 +20,7 @@
 #' fit(medv ~ ., data = Boston, model = LMModel())
 #'
 LMModel <- function() {
+  
   MLModel(
     name = "LMModel",
     packages = "stats",
@@ -53,4 +54,5 @@ LMModel <- function() {
     },
     varimp = function(object, ...) varimp_pchisq(object)
   )
+  
 }

@@ -21,6 +21,7 @@
 #' fit(Species ~ ., data = iris, model = NaiveBayesModel())
 #'
 NaiveBayesModel <- function(laplace = 0) {
+  
   MLModel(
     name = "NaiveBayesModel",
     packages = "e1071",
@@ -36,4 +37,5 @@ NaiveBayesModel <- function(laplace = 0) {
       predict(object, newdata = newdata, type = "raw")
     }
   )
+  
 }

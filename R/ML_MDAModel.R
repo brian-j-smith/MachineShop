@@ -47,6 +47,7 @@
 MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
                      dimension = sum(subclasses) - 1, eps = .Machine$double.eps,
                      iter = 5, method = .(mda::polyreg), trace = FALSE, ...) {
+  
   MLModel(
     name = "MDAModel",
     packages = "mda",
@@ -62,4 +63,5 @@ MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
       predict(object, newdata = newdata, type = "posterior", prior = prior)
     }
   )
+  
 }

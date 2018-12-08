@@ -34,6 +34,7 @@
 QDAModel <- function(prior = NULL, method = c("moment", "mle", "mve", "t"),
                      nu = 5,
                      use = c("plug-in", "predictive", "debiased", "looCV")) {
+  
   method <- match.arg(method)
   use <- match.arg(use)
   
@@ -55,4 +56,5 @@ QDAModel <- function(prior = NULL, method = c("moment", "mle", "mve", "t"),
               method = object$use)$posterior
     }
   )
+  
 }

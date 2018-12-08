@@ -84,4 +84,5 @@ RangerModel <- function(num.trees = 500, mtry = NULL,
       ranger::importance(object)
     }
   )
+  
 }

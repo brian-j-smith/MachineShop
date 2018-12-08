@@ -26,7 +26,9 @@
 #' 
 POLRModel <- function(method = c("logistic", "probit", "loglog", "cloglog",
                                  "cauchit")) {
+  
   method <- match.arg(method)
+  
   MLModel(
     name = "POLRModel",
     packages = "MASS",
@@ -46,4 +48,5 @@ POLRModel <- function(method = c("logistic", "probit", "loglog", "cloglog",
       pchisq(beta^2 / s2, 1)
     }
   )
+  
 }

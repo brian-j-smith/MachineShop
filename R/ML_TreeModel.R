@@ -43,4 +43,5 @@ TreeModel <- function(mincut = 5, minsize = 10, mindev = 0.01,
       predict(object, newdata = newdata)
     }
   )
+  
 }

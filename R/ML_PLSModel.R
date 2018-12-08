@@ -24,6 +24,7 @@
 #' fit(medv ~ ., data = Boston, model = PLSModel())
 #'
 PLSModel <- function(ncomp = 1, scale = FALSE) {
+  
   MLModel(
     name = "PLSModel",
     packages = "pls",
@@ -59,4 +60,5 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
       vi
     }
   )
+  
 }

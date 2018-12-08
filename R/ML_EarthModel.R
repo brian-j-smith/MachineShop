@@ -71,4 +71,5 @@ EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
       earth::evimp(object)[, match.arg(metric), drop = FALSE]
     }
   )
+  
 }

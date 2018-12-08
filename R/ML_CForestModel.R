@@ -40,9 +40,11 @@ CForestModel <- function(teststat = c("quad", "max"),
                                       "Bonferroni", "MonteCarlo"),
                          mincriterion = 0, ntree = 500, mtry = 5,
                          replace = TRUE, fraction = 0.632) {
+  
   teststat <- match.arg(teststat)
   testtype <- match.arg(testtype)
   args <- params(environment())
+  
   MLModel(
     name = "CForestModel",
     packages = "party",
@@ -77,4 +79,5 @@ CForestModel <- function(teststat = c("quad", "max"),
       party::varimp(object, ...)
     }
   )
+  
 }

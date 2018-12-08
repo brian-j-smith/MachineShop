@@ -50,8 +50,10 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
                           .(ifelse(nvars < 500, "covariance", "naive")),
                         type.logistic = c("Newton", "modified.Newton"),
                         type.multinomial = c("ungrouped", "grouped")) {
+  
   type.logistic <- match.arg(type.logistic)
   type.multinomial <- match.arg(type.multinomial)
+  
   MLModel(
     name = "GLMNetModel",
     packages = "glmnet",
@@ -104,4 +106,5 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
       }
     }
   )
+  
 }

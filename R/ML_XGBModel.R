@@ -42,6 +42,7 @@
 #' 
 XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
                      print_every_n = 1) {
+  
   MLModel(
     name = "XGBModel",
     packages = "xgboost",
@@ -97,6 +98,7 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
       }
     }
   )
+  
 }
 
 

@@ -40,7 +40,9 @@ SVMModel <- function(scaled = TRUE, type = NULL,
                                 "splinedot"),
                      kpar = "automatic", C = 1, nu = 0.2, epsilon = 0.1,
                      cache = 40, tol = 0.001, shrinking = TRUE) {
+  
   kernel <- match.arg(kernel)
+  
   MLModel(
     name = "SVMModel",
     packages = "kernlab",
@@ -58,6 +60,7 @@ SVMModel <- function(scaled = TRUE, type = NULL,
                                      "probabilities", "response"))
     }
   )
+  
 }
 
 

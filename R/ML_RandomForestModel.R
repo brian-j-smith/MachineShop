@@ -34,6 +34,7 @@ RandomForestModel <- function(ntree = 500,
                               replace = TRUE,
                               nodesize = .(if (is.factor(y)) 1 else 5),
                               maxnodes = NULL) {
+  
   MLModel(
     name = "RandomForestModel",
     packages = "randomForest",
@@ -53,4 +54,5 @@ RandomForestModel <- function(ntree = 500,
       randomForest::importance(object)
     }
   )
+  
 }

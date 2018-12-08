@@ -45,6 +45,7 @@
 #'
 FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
                      method = .(mda::polyreg), ...) {
+  
   MLModel(
     name = "FDAModel",
     packages = "mda",
@@ -59,6 +60,7 @@ FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
       predict(object, newdata = newdata, type = "posterior", prior = prior)
     }
   )
+  
 }
 
 
