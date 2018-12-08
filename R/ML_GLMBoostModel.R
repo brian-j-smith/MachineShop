@@ -67,7 +67,7 @@ GLMBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
           cumhaz <- basehaz(y, exp(lp), times)
           exp(exp(newlp) %o% -cumhaz)
         } else {
-          exp(newlp)
+          -exp(newlp)
         }
       } else {
         predict(object, newdata = newdata, type = "response")

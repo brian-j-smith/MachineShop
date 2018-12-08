@@ -85,7 +85,7 @@ GAMBoostModel <- function(family = NULL,
           cumhaz <- basehaz(y, exp(lp), times)
           exp(exp(newlp) %o% -cumhaz)
         } else {
-          exp(newlp)
+          -exp(newlp)
         }
       } else {
         predict(object, newdata = newdata, type = "response")

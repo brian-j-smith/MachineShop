@@ -74,7 +74,7 @@ RangerModel <- function(num.trees = 500, mtry = NULL,
           x <- cbind(1, pred$survival)
           x[, ncol(x)] <- 0
           fx <- pred$unique.death.times
-          -1 / drop(fx %*% diff(t(x)))
+          -drop(fx %*% diff(t(x)))
         }
       } else {
         pred$predictions

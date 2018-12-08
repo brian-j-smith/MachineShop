@@ -56,7 +56,7 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
           lapply(function(fit) predict(fit, times)) %>%
           (function(args) do.call(rbind, args))
       } else {
-        predict(object, newdata = newdata)
+        -predict(object, newdata = newdata)
       }
     },
     varimp = function(object, ...) {

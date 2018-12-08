@@ -136,7 +136,7 @@ setMethod(".cindex", c("factor", "numeric"),
 
 setMethod(".cindex", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    rcorr.cens(-predicted, observed)[["C Index"]]
+    rcorr.cens(predicted, observed)[["C Index"]]
   }
 )
 

@@ -66,7 +66,7 @@ CForestModel <- function(teststat = c("quad", "max"),
           sapply(pred, function(fit) {
             x <- c(1, fit$surv, 0)
             fx <- c(fit$time, max_time)
-            -1 / sum(fx * diff(x))
+            -sum(fx * diff(x))
           })
         }
       } else {

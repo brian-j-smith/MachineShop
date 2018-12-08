@@ -53,7 +53,7 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
         rms::survest(object, newdata = newdata, times = times,
                      conf.int = FALSE, se.fit = FALSE)$surv %>% as.matrix
       } else {
-        exp(predict(object, newdata = newdata, type = "lp"))
+        -exp(predict(object, newdata = newdata, type = "lp"))
       }
     },
     varimp = function(object, ...) varimp_pchisq(object)
