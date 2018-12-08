@@ -2,16 +2,34 @@
 
 ## Version Updates
 
-## 0.3
+## 0.4.0
+* Implement models: ``AdaBagModel``, ``AdaBoostModel``, ``BlackBoostModel``, ``EarthModel``, ``FDAModel``, ``GAMBoostModel``, ``GLMBoostModel``, ``MDAModel``, ``NaiveBayesModel``, ``PDAModel``, ``RangerModel``, ``RPartModel``, ``TreeModel``
+* Implement user-specified performance metrics in ``modelmetrics`` function.
+* Implement metrics: ``accuracy``, ``brier``, ``cindex``, ``cross_entropy``, ``f_score``, ``kappa``, ``mae``, ``mse``, ``npv``, ``ppv``, ``pr_auc``, ``precision``, ``r2``, ``recall``, ``roc_auc``, ``roc_index``, ``sensitivity``, ``specificity``, ``weighted_kappa``.
+* Add ``confusion`` method for ``factor``.
+* Add ``cutoff`` argument to ``confusion`` function.
+* Add ``modelinfo`` and ``metricinfo`` functions.
+* Add ``modelmetrics`` method for ``Resamples``.
+* Add ``ModelMetrics`` class with ``print`` and ``summary`` methods.
+* Add ``response`` method for ``recipe``.
+* Extend ``metrics`` and ``stats`` function arguments to accept function names.
+* Change ``CoxModel``, ``GLMModel``, and ``SurvRegModel`` constructor definitions so that model control parameters are specified directly instead of with a separate ``control`` argument/structure.
+* Change ``predict(..., times = numeric())`` function calls to survival model fits to return predicted values in the same direction as survival times.
+* Change ``predict(..., times = numeric())`` function calls to ``CForestModel`` fits to return predicted means instead of medians.
+* Change ``tune`` function argument ``metrics`` to be defined in terms of a user-specified metric or metrics.
+* Deprecate MLControl arguments ``cutoff``, ``cutoff_index``, ``na.rm``, and ``summary``.
+
+
+## 0.3.0
 * Implement linear models (``LMModel``), linear discriminant analysis (``LDAModel``), and quadratic discriminant analysis (``QDAModel``).
 * Implement confusion matrices.
 * Support matrix response variables.
 * Support user-specified stratification variables for resampling via the ``strata`` argument of ``ModelFrame`` or the role of ``"case_strata"`` for recipe variables. 
 * Support user-specified case weights for model fitting via the role of ``"case_weight"`` for recipe variables.
 * Provide fallback for models with undefined variable importance.
-* #2: Update the importing of ``prepper`` due to its relocation from ``rsample`` to ``recipes``.
+* Update the importing of ``prepper`` due to its relocation from ``rsample`` to ``recipes``.
 
-## 0.2
+## 0.2.0
 
 * Implement partial dependence, calibration, and lift estimation and plotting.
 * Implement k-nearest neighbors model (``KNNModel``), stacked regression models (``StackedModel``), super learner models (``SuperModel``), and extreme gradient boosting (``XGBModel``).
