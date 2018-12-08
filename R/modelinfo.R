@@ -35,6 +35,7 @@ setMethod(".modelinfo", "NULL",
     model_labels <- c(
       "AdaBagModel" = "Bagging with Classification Trees",
       "AdaBoostModel" = "Boosting with Classification Trees",
+      "BlackBoostModel" = "Gradient Boosting with Regression Trees",
       "C50Model" = "C5.0 Classification",
       "CForestModel" = "Conditional Random Forests",
       "CoxModel" = "Cox Regression",

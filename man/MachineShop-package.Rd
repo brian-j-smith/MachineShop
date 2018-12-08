@@ -20,6 +20,7 @@ with the \code{\link{modelinfo}} function.
   \tab \strong{Survival} \cr
   \code{\link{AdaBagModel}}         \tab f   \tab     \tab   \cr
   \code{\link{AdaBoostModel}}       \tab f   \tab     \tab   \cr
+  \code{\link{BlackBoostModel}}     \tab f   \tab n   \tab S \cr
   \code{\link{C50Model}}            \tab f   \tab     \tab   \cr
   \code{\link{CForestModel}}        \tab f   \tab n   \tab S \cr
   \code{\link{CoxModel}}            \tab     \tab     \tab S \cr
