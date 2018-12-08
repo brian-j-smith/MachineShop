@@ -55,9 +55,9 @@ C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
                      earlyStopping = TRUE) {
   
   args <- params(environment())
-  mainargs <- names(args) %in% c("trials", "rules")
-  params <- args[mainargs]
-  params$control <- as.call(c(.(C50::C5.0Control), args[!mainargs]))
+  is_main <- names(args) %in% c("trials", "rules")
+  params <- args[is_main]
+  params$control <- as.call(c(.(C50::C5.0Control), args[!is_main]))
   
   MLModel(
     name = "C50Model",
@@ -76,4 +76,5 @@ C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
       C50::C5imp(object, metric = match.arg(metric))
     }
   )
+  
 }

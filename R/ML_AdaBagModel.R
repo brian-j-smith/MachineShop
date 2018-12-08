@@ -37,9 +37,9 @@ AdaBagModel <- function(mfinal = 100, minsplit = 20,
                         xval = 10, surrogatestyle = 0, maxdepth = 30) {
   
   args <- params(environment())
-  mainargs <- names(args) %in% "mfinal"
-  params <- args[mainargs]
-  params$control <- as.call(c(.(list), args[!mainargs]))
+  is_main <- names(args) %in% "mfinal"
+  params <- args[is_main]
+  params$control <- as.call(c(.(list), args[!is_main]))
   
   MLModel(
     name = "AdaBagModel",
@@ -60,4 +60,5 @@ AdaBagModel <- function(mfinal = 100, minsplit = 20,
       object$importance
     }
   )
+  
 }

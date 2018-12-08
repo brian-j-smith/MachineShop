@@ -45,9 +45,9 @@ AdaBoostModel <- function(boos = TRUE, mfinal = 100,
   coeflearn <- match.arg(coeflearn)
   
   args <- params(environment())
-  mainargs <- names(args) %in% c("boos", "mfinal", "coeflearn")
-  params <- args[mainargs]
-  params$control <- as.call(c(.(list), args[!mainargs]))
+  is_main <- names(args) %in% c("boos", "mfinal", "coeflearn")
+  params <- args[is_main]
+  params$control <- as.call(c(.(list), args[!is_main]))
   
   MLModel(
     name = "AdaBoostModel",
@@ -68,4 +68,5 @@ AdaBoostModel <- function(boos = TRUE, mfinal = 100,
       object$importance
     }
   )
+  
 }

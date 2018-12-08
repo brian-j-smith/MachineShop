@@ -37,9 +37,9 @@ GLMBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
                           stopintern = FALSE, trace = FALSE) {
   
   args <- params(environment())
-  mainargs <- names(args) %in% "family"
-  params <- args[mainargs]
-  params$control <- as.call(c(.(mboost::boost_control), args[!mainargs]))
+  is_main <- names(args) %in% "family"
+  params <- args[is_main]
+  params$control <- as.call(c(.(mboost::boost_control), args[!is_main]))
 
   MLModel(
     name = "GLMBoostModel",

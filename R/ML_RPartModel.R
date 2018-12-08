@@ -33,14 +33,12 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
                        cp = 0.01, maxcompete = 4, maxsurrogate = 5,
                        usesurrogate = 2, xval = 10, surrogatestyle = 0,
                        maxdepth = 30) {
-  args <- list()
-  args$control <- params(environment())
   
   MLModel(
     name = "RPartModel",
     packages = c("rpart", "partykit"),
     types = c("factor", "numeric", "Surv"),
-    params = args,
+    params = list(control = as.call(c(.(list), params(environment())))),
     nvars = function(data) nvars(data, design = "terms"),
     fit = function(formula, data, weights, ...) {
       environment(formula) <- environment()
@@ -65,4 +63,5 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
       object$variable.importance
     }
   )
+  
 }

@@ -58,14 +58,13 @@ BlackBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
   testtype <- match.arg(testtype)
   
   args <- params(environment())
-  mainargs <- names(args) %in% "family"
-  controlargs <- names(args) %in% c("mstop", "nu", "risk", "stopintern",
-                                    "trace")
+  is_main <- names(args) %in% "family"
+  is_control <- names(args) %in% c("mstop", "nu", "risk", "stopintern", "trace")
 
-  params <- args[mainargs]
-  params$control <- as.call(c(.(mboost::boost_control), args[controlargs]))
+  params <- args[is_main]
+  params$control <- as.call(c(.(mboost::boost_control), args[is_control]))
   params$tree_controls <- as.call(c(.(partykit::ctree_control),
-                                    args[!(mainargs | controlargs)]))
+                                    args[!(is_main | is_control)]))
 
   MLModel(
     name = "BlackBoostModel",
