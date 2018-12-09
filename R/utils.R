@@ -176,21 +176,23 @@ list2function <- function(x) {
 }
 
 
-make_unique_levels <- function(..., which) {
-  args <- list()
-  
+make_unique_levels <- function(x, which) {
   level_names <- list()
-  for (x in list(...)) {
-    if (is.null(x[[which]])) x[[which]] <- which
-    x[[which]] <- as.factor(x[[which]])
-    args <- c(args, list(x))
-    level_names <- c(level_names, list(levels(x[[which]])))
+  for (i in seq(x)) {
+    if (is.null(x[[i]][[which]])) x[[i]][[which]] <- which
+    x[[i]][[which]] <- as.factor(x[[i]][[which]])
+    arg_name <- names(x)[i]
+    level_names[[i]] <- if (!is.null(arg_name) && nzchar(arg_name)) {
+      rep(arg_name, nlevels(x[[i]][[which]]))
+    } else {
+      levels(x[[i]][[which]])
+    }
   }
   level_names <- level_names %>% unlist %>% make.unique %>% relist(level_names)
   
-  for (i in seq(args)) levels(args[[i]][[which]]) <- level_names[[i]]
+  for (i in seq(x)) levels(x[[i]][[which]]) <- level_names[[i]]
   
-  args
+  x
 }
 
 

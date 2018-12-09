@@ -364,7 +364,7 @@ MLModelTune <- setClass("MLModelTune",
 
 
 Calibration <- function(...) {
-  args <- make_unique_levels(..., which = "Model")
+  args <- make_unique_levels(list(...), which = "Model")
   structure(do.call(rbind, args), class = c("Calibration", "data.frame"))
 }
 
@@ -386,7 +386,7 @@ HTestResamples <- setClass("HTestResamples",
 
 
 Lift <- function(...) {
-  args <- make_unique_levels(..., which = "Model")
+  args <- make_unique_levels(list(...), which = "Model")
   structure(do.call(rbind, args), class = c("Lift", "data.frame"))
 }
 

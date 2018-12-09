@@ -36,9 +36,7 @@ lift <- function(x, y = NULL, ...) {
 
 .lift.Resamples <- function(x, ...) {
   lf_list <- by(x, x$Model, function(data) {
-    lf <- lift(data$Observed, data$Predicted)
-    lf$Model <- as.character(data$Model[1])
-    lf
+    lift(data$Observed, data$Predicted)
   }, simplify = FALSE)
   do.call(Lift, lf_list)
 }

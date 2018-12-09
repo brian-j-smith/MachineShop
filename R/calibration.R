@@ -44,9 +44,7 @@ calibration <- function(x, y = NULL, n = 10, times = numeric(), ...) {
 .calibration.Resamples <- function(x, n, ...) {
   times <- x@control@surv_times
   cal_list <- by(x, x$Model, function(data) {
-    cal <- calibration(data$Observed, data$Predicted, n = n, times = times)
-    cal$Model <- as.character(data$Model[1])
-    cal
+    calibration(data$Observed, data$Predicted, n = n, times = times)
   }, simplify = FALSE)
   do.call(Calibration, cal_list)
 }
