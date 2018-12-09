@@ -5,7 +5,7 @@
 \alias{plot.ModelMetrics}
 \alias{plot.Resamples}
 \alias{plot.MLModelTune}
-\alias{plot.CalibrationResamples}
+\alias{plot.Calibration}
 \alias{plot.ConfusionMatrix}
 \alias{plot.ConfusionResamples}
 \alias{plot.LiftResamples}
@@ -22,8 +22,8 @@
 \method{plot}{MLModelTune}(x, metrics = NULL, stat = mean,
   type = c("boxplot", "density", "errorbar", "line", "violin"), ...)
 
-\method{plot}{CalibrationResamples}(x, type = c("line", "point"),
-  se = FALSE, ...)
+\method{plot}{Calibration}(x, type = c("line", "point"), se = FALSE,
+  ...)
 
 \method{plot}{ConfusionMatrix}(x, ...)
 

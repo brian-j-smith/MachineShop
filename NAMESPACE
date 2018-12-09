@@ -22,7 +22,7 @@ importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
            vcov)
 importFrom(survival, is.Surv, Surv, survfit)
 importFrom(survivalROC, survivalROC)
-importFrom(utils, combn, head, stack, tail)
+importFrom(utils, combn, head, relist, stack, tail)
 
 
 export(.,
@@ -134,7 +134,7 @@ S3method(print, Resamples)
 S3method(plot, MLModelTune)
 S3method(plot, PartialDependence)
 S3method(plot, Resamples)
-S3method(plot, CalibrationResamples)
+S3method(plot, Calibration)
 S3method(plot, ConfusionMatrix)
 S3method(plot, ConfusionResamples)
 S3method(plot, LiftResamples)

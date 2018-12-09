@@ -176,6 +176,24 @@ list2function <- function(x) {
 }
 
 
+make_unique_levels <- function(..., which) {
+  args <- list()
+  
+  level_names <- list()
+  for (x in list(...)) {
+    if (is.null(x[[which]])) x[[which]] <- which
+    x[[which]] <- as.factor(x[[which]])
+    args <- c(args, list(x))
+    level_names <- c(level_names, list(levels(x[[which]])))
+  }
+  level_names <- level_names %>% unlist %>% make.unique %>% relist(level_names)
+  
+  for (i in seq(args)) levels(args[[i]][[which]]) <- level_names[[i]]
+  
+  args
+}
+
+
 match_indices <- function(indices, choices) {
   lookup <- structure(seq(choices), names = choices)
   indices <- na.omit(names(lookup)[lookup[indices]])

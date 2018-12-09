@@ -1,17 +1,20 @@
 #' Model Calibration
 #' 
-#' Calculate calibration estimates from observed and resampled response variable
-#' values.
+#' Calculate calibration estimates from observed and predicted responses.
 #' 
-#' @param x \code{Resamples} object.
+#' @param x observed responses or \code{Resamples} object of observed and
+#' predicted responses.
+#' @param y predicted responses.
 #' @param n number of resampled response variable bins within which to
 #' calculate observed mean values.
+#' @param times numeric vector of follow-up times if \code{y} contains predicted
+#' survival events.
 #' @param ... arguments passed to other methods.
 #' 
-#' @return \code{CalibrationResamples} class object that inherits from
-#' \code{data.frame}.
+#' @return \code{Calibration} class object that inherits from \code{data.frame}.
 #'  
-#' @seealso \code{\link{resample}}, \code{\link{plot}}
+#' @seealso \code{\link{response}}, \code{\link{predict}},
+#' \code{\link{resample}}, \code{\link{plot}}
 #' 
 #' @examples
 #' library(survival)
@@ -23,34 +26,46 @@
 #' (cal <- calibration(res))
 #' plot(cal)
 #' 
-calibration <- function(x, n = 10, ...) {
-  stopifnot(is(x, "Resamples"))
-  
-  times <- x@control@surv_times
-  
-  cal_list <- by(x, x$Model, function(data) {
-    .calibration(data$Observed, data$Predicted, n, times = times) %>%
-      cbind(Model = data$Model[1])
-  }, simplify = FALSE)
-
-  CalibrationResamples(do.call(rbind, cal_list))
+calibration <- function(x, y = NULL, n = 10, times = numeric(), ...) {
+  .calibration(x, y, n = n, times = times)
 }
 
 
-setGeneric(".calibration", function(observed, predicted, n, ...)
-  standardGeneric(".calibration"))
+.calibration <- function(x, ...) {
+  UseMethod(".calibration")
+}
 
 
-setMethod(".calibration", c("ANY", "ANY"),
-  function(observed, predicted, n, ...) {
+.calibration.default <- function(x, y, n, times, ...) {
+  Calibration(.calibration_default(x, y, n = n, times = times))
+}
+
+
+.calibration.Resamples <- function(x, n, ...) {
+  times <- x@control@surv_times
+  cal_list <- by(x, x$Model, function(data) {
+    cal <- calibration(data$Observed, data$Predicted, n = n, times = times)
+    cal$Model <- as.character(data$Model[1])
+    cal
+  }, simplify = FALSE)
+  do.call(Calibration, cal_list)
+}
+
+
+setGeneric(".calibration_default", function(observed, predicted, ...)
+  standardGeneric(".calibration_default"))
+
+
+setMethod(".calibration_default", c("ANY", "ANY"),
+  function(observed, predicted, ...) {
     stop("calibration unavailable for response type")
   }
 )
 
 
-setMethod(".calibration", c("factor", "matrix"),
+setMethod(".calibration_default", c("factor", "matrix"),
   function(observed, predicted, n, ...) {
-    cal <- .calibration(model.matrix(~ observed - 1), predicted, n)
+    cal <- calibration(model.matrix(~ observed - 1), predicted, n = n)
     bounds <- c("Lower", "Upper")
     cal$Observed[, bounds] <- pmin(pmax(cal$Observed[, bounds], 0), 1)
     cal
@@ -58,10 +73,10 @@ setMethod(".calibration", c("factor", "matrix"),
 )
 
 
-setMethod(".calibration", c("factor", "numeric"),
+setMethod(".calibration_default", c("factor", "numeric"),
   function(observed, predicted, n, ...) {
     cal <-
-      .calibration(as.numeric(observed == levels(observed)[2]), predicted, n)
+      calibration(as.numeric(observed == levels(observed)[2]), predicted, n = n)
     bounds <- c("Lower", "Upper")
     cal$Observed[, bounds] <- pmin(pmax(cal$Observed[, bounds], 0), 1)
     cal
@@ -69,7 +84,7 @@ setMethod(".calibration", c("factor", "numeric"),
 )
 
 
-setMethod(".calibration", c("matrix", "matrix"),
+setMethod(".calibration_default", c("matrix", "matrix"),
   function(observed, predicted, n, ...) {
     observed <- stack(as.data.frame(observed))
     predicted <- stack(as.data.frame(predicted))
@@ -85,14 +100,14 @@ setMethod(".calibration", c("matrix", "matrix"),
 )
 
 
-setMethod(".calibration", c("numeric", "numeric"),
+setMethod(".calibration_default", c("numeric", "numeric"),
   function(observed, predicted, n, ...) {
-    .calibration(cbind(y = observed), cbind(y = predicted), n)
+    calibration(cbind(y = observed), cbind(y = predicted), n = n)
   }
 )
 
 
-setMethod(".calibration", c("Surv", "matrix"),
+setMethod(".calibration_default", c("Surv", "matrix"),
   function(observed, predicted, n, times, ...) {
     num_obs <- nrow(predicted)
     colnames(predicted) <- paste0("Time", seq(times))

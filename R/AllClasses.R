@@ -363,8 +363,9 @@ MLModelTune <- setClass("MLModelTune",
 )
 
 
-CalibrationResamples <- function(object) {
-  structure(object, class = c("CalibrationResamples", "data.frame"))
+Calibration <- function(...) {
+  args <- make_unique_levels(..., which = "Model")
+  structure(do.call(rbind, args), class = c("Calibration", "data.frame"))
 }
 
 

@@ -4,23 +4,27 @@
 \alias{calibration}
 \title{Model Calibration}
 \usage{
-calibration(x, n = 10, ...)
+calibration(x, y = NULL, n = 10, times = numeric(), ...)
 }
 \arguments{
-\item{x}{\code{Resamples} object.}
+\item{x}{observed responses or \code{Resamples} object of observed and
+predicted responses.}
+
+\item{y}{predicted responses.}
 
 \item{n}{number of resampled response variable bins within which to
 calculate observed mean values.}
 
+\item{times}{numeric vector of follow-up times if \code{y} contains predicted
+survival events.}
+
 \item{...}{arguments passed to other methods.}
 }
 \value{
-\code{CalibrationResamples} class object that inherits from
-\code{data.frame}.
+\code{Calibration} class object that inherits from \code{data.frame}.
 }
 \description{
-Calculate calibration estimates from observed and resampled response variable
-values.
+Calculate calibration estimates from observed and predicted responses.
 }
 \examples{
 library(survival)
@@ -34,5 +38,6 @@ plot(cal)
 
 }
 \seealso{
+\code{\link{response}}, \code{\link{predict}},
 \code{\link{resample}}, \code{\link{plot}}
 }

@@ -137,8 +137,7 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
 #' 
 #' @param se logical indicating whether to include standard error bars.
 #' 
-plot.CalibrationResamples <- function(x, type = c("line", "point"), 
-                                      se = FALSE, ...) {
+plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
   type <- match.arg(type)
   
   aes_response <- if (nlevels(x$Response) > 1) {
