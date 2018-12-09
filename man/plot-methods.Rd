@@ -6,8 +6,8 @@
 \alias{plot.Resamples}
 \alias{plot.MLModelTune}
 \alias{plot.Calibration}
+\alias{plot.Confusion}
 \alias{plot.ConfusionMatrix}
-\alias{plot.ConfusionResamples}
 \alias{plot.Lift}
 \alias{plot.PartialDependence}
 \alias{plot.VarImp}
@@ -25,9 +25,9 @@
 \method{plot}{Calibration}(x, type = c("line", "point"), se = FALSE,
   ...)
 
-\method{plot}{ConfusionMatrix}(x, ...)
+\method{plot}{Confusion}(x, ...)
 
-\method{plot}{ConfusionResamples}(x, ...)
+\method{plot}{ConfusionMatrix}(x, ...)
 
 \method{plot}{Lift}(x, find = NULL, ...)
 

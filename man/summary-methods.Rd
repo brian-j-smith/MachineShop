@@ -5,8 +5,8 @@
 \alias{summary.ModelMetrics}
 \alias{summary.Resamples}
 \alias{summary.MLModelTune}
+\alias{summary.Confusion}
 \alias{summary.ConfusionMatrix}
-\alias{summary.ConfusionResamples}
 \title{Model Performance Summary}
 \usage{
 \method{summary}{ModelMetrics}(object, stats = c(Mean = base::mean,
@@ -21,9 +21,9 @@
   = stats::median, SD = stats::sd, Min = base::min, Max = base::max),
   na.rm = TRUE, ...)
 
-\method{summary}{ConfusionMatrix}(object, ...)
+\method{summary}{Confusion}(object, ...)
 
-\method{summary}{ConfusionResamples}(object, ...)
+\method{summary}{ConfusionMatrix}(object, ...)
 }
 \arguments{
 \item{object}{object to summarize.}

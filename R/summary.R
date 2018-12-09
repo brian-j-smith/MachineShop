@@ -85,6 +85,13 @@ summary.MLModelTune <- function(object,
 
 #' @rdname summary-methods
 #' 
+summary.Confusion <- function(object, ...) {
+  structure(lapply(object, summary), class = "listof")
+}
+
+
+#' @rdname summary-methods
+#' 
 summary.ConfusionMatrix <- function(object, ...) {
   n <- sum(object)
   object <- object / n
@@ -109,13 +116,6 @@ summary.ConfusionMatrix <- function(object, ...) {
                    Majority = max(observed),
                    Kappa = 1 - (1 - sum(agreement)) /
                      (1 - sum(observed * predicted))) 
-}
-
-
-#' @rdname summary-methods
-#' 
-summary.ConfusionResamples <- function(object, ...) {
-  structure(lapply(object, summary), class = "listof")
 }
 
 

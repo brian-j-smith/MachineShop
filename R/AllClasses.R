@@ -369,13 +369,13 @@ Calibration <- function(...) {
 }
 
 
-ConfusionMatrix <- function(object) {
-   structure(object, class = c("ConfusionMatrix", "table"))
+Confusion <- function(...) {
+  structure(list(...), class = c("Confusion", "listof"))
 }
 
 
-ConfusionResamples <- function(object) {
-  structure(object, class = c("ConfusionResamples", "listof"))
+ConfusionMatrix <- function(object) {
+   structure(object, class = c("ConfusionMatrix", "table"))
 }
 
 

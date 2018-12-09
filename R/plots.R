@@ -180,6 +180,17 @@ plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
 
 #' @rdname plot-methods
 #' 
+plot.Confusion <- function(x, ...) {
+  pl <- list()
+  for (name in names(x)) {
+    pl[[name]] <- plot(x[[name]]) + labs(title = name)
+  }
+  pl
+}
+
+
+#' @rdname plot-methods
+#' 
 plot.ConfusionMatrix <- function(x, ...) {
   df <- as.data.frame(prop.table(x), responseName = "Value")
   df$Predicted <- with(df, factor(Predicted, rev(levels(Predicted))))
@@ -187,17 +198,6 @@ plot.ConfusionMatrix <- function(x, ...) {
     geom_raster() +
     labs(fill = "Probability") +
     scale_fill_gradient(trans = "reverse")
-}
-
-
-#' @rdname plot-methods
-#' 
-plot.ConfusionResamples <- function(x, ...) {
-  pl <- list()
-  for (name in names(x)) {
-    pl[[name]] <- plot(x[[name]]) + labs(title = name)
-  }
-  pl
 }
 
 

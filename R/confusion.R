@@ -13,8 +13,9 @@
 #' 
 #' @return
 #' The return value is a \code{ConfusionMatrix} class object that inherits from
-#' \code{table} if \code{x} is a factor or a \code{ConfusionResamples} object
-#' that inherits from \code{list} if \code{x} is a \code{Resamples} object.
+#' \code{table} if \code{x} and \code{y} responses are specified or a
+#' \code{ConfusionResamples} object that inherits from \code{list} if \code{x}
+#' is a \code{Resamples} object.
 #'  
 #' @seealso \code{\link{response}}, \code{\link{predict}},
 #' \code{\link{resample}}, \code{\link{plot}}, \code{\link{summary}}
@@ -33,22 +34,17 @@ confusion <- function(x, y = NULL, cutoff = 0.5, ...) {
 }
 
 
-.confusion.factor <- function(x, y, cutoff, ...) {
+.confusion.default <- function(x, y, cutoff, ...) {
   if (!is.null(cutoff)) y <- convert_response(x, y, cutoff = cutoff)
   ConfusionMatrix(.confusion_matrix(x, y))
 }
 
 
 .confusion.Resamples <- function(x, cutoff, ...) {
-  if (!is.null(cutoff)) {
-    x$Predicted <- convert_response(x$Observed, x$Predicted, cutoff = cutoff)
-  }
-  conf <- by(x, list(Model = x$Model), function(data) {
-    ConfusionMatrix(.confusion_matrix(data$Observed, data$Predicted))
+  conf_list <- by(x, list(Model = x$Model), function(data) {
+   confusion(data$Observed, data$Predicted, cutoff = cutoff)
   }, simplify = FALSE)
-
-  ConfusionResamples(structure(as(conf, "list"), names = names(conf)))
-
+  do.call(Confusion, conf_list)
 }
 
 
