@@ -206,7 +206,7 @@ plot.ConfusionResamples <- function(x, ...) {
 #' @param find numeric percent of observed events at which to display reference
 #' lines indicating the corresponding percent tested in lift plots.
 #' 
-plot.LiftResamples <- function(x, find = NULL, ...) {
+plot.Lift <- function(x, find = NULL, ...) {
   aes_model <- if (nlevels(x$Model) > 1) {
     aes(x = Tested, y = Found, color = Model)
   } else {

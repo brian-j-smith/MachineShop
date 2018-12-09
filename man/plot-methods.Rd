@@ -8,7 +8,7 @@
 \alias{plot.Calibration}
 \alias{plot.ConfusionMatrix}
 \alias{plot.ConfusionResamples}
-\alias{plot.LiftResamples}
+\alias{plot.Lift}
 \alias{plot.PartialDependence}
 \alias{plot.VarImp}
 \title{Model Performance Plots}
@@ -29,7 +29,7 @@
 
 \method{plot}{ConfusionResamples}(x, ...)
 
-\method{plot}{LiftResamples}(x, find = NULL, ...)
+\method{plot}{Lift}(x, find = NULL, ...)
 
 \method{plot}{PartialDependence}(x, stats = NULL, ...)
 

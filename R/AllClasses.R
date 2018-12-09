@@ -385,8 +385,9 @@ HTestResamples <- setClass("HTestResamples",
 )
 
 
-LiftResamples <- function(object) {
-  structure(object, class = c("LiftResamples", "data.frame"))
+Lift <- function(...) {
+  args <- make_unique_levels(..., which = "Model")
+  structure(do.call(rbind, args), class = c("Lift", "data.frame"))
 }
 
 

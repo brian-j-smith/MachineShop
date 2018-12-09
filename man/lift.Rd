@@ -4,20 +4,21 @@
 \alias{lift}
 \title{Model Lift}
 \usage{
-lift(x, ...)
+lift(x, y = NULL, ...)
 }
 \arguments{
-\item{x}{\code{Resamples} object.}
+\item{x}{observed responses or \code{Resamples} object of observed and
+predicted responses.}
+
+\item{y}{predicted responses.}
 
 \item{...}{arguments passed to other methods.}
 }
 \value{
-\code{LiftResamples} class object that inherits from
-\code{data.frame}.
+\code{Lift} class object that inherits from \code{data.frame}.
 }
 \description{
-Calculate lift estimates from observed and resampled response variable
-values.
+Calculate lift estimates from observed and predicted responses.
 }
 \examples{
 library(MASS)
@@ -28,5 +29,6 @@ plot(lf)
 
 }
 \seealso{
+\code{\link{response}}, \code{\link{predict}},
 \code{\link{resample}}, \code{\link{plot}}
 }
