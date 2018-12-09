@@ -316,10 +316,6 @@ setMethod("initialize", "Resamples",
         stop("values to combine must be Resamples objects")
       }
       
-      if (!all(sapply(args, function(x) nlevels(x$Model) == 1))) {
-        stop("resamples must be from single models")
-      }
-
       control <- .Data@control
       is_equal_control <- function(x) isTRUE(all.equal(x@control, control))
       if (!all(sapply(args, is_equal_control))) {
@@ -330,25 +326,14 @@ setMethod("initialize", "Resamples",
       if (!all(sapply(args, function(x) x@strata == strata))) {
         stop("resamples have different strata variables")
       }
-
-      .Data <- Reduce(append, args)
-
-      old_model_names <- sapply(args, function(x) levels(x$Model))
-      model_names <- names(args)
-      if (is.null(model_names)) {
-        model_names <- old_model_names
-      } else {
-        model_names <- ifelse(nzchar(model_names), model_names, old_model_names)
-      }
-      model_names <- make.names(model_names, unique = TRUE)
-      num_times <- sapply(args, nrow)
-      .Data$Model <- factor(rep(model_names, num_times), levels = model_names)
+      
+      .Data <- Reduce(append, make_unique_levels(args, which = "Model"))
     }
     
-    resample_vars <- c("Model", "Resample", "Case", "Observed", "Predicted")
-    is_missing <- !(resample_vars %in% names(.Data))
+    var_names <- c("Model", "Resample", "Case", "Observed", "Predicted")
+    is_missing <- !(var_names %in% names(.Data))
     if (any(is_missing)) {
-      stop("missing resample variables: ", toString(resample_vars[is_missing]))
+      stop("missing resample variables: ", toString(var_names[is_missing]))
     }
     
     callNextMethod(.Object, .Data, control = control,
