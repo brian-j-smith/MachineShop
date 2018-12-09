@@ -6,12 +6,14 @@
 * Implement models: ``AdaBagModel``, ``AdaBoostModel``, ``BlackBoostModel``, ``EarthModel``, ``FDAModel``, ``GAMBoostModel``, ``GLMBoostModel``, ``MDAModel``, ``NaiveBayesModel``, ``PDAModel``, ``RangerModel``, ``RPartModel``, ``TreeModel``
 * Implement user-specified performance metrics in ``modelmetrics`` function.
 * Implement metrics: ``accuracy``, ``brier``, ``cindex``, ``cross_entropy``, ``f_score``, ``kappa``, ``mae``, ``mse``, ``npv``, ``ppv``, ``pr_auc``, ``precision``, ``r2``, ``recall``, ``roc_auc``, ``roc_index``, ``sensitivity``, ``specificity``, ``weighted_kappa``.
-* Add ``confusion`` method for ``factor``.
 * Add ``cutoff`` argument to ``confusion`` function.
 * Add ``modelinfo`` and ``metricinfo`` functions.
 * Add ``modelmetrics`` method for ``Resamples``.
 * Add ``ModelMetrics`` class with ``print`` and ``summary`` methods.
 * Add ``response`` method for ``recipe``.
+* Extend ``calibration`` arguments to observed and predicted responses.
+* Extend ``confusion`` arguments to observed and predicted responses.
+* Extend ``lift`` arguments to observed and predicted responses.
 * Extend ``metrics`` and ``stats`` function arguments to accept function names.
 * Change ``CoxModel``, ``GLMModel``, and ``SurvRegModel`` constructor definitions so that model control parameters are specified directly instead of with a separate ``control`` argument/structure.
 * Change ``predict(..., times = numeric())`` function calls to survival model fits to return predicted values in the same direction as survival times.
