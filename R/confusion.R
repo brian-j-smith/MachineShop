@@ -2,6 +2,8 @@
 #' 
 #' Calculate confusion matrices of predicted and observed responses.
 #' 
+#' @rdname confusion
+#' 
 #' @param x factor of observed responses or \code{Resamples} object of observed
 #' and predicted responses.
 #' @param y predicted responses.
@@ -9,7 +11,6 @@
 #' for binary responses.  If \code{NULL}, then responses are summed directly
 #' over predicted class probabilities and will thus appear as decimal numbers
 #' that can be interpreted as expected counts.
-#' @param ... arguments passed to other methods.
 #' 
 #' @return
 #' The return value is a \code{ConfusionMatrix} class object that inherits from
