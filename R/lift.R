@@ -2,10 +2,11 @@
 #' 
 #' Calculate lift estimates from observed and predicted responses.
 #' 
+#' @rdname lift
+#' 
 #' @param x observed responses or \code{Resamples} object of observed and
 #' predicted responses.
 #' @param y predicted responses.
-#' @param ... arguments passed to other methods.
 #' 
 #' @return \code{Lift} class object that inherits from \code{data.frame}.
 #'  

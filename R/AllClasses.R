@@ -367,10 +367,35 @@ HTestResamples <- setClass("HTestResamples",
 )
 
 
+#' @name lift
+#' @rdname lift
+#' 
+#' @param ... named or unnamed \code{lift} output to combine together with the
+#' \code{Lift} constructor.
+#' 
 Lift <- function(...) {
-  args <- make_unique_levels(list(...), which = "Model")
-  structure(do.call(rbind, args), class = c("Lift", "data.frame"))
+  args <- list(...)
+  
+  if (!all(sapply(args, is.data.frame))) {
+    stop("values to combine must inherit from data.frame")
+  }
+  
+  var_names <- c("Found", "Tested")
+  for (x in args) {
+    is_missing <- !(var_names %in% names(x))
+    if (any(is_missing)) {
+      stop("missing lift variables: ", toString(var_names[is_missing]))
+    }
+  }
+
+  args <- make_unique_levels(args, which = "Model")
+  new("Lift", do.call(append, args))
 }
+
+
+setClass("Lift",
+  contains = "data.frame"
+)
 
 
 ModelMetrics <- setClass("ModelMetrics",
