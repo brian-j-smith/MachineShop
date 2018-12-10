@@ -295,7 +295,7 @@ Resamples <- function(...) {
       stop("resamples have different strata variables")
     }
     
-    .Data <- Reduce(append, make_unique_levels(args, which = "Model"))
+    .Data <- do.call(append, make_unique_levels(args, which = "Model"))
   }
   
   var_names <- c("Model", "Resample", "Case", "Observed", "Predicted")
