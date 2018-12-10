@@ -11,10 +11,14 @@
 * Add ``modelmetrics`` method for ``Resamples``.
 * Add ``ModelMetrics`` class with ``print`` and ``summary`` methods.
 * Add ``response`` method for ``recipe``.
+* Export ``Calibration`` constructor.
+* Export ``Confusion`` constructor.
+* Export ``Lift`` constructor.
 * Extend ``calibration`` arguments to observed and predicted responses.
 * Extend ``confusion`` arguments to observed and predicted responses.
 * Extend ``lift`` arguments to observed and predicted responses.
 * Extend ``metrics`` and ``stats`` function arguments to accept function names.
+* Extend ``Resamples`` to arguments with multiple models.
 * Change ``CoxModel``, ``GLMModel``, and ``SurvRegModel`` constructor definitions so that model control parameters are specified directly instead of with a separate ``control`` argument/structure.
 * Change ``predict(..., times = numeric())`` function calls to survival model fits to return predicted values in the same direction as survival times.
 * Change ``predict(..., times = numeric())`` function calls to ``CForestModel`` fits to return predicted means instead of medians.
