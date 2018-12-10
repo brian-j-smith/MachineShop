@@ -265,7 +265,7 @@ resample_args <- function(train, test, model, control, strata = character()) {
   df$Predicted <- predict(trainfit, test, type = "prob",
                           times = control@surv_times)
   
-  list(df, control = control, strata = strata)
+  list(df, .control = control, .strata = strata)
 }
 
 
@@ -274,5 +274,5 @@ Resamples.list <- function(x) {
   resample_df <- Reduce(append, resample_list)
   num_times <- sapply(resample_list, nrow)
   resample_df$Resample <- rep(seq_along(num_times), num_times)
-  Resamples(resample_df, control = x[[1]]$control, strata = x[[1]]$strata)
+  Resamples(resample_df, .control = x[[1]]$.control, .strata = x[[1]]$.strata)
 }

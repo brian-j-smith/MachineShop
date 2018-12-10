@@ -269,55 +269,48 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 #' resampling \code{control} object.
 #' 
 Resamples <- function(...) {
-  new("Resamples", ...)
+  .Resamples(...)
+}
+
+
+.Resamples <- function(..., .control = NULL, .strata = character()) {
+  args <- list(...)
+  
+  if (length(args) == 0) stop("no resample output given")
+  
+  .Data <- args[[1]]
+  if (length(args) > 1) {
+    if (!all(sapply(args, function(x) is(x, "Resamples")))) {
+      stop("values to combine must be Resamples objects")
+    }
+    
+    .control <- .Data@control
+    is_equal_control <- function(x) isTRUE(all.equal(x@control, .control))
+    if (!all(sapply(args, is_equal_control))) {
+      stop("resamples have different control structures")
+    }
+    
+    .strata <- .Data@strata
+    if (!all(sapply(args, function(x) x@strata == .strata))) {
+      stop("resamples have different strata variables")
+    }
+    
+    .Data <- Reduce(append, make_unique_levels(args, which = "Model"))
+  }
+  
+  var_names <- c("Model", "Resample", "Case", "Observed", "Predicted")
+  is_missing <- !(var_names %in% names(.Data))
+  if (any(is_missing)) {
+    stop("missing resample variables: ", toString(var_names[is_missing]))
+  }
+  
+  new("Resamples", .Data, control = .control, strata = as.character(.strata))
 }
 
 
 setClass("Resamples",
   slots = c(control = "MLControl", strata = "character"),
   contains = "data.frame"
-)
-
-
-setMethod("initialize", "Resamples",
-  function(.Object, ..., control = NULL, strata = character()) {
-    args <- list(...)
-    
-    if (length(args) == 0) stop("no resample output given")
-    
-    .Data <- args[[1]]
-    if (length(args) == 1) {
-      if (is(.Data, "Resamples")) {
-        strata <- .Data@strata
-      }
-    } else {
-      if (!all(sapply(args, function(x) is(x, "Resamples")))) {
-        stop("values to combine must be Resamples objects")
-      }
-      
-      control <- .Data@control
-      is_equal_control <- function(x) isTRUE(all.equal(x@control, control))
-      if (!all(sapply(args, is_equal_control))) {
-        stop("resamples have different control structures")
-      }
-      
-      strata <- .Data@strata
-      if (!all(sapply(args, function(x) x@strata == strata))) {
-        stop("resamples have different strata variables")
-      }
-      
-      .Data <- Reduce(append, make_unique_levels(args, which = "Model"))
-    }
-    
-    var_names <- c("Model", "Resample", "Case", "Observed", "Predicted")
-    is_missing <- !(var_names %in% names(.Data))
-    if (any(is_missing)) {
-      stop("missing resample variables: ", toString(var_names[is_missing]))
-    }
-    
-    callNextMethod(.Object, .Data, control = control,
-                   strata = as.character(strata))
-  }
 )
 
 
