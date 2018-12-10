@@ -12,6 +12,9 @@
 #' @param cutoff threshold above which probabilities are classified as success
 #' for binary responses.
 #' @param f function to calculate a desired sensitivity-specificity tradeoff.
+#' @param power power to which positional distances of off-diagonals from the
+#' main diagonal in confusion matrices are raised to calculate
+#' \code{weighted_kappa2}.
 #' @param times numeric vector of follow-up times at which survival events
 #' were predicted.
 #' @param ... arguments passed to or from other methods.
@@ -200,21 +203,21 @@ setMethod(".f_score", c("factor", "numeric"),
 
 #' @rdname metrics
 #' 
-kappa <- function(observed, predicted, cutoff = 0.5, ...) {
-  .kappa(observed, predicted, cutoff = cutoff)
+kappa2 <- function(observed, predicted, cutoff = 0.5, ...) {
+  .kappa2(observed, predicted, cutoff = cutoff)
 }
 
 
-setGeneric(".kappa",
-           function(observed, predicted, ...) standardGeneric(".kappa"))
+setGeneric(".kappa2",
+           function(observed, predicted, ...) standardGeneric(".kappa2"))
 
 
-setMethod(".kappa", c("ANY", "ANY"),
+setMethod(".kappa2", c("ANY", "ANY"),
   function(observed, predicted, ...) numeric()
 )
 
 
-setMethod(".kappa", c("factor", "factor"),
+setMethod(".kappa2", c("factor", "factor"),
   function(observed, predicted, ...) {
     p <- prop.table(confusion(observed, predicted))
     1 - (1 - sum(diag(p))) / (1 - sum(rowSums(p) * colSums(p)))
@@ -222,18 +225,18 @@ setMethod(".kappa", c("factor", "factor"),
 )
 
 
-setMethod(".kappa", c("factor", "matrix"),
+setMethod(".kappa2", c("factor", "matrix"),
   function(observed, predicted, ...) {
     predicted <- convert_response(observed, predicted)
-    kappa(observed, predicted)
+    kappa2(observed, predicted)
   }
 )
 
 
-setMethod(".kappa", c("factor", "numeric"),
+setMethod(".kappa2", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
     predicted <- convert_response(observed, predicted, cutoff = cutoff)
-    kappa(observed, predicted)
+    kappa2(observed, predicted)
   }
 )
 
@@ -596,36 +599,33 @@ setMethod(".specificity", c("factor", "numeric"),
 
 #' @rdname metrics
 #' 
-#' @param weight definition of weights for the kappa metric as linear
-#' (\code{"equal"}) or squared (\code{"squared"}) distance between ordinal
-#' categories.
-#' 
-weighted_kappa <- function(observed, predicted, weight = c("equal", "squared"),
-                           ...) {
-  .weighted_kappa(observed, predicted, weight = match.arg(weight))
+weighted_kappa2 <- function(observed, predicted, power = 1, ...) {
+  .weighted_kappa2(observed, predicted, power = power)
 }
 
 
-setGeneric(".weighted_kappa",
-           function(observed, predicted, ...) standardGeneric(".weighted_kappa"))
+setGeneric(".weighted_kappa2", function(observed, predicted, ...)
+  standardGeneric(".weighted_kappa2"))
 
 
-setMethod(".weighted_kappa", c("ANY", "ANY"),
+setMethod(".weighted_kappa2", c("ANY", "ANY"),
   function(observed, predicted, ...) numeric()
 )
 
 
-setMethod(".weighted_kappa", c("ordered", "factor"),
-  function(observed, predicted, weight, ...) {
-    ratings <- cbind(observed, predicted)
-    kappa2(ratings, weight = weight)$value
+setMethod(".weighted_kappa2", c("ordered", "ordered"),
+  function(observed, predicted, power, ...) {
+    n <- confusion(observed, predicted)
+    m <- (rowSums(n) %o% colSums(n)) / sum(n)
+    w <- abs(row(n) - col(n))^power
+    1 - sum(w * n) / sum(w * m)
   }
 )
 
 
-setMethod(".weighted_kappa", c("ordered", "matrix"),
-  function(observed, predicted, weight, ...) {
+setMethod(".weighted_kappa2", c("ordered", "matrix"),
+  function(observed, predicted, power, ...) {
     predicted <- convert_response(observed, predicted)
-    weighted_kappa(observed, predicted, weight = weight)
+    weighted_kappa2(observed, predicted, power = power)
   }
 )

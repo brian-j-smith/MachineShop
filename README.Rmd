@@ -176,7 +176,7 @@ metricinfo(factor(0), matrix(0)) %>% names
 metricinfo(factor(0), numeric(0)) %>% names
 
 ## User-specified model metrics
-modelmetrics(res, c("accuracy", "kappa", "brier", "cross_entropy")) %>% summary
+modelmetrics(res, c("accuracy", "kappa2", "brier", "cross_entropy")) %>% summary
 ```
 
 ### Model Tuning

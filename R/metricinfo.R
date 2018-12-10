@@ -39,7 +39,7 @@ setMethod(".metricinfo", "NULL",
                       "cindex" = "Concordance Index",
                       "cross_entropy" = "Cross Entropy",
                       "f_score" = "F Score",
-                      "kappa" = "Cohen's Kappa",
+                      "kappa2" = "Cohen's Kappa",
                       "mae" = "Mean Absolute Error",
                       "mse" = "Mean Squared Error",
                       "npv" = "Negative Predictive Value",
@@ -52,7 +52,7 @@ setMethod(".metricinfo", "NULL",
                       "roc_index" = "ROC Index",
                       "sensitivity" = "Sensitivity",
                       "specificity" = "Specificity",
-                      "weighted_kappa" = "Weighted Cohen's Kappa")
+                      "weighted_kappa2" = "Weighted Cohen's Kappa")
     
     info <- list()
     for (name in names(metric_labels)) {

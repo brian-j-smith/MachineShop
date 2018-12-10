@@ -63,7 +63,7 @@ modelmetrics.Resamples <- function(x, ..., na.rm = TRUE) {
 #' 
 modelmetrics.factor <- function(x, y, metrics =
                                   c("Accuracy" = MachineShop::accuracy,
-                                    "Kappa" = MachineShop::kappa,
+                                    "Kappa" = MachineShop::kappa2,
                                     "ROCAUC" = MachineShop::roc_auc,
                                     "Sensitivity" = MachineShop::sensitivity,
                                     "Specificity" = MachineShop::specificity,

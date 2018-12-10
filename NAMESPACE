@@ -8,7 +8,6 @@ importFrom(abind, abind, adrop)
 importFrom(foreach, "%dopar%", foreach, registerDoSEQ)
 importFrom(graphics, plot)
 importFrom(Hmisc, rcorr.cens)
-importFrom(irr, kappa2)
 importFrom(magrittr, "%>%")
 importFrom(MLmetrics, PRAUC)
 importFrom(recipes, bake, juice, prep, prepper)
@@ -49,7 +48,7 @@ export(accuracy,
        cindex,
        cross_entropy,
        f_score,
-       kappa,
+       kappa2,
        mae,
        mse,
        npv,
@@ -63,7 +62,7 @@ export(accuracy,
        roc_index,
        sensitivity,
        specificity,
-       weighted_kappa)
+       weighted_kappa2)
 
 export(BootControl,
        CVControl,

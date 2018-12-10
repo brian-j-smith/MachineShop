@@ -7,7 +7,7 @@
 \alias{cindex}
 \alias{cross_entropy}
 \alias{f_score}
-\alias{kappa}
+\alias{kappa2}
 \alias{mae}
 \alias{mse}
 \alias{npv}
@@ -21,7 +21,7 @@
 \alias{roc_index}
 \alias{sensitivity}
 \alias{specificity}
-\alias{weighted_kappa}
+\alias{weighted_kappa2}
 \title{Performance Metrics}
 \usage{
 accuracy(observed, predicted, cutoff = 0.5, ...)
@@ -34,7 +34,7 @@ cross_entropy(observed, predicted, ...)
 
 f_score(observed, predicted, cutoff = 0.5, beta = 1, ...)
 
-kappa(observed, predicted, cutoff = 0.5, ...)
+kappa2(observed, predicted, cutoff = 0.5, ...)
 
 mae(observed, predicted, ...)
 
@@ -63,7 +63,7 @@ sensitivity(observed, predicted, cutoff = 0.5, ...)
 
 specificity(observed, predicted, cutoff = 0.5, ...)
 
-weighted_kappa(observed, predicted, weight = c("equal", "squared"), ...)
+weighted_kappa2(observed, predicted, power = 1, ...)
 }
 \arguments{
 \item{observed}{observed responses.}
@@ -83,9 +83,9 @@ were predicted.}
 
 \item{f}{function to calculate a desired sensitivity-specificity tradeoff.}
 
-\item{weight}{definition of weights for the kappa metric as linear
-(\code{"equal"}) or squared (\code{"squared"}) distance between ordinal
-categories.}
+\item{power}{power to which positional distances of off-diagonals from the
+main diagonal in confusion matrices are raised to calculate
+\code{weighted_kappa2}.}
 }
 \description{
 Compute measures of agreement between observed and predicted responses.

@@ -14,7 +14,7 @@ modelmetrics(x, ...)
 \method{modelmetrics}{Resamples}(x, ..., na.rm = TRUE)
 
 \method{modelmetrics}{factor}(x, y, metrics = c(Accuracy =
-  MachineShop::accuracy, Kappa = MachineShop::kappa, ROCAUC =
+  MachineShop::accuracy, Kappa = MachineShop::kappa2, ROCAUC =
   MachineShop::roc_auc, Sensitivity = MachineShop::sensitivity, Specificity
   = MachineShop::specificity, Brier = MachineShop::brier), cutoff = 0.5,
   ...)

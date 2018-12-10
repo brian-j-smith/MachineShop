@@ -1775,33 +1775,35 @@ modelmetrics(res) %>% summary
 
 ## All available metric functions
 metricinfo() %>% names
-#>  [1] "accuracy"       "brier"          "cindex"         "cross_entropy" 
-#>  [5] "f_score"        "kappa"          "mae"            "mse"           
-#>  [9] "npv"            "ppv"            "pr_auc"         "precision"     
-#> [13] "r2"             "recall"         "roc_auc"        "roc_index"     
-#> [17] "sensitivity"    "specificity"    "weighted_kappa"
+#>  [1] "accuracy"        "brier"           "cindex"         
+#>  [4] "cross_entropy"   "f_score"         "kappa2"         
+#>  [7] "mae"             "mse"             "npv"            
+#> [10] "ppv"             "pr_auc"          "precision"      
+#> [13] "r2"              "recall"          "roc_auc"        
+#> [16] "roc_index"       "sensitivity"     "specificity"    
+#> [19] "weighted_kappa2"
 
 ## Metric functions by observed and predicted response types
 metricinfo(factor(0)) %>% names
 #>  [1] "accuracy"      "brier"         "cindex"        "cross_entropy"
-#>  [5] "f_score"       "kappa"         "npv"           "ppv"          
+#>  [5] "f_score"       "kappa2"        "npv"           "ppv"          
 #>  [9] "pr_auc"        "precision"     "recall"        "roc_auc"      
 #> [13] "roc_index"     "sensitivity"   "specificity"
 metricinfo(factor(0), factor(0)) %>% names
-#> [1] "accuracy" "kappa"
+#> [1] "accuracy" "kappa2"
 metricinfo(factor(0), matrix(0)) %>% names
-#> [1] "accuracy"      "brier"         "cross_entropy" "kappa"
+#> [1] "accuracy"      "brier"         "cross_entropy" "kappa2"
 metricinfo(factor(0), numeric(0)) %>% names
 #>  [1] "accuracy"      "brier"         "cindex"        "cross_entropy"
-#>  [5] "f_score"       "kappa"         "npv"           "ppv"          
+#>  [5] "f_score"       "kappa2"        "npv"           "ppv"          
 #>  [9] "pr_auc"        "precision"     "recall"        "roc_auc"      
 #> [13] "roc_index"     "sensitivity"   "specificity"
 
 ## User-specified model metrics
-modelmetrics(res, c("accuracy", "kappa", "brier", "cross_entropy")) %>% summary
+modelmetrics(res, c("accuracy", "kappa2", "brier", "cross_entropy")) %>% summary
 #>                     Mean    Median         SD          Min       Max NA
 #> accuracy      0.95333333 0.9333333 0.03220306 9.333333e-01 1.0000000  0
-#> kappa         0.93000000 0.9000000 0.04830459 9.000000e-01 1.0000000  0
+#> kappa2        0.93000000 0.9000000 0.04830459 9.000000e-01 1.0000000  0
 #> brier         0.08476969 0.1133233 0.05621648 5.140496e-05 0.1372037  0
 #> cross_entropy 0.22809689 0.1745116 0.21892382 2.802783e-03 0.6422832  0
 ```
