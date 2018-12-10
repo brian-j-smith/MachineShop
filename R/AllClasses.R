@@ -320,10 +320,35 @@ MLModelTune <- setClass("MLModelTune",
 )
 
 
+#' @name calibration
+#' @rdname calibration
+#' 
+#' @param ... named or unnamed \code{calibration} output to combine together
+#' with the \code{Calibration} constructor.
+#' 
 Calibration <- function(...) {
-  args <- make_unique_levels(list(...), which = "Model")
-  structure(do.call(rbind, args), class = c("Calibration", "data.frame"))
+  args <- list(...)
+  
+  if (!all(sapply(args, is.data.frame))) {
+    stop("values to combine must inherit from data.frame")
+  }
+  
+  var_names <- c("Response", "Midpoint", "Observed")
+  for (x in args) {
+    is_missing <- !(var_names %in% names(x))
+    if (any(is_missing)) {
+      stop("missing calibration variables: ", toString(var_names[is_missing]))
+    }
+  }
+
+  args <- make_unique_levels(args, which = "Model")
+  new("Calibration", do.call(append, args))
 }
+
+
+setClass("Calibration",
+  contains = "data.frame"
+)
 
 
 Confusion <- function(...) {

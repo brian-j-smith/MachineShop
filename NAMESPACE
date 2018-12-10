@@ -27,6 +27,7 @@ importFrom(utils, combn, head, relist, stack, tail)
 
 export(.,
        calibration,
+       Calibration,
        confusion,
        dependence,
        fit,

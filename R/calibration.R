@@ -2,6 +2,8 @@
 #' 
 #' Calculate calibration estimates from observed and predicted responses.
 #' 
+#' @rdname calibration
+#' 
 #' @param x observed responses or \code{Resamples} object of observed and
 #' predicted responses.
 #' @param y predicted responses.
@@ -9,7 +11,6 @@
 #' calculate observed mean values.
 #' @param times numeric vector of follow-up times if \code{y} contains predicted
 #' survival events.
-#' @param ... arguments passed to other methods.
 #' 
 #' @return \code{Calibration} class object that inherits from \code{data.frame}.
 #'  
