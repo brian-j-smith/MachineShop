@@ -258,39 +258,18 @@ setClass("SVMTanhModelFit", contain = c("MLModelFit", "ksvm"))
 setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 
 
-#' Resamples Class Contructor
+#' @name resample
+#' @rdname resample-methods
 #' 
-#' Create an object of resampled performance metrics from one or more models.
+#' @param ... named or unnamed \code{resample} output to combine together with
+#' the \code{Resamples} constructor.
 #' 
-#' @param control \code{MLControl} object used to generate the resample output.
-#' @param strata character string indicating the strata variable, if any.
-#' @param ... named or unnamed resample output from one or more models.
+#' @details Output being combined from more than one model with the
+#' \code{Resamples} constructor must have been generated with the same
+#' resampling \code{control} object.
 #' 
-#' @details Argument \code{control} need only be specified if the supplied
-#' output is not a \code{Resamples} object.  Output being combined from more
-#' than one model must have been generated with the same resampling control
-#' object.
-#' 
-#' @return \code{Resamples} class object.
-#' 
-#' @seealso \code{\link{resample}}, \code{\link{plot}}, \code{\link{summary}}
-#' 
-#' @examples
-#' ## Factor response example
-#' 
-#' fo <- Species ~ .
-#' control <- CVControl()
-#' 
-#' gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
-#' gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
-#' gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
-#' 
-#' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
-#' summary(res)
-#' plot(res)
-#' 
-Resamples <- function(..., control = NULL, strata = character()) {
-  new("Resamples", ..., control = control, strata = strata)
+Resamples <- function(...) {
+  new("Resamples", ...)
 }
 
 
@@ -301,7 +280,7 @@ setClass("Resamples",
 
 
 setMethod("initialize", "Resamples",
-  function(.Object, ..., control, strata) {
+  function(.Object, ..., control = NULL, strata = character()) {
     args <- list(...)
     
     if (length(args) == 0) stop("no resample output given")

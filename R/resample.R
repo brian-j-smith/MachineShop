@@ -3,13 +3,11 @@
 #' Estimation of the predictive performance of a model estimated and evaluated
 #' on training and test samples generated from an observed data set.
 #' 
-#' @name resample
 #' @rdname resample-methods
 #' 
 #' @param x defined relationship between model predictors and an outcome.  May
 #' be a ModelFrame containing a formula, data, and optionally case weights; a
 #' formula; or a recipe.
-#' @param ... arguments passed to other methods.
 #' 
 #' @return \code{Resamples} class object.
 #' 
@@ -33,22 +31,25 @@ resample <- function(x, ...) {
 #' continuous for \code{numeric}, and event status \code{Surv}.
 #' 
 #' @seealso \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-#' \code{\link{modelinfo}}, \code{\link{MLControl}}, \code{\link{Resamples}},
-#' \code{\link{plot}}, \code{\link{summary}}
+#' \code{\link{modelinfo}}, \code{\link{MLControl}}, \code{\link{modelmetrics}},
+#' \code{\link{metricinfo}}, \code{\link{plot}}, \code{\link{summary}}
 #' 
 #' @examples
-#' \donttest{
-#' ## Survival response example
-#' library(survival)
-#' library(MASS)
+#' ## Factor response example
 #' 
-#' (gbmres <- resample(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-#'                     data = Melanoma, model = GBMModel,
-#'                     control = CVControl(folds = 10, repeats = 5,
-#'                                         surv_times = 365 * c(2, 5, 10))))
-#' summary(gbmres)
-#' plot(gbmres)
-#' }
+#' fo <- Species ~ .
+#' control <- CVControl()
+#' 
+#' gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+#' gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+#' gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+#' 
+#' summary(gbmres1)
+#' plot(gbmres1)
+#' 
+#' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
+#' summary(res)
+#' plot(res)
 #' 
 resample.formula <- function(x, data, model, control = CVControl, ...) {
   resample(ModelFrame(x, data, strata = strata(response(x, data)),
