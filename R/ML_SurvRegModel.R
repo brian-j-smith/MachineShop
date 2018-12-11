@@ -23,7 +23,7 @@
 #' 
 SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
                                   "logistic", "lognormal", "logloglogistic"),
-                         scale = 0, parms = NULL, ...) {
+                         scale = NULL, parms = NULL, ...) {
   
   dist <- match.arg(dist)
   
@@ -86,7 +86,7 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
 SurvRegStepAICModel <- function(dist = c("weibull", "exponential", "gaussian",
                                          "logistic", "lognormal",
                                          "logloglogistic"),
-                                scale = 0, parms = NULL, ...,
+                                scale = NULL, parms = NULL, ...,
                                 direction = c("both", "backward", "forward"),
                                 scope = NULL, k = 2, trace = FALSE,
                                 steps = 1000) {
