@@ -2,7 +2,7 @@
 #' 
 #' Compute measures of agreement between observed and predicted responses.
 #' 
-#' @aliases metrics
+#' @name metrics
 #' @rdname metrics
 #' 
 #' @param observed observed responses.

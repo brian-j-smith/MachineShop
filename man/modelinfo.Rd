@@ -30,3 +30,6 @@ names(modelinfo(factor(0)))
 names(modelinfo(factor(0), numeric(0)))
 
 }
+\seealso{
+\code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
+}

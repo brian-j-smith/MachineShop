@@ -121,13 +121,13 @@ test <- iris[-trainindices, ]
 ## Model formula
 fo <- Species ~ .
 
-## All available models
-modelinfo() %>% names
-
 ## Models by response type
 modelinfo(factor(0)) %>% names
 
-## Gradient boosted mode fit to training set
+## Model-specific information
+modelinfo(GBMModel)
+
+## Generalized boosted model fit to training set
 gbmfit <- fit(fo, data = train, model = GBMModel)
 
 ## Variable importance
@@ -169,14 +169,11 @@ modelmetrics(res) %>% summary
 ## All available metric functions
 metricinfo() %>% names
 
-## Metric functions by observed and predicted response types
-metricinfo(factor(0)) %>% names
-metricinfo(factor(0), factor(0)) %>% names
-metricinfo(factor(0), matrix(0)) %>% names
-metricinfo(factor(0), numeric(0)) %>% names
+## Metrics available for resample output
+metricinfo(res) %>% names
 
 ## User-specified model metrics
-modelmetrics(res, c("accuracy", "kappa2", "brier", "cross_entropy")) %>% summary
+modelmetrics(res, c("accuracy", "kappa2")) %>% summary
 ```
 
 ### Model Tuning
@@ -230,7 +227,7 @@ plot(perfdiff)
 stackedres <- resample(fo, data = iris, model = StackedModel(GBMModel, RandomForestModel, NNetModel))
 summary(stackedres)
 
-## Super learners
+## Super learner
 superres <- resample(fo, data = iris, model = SuperModel(GBMModel, RandomForestModel, NNetModel))
 summary(superres)
 ```

@@ -12,6 +12,8 @@
 #' constructor \code{"arguments"}, and whether a \code{"varimp"} function is
 #' implemented for each.
 #' 
+#' @seealso \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
+#' 
 #' @examples
 #' ## All models
 #' modelinfo()

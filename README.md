@@ -1655,25 +1655,6 @@ test <- iris[-trainindices, ]
 ## Model formula
 fo <- Species ~ .
 
-## All available models
-modelinfo() %>% names
-#>  [1] "AdaBagModel"         "AdaBoostModel"       "BlackBoostModel"    
-#>  [4] "C50Model"            "CForestModel"        "CoxModel"           
-#>  [7] "CoxStepAICModel"     "EarthModel"          "FDAModel"           
-#> [10] "GAMBoostModel"       "GBMModel"            "GLMBoostModel"      
-#> [13] "GLMModel"            "GLMStepAICModel"     "GLMNetModel"        
-#> [16] "KNNModel"            "LDAModel"            "LMModel"            
-#> [19] "MDAModel"            "NaiveBayesModel"     "NNetModel"          
-#> [22] "PDAModel"            "PLSModel"            "POLRModel"          
-#> [25] "QDAModel"            "RandomForestModel"   "RangerModel"        
-#> [28] "RPartModel"          "StackedModel"        "SuperModel"         
-#> [31] "SurvRegModel"        "SurvRegStepAICModel" "SVMModel"           
-#> [34] "SVMANOVAModel"       "SVMBesselModel"      "SVMLaplaceModel"    
-#> [37] "SVMLinearModel"      "SVMPolyModel"        "SVMRadialModel"     
-#> [40] "SVMSplineModel"      "SVMTanhModel"        "TreeModel"          
-#> [43] "XGBModel"            "XGBDARTModel"        "XGBLinearModel"     
-#> [46] "XGBTreeModel"
-
 ## Models by response type
 modelinfo(factor(0)) %>% names
 #>  [1] "AdaBagModel"       "AdaBoostModel"     "C50Model"         
@@ -1689,7 +1670,27 @@ modelinfo(factor(0)) %>% names
 #> [31] "SVMTanhModel"      "TreeModel"         "XGBModel"         
 #> [34] "XGBDARTModel"      "XGBLinearModel"    "XGBTreeModel"
 
-## Gradient boosted mode fit to training set
+## Model-specific information
+modelinfo(GBMModel)
+#> $GBMModel
+#> $GBMModel$label
+#> [1] "Generalized Boosted Regression"
+#> 
+#> $GBMModel$packages
+#> [1] "gbm"
+#> 
+#> $GBMModel$types
+#> [1] "factor"  "numeric" "Surv"   
+#> 
+#> $GBMModel$arguments
+#> function (distribution = NULL, n.trees = 100, interaction.depth = 1, 
+#>     n.minobsinnode = 10, shrinkage = 0.1, bag.fraction = 0.5) 
+#> NULL
+#> 
+#> $GBMModel$varimp
+#> [1] TRUE
+
+## Generalized boosted model fit to training set
 gbmfit <- fit(fo, data = train, model = GBMModel)
 
 ## Variable importance
@@ -1783,29 +1784,15 @@ metricinfo() %>% names
 #> [16] "roc_index"       "sensitivity"     "specificity"    
 #> [19] "weighted_kappa2"
 
-## Metric functions by observed and predicted response types
-metricinfo(factor(0)) %>% names
-#>  [1] "accuracy"      "brier"         "cindex"        "cross_entropy"
-#>  [5] "f_score"       "kappa2"        "npv"           "ppv"          
-#>  [9] "pr_auc"        "precision"     "recall"        "roc_auc"      
-#> [13] "roc_index"     "sensitivity"   "specificity"
-metricinfo(factor(0), factor(0)) %>% names
-#> [1] "accuracy" "kappa2"
-metricinfo(factor(0), matrix(0)) %>% names
+## Metrics available for resample output
+metricinfo(res) %>% names
 #> [1] "accuracy"      "brier"         "cross_entropy" "kappa2"
-metricinfo(factor(0), numeric(0)) %>% names
-#>  [1] "accuracy"      "brier"         "cindex"        "cross_entropy"
-#>  [5] "f_score"       "kappa2"        "npv"           "ppv"          
-#>  [9] "pr_auc"        "precision"     "recall"        "roc_auc"      
-#> [13] "roc_index"     "sensitivity"   "specificity"
 
 ## User-specified model metrics
-modelmetrics(res, c("accuracy", "kappa2", "brier", "cross_entropy")) %>% summary
-#>                     Mean    Median         SD          Min       Max NA
-#> accuracy      0.95333333 0.9333333 0.03220306 9.333333e-01 1.0000000  0
-#> kappa2        0.93000000 0.9000000 0.04830459 9.000000e-01 1.0000000  0
-#> brier         0.08476969 0.1133233 0.05621648 5.140496e-05 0.1372037  0
-#> cross_entropy 0.22809689 0.1745116 0.21892382 2.802783e-03 0.6422832  0
+modelmetrics(res, c("accuracy", "kappa2")) %>% summary
+#>               Mean    Median         SD       Min Max NA
+#> accuracy 0.9533333 0.9333333 0.03220306 0.9333333   1  0
+#> kappa2   0.9300000 0.9000000 0.04830459 0.9000000   1  0
 ```
 
 ### Model Tuning
@@ -1940,7 +1927,7 @@ summary(stackedres)
 #> Kappa    0.94000000 0.95000000 0.06992059 0.800000000 1.0000000  0
 #> Brier    0.06515169 0.06151907 0.06178104 0.005580933 0.1841152  0
 
-## Super learners
+## Super learner
 superres <- resample(fo, data = iris, model = SuperModel(GBMModel, RandomForestModel, NNetModel))
 summary(superres)
 #>                Mean    Median         SD          Min      Max NA
