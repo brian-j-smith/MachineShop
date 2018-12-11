@@ -78,14 +78,15 @@ GAMBoostModel <- function(family = NULL,
     },
     predict = function(object, newdata, times, ...) {
       if (object$family@name == "Cox Partial Likelihood") {
-        newlp <- predict(object, newdata = newdata, type = "link") %>% drop
+        new_neg_risk <-
+          -exp(predict(object, newdata = newdata, type = "link")) %>% drop
         if (length(times)) {
           y <- object$response
-          lp <- predict(object, type = "link") %>% drop
-          cumhaz <- basehaz(y, exp(lp), times)
-          exp(exp(newlp) %o% -cumhaz)
+          risk <- exp(predict(object, type = "link")) %>% drop
+          cumhaz <- basehaz(y, risk, times)
+          exp(new_neg_risk %o% cumhaz)
         } else {
-          -exp(newlp)
+          new_neg_risk
         }
       } else {
         predict(object, newdata = newdata, type = "response")

@@ -52,17 +52,16 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
                distribution = distribution, ...)
     },
     predict = function(object, newdata, fitbits, times, ...) {
-      obs <- response(fitbits)
       if (object$distribution$name == "coxph") {
+        new_neg_risk <- -exp(predict(object, newdata = newdata,
+                                     n.trees = object$n.trees, type = "link"))
         if (length(times)) {
-          lp <- predict(object, n.trees = object$n.trees, type = "link")
-          newlp <- predict(object, newdata = newdata, n.trees = object$n.trees,
-                           type = "link")
-          cumhaz <- basehaz(obs, exp(lp), times)
-          exp(exp(newlp) %o% -cumhaz)
+          y <- response(fitbits)
+          risk <- exp(predict(object, n.trees = object$n.trees, type = "link"))
+          cumhaz <- basehaz(y, risk, times)
+          exp(new_neg_risk %o% cumhaz)
         } else {
-          -exp(predict(object, newdata = newdata, n.trees = object$n.trees,
-                       type = "link"))
+          new_neg_risk
         }
       } else {
         predict(object, newdata = newdata, n.trees = object$n.trees,

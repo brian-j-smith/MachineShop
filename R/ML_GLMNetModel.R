@@ -78,19 +78,19 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
       modelfit
     },
     predict = function(object, newdata, fitbits, times, ...) {
-      x <- object$x
       y <- response(fitbits)
       fo <- formula(fitbits)[-2]
       newmf <- model.frame(fo, newdata, na.action = na.pass)
       newx <- model.matrix(fo, newmf)[, -1, drop = FALSE]
       if (is.Surv(y)) {
-        if (length(times)) {
-          lp <- predict(object, newx = x, type = "link") %>% drop
-          newlp <- predict(object, newx = newx, type = "link") %>% drop
-          cumhaz <- basehaz(y, exp(lp), times)
-          exp(exp(newlp) %o% -cumhaz)
-        } else {
+        new_neg_risk <-
           -exp(predict(object, newx = newx, type = "link")) %>% drop
+        if (length(times)) {
+          risk <- exp(predict(object, newx = object$x, type = "link")) %>% drop
+          cumhaz <- basehaz(y, risk, times)
+          exp(new_neg_risk %o% cumhaz)
+        } else {
+          new_neg_risk
         }
       } else {
         predict(object, newx = newx, type = "response")
