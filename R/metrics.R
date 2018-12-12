@@ -139,7 +139,7 @@ setMethod(".cindex", c("factor", "numeric"),
 
 setMethod(".cindex", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    rcorr.cens(predicted, observed)[["C Index"]]
+    Hmisc::rcorr.cens(predicted, observed)[["C Index"]]
   }
 )
 
@@ -520,8 +520,9 @@ setMethod(".roc_auc", c("Surv", "matrix"),
     stopifnot(ncol(predicted) == length(times))
     
     metrics <- sapply(seq(times), function(i) {
-      survivalROC(observed[, "time"], observed[, "status"], 1 - predicted[, i],
-                  predict.time = times[i], method = "KM")$AUC
+      survivalROC::survivalROC(observed[, "time"], observed[, "status"],
+                               1 - predicted[, i], predict.time = times[i],
+                               method = "KM")$AUC
     })
     
     if (length(times) > 1) {

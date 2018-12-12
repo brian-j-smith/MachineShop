@@ -7,19 +7,16 @@ importClassesFrom(party, RandomForest)
 importFrom(abind, abind, adrop)
 importFrom(foreach, "%dopar%", foreach, registerDoSEQ)
 importFrom(graphics, plot)
-importFrom(Hmisc, rcorr.cens)
 importFrom(magrittr, "%>%")
 importFrom(recipes, bake, juice, prep, prepper)
 importFrom(rsample, assessment, bootstraps, initial_split, rsample2caret,
            testing, vfold_cv)
-importFrom(Rsolnp, solnp)
 importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
            formula, get_all_vars, median, model.frame, model.matrix,
            model.response, model.weights, na.fail, na.omit, na.pass, p.adjust,
            pchisq, predict, quantile, reformulate, reshape, sd, t.test, terms,
            vcov)
 importFrom(survival, is.Surv, Surv, survfit)
-importFrom(survivalROC, survivalROC)
 importFrom(utils, combn, head, relist, stack, tail)
 
 

@@ -85,11 +85,11 @@ setClass("StackedModel", contains = "MLModel")
       response[complete_responses, , drop = FALSE]
     })
 
-    weights <- solnp(rep(1 / num_learners, num_learners),
-                     function(x) eval_stack_loss(x, stack, times),
-                     eqfun = function(x) sum(x), eqB = 1,
-                     LB = rep(0, num_learners),
-                     control = list(trace = FALSE))$pars
+    weights <- Rsolnp::solnp(rep(1 / num_learners, num_learners),
+                             function(x) eval_stack_loss(x, stack, times),
+                             eqfun = function(x) sum(x), eqB = 1,
+                             LB = rep(0, num_learners),
+                             control = list(trace = FALSE))$pars
   }
   
   list(base_fits = lapply(base_learners,
