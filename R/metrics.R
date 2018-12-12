@@ -373,7 +373,17 @@ setMethod(".pr_auc", c("ANY", "ANY"),
 
 setMethod(".pr_auc", c("factor", "numeric"),
   function(observed, predicted, ...) {
-    PRAUC(predicted, observed == levels(observed)[2])
+    perf <- ROCR::prediction(predicted, observed) %>%
+      ROCR::performance(measure = "prec", x.measure = "rec")
+    recall <- perf@x.values[[1]]
+    precision <- perf@y.values[[1]]
+    
+    sort_order <- order(recall)
+    recall <- recall[sort_order]
+    precision <- precision[sort_order]
+
+    sum(diff(recall) * (precision[-length(precision)] + diff(precision) / 2),
+        na.rm = TRUE)
   }
 )
 

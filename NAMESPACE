@@ -9,7 +9,6 @@ importFrom(foreach, "%dopar%", foreach, registerDoSEQ)
 importFrom(graphics, plot)
 importFrom(Hmisc, rcorr.cens)
 importFrom(magrittr, "%>%")
-importFrom(MLmetrics, PRAUC)
 importFrom(recipes, bake, juice, prep, prepper)
 importFrom(rsample, assessment, bootstraps, initial_split, rsample2caret,
            testing, vfold_cv)
