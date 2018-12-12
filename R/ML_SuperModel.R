@@ -40,8 +40,7 @@ SuperModel <- function(..., model = GBMModel, control = CVControl,
   base_learners <- lapply(list(...), getMLObject, class = "MLModel")
 
   control <- getMLObject(control, "MLControl")
-  control@summary <- function(observed, predicted, ...) NA
-  
+
   new("SuperModel",
     name = "SuperModel",
     types = c("factor", "matrix", "numeric", "ordered", "Surv"),

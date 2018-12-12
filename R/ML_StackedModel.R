@@ -34,8 +34,7 @@ StackedModel <- function(..., control = CVControl, weights = NULL) {
   base_learners <- lapply(list(...), getMLObject, class = "MLModel")
   
   control <- getMLObject(control, "MLControl")
-  control@summary <- function(observed, predicted, ...) NA
-  
+
   if (!is.null(weights)) stopifnot(length(weights) == length(base_learners))
   
   new("StackedModel",

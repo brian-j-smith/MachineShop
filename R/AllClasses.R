@@ -10,59 +10,49 @@ setOldClass("recipe")
 #' 
 #' @rdname MLControl
 #' 
-#' @param summary function to compute model performance metrics (deprecated).
-#' @param cutoff threshold above which probabilities are classified as success
-#' for factor outcomes and which expected values are rounded for integer
-#' outcomes (deprecated).
-#' @param cutoff_index function to calculate a desired sensitivity-specificity
-#' tradeoff (deprecated).
 #' @param surv_times numeric vector of follow-up times at which to predict
 #' survival events.
-#' @param na.rm logical indicating whether to remove observed or predicted
-#' responses that are \code{NA} when calculating model metrics (deprecated).
 #' @param seed integer to set the seed at the start of resampling.  This is set
 #' to a random integer by default (NULL).
 #' @param ...  arguments to be passed to \code{MLControl}.
 #' 
-#' @details
-#' Arguments \code{summary}, \code{cutoff}, \code{cutoff_index}, and
-#' \code{na.rm} are deprecated.  The latter three may be specified directly in
-#' calls to \code{\link{modelmetrics}} instead.
-#' 
 #' @return \code{MLControl} class object.
 #' 
-#' @seealso \code{\link{resample}}, \code{\link{modelmetrics}}
+#' @seealso \code{\link{resample}}
 #' 
-MLControl <- function(summary = NULL, cutoff = NULL, cutoff_index = NULL,
-                      surv_times = numeric(), na.rm = NULL, seed = NULL) {
-    if (!is.null(summary)) {
-      depwarn("'summary' argument to MLControl is deprecated",
-              "apply the modelmetrics function to Resamples output directly")
-    }
-    
-    if (!is.null(cutoff)) {
-      depwarn("'cutoff' argument to MLContorl is deprecated",
-              "specify in calls to modelmetrics instead")
-    }
-    
-    if (!is.null(cutoff_index)) {
-      depwarn("'cutoff_index' argument to MLControl is deprecated",
-              "specify in calls to modelmetrics instead")
-    }
-    
-    if (!is.null(na.rm)) {
-      depwarn("'na.rm' argument to MLControl is deprecated",
-              "specify in calls to modelmetrics instead")
-    }
-    
-    if (is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
-    new("MLControl", surv_times = surv_times, na.rm = TRUE, seed = seed)
+MLControl <- function(surv_times = numeric(), seed = NULL, ...) {
+  MLControl_depwarn(...)
+  if (is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
+  new("MLControl", surv_times = surv_times, seed = seed)
+}
+
+
+MLControl_depwarn <- function(summary = NULL, cutoff = NULL,
+                              cutoff_index = NULL, na.rm = NULL, ...) {
+  if (!is.null(summary)) {
+    depwarn("'summary' argument to MLControl is deprecated",
+            "apply the modelmetrics function to Resamples output directly")
+  }
+  
+  if (!is.null(cutoff)) {
+    depwarn("'cutoff' argument to MLContorl is deprecated",
+            "specify in calls to modelmetrics instead")
+  }
+  
+  if (!is.null(cutoff_index)) {
+    depwarn("'cutoff_index' argument to MLControl is deprecated",
+            "specify in calls to modelmetrics instead")
+  }
+  
+  if (!is.null(na.rm)) {
+    depwarn("'na.rm' argument to MLControl is deprecated",
+            "specify in calls to modelmetrics instead")
+  }
 }
 
 
 setClass("MLControl",
-  slots = c(summary = "function", cutoff = "numeric", cutoff_index = "function",
-            surv_times = "numeric", na.rm = "logical", seed = "numeric")
+  slots = c(surv_times = "numeric", seed = "numeric")
 )
 
 

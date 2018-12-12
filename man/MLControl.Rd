@@ -9,8 +9,7 @@
 \alias{TrainControl}
 \title{Resampling Controls}
 \usage{
-MLControl(summary = NULL, cutoff = NULL, cutoff_index = NULL,
-  surv_times = numeric(), na.rm = NULL, seed = NULL)
+MLControl(surv_times = numeric(), seed = NULL, ...)
 
 BootControl(samples = 25, ...)
 
@@ -23,27 +22,15 @@ SplitControl(prop = 2/3, ...)
 TrainControl(...)
 }
 \arguments{
-\item{summary}{function to compute model performance metrics (deprecated).}
-
-\item{cutoff}{threshold above which probabilities are classified as success
-for factor outcomes and which expected values are rounded for integer
-outcomes (deprecated).}
-
-\item{cutoff_index}{function to calculate a desired sensitivity-specificity
-tradeoff (deprecated).}
-
 \item{surv_times}{numeric vector of follow-up times at which to predict
 survival events.}
-
-\item{na.rm}{logical indicating whether to remove observed or predicted
-responses that are \code{NA} when calculating model metrics (deprecated).}
 
 \item{seed}{integer to set the seed at the start of resampling.  This is set
 to a random integer by default (NULL).}
 
-\item{samples}{number of bootstrap samples.}
-
 \item{...}{arguments to be passed to \code{MLControl}.}
+
+\item{samples}{number of bootstrap samples.}
 
 \item{folds}{number of cross-validation folds (K).}
 
@@ -78,11 +65,6 @@ into a seperate trianing and test set.
 \code{TrainControl} constructs an \code{MLControl} object for training and
 performance evaluation to be performed on the same training set.
 }
-\details{
-Arguments \code{summary}, \code{cutoff}, \code{cutoff_index}, and
-\code{na.rm} are deprecated.  The latter three may be specified directly in
-calls to \code{\link{modelmetrics}} instead.
-}
 \examples{
 ## 100 bootstrap samples
 BootControl(samples = 100)
@@ -101,5 +83,5 @@ TrainControl()
 
 }
 \seealso{
-\code{\link{resample}}, \code{\link{modelmetrics}}
+\code{\link{resample}}
 }
