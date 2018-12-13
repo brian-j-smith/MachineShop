@@ -1749,8 +1749,6 @@ performance(obs, pred)
 #> 
 #> Repeats: 1
 #> 
-#> Survival times: 
-#> 
 #> Seed: 253452646
 
 summary(res)
@@ -1884,7 +1882,7 @@ summary(perfdiff)
 #> NNet - RF   0.026847898 -0.0037110334 0.11589380 -0.15451161 0.33221333  0
 
 t.test(perfdiff)
-#> An object of class "HTestResamples"
+#> An object of class "HTestPerformanceDiff"
 #> 
 #> Upper diagonal: mean differences (row - column)
 #> Lower diagonal: p-values

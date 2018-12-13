@@ -10,8 +10,10 @@ print.Resamples <- function(x, ...) {
 
 setMethod("show", "MLControl",
   function(object) {
-    cat("Survival times: ", toString(object@surv_times), "\n\n",
-        "Seed: ", object@seed, "\n\n", sep = "")
+    if (length(object@surv_times)) {
+      cat("Survival times:", toString(object@surv_times), "\n\n")
+    }
+    cat("Seed:", object@seed, "\n\n")
     invisible()
   }
 )
