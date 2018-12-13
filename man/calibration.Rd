@@ -19,8 +19,9 @@ predicted responses.}
 \item{y}{predicted responses.}
 
 \item{breaks}{value defining the response variable bins within which to
-calculate observed mean values.  May be specified as a number of bins or a
-vector of breakpoints.}
+calculate observed mean values.  May be specified as a number of bins, a
+vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
+survival responses and loess for others.}
 
 \item{times}{numeric vector of follow-up times if \code{y} contains predicted
 survival events.}

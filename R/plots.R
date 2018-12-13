@@ -141,9 +141,9 @@ plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
   type <- match.arg(type)
   
   aes_response <- if (nlevels(x$Response) > 1) {
-    aes(x = Midpoint, y = Mean, color = Response)
+    aes(x = Predicted, y = Mean, color = Response)
   } else {
-    aes(x = Midpoint, y = Mean)
+    aes(x = Predicted, y = Mean)
   }
   
   position <- "identity"
@@ -152,19 +152,19 @@ plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
     
     df <- data.frame(
       Response = cal$Response,
-      Midpoint = cal$Midpoint,
+      Predicted = cal$Predicted,
       cal$Observed
     )
-    Midpoint_width <- diff(range(df$Midpoint))
+    Predicted_width <- diff(range(df$Predicted, na.rm = TRUE))
   
     p <- ggplot(df, aes_response) +
       geom_abline(intercept = 0, slope = 1, color = "gray") +
-      labs(title = cal$Model[1], x = "Bin Midpoints", y = "Observed Mean")
+      labs(title = cal$Model[1], x = "Predicted", y = "Observed Mean")
     
     if (se) {
-      position <- position_dodge(width = 0.025 * Midpoint_width)
+      position <- position_dodge(width = 0.025 * Predicted_width)
       p <- p + geom_errorbar(aes(ymin = Lower, ymax = Upper),
-                             width = 0.05 * Midpoint_width,
+                             width = 0.05 * Predicted_width,
                              position = position)
     }
   

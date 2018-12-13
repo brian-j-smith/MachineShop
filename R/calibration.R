@@ -8,8 +8,9 @@
 #' predicted responses.
 #' @param y predicted responses.
 #' @param breaks value defining the response variable bins within which to
-#' calculate observed mean values.  May be specified as a number of bins or a
-#' vector of breakpoints.
+#' calculate observed mean values.  May be specified as a number of bins, a
+#' vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
+#' survival responses and loess for others.
 #' @param times numeric vector of follow-up times if \code{y} contains predicted
 #' survival events.
 #' 
@@ -95,16 +96,30 @@ setMethod(".calibration_default", c("factor", "numeric"),
 
 setMethod(".calibration_default", c("matrix", "matrix"),
   function(observed, predicted, breaks, ...) {
-    observed <- stack(as.data.frame(observed))
-    predicted <- stack(as.data.frame(predicted))
-    df <- data.frame(Response = predicted$ind,
-                     Midpoint = midpoints(predicted$values, breaks),
-                     Observed = observed$values)
-    aggregate(. ~ Response + Midpoint, df, function(x) {
-      Mean <- mean(x)
-      SE <- sd(x) / sqrt(length(x))
-      c(Mean = Mean, SE = SE, Lower = Mean - SE, Upper = Mean + SE)
-    })
+    df <- data.frame(Response = rep(colnames(predicted),
+                                    each = nrow(predicted)))
+    if (is.null(breaks)) {
+      df$Predicted <- c(predicted)
+      loessfit_list <- lapply(1:ncol(predicted), function(i) {
+        y <- observed[, i]
+        x <- predicted[, i]
+        predict(loess(y ~ x), se = TRUE)
+      })
+      Mean <- c(sapply(loessfit_list, getElement, name = "fit"))
+      SE <- c(sapply(loessfit_list, getElement, name = "se.fit"))
+      df$Observed <- cbind(Mean = Mean, SE = SE,
+                           Lower = Mean - SE,
+                           Upper = Mean + SE)
+      df
+    } else {
+      df$Predicted <- midpoints(c(predicted), breaks)
+      df$Observed <- c(observed)
+      aggregate(. ~ Response + Predicted, df, function(x) {
+        Mean <- mean(x)
+        SE <- sd(x) / sqrt(length(x))
+        c(Mean = Mean, SE = SE, Lower = Mean - SE, Upper = Mean + SE)
+      })
+    }
   }
 )
 
@@ -118,24 +133,35 @@ setMethod(".calibration_default", c("numeric", "numeric"),
 
 setMethod(".calibration_default", c("Surv", "matrix"),
   function(observed, predicted, breaks, times, ...) {
-    num_obs <- nrow(predicted)
-    colnames(predicted) <- paste0("Time", seq(times))
-    predicted <- stack(as.data.frame(predicted))
-    df <- data.frame(Response = predicted$ind,
-                     Midpoint = midpoints(predicted$values, breaks),
-                     Observed = rep(observed, times = length(times)),
-                     Time = rep(times, each = num_obs))
-    by_results <- by(df, df[c("Midpoint", "Response")], function(data) {
-      km <- survfit(Observed ~ 1, data = data)
-      interval <- findInterval(data$Time[1], c(0, km$time))
-      Mean <- c(1, km$surv)[interval]
-      SE <- c(0, km$std.err)[interval]
-      result <- data[1, c("Response", "Midpoint")]
-      result$Observed <- cbind(Mean = Mean, SE = SE, Lower = max(Mean - SE, 0),
-                               Upper = min(Mean + SE, 1))
-      result
-    }, simplify = FALSE)
-    do.call(rbind, by_results)
+    colnames(predicted) <- paste0("Time", 1:length(times))
+    df <- data.frame(Response = rep(colnames(predicted),
+                                    each = nrow(predicted)))
+    if (is.null(breaks)) {
+      df$Predicted <- c(predicted)
+      Mean <- c(sapply(1:ncol(predicted), function(i) {
+        x <- predicted[, i, drop = FALSE]
+        harefit <- polspline::hare(observed[, "time"], observed[, "status"], x)
+        1 - polspline::phare(times[i], x, harefit)
+      }))
+      df$Observed <- cbind(Mean = Mean, SE = NA, Lower = NA, Upper = NA)
+      df
+    } else {
+      df$Predicted <- midpoints(c(predicted), breaks)
+      df$Observed <- rep(observed, times = length(times))
+      df$Time <- rep(times, each = nrow(predicted))
+      by_results <- by(df, df[c("Predicted", "Response")], function(data) {
+        km <- survfit(Observed ~ 1, data = data)
+        interval <- findInterval(data$Time[1], c(0, km$time))
+        Mean <- c(1, km$surv)[interval]
+        SE <- c(0, km$std.err)[interval]
+        result <- data[1, c("Response", "Predicted")]
+        result$Observed <- cbind(Mean = Mean, SE = SE,
+                                 Lower = max(Mean - SE, 0),
+                                 Upper = min(Mean + SE, 1))
+        result
+      }, simplify = FALSE)
+      do.call(rbind, by_results)
+    }
   }
 )
 

@@ -323,7 +323,7 @@ Calibration <- function(...) {
     stop("values to combine must inherit from data.frame")
   }
   
-  var_names <- c("Response", "Midpoint", "Observed")
+  var_names <- c("Response", "Predicted", "Observed")
   for (x in args) {
     is_missing <- !(var_names %in% names(x))
     if (any(is_missing)) {
