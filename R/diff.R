@@ -8,14 +8,14 @@
 #' @param x object containing resampled metrics.
 #' @param ... arguments to be passed to other methods.
 #' 
-#' @return \code{ModelMetricsDiff} class object that inherits from
-#' \code{ModelMetrics}.
+#' @return \code{PerformanceDiff} class object that inherits from
+#' \code{Performance}.
 #' 
-#' @seealso \code{\link{modelmetrics}}, \code{\link{resample}},
+#' @seealso \code{\link{performance}}, \code{\link{resample}},
 #' \code{\link{tune}}, \code{\link{plot}}, \code{\link{summary}},
 #' \code{\link{t.test}}
 #' 
-diff.ModelMetrics <- function(x, ...) {
+diff.Performance <- function(x, ...) {
   if (length(dim(x)) <= 2) stop("more than one model needed to diff")
   indices <- combn(dim(x)[3], 2)
   indices1 <- indices[1,]
@@ -24,7 +24,7 @@ diff.ModelMetrics <- function(x, ...) {
   model_names <- dimnames(x)[[3]]
   dimnames(xdiff)[[3]] <-
     paste(model_names[indices1], "-", model_names[indices2])
-  ModelMetricsDiff(xdiff, model_names = model_names)
+  PerformanceDiff(xdiff, model_names = model_names)
 }
 
 
@@ -48,7 +48,7 @@ diff.ModelMetrics <- function(x, ...) {
 #' plot(perfdiff)
 #' 
 diff.Resamples <- function(x, ...) {
-  diff(modelmetrics(x))
+  diff(performance(x))
 }
 
 
@@ -69,12 +69,12 @@ diff.MLModelTune <- function(x, ...) {
 #' @param x object containing paired differences between resampled metrics.
 #' @param adjust p-value adjustment for multiple statistical comparisons as
 #' implemented by \code{\link[stats]{p.adjust}}.
-#' @param ... arguments passed to other metrics.
+#' @param ... arguments passed to other methods.
 #' 
-#' @return \code{HTestResamples} class object that inherits from \code{array}.
-#' p-values and mean differences are contained in the lower and upper triangular
-#' portions, respectively, of the first two dimensions.  Model pairs are
-#' contined in the third dimension.
+#' @return \code{HTestPerformanceDiff} class object that inherits from
+#' \code{array}.  p-values and mean differences are contained in the lower and
+#' upper triangular portions, respectively, of the first two dimensions.  Model
+#' pairs are contined in the third dimension.
 #' 
 #' @seealso \code{\link{diff}}
 #' 
@@ -93,7 +93,7 @@ diff.MLModelTune <- function(x, ...) {
 #' perfdiff <- diff(res)
 #' t.test(perfdiff)
 #' 
-t.test.ModelMetricsDiff <- function(x, adjust = "holm", ...)
+t.test.PerformanceDiff <- function(x, adjust = "holm", ...)
 {
   pvalues <- x %>%
     apply(c(3, 2), function(resample) t.test(resample)$p.value) %>%
@@ -109,5 +109,5 @@ t.test.ModelMetricsDiff <- function(x, adjust = "holm", ...)
   results <- aperm(results, perm = c(2, 1, 3))
   results[indices] <- pvalues
 
-  HTestResamples(results, adjust = adjust)
+  HTestPerformanceDiff(results, adjust = adjust)
 }

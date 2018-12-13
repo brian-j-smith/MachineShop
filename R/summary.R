@@ -15,16 +15,16 @@
 #' the first for single models, and models and metrics in the first and third,
 #' respectively, for multiple models.
 #' 
-#' @seealso \code{\link{modelmetrics}}, \code{\link{resample}},
+#' @seealso \code{\link{performance}}, \code{\link{resample}},
 #' \code{\link{diff}}, \code{\link{tune}}, \code{\link{confusion}}
 #' 
-summary.ModelMetrics <- function(object,
-                                 stats = c("Mean" = base::mean,
-                                           "Median" = stats::median,
-                                           "SD" = stats::sd,
-                                           "Min" = base::min,
-                                           "Max" = base::max),
-                                 na.rm = TRUE, ...) {
+summary.Performance <- function(object,
+                                stats = c("Mean" = base::mean,
+                                          "Median" = stats::median,
+                                          "SD" = stats::sd,
+                                          "Min" = base::min,
+                                          "Max" = base::max),
+                                na.rm = TRUE, ...) {
   stats <- list2function(stats)
 
   f <- function(x) {
@@ -66,7 +66,7 @@ summary.Resamples <- function(object,
                                         "Min" = base::min,
                                         "Max" = base::max),
                               na.rm = TRUE, ...) {
-  summary(modelmetrics(object), stats = stats, na.rm = na.rm)
+  summary(performance(object), stats = stats, na.rm = na.rm)
 }
 
 
@@ -100,7 +100,7 @@ summary.ConfusionMatrix <- function(object, ...) {
   predicted <- rowSums(object)
   agreement <- diag(object)
   
-  metrics <- rbind(
+  perf <- rbind(
     Observed = observed,
     Predicted = predicted,
     Agreement = agreement,
@@ -110,7 +110,7 @@ summary.ConfusionMatrix <- function(object, ...) {
     NPV = (1 - observed - predicted + agreement) / (1 - predicted)
   )
   
-  SummaryConfusion(metrics,
+  SummaryConfusion(perf,
                    N = n,
                    Accuracy = sum(agreement),
                    Majority = max(observed),

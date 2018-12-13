@@ -1,4 +1,4 @@
-context("ResamplesHTest")
+context("HTest")
 
 
 test_Resamples <- function() {
@@ -41,7 +41,7 @@ test_tune <- function() {
 test_that("model comparisons", {
   skip_if_not(TEST_MODEL_COMPARISONS)
   with_parallel({
-    expect_is(test_Resamples(), "HTestResamples")
-    expect_is(test_tune(), "HTestResamples")
+    expect_is(test_Resamples(), "HTestPerformanceDiff")
+    expect_is(test_tune(), "HTestPerformanceDiff")
   })
 })

@@ -17,7 +17,7 @@
 #' @param ... arguments passed to model-specific prediction functions.
 #' 
 #' @seealso \code{\link{fit}}, \code{\link{confusion}},
-#' \code{\link{modelmetrics}}
+#' \code{\link{performance}}
 #' 
 #' @examples
 #' ## Survival response example

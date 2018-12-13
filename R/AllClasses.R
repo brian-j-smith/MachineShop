@@ -31,22 +31,22 @@ MLControl_depwarn <- function(summary = NULL, cutoff = NULL,
                               cutoff_index = NULL, na.rm = NULL, ...) {
   if (!is.null(summary)) {
     depwarn("'summary' argument to MLControl is deprecated",
-            "apply the modelmetrics function to Resamples output directly")
+            "apply the 'performance' function to Resamples output directly")
   }
   
   if (!is.null(cutoff)) {
     depwarn("'cutoff' argument to MLContorl is deprecated",
-            "specify in calls to modelmetrics instead")
+            "specify in calls to 'performance' instead")
   }
   
   if (!is.null(cutoff_index)) {
     depwarn("'cutoff_index' argument to MLControl is deprecated",
-            "specify in calls to modelmetrics instead")
+            "specify in calls to 'performance' instead")
   }
   
   if (!is.null(na.rm)) {
     depwarn("'na.rm' argument to MLControl is deprecated",
-            "specify in calls to modelmetrics instead")
+            "specify in calls to 'performance' instead")
   }
 }
 
@@ -375,7 +375,7 @@ ConfusionMatrix <- function(object) {
 }
 
 
-HTestResamples <- setClass("HTestResamples",
+HTestPerformanceDiff <- setClass("HTestPerformanceDiff",
   slots = c("adjust" = "character"),
   contains = "array"
 )
@@ -412,20 +412,20 @@ setClass("Lift",
 )
 
 
-ModelMetrics <- setClass("ModelMetrics",
+PartialDependence <- function(object) {
+  structure(object, class = c("PartialDependence", "data.frame"))
+}
+
+
+Performance <- setClass("Performance",
   contains = "array"
 )
 
 
-ModelMetricsDiff <- setClass("ModelMetricsDiff",
+PerformanceDiff <- setClass("PerformanceDiff",
   slots = c("model_names" = "character"),
-  contains = "ModelMetrics"
+  contains = "Performance"
 )
-
-
-PartialDependence <- function(object) {
-  structure(object, class = c("PartialDependence", "data.frame"))
-}
 
 
 SummaryConfusion <- setClass("SummaryConfusion",

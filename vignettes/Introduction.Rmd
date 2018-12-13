@@ -77,13 +77,13 @@ predict(gbmfit, newdata = test, times = times, type = "prob") %>% head
 predict(gbmfit, newdata = test, times = times) %>% head
 ```
 
-A call to `modelmetrics` with observed and predicted outcomes will produce model performance metrics.  The metrics produced will depend on the type of the observed variable.  In this case of a `Surv` variable, the metrics are area under the ROC curve [@heagerty:2004:TDR] and Brier score [@graf:1999:ACP] at the specified times and overall time-integrated averages.
+A call to `performance` with observed and predicted outcomes will produce model performance metrics.  The metrics produced will depend on the type of the observed variable.  In this case of a `Surv` variable, the metrics are area under the ROC curve [@heagerty:2004:TDR] and Brier score [@graf:1999:ACP] at the specified times and overall time-integrated averages.
 
 ```{r}
 ## Model performance metrics
 obs <- response(fo, test)
 pred <- predict(gbmfit, newdata = test, times = times, type = "prob")
-modelmetrics(obs, pred, times = times)
+performance(obs, pred, times = times)
 ```
 
 

@@ -41,5 +41,5 @@ predict(gbmfit, newdata = Melanoma, times = 365 * c(2, 5, 10), type = "prob")
 }
 \seealso{
 \code{\link{fit}}, \code{\link{confusion}},
-\code{\link{modelmetrics}}
+\code{\link{performance}}
 }

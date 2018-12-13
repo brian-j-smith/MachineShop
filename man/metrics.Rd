@@ -91,5 +91,5 @@ main diagonal in confusion matrices are raised to calculate
 Compute measures of agreement between observed and predicted responses.
 }
 \seealso{
-\code{\link{metricinfo}}, \code{\link{modelmetrics}}
+\code{\link{metricinfo}}, \code{\link{performance}}
 }

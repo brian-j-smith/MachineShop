@@ -43,7 +43,7 @@ employed.}
 
 \item{metrics}{function, one or more function names, or list of named
 functions to include in the calculation of performance metrics.  The default
-\code{\link{modelmetrics}} are used unless otherwise specified.  Model
+\code{\link{performance}} metrics are used unless otherwise specified.  Model
 selection is based on the first specified metric.}
 
 \item{stat}{function to compute a summary statistic on resampled values of

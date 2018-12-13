@@ -2,7 +2,7 @@
 #' 
 #' Compute measures of model performance.
 #' 
-#' @rdname modelmetrics
+#' @rdname performance
 #' 
 #' @param x observed responses or class containing observed and predicted
 #' responses.
@@ -14,89 +14,90 @@
 #' @param times numeric vector of follow-up times at which survival events
 #' were predicted.
 #' @param na.rm logical indicating whether to remove observed or predicted
-#' responses that are \code{NA} when calculating model metrics.
-#' @param ... arguments passed from the \code{Resamples} method to the others.
+#' responses that are \code{NA} when calculating metrics.
+#' @param ... arguments passed from the \code{Resamples} method to the others
+#' and from deprecated function \code{modelmetrics} to \code{performance}.
 #' 
 #' @seealso \code{\link{response}}, \code{\link{predict}},
 #' \code{\link{resample}}, \code{\link{metrics}}
 #' 
-modelmetrics <- function(x, ...) {
-  UseMethod("modelmetrics")
+performance <- function(x, ...) {
+  UseMethod("performance")
 }
 
 
-#' @rdname modelmetrics
+#' @rdname performance
 #' 
 #' @examples
 #' res <- resample(Species ~ ., data = iris, model = GBMModel)
-#' (metrics <- modelmetrics(res))
-#' summary(metrics)
-#' plot(metrics)
+#' (perf <- performance(res))
+#' summary(perf)
+#' plot(perf)
 #' 
-modelmetrics.Resamples <- function(x, ..., na.rm = TRUE) {
+performance.Resamples <- function(x, ..., na.rm = TRUE) {
   control <- x@control
   if (na.rm) x <- na.omit(x)
   args <- list(...)
   args$times <- control@surv_times
-  metrics_by <- by(x, x[c("Model", "Resample")], function(x) {
+  perf_by <- by(x, x[c("Model", "Resample")], function(x) {
     if (nrow(x)) {
-      do.call(modelmetrics, c(list(x$Observed, x$Predicted), args))
+      do.call(performance, c(list(x$Observed, x$Predicted), args))
     } else {
       NA
     }
   }, simplify = FALSE)
-  metrics_list <- tapply(metrics_by,
-                         rep(dimnames(metrics_by)$Model, dim(metrics_by)[2]),
-                         function(metrics) do.call(rbind, metrics),
-                         simplify = FALSE)
-  metrics <- if (length(metrics_list) > 1) {
-    abind(metrics_list, along = 3)
+  perf_list <- tapply(perf_by,
+                      rep(dimnames(perf_by)$Model, dim(perf_by)[2]),
+                      function(perf) do.call(rbind, perf),
+                      simplify = FALSE)
+  perf <- if (length(perf_list) > 1) {
+    abind(perf_list, along = 3)
   } else {
-    metrics_list[[1]]
+    perf_list[[1]]
   }
-  dimnames(metrics)[[1]] <- dimnames(metrics_by)$Resample
-  ModelMetrics(metrics)
+  dimnames(perf)[[1]] <- dimnames(perf_by)$Resample
+  Performance(perf)
 }
 
 
-#' @rdname modelmetrics
+#' @rdname performance
 #' 
-modelmetrics.factor <- function(x, y, metrics =
-                                  c("Accuracy" = MachineShop::accuracy,
-                                    "Kappa" = MachineShop::kappa2,
-                                    "ROCAUC" = MachineShop::roc_auc,
-                                    "Sensitivity" = MachineShop::sensitivity,
-                                    "Specificity" = MachineShop::specificity,
-                                    "Brier" = MachineShop::brier),
+performance.factor <- function(x, y, metrics =
+                                 c("Accuracy" = MachineShop::accuracy,
+                                   "Kappa" = MachineShop::kappa2,
+                                   "ROCAUC" = MachineShop::roc_auc,
+                                   "Sensitivity" = MachineShop::sensitivity,
+                                   "Specificity" = MachineShop::specificity,
+                                   "Brier" = MachineShop::brier),
                                 cutoff = 0.5, ...) {
   metrics <- list2function(metrics)
   metrics(x, y, cutoff = cutoff)
 }
 
 
-#' @rdname modelmetrics
+#' @rdname performance
 #' 
-modelmetrics.matrix <- function(x, y, metrics =
+performance.matrix <- function(x, y, metrics =
+                                 c("R2" = MachineShop::r2,
+                                   "RMSE" = MachineShop::rmse,
+                                   "MAE" = MachineShop::mae), ...) {
+  metrics <- list2function(metrics)
+  metrics(x, y)
+}
+
+
+#' @rdname performance
+#' 
+performance.numeric <- function(x, y, metrics =
                                   c("R2" = MachineShop::r2,
-                                    "RMSE" = MachineShop::rmse,
-                                    "MAE" = MachineShop::mae), ...) {
+                                   "RMSE" = MachineShop::rmse,
+                                   "MAE" = MachineShop::mae), ...) {
   metrics <- list2function(metrics)
   metrics(x, y)
 }
 
 
-#' @rdname modelmetrics
-#' 
-modelmetrics.numeric <- function(x, y, metrics =
-                                   c("R2" = MachineShop::r2,
-                                     "RMSE" = MachineShop::rmse,
-                                     "MAE" = MachineShop::mae), ...) {
-  metrics <- list2function(metrics)
-  metrics(x, y)
-}
-
-
-#' @rdname modelmetrics
+#' @rdname performance
 #' 
 #' @examples
 #' ## Survival response example
@@ -108,13 +109,21 @@ modelmetrics.numeric <- function(x, y, metrics =
 #' 
 #' obs <- response(fo, data = Melanoma)
 #' pred <- predict(gbmfit, newdata = Melanoma, type = "prob")
-#' modelmetrics(obs, pred)
+#' performance(obs, pred)
 #' 
-modelmetrics.Surv <- function(x, y, metrics =
-                                c("CIndex" = MachineShop::cindex,
-                                  "ROC" = MachineShop::roc_auc,
-                                  "Brier" = MachineShop::brier),
+performance.Surv <- function(x, y, metrics =
+                               c("CIndex" = MachineShop::cindex,
+                                 "ROC" = MachineShop::roc_auc,
+                                 "Brier" = MachineShop::brier),
                               times = numeric(), ...) {
   metrics <- list2function(metrics)
   metrics(x, y, times = times)
+}
+
+
+#' @rdname performance
+#' 
+modelmetrics <- function(...) {
+  depwarn("'modelmetrics' is deprecated", "use 'performance' instead")
+  performance(...)
 }

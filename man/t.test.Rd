@@ -2,10 +2,10 @@
 % Please edit documentation in R/diff.R
 \name{t.test}
 \alias{t.test}
-\alias{t.test.ModelMetricsDiff}
+\alias{t.test.PerformanceDiff}
 \title{Paired t-Tests for Model Comparisons}
 \usage{
-\method{t}{test.ModelMetricsDiff}(x, adjust = "holm", ...)
+\method{t}{test.PerformanceDiff}(x, adjust = "holm", ...)
 }
 \arguments{
 \item{x}{object containing paired differences between resampled metrics.}
@@ -13,13 +13,13 @@
 \item{adjust}{p-value adjustment for multiple statistical comparisons as
 implemented by \code{\link[stats]{p.adjust}}.}
 
-\item{...}{arguments passed to other metrics.}
+\item{...}{arguments passed to other methods.}
 }
 \value{
-\code{HTestResamples} class object that inherits from \code{array}.
-p-values and mean differences are contained in the lower and upper triangular
-portions, respectively, of the first two dimensions.  Model pairs are
-contined in the third dimension.
+\code{HTestPerformanceDiff} class object that inherits from
+\code{array}.  p-values and mean differences are contained in the lower and
+upper triangular portions, respectively, of the first two dimensions.  Model
+pairs are contined in the third dimension.
 }
 \description{
 Paired t-test comparisons of resampled performance metrics from different

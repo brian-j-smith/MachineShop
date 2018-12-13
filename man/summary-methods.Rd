@@ -2,16 +2,16 @@
 % Please edit documentation in R/summary.R
 \name{summary}
 \alias{summary}
-\alias{summary.ModelMetrics}
+\alias{summary.Performance}
 \alias{summary.Resamples}
 \alias{summary.MLModelTune}
 \alias{summary.Confusion}
 \alias{summary.ConfusionMatrix}
 \title{Model Performance Summary}
 \usage{
-\method{summary}{ModelMetrics}(object, stats = c(Mean = base::mean,
-  Median = stats::median, SD = stats::sd, Min = base::min, Max =
-  base::max), na.rm = TRUE, ...)
+\method{summary}{Performance}(object, stats = c(Mean = base::mean, Median
+  = stats::median, SD = stats::sd, Min = base::min, Max = base::max),
+  na.rm = TRUE, ...)
 
 \method{summary}{Resamples}(object, stats = c(Mean = base::mean, Median =
   stats::median, SD = stats::sd, Min = base::min, Max = base::max),
@@ -59,6 +59,6 @@ summary(res)
 
 }
 \seealso{
-\code{\link{modelmetrics}}, \code{\link{resample}},
+\code{\link{performance}}, \code{\link{resample}},
 \code{\link{diff}}, \code{\link{tune}}, \code{\link{confusion}}
 }

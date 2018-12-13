@@ -115,7 +115,7 @@ setMethod("show", "MLModelTune",
 )
 
 
-setMethod("show", "ModelMetrics",
+setMethod("show", "Performance",
   function(object) {
     cat("An object of class \"", class(object), "\"\n\n", sep = "")
     if (length(dim(object)) > 2) {
@@ -139,7 +139,7 @@ setMethod("show", "Resamples",
 )
 
 
-setMethod("show", "HTestResamples",
+setMethod("show", "HTestPerformanceDiff",
   function(object) {
     cat("An object of class \"", class(object), "\"\n\n",
         "Upper diagonal: mean differences (row - column)\n",

@@ -32,7 +32,7 @@ tune <- function(x, ...) {
 #' employed.
 #' @param metrics function, one or more function names, or list of named
 #' functions to include in the calculation of performance metrics.  The default
-#' \code{\link{modelmetrics}} are used unless otherwise specified.  Model
+#' \code{\link{performance}} metrics are used unless otherwise specified.  Model
 #' selection is based on the first specified metric.
 #' @param stat function to compute a summary statistic on resampled values of
 #' the metric for model selection.
@@ -100,23 +100,23 @@ tune.recipe <- function(x, models, grid = data.frame(),
   
   control <- getMLObject(control, "MLControl")
   
-  modelmetrics_tune <-
+  performance_tune <-
     ifelse(is.null(metrics),
-           function(x) modelmetrics(x, ...),
-           function(x) modelmetrics(x, metrics = metrics, ...))
+           function(x) performance(x, ...),
+           function(x) performance(x, metrics = metrics, ...))
 
   resamples <- list()
   perf <- numeric()
   for (i in seq(models)) {
     resamples[[i]] <- resample(x, data = data, model = models[[i]],
                                control = control)
-    modmets <- modelmetrics_tune(resamples[[i]])
-    perf[i] <- stat(na.omit(modmets[, 1]))
+    perf_tune <- performance_tune(resamples[[i]])
+    perf[i] <- stat(na.omit(perf_tune[, 1]))
   }
   selected <- ifelse(maximize, which.max, which.min)(perf)
   
   MLModelTune(models[[selected]], grid = grid,
               resamples = do.call(Resamples, resamples),
-              selected = structure(selected, names = colnames(modmets)[1]))
+              selected = structure(selected, names = colnames(perf_tune)[1]))
   
 }

@@ -80,6 +80,6 @@ plot(res)
 }
 \seealso{
 \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-\code{\link{modelinfo}}, \code{\link{MLControl}}, \code{\link{modelmetrics}},
+\code{\link{modelinfo}}, \code{\link{MLControl}}, \code{\link{performance}},
 \code{\link{metricinfo}}, \code{\link{plot}}, \code{\link{summary}}
 }

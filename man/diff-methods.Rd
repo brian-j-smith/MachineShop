@@ -2,12 +2,12 @@
 % Please edit documentation in R/diff.R
 \name{diff}
 \alias{diff}
-\alias{diff.ModelMetrics}
+\alias{diff.Performance}
 \alias{diff.Resamples}
 \alias{diff.MLModelTune}
 \title{Model Performance Differences}
 \usage{
-\method{diff}{ModelMetrics}(x, ...)
+\method{diff}{Performance}(x, ...)
 
 \method{diff}{Resamples}(x, ...)
 
@@ -19,8 +19,8 @@
 \item{...}{arguments to be passed to other methods.}
 }
 \value{
-\code{ModelMetricsDiff} class object that inherits from
-\code{ModelMetrics}.
+\code{PerformanceDiff} class object that inherits from
+\code{Performance}.
 }
 \description{
 Pairwise model differences in resampled performance metrics.
@@ -44,7 +44,7 @@ plot(perfdiff)
 
 }
 \seealso{
-\code{\link{modelmetrics}}, \code{\link{resample}},
+\code{\link{performance}}, \code{\link{resample}},
 \code{\link{tune}}, \code{\link{plot}}, \code{\link{summary}},
 \code{\link{t.test}}
 }

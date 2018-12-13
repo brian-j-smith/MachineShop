@@ -13,14 +13,14 @@
 #' @param type type of plot to construct.
 #' @param ... arguments passed to other methods.
 #' 
-#' @seealso \code{\link{modelmetrics}},  \code{\link{resample}},
+#' @seealso \code{\link{performance}},  \code{\link{resample}},
 #' \code{\link{diff}}, \code{\link{tune}}, \code{\link{calibration}},
 #' \code{\link{confusion}}, \code{\link{lift}}, \code{\link{dependence}},
 #' \code{\link{varimp}}
 #' 
-plot.ModelMetrics <- function(x, metrics = NULL, stat = mean,
-                              type = c("boxplot", "density", "errorbar",
-                                       "violin"), ...) {
+plot.Performance <- function(x, metrics = NULL, stat = mean,
+                             type = c("boxplot", "density", "errorbar",
+                                      "violin"), ...) {
   df <- as.data.frame.table(x)
   if (length(dim(x)) <= 2) df$Var3 <- factor("Model")
   orderednames <- match(c("Var1", "Var2", "Var3", "Freq"), names(df))
@@ -84,7 +84,7 @@ plot.ModelMetrics <- function(x, metrics = NULL, stat = mean,
 plot.Resamples <- function(x, metrics = NULL, stat = mean,
                            type = c("boxplot", "density", "errorbar", "violin"),
                            ...) {
-  plot(modelmetrics(x), metrics = metrics, stat = stat, type = type)
+  plot(performance(x), metrics = metrics, stat = stat, type = type)
 }
 
 
@@ -93,7 +93,7 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
 plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
                              type = c("boxplot", "density", "errorbar", "line",
                                       "violin"), ...) {
-  perf <- modelmetrics(x@resamples)
+  perf <- performance(x@resamples)
   type <- match.arg(type)
   if (type == "line") {
     grid <- x@grid

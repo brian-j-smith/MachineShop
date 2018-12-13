@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots.R
 \name{plot}
 \alias{plot}
-\alias{plot.ModelMetrics}
+\alias{plot.Performance}
 \alias{plot.Resamples}
 \alias{plot.MLModelTune}
 \alias{plot.Calibration}
@@ -13,7 +13,7 @@
 \alias{plot.VarImp}
 \title{Model Performance Plots}
 \usage{
-\method{plot}{ModelMetrics}(x, metrics = NULL, stat = mean,
+\method{plot}{Performance}(x, metrics = NULL, stat = mean,
   type = c("boxplot", "density", "errorbar", "violin"), ...)
 
 \method{plot}{Resamples}(x, metrics = NULL, stat = mean,
@@ -81,7 +81,7 @@ plot(res)
 
 }
 \seealso{
-\code{\link{modelmetrics}},  \code{\link{resample}},
+\code{\link{performance}},  \code{\link{resample}},
 \code{\link{diff}}, \code{\link{tune}}, \code{\link{calibration}},
 \code{\link{confusion}}, \code{\link{lift}}, \code{\link{dependence}},
 \code{\link{varimp}}

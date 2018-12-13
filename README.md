@@ -1725,7 +1725,7 @@ predict(gbmfit, newdata = test) %>% head
 ## Test set performance
 obs <- response(fo, data = test)
 pred <- predict(gbmfit, newdata = test, type = "prob")
-modelmetrics(obs, pred)
+performance(obs, pred)
 #>  Accuracy     Kappa     Brier 
 #> 0.9200000 0.8793727 0.1502442
 ```
@@ -1764,11 +1764,11 @@ plot(res)
 
 <img src="man/figures/README-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
-### Model Metrics
+### Performance Metrics
 
 ``` r
-## Default model metrics
-modelmetrics(res) %>% summary
+## Default performance metrics
+performance(res) %>% summary
 #>                Mean    Median         SD          Min       Max NA
 #> Accuracy 0.95333333 0.9333333 0.03220306 9.333333e-01 1.0000000  0
 #> Kappa    0.93000000 0.9000000 0.04830459 9.000000e-01 1.0000000  0
@@ -1788,8 +1788,8 @@ metricinfo() %>% names
 metricinfo(res) %>% names
 #> [1] "accuracy"      "brier"         "cross_entropy" "kappa2"
 
-## User-specified model metrics
-modelmetrics(res, c("accuracy", "kappa2")) %>% summary
+## User-specified metrics
+performance(res, c("accuracy", "kappa2")) %>% summary
 #>               Mean    Median         SD       Min Max NA
 #> accuracy 0.9533333 0.9333333 0.03220306 0.9333333   1  0
 #> kappa2   0.9300000 0.9000000 0.04830459 0.9000000   1  0

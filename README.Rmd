@@ -146,7 +146,7 @@ predict(gbmfit, newdata = test) %>% head
 ## Test set performance
 obs <- response(fo, data = test)
 pred <- predict(gbmfit, newdata = test, type = "prob")
-modelmetrics(obs, pred)
+performance(obs, pred)
 ```
 
 ### Resampling
@@ -160,11 +160,11 @@ summary(res)
 plot(res)
 ```
 
-### Model Metrics
+### Performance Metrics
 
 ```{r}
-## Default model metrics
-modelmetrics(res) %>% summary
+## Default performance metrics
+performance(res) %>% summary
 
 ## All available metric functions
 metricinfo() %>% names
@@ -172,8 +172,8 @@ metricinfo() %>% names
 ## Metrics available for resample output
 metricinfo(res) %>% names
 
-## User-specified model metrics
-modelmetrics(res, c("accuracy", "kappa2")) %>% summary
+## User-specified metrics
+performance(res, c("accuracy", "kappa2")) %>% summary
 ```
 
 ### Model Tuning
