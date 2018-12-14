@@ -1,8 +1,8 @@
 #' Model Tuning and Selection
 #' 
 #' Evaluate a model over a grid of tuning parameters or a list of specified
-#' model objects and select the best one according to resample estimation of
-#' predictive performance.
+#' models and select the best one according to resample estimation of predictive
+#' performance.
 #' 
 #' @name tune
 #' @rdname tune-methods
@@ -22,8 +22,8 @@ tune <- function(x, ...) {
 #' @rdname tune-methods
 #' 
 #' @param data \code{data.frame} containing observed predictors and outcomes.
-#' @param models \code{MLModel} constructor function or character string or a
-#' list of \code{MLModel} contructors or objects.
+#' @param models \code{MLModel} function, function name, object or list of the
+#' aforementioned elements such as that returned by \code{\link{expand.model}}.
 #' @param grid \code{data.frame} containing parameter values over which to
 #' evaluate \code{models} when a single constructor is specified.  Ignored in
 #' the case of a list of models.
@@ -40,8 +40,8 @@ tune <- function(x, ...) {
 #' maximum or minimum value of the performance metric.
 #' 
 #' @seealso \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-#' \code{\link{modelinfo}}, \code{\link{MLControl}}, \code{\link{fit}},
-#' \code{\link{plot}}, \code{\link{summary}}
+#' \code{\link{modelinfo}}, \code{\link{expand.model}}, \code{\link{MLControl}},
+#' \code{\link{fit}}, \code{\link{plot}}, \code{\link{summary}}
 #' 
 #' @examples
 #' \donttest{
@@ -87,15 +87,15 @@ tune.recipe <- function(x, models, grid = data.frame(),
 }
 
 
-.tune <- function(x, data, models, grid, control, metrics, stat, maximize,
-                  ...) {
+.tune <-
+  function(x, data, models, grid, control, metrics, stat, maximize, ...) {
   
   if (is.list(models)) {
     models <- lapply(models, getMLObject, class = "MLModel")
     grid <- data.frame()
   } else {
-    models <- split(grid, seq(max(1, nrow(grid)))) %>%
-      lapply(function(params) do.call(models, params))
+    model <- getMLObject(models, class = "MLModel")
+    models <- expand.model(list(get(model@name, mode = "function"), grid))
   }
   
   control <- getMLObject(control, "MLControl")

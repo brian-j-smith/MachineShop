@@ -30,8 +30,8 @@ weights; a \code{formula}; or a \code{recipe.}}
 
 \item{data}{\code{data.frame} containing observed predictors and outcomes.}
 
-\item{models}{\code{MLModel} constructor function or character string or a
-list of \code{MLModel} contructors or objects.}
+\item{models}{\code{MLModel} function, function name, object or list of the
+aforementioned elements such as that returned by \code{\link{expand.model}}.}
 
 \item{grid}{\code{data.frame} containing parameter values over which to
 evaluate \code{models} when a single constructor is specified.  Ignored in
@@ -57,8 +57,8 @@ maximum or minimum value of the performance metric.}
 }
 \description{
 Evaluate a model over a grid of tuning parameters or a list of specified
-model objects and select the best one according to resample estimation of
-predictive performance.
+models and select the best one according to resample estimation of predictive
+performance.
 }
 \examples{
 \donttest{
@@ -82,6 +82,6 @@ varimp(gbmfit)
 }
 \seealso{
 \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-\code{\link{modelinfo}}, \code{\link{MLControl}}, \code{\link{fit}},
-\code{\link{plot}}, \code{\link{summary}}
+\code{\link{modelinfo}}, \code{\link{expand.model}}, \code{\link{MLControl}},
+\code{\link{fit}}, \code{\link{plot}}, \code{\link{summary}}
 }
