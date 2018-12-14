@@ -20,15 +20,15 @@ with the \code{\link{modelinfo}} function.
   \tab \strong{Survival} \cr
   \code{\link{AdaBagModel}}         \tab f   \tab     \tab   \cr
   \code{\link{AdaBoostModel}}       \tab f   \tab     \tab   \cr
-  \code{\link{BlackBoostModel}}     \tab f   \tab n   \tab S \cr
+  \code{\link{BlackBoostModel}}     \tab b   \tab n   \tab S \cr
   \code{\link{C50Model}}            \tab f   \tab     \tab   \cr
   \code{\link{CForestModel}}        \tab f   \tab n   \tab S \cr
   \code{\link{CoxModel}}            \tab     \tab     \tab S \cr
   \code{\link{EarthModel}}          \tab f   \tab n   \tab   \cr
   \code{\link{FDAModel}}            \tab f   \tab     \tab   \cr
-  \code{\link{GAMBoostModel}}       \tab f   \tab n   \tab S \cr
+  \code{\link{GAMBoostModel}}       \tab b   \tab n   \tab S \cr
   \code{\link{GBMModel}}            \tab f   \tab n   \tab S \cr
-  \code{\link{GLMBoostModel}}       \tab f   \tab n   \tab S \cr
+  \code{\link{GLMBoostModel}}       \tab b   \tab n   \tab S \cr
   \code{\link{GLMModel}}            \tab b   \tab n   \tab   \cr
   \code{\link{GLMNetModel}}         \tab f   \tab m,n \tab S \cr
   \code{\link{KNNModel}}            \tab f,o \tab n   \tab   \cr
