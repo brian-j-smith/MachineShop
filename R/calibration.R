@@ -133,7 +133,7 @@ setMethod(".calibration_default", c("numeric", "numeric"),
 
 setMethod(".calibration_default", c("Surv", "matrix"),
   function(observed, predicted, breaks, times, ...) {
-    colnames(predicted) <- paste0("Time", 1:length(times))
+    colnames(predicted) <- paste("Time", 1:length(times))
     df <- data.frame(Response = rep(colnames(predicted),
                                     each = nrow(predicted)))
     if (is.null(breaks)) {
