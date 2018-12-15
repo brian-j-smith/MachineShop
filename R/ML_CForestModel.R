@@ -47,6 +47,7 @@ CForestModel <- function(teststat = c("quad", "max"),
   
   MLModel(
     name = "CForestModel",
+    label = "Conditional Random Forests",
     packages = "party",
     types = c("factor", "numeric", "Surv"),
     params = list(controls = as.call(c(.(party::cforest_control), args))),

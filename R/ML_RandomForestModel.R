@@ -37,6 +37,7 @@ RandomForestModel <- function(ntree = 500,
   
   MLModel(
     name = "RandomForestModel",
+    label = "Random Forests",
     packages = "randomForest",
     types = c("factor", "numeric"),
     params = params(environment()),

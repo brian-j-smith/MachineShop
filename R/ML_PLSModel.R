@@ -27,6 +27,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
   
   MLModel(
     name = "PLSModel",
+    label = "Partial Least Squares",
     packages = "pls",
     types = c("factor", "numeric"),
     params = params(environment()),

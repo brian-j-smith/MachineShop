@@ -43,6 +43,7 @@ LDAModel <- function(prior = NULL, tol = 1e-4,
   
   MLModel(
     name = "LDAModel",
+    label = "Linear Discriminant Analysis",
     packages = "MASS",
     types = "factor",
     params = params(environment()),

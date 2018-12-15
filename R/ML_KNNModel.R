@@ -34,6 +34,7 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
   
   MLModel(
     name = "KNNModel",
+    label = "K-Nearest Neighbors Model",
     packages = "kknn",
     types = c("factor", "numeric", "ordered"),
     params = params(environment()),

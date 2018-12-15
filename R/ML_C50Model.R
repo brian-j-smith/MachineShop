@@ -61,6 +61,7 @@ C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
   
   MLModel(
     name = "C50Model",
+    label = "C5.0 Classification",
     packages = "C50",
     types = "factor",
     params = params,

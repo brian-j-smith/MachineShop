@@ -4,7 +4,7 @@
 \alias{MLModel}
 \title{MLModel Class Constructor}
 \usage{
-MLModel(name = "MLModel", packages = character(0),
+MLModel(name = "MLModel", label = name, packages = character(0),
   types = character(0), params = list(), nvars = function(data) NULL,
   fit = function(formula, data, weights, ...) stop("no fit function"),
   predict = function(object, newdata, times, ...)
@@ -12,6 +12,8 @@ MLModel(name = "MLModel", packages = character(0),
 }
 \arguments{
 \item{name}{character string name for the instantiated \code{MLModel} object.}
+
+\item{label}{descriptive label for the model.}
 
 \item{packages}{character vector of packages required by the object.}
 

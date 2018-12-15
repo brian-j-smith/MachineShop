@@ -48,6 +48,7 @@ EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
   
   MLModel(
     name = "EarthModel",
+    label = "Multivariate Adaptive Regression Splines",
     packages = "earth",
     types = c("factor", "numeric"),
     params = params(environment()),

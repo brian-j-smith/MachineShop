@@ -39,6 +39,7 @@ StackedModel <- function(..., control = CVControl, weights = NULL) {
   
   new("StackedModel",
     name = "StackedModel",
+    label = "Stacked Regression",
     types = c("factor", "matrix", "numeric", "ordered", "Surv"),
     params = as.list(environment()),
     fitbits = MLFitBits(

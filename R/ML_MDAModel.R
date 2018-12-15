@@ -50,6 +50,7 @@ MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
   
   MLModel(
     name = "MDAModel",
+    label = "Mixture Discriminant Analysis",
     packages = "mda",
     types = "factor",
     params = params(environment()),

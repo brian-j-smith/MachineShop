@@ -54,6 +54,7 @@ GAMBoostModel <- function(family = NULL,
 
   MLModel(
     name = "GAMBoostModel",
+    label = "Gradient Boosting with Additive Models",
     packages = "mboost",
     types = c("binary", "numeric", "Surv"),
     params = params,

@@ -31,6 +31,7 @@ TreeModel <- function(mincut = 5, minsize = 10, mindev = 0.01,
   
   MLModel(
     name = "TreeModel",
+    label = "Regression and Classification Trees",
     packages = "tree",
     types = c("factor", "numeric"),
     params = params(environment()),

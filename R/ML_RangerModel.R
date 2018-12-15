@@ -55,6 +55,7 @@ RangerModel <- function(num.trees = 500, mtry = NULL,
   
   MLModel(
     name = "RangerModel",
+    label = "Fast Random Forests",
     packages = "ranger",
     types = c("factor", "numeric", "Surv"),
     params = params(environment()),

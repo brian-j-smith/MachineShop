@@ -39,6 +39,7 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
 
   MLModel(
     name = "CoxModel",
+    label = "Cox Regression",
     packages = "rms",
     types = "Surv",
     params = params,
@@ -92,6 +93,7 @@ CoxStepAICModel <- function(ties = c("efron", "breslow", "exact"), ...,
   
   MLModel(
     name = "CoxStepAICModel",
+    label = "Cox Regression (Stepwise)",
     packages = c(stepmodel@packages, "MASS"),
     types = stepmodel@types,
     params = c(stepmodel@params, params),

@@ -51,6 +51,7 @@ AdaBoostModel <- function(boos = TRUE, mfinal = 100,
   
   MLModel(
     name = "AdaBoostModel",
+    label = "Boosting with Classification Trees",
     packages = "adabag",
     types = "factor",
     params = params,

@@ -48,6 +48,7 @@ FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
   
   MLModel(
     name = "FDAModel",
+    label = "Flexible Discriminant Analysis",
     packages = "mda",
     types = "factor",
     params = params(environment()),
@@ -78,5 +79,6 @@ PDAModel <- function(lambda = 1, df = NULL, ...) {
   args$method <- .(mda::gen.ridge)
   model <- do.call(FDAModel, args, quote = TRUE)
   model@name <- "PDAModel"
+  model@label <- "Penalized Discriminant Analysis"
   model
 }

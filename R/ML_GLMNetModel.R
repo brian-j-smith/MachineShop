@@ -56,6 +56,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
   
   MLModel(
     name = "GLMNetModel",
+    label = "Lasso and Elastic-Net",
     packages = "glmnet",
     types = c("factor", "matrix", "numeric", "Surv"),
     params = params(environment()),

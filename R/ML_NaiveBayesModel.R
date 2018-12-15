@@ -24,6 +24,7 @@ NaiveBayesModel <- function(laplace = 0) {
   
   MLModel(
     name = "NaiveBayesModel",
+    label = "Naive Bayes Classifier",
     packages = "e1071",
     types = "factor",
     params = params(environment()),

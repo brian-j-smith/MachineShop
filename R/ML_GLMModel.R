@@ -36,6 +36,7 @@ GLMModel <- function(family = NULL, ...) {
   
   MLModel(
     name = "GLMModel",
+    label = "Generalized Linear Models",
     packages = "stats",
     types = c("binary", "numeric"),
     params = params,
@@ -88,6 +89,7 @@ GLMStepAICModel <- function(family = NULL, ...,
   
   MLModel(
     name = "GLMStepAICModel",
+    label = "Generalized Linear Models (Stepwise)",
     packages = c(stepmodel@packages, "MASS"),
     types = stepmodel@types,
     params = c(stepmodel@params, params),

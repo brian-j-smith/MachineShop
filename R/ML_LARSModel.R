@@ -41,6 +41,7 @@ LARSModel <- function(type = c("lasso", "lar", "forward.stagewise", "stepwise"),
 
   MLModel(
     name = "LARSModel",
+    label = "Least Angle Regression",
     packages = "lars",
     types = "numeric",
     params = params(environment()),

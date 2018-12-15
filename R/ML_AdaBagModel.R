@@ -43,6 +43,7 @@ AdaBagModel <- function(mfinal = 100, minsplit = 20,
   
   MLModel(
     name = "AdaBagModel",
+    label = "Bagging with Classification Trees",
     packages = "adabag",
     types = "factor",
     params = params,

@@ -45,6 +45,7 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
   
   MLModel(
     name = "XGBModel",
+    label = "Extreme Gradient Boosting",
     packages = "xgboost",
     types = c("factor", "numeric"),
     params = params(environment()),
@@ -123,7 +124,8 @@ XGBDARTModel <- function(objective = NULL, base_score = 0.5,
                          grow_policy="depthwise", max_leaves = 0, max_bin = 256,
                          sample_type = "uniform", normalize_type = "tree",
                          rate_drop = 0, one_drop = 0, skip_drop = 0, ...) {
-  .XGBModel("XGBDARTModel", "dart", environment(), ...)
+  .XGBModel("XGBDARTModel", "Extreme Gradient Boosting (DART)",
+            "dart", environment(), ...)
 }
 
 
@@ -132,7 +134,8 @@ XGBDARTModel <- function(objective = NULL, base_score = 0.5,
 XGBLinearModel <- function(objective = NULL, base_score = 0.5,
                            lambda = 0, alpha = 0, updater = "shotgun",
                            feature_selector = "cyclic", top_k = 0, ...) {
-  .XGBModel("XGBLinearModel", "gblinear", environment(), ...)
+  .XGBModel("XGBLinearModel", "Extreme Gradient Boosting (Linear)",
+            "gblinear", environment(), ...)
 }
 
 
@@ -148,14 +151,16 @@ XGBTreeModel <- function(objective = NULL, base_score = 0.5,
                          refresh_leaf = 1, process_type = "default",
                          grow_policy="depthwise", max_leaves = 0, max_bin = 256,
                          ...) {
-  .XGBModel("XGBTreeModel", "gbtree", environment(), ...)
+  .XGBModel("XGBTreeModel", "Extreme Gradient Boosting (Tree)",
+            "gbtree", environment(), ...)
 }
 
 
-.XGBModel <- function(name, booster, envir, ...) {
+.XGBModel <- function(name, label, booster, envir, ...) {
   args <- list(...)
   args$params <- as.call(c(.(list), params(envir), booster = booster))
   model <- do.call(XGBModel, args, quote = TRUE)
   model@name <- name
+  model@label <- label
   model
 }

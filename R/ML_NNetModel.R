@@ -45,6 +45,7 @@ NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
   
   MLModel(
     name = "NNetModel",
+    label = "Feed-Forward Neural Networks",
     packages = "nnet",
     types = c("factor", "numeric"),
     params = params(environment()),

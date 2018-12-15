@@ -40,6 +40,7 @@ QDAModel <- function(prior = NULL, method = c("moment", "mle", "mve", "t"),
   
   MLModel(
     name = "QDAModel",
+    label = "Quadratic Discriminant Analysis",
     packages = "MASS",
     types = "factor",
     params = params(environment()),

@@ -34,6 +34,7 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
   
   MLModel(
     name = "SurvRegModel",
+    label = "Parametric Survival",
     packages = "rms",
     types = "Surv",
     params = params,
@@ -101,6 +102,7 @@ SurvRegStepAICModel <- function(dist = c("weibull", "exponential", "gaussian",
 
   MLModel(
     name = "SurvRegStepAICModel",
+    label = "Parametric Survival (Stepwise)",
     packages = c(stepmodel@packages, "MASS"),
     types = stepmodel@types,
     params = c(stepmodel@params, params),

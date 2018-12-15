@@ -184,6 +184,7 @@ MLFitBits <- setClass("MLFitBits",
 #' MLModel Class Constructor
 #' 
 #' @param name character string name for the instantiated \code{MLModel} object.
+#' @param label descriptive label for the model.
 #' @param packages character vector of packages required by the object.
 #' @param types character vector of response variable types on which the model
 #' can be fit.
@@ -194,7 +195,7 @@ MLFitBits <- setClass("MLFitBits",
 #' @param predict model prediction function.
 #' @param varimp variable importance function.
 #' 
-MLModel <- function(name = "MLModel", packages = character(0),
+MLModel <- function(name = "MLModel", label = name, packages = character(0),
                     types = character(0), params = list(),
                     nvars = function(data) NULL,
                     fit = function(formula, data, weights, ...)
@@ -208,6 +209,7 @@ MLModel <- function(name = "MLModel", packages = character(0),
   
   new("MLModel",
       name = name,
+      label = label,
       packages = packages,
       types = types,
       params = params,
@@ -221,6 +223,7 @@ MLModel <- function(name = "MLModel", packages = character(0),
 
 setClass("MLModel",
   slots = c(name = "character",
+            label = "character",
             packages = "character",
             types = "character",
             params = "list",

@@ -31,6 +31,7 @@ POLRModel <- function(method = c("logistic", "probit", "loglog", "cloglog",
   
   MLModel(
     name = "POLRModel",
+    label = "Ordered Logistic Regression",
     packages = "MASS",
     types = "ordered",
     params = params(environment()),
