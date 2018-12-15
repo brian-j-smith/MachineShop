@@ -248,68 +248,6 @@ setClass("SVMTanhModelFit", contain = c("MLModelFit", "ksvm"))
 setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 
 
-#' @name resample
-#' @rdname resample-methods
-#' 
-#' @param ... named or unnamed \code{resample} output to combine together with
-#' the \code{Resamples} constructor.
-#' 
-#' @details Output being combined from more than one model with the
-#' \code{Resamples} constructor must have been generated with the same
-#' resampling \code{control} object.
-#' 
-Resamples <- function(...) {
-  .Resamples(...)
-}
-
-
-.Resamples <- function(..., .control = NULL, .strata = character()) {
-  args <- list(...)
-  
-  if (length(args) == 0) stop("no resample output given")
-  
-  .Data <- args[[1]]
-  if (length(args) > 1) {
-    if (!all(sapply(args, function(x) is(x, "Resamples")))) {
-      stop("values to combine must be Resamples objects")
-    }
-    
-    .control <- .Data@control
-    is_equal_control <- function(x) isTRUE(all.equal(x@control, .control))
-    if (!all(sapply(args, is_equal_control))) {
-      stop("resamples have different control structures")
-    }
-    
-    .strata <- .Data@strata
-    if (!all(sapply(args, function(x) x@strata == .strata))) {
-      stop("resamples have different strata variables")
-    }
-    
-    .Data <- do.call(append, make_unique_levels(args, which = "Model"))
-  }
-  
-  var_names <- c("Model", "Resample", "Case", "Observed", "Predicted")
-  is_missing <- !(var_names %in% names(.Data))
-  if (any(is_missing)) {
-    stop("missing resample variables: ", toString(var_names[is_missing]))
-  }
-  
-  new("Resamples", .Data, control = .control, strata = as.character(.strata))
-}
-
-
-setClass("Resamples",
-  slots = c(control = "MLControl", strata = "character"),
-  contains = "data.frame"
-)
-
-
-MLModelTune <- setClass("MLModelTune",
-  slots = c(grid = "data.frame", resamples = "Resamples", selected = "numeric"),
-  contains = "MLModel"
-)
-
-
 #' @name calibration
 #' @rdname calibration
 #' 
@@ -438,6 +376,70 @@ setClass("Performance",
 PerformanceDiff <- setClass("PerformanceDiff",
   slots = c("model_names" = "character"),
   contains = "Performance"
+)
+
+
+MLModelTune <- setClass("MLModelTune",
+  slots = c(grid = "data.frame",
+            performance = "Performance",
+            selected = "numeric"),
+  contains = "MLModel"
+)
+
+
+#' @name resample
+#' @rdname resample-methods
+#' 
+#' @param ... named or unnamed \code{resample} output to combine together with
+#' the \code{Resamples} constructor.
+#' 
+#' @details Output being combined from more than one model with the
+#' \code{Resamples} constructor must have been generated with the same
+#' resampling \code{control} object.
+#' 
+Resamples <- function(...) {
+  .Resamples(...)
+}
+
+
+.Resamples <- function(..., .control = NULL, .strata = character()) {
+  args <- list(...)
+  
+  if (length(args) == 0) stop("no resample output given")
+  
+  .Data <- args[[1]]
+  if (length(args) > 1) {
+    if (!all(sapply(args, function(x) is(x, "Resamples")))) {
+      stop("values to combine must be Resamples objects")
+    }
+    
+    .control <- .Data@control
+    is_equal_control <- function(x) isTRUE(all.equal(x@control, .control))
+    if (!all(sapply(args, is_equal_control))) {
+      stop("resamples have different control structures")
+    }
+    
+    .strata <- .Data@strata
+    if (!all(sapply(args, function(x) x@strata == .strata))) {
+      stop("resamples have different strata variables")
+    }
+    
+    .Data <- do.call(append, make_unique_levels(args, which = "Model"))
+  }
+  
+  var_names <- c("Model", "Resample", "Case", "Observed", "Predicted")
+  is_missing <- !(var_names %in% names(.Data))
+  if (any(is_missing)) {
+    stop("missing resample variables: ", toString(var_names[is_missing]))
+  }
+  
+  new("Resamples", .Data, control = .control, strata = as.character(.strata))
+}
+
+
+setClass("Resamples",
+  slots = c(control = "MLControl", strata = "character"),
+  contains = "data.frame"
 )
 
 

@@ -93,7 +93,7 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
 plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
                              type = c("boxplot", "density", "errorbar", "line",
                                       "violin"), ...) {
-  perf <- performance(x@resamples)
+  perf <- x@performance
   type <- match.arg(type)
   if (type == "line") {
     grid <- x@grid

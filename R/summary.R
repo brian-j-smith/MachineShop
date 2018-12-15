@@ -79,7 +79,7 @@ summary.MLModelTune <- function(object,
                                           "Min" = base::min,
                                           "Max" = base::max),
                                 na.rm = TRUE, ...) {
-  summary(object@resamples, stats = stats, na.rm = na.rm, ...)
+  summary(object@performance, stats = stats, na.rm = na.rm, ...)
 }
 
 

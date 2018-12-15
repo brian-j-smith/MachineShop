@@ -55,7 +55,7 @@ diff.Resamples <- function(x, ...) {
 #' @rdname diff-methods
 #' 
 diff.MLModelTune <- function(x, ...) {
-  diff(x@resamples)
+  diff(x@performance)
 }
 
 

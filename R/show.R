@@ -104,11 +104,11 @@ setMethod("show", "MLModelFit",
 setMethod("show", "MLModelTune",
   function(object) {
     callNextMethod(object)
-    cat("grid:\n")
+    cat("Grid:\n")
     print(object@grid)
-    cat("\nresamples:\n")
-    print(object@resamples)
-    model_names <- levels(object@resamples$Model)
+    cat("\n")
+    print(object@performance)
+    model_names <- dimnames(object@performance)[[3]]
     if (length(model_names) > 1) {
       cat("Selected: ", model_names[object@selected],
           " (", names(object@selected), ")\n\n", sep = "")

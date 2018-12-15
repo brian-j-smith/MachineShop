@@ -91,7 +91,14 @@ tune.recipe <- function(x, models, grid = data.frame(),
   function(x, data, models, grid, control, metrics, stat, maximize, ...) {
   
   if (is.list(models)) {
-    models <- lapply(models, getMLObject, class = "MLModel")
+    model_names <- character()
+    for (i in seq(models)) {
+      models[[i]] <- getMLObject(models[[i]], class = "MLModel")
+      name <- names(models)[i]
+      model_names[i] <- 
+        if (!is.null(name) && nzchar(name)) name else models[[i]]@name
+    }
+    names(models) <- make.unique(model_names)
     grid <- data.frame()
   } else {
     model <- getMLObject(models, class = "MLModel")
@@ -105,18 +112,17 @@ tune.recipe <- function(x, models, grid = data.frame(),
            function(x) performance(x, ...),
            function(x) performance(x, metrics = metrics, ...))
 
-  resamples <- list()
-  perf <- numeric()
-  for (i in seq(models)) {
-    resamples[[i]] <- resample(x, data = data, model = models[[i]],
-                               control = control)
-    perf_tune <- performance_tune(resamples[[i]])
-    perf[i] <- stat(na.omit(perf_tune[, 1]))
+  perf_list <- list()
+  perf_stat <- numeric()
+  for (name in names(models)) {
+    res <- resample(x, data = data, model = models[[name]], control = control)
+    perf_list[[name]] <- performance_tune(res)
+    perf_stat[name] <- stat(na.omit(perf_list[[name]][, 1]))
   }
-  selected <- ifelse(maximize, which.max, which.min)(perf)
+  perf <- do.call(Performance, perf_list)
+  selected <- ifelse(maximize, which.max, which.min)(perf_stat)
   
-  MLModelTune(models[[selected]], grid = grid,
-              resamples = do.call(Resamples, resamples),
-              selected = structure(selected, names = colnames(perf_tune)[1]))
+  MLModelTune(models[[selected]], grid = grid, performance = perf,
+              selected = structure(selected, names = colnames(perf)[1]))
   
 }
