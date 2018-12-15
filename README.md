@@ -596,6 +596,36 @@ n
 
 <td style="text-align:left;">
 
+Least Angle Regression
+
+</td>
+
+<td style="text-align:center;">
+
+LARSModel
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
 Linear Discriminant Analysis
 
 </td>

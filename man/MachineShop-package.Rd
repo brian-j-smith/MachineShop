@@ -32,6 +32,7 @@ with the \code{\link{modelinfo}} function.
   \code{\link{GLMModel}}            \tab b   \tab n   \tab   \cr
   \code{\link{GLMNetModel}}         \tab f   \tab m,n \tab S \cr
   \code{\link{KNNModel}}            \tab f,o \tab n   \tab   \cr
+  \code{\link{LARSModel}}           \tab     \tab n   \tab   \cr
   \code{\link{LDAModel}}            \tab f   \tab     \tab   \cr
   \code{\link{LMModel}}             \tab f   \tab m,n \tab   \cr
   \code{\link{MDAModel}}            \tab f   \tab     \tab   \cr
