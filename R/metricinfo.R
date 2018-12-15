@@ -23,54 +23,37 @@
 #' names(metricinfo(factor(0), numeric(0)))
 #' 
 metricinfo <- function(...) {
-  args <- list(...)
-  if (length(args) == 0) args <- list(NULL)
-  do.call(.metricinfo, args)
+  .metricinfo(...)
 }
+
+
+.metric_labels = c("accuracy" = "Accuracy",
+                   "brier" = "Brier Score",
+                   "cindex" = "Concordance Index",
+                   "cross_entropy" = "Cross Entropy",
+                   "f_score" = "F Score",
+                   "kappa2" = "Cohen's Kappa",
+                   "mae" = "Mean Absolute Error",
+                   "mse" = "Mean Squared Error",
+                   "npv" = "Negative Predictive Value",
+                   "ppv" = "Positive Predictive Value",
+                   "pr_auc" = "Area Under Precision-Recall Curve",
+                   "precision" = "Precision",
+                   "r2" = "Coefficient of Determination",
+                   "recall" = "Recall",
+                   "roc_auc" = "Area Under ROC Curve",
+                   "roc_index" = "ROC Index",
+                   "sensitivity" = "Sensitivity",
+                   "specificity" = "Specificity",
+                   "weighted_kappa2" = "Weighted Cohen's Kappa")
 
 
 setGeneric(".metricinfo", function(x, ...) standardGeneric(".metricinfo"))
 
 
-setMethod(".metricinfo", "NULL",
+setMethod(".metricinfo", "missing",
   function(x, ...) {
-    metric_labels = c("accuracy" = "Accuracy",
-                      "brier" = "Brier Score",
-                      "cindex" = "Concordance Index",
-                      "cross_entropy" = "Cross Entropy",
-                      "f_score" = "F Score",
-                      "kappa2" = "Cohen's Kappa",
-                      "mae" = "Mean Absolute Error",
-                      "mse" = "Mean Squared Error",
-                      "npv" = "Negative Predictive Value",
-                      "ppv" = "Positive Predictive Value",
-                      "pr_auc" = "Area Under Precision-Recall Curve",
-                      "precision" = "Precision",
-                      "r2" = "Coefficient of Determination",
-                      "recall" = "Recall",
-                      "roc_auc" = "Area Under ROC Curve",
-                      "roc_index" = "ROC Index",
-                      "sensitivity" = "Sensitivity",
-                      "specificity" = "Specificity",
-                      "weighted_kappa2" = "Weighted Cohen's Kappa")
-    
-    info <- list()
-    for (name in names(metric_labels)) {
-      methods <- findMethods(paste0(".", name))
-      is_defined <- sapply(methods, function(x) body(x) != quote(numeric()))
-      types <- as.data.frame(do.call(rbind, methods@signatures[is_defined]))
-      names(types) <- methods@arguments
-      
-      info[[name]] <- list(
-        label = metric_labels[[name]],
-        arguments = args(get(name, mode = "function")),
-        types = types
-      )
-      signatures <- methods@signatures
-      structure(as.data.frame(do.call(rbind, methods@signatures)),
-                names = methods@arguments)
-    }
-    info
+    do.call(metricinfo, as.list(names(.metric_labels)))
   }
 )
 
@@ -91,7 +74,25 @@ setMethod(".metricinfo", "ANY",
 
 setMethod(".metricinfo", "character",
   function(x, ...) {
-    metricinfo()[unique(c(x, ...))]
+    info <- list()
+    if (x %in% names(.metric_labels)) {
+      methods <- findMethods(paste0(".", x))
+      is_defined <- sapply(methods, function(method) {
+        body(method) != quote(numeric())
+      })
+      types <- as.data.frame(do.call(rbind, methods@signatures[is_defined]))
+      names(types) <- methods@arguments
+      info[[x]] <- list(
+        label = .metric_labels[[x]],
+        arguments = args(get(x, mode = "function")),
+        types = types
+      )
+    }
+    if (length(list(...))) {
+      info <- c(info, metricinfo(...))
+      info <- info[unique(names(info))]
+    }
+    info
   }
 )
 

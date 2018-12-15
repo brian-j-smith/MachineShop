@@ -23,80 +23,65 @@
 #' names(modelinfo(factor(0), numeric(0)))
 #' 
 modelinfo <- function(...) {
-  args <- list(...)
-  if (length(args) == 0) args <- list(NULL)
-  do.call(.modelinfo, args)
+  .modelinfo(...)
 }
+
+
+.model_names <- c("AdaBagModel",
+                  "AdaBoostModel",
+                  "BlackBoostModel",
+                  "C50Model",
+                  "CForestModel",
+                  "CoxModel",
+                  "CoxStepAICModel",
+                  "EarthModel",
+                  "FDAModel",
+                  "GAMBoostModel",
+                  "GBMModel",
+                  "GLMBoostModel",
+                  "GLMModel",
+                  "GLMStepAICModel",
+                  "GLMNetModel",
+                  "KNNModel",
+                  "LARSModel",
+                  "LDAModel",
+                  "LMModel",
+                  "MDAModel",
+                  "NaiveBayesModel",
+                  "NNetModel",
+                  "PDAModel",
+                  "PLSModel",
+                  "POLRModel",
+                  "QDAModel",
+                  "RandomForestModel",
+                  "RangerModel",
+                  "RPartModel",
+                  "StackedModel",
+                  "SuperModel",
+                  "SurvRegModel",
+                  "SurvRegStepAICModel",
+                  "SVMModel",
+                  "SVMANOVAModel",
+                  "SVMBesselModel",
+                  "SVMLaplaceModel",
+                  "SVMLinearModel",
+                  "SVMPolyModel",
+                  "SVMRadialModel",
+                  "SVMSplineModel",
+                  "SVMTanhModel",
+                  "TreeModel",
+                  "XGBModel",
+                  "XGBDARTModel",
+                  "XGBLinearModel",
+                  "XGBTreeModel")
 
 
 setGeneric(".modelinfo", function(x, ...) standardGeneric(".modelinfo"))
 
 
-setMethod(".modelinfo", "NULL",
+setMethod(".modelinfo", "missing",
   function(x, ...) {
-    model_labels <- c(
-      "AdaBagModel" = "Bagging with Classification Trees",
-      "AdaBoostModel" = "Boosting with Classification Trees",
-      "BlackBoostModel" = "Gradient Boosting with Regression Trees",
-      "C50Model" = "C5.0 Classification",
-      "CForestModel" = "Conditional Random Forests",
-      "CoxModel" = "Cox Regression",
-      "CoxStepAICModel" = "Cox Regression (Stepwise)",
-      "EarthModel" = "Multivariate Adaptive Regression Splines",
-      "FDAModel" = "Flexible Discriminant Analysis",
-      "GAMBoostModel" = "Gradient Boosting with Additive Models",
-      "GBMModel" = "Generalized Boosted Regression",
-      "GLMBoostModel" = "Gradient Boosting with Linear Models",
-      "GLMModel" = "Generalized Linear Models",
-      "GLMStepAICModel" = "Generalized Linear Models (Stepwise)",
-      "GLMNetModel" = "Lasso and Elastic-Net",
-      "KNNModel" = "K-Nearest Neighbors Model",
-      "LARSModel" = "Least Angle Regression",
-      "LDAModel" = "Linear Discriminant Analysis",
-      "LMModel" = "Linear Model",
-      "MDAModel" = "Mixture Discriminant Analysis",
-      "NaiveBayesModel" = "Naive Bayes Classifier",
-      "NNetModel" = "Feed-Forward Neural Networks",
-      "PDAModel" = "Penalized Discriminant Analysis",
-      "PLSModel" = "Partial Least Squares",
-      "POLRModel" = "Ordered Logistic Regression",
-      "QDAModel" = "Quadratic Discriminant Analysis",
-      "RandomForestModel" = "Random Forests",
-      "RangerModel" = "Fast Random Forests",
-      "RPartModel" = "Recursive Partitioning and Regression Trees",
-      "StackedModel" = "Stacked Regression",
-      "SuperModel" = "Super Learner",
-      "SurvRegModel" = "Parametric Survival",
-      "SurvRegStepAICModel" = "Parametric Survival (Stepwise)",
-      "SVMModel" = "Support Vector Machines",
-      "SVMANOVAModel" = "Support Vector Machines (ANOVA)",
-      "SVMBesselModel" = "Suplport Vector Machines (Bessel)",
-      "SVMLaplaceModel" = "Support Vector Machines (Laplace)",
-      "SVMLinearModel" = "Support Vector Machines (Linear)",
-      "SVMPolyModel" = "Support Vector Machines (Poly)",
-      "SVMRadialModel" = "Support Vector Machines (Radial)",
-      "SVMSplineModel" = "Support Vector Machines (Spline)",
-      "SVMTanhModel" = "Support Vector Machines (Tanh)",
-      "TreeModel" = "Regression and Classification Trees",
-      "XGBModel" = "Extreme Gradient Boosting",
-      "XGBDARTModel" = "Extreme Gradient Boosting (DART)",
-      "XGBLinearModel" = "Extreme Gradient Boosting (Linear)",
-      "XGBTreeModel" = "Extreme Gradient Boosting (Tree)"
-    )
-    
-    info <- list()
-    for (name in names(model_labels)) {
-      model_function <- get(name, mode = "function")
-      model <- model_function()
-      info[[model@name]] <- list(
-        label = model_labels[[model@name]],
-        packages = model@packages,
-        types = model@types,
-        arguments = args(model_function),
-        varimp = !is.null(body(fitbit(model, "varimp")))
-      )
-    }
-    info
+    do.call(modelinfo, as.list(.model_names))
   }
 )
 
@@ -131,9 +116,17 @@ setMethod(".modelinfo", "function",
 
 setMethod(".modelinfo", "MLModel",
   function(x, ...) {
-    model_names <- sapply(list(x, ...), function(object) {
-      getMLObject(object, "MLModel")@name
-    })
-    modelinfo()[unique(model_names)]
+    info <- structure(list(list(
+      label = x@label,
+      packages = x@packages,
+      types = x@types,
+      arguments = args(get(x@name, mode = "function")),
+      varimp = !is.null(body(fitbit(x, "varimp")))
+    )), names = x@name)
+    if (length(list(...))) {
+      info <- c(info, modelinfo(...))
+      info <- info[unique(names(info))]
+    }
+    info
   }
 )
