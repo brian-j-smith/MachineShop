@@ -35,10 +35,11 @@ performance <- function(x, ...) {
 #' plot(perf)
 #' 
 performance.Resamples <- function(x, ..., na.rm = TRUE) {
-  control <- x@control
-  if (na.rm) x <- na.omit(x)
   args <- list(...)
-  args$times <- control@surv_times
+  args$time <- x@control@surv_times
+
+  if (na.rm) x <- na.omit(x)
+  
   perf_by <- by(x, x[c("Model", "Resample")], function(x) {
     if (nrow(x)) {
       do.call(performance, c(list(x$Observed, x$Predicted), args))
@@ -46,17 +47,15 @@ performance.Resamples <- function(x, ..., na.rm = TRUE) {
       NA
     }
   }, simplify = FALSE)
-  perf_list <- tapply(perf_by,
-                      rep(dimnames(perf_by)$Model, dim(perf_by)[2]),
-                      function(perf) do.call(rbind, perf),
-                      simplify = FALSE)
-  perf <- if (length(perf_list) > 1) {
-    abind(perf_list, along = 3)
-  } else {
-    perf_list[[1]]
-  }
-  dimnames(perf)[[1]] <- dimnames(perf_by)$Resample
-  Performance(perf)
+  
+  perf_list <- tapply(perf_by, rep(dimnames(perf_by)$Model, dim(perf_by)[2]),
+                      function(perf) {
+                        perf_model <- do.call(rbind, perf)
+                        rownames(perf_model) <- dimnames(perf_by)$Resample
+                        perf_model
+                      }, simplify = FALSE)
+  
+  do.call(Performance, perf_list)
 }
 
 
