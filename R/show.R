@@ -11,7 +11,7 @@ print.Resamples <- function(x, ...) {
 setMethod("show", "MLControl",
   function(object) {
     if (length(object@surv_times)) {
-      cat("Survival times:", toString(object@surv_times), "\n\n")
+      cat("Survival times:", toString(object@surv_times), "\n")
     }
     cat("Seed:", object@seed, "\n\n")
     invisible()
@@ -21,9 +21,10 @@ setMethod("show", "MLControl",
 
 setMethod("show", "BootMLControl",
   function(object) {
-    cat("Resamples control object of class \"", class(object), "\"\n\n",
-        "Method: Bootstrap Resampling\n\n",
-        "Samples: ", object@samples, "\n\n",
+    cat("An object from class \"MLControl\"\n\n",
+        "Name: BootControl\n",
+        "Label: Bootstrap Resampling\n",
+        "Samples: ", object@samples, "\n",
         sep = "")
     callNextMethod(object)
     invisible()
@@ -33,10 +34,11 @@ setMethod("show", "BootMLControl",
 
 setMethod("show", "CVMLControl",
   function(object) {
-    cat("Resamples control object of class \"", class(object), "\"\n\n",
-        "Method: K-Fold Cross-Validation\n\n",
-        "Folds: ", object@folds, "\n\n",
-        "Repeats: ", object@repeats, "\n\n",
+    cat("An object from class \"MLControl\"\n\n",
+        "Name: CVControl\n",
+        "Label: K-Fold Cross-Validation\n",
+        "Folds: ", object@folds, "\n",
+        "Repeats: ", object@repeats, "\n",
         sep = "")
     callNextMethod(object)
     invisible()
@@ -46,9 +48,10 @@ setMethod("show", "CVMLControl",
 
 setMethod("show", "OOBMLControl",
   function(object) {
-    cat("Resamples control object of class \"", class(object), "\"\n\n",
-        "Method: Out-Of-Bootstrap Resampling\n\n",
-        "Samples: ", object@samples, "\n\n",
+    cat("An object from class \"MLControl\"\n\n",
+        "Name: OOBControl\n",
+        "Label: Out-Of-Bootstrap Resampling\n",
+        "Samples: ", object@samples, "\n",
         sep = "")
     callNextMethod(object)
     invisible()
@@ -58,9 +61,10 @@ setMethod("show", "OOBMLControl",
 
 setMethod("show", "SplitMLControl",
   function(object) {
-    cat("Resamples control object of class \"", class(object), "\"\n\n",
-        "Method: Split Training and Test Samples\n\n",
-        "Training proportion: ", object@prop, "\n\n",
+    cat("An object from class \"MLControl\"\n\n",
+        "Name: SplitControl\n",
+        "Label: Split Training and Test Samples\n",
+        "Training proportion: ", object@prop, "\n",
         sep = "")
     callNextMethod(object)
     invisible()
@@ -70,8 +74,9 @@ setMethod("show", "SplitMLControl",
 
 setMethod("show", "TrainMLControl",
   function(object) {
-    cat("Resamples control object of class \"", class(object), "\"\n\n",
-        "Method: Training Resubstitution\n\n",
+    cat("An object from class \"MLControl\"\n\n",
+        "Name: TrainControl\n",
+        "Label: Training Resubstitution\n",
         sep = "")
     callNextMethod(object)
     invisible()
@@ -81,11 +86,16 @@ setMethod("show", "TrainMLControl",
 
 setMethod("show", "MLMetric",
   function(object) {
-    cat("Metric name: ", object@name, "\n\n",
-        "Label: ", object@label, "\n\n",
-        "Maximize: ", object@maximize, "\n\n",
+    info <- metricinfo(object)[[1]]
+    cat("An object of class \"", class(object), "\"\n\n",
+        "Metric name: ", info$name, "\n",
+        "Label: ", info$label, "\n",
+        "Maximize: ", info$maximize, "\n\n",
         sep = "")
-    show(object@.Data)
+    cat("Arguments:\n")
+    print(info$arguments)
+    cat("\nTypes:\n")
+    print(info$types)
   }
 )
 
@@ -93,8 +103,9 @@ setMethod("show", "MLMetric",
 setMethod("show", "MLModel",
   function(object) {
     cat("An object of class \"", class(object), "\"\n\n",
-        "Name: ", object@name, "\n\n",
-        "Required packages: ", toString(object@packages), "\n\n",
+        "Model name: ", object@name, "\n",
+        "Label: ", object@label, "\n",
+        "Packages: ", toString(object@packages), "\n",
         "Response types: ", toString(object@types), "\n\n",
         "Parameters:\n",
         sep = "")
@@ -121,8 +132,9 @@ setMethod("show", "MLModelTune",
     print(object@performance)
     model_names <- dimnames(object@performance)[[3]]
     if (length(model_names) > 1) {
-      cat("Selected: ", model_names[object@selected],
-          " (", names(object@selected), ")\n\n", sep = "")
+      cat("Selected (", names(object@selected), "): ",
+          model_names[object@selected], "\n\n",
+          sep = "")
     }
   }
 )
@@ -143,10 +155,11 @@ setMethod("show", "HTestPerformanceDiff",
 setMethod("show", "Performance",
   function(object) {
     cat("An object of class \"", class(object), "\"\n\n", sep = "")
+    cat("Metrics:", toString(dimnames(object)[[2]]), "\n")
     if (length(dim(object)) > 2) {
-      cat("Models:", toString(dimnames(object)[[3]]), "\n\n")
+      cat("Models:", toString(dimnames(object)[[3]]), "\n")
     }
-    cat("Metrics:", toString(dimnames(object)[[2]]), "\n\n")
+    cat("\n")
   }
 )
 
@@ -154,10 +167,11 @@ setMethod("show", "Performance",
 setMethod("show", "Resamples",
   function(object) {
     cat("An object of class \"", class(object), "\"\n\n",
-        "Models: ", toString(levels(object$Model)), "\n\n", sep = "")
+        "Models: ", toString(levels(object$Model)), "\n", sep = "")
     if (length(object@strata)) {
-      cat("Stratification variable:", object@strata, "\n\n")
+      cat("Stratification variable:", object@strata, "\n")
     }
+    cat("\n")
     show(object@control)
     invisible()
   }
@@ -171,7 +185,8 @@ setMethod("show", "SummaryConfusion",
     cat("Number of responses: ", n, "\n",
         "Accuracy (SE): ", acc, " (", sqrt(acc * (1 - acc) / n), ")\n",
         "Majority class: ", object@Majority, "\n",
-        "Kappa: ", object@Kappa, "\n\n", sep = "")
+        "Kappa: ", object@Kappa, "\n\n",
+        sep = "")
     print(object@.Data)
   }
 )
