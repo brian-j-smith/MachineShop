@@ -7,14 +7,14 @@
 metricinfo(...)
 }
 \arguments{
-\item{...}{one or more metric function names, observed response, observed and
-predicted responses, or a \code{Resamples} object.  If none are specified,
-information is returned on all available metrics by default.}
+\item{...}{one or more metric functions, function names, observed response,
+observed and predicted responses, or a \code{Resamples} object.  If none are
+specified, information is returned on all available metrics by default.}
 }
 \value{
-List of named metrics available for the supplied arguments and
-containing a descriptive \code{"label"}, the functions' \code{"arguments"},
-and supported response variable \code{"types"}.
+List of named metrics containing a descriptive \code{"label"},
+whether to \code{"maximize"} the metric for better performance, the function
+\code{"arguments"}, and supported response variable \code{"types"} for each.
 }
 \description{
 Display information about metrics provided by the \pkg{MachineShop} package.

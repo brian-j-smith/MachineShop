@@ -2,12 +2,12 @@
 #' 
 #' Display information about models provided by the \pkg{MachineShop} package.
 #' 
-#' @param ... \code{MLModel} objects, constructor functions, character
-#' strings naming constructor functions, or supported responses for which to
-#' display information.  If none are specified, information is returned on all
-#' available models by default.
+#' @param ... \code{MLModel} objects, constructor functions, constructor
+#' function names, or supported responses for which to display information.  If
+#' none are specified, information is returned on all available models by
+#' default.
 #' 
-#' @return List of named models containing the \code{"label"}, required
+#' @return List of named models containing a descriptive \code{"label"}, source
 #' \code{"packages"}, supported response variable \code{"types"}, the
 #' constructor \code{"arguments"}, and whether a \code{"varimp"} function is
 #' implemented for each.
@@ -23,7 +23,19 @@
 #' names(modelinfo(factor(0), numeric(0)))
 #' 
 modelinfo <- function(...) {
-  .modelinfo(...)
+  args <- list(...)
+  if (length(args) == 0) args <- as.list(.model_names)
+  info <- do.call(.modelinfo, args)
+  
+  is_type <- !sapply(info, is, class2 = "list")
+  if (any(is_type)) {
+    info_models <- if (all(is_type)) modelinfo() else info[!is_type]
+    info_types <- do.call(.modelinfo_types, info[is_type])
+    info <- c(info_models, info_types)
+    info <- info[intersect(names(info_models), names(info_types))]
+  }
+  
+  info[unique(names(info))]
 }
 
 
@@ -76,57 +88,54 @@ modelinfo <- function(...) {
                   "XGBTreeModel")
 
 
-setGeneric(".modelinfo", function(x, ...) standardGeneric(".modelinfo"))
+.modelinfo <- function(x, ...) {
+  UseMethod(".modelinfo")
+}
 
 
-setMethod(".modelinfo", "missing",
-  function(x, ...) {
-    do.call(modelinfo, as.list(.model_names))
-  }
-)
+.modelinfo.default <- function(x, ...) {
+  info <- list(x)
+  if (length(list(...))) c(info, .modelinfo(...)) else info
+}
 
 
-setMethod(".modelinfo", "ANY",
-  function(x, ...) {
-    args <- list(x, ...)
-    info <- modelinfo()
-    is_type <- sapply(info, function(this) {
-      all(sapply(args, function(object) {
-        any(sapply(this$types, function(type) is_response(object, type)))
-      }))
-    })
-    info[is_type]
-  }
-)
+.modelinfo.character <- function(x, ...) {
+  model <- try(getMLObject(x, "MLModel"), silent = TRUE)
+  if (is(model, "try-error")) model <- list()
+  .modelinfo(model, ...)
+}
 
 
-setMethod(".modelinfo", "character",
-  function(x, ...) {
-    modelinfo(getMLObject(x, "MLModel"), ...)
-  }
-)
+.modelinfo.function <- function(x, ...) {
+  model <- try(getMLObject(x, "MLModel"), silent = TRUE)
+  if (is(model, "try-error")) model <- list()
+  .modelinfo(model, ...)
+}
 
 
-setMethod(".modelinfo", "function",
-  function(x, ...) {
-    modelinfo(getMLObject(x, "MLModel"), ...)
-  }
-)
+.modelinfo.list <- function(x, ...) {
+  if (length(list(...))) .modelinfo(...) else list()
+}
 
 
-setMethod(".modelinfo", "MLModel",
-  function(x, ...) {
-    info <- structure(list(list(
-      label = x@label,
-      packages = x@packages,
-      types = x@types,
-      arguments = args(get(x@name, mode = "function")),
-      varimp = !is.null(body(fitbit(x, "varimp")))
-    )), names = x@name)
-    if (length(list(...))) {
-      info <- c(info, modelinfo(...))
-      info <- info[unique(names(info))]
-    }
-    info
-  }
-)
+.modelinfo.MLModel <- function(x, ...) {
+  info <- structure(list(list(
+    label = x@label,
+    packages = x@packages,
+    types = x@types,
+    arguments = args(get(x@name, mode = "function")),
+    varimp = !is.null(body(fitbit(x, "varimp")))
+  )), names = x@name)
+  if (length(list(...))) c(info, .modelinfo(...)) else info
+}
+
+
+.modelinfo_types <- function(...) {
+  info <- modelinfo()
+  is_supported <- sapply(info, function(this) {
+    all(sapply(list(...), function(object) {
+      any(sapply(this$types, function(type) is_response(object, type)))
+    }))
+  })
+  info[is_supported]
+}

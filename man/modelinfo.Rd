@@ -7,13 +7,13 @@
 modelinfo(...)
 }
 \arguments{
-\item{...}{\code{MLModel} objects, constructor functions, character
-strings naming constructor functions, or supported responses for which to
-display information.  If none are specified, information is returned on all
-available models by default.}
+\item{...}{\code{MLModel} objects, constructor functions, constructor
+function names, or supported responses for which to display information.  If
+none are specified, information is returned on all available models by
+default.}
 }
 \value{
-List of named models containing the \code{"label"}, required
+List of named models containing a descriptive \code{"label"}, source
 \code{"packages"}, supported response variable \code{"types"}, the
 constructor \code{"arguments"}, and whether a \code{"varimp"} function is
 implemented for each.

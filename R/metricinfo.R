@@ -2,13 +2,13 @@
 #' 
 #' Display information about metrics provided by the \pkg{MachineShop} package.
 #' 
-#' @param ... one or more metric function names, observed response, observed and
-#' predicted responses, or a \code{Resamples} object.  If none are specified,
-#' information is returned on all available metrics by default.
+#' @param ... one or more metric functions, function names, observed response,
+#' observed and predicted responses, or a \code{Resamples} object.  If none are
+#' specified, information is returned on all available metrics by default.
 #' 
-#' @return List of named metrics available for the supplied arguments and
-#' containing a descriptive \code{"label"}, the functions' \code{"arguments"},
-#' and supported response variable \code{"types"}.
+#' @return List of named metrics containing a descriptive \code{"label"},
+#' whether to \code{"maximize"} the metric for better performance, the function
+#' \code{"arguments"}, and supported response variable \code{"types"} for each.
 #' 
 #' @seealso \code{\link{metrics}}, \code{\link{resample}}
 #' 
@@ -23,82 +23,108 @@
 #' names(metricinfo(factor(0), numeric(0)))
 #' 
 metricinfo <- function(...) {
-  .metricinfo(...)
+  args <- list(...)
+  if (length(args) == 0) args <- as.list(.metric_names)
+  info <- do.call(.metricinfo, args)
+  
+  is_type <- !sapply(info, is, class2 = "list")
+  if (any(is_type)) {
+    info_metrics <- if (all(is_type)) metricinfo() else info[!is_type]
+    info_types <- do.call(.metricinfo_types, info[is_type])
+    info <- c(info_metrics, info_types)
+    info <- info[intersect(names(info_metrics), names(info_types))]
+  }
+  
+  info[unique(names(info))]
 }
 
 
-.metric_labels = c("accuracy" = "Accuracy",
-                   "brier" = "Brier Score",
-                   "cindex" = "Concordance Index",
-                   "cross_entropy" = "Cross Entropy",
-                   "f_score" = "F Score",
-                   "kappa2" = "Cohen's Kappa",
-                   "mae" = "Mean Absolute Error",
-                   "mse" = "Mean Squared Error",
-                   "npv" = "Negative Predictive Value",
-                   "ppv" = "Positive Predictive Value",
-                   "pr_auc" = "Area Under Precision-Recall Curve",
-                   "precision" = "Precision",
-                   "r2" = "Coefficient of Determination",
-                   "recall" = "Recall",
-                   "roc_auc" = "Area Under ROC Curve",
-                   "roc_index" = "ROC Index",
-                   "sensitivity" = "Sensitivity",
-                   "specificity" = "Specificity",
-                   "weighted_kappa2" = "Weighted Cohen's Kappa")
+.metric_names = c("accuracy",
+                  "brier",
+                  "cindex",
+                  "cross_entropy",
+                  "f_score",
+                  "kappa2",
+                  "mae",
+                  "mse",
+                  "npv",
+                  "ppv",
+                  "pr_auc",
+                  "precision",
+                  "r2",
+                  "recall",
+                  "rmse",
+                  "roc_auc",
+                  "roc_index",
+                  "sensitivity",
+                  "specificity",
+                  "weighted_kappa2")
 
 
-setGeneric(".metricinfo", function(x, ...) standardGeneric(".metricinfo"))
+.metricinfo <- function(x, ...) {
+  UseMethod(".metricinfo")
+}
 
 
-setMethod(".metricinfo", "missing",
-  function(x, ...) {
-    do.call(metricinfo, as.list(names(.metric_labels)))
-  }
-)
+.metricinfo.default <- function(x, ...) {
+  info <- list(x)
+  if (length(list(...))) c(info, .metricinfo(...)) else info
+}
 
 
-setMethod(".metricinfo", "ANY",
-  function(x, y = NULL, ...) {
-    info <- metricinfo()
-    is_type <- sapply(info, function(this) {
-      any(apply(this$type, 1, function(type) {
-        is_method_type <- is(x, type[1])
-        if (is.null(y)) is_method_type else is_method_type && is(y, type[2])
-      }))
+.metricinfo.character <- function(x, ...) {
+  metric <- try(get(x, mode = "function"), silent = TRUE)
+  if (is(metric, "try-error")) metric <- list()
+  .metricinfo(metric, ...)
+}
+
+
+.metricinfo.function <- function(x, ...) {
+  .metricinfo(list(), ...)
+}
+
+
+.metricinfo.list <- function(x, ...) {
+  if (length(list(...))) .metricinfo(...) else list()
+}
+
+
+.metricinfo.MLMetric <- function(x, ...) {
+  generic_name <- paste0(".", x@name)
+  if (isGeneric(generic_name)) {
+    methods <- findMethods(generic_name)
+    is_defined <- sapply(methods, function(method) {
+      body(method) != quote(numeric())
     })
-    info[is_type]
+    types <- as.data.frame(do.call(rbind, methods@signatures[is_defined]),
+                           stringsAsFactors = FALSE)
+    names(types) <- methods@arguments
+  } else {
+    types <- NULL
   }
-)
+  
+  info <- structure(list(list(
+    label = x@label,
+    maximize = x@maximize,
+    arguments = args(x),
+    types = types
+  )), names = x@name)
+  
+  if (length(list(...))) c(info, .metricinfo(...)) else info
+}
 
 
-setMethod(".metricinfo", "character",
-  function(x, ...) {
-    info <- list()
-    if (x %in% names(.metric_labels)) {
-      methods <- findMethods(paste0(".", x))
-      is_defined <- sapply(methods, function(method) {
-        body(method) != quote(numeric())
-      })
-      types <- as.data.frame(do.call(rbind, methods@signatures[is_defined]))
-      names(types) <- methods@arguments
-      info[[x]] <- list(
-        label = .metric_labels[[x]],
-        arguments = args(get(x, mode = "function")),
-        types = types
-      )
-    }
-    if (length(list(...))) {
-      info <- c(info, metricinfo(...))
-      info <- info[unique(names(info))]
-    }
-    info
-  }
-)
+.metricinfo.Resamples <- function(x, ...) {
+  .metricinfo(x$Observed, x$Predicted, ...)
+}
 
 
-setMethod(".metricinfo", "Resamples",
-  function(x, ...) {
-    metricinfo(x$Observed, x$Predicted)
-  }
-)
+.metricinfo_types <- function(x, y = NULL, ...) {
+  info <- metricinfo()
+  is_supported <- sapply(info, function(this) {
+    is_method_type <- inherits(x, this$types$observed)
+    if (is.null(y)) is_method_type else
+      is_method_type && inherits(y, this$types$predicted)
+  })
+  info[is_supported]
+}
