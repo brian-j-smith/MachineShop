@@ -79,6 +79,17 @@ setMethod("show", "TrainMLControl",
 )
 
 
+setMethod("show", "MLMetric",
+  function(object) {
+    cat("Metric name: ", object@name, "\n\n",
+        "Label: ", object@label, "\n\n",
+        "Maximize: ", object@maximize, "\n\n",
+        sep = "")
+    show(object@.Data)
+  }
+)
+
+
 setMethod("show", "MLModel",
   function(object) {
     cat("An object of class \"", class(object), "\"\n\n",
@@ -117,6 +128,18 @@ setMethod("show", "MLModelTune",
 )
 
 
+setMethod("show", "HTestPerformanceDiff",
+  function(object) {
+    cat("An object of class \"", class(object), "\"\n\n",
+        "Upper diagonal: mean differences (row - column)\n",
+        "Lower diagonal: p-values\n",
+        "P-value adjustment method: ", object@adjust, "\n\n",
+        sep = "")
+    print(object@.Data)
+  }
+)
+
+
 setMethod("show", "Performance",
   function(object) {
     cat("An object of class \"", class(object), "\"\n\n", sep = "")
@@ -137,18 +160,6 @@ setMethod("show", "Resamples",
     }
     show(object@control)
     invisible()
-  }
-)
-
-
-setMethod("show", "HTestPerformanceDiff",
-  function(object) {
-    cat("An object of class \"", class(object), "\"\n\n",
-        "Upper diagonal: mean differences (row - column)\n",
-        "Lower diagonal: p-values\n",
-        "P-value adjustment method: ", object@adjust, "\n\n",
-        sep = "")
-    print(object@.Data)
   }
 )
 

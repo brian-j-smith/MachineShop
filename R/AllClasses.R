@@ -181,6 +181,22 @@ MLFitBits <- setClass("MLFitBits",
 )
 
 
+MLMetric <- function(object, name = "MLMetric", label = name, maximize = TRUE) {
+  new("MLMetric", object, name = name, label = label, maximize = maximize)
+}
+
+
+"MLMetric<-" <- function(object, value) {
+  do.call(MLMetric, c(object, value))
+}
+
+
+setClass("MLMetric",
+  slots = c(name = "character", label = "character", maximize = "logical"),
+  contains = "function"
+)
+
+
 #' MLModel Class Constructor
 #' 
 #' @param name character string name for the instantiated \code{MLModel} object.
