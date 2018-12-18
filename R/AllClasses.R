@@ -70,11 +70,11 @@ setClass("MLControl",
 #' BootControl(samples = 100)
 #' 
 BootControl <- function(samples = 25, ...) {
-  new("BootMLControl", MLControl(...), samples = samples)
+  new("MLControlBoot", MLControl(...), samples = samples)
 }
 
 
-setClass("BootMLControl",
+setClass("MLControlBoot",
   slots = c(samples = "numeric"),
   contains = "MLControl"
 )
@@ -96,11 +96,11 @@ setClass("BootMLControl",
 #' CVControl(folds = 10, repeats = 5)
 #' 
 CVControl <- function(folds = 10, repeats = 1, ...) {
-  new("CVMLControl", MLControl(...), folds = folds, repeats = repeats)
+  new("MLControlCV", MLControl(...), folds = folds, repeats = repeats)
 }
 
 
-setClass("CVMLControl",
+setClass("MLControlCV",
   slots = c(folds = "numeric", repeats = "numeric"),
   contains = "MLControl"
 )
@@ -118,11 +118,11 @@ setClass("CVMLControl",
 #' OOBControl(samples = 100)
 #' 
 OOBControl <- function(samples = 25, ...) {
-  new("OOBMLControl", MLControl(...), samples = samples)
+  new("MLControlOOB", MLControl(...), samples = samples)
 }
 
 
-setClass("OOBMLControl",
+setClass("MLControlOOB",
   slots = c(samples = "numeric"),
   contains = "MLControl"
 )
@@ -142,11 +142,11 @@ setClass("OOBMLControl",
 #' SplitControl(prop = 2/3)
 #' 
 SplitControl <- function(prop = 2/3, ...) {
-  new("SplitMLControl", MLControl(...), prop = prop)
+  new("MLControlSplit", MLControl(...), prop = prop)
 }
 
 
-setClass("SplitMLControl",
+setClass("MLControlSplit",
   slots = c(prop = "numeric"),
   contains = "MLControl"
 )
@@ -163,11 +163,11 @@ setClass("SplitMLControl",
 #' TrainControl()
 #' 
 TrainControl <- function(...) {
-  new("TrainMLControl", MLControl(...))
+  new("MLControlTrain", MLControl(...))
 }
 
 
-setClass("TrainMLControl",
+setClass("MLControlTrain",
   contains = "MLControl"
 )
 

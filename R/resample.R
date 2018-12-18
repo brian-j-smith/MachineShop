@@ -85,7 +85,7 @@ resample.recipe <- function(x, model, control = CVControl, ...) {
 setGeneric(".resample", function(object, x, ...) standardGeneric(".resample"))
 
 
-setMethod(".resample", c("BootMLControl", "ModelFrame"),
+setMethod(".resample", c("MLControlBoot", "ModelFrame"),
   function(object, x, model) {
     strata <- strata_var(x)
     set.seed(object@seed)
@@ -104,7 +104,7 @@ setMethod(".resample", c("BootMLControl", "ModelFrame"),
 )
 
 
-setMethod(".resample", c("BootMLControl", "recipe"),
+setMethod(".resample", c("MLControlBoot", "recipe"),
   function(object, x, model) {
     strata <- strata_var(x)
     set.seed(object@seed)
@@ -124,7 +124,7 @@ setMethod(".resample", c("BootMLControl", "recipe"),
 )
 
 
-setMethod(".resample", c("CVMLControl", "ModelFrame"),
+setMethod(".resample", c("MLControlCV", "ModelFrame"),
   function(object, x, model) {
     strata <- strata_var(x)
     set.seed(object@seed)
@@ -145,7 +145,7 @@ setMethod(".resample", c("CVMLControl", "ModelFrame"),
 )
 
 
-setMethod(".resample", c("CVMLControl", "recipe"),
+setMethod(".resample", c("MLControlCV", "recipe"),
   function(object, x, model) {
     strata <- strata_var(x)
     set.seed(object@seed)
@@ -166,7 +166,7 @@ setMethod(".resample", c("CVMLControl", "recipe"),
 )
 
 
-setMethod(".resample", c("OOBMLControl", "ModelFrame"),
+setMethod(".resample", c("MLControlOOB", "ModelFrame"),
   function(object, x, model) {
     strata <- strata_var(x)
     set.seed(object@seed)
@@ -187,7 +187,7 @@ setMethod(".resample", c("OOBMLControl", "ModelFrame"),
 )
 
 
-setMethod(".resample", c("OOBMLControl", "recipe"),
+setMethod(".resample", c("MLControlOOB", "recipe"),
   function(object, x, model) {
     strata <- strata_var(x)
     set.seed(object@seed)
@@ -207,7 +207,7 @@ setMethod(".resample", c("OOBMLControl", "recipe"),
 )
 
 
-setMethod(".resample", c("SplitMLControl", "ModelFrame"),
+setMethod(".resample", c("MLControlSplit", "ModelFrame"),
   function(object, x, model) {
     strata <- strata_var(x)
     set.seed(object@seed)
@@ -221,7 +221,7 @@ setMethod(".resample", c("SplitMLControl", "ModelFrame"),
 )
 
 
-setMethod(".resample", c("SplitMLControl", "recipe"),
+setMethod(".resample", c("MLControlSplit", "recipe"),
   function(object, x, model) {
     strata <- strata_var(x)
     set.seed(object@seed)
@@ -235,7 +235,7 @@ setMethod(".resample", c("SplitMLControl", "recipe"),
 )
 
 
-setMethod(".resample", c("TrainMLControl", "ModelFrame"),
+setMethod(".resample", c("MLControlTrain", "ModelFrame"),
   function(object, x, model) {
     set.seed(object@seed)
     do.call(Resamples, resample_args(x, x, model, object))
@@ -243,7 +243,7 @@ setMethod(".resample", c("TrainMLControl", "ModelFrame"),
 )
 
 
-setMethod(".resample", c("TrainMLControl", "recipe"),
+setMethod(".resample", c("MLControlTrain", "recipe"),
   function(object, x, model) {
     set.seed(object@seed)
     test <- ModelFrame(formula(terms(x)), getdata(x))

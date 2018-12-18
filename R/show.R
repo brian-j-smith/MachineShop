@@ -19,7 +19,7 @@ setMethod("show", "MLControl",
 )
 
 
-setMethod("show", "BootMLControl",
+setMethod("show", "MLControlBoot",
   function(object) {
     cat("An object from class \"MLControl\"\n\n",
         "Name: BootControl\n",
@@ -32,7 +32,7 @@ setMethod("show", "BootMLControl",
 )
 
 
-setMethod("show", "CVMLControl",
+setMethod("show", "MLControlCV",
   function(object) {
     cat("An object from class \"MLControl\"\n\n",
         "Name: CVControl\n",
@@ -46,7 +46,7 @@ setMethod("show", "CVMLControl",
 )
 
 
-setMethod("show", "OOBMLControl",
+setMethod("show", "MLControlOOB",
   function(object) {
     cat("An object from class \"MLControl\"\n\n",
         "Name: OOBControl\n",
@@ -59,7 +59,7 @@ setMethod("show", "OOBMLControl",
 )
 
 
-setMethod("show", "SplitMLControl",
+setMethod("show", "MLControlSplit",
   function(object) {
     cat("An object from class \"MLControl\"\n\n",
         "Name: SplitControl\n",
@@ -72,7 +72,7 @@ setMethod("show", "SplitMLControl",
 )
 
 
-setMethod("show", "TrainMLControl",
+setMethod("show", "MLControlTrain",
   function(object) {
     cat("An object from class \"MLControl\"\n\n",
         "Name: TrainControl\n",
