@@ -213,6 +213,41 @@ setMethod(".f_score", c("factor", "numeric"),
 
 #' @rdname metrics
 #' 
+gini <- function(observed, predicted, ...) {
+  .gini(observed, predicted)
+}
+
+MLMetric(gini) <- list("gini", "Gini Coefficient", FALSE)
+
+
+setGeneric(".gini",
+           function(observed, predicted, ...) standardGeneric(".gini"))
+
+
+setMethod(".gini", c("ANY", "ANY"),
+  function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".gini", c("matrix", "matrix"),
+  function(observed, predicted, ...) {
+    .metric.matrix(observed, predicted, gini)
+  }
+)
+
+
+setMethod(".gini", c("numeric", "numeric"),
+  function(observed, predicted, ...) {
+    y_predicted <- observed[order(predicted, decreasing = TRUE)]
+    y_observed <- observed[order(observed, decreasing = TRUE)]
+    gini_sum <- function(y) sum(cumsum(y / sum(y) - 1 / length(y)))
+    gini_sum(y_predicted) / gini_sum(y_observed)
+  }
+)
+
+
+#' @rdname metrics
+#' 
 kappa2 <- function(observed, predicted, cutoff = 0.5, ...) {
   .kappa2(observed, predicted, cutoff = cutoff)
 }

@@ -7,6 +7,7 @@
 \alias{cindex}
 \alias{cross_entropy}
 \alias{f_score}
+\alias{gini}
 \alias{kappa2}
 \alias{mae}
 \alias{mse}
@@ -33,6 +34,8 @@ cindex(observed, predicted, ...)
 cross_entropy(observed, predicted, ...)
 
 f_score(observed, predicted, cutoff = 0.5, beta = 1, ...)
+
+gini(observed, predicted, ...)
 
 kappa2(observed, predicted, cutoff = 0.5, ...)
 
