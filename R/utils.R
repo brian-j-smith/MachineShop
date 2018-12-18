@@ -114,7 +114,7 @@ basehaz <- function(y, risk, times) {
   nrisk <- rowsum(risk, y[, "time"]) %>% rev %>% cumsum %>% rev
   nevent <- rowsum(y[, "status"], y[, "time"])[, 1]
   cumhaz <- cumsum(nevent / nrisk) %>% structure(names = NULL)
-  idx <- approx(y_times, seq(y_times), times, method = "constant",
+  idx <- approx(y_times, seq_along(y_times), times, method = "constant",
                 f = 0, yleft = 0, yright = length(y_times))$y
   c(0, cumhaz)[idx + 1]
 }
@@ -208,7 +208,7 @@ make_unique_levels <- function(x, which) {
 
 
 match_indices <- function(indices, choices) {
-  lookup <- structure(seq(choices), names = choices)
+  lookup <- structure(seq_along(choices), names = choices)
   indices <- na.omit(names(lookup)[lookup[indices]])
   if (length(indices) == 0) {
     indices <- names(lookup)[1]

@@ -101,7 +101,7 @@ setMethod(".brier", c("Surv", "matrix"),
     obs_events <- observed[, "status"]
     fitcens <- survfit(Surv(obs_times, 1 - obs_events) ~ 1)
   
-    metrics <- sapply(seq(times), function(i) {
+    metrics <- sapply(seq_along(times), function(i) {
       time <- times[i]
       is_obs_after <- obs_times > time
       weights <- (obs_events == 1 | is_obs_after) /
@@ -553,7 +553,7 @@ setMethod(".roc_auc", c("Surv", "matrix"),
   function(observed, predicted, times, ...) {
     stopifnot(ncol(predicted) == length(times))
     
-    metrics <- sapply(seq(times), function(i) {
+    metrics <- sapply(seq_along(times), function(i) {
       survivalROC::survivalROC(observed[, "time"], observed[, "status"],
                                1 - predicted[, i], predict.time = times[i],
                                method = "KM")$AUC
