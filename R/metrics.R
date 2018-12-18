@@ -280,16 +280,9 @@ setMethod(".mae", c("numeric", "numeric"),
 
 setMethod(".mae", c("matrix", "matrix"),
   function(observed, predicted, ...) {
-    n <- ncol(observed)
-    sapply(1:n, function(i) mae(observed[, i], predicted[, i])) / n
+    .metric.matrix(observed, predicted, mae)
   }
 )
-
-
-mean.SurvMetrics <- function(x, times) {
-  weights <- diff(c(0, times)) / tail(times, 1)
-  sum(weights * x)
-}
 
 
 #' @rdname metrics
@@ -319,8 +312,7 @@ setMethod(".mse", c("numeric", "numeric"),
 
 setMethod(".mse", c("matrix", "matrix"),
   function(observed, predicted, ...) {
-    n <- ncol(observed)
-    sapply(1:n, function(i) mse(observed[, i], predicted[, i])) / n
+    .metric.matrix(observed, predicted, mse)
   }
 )
 
@@ -464,8 +456,7 @@ setMethod(".r2", c("numeric", "numeric"),
 
 setMethod(".r2", c("matrix", "matrix"),
   function(observed, predicted, ...) {
-    n <- ncol(observed)
-    sapply(1:n, function(i) r2(observed[, i], predicted[, i])) / n
+    .metric.matrix(observed, predicted, r2)
   }
 )
 
@@ -683,3 +674,16 @@ setMethod(".weighted_kappa2", c("ordered", "matrix"),
     weighted_kappa2(observed, predicted, power = power)
   }
 )
+
+
+.metric.matrix <- function(observed, predicted, f, ...) {
+  mean(sapply(1:ncol(observed), function(i) {
+    f(observed[, i], predicted[, i], ...)
+  }))
+}
+
+
+mean.SurvMetrics <- function(x, times) {
+  weights <- diff(c(0, times)) / tail(times, 1)
+  sum(weights * x)
+}
