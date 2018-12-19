@@ -37,7 +37,9 @@ tune <- function(x, ...) {
 #' @param stat function to compute a summary statistic on resampled values of
 #' the metric for model selection.
 #' @param maximize logical indicating whether to select the model having the
-#' maximum or minimum value of the performance metric.
+#' maximum or minimum value of the performance metric.  Set automatically if a
+#' package \code{\link{metrics}} function is explicitly specified for the model
+#' selection.
 #' 
 #' @seealso \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
 #' \code{\link{modelinfo}}, \code{\link{expand.model}}, \code{\link{MLControl}},
@@ -120,6 +122,15 @@ tune.recipe <- function(x, models, grid = data.frame(),
     perf_stat[name] <- stat(na.omit(perf_list[[name]][, 1]))
   }
   perf <- do.call(Performance, perf_list)
+  
+  metric <- if (is.character(metrics)) {
+    get(metrics[1], mode = "function")
+  } else if (is.list(metrics)) {
+    metrics[[1]]
+  } else {
+    metrics
+  }
+  if (is(metric, "MLMetric")) maximize <- metric@maximize
   selected <- ifelse(maximize, which.max, which.min)(perf_stat)
   
   MLModelTune(models[[selected]], grid = grid, performance = perf,

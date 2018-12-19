@@ -50,7 +50,9 @@ selection is based on the first specified metric.}
 the metric for model selection.}
 
 \item{maximize}{logical indicating whether to select the model having the
-maximum or minimum value of the performance metric.}
+maximum or minimum value of the performance metric.  Set automatically if a
+package \code{\link{metrics}} function is explicitly specified for the model
+selection.}
 }
 \value{
 \code{MLModelTune} class object that inherits from \code{MLModel}.
