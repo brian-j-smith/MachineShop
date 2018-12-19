@@ -306,16 +306,16 @@ setMethod(".mae", c("ANY", "ANY"),
 )
 
 
-setMethod(".mae", c("numeric", "numeric"),
+setMethod(".mae", c("matrix", "matrix"),
   function(observed, predicted, ...) {
-    mean(abs(observed - predicted))
+    .metric.matrix(observed, predicted, mae)
   }
 )
 
 
-setMethod(".mae", c("matrix", "matrix"),
+setMethod(".mae", c("numeric", "numeric"),
   function(observed, predicted, ...) {
-    .metric.matrix(observed, predicted, mae)
+    mean(abs(observed - predicted))
   }
 )
 
@@ -338,16 +338,16 @@ setMethod(".mse", c("ANY", "ANY"),
 )
 
 
-setMethod(".mse", c("numeric", "numeric"),
+setMethod(".mse", c("matrix", "matrix"),
   function(observed, predicted, ...) {
-    mean((observed - predicted)^2)
+    .metric.matrix(observed, predicted, mse)
   }
 )
 
 
-setMethod(".mse", c("matrix", "matrix"),
+setMethod(".mse", c("numeric", "numeric"),
   function(observed, predicted, ...) {
-    .metric.matrix(observed, predicted, mse)
+    mean((observed - predicted)^2)
   }
 )
 
@@ -489,16 +489,16 @@ setMethod(".r2", c("ANY", "ANY"),
 )
 
 
-setMethod(".r2", c("numeric", "numeric"),
+setMethod(".r2", c("matrix", "matrix"),
   function(observed, predicted, ...) {
-    1 - sum((observed - predicted)^2) / sum((observed - mean(observed))^2)
+    .metric.matrix(observed, predicted, r2)
   }
 )
 
 
-setMethod(".r2", c("matrix", "matrix"),
+setMethod(".r2", c("numeric", "numeric"),
   function(observed, predicted, ...) {
-    .metric.matrix(observed, predicted, r2)
+    1 - sum((observed - predicted)^2) / sum((observed - mean(observed))^2)
   }
 )
 
@@ -543,6 +543,13 @@ setGeneric(".rmse",
 
 setMethod(".rmse", c("ANY", "ANY"),
   function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".rmse", c("matrix", "matrix"),
+  function(observed, predicted, ...) {
+    .metric.matrix(observed, predicted, rmse)
+  }
 )
 
 
