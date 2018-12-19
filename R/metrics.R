@@ -422,6 +422,13 @@ setMethod(".pr_auc", c("ANY", "ANY"),
 )
 
 
+setMethod(".pr_auc", c("factor", "matrix"), 
+  function(observed, predicted, ...) {
+    .metric.factor(observed, predicted, pr_auc)
+  }
+)
+
+
 setMethod(".pr_auc", c("factor", "numeric"),
   function(observed, predicted, ...) {
     perf <- ROCR::prediction(predicted, observed) %>%
@@ -561,6 +568,13 @@ setGeneric(".roc_auc",
 
 setMethod(".roc_auc", c("ANY", "ANY"),
   function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".roc_auc", c("factor", "matrix"), 
+  function(observed, predicted, ...) {
+    .metric.factor(observed, predicted, roc_auc)
+  }
 )
 
 
@@ -709,6 +723,13 @@ setMethod(".weighted_kappa2", c("ordered", "matrix"),
     weighted_kappa2(observed, predicted, power = power)
   }
 )
+
+
+.metric.factor <- function(observed, predicted, f, ...) {
+  mean(sapply(1:ncol(predicted), function(i) {
+    f(factor(observed == levels(observed)[i]), predicted[, i], ...)
+  }))
+}
 
 
 .metric.matrix <- function(observed, predicted, f, ...) {
