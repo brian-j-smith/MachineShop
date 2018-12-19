@@ -11,6 +11,7 @@
 \alias{kappa2}
 \alias{mae}
 \alias{mse}
+\alias{msle}
 \alias{npv}
 \alias{ppv}
 \alias{pr_auc}
@@ -18,6 +19,7 @@
 \alias{r2}
 \alias{recall}
 \alias{rmse}
+\alias{rmsle}
 \alias{roc_auc}
 \alias{roc_index}
 \alias{sensitivity}
@@ -43,6 +45,8 @@ mae(observed, predicted, ...)
 
 mse(observed, predicted, ...)
 
+msle(observed, predicted, ...)
+
 npv(observed, predicted, cutoff = 0.5, ...)
 
 ppv(observed, predicted, cutoff = 0.5, ...)
@@ -56,6 +60,8 @@ r2(observed, predicted, ...)
 recall(observed, predicted, cutoff = 0.5, ...)
 
 rmse(observed, predicted, ...)
+
+rmsle(observed, predicted, ...)
 
 roc_auc(observed, predicted, times = numeric(), ...)
 

@@ -354,6 +354,38 @@ setMethod(".mse", c("numeric", "numeric"),
 
 #' @rdname metrics
 #' 
+msle <- function(observed, predicted, ...) {
+  .msle(observed, predicted)
+}
+
+MLMetric(msle) <- list("msle", "Mean Squared Log Error", FALSE)
+
+
+setGeneric(".msle",
+           function(observed, predicted, ...) standardGeneric(".msle"))
+
+
+setMethod(".msle", c("ANY", "ANY"),
+  function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".msle", c("matrix", "matrix"),
+  function(observed, predicted, ...) {
+    .metric.matrix(observed, predicted, msle)
+  }
+)
+
+
+setMethod(".msle", c("numeric", "numeric"),
+  function(observed, predicted, ...) {
+    mean((log(1 + observed) - log(1 + predicted))^2)
+  }
+)
+
+
+#' @rdname metrics
+#' 
 npv <- function(observed, predicted, cutoff = 0.5, ...) {
   .npv(observed, predicted, cutoff = cutoff)
 }
@@ -556,6 +588,38 @@ setMethod(".rmse", c("matrix", "matrix"),
 setMethod(".rmse", c("numeric", "numeric"),
   function(observed, predicted, ...) {
     sqrt(mse(observed, predicted))
+  }
+)
+
+
+#' @rdname metrics
+#' 
+rmsle <- function(observed, predicted, ...) {
+  .rmsle(observed, predicted)
+}
+
+MLMetric(rmsle) <- list("rmsle", "Root Mean Squared Log Error", FALSE)
+
+
+setGeneric(".rmsle",
+           function(observed, predicted, ...) standardGeneric(".rmsle"))
+
+
+setMethod(".rmsle", c("ANY", "ANY"),
+  function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".rmsle", c("matrix", "matrix"),
+  function(observed, predicted, ...) {
+    .metric.matrix(observed, predicted, rmsle)
+  }
+)
+
+
+setMethod(".rmsle", c("numeric", "numeric"),
+  function(observed, predicted, ...) {
+    sqrt(msle(observed, predicted))
   }
 )
 
