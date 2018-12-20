@@ -179,7 +179,7 @@ list2function <- function(x) {
   if (is(x, "vector")) {
     x <- as.list(x)
     metric_names <- character()
-    for (i in seq_along(x)) {
+    for (i in seq(x)) {
       if (is(x[[i]], "character")) {
         metric_name <- x[[i]]
         x[[i]] <- get(metric_name, mode = "function")

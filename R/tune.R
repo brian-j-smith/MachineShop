@@ -123,13 +123,9 @@ tune.recipe <- function(x, models, grid = data.frame(),
   }
   perf <- do.call(Performance, perf_list)
   
-  metric <- if (is.character(metrics)) {
-    get(metrics[1], mode = "function")
-  } else if (is.list(metrics)) {
-    metrics[[1]]
-  } else {
-    metrics
-  }
+  metric <- metrics
+  if (is(metric, "vector")) metric <- metric[[1]]
+  if (is(metric, "character")) metric <- get(metric, mode = "function")
   if (is(metric, "MLMetric")) maximize <- metric@maximize
   selected <- ifelse(maximize, which.max, which.min)(perf_stat)
   
