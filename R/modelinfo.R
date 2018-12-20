@@ -41,6 +41,7 @@ modelinfo <- function(...) {
 
 .model_names <- c("AdaBagModel",
                   "AdaBoostModel",
+                  "BARTMachineModel",
                   "BlackBoostModel",
                   "C50Model",
                   "CForestModel",

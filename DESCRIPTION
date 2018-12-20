@@ -12,9 +12,9 @@ Description: Meta-package for statistical and machine learning with a common int
 Imports: abind, foreach, ggplot2, Hmisc, kernlab, magrittr, methods, party,
          polspline, recipes (>= 0.1.4), ROCR, rsample, Rsolnp, survival,
          survivalROC, utils
-Suggests: adabag, C50, doParallel, e1071, earth, gbm, glmnet, kableExtra, kknn,
-          knitr, lars, mda, MASS, mboost, nnet, partykit, pls, randomForest,
-          ranger, rmarkdown, rms, rpart, testthat, tree, xgboost
+Suggests: adabag, bartMachine, C50, doParallel, e1071, earth, gbm, glmnet,
+          kableExtra, kknn, knitr, lars, mda, MASS, mboost, nnet, partykit, pls,
+          randomForest, ranger, rmarkdown, rms, rpart, testthat, tree, xgboost
 License: GPL-3
 URL: https://github.com/brian-j-smith/MachineShop
 BugReports: https://github.com/brian-j-smith/MachineShop/issues
