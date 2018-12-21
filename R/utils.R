@@ -120,6 +120,13 @@ basehaz <- function(y, risk, times) {
 }
 
 
+extract <- function(formula, data, na.action = na.pass) {
+  mf <- model.frame(formula, data, na.action = na.action)
+  list(x = model.matrix(formula, mf)[, -1, drop = FALSE],
+       y = model.response(mf))
+}
+
+
 field <- function(object, name) {
   if (isS4(object)) slot(object, name) else object[[name]]
 }

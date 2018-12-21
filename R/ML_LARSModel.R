@@ -48,9 +48,9 @@ LARSModel <- function(type = c("lasso", "lar", "forward.stagewise", "stepwise"),
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, step = NULL, ...) {
       assert_equal_weights(weights)
-      mf <- model.frame(formula, data, na.action = na.pass)
-      x <- model.matrix(formula, mf)[, -1, drop = FALSE]
-      y <- model.response(mf)
+      terms <- extract(formula, data)
+      x <- terms$x
+      y <- terms$y
       if (is.null(step)) {
         modelfit <- lars::lars(x, y, ...)
         modelfit$step <- length(modelfit$df)
@@ -61,9 +61,7 @@ LARSModel <- function(type = c("lasso", "lar", "forward.stagewise", "stepwise"),
       modelfit
     },
     predict = function(object, newdata, fitbits, ...) {
-      fo <- formula(fitbits)[-2]
-      newmf <- model.frame(fo, newdata, na.action = na.pass)
-      newx <- model.matrix(fo, newmf)[, -1, drop = FALSE]
+      newx <- extract(formula(fitbits)[-2], newdata)$x
       predict(object, newx = newx, s = object$step, type = "fit")$fit
     }
   )

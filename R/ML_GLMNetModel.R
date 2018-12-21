@@ -62,9 +62,9 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
     params = params(environment()),
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, family = NULL, ...) {
-      mf <- model.frame(formula, data, na.action = na.pass)
-      x <- model.matrix(formula, mf)[, -1, drop = FALSE]
-      y <- model.response(mf)
+      terms <- extract(formula, data)
+      x <- terms$x
+      y <- terms$y
       if (is.null(family)) {
         family <- switch_class(y,
                                "factor" = ifelse(nlevels(y) == 2,
@@ -80,9 +80,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
     },
     predict = function(object, newdata, fitbits, times, ...) {
       y <- response(fitbits)
-      fo <- formula(fitbits)[-2]
-      newmf <- model.frame(fo, newdata, na.action = na.pass)
-      newx <- model.matrix(fo, newmf)[, -1, drop = FALSE]
+      newx <- extract(formula(fitbits)[-2], newdata)$x
       if (is.Surv(y)) {
         new_neg_risk <-
           -exp(predict(object, newx = newx, type = "link")) %>% drop
