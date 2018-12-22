@@ -89,4 +89,7 @@
 #' \code{\link{summary}} \cr 
 #' \code{\link{plot}}
 #' 
+#' Custom metrics and models can be created with the \code{\link{MLMetric}} and
+#' \code{\link{MLModel}} constructors.
+#' 
 "_PACKAGE"

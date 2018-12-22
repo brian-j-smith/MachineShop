@@ -231,7 +231,10 @@ setClass("MLMetric",
 
 #' MLModel Class Constructor
 #' 
-#' @param name character string name for the instantiated \code{MLModel} object.
+#' Create a model for use with the \pkg{MachineShop} package.
+#' 
+#' @param name character string name for the instantiated \code{MLModel} object;
+#' same as the derived model constructor name.
 #' @param label descriptive label for the model.
 #' @param packages character vector of packages required by the object.
 #' @param types character vector of response variable types on which the model
@@ -242,6 +245,39 @@ setClass("MLMetric",
 #' @param fit model fitting function.
 #' @param predict model prediction function.
 #' @param varimp variable importance function.
+#' 
+#' @details \code{MLModel} can be used to create custom model constructors.  To
+#' ensure full compatibility with the \pkg{MachineShop} package, add derived
+#' constructor functions to the package namespace with the \code{environment}
+#' function.  See example below.
+#' 
+#' @return \code{MLModel} class object.
+#' 
+#' @seealso \code{\link{modelinfo}}
+#' 
+#' @examples
+#' ## Logistic regression model constructor
+#' LogisticModel <- function() {
+#'   MLModel(
+#'     name = "LogisticModel",
+#'     label = "Logistic Regression",
+#'     package = "stats",
+#'     types = "binary",
+#'     fit = function(formula, data, weights, ...) {
+#'       environment(formula) <- environment()
+#'       glm(formula, data = data, weights = weights, family = binomial, ...)
+#'     },
+#'     predict = function(object, newdata, ...) {
+#'       predict(object, newdata = newdata, type = "response")
+#'     },
+#'     varimp = function(object, ...) {
+#'       pchisq(coef(object)^2 / diag(vcov(object)), 1)
+#'     }
+#'   )
+#' }
+#' 
+#' ## Add to MachineShop for full compatibility
+#' environment(LogisticModel) <- asNamespace("MachineShop")
 #' 
 MLModel <- function(name = "MLModel", label = name, packages = character(0),
                     types = character(0), params = list(),

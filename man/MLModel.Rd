@@ -11,7 +11,8 @@ MLModel(name = "MLModel", label = name, packages = character(0),
   stop("no predict function"), varimp = function(object, ...) NULL)
 }
 \arguments{
-\item{name}{character string name for the instantiated \code{MLModel} object.}
+\item{name}{character string name for the instantiated \code{MLModel} object;
+same as the derived model constructor name.}
 
 \item{label}{descriptive label for the model.}
 
@@ -31,6 +32,43 @@ given model frame.}
 
 \item{varimp}{variable importance function.}
 }
+\value{
+\code{MLModel} class object.
+}
 \description{
-MLModel Class Constructor
+Create a model for use with the \pkg{MachineShop} package.
+}
+\details{
+\code{MLModel} can be used to create custom model constructors.  To
+ensure full compatibility with the \pkg{MachineShop} package, add derived
+constructor functions to the package namespace with the \code{environment}
+function.  See example below.
+}
+\examples{
+## Logistic regression model constructor
+LogisticModel <- function() {
+  MLModel(
+    name = "LogisticModel",
+    label = "Logistic Regression",
+    package = "stats",
+    types = "binary",
+    fit = function(formula, data, weights, ...) {
+      environment(formula) <- environment()
+      glm(formula, data = data, weights = weights, family = binomial, ...)
+    },
+    predict = function(object, newdata, ...) {
+      predict(object, newdata = newdata, type = "response")
+    },
+    varimp = function(object, ...) {
+      pchisq(coef(object)^2 / diag(vcov(object)), 1)
+    }
+  )
+}
+
+## Add to MachineShop for full compatibility
+environment(LogisticModel) <- asNamespace("MachineShop")
+
+}
+\seealso{
+\code{\link{modelinfo}}
 }
