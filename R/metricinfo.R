@@ -93,7 +93,8 @@ metricinfo <- function(...) {
 
 
 .metricinfo.MLMetric <- function(x, ...) {
-  generic_name <- paste0(".", x@name)
+  generic_name <- x@name
+  if (!isGeneric(generic_name)) generic_name <- paste0(".", x@name)
   if (isGeneric(generic_name)) {
     methods <- findMethods(generic_name)
     is_defined <- sapply(methods, function(method) {
