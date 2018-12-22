@@ -86,12 +86,12 @@ setMethod("show", "MLControlTrain",
 
 setMethod("show", "MLMetric",
   function(object) {
-    info <- metricinfo(object)[[1]]
     cat("An object of class \"", class(object), "\"\n\n",
-        "Metric name: ", info$name, "\n",
-        "Label: ", info$label, "\n",
-        "Maximize: ", info$maximize, "\n\n",
+        "Metric name: ", object@name, "\n",
+        "Label: ", object@label, "\n",
+        "Maximize: ", object@maximize, "\n\n",
         sep = "")
+    info <- metricinfo(object)[[1]]
     cat("Arguments:\n")
     print(info$arguments)
     cat("\nTypes:\n")

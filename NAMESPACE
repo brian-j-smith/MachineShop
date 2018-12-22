@@ -72,6 +72,8 @@ export(BootControl,
        TrainControl)
 
 export(MLControl,
+       MLMetric,
+       "MLMetric<-",
        MLModel,
        AdaBagModel,
        AdaBoostModel,
