@@ -42,7 +42,6 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
     params = list(control = as.call(c(.(list), params(environment())))),
     nvars = function(data) nvars(data, design = "terms"),
     fit = function(formula, data, weights, ...) {
-      environment(formula) <- environment()
       method <- switch_class(response(formula, data),
                              "factor" = "class",
                              "numeric" = "anova",

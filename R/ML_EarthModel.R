@@ -57,8 +57,7 @@ EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
       attachment(list(
         contr.earth.response = earth::contr.earth.response
       ), name = "earth_exports")
-
-      environment(formula) <- environment()
+      
       family <- switch_class(response(formula, data),
                              "factor" = "binomial",
                              "numeric" = "gaussian")

@@ -57,7 +57,6 @@ MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
-      environment(formula) <- environment()
       mda::mda(formula, data = data, ...)
     },
     predict = function(object, newdata, prior = object$prior, ...) {

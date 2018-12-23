@@ -42,7 +42,6 @@ GLMModel <- function(family = NULL, ...) {
     params = params,
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, family = NULL, ...) {
-      environment(formula) <- environment()
       if (is.null(family)) {
         family <- switch_class(response(formula, data),
                                "factor" = "binomial",

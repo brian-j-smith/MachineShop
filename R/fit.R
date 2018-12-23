@@ -78,13 +78,20 @@ fit.recipe <- function(x, model, ...) {
   }
   
   requireModelNamespaces(model@packages)
-  fo <- formula(terms(mf))
-  weights <- model.weights(mf)
-  if (is.null(weights)) weights <- rep(1, nrow(mf))
-  args <- c(list(formula = fo, data = mf, weights = weights), model@params)
-  data_params <- list(y = y, nobs = nrow(mf))
-  data_params$nvars <-  model@nvars(mf[1, , drop = FALSE])
   
-  do.call(model@fit, args, envir = list2env(c(args, data_params))) %>%
+  envir <- list2env(within(list(), {
+    formula <- formula(terms(mf))
+    data <- as(mf, "data.frame")
+    weights <- model.weights(mf)
+    if (is.null(weights)) weights <- rep(1, nrow(mf))
+    y <- y
+    nobs <- nrow(mf)
+    nvars <- model@nvars(mf[1, , drop = FALSE])
+  }), parent = globalenv())
+  environment(envir$formula) <- envir
+  
+  args <- c(mget(c("formula", "data", "weights"), envir), model@params)
+  
+  do.call(model@fit, args, envir = envir) %>%
     asMLModelFit(paste0(model@name, "Fit"), model, x, y)
 }

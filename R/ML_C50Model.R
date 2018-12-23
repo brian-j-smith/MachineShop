@@ -67,7 +67,6 @@ C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
     params = params,
     nvars = function(data) nvars(data, design = "terms"),
     fit = function(formula, data, weights, ...) {
-      environment(formula) <- environment()
       C50::C5.0(formula, data = data, weights = weights, ...)
     },
     predict = function(object, newdata, ...) {

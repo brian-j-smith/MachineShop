@@ -63,12 +63,10 @@ knitr::opts_chunk$set(
 
 - The first three arguments should be `formula`, `data`, and `weights` followed by a three dot ellipsis.
 
-- Set `environment(formula) <- environment()` if the formula will be passed to the source package fit function.  Some fit functions expect the formula to be defined in the same environment as the data and weights belong; i.e., the fit formula environment.
-
 - If weights are not supported, the following should be included in the function:
 
 ```{r eval = FALSE}
-if(!all(weights == 1)) warning("weights are unsupported and will be ignored")
+if(!all(weights == 1)) warning("weights are not supported and will be ignored")
 ```
 
 - Only add elements to the resulting fit object if they are needed and will be used in the `predict`, `response`, or `varimp` functions.

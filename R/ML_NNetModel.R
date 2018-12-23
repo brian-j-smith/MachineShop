@@ -51,7 +51,6 @@ NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
     params = params(environment()),
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
-      environment(formula) <- environment()
       nnet::nnet(formula, data = data, weights = weights, ...)
     },
     predict = function(object, newdata, ...) {

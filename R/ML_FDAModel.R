@@ -54,7 +54,6 @@ FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
     params = params(environment()),
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
-      environment(formula) <- environment()
       mda::fda(formula, data = data, weights = weights, ...)
     },
     predict = function(object, newdata, prior = object$prior, ...) {

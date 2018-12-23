@@ -40,7 +40,6 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
     params = params,
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
-      environment(formula) <- environment()
       rms::psm(formula, data = data, weights = weights, ...)
     },
     predict = function(object, newdata, times, ...) {

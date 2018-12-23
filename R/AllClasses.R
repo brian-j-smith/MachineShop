@@ -264,8 +264,7 @@ setClass("MLMetric",
 #'     package = "stats",
 #'     types = "binary",
 #'     fit = function(formula, data, weights, ...) {
-#'       environment(formula) <- environment()
-#'       glm(formula, data = data, weights = weights, family = binomial, ...)
+#'       stats::glm(formula, data = data, weights = weights, family = binomial, ...)
 #'     },
 #'     predict = function(object, newdata, ...) {
 #'       predict(object, newdata = newdata, type = "response")

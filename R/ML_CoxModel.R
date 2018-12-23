@@ -45,7 +45,6 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
     params = params,
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
-      environment(formula) <- environment()
       rms::cph(formula, data = data, weights = weights, singular.ok = TRUE,
                surv = TRUE, y = TRUE, ...)
     },

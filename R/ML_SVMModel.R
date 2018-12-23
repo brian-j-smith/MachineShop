@@ -52,7 +52,6 @@ SVMModel <- function(scaled = TRUE, type = NULL,
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
-      environment(formula) <- environment()
       kernlab::ksvm(formula, data = data, prob.model = TRUE, ...)
     },
     predict = function(object, newdata, fitbits, ...) {

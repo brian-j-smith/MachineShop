@@ -34,7 +34,6 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
     nvars = function(data) nvars(data, design = "model.matrix"),
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
-      environment(formula) <- environment()
       y <- response(formula, data)
       if (is.factor(y)) {
         varname <- response(terms(formula))

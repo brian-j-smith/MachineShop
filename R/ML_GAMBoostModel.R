@@ -67,7 +67,7 @@ GAMBoostModel <- function(family = NULL,
         bbs = mboost::bbs,
         bns = mboost::bns
       ), name = "mboost_exports")
-      environment(formula) <- environment()
+      
       if (is.null(family)) {
         family <- switch_class(response(formula, data),
                                "factor" = mboost::Binomial(),

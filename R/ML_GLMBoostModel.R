@@ -49,7 +49,6 @@ GLMBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
     params = params,
     nvars = function(data) nvars(data, design = "terms"),
     fit = function(formula, data, weights, family = NULL, ...) {
-      environment(formula) <- environment()
       if (is.null(family)) {
         family <- switch_class(response(formula, data),
                                "factor" = mboost::Binomial(),
