@@ -275,7 +275,7 @@ preprocess <- function(x, data = NULL, ...) {
 
 
 preprocess.default <- function(x, data = NULL, ...) {
-  as(if (is.null(data)) x else data, "data.frame")
+  as.data.frame(if (is.null(data)) x else data)
 }
 
 

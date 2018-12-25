@@ -1,9 +1,7 @@
-setAs("ModelFrame", "data.frame",
-  function(from) {
-    attr(from, "terms") <- NULL
-    structure(from, class = "data.frame")
-  }
-)
+as.data.frame.ModelFrame <- function(x, ...) {
+  attr(x, "terms") <- NULL
+  structure(x, class = "data.frame")
+}
 
 
 setAs("data.frame", "VarImp",

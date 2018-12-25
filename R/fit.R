@@ -81,7 +81,7 @@ fit.recipe <- function(x, model, ...) {
   
   envir <- list2env(within(list(), {
     formula <- formula(terms(mf))
-    data <- as(mf, "data.frame")
+    data <- as.data.frame(mf)
     weights <- model.weights(mf)
     if (is.null(weights)) weights <- rep(1, nrow(mf))
     y <- y

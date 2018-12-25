@@ -124,6 +124,7 @@ export(MLControl,
        XGBLinearModel,
        XGBTreeModel)
 
+S3method(as.data.frame, ModelFrame)
 S3method(diff, MLModelTune)
 S3method(diff, Resamples)
 S3method(fit, ModelFrame)
