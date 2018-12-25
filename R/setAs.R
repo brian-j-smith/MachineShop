@@ -57,10 +57,3 @@ unMLModelFit <- function(object) {
     structure(object, class = classes[-c(pos - 1, pos)])
   }
 }
-
-
-unAsIs <- function(object) {
-  classes <- class(object)
-  if ("AsIs" %in% classes) class(object) <- classes[-match("AsIs", classes)]
-  object
-}
