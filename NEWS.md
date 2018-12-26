@@ -2,6 +2,22 @@
 
 ## Version Updates
 
+## 1.0.0
+
+* Implement models: ``BARTMachineModel``, ``LARSModel``.
+* Implement performance metrics: ``gini``, multi-class ``pr_auc`` and ``roc_auc``, multivariate ``rmse``, ``msle``, ``rmsle``.
+* Implement smooth calibration curves.
+* Implement ``MLMetric`` class for performance metrics.
+* Add ``as.data.frame`` method for ``ModelFrame``.
+* Add ``expand.model`` function.
+* Add ``label`` slot to ``MLModel``.
+* Expand ``metricinfo/modelinfo`` support for mixed argument types.
+* Rename ``calibration`` argument ``n`` to ``breaks``.
+* Rename ``modelmetrics`` function to ``performance``.
+* Rename ``ModelMetrics/Diff`` classes to ``Performance/Diff``.
+* Change ``MLModelTune`` slot ``resamples`` to ``performance``.
+
+
 ## 0.4.0
 * Implement models: ``AdaBagModel``, ``AdaBoostModel``, ``BlackBoostModel``, ``EarthModel``, ``FDAModel``, ``GAMBoostModel``, ``GLMBoostModel``, ``MDAModel``, ``NaiveBayesModel``, ``PDAModel``, ``RangerModel``, ``RPartModel``, ``TreeModel``
 * Implement user-specified performance metrics in ``modelmetrics`` function.
