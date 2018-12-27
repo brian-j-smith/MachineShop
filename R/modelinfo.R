@@ -135,7 +135,7 @@ modelinfo <- function(...) {
   info <- modelinfo()
   is_supported <- sapply(info, function(this) {
     all(sapply(list(...), function(object) {
-      any(sapply(this$types, function(type) is_response(object, type)))
+      any(mapply(is_response, list(object), this$types))
     }))
   })
   info[is_supported]

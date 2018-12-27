@@ -126,9 +126,11 @@ metricinfo <- function(...) {
 .metricinfo_types <- function(x, y = NULL, ...) {
   info <- metricinfo()
   is_supported <- sapply(info, function(this) {
-    is_method_type <- inherits(x, this$types$observed)
-    if (is.null(y)) is_method_type else
-      is_method_type && inherits(y, this$types$predicted)
+    is_types <- mapply(is, list(x), this$types$observed)
+    if (!is.null(y)) {
+      is_types <- is_types & mapply(is, list(y), this$types$predicted)
+    }
+    any(is_types)
   })
   info[is_supported]
 }
