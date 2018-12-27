@@ -5,7 +5,7 @@
 \alias{t.test.PerformanceDiff}
 \title{Paired t-Tests for Model Comparisons}
 \usage{
-\method{t}{test.PerformanceDiff}(x, adjust = "holm", ...)
+\method{t.test}{PerformanceDiff}(x, adjust = "holm", ...)
 }
 \arguments{
 \item{x}{object containing paired differences between resampled metrics.}

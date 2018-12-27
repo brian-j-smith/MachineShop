@@ -66,6 +66,8 @@ diff.MLModelTune <- function(x, ...) {
 #' 
 #' @name t.test
 #' 
+#' @method t.test PerformanceDiff
+#' 
 #' @param x object containing paired differences between resampled metrics.
 #' @param adjust p-value adjustment for multiple statistical comparisons as
 #' implemented by \code{\link[stats]{p.adjust}}.
