@@ -20,16 +20,20 @@ knitr::opts_chunk$set(
 
 ## Model Constructor Components
 
+- `MLModel` is a function supplied by the **MachineShop** package.  It allows for the integration of statistical and machine learning models supplied by other R packages with the **MachineShop** model fitting, prediction, and performance assessment tools.
+
+- The following are guidelines for writing model constructor functions that are wrappers around the `MLModel` function.
+
+- In this context, the term "constructor" refers to the wrapper function and "source package" to the package supplying the original model implementation.
+
 
 ### Constructor Arguments
 
-- Parameters without defaults are required and will trigger an error message if not supplied values when called.
-
-- Ideally, the constructor should produce a valid model if called without any arguments; i.e., not have any required arguments.
+- The constructor should produce a valid model if called without any arguments; i.e., not have any required arguments.
 
 - The source package defaults will be used for parameters with `NULL` values.
 
-- Model formula, data, and weights are separate from model parameters and should not be included among the constructor arguments.
+- Model formula, data, and weights are separate from model parameters and should not be defined as constructor arguments.
 
 
 ### name Slot
@@ -46,12 +50,12 @@ knitr::opts_chunk$set(
 
 ### types Slot
 
-- Include all response variable types (`"factor"`, `"numeric"`, `"ordered"`, and/or `"Surv"`) that can be analyzed with the model.
+- Include all response variable types (`"binary"`, `"factor"`, `"matrix"`, `"numeric"`, `"ordered"`, and/or `"Surv"`) that can be analyzed with the model.
 
 
 ### params Slot
 
-- List of parameter values set by the constructor, typically obtained with `params(environment())` if all arguments are to be passed to the source package fit function as supplied.  Additional steps may be needed to pass the constructor arguments to the source package in a different format; e.g., when some model parameters must be passed in a control structure, as in C50Model and CForestModel.
+- List of parameter values set by the constructor, typically obtained with `MachineShop:::params(environment())` if all arguments are to be passed to the source package fit function as supplied.  Additional steps may be needed to pass the constructor arguments to the source package in a different format; e.g., when some model parameters must be passed in a control structure, as in `C50Model` and `CForestModel`.
 
 
 ### nvars Function
@@ -61,7 +65,7 @@ knitr::opts_chunk$set(
 
 ### fit Function
 
-- The first three arguments should be `formula`, `data`, and `weights` followed by a three dot ellipsis.
+- The first three arguments should be `formula`, `data`, and `weights` followed by an ellipsis (`...`).
 
 - If weights are not supported, the following should be included in the function:
 
@@ -69,23 +73,23 @@ knitr::opts_chunk$set(
 if(!all(weights == 1)) warning("weights are not supported and will be ignored")
 ```
 
-- Only add elements to the resulting fit object if they are needed and will be used in the `predict`, `response`, or `varimp` functions.
+- Only add elements to the resulting fit object if they are needed and will be used in the `predict` or `varimp` functions.
 
 - Return the fit object.
 
 
 ### predict Function
 
-- The arguments are a model fit `object`, `newdata` frame, optionally `time` for prediction at survival time points, and an ellipsis.
+- The arguments are a model fit `object`, `newdata` frame, optionally `times` for prediction at survival time points, and an ellipsis.
 
-- The predict function should return a vector or matrix of probabilities for 2-level factors, a matrix for factors with more than 2 levels, a vector or matrix of expected responses if numeric, a matrix of survival probabilities if follow-up times are supplied, or a vector of survival risks if no follow-up times.
+- The predict function should return a vector or column matrix of probabilities for the second level of binary factors, a matrix whose columns contain the probabilities for factors with more than two levels, a matrix of predicted responses if matrix, a vector or column matrix of predicted responses if numeric, a matrix whose columns contain survival probabilities at `times` if supplied, or a vector of survival predictions if `times` are not supplied.
 
 
 ### varimp Function
 
 - Should have a single model fit `object` argument followed by an ellipsis.
 
-- Variable importance results should generally be returned as a vector with elements named after the corresponding predictor variables.  The package will take care of conversions to a data frame and VarImp object.  If there is more than one set of relevant variable importance measures, they can be returned as a matrix or data frame with predictor variable names as the row names.
+- Variable importance results should generally be returned as a vector with elements named after the corresponding predictor variables.  The package will handle conversions to a data frame and `VarImp` object.  If there is more than one set of relevant variable importance measures, they can be returned as a matrix or data frame with predictor variable names as the row names.
 
 
 ## Documenting an MLModel
@@ -104,7 +108,7 @@ if(!all(weights == 1)) warning("weights are not supported and will be ignored")
 
 ### Details Section
 
-- Include response types (factor, numeric, ordered, and/or Surv).
+- Include response types (binary, factor, matrix, numeric, ordered, and/or Surv).
 
 - Include the following sentence:
   
@@ -130,12 +134,14 @@ if(!all(weights == 1)) warning("weights are not supported and will be ignored")
 
 ## Package Extensions
 
-- For full compatibility with the `MachineShop` package, model constructors must belong to its namespace.
+- If adding a new model to the package, save its source code in a file whose name begins with "ML_" followed by the model name, and ending with a .R extension; e.g., `"R/ML_CustomModel.R"`.
 
-- This can be accomplished by rebuilding the package with source code for a new model added; or by defining a new model constructor, say `CustomModel`, and manually adding it to the namespace as follows.
+- Export the model in `NAMESPACE`.
 
-```{r eval = FALSE}
-environment(CustomModel) <- asNamespace("MachineShop")
-```
+- Add any required packages to the "Suggests" section of `DESCRIPTION`.
 
-- If adding a new model to the package, save its source code in a file whose name begins with "ML_" followed by the model name, and ending with a .R extension; e.g., `"ML_CustomModel.R"`.
+- Add the model to `R/MachineShop-package.R`.
+
+- Add the model to `R/modelinfo.R`.
+
+- Add a unit testing file to `tests/testthat`.

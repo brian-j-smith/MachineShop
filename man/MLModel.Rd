@@ -12,25 +12,34 @@ MLModel(name = "MLModel", label = name, packages = character(0),
 }
 \arguments{
 \item{name}{character string name for the instantiated \code{MLModel} object;
-same as the derived model constructor name.}
+same name as the object to which the model is assigned.}
 
 \item{label}{descriptive label for the model.}
 
-\item{packages}{character vector of packages required by the object.}
+\item{packages}{character vector of packages whose namespaces are required by
+the model.}
 
-\item{types}{character vector of response variable types on which the model
-can be fit.}
+\item{types}{character vector of response variable types to which the model
+can be fit.  Supported types are \code{"binary"}, \code{"factor"},
+\code{"matrix"}, \code{"numeric"}, \code{"ordered"}, and \code{"Surv"}.}
 
-\item{params}{list of user-specified model parameters.}
+\item{params}{list of user-specified model parameters to be passed to the
+\code{fit} function.}
 
-\item{nvars}{function to return the number of predictor variables for a
-given model frame.}
+\item{nvars}{function to determine the number of variables included in the
+model from the \code{data} frame used by \code{fit}.}
 
-\item{fit}{model fitting function.}
+\item{fit}{model fitting function whose arguments are a \code{formula}, a
+\code{data} frame, case \code{weights}, and an ellipsis (\code{...}).}
 
-\item{predict}{model prediction function.}
+\item{predict}{model prediction function whose arguments are the
+\code{object} returned by \code{fit}, a \code{newdata} frame of predictor
+variables, optional vector of \code{times} at which to predict survival,
+and an ellipsis.}
 
-\item{varimp}{variable importance function.}
+\item{varimp}{variable importance function whose arguments are the
+\code{object} returned by \code{fit}, optional arguments passed from calls
+to \code{\link{varimp}}, and an ellipsis.}
 }
 \value{
 \code{MLModel} class object.
@@ -39,35 +48,44 @@ given model frame.}
 Create a model for use with the \pkg{MachineShop} package.
 }
 \details{
-\code{MLModel} can be used to create custom model constructors.  To
-ensure full compatibility with the \pkg{MachineShop} package, add derived
-constructor functions to the package namespace with the \code{environment}
-function.  See example below.
-}
-\examples{
-## Logistic regression model constructor
-LogisticModel <- function() {
-  MLModel(
-    name = "LogisticModel",
-    label = "Logistic Regression",
-    package = "stats",
-    types = "binary",
-    fit = function(formula, data, weights, ...) {
-      stats::glm(formula, data = data, weights = weights, family = binomial, ...)
-    },
-    predict = function(object, newdata, ...) {
-      predict(object, newdata = newdata, type = "response")
-    },
-    varimp = function(object, ...) {
-      pchisq(coef(object)^2 / diag(vcov(object)), 1)
-    }
-  )
+Values returned by the \code{predict} functions should be formatted according
+to the response variable types below.
+\describe{
+\item{factor}{a vector or column matrix of probabilities for the second level
+of binary factors or a matrix whose columns contain the probabilities for
+factors with more than two levels.}
+\item{matrix}{a matrix of predicted responses.}
+\item{numeric}{a vector or column matrix of predicted responses.}
+\item{Surv}{a matrix whose columns contain survival probabilities at
+\code{times} if supplied or a vector of survival predictions otherwise.}
 }
 
-## Add to MachineShop for full compatibility
-environment(LogisticModel) <- asNamespace("MachineShop")
+The \code{varimp} function should return a vector of importance values named
+after the predictor variables or a matrix or data frame whose rows are named
+after the predictors.
+}
+\examples{
+## Logistic regression model
+LogisticModel <- MLModel(
+  name = "LogisticModel",
+  types = "binary",
+  fit = function(formula, data, weights, ...) {
+    glm(formula, data = data, weights = weights, family = binomial, ...)
+  },
+  predict = function(object, newdata, ...) {
+    predict(object, newdata = newdata, type = "response")
+  },
+  varimp = function(object, ...) {
+    pchisq(coef(object)^2 / diag(vcov(object)), 1)
+  }
+)
+
+library(MASS)
+res <- resample(type ~ ., data = Pima.tr, model = LogisticModel)
+summary(res)
 
 }
 \seealso{
-\code{\link{modelinfo}}
+\code{\link{modelinfo}}, \code{\link{fit}}, \code{\link{resample}},
+\code{\link{tune}}
 }
