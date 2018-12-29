@@ -173,7 +173,7 @@ metricinfo() %>% names
 metricinfo(res) %>% names
 
 ## User-specified metrics
-performance(res, c("accuracy", "kappa2")) %>% summary
+performance(res, c(accuracy, kappa2)) %>% summary
 ```
 
 ### Model Tuning
