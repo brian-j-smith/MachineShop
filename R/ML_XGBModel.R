@@ -55,7 +55,6 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
       x <- terms$x
       y <- terms$y
       response_levels <- levels(y)
-      if (is.null(params$objective)) params$objective <- 1
       switch_class(y,
                    "factor" = {
                      params$num_class <- nlevels(y)
@@ -67,7 +66,7 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
                                       "reg:tweedie", "count:poisson",
                                       "rank:pairwise", "rank:ndcg", "rank:map")
                    })
-      params$objective <- match_indices(params$objective, obj_choices)
+      params$objective <- match.arg(params$objective, obj_choices)
       modelfit <- xgboost::xgboost(x, y, weight = weights, params = params, ...)
       modelfit$levels <- response_levels
       modelfit
