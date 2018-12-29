@@ -124,7 +124,7 @@ modelinfo <- function(...) {
     label = x@label,
     packages = x@packages,
     types = x@types,
-    arguments = args(get(x@name, mode = "function")),
+    arguments = args(get(x@name)),
     varimp = !is.null(body(fitbit(x, "varimp")))
   )), names = x@name)
   if (length(list(...))) c(info, .modelinfo(...)) else info

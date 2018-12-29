@@ -163,7 +163,7 @@ getdata.recipe <- function(x, ...) {
 
 
 getMLObject <- function(x, class) {
-  if (is.character(x)) x <- get(x, mode = "function")
+  if (is.character(x)) x <- get(x)
   if (is.function(x)) x <- x()
   if (!is(x, class)) stop("object not of class ", class)
   x
