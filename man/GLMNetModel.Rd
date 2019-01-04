@@ -55,8 +55,8 @@ Fit a generalized linear model via penalized maximum likelihood.
 \code{Surv}}
 }
 
-Default values for the \code{NULL} arguments and further model
-details can be found in the source link below.
+Default values for the \code{NULL} arguments and further model details can be
+found in the source link below.
 }
 \examples{
 library(MASS)

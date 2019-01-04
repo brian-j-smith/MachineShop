@@ -2,7 +2,7 @@
 % Please edit documentation in R/ML_BARTMachineModel.R
 \name{BARTMachineModel}
 \alias{BARTMachineModel}
-\title{Bayesian Addivitive Regression Trees Model}
+\title{Bayesian Additive Regression Trees Model}
 \usage{
 BARTMachineModel(num_trees = 50, num_burn = 250, num_iter = 1000,
   alpha = 0.95, beta = 2, k = 2, q = 0.9, nu = 3,

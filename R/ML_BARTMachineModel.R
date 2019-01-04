@@ -1,4 +1,4 @@
-#' Bayesian Addivitive Regression Trees Model
+#' Bayesian Additive Regression Trees Model
 #'
 #' Builds a BART model for regression or classification.
 #'
