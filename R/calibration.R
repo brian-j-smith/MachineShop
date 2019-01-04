@@ -133,6 +133,10 @@ setMethod(".calibration_default", c("numeric", "numeric"),
 
 setMethod(".calibration_default", c("Surv", "matrix"),
   function(observed, predicted, breaks, times, ...) {
+    if (length(times) != ncol(predicted)) {
+      stop("unequal number of survival times and predictions")
+    }
+    
     colnames(predicted) <- paste("Time", 1:length(times))
     df <- data.frame(Response = rep(colnames(predicted),
                                     each = nrow(predicted)))
