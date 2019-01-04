@@ -150,6 +150,40 @@ Bayesian Additive Regression Trees
 
 <td style="text-align:center;">
 
+BARTModel
+
+</td>
+
+<td style="text-align:center;">
+
+f
+
+</td>
+
+<td style="text-align:center;">
+
+n
+
+</td>
+
+<td style="text-align:center;">
+
+S
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Bayesian Additive Regression Trees
+
+</td>
+
+<td style="text-align:center;">
+
 BARTMachineModel
 
 </td>
@@ -1719,18 +1753,19 @@ fo <- Species ~ .
 
 ## Models by response type
 modelinfo(factor(0)) %>% names
-#>  [1] "AdaBagModel"       "AdaBoostModel"     "C50Model"         
-#>  [4] "CForestModel"      "EarthModel"        "FDAModel"         
-#>  [7] "GBMModel"          "GLMNetModel"       "KNNModel"         
-#> [10] "LDAModel"          "LMModel"           "MDAModel"         
-#> [13] "NaiveBayesModel"   "NNetModel"         "PDAModel"         
-#> [16] "PLSModel"          "QDAModel"          "RandomForestModel"
-#> [19] "RangerModel"       "RPartModel"        "StackedModel"     
-#> [22] "SuperModel"        "SVMModel"          "SVMANOVAModel"    
-#> [25] "SVMBesselModel"    "SVMLaplaceModel"   "SVMLinearModel"   
-#> [28] "SVMPolyModel"      "SVMRadialModel"    "SVMSplineModel"   
-#> [31] "SVMTanhModel"      "TreeModel"         "XGBModel"         
-#> [34] "XGBDARTModel"      "XGBLinearModel"    "XGBTreeModel"
+#>  [1] "AdaBagModel"       "AdaBoostModel"     "BARTModel"        
+#>  [4] "C50Model"          "CForestModel"      "EarthModel"       
+#>  [7] "FDAModel"          "GBMModel"          "GLMNetModel"      
+#> [10] "KNNModel"          "LDAModel"          "LMModel"          
+#> [13] "MDAModel"          "NaiveBayesModel"   "NNetModel"        
+#> [16] "PDAModel"          "PLSModel"          "QDAModel"         
+#> [19] "RandomForestModel" "RangerModel"       "RPartModel"       
+#> [22] "StackedModel"      "SuperModel"        "SVMModel"         
+#> [25] "SVMANOVAModel"     "SVMBesselModel"    "SVMLaplaceModel"  
+#> [28] "SVMLinearModel"    "SVMPolyModel"      "SVMRadialModel"   
+#> [31] "SVMSplineModel"    "SVMTanhModel"      "TreeModel"        
+#> [34] "XGBModel"          "XGBDARTModel"      "XGBLinearModel"   
+#> [37] "XGBTreeModel"
 
 ## Model-specific information
 modelinfo(GBMModel)

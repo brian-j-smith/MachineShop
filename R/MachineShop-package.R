@@ -10,6 +10,7 @@
 #'   \tab \strong{Survival} \cr
 #'   \code{\link{AdaBagModel}}         \tab f   \tab     \tab   \cr
 #'   \code{\link{AdaBoostModel}}       \tab f   \tab     \tab   \cr
+#'   \code{\link{BARTModel}}           \tab f   \tab n   \tab S \cr
 #'   \code{\link{BARTMachineModel}}    \tab b   \tab n   \tab   \cr
 #'   \code{\link{BlackBoostModel}}     \tab b   \tab n   \tab S \cr
 #'   \code{\link{C50Model}}            \tab f   \tab     \tab   \cr
