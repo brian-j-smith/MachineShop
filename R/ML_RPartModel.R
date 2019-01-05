@@ -50,13 +50,17 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
                    method = method, ...)
     },
     predict = function(object, newdata, fitbits, times, ...) {
-      if (is.Surv(response(fitbits)) && length(times)) {
-        predict(partykit::as.party(object), newdata = newdata,
-                type = "prob") %>%
-          lapply(function(fit) predict(fit, times)) %>%
-          (function(args) do.call(rbind, args))
+      y <- response(fitbits)
+      if (is.Surv(y)) {
+        n <- length(times)
+        if (n == 0) times <- surv_times(y)
+        
+        pred <- partykit::as.party(object) %>%
+          predict(newdata = newdata, type = "prob") %>%
+          sapply(function(fit) predict(fit, times)) %>% t
+        if (n == 0) surv_mean(times, pred, surv_max(y)) else pred
       } else {
-        -predict(object, newdata = newdata)
+        predict(object, newdata = newdata)
       }
     },
     varimp = function(object, ...) {

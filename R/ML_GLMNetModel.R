@@ -82,15 +82,14 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
       y <- response(fitbits)
       newx <- extract(formula(fitbits)[-2], newdata)$x
       if (is.Surv(y)) {
-        new_neg_risk <-
-          -exp(predict(object, newx = newx, type = "link")) %>% drop
-        if (length(times)) {
-          risk <- exp(predict(object, newx = object$x, type = "link")) %>% drop
-          cumhaz <- basehaz(y, risk, times)
-          exp(new_neg_risk %o% cumhaz)
-        } else {
-          new_neg_risk
-        }
+        risk <- drop(exp(predict(object, newx = object$x, type = "link")))
+        new_risk <- drop(exp(predict(object, newx = newx, type = "link")))
+
+        n <- length(times)
+        if (n == 0) times <- surv_times(y)
+        
+        pred <- exp(new_risk %o% -basehaz(y, risk, times))
+        if (n == 0) surv_mean(times, pred, surv_max(y)) else pred
       } else {
         predict(object, newx = newx, type = "response")
       }

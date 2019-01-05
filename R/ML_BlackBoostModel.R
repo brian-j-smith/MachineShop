@@ -85,16 +85,15 @@ BlackBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
     },
     predict = function(object, newdata, times, ...) {
       if (object$family@name == "Cox Partial Likelihood") {
-        new_neg_risk <-
-          -exp(predict(object, newdata = newdata, type = "link")) %>% drop
-        if (length(times)) {
-          y <- object$response
-          risk <- exp(predict(object, type = "link")) %>% drop
-          cumhaz <- basehaz(y, risk, times)
-          exp(new_neg_risk %o% cumhaz)
-        } else {
-          new_neg_risk
-        }
+        y <- object$response
+        risk <- drop(exp(predict(object, type = "link")))
+        new_risk <- drop(exp(predict(object, newdata = newdata, type = "link")))
+        
+        n <- length(times)
+        if (n == 0) times <- surv_times(y)
+        
+        pred <- exp(new_risk %o% -basehaz(y, risk, times))
+        if (n == 0) surv_mean(times, pred, surv_max(y)) else pred
       } else {
         predict(object, newdata = newdata, type = "response")
       }

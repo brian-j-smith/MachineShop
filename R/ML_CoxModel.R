@@ -49,12 +49,14 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
                surv = TRUE, y = TRUE, ...)
     },
     predict = function(object, newdata, times, ...) {
-      if (length(times)) {
-        rms::survest(object, newdata = newdata, times = times,
-                     conf.int = FALSE, se.fit = FALSE)$surv %>% as.matrix
-      } else {
-        -exp(predict(object, newdata = newdata, type = "lp"))
-      }
+      y <- object$y
+      
+      n <- length(times)
+      if (n == 0) times <- surv_times(y)
+      
+      pred <- rms::survest(object, newdata = newdata, times = times,
+                           conf.int = FALSE, se.fit = FALSE)$surv %>% as.matrix
+      if (n == 0) surv_mean(times, pred, surv_max(y)) else pred
     },
     varimp = function(object, ...) varimp_pchisq(object)
   )

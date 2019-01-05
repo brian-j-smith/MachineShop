@@ -35,7 +35,7 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
   MLModel(
     name = "SurvRegModel",
     label = "Parametric Survival",
-    packages = "rms",
+    packages = c("rms", "Hmisc"),
     types = "Surv",
     params = params,
     nvars = function(data) nvars(data, design = "model.matrix"),
@@ -48,7 +48,7 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
                              conf.int = FALSE)
         if (is(pred, "survest.psm")) as.matrix(pred$surv) else pred
       } else {
-        exp(predict(object, newdata = newdata, type = "lp"))
+        Hmisc::Mean(object)(predict(object, newdata = newdata, type = "lp"))
       }
     },
     varimp = function(object, ...) varimp_pchisq(object)
