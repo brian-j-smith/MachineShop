@@ -44,7 +44,7 @@ QDAModel <- function(prior = NULL, method = c("moment", "mle", "mve", "t"),
     packages = "MASS",
     types = "factor",
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "model.matrix"),
+    design = "model.matrix",
     fit = function(formula, data, weights, use, ...) {
       assert_equal_weights(weights)
       modelfit <- MASS::qda(formula, data = data, ...)

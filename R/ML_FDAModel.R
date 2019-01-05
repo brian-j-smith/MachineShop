@@ -52,7 +52,7 @@ FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
     packages = "mda",
     types = "factor",
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "model.matrix"),
+    design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       mda::fda(formula, data = data, weights = weights, ...)
     },

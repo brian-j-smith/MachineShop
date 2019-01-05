@@ -40,7 +40,7 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
     packages = c("rpart", "partykit"),
     types = c("factor", "numeric", "Surv"),
     params = list(control = as.call(c(.(list), params(environment())))),
-    nvars = function(data) nvars(data, design = "terms"),
+    design = "terms",
     fit = function(formula, data, weights, ...) {
       method <- switch_class(response(formula, data),
                              "factor" = "class",

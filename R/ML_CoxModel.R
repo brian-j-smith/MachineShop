@@ -43,7 +43,7 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
     packages = "rms",
     types = "Surv",
     params = params,
-    nvars = function(data) nvars(data, design = "model.matrix"),
+    design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       rms::cph(formula, data = data, weights = weights, singular.ok = TRUE,
                surv = TRUE, y = TRUE, ...)
@@ -98,7 +98,7 @@ CoxStepAICModel <- function(ties = c("efron", "breslow", "exact"), ...,
     packages = c(stepmodel@packages, "MASS"),
     types = stepmodel@types,
     params = c(stepmodel@params, params),
-    nvars = stepmodel@nvars,
+    design = stepmodel@design,
     fit = function(formula, data, weights, direction = "both", scope = list(),
                    k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()

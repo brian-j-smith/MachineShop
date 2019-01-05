@@ -47,7 +47,7 @@ AdaBagModel <- function(mfinal = 100, minsplit = 20,
     packages = "adabag",
     types = "factor",
     params = params,
-    nvars = function(data) nvars(data, design = "terms"),
+    design = "terms",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       data <- model.frame(formula, data)

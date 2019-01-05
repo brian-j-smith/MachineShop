@@ -51,7 +51,7 @@ CForestModel <- function(teststat = c("quad", "max"),
     packages = "party",
     types = c("factor", "numeric", "Surv"),
     params = list(controls = as.call(c(.(party::cforest_control), args))),
-    nvars = function(data) nvars(data, design = "terms"),
+    design = "terms",
     fit = function(formula, data, weights, ...) {
       party::cforest(formula, data = data, weights = weights, ...)
     },

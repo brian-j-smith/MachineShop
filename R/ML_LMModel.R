@@ -27,7 +27,7 @@ LMModel <- function() {
     packages = "stats",
     types = c("factor", "matrix", "numeric"),
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "model.matrix"),
+    design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       y <- response(formula, data)
       if (is.factor(y)) {

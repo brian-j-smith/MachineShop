@@ -86,7 +86,7 @@ fit.recipe <- function(x, model, ...) {
     if (is.null(weights)) weights <- rep(1, nrow(mf))
     y <- y
     nobs <- nrow(mf)
-    nvars <- model@nvars(mf[1, , drop = FALSE])
+    nvars <- nvars(mf, model)
   }), parent = globalenv())
   environment(envir$formula) <- envir
   

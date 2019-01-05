@@ -243,8 +243,9 @@ setClass("MLMetric",
 #' \code{"matrix"}, \code{"numeric"}, \code{"ordered"}, and \code{"Surv"}.
 #' @param params list of user-specified model parameters to be passed to the
 #' \code{fit} function.
-#' @param nvars function to determine the number of variables included in the
-#' model from the \code{data} frame used by \code{fit}.
+#' @param design character string indicating whether the type of design matrix
+#' used to fit the model is a \code{"\link{model.matrix}"}, a data.frame
+#' of the original predictor variable \code{"terms"}, or unknown (default).
 #' @param fit model fitting function whose arguments are a \code{formula}, a
 #' \code{data} frame, case \code{weights}, and an ellipsis (\code{...}).
 #' @param predict model prediction function whose arguments are the
@@ -254,6 +255,7 @@ setClass("MLMetric",
 #' @param varimp variable importance function whose arguments are the
 #' \code{object} returned by \code{fit}, optional arguments passed from calls
 #' to \code{\link{varimp}}, and an ellipsis.
+#' @param ... arguments passed from other methods.
 #' 
 #' @details
 #' Values returned by the \code{predict} functions should be formatted according
@@ -297,17 +299,19 @@ setClass("MLMetric",
 #' res <- resample(type ~ ., data = Pima.tr, model = LogisticModel)
 #' summary(res)
 #' 
-MLModel <- function(name = "MLModel", label = name, packages = character(0),
-                    types = character(0), params = list(),
-                    nvars = function(data) NULL,
+MLModel <- function(name = "MLModel", label = name, packages = character(),
+                    types = character(), params = list(),
+                    design = c(NA, "model.matrix", "terms"),
                     fit = function(formula, data, weights, ...)
                       stop("no fit function"),
                     predict = function(object, newdata, times, ...)
                       stop("no predict function"),
-                    varimp = function(object, ...) NULL) {
+                    varimp = function(object, ...) NULL, ...) {
   
   stopifnot(types %in% c("binary", "factor", "matrix", "numeric", "ordered",
                          "Surv"))
+  
+  MLModel_depwarn(...)
   
   new("MLModel",
       name = name,
@@ -315,11 +319,19 @@ MLModel <- function(name = "MLModel", label = name, packages = character(0),
       packages = packages,
       types = types,
       params = params,
-      nvars = nvars,
+      design = match.arg(design),
       fit = fit,
       fitbits = MLFitBits(packages = packages,
                           predict = predict,
                           varimp = varimp))
+}
+
+
+MLModel_depwarn <- function(nvars = NULL, ...) {
+  if (!is.null(nvars)) {
+    depwarn("'nvars' argument to MLModel is deprecated",
+            "specify the design matrix type with 'design' instead")
+  }
 }
 
 
@@ -329,7 +341,7 @@ setClass("MLModel",
             packages = "character",
             types = "character",
             params = "list",
-            nvars = "function",
+            design = "character",
             fit = "function",
             fitbits = "MLFitBits")
 )

@@ -45,7 +45,7 @@ LARSModel <- function(type = c("lasso", "lar", "forward.stagewise", "stepwise"),
     packages = "lars",
     types = "numeric",
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "model.matrix"),
+    design = "model.matrix",
     fit = function(formula, data, weights, step = NULL, ...) {
       assert_equal_weights(weights)
       terms <- extract(formula, data)

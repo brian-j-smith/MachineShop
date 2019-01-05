@@ -52,7 +52,7 @@ EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
     packages = "earth",
     types = c("factor", "numeric"),
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "model.matrix"),
+    design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       attachment(list(
         contr.earth.response = earth::contr.earth.response

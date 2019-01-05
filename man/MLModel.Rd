@@ -4,11 +4,12 @@
 \alias{MLModel}
 \title{MLModel Class Constructor}
 \usage{
-MLModel(name = "MLModel", label = name, packages = character(0),
-  types = character(0), params = list(), nvars = function(data) NULL,
-  fit = function(formula, data, weights, ...) stop("no fit function"),
-  predict = function(object, newdata, times, ...)
-  stop("no predict function"), varimp = function(object, ...) NULL)
+MLModel(name = "MLModel", label = name, packages = character(),
+  types = character(), params = list(), design = c(NA,
+  "model.matrix", "terms"), fit = function(formula, data, weights, ...)
+  stop("no fit function"), predict = function(object, newdata, times,
+  ...) stop("no predict function"), varimp = function(object, ...) NULL,
+  ...)
 }
 \arguments{
 \item{name}{character string name for the instantiated \code{MLModel} object;
@@ -26,8 +27,9 @@ can be fit.  Supported types are \code{"binary"}, \code{"factor"},
 \item{params}{list of user-specified model parameters to be passed to the
 \code{fit} function.}
 
-\item{nvars}{function to determine the number of variables included in the
-model from the \code{data} frame used by \code{fit}.}
+\item{design}{character string indicating whether the type of design matrix
+used to fit the model is a \code{"\link{model.matrix}"}, a data.frame
+of the original predictor variable \code{"terms"}, or unknown (default).}
 
 \item{fit}{model fitting function whose arguments are a \code{formula}, a
 \code{data} frame, case \code{weights}, and an ellipsis (\code{...}).}
@@ -40,6 +42,8 @@ and an ellipsis.}
 \item{varimp}{variable importance function whose arguments are the
 \code{object} returned by \code{fit}, optional arguments passed from calls
 to \code{\link{varimp}}, and an ellipsis.}
+
+\item{...}{arguments passed from other methods.}
 }
 \value{
 \code{MLModel} class object.

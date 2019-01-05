@@ -38,7 +38,7 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
     packages = "kknn",
     types = c("factor", "numeric", "ordered"),
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "model.matrix"),
+    design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       list(formula = formula, train = data, ...)

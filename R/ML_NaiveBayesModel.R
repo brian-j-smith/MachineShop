@@ -28,7 +28,7 @@ NaiveBayesModel <- function(laplace = 0) {
     packages = "e1071",
     types = "factor",
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "terms"),
+    design = "terms",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       e1071::naiveBayes(formula, data = data, ...)

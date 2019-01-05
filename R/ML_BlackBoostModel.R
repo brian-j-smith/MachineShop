@@ -72,7 +72,7 @@ BlackBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
     packages = c("mboost", "partykit"),
     types = c("binary", "numeric", "Surv"),
     params = params,
-    nvars = function(data) nvars(data, design = "terms"),
+    design = "terms",
     fit = function(formula, data, weights, family = NULL, ...) {
       if (is.null(family)) {
         family <- switch_class(response(formula, data),

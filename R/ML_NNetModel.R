@@ -49,7 +49,7 @@ NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
     packages = "nnet",
     types = c("factor", "numeric"),
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "model.matrix"),
+    design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       nnet::nnet(formula, data = data, weights = weights, ...)
     },

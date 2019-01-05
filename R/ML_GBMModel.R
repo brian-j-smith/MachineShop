@@ -40,7 +40,7 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
     packages = "gbm",
     types = c("factor", "numeric", "Surv"),
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "terms"),
+    design = "terms",
     fit = function(formula, data, weights, distribution = NULL, ...) {
       if (is.null(distribution)) {
         distribution <- switch_class(response(formula, data),

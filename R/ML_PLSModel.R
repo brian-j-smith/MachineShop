@@ -31,7 +31,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
     packages = "pls",
     types = c("factor", "numeric"),
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "model.matrix"),
+    design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       y <- response(formula, data)

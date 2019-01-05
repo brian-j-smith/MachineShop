@@ -60,7 +60,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
     packages = "glmnet",
     types = c("factor", "matrix", "numeric", "Surv"),
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "model.matrix"),
+    design = "model.matrix",
     fit = function(formula, data, weights, family = NULL, ...) {
       terms <- extract(formula, data)
       x <- terms$x

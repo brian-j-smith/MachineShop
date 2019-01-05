@@ -61,7 +61,7 @@ BARTMachineModel <- function(num_trees = 50, num_burn = 250, num_iter = 1000,
     packages = "bartMachine",
     types = c("binary", "numeric"),
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "model.matrix"),
+    design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       terms <- extract(formula, data)

@@ -35,7 +35,7 @@ TreeModel <- function(mincut = 5, minsize = 10, mindev = 0.01,
     packages = "tree",
     types = c("factor", "numeric"),
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "terms"),
+    design = "terms",
     fit = function(formula, data, weights, split, ...) {
       tree::tree(formula, data = data, weights = weights, split = split, ...)
     },

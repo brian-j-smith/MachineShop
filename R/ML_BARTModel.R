@@ -76,7 +76,7 @@ BARTModel <- function(K = NULL, sparse = FALSE, theta = 0, omega = 1,
     packages = "BART",
     types = c("factor", "numeric", "Surv"),
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "model.matrix"),
+    design = "model.matrix",
     fit = function(formula, data, weights, K = NULL, sigest = NA, sigdf = 3,
                    sigquant = 0.90, lambda = NA, ...) {
       terms <- extract(formula, data)

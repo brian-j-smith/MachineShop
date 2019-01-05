@@ -231,15 +231,15 @@ match_indices <- function(indices, choices) {
 }
 
 
-nvars <- function(data, design = c("terms", "model.matrix")) {
-  modelterms <- terms(data)
-  switch(match.arg(design),
-         "terms" = length(labels(modelterms)),
+nvars <- function(x, model) {
+  model_terms <- terms(x)
+  switch(model@design,
          "model.matrix" = {
-           fo <- formula(modelterms)
-           mf <- model.frame(fo, data)
-           ncol(model.matrix(fo, mf)) - attr(modelterms, "intercept")
-         }
+           fo <- formula(model_terms)
+           mf <- model.frame(fo, x[1, , drop = FALSE])
+           ncol(model.matrix(fo, mf)) - attr(model_terms, "intercept")
+         },
+         "terms" = length(labels(model_terms))
   )
 }
 

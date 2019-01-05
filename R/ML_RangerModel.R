@@ -59,7 +59,7 @@ RangerModel <- function(num.trees = 500, mtry = NULL,
     packages = "ranger",
     types = c("factor", "numeric", "Surv"),
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "terms"),
+    design = "terms",
     fit = function(formula, data, weights, ...) {
       ranger::ranger(formula, data = data, case.weights = weights, 
                      probability = is(response(formula, data), "factor"), ...)

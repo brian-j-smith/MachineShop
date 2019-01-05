@@ -41,7 +41,7 @@ RandomForestModel <- function(ntree = 500,
     packages = "randomForest",
     types = c("factor", "numeric"),
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "terms"),
+    design = "terms",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       randomForest::randomForest(formula, data = data, ...)

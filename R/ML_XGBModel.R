@@ -49,7 +49,7 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
     packages = "xgboost",
     types = c("factor", "numeric"),
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "model.matrix"),
+    design = "model.matrix",
     fit = function(formula, data, weights, params, ...) {
       terms <- extract(formula, data)
       x <- terms$x

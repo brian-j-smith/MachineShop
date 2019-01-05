@@ -40,7 +40,7 @@ GLMModel <- function(family = NULL, ...) {
     packages = "stats",
     types = c("binary", "numeric"),
     params = params,
-    nvars = function(data) nvars(data, design = "model.matrix"),
+    design = "model.matrix",
     fit = function(formula, data, weights, family = NULL, ...) {
       if (is.null(family)) {
         family <- switch_class(response(formula, data),
@@ -92,7 +92,7 @@ GLMStepAICModel <- function(family = NULL, ...,
     packages = c(stepmodel@packages, "MASS"),
     types = stepmodel@types,
     params = c(stepmodel@params, params),
-    nvars = stepmodel@nvars,
+    design = stepmodel@design,
     fit = function(formula, data, weights, family = NULL, direction = "both",
                    scope = list(), k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()

@@ -47,7 +47,7 @@ LDAModel <- function(prior = NULL, tol = 1e-4,
     packages = "MASS",
     types = "factor",
     params = params(environment()),
-    nvars = function(data) nvars(data, design = "model.matrix"),
+    design = "model.matrix",
     fit = function(formula, data, weights, dimen, use, ...) {
       assert_equal_weights(weights)
       modelfit <- MASS::lda(formula, data = data, ...)

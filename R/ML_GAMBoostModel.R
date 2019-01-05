@@ -58,7 +58,7 @@ GAMBoostModel <- function(family = NULL,
     packages = "mboost",
     types = c("binary", "numeric", "Surv"),
     params = params,
-    nvars = function(data) nvars(data, design = "terms"),
+    design = "terms",
     fit = function(formula, data, weights, family = NULL, ...) {
       attachment(list(
         bbs = mboost::bbs,
