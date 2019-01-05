@@ -96,7 +96,7 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
   perf <- x@performance
   type <- match.arg(type)
   if (type == "line") {
-    grid <- x@grid
+    grid <- x@tune_grid
     if (any(dim(grid) == 0)) stop("no tuning parameters to plot")
     stats <- apply(perf, c(3, 2), function(x) stat(na.omit(x))) %>%
       as.data.frame.table

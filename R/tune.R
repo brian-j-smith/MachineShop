@@ -129,7 +129,7 @@ tune.recipe <- function(x, models, grid = data.frame(),
   if (is(metric, "MLMetric")) maximize <- metric@maximize
   selected <- ifelse(maximize, which.max, which.min)(perf_stat)
   
-  MLModelTune(models[[selected]], grid = grid, performance = perf,
+  MLModelTune(models[[selected]], tune_grid = grid, performance = perf,
               selected = structure(selected, names = colnames(perf)[1]))
   
 }

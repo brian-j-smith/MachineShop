@@ -127,7 +127,7 @@ setMethod("show", "MLModelTune",
   function(object) {
     callNextMethod(object)
     cat("Grid:\n")
-    print(object@grid)
+    print(object@tune_grid)
     cat("\n")
     print(object@performance)
     if (!is.na(dim(object@performance)[3])) {
