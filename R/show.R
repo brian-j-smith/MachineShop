@@ -130,8 +130,8 @@ setMethod("show", "MLModelTune",
     print(object@grid)
     cat("\n")
     print(object@performance)
-    model_names <- dimnames(object@performance)[[3]]
-    if (length(model_names) > 1) {
+    if (!is.na(dim(object@performance)[3])) {
+      model_names <- dimnames(object@performance)[[3]]
       cat("Selected (", names(object@selected), "): ",
           model_names[object@selected], "\n\n",
           sep = "")
