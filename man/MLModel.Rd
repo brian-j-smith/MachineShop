@@ -5,11 +5,11 @@
 \title{MLModel Class Constructor}
 \usage{
 MLModel(name = "MLModel", label = name, packages = character(),
-  types = character(), params = list(), design = c(NA,
-  "model.matrix", "terms"), fit = function(formula, data, weights, ...)
-  stop("no fit function"), predict = function(object, newdata, times,
-  ...) stop("no predict function"), varimp = function(object, ...) NULL,
-  ...)
+  types = character(), params = list(), grid = function(x, length,
+  ...) NULL, design = c(NA, "model.matrix", "terms"),
+  fit = function(formula, data, weights, ...) stop("no fit function"),
+  predict = function(object, newdata, times, ...)
+  stop("no predict function"), varimp = function(object, ...) NULL, ...)
 }
 \arguments{
 \item{name}{character string name for the instantiated \code{MLModel} object;
@@ -27,12 +27,17 @@ can be fit.  Supported types are \code{"binary"}, \code{"factor"},
 \item{params}{list of user-specified model parameters to be passed to the
 \code{fit} function.}
 
+\item{grid}{tuning grid function whose first agument \code{x} is a
+\code{\link{ModelFrame}} of the model fit data and formula, followed by a
+\code{length} to use in generating sequences of parameter values and an
+ellipsis (\code{...}).}
+
 \item{design}{character string indicating whether the type of design matrix
 used to fit the model is a \code{"\link{model.matrix}"}, a data.frame
 of the original predictor variable \code{"terms"}, or unknown (default).}
 
 \item{fit}{model fitting function whose arguments are a \code{formula}, a
-\code{data} frame, case \code{weights}, and an ellipsis (\code{...}).}
+\code{data} frame, case \code{weights}, and an ellipsis.}
 
 \item{predict}{model prediction function whose arguments are the
 \code{object} returned by \code{fit}, a \code{newdata} frame of predictor
@@ -52,6 +57,10 @@ to \code{\link{varimp}}, and an ellipsis.}
 Create a model for use with the \pkg{MachineShop} package.
 }
 \details{
+The \code{grid} function should return a list whose elements are named after
+and contain values of parameters to include in a tuning grid to be
+constructed automatically by the package.
+
 Values returned by the \code{predict} functions should be formatted according
 to the response variable types below.
 \describe{

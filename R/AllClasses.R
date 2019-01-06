@@ -243,11 +243,15 @@ setClass("MLMetric",
 #' \code{"matrix"}, \code{"numeric"}, \code{"ordered"}, and \code{"Surv"}.
 #' @param params list of user-specified model parameters to be passed to the
 #' \code{fit} function.
+#' @param grid tuning grid function whose first agument \code{x} is a
+#' \code{\link{ModelFrame}} of the model fit data and formula, followed by a
+#' \code{length} to use in generating sequences of parameter values and an
+#' ellipsis (\code{...}).
 #' @param design character string indicating whether the type of design matrix
 #' used to fit the model is a \code{"\link{model.matrix}"}, a data.frame
 #' of the original predictor variable \code{"terms"}, or unknown (default).
 #' @param fit model fitting function whose arguments are a \code{formula}, a
-#' \code{data} frame, case \code{weights}, and an ellipsis (\code{...}).
+#' \code{data} frame, case \code{weights}, and an ellipsis.
 #' @param predict model prediction function whose arguments are the
 #' \code{object} returned by \code{fit}, a \code{newdata} frame of predictor
 #' variables, optional vector of \code{times} at which to predict survival,
@@ -258,6 +262,10 @@ setClass("MLMetric",
 #' @param ... arguments passed from other methods.
 #' 
 #' @details
+#' The \code{grid} function should return a list whose elements are named after
+#' and contain values of parameters to include in a tuning grid to be
+#' constructed automatically by the package.
+#' 
 #' Values returned by the \code{predict} functions should be formatted according
 #' to the response variable types below.
 #' \describe{
@@ -301,6 +309,7 @@ setClass("MLMetric",
 #' 
 MLModel <- function(name = "MLModel", label = name, packages = character(),
                     types = character(), params = list(),
+                    grid = function(x, length, ...) NULL,
                     design = c(NA, "model.matrix", "terms"),
                     fit = function(formula, data, weights, ...)
                       stop("no fit function"),
@@ -319,6 +328,7 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
       packages = packages,
       types = types,
       params = params,
+      grid = grid,
       design = match.arg(design),
       fit = fit,
       fitbits = MLFitBits(packages = packages,
@@ -341,6 +351,7 @@ setClass("MLModel",
             packages = "character",
             types = "character",
             params = "list",
+            grid = "function",
             design = "character",
             fit = "function",
             fitbits = "MLFitBits")

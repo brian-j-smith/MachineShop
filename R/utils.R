@@ -232,6 +232,7 @@ match_indices <- function(indices, choices) {
 
 
 nvars <- function(x, model) {
+  model <- getMLObject(model, "MLModel")
   model_terms <- terms(x)
   switch(model@design,
          "model.matrix" = {

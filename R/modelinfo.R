@@ -9,8 +9,9 @@
 #' 
 #' @return List of named models containing a descriptive \code{"label"}, source
 #' \code{"packages"}, supported response variable \code{"types"}, the
-#' constructor \code{"arguments"}, and whether a \code{"varimp"} function is
-#' implemented for each.
+#' constructor \code{"arguments"}, whether there is a pre-defined \code{"grid"}
+#' of tuning parameters, and whether a \code{"varimp"} function is implemented
+#' for each.
 #' 
 #' @seealso \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
 #' 
@@ -126,6 +127,7 @@ modelinfo <- function(...) {
     packages = x@packages,
     types = x@types,
     arguments = args(get(x@name)),
+    grid = !is.null(body(x@grid)),
     varimp = !is.null(body(fitbit(x, "varimp")))
   )), names = x@name)
   if (length(list(...))) c(info, .modelinfo(...)) else info

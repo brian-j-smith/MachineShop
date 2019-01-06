@@ -9,15 +9,15 @@
 \usage{
 tune(x, ...)
 
-\method{tune}{formula}(x, data, models, grid = data.frame(),
+\method{tune}{formula}(x, data, models, grid = 3, fixed = NULL,
   control = CVControl, metrics = NULL, stat = mean,
   maximize = TRUE, ...)
 
-\method{tune}{ModelFrame}(x, models, grid = data.frame(),
+\method{tune}{ModelFrame}(x, models, grid = 3, fixed = NULL,
   control = CVControl, metrics = NULL, stat = mean,
   maximize = TRUE, ...)
 
-\method{tune}{recipe}(x, models, grid = data.frame(),
+\method{tune}{recipe}(x, models, grid = 3, fixed = NULL,
   control = CVControl, metrics = NULL, stat = mean,
   maximize = TRUE, ...)
 }
@@ -33,9 +33,13 @@ weights; a \code{formula}; or a \code{recipe.}}
 \item{models}{\code{MLModel} function, function name, object or vector of the
 aforementioned elements, such as that returned by \code{\link{expand.model}}.}
 
-\item{grid}{\code{data.frame} containing parameter values over which to
-evaluate \code{models} when a single constructor is specified.  Ignored in
-the case of a list of models.}
+\item{grid}{\code{data.frame} containing parameter values at which to
+evaluate a single model supplied to \code{models} or the number of
+parameter-specific values to generate automatically if the model has a
+pre-defined grid.  Ignored in the case of a list of models.}
+
+\item{fixed}{list of fixed parameter values to combine with those in
+\code{grid}.}
 
 \item{control}{\code{\link{MLControl}} object, control function, or character
 string naming a control function defining the resampling method to be

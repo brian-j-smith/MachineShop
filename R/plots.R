@@ -115,8 +115,9 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
     }
     df$metric <- factor(df$metric, metrics)
     
-    mapping <- if (ncol(grid) > 1) {
-      df$group <- do.call(interaction, grid[-1])
+    indices <- sapply(grid[-1], function(x) length(unique(x)) > 1)
+    mapping <- if (any(indices)) {
+      df$group <- interaction(grid[-1][indices])
       aes(x, y, color = group, shape = group)
     } else {
       aes(x, y)
@@ -124,8 +125,8 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
     ggplot(df, mapping) +
       geom_line() +
       geom_point() +
-      labs(x = names(grid)[1], y = "Values", color = "Params Group",
-           shape = "Params Group") +
+      labs(x = names(grid)[1], y = "Values", color = "Group",
+           shape = "Group") +
       facet_wrap(~ metric, scales = "free")
   } else {
     plot(perf, metrics = metrics, stat = stat, type = type, ...)

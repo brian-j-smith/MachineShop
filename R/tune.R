@@ -24,9 +24,12 @@ tune <- function(x, ...) {
 #' @param data \code{data.frame} containing observed predictors and outcomes.
 #' @param models \code{MLModel} function, function name, object or vector of the
 #' aforementioned elements, such as that returned by \code{\link{expand.model}}.
-#' @param grid \code{data.frame} containing parameter values over which to
-#' evaluate \code{models} when a single constructor is specified.  Ignored in
-#' the case of a list of models.
+#' @param grid \code{data.frame} containing parameter values at which to
+#' evaluate a single model supplied to \code{models} or the number of
+#' parameter-specific values to generate automatically if the model has a
+#' pre-defined grid.  Ignored in the case of a list of models.
+#' @param fixed list of fixed parameter values to combine with those in
+#' \code{grid}.
 #' @param control \code{\link{MLControl}} object, control function, or character
 #' string naming a control function defining the resampling method to be
 #' employed.
@@ -64,33 +67,32 @@ tune <- function(x, ...) {
 #' varimp(gbmfit)
 #' }
 #' 
-tune.formula <- function(x, data, models, grid = data.frame(),
+tune.formula <- function(x, data, models, grid = 3, fixed = NULL,
                          control = CVControl, metrics = NULL, stat = mean,
                          maximize = TRUE, ...) {
-  .tune(x, data, models, grid, control, metrics, stat, maximize, ...)
+  .tune(x, data, models, grid, fixed, control, metrics, stat, maximize, ...)
 }
 
 
 #' @rdname tune-methods
 #' 
-tune.ModelFrame <- function(x, models, grid = data.frame(),
+tune.ModelFrame <- function(x, models, grid = 3, fixed = NULL,
                             control = CVControl, metrics = NULL, stat = mean,
                             maximize = TRUE, ...) {
-  .tune(x, NULL, models, grid, control, metrics, stat, maximize, ...)
+  .tune(x, NULL, models, grid, fixed, control, metrics, stat, maximize, ...)
 }
 
 
 #' @rdname tune-methods
 #' 
-tune.recipe <- function(x, models, grid = data.frame(),
-                        control = CVControl, metrics = NULL, stat = mean,
-                        maximize = TRUE, ...) {
-  .tune(x, NULL, models, grid, control, metrics, stat, maximize, ...)
+tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
+                        metrics = NULL, stat = mean, maximize = TRUE, ...) {
+  .tune(x, NULL, models, grid, fixed, control, metrics, stat, maximize, ...)
 }
 
 
-.tune <-
-  function(x, data, models, grid, control, metrics, stat, maximize, ...) {
+.tune <- function(x, data, models, grid, fixed, control, metrics, stat,
+                  maximize, ...) {
   
   if (is.vector(models)) {
     models <- as.list(models)
@@ -105,6 +107,10 @@ tune.recipe <- function(x, models, grid = data.frame(),
     grid <- data.frame()
   } else {
     model <- getMLObject(models, class = "MLModel")
+    if (is.numeric(grid)) {
+      grid <- grid(x, data = data, model = model, length = grid)
+    }
+    grid <- combine_tune_params(grid, fixed)
     models <- expand.model(list(get(model@name, mode = "function"), grid))
   }
   
@@ -133,4 +139,23 @@ tune.recipe <- function(x, models, grid = data.frame(),
   MLModelTune(models[[selected]], tune_grid = grid, performance = perf,
               selected = structure(selected, names = colnames(perf)[1]))
   
+}
+
+
+combine_tune_params <- function(grid, fixed) {
+  fixed <- as.data.frame(fixed, stringsAsFactors = FALSE)
+  if (nrow(fixed) > 1) stop("only single values allowed for fixed parameters")
+  
+  grid_params <- names(grid)
+  fixed_params <- names(fixed)
+  common_params <- intersect(grid_params, fixed_params)
+  new_params <- setdiff(fixed_params, common_params)
+  
+  grid[common_params] <- fixed[common_params]
+  grid <- grid[!duplicated(grid), , drop = FALSE]
+  rownames(grid) <- NULL
+  
+  grid[new_params] <- fixed[new_params]
+  
+  grid
 }

@@ -15,8 +15,9 @@ default.}
 \value{
 List of named models containing a descriptive \code{"label"}, source
 \code{"packages"}, supported response variable \code{"types"}, the
-constructor \code{"arguments"}, and whether a \code{"varimp"} function is
-implemented for each.
+constructor \code{"arguments"}, whether there is a pre-defined \code{"grid"}
+of tuning parameters, and whether a \code{"varimp"} function is implemented
+for each.
 }
 \description{
 Display information about models provided by the \pkg{MachineShop} package.
