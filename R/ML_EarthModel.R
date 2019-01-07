@@ -52,6 +52,13 @@ EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
     packages = "earth",
     types = c("factor", "numeric"),
     params = params(environment()),
+    grid = function(x, length, ...) {
+      modelfit <- fit(x, model = EarthModel(pmethod = "none"))
+      max_terms <- min(2 + 0.75 * nrow(modelfit$dirs), 200)
+      list(
+        nprune = round(seq(2, max_terms, length = length))
+      )
+    },
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       attachment(list(

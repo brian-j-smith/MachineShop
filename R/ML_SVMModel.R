@@ -158,6 +158,9 @@ SVMTanhModel <- function(scale = 1, offset = 1, ...) {
   model@name <- name
   model@label <- label
   
+  scaled <- model@params$scaled
+  if (!is.logical(scaled)) scaled <- TRUE
+  
   model@grid <- function(x, length, ...) {
     params <- switch(kernel,
                      "anovadot" = list(C = NULL, degree = NULL),
@@ -181,7 +184,8 @@ SVMTanhModel <- function(scale = 1, offset = 1, ...) {
       f("order", seq_len(min(length, 3))) %>%
       f("scale", 10^(1:length - 3)) %>%
       f("sigma", {
-        sigmas <- kernlab::sigest(extract(formula(terms(x)), x)$x)
+        sigmas <- kernlab::sigest(extract(formula(terms(x)), x)$x,
+                                  scaled = scaled)
         params$sigma <- seq(min(sigmas), max(sigmas), length = min(length, 6))
       })
   }

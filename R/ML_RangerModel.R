@@ -61,7 +61,7 @@ RangerModel <- function(num.trees = 500, mtry = NULL,
     params = params(environment()),
     grid = function(x, length, ...) {
       list(
-        mtry = mtry_grid(x, RangerModel, length)
+        mtry = seq_nvars(x, RangerModel, length)
       )
     },
     design = "terms",

@@ -53,7 +53,7 @@ CForestModel <- function(teststat = c("quad", "max"),
     params = list(controls = as.call(c(.(party::cforest_control), args))),
     grid = function(x, length, ...) {
       list(
-        mtry = mtry_grid(x, CForestModel, length)
+        mtry = seq_nvars(x, CForestModel, length)
       )
     },
     design = "terms",

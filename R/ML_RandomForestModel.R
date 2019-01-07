@@ -43,7 +43,7 @@ RandomForestModel <- function(ntree = 500,
     params = params(environment()),
     grid = function(x, length, ...) {
       list(
-        mtry = mtry_grid(x, RandomForestModel, length)
+        mtry = seq_nvars(x, RandomForestModel, length)
       )
     },
     design = "terms",

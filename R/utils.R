@@ -281,6 +281,22 @@ requireModelNamespaces <- function(packages) {
 }
 
 
+seq_nvars <- function(x, model, length) {
+  nvars <- nvars(x, model)
+  length <- min(length, nvars)
+  vals <- if (length > 1) {
+    if (nvars < 500) {
+      seq(2, nvars, length = length)
+    } else {
+      2^seq(1, log2(nvars), length = length)
+    }
+  } else {
+    numeric()
+  }
+  round(vals)
+}
+
+
 stepAIC_args <- function(formula, direction, scope) {
   if (is.null(scope$lower)) scope$lower <- ~ 1
   if (is.null(scope$upper)) scope$upper <- formula[-2]

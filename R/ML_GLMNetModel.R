@@ -61,8 +61,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
     types = c("factor", "matrix", "numeric", "Surv"),
     params = params(environment()),
     grid = function(x, length, ...) {
-      model <- GLMNetModel()
-      model@params$lambda <- NULL
+      model <- GLMNetModel(lambda = NULL)
       model@params$nlambda <- 3
       modelfit <- fit(x, model = model)
       list(

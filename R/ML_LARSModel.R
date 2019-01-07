@@ -45,6 +45,11 @@ LARSModel <- function(type = c("lasso", "lar", "forward.stagewise", "stepwise"),
     packages = "lars",
     types = "numeric",
     params = params(environment()),
+    grid = function(x, length, ...) {
+      list(
+        step = seq_nvars(x, LARSModel, length)
+      )
+    },
     design = "model.matrix",
     fit = function(formula, data, weights, step = NULL, ...) {
       assert_equal_weights(weights)

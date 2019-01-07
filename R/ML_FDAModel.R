@@ -52,6 +52,13 @@ FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
     packages = "mda",
     types = "factor",
     params = params(environment()),
+    grid = function(x, length, ...) {
+      modelfit <- fit(x, model = EarthModel(pmethod = "none"))
+      max_terms <- min(2 + 0.75 * nrow(modelfit$dirs), 200)
+      list(
+        nprune = round(seq(2, max_terms, length = length))
+      )
+    },
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       mda::fda(formula, data = data, weights = weights, ...)
@@ -79,5 +86,10 @@ PDAModel <- function(lambda = 1, df = NULL, ...) {
   model <- do.call(FDAModel, args, quote = TRUE)
   model@name <- "PDAModel"
   model@label <- "Penalized Discriminant Analysis"
+  model@grid <- function(x, length, ...) {
+    list(
+      lambda = c(0, 10^-((length - 1):1))
+    )
+  }
   model
 }
