@@ -22,8 +22,8 @@ tune <- function(x, ...) {
 #' @rdname tune-methods
 #' 
 #' @param data \code{data.frame} containing observed predictors and outcomes.
-#' @param models \code{MLModel} function, function name, object or list of the
-#' aforementioned elements such as that returned by \code{\link{expand.model}}.
+#' @param models \code{MLModel} function, function name, object or vector of the
+#' aforementioned elements, such as that returned by \code{\link{expand.model}}.
 #' @param grid \code{data.frame} containing parameter values over which to
 #' evaluate \code{models} when a single constructor is specified.  Ignored in
 #' the case of a list of models.
@@ -92,7 +92,8 @@ tune.recipe <- function(x, models, grid = data.frame(),
 .tune <-
   function(x, data, models, grid, control, metrics, stat, maximize, ...) {
   
-  if (is.list(models)) {
+  if (is.vector(models)) {
+    models <- as.list(models)
     model_names <- character()
     for (i in seq(models)) {
       models[[i]] <- getMLObject(models[[i]], class = "MLModel")

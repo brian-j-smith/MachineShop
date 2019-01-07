@@ -30,8 +30,8 @@ weights; a \code{formula}; or a \code{recipe.}}
 
 \item{data}{\code{data.frame} containing observed predictors and outcomes.}
 
-\item{models}{\code{MLModel} function, function name, object or list of the
-aforementioned elements such as that returned by \code{\link{expand.model}}.}
+\item{models}{\code{MLModel} function, function name, object or vector of the
+aforementioned elements, such as that returned by \code{\link{expand.model}}.}
 
 \item{grid}{\code{data.frame} containing parameter values over which to
 evaluate \code{models} when a single constructor is specified.  Ignored in
