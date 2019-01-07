@@ -38,6 +38,11 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
     packages = "kknn",
     types = c("factor", "numeric", "ordered"),
     params = params(environment()),
+    grid = function(x, length, ...) {
+      list(
+        k = seq(5, by = 2, length = length)
+      )
+    },
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)

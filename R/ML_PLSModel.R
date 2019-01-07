@@ -31,6 +31,11 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
     packages = "pls",
     types = c("factor", "numeric"),
     params = params(environment()),
+    grid = function(x, length, ...) {
+      list(
+        ncomp = 1:min(c(nrow(x), nvars(x, PLSModel) - 1, length))
+      )
+    },
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)

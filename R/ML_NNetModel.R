@@ -49,6 +49,12 @@ NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
     packages = "nnet",
     types = c("factor", "numeric"),
     params = params(environment()),
+    grid = function(x, length, ...) {
+      list(
+        decay = c(0, 10^-((length - 1):1)),
+        size = seq(1, by = 2, length = length)
+      )
+    },
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       nnet::nnet(formula, data = data, weights = weights, ...)

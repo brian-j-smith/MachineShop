@@ -47,6 +47,11 @@ LDAModel <- function(prior = NULL, tol = 1e-4,
     packages = "MASS",
     types = "factor",
     params = params(environment()),
+    grid = function(x, length, ...) {
+      list(
+        dimen = 1:min(nlevels(response(x)) - 1, nvars(x, LDAModel))
+      )
+    },
     design = "model.matrix",
     fit = function(formula, data, weights, dimen, use, ...) {
       assert_equal_weights(weights)

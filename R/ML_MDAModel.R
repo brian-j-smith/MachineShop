@@ -54,6 +54,11 @@ MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
     packages = "mda",
     types = "factor",
     params = params(environment()),
+    grid = function(x, length, ...) {
+      list(
+        subclasses = 2 * 1:length
+      )
+    },
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)

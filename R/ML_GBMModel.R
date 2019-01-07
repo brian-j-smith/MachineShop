@@ -40,6 +40,12 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
     packages = "gbm",
     types = c("factor", "numeric", "Surv"),
     params = params(environment()),
+    grid = function(x, length, ...) {
+      list(
+        n.trees = 50 * 1:length,
+        interaction.depth = 1:length
+      )
+    },
     design = "terms",
     fit = function(formula, data, weights, distribution = NULL, ...) {
       if (is.null(distribution)) {

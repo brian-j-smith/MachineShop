@@ -47,6 +47,12 @@ AdaBagModel <- function(mfinal = 100, minsplit = 20,
     packages = "adabag",
     types = "factor",
     params = params,
+    grid = function(x, length, ...) {
+      list(
+        mfinal = 50 * 1:length,
+        maxdepth = 1:length
+      )
+    },
     design = "terms",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)

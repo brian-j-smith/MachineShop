@@ -47,6 +47,11 @@ GLMBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
     packages = "mboost",
     types = c("binary", "numeric", "Surv"),
     params = params,
+    grid = function(x, length, ...) {
+      list(
+        mstop = 50 * 1:length
+      )
+    },
     design = "terms",
     fit = function(formula, data, weights, family = NULL, ...) {
       if (is.null(family)) {

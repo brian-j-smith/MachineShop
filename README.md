@@ -1784,6 +1784,9 @@ modelinfo(GBMModel)
 #>     n.minobsinnode = 10, shrinkage = 0.1, bag.fraction = 0.5) 
 #> NULL
 #> 
+#> $GBMModel$grid
+#> [1] TRUE
+#> 
 #> $GBMModel$varimp
 #> [1] TRUE
 

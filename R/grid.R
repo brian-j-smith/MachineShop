@@ -20,3 +20,19 @@ grid.ModelFrame <- function(x, model, length = 3, ...) {
 grid.recipe <- function(x, model, length = 3, ...) {
   grid(ModelFrame(x, na.action = na.pass), model, length = length)
 }
+
+
+mtry_grid <- function(x, model, length) {
+  nvars <- nvars(x, model)
+  length <- min(length, nvars)
+  vals <- if (length > 1) {
+    if (nvars < 500) {
+      seq(2, nvars, length = length)
+    } else {
+      2^seq(1, log2(nvars), length = length)
+    }
+  } else {
+    numeric()
+  }
+  round(vals)
+}

@@ -157,5 +157,34 @@ SVMTanhModel <- function(scale = 1, offset = 1, ...) {
   model <- do.call(SVMModel, args, quote = TRUE)
   model@name <- name
   model@label <- label
+  
+  model@grid <- function(x, length, ...) {
+    params <- switch(kernel,
+                     "anovadot" = list(C = NULL, degree = NULL),
+                     "besseldot" = list(C = NULL, order = NULL,
+                                        degree = NULL),
+                     "laplacedot" = list(C = NULL, sigma = NULL),
+                     "polydot" = list(C = NULL, degree = NULL, scale = NULL),
+                     "rbfdot" = list(C = NULL, sigma = NULL),
+                     "splinedot" = list(C = NULL),
+                     "tanhdot" = list(C = NULL, scale = NULL),
+                     "vanilladot" = list(C = NULL))
+    
+    f <- function(params, name, value) {
+      if (name %in% names(params)) params[[name]] <- value
+      params
+    }
+    
+    params %>%
+      f("C", 2^(1:length - 3)) %>%
+      f("degree", seq_len(min(length, 3))) %>%
+      f("order", seq_len(min(length, 3))) %>%
+      f("scale", 10^(1:length - 3)) %>%
+      f("sigma", {
+        sigmas <- kernlab::sigest(extract(formula(terms(x)), x)$x)
+        params$sigma <- seq(min(sigmas), max(sigmas), length = min(length, 6))
+      })
+  }
+
   model
 }

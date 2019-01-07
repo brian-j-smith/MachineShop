@@ -159,5 +159,43 @@ XGBTreeModel <- function(objective = NULL, base_score = 0.5,
   model <- do.call(XGBModel, args, quote = TRUE)
   model@name <- name
   model@label <- label
+  
+  model@grid <- function(x, length, ...) {
+    params <- switch(booster,
+                     "dart" = list(
+                       nrounds = NULL,
+                       max_depth = NULL,
+                       eta = NULL,
+                       subsample = NULL,
+                       colsample_bytree = NULL,
+                       rate_drop = c(0.01, 0.50),
+                       skip_drop = c(0.05, 0.95)
+                     ),
+                     "gblinear" = list(
+                       nrounds = NULL,
+                       lambda = c(0, 10^-((length - 1):1)),
+                       alpha = c(0, 10^-((length - 1):1))
+                     ),
+                     "gbtree" = list(
+                       nrounds = NULL,
+                       max_depth = NULL,
+                       eta = NULL,
+                       subsample = NULL,
+                       colsample_bytree = NULL
+                     ))
+    
+    f <- function(params, name, value) {
+      if (name %in% names(params)) params[[name]] <- value
+      params
+    }
+    
+    params %>%
+      f("nrounds", 50 * 1:length) %>%
+      f("max_depth", 1:length) %>%
+      f("eta", c(0.3, 0.4)) %>%
+      f("subsample", seq(0.5, 1.0, length = length)) %>%
+      f("colsample_bytree", c(0.6, 0.8))
+  }
+  
   model
 }

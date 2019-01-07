@@ -65,6 +65,13 @@ C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
     packages = "C50",
     types = "factor",
     params = params,
+    grid = function(x, length, ...) {
+      list(
+        trials = c(1, 10 * seq_len(length - 1)),
+        rules = c(FALSE, TRUE),
+        winnow = c(FALSE, TRUE)
+      )
+    },
     design = "terms",
     fit = function(formula, data, weights, ...) {
       C50::C5.0(formula, data = data, weights = weights, ...)

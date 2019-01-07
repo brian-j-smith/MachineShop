@@ -58,6 +58,11 @@ GAMBoostModel <- function(family = NULL,
     packages = "mboost",
     types = c("binary", "numeric", "Surv"),
     params = params,
+    grid = function(x, length, ...) {
+      list(
+        mstop = 50 * 1:length
+      )
+    },
     design = "terms",
     fit = function(formula, data, weights, family = NULL, ...) {
       attachment(list(

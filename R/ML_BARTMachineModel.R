@@ -61,6 +61,14 @@ BARTMachineModel <- function(num_trees = 50, num_burn = 250, num_iter = 1000,
     packages = "bartMachine",
     types = c("binary", "numeric"),
     params = params(environment()),
+    grid = function(x, length, ...) {
+      list(
+        alpha = seq(0.9, 0.99, length = length),
+        beta = seq(1, 3, length = length),
+        k = 1 + 1:length,
+        nu = 1 + 1:length
+      )
+    },
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
