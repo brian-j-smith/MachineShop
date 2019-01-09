@@ -9,7 +9,7 @@
 Meta-package for statistical and machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Supports predictive modeling of numerical, categorical, and censored time-to-event outcomes and resample (bootstrap and cross-validation) estimation of model performance.
 }
 \details{
-\pkg{MachineShop} provides a common interface to machine learning and
+\pkg{MachineShop} provides a unified interface to machine learning and
 statistical models provided by other packages.  Supported models are
 summarized in the table below according to the types of response variables
 with which each can be used.  Additional model information can be obtained

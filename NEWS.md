@@ -2,6 +2,12 @@
 
 ## Version Updates
 
+## 1.1.0
+* Implement model: ``BARTModel``.
+* Implement model tuning over automatically generated grids of parameter values and random sampling of grid points.
+* Standardize predict functions to return mean survival when times are not specified.
+
+
 ## 1.0.0
 
 * Implement models: ``BARTMachineModel``, ``LARSModel``.
