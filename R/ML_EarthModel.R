@@ -52,12 +52,14 @@ EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
     packages = "earth",
     types = c("factor", "numeric"),
     params = params(environment()),
-    grid = function(x, length, ...) {
+    grid = function(x, length, random, ...) {
       modelfit <- fit(x, model = EarthModel(pmethod = "none"))
       max_terms <- min(2 + 0.75 * nrow(modelfit$dirs), 200)
-      list(
+      params <- list(
         nprune = round(seq(2, max_terms, length = length))
       )
+      if (random) params$degree <- 1:2
+      params
     },
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {

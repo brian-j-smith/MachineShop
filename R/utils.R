@@ -281,6 +281,23 @@ requireModelNamespaces <- function(packages) {
 }
 
 
+seq_inner <- function(from, to, length) {
+  x <- seq(from, to, length = length + 2)
+  x[-c(1, length + 2)]
+}
+
+
+seq_range <- function(from, by, lim, length) {
+  if (length > 0) {
+    to <- min(from + by * (length - 1), lim[2])
+    x <- seq(from, to, length = length)
+    x[x >= lim[1]]
+  } else {
+    seq(from, length = length)
+  }
+}
+
+
 seq_nvars <- function(x, model, length) {
   nvars <- nvars(x, model)
   length <- min(length, nvars)

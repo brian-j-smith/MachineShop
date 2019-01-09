@@ -36,9 +36,9 @@ info <- modelinfo()
 * Model specification with traditional formulas and with flexible pre-processing [recipes](https://cran.r-project.org/package=recipes).
 * Resample estimation of predictive performance, including cross-validation, bootstrap resampling, and split training-test set validation.
 * Parallel execution of resampling algorithms.
-* Choices of performance metrics: accuracy, areas under ROC and precision-recall curves, Brier score, coefficient of determination $R^2$, concordance index, cross entropy, F-score, Gini coefficient, unweighted and weighted Cohen's kappa, mean absolute error, mean squared error, mean squared log error, positive and negative predictive values, and precision and recall.
+* Choices of performance metrics: accuracy, areas under ROC and precision-recall curves, Brier score, coefficient of determination (R squared), concordance index, cross entropy, F-score, Gini coefficient, unweighted and weighted Cohen's kappa, mean absolute error, mean squared error, mean squared log error, positive and negative predictive values, and precision and recall.
 * Tabular and graphical performance summaries: calibration curves, confusion matrices, partial dependence plots, lift curves, and variable importance.
-* Automated model tuning over grids of parameter values.
+* Model tuning over automatically generated grids of parameter values and random sampling of grid points.
 * Model selection and comparisons for any combination of models and model parameter values.
 * User-definable models and performance metrics.
 

@@ -160,26 +160,30 @@ XGBTreeModel <- function(objective = NULL, base_score = 0.5,
   model@name <- name
   model@label <- label
   
-  model@grid <- function(x, length, ...) {
+  model@grid <- function(x, length, random, ...) {
     params <- switch(booster,
                      "dart" = list(
                        nrounds = NULL,
                        max_depth = NULL,
                        eta = NULL,
+                       gamma = NULL,
+                       min_child_weight = NULL,
                        subsample = NULL,
                        colsample_bytree = NULL,
-                       rate_drop = c(0.01, 0.50),
-                       skip_drop = c(0.05, 0.95)
+                       rate_drop = NULL,
+                       skip_drop = NULL
                      ),
                      "gblinear" = list(
                        nrounds = NULL,
-                       lambda = c(0, 10^-((length - 1):1)),
-                       alpha = c(0, 10^-((length - 1):1))
+                       lambda = NULL,
+                       alpha = NULL
                      ),
                      "gbtree" = list(
                        nrounds = NULL,
                        max_depth = NULL,
                        eta = NULL,
+                       gamma = NULL,
+                       min_child_weight = NULL,
                        subsample = NULL,
                        colsample_bytree = NULL
                      ))
@@ -189,12 +193,28 @@ XGBTreeModel <- function(objective = NULL, base_score = 0.5,
       params
     }
     
-    params %>%
+    params <- params %>%
       f("nrounds", round(seq_range(0, 50, c(1, 1000), length + 1))) %>%
       f("max_depth", 1:min(length, 10)) %>%
       f("eta", c(0.3, 0.4)) %>%
-      f("subsample", seq(0.5, 1.0, length = length)) %>%
-      f("colsample_bytree", c(0.6, 0.8))
+      f("subsample", seq(0.25, 1, length = length)) %>%
+      f("colsample_bytree", c(0.6, 0.8)) %>%
+      f("rate_drop", c(0.01, 0.50)) %>%
+      f("skip_drop", c(0.05, 0.95)) %>%
+      f("lambda", c(10^-seq_inner(0, 5, length - 1), 0)) %>%
+      f("alpha", c(10^-seq_inner(0, 5, length - 1), 0))
+    
+    if (random) {
+      params <- params %>%
+        f("eta", seq(0.001, 0.6, length = length)) %>%
+        f("gamma", seq(0, 10, length = length)) %>%
+        f("min_child_weight", 0:20) %>%
+        f("colsample_bytree", seq(0.3, 0.8, length = length)) %>%
+        f("rate_drop", seq(0.01, 0.50, length = length)) %>%
+        f("skip_drop", seq(0.05, 0.95, length = length))
+    }
+    
+    params
   }
   
   model

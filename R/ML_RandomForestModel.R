@@ -41,10 +41,12 @@ RandomForestModel <- function(ntree = 500,
     packages = "randomForest",
     types = c("factor", "numeric"),
     params = params(environment()),
-    grid = function(x, length, ...) {
-      list(
+    grid = function(x, length, random, ...) {
+      params <- list(
         mtry = seq_nvars(x, RandomForestModel, length)
       )
+      if (random) params$nodesize <- 1:min(nrow(x), 20)
+      params
     },
     design = "terms",
     fit = function(formula, data, weights, ...) {

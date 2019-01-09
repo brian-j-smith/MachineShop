@@ -6,7 +6,7 @@
 \usage{
 MLModel(name = "MLModel", label = name, packages = character(),
   types = character(), params = list(), grid = function(x, length,
-  ...) NULL, design = c(NA, "model.matrix", "terms"),
+  random, ...) NULL, design = c(NA, "model.matrix", "terms"),
   fit = function(formula, data, weights, ...) stop("no fit function"),
   predict = function(object, newdata, times, ...)
   stop("no predict function"), varimp = function(object, ...) NULL, ...)
@@ -29,8 +29,8 @@ can be fit.  Supported types are \code{"binary"}, \code{"factor"},
 
 \item{grid}{tuning grid function whose first agument \code{x} is a
 \code{\link{ModelFrame}} of the model fit data and formula, followed by a
-\code{length} to use in generating sequences of parameter values and an
-ellipsis (\code{...}).}
+\code{length} to use in generating sequences of parameter values, a number of
+grid points to sample at \code{random}, and an ellipsis (\code{...}).}
 
 \item{design}{character string indicating whether the type of design matrix
 used to fit the model is a \code{"\link{model.matrix}"}, a data.frame
@@ -57,9 +57,9 @@ to \code{\link{varimp}}, and an ellipsis.}
 Create a model for use with the \pkg{MachineShop} package.
 }
 \details{
-The \code{grid} function should return a list whose elements are named after
-and contain values of parameters to include in a tuning grid to be
-constructed automatically by the package.
+If supplied, the \code{grid} function should return a list whose elements are
+named after and contain values of parameters to include in a tuning grid to
+be constructed automatically by the package.
 
 Values returned by the \code{predict} functions should be formatted according
 to the response variable types below.

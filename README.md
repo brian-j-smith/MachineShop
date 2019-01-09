@@ -31,14 +31,15 @@ estimation of model performance.
   - Parallel execution of resampling algorithms.
   - Choices of performance metrics: accuracy, areas under ROC and
     precision-recall curves, Brier score, coefficient of determination
-    \(R^2\), concordance index, cross entropy, F-score, Gini
+    (R squared), concordance index, cross entropy, F-score, Gini
     coefficient, unweighted and weighted Cohen’s kappa, mean absolute
     error, mean squared error, mean squared log error, positive and
     negative predictive values, and precision and recall.
   - Tabular and graphical performance summaries: calibration curves,
     confusion matrices, partial dependence plots, lift curves, and
     variable importance.
-  - Automated model tuning over grids of parameter values.
+  - Model tuning over automatically generated grids of parameter values
+    and random sampling of grid points.
   - Model selection and comparisons for any combination of models and
     model parameter values.
   - User-definable models and performance

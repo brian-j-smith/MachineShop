@@ -59,10 +59,19 @@ RangerModel <- function(num.trees = 500, mtry = NULL,
     packages = "ranger",
     types = c("factor", "numeric", "Surv"),
     params = params(environment()),
-    grid = function(x, length, ...) {
-      list(
+    grid = function(x, length, random, ...) {
+      params <- list(
         mtry = seq_nvars(x, RangerModel, length)
       )
+      if (random) {
+        params$min.node.size <- 1:min(nrow(x), 20)
+        params$splitrule <- if (is.factor(response(x))) {
+          c("gini", "extratrees")
+        } else {
+          c("variance", "extratrees", "maxstat")
+        }
+      }
+      params
     },
     design = "terms",
     fit = function(formula, data, weights, ...) {

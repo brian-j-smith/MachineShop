@@ -245,8 +245,8 @@ setClass("MLMetric",
 #' \code{fit} function.
 #' @param grid tuning grid function whose first agument \code{x} is a
 #' \code{\link{ModelFrame}} of the model fit data and formula, followed by a
-#' \code{length} to use in generating sequences of parameter values and an
-#' ellipsis (\code{...}).
+#' \code{length} to use in generating sequences of parameter values, a number of
+#' grid points to sample at \code{random}, and an ellipsis (\code{...}).
 #' @param design character string indicating whether the type of design matrix
 #' used to fit the model is a \code{"\link{model.matrix}"}, a data.frame
 #' of the original predictor variable \code{"terms"}, or unknown (default).
@@ -262,9 +262,9 @@ setClass("MLMetric",
 #' @param ... arguments passed from other methods.
 #' 
 #' @details
-#' The \code{grid} function should return a list whose elements are named after
-#' and contain values of parameters to include in a tuning grid to be
-#' constructed automatically by the package.
+#' If supplied, the \code{grid} function should return a list whose elements are
+#' named after and contain values of parameters to include in a tuning grid to
+#' be constructed automatically by the package.
 #' 
 #' Values returned by the \code{predict} functions should be formatted according
 #' to the response variable types below.
@@ -309,7 +309,7 @@ setClass("MLMetric",
 #' 
 MLModel <- function(name = "MLModel", label = name, packages = character(),
                     types = character(), params = list(),
-                    grid = function(x, length, ...) NULL,
+                    grid = function(x, length, random, ...) NULL,
                     design = c(NA, "model.matrix", "terms"),
                     fit = function(formula, data, weights, ...)
                       stop("no fit function"),

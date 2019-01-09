@@ -31,11 +31,19 @@ models <- c(
   "XGBTreeModel"
 )
 
-test_tune_grid <- function(model) {
-  fo <- type ~ .
-  df <- Pima.tr
-  tune(fo, data = df, grid = 1, model = model)
-  tune(fo, data = df, grid = 3, model = model)
+control <- CVControl(folds = 3)
+
+test_tune_grid1 <- function(model) {
+  tune(type ~ ., data = Pima.tr, model = model, grid = 1, control = control)
+}
+
+test_tune_grid2 <- function(model) {
+  tune(type ~ ., data = Pima.tr, model = model, grid = 3, control = control)
+}
+
+test_tune_grid3 <- function(model) {
+  tune(type ~ ., data = Pima.tr, model = model,
+       grid = Grid(length = 100, random = 25), control = control)
 }
 
 for (model in models) {
@@ -45,7 +53,9 @@ for (model in models) {
   test_that("tune grid", {
     skip_if_not(TEST_MODEL_TUNING)
     with_parallel({
-      expect_is(test_tune_grid(model), "MLModelTune")
+      expect_is(test_tune_grid1(model), "MLModelTune")
+      expect_is(test_tune_grid2(model), "MLModelTune")
+      expect_is(test_tune_grid3(model), "MLModelTune")
     })
   })
   

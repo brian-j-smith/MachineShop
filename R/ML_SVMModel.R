@@ -169,8 +169,8 @@ SVMTanhModel <- function(scale = 1, offset = 1, ...) {
                      "laplacedot" = list(C = NULL, sigma = NULL),
                      "polydot" = list(C = NULL, degree = NULL, scale = NULL),
                      "rbfdot" = list(C = NULL, sigma = NULL),
-                     "splinedot" = list(C = NULL),
-                     "tanhdot" = list(C = NULL, scale = NULL),
+                     "splinedot" = list(),
+                     "tanhdot" = list(),
                      "vanilladot" = list(C = NULL))
     
     f <- function(params, name, value) {
@@ -179,10 +179,10 @@ SVMTanhModel <- function(scale = 1, offset = 1, ...) {
     }
     
     params %>%
-      f("C", 2^seq_range(-5, 2.5, c(-5, 10), length)) %>%
+      f("C", 2^seq_range(-4, 2, c(-4, 10), length)) %>%
       f("degree", seq_len(min(length, 3))) %>%
       f("order", seq_len(min(length, 3))) %>%
-      f("scale", 10^seq_range(-5, 2.5, c(-5, log10(2)), length)) %>%
+      f("scale", 10^seq_range(-4, 2, c(-4, log10(2)), length)) %>%
       f("sigma", {
         sigmas <- kernlab::sigest(extract(formula(terms(x)), x)$x,
                                   scaled = scaled)

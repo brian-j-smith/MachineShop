@@ -40,11 +40,16 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
     packages = "gbm",
     types = c("factor", "numeric", "Surv"),
     params = params(environment()),
-    grid = function(x, length, ...) {
-      list(
+    grid = function(x, length, random, ...) {
+      params <- list(
         n.trees = round(seq_range(0, 50, c(1, 1000), length + 1)),
         interaction.depth = 1:min(length, 10)
       )
+      if (random) {
+        params$shrinkage <- seq(0.001, 0.1, length = length)
+        params$n.minobsinnode <- 1:min(nrow(x), 20)
+      }
+      params
     },
     design = "terms",
     fit = function(formula, data, weights, distribution = NULL, ...) {

@@ -55,11 +55,13 @@ AdaBoostModel <- function(boos = TRUE, mfinal = 100,
     packages = "adabag",
     types = "factor",
     params = params,
-    grid = function(x, length, ...) {
-      list(
+    grid = function(x, length, random, ...) {
+      params <- list(
         mfinal = round(seq_range(0, 25, c(1, 200), length + 1)),
         maxdepth = 1:min(length, 30)
       )
+      if (random) params$coeflearn <- c("Breiman", "Freund", "Zhu")
+      params
     },
     design = "terms",
     fit = function(formula, data, weights, ...) {
