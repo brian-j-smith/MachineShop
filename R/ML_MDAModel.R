@@ -56,7 +56,7 @@ MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
     params = params(environment()),
     grid = function(x, length, ...) {
       list(
-        subclasses = 2 * 1:length
+        subclasses = 1:min(length, 10) + 1
       )
     },
     design = "model.matrix",

@@ -88,7 +88,7 @@ PDAModel <- function(lambda = 1, df = NULL, ...) {
   model@label <- "Penalized Discriminant Analysis"
   model@grid <- function(x, length, ...) {
     list(
-      lambda = c(0, 10^-((length - 1):1))
+      lambda = c(10^-seq_range(1, 1.5, c(1, 5), length - 1), 0)
     )
   }
   model

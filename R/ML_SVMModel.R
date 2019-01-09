@@ -179,14 +179,15 @@ SVMTanhModel <- function(scale = 1, offset = 1, ...) {
     }
     
     params %>%
-      f("C", 2^(1:length - 3)) %>%
+      f("C", 2^seq_range(-5, 2.5, c(-5, 10), length)) %>%
       f("degree", seq_len(min(length, 3))) %>%
       f("order", seq_len(min(length, 3))) %>%
-      f("scale", 10^(1:length - 3)) %>%
+      f("scale", 10^seq_range(-5, 2.5, c(-5, log10(2)), length)) %>%
       f("sigma", {
         sigmas <- kernlab::sigest(extract(formula(terms(x)), x)$x,
                                   scaled = scaled)
-        params$sigma <- seq(min(sigmas), max(sigmas), length = min(length, 6))
+        params$sigma <- exp(seq(log(min(sigmas)), log(max(sigmas)),
+                                length = length))
       })
   }
 

@@ -49,7 +49,7 @@ LDAModel <- function(prior = NULL, tol = 1e-4,
     params = params(environment()),
     grid = function(x, length, ...) {
       list(
-        dimen = 1:min(nlevels(response(x)) - 1, nvars(x, LDAModel))
+        dimen = 1:min(nlevels(response(x)) - 1, nvars(x, LDAModel), length)
       )
     },
     design = "model.matrix",

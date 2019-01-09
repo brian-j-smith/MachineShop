@@ -65,8 +65,8 @@ BARTMachineModel <- function(num_trees = 50, num_burn = 250, num_iter = 1000,
       list(
         alpha = seq(0.9, 0.99, length = length),
         beta = seq(1, 3, length = length),
-        k = 1 + 1:length,
-        nu = 1 + 1:length
+        k = 1:min(length, 10) + 1,
+        nu = 1:min(length, 10) + 1
       )
     },
     design = "model.matrix",

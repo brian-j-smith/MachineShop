@@ -190,8 +190,8 @@ XGBTreeModel <- function(objective = NULL, base_score = 0.5,
     }
     
     params %>%
-      f("nrounds", 50 * 1:length) %>%
-      f("max_depth", 1:length) %>%
+      f("nrounds", round(seq_range(0, 50, c(1, 1000), length + 1))) %>%
+      f("max_depth", 1:min(length, 10)) %>%
       f("eta", c(0.3, 0.4)) %>%
       f("subsample", seq(0.5, 1.0, length = length)) %>%
       f("colsample_bytree", c(0.6, 0.8))

@@ -33,7 +33,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
     params = params(environment()),
     grid = function(x, length, ...) {
       list(
-        ncomp = 1:min(c(nrow(x), nvars(x, PLSModel) - 1, length))
+        ncomp = 1:min(nrow(x), nvars(x, PLSModel) - 1, length)
       )
     },
     design = "model.matrix",

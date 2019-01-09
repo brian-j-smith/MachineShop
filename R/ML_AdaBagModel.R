@@ -49,8 +49,8 @@ AdaBagModel <- function(mfinal = 100, minsplit = 20,
     params = params,
     grid = function(x, length, ...) {
       list(
-        mfinal = 50 * 1:length,
-        maxdepth = 1:length
+        mfinal = round(seq_range(0, 25, c(1, 200), length + 1)),
+        maxdepth = 1:min(length, 30)
       )
     },
     design = "terms",

@@ -51,7 +51,7 @@ NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
     params = params(environment()),
     grid = function(x, length, ...) {
       list(
-        decay = c(0, 10^-((length - 1):1)),
+        decay = c(10^-seq_range(1, 1.5, c(1, 5), length - 1), 0),
         size = seq(1, by = 2, length = length)
       )
     },

@@ -60,7 +60,7 @@ GAMBoostModel <- function(family = NULL,
     params = params,
     grid = function(x, length, ...) {
       list(
-        mstop = 50 * 1:length
+        mstop = round(seq_range(0, 50, c(1, 1000), length + 1))
       )
     },
     design = "terms",

@@ -42,8 +42,8 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
     params = params(environment()),
     grid = function(x, length, ...) {
       list(
-        n.trees = 50 * 1:length,
-        interaction.depth = 1:length
+        n.trees = round(seq_range(0, 50, c(1, 1000), length + 1)),
+        interaction.depth = 1:min(length, 10)
       )
     },
     design = "terms",

@@ -40,7 +40,7 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
     params = params(environment()),
     grid = function(x, length, ...) {
       list(
-        k = seq(5, by = 2, length = length)
+        k = round(seq_range(0, 5, c(1, nrow(x) / 3), length + 1))
       )
     },
     design = "model.matrix",

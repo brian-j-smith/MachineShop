@@ -74,8 +74,8 @@ BlackBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
     params = params,
     grid = function(x, length, ...) {
       list(
-        mstop = 50 * 1:length,
-        maxdepth = 1:length
+        mstop = round(seq_range(0, 50, c(1, 1000), length + 1)),
+        maxdepth = 1:min(length, 10)
       )
     },
     design = "terms",
