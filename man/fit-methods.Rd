@@ -35,8 +35,8 @@ Fit a model to estimate its parameters from a data set.
 }
 \details{
 User-specified case weights may be specified for
-\code{\link[MachineShop:ModelFrame-methods]{ModelFrames}} upon
-creation with the \code{weights} argument in its constructor.
+\code{\link[=ModelFrame]{ModelFrames}} upon creation with the \code{weights}
+argument in its constructor.
 
 Variables in a \code{recipe} may be used as case weights by defining a
 "case_weight" \code{\link[recipes:roles]{role}} for them.

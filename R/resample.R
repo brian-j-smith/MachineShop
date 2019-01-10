@@ -61,9 +61,9 @@ resample.formula <- function(x, data, model, control = CVControl, ...) {
 #' 
 #' @details
 #' User-specified stratification variables may be specified for
-#' \code{\link[MachineShop:ModelFrame-methods]{ModelFrames}} upon
-#' creation with the \code{strata} argument in its constructor.  Resampling of
-#' this class is unstratified by default.
+#' \code{\link[=ModelFrame]{ModelFrames}} upon creation with the \code{strata}
+#' argument in its constructor.  Resampling of this class is unstratified by
+#' default.
 #' 
 resample.ModelFrame <- function(x, model, control = CVControl, ...) {
   .resample(getMLObject(control, "MLControl"), x, model)

@@ -52,9 +52,9 @@ values of the response variable; i.e. categorical levels for \code{factor},
 continuous for \code{numeric}, and event status \code{Surv}.
 
 User-specified stratification variables may be specified for
-\code{\link[MachineShop:ModelFrame-methods]{ModelFrames}} upon
-creation with the \code{strata} argument in its constructor.  Resampling of
-this class is unstratified by default.
+\code{\link[=ModelFrame]{ModelFrames}} upon creation with the \code{strata}
+argument in its constructor.  Resampling of this class is unstratified by
+default.
 
 Variables in a \code{recipe} may be used for stratification by defining a
 "case_strata" \code{\link[recipes:roles]{role}} for them.  Resampling will

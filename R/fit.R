@@ -45,8 +45,8 @@ fit.formula <- function(x, data, model, ...) {
 #' 
 #' @details
 #' User-specified case weights may be specified for
-#' \code{\link[MachineShop:ModelFrame-methods]{ModelFrames}} upon
-#' creation with the \code{weights} argument in its constructor.
+#' \code{\link[=ModelFrame]{ModelFrames}} upon creation with the \code{weights}
+#' argument in its constructor.
 #' 
 fit.ModelFrame <- function(x, model, ...) {
   .fit(getMLObject(model, "MLModel"), x)
