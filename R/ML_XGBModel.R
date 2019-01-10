@@ -172,61 +172,59 @@ XGBTreeModel <- function(objective = NULL, base_score = 0.5,
   model@name <- name
   model@label <- label
   
-  model@grid <- function(x, length, random, ...) {
-    params <- switch(booster,
-                     "dart" = list(
-                       nrounds = NULL,
-                       max_depth = NULL,
-                       eta = NULL,
-                       gamma = NULL,
-                       min_child_weight = NULL,
-                       subsample = NULL,
-                       colsample_bytree = NULL,
-                       rate_drop = NULL,
-                       skip_drop = NULL
-                     ),
-                     "gblinear" = list(
-                       nrounds = NULL,
-                       lambda = NULL,
-                       alpha = NULL
-                     ),
-                     "gbtree" = list(
-                       nrounds = NULL,
-                       max_depth = NULL,
-                       eta = NULL,
-                       gamma = NULL,
-                       min_child_weight = NULL,
-                       subsample = NULL,
-                       colsample_bytree = NULL
-                     ))
-    
-    f <- function(params, name, value) {
-      if (name %in% names(params)) params[[name]] <- value
+  params <- switch(booster,
+                   "dart" = list(
+                     nrounds = NULL,
+                     max_depth = NULL,
+                     eta = NULL,
+                     gamma = NULL,
+                     min_child_weight = NULL,
+                     subsample = NULL,
+                     colsample_bytree = NULL,
+                     rate_drop = NULL,
+                     skip_drop = NULL
+                   ),
+                   "gblinear" = list(
+                     nrounds = NULL,
+                     lambda = NULL,
+                     alpha = NULL
+                   ),
+                   "gbtree" = list(
+                     nrounds = NULL,
+                     max_depth = NULL,
+                     eta = NULL,
+                     gamma = NULL,
+                     min_child_weight = NULL,
+                     subsample = NULL,
+                     colsample_bytree = NULL
+                   ))
+  
+  if (length(params)) {
+    model@grid <- function(x, length, random, ...) {
+      params <- params %>%
+        set_param("nrounds",
+                  round(seq_range(0, 50, c(1, 1000), length + 1))) %>%
+        set_param("max_depth", 1:min(length, 10)) %>%
+        set_param("eta", c(0.3, 0.4)) %>%
+        set_param("subsample", seq(0.25, 1, length = length)) %>%
+        set_param("colsample_bytree", c(0.6, 0.8)) %>%
+        set_param("rate_drop", c(0.01, 0.50)) %>%
+        set_param("skip_drop", c(0.05, 0.95)) %>%
+        set_param("lambda", c(10^-seq_inner(0, 5, length - 1), 0)) %>%
+        set_param("alpha", c(10^-seq_inner(0, 5, length - 1), 0))
+      
+      if (random) {
+        params <- params %>%
+          set_param("eta", seq(0.001, 0.6, length = length)) %>%
+          set_param("gamma", seq(0, 10, length = length)) %>%
+          set_param("min_child_weight", 0:20) %>%
+          set_param("colsample_bytree", seq(0.3, 0.8, length = length)) %>%
+          set_param("rate_drop", seq(0.01, 0.50, length = length)) %>%
+          set_param("skip_drop", seq(0.05, 0.95, length = length))
+      }
+      
       params
     }
-    
-    params <- params %>%
-      f("nrounds", round(seq_range(0, 50, c(1, 1000), length + 1))) %>%
-      f("max_depth", 1:min(length, 10)) %>%
-      f("eta", c(0.3, 0.4)) %>%
-      f("subsample", seq(0.25, 1, length = length)) %>%
-      f("colsample_bytree", c(0.6, 0.8)) %>%
-      f("rate_drop", c(0.01, 0.50)) %>%
-      f("skip_drop", c(0.05, 0.95)) %>%
-      f("lambda", c(10^-seq_inner(0, 5, length - 1), 0)) %>%
-      f("alpha", c(10^-seq_inner(0, 5, length - 1), 0))
-    
-    if (random) {
-      params <- params %>%
-        f("eta", seq(0.001, 0.6, length = length)) %>%
-        f("gamma", seq(0, 10, length = length)) %>%
-        f("min_child_weight", 0:20) %>%
-        f("colsample_bytree", seq(0.3, 0.8, length = length)) %>%
-        f("rate_drop", seq(0.01, 0.50, length = length)) %>%
-        f("skip_drop", seq(0.05, 0.95, length = length))
-    }
-    
-    params
   }
   
   model

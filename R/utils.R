@@ -313,6 +313,12 @@ seq_nvars <- function(x, model, length) {
   round(vals)
 }
 
+    
+set_param <- function(params, name, value) {
+  if (name %in% names(params)) params[[name]] <- value
+  params
+}
+
 
 stepAIC_args <- function(formula, direction, scope) {
   if (is.null(scope$lower)) scope$lower <- ~ 1

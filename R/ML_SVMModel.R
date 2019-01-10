@@ -171,34 +171,28 @@ SVMTanhModel <- function(scale = 1, offset = 1, ...) {
   scaled <- model@params$scaled
   if (!is.logical(scaled)) scaled <- TRUE
   
-  model@grid <- function(x, length, ...) {
-    params <- switch(kernel,
-                     "anovadot" = list(C = NULL, degree = NULL),
-                     "besseldot" = list(C = NULL, order = NULL,
-                                        degree = NULL),
-                     "laplacedot" = list(C = NULL, sigma = NULL),
-                     "polydot" = list(C = NULL, degree = NULL, scale = NULL),
-                     "rbfdot" = list(C = NULL, sigma = NULL),
-                     "splinedot" = list(),
-                     "tanhdot" = list(),
-                     "vanilladot" = list(C = NULL))
-    
-    f <- function(params, name, value) {
-      if (name %in% names(params)) params[[name]] <- value
-      params
+  params <- switch(kernel,
+                   "anovadot" = list(C = NULL, degree = NULL),
+                   "besseldot" = list(C = NULL, order = NULL,
+                                      degree = NULL),
+                   "laplacedot" = list(C = NULL, sigma = NULL),
+                   "polydot" = list(C = NULL, degree = NULL, scale = NULL),
+                   "rbfdot" = list(C = NULL, sigma = NULL),
+                   "vanilladot" = list(C = NULL))
+  
+  if (length(params)) {
+    model@grid <- function(x, length, ...) {
+      params %>%
+        set_param("C", 2^seq_range(-4, 2, c(-4, 10), length)) %>%
+        set_param("degree", seq_len(min(length, 3))) %>%
+        set_param("order", seq_len(min(length, 3))) %>%
+        set_param("scale", 10^seq_range(-4, 2, c(-4, log10(2)), length)) %>%
+        set_param("sigma", {
+          sigmas <- kernlab::sigest(extract(formula(terms(x)), x)$x,
+                                    scaled = scaled)
+          exp(seq(log(min(sigmas)), log(max(sigmas)), length = length))
+        })
     }
-    
-    params %>%
-      f("C", 2^seq_range(-4, 2, c(-4, 10), length)) %>%
-      f("degree", seq_len(min(length, 3))) %>%
-      f("order", seq_len(min(length, 3))) %>%
-      f("scale", 10^seq_range(-4, 2, c(-4, log10(2)), length)) %>%
-      f("sigma", {
-        sigmas <- kernlab::sigest(extract(formula(terms(x)), x)$x,
-                                  scaled = scaled)
-        params$sigma <- exp(seq(log(min(sigmas)), log(max(sigmas)),
-                                length = length))
-      })
   }
 
   model
