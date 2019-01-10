@@ -22,6 +22,9 @@
 #' @details
 #' \describe{
 #' \item{Response Types:}{\code{binary}, \code{numeric}, \code{Surv}}
+#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'   \code{mstop}
+#' }
 #' }
 #' 
 #' Default values for the \code{NULL} arguments and further model details can be

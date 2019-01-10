@@ -39,6 +39,9 @@ utilizing conditional inference trees as base learners.
 \details{
 \describe{
 \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
+\item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+  \code{mtry}
+}
 }
 
 Supplied arguments are passed to \code{\link[party]{cforest_control}}.

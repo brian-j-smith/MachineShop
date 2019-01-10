@@ -23,7 +23,11 @@
 #' @details
 #' \describe{
 #' \item{Response Types:}{\code{factor}}
+#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'   \code{mfinal}, \code{maxdepth}, \code{coeflearn}*
 #' }
+#' }
+#' * included only in randomly sampled grid points
 #' 
 #' Further model details can be found in the source link below.
 #' 

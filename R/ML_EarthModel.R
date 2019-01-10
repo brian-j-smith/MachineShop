@@ -16,7 +16,11 @@
 #' @details
 #' \describe{
 #' \item{Response Types:}{\code{factor}, \code{numeric}}
+#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'   \code{nprune}, \code{degree}*
 #' }
+#' }
+#' * included only in randomly sampled grid points
 #' 
 #' Default values for the \code{NULL} arguments and further model details can be
 #' found in the source link below.

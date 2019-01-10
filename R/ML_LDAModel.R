@@ -13,6 +13,9 @@
 #' @details
 #' \describe{
 #' \item{Response Types:}{\code{factor}}
+#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'   \code{dimen}
+#' }
 #' }
 #' 
 #' The \code{\link{predict}} function for this model additionally accepts the

@@ -42,6 +42,9 @@ trees as single classifiers.
 \details{
 \describe{
 \item{Response Types:}{\code{factor}}
+\item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+  \code{mfinal}, \code{maxdepth}
+}
 }
 
 Further model details can be found in the source link below.

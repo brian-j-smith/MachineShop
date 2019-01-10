@@ -27,6 +27,9 @@
 #' @details
 #' \describe{
 #' \item{Response Types:}{\code{factor}}
+#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'   \code{trials}, \code{rules}, \code{winnow}
+#' }
 #' }
 #' 
 #' Latter arguments are passed to \code{\link[C50]{C5.0Control}}.

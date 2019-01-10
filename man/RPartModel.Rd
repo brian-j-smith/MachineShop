@@ -38,6 +38,9 @@ Fit an \code{rpart} model.
 \details{
 \describe{
 \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
+\item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+\code{cp}
+}
 }
 
 Further model details can be found in the source link below.

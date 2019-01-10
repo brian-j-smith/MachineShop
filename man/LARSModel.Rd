@@ -36,6 +36,9 @@ fits, starting from zero to the least squares fit.
 \details{
 \describe{
 \item{Response Types:}{\code{numeric}}
+\item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+  \code{step}
+}
 }
 
 Default values for the \code{NULL} arguments and further model details can be

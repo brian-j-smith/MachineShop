@@ -67,7 +67,19 @@ framework from Chen & Guestrin.
 \details{
 \describe{
 \item{Response Types:}{\code{factor}, \code{numeric}}
+\item{\link[=tune]{Automatic Tuning} Grid Parameters}{
+\itemize{
+  \item XGBDARTModel: \code{nrounds}, \code{max_depth}, \code{eta},
+  \code{gamma}*, \code{min_child_weight}*, \code{subsample},
+  \code{colsample_bytree}, \code{rate_drop}, \code{skip_drop}
+  \item XGBLinearModel: \code{nrounds}, \code{lambda}, \code{alpha}
+  \item XGBTreeModel: \code{nrounds}, \code{max_depth}, \code{eta},
+  \code{gamma}*, \code{min_child_weight}*, \code{subsample},
+  \code{colsample_bytree}
 }
+}
+}
+* included only in randomly sampled grid points
 
 Default values for the \code{NULL} arguments and further model details can be
 found in the source link below.

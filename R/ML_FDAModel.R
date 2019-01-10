@@ -23,7 +23,14 @@
 #' @details
 #' \describe{
 #' \item{Response Types:}{\code{factor}}
+#' \item{\link[=tune]{Automatic Tuning} Grid Parameters}{
+#' \itemize{
+#'   \item FDAModel: \code{nprune}, \code{degree}*
+#'   \item PDAModel: \code{lambda}
 #' }
+#' }
+#' }
+#' * included only in randomly sampled grid points
 #' 
 #' The \code{\link{predict}} function for this model additionally accepts the
 #' following argument.
