@@ -275,7 +275,7 @@ setClass("MLMetric",
 #' \item{matrix}{a matrix of predicted responses.}
 #' \item{numeric}{a vector or column matrix of predicted responses.}
 #' \item{Surv}{a matrix whose columns contain survival probabilities at
-#' \code{times} if supplied or a vector of survival predictions otherwise.}
+#' \code{times} if supplied or a vector of predicted survival means otherwise.}
 #' }
 #' 
 #' The \code{varimp} function should return a vector of importance values named

@@ -246,6 +246,13 @@ setMethod(".gini", c("numeric", "numeric"),
 )
 
 
+setMethod(".gini", c("Surv", "numeric"),
+  function(observed, predicted, ...) {
+    .metric.Surv(observed, predicted, gini)
+  }
+)
+
+
 #' @rdname metrics
 #' 
 kappa2 <- function(observed, predicted, cutoff = 0.5, ...) {
@@ -320,6 +327,13 @@ setMethod(".mae", c("numeric", "numeric"),
 )
 
 
+setMethod(".mae", c("Surv", "numeric"),
+  function(observed, predicted, ...) {
+    .metric.Surv(observed, predicted, mae)
+  }
+)
+
+
 #' @rdname metrics
 #' 
 mse <- function(observed, predicted, ...) {
@@ -352,6 +366,13 @@ setMethod(".mse", c("numeric", "numeric"),
 )
 
 
+setMethod(".mse", c("Surv", "numeric"),
+  function(observed, predicted, ...) {
+    .metric.Surv(observed, predicted, mse)
+  }
+)
+
+
 #' @rdname metrics
 #' 
 msle <- function(observed, predicted, ...) {
@@ -380,6 +401,13 @@ setMethod(".msle", c("matrix", "matrix"),
 setMethod(".msle", c("numeric", "numeric"),
   function(observed, predicted, ...) {
     mean((log(1 + observed) - log(1 + predicted))^2)
+  }
+)
+
+
+setMethod(".msle", c("Surv", "numeric"),
+  function(observed, predicted, ...) {
+    .metric.Surv(observed, predicted, msle)
   }
 )
 
@@ -535,6 +563,13 @@ setMethod(".r2", c("numeric", "numeric"),
 )
 
 
+setMethod(".r2", c("Surv", "numeric"),
+  function(observed, predicted, ...) {
+    .metric.Surv(observed, predicted, r2)
+  }
+)
+
+
 #' @rdname metrics
 #' 
 recall <- function(observed, predicted, cutoff = 0.5, ...) {
@@ -592,6 +627,13 @@ setMethod(".rmse", c("numeric", "numeric"),
 )
 
 
+setMethod(".rmse", c("Surv", "numeric"),
+  function(observed, predicted, ...) {
+    .metric.Surv(observed, predicted, rmse)
+  }
+)
+
+
 #' @rdname metrics
 #' 
 rmsle <- function(observed, predicted, ...) {
@@ -620,6 +662,13 @@ setMethod(".rmsle", c("matrix", "matrix"),
 setMethod(".rmsle", c("numeric", "numeric"),
   function(observed, predicted, ...) {
     sqrt(msle(observed, predicted))
+  }
+)
+
+
+setMethod(".rmsle", c("Surv", "numeric"),
+  function(observed, predicted, ...) {
+    .metric.Surv(observed, predicted, rmsle)
   }
 )
 
@@ -807,6 +856,12 @@ setMethod(".weighted_kappa2", c("ordered", "matrix"),
   mean(sapply(1:ncol(observed), function(i) {
     f(observed[, i], predicted[, i], ...)
   }))
+}
+
+
+.metric.Surv <- function(observed, predicted, f, ...) {
+  events <- observed[, "status"] == 1
+  f(observed[events, "time"], predicted[events], ...)
 }
 
 

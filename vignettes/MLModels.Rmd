@@ -82,7 +82,7 @@ if(!all(weights == 1)) warning("weights are not supported and will be ignored")
 
 - The arguments are a model fit `object`, `newdata` frame, optionally `times` for prediction at survival time points, and an ellipsis.
 
-- The predict function should return a vector or column matrix of probabilities for the second level of binary factors, a matrix whose columns contain the probabilities for factors with more than two levels, a matrix of predicted responses if matrix, a vector or column matrix of predicted responses if numeric, a matrix whose columns contain survival probabilities at `times` if supplied, or a vector of survival predictions if `times` are not supplied.
+- The predict function should return a vector or column matrix of probabilities for the second level of binary factors, a matrix whose columns contain the probabilities for factors with more than two levels, a matrix of predicted responses if matrix, a vector or column matrix of predicted responses if numeric, a matrix whose columns contain survival probabilities at `times` if supplied, or a vector of predicted survival means if `times` are not supplied.
 
 
 ### varimp Function
