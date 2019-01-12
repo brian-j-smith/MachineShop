@@ -6,6 +6,8 @@
 * Implement model: ``BARTModel``.
 * Implement model tuning over automatically generated grids of parameter values and random sampling of grid points.
 * Standardize predict functions to return mean survival when times are not specified.
+* Add performance metrics for predicted survival means: ``cindex``, ``gini``, ``mae``, ``mse``, ``msle``, ``r2``, ``rmse``, ``rmsle``.
+* Replace ``MLModel`` slot and constructor argument ``nvars`` with ``design``.
 
 
 ## 1.0.0
