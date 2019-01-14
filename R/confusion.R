@@ -7,10 +7,14 @@
 #' @param x factor of observed responses or \code{Resamples} object of observed
 #' and predicted responses.
 #' @param y predicted responses.
-#' @param cutoff threshold above which probabilities are classified as success
-#' for binary responses.  If \code{NULL}, then responses are summed directly
-#' over predicted class probabilities and will thus appear as decimal numbers
-#' that can be interpreted as expected counts.
+#' @param cutoff threshold above which binary factor probabilities are
+#' classified as events and below which survival probabilities are classified.
+#' If \code{NULL}, then binary responses are summed directly over predicted
+#' class probabilities, whereas a default cutoff of 0.5 is used for
+#' survival probabilities.  Class probability summations and survival will
+#' appear as decimal numbers that can be interpreted as expected counts.
+#' @param times numeric vector of follow-up times if \code{y} contains predicted
+#' survival events.
 #' 
 #' @return
 #' The return value is a \code{ConfusionMatrix} class object that inherits from
@@ -25,8 +29,8 @@
 #' res <- resample(Species ~ ., data = iris, model = GBMModel)
 #' confusion(res)
 #' 
-confusion <- function(x, y = NULL, cutoff = 0.5, ...) {
-  .confusion(x, y, cutoff = cutoff)
+confusion <- function(x, y = NULL, cutoff = 0.5, times = numeric(), ...) {
+  .confusion(x, y, cutoff = cutoff, times = times)
 }
 
 
@@ -43,9 +47,20 @@ confusion <- function(x, y = NULL, cutoff = 0.5, ...) {
 
 .confusion.Resamples <- function(x, cutoff, ...) {
   conf_list <- by(x, list(Model = x$Model), function(data) {
-   confusion(data$Observed, data$Predicted, cutoff = cutoff)
+   confusion(data$Observed, data$Predicted, cutoff = cutoff,
+             times = x@control@surv_times)
   }, simplify = FALSE)
+  if (all(mapply(is, conf_list, "Confusion"))) {
+    conf_list <- unlist(conf_list, recursive = FALSE)
+  }
   do.call(Confusion, conf_list)
+}
+
+
+.confusion.Surv <- function(x, y, cutoff, times, ...) {
+  if (is.null(cutoff)) cutoff <- 0.5
+  y <- convert_response(x, y, cutoff = cutoff)
+  do.call(Confusion, .confusion_matrix(x, y, times = times))
 }
 
 
@@ -55,7 +70,7 @@ setGeneric(".confusion_matrix", function(observed, predicted, ...)
 
 setMethod(".confusion_matrix", c("ANY", "ANY"),
   function(observed, predicted, ...) {
-    stop("confusion matrix requires a factor response variable")
+    stop("confusion matrix requires a predicted factor or survival times")
   }
 )
 
@@ -81,5 +96,48 @@ setMethod(".confusion_matrix", c("factor", "matrix"),
 setMethod(".confusion_matrix", c("factor", "numeric"),
   function(observed, predicted, ...) {
     .confusion_matrix(observed, cbind(1 - predicted, predicted))
+  }
+)
+
+
+setMethod(".confusion_matrix", c("Surv", "matrix"),
+  function(observed, predicted, times, ...) {
+    if (length(times) != ncol(predicted)) {
+      stop("unequal number of survival times and predictions")
+    }
+    
+    survfit_all <- survfit(observed ~ 1, se.fit = FALSE)
+
+    structure(
+      lapply(1:ncol(predicted), function(i) {
+        pred <- predicted[, i]
+        time <- times[i]
+        
+        surv_all <- predict(survfit_all, time)
+    
+        surv_pos <- 1
+        positives <- pred == 1
+        p <- mean(positives)
+        if (p > 0) {
+          obs <- observed[positives]
+          valid_events <- obs[, "status"] == 1 & obs[, "time"] <= time
+          event_times <- sort(unique(obs[valid_events, "time"]))
+          for (event_time in event_times) {
+            d <- sum(obs[, "time"] == event_time & obs[, "status"] == 1)
+            n <- sum(obs[, "time"] >= event_time)
+            surv_pos <- surv_pos * (1 - d / n)
+          }
+        }
+
+        conf_tbl <- table(Predicted = 0:1, Observed = 0:1)
+        conf_tbl[1, 1] <- surv_all - surv_pos * p
+        conf_tbl[1, 2] <- (1 - p) - conf_tbl[1, 1]
+        conf_tbl[2, 2] <- (1 - surv_pos) * p
+        conf_tbl[2, 1] <- p - conf_tbl[2, 2]
+        
+        ConfusionMatrix(length(observed) * conf_tbl)
+      }),
+      names = paste0("time", seq_along(times))
+    )
   }
 )
