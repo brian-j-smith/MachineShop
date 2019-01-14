@@ -436,9 +436,9 @@ Confusion <- function(...) {
 }
 
 
-ConfusionMatrix <- function(object) {
-   structure(object, class = c("ConfusionMatrix", "table"))
-}
+ConfusionMatrix <- setClass("ConfusionMatrix",
+  contains = c("table", "matrix")
+)
 
 
 HTestPerformanceDiff <- setClass("HTestPerformanceDiff",

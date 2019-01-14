@@ -5,12 +5,14 @@
 #' @name metrics
 #' @rdname metrics
 #' 
-#' @param observed observed responses.
+#' @param observed observed responses or
+#' \code{\link[=confusion]{ConfusionMatrix}} of observed and predicted
+#' responses.
 #' @param predicted predicted responses.
 #' @param beta relative importance of recall to precision in the calculation of
 #' \code{f_score} [default: F1 score].
-#' @param cutoff threshold above which probabilities are classified as success
-#' for binary responses.
+#' @param cutoff threshold above which binary factor probabilities are
+#' classified as events and below which survival probabilities are classified.
 #' @param f function to calculate a desired sensitivity-specificity tradeoff.
 #' @param power power to which positional distances of off-diagonals from the
 #' main diagonal in confusion matrices are raised to calculate
@@ -19,10 +21,12 @@
 #' were predicted.
 #' @param ... arguments passed to or from other methods.
 #' 
-#' @seealso \code{\link{metricinfo}}, \code{\link{performance}}
+#' @seealso \code{\link{metricinfo}}, \code{\link{confusion}},
+#' \code{\link{performance}}
 #' 
-accuracy <- function(observed, predicted, cutoff = 0.5, ...) {
-  .accuracy(observed, predicted, cutoff = cutoff)
+accuracy <- function(observed, predicted = NULL, cutoff = 0.5,
+                     times = numeric(), ...) {
+  .accuracy(observed, predicted, cutoff = cutoff, times = times)
 }
 
 MLMetric(accuracy) <- list("accuracy", "Accuracy", TRUE)
@@ -37,32 +41,44 @@ setMethod(".accuracy", c("ANY", "ANY"),
 )
 
 
+setMethod(".accuracy", c("ConfusionMatrix", "NULL"),
+  function(observed, predicted, ...) {
+    sum(diag(observed)) / sum(observed)
+  }
+)
+
+
 setMethod(".accuracy", c("factor", "factor"),
   function(observed, predicted, ...) {
-    mean(observed == predicted)
+    accuracy(confusion(observed, predicted))
   }
 )
 
 
 setMethod(".accuracy", c("factor", "matrix"),
   function(observed, predicted, ...) {
-    predicted <- convert_response(observed, predicted)
-    accuracy(observed, predicted)
+    accuracy(confusion(observed, predicted))
   }
 )
 
 
 setMethod(".accuracy", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
-    predicted <- convert_response(observed, predicted, cutoff = cutoff)
-    accuracy(observed, predicted)
+    accuracy(confusion(observed, predicted, cutoff = cutoff))
+  }
+)
+
+
+setMethod(".accuracy", c("Surv", "matrix"),
+  function(observed, predicted, cutoff, times, ...) {
+    .metric.Surv_matrix(observed, predicted, cutoff, times, accuracy)
   }
 )
 
 
 #' @rdname metrics
 #' 
-brier <- function(observed, predicted, times = numeric(), ...) {
+brier <- function(observed, predicted = NULL, times = numeric(), ...) {
   .brier(observed, predicted, times = times)
 }
 
@@ -95,7 +111,9 @@ setMethod(".brier", c("factor", "numeric"),
 
 setMethod(".brier", c("Surv", "matrix"),
   function(observed, predicted, times = numeric(), ...) {
-    stopifnot(ncol(predicted) == length(times))
+    if (length(times) != ncol(predicted)) {
+      stop("unequal number of survival times and predictions")
+    }
     
     obs_times <- observed[, "time"]
     obs_events <- observed[, "status"]
@@ -120,7 +138,7 @@ setMethod(".brier", c("Surv", "matrix"),
 
 #' @rdname metrics
 #' 
-cindex <- function(observed, predicted, ...) {
+cindex <- function(observed, predicted = NULL, ...) {
   .cindex(observed, predicted)
 }
 
@@ -152,7 +170,7 @@ setMethod(".cindex", c("Surv", "numeric"),
 
 #' @rdname metrics
 #' 
-cross_entropy <- function(observed, predicted, ...) {
+cross_entropy <- function(observed, predicted = NULL, ...) {
   .cross_entropy(observed, predicted)
 }
 
@@ -186,8 +204,9 @@ setMethod(".cross_entropy", c("factor", "numeric"),
 
 #' @rdname metrics
 #' 
-f_score <- function(observed, predicted, cutoff = 0.5, beta = 1, ...) {
-  .f_score(observed, predicted, cutoff = cutoff, beta = beta)
+f_score <- function(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
+                    beta = 1, ...) {
+  .f_score(observed, predicted, cutoff = cutoff, times = times, beta = beta)
 }
 
 MLMetric(f_score) <- list("f_score", "F Score", TRUE)
@@ -202,18 +221,38 @@ setMethod(".f_score", c("ANY", "ANY"),
 )
 
 
+setMethod(".f_score", c("ConfusionMatrix", "NULL"),
+  function(observed, predicted, beta, ...) {
+    if (any(dim(observed) != c(2, 2))) {
+      warn("'f_score' requires a 2-level response")
+      numeric()
+    } else {
+      beta2 <- beta^2
+      (1 + beta2) * observed[2, 2] /
+        ((1 + beta2) * observed[2, 2] + beta2 * observed[1, 2] + observed[2, 1])
+    }
+  }
+)
+
+
 setMethod(".f_score", c("factor", "numeric"),
   function(observed, predicted, cutoff, beta, ...) {
-    n <- confusion(observed, predicted, cutoff = cutoff)
-    beta2 <- beta^2
-    (1 + beta2) * n[2, 2] / ((1 + beta2) * n[2, 2] + beta2 * n[1, 2] + n[2, 1])
+    f_score(confusion(observed, predicted, cutoff = cutoff), beta = beta)
+  }
+)
+
+
+setMethod(".f_score", c("Surv", "matrix"),
+  function(observed, predicted, cutoff, times, beta, ...) {
+    .metric.Surv_matrix(observed, predicted, cutoff, times, f_score,
+                        beta = beta)
   }
 )
 
 
 #' @rdname metrics
 #' 
-gini <- function(observed, predicted, ...) {
+gini <- function(observed, predicted = NULL, ...) {
   .gini(observed, predicted)
 }
 
@@ -248,15 +287,16 @@ setMethod(".gini", c("numeric", "numeric"),
 
 setMethod(".gini", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    .metric.Surv(observed, predicted, gini)
+    .metric.Surv_numeric(observed, predicted, gini)
   }
 )
 
 
 #' @rdname metrics
 #' 
-kappa2 <- function(observed, predicted, cutoff = 0.5, ...) {
-  .kappa2(observed, predicted, cutoff = cutoff)
+kappa2 <- function(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
+                   ...) {
+  .kappa2(observed, predicted, cutoff = cutoff, times = times)
 }
 
 MLMetric(kappa2) <- list("kappa2", "Cohen's Kappa", TRUE)
@@ -271,33 +311,45 @@ setMethod(".kappa2", c("ANY", "ANY"),
 )
 
 
+setMethod(".kappa2", c("ConfusionMatrix", "NULL"),
+  function(observed, predicted, ...) {
+    p <- prop.table(observed)
+    1 - (1 - sum(diag(p))) / (1 - sum(rowSums(p) * colSums(p)))
+  }
+)
+
+
 setMethod(".kappa2", c("factor", "factor"),
   function(observed, predicted, ...) {
-    p <- prop.table(confusion(observed, predicted))
-    1 - (1 - sum(diag(p))) / (1 - sum(rowSums(p) * colSums(p)))
+    kappa2(confusion(observed, predicted))
   }
 )
 
 
 setMethod(".kappa2", c("factor", "matrix"),
   function(observed, predicted, ...) {
-    predicted <- convert_response(observed, predicted)
-    kappa2(observed, predicted)
+    kappa2(confusion(observed, predicted))
   }
 )
 
 
 setMethod(".kappa2", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
-    predicted <- convert_response(observed, predicted, cutoff = cutoff)
-    kappa2(observed, predicted)
+    kappa2(confusion(observed, predicted, cutoff = cutoff))
+  }
+)
+
+
+setMethod(".kappa2", c("Surv", "matrix"),
+  function(observed, predicted, cutoff, times, ...) {
+    .metric.Surv_matrix(observed, predicted, cutoff, times, kappa2)
   }
 )
 
 
 #' @rdname metrics
 #' 
-mae <- function(observed, predicted, ...) {
+mae <- function(observed, predicted = NULL, ...) {
   .mae(observed, predicted)
 }
 
@@ -329,14 +381,14 @@ setMethod(".mae", c("numeric", "numeric"),
 
 setMethod(".mae", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    .metric.Surv(observed, predicted, mae)
+    .metric.Surv_numeric(observed, predicted, mae)
   }
 )
 
 
 #' @rdname metrics
 #' 
-mse <- function(observed, predicted, ...) {
+mse <- function(observed, predicted = NULL, ...) {
   .mse(observed, predicted)
 }
 
@@ -368,14 +420,14 @@ setMethod(".mse", c("numeric", "numeric"),
 
 setMethod(".mse", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    .metric.Surv(observed, predicted, mse)
+    .metric.Surv_numeric(observed, predicted, mse)
   }
 )
 
 
 #' @rdname metrics
 #' 
-msle <- function(observed, predicted, ...) {
+msle <- function(observed, predicted = NULL, ...) {
   .msle(observed, predicted)
 }
 
@@ -407,15 +459,16 @@ setMethod(".msle", c("numeric", "numeric"),
 
 setMethod(".msle", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    .metric.Surv(observed, predicted, msle)
+    .metric.Surv_numeric(observed, predicted, msle)
   }
 )
 
 
 #' @rdname metrics
 #' 
-npv <- function(observed, predicted, cutoff = 0.5, ...) {
-  .npv(observed, predicted, cutoff = cutoff)
+npv <- function(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
+                ...) {
+  .npv(observed, predicted, cutoff = cutoff, times = times)
 }
 
 MLMetric(npv) <- list("npv", "Negative Predictive Value", TRUE)
@@ -430,18 +483,37 @@ setMethod(".npv", c("ANY", "ANY"),
 )
 
 
+setMethod(".npv", c("ConfusionMatrix", "NULL"),
+  function(observed, predicted, ...) {
+    if (any(dim(observed) != c(2, 2))) {
+      warn("'npv' requires a 2-level response")
+      numeric()
+    } else {
+      observed[1, 1] / (observed[1, 1] + observed[1, 2])
+    }
+  }
+)
+
+
 setMethod(".npv", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
-    n <- confusion(observed, predicted, cutoff = cutoff)
-    n[1, 1] / (n[1, 1] + n[1, 2])
+    npv(confusion(observed, predicted, cutoff = cutoff))
+  }
+)
+
+
+setMethod(".npv", c("Surv", "matrix"),
+  function(observed, predicted, cutoff, times, ...) {
+    .metric.Surv_matrix(observed, predicted, cutoff, times, npv)
   }
 )
 
 
 #' @rdname metrics
 #' 
-ppv <- function(observed, predicted, cutoff = 0.5, ...) {
-  .ppv(observed, predicted, cutoff = cutoff)
+ppv <- function(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
+                ...) {
+  .ppv(observed, predicted, cutoff = cutoff, times = times)
 }
 
 MLMetric(ppv) <- list("ppv", "Positive Predictive Value", TRUE)
@@ -456,18 +528,36 @@ setMethod(".ppv", c("ANY", "ANY"),
 )
 
 
+setMethod(".ppv", c("ConfusionMatrix", "NULL"),
+  function(observed, predicted, ...) {
+    if (any(dim(observed) != c(2, 2))) {
+      warn("'ppv' requires a 2-level response")
+      numeric()
+    } else {
+      observed[2, 2] / (observed[2, 1] + observed[2, 2])
+    }
+  }
+)
+
+
 setMethod(".ppv", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
-    n <- confusion(observed, predicted, cutoff = cutoff)
-    n[2, 2] / (n[2, 1] + n[2, 2])
+    ppv(confusion(observed, predicted, cutoff = cutoff))
+  }
+)
+
+
+setMethod(".ppv", c("Surv", "matrix"),
+  function(observed, predicted, cutoff, times, ...) {
+    .metric.Surv_matrix(observed, predicted, cutoff, times, ppv)
   }
 )
 
 
 #' @rdname metrics
 #' 
-pr_auc <- function(observed, predicted, ...) {
-  .pr_auc(observed, predicted)
+pr_auc <- function(observed, predicted = NULL, times = numeric(), ...) {
+  .pr_auc(observed, predicted, times = times)
 }
 
 MLMetric(pr_auc) <- list("pr_auc", "Area Under Precision-Recall Curve", TRUE)
@@ -500,16 +590,24 @@ setMethod(".pr_auc", c("factor", "numeric"),
     recall <- recall[sort_order]
     precision <- precision[sort_order]
 
-    sum(diff(recall) * (precision[-length(precision)] + diff(precision) / 2),
+    sum(diff(recall) * (precision[-length(precision)] + precision[-1]) / 2,
         na.rm = TRUE)
+  }
+)
+
+
+setMethod(".pr_auc", c("Surv", "matrix"),
+  function(observed, predicted, times, ...) {
+    .auc.Surv(observed, predicted, times, recall, precision)
   }
 )
 
 
 #' @rdname metrics
 #' 
-precision <- function(observed, predicted, cutoff = 0.5, ...) {
-  .precision(observed, predicted, cutoff = cutoff)
+precision <- function(observed, predicted = NULL, cutoff = 0.5,
+                      times = numeric(), ...) {
+  .precision(observed, predicted, cutoff = cutoff, times = times)
 }
 
 MLMetric(precision) <- list("precision", "Precision", TRUE)
@@ -524,6 +622,13 @@ setMethod(".precision", c("ANY", "ANY"),
 )
 
 
+setMethod(".precision", c("ConfusionMatrix", "NULL"),
+  function(observed, predicted, ...) {
+    ppv(observed)
+  }
+)
+
+
 setMethod(".precision", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
     ppv(observed, predicted, cutoff = cutoff)
@@ -531,9 +636,16 @@ setMethod(".precision", c("factor", "numeric"),
 )
 
 
+setMethod(".precision", c("Surv", "matrix"),
+  function(observed, predicted, cutoff, times, ...) {
+    ppv(observed, predicted, cutoff = cutoff, times = times)
+  }
+)
+
+
 #' @rdname metrics
 #' 
-r2 <- function(observed, predicted, ...) {
+r2 <- function(observed, predicted = NULL, ...) {
   .r2(observed, predicted)
 }
 
@@ -565,15 +677,16 @@ setMethod(".r2", c("numeric", "numeric"),
 
 setMethod(".r2", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    .metric.Surv(observed, predicted, r2)
+    .metric.Surv_numeric(observed, predicted, r2)
   }
 )
 
 
 #' @rdname metrics
 #' 
-recall <- function(observed, predicted, cutoff = 0.5, ...) {
-  .recall(observed, predicted, cutoff = cutoff)
+recall <- function(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
+                   ...) {
+  .recall(observed, predicted, cutoff = cutoff, times = times)
 }
 
 MLMetric(recall) <- list("recall", "Recall", TRUE)
@@ -588,6 +701,13 @@ setMethod(".recall", c("ANY", "ANY"),
 )
 
 
+setMethod(".recall", c("ConfusionMatrix", "NULL"),
+  function(observed, predicted, ...) {
+    sensitivity(observed)
+  }
+)
+
+
 setMethod(".recall", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
     sensitivity(observed, predicted, cutoff = cutoff)
@@ -595,9 +715,16 @@ setMethod(".recall", c("factor", "numeric"),
 )
 
 
+setMethod(".recall", c("Surv", "matrix"),
+  function(observed, predicted, cutoff, times, ...) {
+    sensitivity(observed, predicted, cutoff = cutoff, times = times)
+  }
+)
+
+
 #' @rdname metrics
 #' 
-rmse <- function(observed, predicted, ...) {
+rmse <- function(observed, predicted = NULL, ...) {
   .rmse(observed, predicted)
 }
 
@@ -629,14 +756,14 @@ setMethod(".rmse", c("numeric", "numeric"),
 
 setMethod(".rmse", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    .metric.Surv(observed, predicted, rmse)
+    .metric.Surv_numeric(observed, predicted, rmse)
   }
 )
 
 
 #' @rdname metrics
 #' 
-rmsle <- function(observed, predicted, ...) {
+rmsle <- function(observed, predicted = NULL, ...) {
   .rmsle(observed, predicted)
 }
 
@@ -668,14 +795,14 @@ setMethod(".rmsle", c("numeric", "numeric"),
 
 setMethod(".rmsle", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    .metric.Surv(observed, predicted, rmsle)
+    .metric.Surv_numeric(observed, predicted, rmsle)
   }
 )
 
 
 #' @rdname metrics
 #' 
-roc_auc <- function(observed, predicted, times = numeric(), ...) {
+roc_auc <- function(observed, predicted = NULL, times = numeric(), ...) {
   .roc_auc(observed, predicted, times = times)
 }
 
@@ -711,28 +838,18 @@ setMethod(".roc_auc", c("factor", "numeric"),
 
 setMethod(".roc_auc", c("Surv", "matrix"),
   function(observed, predicted, times, ...) {
-    stopifnot(ncol(predicted) == length(times))
-    
-    metrics <- sapply(seq_along(times), function(i) {
-      survivalROC::survivalROC(observed[, "time"], observed[, "status"],
-                               1 - predicted[, i], predict.time = times[i],
-                               method = "KM")$AUC
-    })
-    
-    if (length(times) > 1) {
-      c("mean" = mean.SurvMetrics(metrics, times), "time" = metrics)
-    } else {
-      metrics
-    }
+    .auc.Surv(observed, predicted, times, function(x) 1 - specificity(x),
+              sensitivity)
   }
 )
 
 
 #' @rdname metrics
 #' 
-roc_index <- function(observed, predicted, cutoff = 0.5,
-                      f = function(sens, spec) sens + spec, ...) {
-  .roc_index(observed, predicted, cutoff = cutoff, f = f)
+roc_index <- function(observed, predicted = NULL, cutoff = 0.5,
+                      times = numeric(), f = function(sens, spec) sens + spec,
+                      ...) {
+  .roc_index(observed, predicted, cutoff = cutoff, times = times, f = f)
 }
 
 MLMetric(roc_index) <- list("roc_index", "ROC Index", TRUE)
@@ -747,19 +864,32 @@ setMethod(".roc_index", c("ANY", "ANY"),
 )
 
 
+setMethod(".roc_index", c("ConfusionMatrix", "NULL"),
+  function(observed, predicted, f, ...) {
+    f(sensitivity(observed), specificity(observed))
+  }
+)
+
+
 setMethod(".roc_index", c("factor", "numeric"),
   function(observed, predicted, cutoff, f, ...) {
-    sens <- sensitivity(observed, predicted, cutoff = cutoff)
-    spec <- specificity(observed, predicted, cutoff = cutoff)
-    f(sens, spec)
+    roc_index(confusion(observed, predicted, cutoff = cutoff), f = f)
+  }
+)
+
+
+setMethod(".roc_index", c("Surv", "matrix"),
+  function(observed, predicted, cutoff, times, f, ...) {
+    .metric.Surv_matrix(observed, predicted, cutoff, times, roc_index, f = f)
   }
 )
 
 
 #' @rdname metrics
 #' 
-sensitivity <- function(observed, predicted, cutoff = 0.5, ...) {
-  .sensitivity(observed, predicted, cutoff = cutoff)
+sensitivity <- function(observed, predicted = NULL, cutoff = 0.5,
+                        times = numeric(), ...) {
+  .sensitivity(observed, predicted, cutoff = cutoff, times = times)
 }
 
 MLMetric(sensitivity) <- list("sensitivity", "Sensitivity", TRUE)
@@ -774,18 +904,38 @@ setMethod(".sensitivity", c("ANY", "ANY"),
 )
 
 
-setMethod(".sensitivity", c("factor", "numeric"),
-  function(observed, predicted, cutoff, ...) {
-    n <- confusion(observed, predicted, cutoff = cutoff)
-    n[2, 2] / (n[1, 2] + n[2, 2])
+setMethod(".sensitivity", c("ConfusionMatrix", "NULL"),
+  function(observed, predicted, ...) {
+    if (any(dim(observed) != c(2, 2))) {
+      warn("'sensitivity' requires a 2-level response")
+      numeric()
+    } else {
+      observed[2, 2] / (observed[1, 2] + observed[2, 2])
+    }
   }
 )
 
 
+setMethod(".sensitivity", c("factor", "numeric"),
+  function(observed, predicted, cutoff, ...) {
+    sensitivity(confusion(observed, predicted, cutoff = cutoff))
+  }
+)
+
+
+setMethod(".sensitivity", c("Surv", "matrix"),
+  function(observed, predicted, cutoff, times, ...) {
+    .metric.Surv_matrix(observed, predicted, cutoff, times, sensitivity)
+  }
+)
+
+
+
 #' @rdname metrics
 #' 
-specificity <- function(observed, predicted, cutoff = 0.5, ...) {
-  .specificity(observed, predicted, cutoff = cutoff)
+specificity <- function(observed, predicted = NULL, cutoff = 0.5,
+                        times = numeric(), ...) {
+  .specificity(observed, predicted, cutoff = cutoff, times = times)
 }
 
 MLMetric(specificity) <- list("specificity", "Specificity", TRUE)
@@ -800,17 +950,35 @@ setMethod(".specificity", c("ANY", "ANY"),
 )
 
 
+setMethod(".specificity", c("ConfusionMatrix", "NULL"),
+  function(observed, predicted, ...) {
+    if (any(dim(observed) != c(2, 2))) {
+      warn("'specificity' requires a 2-level response")
+      numeric()
+    } else{
+      observed[1, 1] / (observed[1, 1] + observed[2, 1])
+    }
+  }
+)
+
+
 setMethod(".specificity", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
-    n <- confusion(observed, predicted, cutoff = cutoff)
-    n[1, 1] / (n[1, 1] + n[2, 1])
+    specificity(confusion(observed, predicted, cutoff = cutoff))
+  }
+)
+
+
+setMethod(".specificity", c("Surv", "matrix"),
+  function(observed, predicted, cutoff, times, ...) {
+    .metric.Surv_matrix(observed, predicted, cutoff, times, specificity)
   }
 )
 
 
 #' @rdname metrics
 #' 
-weighted_kappa2 <- function(observed, predicted, power = 1, ...) {
+weighted_kappa2 <- function(observed, predicted = NULL, power = 1, ...) {
   .weighted_kappa2(observed, predicted, power = power)
 }
 
@@ -827,41 +995,108 @@ setMethod(".weighted_kappa2", c("ANY", "ANY"),
 )
 
 
+setMethod(".weighted_kappa2", c("ConfusionMatrix", "NULL"),
+  function(observed, predicted, power, ...) {
+    expected <- (rowSums(observed) %o% colSums(observed)) / sum(observed)
+    weights <- abs(row(observed) - col(observed))^power
+    1 - sum(weights * observed) / sum(weights * expected)
+  }
+)
+
+
 setMethod(".weighted_kappa2", c("ordered", "ordered"),
   function(observed, predicted, power, ...) {
-    n <- confusion(observed, predicted)
-    m <- (rowSums(n) %o% colSums(n)) / sum(n)
-    w <- abs(row(n) - col(n))^power
-    1 - sum(w * n) / sum(w * m)
+    weighted_kappa2(confusion(observed, predicted), power = power)
   }
 )
 
 
 setMethod(".weighted_kappa2", c("ordered", "matrix"),
   function(observed, predicted, power, ...) {
-    predicted <- convert_response(observed, predicted)
-    weighted_kappa2(observed, predicted, power = power)
+    weighted_kappa2(confusion(observed, predicted), power = power)
   }
 )
 
 
-.metric.factor <- function(observed, predicted, f, ...) {
+.auc.Surv <-   function(observed, predicted, times, FUN_x, FUN_y) {
+  if (length(times) != ncol(predicted)) {
+    stop("unequal number of survival times and predictions")
+  }
+  
+  survfit_all <- survfit(observed ~ 1, se.fit = FALSE)
+
+  metrics <- sapply(1:ncol(predicted), function(i) {
+    pred <- predicted[, i]
+    cutoffs <- c(-Inf, sort(unique(pred)))
+    time <- times[i]
+
+    surv_all <- predict(survfit_all, time)
+    
+    conf <- ConfusionMatrix(table(Predicted = 0:1, Observed = 0:1))
+    num_cutoffs <- length(cutoffs)
+    perf <- data.frame(x = numeric(num_cutoffs), y = numeric(num_cutoffs))
+    for (j in 1:num_cutoffs) {
+      surv_pos <- 1
+      positives <- pred <= cutoffs[j]
+      p <- mean(positives)
+      if (p > 0) {
+        obs <- observed[positives]
+        valid_events <- obs[, "status"] == 1 & obs[, "time"] <= time
+        event_times <- sort(unique(obs[valid_events, "time"]))
+        for (event_time in event_times) {
+          d <- sum(obs[, "time"] == event_time & obs[, "status"] == 1)
+          n <- sum(obs[, "time"] >= event_time)
+          surv_pos <- surv_pos * (1 - d / n)
+        }
+      }
+      conf[1, 1] <- surv_all - surv_pos * p
+      conf[1, 2] <- (1 - p) - conf[1, 1]
+      conf[2, 2] <- (1 - surv_pos) * p
+      conf[2, 1] <- p - conf[2, 2]
+      perf$x[j] <- FUN_x(conf)
+      perf$y[j] <- FUN_y(conf)
+    }
+    perf <- na.omit(perf)
+    n <- nrow(perf)
+    if (n > 1) with(perf, sum(diff(x) * (y[-n] + y[-1]) / 2)) else NA
+  })
+
+  if (length(times) > 1) {
+    c("mean" = mean.SurvMetrics(metrics, times), "time" = metrics)
+  } else {
+    metrics
+  }
+}
+
+
+.metric.factor <- function(observed, predicted, FUN, ...) {
   mean(sapply(1:ncol(predicted), function(i) {
-    f(factor(observed == levels(observed)[i]), predicted[, i], ...)
+    FUN(factor(observed == levels(observed)[i]), predicted[, i], ...)
   }))
 }
 
 
-.metric.matrix <- function(observed, predicted, f, ...) {
+.metric.matrix <- function(observed, predicted, FUN, ...) {
   mean(sapply(1:ncol(observed), function(i) {
-    f(observed[, i], predicted[, i], ...)
+    FUN(observed[, i], predicted[, i], ...)
   }))
 }
 
 
-.metric.Surv <- function(observed, predicted, f, ...) {
+.metric.Surv_matrix <- function(observed, predicted, cutoff, times, FUN, ...) {
+  conf <- confusion(observed, predicted, cutoff = cutoff, times = times)
+  metrics <- sapply(conf, FUN, ...)
+  if (length(times) > 1) {
+    c("mean" = mean.SurvMetrics(metrics, times), metrics)
+  } else {
+    metrics[[1]]
+  }
+}
+
+
+.metric.Surv_numeric <- function(observed, predicted, FUN, ...) {
   events <- observed[, "status"] == 1
-  f(observed[events, "time"], predicted[events], ...)
+  FUN(observed[events, "time"], predicted[events], ...)
 }
 
 

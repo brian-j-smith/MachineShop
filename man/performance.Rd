@@ -3,6 +3,7 @@
 \name{performance}
 \alias{performance}
 \alias{performance.Resamples}
+\alias{performance.ConfusionMatrix}
 \alias{performance.factor}
 \alias{performance.matrix}
 \alias{performance.numeric}
@@ -13,6 +14,9 @@
 performance(x, ...)
 
 \method{performance}{Resamples}(x, ..., na.rm = TRUE)
+
+\method{performance}{ConfusionMatrix}(x, metrics = c(Accuracy =
+  MachineShop::accuracy, Kappa = MachineShop::kappa2), ...)
 
 \method{performance}{factor}(x, y, metrics = c(Accuracy =
   MachineShop::accuracy, Kappa = MachineShop::kappa2, ROCAUC =
@@ -27,8 +31,8 @@ performance(x, ...)
   RMSE = MachineShop::rmse, MAE = MachineShop::mae), ...)
 
 \method{performance}{Surv}(x, y, metrics = c(CIndex =
-  MachineShop::cindex, ROC = MachineShop::roc_auc, Brier =
-  MachineShop::brier), times = numeric(), ...)
+  MachineShop::cindex, ROCAUC = MachineShop::roc_auc, Brier =
+  MachineShop::brier), cutoff = 0.5, times = numeric(), ...)
 
 modelmetrics(...)
 }
@@ -42,13 +46,13 @@ and from deprecated function \code{modelmetrics} to \code{performance}.}
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}
 
-\item{y}{predicted responses.}
-
 \item{metrics}{function, one or more function names, or list of named
 functions to include in the calculation of performance metrics.}
 
-\item{cutoff}{threshold above which probabilities are classified as success
-for binary responses.}
+\item{y}{predicted responses.}
+
+\item{cutoff}{threshold above which binary factor probabilities are
+classified as events and below which survival probabilities are classified.}
 
 \item{times}{numeric vector of follow-up times at which survival events
 were predicted.}
@@ -76,5 +80,5 @@ performance(obs, pred)
 }
 \seealso{
 \code{\link{response}}, \code{\link{predict}},
-\code{\link{resample}}, \code{\link{metrics}}
+\code{\link{resample}}, \code{\link{confusion}}, \code{\link{metrics}}
 }

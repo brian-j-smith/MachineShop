@@ -17,9 +17,9 @@ If not specified, the training data will be used by default.}
 \item{type}{specifies prediction on the original outcome scale
 (\code{"response"}) or on a probability distribution scale (\code{"prob"}).}
 
-\item{cutoff}{threshold above which probabilities are classified as success
-for factor outcomes and which expected values are rounded for integer
-outcomes.}
+\item{cutoff}{threshold above which binary factor probabilities are
+classified as events, below which survival probabilities are classified, and
+at which expected values are rounded for integer outcomes.}
 
 \item{times}{numeric vector of follow-up times at which to predict
 survival events.}

@@ -9,8 +9,8 @@
 #' @param y predicted responses.
 #' @param metrics function, one or more function names, or list of named
 #' functions to include in the calculation of performance metrics.
-#' @param cutoff threshold above which probabilities are classified as success
-#' for binary responses.
+#' @param cutoff threshold above which binary factor probabilities are
+#' classified as events and below which survival probabilities are classified.
 #' @param times numeric vector of follow-up times at which survival events
 #' were predicted.
 #' @param na.rm logical indicating whether to remove observed or predicted
@@ -19,7 +19,7 @@
 #' and from deprecated function \code{modelmetrics} to \code{performance}.
 #' 
 #' @seealso \code{\link{response}}, \code{\link{predict}},
-#' \code{\link{resample}}, \code{\link{metrics}}
+#' \code{\link{resample}}, \code{\link{confusion}}, \code{\link{metrics}}
 #' 
 performance <- function(x, ...) {
   UseMethod("performance")
@@ -56,6 +56,17 @@ performance.Resamples <- function(x, ..., na.rm = TRUE) {
                       }, simplify = FALSE)
   
   do.call(Performance, perf_list)
+}
+
+
+#' @rdname performance
+#' 
+performance.ConfusionMatrix <- function(x, metrics =
+                                          c("Accuracy" = MachineShop::accuracy,
+                                            "Kappa" = MachineShop::kappa2),
+                                        ...) {
+  metrics <- list2function(metrics)
+  metrics(x)
 }
 
 
@@ -112,11 +123,11 @@ performance.numeric <- function(x, y, metrics =
 #' 
 performance.Surv <- function(x, y, metrics =
                                c("CIndex" = MachineShop::cindex,
-                                 "ROC" = MachineShop::roc_auc,
+                                 "ROCAUC" = MachineShop::roc_auc,
                                  "Brier" = MachineShop::brier),
-                              times = numeric(), ...) {
+                              cutoff = 0.5, times = numeric(), ...) {
   metrics <- list2function(metrics)
-  metrics(x, y, times = times)
+  metrics(x, y, cutoff = cutoff, times = times)
 }
 
 

@@ -27,65 +27,74 @@
 \alias{weighted_kappa2}
 \title{Performance Metrics}
 \usage{
-accuracy(observed, predicted, cutoff = 0.5, ...)
+accuracy(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
+  ...)
 
-brier(observed, predicted, times = numeric(), ...)
+brier(observed, predicted = NULL, times = numeric(), ...)
 
-cindex(observed, predicted, ...)
+cindex(observed, predicted = NULL, ...)
 
-cross_entropy(observed, predicted, ...)
+cross_entropy(observed, predicted = NULL, ...)
 
-f_score(observed, predicted, cutoff = 0.5, beta = 1, ...)
+f_score(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
+  beta = 1, ...)
 
-gini(observed, predicted, ...)
+gini(observed, predicted = NULL, ...)
 
-kappa2(observed, predicted, cutoff = 0.5, ...)
+kappa2(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
+  ...)
 
-mae(observed, predicted, ...)
+mae(observed, predicted = NULL, ...)
 
-mse(observed, predicted, ...)
+mse(observed, predicted = NULL, ...)
 
-msle(observed, predicted, ...)
+msle(observed, predicted = NULL, ...)
 
-npv(observed, predicted, cutoff = 0.5, ...)
+npv(observed, predicted = NULL, cutoff = 0.5, times = numeric(), ...)
 
-ppv(observed, predicted, cutoff = 0.5, ...)
+ppv(observed, predicted = NULL, cutoff = 0.5, times = numeric(), ...)
 
-pr_auc(observed, predicted, ...)
+pr_auc(observed, predicted = NULL, times = numeric(), ...)
 
-precision(observed, predicted, cutoff = 0.5, ...)
+precision(observed, predicted = NULL, cutoff = 0.5,
+  times = numeric(), ...)
 
-r2(observed, predicted, ...)
+r2(observed, predicted = NULL, ...)
 
-recall(observed, predicted, cutoff = 0.5, ...)
+recall(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
+  ...)
 
-rmse(observed, predicted, ...)
+rmse(observed, predicted = NULL, ...)
 
-rmsle(observed, predicted, ...)
+rmsle(observed, predicted = NULL, ...)
 
-roc_auc(observed, predicted, times = numeric(), ...)
+roc_auc(observed, predicted = NULL, times = numeric(), ...)
 
-roc_index(observed, predicted, cutoff = 0.5, f = function(sens, spec)
-  sens + spec, ...)
+roc_index(observed, predicted = NULL, cutoff = 0.5,
+  times = numeric(), f = function(sens, spec) sens + spec, ...)
 
-sensitivity(observed, predicted, cutoff = 0.5, ...)
+sensitivity(observed, predicted = NULL, cutoff = 0.5,
+  times = numeric(), ...)
 
-specificity(observed, predicted, cutoff = 0.5, ...)
+specificity(observed, predicted = NULL, cutoff = 0.5,
+  times = numeric(), ...)
 
-weighted_kappa2(observed, predicted, power = 1, ...)
+weighted_kappa2(observed, predicted = NULL, power = 1, ...)
 }
 \arguments{
-\item{observed}{observed responses.}
+\item{observed}{observed responses or
+\code{\link[=confusion]{ConfusionMatrix}} of observed and predicted
+responses.}
 
 \item{predicted}{predicted responses.}
 
-\item{cutoff}{threshold above which probabilities are classified as success
-for binary responses.}
-
-\item{...}{arguments passed to or from other methods.}
+\item{cutoff}{threshold above which binary factor probabilities are
+classified as events and below which survival probabilities are classified.}
 
 \item{times}{numeric vector of follow-up times at which survival events
 were predicted.}
+
+\item{...}{arguments passed to or from other methods.}
 
 \item{beta}{relative importance of recall to precision in the calculation of
 \code{f_score} [default: F1 score].}
@@ -100,5 +109,6 @@ main diagonal in confusion matrices are raised to calculate
 Compute measures of agreement between observed and predicted responses.
 }
 \seealso{
-\code{\link{metricinfo}}, \code{\link{performance}}
+\code{\link{metricinfo}}, \code{\link{confusion}},
+\code{\link{performance}}
 }

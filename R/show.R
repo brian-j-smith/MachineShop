@@ -140,6 +140,14 @@ setMethod("show", "MLModelTune",
 )
 
 
+setMethod("show", "ConfusionMatrix",
+  function(object) {
+    cat("An object of class \"", class(object), "\"\n\n", sep = "")
+    print(object@.Data)
+  }
+)
+
+
 setMethod("show", "HTestPerformanceDiff",
   function(object) {
     cat("An object of class \"", class(object), "\"\n\n",
