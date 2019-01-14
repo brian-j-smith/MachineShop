@@ -29,7 +29,7 @@ summary.Performance <- function(object,
 
   f <- function(x) {
     prop_na <- mean(is.na(x))
-    if (na.rm) x <- na.omit(x)
+    if (na.rm) x <- as.numeric(na.omit(x))
     c(stats(x), "NA" = prop_na)
   }
   
