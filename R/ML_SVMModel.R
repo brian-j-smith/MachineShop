@@ -184,8 +184,8 @@ SVMTanhModel <- function(scale = 1, offset = 1, ...) {
     model@grid <- function(x, length, ...) {
       params %>%
         set_param("C", 2^seq_range(-4, 2, c(-4, 10), length)) %>%
-        set_param("degree", seq_len(min(length, 3))) %>%
-        set_param("order", seq_len(min(length, 3))) %>%
+        set_param("degree", 1:min(length, 3)) %>%
+        set_param("order", 1:min(length, 3)) %>%
         set_param("scale", 10^seq_range(-4, 2, c(-4, log10(2)), length)) %>%
         set_param("sigma", {
           sigmas <- kernlab::sigest(extract(formula(terms(x)), x)$x,
