@@ -581,17 +581,17 @@ setMethod(".pr_auc", c("factor", "matrix"),
 
 setMethod(".pr_auc", c("factor", "numeric"),
   function(observed, predicted, ...) {
-    perf <- ROCR::prediction(predicted, observed) %>%
-      ROCR::performance(measure = "prec", x.measure = "rec")
-    recall <- perf@x.values[[1]]
-    precision <- perf@y.values[[1]]
-    
-    sort_order <- order(recall)
-    recall <- recall[sort_order]
-    precision <- precision[sort_order]
-
-    sum(diff(recall) * (precision[-length(precision)] + precision[-1]) / 2,
-        na.rm = TRUE)
+    cutoffs <- c(sort(unique(predicted), decreasing = TRUE)[-1], -Inf)
+    num_cutoffs <- length(cutoffs)
+    if (num_cutoffs <= 1) NA else {
+      perf <- data.frame(x = numeric(num_cutoffs), y = numeric(num_cutoffs))
+      for (i in 1:num_cutoffs) {
+        conf <- confusion(observed, predicted, cutoff = cutoffs[i])
+        perf$x[i] <- recall(conf)
+        perf$y[i] <- precision(conf)
+      }
+      with(perf, sum(diff(x) * (y[-num_cutoffs] + y[-1]) / 2))
+    }
   }
 )
 
