@@ -5,8 +5,11 @@
 ## 1.1.0
 * Implement model: ``BARTModel``.
 * Implement model tuning over automatically generated grids of parameter values and random sampling of grid points.
+* Add metrics for predicted survival times: ``accuracy``, ``f_score``, ``kappa2``, ``npv``, ``ppv``, ``pr_auc``, ``precision``, ``recall``, ``roc_index``, ``sensitivity``, ``specificity``
+* Add metrics for predicted survival means: ``cindex``, ``gini``, ``mae``, ``mse``, ``msle``, ``r2``, ``rmse``, ``rmsle``.
+* Add ``performance`` and metric methods for ``ConfusionMatrix``.
+* Add confusion matrices for predicted survival times.
 * Standardize predict functions to return mean survival when times are not specified.
-* Add performance metrics for predicted survival means: ``cindex``, ``gini``, ``mae``, ``mse``, ``msle``, ``r2``, ``rmse``, ``rmsle``.
 * Replace ``MLModel`` slot and constructor argument ``nvars`` with ``design``.
 
 
