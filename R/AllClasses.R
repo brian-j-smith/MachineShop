@@ -21,32 +21,32 @@ setOldClass("recipe")
 #' @seealso \code{\link{resample}}
 #' 
 MLControl <- function(surv_times = numeric(), seed = NULL, ...) {
-  MLControl_depwarn(...)
+  MLControl_stop(...)
   if (is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
   new("MLControl", surv_times = surv_times, seed = seed)
 }
 
 
-MLControl_depwarn <- function(summary = NULL, cutoff = NULL,
-                              cutoff_index = NULL, na.rm = NULL, ...) {
+MLControl_stop <- function(summary = NULL, cutoff = NULL,
+                           cutoff_index = NULL, na.rm = NULL, ...) {
   if (!is.null(summary)) {
-    depwarn("'summary' argument to MLControl is deprecated",
-            "apply the 'performance' function to Resamples output directly")
+    stop("'summary' argument to MLControl is deprecated;\n",
+         "apply the 'performance' function to Resamples output directly")
   }
   
   if (!is.null(cutoff)) {
-    depwarn("'cutoff' argument to MLContorl is deprecated",
-            "specify in calls to 'performance' instead")
+    stop("'cutoff' argument to MLContorl is deprecated;\n",
+         "specify in calls to 'performance' instead")
   }
   
   if (!is.null(cutoff_index)) {
-    depwarn("'cutoff_index' argument to MLControl is deprecated",
-            "specify in calls to 'performance' instead")
+    stop("'cutoff_index' argument to MLControl is deprecated;\n",
+         "specify in calls to 'roc_index' instead")
   }
   
   if (!is.null(na.rm)) {
-    depwarn("'na.rm' argument to MLControl is deprecated",
-            "specify in calls to 'performance' instead")
+    stop("'na.rm' argument to MLControl is deprecated;\n",
+         "specify in calls to 'performance' instead")
   }
 }
 
