@@ -397,7 +397,7 @@ varimp(gbmfit)
 
 ### Preprocessing Recipes
 
-The `recipes` package [@kuhn:2018:RPT] provides a framework for defining predictor and response variables and preprocessing steps to be applied to them prior to model fitting.  Using recipes helps to ensure that estimation of predictive performance accounts for all modeling step.  They are also a very convenient way of consistently applying preprocessing to new data.  Stratified resampling and case weights are supported for recipes via the designations of `"case_strata"` and `"case_weight"` roles, respectively.  Recipes currently support `factor` and `numeric` responses, but not generally `Surv`.
+The `recipes` package [@kuhn:2018:RPT] provides a framework for defining predictor and response variables and preprocessing steps to be applied to them prior to model fitting.  Using recipes helps ensure that estimation of predictive performance accounts for all modeling step.  They are also a very convenient way of consistently applying preprocessing to new data.  Stratified resampling and case weights are supported for recipes via the designations of `"case_strata"` and `"case_weight"` roles, respectively.
 
 ```{r}
 ## Recipe specification
@@ -408,10 +408,25 @@ rec <- recipe(medv ~ ., data = Boston) %>%
   step_scale(all_predictors()) %>%
   step_pca(all_predictors())
 
-gbmfit <- resample(rec, model = GBMModel)
-summary(gbmfit)
+res <- resample(rec, model = GBMModel)
+summary(res)
 ```
 
+Survival outcomes in recipes can be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated as `"surv_time"` and `"surv_event"`, as shown below.
+
+```{r}
+## Recipe for survival
+rec <- recipe(time + status ~ ., data = within(Melanoma, status <- status != 2)) %>%
+  add_role(time, new_role = "surv_time") %>%
+  add_role(status, new_role = "surv_event") %>%
+  add_role(status, new_role = "case_strata") %>%
+  step_center(all_predictors()) %>%
+  step_scale(all_predictors()) %>%
+  step_pca(all_predictors())
+
+res <- resample(rec, model = GBMModel)
+summary(res)
+```
 
 ### Available Models
 

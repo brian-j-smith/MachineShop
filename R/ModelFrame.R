@@ -106,7 +106,7 @@ ModelFrame.recipe <- function(x, na.action = NULL, ...) {
     if (length(var_name) == 1) df[[var_name]] else
       stop("multiple strata variables specified")
 
-  do.call(ModelFrame, list(formula(x), df,
+  do.call(ModelFrame, list(formula(terms(x)), df,
                            weights = weights, strata = strata,
                            na.action = na.action))
 }

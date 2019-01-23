@@ -376,9 +376,29 @@ switch_class <- function(EXPR, ...) {
 
 terms.recipe <- function(x, ...) {
   info <- summary(x)
-  lhs <- with(info, variable[role == "outcome"])
-  rhs <- with(info, variable[role == "predictor"])
-  terms(reformulate(rhs, lhs))
+  
+  get_var <- function(roles) {
+    is_role <- tapply(info$role, list(info$variable), function(x) {
+      all(roles %in% x)
+    })
+    names(is_role)[is_role]
+  }
+  
+  outcome_var <- get_var("outcome")
+  if (length(outcome_var) != 1) {
+    surv_time <- get_var(c("surv_time", "outcome"))
+    surv_event <- get_var(c("surv_event", "outcome"))
+    if (length(surv_time) == 1 && length(surv_event) == 1) {
+      outcome_var <- call("Surv", as.symbol(surv_time), as.symbol(surv_event))
+    } else {
+      stop("recipe outcome must be a single variable or separate survival ",
+           "variables with roles 'surv_time' and 'surv_event'")
+    }
+  }
+
+  predictor_vars <- info$variable[info$role == "predictor"]
+  
+  terms(reformulate(predictor_vars, outcome_var))
 }
 
 

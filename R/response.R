@@ -51,12 +51,7 @@ response.ModelFrame <- function(object, ...) {
 #' 
 response.recipe <- function(object, data, ...) {
   object <- prep(object)
-  response(formula(object), bake(object, data))
-}
-
-
-response.tbl_df <- function(object, ...) {
-  response(formula(object), object)
+  response(formula(terms(object)), bake(object, data))
 }
 
 
