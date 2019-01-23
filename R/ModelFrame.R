@@ -96,13 +96,15 @@ ModelFrame.recipe <- function(x, na.action = NULL, ...) {
   
   info <- summary(x)
   
-  weights_index <- which(info$role %in% "case_weight")
-  if (length(weights_index) > 1) stop("multiple case weights specified")
-  weights <- if (length(weights_index) == 1) df[[weights_index]] else NULL
-  
-  strata_index <- which(info$role %in% "case_strata")
-  if (length(strata_index) > 1) stop("multiple strata variables specified")
-  strata <- if (length(strata_index) == 1) df[[strata_index]] else NULL
+  var_name <- info$variable[info$role == "case_weight"]
+  weights <- if (length(var_name) == 0) NULL else
+    if (length(var_name) == 1) df[[var_name]] else
+      stop("multiple case weights specified")
+
+  var_name <- info$variable[info$role == "case_strata"]
+  strata <- if (length(var_name) == 0) NULL else
+    if (length(var_name) == 1) df[[var_name]] else
+      stop("multiple strata variables specified")
 
   do.call(ModelFrame, list(formula(x), df,
                            weights = weights, strata = strata,
