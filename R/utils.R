@@ -377,28 +377,43 @@ switch_class <- function(EXPR, ...) {
 terms.recipe <- function(x, ...) {
   info <- summary(x)
   
-  get_var <- function(roles) {
-    is_role <- tapply(info$role, list(info$variable), function(x) {
-      all(roles %in% x)
+  get_vars <- function(roles = NULL, types = NULL) {
+    is_match <- by(info, info$variable, function(split) {
+      all(roles %in% split$role) && all(types %in% split$type)
     })
-    names(is_role)[is_role]
+    names(is_match)[is_match]
   }
   
-  outcome_var <- get_var("outcome")
-  if (length(outcome_var) != 1) {
-    surv_time <- get_var(c("surv_time", "outcome"))
-    surv_event <- get_var(c("surv_event", "outcome"))
-    if (length(surv_time) == 1 && length(surv_event) == 1) {
-      outcome_var <- call("Surv", as.symbol(surv_time), as.symbol(surv_event))
-    } else {
-      stop("recipe outcome must be a single variable or separate survival ",
-           "variables with roles 'surv_time' and 'surv_event'")
-    }
+  outcome_set <- get_vars("outcome")
+
+  surv_time <- get_vars(c("surv_time", "outcome"))
+  surv_event <- get_vars(c("surv_event", "outcome"))
+  numeric_outcomes <- get_vars("outcome", "numeric")  
+  
+  if (length(surv_time) > 1 || length(surv_event) > 1) {
+    stop("multiple instances of outcome role 'surv_time' or 'surv_event'")
+  } else if (length(surv_time)) {
+    outcome <- call("Surv", as.symbol(surv_time))
+    if (length(surv_event)) outcome[[3]] <- as.symbol(surv_event)
+    outcome_set <- setdiff(outcome_set, c(surv_time, surv_event))
+  } else if (length(surv_event)) {
+    stop("outcome role 'surv_event' specified without 'surv_time'")
+  } else if (length(numeric_outcomes) > 1) {
+    outcome <- as.call(c(.(cbind), lapply(numeric_outcomes, as.symbol)))
+    outcome_set <- setdiff(outcome_set, numeric_outcomes)
+  } else if (length(outcome_set) == 1) {
+    outcome <- outcome_set
+    outcome_set <- NULL
+  }
+  
+  if (length(outcome_set)) {
+    stop("recipe outcome must be a single variable, survival variables with ",
+         "roles 'surv_time' and 'surv_event', or multiple numeric variables")
   }
 
-  predictor_vars <- info$variable[info$role == "predictor"]
+  predictors <- info$variable[info$role == "predictor"]
   
-  terms(reformulate(predictor_vars, outcome_var))
+  terms(reformulate(predictors, outcome))
 }
 
 

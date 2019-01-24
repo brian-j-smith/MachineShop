@@ -412,7 +412,7 @@ res <- resample(rec, model = GBMModel)
 summary(res)
 ```
 
-Survival outcomes in recipes can be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated as `"surv_time"` and `"surv_event"`, as shown below.
+Survival outcomes in recipes can be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated as `"surv_time"` and `"surv_event"`, as shown below.  Alternatively, multiple numeric variables given on the right hand side without any new role designations will be treated as a matrix outcome.
 
 ```{r}
 ## Recipe for survival
