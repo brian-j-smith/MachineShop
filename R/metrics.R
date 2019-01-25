@@ -195,6 +195,7 @@ setMethod(".cross_entropy", c("factor", "matrix"),
   }
 )
 
+
 setMethod(".cross_entropy", c("factor", "numeric"),
   function(observed, predicted, ...) {
     cross_entropy(observed, cbind(1 - predicted, predicted))
@@ -930,7 +931,6 @@ setMethod(".sensitivity", c("Surv", "matrix"),
 )
 
 
-
 #' @rdname metrics
 #' 
 specificity <- function(observed, predicted = NULL, cutoff = 0.5,
@@ -1023,15 +1023,13 @@ setMethod(".weighted_kappa2", c("ordered", "matrix"),
     stop("unequal number of survival times and predictions")
   }
   
-  survfit_all <- survfit(observed ~ 1, se.fit = FALSE)
+  surv_all <- predict(survfit(observed ~ 1, se.fit = FALSE), times)
 
   metrics <- sapply(1:ncol(predicted), function(i) {
     pred <- predicted[, i]
     cutoffs <- c(-Inf, sort(unique(pred)))
     time <- times[i]
 
-    surv_all <- predict(survfit_all, time)
-    
     conf <- ConfusionMatrix(table(Predicted = 0:1, Observed = 0:1))
     num_cutoffs <- length(cutoffs)
     perf <- data.frame(x = numeric(num_cutoffs), y = numeric(num_cutoffs))
@@ -1049,7 +1047,7 @@ setMethod(".weighted_kappa2", c("ordered", "matrix"),
           surv_pos <- surv_pos * (1 - d / n)
         }
       }
-      conf[1, 1] <- surv_all - surv_pos * p
+      conf[1, 1] <- surv_all[i] - surv_pos * p
       conf[1, 2] <- (1 - p) - conf[1, 1]
       conf[2, 2] <- (1 - surv_pos) * p
       conf[2, 1] <- p - conf[2, 2]
