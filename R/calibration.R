@@ -12,7 +12,7 @@
 #' vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
 #' survival responses and loess for others.
 #' @param times numeric vector of follow-up times if \code{y} contains predicted
-#' survival events.
+#' survival probabilities.
 #' 
 #' @return \code{Calibration} class object that inherits from \code{data.frame}.
 #'  

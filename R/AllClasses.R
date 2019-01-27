@@ -11,7 +11,7 @@ setOldClass("recipe")
 #' @rdname MLControl
 #' 
 #' @param surv_times numeric vector of follow-up times at which to predict
-#' survival events.
+#' survival probabilities.
 #' @param seed integer to set the seed at the start of resampling.  This is set
 #' to a random integer by default (NULL).
 #' @param ...  arguments to be passed to \code{MLControl}.

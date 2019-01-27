@@ -54,8 +54,8 @@ functions to include in the calculation of performance metrics.}
 \item{cutoff}{threshold above which binary factor probabilities are
 classified as events and below which survival probabilities are classified.}
 
-\item{times}{numeric vector of follow-up times at which survival events
-were predicted.}
+\item{times}{numeric vector of follow-up times at which survival
+probabilities were predicted.}
 }
 \description{
 Compute measures of model performance.

@@ -13,7 +13,7 @@
 #' classified as events, below which survival probabilities are classified, and
 #' at which expected values are rounded for integer outcomes.
 #' @param times numeric vector of follow-up times at which to predict
-#' survival events.
+#' survival events/probabilities.
 #' @param ... arguments passed to model-specific prediction functions.
 #' 
 #' @seealso \code{\link{fit}}, \code{\link{confusion}},

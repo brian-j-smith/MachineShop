@@ -24,7 +24,7 @@ vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
 survival responses and loess for others.}
 
 \item{times}{numeric vector of follow-up times if \code{y} contains predicted
-survival events.}
+survival probabilities.}
 }
 \value{
 \code{Calibration} class object that inherits from \code{data.frame}.

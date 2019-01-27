@@ -14,7 +14,7 @@
 #' survival probabilities.  Class probability summations and survival will
 #' appear as decimal numbers that can be interpreted as expected counts.
 #' @param times numeric vector of follow-up times if \code{y} contains predicted
-#' survival events.
+#' survival probabilities.
 #' 
 #' @return
 #' The return value is a \code{ConfusionMatrix} class object that inherits from
@@ -70,7 +70,7 @@ setGeneric(".confusion_matrix", function(observed, predicted, ...)
 
 setMethod(".confusion_matrix", c("ANY", "ANY"),
   function(observed, predicted, ...) {
-    stop("confusion matrix requires a predicted factor or survival times")
+    stop("confusion requires a predicted factor or survival probabilities")
   }
 )
 

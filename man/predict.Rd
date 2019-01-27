@@ -22,7 +22,7 @@ classified as events, below which survival probabilities are classified, and
 at which expected values are rounded for integer outcomes.}
 
 \item{times}{numeric vector of follow-up times at which to predict
-survival events.}
+survival events/probabilities.}
 
 \item{...}{arguments passed to model-specific prediction functions.}
 }

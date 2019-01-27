@@ -8,7 +8,7 @@
 #' predicted responses.
 #' @param y predicted responses.
 #' @param times numeric vector of follow-up times if \code{y} contains predicted
-#' survival events.
+#' survival probabilities.
 #' 
 #' @return \code{Lift} class object that inherits from \code{data.frame}.
 #'  

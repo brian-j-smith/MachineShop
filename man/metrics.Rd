@@ -91,8 +91,8 @@ responses.}
 \item{cutoff}{threshold above which binary factor probabilities are
 classified as events and below which survival probabilities are classified.}
 
-\item{times}{numeric vector of follow-up times at which survival events
-were predicted.}
+\item{times}{numeric vector of follow-up times at which survival
+probabilities were predicted.}
 
 \item{...}{arguments passed to or from other methods.}
 

@@ -17,8 +17,8 @@
 #' @param power power to which positional distances of off-diagonals from the
 #' main diagonal in confusion matrices are raised to calculate
 #' \code{weighted_kappa2}.
-#' @param times numeric vector of follow-up times at which survival events
-#' were predicted.
+#' @param times numeric vector of follow-up times at which survival
+#' probabilities were predicted.
 #' @param ... arguments passed to or from other methods.
 #' 
 #' @seealso \code{\link{metricinfo}}, \code{\link{confusion}},

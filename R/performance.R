@@ -11,8 +11,8 @@
 #' functions to include in the calculation of performance metrics.
 #' @param cutoff threshold above which binary factor probabilities are
 #' classified as events and below which survival probabilities are classified.
-#' @param times numeric vector of follow-up times at which survival events
-#' were predicted.
+#' @param times numeric vector of follow-up times at which survival
+#' probabilities were predicted.
 #' @param na.rm logical indicating whether to remove observed or predicted
 #' responses that are \code{NA} when calculating metrics.
 #' @param ... arguments passed from the \code{Resamples} method to the others

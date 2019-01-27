@@ -23,7 +23,7 @@ TrainControl(...)
 }
 \arguments{
 \item{surv_times}{numeric vector of follow-up times at which to predict
-survival events.}
+survival probabilities.}
 
 \item{seed}{integer to set the seed at the start of resampling.  This is set
 to a random integer by default (NULL).}

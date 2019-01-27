@@ -26,7 +26,7 @@ survival probabilities.  Class probability summations and survival will
 appear as decimal numbers that can be interpreted as expected counts.}
 
 \item{times}{numeric vector of follow-up times if \code{y} contains predicted
-survival events.}
+survival probabilities.}
 }
 \value{
 The return value is a \code{ConfusionMatrix} class object that inherits from

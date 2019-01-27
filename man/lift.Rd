@@ -19,7 +19,7 @@ predicted responses.}
 \item{y}{predicted responses.}
 
 \item{times}{numeric vector of follow-up times if \code{y} contains predicted
-survival events.}
+survival probabilities.}
 }
 \value{
 \code{Lift} class object that inherits from \code{data.frame}.
