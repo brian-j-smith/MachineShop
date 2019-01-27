@@ -68,11 +68,10 @@ setMethod(".lift_default", c("ANY", "ANY"),
 setMethod(".lift_default", c("factor", "numeric"),
   function(observed, predicted, ...) {
     df <- data.frame(
-      observed = observed == levels(observed)[2],
+      observed = as.integer(observed == levels(observed)[2]),
       predicted = predicted
     ) %>% na.omit
-    order_indices <- order(df$predicted, decreasing = TRUE)
-    observed <- df$observed[order_indices]
+    observed <- rev(rowsum(df$observed, df$predicted))
     100 * data.frame(
       Found = c(0, cumsum(observed) / sum(observed)),
       Tested = c(0, seq(observed) / length(observed))
