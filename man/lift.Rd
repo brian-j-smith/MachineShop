@@ -7,7 +7,7 @@
 \usage{
 Lift(...)
 
-lift(x, y = NULL, ...)
+lift(x, y = NULL, times = numeric(), ...)
 }
 \arguments{
 \item{...}{named or unnamed \code{lift} output to combine together with the
@@ -17,6 +17,9 @@ lift(x, y = NULL, ...)
 predicted responses.}
 
 \item{y}{predicted responses.}
+
+\item{times}{numeric vector of follow-up times if \code{y} contains predicted
+survival events.}
 }
 \value{
 \code{Lift} class object that inherits from \code{data.frame}.

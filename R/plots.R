@@ -222,8 +222,7 @@ plot.Lift <- function(x, find = NULL, ...) {
   
   if (!is.null(find)) {
     tested <- by(x, x$Model, function(data) {
-      interval <- nrow(data) - findInterval(-find, -rev(data$Found)) + 1
-      data$Tested[interval]
+      data$Tested[match(TRUE, data$Found >= find)]
     })
     df <- data.frame(
       Tested = as.numeric(tested),
