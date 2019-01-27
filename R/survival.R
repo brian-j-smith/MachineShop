@@ -16,9 +16,9 @@ surv_max <- function(x) {
 
 surv_mean <- function(times, probs, max_time = max(times)) {
   times <- c(times, max_time)
-  probs <- cbind(probs, 0)
+  probs <- cbind(rbind(probs), 0)
   stopifnot(length(times) == ncol(probs))
-  -drop(times %*% diff(t(cbind(1, probs))))
+  -as.numeric(times %*% diff(t(cbind(1, probs))))
 }
 
 

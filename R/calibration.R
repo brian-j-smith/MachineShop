@@ -170,6 +170,46 @@ setMethod(".calibration_default", c("Surv", "matrix"),
 )
 
 
+setMethod(".calibration_default", c("Surv", "numeric"),
+  function(observed, predicted, breaks, ...) {
+    surv_max <- surv_max(observed)
+    if (is.null(breaks)) {
+      df <- data.frame(
+        Response = "Mean",
+        Predicted = unique(predicted)
+      )
+      metrics_list <- lapply(df$Predicted, function(value) {
+        abs_diff <- abs(predicted - value)
+        weights <- (1 - (abs_diff / diff(range(abs_diff)))^3)^3
+        km <- survfit(observed ~ 1, weights = weights, se.fit = FALSE)
+        c(Mean = surv_mean(km$time, km$surv, max_time = surv_max),
+          SE = NA, Lower = NA, Upper = NA)
+      })
+      df$Observed <- do.call(rbind, metrics_list)
+      df
+    } else {
+      df <- data.frame(
+        Response = "Mean",
+        Predicted = midpoints(predicted, breaks),
+        Observed = observed
+      )
+      by_results <- by(df, df[c("Predicted", "Response")], function(data) {
+        km <- survfit(Observed ~ 1, data = data, se.fit = FALSE)
+        est <- survival:::survmean(km, rmean = surv_max)
+        Mean <- est$matrix["*rmean"]
+        SE <- est$matrix["*se(rmean)"]
+        result <- data[1, c("Response", "Predicted")]
+        result$Observed <- cbind(Mean = Mean, SE = SE,
+                                 Lower = max(Mean - SE, 0),
+                                 Upper = Mean + SE)
+        result
+      }, simplify = FALSE)
+      do.call(rbind, by_results)
+    }
+  }
+)
+
+
 midpoints <- function(x, breaks) {
   breaks <- if (length(breaks) == 1) {
     break_range <- range(x, na.rm = TRUE)
