@@ -86,7 +86,7 @@ summary.MLModelTune <- function(object,
 #' @rdname summary-methods
 #' 
 summary.Confusion <- function(object, ...) {
-  structure(lapply(object, summary), class = "listof")
+  structure(lapply(object, summary, ...), class = "listof")
 }
 
 

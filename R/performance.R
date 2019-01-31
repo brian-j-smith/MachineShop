@@ -61,6 +61,13 @@ performance.Resamples <- function(x, ..., na.rm = TRUE) {
 
 #' @rdname performance
 #' 
+performance.Confusion <- function(x, ...) {
+  structure(lapply(x, performance, ...), class = "listof")
+}
+
+
+#' @rdname performance
+#' 
 performance.ConfusionMatrix <- function(x, metrics =
                                           c("Accuracy" = MachineShop::accuracy,
                                             "Kappa" = MachineShop::kappa2),

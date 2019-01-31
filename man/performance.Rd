@@ -3,6 +3,7 @@
 \name{performance}
 \alias{performance}
 \alias{performance.Resamples}
+\alias{performance.Confusion}
 \alias{performance.ConfusionMatrix}
 \alias{performance.factor}
 \alias{performance.matrix}
@@ -14,6 +15,8 @@
 performance(x, ...)
 
 \method{performance}{Resamples}(x, ..., na.rm = TRUE)
+
+\method{performance}{Confusion}(x, ...)
 
 \method{performance}{ConfusionMatrix}(x, metrics = c(Accuracy =
   MachineShop::accuracy, Kappa = MachineShop::kappa2), ...)
