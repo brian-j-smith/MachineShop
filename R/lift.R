@@ -38,7 +38,7 @@ lift <- function(x, y = NULL, times = numeric(), ...) {
 
 
 .lift.Resamples <- function(x, ...) {
-  times <- x@control@surv_times
+  times <- x@control@times
   lf_list <- by(x, x$Model, function(data) {
     .lift_default(data$Observed, data$Predicted, times = times)
   }, simplify = FALSE)

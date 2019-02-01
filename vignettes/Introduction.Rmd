@@ -592,7 +592,7 @@ For the survival example, repeated cross-validation control structures are defin
 surv_means_control <- CVControl(folds = 10, repeats = 3, seed = 123)
 
 ## Prediction of survival probabilities
-surv_probs_control <- CVControl(folds = 10, repeats = 3, surv_times = surv_times, seed = 123)
+surv_probs_control <- CVControl(folds = 10, repeats = 3, times = surv_times, seed = 123)
 ```
 
 

@@ -48,7 +48,7 @@ confusion <- function(x, y = NULL, cutoff = 0.5, times = numeric(), ...) {
 .confusion.Resamples <- function(x, cutoff, ...) {
   conf_list <- by(x, list(Model = x$Model), function(data) {
    confusion(data$Observed, data$Predicted, cutoff = cutoff,
-             times = x@control@surv_times)
+             times = x@control@times)
   }, simplify = FALSE)
   if (all(mapply(is, conf_list, "Confusion"))) {
     conf_list <- unlist(conf_list, recursive = FALSE)

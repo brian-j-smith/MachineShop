@@ -91,7 +91,7 @@ setClass("SuperModel", contains = "MLModel")
                           function(learner) fit(mf, model = learner)),
        super_fit = fit(super_mf, model = super_learner),
        all_vars = params$all_vars,
-       times = control@surv_times) %>%
+       times = control@times) %>%
     asMLModelFit("SuperModelFit", model, x, response(mf))
 }
 

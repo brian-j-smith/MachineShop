@@ -25,8 +25,8 @@
 #' 
 #' res <- resample(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
 #'                 data = Melanoma, model = GBMModel,
-#'                 control = CVControl(surv_times = 365 * c(2, 5, 10)))
-#' (cal <- calibration(res))
+#'                 control = CVControl(times = 365 * c(2, 5, 10)))
+#' cal <- calibration(res)
 #' plot(cal)
 #' 
 calibration <- function(x, y = NULL, breaks = 10, times = numeric(), ...) {
@@ -54,7 +54,7 @@ calibration_depwarn <- function(n = NULL, ...) {
 
 
 .calibration.Resamples <- function(x, breaks, ...) {
-  times <- x@control@surv_times
+  times <- x@control@times
   cal_list <- by(x, x$Model, function(data) {
     calibration(data$Observed, data$Predicted, breaks = breaks, times = times)
   }, simplify = FALSE)

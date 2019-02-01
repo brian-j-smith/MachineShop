@@ -39,14 +39,11 @@ test_model <- function(formula, data, model, times = numeric()) {
   print(summary(perf_cv))
   print(plot(perf_cv))
   
-  perf_boot_times <- resample(formula, data, model,
-                              BootControl(surv_times = times))
+  perf_boot_times <- resample(formula, data, model, BootControl(times = times))
   print(perf_boot_times)
-  perf_cv_times <- resample(formula, data, model,
-                            CVControl(surv_times = times))
+  perf_cv_times <- resample(formula, data, model, CVControl(times = times))
   print(perf_cv_times)
-  perf_oob_times <- resample(formula, data, model,
-                             OOBControl(surv_times = times))
+  perf_oob_times <- resample(formula, data, model, OOBControl(times = times))
   print(perf_oob_times)
   
   print(summary(perf_cv_times))

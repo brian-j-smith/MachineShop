@@ -256,14 +256,13 @@ resample_args <- function(train, test, model, control, strata = character()) {
   model <- getMLObject(model, "MLModel")
   
   trainfit <- fit(train, model)
-  if (is(trainfit, "StackedModel")) control@surv_times <- trainfit$times
+  if (is(trainfit, "StackedModel")) control@times <- trainfit$times
   
   df <- data.frame(Model = factor(model@name),
                    Resample = 1,
                    Case = row.names(test))
   df$Observed <- response(test)
-  df$Predicted <- predict(trainfit, test, type = "prob",
-                          times = control@surv_times)
+  df$Predicted <- predict(trainfit, test, type = "prob", times = control@times)
   
   list(df, .control = control, .strata = strata)
 }

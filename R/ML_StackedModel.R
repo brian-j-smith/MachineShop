@@ -69,7 +69,7 @@ setClass("StackedModel", contains = "MLModel")
   base_learners <- model@params$base_learners
   weights <- model@params$weights
   control <-  model@params$control
-  times <- control@surv_times
+  times <- control@times
   
   if (is.null(weights)) {
     num_learners <- length(base_learners)

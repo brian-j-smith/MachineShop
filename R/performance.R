@@ -36,7 +36,7 @@ performance <- function(x, ...) {
 #' 
 performance.Resamples <- function(x, ..., na.rm = TRUE) {
   args <- list(...)
-  args$time <- x@control@surv_times
+  args$time <- x@control@times
 
   if (na.rm) x <- na.omit(x)
   
