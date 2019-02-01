@@ -3,7 +3,7 @@
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/MachineShop)](http://cran.r-project.org/web/packages/MachineShop)
 
-## Overview
+## Description
 
 `MachineShop` is a meta-package for statistical and machine learning
 with a unified interface for model fitting, prediction, performance
@@ -17,7 +17,7 @@ estimation of model performance.
 
   - Unified and concise interface for model fitting, prediction, and
     performance assessment.
-  - Currently supports 49 established models from 25 **R** packages.
+  - Current support for 49 established models from 25 **R** packages.
   - Ensemble modeling with stacked regression and super learners.
   - Modeling of response variables types: binary factors, multi-class
     nominal and ordinal factors, numeric vectors and matrices, and
@@ -31,15 +31,15 @@ estimation of model performance.
   - Parallel execution of resampling algorithms.
   - Choices of performance metrics: accuracy, areas under ROC and
     precision-recall curves, Brier score, coefficient of determination
-    (R squared), concordance index, cross entropy, F-score, Gini
+    (R<sup>2</sup>), concordance index, cross entropy, F-score, Gini
     coefficient, unweighted and weighted Cohen’s kappa, mean absolute
     error, mean squared error, mean squared log error, positive and
     negative predictive values, and precision and recall.
-  - Tabular and graphical performance summaries: calibration curves,
+  - Graphical and tabular performance summaries: calibration curves,
     confusion matrices, partial dependence plots, lift curves, and
     variable importance.
   - Model tuning over automatically generated grids of parameter values
-    and random sampling of grid points.
+    and randomly sampled grid points.
   - Model selection and comparisons for any combination of models and
     model parameter values.
   - User-definable models and performance
@@ -49,7 +49,7 @@ metrics.
 
 <div>
 
-<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
 
 <thead>
 
