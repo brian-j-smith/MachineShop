@@ -62,6 +62,7 @@ metricinfo <- function(...) {
                   "roc_index",
                   "sensitivity",
                   "specificity",
+                  "tnr",
                   "tpr",
                   "weighted_kappa2")
 

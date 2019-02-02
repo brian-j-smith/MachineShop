@@ -985,8 +985,47 @@ setMethod(".specificity", c("ANY", "ANY"),
 
 setMethod(".specificity", c("ConfusionMatrix", "NULL"),
   function(observed, predicted, ...) {
+    tnr(observed)
+  }
+)
+
+
+setMethod(".specificity", c("factor", "numeric"),
+  function(observed, predicted, cutoff, ...) {
+    tnr(observed, predicted, cutoff = cutoff)
+  }
+)
+
+
+setMethod(".specificity", c("Surv", "matrix"),
+  function(observed, predicted, cutoff, times, ...) {
+    tnr(observed, predicted, cutoff = cutoff, times = times)
+  }
+)
+
+
+#' @rdname metrics
+#' 
+tnr <- function(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
+                ...) {
+  .tnr(observed, predicted, cutoff = cutoff, times = times)
+}
+
+MLMetric(tnr) <- list("tnr", "True Negative Rate", TRUE)
+
+
+setGeneric(".tnr", function(observed, predicted, ...) standardGeneric(".tnr"))
+
+
+setMethod(".tnr", c("ANY", "ANY"),
+  function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".tnr", c("ConfusionMatrix", "NULL"),
+  function(observed, predicted, ...) {
     if (any(dim(observed) != c(2, 2))) {
-      warn("'specificity' requires a 2-level response")
+      warn("'tnr' requires a 2-level response")
       numeric()
     } else{
       observed[1, 1] / (observed[1, 1] + observed[2, 1])
@@ -995,16 +1034,16 @@ setMethod(".specificity", c("ConfusionMatrix", "NULL"),
 )
 
 
-setMethod(".specificity", c("factor", "numeric"),
+setMethod(".tnr", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
-    specificity(confusion(observed, predicted, cutoff = cutoff))
+    tnr(confusion(observed, predicted, cutoff = cutoff))
   }
 )
 
 
-setMethod(".specificity", c("Surv", "matrix"),
+setMethod(".tnr", c("Surv", "matrix"),
   function(observed, predicted, cutoff, times, ...) {
-    .metric.Surv_matrix(observed, predicted, cutoff, times, specificity)
+    .metric.Surv_matrix(observed, predicted, cutoff, times, tnr)
   }
 )
 

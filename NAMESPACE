@@ -65,6 +65,7 @@ export(accuracy,
        roc_index,
        sensitivity,
        specificity,
+       tnr,
        tpr,
        weighted_kappa2)
 
