@@ -7,6 +7,7 @@
 \alias{cindex}
 \alias{cross_entropy}
 \alias{f_score}
+\alias{fnr}
 \alias{gini}
 \alias{kappa2}
 \alias{mae}
@@ -39,6 +40,8 @@ cross_entropy(observed, predicted = NULL, ...)
 
 f_score(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
   beta = 1, ...)
+
+fnr(observed, predicted = NULL, cutoff = 0.5, times = numeric(), ...)
 
 gini(observed, predicted = NULL, ...)
 

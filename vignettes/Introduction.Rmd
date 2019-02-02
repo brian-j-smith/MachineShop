@@ -468,6 +468,9 @@ Metrics for binary factors include those given for multi-level factors as well a
 `f_score`
   : [F score](https://en.wikipedia.org/wiki/Precision_and_recall#F-measure), $F_\beta = (1 + \beta^2) \frac{\text{precision} \times \text{recall}}{\beta^2 \times \text{precision} + \text{recall}}$.  F1 score $(\beta = 1)$ is the package default.
 
+`fnr`
+  : False negative rate, $FNR = \frac{FN}{TP + FN} = 1 - TPR$.
+
 `npv`
   : Negative predictive value, $NPV = \frac{TN}{TN + FN}$.
 
@@ -500,7 +503,7 @@ kable(conf,
   : A tradeoff function of sensitivity and specificity as defined by the `f` argument in this function (default: sensitivity + specificity).  The function allows for specification of tradeoffs [@perkins:2006:IOC] other than the default of Youden's J statistic [@youden:1950:IRD].
   
 `sensitivity`, `recall`, `tpr`
-  : True positive rate, $TPR =\frac{TP}{TP + FN}$.
+  : True positive rate, $TPR =\frac{TP}{TP + FN} = 1 - FNR$.
   
 `specificity`
   : True negative rate, $TNR = \frac{TN}{TN + FP}$.

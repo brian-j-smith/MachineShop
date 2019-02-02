@@ -253,6 +253,45 @@ setMethod(".f_score", c("Surv", "matrix"),
 
 #' @rdname metrics
 #' 
+fnr <- function(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
+                ...) {
+  .fnr(observed, predicted, cutoff = cutoff, times = times)
+}
+
+MLMetric(fnr) <- list("fnr", "False Negative Rate", FALSE)
+
+
+setGeneric(".fnr", function(observed, predicted, ...) standardGeneric(".fnr"))
+
+
+setMethod(".fnr", c("ANY", "ANY"),
+  function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".fnr", c("ConfusionMatrix", "NULL"),
+  function(observed, predicted, ...) {
+    1 - tpr(observed)
+  }
+)
+
+
+setMethod(".fnr", c("factor", "numeric"),
+  function(observed, predicted, cutoff, ...) {
+    1 - tpr(observed, predicted, cutoff = cutoff)
+  }
+)
+
+
+setMethod(".fnr", c("Surv", "matrix"),
+  function(observed, predicted, cutoff, times, ...) {
+    1 - tpr(observed, predicted, cutoff = cutoff, times = times)
+  }
+)
+
+
+#' @rdname metrics
+#' 
 gini <- function(observed, predicted = NULL, ...) {
   .gini(observed, predicted)
 }
