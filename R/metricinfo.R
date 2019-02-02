@@ -45,6 +45,7 @@ metricinfo <- function(...) {
                   "cross_entropy",
                   "f_score",
                   "fnr",
+                  "fpr",
                   "gini",
                   "kappa2",
                   "mae",

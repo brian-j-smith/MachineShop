@@ -292,6 +292,45 @@ setMethod(".fnr", c("Surv", "matrix"),
 
 #' @rdname metrics
 #' 
+fpr <- function(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
+                ...) {
+  .fpr(observed, predicted, cutoff = cutoff, times = times)
+}
+
+MLMetric(fpr) <- list("fpr", "False Positive Rate", FALSE)
+
+
+setGeneric(".fpr", function(observed, predicted, ...) standardGeneric(".fpr"))
+
+
+setMethod(".fpr", c("ANY", "ANY"),
+  function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".fpr", c("ConfusionMatrix", "NULL"),
+  function(observed, predicted, ...) {
+    1 - tnr(observed)
+  }
+)
+
+
+setMethod(".fpr", c("factor", "numeric"),
+  function(observed, predicted, cutoff, ...) {
+    1 - tnr(observed, predicted, cutoff = cutoff)
+  }
+)
+
+
+setMethod(".fpr", c("Surv", "matrix"),
+  function(observed, predicted, cutoff, times, ...) {
+    1 - tnr(observed, predicted, cutoff = cutoff, times = times)
+  }
+)
+
+
+#' @rdname metrics
+#' 
 gini <- function(observed, predicted = NULL, ...) {
   .gini(observed, predicted)
 }
@@ -878,7 +917,7 @@ setMethod(".roc_auc", c("factor", "numeric"),
 
 setMethod(".roc_auc", c("Surv", "matrix"),
   function(observed, predicted, times, ...) {
-    .auc.Surv(observed, predicted, times, function(x) 1 - specificity(x), tpr)
+    .auc.Surv(observed, predicted, times, fpr, tpr)
   }
 )
 
