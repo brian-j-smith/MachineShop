@@ -64,6 +64,7 @@ export(accuracy,
        roc_index,
        sensitivity,
        specificity,
+       tpr,
        weighted_kappa2)
 
 export(BootControl,

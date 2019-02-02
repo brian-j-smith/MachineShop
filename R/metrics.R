@@ -704,21 +704,21 @@ setMethod(".recall", c("ANY", "ANY"),
 
 setMethod(".recall", c("ConfusionMatrix", "NULL"),
   function(observed, predicted, ...) {
-    sensitivity(observed)
+    tpr(observed)
   }
 )
 
 
 setMethod(".recall", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
-    sensitivity(observed, predicted, cutoff = cutoff)
+    tpr(observed, predicted, cutoff = cutoff)
   }
 )
 
 
 setMethod(".recall", c("Surv", "matrix"),
   function(observed, predicted, cutoff, times, ...) {
-    sensitivity(observed, predicted, cutoff = cutoff, times = times)
+    tpr(observed, predicted, cutoff = cutoff, times = times)
   }
 )
 
@@ -839,8 +839,7 @@ setMethod(".roc_auc", c("factor", "numeric"),
 
 setMethod(".roc_auc", c("Surv", "matrix"),
   function(observed, predicted, times, ...) {
-    .auc.Surv(observed, predicted, times, function(x) 1 - specificity(x),
-              sensitivity)
+    .auc.Surv(observed, predicted, times, function(x) 1 - specificity(x), tpr)
   }
 )
 
@@ -907,26 +906,21 @@ setMethod(".sensitivity", c("ANY", "ANY"),
 
 setMethod(".sensitivity", c("ConfusionMatrix", "NULL"),
   function(observed, predicted, ...) {
-    if (any(dim(observed) != c(2, 2))) {
-      warn("'sensitivity' requires a 2-level response")
-      numeric()
-    } else {
-      observed[2, 2] / (observed[1, 2] + observed[2, 2])
-    }
+    tpr(observed)
   }
 )
 
 
 setMethod(".sensitivity", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
-    sensitivity(confusion(observed, predicted, cutoff = cutoff))
+    tpr(observed, predicted, cutoff = cutoff)
   }
 )
 
 
 setMethod(".sensitivity", c("Surv", "matrix"),
   function(observed, predicted, cutoff, times, ...) {
-    .metric.Surv_matrix(observed, predicted, cutoff, times, sensitivity)
+    tpr(observed, predicted, cutoff = cutoff, times = times)
   }
 )
 
@@ -972,6 +966,50 @@ setMethod(".specificity", c("factor", "numeric"),
 setMethod(".specificity", c("Surv", "matrix"),
   function(observed, predicted, cutoff, times, ...) {
     .metric.Surv_matrix(observed, predicted, cutoff, times, specificity)
+  }
+)
+
+
+#' @rdname metrics
+#' 
+tpr <- function(observed, predicted = NULL, cutoff = 0.5,
+                times = numeric(), ...) {
+  .tpr(observed, predicted, cutoff = cutoff, times = times)
+}
+
+MLMetric(tpr) <- list("tpr", "True Positive Rate", TRUE)
+
+
+setGeneric(".tpr", function(observed, predicted, ...) standardGeneric(".tpr"))
+
+
+setMethod(".tpr", c("ANY", "ANY"),
+  function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".tpr", c("ConfusionMatrix", "NULL"),
+  function(observed, predicted, ...) {
+    if (any(dim(observed) != c(2, 2))) {
+      warn("'tpr' requires a 2-level response")
+      numeric()
+    } else {
+      observed[2, 2] / (observed[1, 2] + observed[2, 2])
+    }
+  }
+)
+
+
+setMethod(".tpr", c("factor", "numeric"),
+  function(observed, predicted, cutoff, ...) {
+    tpr(confusion(observed, predicted, cutoff = cutoff))
+  }
+)
+
+
+setMethod(".tpr", c("Surv", "matrix"),
+  function(observed, predicted, cutoff, times, ...) {
+    .metric.Surv_matrix(observed, predicted, cutoff, times, tpr)
   }
 )
 

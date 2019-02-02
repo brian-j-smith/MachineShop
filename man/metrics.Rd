@@ -24,6 +24,7 @@
 \alias{roc_index}
 \alias{sensitivity}
 \alias{specificity}
+\alias{tpr}
 \alias{weighted_kappa2}
 \title{Performance Metrics}
 \usage{
@@ -78,6 +79,8 @@ sensitivity(observed, predicted = NULL, cutoff = 0.5,
 
 specificity(observed, predicted = NULL, cutoff = 0.5,
   times = numeric(), ...)
+
+tpr(observed, predicted = NULL, cutoff = 0.5, times = numeric(), ...)
 
 weighted_kappa2(observed, predicted = NULL, power = 1, ...)
 }
