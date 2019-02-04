@@ -33,7 +33,8 @@
 \method{plot}{Curves}(x, type = c("tradeoffs", "cutoffs"),
   diagonal = FALSE, stat = base::mean, ...)
 
-\method{plot}{Lift}(x, find = NULL, ...)
+\method{plot}{Lift}(x, find = NULL, diagonal = TRUE,
+  stat = base::mean, ...)
 
 \method{plot}{PartialDependence}(x, stats = NULL, ...)
 
@@ -47,8 +48,9 @@ metrics to plot.}
 
 \item{stat}{function to compute a summary statistic on resampled values for
 \code{MLModelTune} line plots and \code{Resamples} model sorting.  For
-\code{Curves}, plots are of resampled metrics aggregated by the statistic if
-given or of resample-specific metrics if \code{NULL}.
+\code{Curves} and \code{Lift} classes, plots are of resampled metrics
+aggregated by the statistic if given or of resample-specific metrics if
+\code{NULL}.
 \code{Curves}, or \code{NULL} for resample-specific
 metrics.}
 
@@ -61,8 +63,8 @@ metrics.}
 \item{diagonal}{logical indicating whether to include a diagonal reference
 line.}
 
-\item{find}{numeric percent of observed events at which to display reference
-lines indicating the corresponding percent tested in lift plots.}
+\item{find}{numeric true positive rate at which to display reference lines
+identifying the corresponding rates of positive predictions.}
 
 \item{stats}{vector of numeric indexes or character names of partial
 dependence summary statistics to plot.}

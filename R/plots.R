@@ -12,8 +12,9 @@
 #' metrics to plot.
 #' @param stat function to compute a summary statistic on resampled values for
 #' \code{MLModelTune} line plots and \code{Resamples} model sorting.  For
-#' \code{Curves}, plots are of resampled metrics aggregated by the statistic if
-#' given or of resample-specific metrics if \code{NULL}.
+#' \code{Curves} and \code{Lift} classes, plots are of resampled metrics
+#' aggregated by the statistic if given or of resample-specific metrics if
+#' \code{NULL}.
 #' \code{Curves}, or \code{NULL} for resample-specific
 #' metrics.
 
@@ -251,34 +252,32 @@ plot.Curves <- function(x, type = c("tradeoffs", "cutoffs"), diagonal = FALSE,
 
 #' @rdname plot-methods
 #' 
-#' @param find numeric percent of observed events at which to display reference
-#' lines indicating the corresponding percent tested in lift plots.
+#' @param find numeric true positive rate at which to display reference lines
+#' identifying the corresponding rates of positive predictions.
 #' 
-plot.Lift <- function(x, find = NULL, ...) {
-  aes_model <- if (nlevels(x$Model) > 1) {
-    aes(x = Tested, y = Found, color = Model)
-  } else {
-    aes(x = Tested, y = Found)
-  }
+plot.Lift <- function(x, find = NULL, diagonal = TRUE, stat = base::mean, ...) {
+  x <- summary(x, stat = stat)
+  p <- plot(Curves(x), diagonal = diagonal, stat = NULL)
 
-  p <- ggplot(x, aes_model) +
-    geom_step() +
-    geom_abline(intercept = 0, slope = 1, color = "gray") +
-    labs(x = "Positive Test Rate (%)",
-         y = "True Positive Finding (%)")
-  
   if (!is.null(find)) {
-    tested <- by(x, x$Model, function(data) {
-      data$Tested[match(TRUE, data$Found >= find)]
+    if (find < 0 || find > 1) warning("'find' rate outside of 0 to 1 range")
+
+    indices <- x["Model"]
+    indices$Resample <- x$Resample
+    tested <- by(x, indices, function(data) {
+      approx(data$y, data$x, find, ties = "ordered")$y
     })
+    
     df <- data.frame(
-      Tested = as.numeric(tested),
-      Found = find,
-      Model = names(tested)
+      x = as.numeric(tested),
+      y = find,
+      Model = dimnames(tested)$Model
     )
+    df$Resample <- rep(dimnames(tested)$Resample, each = dim(tested)[1])
+    
     p <- p +
-      geom_segment(aes(x = Tested, y = 0, xend = Tested, yend = Found), df) +
-      geom_segment(aes(x = 0, y = Found, xend = Tested, yend = Found), df)
+      geom_segment(aes(x = x, y = 0, xend = x, yend = y), df) +
+      geom_segment(aes(x = 0, y = y, xend = x, yend = y), df)
   }
   
   p

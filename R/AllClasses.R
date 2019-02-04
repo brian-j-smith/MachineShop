@@ -526,27 +526,16 @@ HTestPerformanceDiff <- setClass("HTestPerformanceDiff",
 #' \code{Lift} constructor.
 #' 
 Lift <- function(...) {
-  args <- list(...)
-  
-  if (!all(sapply(args, is.data.frame))) {
-    stop("values to combine must inherit from data.frame")
+  object <- as(Curves(...), "Lift")
+  if (!all(mapply(identical, object@metrics, c(tpr, rpp)))) {
+    stop("incorrect lift metrics")
   }
-  
-  var_names <- c("Found", "Tested")
-  for (x in args) {
-    is_missing <- !(var_names %in% names(x))
-    if (any(is_missing)) {
-      stop("missing lift variables: ", toString(var_names[is_missing]))
-    }
-  }
-
-  args <- make_unique_levels(args, which = "Model")
-  new("Lift", do.call(append, args))
+  object
 }
 
 
 setClass("Lift",
-  contains = "data.frame"
+  contains = "Curves"
 )
 
 

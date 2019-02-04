@@ -1,7 +1,7 @@
-utils::globalVariables(c("Found", "group", "i", "Lower", "Mean", "Midpoint",
-                         "model", "Model", "Observed", "Predicted", "Predictor",
-                         "Resample", "Response", "Tested", "Upper", "Value",
-                         "values", "variables", "x", "y", "..y.."))
+utils::globalVariables(c("group", "i", "Lower", "Mean", "Midpoint", "model",
+                         "Model", "Observed", "Predicted", "Predictor",
+                         "Resample", "Response", "Upper", "Value", "values",
+                         "variables", "x", "y", "..y.."))
 
 
 .onLoad <- function(libname, pkgname) {
