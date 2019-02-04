@@ -1,5 +1,6 @@
 ---
 title: "Introduction to the MachineShop Package"
+subtitle: "Package Version `r packageVersion('MachineShop')`"
 author:
 - name: "Brian J Smith"
   affiliation: "University of Iowa"
@@ -34,12 +35,14 @@ library(ggplot2)
 ```
 
 
-# Description
+# Overview
+
+## Description
 
 `MachineShop` is a meta-package for statistical and machine learning with a unified interface for model fitting, prediction, performance assessment, and presentation of results.  Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes and for resample (bootstrap, cross-validation, and split training-test sets) estimation of model performance.  This vignette introduces the package interface with a survival data analysis example, followed by supported methods of variable specification; applications to other response variable types; available performance metrics, resampling techniques, and graphical and tabular summaries; and modeling strategies.
 
 
-# Features
+## Features
 
 ```{r echo=FALSE}
 info <- modelinfo()
@@ -52,8 +55,8 @@ info <- modelinfo()
 * Model specification with traditional formulas and with flexible pre-processing [recipes](https://cran.r-project.org/package=recipes).
 * Resample estimation of predictive performance, including cross-validation, bootstrap resampling, and split training-test set validation.
 * Parallel execution of resampling algorithms.
-* Choices of performance metrics: accuracy, areas under ROC and precision-recall curves, Brier score, coefficient of determination (R^2^), concordance index, cross entropy, F-score, Gini coefficient, unweighted and weighted Cohen's kappa, mean absolute error, mean squared error, mean squared log error, positive and negative predictive values, and precision and recall.
-* Graphical and tabular performance summaries: calibration curves, confusion matrices, partial dependence plots, lift curves, and variable importance.
+* Choices of performance metrics: accuracy, areas under ROC and precision recall curves, Brier score, coefficient of determination (R^2^), concordance index, cross entropy, F score, Gini coefficient, unweighted and weighted Cohen's kappa, mean absolute error, mean squared error, mean squared log error, positive and negative predictive values, precision and recall, and sensitivity and specificity.
+* Graphical and tabular performance summaries: calibration curves, confusion matrices, partial dependence plots, performance curves, lift curves, and variable importance.
 * Model tuning over automatically generated grids of parameter values and randomly sampled grid points.
 * Model selection and comparisons for any combination of models and model parameter values.
 * User-definable models and performance metrics.
@@ -493,15 +496,12 @@ kable(conf,
   add_header_above(c("Predicted Response" = 1, "Observed Response" = 2))
 ```
 
-`ppv`
+`ppv`, `precision`
   : Positive predictive value, $PPV = \frac{TP}{TP + FP}$.
 
 `pr_auc`, `auc`
   : Area under a precision recall curve.
   
-`precision`
-  : Same as positive predictive value.
-
 `roc_auc`, `auc`
   : [Area under an ROC curve](https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve).
 
@@ -595,13 +595,13 @@ TrainControl
 For the survival example, repeated cross-validation control structures are defined to estimate model performance in predicting survival means and 5 and 10-year survival probabilities.  In addition to arguments controlling the resampling algorithms, a `seed` can be set to ensure reproducibility of resampling results obtained with the structures.
 
 ```{r}
-## Control parameters for repeated K-fold cross-validation
+## Control parameters for K-fold cross-validation
 
 ## Prediction of survival means
-surv_means_control <- CVControl(folds = 10, repeats = 3, seed = 123)
+surv_means_control <- CVControl(folds = 5, repeats = 3, seed = 123)
 
 ## Prediction of survival probabilities
-surv_probs_control <- CVControl(folds = 10, repeats = 3, times = surv_times, seed = 123)
+surv_probs_control <- CVControl(folds = 5, repeats = 3, times = surv_times, seed = 123)
 ```
 
 
@@ -762,14 +762,50 @@ plot(pd)
 ```
 
 
-## Lift Curves
+## Performance Curve Analysis
+
+Tradeoffs between correct and incorrect classifications of binary outcomes, across the range of possible cutoff probabilities, can be studied with performance curves.
+
+
+### ROC Curves
+
+Receiver operating characteristic (ROC) curves are one example in which true positive rates (sensitivity) are plotted against false positive rates (1 - specificity).  Area under resulting ROC curves can be computed as an overall measure of model predictive performance and interpreted as the probability that a randomly selected event case will have a higher predicted value than a randomly selected non-event case.
+
+```{r}
+## ROC curves
+roc <- performance_curve(res_probs)
+plot(roc, diagonal = TRUE)
+plot(roc, type = "cutoffs")
+```
+
+```{r}
+auc(roc)
+```
+
+
+### Precision Recall Curves
+
+In general, any two binary response metrics may be specified for the construction of a performance curve.  Precision recall curves are another example.
+
+```{r}
+## Precision recall curves
+pr <- performance_curve(res_probs, metrics = c(precision, recall))
+plot(pr)
+```
+
+```{r}
+auc(pr)
+```
+
+
+### Lift Curves
 
 Lift curves depict the rate at which observed binary responses are identifiable from (resampled) predicted response probabilities.  In particular, they plot the true positive findings (sensitivity) against the positive test rates for all possible classification probability cutoffs.  Accordingly, a lift curve can be interpreted as the rate at which positive responses are found as a function of the positive test rate among cases.
 
 ```{r}
 ## Lift curves
 lf <- lift(res_probs)
-plot(lf, find = 75)
+plot(lf, find = 0.75)
 ```
 
 
@@ -838,14 +874,14 @@ Ensemble methods combine multiple base learning algorithms as a strategy to impr
 
 ```{r}
 ## Stacked regression
-model_stacked <- StackedModel(GLMBoostModel, CForestModel, CoxModel)
-res_stacked <- resample(surv_fo, data = surv_df, model = model_stacked)
+stackedmodel <- StackedModel(GLMBoostModel, CForestModel, CoxModel)
+res_stacked <- resample(surv_fo, data = surv_df, model = stackedmodel)
 summary(res_stacked)
 
 ## Super learner
-model_super <- SuperModel(GLMBoostModel, CForestModel, CoxModel,
-                          model = GBMModel)
-res_super <- resample(surv_fo, data = surv_df, model = model_super)
+supermodel <- SuperModel(GLMBoostModel, CForestModel, CoxModel,
+                         model = GBMModel)
+res_super <- resample(surv_fo, data = surv_df, model = supermodel)
 summary(res_super)
 ```
 
