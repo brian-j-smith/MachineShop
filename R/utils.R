@@ -203,7 +203,7 @@ list2function <- function(x) {
 make_unique_levels <- function(x, which) {
   level_names <- list()
   for (i in seq(x)) {
-    if (is.null(x[[i]][[which]])) x[[i]][[which]] <- which
+    if (is.null(x[[i]][[which]])) x[[i]][[which]] <- rep(which, nrow(x[[i]]))
     x[[i]][[which]] <- as.factor(x[[i]][[which]])
     arg_name <- names(x)[i]
     level_names[[i]] <- if (!is.null(arg_name) && nzchar(arg_name)) {
