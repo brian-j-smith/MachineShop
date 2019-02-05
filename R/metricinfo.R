@@ -62,6 +62,7 @@ metricinfo <- function(...) {
                   "rmsle",
                   "roc_auc",
                   "roc_index",
+                  "rpp",
                   "sensitivity",
                   "specificity",
                   "tnr",

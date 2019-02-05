@@ -25,6 +25,7 @@
 \alias{rmsle}
 \alias{roc_auc}
 \alias{roc_index}
+\alias{rpp}
 \alias{sensitivity}
 \alias{specificity}
 \alias{tnr}
@@ -84,6 +85,8 @@ roc_auc(observed, predicted = NULL, times = numeric(), ...)
 
 roc_index(observed, predicted = NULL, cutoff = 0.5,
   times = numeric(), f = function(sens, spec) sens + spec, ...)
+
+rpp(observed, predicted = NULL, cutoff = 0.5, times = numeric(), ...)
 
 sensitivity(observed, predicted = NULL, cutoff = 0.5,
   times = numeric(), ...)

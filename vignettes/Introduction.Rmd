@@ -508,6 +508,9 @@ kable(conf,
 `roc_index`
   : A tradeoff function of sensitivity and specificity as defined by the `f` argument in this function (default: sensitivity + specificity).  The function allows for specification of tradeoffs [@perkins:2006:IOC] other than the default of Youden's J statistic [@youden:1950:IRD].
   
+`rpp`
+  : Rate of positive prediction, $RPP = \frac{TP + FP}{TP + FP + TN + FN}$.
+  
 `sensitivity`, `recall`, `tpr`
   : True positive rate, $TPR =\frac{TP}{TP + FN} = 1 - FNR$.
   

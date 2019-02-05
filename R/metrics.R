@@ -1024,6 +1024,50 @@ setMethod(".roc_index", c("Surv", "matrix"),
 
 #' @rdname metrics
 #' 
+rpp <- function(observed, predicted = NULL, cutoff = 0.5,
+                times = numeric(), ...) {
+  .rpp(observed, predicted, cutoff = cutoff, times = times)
+}
+
+MLMetric(rpp) <- list("rpp", "Rate of Positive Prediction", FALSE)
+
+
+setGeneric(".rpp", function(observed, predicted, ...) standardGeneric(".rpp"))
+
+
+setMethod(".rpp", c("ANY", "ANY"),
+  function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".rpp", c("ConfusionMatrix", "NULL"),
+  function(observed, predicted, ...) {
+    if (any(dim(observed) != c(2, 2))) {
+      warn("'rpp' requires a 2-level response")
+      numeric()
+    } else {
+      (observed[2, 1] + observed[2, 2]) / sum(observed)
+    }
+  }
+)
+
+
+setMethod(".rpp", c("factor", "numeric"),
+  function(observed, predicted, cutoff, ...) {
+    rpp(confusion(observed, predicted, cutoff = cutoff))
+  }
+)
+
+
+setMethod(".rpp", c("Surv", "matrix"),
+  function(observed, predicted, cutoff, times, ...) {
+    .metric.Surv_matrix(observed, predicted, cutoff, times, rpp)
+  }
+)
+
+
+#' @rdname metrics
+#' 
 sensitivity <- function(observed, predicted = NULL, cutoff = 0.5,
                         times = numeric(), ...) {
   .sensitivity(observed, predicted, cutoff = cutoff, times = times)
