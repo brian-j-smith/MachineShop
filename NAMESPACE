@@ -45,6 +45,7 @@ export(.,
        varimp)
 
 export(accuracy,
+       auc,
        brier,
        cindex,
        cross_entropy,

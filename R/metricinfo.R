@@ -40,6 +40,7 @@ metricinfo <- function(...) {
 
 
 .metric_names = c("accuracy",
+                  "auc",
                   "brier",
                   "cindex",
                   "cross_entropy",

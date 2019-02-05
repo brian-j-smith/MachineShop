@@ -21,8 +21,8 @@
 #' @return \code{Curves} class object that inherits from \code{data.frame}.
 #'  
 #' @seealso \code{\link{response}}, \code{\link{predict}},
-#' \code{\link{resample}}, \code{\link{metrics}}, \code{\link{plot}},
-#' \code{\link{summary}}
+#' \code{\link{resample}}, \code{\link{metrics}}, \code{\link{auc}},
+#' \code{\link{plot}}, \code{\link{summary}}
 #' 
 #' @examples
 #' library(MASS)
@@ -32,6 +32,7 @@
 #' ## ROC curve
 #' roc <- performance_curve(res)
 #' plot(roc)
+#' auc(roc)
 #' 
 performance_curve <- function(x, ...) {
   UseMethod("performance_curve")

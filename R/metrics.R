@@ -5,7 +5,7 @@
 #' @name metrics
 #' @rdname metrics
 #' 
-#' @param observed observed responses or
+#' @param observed observed responses, \code{\link{Curves}} object, or
 #' \code{\link[=confusion]{ConfusionMatrix}} of observed and predicted
 #' responses.
 #' @param predicted predicted responses.
@@ -14,15 +14,20 @@
 #' @param cutoff threshold above which binary factor probabilities are
 #' classified as events and below which survival probabilities are classified.
 #' @param f function to calculate a desired sensitivity-specificity tradeoff.
+#' @param metrics list of two performance metrics for the calculation [default:
+#' ROC metrics].
 #' @param power power to which positional distances of off-diagonals from the
 #' main diagonal in confusion matrices are raised to calculate
 #' \code{weighted_kappa2}.
+#' @param stat function to compute a summary statistic at each cutoff value of
+#' resampled metrics in \code{Curves}, or \code{NULL} for resample-specific
+#' metrics.
 #' @param times numeric vector of follow-up times at which survival
 #' probabilities were predicted.
 #' @param ... arguments passed to or from other methods.
 #' 
 #' @seealso \code{\link{metricinfo}}, \code{\link{confusion}},
-#' \code{\link{performance}}
+#' \code{\link{performance}}, \code{\link{performance_curve}}
 #' 
 accuracy <- function(observed, predicted = NULL, cutoff = 0.5,
                      times = numeric(), ...) {
@@ -72,6 +77,74 @@ setMethod(".accuracy", c("factor", "numeric"),
 setMethod(".accuracy", c("Surv", "matrix"),
   function(observed, predicted, cutoff, times, ...) {
     .metric.Surv_matrix(observed, predicted, cutoff, times, accuracy)
+  }
+)
+
+
+#' @rdname metrics
+#' 
+auc <- function(observed, predicted = NULL,
+                metrics = c(MachineShop::tpr, MachineShop::fpr),
+                times = numeric(), stat = base::mean, ...) {
+  .auc(observed, predicted, metrics = metrics, times = times, stat = stat)
+}
+
+MLMetric(auc) <- list("auc", "Area Under Performance Curve", TRUE)
+
+
+setGeneric(".auc", function(observed, predicted, ...) standardGeneric(".auc"))
+
+
+setMethod(".auc", c("ANY", "ANY"),
+  function(observed, predicted, ...) numeric()
+)
+
+
+setMethod(".auc", c("factor", "matrix"), 
+  function(observed, predicted, metrics, ...) {
+    .metric.factor(observed, predicted, auc, metrics = metrics)
+  }
+)
+
+
+setMethod(".auc", c("factor", "numeric"),
+  function(observed, predicted, metrics, ...) {
+    if (identical(metrics[[1]], tpr) && identical(metrics[[2]], fpr)) {
+      R <- rank(predicted)
+      is_event <- observed == levels(observed)[2]
+      n_event <- sum(is_event)
+      n_nonevent <- length(observed) - n_event
+      (sum(R[is_event]) - n_event * (n_event + 1) / 2) / (n_event * n_nonevent)
+    } else {
+      unname(auc(performance_curve(observed, predicted, metrics = metrics)))
+    }
+  }
+)
+
+
+setMethod(".auc", c("Curves", "NULL"),
+  function(observed, predicted, stat, ...) {
+    observed <- summary(observed, stat = stat)
+    indices <- observed["Model"]
+    indices$Resample <- observed$Resample
+    by(observed, indices, function(split) {
+      split <- na.omit(split)
+      n <- nrow(split)
+      if (n > 1) with(split, sum(diff(x) * (y[-n] + y[-1]) / 2)) else NA
+    })  
+  }
+)
+
+
+setMethod(".auc", c("Surv", "matrix"),
+  function(observed, predicted, metrics, times, ...) {
+    x <- unname(auc(performance_curve(observed, predicted,
+                                      metrics = metrics, times = times)))
+    if (length(times) > 1) {
+      c("mean" = mean.SurvMetrics(x, times), "time" = x)
+    } else {
+      x
+    }
   }
 )
 
@@ -653,31 +726,21 @@ setMethod(".pr_auc", c("ANY", "ANY"),
 
 setMethod(".pr_auc", c("factor", "matrix"), 
   function(observed, predicted, ...) {
-    .metric.factor(observed, predicted, pr_auc)
+    auc(observed, predicted, metrics = c(precision, recall))
   }
 )
 
 
 setMethod(".pr_auc", c("factor", "numeric"),
   function(observed, predicted, ...) {
-    cutoffs <- c(sort(unique(predicted), decreasing = TRUE)[-1], -Inf)
-    num_cutoffs <- length(cutoffs)
-    if (num_cutoffs <= 1) NA else {
-      perf <- data.frame(x = numeric(num_cutoffs), y = numeric(num_cutoffs))
-      for (i in 1:num_cutoffs) {
-        conf <- confusion(observed, predicted, cutoff = cutoffs[i])
-        perf$x[i] <- recall(conf)
-        perf$y[i] <- precision(conf)
-      }
-      with(perf, sum(diff(x) * (y[-num_cutoffs] + y[-1]) / 2))
-    }
+    auc(observed, predicted, metrics = c(precision, recall))
   }
 )
 
 
 setMethod(".pr_auc", c("Surv", "matrix"),
   function(observed, predicted, times, ...) {
-    .auc.Surv(observed, predicted, times, recall, precision)
+    auc(observed, predicted, metrics = c(precision, recall), times = times)
   }
 )
 
@@ -899,25 +962,21 @@ setMethod(".roc_auc", c("ANY", "ANY"),
 
 setMethod(".roc_auc", c("factor", "matrix"), 
   function(observed, predicted, ...) {
-    .metric.factor(observed, predicted, roc_auc)
+    auc(observed, predicted)
   }
 )
 
 
 setMethod(".roc_auc", c("factor", "numeric"),
   function(observed, predicted, ...) {
-    R <- rank(predicted)
-    is_event <- observed == levels(observed)[2]
-    n_event <- sum(is_event)
-    n_nonevent <- length(observed) - n_event
-    (sum(R[is_event]) - n_event * (n_event + 1) / 2) / (n_event * n_nonevent)
+    auc(observed, predicted)
   }
 )
 
 
 setMethod(".roc_auc", c("Surv", "matrix"),
   function(observed, predicted, times, ...) {
-    .auc.Surv(observed, predicted, times, fpr, tpr)
+    auc(observed, predicted, times = times)
   }
 )
 
@@ -1171,55 +1230,6 @@ setMethod(".weighted_kappa2", c("ordered", "matrix"),
     weighted_kappa2(confusion(observed, predicted), power = power)
   }
 )
-
-
-.auc.Surv <-   function(observed, predicted, times, FUN_x, FUN_y) {
-  if (length(times) != ncol(predicted)) {
-    stop("unequal number of survival times and predictions")
-  }
-  
-  surv_all <- predict(survfit(observed ~ 1, se.fit = FALSE), times)
-
-  metrics <- sapply(1:ncol(predicted), function(i) {
-    pred <- predicted[, i]
-    cutoffs <- c(-Inf, sort(unique(pred)))
-    time <- times[i]
-
-    conf <- ConfusionMatrix(table(Predicted = 0:1, Observed = 0:1))
-    num_cutoffs <- length(cutoffs)
-    perf <- data.frame(x = numeric(num_cutoffs), y = numeric(num_cutoffs))
-    for (j in 1:num_cutoffs) {
-      surv_pos <- 1
-      positives <- pred <= cutoffs[j]
-      p <- mean(positives)
-      if (p > 0) {
-        obs <- observed[positives]
-        valid_events <- obs[, "status"] == 1 & obs[, "time"] <= time
-        event_times <- sort(unique(obs[valid_events, "time"]))
-        for (event_time in event_times) {
-          d <- sum(obs[, "time"] == event_time & obs[, "status"] == 1)
-          n <- sum(obs[, "time"] >= event_time)
-          surv_pos <- surv_pos * (1 - d / n)
-        }
-      }
-      conf[1, 1] <- surv_all[i] - surv_pos * p
-      conf[1, 2] <- (1 - p) - conf[1, 1]
-      conf[2, 2] <- (1 - surv_pos) * p
-      conf[2, 1] <- p - conf[2, 2]
-      perf$x[j] <- FUN_x(conf)
-      perf$y[j] <- FUN_y(conf)
-    }
-    perf <- na.omit(perf)
-    n <- nrow(perf)
-    if (n > 1) with(perf, sum(diff(x) * (y[-n] + y[-1]) / 2)) else NA
-  })
-
-  if (length(times) > 1) {
-    c("mean" = mean.SurvMetrics(metrics, times), "time" = metrics)
-  } else {
-    metrics
-  }
-}
 
 
 .metric.factor <- function(observed, predicted, FUN, ...) {

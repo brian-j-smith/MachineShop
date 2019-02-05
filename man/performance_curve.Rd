@@ -53,10 +53,11 @@ res <- resample(type ~ ., data = Pima.tr, model = GBMModel)
 ## ROC curve
 roc <- performance_curve(res)
 plot(roc)
+auc(roc)
 
 }
 \seealso{
 \code{\link{response}}, \code{\link{predict}},
-\code{\link{resample}}, \code{\link{metrics}}, \code{\link{plot}},
-\code{\link{summary}}
+\code{\link{resample}}, \code{\link{metrics}}, \code{\link{auc}},
+\code{\link{plot}}, \code{\link{summary}}
 }

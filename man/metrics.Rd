@@ -3,6 +3,7 @@
 \name{metrics}
 \alias{metrics}
 \alias{accuracy}
+\alias{auc}
 \alias{brier}
 \alias{cindex}
 \alias{cross_entropy}
@@ -33,6 +34,9 @@
 \usage{
 accuracy(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
   ...)
+
+auc(observed, predicted = NULL, metrics = c(MachineShop::tpr,
+  MachineShop::fpr), times = numeric(), stat = base::mean, ...)
 
 brier(observed, predicted = NULL, times = numeric(), ...)
 
@@ -94,7 +98,7 @@ tpr(observed, predicted = NULL, cutoff = 0.5, times = numeric(), ...)
 weighted_kappa2(observed, predicted = NULL, power = 1, ...)
 }
 \arguments{
-\item{observed}{observed responses or
+\item{observed}{observed responses, \code{\link{Curves}} object, or
 \code{\link[=confusion]{ConfusionMatrix}} of observed and predicted
 responses.}
 
@@ -107,6 +111,13 @@ classified as events and below which survival probabilities are classified.}
 probabilities were predicted.}
 
 \item{...}{arguments passed to or from other methods.}
+
+\item{metrics}{list of two performance metrics for the calculation [default:
+ROC metrics].}
+
+\item{stat}{function to compute a summary statistic at each cutoff value of
+resampled metrics in \code{Curves}, or \code{NULL} for resample-specific
+metrics.}
 
 \item{beta}{relative importance of recall to precision in the calculation of
 \code{f_score} [default: F1 score].}
@@ -122,5 +133,5 @@ Compute measures of agreement between observed and predicted responses.
 }
 \seealso{
 \code{\link{metricinfo}}, \code{\link{confusion}},
-\code{\link{performance}}
+\code{\link{performance}}, \code{\link{performance_curve}}
 }

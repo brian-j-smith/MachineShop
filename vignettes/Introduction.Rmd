@@ -462,6 +462,9 @@ Brier score and cross entropy loss are computed directly on predicted class prob
 
 Metrics for binary factors include those given for multi-level factors as well as the following.
 
+`auc`
+  : Area under a performance curve.
+
 `cindex`
   : Concordance index computed as rank order agreement between predicted probabilities for paired event and non-event cases.  This metric can be interpreted as the probability that a randomly selected event case will have a higher predicted value than a randomly selected non-event case, and is the same as area under the ROC curve.
 
@@ -493,14 +496,14 @@ kable(conf,
 `ppv`
   : Positive predictive value, $PPV = \frac{TP}{TP + FP}$.
 
-`pr_auc`
-  : Area under the precision-recall curve.
+`pr_auc`, `auc`
+  : Area under a precision recall curve.
   
 `precision`
   : Same as positive predictive value.
 
-`roc_auc`
-  : [Area under the ROC curve](https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve).
+`roc_auc`, `auc`
+  : [Area under an ROC curve](https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve).
 
 `roc_index`
   : A tradeoff function of sensitivity and specificity as defined by the `f` argument in this function (default: sensitivity + specificity).  The function allows for specification of tradeoffs [@perkins:2006:IOC] other than the default of Youden's J statistic [@youden:1950:IRD].
