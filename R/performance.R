@@ -19,7 +19,8 @@
 #' and from deprecated function \code{modelmetrics} to \code{performance}.
 #' 
 #' @seealso \code{\link{response}}, \code{\link{predict}},
-#' \code{\link{resample}}, \code{\link{confusion}}, \code{\link{metrics}}
+#' \code{\link{resample}}, \code{\link{confusion}}, \code{\link{metrics}},
+#' \code{\link{plot}}, \code{\link{summary}}
 #' 
 performance <- function(x, ...) {
   UseMethod("performance")

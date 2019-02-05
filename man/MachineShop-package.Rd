@@ -82,6 +82,7 @@ Performance Assessment:
   \code{\link{diff}} \tab Model Performance Differences \cr
   \code{\link{lift}} \tab Lift Curves \cr
   \code{\link{performance}} \tab Model Performance Metrics \cr
+  \code{\link{performance_curve}} \tab Model Performance Curves \cr
   \code{\link{varimp}} \tab Variable Importance \cr
 }
 

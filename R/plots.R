@@ -6,10 +6,17 @@
 #' @rdname plot-methods
 #' 
 #' @param x object to plot.
+#' @param diagonal logical indicating whether to include a diagonal reference
+#' line.
 #' @param metrics vector of numeric indexes or character names of performance
 #' metrics to plot.
 #' @param stat function to compute a summary statistic on resampled values for
-#' \code{MLModelTune} line plots and \code{Resamples} model sorting.
+#' \code{MLModelTune} line plots and \code{Resamples} model sorting.  For
+#' \code{Curves}, plots are of resampled metrics aggregated by the statistic if
+#' given or of resample-specific metrics if \code{NULL}.
+#' \code{Curves}, or \code{NULL} for resample-specific
+#' metrics.
+
 #' @param type type of plot to construct.
 #' @param ... arguments passed to other methods.
 #' 
@@ -199,6 +206,46 @@ plot.ConfusionMatrix <- function(x, ...) {
     geom_raster() +
     labs(fill = "Probability") +
     scale_fill_gradient(trans = "reverse")
+}
+
+
+#' @rdname plot-methods
+#' 
+plot.Curves <- function(x, type = c("tradeoffs", "cutoffs"), diagonal = FALSE,
+                        stat = base::mean, ...) {
+  x <- summary(x, stat = stat)
+  
+  args <- list(x = quote(x), y = quote(y))
+  if (nlevels(x$Model) > 1) args$color <- quote(Model)
+  if (!is.null(x$Resample)) args$group <- quote(interaction(Model, Resample))
+  mapping <- do.call(aes, args)
+  
+  labels <- c(x = x@metrics$x@label, y = x@metrics$y@label)
+  
+  switch(match.arg(type),
+    "tradeoffs" = {
+      p <- ggplot(x, mapping) +
+        geom_path(na.rm = TRUE) +
+        labs(x = labels["x"], y = labels["y"])
+
+      if (diagonal) {
+        p <- p + geom_abline(intercept = 0, slope = 1, color = "gray")
+      }
+      
+      p
+    },
+    "cutoffs" = {
+      df <- reshape(x, varying = c("x", "y"), v.names = "y",
+                    times = labels, timevar = "Metric",
+                    direction = "long")
+      names(df)[names(df) == "Cutoff"] <- "x"
+      
+      ggplot(df, mapping) +
+        geom_line(na.rm = TRUE) +
+        labs(x = "Cutoff", y = "Performance") +
+        facet_wrap(~ Metric)
+    }
+  )
 }
 
 

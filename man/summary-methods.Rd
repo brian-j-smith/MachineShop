@@ -7,6 +7,7 @@
 \alias{summary.MLModelTune}
 \alias{summary.Confusion}
 \alias{summary.ConfusionMatrix}
+\alias{summary.Curves}
 \title{Model Performance Summary}
 \usage{
 \method{summary}{Performance}(object, stats = c(Mean = base::mean, Median
@@ -24,6 +25,8 @@
 \method{summary}{Confusion}(object, ...)
 
 \method{summary}{ConfusionMatrix}(object, ...)
+
+\method{summary}{Curves}(object, stat = base::mean, ...)
 }
 \arguments{
 \item{object}{object to summarize.}
@@ -34,6 +37,10 @@ to include in the calculation of summary statistics.}
 \item{na.rm}{logical indicating whether to exclude missing values.}
 
 \item{...}{arguments passed to other methods.}
+
+\item{stat}{function to compute a summary statistic at each cutoff value of
+resampled metrics in \code{Curves}, or \code{NULL} for resample-specific
+metrics.}
 }
 \value{
 array with summmary statistics in the second dimension, metrics in

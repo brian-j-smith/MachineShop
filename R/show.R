@@ -148,6 +148,18 @@ setMethod("show", "ConfusionMatrix",
 )
 
 
+setMethod("show", "Curves",
+  function(object){
+    cat("An object of class \"", class(object), "\"\n\n",
+        "Metrics: ",
+        "x = ", object@metrics$x@label, ", ",
+        "y = ", object@metrics$y@label, "\n\n",
+        sep = "")
+    print(as.data.frame(object))
+  }
+)
+
+
 setMethod("show", "HTestPerformanceDiff",
   function(object) {
     cat("An object of class \"", class(object), "\"\n\n",

@@ -6,6 +6,9 @@
 #' @rdname summary-methods
 #' 
 #' @param object object to summarize.
+#' @param stat function to compute a summary statistic at each cutoff value of
+#' resampled metrics in \code{Curves}, or \code{NULL} for resample-specific
+#' metrics.
 #' @param stats function, one or more function names, or list of named functions
 #' to include in the calculation of summary statistics.
 #' @param na.rm logical indicating whether to exclude missing values.
@@ -117,6 +120,48 @@ summary.ConfusionMatrix <- function(object, ...) {
                    Kappa = 1 - (1 - sum(agreement)) /
                      (1 - sum(observed * predicted))) 
 }
+
+
+#' @rdname summary-methods
+#' 
+summary.Curves <- function(object, stat = base::mean, ...) {
+  if (!(is.null(object$Resample) || is.null(stat))) {
+    
+    object_class <- class(object)
+    stat_na_omit <- function(x) stat(na.omit(x))
+    
+    object_list <- by(object, object$Model, function(curves) {
+      cutoffs <- unique(curves$Cutoff)
+      curves_split <- split(curves, curves$Resample)
+      x_all <- y_all <- matrix(NA, length(cutoffs), length(curves_split))
+      for (j in seq(curves_split)) {
+        curve <- curves_split[[j]]
+        x_all[, j] <- .curve_approx(curve$Cutoff, curve$x, cutoffs)
+        y_all[, j] <- .curve_approx(curve$Cutoff, curve$y, cutoffs)
+      }
+      do.call(object_class, list(
+        data.frame(Cutoff = cutoffs,
+                   x = apply(x_all, 1, stat_na_omit),
+                   y = apply(y_all, 1, stat_na_omit)),
+        .metrics = object@metrics
+      ))
+    })
+    
+    object <- do.call(object_class, object_list)
+  }
+  
+  object
+}
+
+
+.curve_approx <- function(...) {
+  values <- try(
+    approx(..., method = "constant", rule = 2, f = 0.5),
+    silent = TRUE
+  )
+  if (is(values, "try-error")) NA else values$y
+}
+
 
 
 summary.MLModelFit <- function(object, ...) {

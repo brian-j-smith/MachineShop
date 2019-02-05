@@ -106,11 +106,13 @@ setMethod(".confusion_matrix", c("Surv", "matrix"),
       stop("unequal number of survival times and predictions")
     }
     
-    surv_all <- predict(survfit(observed ~ 1, se.fit = FALSE), times)
+    surv <- predict(survfit(observed ~ 1, se.fit = FALSE), times)
+    
+    conf_tbl <- table(Predicted = 0:1, Observed = 0:1)
 
     structure(
-      lapply(1:ncol(predicted), function(i) {
-        surv_pos <- 1
+      lapply(1:length(times), function(i) {
+        surv_positives <- 1
         positives <- predicted[, i] == 1
         p <- mean(positives)
         if (p > 0) {
@@ -120,16 +122,15 @@ setMethod(".confusion_matrix", c("Surv", "matrix"),
           for (event_time in event_times) {
             d <- sum(obs[, "time"] == event_time & obs[, "status"] == 1)
             n <- sum(obs[, "time"] >= event_time)
-            surv_pos <- surv_pos * (1 - d / n)
+            surv_positives <- surv_positives * (1 - d / n)
           }
         }
 
-        conf_tbl <- table(Predicted = 0:1, Observed = 0:1)
-        conf_tbl[1, 1] <- surv_all[i] - surv_pos * p
-        conf_tbl[1, 2] <- (1 - p) - conf_tbl[1, 1]
-        conf_tbl[2, 2] <- (1 - surv_pos) * p
-        conf_tbl[2, 1] <- p - conf_tbl[2, 2]
-        
+        conf_tbl[1, 1] <- surv[i] - surv_positives * p
+        conf_tbl[2, 1] <- surv_positives * p
+        conf_tbl[1, 2] <- 1 - p - conf_tbl[1, 1]
+        conf_tbl[2, 2] <- p - surv_positives * p
+
         ConfusionMatrix(length(observed) * conf_tbl)
       }),
       names = paste0("time", seq_along(times))

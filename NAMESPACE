@@ -25,6 +25,7 @@ export(.,
        Calibration,
        confusion,
        Confusion,
+       Curves,
        dependence,
        expand.model,
        fit,
@@ -36,6 +37,7 @@ export(.,
        modelinfo,
        modelmetrics,
        performance,
+       performance_curve,
        resample,
        Resamples,
        response,
@@ -145,6 +147,8 @@ S3method(performance, matrix)
 S3method(performance, numeric)
 S3method(performance, Resamples)
 S3method(performance, Surv)
+S3method(performance_curve, default)
+S3method(performance_curve, Resamples)
 S3method(print, MLModelFit)
 S3method(print, Resamples)
 S3method(plot, MLModelTune)
@@ -153,6 +157,7 @@ S3method(plot, Resamples)
 S3method(plot, Calibration)
 S3method(plot, Confusion)
 S3method(plot, ConfusionMatrix)
+S3method(plot, Curves)
 S3method(plot, Lift)
 S3method(plot, Performance)
 S3method(plot, VarImp)
@@ -164,6 +169,7 @@ S3method(response, formula)
 S3method(response, recipe)
 S3method(summary, Confusion)
 S3method(summary, ConfusionMatrix)
+S3method(summary, Curves)
 S3method(summary, MLModelFit)
 S3method(summary, MLModelTune)
 S3method(summary, Performance)

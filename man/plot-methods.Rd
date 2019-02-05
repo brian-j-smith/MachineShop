@@ -8,6 +8,7 @@
 \alias{plot.Calibration}
 \alias{plot.Confusion}
 \alias{plot.ConfusionMatrix}
+\alias{plot.Curves}
 \alias{plot.Lift}
 \alias{plot.PartialDependence}
 \alias{plot.VarImp}
@@ -29,6 +30,9 @@
 
 \method{plot}{ConfusionMatrix}(x, ...)
 
+\method{plot}{Curves}(x, type = c("tradeoffs", "cutoffs"),
+  diagonal = FALSE, stat = base::mean, ...)
+
 \method{plot}{Lift}(x, find = NULL, ...)
 
 \method{plot}{PartialDependence}(x, stats = NULL, ...)
@@ -42,13 +46,20 @@
 metrics to plot.}
 
 \item{stat}{function to compute a summary statistic on resampled values for
-\code{MLModelTune} line plots and \code{Resamples} model sorting.}
+\code{MLModelTune} line plots and \code{Resamples} model sorting.  For
+\code{Curves}, plots are of resampled metrics aggregated by the statistic if
+given or of resample-specific metrics if \code{NULL}.
+\code{Curves}, or \code{NULL} for resample-specific
+metrics.}
 
 \item{type}{type of plot to construct.}
 
 \item{...}{arguments passed to other methods.}
 
 \item{se}{logical indicating whether to include standard error bars.}
+
+\item{diagonal}{logical indicating whether to include a diagonal reference
+line.}
 
 \item{find}{numeric percent of observed events at which to display reference
 lines indicating the corresponding percent tested in lift plots.}
