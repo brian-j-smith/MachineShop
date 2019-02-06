@@ -124,12 +124,13 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = base::mean,
     df$metric <- factor(df$metric, metrics)
     
     indices <- sapply(grid[-1], function(x) length(unique(x)) > 1)
-    mapping <- if (any(indices)) {
+    args <- list(quote(x), quote(y))
+    if (any(indices)) {
       df$group <- interaction(grid[-1][indices])
-      aes(x, y, color = group, shape = group)
-    } else {
-      aes(x, y)
+      args$color <- args$shape <- quote(group)
     }
+    mapping <- do.call(aes, args)
+    
     ggplot(df, mapping) +
       geom_line() +
       geom_point() +
@@ -149,12 +150,10 @@ plot.MLModelTune <- function(x, metrics = NULL, stat = base::mean,
 plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
   type <- match.arg(type)
   
-  aes_response <- if (nlevels(x$Response) > 1) {
-    aes(x = Predicted, y = Mean, color = Response)
-  } else {
-    aes(x = Predicted, y = Mean)
-  }
-  
+  args <- list(x = quote(Predicted), y = quote(Mean))
+  if (nlevels(x$Response) > 1) args$color <- quote(Response)
+  mapping <- do.call(aes,args)
+
   position <- "identity"
   
   pl <- by(x, x$Model, function(cal) {
@@ -166,7 +165,7 @@ plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
     )
     Predicted_width <- diff(range(df$Predicted, na.rm = TRUE))
   
-    p <- ggplot(df, aes_response) +
+    p <- ggplot(df, mapping) +
       geom_abline(intercept = 0, slope = 1, color = "gray") +
       labs(title = cal$Model[1], x = "Predicted", y = "Observed Mean")
     
@@ -300,17 +299,15 @@ plot.PartialDependence <- function(x, stats = NULL, ...) {
   }
 
   df <- x[c("Statistic", "Response", "Value")]
-
-  aes_response <- if (nlevels(x$Response) > 1) {
-    aes(x = Predictor, y = Value, color = Response)
-  } else {
-    aes(x = Predictor, y = Value)
-  } 
-
+  
+  args <- list(x = quote(Predictor), y = quote(Value))
+  if (nlevels(x$Response) > 1) args$color <- quote(Response)
+  mapping <- do.call(aes, args)
+  
   pl <- list()
   for (varname in names(x$Predictors)) {
     df$Predictor <- x$Predictors[[varname]]
-    p <- ggplot(na.omit(df), aes_response)
+    p <- ggplot(na.omit(df), mapping)
     p <- switch_class(df$Predictor,
                       "factor" = p +
                         geom_crossbar(aes(ymin = ..y.., ymax = ..y..)),
