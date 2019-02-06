@@ -81,7 +81,7 @@ tune <- function(x, ...) {
 #' }
 #' 
 tune.formula <- function(x, data, models, grid = 3, fixed = NULL,
-                         control = CVControl, metrics = NULL, stat = mean,
+                         control = CVControl, metrics = NULL, stat = base::mean,
                          maximize = TRUE, ...) {
   .tune(x, data, models, grid, fixed, control, metrics, stat, maximize, ...)
 }
@@ -90,8 +90,8 @@ tune.formula <- function(x, data, models, grid = 3, fixed = NULL,
 #' @rdname tune-methods
 #' 
 tune.ModelFrame <- function(x, models, grid = 3, fixed = NULL,
-                            control = CVControl, metrics = NULL, stat = mean,
-                            maximize = TRUE, ...) {
+                            control = CVControl, metrics = NULL,
+                            stat = base::mean, maximize = TRUE, ...) {
   .tune(x, NULL, models, grid, fixed, control, metrics, stat, maximize, ...)
 }
 
@@ -99,7 +99,7 @@ tune.ModelFrame <- function(x, models, grid = 3, fixed = NULL,
 #' @rdname tune-methods
 #' 
 tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
-                        metrics = NULL, stat = mean, maximize = TRUE, ...) {
+                        metrics = NULL, stat = base::mean, maximize = TRUE, ...) {
   .tune(x, NULL, models, grid, fixed, control, metrics, stat, maximize, ...)
 }
 

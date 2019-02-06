@@ -10,15 +10,15 @@
 tune(x, ...)
 
 \method{tune}{formula}(x, data, models, grid = 3, fixed = NULL,
-  control = CVControl, metrics = NULL, stat = mean,
+  control = CVControl, metrics = NULL, stat = base::mean,
   maximize = TRUE, ...)
 
 \method{tune}{ModelFrame}(x, models, grid = 3, fixed = NULL,
-  control = CVControl, metrics = NULL, stat = mean,
+  control = CVControl, metrics = NULL, stat = base::mean,
   maximize = TRUE, ...)
 
 \method{tune}{recipe}(x, models, grid = 3, fixed = NULL,
-  control = CVControl, metrics = NULL, stat = mean,
+  control = CVControl, metrics = NULL, stat = base::mean,
   maximize = TRUE, ...)
 }
 \arguments{

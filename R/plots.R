@@ -26,7 +26,7 @@
 #' \code{\link{confusion}}, \code{\link{lift}}, \code{\link{dependence}},
 #' \code{\link{varimp}}
 #' 
-plot.Performance <- function(x, metrics = NULL, stat = mean,
+plot.Performance <- function(x, metrics = NULL, stat = base::mean,
                              type = c("boxplot", "density", "errorbar",
                                       "violin"), ...) {
   df <- as.data.frame.table(x)
@@ -89,7 +89,7 @@ plot.Performance <- function(x, metrics = NULL, stat = mean,
 #' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
 #' plot(res)
 #' 
-plot.Resamples <- function(x, metrics = NULL, stat = mean,
+plot.Resamples <- function(x, metrics = NULL, stat = base::mean,
                            type = c("boxplot", "density", "errorbar", "violin"),
                            ...) {
   plot(performance(x), metrics = metrics, stat = stat, type = type)
@@ -98,7 +98,7 @@ plot.Resamples <- function(x, metrics = NULL, stat = mean,
 
 #' @rdname plot-methods
 #' 
-plot.MLModelTune <- function(x, metrics = NULL, stat = mean,
+plot.MLModelTune <- function(x, metrics = NULL, stat = base::mean,
                              type = c("boxplot", "density", "errorbar", "line",
                                       "violin"), ...) {
   perf <- x@performance

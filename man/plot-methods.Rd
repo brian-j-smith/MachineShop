@@ -14,13 +14,13 @@
 \alias{plot.VarImp}
 \title{Model Performance Plots}
 \usage{
-\method{plot}{Performance}(x, metrics = NULL, stat = mean,
+\method{plot}{Performance}(x, metrics = NULL, stat = base::mean,
   type = c("boxplot", "density", "errorbar", "violin"), ...)
 
-\method{plot}{Resamples}(x, metrics = NULL, stat = mean,
+\method{plot}{Resamples}(x, metrics = NULL, stat = base::mean,
   type = c("boxplot", "density", "errorbar", "violin"), ...)
 
-\method{plot}{MLModelTune}(x, metrics = NULL, stat = mean,
+\method{plot}{MLModelTune}(x, metrics = NULL, stat = base::mean,
   type = c("boxplot", "density", "errorbar", "line", "violin"), ...)
 
 \method{plot}{Calibration}(x, type = c("line", "point"), se = FALSE,
