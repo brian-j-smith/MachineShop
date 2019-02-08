@@ -616,38 +616,51 @@ Resamples <- function(...) {
 }
 
 
-.Resamples <- function(..., .control = NULL, .strata = character()) {
+.Resamples <- function(..., .control = NULL, .strata = NULL) {
   args <- list(...)
   
   if (length(args) == 0) stop("no resample output given")
   
   .Data <- args[[1]]
-  if (length(args) > 1) {
-    if (!all(sapply(args, function(x) is(x, "Resamples")))) {
-      stop("values to combine must be Resamples objects")
+  if (all(mapply(is, args, "Resamples"))) {
+    
+    control <- .Data@control
+    if (!all(sapply(args, function(x) identical(x@control, control)))) {
+      stop("Resamples arguments have different control structures")
+    }
+
+    strata <- .Data@strata
+    if (!all(sapply(args, function(x) identical(x@strata, strata)))) {
+      stop("Resamples arguments have different strata variables")
+    }
+
+  } else if (length(args) > 1) {
+    
+    stop("arguments to combine must be Resamples objects")
+    
+  } else if (!is.data.frame(.Data)) {
+    
+    stop("Resamples argument must inherit from data.frame")
+    
+  } else {
+
+    control <- .control
+    if (!is(control, "MLControl")) {
+      stop("missing control structure in Resamples constructor")
     }
     
-    .control <- .Data@control
-    is_equal_control <- function(x) isTRUE(all.equal(x@control, .control))
-    if (!all(sapply(args, is_equal_control))) {
-      stop("resamples have different control structures")
+    strata <- as.character(.strata)
+
+    var_names <- c("Resample", "Case", "Observed", "Predicted")
+    is_missing <- !(var_names %in% names(.Data))
+    if (any(is_missing)) {
+      stop("missing resample variables: ", toString(var_names[is_missing]))
     }
     
-    .strata <- .Data@strata
-    if (!all(sapply(args, function(x) x@strata == .strata))) {
-      stop("resamples have different strata variables")
-    }
-    
-    .Data <- do.call(append, make_unique_levels(args, which = "Model"))
   }
-  
-  var_names <- c("Model", "Resample", "Case", "Observed", "Predicted")
-  is_missing <- !(var_names %in% names(.Data))
-  if (any(is_missing)) {
-    stop("missing resample variables: ", toString(var_names[is_missing]))
-  }
-  
-  new("Resamples", .Data, control = .control, strata = as.character(.strata))
+
+  args <- make_unique_levels(args, which = "Model")
+  new("Resamples", do.call(append, args), control = control, strata = strata)
 }
 
 

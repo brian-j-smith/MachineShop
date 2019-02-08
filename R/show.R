@@ -188,7 +188,7 @@ setMethod("show", "Resamples",
   function(object) {
     cat("An object of class \"", class(object), "\"\n\n",
         "Models: ", toString(levels(object$Model)), "\n", sep = "")
-    if (length(object@strata)) {
+    if (isTRUE(nzchar(object@strata))) {
       cat("Stratification variable:", object@strata, "\n")
     }
     cat("\n")
