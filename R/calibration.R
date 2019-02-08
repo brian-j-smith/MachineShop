@@ -49,7 +49,8 @@ calibration_depwarn <- function(n = NULL, ...) {
 
 
 .calibration.default <- function(x, y, breaks, times, ...) {
-  Calibration(.calibration_default(x, y, breaks = breaks, times = times))
+  Calibration(.calibration_default(x, y, breaks = breaks, times = times),
+              .breaks = breaks)
 }
 
 

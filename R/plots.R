@@ -151,7 +151,7 @@ plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
   type <- match.arg(type)
   
   args <- list(x = quote(Predicted), y = quote(Mean))
-  if (nlevels(x$Response) > 1) args$color <- quote(Response)
+  if (nlevels(x$Response) > 1) args$color <- args$fill <- quote(Response)
   mapping <- do.call(aes,args)
 
   position <- "identity"
@@ -169,13 +169,16 @@ plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
       geom_abline(intercept = 0, slope = 1, color = "gray") +
       labs(title = cal$Model[1], x = "Predicted", y = "Observed Mean")
     
-    if (se) {
+    if (se) if (x@smoothed) {
+      p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper),
+                           linetype = "blank", alpha = 0.2)
+    } else {
       position <- position_dodge(width = 0.025 * Predicted_width)
       p <- p + geom_errorbar(aes(ymin = Lower, ymax = Upper),
                              width = 0.05 * Predicted_width,
-                             position = position)
+                             position = position, na.rm = TRUE)
     }
-  
+    
     switch(type,
            "line" = p + geom_line(position = position),
            "point" = p + geom_point(position = position))

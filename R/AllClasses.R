@@ -391,26 +391,51 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 #' with the \code{Calibration} constructor.
 #' 
 Calibration <- function(...) {
+  .Calibration(...)
+}
+
+
+.Calibration <- function(..., .breaks) {
   args <- list(...)
   
-  if (!all(sapply(args, is.data.frame))) {
-    stop("values to combine must inherit from data.frame")
-  }
+  if (length(args) == 0) stop("no calibration output given")
   
-  var_names <- c("Response", "Predicted", "Observed")
-  for (x in args) {
-    is_missing <- !(var_names %in% names(x))
+  .Data <- args[[1]]
+  if (all(mapply(is, args, "Calibration"))) {
+    
+    smoothed <- .Data@smoothed
+    if (!all(sapply(args, function(x) identical(x@smoothed, smoothed)))) {
+      stop("Calibration arguments are a mix of smoothed and binned curves")
+    }
+
+  } else if (length(args) > 1) {
+    
+    stop("arguments to combine must be Calibration objects")
+    
+  } else if (!is.data.frame(.Data)) {
+    
+    stop("Calibration argument must inherit from data.frame")
+    
+  } else {
+
+    if (missing(.breaks)) stop("missing breaks in Calibration constructor")
+    smoothed <- is.null(.breaks)
+
+    var_names <- c("Response", "Predicted", "Observed")
+    is_missing <- !(var_names %in% names(.Data))
     if (any(is_missing)) {
       stop("missing calibration variables: ", toString(var_names[is_missing]))
     }
+    
   }
 
   args <- make_unique_levels(args, which = "Model")
-  new("Calibration", do.call(append, args))
+  new("Calibration", do.call(append, args), smoothed = smoothed)
 }
 
 
 setClass("Calibration",
+  slots = c("smoothed" = "logical"),
   contains = "data.frame"
 )
 
