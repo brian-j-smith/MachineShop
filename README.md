@@ -30,14 +30,15 @@ estimation of model performance.
     validation.
   - Parallel execution of resampling algorithms.
   - Choices of performance metrics: accuracy, areas under ROC and
-    precision-recall curves, Brier score, coefficient of determination
-    (R<sup>2</sup>), concordance index, cross entropy, F-score, Gini
+    precision recall curves, Brier score, coefficient of determination
+    (R<sup>2</sup>), concordance index, cross entropy, F score, Gini
     coefficient, unweighted and weighted Cohen’s kappa, mean absolute
     error, mean squared error, mean squared log error, positive and
-    negative predictive values, and precision and recall.
+    negative predictive values, precision and recall, and sensitivity
+    and specificity.
   - Graphical and tabular performance summaries: calibration curves,
-    confusion matrices, partial dependence plots, lift curves, and
-    variable importance.
+    confusion matrices, partial dependence plots, performance curves,
+    lift curves, and variable importance.
   - Model tuning over automatically generated grids of parameter values
     and randomly sampled grid points.
   - Model selection and comparisons for any combination of models and
@@ -1906,19 +1907,21 @@ performance(res) %>% summary
 
 ## All available metric functions
 metricinfo() %>% names
-#>  [1] "accuracy"        "brier"           "cindex"         
-#>  [4] "cross_entropy"   "f_score"         "gini"           
-#>  [7] "kappa2"          "mae"             "mse"            
-#> [10] "msle"            "npv"             "ppv"            
-#> [13] "pr_auc"          "precision"       "r2"             
-#> [16] "recall"          "rmse"            "rmsle"          
-#> [19] "roc_auc"         "roc_index"       "sensitivity"    
-#> [22] "specificity"     "weighted_kappa2"
+#>  [1] "accuracy"        "auc"             "brier"          
+#>  [4] "cindex"          "cross_entropy"   "f_score"        
+#>  [7] "fnr"             "fpr"             "gini"           
+#> [10] "kappa2"          "mae"             "mse"            
+#> [13] "msle"            "npv"             "ppv"            
+#> [16] "pr_auc"          "precision"       "r2"             
+#> [19] "recall"          "rmse"            "rmsle"          
+#> [22] "roc_auc"         "roc_index"       "rpp"            
+#> [25] "sensitivity"     "specificity"     "tnr"            
+#> [28] "tpr"             "weighted_kappa2"
 
 ## Metrics available for resample output
 metricinfo(res) %>% names
-#> [1] "accuracy"      "brier"         "cross_entropy" "kappa2"       
-#> [5] "pr_auc"        "roc_auc"
+#> [1] "accuracy"      "auc"           "brier"         "cross_entropy"
+#> [5] "kappa2"        "pr_auc"        "roc_auc"
 
 ## User-specified metrics
 performance(res, c(accuracy, kappa2)) %>% summary
@@ -2163,7 +2166,7 @@ nnetres_versicolor <- resample(fo_versicolor, data = iris,  model = NNetModel, c
 
 res_versicolor <- Resamples(gbmres_versicolor, rfres_versicolor, nnetres_versicolor)
 lf <- lift(res_versicolor)
-plot(lf, find = 75)
+plot(lf, find = 0.75)
 ```
 
 <img src="man/figures/README-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />

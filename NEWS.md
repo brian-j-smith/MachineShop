@@ -2,6 +2,17 @@
 
 ## Version Updates
 
+## 1.2.0
+* Implement metrics: ``auc``, ``fnr``, ``fpr``, ``rpp``, ``tnr``, ``tpr``.
+* Implement performance curves, including ROC and precision recall.
+* Add calibration curves for predicted survival means.
+* Add lift curves for predicted survival probabilities.
+* Add recipe support for survival and matrix outcomes.
+* Rename ``MLControl`` argument ``surv_times`` to ``times``.
+* Fix identification of recipe ``case_weight`` and ``case_strata`` variables.
+* Bring Introduction vignette up to date with package features.
+
+
 ## 1.1.0
 * Implement model: ``BARTModel``.
 * Implement model tuning over automatically generated grids of parameter values and random sampling of grid points.
