@@ -43,8 +43,7 @@ modelmetrics(...)
 \item{x}{observed responses or class containing observed and predicted
 responses.}
 
-\item{...}{arguments passed from the \code{Resamples} method to the others
-and from deprecated function \code{modelmetrics} to \code{performance}.}
+\item{...}{arguments passed from the \code{Resamples} method to the others.}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}

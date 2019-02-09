@@ -322,7 +322,8 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
 MLModel_depwarn <- function(nvars = NULL, ...) {
   if (!is.null(nvars)) {
     depwarn("'nvars' argument to MLModel is deprecated",
-            "specify the design matrix type with 'design' instead")
+            "specify the design matrix type with 'design' instead",
+            expired = TRUE)
   }
 }
 

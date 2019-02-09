@@ -422,6 +422,6 @@ warn <- function(...) {
 }
 
 
-depwarn <- function(old, new) {
-  warn(old, "\n", new)
+depwarn <- function(old, new, expired = FALSE) {
+  ifelse(expired, stop, warning)(old, ";\n", new, call. = FALSE)
 }

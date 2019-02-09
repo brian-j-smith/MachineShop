@@ -15,8 +15,7 @@
 #' probabilities were predicted.
 #' @param na.rm logical indicating whether to remove observed or predicted
 #' responses that are \code{NA} when calculating metrics.
-#' @param ... arguments passed from the \code{Resamples} method to the others
-#' and from deprecated function \code{modelmetrics} to \code{performance}.
+#' @param ... arguments passed from the \code{Resamples} method to the others.
 #' 
 #' @seealso \code{\link{response}}, \code{\link{predict}},
 #' \code{\link{resample}}, \code{\link{confusion}}, \code{\link{metrics}},
@@ -142,6 +141,8 @@ performance.Surv <- function(x, y, metrics =
 #' @rdname performance
 #' 
 modelmetrics <- function(...) {
-  depwarn("'modelmetrics' is deprecated", "use 'performance' instead")
+  depwarn("'modelmetrics' is deprecated",
+          "use 'performance' instead",
+          expired = TRUE)
   performance(...)
 }

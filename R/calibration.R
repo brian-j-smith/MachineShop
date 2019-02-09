@@ -38,7 +38,8 @@ calibration <- function(x, y = NULL, breaks = 10, times = numeric(), ...) {
 calibration_depwarn <- function(n = NULL, ...) {
   if (!is.null(n)) {
     depwarn("'n' argument to calibration is deprecated",
-            "use 'breaks' instead")
+            "use 'breaks' instead",
+            expired = TRUE)
   }
 }
 
