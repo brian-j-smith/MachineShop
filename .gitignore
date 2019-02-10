@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+MachineShop.Rproj
+docs/html/_site
+docs/html/*_cache
+docs/html/*_files
+inst/doc
+tests/testthat/*.pdf
+tmp

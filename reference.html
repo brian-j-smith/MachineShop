@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Reference</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">MachineShop for R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="using.html">Using</a>
+</li>
+<li>
+  <a href="reference.html">Reference</a>
+</li>
+<li>
+  <a href="examples.html">Examples</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/brian-j-smith/MachineShop">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Reference</h1>
+
+</div>
+
+
+<div id="package-analysis-function" class="section level1">
+<h1>Package Analysis Function</h1>
+<div id="training" class="section level2">
+<h2>Training</h2>
+<table>
+<tbody>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/fit"><code>fit</code></a></td>
+<td>Model fitting</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/resample"><code>resample</code></a></td>
+<td>Resample estimation of model performance</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/tune"><code>tune</code></a></td>
+<td>Model tuning and selection</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+</div>
+<div id="prediction" class="section level2">
+<h2>Prediction</h2>
+<table>
+<tbody>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/predict"><code>predict</code></a></td>
+<td>Model prediction</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+</div>
+<div id="performance-assessment" class="section level2">
+<h2>Performance Assessment</h2>
+<table>
+<tbody>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/calibration"><code>calibration</code></a></td>
+<td>Model calibration</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/confusion"><code>confusion</code></a></td>
+<td>Confusion matrices</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/dependence"><code>dependence</code></a></td>
+<td>Partial dependence</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/diff"><code>diff</code></a></td>
+<td>Model performance differences</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/lift"><code>lift</code></a></td>
+<td>Lift curves</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/performance"><code>performance</code></a></td>
+<td>Model performance metrics</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/performance_curve"><code>performance_curve</code></a></td>
+<td>Model performance curves</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/varimp"><code>varimp</code></a></td>
+<td>Variable importance</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+</div>
+<div id="resample-control-structures" class="section level2">
+<h2>Resample Control Structures</h2>
+<table>
+<tbody>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/BootControl"><code>BootControl</code></a></td>
+<td>Simple bootstrap</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/CVControl"><code>CVControl</code></a></td>
+<td>Repeated K-fold cross-validation</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/OOBControl"><code>OOBControl</code></a></td>
+<td>Out-of-bootstrap</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/SplitControl"><code>SplitControl</code></a></td>
+<td>Split training-testing</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/TrainControl"><code>TrainControl</code></a></td>
+<td>Training resubstitution</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+</div>
+<div id="analysis-summaries" class="section level2">
+<h2>Analysis Summaries</h2>
+<table>
+<tbody>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/plot"><code>plot</code></a></td>
+<td>Graphical summaries</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/summary"><code>summary</code></a></td>
+<td>Tabular summaries</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+</div>
+<div id="information" class="section level2">
+<h2>Information</h2>
+<table>
+<tbody>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/metricinfo"><code>metricinfo</code></a></td>
+<td>Metric function names and attributes</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/modelinfo"><code>modelinfo</code></a></td>
+<td>Model constructor names and attributes</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+</div>
+<div id="package-extension" class="section level2">
+<h2>Package Extension</h2>
+<table>
+<tbody>
+<tr class="odd">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/MLMetric"><code>MLMetric</code></a></td>
+<td>Metric class constructor</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/MLModel"><code>MLModel</code></a></td>
+<td>Model class constructor</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+</div>
+</div>
+<div id="model-constructor-functions" class="section level1">
+<h1>Model Constructor Functions</h1>
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Table. Package-supplied model constructor functions and supported response variable types.
+</caption>
+<thead>
+<tr>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="3">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">
+Response Variable Types
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+Function
+</th>
+<th style="text-align:left;">
+Label
+</th>
+<th style="text-align:center;">
+Categorical<sup>1</sup>
+</th>
+<th style="text-align:center;">
+Continuous<sup>2</sup>
+</th>
+<th style="text-align:center;">
+Survival<sup>3</sup>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/AdaBagModel"><code>AdaBagModel</code></a>
+</td>
+<td style="text-align:left;">
+Bagging with Classification Trees
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/AdaBoostModel"><code>AdaBoostModel</code></a>
+</td>
+<td style="text-align:left;">
+Boosting with Classification Trees
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/BARTModel"><code>BARTModel</code></a>
+</td>
+<td style="text-align:left;">
+Bayesian Additive Regression Trees
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/BARTMachineModel"><code>BARTMachineModel</code></a>
+</td>
+<td style="text-align:left;">
+Bayesian Additive Regression Trees
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/BlackBoostModel"><code>BlackBoostModel</code></a>
+</td>
+<td style="text-align:left;">
+Gradient Boosting with Regression Trees
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/C50Model"><code>C50Model</code></a>
+</td>
+<td style="text-align:left;">
+C5.0 Classification
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/CForestModel"><code>CForestModel</code></a>
+</td>
+<td style="text-align:left;">
+Conditional Random Forests
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/CoxModel"><code>CoxModel</code></a>
+</td>
+<td style="text-align:left;">
+Cox Regression
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/CoxStepAICModel"><code>CoxStepAICModel</code></a>
+</td>
+<td style="text-align:left;">
+Cox Regression (Stepwise)
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/EarthModel"><code>EarthModel</code></a>
+</td>
+<td style="text-align:left;">
+Multivariate Adaptive Regression Splines
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/FDAModel"><code>FDAModel</code></a>
+</td>
+<td style="text-align:left;">
+Flexible Discriminant Analysis
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/GAMBoostModel"><code>GAMBoostModel</code></a>
+</td>
+<td style="text-align:left;">
+Gradient Boosting with Additive Models
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/GBMModel"><code>GBMModel</code></a>
+</td>
+<td style="text-align:left;">
+Generalized Boosted Regression
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/GLMBoostModel"><code>GLMBoostModel</code></a>
+</td>
+<td style="text-align:left;">
+Gradient Boosting with Linear Models
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/GLMModel"><code>GLMModel</code></a>
+</td>
+<td style="text-align:left;">
+Generalized Linear Models
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/GLMStepAICModel"><code>GLMStepAICModel</code></a>
+</td>
+<td style="text-align:left;">
+Generalized Linear Models (Stepwise)
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/GLMNetModel"><code>GLMNetModel</code></a>
+</td>
+<td style="text-align:left;">
+Lasso and Elastic-Net
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+m, n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/KNNModel"><code>KNNModel</code></a>
+</td>
+<td style="text-align:left;">
+K-Nearest Neighbors Model
+</td>
+<td style="text-align:center;">
+f, o
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/LARSModel"><code>LARSModel</code></a>
+</td>
+<td style="text-align:left;">
+Least Angle Regression
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/LDAModel"><code>LDAModel</code></a>
+</td>
+<td style="text-align:left;">
+Linear Discriminant Analysis
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/LMModel"><code>LMModel</code></a>
+</td>
+<td style="text-align:left;">
+Linear Model
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+m, n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/MDAModel"><code>MDAModel</code></a>
+</td>
+<td style="text-align:left;">
+Mixture Discriminant Analysis
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/NaiveBayesModel"><code>NaiveBayesModel</code></a>
+</td>
+<td style="text-align:left;">
+Naive Bayes Classifier
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/NNetModel"><code>NNetModel</code></a>
+</td>
+<td style="text-align:left;">
+Feed-Forward Neural Networks
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/PDAModel"><code>PDAModel</code></a>
+</td>
+<td style="text-align:left;">
+Penalized Discriminant Analysis
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/PLSModel"><code>PLSModel</code></a>
+</td>
+<td style="text-align:left;">
+Partial Least Squares
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/POLRModel"><code>POLRModel</code></a>
+</td>
+<td style="text-align:left;">
+Ordered Logistic Regression
+</td>
+<td style="text-align:center;">
+o
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/QDAModel"><code>QDAModel</code></a>
+</td>
+<td style="text-align:left;">
+Quadratic Discriminant Analysis
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/RandomForestModel"><code>RandomForestModel</code></a>
+</td>
+<td style="text-align:left;">
+Random Forests
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/RangerModel"><code>RangerModel</code></a>
+</td>
+<td style="text-align:left;">
+Fast Random Forests
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/RPartModel"><code>RPartModel</code></a>
+</td>
+<td style="text-align:left;">
+Recursive Partitioning and Regression Trees
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/StackedModel"><code>StackedModel</code></a>
+</td>
+<td style="text-align:left;">
+Stacked Regression
+</td>
+<td style="text-align:center;">
+f, o
+</td>
+<td style="text-align:center;">
+m, n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/SuperModel"><code>SuperModel</code></a>
+</td>
+<td style="text-align:left;">
+Super Learner
+</td>
+<td style="text-align:center;">
+f, o
+</td>
+<td style="text-align:center;">
+m, n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/SurvRegModel"><code>SurvRegModel</code></a>
+</td>
+<td style="text-align:left;">
+Parametric Survival
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/SurvRegStepAICModel"><code>SurvRegStepAICModel</code></a>
+</td>
+<td style="text-align:left;">
+Parametric Survival (Stepwise)
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/SVMModel"><code>SVMModel</code></a>
+</td>
+<td style="text-align:left;">
+Support Vector Machines
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/SVMANOVAModel"><code>SVMANOVAModel</code></a>
+</td>
+<td style="text-align:left;">
+Support Vector Machines (ANOVA)
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/SVMBesselModel"><code>SVMBesselModel</code></a>
+</td>
+<td style="text-align:left;">
+Support Vector Machines (Bessel)
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/SVMLaplaceModel"><code>SVMLaplaceModel</code></a>
+</td>
+<td style="text-align:left;">
+Support Vector Machines (Laplace)
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/SVMLinearModel"><code>SVMLinearModel</code></a>
+</td>
+<td style="text-align:left;">
+Support Vector Machines (Linear)
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/SVMPolyModel"><code>SVMPolyModel</code></a>
+</td>
+<td style="text-align:left;">
+Support Vector Machines (Poly)
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/SVMRadialModel"><code>SVMRadialModel</code></a>
+</td>
+<td style="text-align:left;">
+Support Vector Machines (Radial)
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/SVMSplineModel"><code>SVMSplineModel</code></a>
+</td>
+<td style="text-align:left;">
+Support Vector Machines (Spline)
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/SVMTanhModel"><code>SVMTanhModel</code></a>
+</td>
+<td style="text-align:left;">
+Support Vector Machines (Tanh)
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/TreeModel"><code>TreeModel</code></a>
+</td>
+<td style="text-align:left;">
+Regression and Classification Trees
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/XGBModel"><code>XGBModel</code></a>
+</td>
+<td style="text-align:left;">
+Extreme Gradient Boosting
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/XGBDARTModel"><code>XGBDARTModel</code></a>
+</td>
+<td style="text-align:left;">
+Extreme Gradient Boosting (DART)
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/XGBLinearModel"><code>XGBLinearModel</code></a>
+</td>
+<td style="text-align:left;">
+Extreme Gradient Boosting (Linear)
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/XGBTreeModel"><code>XGBTreeModel</code></a>
+</td>
+<td style="text-align:left;">
+Extreme Gradient Boosting (Tree)
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+n
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; border: 0;" colspan="100%">
+<sup>1</sup> b = binary factor, f = factor, o = ordered factor
+</td>
+</tr>
+<tr>
+<td style="padding: 0; border: 0;" colspan="100%">
+<sup>2</sup> m = matrix, n = numeric
+</td>
+</tr>
+<tr>
+<td style="padding: 0; border: 0;" colspan="100%">
+<sup>3</sup> S = Surv
+</td>
+</tr>
+</tfoot>
+</table>
+</div>
+<div id="metric-functions" class="section level1">
+<h1>Metric Functions</h1>
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Table. Package-supplied performance metric functions and supported response variable types.
+</caption>
+<thead>
+<tr>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden" colspan="1">
+</th>
+<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="3">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">
+Response Variable Types
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+Function
+</th>
+<th style="text-align:left;">
+Label
+</th>
+<th style="text-align:center;">
+Categorical<sup>1</sup>
+</th>
+<th style="text-align:center;">
+Continuous<sup>2</sup>
+</th>
+<th style="text-align:center;">
+Survival<sup>3</sup>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/accuracy"><code>accuracy</code></a>
+</td>
+<td style="text-align:left;">
+Accuracy
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/auc"><code>auc</code></a>
+</td>
+<td style="text-align:left;">
+Area Under Performance Curve
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/brier"><code>brier</code></a>
+</td>
+<td style="text-align:left;">
+Brier Score
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/cindex"><code>cindex</code></a>
+</td>
+<td style="text-align:left;">
+Concordance Index
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/cross_entropy"><code>cross_entropy</code></a>
+</td>
+<td style="text-align:left;">
+Cross Entropy
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/f_score"><code>f_score</code></a>
+</td>
+<td style="text-align:left;">
+F Score
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/fnr"><code>fnr</code></a>
+</td>
+<td style="text-align:left;">
+False Negative Rate
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/fpr"><code>fpr</code></a>
+</td>
+<td style="text-align:left;">
+False Positive Rate
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/gini"><code>gini</code></a>
+</td>
+<td style="text-align:left;">
+Gini Coefficient
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+m, n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/kappa2"><code>kappa2</code></a>
+</td>
+<td style="text-align:left;">
+Cohen’s Kappa
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/mae"><code>mae</code></a>
+</td>
+<td style="text-align:left;">
+Mean Absolute Error
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+m, n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/mse"><code>mse</code></a>
+</td>
+<td style="text-align:left;">
+Mean Squared Error
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+m, n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/msle"><code>msle</code></a>
+</td>
+<td style="text-align:left;">
+Mean Squared Log Error
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+m, n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/npv"><code>npv</code></a>
+</td>
+<td style="text-align:left;">
+Negative Predictive Value
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/ppv"><code>ppv</code></a>
+</td>
+<td style="text-align:left;">
+Positive Predictive Value
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/pr_auc"><code>pr_auc</code></a>
+</td>
+<td style="text-align:left;">
+Area Under Precision-Recall Curve
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/precision"><code>precision</code></a>
+</td>
+<td style="text-align:left;">
+Precision
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/r2"><code>r2</code></a>
+</td>
+<td style="text-align:left;">
+Coefficient of Determination
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+m, n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/recall"><code>recall</code></a>
+</td>
+<td style="text-align:left;">
+Recall
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/rmse"><code>rmse</code></a>
+</td>
+<td style="text-align:left;">
+Root Mean Squared Error
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+m, n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/rmsle"><code>rmsle</code></a>
+</td>
+<td style="text-align:left;">
+Root Mean Squared Log Error
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+m, n
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/roc_auc"><code>roc_auc</code></a>
+</td>
+<td style="text-align:left;">
+Area Under ROC Curve
+</td>
+<td style="text-align:center;">
+f
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/roc_index"><code>roc_index</code></a>
+</td>
+<td style="text-align:left;">
+ROC Index
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/rpp"><code>rpp</code></a>
+</td>
+<td style="text-align:left;">
+Rate of Positive Prediction
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/sensitivity"><code>sensitivity</code></a>
+</td>
+<td style="text-align:left;">
+Sensitivity
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/specificity"><code>specificity</code></a>
+</td>
+<td style="text-align:left;">
+Specificity
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/tnr"><code>tnr</code></a>
+</td>
+<td style="text-align:left;">
+True Negative Rate
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/tpr"><code>tpr</code></a>
+</td>
+<td style="text-align:left;">
+True Positive Rate
+</td>
+<td style="text-align:center;">
+b
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+S
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.1.0/topics/weighted_kappa2"><code>weighted_kappa2</code></a>
+</td>
+<td style="text-align:left;">
+Weighted Cohen’s Kappa
+</td>
+<td style="text-align:center;">
+o
+</td>
+<td style="text-align:center;">
+</td>
+<td style="text-align:center;">
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; border: 0;" colspan="100%">
+<sup>1</sup> b = binary factor, f = factor, o = ordered factor
+</td>
+</tr>
+<tr>
+<td style="padding: 0; border: 0;" colspan="100%">
+<sup>2</sup> m = matrix, n = numeric
+</td>
+</tr>
+<tr>
+<td style="padding: 0; border: 0;" colspan="100%">
+<sup>3</sup> S = Surv
+</td>
+</tr>
+</tfoot>
+</table>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
