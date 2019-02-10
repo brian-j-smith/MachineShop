@@ -27,7 +27,8 @@
 #' 
 #' @examples
 #' res <- resample(Species ~ ., data = iris, model = GBMModel)
-#' confusion(res)
+#' (conf <- confusion(res))
+#' plot(conf)
 #' 
 confusion <- function(x, y = NULL, cutoff = 0.5, times = numeric(), ...) {
   .confusion(x, y, cutoff = cutoff, times = times)

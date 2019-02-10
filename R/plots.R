@@ -208,7 +208,8 @@ plot.ConfusionMatrix <- function(x, ...) {
   ggplot(df, aes(Observed, Predicted, fill = Value)) +
     geom_raster() +
     labs(fill = "Probability") +
-    scale_fill_gradient(trans = "reverse")
+    scale_fill_gradient(trans = "reverse") +
+    coord_fixed()
 }
 
 
