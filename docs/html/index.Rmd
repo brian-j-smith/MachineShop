@@ -1,0 +1,7 @@
+---
+title: "MachineShop: Machine Learning Models and Tools for R"
+subtitle: "Package Version `r packageVersion('MachineShop')`"
+---
+
+```{r child = "../src/overview.Rmd"}
+```

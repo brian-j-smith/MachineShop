@@ -1,0 +1,83 @@
+# Melanoma Example
+
+The package is illustrated in the following sections with an overall survival analysis example in which the response variable is a time to event outcome.  Since survival outcomes are a combination of numerical (time to event) and categorical (event) variables, package features for both variable types will be utilized in the example.  Outcomes other than survival, including nominal and ordinal factors as well as numeric vectors and matrices, are supported by `MachineShop` and will be discussed.
+
+Survival analysis is performed with the `Melanoma` dataset from the `MASS` package [@andersen:1993:SMB].  This dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas.  Also provided are potential predictors of the survival outcomes.  The analysis begins by loading required packages `MachineShop`, `survival`, and `MASS` as well as `magrittr` [@bache:2014:MFP] for its pipe (`%>%`) operator to simplify some of the code syntax.  For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one.  The dataset is then split into a training set on which a survival model will be fit and a test set on which predictions will be made.  A global formula `surv_fo` is defined to relate the predictors on the right hand side to the overall survival outcome on the left and will be used in all of the survival models in this vignette. 
+
+```{r}
+## Analysis libraries
+library(MachineShop)
+library(survival)
+library(MASS)
+library(magrittr)
+
+## Malignant melanoma analysis dataset
+surv_df <- within(Melanoma, status <- as.numeric(status != 2))
+```
+
+<center>
+Table 1. Variable summaries for the Melanoma survival analysis example.
+</center>
+
+```{r echo=FALSE}
+median_range <- function(x) paste0(median(x), " (", toString(range(x)), ")")
+n_perc <- function(x) paste0(sum(x), " (", round(100 * mean(x), 2), "%)")
+
+surv_summary <- list(
+  list("Number of subjects" = ~ length(status)),
+  "time" = list("Median (Range)" = ~ median_range(time)),
+  "status" = list("1 = Dead" = ~ n_perc(status == 1),
+                  "0 = Alive" = ~ n_perc(status == 0)),
+  "sex" = list("1 = Male" = ~ n_perc(sex == 1),
+               "0 = Female" = ~ n_perc(sex == 0)),
+  "age" = list("Median (Range)" = ~ median_range(age)),
+  "year" = list("Median (Range)" = ~ median_range(year)),
+  "thickness" = list("Median (Range)" = ~ median_range(thickness)),
+  "ulcer" = list("1 = Presence" = ~ n_perc(ulcer == 1),
+                 "0 = Absence" = ~ n_perc(ulcer == 0))
+)
+
+vals <- sapply(unlist(unname(surv_summary), recursive = FALSE), function(x) {
+  eval(x[[2]], envir = surv_df)
+})
+
+kbl <- data.frame(Characteristic = names(vals), Value = vals) %>%
+  kable(align = c("l", "c")) %>%
+  kable_styling(c("striped", "condensed"), full_width = FALSE, position = "center")
+
+start_row <- 1
+for (i in seq(surv_summary)) {
+  group_label <- names(surv_summary)[i]
+  group_length <- length(surv_summary[[i]])
+  if (nzchar(group_label)) {
+    kbl <- group_rows(kbl, group_label, start_row, start_row + group_length - 1)
+  }
+  start_row <- start_row + group_length
+}
+
+kbl
+```
+
+```{r echo=FALSE}
+col <- "#F8766D"
+survfit(Surv(time, status) ~ 1, data = surv_df) %>%
+  with(data.frame(time, surv, lower, upper, censor = ifelse(n.censor > 0, time, NA))) %>%
+  ggplot(aes(x = time, y = surv)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), fill = col, alpha = 0.2) +
+  geom_step(color = col) +
+  geom_point(aes(x = censor), shape = 3, color = col) +
+  coord_cartesian(ylim = c(0, 1)) +
+  labs(x = "Follow-Up Time (Days)", y = "Overall Survival Probability",
+       title = "Kaplan-Meier survival plot")
+```
+
+```{r}
+## Training and test sets
+set.seed(123)
+train_indices <- sample(nrow(surv_df), nrow(surv_df) * 2 / 3)
+surv_train <- surv_df[train_indices, ]
+surv_test <- surv_df[-train_indices, ]
+
+## Global formula for the analysis
+surv_fo <- Surv(time, status) ~ sex + age + year + thickness + ulcer
+```

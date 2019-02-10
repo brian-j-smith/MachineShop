@@ -1,0 +1,130 @@
+# Resample Performance Estimation
+
+
+## Algorithms
+
+Model performance can be estimated with resampling methods that simulate repeated training and test set fits and predictions.  With these methods, performance metrics are computed on each resample to produce an empirical distribution for inference.  Resampling is controlled in the `MachineShop` with the functions:
+
+BootControl
+  : Simple bootstrap resampling.  Models are repeatedly fit with bootstrap resampled training sets and used to predict the full data set.
+
+CVControl
+  : Repeated K-fold cross-validation.  The full data set is repeatedly partitioned into K-folds.  For a given partitioning, prediction is performed on each of the K folds with models fit on all remaining folds.
+
+OOBControl
+  : Out-of-bootstrap resampling.  Models are fit with bootstrap resampled training sets and used to predict the unsampled cases.
+  
+SplitControl
+  : Split training and test sets.  The data are randomly partitioned into a training and test set.
+  
+TrainControl
+  : Training resubstitution.  A model is fit on and used to predict the full training set in order to estimate training, or apparent, error.
+  
+For the survival example, repeated cross-validation control structures are defined to estimate model performance in predicting survival means and 5 and 10-year survival probabilities.  In addition to arguments controlling the resampling algorithms, a `seed` can be set to ensure reproducibility of resampling results obtained with the structures.
+
+```{r}
+## Control parameters for K-fold cross-validation
+
+## Prediction of survival means
+surv_means_control <- CVControl(folds = 5, repeats = 3, seed = 123)
+
+## Prediction of survival probabilities
+surv_probs_control <- CVControl(folds = 5, repeats = 3, times = surv_times, seed = 123)
+```
+
+
+## Parallel Processing
+
+Resampling is implemented with the `foreach` package [@microsoft:2017:FPF] and will run in parallel if a compatible backend is loaded, such as that provided by the `doParallel` package [@microsoft:2017:DFP].
+
+```{r}
+## Register multiple cores for parallel computations
+library(doParallel)
+registerDoParallel(cores = 2)
+```
+
+
+## Resample Function
+
+Resampling is performed by calling the `resample` function with a variable specification, model, and control structure.  Like the `fit` function, variables may be specified in terms of a traditional formula, model frame, or recipe.  Summary statistics and plots of resample output can be obtained with the `summary` and `plot` functions.
+
+```{r}
+## Resample estimation for survival means and probabilities
+(res_means <- resample(surv_fo, data = surv_df, model = GBMModel, control = surv_means_control))
+
+(res_probs <- resample(surv_fo, data = surv_df, model = GBMModel, control = surv_probs_control))
+
+summary(res_probs)
+
+plot(res_probs)
+```
+
+The `summary` function when applied directly to output from `resample` computes default performance metrics as described in the *Performance Function* section.  Likewise, the `metricinfo` and `performance` functions can be applied to the output in order to list and compute applicable metrics.  However, unlike in the case of `performance` applied to separate observed and predicted survival probability responses, survival times need not be specified when applied to resampled output.
+
+```{r}
+## Resample-specific metrics
+metricinfo(res_probs) %>% names
+
+## User-specified survival probability metrics
+summary(performance(res_probs, metrics = c(sensitivity, specificity)))
+```
+
+
+## Stratified Resampling
+
+Stratification of cases for the construction of resampled training and test sets can be employed to help achieve balance across the sets.  Stratified resampling is automatically performed if variable specification is in terms of a traditional formula and will be done according to the response variable if a numeric vector or factor, the event variable if survival, and the first variable if a numeric matrix.  For model frames and recipes, stratification variables must be defined explicitly with the `strata` argument to the `ModelFrame` constructor or with the `"case_strata"` role designation in a recipe step. 
+
+```{r results="hide"}
+## Model frame with case status stratification
+mf <- ModelFrame(surv_fo, data = surv_df, strata = status)
+
+resample(mf, model = GBMModel)
+
+## Recipe with case status stratification
+rec <- recipe(time + status ~ ., data = surv_df) %>%
+  add_role(time, new_role = "surv_time") %>%
+  add_role(status, new_role = "surv_event") %>%
+  add_role(status, new_role = "case_strata")
+
+resample(rec, model = GBMModel)
+```
+
+
+## Model Comparisons
+
+Resampled metrics from different models can be combined for comparison with the `Resamples` function.  Optional names given on the left hand side of equal operators within calls to `Resamples` will be used as labels in output from the `summary` and `plot` functions.  For comparisons of resampled output, the same control structure must be used in all associated calls to `resample` to ensure that resulting model metrics are computed on the same resampled training and test sets.
+
+```{r}
+## Resample estimation
+res1 <- resample(surv_fo, data = surv_df, model = GBMModel(n.trees = 25),
+                 control = surv_means_control)
+res2 <- resample(surv_fo, data = surv_df, model = GBMModel(n.trees = 50),
+                 control = surv_means_control)
+res3 <- resample(surv_fo, data = surv_df, model = GBMModel(n.trees = 100),
+                 control = surv_means_control)
+
+## Combine resample output for comparison
+(res <- Resamples(GBM1 = res1, GBM2 = res2, GBM3 = res3))
+
+summary(res)
+
+plot(res)
+plot(res, type = "density")
+plot(res, type = "errorbar")
+plot(res, type = "violin")
+```
+
+Pairwise model differences for each metric can be calculated with the `diff` function applied to results from a call to `Resamples`.  The differences can be summarized descriptively with the `summary` and `plot` functions and assessed for statistical significance with the `t.test` function.
+
+```{r}
+## Pairwise model comparisons
+(perfdiff <- diff(res))
+
+summary(perfdiff)
+
+plot(perfdiff)
+```
+
+```{r}
+t.test(perfdiff)
+```

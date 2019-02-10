@@ -64,12 +64,12 @@ info <- modelinfo()
 
 # Melanoma Example
 
-The package will be illustrated in the following sections with an overall survival analysis example in which the response variable is a time to event outcome.  Since survival outcomes are a combination of numerical (time to event) and categorical (event) variables, package features for both variable types will be utilized in the example.  Outcomes other than survival, including nominal and ordinal factors as well as numeric vectors and matrices, are supported by `MachineShop` and will be discussed.
+The package is illustrated in the following sections with an overall survival analysis example in which the response variable is a time to event outcome.  Since survival outcomes are a combination of numerical (time to event) and categorical (event) variables, package features for both variable types will be utilized in the example.  Outcomes other than survival, including nominal and ordinal factors as well as numeric vectors and matrices, are supported by `MachineShop` and will be discussed.
 
 Survival analysis is performed with the `Melanoma` dataset from the `MASS` package [@andersen:1993:SMB].  This dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas.  Also provided are potential predictors of the survival outcomes.  The analysis begins by loading required packages `MachineShop`, `survival`, and `MASS` as well as `magrittr` [@bache:2014:MFP] for its pipe (`%>%`) operator to simplify some of the code syntax.  For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one.  The dataset is then split into a training set on which a survival model will be fit and a test set on which predictions will be made.  A global formula `surv_fo` is defined to relate the predictors on the right hand side to the overall survival outcome on the left and will be used in all of the survival models in this vignette. 
 
 ```{r}
-## Survival analysis libraries
+## Analysis libraries
 library(MachineShop)
 library(survival)
 library(MASS)
@@ -138,7 +138,7 @@ survfit(Surv(time, status) ~ 1, data = surv_df) %>%
 ```{r}
 ## Training and test sets
 set.seed(123)
-train_indices <- sample.int(nrow(surv_df), nrow(surv_df) * 2 / 3)
+train_indices <- sample(nrow(surv_df), nrow(surv_df) * 2 / 3)
 surv_train <- surv_df[train_indices, ]
 surv_test <- surv_df[-train_indices, ]
 
@@ -537,8 +537,7 @@ Performance metrics are defined below for numeric vector responses.  If applied 
   : Mean squared log error, $MSLE = \frac{1}{n}\sum_{i=1}^n(log(1 + y_i) - log(1 + \hat{y}_i))^2$.
 
 `r2`
-  : One minus residual divided by total sums of squares,
-  $$R^2 = 1 - \frac{\sum_{i=1}^n(y_i - \hat{y}_i)^2}{\sum_{i=1}^n(y_i - \bar{y})^2}.$$
+  : One minus residual divided by total sums of squares, $R^2 = 1 - \sum_{i=1}^n(y_i - \hat{y}_i)^2 / \sum_{i=1}^n(y_i - \bar{y})^2$.
 
 `rmse`
   : Square root of mean squared error.
@@ -668,9 +667,12 @@ Resampled metrics from different models can be combined for comparison with the 
 
 ```{r}
 ## Resample estimation
-res1 <- resample(surv_fo, data = surv_df, model = GBMModel(n.trees = 25), control = surv_means_control)
-res2 <- resample(surv_fo, data = surv_df, model = GBMModel(n.trees = 50), control = surv_means_control)
-res3 <- resample(surv_fo, data = surv_df, model = GBMModel(n.trees = 100), control = surv_means_control)
+res1 <- resample(surv_fo, data = surv_df, model = GBMModel(n.trees = 25),
+                 control = surv_means_control)
+res2 <- resample(surv_fo, data = surv_df, model = GBMModel(n.trees = 50),
+                 control = surv_means_control)
+res3 <- resample(surv_fo, data = surv_df, model = GBMModel(n.trees = 100),
+                 control = surv_means_control)
 
 ## Combine resample output for comparison
 (res <- Resamples(GBM1 = res1, GBM2 = res2, GBM3 = res3))

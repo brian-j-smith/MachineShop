@@ -1,0 +1,183 @@
+# Iris Flowers Species
+
+The following illustrates use of the package to predict the species of flowers in Edgar Anderson's iris data set.
+
+
+## Training and Test Set Analysis
+
+```{r}
+## Analysis packages
+library(MachineShop)
+library(magrittr)
+
+## Iris flower species dataset
+summary(iris)
+
+## Training and test sets
+set.seed(123)
+train_indices <- sample(nrow(iris), nrow(iris) * 2 / 3)
+train <- iris[train_indices, ]
+test <- iris[-train_indices, ]
+
+## Model formula
+fo <- Species ~ .
+
+## Models available for factor responses
+modelinfo(factor(0)) %>% names
+
+## Model-specific information
+modelinfo(GBMModel)
+
+## Generalized boosted model fit to training set
+iris_fit <- fit(fo, data = train, model = GBMModel)
+
+## Variable importance
+(vi <- varimp(iris_fit))
+
+plot(vi)
+```
+
+```{r}
+## Test set predicted probabilities
+predict(iris_fit, newdata = test, type = "prob") %>% head
+
+## Test set predicted classifications
+predict(iris_fit, newdata = test) %>% head
+
+## Test set performance
+obs <- response(fo, data = test)
+pred <- predict(iris_fit, newdata = test, type = "prob")
+performance(obs, pred)
+```
+
+
+## Resampling
+
+```{r, fig.height = 4}
+## Resample estimation of model performance
+(res <- resample(fo, data = iris, model = GBMModel, control = CVControl))
+
+summary(res)
+
+plot(res)
+```
+
+
+## Performance Metrics
+
+```{r}
+## Default performance metrics
+performance(res) %>% summary
+
+## Metrics available for the resample output
+metricinfo(res) %>% names
+
+## User-specified metrics
+performance(res, c(accuracy, kappa2)) %>% summary
+```
+
+
+## Model Tuning
+
+```{r, fig.height = 4}
+## Tune over a grid of model parameters
+iris_tune <- tune(fo, data = iris, model = GBMModel,
+                  grid = expand.grid(n.trees = c(25, 50, 100),
+                                     interaction.depth = 1:3,
+                                     n.minobsinnode = c(5, 10)))
+
+plot(iris_tune, type = "line")
+```
+
+```{r}
+## Fit the selected model
+iris_fit <- fit(fo, data = iris, model = iris_tune)
+varimp(iris_fit)
+```
+
+
+## Model Comparisons
+
+```{r}
+## Model comparisons
+control <- CVControl(folds = 10, repeats = 5)
+
+res1 <- resample(fo, data = iris, model = GBMModel(n.tree = 50), control = control)
+res2 <- resample(fo, data = iris, model = RandomForestModel(ntree = 50), control = control)
+res3 <- resample(fo, data = iris, model = NNetModel(size = 5), control = control)
+
+res <- Resamples(GBM = res1, RF = res2, NNet = res3)
+summary(res)
+
+plot(res)
+```
+
+```{r}
+## Pairwise model differences and t-tests
+perfdiff <- diff(res)
+summary(perfdiff)
+
+t.test(perfdiff)
+
+plot(perfdiff)
+```
+
+
+## Ensemble Models
+
+```{r}
+## Stacked regression
+stackedmodel <- StackedModel(GBMModel, RandomForestModel, NNetModel)
+res_stacked <- resample(fo, data = iris, model = stackedmodel)
+summary(res_stacked)
+
+## Super learner
+supermodel <- SuperModel(GBMModel, RandomForestModel, NNetModel)
+res_super <- resample(fo, data = iris, model = supermodel)
+summary(res_super)
+```
+
+
+## Calibration Curves
+
+```{r results = "hide"}
+cal <- calibration(res1)
+plot(cal, se = TRUE)
+```
+
+
+## Confusion Matrices
+
+```{r}
+(conf <- confusion(res1, cutoff = NULL))
+
+summary(conf)
+```
+
+```{r results = "hide"}
+plot(conf)
+```
+
+
+## Partial Dependence Plots
+
+```{r results = "hide"}
+pd <- dependence(iris_fit, select = c(Petal.Length, Petal.Width))
+plot(pd)
+```
+
+
+## Preprocessing Recipe
+
+```{r}
+library(recipes)
+
+rec <- recipe(fo, data = iris) %>%
+  add_role(Species, new_role = "case_strata")
+
+iris_fit <- fit(rec, model = GBMModel)
+varimp(iris_fit)
+
+res <- resample(rec, model = GBMModel, control = CVControl)
+summary(res)
+```

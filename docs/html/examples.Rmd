@@ -1,0 +1,11 @@
+---
+title: "Examples"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = TRUE)
+source("../src/setup.R")
+```
+
+```{r child = "../src/example_iris.Rmd"}
+```

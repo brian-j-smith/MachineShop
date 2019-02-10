@@ -1,0 +1,24 @@
+name: "MachineShop-website"
+navbar:
+  title: "MachineShop for R"
+  type: inverse
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Using"
+      href: using.html
+    - text: "Reference"
+      href: reference.html
+    - text: "Examples"
+      href: examples.html
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/brian-j-smith/MachineShop
+
+output:
+  html_document:
+    theme: cosmo
+    highlight: textmate
+    toc: true
+    toc_depth: 3
+    toc_float: true

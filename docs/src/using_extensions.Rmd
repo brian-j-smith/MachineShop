@@ -1,0 +1,34 @@
+# Package Extensions
+
+Custom models and metrics can be defined with the `MLModel` and `MLMetric` constructors for use with the model fitting, prediction, and performance assessment tools provided by the package.
+
+```{r}
+## Logistic regression model
+LogisticModel <- MLModel(
+  name = "LogisticModel",
+  types = "binary",
+  fit = function(formula, data, weights, ...) {
+    glm(formula, data = data, weights = weights, family = binomial, ...)
+  },
+  predict = function(object, newdata, ...) {
+    predict(object, newdata = newdata, type = "response")
+  },
+  varimp = function(object, ...) {
+    pchisq(coef(object)^2 / diag(vcov(object)), 1)
+  }
+)
+
+## F2 score metric
+f2_score <- MLMetric(
+  function(observed, predicted, ...) {
+    f_score(observed, predicted, beta = 2, ...)
+  },
+  name = "f2_score",
+  label = "F2 Score",
+  maximize = TRUE
+)
+
+library(MASS)
+res <- resample(type ~ ., data = Pima.tr, model = LogisticModel)
+summary(performance(res, metric = f2_score))
+```

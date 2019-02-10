@@ -1,0 +1,45 @@
+# Metric Functions
+
+```{r table_metrics, echo=FALSE}
+library(MachineShop)
+
+f <- function(x) {
+  types <- x$types
+  
+  is_type <- function(observed, predicted) {
+    any(types$observed == observed & types$predicted == predicted)
+  }
+  
+  categorical <- if (is_type("factor", "matrix")) "f" else
+    if (is_type("factor", "numeric")) "b" else NULL
+  if (is_type("ordered", "ordered")) categorical <- c(categorical, "o")
+
+  continuous <- NULL
+  if (is_type("matrix", "matrix")) continuous <- "m"
+  if (is_type("numeric", "numeric")) continuous <- c(continuous, "n")
+  
+  survival <- NULL
+  if (is_type("Surv", "matrix") || is_type("Surv", "numeric")) survival <- "S"
+
+  data.frame(
+    Label = x$label,
+    Categorical = toString(categorical),
+    Continuous = toString(continuous),
+    Survival = toString(survival)
+  )
+}
+
+info <- metricinfo()
+df <- cbind("Function" = rdoc_url(names(info)),
+            do.call(rbind, lapply(info, f)))
+names(df)[3:5] <- paste0(names(df)[3:5], footnote_marker_number(1:3))
+
+kable(df, caption = "Table. Package-supplied performance metric functions and supported response variable types.",
+      align = c("l", "l", "c", "c", "c"), row.names = FALSE,
+      escape = FALSE) %>%
+  kable_styling(c("striped", "condensed"), full_width = FALSE, position = "center") %>%
+  add_header_above(c(" " = 1, " " = 1, "Response Variable Types" = 3)) %>%
+  footnote(number = c("b = binary factor, f = factor, o = ordered factor",
+                      "m = matrix, n = numeric",
+                      "S = Surv"))
+```

@@ -1,0 +1,54 @@
+# Description
+
+`MachineShop` is a meta-package for statistical and machine learning with a unified interface for model fitting, prediction, performance assessment, and presentation of results.  Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes and for resample (bootstrap, cross-validation, and split training-test sets) estimation of model performance.  This vignette introduces the package interface with a survival data analysis example, followed by supported methods of variable specification; applications to other response variable types; available performance metrics, resampling techniques, and graphical and tabular summaries; and modeling strategies.
+
+
+# Features
+
+```{r echo=FALSE}
+library("MachineShop")
+info <- modelinfo()
+```
+
+* Unified and concise interface for model fitting, prediction, and performance assessment.
+* Current support for `r length(info)` established models from `r length(unique(sapply(info, function(x) x$packages[1])))` **R** packages.
+* Ensemble modeling with stacked regression and super learners.
+* Modeling of response variables types: binary factors, multi-class nominal and ordinal factors, numeric vectors and matrices, and censored time-to-event survival.
+* Model specification with traditional formulas and with flexible pre-processing [recipes](https://cran.r-project.org/package=recipes).
+* Resample estimation of predictive performance, including cross-validation, bootstrap resampling, and split training-test set validation.
+* Parallel execution of resampling algorithms.
+* Choices of performance metrics: accuracy, areas under ROC and precision recall curves, Brier score, coefficient of determination (R^2^), concordance index, cross entropy, F score, Gini coefficient, unweighted and weighted Cohen's kappa, mean absolute error, mean squared error, mean squared log error, positive and negative predictive values, precision and recall, and sensitivity and specificity.
+* Graphical and tabular performance summaries: calibration curves, confusion matrices, partial dependence plots, performance curves, lift curves, and variable importance.
+* Model tuning over automatically generated grids of parameter values and randomly sampled grid points.
+* Model selection and comparisons for any combination of models and model parameter values.
+* User-definable models and performance metrics.
+
+
+# Installation
+
+```{r eval = FALSE}
+# Current release from CRAN
+install.packages("MachineShop")
+
+# Development version from GitHub
+# install.packages("devtools")
+devtools::install_github("brian-j-smith/MachineShop", ref = "develop")
+
+# Development version with vignettes
+devtools::install_github("brian-j-smith/MachineShop", ref = "develop", build_vignettes = TRUE)
+```
+
+
+# Getting Started
+
+Once installed, the following `R` commands will load the package and display its help system documentation.
+
+```{r eval = FALSE, message = FALSE}
+library(MachineShop)
+
+# Package help summary
+?MachineShop
+
+# Vignette
+RShowDoc("Introduction", package = "MachineShop")
+```

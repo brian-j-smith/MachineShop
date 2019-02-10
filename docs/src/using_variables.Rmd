@@ -1,0 +1,69 @@
+# Variable Specifications
+
+Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Three main types of specifications are supported by the `fit`, `resample`, and `tune` functions: traditional formulas, model frames, and recipes.
+
+
+## Traditional Formula
+
+Models may be specified with a traditional formula and data frame pair, as was done at the start of the survival example.  With this specification, in-line functions, interactions, and `.` substitution of variables not already appearing in the formula may be included.
+
+```{r results="hide"}
+## Dataset library
+library(MASS)
+
+## Formula specification
+fit(medv ~ ., data = Boston, model = GBMModel)
+```
+
+
+## Model Frame
+
+Model frame specification is similar to the traditional formula, except with the formula and data frame pair defined within the `ModelFrame` class constructor provided by `MachineShop`.
+
+```{r results="hide"}
+## Model frame specification
+mf <- ModelFrame(medv ~ ., data = Boston)
+
+fit(mf, model = GBMModel)
+```
+
+The model frame approach has a few advantages over the traditional formula.  One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default.  This is often desirable for models that do not handle missing values.  Conversely, missing values can be retained in the model frame by setting its argument `na.action = na.pass` for models, like `GBMModel`, that do handle them.  A second advantage is that case weights can be included in the model frame to be passed on to the model fitting functions.
+
+```{r results="hide"}
+## Model frame specification with case weights
+mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp, data = esoph,
+                 weights = ncases + ncontrols)
+
+fit(mf, model = GBMModel)
+```
+
+A third, which will be illustrated later, is user-specification of a variable for stratified resampling via the constructor's `strata` argument.
+
+
+## Preprocessing Recipe
+
+The `recipes` package [@kuhn:2018:RPT] provides a flexible framework for defining predictor and response variables as well as preprocessing steps to be applied to them prior to model fitting.  Using recipes helps ensure that estimation of predictive performance accounts for all modeling step.  They are also a convenient way of consistently applying preprocessing to new data.  A basic recipe is given below in terms of the formula and data frame ingredients needed for the analysis.
+
+```{r results="hide"}
+## Recipe specification
+library(recipes)
+
+rec <- recipe(medv ~ ., data = Boston)
+
+fit(rec, model = GBMModel)
+```
+
+Case weights and stratified resampling are also supported for recipes via the designations of `"case_weight"` and `"case_strata"` roles, respectively.
+
+```{r results="hide"}
+## Recipe specification with case weights
+df <- within(esoph, {
+  y <- ncases / (ncases + ncontrols)
+  weights <- ncases + ncontrols
+})
+
+rec <- recipe(y ~ agegp + tobgp + alcgp + weights, data = df) %>%
+  update_role(weights, new_role = "case_weight")
+
+fit(rec, model = GBMModel)
+```

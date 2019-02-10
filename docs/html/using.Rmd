@@ -1,0 +1,38 @@
+---
+title: "Using MachineShop"
+bibliography: ../src/bibliography.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = TRUE)
+source("../src/setup.R")
+```
+
+```{r child = "../src/using_example.Rmd"}
+```
+
+```{r child = "../src/using_fit.Rmd"}
+```
+
+```{r child = "../src/using_variables.Rmd"}
+```
+
+```{r child = "../src/using_responses.Rmd"}
+```
+
+```{r child = "../src/using_performance.Rmd"}
+```
+
+```{r child = "../src/using_resample.Rmd"}
+```
+
+```{r child = "../src/using_analyses.Rmd"}
+```
+
+```{r child = "../src/using_strategies.Rmd"}
+```
+
+```{r child = "../src/using_extensions.Rmd"}
+```
+
+# References

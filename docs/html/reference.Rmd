@@ -1,0 +1,17 @@
+---
+title: "Reference"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = TRUE)
+source("../src/setup.R")
+```
+
+```{r child = "../src/functions.Rmd"}
+```
+
+```{r child = "../src/models.Rmd"}
+```
+
+```{r child = "../src/metrics.Rmd"}
+```

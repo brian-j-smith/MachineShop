@@ -1,0 +1,108 @@
+# Performance Analyses
+
+
+## Variable Importance
+
+The importance of variables in a model fit is estimated with the `varimp` function and plotted with `plot`.  Variable importance is a measure of the relative importance of predictors in a model and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most.
+
+```{r}
+## Predictor variable importance
+(vi <- varimp(surv_fit))
+
+plot(vi)
+```
+
+
+## Calibration Curves
+
+Agreement between model-predicted and observed values can be visualized with calibration curves.  In the construction of these curves, cases are partitioned into bins according to their (resampled) predicted responses.  Mean observed responses are then calculated within each of the bins and plotted on the vertical axis against the bin midpoints on the horizontal axis.  An option to produce curves smoothed over the individual predicted values is also provided.  Calibration curves that are close to the 45-degree line indicate close agreement between observed and predicted responses and a model that is said to be well calibrated. 
+
+```{r results="hide"}
+## Binned calibration curves
+cal <- calibration(res_probs, breaks = 10)
+plot(cal, se = TRUE)
+```
+
+```{r results="hide"}
+## Smoothed calibration curves
+cal <- calibration(res_probs, breaks = NULL)
+plot(cal)
+```
+
+
+## Confusion Matrices
+
+Confusion matrices of cross-classified observed and predicted factor responses are available with the `confusion` function.  They can be constructed with predicted class membership or with predicted class probabilities.  In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors and according to the class with highest probability for factors with more than two levels.  Performance metrics, such as those described earlier for binary factors, can be computed with the `performance` function and summarized with `summary` and `plot`.
+
+```{r}
+## Confusion matrices
+(conf <- confusion(res_probs, cutoff = 0.5))
+
+performance(conf, metrics = c("Accuracy" = accuracy,
+                              "Sensitivity" = sensitivity,
+                              "Specificity" = specificity))
+
+summary(conf)
+```
+
+```{r results="hide"}
+plot(conf)
+```
+
+
+## Partial Dependence Plots
+
+Partial dependence plots display the marginal effects of predictors on the response variable.  The response scale displayed in the plots will depend on the response type: probability for factors and predicted survival probabilities, original scale for numerics, and survival time for predicted survival means.
+
+```{r results = "hide"}
+## Partial dependence plots
+pd <- dependence(surv_fit, select = c(thickness, age))
+plot(pd)
+```
+
+
+## Performance Curves
+
+Tradeoffs between correct and incorrect classifications of binary outcomes, across the range of possible cutoff probabilities, can be studied with performance curves.
+
+
+### ROC
+
+Receiver operating characteristic (ROC) curves are one example in which true positive rates (sensitivity) are plotted against false positive rates (1 - specificity).  Area under resulting ROC curves can be computed as an overall measure of model predictive performance and interpreted as the probability that a randomly selected event case will have a higher predicted value than a randomly selected non-event case.
+
+```{r}
+## ROC curves
+roc <- performance_curve(res_probs)
+plot(roc, diagonal = TRUE)
+plot(roc, type = "cutoffs")
+```
+
+```{r}
+auc(roc)
+```
+
+
+### Precision Recall
+
+In general, any two binary response metrics may be specified for the construction of a performance curve.  Precision recall curves are another example.
+
+```{r}
+## Precision recall curves
+pr <- performance_curve(res_probs, metrics = c(precision, recall))
+plot(pr)
+```
+
+```{r}
+auc(pr)
+```
+
+
+### Lift
+
+Lift curves depict the rate at which observed binary responses are identifiable from (resampled) predicted response probabilities.  In particular, they plot the true positive findings (sensitivity) against the positive test rates for all possible classification probability cutoffs.  Accordingly, a lift curve can be interpreted as the rate at which positive responses are found as a function of the positive test rate among cases.
+
+```{r}
+## Lift curves
+lf <- lift(res_probs)
+plot(lf, find = 0.75)
+```

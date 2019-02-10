@@ -1,0 +1,44 @@
+# Model Fit and Prediction
+
+Model fitting requires user specification of an available model.  A named list of `MachineShop` models can be obtained interactively with the `modelinfo` function, and includes a descriptive `"label"`, the source `"packages"` on which the models depend, supported response variable `"types"`, and `"arguments"` that can be specified in calls to the model functions.  Note that in order to use a model the source packages must be installed with the `install.packages` or equivalent function, but need not be loaded with the `library` function.  Function `modelinfo` can be called with one or more model functions, function names, function calls, or observed response variables; and will return information on all models matching the calling arguments.
+
+```{r}
+## All available models
+modelinfo() %>% names
+
+## Survival-specific models
+modelinfo(Surv(0)) %>% names
+
+## Model-specific information
+modelinfo(GBMModel)
+```
+
+Information is displayed above for the `GBMModel` function which is a generalized boosted regression model --- a tree-based ensemble method that can be applied to survival outcomes.  Package models, like `GBMModel` can be specified in the `model` argument of the `fit` function to estimate a relationship (`surv_fo`) between predictors and an outcome based on a set of data (`surv_train`).  Argument specifications may be in terms of the model function, function name, or a function call.
+
+```{r results="hide"}
+## Generalized boosted regression fit
+
+## Model function
+surv_fit <- fit(surv_fo, data = surv_train, model = GBMModel)
+
+## Model function name
+fit(surv_fo, data = surv_train, model = "GBMModel")
+
+## Model function call
+fit(surv_fo, data = surv_train, model = GBMModel(n.trees = 100, interaction.depth = 1))
+```
+
+A `predict` function is supplied and can be applied to model fit results to obtain values predicted on a dataset specified with its `newdata` argument or on the original dataset if not specified.  Survival means are predicted for survival outcomes by default.  Alternatively, a `times` argument allows for specification of follow-up times at which to obtain predicted survival probabilities (`type = "prob"`) or 0-1 survival events (default: `type = "response"`).  In addition, the cutoff probability for classification of survival events or other binary responses can be set optionally in `predict` (default: `cutoff = 0.5`).
+
+
+```{r}
+## Predicted survival means
+predict(surv_fit, newdata = surv_test) %>% head
+
+## Predict survival probabilities and events at specified follow-up times
+surv_times <- 365 * c(5, 10)
+
+predict(surv_fit, newdata = surv_test, times = surv_times, type = "prob") %>% head
+
+predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.5) %>% head
+```

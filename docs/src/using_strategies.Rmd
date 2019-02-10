@@ -1,0 +1,75 @@
+# Modeling Strategies
+
+
+## Model Tuning
+
+Many of the modeling functions have arguments, or parameters, that control aspects of their model fitting algorithms.  For example, `GBMModel` parameters `n.trees` and `interaction.depth` control the number of decision trees to fit and the maximum depth of variable interactions.  The `tune` function performs model fitting over a grid of parameter values and returns the model with the most optimal values.  Optimality is determined based on the first performance metric supplied to the `metrics` argument of `tune`.  Furthermore, argument `grid` controls the construction of grid values and can be a single numeric value giving the grid length in each parameter dimension, a call to `Grid` with the grid `length` and number of grid points to sample at `random`, or a user-specified data frame of grid points.  Summary statistics and plots of resulting performances across all metrics and tuning parameters can be obtained with the `summary` and `plot` functions.
+
+```{r}
+## Tune over automatic grid of model parameters
+(surv_tune <- tune(surv_fo, data = surv_df, model = GBMModel,
+                   grid = 3,
+                   control = surv_means_control,
+                   metrics = c("CIndex" = cindex, "RMSE" = rmse)))
+
+summary(surv_tune)
+
+plot(surv_tune, type = "line")
+```
+
+```{r eval=FALSE}
+## Tune over randomly sampled grid points
+tune(surv_fo, data = surv_df, model = GBMModel,
+     grid = Grid(length = 100, random = 10),
+     control = surv_means_control)
+
+## Tune over user-specified grid points
+tune(surv_fo, data = surv_df, model = GBMModel,
+     grid = expand.grid(n.trees = c(25, 50, 100),
+                        interaction.depth = 1:3),
+     control = surv_means_control)
+```
+
+The return value of `tune` is a model object with the optimal tuning parameters and not a model fit object.  The returned model can be fit subsequently to a set of data with the `fit` function.
+
+```{r}
+## Fit the tuned model
+surv_fit <- fit(surv_fo, data = surv_df, model = surv_tune)
+(vi <- varimp(surv_fit))
+```
+
+
+## Model Selection
+
+Model selection can be performed with the `tune` function to select from any combination of models and model parameters.  It has as a special case the just-discussed tuning of a single model over a grid of parameter values.  In general, a list containing any combination of model functions, function names, and function calls can be supplied to the `models` argument of `tune` to perform model selection.  An `expand.model` helper function is additionally provided to expand a model over a grid of tuning parameters for inclusion in the list if so desired.  In this general form of model selection, the `grid` argument discussed previously for grid tuning is not used.
+
+```{r results="hide"}
+## Select from a list of candidate models
+model_list <- c(
+  expand.model(GBMModel, n.trees = c(50, 100), interaction.depth = 1:2),
+  GLMNetModel(lambda = 0.01),
+  CoxModel,
+  SurvRegModel
+)
+
+tune(surv_fo, data = surv_df, models = model_list,
+     control = surv_means_control)
+```
+
+
+## Ensemble Models
+
+Ensemble methods combine multiple base learning algorithms as a strategy to improve predictive performance.  Two ensemble methods implemented in `Machineshop` are *stacked regression* [@breiman:1996:SR] and *super learners* [@vanderLann:2007:SL].  Stacked regression fits a linear combination of resampled predictions from specified base learners; whereas, super learners fit a specified model, such as `GBMModel`, to the base learner predictions and optionally also to the original predictor variables.  Illustrated below is a performance evaluation of stacked regression and a super learner fit to gradient boosted, random forest, and Cox regression base learners.  In the second case, a separate gradient boosted model is used as the super learner.
+
+```{r}
+## Stacked regression
+stackedmodel <- StackedModel(GLMBoostModel, CForestModel, CoxModel)
+res_stacked <- resample(surv_fo, data = surv_df, model = stackedmodel)
+summary(res_stacked)
+
+## Super learner
+supermodel <- SuperModel(GLMBoostModel, CForestModel, CoxModel,
+                         model = GBMModel)
+res_super <- resample(surv_fo, data = surv_df, model = supermodel)
+summary(res_super)
+```

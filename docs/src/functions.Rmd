@@ -1,0 +1,80 @@
+# Package Analysis Function
+
+
+## Training
+
+|                           |                                                  | 
+|---------------------------|--------------------------------------------------|
+| `r rdoc_url("fit")`       | Model fitting                                    |
+| `r rdoc_url("resample")`  | Resample estimation of model performance         |
+| `r rdoc_url("tune")`      | Model tuning and selection                       |
+
+&nbsp;
+
+
+## Prediction
+
+|                           |                                                  | 
+|---------------------------|--------------------------------------------------|
+| `r rdoc_url("predict")`   | Model prediction                                 |
+
+&nbsp;
+
+
+## Performance Assessment
+
+|                              |                                               | 
+|------------------------------|-----------------------------------------------|
+| `r rdoc_url("calibration")`  | Model calibration                             |
+| `r rdoc_url("confusion")`    | Confusion matrices                            |
+| `r rdoc_url("dependence")`   | Partial dependence                            |
+| `r rdoc_url("diff")`         | Model performance differences                 |
+| `r rdoc_url("lift")`         | Lift curves                                   |
+| `r rdoc_url("performance")`  | Model performance metrics                     |
+| `r rdoc_url("performance_curve")`  | Model performance curves                |
+| `r rdoc_url("varimp")`       | Variable importance                           |
+
+&nbsp;
+
+
+## Resample Control Structures
+
+|                               |                                              | 
+|-------------------------------|----------------------------------------------|
+| `r rdoc_url("BootControl")`   | Simple bootstrap                             |
+| `r rdoc_url("CVControl")`     | Repeated K-fold cross-validation             |
+| `r rdoc_url("OOBControl")`    | Out-of-bootstrap                             |
+| `r rdoc_url("SplitControl")`  | Split training-testing                       |
+| `r rdoc_url("TrainControl")`  | Training resubstitution                      |
+
+&nbsp;
+
+
+## Analysis Summaries
+
+|                               |                                              | 
+|-------------------------------|----------------------------------------------|
+| `r rdoc_url("plot")`          | Graphical summaries                          |
+| `r rdoc_url("summary")`       | Tabular summaries                            |
+
+&nbsp;
+
+
+## Information
+
+|                               |                                              | 
+|-------------------------------|----------------------------------------------|
+| `r rdoc_url("metricinfo")`    | Metric function names and attributes         |
+| `r rdoc_url("modelinfo")`     | Model constructor names and attributes       |
+
+&nbsp;
+
+
+## Package Extension
+
+|                               |                                              | 
+|-------------------------------|----------------------------------------------|
+| `r rdoc_url("MLMetric")`      | Metric class constructor                     |
+| `r rdoc_url("MLModel")`       | Model class constructor                      |
+
+&nbsp;

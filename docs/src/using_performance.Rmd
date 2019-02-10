@@ -1,0 +1,209 @@
+# Model Performance Metrics
+
+
+## Performance Function
+
+Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models.  Metrics can be computed with the `performance` function applied to observed responses and responses predicted with the `predict` function.  Metrics of observed versus predicted survival probabilities additionally require specification of the corresponding survival times.  Accordingly, metric values will be calculated at each survival time and returned along with their time-integrated mean.
+
+```{r}
+## Survival performance metrics
+
+## Observed responses
+obs <- response(surv_fo, surv_test)
+
+## Predicted survival means
+pred_means <- predict(surv_fit, newdata = surv_test)
+performance(obs, pred_means)
+
+## Predicted survival probabilities
+pred_probs <- predict(surv_fit, newdata = surv_test, times = surv_times, type = "prob")
+performance(obs, pred_probs, times = surv_times)
+```
+
+Function `performance` computes a default set of metrics according to the observed and predicted response types, as indicated in the table below.
+
+
+Table 2. Default performance metrics by response types.
+
+Response                 | Default Metrics
+:----------------------- | :------------------------------------------------------
+Factor                   | Accuracy, Cohen's Kappa, Area Under ROC Curve, Brier Score
+Binary Factor            | Accuracy, Cohen's Kappa, Area Under ROC Curve, Sensitivity, Specificity, Brier Score
+Numeric Vector or Matrix | R^2^, Root Mean Squared Error, Mean Absolute Error
+Survival Means           | Concordance Index
+Survival Probabilities   | Area Under ROC Curve, Brier Score
+
+
+The defaults may be changed by specifying one or more package-supplied metric functions to the `metrics` argument of `performance`.  A named list of supplied metric functions can be obtained interactively with the `metricinfo` function, and includes a descriptive `"label"`, whether to `"maximize"` the metric for better performance, the function `"arguments"`, and supported response variable `"types"` for each.  Function `metricinfo` may be called with one or more metric functions, function names, an observed response variable, or an observed and predicted response variable pair; and will return information on all matching metrics.
+
+```{r}
+## Names of all available metrics
+metricinfo() %>% names
+
+## Metrics for observed and predicted response variables
+metricinfo(obs, pred_means) %>% names
+metricinfo(obs, pred_probs) %>% names
+
+## Metrics for response variable types
+metricinfo(Surv(0), numeric(0)) %>% names
+metricinfo(Surv(0), matrix(0)) %>% names
+
+## Metric-specific information
+metricinfo(cindex)
+```
+
+Specification of the `metrics` argument can be in terms of a single metric function, function name, or list of metric functions.  List names, if specified, will be displayed as metric labels in graphical and tabular summaries; otherwise, the function names will be used as labels for unnamed lists.
+
+```{r eval=FALSE}
+## Single metric function
+performance(obs, pred_means, metrics = cindex)
+
+## Single metric function name
+performance(obs, pred_means, metrics = "cindex")
+
+## List of metric functions
+performance(obs, pred_means, metrics = c(cindex, rmse, rmsle))
+
+## Named list of metric functions
+performance(obs, pred_means, metrics = c("CIndex" = cindex,
+                                         "RMSE" = rmse,
+                                         "RMSLE" = rmsle))
+```
+
+Metrics based on classification of two-level class probabilities, like sensitivity and specificity, optionally allow for specification of the classification cutoff probability (default: `cutoff = 0.5`).
+
+```{r}
+## User-specified survival probability metrics
+performance(obs, pred_probs, metrics = c(sensitivity, specificity),
+            times = surv_times, cutoff = 0.5)
+```
+
+
+## Factors
+
+Metrics applicable to multi-level factor response variables are summarized below.
+
+`accuracy`
+  : Proportion of correctly classified responses.
+
+`brier`
+  : [Brier score](https://en.wikipedia.org/wiki/Brier_score).
+  
+`cross_entropy`
+  : [Cross entropy](https://en.wikipedia.org/wiki/Cross_entropy) loss averaged over the number of cases.
+  
+`kappa2`
+  : [Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa) statistic measuring relative agreement between observed and predicted classifications.
+
+`weighted_kappa2`
+  : [Weighted Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa#Weighted_kappa).  This metric is only available for ordered factor responses.
+  
+Brier score and cross entropy loss are computed directly on predicted class probabilities.  The other metrics are computed on predicted class membership, defined as the factor level with the highest predicted probability.
+
+
+## Binary Factors
+
+Metrics for binary factors include those given for multi-level factors as well as the following.
+
+`auc`
+  : Area under a performance curve.
+
+`cindex`
+  : Concordance index computed as rank order agreement between predicted probabilities for paired event and non-event cases.  This metric can be interpreted as the probability that a randomly selected event case will have a higher predicted value than a randomly selected non-event case, and is the same as area under the ROC curve.
+
+`f_score`
+  : [F score](https://en.wikipedia.org/wiki/Precision_and_recall#F-measure), $F_\beta = (1 + \beta^2) \frac{\text{precision} \times \text{recall}}{\beta^2 \times \text{precision} + \text{recall}}$.  F1 score $(\beta = 1)$ is the package default.
+
+`fnr`
+  : False negative rate, $FNR = \frac{FN}{TP + FN} = 1 - TPR$.
+
+`fpr`
+  : False positive rate, $FPR = \frac{FP}{TN + FP} = 1 - TNR$.
+
+`npv`
+  : Negative predictive value, $NPV = \frac{TN}{TN + FN}$.
+
+```{r echo=FALSE}
+conf <- matrix(c("True Negative (TN)", "False Positive (FP)",
+                 "False Negative (FN)", "True Positive (TP)"),
+               2, 2,
+               dimnames = list("Predicted Response" = c("Negative", "Positive"),
+                               "Observed Response" = c("Negative", "Positive")))
+kable(conf,
+      caption = "Table 3. Confusion matrix of observed and predicted response classifications.",
+      align = c("c", "c")) %>%
+  kable_styling(full_width = FALSE, position = "center") %>%
+  add_header_above(c("Predicted Response" = 1, "Observed Response" = 2))
+```
+
+`ppv`, `precision`
+  : Positive predictive value, $PPV = \frac{TP}{TP + FP}$.
+
+`pr_auc`, `auc`
+  : Area under a precision recall curve.
+  
+`roc_auc`, `auc`
+  : [Area under an ROC curve](https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve).
+
+`roc_index`
+  : A tradeoff function of sensitivity and specificity as defined by the `f` argument in this function (default: sensitivity + specificity).  The function allows for specification of tradeoffs [@perkins:2006:IOC] other than the default of Youden's J statistic [@youden:1950:IRD].
+  
+`rpp`
+  : Rate of positive prediction, $RPP = \frac{TP + FP}{TP + FP + TN + FN}$.
+  
+`sensitivity`, `recall`, `tpr`
+  : True positive rate, $TPR =\frac{TP}{TP + FN} = 1 - FNR$.
+  
+`specificity`, `tnr`
+  : True negative rate, $TNR = \frac{TN}{TN + FP} = 1 - FPR$.
+
+Area under the ROC and precision-recall curves are computed directly on predicted class probabilities.  The other metrics are computed on predicted class membership.  Memberships are defined to be in the second factor level if predicted probabilities are greater than the cutoff value set in the `performance` function.
+
+
+## Numerics
+
+Performance metrics are defined below for numeric vector responses.  If applied to a numeric matrix response, the metrics are computed separately for each column of the matrix and then averaged to produce a single value.
+
+`gini`
+  : [Gini coefficient](https://en.wikipedia.org/wiki/Gini_coefficient).
+  
+`mae`
+  : Mean absolute error, $MAE = \frac{1}{n}\sum_{i=1}^n|y_i - \hat{y}_i|$, where $y_i$ and $\hat{y}_i$ are the $n$ observed and predicted responses.
+
+`mse`
+  : Mean squared error, $MSE = \frac{1}{n}\sum_{i=1}^n(y_i - \hat{y}_i)^2$.
+
+`msle`
+  : Mean squared log error, $MSLE = \frac{1}{n}\sum_{i=1}^n(log(1 + y_i) - log(1 + \hat{y}_i))^2$.
+
+`r2`
+  : One minus residual divided by total sums of squares, $R^2 = 1 - \sum_{i=1}^n(y_i - \hat{y}_i)^2 / \sum_{i=1}^n(y_i - \bar{y})^2$.
+
+`rmse`
+  : Square root of mean squared error.
+
+`rmsle`
+  : Square root of mean squared log error.
+
+
+## Survival Objects
+
+All previously described metrics for binary factor responses---plus accuracy, Brier score and Cohen's kappa---are applicable to survival probabilities predicted at specified follow-up times.  Metrics are evaluated separately at each follow-up time and reported along with a time-integrated mean.  The survival concordance index is computed with the method of Harrell [-@harrell:1982:EYM] and Brier score according to Graf et al. [-@graf:1999:ACP]; whereas, the others are computed according to the confusion matrix probabilities below, in which term $\hat{S}(t)$ is the predicted survival probability at follow-up time $t$ and $T$ is the survival time [@heagerty:2004:TDR].
+
+```{r echo=FALSE}
+conf <- matrix(c("$TN = \\Pr(\\hat{S}(t) \\gt \\text{cutoff} \\cap T \\ge t)$",
+                 "$FP = \\Pr(\\hat{S}(t) \\le \\text{cutoff} \\cap T \\ge t)$",
+                 "$FN = \\Pr(\\hat{S}(t) \\gt \\text{cutoff} \\cap T \\lt t)$",
+                 "$TP = \\Pr(\\hat{S}(t) \\le \\text{cutoff} \\cap T \\lt t)$"),
+               2, 2,
+               dimnames = list("Predicted Response" = c("Non-Event", "Event"),
+                               "Observed Response" = c("Non-Event", "Event")))
+kable(conf,
+      caption = "Table 4. Confusion matrix of observed and predicted survival response classifications.",
+      align = c("c", "c"),
+      escape = FALSE) %>%
+  kable_styling(full_width = FALSE, position = "center") %>%
+  add_header_above(c("Predicted Response" = 1, "Observed Response" = 2))
+```
+
+In addition, all of the metrics described for numeric vector responses are applicable to predicted survival means and are computed using only those cases with observed (non-censored) events.
