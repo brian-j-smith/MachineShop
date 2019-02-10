@@ -1,33 +1,26 @@
 ---
+title: "MachineShop: Machine Learning Models and Tools for R"
 output: github_document
-always_allow_html: yes
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  fig.align = "center",
-  message = FALSE,
-  warning = FALSE
-)
-
-library(kableExtra)
-library(MachineShop)
-
-info <- modelinfo()
 ```
 
-# MachineShop: Machine Learning Models and Tools
-
+[![Generic badge](https://img.shields.io/badge/docs-online-green.svg)](https://brian-j-smith.github.io/MachineShop/)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/MachineShop)](http://cran.r-project.org/web/packages/MachineShop)
 
-## Description
 
-`MachineShop` is a meta-package for statistical and machine learning with a unified interface for model fitting, prediction, performance assessment, and presentation of results.  Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes, including those listed in the table below, and for resample (bootstrap, cross-validation, and split training-test sets) estimation of model performance.
+# Description
 
-## Features
+`MachineShop` is a meta-package for statistical and machine learning with a unified interface for model fitting, prediction, performance assessment, and presentation of results.  Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes and for resample (bootstrap, cross-validation, and split training-test sets) estimation of model performance.  This vignette introduces the package interface with a survival data analysis example, followed by supported methods of variable specification; applications to other response variable types; available performance metrics, resampling techniques, and graphical and tabular summaries; and modeling strategies.
+
+
+# Features
+
+```{r echo=FALSE}
+library("MachineShop")
+info <- modelinfo()
+```
 
 * Unified and concise interface for model fitting, prediction, and performance assessment.
 * Current support for `r length(info)` established models from `r length(unique(sapply(info, function(x) x$packages[1])))` **R** packages.
@@ -42,39 +35,8 @@ info <- modelinfo()
 * Model selection and comparisons for any combination of models and model parameter values.
 * User-definable models and performance metrics.
 
-## Models
-<div>
-```{r echo = FALSE}
-types <- c("binary" = "b", "factor" = "f", "matrix" = "m", "numeric" = "n",
-           "ordered" = "o", "Surv" = "S")
-x <- lapply(names(info), function(modelname) {
-  c(modelname, ifelse(names(types) %in% info[[modelname]]$types, types, NA))
-})
-df <- as.data.frame(do.call(rbind, x), stringsAsFactors = FALSE)
-names(df) <- c("Constructor", names(types))
 
-toString2 <- function(x) toString(na.omit(x))
-df_classes <- data.frame(
-  Method = sapply(info, getElement, name = "label"),
-  Constructor = df$Constructor,
-  Categorical = apply(df[c("binary", "factor", "ordered")], 1, toString2),
-  Continuous = apply(df[c("matrix", "numeric")], 1, toString2),
-  Survival = apply(df["Surv"], 1, toString2)
-)
-names(df_classes)[-(1:2)] <- paste0(names(df_classes)[-(1:2)],
-                                    footnote_marker_number(1:3))
-
-kable(df_classes, align = c("l", "c", "c", "c", "c"), row.names = FALSE,
-      escape = FALSE) %>%
-  kable_styling(c("striped", "condensed"), full_width = FALSE, position = "center") %>%
-  add_header_above(c(" " = 1, " " = 1, "Response Variable Types" = 3)) %>%
-  footnote(number = c("b = binary, f = factor, o = ordered",
-                      "m = matrix, n = numeric",
-                      "S = Surv"))
-```
-</div>
-
-## Installation
+# Installation
 
 ```{r eval = FALSE}
 # Current release from CRAN
@@ -89,9 +51,9 @@ devtools::install_github("brian-j-smith/MachineShop", ref = "develop", build_vig
 ```
 
 
-## Documentation
+# Getting Started
 
-Once the package is installed, general documentation on its usage can be viewed with the following console commands.
+Once installed, the following `R` commands will load the package and display its help system documentation.  Online documentation and examples are available at the [MachineShop main website](https://brian-j-smith.github.io/MachineShop).
 
 ```{r eval = FALSE, message = FALSE}
 library(MachineShop)
@@ -101,214 +63,4 @@ library(MachineShop)
 
 # Vignette
 RShowDoc("Introduction", package = "MachineShop")
-```
-
-
-## Parallel Computing
-
-Resampling algorithms will be executed in parallel automatically if a parallel backend for the ``foreach`` package, such as ``doParallel``, is loaded.
-
-```{r}
-library(doParallel)
-registerDoParallel(cores = 4)
-```
-
-
-## Example
-
-The following is a brief example illustrating use of the package to predict the species of flowers in Edgar Anderson's iris data set.
-
-### Training and Test Set Analysis
-
-```{r}
-## Load the package
-library(MachineShop)
-library(magrittr)
-
-## Iris flower species (3 level response) data set
-head(iris)
-
-## Training and test sets
-set.seed(123)
-trainindices <- sample(nrow(iris), nrow(iris) * 2 / 3)
-train <- iris[trainindices, ]
-test <- iris[-trainindices, ]
-
-## Model formula
-fo <- Species ~ .
-
-## Models by response type
-modelinfo(factor(0)) %>% names
-
-## Model-specific information
-modelinfo(GBMModel)
-
-## Generalized boosted model fit to training set
-gbmfit <- fit(fo, data = train, model = GBMModel)
-
-## Variable importance
-(vi <- varimp(gbmfit))
-
-plot(vi)
-```
-
-```{r}
-## Test set predicted probabilities
-predict(gbmfit, newdata = test, type = "prob") %>% head
-
-## Test set predicted classifications
-predict(gbmfit, newdata = test) %>% head
-
-## Test set performance
-obs <- response(fo, data = test)
-pred <- predict(gbmfit, newdata = test, type = "prob")
-performance(obs, pred)
-```
-
-### Resampling
-
-```{r, fig.height = 4}
-## Resample estimation of model performance
-(res <- resample(fo, data = iris, model = GBMModel, control = CVControl))
-
-summary(res)
-
-plot(res)
-```
-
-### Performance Metrics
-
-```{r}
-## Default performance metrics
-performance(res) %>% summary
-
-## All available metric functions
-metricinfo() %>% names
-
-## Metrics available for resample output
-metricinfo(res) %>% names
-
-## User-specified metrics
-performance(res, c(accuracy, kappa2)) %>% summary
-```
-
-### Model Tuning
-
-```{r, fig.height = 4}
-## Tune over a grid of model parameters
-gbmtune <- tune(fo, data = iris, model = GBMModel,
-                grid = expand.grid(n.trees = c(25, 50, 100),
-                                   interaction.depth = 1:3,
-                                   n.minobsinnode = c(5, 10)))
-
-plot(gbmtune, type = "line")
-```
-
-```{r}
-## Fit the selected model
-gbmtunefit <- fit(fo, data = iris, model = gbmtune)
-varimp(gbmtunefit)
-```
-
-### Model Comparisons
-
-```{r}
-## Model comparisons
-control <- CVControl(folds = 10, repeats = 5)
-
-gbmres <- resample(fo, data = iris, model = GBMModel(n.tree = 50), control = control)
-rfres <- resample(fo, data = iris, model = RandomForestModel(ntree = 50), control = control)
-nnetres <- resample(fo, data = iris, model = NNetModel(size = 5), control = control)
-
-res <- Resamples(GBM = gbmres, RF = rfres, NNet = nnetres)
-summary(res)
-
-plot(res)
-```
-
-```{r}
-## Pairwise model differences and t-tests
-perfdiff <- diff(res)
-summary(perfdiff)
-
-t.test(perfdiff)
-
-plot(perfdiff)
-```
-
-### Ensemble Models
-
-```{r}
-## Stacked regression
-stackedres <- resample(fo, data = iris, model = StackedModel(GBMModel, RandomForestModel, NNetModel))
-summary(stackedres)
-
-## Super learner
-superres <- resample(fo, data = iris, model = SuperModel(GBMModel, RandomForestModel, NNetModel))
-summary(superres)
-```
-
-### Calibration Curves
-
-```{r results = "hide"}
-cal <- calibration(res)
-plot(cal, se = TRUE)
-```
-
-### Confusion Matrices
-
-```{r}
-(conf <- confusion(gbmres, cutoff = NULL))
-
-summary(conf)
-```
-
-```{r results = "hide"}
-plot(conf)
-```
-
-### Partial Dependence Plots
-
-```{r results = "hide"}
-pd <- dependence(gbmfit, select = c(Petal.Length, Petal.Width))
-plot(pd)
-```
-
-### Lift Curves
-
-```{r}
-## Requires a binary outcome
-fo_versicolor <- factor(Species == "versicolor") ~ .
-control = CVControl()
-
-gbmres_versicolor <- resample(fo_versicolor, data = iris,  model = GBMModel, control = control)
-lf <- lift(gbmres_versicolor)
-plot(lf)
-```
-
-```{r}
-rfres_versicolor <- resample(fo_versicolor, data = iris,  model = RandomForestModel, control = control)
-nnetres_versicolor <- resample(fo_versicolor, data = iris,  model = NNetModel, control = control)
-
-res_versicolor <- Resamples(gbmres_versicolor, rfres_versicolor, nnetres_versicolor)
-lf <- lift(res_versicolor)
-plot(lf, find = 0.75)
-```
-
-### Preprocessing Recipes
-
-```{r}
-library(recipes)
-
-rec <- recipe(fo, data = iris) %>%
-  add_role(Species, new_role = "case_strata") %>%
-  step_center(all_predictors()) %>%
-  step_scale(all_predictors()) %>%
-  step_pca(all_predictors())
-
-fit_rec <- fit(rec, model = GBMModel)
-varimp(fit_rec)
-
-res_rec <- resample(rec, model = GBMModel, control = CVControl)
-summary(res_rec)
 ```
