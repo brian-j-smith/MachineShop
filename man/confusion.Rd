@@ -39,7 +39,8 @@ Calculate confusion matrices of predicted and observed responses.
 }
 \examples{
 res <- resample(Species ~ ., data = iris, model = GBMModel)
-confusion(res)
+(conf <- confusion(res))
+plot(conf)
 
 }
 \seealso{
