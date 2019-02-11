@@ -228,8 +228,9 @@ plot.Curves <- function(x, type = c("tradeoffs", "cutoffs"), diagonal = FALSE,
   
   switch(match.arg(type),
     "tradeoffs" = {
-      p <- ggplot(x, mapping) +
-        geom_path(na.rm = TRUE) +
+      x$Cutoff <- NULL
+      p <- ggplot(na.omit(x), mapping) +
+        geom_path() +
         labs(x = labels["x"], y = labels["y"])
 
       if (diagonal) {
@@ -244,8 +245,8 @@ plot.Curves <- function(x, type = c("tradeoffs", "cutoffs"), diagonal = FALSE,
                     direction = "long")
       names(df)[names(df) == "Cutoff"] <- "x"
       
-      ggplot(df, mapping) +
-        geom_line(na.rm = TRUE) +
+      ggplot(na.omit(df), mapping) +
+        geom_line() +
         labs(x = "Cutoff", y = "Performance") +
         facet_wrap(~ Metric)
     }
