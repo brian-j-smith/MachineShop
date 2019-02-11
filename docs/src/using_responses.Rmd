@@ -54,9 +54,7 @@ Multivariate numerical responses should be given as numeric `matrix` variables f
 ## Anscombe's multiple regression models dataset
 
 ## Numeric matrix response formula
-mf <- ModelFrame(cbind(y1, y2, y3) ~ x1, data = anscombe)
-
-fit(mf, model = LMModel)
+fit(cbind(y1, y2, y3) ~ x1, data = anscombe, model = LMModel)
 ```
 
 For recipes, the multiple response variables should be given on the left hand side of the formula specification.
