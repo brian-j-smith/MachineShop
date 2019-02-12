@@ -551,6 +551,7 @@ predict(surv_fit, newdata = surv_test) %&gt;% head
 surv_times &lt;- 365 * c(5, 10)
 
 predict(surv_fit, newdata = surv_test, times = surv_times, type = &quot;prob&quot;) %&gt;% head
+#&gt; An object of class &quot;SurvProbs&quot;
 #&gt;           [,1]      [,2]
 #&gt; [1,] 0.9242729 0.8539451
 #&gt; [2,] 0.9509326 0.9040459
@@ -558,15 +559,20 @@ predict(surv_fit, newdata = surv_test, times = surv_times, type = &quot;prob&quo
 #&gt; [4,] 0.4552399 0.2064317
 #&gt; [5,] 0.5827357 0.3386677
 #&gt; [6,] 0.8262041 0.6819637
+#&gt; Slot &quot;times&quot;:
+#&gt; [1] 1825 3650
 
 predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.5) %&gt;% head
+#&gt; An object of class &quot;SurvEvents&quot;
 #&gt;      [,1] [,2]
 #&gt; [1,]    0    0
 #&gt; [2,]    0    0
 #&gt; [3,]    0    0
 #&gt; [4,]    1    1
 #&gt; [5,]    0    1
-#&gt; [6,]    0    0</code></pre>
+#&gt; [6,]    0    0
+#&gt; Slot &quot;times&quot;:
+#&gt; [1] 1825 3650</code></pre>
 </div>
 <div id="variable-specifications" class="section level1">
 <h1>Variable Specifications</h1>
@@ -655,9 +661,7 @@ fit(medv ~ ., data = Boston, model = GBMModel)</code></pre>
 <pre class="r"><code>## Anscombe&#39;s multiple regression models dataset
 
 ## Numeric matrix response formula
-mf &lt;- ModelFrame(cbind(y1, y2, y3) ~ x1, data = anscombe)
-
-fit(mf, model = LMModel)</code></pre>
+fit(cbind(y1, y2, y3) ~ x1, data = anscombe, model = LMModel)</code></pre>
 <p>For recipes, the multiple response variables should be given on the left hand side of the formula specification.</p>
 <pre class="r"><code>## Numeric matrix response recipe
 rec &lt;- recipe(y1 + y2 + y3 ~ x1, data = anscombe)
@@ -684,7 +688,7 @@ fit(rec, model = GBMModel)</code></pre>
 <h1>Model Performance Metrics</h1>
 <div id="performance-function" class="section level2">
 <h2>Performance Function</h2>
-<p>Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models. Metrics can be computed with the <code>performance</code> function applied to observed responses and responses predicted with the <code>predict</code> function. Metrics of observed versus predicted survival probabilities additionally require specification of the corresponding survival times. Accordingly, metric values will be calculated at each survival time and returned along with their time-integrated mean.</p>
+<p>Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models. Metrics can be computed with the <code>performance</code> function applied to observed responses and responses predicted with the <code>predict</code> function. Metrics of observed versus predicted survival probabilities will be calculated at each survival time and returned along with their time-integrated mean.</p>
 <pre class="r"><code>## Survival performance metrics
 
 ## Observed responses
@@ -698,7 +702,7 @@ performance(obs, pred_means)
 
 ## Predicted survival probabilities
 pred_probs &lt;- predict(surv_fit, newdata = surv_test, times = surv_times, type = &quot;prob&quot;)
-performance(obs, pred_probs, times = surv_times)
+performance(obs, pred_probs)
 #&gt;  ROCAUC.mean ROCAUC.time1 ROCAUC.time2   Brier.mean  Brier.time1 
 #&gt;    0.6304049    0.6634101    0.5973996    0.2155492    0.1806647 
 #&gt;  Brier.time2 
@@ -765,7 +769,7 @@ metricinfo(obs, pred_probs) %&gt;% names
 ## Metrics for response variable types
 metricinfo(Surv(0), numeric(0)) %&gt;% names
 #&gt; [1] &quot;cindex&quot; &quot;gini&quot;   &quot;mae&quot;    &quot;mse&quot;    &quot;msle&quot;   &quot;r2&quot;     &quot;rmse&quot;   &quot;rmsle&quot;
-metricinfo(Surv(0), matrix(0)) %&gt;% names
+metricinfo(Surv(0), SurvProbs(0)) %&gt;% names
 #&gt;  [1] &quot;accuracy&quot;    &quot;auc&quot;         &quot;brier&quot;       &quot;f_score&quot;     &quot;fnr&quot;        
 #&gt;  [6] &quot;fpr&quot;         &quot;kappa2&quot;      &quot;npv&quot;         &quot;ppv&quot;         &quot;pr_auc&quot;     
 #&gt; [11] &quot;precision&quot;   &quot;recall&quot;      &quot;roc_auc&quot;     &quot;roc_index&quot;   &quot;rpp&quot;        
@@ -804,8 +808,7 @@ performance(obs, pred_means, metrics = c(&quot;CIndex&quot; = cindex,
                                          &quot;RMSLE&quot; = rmsle))</code></pre>
 <p>Metrics based on classification of two-level class probabilities, like sensitivity and specificity, optionally allow for specification of the classification cutoff probability (default: <code>cutoff = 0.5</code>).</p>
 <pre class="r"><code>## User-specified survival probability metrics
-performance(obs, pred_probs, metrics = c(sensitivity, specificity),
-            times = surv_times, cutoff = 0.5)
+performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.5)
 #&gt;  sensitivity.mean sensitivity.time1 sensitivity.time2  specificity.mean 
 #&gt;         0.3286345         0.2855395         0.3717295         0.8850314 
 #&gt; specificity.time1 specificity.time2 
@@ -1102,7 +1105,7 @@ summary(res_probs)
 
 plot(res_probs)</code></pre>
 <p><img src="using_files/figure-html/unnamed-chunk-38-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>The <code>summary</code> function when applied directly to output from <code>resample</code> computes default performance metrics as described in the <em>Performance Function</em> section. Likewise, the <code>metricinfo</code> and <code>performance</code> functions can be applied to the output in order to list and compute applicable metrics. However, unlike in the case of <code>performance</code> applied to separate observed and predicted survival probability responses, survival times need not be specified when applied to resampled output.</p>
+<p>The <code>summary</code> function when applied directly to output from <code>resample</code> computes default performance metrics as described in the <em>Performance Function</em> section. Likewise, the <code>metricinfo</code> and <code>performance</code> functions can be applied to the output in order to list and compute applicable metrics.</p>
 <pre class="r"><code>## Resample-specific metrics
 metricinfo(res_probs) %&gt;% names
 #&gt;  [1] &quot;accuracy&quot;    &quot;auc&quot;         &quot;brier&quot;       &quot;f_score&quot;     &quot;fnr&quot;        
