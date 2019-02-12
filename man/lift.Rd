@@ -7,7 +7,7 @@
 \usage{
 Lift(...)
 
-lift(x, y = NULL, times = numeric(), ...)
+lift(x, y = NULL, ...)
 }
 \arguments{
 \item{...}{named or unnamed \code{lift} output to combine together with the
@@ -17,9 +17,6 @@ lift(x, y = NULL, times = numeric(), ...)
 predicted responses.}
 
 \item{y}{predicted responses.}
-
-\item{times}{numeric vector of follow-up times if \code{y} contains predicted
-survival probabilities.}
 }
 \value{
 \code{Lift} class object that inherits from \code{Curves}.

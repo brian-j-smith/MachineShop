@@ -1,51 +1,59 @@
-setGeneric("convert_dim", function(object, x) standardGeneric("convert_dim"))
+setGeneric("convert_prob",
+           function(object, x, ...) standardGeneric("convert_prob"))
 
 
-setMethod("convert_dim", c("ANY", "ANY"),
-  function(object, x) x
+setMethod("convert_prob", c("ANY", "ANY"),
+  function(object, x, ...) x
 )
 
 
-setMethod("convert_dim", c("factor", "array"),
-  function(object, x) {
-    convert_dim(object, adrop(x, length(dim(x))))
+setMethod("convert_prob", c("factor", "array"),
+  function(object, x, ...) {
+    convert_prob(object, adrop(x, length(dim(x))))
   }
 )
 
 
-setMethod("convert_dim", c("factor", "matrix"),
-  function(object, x) {
+setMethod("convert_prob", c("factor", "matrix"),
+  function(object, x, ...) {
     if (nlevels(object) == 2) x[, ncol(x)] else x
   }
 )
 
 
-setMethod("convert_dim", c("matrix", "array"),
-  function(object, x) {
-    convert_dim(object, adrop(x, length(dim(x))))
+setMethod("convert_prob", c("matrix", "array"),
+  function(object, x, ...) {
+    convert_prob(object, adrop(x, length(dim(x))))
   }
 )
 
 
-setMethod("convert_dim", c("matrix", "matrix"),
-  function(object, x) {
+setMethod("convert_prob", c("matrix", "matrix"),
+  function(object, x, ...) {
     stopifnot(ncol(object) == ncol(x))
     x
   }
 )
 
 
-setMethod("convert_dim", c("numeric", "array"),
-  function(object, x) {
-    convert_dim(object, adrop(x, length(dim(x))))
+setMethod("convert_prob", c("numeric", "array"),
+  function(object, x, ...) {
+    convert_prob(object, adrop(x, length(dim(x))))
   }
 )
 
 
-setMethod("convert_dim", c("numeric", "matrix"),
-  function(object, x) {
+setMethod("convert_prob", c("numeric", "matrix"),
+  function(object, x, ...) {
     stopifnot(ncol(x) == 1)
     drop(x)
+  }
+)
+
+
+setMethod("convert_prob", c("Surv", "matrix"),
+  function(object, x, times, ...) {
+    SurvProbs(x, times)
   }
 )
 
@@ -94,10 +102,15 @@ setMethod("convert_response", c("ordered", "matrix"),
 )
 
 
-setMethod("convert_response", c("Surv", "matrix"),
+setMethod("convert_response", c("Surv", "SurvEvents"),
+  function(object, x, ...) x
+)
+
+
+setMethod("convert_response", c("Surv", "SurvProbs"),
   function(object, x, cutoff = 0.5, ...) {
-    x <- x <= cutoff
-    mode(x) <- "integer"
-    x
+    events <- x <= cutoff
+    mode(events) <- "integer"
+    SurvEvents(events, x@times)
   }
 )

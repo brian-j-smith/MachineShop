@@ -33,56 +33,49 @@
 \alias{rmsle}
 \title{Performance Metrics}
 \usage{
-accuracy(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
-  ...)
+accuracy(observed, predicted = NULL, cutoff = 0.5, ...)
 
 auc(observed, predicted = NULL, metrics = c(MachineShop::tpr,
-  MachineShop::fpr), times = numeric(), stat = base::mean, ...)
+  MachineShop::fpr), stat = base::mean, ...)
 
-brier(observed, predicted = NULL, times = numeric(), ...)
+brier(observed, predicted = NULL, ...)
 
 cindex(observed, predicted = NULL, ...)
 
 cross_entropy(observed, predicted = NULL, ...)
 
-f_score(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
-  beta = 1, ...)
+f_score(observed, predicted = NULL, cutoff = 0.5, beta = 1, ...)
 
-fnr(observed, predicted = NULL, cutoff = 0.5, times = numeric(), ...)
+fnr(observed, predicted = NULL, cutoff = 0.5, ...)
 
-fpr(observed, predicted = NULL, cutoff = 0.5, times = numeric(), ...)
+fpr(observed, predicted = NULL, cutoff = 0.5, ...)
 
-kappa2(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
-  ...)
+kappa2(observed, predicted = NULL, cutoff = 0.5, ...)
 
-npv(observed, predicted = NULL, cutoff = 0.5, times = numeric(), ...)
+npv(observed, predicted = NULL, cutoff = 0.5, ...)
 
-ppv(observed, predicted = NULL, cutoff = 0.5, times = numeric(), ...)
+ppv(observed, predicted = NULL, cutoff = 0.5, ...)
 
-pr_auc(observed, predicted = NULL, times = numeric(), ...)
+pr_auc(observed, predicted = NULL, ...)
 
-precision(observed, predicted = NULL, cutoff = 0.5,
-  times = numeric(), ...)
+precision(observed, predicted = NULL, cutoff = 0.5, ...)
 
-recall(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
-  ...)
+recall(observed, predicted = NULL, cutoff = 0.5, ...)
 
-roc_auc(observed, predicted = NULL, times = numeric(), ...)
+roc_auc(observed, predicted = NULL, ...)
 
 roc_index(observed, predicted = NULL, cutoff = 0.5,
-  times = numeric(), f = function(sens, spec) sens + spec, ...)
+  f = function(sens, spec) sens + spec, ...)
 
-rpp(observed, predicted = NULL, cutoff = 0.5, times = numeric(), ...)
+rpp(observed, predicted = NULL, cutoff = 0.5, ...)
 
-sensitivity(observed, predicted = NULL, cutoff = 0.5,
-  times = numeric(), ...)
+sensitivity(observed, predicted = NULL, cutoff = 0.5, ...)
 
-specificity(observed, predicted = NULL, cutoff = 0.5,
-  times = numeric(), ...)
+specificity(observed, predicted = NULL, cutoff = 0.5, ...)
 
-tnr(observed, predicted = NULL, cutoff = 0.5, times = numeric(), ...)
+tnr(observed, predicted = NULL, cutoff = 0.5, ...)
 
-tpr(observed, predicted = NULL, cutoff = 0.5, times = numeric(), ...)
+tpr(observed, predicted = NULL, cutoff = 0.5, ...)
 
 weighted_kappa2(observed, predicted = NULL, power = 1, ...)
 
@@ -109,9 +102,6 @@ responses.}
 
 \item{cutoff}{threshold above which binary factor probabilities are
 classified as events and below which survival probabilities are classified.}
-
-\item{times}{numeric vector of follow-up times at which survival
-probabilities were predicted.}
 
 \item{...}{arguments passed to or from other methods.}
 

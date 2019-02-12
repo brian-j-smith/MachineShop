@@ -59,7 +59,7 @@ summary(res_probs)
 plot(res_probs)
 ```
 
-The `summary` function when applied directly to output from `resample` computes default performance metrics as described in the *Performance Function* section.  Likewise, the `metricinfo` and `performance` functions can be applied to the output in order to list and compute applicable metrics.  However, unlike in the case of `performance` applied to separate observed and predicted survival probability responses, survival times need not be specified when applied to resampled output.
+The `summary` function when applied directly to output from `resample` computes default performance metrics as described in the *Performance Function* section.  Likewise, the `metricinfo` and `performance` functions can be applied to the output in order to list and compute applicable metrics.
 
 ```{r}
 ## Resample-specific metrics

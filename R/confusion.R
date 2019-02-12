@@ -13,8 +13,6 @@
 #' class probabilities, whereas a default cutoff of 0.5 is used for
 #' survival probabilities.  Class probability summations and survival will
 #' appear as decimal numbers that can be interpreted as expected counts.
-#' @param times numeric vector of follow-up times if \code{y} contains predicted
-#' survival probabilities.
 #' 
 #' @return
 #' The return value is a \code{ConfusionMatrix} class object that inherits from
@@ -30,8 +28,8 @@
 #' (conf <- confusion(res))
 #' plot(conf)
 #' 
-confusion <- function(x, y = NULL, cutoff = 0.5, times = numeric(), ...) {
-  .confusion(x, y, cutoff = cutoff, times = times)
+confusion <- function(x, y = NULL, cutoff = 0.5, ...) {
+  .confusion(x, y, cutoff = cutoff)
 }
 
 
@@ -48,8 +46,7 @@ confusion <- function(x, y = NULL, cutoff = 0.5, times = numeric(), ...) {
 
 .confusion.Resamples <- function(x, cutoff, ...) {
   conf_list <- by(x, list(Model = x$Model), function(data) {
-   confusion(data$Observed, data$Predicted, cutoff = cutoff,
-             times = x@control@times)
+   confusion(data$Observed, data$Predicted, cutoff = cutoff)
   }, simplify = FALSE)
   if (all(mapply(is, conf_list, "Confusion"))) {
     conf_list <- unlist(conf_list, recursive = FALSE)
@@ -58,10 +55,9 @@ confusion <- function(x, y = NULL, cutoff = 0.5, times = numeric(), ...) {
 }
 
 
-.confusion.Surv <- function(x, y, cutoff, times, ...) {
+.confusion.Surv <- function(x, y, cutoff, ...) {
   if (is.null(cutoff)) cutoff <- 0.5
-  y <- convert_response(x, y, cutoff = cutoff)
-  do.call(Confusion, .confusion_matrix(x, y, times = times))
+  do.call(Confusion, .confusion_matrix(x, y, cutoff = cutoff))
 }
 
 
@@ -101,12 +97,17 @@ setMethod(".confusion_matrix", c("factor", "numeric"),
 )
 
 
-setMethod(".confusion_matrix", c("Surv", "matrix"),
-  function(observed, predicted, times, ...) {
-    if (length(times) != ncol(predicted)) {
-      stop("unequal number of survival times and predictions")
-    }
-    
+setMethod(".confusion_matrix", c("Surv", "SurvProbs"),
+  function(observed, predicted, cutoff, ...) {
+    predicted <- convert_response(observed, predicted, cutoff = cutoff)
+    .confusion_matrix(observed, predicted)
+  }
+)
+
+
+setMethod(".confusion_matrix", c("Surv", "SurvEvents"),
+  function(observed, predicted, ...) {
+    times <- predicted@times
     surv <- predict(survfit(observed ~ 1, se.fit = FALSE), times)
     
     conf_tbl <- table(Predicted = 0:1, Observed = 0:1)

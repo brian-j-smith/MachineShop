@@ -11,8 +11,6 @@
 #' functions to include in the calculation of performance metrics.
 #' @param cutoff threshold above which binary factor probabilities are
 #' classified as events and below which survival probabilities are classified.
-#' @param times numeric vector of follow-up times at which survival
-#' probabilities were predicted.
 #' @param na.rm logical indicating whether to remove observed or predicted
 #' responses that are \code{NA} when calculating metrics.
 #' @param ... arguments passed from the \code{Resamples} method to the others.
@@ -35,17 +33,10 @@ performance <- function(x, ...) {
 #' plot(perf)
 #' 
 performance.Resamples <- function(x, ..., na.rm = TRUE) {
-  args <- list(...)
-  args$time <- x@control@times
-
   if (na.rm) x <- na.omit(x)
   
   perf_by <- by(x, x[c("Model", "Resample")], function(x) {
-    if (nrow(x)) {
-      do.call(performance, c(list(x$Observed, x$Predicted), args))
-    } else {
-      NA
-    }
+    if (nrow(x)) performance(x$Observed, x$Predicted, ...) else NA
   }, simplify = FALSE)
   
   perf_list <- tapply(perf_by, rep(dimnames(perf_by)$Model, dim(perf_by)[2]),
@@ -132,9 +123,9 @@ performance.Surv <- function(x, y, metrics =
                                c("CIndex" = MachineShop::cindex,
                                  "ROCAUC" = MachineShop::roc_auc,
                                  "Brier" = MachineShop::brier),
-                              cutoff = 0.5, times = numeric(), ...) {
+                              cutoff = 0.5, ...) {
   metrics <- list2function(metrics)
-  metrics(x, y, cutoff = cutoff, times = times)
+  metrics(x, y, cutoff = cutoff)
 }
 
 

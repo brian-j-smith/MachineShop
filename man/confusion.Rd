@@ -7,7 +7,7 @@
 \usage{
 Confusion(...)
 
-confusion(x, y = NULL, cutoff = 0.5, times = numeric(), ...)
+confusion(x, y = NULL, cutoff = 0.5, ...)
 }
 \arguments{
 \item{...}{named or unnamed \code{confusion} output to combine together with
@@ -24,9 +24,6 @@ If \code{NULL}, then binary responses are summed directly over predicted
 class probabilities, whereas a default cutoff of 0.5 is used for
 survival probabilities.  Class probability summations and survival will
 appear as decimal numbers that can be interpreted as expected counts.}
-
-\item{times}{numeric vector of follow-up times if \code{y} contains predicted
-survival probabilities.}
 }
 \value{
 The return value is a \code{ConfusionMatrix} class object that inherits from

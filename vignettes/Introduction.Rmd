@@ -361,7 +361,7 @@ fit(rec, model = GBMModel)
 
 ## Performance Function
 
-Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models.  Metrics can be computed with the `performance` function applied to observed responses and responses predicted with the `predict` function.  Metrics of observed versus predicted survival probabilities additionally require specification of the corresponding survival times.  Accordingly, metric values will be calculated at each survival time and returned along with their time-integrated mean.
+Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models.  Metrics can be computed with the `performance` function applied to observed responses and responses predicted with the `predict` function.  Metrics of observed versus predicted survival probabilities will be calculated at each survival time and returned along with their time-integrated mean.
 
 ```{r}
 ## Survival performance metrics
@@ -375,7 +375,7 @@ performance(obs, pred_means)
 
 ## Predicted survival probabilities
 pred_probs <- predict(surv_fit, newdata = surv_test, times = surv_times, type = "prob")
-performance(obs, pred_probs, times = surv_times)
+performance(obs, pred_probs)
 ```
 
 Function `performance` computes a default set of metrics according to the observed and predicted response types, as indicated in the table below.
@@ -404,7 +404,7 @@ metricinfo(obs, pred_probs) %>% names
 
 ## Metrics for response variable types
 metricinfo(Surv(0), numeric(0)) %>% names
-metricinfo(Surv(0), matrix(0)) %>% names
+metricinfo(Surv(0), SurvProbs(0)) %>% names
 
 ## Metric-specific information
 metricinfo(cindex)
@@ -432,8 +432,7 @@ Metrics based on classification of two-level class probabilities, like sensitivi
 
 ```{r}
 ## User-specified survival probability metrics
-performance(obs, pred_probs, metrics = c(sensitivity, specificity),
-            times = surv_times, cutoff = 0.5)
+performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.5)
 ```
 
 
@@ -628,7 +627,7 @@ summary(res_probs)
 plot(res_probs)
 ```
 
-The `summary` function when applied directly to output from `resample` computes default performance metrics as described in the *Performance Function* section.  Likewise, the `metricinfo` and `performance` functions can be applied to the output in order to list and compute applicable metrics.  However, unlike in the case of `performance` applied to separate observed and predicted survival probability responses, survival times need not be specified when applied to resampled output.
+The `summary` function when applied directly to output from `resample` computes default performance metrics as described in the *Performance Function* section.  Likewise, the `metricinfo` and `performance` functions can be applied to the output in order to list and compute applicable metrics.
 
 ```{r}
 ## Resample-specific metrics

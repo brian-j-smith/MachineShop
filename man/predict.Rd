@@ -5,8 +5,8 @@
 \alias{predict.MLModelFit}
 \title{Model Prediction}
 \usage{
-\method{predict}{MLModelFit}(object, newdata = NULL,
-  type = c("response", "prob"), cutoff = 0.5, times = numeric(), ...)
+\method{predict}{MLModelFit}(object, newdata = NULL, times = numeric(),
+  type = c("response", "prob"), cutoff = 0.5, ...)
 }
 \arguments{
 \item{object}{\code{MLModelFit} object from a model fit.}
@@ -14,15 +14,15 @@
 \item{newdata}{optional \code{data.frame} with which to obtain predictions.
 If not specified, the training data will be used by default.}
 
+\item{times}{numeric vector of follow-up times at which to predict
+survival events/probabilities.}
+
 \item{type}{specifies prediction on the original outcome scale
 (\code{"response"}) or on a probability distribution scale (\code{"prob"}).}
 
 \item{cutoff}{threshold above which binary factor probabilities are
 classified as events, below which survival probabilities are classified, and
 at which expected values are rounded for integer outcomes.}
-
-\item{times}{numeric vector of follow-up times at which to predict
-survival events/probabilities.}
 
 \item{...}{arguments passed to model-specific prediction functions.}
 }

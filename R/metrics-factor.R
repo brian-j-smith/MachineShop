@@ -22,16 +22,13 @@
 #' @param stat function to compute a summary statistic at each cutoff value of
 #' resampled metrics in \code{Curves}, or \code{NULL} for resample-specific
 #' metrics.
-#' @param times numeric vector of follow-up times at which survival
-#' probabilities were predicted.
 #' @param ... arguments passed to or from other methods.
 #' 
 #' @seealso \code{\link{metricinfo}}, \code{\link{confusion}},
 #' \code{\link{performance}}, \code{\link{performance_curve}}
 #' 
-accuracy <- function(observed, predicted = NULL, cutoff = 0.5,
-                     times = numeric(), ...) {
-  .accuracy(observed, predicted, cutoff = cutoff, times = times)
+accuracy <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
+  .accuracy(observed, predicted, cutoff = cutoff)
 }
 
 MLMetric(accuracy) <- list("accuracy", "Accuracy", TRUE)
@@ -74,9 +71,16 @@ setMethod(".accuracy", c("factor", "numeric"),
 )
 
 
-setMethod(".accuracy", c("Surv", "matrix"),
-  function(observed, predicted, cutoff, times, ...) {
-    .metric.Surv_matrix(observed, predicted, cutoff, times, accuracy)
+setMethod(".accuracy", c("Surv", "SurvEvents"),
+  function(observed, predicted, ...) {
+    .metric.Surv_matrix(observed, predicted, accuracy)
+  }
+)
+
+
+setMethod(".accuracy", c("Surv", "SurvProbs"),
+  function(observed, predicted, cutoff, ...) {
+    .metric.Surv_matrix(observed, predicted, accuracy, cutoff)
   }
 )
 
@@ -85,8 +89,8 @@ setMethod(".accuracy", c("Surv", "matrix"),
 #' 
 auc <- function(observed, predicted = NULL,
                 metrics = c(MachineShop::tpr, MachineShop::fpr),
-                times = numeric(), stat = base::mean, ...) {
-  .auc(observed, predicted, metrics = metrics, times = times, stat = stat)
+                stat = base::mean, ...) {
+  .auc(observed, predicted, metrics = metrics, stat = stat)
 }
 
 MLMetric(auc) <- list("auc", "Area Under Performance Curve", TRUE)
@@ -136,10 +140,10 @@ setMethod(".auc", c("Curves", "NULL"),
 )
 
 
-setMethod(".auc", c("Surv", "matrix"),
-  function(observed, predicted, metrics, times, ...) {
-    x <- unname(auc(performance_curve(observed, predicted,
-                                      metrics = metrics, times = times)))
+setMethod(".auc", c("Surv", "SurvProbs"),
+  function(observed, predicted, metrics, ...) {
+    x <- unname(auc(performance_curve(observed, predicted, metrics = metrics)))
+    times <- predicted@times
     if (length(times) > 1) {
       c("mean" = mean.SurvMetrics(x, times), "time" = x)
     } else {
@@ -151,8 +155,8 @@ setMethod(".auc", c("Surv", "matrix"),
 
 #' @rdname metrics
 #' 
-brier <- function(observed, predicted = NULL, times = numeric(), ...) {
-  .brier(observed, predicted, times = times)
+brier <- function(observed, predicted = NULL, ...) {
+  .brier(observed, predicted)
 }
 
 MLMetric(brier) <- list("brier", "Brier Score", FALSE)
@@ -182,12 +186,9 @@ setMethod(".brier", c("factor", "numeric"),
 )
 
 
-setMethod(".brier", c("Surv", "matrix"),
-  function(observed, predicted, times = numeric(), ...) {
-    if (length(times) != ncol(predicted)) {
-      stop("unequal number of survival times and predictions")
-    }
-    
+setMethod(".brier", c("Surv", "SurvProbs"),
+  function(observed, predicted, ...) {
+    times <- predicted@times
     obs_times <- observed[, "time"]
     obs_events <- observed[, "status"]
     fitcens <- survfit(Surv(obs_times, 1 - obs_events) ~ 1)
@@ -278,9 +279,8 @@ setMethod(".cross_entropy", c("factor", "numeric"),
 
 #' @rdname metrics
 #' 
-f_score <- function(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
-                    beta = 1, ...) {
-  .f_score(observed, predicted, cutoff = cutoff, times = times, beta = beta)
+f_score <- function(observed, predicted = NULL, cutoff = 0.5, beta = 1, ...) {
+  .f_score(observed, predicted, cutoff = cutoff, beta = beta)
 }
 
 MLMetric(f_score) <- list("f_score", "F Score", TRUE)
@@ -316,19 +316,24 @@ setMethod(".f_score", c("factor", "numeric"),
 )
 
 
-setMethod(".f_score", c("Surv", "matrix"),
-  function(observed, predicted, cutoff, times, beta, ...) {
-    .metric.Surv_matrix(observed, predicted, cutoff, times, f_score,
-                        beta = beta)
+setMethod(".f_score", c("Surv", "SurvEvents"),
+  function(observed, predicted, beta, ...) {
+    .metric.Surv_matrix(observed, predicted, f_score, beta = beta)
+  }
+)
+
+
+setMethod(".f_score", c("Surv", "SurvProbs"),
+  function(observed, predicted, cutoff, beta, ...) {
+    .metric.Surv_matrix(observed, predicted, f_score, cutoff, beta = beta)
   }
 )
 
 
 #' @rdname metrics
 #' 
-fnr <- function(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
-                ...) {
-  .fnr(observed, predicted, cutoff = cutoff, times = times)
+fnr <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
+  .fnr(observed, predicted, cutoff = cutoff)
 }
 
 MLMetric(fnr) <- list("fnr", "False Negative Rate", FALSE)
@@ -356,18 +361,24 @@ setMethod(".fnr", c("factor", "numeric"),
 )
 
 
-setMethod(".fnr", c("Surv", "matrix"),
-  function(observed, predicted, cutoff, times, ...) {
-    1 - tpr(observed, predicted, cutoff = cutoff, times = times)
+setMethod(".fnr", c("Surv", "SurvEvents"),
+  function(observed, predicted, ...) {
+    1 - tpr(observed, predicted)
+  }
+)
+
+
+setMethod(".fnr", c("Surv", "SurvProbs"),
+  function(observed, predicted, cutoff, ...) {
+    1 - tpr(observed, predicted, cutoff = cutoff)
   }
 )
 
 
 #' @rdname metrics
 #' 
-fpr <- function(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
-                ...) {
-  .fpr(observed, predicted, cutoff = cutoff, times = times)
+fpr <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
+  .fpr(observed, predicted, cutoff = cutoff)
 }
 
 MLMetric(fpr) <- list("fpr", "False Positive Rate", FALSE)
@@ -395,18 +406,24 @@ setMethod(".fpr", c("factor", "numeric"),
 )
 
 
-setMethod(".fpr", c("Surv", "matrix"),
-  function(observed, predicted, cutoff, times, ...) {
-    1 - tnr(observed, predicted, cutoff = cutoff, times = times)
+setMethod(".fpr", c("Surv", "SurvEvents"),
+  function(observed, predicted, ...) {
+    1 - tnr(observed, predicted)
+  }
+)
+
+
+setMethod(".fpr", c("Surv", "SurvProbs"),
+  function(observed, predicted, cutoff, ...) {
+    1 - tnr(observed, predicted, cutoff = cutoff)
   }
 )
 
 
 #' @rdname metrics
 #' 
-kappa2 <- function(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
-                   ...) {
-  .kappa2(observed, predicted, cutoff = cutoff, times = times)
+kappa2 <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
+  .kappa2(observed, predicted, cutoff = cutoff)
 }
 
 MLMetric(kappa2) <- list("kappa2", "Cohen's Kappa", TRUE)
@@ -450,18 +467,24 @@ setMethod(".kappa2", c("factor", "numeric"),
 )
 
 
-setMethod(".kappa2", c("Surv", "matrix"),
-  function(observed, predicted, cutoff, times, ...) {
-    .metric.Surv_matrix(observed, predicted, cutoff, times, kappa2)
+setMethod(".kappa2", c("Surv", "SurvEvents"),
+  function(observed, predicted, ...) {
+    .metric.Surv_matrix(observed, predicted, kappa2)
+  }
+)
+
+
+setMethod(".kappa2", c("Surv", "SurvProbs"),
+  function(observed, predicted, cutoff, ...) {
+    .metric.Surv_matrix(observed, predicted, kappa2, cutoff)
   }
 )
 
 
 #' @rdname metrics
 #' 
-npv <- function(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
-                ...) {
-  .npv(observed, predicted, cutoff = cutoff, times = times)
+npv <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
+  .npv(observed, predicted, cutoff = cutoff)
 }
 
 MLMetric(npv) <- list("npv", "Negative Predictive Value", TRUE)
@@ -495,18 +518,24 @@ setMethod(".npv", c("factor", "numeric"),
 )
 
 
-setMethod(".npv", c("Surv", "matrix"),
-  function(observed, predicted, cutoff, times, ...) {
-    .metric.Surv_matrix(observed, predicted, cutoff, times, npv)
+setMethod(".npv", c("Surv", "SurvEvents"),
+  function(observed, predicted, ...) {
+    .metric.Surv_matrix(observed, predicted, npv)
+  }
+)
+
+
+setMethod(".npv", c("Surv", "SurvProbs"),
+  function(observed, predicted, cutoff, ...) {
+    .metric.Surv_matrix(observed, predicted, npv, cutoff)
   }
 )
 
 
 #' @rdname metrics
 #' 
-ppv <- function(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
-                ...) {
-  .ppv(observed, predicted, cutoff = cutoff, times = times)
+ppv <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
+  .ppv(observed, predicted, cutoff = cutoff)
 }
 
 MLMetric(ppv) <- list("ppv", "Positive Predictive Value", TRUE)
@@ -540,17 +569,24 @@ setMethod(".ppv", c("factor", "numeric"),
 )
 
 
-setMethod(".ppv", c("Surv", "matrix"),
-  function(observed, predicted, cutoff, times, ...) {
-    .metric.Surv_matrix(observed, predicted, cutoff, times, ppv)
+setMethod(".ppv", c("Surv", "SurvEvents"),
+  function(observed, predicted, ...) {
+    .metric.Surv_matrix(observed, predicted, ppv)
+  }
+)
+
+
+setMethod(".ppv", c("Surv", "SurvProbs"),
+  function(observed, predicted, cutoff, ...) {
+    .metric.Surv_matrix(observed, predicted, ppv, cutoff)
   }
 )
 
 
 #' @rdname metrics
 #' 
-pr_auc <- function(observed, predicted = NULL, times = numeric(), ...) {
-  .pr_auc(observed, predicted, times = times)
+pr_auc <- function(observed, predicted = NULL, ...) {
+  .pr_auc(observed, predicted)
 }
 
 MLMetric(pr_auc) <- list("pr_auc", "Area Under Precision-Recall Curve", TRUE)
@@ -579,18 +615,17 @@ setMethod(".pr_auc", c("factor", "numeric"),
 )
 
 
-setMethod(".pr_auc", c("Surv", "matrix"),
-  function(observed, predicted, times, ...) {
-    auc(observed, predicted, metrics = c(precision, recall), times = times)
+setMethod(".pr_auc", c("Surv", "SurvProbs"),
+  function(observed, predicted, ...) {
+    auc(observed, predicted, metrics = c(precision, recall))
   }
 )
 
 
 #' @rdname metrics
 #' 
-precision <- function(observed, predicted = NULL, cutoff = 0.5,
-                      times = numeric(), ...) {
-  .precision(observed, predicted, cutoff = cutoff, times = times)
+precision <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
+  .precision(observed, predicted, cutoff = cutoff)
 }
 
 MLMetric(precision) <- list("precision", "Precision", TRUE)
@@ -619,18 +654,24 @@ setMethod(".precision", c("factor", "numeric"),
 )
 
 
-setMethod(".precision", c("Surv", "matrix"),
-  function(observed, predicted, cutoff, times, ...) {
-    ppv(observed, predicted, cutoff = cutoff, times = times)
+setMethod(".precision", c("Surv", "SurvEvents"),
+  function(observed, predicted, ...) {
+    ppv(observed, predicted)
+  }
+)
+
+
+setMethod(".precision", c("Surv", "SurvProbs"),
+  function(observed, predicted, cutoff, ...) {
+    ppv(observed, predicted, cutoff = cutoff)
   }
 )
 
 
 #' @rdname metrics
 #' 
-recall <- function(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
-                   ...) {
-  .recall(observed, predicted, cutoff = cutoff, times = times)
+recall <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
+  .recall(observed, predicted, cutoff = cutoff)
 }
 
 MLMetric(recall) <- list("recall", "Recall", TRUE)
@@ -659,17 +700,24 @@ setMethod(".recall", c("factor", "numeric"),
 )
 
 
-setMethod(".recall", c("Surv", "matrix"),
-  function(observed, predicted, cutoff, times, ...) {
-    tpr(observed, predicted, cutoff = cutoff, times = times)
+setMethod(".recall", c("Surv", "SurvEvents"),
+  function(observed, predicted, ...) {
+    tpr(observed, predicted)
+  }
+)
+
+
+setMethod(".recall", c("Surv", "SurvProbs"),
+  function(observed, predicted, cutoff, ...) {
+    tpr(observed, predicted, cutoff = cutoff)
   }
 )
 
 
 #' @rdname metrics
 #' 
-roc_auc <- function(observed, predicted = NULL, times = numeric(), ...) {
-  .roc_auc(observed, predicted, times = times)
+roc_auc <- function(observed, predicted = NULL, ...) {
+  .roc_auc(observed, predicted)
 }
 
 MLMetric(roc_auc) <- list("roc_auc", "Area Under ROC Curve", TRUE)
@@ -698,9 +746,9 @@ setMethod(".roc_auc", c("factor", "numeric"),
 )
 
 
-setMethod(".roc_auc", c("Surv", "matrix"),
-  function(observed, predicted, times, ...) {
-    auc(observed, predicted, times = times)
+setMethod(".roc_auc", c("Surv", "SurvProbs"),
+  function(observed, predicted, ...) {
+    auc(observed, predicted)
   }
 )
 
@@ -708,9 +756,8 @@ setMethod(".roc_auc", c("Surv", "matrix"),
 #' @rdname metrics
 #' 
 roc_index <- function(observed, predicted = NULL, cutoff = 0.5,
-                      times = numeric(), f = function(sens, spec) sens + spec,
-                      ...) {
-  .roc_index(observed, predicted, cutoff = cutoff, times = times, f = f)
+                      f = function(sens, spec) sens + spec, ...) {
+  .roc_index(observed, predicted, cutoff = cutoff, f = f)
 }
 
 MLMetric(roc_index) <- list("roc_index", "ROC Index", TRUE)
@@ -739,18 +786,24 @@ setMethod(".roc_index", c("factor", "numeric"),
 )
 
 
-setMethod(".roc_index", c("Surv", "matrix"),
-  function(observed, predicted, cutoff, times, f, ...) {
-    .metric.Surv_matrix(observed, predicted, cutoff, times, roc_index, f = f)
+setMethod(".roc_index", c("Surv", "SurvEvents"),
+  function(observed, predicted, f, ...) {
+    .metric.Surv_matrix(observed, predicted, roc_index, f = f)
+  }
+)
+
+
+setMethod(".roc_index", c("Surv", "SurvProbs"),
+  function(observed, predicted, cutoff, f, ...) {
+    .metric.Surv_matrix(observed, predicted, roc_index, cutoff, f = f)
   }
 )
 
 
 #' @rdname metrics
 #' 
-rpp <- function(observed, predicted = NULL, cutoff = 0.5,
-                times = numeric(), ...) {
-  .rpp(observed, predicted, cutoff = cutoff, times = times)
+rpp <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
+  .rpp(observed, predicted, cutoff = cutoff)
 }
 
 MLMetric(rpp) <- list("rpp", "Rate of Positive Prediction", FALSE)
@@ -783,18 +836,24 @@ setMethod(".rpp", c("factor", "numeric"),
 )
 
 
-setMethod(".rpp", c("Surv", "matrix"),
-  function(observed, predicted, cutoff, times, ...) {
-    .metric.Surv_matrix(observed, predicted, cutoff, times, rpp)
+setMethod(".rpp", c("Surv", "SurvEvents"),
+  function(observed, predicted, ...) {
+    .metric.Surv_matrix(observed, predicted, rpp)
+  }
+)
+
+
+setMethod(".rpp", c("Surv", "SurvProbs"),
+  function(observed, predicted, cutoff, ...) {
+    .metric.Surv_matrix(observed, predicted, rpp, cutoff)
   }
 )
 
 
 #' @rdname metrics
 #' 
-sensitivity <- function(observed, predicted = NULL, cutoff = 0.5,
-                        times = numeric(), ...) {
-  .sensitivity(observed, predicted, cutoff = cutoff, times = times)
+sensitivity <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
+  .sensitivity(observed, predicted, cutoff = cutoff)
 }
 
 MLMetric(sensitivity) <- list("sensitivity", "Sensitivity", TRUE)
@@ -823,18 +882,24 @@ setMethod(".sensitivity", c("factor", "numeric"),
 )
 
 
-setMethod(".sensitivity", c("Surv", "matrix"),
-  function(observed, predicted, cutoff, times, ...) {
-    tpr(observed, predicted, cutoff = cutoff, times = times)
+setMethod(".sensitivity", c("Surv", "SurvEvents"),
+  function(observed, predicted, ...) {
+    tpr(observed, predicted)
+  }
+)
+
+
+setMethod(".sensitivity", c("Surv", "SurvProbs"),
+  function(observed, predicted, cutoff, ...) {
+    tpr(observed, predicted, cutoff = cutoff)
   }
 )
 
 
 #' @rdname metrics
 #' 
-specificity <- function(observed, predicted = NULL, cutoff = 0.5,
-                        times = numeric(), ...) {
-  .specificity(observed, predicted, cutoff = cutoff, times = times)
+specificity <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
+  .specificity(observed, predicted, cutoff = cutoff)
 }
 
 MLMetric(specificity) <- list("specificity", "Specificity", TRUE)
@@ -863,18 +928,24 @@ setMethod(".specificity", c("factor", "numeric"),
 )
 
 
-setMethod(".specificity", c("Surv", "matrix"),
-  function(observed, predicted, cutoff, times, ...) {
-    tnr(observed, predicted, cutoff = cutoff, times = times)
+setMethod(".specificity", c("Surv", "SurvEvents"),
+  function(observed, predicted, ...) {
+    tnr(observed, predicted)
+  }
+)
+
+
+setMethod(".specificity", c("Surv", "SurvProbs"),
+  function(observed, predicted, cutoff, ...) {
+    tnr(observed, predicted, cutoff = cutoff)
   }
 )
 
 
 #' @rdname metrics
 #' 
-tnr <- function(observed, predicted = NULL, cutoff = 0.5, times = numeric(),
-                ...) {
-  .tnr(observed, predicted, cutoff = cutoff, times = times)
+tnr <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
+  .tnr(observed, predicted, cutoff = cutoff)
 }
 
 MLMetric(tnr) <- list("tnr", "True Negative Rate", TRUE)
@@ -907,18 +978,24 @@ setMethod(".tnr", c("factor", "numeric"),
 )
 
 
-setMethod(".tnr", c("Surv", "matrix"),
-  function(observed, predicted, cutoff, times, ...) {
-    .metric.Surv_matrix(observed, predicted, cutoff, times, tnr)
+setMethod(".tnr", c("Surv", "SurvEvents"),
+  function(observed, predicted, ...) {
+    .metric.Surv_matrix(observed, predicted, tnr)
+  }
+)
+
+
+setMethod(".tnr", c("Surv", "SurvProbs"),
+  function(observed, predicted, cutoff, ...) {
+    .metric.Surv_matrix(observed, predicted, tnr, cutoff)
   }
 )
 
 
 #' @rdname metrics
 #' 
-tpr <- function(observed, predicted = NULL, cutoff = 0.5,
-                times = numeric(), ...) {
-  .tpr(observed, predicted, cutoff = cutoff, times = times)
+tpr <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
+  .tpr(observed, predicted, cutoff = cutoff)
 }
 
 MLMetric(tpr) <- list("tpr", "True Positive Rate", TRUE)
@@ -951,9 +1028,16 @@ setMethod(".tpr", c("factor", "numeric"),
 )
 
 
-setMethod(".tpr", c("Surv", "matrix"),
-  function(observed, predicted, cutoff, times, ...) {
-    .metric.Surv_matrix(observed, predicted, cutoff, times, tpr)
+setMethod(".tpr", c("Surv", "SurvEvents"),
+  function(observed, predicted, ...) {
+    .metric.Surv_matrix(observed, predicted, tpr)
+  }
+)
+
+
+setMethod(".tpr", c("Surv", "SurvProbs"),
+  function(observed, predicted, cutoff, ...) {
+    .metric.Surv_matrix(observed, predicted, tpr, cutoff)
   }
 )
 
@@ -1007,9 +1091,10 @@ setMethod(".weighted_kappa2", c("ordered", "matrix"),
 }
 
 
-.metric.Surv_matrix <- function(observed, predicted, cutoff, times, FUN, ...) {
-  conf <- confusion(observed, predicted, cutoff = cutoff, times = times)
+.metric.Surv_matrix <- function(observed, predicted, FUN, cutoff = NULL, ...) {
+  conf <- confusion(observed, predicted, cutoff = cutoff)
   metrics <- sapply(conf, FUN, ...)
+  times <- predicted@times
   if (length(times) > 1) {
     c("mean" = mean.SurvMetrics(metrics, times), metrics)
   } else {

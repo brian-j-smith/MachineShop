@@ -652,6 +652,82 @@ SummaryConfusion <- setClass("SummaryConfusion",
 )
 
 
+SurvMatrix <- function(object, times = NULL) {
+  object <- as.matrix(object)
+  
+  if (is.null(times)) times <- rep(NA_real_, ncol(object))
+  
+  if (length(times) != ncol(object)) {
+    stop("unequal number of survival times and predictions")
+  }
+  
+  new("SurvMatrix", object, times = times)
+}
+
+
+setClass("SurvMatrix",
+  slots = c("times" = "numeric"),
+  contains = "matrix"
+)
+
+
+#' SurvMatrix Class Constructor
+#' 
+#' Create an object of predicted survival events or probabilites for use with
+#' metrics provided by the \pkg{MachineShop} package.
+#' 
+#' @name SurvMatrix
+#' @rdname SurvMatrix
+#' 
+#' @param object matrix, or object that can be converted to one, of predicted
+#' survival events or probabilities with columns and rows representing
+#' prediction times and cases, respectively.
+#' @param times numeric vector of the survival prediction times.
+#' 
+#' @return Object that is of the same class as the constructor name and inherits
+#' from \code{SurvMatrix}.  Examples of these objects are the predicted survival
+#' events and probabilities returned by the \code{predict} function.
+#' 
+#' @seealso \code{\link{metrics}}, \code{\link{predict}}
+#' 
+SurvEvents <- function(object = numeric(), times = NULL) {
+  as(SurvMatrix(object, times), "SurvEvents")
+}
+
+
+setClass("SurvEvents", contains = "SurvMatrix")
+
+
+#' @rdname SurvMatrix
+#' 
+SurvProbs <- function(object = numeric(), times = NULL) {
+  as(SurvMatrix(object, times), "SurvProbs")
+}
+
+
+setClass("SurvProbs", contains = "SurvMatrix")
+
+
+#' @rdname SurvMatrix
+#' @aliases SurvMatrix,ANY,ANY,ANY
+#' 
+#' @param x object from which to extract elements.
+#' @param i,j,... indices specifying elements to extract.
+#' @param drop logical indicating that the result be returned as a
+#' \code{numeric} coerced to the lowest dimension possible if \code{TRUE} or
+#' as a 2-dimensional \code{SurvMatrix} object otherwise.
+#' 
+setMethod("[", c(x = "SurvMatrix", i = "ANY", j = "ANY", drop = "ANY"),
+  function(x, i, j, ..., drop = FALSE) {
+    if (drop) {
+      x@.Data[i, j, drop = TRUE]
+    } else {
+      as(SurvMatrix(x@.Data[i, j, drop = FALSE], x@times[j]), class(x))
+    }
+  }
+)
+
+
 VarImp <- setClass("VarImp", contains = "data.frame")
 
 

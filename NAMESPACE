@@ -41,6 +41,8 @@ export(.,
        resample,
        Resamples,
        response,
+       SurvEvents,
+       SurvProbs,
        tune,
        varimp)
 

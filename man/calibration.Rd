@@ -7,7 +7,7 @@
 \usage{
 Calibration(...)
 
-calibration(x, y = NULL, breaks = 10, times = numeric(), ...)
+calibration(x, y = NULL, breaks = 10, ...)
 }
 \arguments{
 \item{...}{named or unnamed \code{calibration} output to combine together
@@ -22,9 +22,6 @@ predicted responses.}
 calculate observed mean values.  May be specified as a number of bins, a
 vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
 survival responses and loess for others.}
-
-\item{times}{numeric vector of follow-up times if \code{y} contains predicted
-survival probabilities.}
 }
 \value{
 \code{Calibration} class object that inherits from \code{data.frame}.

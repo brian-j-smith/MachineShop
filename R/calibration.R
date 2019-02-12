@@ -11,8 +11,6 @@
 #' calculate observed mean values.  May be specified as a number of bins, a
 #' vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
 #' survival responses and loess for others.
-#' @param times numeric vector of follow-up times if \code{y} contains predicted
-#' survival probabilities.
 #' 
 #' @return \code{Calibration} class object that inherits from \code{data.frame}.
 #'  
@@ -29,9 +27,9 @@
 #' cal <- calibration(res)
 #' plot(cal)
 #' 
-calibration <- function(x, y = NULL, breaks = 10, times = numeric(), ...) {
+calibration <- function(x, y = NULL, breaks = 10, ...) {
   calibration_depwarn(...)
-  .calibration(x, y, breaks = breaks, times = times)
+  .calibration(x, y, breaks = breaks)
 }
 
 
@@ -49,16 +47,14 @@ calibration_depwarn <- function(n = NULL, ...) {
 }
 
 
-.calibration.default <- function(x, y, breaks, times, ...) {
-  Calibration(.calibration_default(x, y, breaks = breaks, times = times),
-              .breaks = breaks)
+.calibration.default <- function(x, y, breaks, ...) {
+  Calibration(.calibration_default(x, y, breaks = breaks), .breaks = breaks)
 }
 
 
 .calibration.Resamples <- function(x, breaks, ...) {
-  times <- x@control@times
   cal_list <- by(x, x$Model, function(data) {
-    calibration(data$Observed, data$Predicted, breaks = breaks, times = times)
+    calibration(data$Observed, data$Predicted, breaks = breaks)
   }, simplify = FALSE)
   do.call(Calibration, cal_list)
 }
@@ -133,12 +129,9 @@ setMethod(".calibration_default", c("numeric", "numeric"),
 )
 
 
-setMethod(".calibration_default", c("Surv", "matrix"),
-  function(observed, predicted, breaks, times, ...) {
-    if (length(times) != ncol(predicted)) {
-      stop("unequal number of survival times and predictions")
-    }
-    
+setMethod(".calibration_default", c("Surv", "SurvProbs"),
+  function(observed, predicted, breaks, ...) {
+    times <- predicted@times
     colnames(predicted) <- paste("Time", 1:length(times))
     df <- data.frame(Response = rep(colnames(predicted),
                                     each = nrow(predicted)))

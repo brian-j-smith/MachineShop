@@ -28,16 +28,16 @@
 #'               data = Melanoma, model = GBMModel)
 #' predict(gbmfit, newdata = Melanoma, times = 365 * c(2, 5, 10), type = "prob")
 #' 
-predict.MLModelFit <- function(object, newdata = NULL,
+predict.MLModelFit <- function(object, newdata = NULL, times = numeric(),
                                type = c("response", "prob"), cutoff = 0.5,
-                               times = numeric(), ...) {
+                               ...) {
   newdata <- preprocess(fitbit(object, "x"), newdata)
   requireModelNamespaces(fitbit(object, "packages"))
   obs <- response(object)
   pred <- fitbit(object, "predict")(unMLModelFit(object), newdata,
                                     fitbits = field(object, "fitbits"),
                                     times = times, ...)
-  pred <- convert_dim(obs, pred)
+  pred <- convert_prob(obs, pred, times = times)
   if (match.arg(type) == "response") {
     pred <- convert_response(obs, pred, cutoff = cutoff)
   }

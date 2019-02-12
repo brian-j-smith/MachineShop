@@ -13,8 +13,6 @@
 #' @param metrics list of two performance metrics for the analysis [default: ROC
 #' metrics].  Precision recall curves can be obtained with 
 #' \code{c(precision, recall)}.
-#' @param times numeric vector of follow-up times if \code{y} contains predicted
-#' survival probabilities.
 #' @param na.rm logical indicating whether to remove observed or predicted
 #' responses that are \code{NA} when calculating metrics.
 #' 
@@ -45,16 +43,14 @@ performance_curve.Resamples <- function(x, metrics = c(MachineShop::tpr,
                                                        MachineShop::fpr),
                                         na.rm = TRUE, ...) {
   metrics <- .get_curve_metrics(metrics)
-  times <- x@control@times
-  
+
   if (na.rm) x <- na.omit(x)
   
   curves <- NULL
   for (model in unique(x$Model)) {
     for (resample in unique(x$Resample)) {
       df <- subset(x, Model == model & Resample == resample)
-      curve <- .curve_default(df$Observed, df$Predicted,
-                              metrics = metrics, times = times)
+      curve <- .curve_default(df$Observed, df$Predicted, metrics = metrics)
       curve <- if (is(curve, "listof")) {
         structure(curve, names = paste0(model, ".", names(curve)))
       } else {
@@ -74,8 +70,8 @@ performance_curve.Resamples <- function(x, metrics = c(MachineShop::tpr,
 #' 
 performance_curve.default <- function(x, y, metrics = c(MachineShop::tpr,
                                                         MachineShop::fpr),
-                                      times = numeric(), ...) {
-  .curve(x, y, metrics = .get_curve_metrics(metrics), times = times)
+                                      ...) {
+  .curve(x, y, metrics = .get_curve_metrics(metrics))
 }
 
 
@@ -102,8 +98,8 @@ performance_curve.default <- function(x, y, metrics = c(MachineShop::tpr,
 }
 
 
-.curve.Surv <- function(x, y, times, metrics, stat, ...) {
-  do.call(Curves, .curve_default(x, y, times = times, metrics = metrics))
+.curve.Surv <- function(x, y, metrics, stat, ...) {
+  do.call(Curves, .curve_default(x, y, metrics = metrics))
 }
 
 
@@ -133,12 +129,9 @@ setMethod(".curve_default", c("factor", "numeric"),
 )
 
 
-setMethod(".curve_default", c("Surv", "matrix"),
-  function(observed, predicted, times, metrics, ...) {
-    if (length(times) != ncol(predicted)) {
-      stop("unequal number of survival times and predictions")
-    }
-    
+setMethod(".curve_default", c("Surv", "SurvProbs"),
+  function(observed, predicted, metrics, ...) {
+    times <- predicted@times
     surv <- predict(survfit(observed ~ 1, se.fit = FALSE), times)
 
     conf <- ConfusionMatrix(table(Predicted = 0:1, Observed = 0:1))

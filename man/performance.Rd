@@ -35,7 +35,7 @@ performance(x, ...)
 
 \method{performance}{Surv}(x, y, metrics = c(CIndex =
   MachineShop::cindex, ROCAUC = MachineShop::roc_auc, Brier =
-  MachineShop::brier), cutoff = 0.5, times = numeric(), ...)
+  MachineShop::brier), cutoff = 0.5, ...)
 
 modelmetrics(...)
 }
@@ -55,9 +55,6 @@ functions to include in the calculation of performance metrics.}
 
 \item{cutoff}{threshold above which binary factor probabilities are
 classified as events and below which survival probabilities are classified.}
-
-\item{times}{numeric vector of follow-up times at which survival
-probabilities were predicted.}
 }
 \description{
 Compute measures of model performance.
