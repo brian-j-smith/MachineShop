@@ -2,7 +2,7 @@
 title: "MachineShop: Machine Learning Models and Tools for R"
 ---
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/MachineShop)](http://cran.r-project.org/web/packages/MachineShop)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/MachineShop)](https://CRAN.R-project.org/package=MachineShop)
 
 ```{r child = "../src/overview.Rmd"}
 ```

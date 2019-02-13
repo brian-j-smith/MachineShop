@@ -7,7 +7,7 @@ output: github_document
 ```
 
 [![Generic badge](https://img.shields.io/badge/docs-online-green.svg)](https://brian-j-smith.github.io/MachineShop/)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/MachineShop)](http://cran.r-project.org/web/packages/MachineShop)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/MachineShop)](https://CRAN.R-project.org/package=MachineShop)
 
 
 # Description

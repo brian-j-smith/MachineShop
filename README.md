@@ -3,7 +3,7 @@ MachineShop: Machine Learning Models and Tools for R
 
 [![Generic
 badge](https://img.shields.io/badge/docs-online-green.svg)](https://brian-j-smith.github.io/MachineShop/)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/MachineShop)](http://cran.r-project.org/web/packages/MachineShop)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/MachineShop)](https://CRAN.R-project.org/package=MachineShop)
 
 # Description
 
