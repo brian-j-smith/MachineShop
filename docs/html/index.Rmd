@@ -1,7 +1,8 @@
 ---
 title: "MachineShop: Machine Learning Models and Tools for R"
-subtitle: "Package Version `r packageVersion('MachineShop')`"
 ---
+
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/MachineShop)](http://cran.r-project.org/web/packages/MachineShop)
 
 ```{r child = "../src/overview.Rmd"}
 ```

@@ -5,11 +5,13 @@
 ## 1.2.0
 * Implement metrics: ``auc``, ``fnr``, ``fpr``, ``rpp``, ``tnr``, ``tpr``.
 * Implement performance curves, including ROC and precision recall.
+* Implement ``SurvMatrix`` classes for predicted survival events and probabilities to eliminate need for separate ``times`` arguments in calibration, confusion, metrics, and performance functions.
 * Add calibration curves for predicted survival means.
 * Add lift curves for predicted survival probabilities.
 * Add recipe support for survival and matrix outcomes.
 * Rename ``MLControl`` argument ``surv_times`` to ``times``.
 * Fix identification of recipe ``case_weight`` and ``case_strata`` variables.
+* Launch package [website](https://brian-j-smith.github.io/MachineShop/).
 * Bring Introduction vignette up to date with package features.
 
 
