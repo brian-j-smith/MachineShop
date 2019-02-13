@@ -3,22 +3,17 @@
 \name{performance}
 \alias{performance}
 \alias{performance.Resamples}
-\alias{performance.Confusion}
-\alias{performance.ConfusionMatrix}
 \alias{performance.factor}
 \alias{performance.matrix}
 \alias{performance.numeric}
 \alias{performance.Surv}
+\alias{performance.Confusion}
+\alias{performance.ConfusionMatrix}
 \title{Model Performance Metrics}
 \usage{
 performance(x, ...)
 
 \method{performance}{Resamples}(x, ..., na.rm = TRUE)
-
-\method{performance}{Confusion}(x, ...)
-
-\method{performance}{ConfusionMatrix}(x, metrics = c(Accuracy =
-  MachineShop::accuracy, Kappa = MachineShop::kappa2), ...)
 
 \method{performance}{factor}(x, y, metrics = c(Accuracy =
   MachineShop::accuracy, Kappa = MachineShop::kappa2, ROCAUC =
@@ -35,20 +30,27 @@ performance(x, ...)
 \method{performance}{Surv}(x, y, metrics = c(CIndex =
   MachineShop::cindex, ROCAUC = MachineShop::roc_auc, Brier =
   MachineShop::brier), cutoff = 0.5, ...)
+
+\method{performance}{Confusion}(x, ...)
+
+\method{performance}{ConfusionMatrix}(x, metrics = c(Accuracy =
+  MachineShop::accuracy, Kappa = MachineShop::kappa2), ...)
 }
 \arguments{
 \item{x}{observed responses or class containing observed and predicted
 responses.}
 
-\item{...}{arguments passed from the \code{Resamples} method to the others.}
+\item{...}{arguments passed from the \code{Resamples} method to the response
+type-specific methods or from the method for \code{Confusion} to
+\code{ConfusionMatrix}.}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}
 
+\item{y}{predicted responses.}
+
 \item{metrics}{function, one or more function names, or list of named
 functions to include in the calculation of performance metrics.}
-
-\item{y}{predicted responses.}
 
 \item{cutoff}{threshold above which binary factor probabilities are
 classified as events and below which survival probabilities are classified.}

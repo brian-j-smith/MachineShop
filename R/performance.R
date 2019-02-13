@@ -13,7 +13,9 @@
 #' classified as events and below which survival probabilities are classified.
 #' @param na.rm logical indicating whether to remove observed or predicted
 #' responses that are \code{NA} when calculating metrics.
-#' @param ... arguments passed from the \code{Resamples} method to the others.
+#' @param ... arguments passed from the \code{Resamples} method to the response
+#' type-specific methods or from the method for \code{Confusion} to
+#' \code{ConfusionMatrix}.
 #' 
 #' @seealso \code{\link{response}}, \code{\link{predict}},
 #' \code{\link{resample}}, \code{\link{confusion}}, \code{\link{metrics}},
@@ -47,24 +49,6 @@ performance.Resamples <- function(x, ..., na.rm = TRUE) {
                       }, simplify = FALSE)
   
   do.call(Performance, perf_list)
-}
-
-
-#' @rdname performance
-#' 
-performance.Confusion <- function(x, ...) {
-  structure(lapply(x, performance, ...), class = "listof")
-}
-
-
-#' @rdname performance
-#' 
-performance.ConfusionMatrix <- function(x, metrics =
-                                          c("Accuracy" = MachineShop::accuracy,
-                                            "Kappa" = MachineShop::kappa2),
-                                        ...) {
-  metrics <- list2function(metrics)
-  metrics(x)
 }
 
 
@@ -126,4 +110,22 @@ performance.Surv <- function(x, y, metrics =
                               cutoff = 0.5, ...) {
   metrics <- list2function(metrics)
   metrics(x, y, cutoff = cutoff)
+}
+
+
+#' @rdname performance
+#' 
+performance.Confusion <- function(x, ...) {
+  structure(lapply(x, performance, ...), class = "listof")
+}
+
+
+#' @rdname performance
+#' 
+performance.ConfusionMatrix <- function(x, metrics =
+                                          c("Accuracy" = MachineShop::accuracy,
+                                            "Kappa" = MachineShop::kappa2),
+                                        ...) {
+  metrics <- list2function(metrics)
+  metrics(x)
 }
