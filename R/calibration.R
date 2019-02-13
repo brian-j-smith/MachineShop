@@ -28,17 +28,7 @@
 #' plot(cal)
 #' 
 calibration <- function(x, y = NULL, breaks = 10, ...) {
-  calibration_depwarn(...)
   .calibration(x, y, breaks = breaks)
-}
-
-
-calibration_depwarn <- function(n = NULL, ...) {
-  if (!is.null(n)) {
-    depwarn("'n' argument to calibration is deprecated",
-            "use 'breaks' instead",
-            expired = TRUE)
-  }
 }
 
 
