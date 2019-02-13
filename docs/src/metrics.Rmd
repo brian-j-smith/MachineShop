@@ -19,7 +19,9 @@ f <- function(x) {
   if (is_type("numeric", "numeric")) continuous <- c(continuous, "n")
   
   survival <- NULL
-  if (is_type("Surv", "matrix") || is_type("Surv", "numeric")) survival <- "S"
+  if (any(mapply(is_type, "Surv", c("numeric", "SurvEvents", "SurvProbs")))) {
+    survival <- "S"
+  }
 
   data.frame(
     Label = x$label,
