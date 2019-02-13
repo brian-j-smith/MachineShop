@@ -9,7 +9,6 @@
 \alias{performance.matrix}
 \alias{performance.numeric}
 \alias{performance.Surv}
-\alias{modelmetrics}
 \title{Model Performance Metrics}
 \usage{
 performance(x, ...)
@@ -36,8 +35,6 @@ performance(x, ...)
 \method{performance}{Surv}(x, y, metrics = c(CIndex =
   MachineShop::cindex, ROCAUC = MachineShop::roc_auc, Brier =
   MachineShop::brier), cutoff = 0.5, ...)
-
-modelmetrics(...)
 }
 \arguments{
 \item{x}{observed responses or class containing observed and predicted

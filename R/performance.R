@@ -127,13 +127,3 @@ performance.Surv <- function(x, y, metrics =
   metrics <- list2function(metrics)
   metrics(x, y, cutoff = cutoff)
 }
-
-
-#' @rdname performance
-#' 
-modelmetrics <- function(...) {
-  depwarn("'modelmetrics' is deprecated",
-          "use 'performance' instead",
-          expired = TRUE)
-  performance(...)
-}
