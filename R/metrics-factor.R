@@ -104,13 +104,6 @@ setMethod(".auc", c("ANY", "ANY"),
 )
 
 
-setMethod(".auc", c("factor", "matrix"), 
-  function(observed, predicted, metrics, ...) {
-    .metric.factor(observed, predicted, auc, metrics = metrics)
-  }
-)
-
-
 setMethod(".auc", c("factor", "numeric"),
   function(observed, predicted, metrics, ...) {
     if (identical(metrics[[1]], tpr) && identical(metrics[[2]], fpr)) {
@@ -601,13 +594,6 @@ setMethod(".pr_auc", c("ANY", "ANY"),
 )
 
 
-setMethod(".pr_auc", c("factor", "matrix"), 
-  function(observed, predicted, ...) {
-    auc(observed, predicted, metrics = c(precision, recall))
-  }
-)
-
-
 setMethod(".pr_auc", c("factor", "numeric"),
   function(observed, predicted, ...) {
     auc(observed, predicted, metrics = c(precision, recall))
@@ -729,13 +715,6 @@ setGeneric(".roc_auc",
 
 setMethod(".roc_auc", c("ANY", "ANY"),
   function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".roc_auc", c("factor", "matrix"), 
-  function(observed, predicted, ...) {
-    auc(observed, predicted)
-  }
 )
 
 
@@ -1082,13 +1061,6 @@ setMethod(".weighted_kappa2", c("ordered", "matrix"),
     weighted_kappa2(confusion(observed, predicted), power = power)
   }
 )
-
-
-.metric.factor <- function(observed, predicted, FUN, ...) {
-  mean(sapply(1:ncol(predicted), function(i) {
-    FUN(factor(observed == levels(observed)[i]), predicted[, i], ...)
-  }))
-}
 
 
 .metric.Surv_matrix <- function(observed, predicted, FUN, cutoff = NULL, ...) {
