@@ -15,21 +15,22 @@ performance(x, ...)
 
 \method{performance}{Resamples}(x, ..., na.rm = TRUE)
 
-\method{performance}{factor}(x, y, metrics = c(Accuracy =
-  MachineShop::accuracy, Kappa = MachineShop::kappa2, ROCAUC =
-  MachineShop::roc_auc, Sensitivity = MachineShop::sensitivity, Specificity
-  = MachineShop::specificity, Brier = MachineShop::brier), cutoff = 0.5,
-  ...)
+\method{performance}{factor}(x, y, metrics = c(Brier =
+  MachineShop::brier, Accuracy = MachineShop::accuracy, Kappa =
+  MachineShop::kappa2, `Weighted Kappa` = MachineShop::weighted_kappa2,
+  ROCAUC = MachineShop::roc_auc, Sensitivity = MachineShop::sensitivity,
+  Specificity = MachineShop::specificity), cutoff = 0.5, ...)
 
-\method{performance}{matrix}(x, y, metrics = c(R2 = MachineShop::r2, RMSE
-  = MachineShop::rmse, MAE = MachineShop::mae), ...)
+\method{performance}{matrix}(x, y, metrics = c(RMSE = MachineShop::rmse,
+  R2 = MachineShop::r2, MAE = MachineShop::mae), ...)
 
-\method{performance}{numeric}(x, y, metrics = c(R2 = MachineShop::r2,
-  RMSE = MachineShop::rmse, MAE = MachineShop::mae), ...)
+\method{performance}{numeric}(x, y, metrics = c(RMSE = MachineShop::rmse,
+  R2 = MachineShop::r2, MAE = MachineShop::mae), ...)
 
 \method{performance}{Surv}(x, y, metrics = c(CIndex =
-  MachineShop::cindex, ROCAUC = MachineShop::roc_auc, Brier =
-  MachineShop::brier), cutoff = 0.5, ...)
+  MachineShop::cindex, Brier = MachineShop::brier, ROCAUC =
+  MachineShop::roc_auc, Accuracy = MachineShop::accuracy), cutoff = 0.5,
+  ...)
 
 \method{performance}{Confusion}(x, ...)
 

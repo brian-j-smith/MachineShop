@@ -17,7 +17,7 @@ importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
            pchisq, predict, quantile, reformulate, reshape, sd, t.test, terms,
            vcov)
 importFrom(survival, is.Surv, Surv, survfit)
-importFrom(utils, combn, head, relist, stack, tail)
+importFrom(utils, combn, getS3method, head, relist, stack, tail)
 
 
 export(.,

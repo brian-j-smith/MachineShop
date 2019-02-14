@@ -3,7 +3,7 @@
 
 ## Performance Function
 
-Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models.  Metrics can be computed with the `performance` function applied to observed responses and responses predicted with the `predict` function.  Metrics of observed versus predicted survival probabilities will be calculated at each survival time and returned along with their time-integrated mean.
+Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models.  Metrics can be computed with the `performance` function applied to observed responses and responses predicted with the `predict` function.  Metrics of observed versus predicted survival probabilities or events will be calculated at each survival time and returned along with their time-integrated mean.
 
 ```{r}
 ## Survival performance metrics
@@ -18,6 +18,10 @@ performance(obs, pred_means)
 ## Predicted survival probabilities
 pred_probs <- predict(surv_fit, newdata = surv_test, times = surv_times, type = "prob")
 performance(obs, pred_probs)
+
+## Predicted survival events
+pred_events <- predict(surv_fit, newdata = surv_test, times = surv_times)
+performance(obs, pred_events)
 ```
 
 Function `performance` computes a default set of metrics according to the observed and predicted response types, as indicated in the table below.
@@ -27,11 +31,12 @@ Table 2. Default performance metrics by response types.
 
 Response                 | Default Metrics
 :----------------------- | :------------------------------------------------------
-Factor                   | Accuracy, Cohen's Kappa, Area Under ROC Curve, Brier Score
-Binary Factor            | Accuracy, Cohen's Kappa, Area Under ROC Curve, Sensitivity, Specificity, Brier Score
-Numeric Vector or Matrix | R^2^, Root Mean Squared Error, Mean Absolute Error
+Factor                   | Brier Score, Accuracy, Cohen's Kappa
+Binary Factor            | Brier Score, Accuracy, Cohen's Kappa, Area Under ROC Curve, Sensitivity, Specificity
+Numeric Vector or Matrix | Root Mean Squared Error, R^2^, Mean Absolute Error
 Survival Means           | Concordance Index
-Survival Probabilities   | Area Under ROC Curve, Brier Score
+Survival Probabilities   | Area Under ROC Curve, Brier Score, Accuracy
+Survival Events          | Accuracy
 
 
 The defaults may be changed by specifying one or more package-supplied metric functions to the `metrics` argument of `performance`.  A named list of supplied metric functions can be obtained interactively with the `metricinfo` function, and includes a descriptive `"label"`, whether to `"maximize"` the metric for better performance, the function `"arguments"`, and supported response variable `"types"` for each.  Function `metricinfo` may be called with one or more metric functions, function names, an observed response variable, or an observed and predicted response variable pair; and will return information on all matching metrics.

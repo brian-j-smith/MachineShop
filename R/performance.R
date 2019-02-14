@@ -55,12 +55,14 @@ performance.Resamples <- function(x, ..., na.rm = TRUE) {
 #' @rdname performance
 #' 
 performance.factor <- function(x, y, metrics =
-                                 c("Accuracy" = MachineShop::accuracy,
+                                 c("Brier" = MachineShop::brier,
+                                   "Accuracy" = MachineShop::accuracy,
                                    "Kappa" = MachineShop::kappa2,
+                                   "Weighted Kappa" =
+                                     MachineShop::weighted_kappa2,
                                    "ROCAUC" = MachineShop::roc_auc,
                                    "Sensitivity" = MachineShop::sensitivity,
-                                   "Specificity" = MachineShop::specificity,
-                                   "Brier" = MachineShop::brier),
+                                   "Specificity" = MachineShop::specificity),
                                 cutoff = 0.5, ...) {
   metrics <- list2function(metrics)
   metrics(x, y, cutoff = cutoff)
@@ -70,8 +72,8 @@ performance.factor <- function(x, y, metrics =
 #' @rdname performance
 #' 
 performance.matrix <- function(x, y, metrics =
-                                 c("R2" = MachineShop::r2,
-                                   "RMSE" = MachineShop::rmse,
+                                 c("RMSE" = MachineShop::rmse,
+                                   "R2" = MachineShop::r2,
                                    "MAE" = MachineShop::mae), ...) {
   metrics <- list2function(metrics)
   metrics(x, y)
@@ -81,9 +83,9 @@ performance.matrix <- function(x, y, metrics =
 #' @rdname performance
 #' 
 performance.numeric <- function(x, y, metrics =
-                                  c("R2" = MachineShop::r2,
-                                   "RMSE" = MachineShop::rmse,
-                                   "MAE" = MachineShop::mae), ...) {
+                                  c("RMSE" = MachineShop::rmse,
+                                    "R2" = MachineShop::r2,
+                                    "MAE" = MachineShop::mae), ...) {
   metrics <- list2function(metrics)
   metrics(x, y)
 }
@@ -105,8 +107,9 @@ performance.numeric <- function(x, y, metrics =
 #' 
 performance.Surv <- function(x, y, metrics =
                                c("CIndex" = MachineShop::cindex,
+                                 "Brier" = MachineShop::brier,
                                  "ROCAUC" = MachineShop::roc_auc,
-                                 "Brier" = MachineShop::brier),
+                                 "Accuracy" = MachineShop::accuracy),
                               cutoff = 0.5, ...) {
   metrics <- list2function(metrics)
   metrics(x, y, cutoff = cutoff)
