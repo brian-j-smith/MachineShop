@@ -23,7 +23,7 @@
 #' names(metricinfo(factor(0), numeric(0)))
 #' 
 metricinfo <- function(...) {
-  args <- list(...)
+  args <- unname(list(...))
   if (length(args) == 0) args <- as.list(.metric_names)
   info <- do.call(.metricinfo, args)
   

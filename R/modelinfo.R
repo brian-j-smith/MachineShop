@@ -24,7 +24,7 @@
 #' names(modelinfo(factor(0), numeric(0)))
 #' 
 modelinfo <- function(...) {
-  args <- list(...)
+  args <- unname(list(...))
   if (length(args) == 0) args <- as.list(.model_names)
   info <- do.call(.modelinfo, args)
   
