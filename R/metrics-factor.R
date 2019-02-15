@@ -736,7 +736,8 @@ setMethod(".roc_auc", c("Surv", "SurvProbs"),
 #' @rdname metrics
 #' 
 roc_index <- function(observed, predicted = NULL, cutoff = 0.5,
-                      f = function(sens, spec) sens + spec, ...) {
+                      f = function(sensitivity, specificity)
+                        (sensitivity + specificity) / 2, ...) {
   .roc_index(observed, predicted, cutoff = cutoff, f = f)
 }
 

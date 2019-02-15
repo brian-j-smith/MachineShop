@@ -65,7 +65,8 @@ recall(observed, predicted = NULL, cutoff = 0.5, ...)
 roc_auc(observed, predicted = NULL, ...)
 
 roc_index(observed, predicted = NULL, cutoff = 0.5,
-  f = function(sens, spec) sens + spec, ...)
+  f = function(sensitivity, specificity) (sensitivity + specificity)/2,
+  ...)
 
 rpp(observed, predicted = NULL, cutoff = 0.5, ...)
 
