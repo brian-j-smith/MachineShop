@@ -38,6 +38,8 @@ setMethod(".gini", c("Surv", "numeric"),
     .metric.Surv_numeric(observed, predicted, gini)
   }
 )
+
+
 #' @rdname metrics
 #' 
 mae <- function(observed, predicted = NULL, ...) {

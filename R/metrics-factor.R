@@ -184,14 +184,15 @@ setMethod(".brier", c("Surv", "SurvProbs"),
     times <- predicted@times
     obs_times <- observed[, "time"]
     obs_events <- observed[, "status"]
-    fitcens <- survfit(Surv(obs_times, 1 - obs_events) ~ 1)
+    
+    cens_fit <- survfit(Surv(obs_times, 1 - obs_events) ~ 1, se.fit = FALSE)
   
     metrics <- sapply(seq_along(times), function(i) {
       time <- times[i]
-      is_obs_after <- obs_times > time
-      weights <- (obs_events == 1 | is_obs_after) /
-        predict(fitcens, pmin(obs_times, time))
-      mean(weights * (is_obs_after - predicted[, i])^2)
+      obs_after_time <- obs_times > time
+      cens <- predict(cens_fit, pmin(obs_times, time))
+      weights <- ifelse(obs_events == 1 | obs_after_time, 1 / cens, 0)
+      mean(weights * (obs_after_time - predicted[, i])^2)
     })
     
     if (length(times) > 1) {
