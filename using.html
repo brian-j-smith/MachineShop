@@ -26,9 +26,8 @@
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
-<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
-<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -103,6 +102,9 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
 </style>
 
 
@@ -117,7 +119,6 @@ body {
   padding-top: 56px;
   margin-top: -56px;
 }
-
 .section h2 {
   padding-top: 56px;
   margin-top: -56px;
@@ -137,6 +138,43 @@ body {
 .section h6 {
   padding-top: 56px;
   margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -158,18 +196,77 @@ $(document).ready(function () {
 });
 </script>
 
-
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
 });
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
 </script>
 
 <!-- code folding -->
-
 
 
 
@@ -688,7 +785,7 @@ fit(rec, model = GBMModel)</code></pre>
 <h1>Model Performance Metrics</h1>
 <div id="performance-function" class="section level2">
 <h2>Performance Function</h2>
-<p>Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models. Metrics can be computed with the <code>performance</code> function applied to observed responses and responses predicted with the <code>predict</code> function. Metrics of observed versus predicted survival probabilities will be calculated at each survival time and returned along with their time-integrated mean.</p>
+<p>Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models. Metrics can be computed with the <code>performance</code> function applied to observed responses and responses predicted with the <code>predict</code> function. Metrics of observed versus predicted survival probabilities or events will be calculated at each survival time and returned along with their time-integrated mean.</p>
 <pre class="r"><code>## Survival performance metrics
 
 ## Observed responses
@@ -703,10 +800,16 @@ performance(obs, pred_means)
 ## Predicted survival probabilities
 pred_probs &lt;- predict(surv_fit, newdata = surv_test, times = surv_times, type = &quot;prob&quot;)
 performance(obs, pred_probs)
-#&gt;  ROCAUC.mean ROCAUC.time1 ROCAUC.time2   Brier.mean  Brier.time1 
-#&gt;    0.6304049    0.6634101    0.5973996    0.2155492    0.1806647 
-#&gt;  Brier.time2 
-#&gt;    0.2504337</code></pre>
+#&gt;     Brier.mean    Brier.time1    Brier.time2    ROCAUC.mean   ROCAUC.time1 
+#&gt;      0.2155492      0.1806647      0.2504337      0.6304049      0.6634101 
+#&gt;   ROCAUC.time2  Accuracy.mean Accuracy.time1 Accuracy.time2 
+#&gt;      0.5973996      0.7021586      0.7607143      0.6436028
+
+## Predicted survival events
+pred_events &lt;- predict(surv_fit, newdata = surv_test, times = surv_times)
+performance(obs, pred_events)
+#&gt;  Accuracy.mean Accuracy.time1 Accuracy.time2 
+#&gt;      0.7021586      0.7607143      0.6436028</code></pre>
 <p>Function <code>performance</code> computes a default set of metrics according to the observed and predicted response types, as indicated in the table below.</p>
 <p>Table 2. Default performance metrics by response types.</p>
 <table>
@@ -723,15 +826,15 @@ performance(obs, pred_probs)
 <tbody>
 <tr class="odd">
 <td align="left">Factor</td>
-<td align="left">Accuracy, Cohen’s Kappa, Area Under ROC Curve, Brier Score</td>
+<td align="left">Brier Score, Accuracy, Cohen’s Kappa</td>
 </tr>
 <tr class="even">
 <td align="left">Binary Factor</td>
-<td align="left">Accuracy, Cohen’s Kappa, Area Under ROC Curve, Sensitivity, Specificity, Brier Score</td>
+<td align="left">Brier Score, Accuracy, Cohen’s Kappa, Area Under ROC Curve, Sensitivity, Specificity</td>
 </tr>
 <tr class="odd">
 <td align="left">Numeric Vector or Matrix</td>
-<td align="left">R<sup>2</sup>, Root Mean Squared Error, Mean Absolute Error</td>
+<td align="left">Root Mean Squared Error, R<sup>2</sup>, Mean Absolute Error</td>
 </tr>
 <tr class="even">
 <td align="left">Survival Means</td>
@@ -739,7 +842,11 @@ performance(obs, pred_probs)
 </tr>
 <tr class="odd">
 <td align="left">Survival Probabilities</td>
-<td align="left">Area Under ROC Curve, Brier Score</td>
+<td align="left">Area Under ROC Curve, Brier Score, Accuracy</td>
+</tr>
+<tr class="even">
+<td align="left">Survival Events</td>
+<td align="left">Accuracy</td>
 </tr>
 </tbody>
 </table>
@@ -866,12 +973,12 @@ Table 3. Confusion matrix of observed and predicted response classifications.
 <thead>
 <tr>
 <th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1">
-<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
 Predicted Response
 </div>
 </th>
 <th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
-<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
 Observed Response
 </div>
 </th>
@@ -974,12 +1081,12 @@ Table 4. Confusion matrix of observed and predicted survival response classifica
 <thead>
 <tr>
 <th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1">
-<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
 Predicted Response
 </div>
 </th>
 <th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
-<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
 Observed Response
 </div>
 </th>
@@ -1095,13 +1202,16 @@ registerDoParallel(cores = 2)</code></pre>
 #&gt; Seed: 123
 
 summary(res_probs)
-#&gt;                   Mean    Median         SD       Min       Max NA
-#&gt; ROCAUC.mean  0.7003126 0.6784924 0.06065723 0.6241044 0.8151629  0
-#&gt; ROCAUC.time1 0.7269430 0.7142815 0.08019011 0.5933010 0.8597839  0
-#&gt; ROCAUC.time2 0.6736821 0.6699859 0.06283310 0.5786972 0.7795556  0
-#&gt; Brier.mean   0.2195629 0.2269923 0.02047342 0.1678486 0.2390358  0
-#&gt; Brier.time1  0.1853380 0.1955808 0.03318681 0.1316865 0.2438647  0
-#&gt; Brier.time2  0.2537878 0.2507074 0.04236136 0.1842553 0.3162855  0
+#&gt;                     Mean    Median         SD       Min       Max NA
+#&gt; Brier.mean     0.2195629 0.2269923 0.02047342 0.1678486 0.2390358  0
+#&gt; Brier.time1    0.1853380 0.1955808 0.03318681 0.1316865 0.2438647  0
+#&gt; Brier.time2    0.2537878 0.2507074 0.04236136 0.1842553 0.3162855  0
+#&gt; ROCAUC.mean    0.7003126 0.6784924 0.06065723 0.6241044 0.8151629  0
+#&gt; ROCAUC.time1   0.7269430 0.7142815 0.08019011 0.5933010 0.8597839  0
+#&gt; ROCAUC.time2   0.6736821 0.6699859 0.06283310 0.5786972 0.7795556  0
+#&gt; Accuracy.mean  0.6666261 0.6654481 0.04073922 0.5564662 0.7302533  0
+#&gt; Accuracy.time1 0.7466615 0.7544715 0.05228609 0.6720000 0.8292683  0
+#&gt; Accuracy.time2 0.5865907 0.5914104 0.08164512 0.3666360 0.6873358  0
 
 plot(res_probs)</code></pre>
 <p><img src="using_files/figure-html/unnamed-chunk-38-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -1251,14 +1361,14 @@ plot(cal)</code></pre>
 #&gt; GBMModel.time1 :
 #&gt;          Observed
 #&gt; Predicted         0         1
-#&gt;         0 848.89730 259.10270
-#&gt;         1  51.78571  70.21429
+#&gt;         0 424.44865 129.55135
+#&gt;         1  25.89286  35.10714
 #&gt; 
 #&gt; GBMModel.time2 :
 #&gt;          Observed
 #&gt; Predicted         0         1
-#&gt;         0 594.37262 403.62738
-#&gt;         1  88.68996 143.31004
+#&gt;         0 297.18631 201.81369
+#&gt;         1  44.34498  71.65502
 
 performance(conf, metrics = c(&quot;Accuracy&quot; = accuracy,
                               &quot;Sensitivity&quot; = sensitivity,
@@ -1273,8 +1383,8 @@ performance(conf, metrics = c(&quot;Accuracy&quot; = accuracy,
 
 summary(conf)
 #&gt; GBMModel.time1 :
-#&gt; Number of responses: 1230
-#&gt; Accuracy (SE): 0.7472452 (0.01239164)
+#&gt; Number of responses: 615
+#&gt; Accuracy (SE): 0.7472452 (0.01752442)
 #&gt; Majority class: 0.7322626
 #&gt; Kappa: 0.1945668
 #&gt; 
@@ -1288,8 +1398,8 @@ summary(conf)
 #&gt; NPV         0.5755269 0.76615280
 #&gt; 
 #&gt; GBMModel.time2 :
-#&gt; Number of responses: 1230
-#&gt; Accuracy (SE): 0.599742 (0.01397011)
+#&gt; Number of responses: 615
+#&gt; Accuracy (SE): 0.599742 (0.01975671)
 #&gt; Majority class: 0.5553354
 #&gt; Kappa: 0.1402268
 #&gt; 

@@ -25,9 +25,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
-<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
-<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -102,6 +101,9 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
 </style>
 
 
@@ -116,7 +118,6 @@ body {
   padding-top: 56px;
   margin-top: -56px;
 }
-
 .section h2 {
   padding-top: 56px;
   margin-top: -56px;
@@ -136,6 +137,43 @@ body {
 .section h6 {
   padding-top: 56px;
   margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -157,18 +195,77 @@ $(document).ready(function () {
 });
 </script>
 
-
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
 });
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
 </script>
 
 <!-- code folding -->
-
 
 
 
@@ -396,8 +493,8 @@ iris_fit &lt;- fit(fo, data = train, model = GBMModel)
 (vi &lt;- varimp(iris_fit))
 #&gt;                 Overall
 #&gt; Petal.Length 100.000000
-#&gt; Petal.Width   14.601856
-#&gt; Sepal.Width    1.438558
+#&gt; Petal.Width   14.545811
+#&gt; Sepal.Width    1.296926
 #&gt; Sepal.Length   0.000000
 
 plot(vi)</code></pre>
@@ -421,8 +518,8 @@ predict(iris_fit, newdata = test) %&gt;% head
 obs &lt;- response(fo, data = test)
 pred &lt;- predict(iris_fit, newdata = test, type = &quot;prob&quot;)
 performance(obs, pred)
-#&gt;  Accuracy     Kappa    ROCAUC     Brier 
-#&gt; 0.9200000 0.8793727 0.9837585 0.1502442</code></pre>
+#&gt;     Brier  Accuracy     Kappa 
+#&gt; 0.1502442 0.9200000 0.8793727</code></pre>
 </div>
 <div id="resampling" class="section level2">
 <h2>Resampling</h2>
@@ -443,10 +540,9 @@ performance(obs, pred)
 
 summary(res)
 #&gt;                Mean    Median         SD          Min       Max NA
+#&gt; Brier    0.08476969 0.1133233 0.05621648 5.140496e-05 0.1372037  0
 #&gt; Accuracy 0.95333333 0.9333333 0.03220306 9.333333e-01 1.0000000  0
 #&gt; Kappa    0.93000000 0.9000000 0.04830459 9.000000e-01 1.0000000  0
-#&gt; ROCAUC   0.98800000 1.0000000 0.02305120 9.333333e-01 1.0000000  0
-#&gt; Brier    0.08476969 0.1133233 0.05621648 5.140496e-05 0.1372037  0
 
 plot(res)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -456,15 +552,13 @@ plot(res)</code></pre>
 <pre class="r"><code>## Default performance metrics
 performance(res) %&gt;% summary
 #&gt;                Mean    Median         SD          Min       Max NA
+#&gt; Brier    0.08476969 0.1133233 0.05621648 5.140496e-05 0.1372037  0
 #&gt; Accuracy 0.95333333 0.9333333 0.03220306 9.333333e-01 1.0000000  0
 #&gt; Kappa    0.93000000 0.9000000 0.04830459 9.000000e-01 1.0000000  0
-#&gt; ROCAUC   0.98800000 1.0000000 0.02305120 9.333333e-01 1.0000000  0
-#&gt; Brier    0.08476969 0.1133233 0.05621648 5.140496e-05 0.1372037  0
 
 ## Metrics available for the resample output
 metricinfo(res) %&gt;% names
-#&gt; [1] &quot;accuracy&quot;      &quot;auc&quot;           &quot;brier&quot;         &quot;cross_entropy&quot;
-#&gt; [5] &quot;kappa2&quot;        &quot;pr_auc&quot;        &quot;roc_auc&quot;
+#&gt; [1] &quot;accuracy&quot;      &quot;brier&quot;         &quot;cross_entropy&quot; &quot;kappa2&quot;
 
 ## User-specified metrics
 performance(res, c(accuracy, kappa2)) %&gt;% summary
@@ -487,8 +581,8 @@ iris_fit &lt;- fit(fo, data = iris, model = iris_tune)
 varimp(iris_fit)
 #&gt;                 Overall
 #&gt; Petal.Length 100.000000
-#&gt; Petal.Width   55.133803
-#&gt; Sepal.Width    3.380451
+#&gt; Petal.Width   49.604702
+#&gt; Sepal.Width    2.027544
 #&gt; Sepal.Length   0.000000</code></pre>
 </div>
 <div id="model-comparisons" class="section level2">
@@ -502,6 +596,13 @@ res3 &lt;- resample(fo, data = iris, model = NNetModel(size = 5), control = cont
 
 res &lt;- Resamples(GBM = res1, RF = res2, NNet = res3)
 summary(res)
+#&gt; , , Brier
+#&gt; 
+#&gt;            Mean      Median         SD          Min       Max NA
+#&gt; GBM  0.08474846 0.048291725 0.09814080 1.165220e-04 0.3783416  0
+#&gt; NNet 0.07970655 0.004796933 0.11239311 6.012788e-22 0.3945810  0
+#&gt; RF   0.06767040 0.037360000 0.07658412 2.666667e-04 0.3032000  0
+#&gt; 
 #&gt; , , Accuracy
 #&gt; 
 #&gt;           Mean    Median         SD       Min Max NA
@@ -515,26 +616,19 @@ summary(res)
 #&gt; GBM  0.916    0.9 0.08656719 0.7   1  0
 #&gt; NNet 0.918    1.0 0.13951812 0.4   1  0
 #&gt; RF   0.928    0.9 0.08339725 0.7   1  0
-#&gt; 
-#&gt; , , ROCAUC
-#&gt; 
-#&gt;           Mean Median         SD       Min Max NA
-#&gt; GBM  0.9897333      1 0.01948125 0.9333333   1  0
-#&gt; NNet 0.9738667      1 0.04821230 0.8333333   1  0
-#&gt; RF   0.9943333      1 0.01205148 0.9466667   1  0
-#&gt; 
-#&gt; , , Brier
-#&gt; 
-#&gt;            Mean      Median         SD          Min       Max NA
-#&gt; GBM  0.08474846 0.048291725 0.09814080 1.165220e-04 0.3783416  0
-#&gt; NNet 0.07970655 0.004796933 0.11239311 6.012788e-22 0.3945810  0
-#&gt; RF   0.06767040 0.037360000 0.07658412 2.666667e-04 0.3032000  0
 
 plot(res)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Pairwise model differences and t-tests
 perfdiff &lt;- diff(res)
 summary(perfdiff)
+#&gt; , , Brier
+#&gt; 
+#&gt;                   Mean       Median         SD         Min       Max NA
+#&gt; GBM - NNet 0.005041913  0.002626687 0.09793438 -0.35684827 0.1372322  0
+#&gt; GBM - RF   0.017078064  0.007020778 0.03169041 -0.03575085 0.1285306  0
+#&gt; NNet - RF  0.012036151 -0.002857921 0.09146979 -0.12379568 0.3732476  0
+#&gt; 
 #&gt; , , Accuracy
 #&gt; 
 #&gt;              Mean Median         SD         Min        Max NA
@@ -548,20 +642,6 @@ summary(perfdiff)
 #&gt; GBM - NNet -0.006      0 0.10956314 -0.1 0.5  0
 #&gt; GBM - RF   -0.010      0 0.04164966 -0.1 0.1  0
 #&gt; NNet - RF  -0.004      0 0.10872170 -0.5 0.1  0
-#&gt; 
-#&gt; , , ROCAUC
-#&gt; 
-#&gt;                   Mean Median         SD         Min        Max NA
-#&gt; GBM - NNet  0.01586667      0 0.04809081 -0.06666667 0.15333333  0
-#&gt; GBM - RF   -0.00460000      0 0.01775226 -0.06666667 0.03333333  0
-#&gt; NNet - RF  -0.02046667      0 0.04640358 -0.16666667 0.02666667  0
-#&gt; 
-#&gt; , , Brier
-#&gt; 
-#&gt;                   Mean       Median         SD         Min       Max NA
-#&gt; GBM - NNet 0.005041913  0.002626687 0.09793438 -0.35684827 0.1372322  0
-#&gt; GBM - RF   0.017078064  0.007020778 0.03169041 -0.03575085 0.1285306  0
-#&gt; NNet - RF  0.012036151 -0.002857921 0.09146979 -0.12379568 0.3732476  0
 
 t.test(perfdiff)
 #&gt; An object of class &quot;HTestPerformanceDiff&quot;
@@ -569,6 +649,13 @@ t.test(perfdiff)
 #&gt; Upper diagonal: mean differences (row - column)
 #&gt; Lower diagonal: p-values
 #&gt; P-value adjustment method: holm
+#&gt; 
+#&gt; , , Brier
+#&gt; 
+#&gt;              GBM        NNet         RF
+#&gt; GBM           NA 0.005041913 0.01707806
+#&gt; NNet 0.717396768          NA 0.01203615
+#&gt; RF   0.001162493 0.713395252         NA
 #&gt; 
 #&gt; , , Accuracy
 #&gt; 
@@ -583,20 +670,6 @@ t.test(perfdiff)
 #&gt; GBM         NA -0.006 -0.010
 #&gt; NNet 1.0000000     NA -0.004
 #&gt; RF   0.2876949  1.000     NA
-#&gt; 
-#&gt; , , ROCAUC
-#&gt; 
-#&gt;             GBM        NNet          RF
-#&gt; GBM          NA 0.015866667 -0.00460000
-#&gt; NNet 0.04759867          NA -0.02046667
-#&gt; RF   0.07299227 0.009117274          NA
-#&gt; 
-#&gt; , , Brier
-#&gt; 
-#&gt;              GBM        NNet         RF
-#&gt; GBM           NA 0.005041913 0.01707806
-#&gt; NNet 0.717396768          NA 0.01203615
-#&gt; RF   0.001162493 0.713395252         NA
 
 plot(perfdiff)</code></pre>
 <p><img src="examples_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -607,21 +680,19 @@ plot(perfdiff)</code></pre>
 stackedmodel &lt;- StackedModel(GBMModel, RandomForestModel, NNetModel)
 res_stacked &lt;- resample(fo, data = iris, model = stackedmodel)
 summary(res_stacked)
-#&gt;                Mean     Median          SD         Min       Max NA
-#&gt; Accuracy 0.95333333 0.96666667 0.054884840 0.866666667 1.0000000  0
-#&gt; Kappa    0.93000000 0.95000000 0.082327260 0.800000000 1.0000000  0
-#&gt; ROCAUC   0.99600000 1.00000000 0.008999314 0.973333333 1.0000000  0
-#&gt; Brier    0.06969028 0.03898702 0.078801354 0.001289297 0.2385706  0
+#&gt;                Mean     Median         SD         Min       Max NA
+#&gt; Brier    0.06969028 0.03898702 0.07880135 0.001289297 0.2385706  0
+#&gt; Accuracy 0.95333333 0.96666667 0.05488484 0.866666667 1.0000000  0
+#&gt; Kappa    0.93000000 0.95000000 0.08232726 0.800000000 1.0000000  0
 
 ## Super learner
 supermodel &lt;- SuperModel(GBMModel, RandomForestModel, NNetModel)
 res_super &lt;- resample(fo, data = iris, model = supermodel)
 summary(res_super)
 #&gt;                Mean    Median         SD          Min       Max NA
+#&gt; Brier    0.08882786 0.1308139 0.07543158 6.435696e-05 0.1833023  0
 #&gt; Accuracy 0.94666667 0.9333333 0.06126244 8.000000e-01 1.0000000  0
-#&gt; Kappa    0.92000000 0.9000000 0.09189366 7.000000e-01 1.0000000  0
-#&gt; ROCAUC   0.98133333 1.0000000 0.02529822 9.466667e-01 1.0000000  0
-#&gt; Brier    0.08882786 0.1308139 0.07543158 6.435696e-05 0.1833023  0</code></pre>
+#&gt; Kappa    0.92000000 0.9000000 0.09189366 7.000000e-01 1.0000000  0</code></pre>
 </div>
 <div id="calibration-curves" class="section level2">
 <h2>Calibration Curves</h2>
@@ -672,19 +743,18 @@ rec &lt;- recipe(fo, data = iris) %&gt;%
 
 iris_fit &lt;- fit(rec, model = GBMModel)
 varimp(iris_fit)
-#&gt;                  Overall
-#&gt; Petal.Length 100.0000000
-#&gt; Petal.Width   28.0973056
-#&gt; Sepal.Width    0.7578026
-#&gt; Sepal.Length   0.0000000
+#&gt;                 Overall
+#&gt; Petal.Length 100.000000
+#&gt; Petal.Width   28.119054
+#&gt; Sepal.Width    2.191338
+#&gt; Sepal.Length   0.000000
 
 res &lt;- resample(rec, model = GBMModel, control = CVControl)
 summary(res)
 #&gt;                Mean    Median         SD          Min       Max NA
+#&gt; Brier    0.09069158 0.1156874 0.05188803 3.532539e-05 0.1357598  0
 #&gt; Accuracy 0.94666667 0.9333333 0.02810913 9.333333e-01 1.0000000  0
-#&gt; Kappa    0.92000000 0.9000000 0.04216370 9.000000e-01 1.0000000  0
-#&gt; ROCAUC   0.98133333 1.0000000 0.02754121 9.333333e-01 1.0000000  0
-#&gt; Brier    0.09069158 0.1156874 0.05188803 3.532539e-05 0.1357598  0</code></pre>
+#&gt; Kappa    0.92000000 0.9000000 0.04216370 9.000000e-01 1.0000000  0</code></pre>
 </div>
 </div>
 
