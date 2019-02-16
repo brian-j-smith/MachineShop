@@ -35,7 +35,7 @@ setMethod(".gini", c("numeric", "numeric"),
 
 setMethod(".gini", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    .metric.Surv_numeric(observed, predicted, gini)
+    .metric.SurvMean(observed, predicted, gini)
   }
 )
 
@@ -74,7 +74,7 @@ setMethod(".mae", c("numeric", "numeric"),
 
 setMethod(".mae", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    .metric.Surv_numeric(observed, predicted, mae)
+    .metric.SurvMean(observed, predicted, mae)
   }
 )
 
@@ -113,7 +113,7 @@ setMethod(".mse", c("numeric", "numeric"),
 
 setMethod(".mse", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    .metric.Surv_numeric(observed, predicted, mse)
+    .metric.SurvMean(observed, predicted, mse)
   }
 )
 
@@ -152,7 +152,7 @@ setMethod(".msle", c("numeric", "numeric"),
 
 setMethod(".msle", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    .metric.Surv_numeric(observed, predicted, msle)
+    .metric.SurvMean(observed, predicted, msle)
   }
 )
 
@@ -191,7 +191,7 @@ setMethod(".r2", c("numeric", "numeric"),
 
 setMethod(".r2", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    .metric.Surv_numeric(observed, predicted, r2)
+    .metric.SurvMean(observed, predicted, r2)
   }
 )
 
@@ -230,7 +230,7 @@ setMethod(".rmse", c("numeric", "numeric"),
 
 setMethod(".rmse", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    .metric.Surv_numeric(observed, predicted, rmse)
+    .metric.SurvMean(observed, predicted, rmse)
   }
 )
 
@@ -269,7 +269,7 @@ setMethod(".rmsle", c("numeric", "numeric"),
 
 setMethod(".rmsle", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    .metric.Surv_numeric(observed, predicted, rmsle)
+    .metric.SurvMean(observed, predicted, rmsle)
   }
 )
 
@@ -281,7 +281,7 @@ setMethod(".rmsle", c("Surv", "numeric"),
 }
 
 
-.metric.Surv_numeric <- function(observed, predicted, FUN, ...) {
+.metric.SurvMean <- function(observed, predicted, FUN, ...) {
   events <- observed[, "status"] == 1
   FUN(observed[events, "time"], predicted[events], ...)
 }
