@@ -216,7 +216,7 @@ setMethod(".rmse", c("ANY", "ANY"),
 
 setMethod(".rmse", c("matrix", "matrix"),
   function(observed, predicted, ...) {
-    .metric.matrix(observed, predicted, rmse)
+    sqrt(mse(observed, predicted))
   }
 )
 
@@ -230,7 +230,7 @@ setMethod(".rmse", c("numeric", "numeric"),
 
 setMethod(".rmse", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    .metric.SurvMean(observed, predicted, rmse)
+    sqrt(mse(observed, predicted))
   }
 )
 
@@ -255,7 +255,7 @@ setMethod(".rmsle", c("ANY", "ANY"),
 
 setMethod(".rmsle", c("matrix", "matrix"),
   function(observed, predicted, ...) {
-    .metric.matrix(observed, predicted, rmsle)
+    sqrt(msle(observed, predicted))
   }
 )
 
@@ -269,7 +269,7 @@ setMethod(".rmsle", c("numeric", "numeric"),
 
 setMethod(".rmsle", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    .metric.SurvMean(observed, predicted, rmsle)
+    sqrt(msle(observed, predicted))
   }
 )
 
