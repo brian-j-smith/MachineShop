@@ -23,7 +23,7 @@ df_classes <- data.frame(
 names(df_classes)[3:5] <- paste0(names(df_classes)[3:5], footnote_marker_number(1:3))
 
 kable(df_classes,
-      caption = "Table. Package-supplied model constructor functions and supported response variable types.",
+      caption = "Package-supplied model constructor functions and supported response variable types.",
       align = c("l", "l", "c", "c", "c"), row.names = FALSE,
       escape = FALSE) %>%
   kable_styling(c("striped", "condensed"), full_width = FALSE, position = "center") %>%

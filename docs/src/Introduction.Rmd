@@ -1,0 +1,36 @@
+---
+title: "Introduction to the MachineShop Package"
+subtitle: "Package Version `r packageVersion('MachineShop')`"
+author:
+- name: "Brian J Smith"
+  affiliation: "University of Iowa"
+  email: "brian-j-smith@uiowa.edu"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+bibliography: bibliography.bib
+vignette: >
+  %\VignetteIndexEntry{Introduction to the MachineShop Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 7,
+  fig.height = 4,
+  fig.align = "center"
+)
+
+library(kableExtra)
+library(ggplot2)
+
+rdoc_url <- function(name) name
+```

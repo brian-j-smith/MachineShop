@@ -51,7 +51,9 @@ modeling strategies.
     model parameter values.
   - User-definable models and performance metrics.
 
-# Installation
+# Getting Started
+
+## Installation
 
 ``` r
 # Current release from CRAN
@@ -65,11 +67,11 @@ devtools::install_github("brian-j-smith/MachineShop", ref = "develop")
 devtools::install_github("brian-j-smith/MachineShop", ref = "develop", build_vignettes = TRUE)
 ```
 
-# Getting Started
+## Documentation
 
-Once installed, the following `R` commands will load the package and
+Once installed, the following **R** commands will load the package and
 display its help system documentation. Online documentation and examples
-are available at the [MachineShop main
+are available at the [MachineShop
 website](https://brian-j-smith.github.io/MachineShop).
 
 ``` r

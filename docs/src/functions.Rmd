@@ -1,4 +1,4 @@
-# Package Analysis Function
+# Analysis Functions
 
 
 ## Training

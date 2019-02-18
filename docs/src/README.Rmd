@@ -1,0 +1,14 @@
+---
+title: "MachineShop: Machine Learning Models and Tools for R"
+output: github_document
+---
+
+```{r setup, include = FALSE}
+```
+
+[![Generic badge](https://img.shields.io/badge/docs-online-green.svg)](https://brian-j-smith.github.io/MachineShop/)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/MachineShop)](https://CRAN.R-project.org/package=MachineShop)
+
+
+```{r child = "../src/overview.Rmd"}
+```
