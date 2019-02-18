@@ -1163,7 +1163,7 @@ surv_probs_control &lt;- CVControl(folds = 5, repeats = 3, times = surv_times, s
 </div>
 <div id="parallel-processing" class="section level2">
 <h2>Parallel Processing</h2>
-<p>Resampling is implemented with the <code>foreach</code> package <span class="citation">(Microsoft and Weston 2017)</span> and will run in parallel if a compatible backend is loaded, such as that provided by the <code>doParallel</code> package <span class="citation">(Corporation and Weston 2018)</span>.</p>
+<p>Resampling is implemented with the <code>foreach</code> package <span class="citation">(Microsoft and Weston 2017)</span> and will run in parallel if a compatible backend is loaded, such as that provided by the <code>doParallel</code> package <span class="citation">(Microsoft and Weston 2018)</span>.</p>
 <pre class="r"><code>## Register multiple cores for parallel computations
 library(doParallel)
 registerDoParallel(cores = 2)</code></pre>
@@ -1583,7 +1583,7 @@ tune(surv_fo, data = surv_df, models = model_list,
 </div>
 <div id="ensemble-models" class="section level2">
 <h2>Ensemble Models</h2>
-<p>Ensemble methods combine multiple base learning algorithms as a strategy to improve predictive performance. Two ensemble methods implemented in <code>Machineshop</code> are <em>stacked regression</em> <span class="citation">(Breiman 1996)</span> and <em>super learners</em> <span class="citation">(Lann and Hubbard 2007)</span>. Stacked regression fits a linear combination of resampled predictions from specified base learners; whereas, super learners fit a specified model, such as <code>GBMModel</code>, to the base learner predictions and optionally also to the original predictor variables. Illustrated below is a performance evaluation of stacked regression and a super learner fit to gradient boosted, random forest, and Cox regression base learners. In the second case, a separate gradient boosted model is used as the super learner.</p>
+<p>Ensemble methods combine multiple base learning algorithms as a strategy to improve predictive performance. Two ensemble methods implemented in <code>Machineshop</code> are <em>stacked regression</em> <span class="citation">(Breiman 1996)</span> and <em>super learners</em> <span class="citation">(van der Lann and Hubbard 2007)</span>. Stacked regression fits a linear combination of resampled predictions from specified base learners; whereas, super learners fit a specified model, such as <code>GBMModel</code>, to the base learner predictions and optionally also to the original predictor variables. Illustrated below is a performance evaluation of stacked regression and a super learner fit to gradient boosted, random forest, and Cox regression base learners. In the second case, a separate gradient boosted model is used as the super learner.</p>
 <pre class="r"><code>## Stacked regression
 stackedmodel &lt;- StackedModel(GLMBoostModel, CForestModel, CoxModel)
 res_stacked &lt;- resample(surv_fo, data = surv_df, model = stackedmodel)
@@ -1638,40 +1638,40 @@ summary(performance(res, metric = f2_score))
 <h1>References</h1>
 <div id="refs" class="references">
 <div id="ref-andersen:1993:SMB">
-<p>Andersen, PK, O Borgan, RD Gill, and N Keiding. 1993. <em>Statistical Models Based on Counting Processes</em>. New York: Springer.</p>
+<p>Andersen, Per K, Ornulf Borgan, Richard D Gill, and Niels Keiding. 1993. <em>Statistical Models Based on Counting Processes</em>. New York: Springer.</p>
 </div>
 <div id="ref-bache:2014:MFP">
-<p>Bache, Stefan Milton, and Hadley Wickham. 2014. <em>Magrittr: A Forward-Pipe Operator for R</em>. <a href="https://CRAN.R-project.org/package=magrittr" class="uri">https://CRAN.R-project.org/package=magrittr</a>.</p>
+<p>Bache, Stefan Milton, and Hadley Wickham. 2014. <em>magrittr: A Forward-Pipe Operator for R</em>. <a href="https://CRAN.R-project.org/package=magrittr" class="uri">https://CRAN.R-project.org/package=magrittr</a>.</p>
 </div>
 <div id="ref-breiman:1996:SR">
-<p>Breiman, L. 1996. “Stacked Regression.” <em>Machine Learning</em> 24: 49–64.</p>
-</div>
-<div id="ref-microsoft:2017:DFP">
-<p>Corporation, Microsoft, and Steve Weston. 2018. <em>DoParallel: Foreach Parallel Adaptor for the ’Parallel’ Package</em>. <a href="https://CRAN.R-project.org/package=doParallel" class="uri">https://CRAN.R-project.org/package=doParallel</a>.</p>
+<p>Breiman, Leo. 1996. “Stacked Regression.” <em>Machine Learning</em> 24: 49–64.</p>
 </div>
 <div id="ref-graf:1999:ACP">
-<p>Graf, E, C Schmoor, W Sauerbrei, and M Schumacher. 1999. “Assessment and Comparison of Prognostic Classification Schemes for Survival Data.” <em>Statistics in Medicine</em> 18 (17–18): 2529–45.</p>
+<p>Graf, Erika, Claudia Schmoor, Willi Sauerbrei, and Martin Schumacher. 1999. “Assessment and Comparison of Prognostic Classification Schemes for Survival Data.” <em>Statistics in Medicine</em> 18 (17–18): 2529–45.</p>
 </div>
 <div id="ref-harrell:1982:EYM">
-<p>Harrell, FE, RM Califf, DB Pryor, KL Lee, and RA Rosati. 1982. “Evaluating the Yield of Medical Tests.” <em>JAMA</em> 247 (18): 2543–6.</p>
+<p>Harrell, Frank E, Robert M Califf, David B Pryor, Kerry L Lee, and Robert A Rosati. 1982. “Evaluating the Yield of Medical Tests.” <em>JAMA</em> 247 (18): 2543–6.</p>
 </div>
 <div id="ref-heagerty:2004:TDR">
-<p>Heagerty, PJ, T Lumley, and MS Pepe. 2004. “Time-Dependent Roc Curves for Censored Survival Data and a Diagnostic Marker.” <em>Biometrics</em> 56 (2): 337–44.</p>
+<p>Heagerty, Patrick J, Thomas Lumley, and Margaret S Pepe. 2004. “Time-Dependent ROC Curves for Censored Survival Data and a Diagnostic Marker.” <em>Biometrics</em> 56 (2): 337–44.</p>
 </div>
 <div id="ref-kuhn:2018:RPT">
-<p>Kuhn, Max, and Hadley Wickham. 2018. <em>Recipes: Preprocessing Tools to Create Design Matrices</em>. <a href="https://CRAN.R-project.org/package=recipes" class="uri">https://CRAN.R-project.org/package=recipes</a>.</p>
-</div>
-<div id="ref-vanderLann:2007:SL">
-<p>Lann, MJ van der, and AE Hubbard. 2007. “Super Learner.” <em>Statistical Applications in Genetics and Molecular Biology</em> 6 (1).</p>
+<p>Kuhn, Max, and Hadley Wickham. 2018. <em>recipes: Preprocessing Tools to Create Design Matrices</em>. <a href="https://CRAN.R-project.org/package=recipes" class="uri">https://CRAN.R-project.org/package=recipes</a>.</p>
 </div>
 <div id="ref-microsoft:2017:FPF">
-<p>Microsoft, and Steve Weston. 2017. <em>Foreach: Provides Foreach Looping Construct for R</em>. <a href="https://CRAN.R-project.org/package=foreach" class="uri">https://CRAN.R-project.org/package=foreach</a>.</p>
+<p>Microsoft, and Steve Weston. 2017. <em>foreach: Provides Foreach Looping Construct for R</em>. <a href="https://CRAN.R-project.org/package=foreach" class="uri">https://CRAN.R-project.org/package=foreach</a>.</p>
+</div>
+<div id="ref-microsoft:2017:DFP">
+<p>———. 2018. <em>doParallel: Foreach Parallel Adaptor for the ’Parallel’ Package</em>. <a href="https://CRAN.R-project.org/package=doParallel" class="uri">https://CRAN.R-project.org/package=doParallel</a>.</p>
 </div>
 <div id="ref-perkins:2006:IOC">
-<p>Perkins, Neil J., and Enrique F. Schisterman. 2006. “The Inconsistency of &quot;Optimal&quot; Cutpoints Obtained Using Two Criteria Based on the Receiver Operating Characteristic Curve.” <em>American Journal of Epidemiology</em> 163 (7): 670–75.</p>
+<p>Perkins, Neil J, and Enrique F Schisterman. 2006. “The Inconsistency of &quot;Optimal&quot; Cutpoints Obtained Using Two Criteria Based on the Receiver Operating Characteristic Curve.” <em>American Journal of Epidemiology</em> 163 (7): 670–75.</p>
+</div>
+<div id="ref-vanderLann:2007:SL">
+<p>van der Lann, Mark J, and Alan E Hubbard. 2007. “Super Learner.” <em>Statistical Applications in Genetics and Molecular Biology</em> 6 (1).</p>
 </div>
 <div id="ref-youden:1950:IRD">
-<p>Youden, WJ. 1950. “Index for Rating Diagnostic Tests.” <em>Cancer</em> 3 (1): 32–35.</p>
+<p>Youden, William J. 1950. “Index for Rating Diagnostic Tests.” <em>Cancer</em> 3 (1): 32–35.</p>
 </div>
 </div>
 </div>
