@@ -231,7 +231,7 @@ setMethod(".cindex", c("factor", "numeric"),
 
 setMethod(".cindex", c("Surv", "numeric"),
   function(observed, predicted, ...) {
-    Hmisc::rcorr.cens(predicted, observed)[["C Index"]]
+    concordance(observed ~ predicted)$concordance
   }
 )
 
