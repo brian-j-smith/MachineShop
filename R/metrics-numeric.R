@@ -25,10 +25,12 @@ setMethod(".gini", c("matrix", "matrix"),
 
 setMethod(".gini", c("numeric", "numeric"),
   function(observed, predicted, ...) {
-    y_predicted <- observed[order(predicted, decreasing = TRUE)]
-    y_observed <- observed[order(observed, decreasing = TRUE)]
-    gini_sum <- function(y) sum(cumsum(y / sum(y) - 1 / length(y)))
-    gini_sum(y_predicted) / gini_sum(y_observed)
+    gini_sum <- function(x) {
+      n <- length(x)
+      y <- observed[order(x)]
+      n + 1 - 2 * sum((n:1) * y) / sum(y)
+    }
+    gini_sum(predicted) / gini_sum(observed)
   }
 )
 
