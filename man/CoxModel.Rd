@@ -58,7 +58,7 @@ fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
 
 }
 \seealso{
-\code{\link[rms]{cph}}, \code{\link[survival]{coxph}},
+\code{\link[survival]{coxph}},
 \code{\link[survival]{coxph.control}}, \code{\link[MASS]{stepAIC}},
 \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
 }

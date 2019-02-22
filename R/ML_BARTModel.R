@@ -118,12 +118,7 @@ BARTModel <- function(K = NULL, sparse = FALSE, theta = 0, omega = 1,
         newx <- cbind(t = object$times, newx[rep(1:N, each = K), ])
         pred <- predict(object, newdata = newx)$surv.test.mean %>%
           matrix(nrow = N, ncol = K, byrow = TRUE)
-        if (length(times)) {
-          surv <- cbind(1, pred)
-          surv[, findInterval(times, c(0, object$times)), drop = FALSE]
-        } else {
-          surv_mean(object$times, pred, surv_max(response(fitbits)))
-        }
+        predict(Surv(object$times), pred, times, ...)
       } else if (is(object, "wbart")) {
         colMeans(predict(object, newdata = newx))
       }

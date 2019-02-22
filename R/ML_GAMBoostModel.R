@@ -88,14 +88,9 @@ GAMBoostModel <- function(family = NULL,
     predict = function(object, newdata, times, ...) {
       if (object$family@name == "Cox Partial Likelihood") {
         y <- object$response
-        risk <- drop(exp(predict(object, type = "link")))
-        new_risk <- drop(exp(predict(object, newdata = newdata, type = "link")))
-        
-        n <- length(times)
-        if (n == 0) times <- surv_times(y)
-        
-        pred <- exp(new_risk %o% -basehaz(y, risk, times))
-        if (n == 0) surv_mean(times, pred, surv_max(y)) else pred
+        lp <- drop(predict(object, type = "link"))
+        new_lp <- drop(predict(object, newdata = newdata, type = "link"))
+        predict(y, lp, times, new_lp, ...)
       } else {
         predict(object, newdata = newdata, type = "response")
       }

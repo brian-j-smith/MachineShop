@@ -157,7 +157,6 @@ setMethod(".calibration_default", c("Surv", "SurvProbs"),
 
 setMethod(".calibration_default", c("Surv", "numeric"),
   function(observed, predicted, breaks, ...) {
-    surv_max <- surv_max(observed)
     if (is.null(breaks)) {
       df <- data.frame(
         Response = "Mean",
@@ -167,8 +166,7 @@ setMethod(".calibration_default", c("Surv", "numeric"),
         abs_diff <- abs(predicted - value)
         weights <- (1 - (abs_diff / diff(range(abs_diff)))^3)^3
         km <- survfit(observed ~ 1, weights = weights, se.fit = FALSE)
-        c(Mean = surv_mean(km$time, km$surv, max_time = surv_max),
-          SE = NA, Lower = NA, Upper = NA)
+        c(Mean = mean(km), SE = NA, Lower = NA, Upper = NA)
       })
       df$Observed <- do.call(rbind, metrics_list)
       df
@@ -178,6 +176,7 @@ setMethod(".calibration_default", c("Surv", "numeric"),
         Predicted = midpoints(predicted, breaks),
         Observed = observed
       )
+      surv_max <- surv_max(observed)
       by_results <- by(df, df[c("Predicted", "Response")], function(data) {
         km <- survfit(Observed ~ 1, data = data, se.fit = FALSE)
         est <- survival:::survmean(km, rmean = surv_max)

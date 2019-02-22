@@ -653,7 +653,7 @@ SummaryConfusion <- setClass("SummaryConfusion",
 
 
 SurvMatrix <- function(object, times = NULL) {
-  object <- as.matrix(object)
+  object <- unname(as.matrix(object))
   
   if (is.null(times)) times <- rep(NA_real_, ncol(object))
   

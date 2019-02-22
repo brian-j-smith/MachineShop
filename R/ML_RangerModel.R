@@ -85,12 +85,7 @@ RangerModel <- function(num.trees = 500, mtry = NULL,
     predict = function(object, newdata, times, ...) {
       pred <- predict(object, data = newdata)
       if (!is.null(object$survival)) {
-        if (length(times)) {
-          indices <- findInterval(times, pred$unique.death.times)
-          pred$survival[, indices, drop = FALSE]
-        } else {
-          surv_mean(pred$unique.death.times, pred$survival)
-        }
+        predict(Surv(pred$unique.death.times), pred$survival, times, ...)
       } else {
         pred$predictions
       }

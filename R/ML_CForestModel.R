@@ -66,13 +66,8 @@ CForestModel <- function(teststat = c("quad", "max"),
     predict = function(object, newdata, fitbits, times, ...) {
       if (object@responses@is_censored) {
         y <- response(fitbits)
-        
-        n <- length(times)
-        if (n == 0) times <- surv_times(y)
-        
-        pred <- predict(object, newdata = newdata, type = "prob") %>%
-          sapply(function(fit) predict(fit, times)) %>% t
-        if (n == 0) surv_mean(times, pred, surv_max(y)) else pred
+        fits <- predict(object, newdata = newdata, type = "prob")
+        predict(y, fits, times, ...)
       } else {
         predict(object, newdata = newdata, type = "prob") %>%
           unlist %>%

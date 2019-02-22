@@ -17,7 +17,7 @@
 #'
 #' @return \code{MLModel} class object.
 #' 
-#' @seealso \code{\link[rms]{cph}}, \code{\link[survival]{coxph}},
+#' @seealso \code{\link[survival]{coxph}},
 #' \code{\link[survival]{coxph.control}}, \code{\link[MASS]{stepAIC}},
 #' \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
 #' 
@@ -40,23 +40,18 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
   MLModel(
     name = "CoxModel",
     label = "Cox Regression",
-    packages = "rms",
+    packages = "survival",
     types = "Surv",
     params = params,
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
-      rms::cph(formula, data = data, weights = weights, singular.ok = TRUE,
-               surv = TRUE, y = TRUE, ...)
+      survival::coxph(formula, data = data, weights = weights, ...)
     },
     predict = function(object, newdata, times, ...) {
       y <- object$y
-      
-      n <- length(times)
-      if (n == 0) times <- surv_times(y)
-      
-      pred <- rms::survest(object, newdata = newdata, times = times,
-                           conf.int = FALSE, se.fit = FALSE)$surv %>% as.matrix
-      if (n == 0) surv_mean(times, pred, surv_max(y)) else pred
+      lp <- predict(object, type = "lp")
+      new_lp <- predict(object, newdata = newdata, type = "lp")
+      predict(y, lp, times, new_lp, ...)
     },
     varimp = function(object, ...) varimp_pchisq(object)
   )
@@ -103,8 +98,7 @@ CoxStepAICModel <- function(ties = c("efron", "breslow", "exact"), ...,
                    k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()
       stepargs <- stepAIC_args(formula, direction, scope)
-      rms::cph(stepargs$formula, data = data, weights = weights, singular.ok = TRUE,
-               surv = TRUE, y = TRUE, ...) %>%
+      survival::coxph(stepargs$formula, data = data, weights = weights, ...) %>%
         MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,
                       trace = trace, steps = steps)
     },

@@ -43,10 +43,3 @@ predict.MLModelFit <- function(object, newdata = NULL, times = numeric(),
   }
   pred
 }
-
-
-predict.survfit <- function(object, times, ...) {
-  surv_times <- c(0, object$time)
-  surv_probs <- c(1, object$surv)
-  surv_probs[findInterval(times, surv_times)]
-}
