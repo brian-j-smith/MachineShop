@@ -12,6 +12,7 @@ setOldClass("recipe")
 #' 
 #' @param times numeric vector of follow-up times at which to predict survival
 #' probabilities.
+#' @param method argument passed to \code{\link{predict}}.
 #' @param seed integer to set the seed at the start of resampling.  This is set
 #' to a random integer by default (NULL).
 #' @param ...  arguments to be passed to \code{MLControl}.
@@ -20,7 +21,7 @@ setOldClass("recipe")
 #' 
 #' @seealso \code{\link{resample}}
 #' 
-MLControl <- function(times = numeric(), seed = NULL, ...) {
+MLControl <- function(times = numeric(), method = NULL, seed = NULL, ...) {
   args <- list(...)
   if (!is.null(args$surv_times)) {
     depwarn("'surv_times' argument to MLControl is deprecated",
@@ -29,12 +30,12 @@ MLControl <- function(times = numeric(), seed = NULL, ...) {
   }
   
   if (is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
-  new("MLControl", times = times, seed = seed)
+  new("MLControl", times = times, method = method, seed = seed)
 }
 
 
 setClass("MLControl",
-  slots = c(times = "numeric", seed = "numeric")
+  slots = c(times = "numeric", method = "ANY", seed = "numeric")
 )
 
 

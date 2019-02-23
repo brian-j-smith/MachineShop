@@ -1,15 +1,64 @@
-basesurv <- function(y, risk) {
+basesurv <- function(y, risk, method = c("efron", "breslow",
+                                         "fleming-harrington"), ...) {
   times <- y[, "time"]
   events <- pmin(y[, "status"], 1)
-  n.event <- drop(rowsum(events, times))
-  n.risk <- rowsum(risk, times) %>% rev %>% cumsum %>% rev
+  surv <- switch(match.arg(method),
+                 "breslow" = basesurv_breslow,
+                 "efron" = basesurv_efron,
+                 "fleming-harrington" = basesurv_fh)
+  fit <- surv(times, events, risk)
   structure(
-    list(time = sort(unique(times)),
-         n.event = n.event,
-         surv = exp(-cumsum(n.event / n.risk))),
+    list(n = length(y), time = sort(unique(times)),
+         n.risk = fit$n.risk, n.event = fit$n.event,
+         n.censor = fit$n.total - fit$n.event,
+         surv = fit$surv),
     class = c("BaseSurv", "survfit")
   )
 }
+
+
+basesurv_breslow <- function(times, events, risk) {
+  n <- unname(rowsum(cbind(1, events, risk), times))
+  n.event <- n[, 2]
+  n.risk <- cumsum_risk(n[, 3])
+  hazard <- n.event / n.risk
+  list(n.total = n[, 1], n.event = n.event, n.risk = n.risk,
+       surv = exp(-cumsum(hazard)))
+}
+
+
+basesurv_efron <- function(times, events, risk) {
+  f <- function(n.event, n.risk_all, n.risk_events) {
+    if (n.event) {
+      n.event / prod(n.risk_all - (1:n.event - 1) / n.event * n.risk_events)
+    } else 0
+  }
+  basesurv_function(times, events, risk, f)
+}
+
+
+basesurv_fh <- function(times, events, risk) {
+  f <- function(n.event, n.risk_all, n.risk_events) {
+    if (n.event) {
+      sum(1 / (n.risk_all - (1:n.event - 1) / n.event * n.risk_events))
+    } else 0
+  }
+  basesurv_function(times, events, risk, f)
+}
+
+
+basesurv_function <- function(times, events, risk, f) {
+  n <- unname(rowsum(cbind(1, events, risk, risk * events), times))
+  n.event <- n[, 2]
+  n.risk_all <- cumsum_risk(n[, 3])
+  n.risk_events <- cumsum_risk(n[, 4])
+  hazard <- mapply(f, n.event, n.risk_all, n.risk_events)
+  list(n.total = n[, 1], n.event = n.event, n.risk = n.risk_all,
+       surv = exp(-cumsum(hazard)))
+}
+
+
+cumsum_risk <- function(x) rev(cumsum(rev(x)))
 
 
 mean.BaseSurv <- function(x, new_risk, ...) {
@@ -71,7 +120,7 @@ predict.Surv <- function(object, x, ...) {
 .predict.Surv.numeric <- function(y, object, times, new_lp, ...) {
   risk <- exp(object)
   new_risk <- exp(new_lp)
-  x <- basesurv(y, risk)
+  x <- basesurv(y, risk, ...)
   if (length(times)) {
     predict(x, times, new_risk)
   } else {

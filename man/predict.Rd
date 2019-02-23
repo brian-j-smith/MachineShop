@@ -6,7 +6,7 @@
 \title{Model Prediction}
 \usage{
 \method{predict}{MLModelFit}(object, newdata = NULL, times = numeric(),
-  type = c("response", "prob"), cutoff = 0.5, ...)
+  type = c("response", "prob"), cutoff = 0.5, method = NULL, ...)
 }
 \arguments{
 \item{object}{\code{MLModelFit} object from a model fit.}
@@ -23,6 +23,10 @@ survival events/probabilities.}
 \item{cutoff}{threshold above which binary factor probabilities are
 classified as events, below which survival probabilities are classified, and
 at which expected values are rounded for integer outcomes.}
+
+\item{method}{character string specifying the method of estimating survival
+curves for Cox proportional hazards-based models.  Possible values are
+\code{"breslow"}, \code{"efron"} (default), or \code{"fleming-harrington"}.}
 
 \item{...}{arguments passed to model-specific prediction functions.}
 }
