@@ -17,6 +17,9 @@
 #' @param method character string specifying the method of estimating survival
 #' curves for Cox proportional hazards-based models.  Possible values are
 #' \code{"breslow"}, \code{"efron"} (default), or \code{"fleming-harrington"}.
+#' @param dist character string specifying distributional approximations to
+#' estimated survival curves.  Possibilities are \code{"none"} (default),
+#' \code{"exponential"}, or \code{"weibull"}.
 #' @param ... arguments passed to model-specific prediction functions.
 #' 
 #' @seealso \code{\link{fit}}, \code{\link{confusion}},
@@ -33,13 +36,14 @@
 #' 
 predict.MLModelFit <- function(object, newdata = NULL, times = numeric(),
                                type = c("response", "prob"), cutoff = 0.5,
-                               method = NULL, ...) {
+                               method = NULL, dist = NULL, ...) {
   newdata <- preprocess(fitbit(object, "x"), newdata)
   requireModelNamespaces(fitbit(object, "packages"))
   obs <- response(object)
   pred <- fitbit(object, "predict")(unMLModelFit(object), newdata,
                                     fitbits = field(object, "fitbits"),
-                                    times = times, method = method, ...)
+                                    times = times, method = method, dist = dist,
+                                    ...)
   pred <- convert_prob(obs, pred, times = times)
   if (match.arg(type) == "response") {
     pred <- convert_response(obs, pred, cutoff = cutoff)

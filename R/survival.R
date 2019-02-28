@@ -73,6 +73,11 @@ mean.survfit <- function(x, max_time = max(x$time), ...) {
 }
 
 
+mean.Weibull <- function(x, new_risk = 1, ...) {
+  (new_risk * x$scale)^(-1 / x$shape) * gamma(1 + 1 / x$shape)
+}
+
+
 predict.BaseSurv <- function(object, times, new_risk, ...) {
   basesurv <- NextMethod()
   t(outer(basesurv, new_risk, "^"))
@@ -89,38 +94,40 @@ predict.Surv <- function(object, x, ...) {
 }
 
 
-.predict.Surv.list <- function(y, object, times, ...) {
+.predict.Surv.list <- function(y, object, times, dist, ...) {
+  dist <- SurvDist(dist)
   if (length(times)) {
-    t(sapply(object, function(x) predict(x, times)))
+    t(sapply(object, function(x) predict(dist(x), times)))
   } else {
     max_time <- surv_max(y)
-    sapply(object, function(x) mean(x, max_time = max_time))
+    sapply(object, function(x) mean(dist(x), max_time = max_time))
   }
 }
 
 
-.predict.Surv.matrix <- function(y, object, times, ...) {
+.predict.Surv.matrix <- function(y, object, times, dist, ...) {
   fit <- structure(list(time = y[, "time"]), class = "survfit")
+  dist <- SurvDist(dist)
   if (length(times)) {
     t(apply(object, 1, function(x) {
         fit$n.event <- -diff(c(1, x))
         fit$surv <- x
-        predict(fit, times)
+        predict(dist(fit), times)
       }))
   } else {
     apply(object, 1, function(x) {
       fit$n.event <- -diff(c(1, x))
       fit$surv <- x
-      mean(fit)
+      mean(dist(fit))
     })
   }
 }
 
 
-.predict.Surv.numeric <- function(y, object, times, new_lp, ...) {
+.predict.Surv.numeric <- function(y, object, times, new_lp, dist, ...) {
   risk <- exp(object)
   new_risk <- exp(new_lp)
-  x <- basesurv(y, risk, ...)
+  x <- SurvDist(dist)(basesurv(y, risk, ...))
   if (length(times)) {
     predict(x, times, new_risk)
   } else {
@@ -132,6 +139,19 @@ predict.Surv <- function(object, x, ...) {
 predict.survfit <- function(object, times, ...) {
   idx <- findInterval(times, object$time)
   c(1, object$surv)[idx + 1]
+}
+
+
+predict.Weibull <- function(object, times, new_risk = 1, ...) {
+  exp(new_risk %o% -(object$scale * times^object$shape))
+}
+
+
+surv_cases <- function(..., n.event = NULL) {
+  df <- data.frame(...)
+  is_event <- if (is.null(n.event)) TRUE else n.event > 0
+  is_finite <- Reduce("&", lapply(df, is.finite))
+  df[is_event & is_finite, , drop = FALSE]
 }
 
 
@@ -150,4 +170,33 @@ surv_mean <- function(times, surv, max_time = max(times)) {
 
 surv_times <- function(y) {
   sort(unique(y[y[, "status"] != 0, "time"]))
+}
+
+
+SurvDist <- function(x = c("none", "exponential", "weibull")) {
+  switch(match.arg(x),
+         "exponential" = Exponential,
+         "weibull" = Weibull,
+         identity)
+}
+
+
+Exponential <- function(x) {
+  stopifnot(is(x, "survfit"))
+  df <- surv_cases(y = log(-log(x$surv)) - log(x$time), n.event = x$n.event)
+  structure(
+    list(shape = 1, scale = exp(mean(df$y))),
+    class = "Weibull"
+  )
+}
+
+
+Weibull <- function(x) {
+  stopifnot(is(x, "survfit"))
+  df <- surv_cases(x = log(x$time), y = log(-log(x$surv)), n.event = x$n.event)
+  coef <- if (nrow(df) > 1) coef(lm(y ~ x, data = df)) else c(NA, NA)
+  structure(
+    list(shape = coef[[2]], scale = exp(coef[[1]])),
+    class = "Weibull"
+  )
 }

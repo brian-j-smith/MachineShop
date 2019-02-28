@@ -6,7 +6,8 @@
 \title{Model Prediction}
 \usage{
 \method{predict}{MLModelFit}(object, newdata = NULL, times = numeric(),
-  type = c("response", "prob"), cutoff = 0.5, method = NULL, ...)
+  type = c("response", "prob"), cutoff = 0.5, method = NULL,
+  dist = NULL, ...)
 }
 \arguments{
 \item{object}{\code{MLModelFit} object from a model fit.}
@@ -27,6 +28,10 @@ at which expected values are rounded for integer outcomes.}
 \item{method}{character string specifying the method of estimating survival
 curves for Cox proportional hazards-based models.  Possible values are
 \code{"breslow"}, \code{"efron"} (default), or \code{"fleming-harrington"}.}
+
+\item{dist}{character string specifying distributional approximations to
+estimated survival curves.  Possibilities are \code{"none"} (default),
+\code{"exponential"}, or \code{"weibull"}.}
 
 \item{...}{arguments passed to model-specific prediction functions.}
 }

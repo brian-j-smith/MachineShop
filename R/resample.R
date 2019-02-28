@@ -263,7 +263,7 @@ resample_args <- function(train, test, model, control, strata = character()) {
                    Case = row.names(test))
   df$Observed <- response(test)
   df$Predicted <- predict(trainfit, test, type = "prob", times = control@times,
-                          method = control@method)
+                          method = control@method, dist = control@dist)
   
   list(df, .control = control, .strata = strata)
 }
