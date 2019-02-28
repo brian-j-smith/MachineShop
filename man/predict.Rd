@@ -5,7 +5,7 @@
 \alias{predict.MLModelFit}
 \title{Model Prediction}
 \usage{
-\method{predict}{MLModelFit}(object, newdata = NULL, times = numeric(),
+\method{predict}{MLModelFit}(object, newdata = NULL, times = NULL,
   type = c("response", "prob"), cutoff = 0.5, method = NULL,
   dist = NULL, ...)
 }
@@ -16,7 +16,7 @@
 If not specified, the training data will be used by default.}
 
 \item{times}{numeric vector of follow-up times at which to predict
-survival events/probabilities.}
+survival events/probabilities or \code{NULL} for predicted survival means.}
 
 \item{type}{specifies prediction on the original outcome scale
 (\code{"response"}) or on a probability distribution scale (\code{"prob"}).}

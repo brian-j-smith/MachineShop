@@ -9,8 +9,8 @@
 \alias{TrainControl}
 \title{Resampling Controls}
 \usage{
-MLControl(times = numeric(), method = NULL, dist = NULL,
-  seed = NULL, ...)
+MLControl(times = NULL, method = NULL, dist = NULL, seed = NULL,
+  ...)
 
 BootControl(samples = 25, ...)
 
@@ -23,10 +23,7 @@ SplitControl(prop = 2/3, ...)
 TrainControl(...)
 }
 \arguments{
-\item{times}{numeric vector of follow-up times at which to predict survival
-probabilities.}
-
-\item{method, dist}{arguments passed to \code{\link{predict}}.}
+\item{times, method, dist}{arguments passed to \code{\link{predict}}.}
 
 \item{seed}{integer to set the seed at the start of resampling.  This is set
 to a random integer by default (NULL).}

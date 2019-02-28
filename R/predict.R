@@ -7,13 +7,13 @@
 #' @param object \code{MLModelFit} object from a model fit.
 #' @param newdata optional \code{data.frame} with which to obtain predictions.
 #' If not specified, the training data will be used by default.
+#' @param times numeric vector of follow-up times at which to predict
+#' survival events/probabilities or \code{NULL} for predicted survival means.
 #' @param type specifies prediction on the original outcome scale
 #' (\code{"response"}) or on a probability distribution scale (\code{"prob"}).
 #' @param cutoff threshold above which binary factor probabilities are
 #' classified as events, below which survival probabilities are classified, and
 #' at which expected values are rounded for integer outcomes.
-#' @param times numeric vector of follow-up times at which to predict
-#' survival events/probabilities.
 #' @param method character string specifying the method of estimating survival
 #' curves for Cox proportional hazards-based models.  Possible values are
 #' \code{"breslow"}, \code{"efron"} (default), or \code{"fleming-harrington"}.
@@ -34,7 +34,7 @@
 #'               data = Melanoma, model = GBMModel)
 #' predict(gbmfit, newdata = Melanoma, times = 365 * c(2, 5, 10), type = "prob")
 #' 
-predict.MLModelFit <- function(object, newdata = NULL, times = numeric(),
+predict.MLModelFit <- function(object, newdata = NULL, times = NULL,
                                type = c("response", "prob"), cutoff = 0.5,
                                method = NULL, dist = NULL, ...) {
   newdata <- preprocess(fitbit(object, "x"), newdata)
