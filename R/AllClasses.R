@@ -13,7 +13,7 @@ setOldClass("recipe")
 #' @param times,method,dist arguments passed to \code{\link{predict}}.
 #' @param seed integer to set the seed at the start of resampling.  This is set
 #' to a random integer by default (NULL).
-#' @param ...  arguments to be passed to \code{MLControl}.
+#' @param ...  arguments passed to \code{MLControl}.
 #' 
 #' @return \code{MLControl} class object.
 #' 

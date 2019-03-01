@@ -79,7 +79,7 @@ SVMModel <- function(scaled = TRUE, type = NULL,
 #' @param sigma inverse kernel width used by the ANOVA, Bessel, and Laplacian
 #' kernels.
 #' @param degree degree of the ANOVA, Bessel, and polynomial kernel functions.
-#' @param ... arguments to be passed to \code{SVMModel}.
+#' @param ... arguments passed to \code{SVMModel}.
 #' 
 SVMANOVAModel <- function(sigma = 1, degree = 1, ...) {
   .SVMModel("SVMANOVAModel", "Support Vector Machines (ANOVA)",

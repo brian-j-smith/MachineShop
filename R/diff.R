@@ -6,7 +6,7 @@
 #' @rdname diff-methods
 #' 
 #' @param x object containing resampled metrics.
-#' @param ... arguments to be passed to other methods.
+#' @param ... arguments passed to other methods.
 #' 
 #' @return \code{PerformanceDiff} class object that inherits from
 #' \code{Performance}.

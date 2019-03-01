@@ -55,7 +55,7 @@ bias.}
 
 \item{eta, gamma, max_depth, min_child_weight, max_delta_step, subsample, colsample_bytree, colsample_bylevel, lambda, alpha, tree_method, sketch_eps, scale_pos_weight, update, refresh_leaf, process_type, grow_policy, max_leaves, max_bin, sample_type, normalize_type, rate_drop, one_drop, skip_drop, updater, feature_selector, top_k}{see \code{params} reference.}
 
-\item{...}{arguments to be passed to \code{XGBModel}.}
+\item{...}{arguments passed to \code{XGBModel}.}
 }
 \value{
 \code{MLModel} class object.

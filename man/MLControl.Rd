@@ -28,7 +28,7 @@ TrainControl(...)
 \item{seed}{integer to set the seed at the start of resampling.  This is set
 to a random integer by default (NULL).}
 
-\item{...}{arguments to be passed to \code{MLControl}.}
+\item{...}{arguments passed to \code{MLControl}.}
 
 \item{samples}{number of bootstrap samples.}
 

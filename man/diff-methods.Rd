@@ -16,7 +16,7 @@
 \arguments{
 \item{x}{object containing resampled metrics.}
 
-\item{...}{arguments to be passed to other methods.}
+\item{...}{arguments passed to other methods.}
 }
 \value{
 \code{PerformanceDiff} class object that inherits from

@@ -61,7 +61,7 @@ kernels.}
 
 \item{degree}{degree of the ANOVA, Bessel, and polynomial kernel functions.}
 
-\item{...}{arguments to be passed to \code{SVMModel}.}
+\item{...}{arguments passed to \code{SVMModel}.}
 
 \item{order}{order of the Bessel function to be used as a kernel.}
 
