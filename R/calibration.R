@@ -129,7 +129,6 @@ setMethod(".calibration_default", c("numeric", "numeric"),
 setMethod(".calibration_default", c("Surv", "SurvProbs"),
   function(observed, predicted, breaks, ...) {
     times <- predicted@times
-    colnames(predicted) <- paste("Time", 1:length(times))
     df <- data.frame(Response = rep(colnames(predicted),
                                     each = nrow(predicted)))
     if (is.null(breaks)) {

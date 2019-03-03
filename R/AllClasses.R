@@ -653,13 +653,15 @@ SummaryConfusion <- setClass("SummaryConfusion",
 
 
 SurvMatrix <- function(object, times = NULL) {
-  object <- unname(as.matrix(object))
+  object <- as.matrix(object)
   
   if (is.null(times)) times <- rep(NA_real_, ncol(object))
   
   if (length(times) != ncol(object)) {
     stop("unequal number of survival times and predictions")
   }
+  
+  dimnames(object) <- list(NULL, paste("Time", seq(ncol(object))))
   
   new("SurvMatrix", object, times = times)
 }

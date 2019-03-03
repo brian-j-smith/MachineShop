@@ -7,6 +7,11 @@ setMethod("convert_prob", c("ANY", "ANY"),
 )
 
 
+setMethod("convert_prob", c("ANY", "numeric"),
+  function(object, x, ...) unname(x)
+)
+
+
 setMethod("convert_prob", c("factor", "array"),
   function(object, x, ...) {
     convert_prob(object, adrop(x, length(dim(x))))
@@ -16,7 +21,11 @@ setMethod("convert_prob", c("factor", "array"),
 
 setMethod("convert_prob", c("factor", "matrix"),
   function(object, x, ...) {
-    if (nlevels(object) == 2) x[, ncol(x)] else x
+    if (nlevels(object) == 2) {
+      convert_prob(object, x[, ncol(x)])
+    } else {
+      structure(x, dimnames = list(NULL, levels(object)))
+    }
   }
 )
 
@@ -31,7 +40,10 @@ setMethod("convert_prob", c("matrix", "array"),
 setMethod("convert_prob", c("matrix", "matrix"),
   function(object, x, ...) {
     stopifnot(ncol(object) == ncol(x))
-    x
+    varnames <- colnames(x)
+    if (is.null(varnames)) varnames <- colnames(object)
+    if (is.null(varnames)) varnames <- paste0("y", seq(ncol(x)))
+    structure(x, dimnames = list(NULL, varnames))
   }
 )
 
@@ -46,7 +58,7 @@ setMethod("convert_prob", c("numeric", "array"),
 setMethod("convert_prob", c("numeric", "matrix"),
   function(object, x, ...) {
     stopifnot(ncol(x) == 1)
-    drop(x)
+    convert_prob(object, x[, 1])
   }
 )
 
