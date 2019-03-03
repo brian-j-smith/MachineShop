@@ -161,8 +161,8 @@ setMethod(".msle", c("Surv", "numeric"),
 
 #' @rdname metrics
 #' 
-r2 <- function(observed, predicted = NULL, ...) {
-  .r2(observed, predicted)
+r2 <- function(observed, predicted = NULL, dist = NULL, ...) {
+  .r2(observed, predicted, dist = dist)
 }
 
 MLMetric(r2) <- list("r2", "Coefficient of Determination", TRUE)
@@ -186,14 +186,22 @@ setMethod(".r2", c("matrix", "matrix"),
 
 setMethod(".r2", c("numeric", "numeric"),
   function(observed, predicted, ...) {
-    1 - sum((observed - predicted)^2) / sum((observed - mean(observed))^2)
+    1 - mse(observed, predicted) / mse(observed, mean(observed))
   }
 )
 
 
 setMethod(".r2", c("Surv", "numeric"),
-  function(observed, predicted, ...) {
-    .metric.SurvMean(observed, predicted, r2)
+  function(observed, predicted, dist, ...) {
+    dist <- match.arg(dist, c("none", names(survreg.distributions)))
+    observed_mean <- if (dist == "none") {
+      rep(mean(survfit(observed ~ 1, se.fit = FALSE)), length(observed))
+    } else if (length(surv_times(observed)) > 1) {
+      predict(survreg(observed ~ 1, dist = dist))
+    } else {
+      rep(NA, length(observed))
+    }
+    1 - mse(observed, predicted) / mse(observed, observed_mean)
   }
 )
 
