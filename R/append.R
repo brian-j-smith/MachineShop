@@ -42,11 +42,7 @@ setMethod(".append", c("ordered", "ordered"),
 
 
 setMethod(".append", c("Surv", "Surv"),
-  function(x, y) {
-    df <- as.data.frame(rbind(x, y))
-    names(df) <- NULL
-    do.call(Surv, df)
-  }
+  function(x, y) c(x, y)
 )
 
 
