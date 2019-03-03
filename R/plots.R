@@ -171,7 +171,7 @@ plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
     
     if (se) if (x@smoothed) {
       p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper),
-                           linetype = "blank", alpha = 0.2)
+                           linetype = "blank", alpha = 0.2, na.rm = TRUE)
     } else {
       position <- position_dodge(width = 0.025 * Predicted_width)
       p <- p + geom_errorbar(aes(ymin = Lower, ymax = Upper),
@@ -180,8 +180,8 @@ plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
     }
     
     switch(type,
-           "line" = p + geom_line(position = position),
-           "point" = p + geom_point(position = position))
+           "line" = p + geom_line(position = position, na.rm = TRUE),
+           "point" = p + geom_point(position = position, na.rm = TRUE))
     
   }, simplify = FALSE)
   

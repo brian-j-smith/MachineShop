@@ -11,6 +11,12 @@
 #' calculate observed mean values.  May be specified as a number of bins, a
 #' vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
 #' survival responses and loess for others.
+#' @param dist character string specifying a distribution with which to estimate
+#' observed survival means.  Possible values are \code{"none"} (default) for the
+#' Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
+#' \code{"gaussian"}, \code{"loggaussian"}, \code{"logistic"},
+#' \code{"loglogistic"}, \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or
+#' \code{"weibull"}.
 #' 
 #' @return \code{Calibration} class object that inherits from \code{data.frame}.
 #'  
@@ -27,8 +33,8 @@
 #' cal <- calibration(res)
 #' plot(cal)
 #' 
-calibration <- function(x, y = NULL, breaks = 10, ...) {
-  .calibration(x, y, breaks = breaks)
+calibration <- function(x, y = NULL, breaks = 10, dist = NULL, ...) {
+  .calibration(x, y, breaks = breaks, dist = dist)
 }
 
 
@@ -38,13 +44,14 @@ calibration <- function(x, y = NULL, breaks = 10, ...) {
 
 
 .calibration.default <- function(x, y, breaks, ...) {
-  Calibration(.calibration_default(x, y, breaks = breaks), .breaks = breaks)
+  Calibration(.calibration_default(x, y, breaks = breaks, ...),
+              .breaks = breaks)
 }
 
 
-.calibration.Resamples <- function(x, breaks, ...) {
+.calibration.Resamples <- function(x, ...) {
   cal_list <- by(x, x$Model, function(data) {
-    calibration(data$Observed, data$Predicted, breaks = breaks)
+    calibration(data$Observed, data$Predicted, ...)
   }, simplify = FALSE)
   do.call(Calibration, cal_list)
 }
@@ -62,8 +69,8 @@ setMethod(".calibration_default", c("ANY", "ANY"),
 
 
 setMethod(".calibration_default", c("factor", "matrix"),
-  function(observed, predicted, breaks, ...) {
-    cal <- calibration(model.matrix(~ observed - 1), predicted, breaks = breaks)
+  function(observed, predicted, ...) {
+    cal <- calibration(model.matrix(~ observed - 1), predicted, ...)
     bounds <- c("Lower", "Upper")
     cal$Observed[, bounds] <- pmin(pmax(cal$Observed[, bounds], 0), 1)
     cal
@@ -72,9 +79,9 @@ setMethod(".calibration_default", c("factor", "matrix"),
 
 
 setMethod(".calibration_default", c("factor", "numeric"),
-  function(observed, predicted, breaks, ...) {
-    cal <- calibration(as.numeric(observed == levels(observed)[2]), predicted,
-                       breaks = breaks)
+  function(observed, predicted, ...) {
+    observed <- as.numeric(observed == levels(observed)[2])
+    cal <- calibration(observed, predicted, ...)
     bounds <- c("Lower", "Upper")
     cal$Observed[, bounds] <- pmin(pmax(cal$Observed[, bounds], 0), 1)
     cal
@@ -113,8 +120,8 @@ setMethod(".calibration_default", c("matrix", "matrix"),
 
 
 setMethod(".calibration_default", c("numeric", "numeric"),
-  function(observed, predicted, breaks, ...) {
-    calibration(cbind(y = observed), cbind(y = predicted), breaks = breaks)
+  function(observed, predicted, ...) {
+    calibration(cbind(y = observed), cbind(y = predicted), ...)
   }
 )
 
@@ -156,7 +163,22 @@ setMethod(".calibration_default", c("Surv", "SurvProbs"),
 
 
 setMethod(".calibration_default", c("Surv", "numeric"),
-  function(observed, predicted, breaks, ...) {
+  function(observed, predicted, breaks, dist, ...) {
+    max_time <- surv_max(observed)
+    dist <- match.arg(dist, c("none", names(survreg.distributions)))
+    
+    f_survfit <- function(observed, weights = NULL) {
+      km <- survfit(observed ~ 1, weights = weights, se.fit = FALSE)
+      est <- survival:::survmean(km, rmean = max_time)
+      list(Mean = est$matrix[["*rmean"]], SE = est$matrix[["*se(rmean)"]])
+    }
+    
+    f_survreg <- function(observed, dist, weights = NULL) {
+      regfit <- survreg(observed ~ 1, weights = weights, dist = dist)
+      est <- predict(regfit, data.frame(row.names = 1), se.fit = TRUE)
+      list(Mean = est$fit[[1]], SE = est$se.fit[[1]])
+    }
+    
     if (is.null(breaks)) {
       df <- data.frame(
         Response = "Mean",
@@ -164,9 +186,15 @@ setMethod(".calibration_default", c("Surv", "numeric"),
       )
       metrics_list <- lapply(df$Predicted, function(value) {
         abs_diff <- abs(predicted - value)
-        weights <- (1 - (abs_diff / diff(range(abs_diff)))^3)^3
-        km <- survfit(observed ~ 1, weights = weights, se.fit = FALSE)
-        c(Mean = mean(km), SE = NA, Lower = NA, Upper = NA)
+        weights <- (1 - (abs_diff / diff(range(abs_diff)))^3)^3 + 1e-10
+        est <- if (dist == "none") {
+          f_survfit(observed, weights)
+        } else {
+          f_survreg(observed, dist, weights)
+        }
+        with(est, c(Mean = Mean, SE = SE,
+                    Lower = max(Mean - SE, 0),
+                    Upper = Mean + SE))
       })
       df$Observed <- do.call(rbind, metrics_list)
       df
@@ -176,16 +204,19 @@ setMethod(".calibration_default", c("Surv", "numeric"),
         Predicted = midpoints(predicted, breaks),
         Observed = observed
       )
-      surv_max <- surv_max(observed)
       by_results <- by(df, df[c("Predicted", "Response")], function(data) {
-        km <- survfit(Observed ~ 1, data = data, se.fit = FALSE)
-        est <- survival:::survmean(km, rmean = surv_max)
-        Mean <- est$matrix["*rmean"]
-        SE <- est$matrix["*se(rmean)"]
+        observed <- data$Observed
+        est <- if (dist == "none") {
+          f_survfit(observed)
+        } else if (length(surv_times(observed)) > 1) {
+          f_survreg(observed, dist)
+        } else {
+          list(Mean = NA, SE = NA)
+        }
         result <- data[1, c("Response", "Predicted")]
-        result$Observed <- cbind(Mean = Mean, SE = SE,
-                                 Lower = max(Mean - SE, 0),
-                                 Upper = Mean + SE)
+        result$Observed <- with(est, cbind(Mean = Mean, SE = SE,
+                                           Lower = max(Mean - SE, 0),
+                                           Upper = Mean + SE))
         result
       }, simplify = FALSE)
       do.call(rbind, by_results)

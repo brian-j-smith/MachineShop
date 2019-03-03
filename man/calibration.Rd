@@ -7,7 +7,7 @@
 \usage{
 Calibration(...)
 
-calibration(x, y = NULL, breaks = 10, ...)
+calibration(x, y = NULL, breaks = 10, dist = NULL, ...)
 }
 \arguments{
 \item{...}{named or unnamed \code{calibration} output to combine together
@@ -22,6 +22,13 @@ predicted responses.}
 calculate observed mean values.  May be specified as a number of bins, a
 vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
 survival responses and loess for others.}
+
+\item{dist}{character string specifying a distribution with which to estimate
+observed survival means.  Possible values are \code{"none"} (default) for the
+Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
+\code{"gaussian"}, \code{"loggaussian"}, \code{"logistic"},
+\code{"loglogistic"}, \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or
+\code{"weibull"}.}
 }
 \value{
 \code{Calibration} class object that inherits from \code{data.frame}.
