@@ -302,8 +302,6 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
   stopifnot(types %in% c("binary", "factor", "matrix", "numeric", "ordered",
                          "Surv"))
   
-  MLModel_depwarn(...)
-  
   new("MLModel",
       name = name,
       label = label,
@@ -316,15 +314,6 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
       fitbits = MLFitBits(packages = packages,
                           predict = predict,
                           varimp = varimp))
-}
-
-
-MLModel_depwarn <- function(nvars = NULL, ...) {
-  if (!is.null(nvars)) {
-    depwarn("'nvars' argument to MLModel is deprecated",
-            "specify the design matrix type with 'design' instead",
-            expired = TRUE)
-  }
 }
 
 
