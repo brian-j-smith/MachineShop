@@ -24,7 +24,7 @@ MLControl <- function(times = NULL, method = NULL, dist = NULL, seed = NULL,
   args <- list(...)
   if (!is.null(args$surv_times)) {
     depwarn("'surv_times' argument to MLControl is deprecated",
-            "use 'times' instead")
+            "use 'times' instead", expired = TRUE)
     times <- args$surv_times
   }
   
