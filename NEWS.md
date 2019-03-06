@@ -2,6 +2,14 @@
 
 ## Version Updates
 
+## 1.2.1
+* Add ``method`` option to ``predict()`` for Breslow, Efron (default), or Fleming-Harrington estimation of survival curves for Cox proportional hazards-based models.
+* Add ``dist`` option to ``predict()`` for exponential or Weibull approximation to estimated survival curves.
+* Add ``dist`` option to ``calibration()`` for distributional estimation of observed mean survival.
+* Add ``dist`` option to ``r2()`` for distributional estimation of the total sum of squares mean.
+* Handle unnamed arguments in ``metricinfo()`` and ``modelinfo()``.
+
+
 ## 1.2.0
 * Implement metrics: ``auc``, ``fnr``, ``fpr``, ``rpp``, ``tnr``, ``tpr``.
 * Implement performance curves, including ROC and precision recall.
