@@ -38,5 +38,5 @@ varimp_pchisq <- function(object) {
 varimp_undef <- function(object) {
   warn("variable importance not defined for ", class(object)[1])
   varnames <- labels(terms(fitbit(object, "x")))
-  structure(rep(NA_integer_, length(varnames)), names = varnames)
+  structure(rep(NA_real_, length(varnames)), names = varnames)
 }
