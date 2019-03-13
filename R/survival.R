@@ -12,10 +12,11 @@ predict.Surv <- function(object, x, ...) {
 
 
 .predict.Surv.list <- function(y, object, times, dist, ...) {
-  dist <- surv_dist(dist)
   if (length(times)) {
+    dist <- surv_dist(dist)
     t(sapply(object, function(x) predict(dist(x), times)))
   } else {
+    dist <- surv_dist_mean(dist)
     max_time <- surv_max(y)
     sapply(object, function(x) mean(dist(x), max_time = max_time))
   }
@@ -23,11 +24,11 @@ predict.Surv <- function(object, x, ...) {
 
 
 .predict.Surv.matrix <- function(y, object, times, dist, ...) {
-  x <- surv_dist(dist)(SurvProbs(object, y[, "time"]))
+  x <- SurvProbs(object, y[, "time"])
   if (length(times)) {
-    predict(x, times)
+    predict(surv_dist(dist)(x), times)
   } else {
-    mean(x)
+    mean(surv_dist_mean(dist)(x))
   }
 }
 
@@ -35,11 +36,10 @@ predict.Surv <- function(object, x, ...) {
 .predict.Surv.numeric <- function(y, object, times, new_lp, dist, ...) {
   risk <- exp(object)
   new_risk <- exp(new_lp)
-  x <- surv_dist(dist)(y, risk, ...)
   if (length(times)) {
-    predict(x, times, new_risk)
+    predict(surv_dist(dist)(y, risk, ...), times, new_risk)
   } else {
-    mean(x, new_risk)
+    mean(surv_dist_mean(dist)(y, risk, ...), new_risk)
   }
 }
 
@@ -269,6 +269,11 @@ surv_dist <- function(x = c("empirical", "exponential", "rayleigh",
          "rayleigh" = Rayleigh,
          "weibull" = Weibull,
          EmpiricalSurv)
+}
+
+
+surv_dist_mean <- function(x = NULL) {
+  if (is.null(x)) Weibull else surv_dist(x)
 }
 
 

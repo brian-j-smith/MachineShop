@@ -193,7 +193,8 @@ setMethod(".r2", c("numeric", "numeric"),
 
 setMethod(".r2", c("Surv", "numeric"),
   function(observed, predicted, dist, ...) {
-    dist <- match.arg(dist, c("empirical", names(survreg.distributions)))
+    dist <- if (is.null(dist)) "weibull" else
+      match.arg(dist, c("empirical", names(survreg.distributions)))
     nparams <- if (dist %in% c("exponential", "rayleigh")) 1 else 2
     observed_mean <- if (dist == "empirical") {
       rep(mean(survfit(observed ~ 1, se.fit = FALSE)), length(observed))

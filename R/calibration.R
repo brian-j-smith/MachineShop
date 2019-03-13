@@ -12,11 +12,11 @@
 #' vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
 #' survival responses and loess for others.
 #' @param dist character string specifying a distribution with which to estimate
-#' observed survival means.  Possible values are \code{"empirical"} (default)
-#' for the Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
+#' observed survival means.  Possible values are \code{"empirical"} for the
+#' Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
 #' \code{"gaussian"}, \code{"loggaussian"}, \code{"logistic"},
 #' \code{"loglogistic"}, \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or
-#' \code{"weibull"}.
+#' \code{"weibull"} (default).
 #' 
 #' @return \code{Calibration} class object that inherits from \code{data.frame}.
 #'  
@@ -164,7 +164,8 @@ setMethod(".calibration_default", c("Surv", "SurvProbs"),
 setMethod(".calibration_default", c("Surv", "numeric"),
   function(observed, predicted, breaks, dist, ...) {
     max_time <- surv_max(observed)
-    dist <- match.arg(dist, c("empirical", names(survreg.distributions)))
+    dist <- if (is.null(dist)) "weibull" else
+      match.arg(dist, c("empirical", names(survreg.distributions)))
     nparams <- if (dist %in% c("exponential", "rayleigh")) 1 else 2
     
     f_survfit <- function(observed, weights = NULL) {

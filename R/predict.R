@@ -15,11 +15,13 @@
 #' classified as events, below which survival probabilities are classified, and
 #' at which expected values are rounded for integer outcomes.
 #' @param dist character string specifying distributional approximations to
-#' estimated survival curves.  Possible values are \code{"empirical"} (default),
-#' \code{"exponential"}, \code{"rayleigh"}, or \code{"weibull"}.
+#' estimated survival curves.  Possible values are \code{"empirical"},
+#' \code{"exponential"}, \code{"rayleigh"}, or \code{"weibull"}; with defaults
+#' of \code{"empirical"} for predicted survival events/probabilities and
+#' \code{"weibull"} for predicted survival means.
 #' @param method character string specifying the empirical method of estimating
 #' baseline survival curves for Cox proportional hazards-based models.
-#' Possibilities are \code{"breslow"}, \code{"efron"} (default), or
+#' Choices are \code{"breslow"}, \code{"efron"} (default), or
 #' \code{"fleming-harrington"}.
 #' @param ... arguments passed to model-specific prediction functions.
 #' 
