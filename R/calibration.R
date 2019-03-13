@@ -134,7 +134,7 @@ setMethod(".calibration_default", c("Surv", "SurvProbs"),
     if (is.null(breaks)) {
       df$Predicted <- c(predicted)
       Mean <- c(sapply(1:ncol(predicted), function(i) {
-        x <- predicted[, i, drop = FALSE]
+        x <- predicted[, i]
         harefit <- polspline::hare(observed[, "time"], observed[, "status"], x)
         1 - polspline::phare(times[i], x, harefit)
       }))

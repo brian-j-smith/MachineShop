@@ -141,7 +141,7 @@ setMethod(".curve_default", c("Surv", "SurvProbs"),
         
         time <- times[i]
         surv_all <- surv[i]
-        pred <- predicted[, i]
+        pred <- predicted[, i, drop = TRUE]
         
         cutoffs <- c(-Inf, unique(pred))
         x <- y <- numeric(length(cutoffs))

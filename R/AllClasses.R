@@ -710,11 +710,8 @@ setClass("SurvProbs", contains = "SurvMatrix")
 #' 
 setMethod("[", c(x = "SurvMatrix", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
-    if (drop) {
-      x@.Data[i, j, drop = TRUE]
-    } else {
-      as(SurvMatrix(x@.Data[i, j, drop = FALSE], x@times[j]), class(x))
-    }
+    Data <- x@.Data[i, j, drop = drop]
+    if (drop) Data else new(class(x), Data, times = x@times[j])
   }
 )
 

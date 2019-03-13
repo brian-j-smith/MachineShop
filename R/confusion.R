@@ -115,7 +115,7 @@ setMethod(".confusion_matrix", c("Surv", "SurvEvents"),
     structure(
       lapply(1:length(times), function(i) {
         surv_positives <- 1
-        positives <- predicted[, i] == 1
+        positives <- predicted[, i, drop = TRUE] == 1
         p <- mean(positives)
         if (p > 0) {
           obs <- observed[positives]

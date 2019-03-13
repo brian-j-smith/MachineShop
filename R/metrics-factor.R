@@ -198,7 +198,7 @@ setMethod(".brier", c("Surv", "SurvProbs"),
       obs_after_time <- obs_times > time
       cens <- predict(cens_fit, pmin(obs_times, time))
       weights <- ifelse(obs_events == 1 | obs_after_time, 1 / cens, 0)
-      mean(weights * (obs_after_time - predicted[, i])^2)
+      mean(weights * (obs_after_time - predicted[, i, drop = TRUE])^2)
     })
     
     if (length(times) > 1) {
