@@ -193,13 +193,14 @@ setMethod(".r2", c("numeric", "numeric"),
 
 setMethod(".r2", c("Surv", "numeric"),
   function(observed, predicted, dist, ...) {
-    dist <- match.arg(dist, c("none", names(survreg.distributions)))
-    observed_mean <- if (dist == "none") {
+    dist <- match.arg(dist, c("empirical", names(survreg.distributions)))
+    nparams <- if (dist %in% c("exponential", "rayleigh")) 1 else 2
+    observed_mean <- if (dist == "empirical") {
       rep(mean(survfit(observed ~ 1, se.fit = FALSE)), length(observed))
-    } else if (length(surv_times(observed)) > 1) {
+    } else if (length(surv_times(observed)) >= nparams) {
       predict(survreg(observed ~ 1, dist = dist))
     } else {
-      rep(NA, length(observed))
+      rep(NA_real_, length(observed))
     }
     1 - mse(observed, predicted) / mse(observed, observed_mean)
   }

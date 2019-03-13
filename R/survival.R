@@ -1,87 +1,4 @@
-basesurv <- function(y, risk, method = c("efron", "breslow",
-                                         "fleming-harrington"), ...) {
-  times <- y[, "time"]
-  events <- pmin(y[, "status"], 1)
-  surv <- switch(match.arg(method),
-                 "breslow" = basesurv_breslow,
-                 "efron" = basesurv_efron,
-                 "fleming-harrington" = basesurv_fh)
-  fit <- surv(times, events, risk)
-  structure(
-    list(n = length(y), time = sort(unique(times)),
-         n.risk = fit$n.risk, n.event = fit$n.event,
-         n.censor = fit$n.total - fit$n.event,
-         surv = fit$surv),
-    class = c("BaseSurv", "survfit")
-  )
-}
-
-
-basesurv_breslow <- function(times, events, risk) {
-  n <- unname(rowsum(cbind(1, events, risk), times))
-  n.event <- n[, 2]
-  n.risk <- cumsum_risk(n[, 3])
-  hazard <- n.event / n.risk
-  list(n.total = n[, 1], n.event = n.event, n.risk = n.risk,
-       surv = exp(-cumsum(hazard)))
-}
-
-
-basesurv_efron <- function(times, events, risk) {
-  f <- function(n.event, n.risk_all, n.risk_events) {
-    if (n.event) {
-      n.event / prod(n.risk_all - (1:n.event - 1) / n.event * n.risk_events)
-    } else 0
-  }
-  basesurv_function(times, events, risk, f)
-}
-
-
-basesurv_fh <- function(times, events, risk) {
-  f <- function(n.event, n.risk_all, n.risk_events) {
-    if (n.event) {
-      sum(1 / (n.risk_all - (1:n.event - 1) / n.event * n.risk_events))
-    } else 0
-  }
-  basesurv_function(times, events, risk, f)
-}
-
-
-basesurv_function <- function(times, events, risk, f) {
-  n <- unname(rowsum(cbind(1, events, risk, risk * events), times))
-  n.event <- n[, 2]
-  n.risk_all <- cumsum_risk(n[, 3])
-  n.risk_events <- cumsum_risk(n[, 4])
-  hazard <- mapply(f, n.event, n.risk_all, n.risk_events)
-  list(n.total = n[, 1], n.event = n.event, n.risk = n.risk_all,
-       surv = exp(-cumsum(hazard)))
-}
-
-
-cumsum_risk <- function(x) rev(cumsum(rev(x)))
-
-
-mean.BaseSurv <- function(x, new_risk, ...) {
-  times <- x$time[x$n.event > 0]
-  surv_mean(times, predict(x, times, new_risk), max(x$time))
-}
-
-
-mean.survfit <- function(x, max_time = max(x$time), ...) {
-  is_event <- x$n.event > 0
-  surv_mean(x$time[is_event], x$surv[is_event], max_time)
-}
-
-
-mean.Weibull <- function(x, new_risk = 1, ...) {
-  (new_risk * x$scale)^(-1 / x$shape) * gamma(1 + 1 / x$shape)
-}
-
-
-predict.BaseSurv <- function(object, times, new_risk, ...) {
-  basesurv <- NextMethod()
-  t(outer(basesurv, new_risk, "^"))
-}
+#################### Surv Prediction Method ####################
 
 
 predict.Surv <- function(object, x, ...) {
@@ -95,7 +12,7 @@ predict.Surv <- function(object, x, ...) {
 
 
 .predict.Surv.list <- function(y, object, times, dist, ...) {
-  dist <- SurvDist(dist)
+  dist <- surv_dist(dist)
   if (length(times)) {
     t(sapply(object, function(x) predict(dist(x), times)))
   } else {
@@ -106,20 +23,11 @@ predict.Surv <- function(object, x, ...) {
 
 
 .predict.Surv.matrix <- function(y, object, times, dist, ...) {
-  fit <- structure(list(time = y[, "time"]), class = "survfit")
-  dist <- SurvDist(dist)
+  x <- surv_dist(dist)(SurvProbs(object, y[, "time"]))
   if (length(times)) {
-    t(apply(object, 1, function(x) {
-        fit$n.event <- -diff(c(1, x))
-        fit$surv <- x
-        predict(dist(fit), times)
-      }))
+    predict(x, times)
   } else {
-    apply(object, 1, function(x) {
-      fit$n.event <- -diff(c(1, x))
-      fit$surv <- x
-      mean(dist(fit))
-    })
+    mean(x)
   }
 }
 
@@ -127,12 +35,197 @@ predict.Surv <- function(object, x, ...) {
 .predict.Surv.numeric <- function(y, object, times, new_lp, dist, ...) {
   risk <- exp(object)
   new_risk <- exp(new_lp)
-  x <- SurvDist(dist)(basesurv(y, risk, ...))
+  x <- surv_dist(dist)(y, risk, ...)
   if (length(times)) {
     predict(x, times, new_risk)
   } else {
     mean(x, new_risk)
   }
+}
+
+
+#################### Empirical Survival Distribution ####################
+
+
+EmpiricalSurv <- function(x, ...) {
+  UseMethod("EmpiricalSurv")
+}
+
+
+EmpiricalSurv.default <- function(x, ...) {
+  x
+}
+
+
+EmpiricalSurv.Surv <- function(y, risk = NULL,
+                               method = c("efron", "breslow",
+                                          "fleming-harrington"), ...) {
+  times <- y[, "time"]
+  events <- pmin(y[, "status"], 1)
+  if (is.null(risk)) risk <- rep(1, length(times))
+  surv <- switch(match.arg(method),
+                 "breslow" = empiricalsurv_breslow,
+                 "efron" = empiricalsurv_efron,
+                 "fleming-harrington" = empiricalsurv_fh)
+  fit <- surv(times, events, risk)
+  structure(
+    list(n = length(y), time = sort(unique(times)),
+         n.risk = fit$n.risk, n.event = fit$n.event,
+         n.censor = fit$n.total - fit$n.event,
+         surv = fit$surv),
+    class = c("EmpiricalSurv", "survfit")
+  )
+}
+
+
+empiricalsurv_breslow <- function(times, events, risk) {
+  n <- unname(rowsum(cbind(1, events, risk), times))
+  n.event <- n[, 2]
+  n.risk <- cumsum_risk(n[, 3])
+  hazard <- n.event / n.risk
+  list(n.total = n[, 1], n.event = n.event, n.risk = n.risk,
+       surv = exp(-cumsum(hazard)))
+}
+
+
+empiricalsurv_efron <- function(times, events, risk) {
+  f <- function(n.event, n.risk_all, n.risk_events) {
+    if (n.event) {
+      n.event / prod(n.risk_all - (1:n.event - 1) / n.event * n.risk_events)
+    } else 0
+  }
+  empiricalsurv_function(times, events, risk, f)
+}
+
+
+empiricalsurv_fh <- function(times, events, risk) {
+  f <- function(n.event, n.risk_all, n.risk_events) {
+    if (n.event) {
+      sum(1 / (n.risk_all - (1:n.event - 1) / n.event * n.risk_events))
+    } else 0
+  }
+  empiricalsurv_function(times, events, risk, f)
+}
+
+
+empiricalsurv_function <- function(times, events, risk, f) {
+  n <- unname(rowsum(cbind(1, events, risk, risk * events), times))
+  n.event <- n[, 2]
+  n.risk_all <- cumsum_risk(n[, 3])
+  n.risk_events <- cumsum_risk(n[, 4])
+  hazard <- mapply(f, n.event, n.risk_all, n.risk_events)
+  list(n.total = n[, 1], n.event = n.event, n.risk = n.risk_all,
+       surv = exp(-cumsum(hazard)))
+}
+
+
+mean.EmpiricalSurv <- function(x, new_risk = NULL, ...) {
+  times <- x$time[x$n.event > 0]
+  surv_mean(times, predict(x, times, new_risk), max(x$time))
+}
+
+
+predict.EmpiricalSurv <- function(object, times, new_risk = NULL, ...) {
+  surv <- NextMethod()
+  rbind(if (is.null(new_risk)) surv else sapply(surv, function(x) x^new_risk))
+}
+
+
+#################### Exponential Distribution ####################
+
+
+Exponential <- function(...) {
+  Weibull(..., shape = 1)
+}
+
+
+#################### Rayleigh Distribution ####################
+
+
+Rayleigh <- function(...) {
+  Weibull(..., shape = 2)
+}
+
+
+#################### Weibull Distribution ####################
+
+
+Weibull <- function(x, ...) {
+  UseMethod("Weibull")
+}
+
+
+Weibull.numeric <- function(x = scale, shape, scale, ...) {
+  structure(list(shape = shape, scale = x), class = "Weibull")
+}
+
+
+Weibull.Surv <- function(x, risk = NULL, shape = NULL, ...) {
+  if (is.null(shape)) {
+    shape <- Inf
+    nparams <- 2
+  } else {
+    nparams <- 1
+  }
+  params <- if (length(surv_times(x)) >= nparams) {
+    fo <- if (is.null(risk)) x ~ 1 else x ~ offset(-log(risk))
+    regfit <- survreg(fo, dist = "weibull", scale = 1 / shape)
+    c(1 / regfit$scale, exp(coef(regfit)[[1]]))
+  } else c(NA_real_, NA_real_)
+  Weibull(shape = params[1], scale = params[2]^-params[1])
+}
+
+
+Weibull.survfit <- function(x, ...) {
+  time_event <- rep(x$time, times = x$n.event)
+  time_censor <- rep(x$time, times = x$n.censor)
+  time <- c(time_event, time_censor)
+  status <- rep(c(1, 0), times = c(length(time_event), length(time_censor)))
+  Weibull(Surv(time, status), ...)
+}
+
+
+Weibull.SurvProbs <- function(x, shape = NULL, ...) {
+  weibullfit <- if (is.null(shape)) {
+    function(df) if (nrow(df) >= 2) {
+      coef(lm(y ~ x, data = df))
+    } else c(NA_real_, NA_real_)
+  } else {
+    function(df) c(mean(df$y - shape * df$x), shape)
+  }
+  coef <- apply(x, 1, function(surv) {
+    df <- surv_cases(x = log(x@times), y = log(-log(surv)),
+                     subset = diff(c(1, surv)) < 0)
+    weibullfit(df)
+  })
+  Weibull(shape = coef[2, ], scale = exp(coef[1, ]))
+}
+
+
+mean.Weibull <- function(x, new_risk = NULL, ...) {
+  if (!is.null(new_risk)) x$scale <- new_risk * x$scale
+  x$scale^(-1 / x$shape) * gamma(1 + 1 / x$shape)
+}
+
+
+predict.Weibull <- function(object, times, new_risk = NULL, ...) {
+  if (is.null(new_risk)) new_risk <- 1
+  shape <- object$shape
+  times_shape <- if (length(shape) == 1) {
+    matrix(times^shape, length(new_risk), length(times), byrow = TRUE)
+  } else {
+    sapply(times, function(time) time^shape)
+  }
+  exp((new_risk * -object$scale) * times_shape)
+}
+
+
+#################### survfit Methods ####################
+
+
+mean.survfit <- function(x, max_time = max(x$time), ...) {
+  is_event <- x$n.event > 0
+  surv_mean(x$time[is_event], x$surv[is_event], max_time)
 }
 
 
@@ -142,16 +235,40 @@ predict.survfit <- function(object, times, ...) {
 }
 
 
-predict.Weibull <- function(object, times, new_risk = 1, ...) {
-  exp(new_risk %o% -(object$scale * times^object$shape))
+#################### SurvProbs Methods ####################
+
+
+mean.SurvProbs <- function(x, ...) {
+  apply(x, 1, function(surv) surv_mean(x@times, surv))
 }
 
 
-surv_cases <- function(..., n.event = NULL) {
+predict.SurvProbs <- function(object, times, ...) {
+  idx <- findInterval(times, object@times)
+  cbind(1, object)[, idx + 1, drop = FALSE]
+}
+
+
+#################### Survival Utility Functions ####################
+
+
+cumsum_risk <- function(x) rev(cumsum(rev(x)))
+
+
+surv_cases <- function(..., subset = TRUE) {
   df <- data.frame(...)
-  is_event <- if (is.null(n.event)) TRUE else n.event > 0
   is_finite <- Reduce("&", lapply(df, is.finite))
-  df[is_event & is_finite, , drop = FALSE]
+  df[subset & is_finite, , drop = FALSE]
+}
+
+
+surv_dist <- function(x = c("empirical", "exponential", "rayleigh",
+                            "weibull")) {
+  switch(match.arg(x),
+         "exponential" = Exponential,
+         "rayleigh" = Rayleigh,
+         "weibull" = Weibull,
+         EmpiricalSurv)
 }
 
 
@@ -170,33 +287,4 @@ surv_mean <- function(times, surv, max_time = max(times)) {
 
 surv_times <- function(y) {
   sort(unique(y[y[, "status"] != 0, "time"]))
-}
-
-
-SurvDist <- function(x = c("none", "exponential", "weibull")) {
-  switch(match.arg(x),
-         "exponential" = Exponential,
-         "weibull" = Weibull,
-         identity)
-}
-
-
-Exponential <- function(x) {
-  stopifnot(is(x, "survfit"))
-  df <- surv_cases(y = log(-log(x$surv)) - log(x$time), n.event = x$n.event)
-  structure(
-    list(shape = 1, scale = exp(mean(df$y))),
-    class = "Weibull"
-  )
-}
-
-
-Weibull <- function(x) {
-  stopifnot(is(x, "survfit"))
-  df <- surv_cases(x = log(x$time), y = log(-log(x$surv)), n.event = x$n.event)
-  coef <- if (nrow(df) > 1) coef(lm(y ~ x, data = df)) else c(NA, NA)
-  structure(
-    list(shape = coef[[2]], scale = exp(coef[[1]])),
-    class = "Weibull"
-  )
 }

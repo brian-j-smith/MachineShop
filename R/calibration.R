@@ -12,8 +12,8 @@
 #' vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
 #' survival responses and loess for others.
 #' @param dist character string specifying a distribution with which to estimate
-#' observed survival means.  Possible values are \code{"none"} (default) for the
-#' Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
+#' observed survival means.  Possible values are \code{"empirical"} (default)
+#' for the Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
 #' \code{"gaussian"}, \code{"loggaussian"}, \code{"logistic"},
 #' \code{"loglogistic"}, \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or
 #' \code{"weibull"}.
@@ -164,7 +164,8 @@ setMethod(".calibration_default", c("Surv", "SurvProbs"),
 setMethod(".calibration_default", c("Surv", "numeric"),
   function(observed, predicted, breaks, dist, ...) {
     max_time <- surv_max(observed)
-    dist <- match.arg(dist, c("none", names(survreg.distributions)))
+    dist <- match.arg(dist, c("empirical", names(survreg.distributions)))
+    nparams <- if (dist %in% c("exponential", "rayleigh")) 1 else 2
     
     f_survfit <- function(observed, weights = NULL) {
       km <- survfit(observed ~ 1, weights = weights, se.fit = FALSE)
@@ -186,7 +187,7 @@ setMethod(".calibration_default", c("Surv", "numeric"),
       metrics_list <- lapply(df$Predicted, function(value) {
         abs_diff <- abs(predicted - value)
         weights <- (1 - (abs_diff / diff(range(abs_diff)))^3)^3 + 1e-10
-        est <- if (dist == "none") {
+        est <- if (dist == "empirical") {
           f_survfit(observed, weights)
         } else {
           f_survreg(observed, dist, weights)
@@ -205,12 +206,12 @@ setMethod(".calibration_default", c("Surv", "numeric"),
       )
       by_results <- by(df, df[c("Predicted", "Response")], function(data) {
         observed <- data$Observed
-        est <- if (dist == "none") {
+        est <- if (dist == "empirical") {
           f_survfit(observed)
-        } else if (length(surv_times(observed)) > 1) {
+        } else if (length(surv_times(observed)) >= nparams) {
           f_survreg(observed, dist)
         } else {
-          list(Mean = NA, SE = NA)
+          list(Mean = NA_real_, SE = NA_real_)
         }
         result <- data[1, c("Response", "Predicted")]
         result$Observed <- with(est, cbind(Mean = Mean, SE = SE,

@@ -24,8 +24,8 @@ vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
 survival responses and loess for others.}
 
 \item{dist}{character string specifying a distribution with which to estimate
-observed survival means.  Possible values are \code{"none"} (default) for the
-Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
+observed survival means.  Possible values are \code{"empirical"} (default)
+for the Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
 \code{"gaussian"}, \code{"loggaussian"}, \code{"logistic"},
 \code{"loglogistic"}, \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or
 \code{"weibull"}.}

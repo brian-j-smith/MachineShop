@@ -124,8 +124,8 @@ main diagonal in confusion matrices are raised to calculate
 
 \item{dist}{character string specifying a distribution with which to estimate
 the survival mean in the total sum of square component of \code{r2}.
-Possible values are \code{"none"} (default) for the Kaplan-Meier estimator,
-\code{"exponential"}, \code{"extreme"}, \code{"gaussian"},
+Possible values are \code{"empirical"} (default) for the Kaplan-Meier
+estimator, \code{"exponential"}, \code{"extreme"}, \code{"gaussian"},
 \code{"loggaussian"}, \code{"logistic"}, \code{"loglogistic"},
 \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or \code{"weibull"}.}
 }

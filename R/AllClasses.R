@@ -10,7 +10,7 @@ setOldClass("recipe")
 #' 
 #' @rdname MLControl
 #' 
-#' @param times,method,dist arguments passed to \code{\link{predict}}.
+#' @param times,dist,method arguments passed to \code{\link{predict}}.
 #' @param seed integer to set the seed at the start of resampling.  This is set
 #' to a random integer by default (NULL).
 #' @param ...  arguments passed to \code{MLControl}.
@@ -19,7 +19,7 @@ setOldClass("recipe")
 #' 
 #' @seealso \code{\link{resample}}
 #' 
-MLControl <- function(times = NULL, method = NULL, dist = NULL, seed = NULL,
+MLControl <- function(times = NULL, dist = NULL, method = NULL, seed = NULL,
                       ...) {
   args <- list(...)
   if (!is.null(args$surv_times)) {
@@ -29,12 +29,12 @@ MLControl <- function(times = NULL, method = NULL, dist = NULL, seed = NULL,
   }
   
   if (is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
-  new("MLControl", times = times, method = method, dist = dist, seed = seed)
+  new("MLControl", times = times, dist = dist, method = method, seed = seed)
 }
 
 
 setClass("MLControl",
-  slots = c(times = "ANY", method = "ANY", dist = "ANY", seed = "numeric")
+  slots = c(times = "ANY", dist = "ANY", method = "ANY", seed = "numeric")
 )
 
 
