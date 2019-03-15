@@ -15,10 +15,10 @@ importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
            formula, get_all_vars, loess, lm, median, model.frame, model.matrix,
            model.response, model.weights, na.fail, na.omit, na.pass, p.adjust,
            pchisq, predict, quantile, reformulate, reshape, sd, t.test, terms,
-           vcov)
+           time, vcov)
 importFrom(survival, concordance, is.Surv, Surv, survfit, survreg,
            survreg.distributions)
-importFrom(utils, combn, getS3method, head, relist, stack, tail)
+importFrom(utils, combn, getS3method, head, relist, stack, str, tail)
 
 
 export(.,
@@ -155,6 +155,7 @@ S3method(performance_curve, default)
 S3method(performance_curve, Resamples)
 S3method(print, MLModelFit)
 S3method(print, Resamples)
+S3method(print, SurvMatrix)
 S3method(plot, MLModelTune)
 S3method(plot, PartialDependence)
 S3method(plot, Resamples)
@@ -171,6 +172,7 @@ S3method(resample, formula)
 S3method(resample, recipe)
 S3method(response, formula)
 S3method(response, recipe)
+S3method(str, SurvMatrix)
 S3method(summary, Confusion)
 S3method(summary, ConfusionMatrix)
 S3method(summary, Curves)
@@ -182,3 +184,4 @@ S3method(t.test, PerformanceDiff)
 S3method(tune, ModelFrame)
 S3method(tune, formula)
 S3method(tune, recipe)
+S3method("[", SurvMatrix)

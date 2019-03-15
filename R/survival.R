@@ -194,7 +194,7 @@ Weibull.SurvProbs <- function(x, shape = NULL, ...) {
     function(df) c(mean(df$y - shape * df$x), shape)
   }
   coef <- apply(x, 1, function(surv) {
-    df <- surv_cases(x = log(x@times), y = log(-log(surv)),
+    df <- surv_cases(x = log(time(x)), y = log(-log(surv)),
                      subset = diff(c(1, surv)) < 0)
     weibullfit(df)
   })
@@ -239,14 +239,19 @@ predict.survfit <- function(object, times, ...) {
 
 
 mean.SurvProbs <- function(x, ...) {
-  apply(x, 1, function(surv) surv_mean(x@times, surv))
+  apply(x, 1, function(surv) surv_mean(time(x), surv))
 }
 
 
 predict.SurvProbs <- function(object, times, ...) {
-  idx <- findInterval(times, object@times)
+  idx <- findInterval(times, time(object))
   cbind(1, object)[, idx + 1, drop = FALSE]
 }
+
+
+#################### time Methods ####################
+
+time.SurvMatrix <- function(x, ...) attr(x, "times")
 
 
 #################### Survival Utility Functions ####################

@@ -1,5 +1,8 @@
 setOldClass("ModelFrame")
 setOldClass("recipe")
+setOldClass("SurvEvents")
+setOldClass("SurvMatrix")
+setOldClass("SurvProbs")
 
 
 #' Resampling Controls
@@ -652,14 +655,8 @@ SurvMatrix <- function(object, times = NULL) {
   
   dimnames(object) <- list(NULL, paste("Time", seq(ncol(object))))
   
-  new("SurvMatrix", object, times = times)
+  structure(object, class = "SurvMatrix", times = times)
 }
-
-
-setClass("SurvMatrix",
-  slots = c("times" = "numeric"),
-  contains = "matrix"
-)
 
 
 #' SurvMatrix Class Constructor
@@ -682,38 +679,31 @@ setClass("SurvMatrix",
 #' @seealso \code{\link{metrics}}, \code{\link{predict}}
 #' 
 SurvEvents <- function(object = numeric(), times = NULL) {
-  as(SurvMatrix(object, times), "SurvEvents")
+  object <- SurvMatrix(object, times)
+  structure(object, class = c("SurvEvents", class(object)))
 }
-
-
-setClass("SurvEvents", contains = "SurvMatrix")
 
 
 #' @rdname SurvMatrix
 #' 
 SurvProbs <- function(object = numeric(), times = NULL) {
-  as(SurvMatrix(object, times), "SurvProbs")
+  object <- SurvMatrix(object, times)
+  structure(object, class = c("SurvProbs", class(object)))
 }
 
 
-setClass("SurvProbs", contains = "SurvMatrix")
-
-
 #' @rdname SurvMatrix
-#' @aliases SurvMatrix,ANY,ANY,ANY
 #' 
 #' @param x object from which to extract elements.
-#' @param i,j,... indices specifying elements to extract.
+#' @param i,j indices specifying elements to extract.
 #' @param drop logical indicating that the result be returned as a
 #' \code{numeric} coerced to the lowest dimension possible if \code{TRUE} or
 #' as a 2-dimensional \code{SurvMatrix} object otherwise.
 #' 
-setMethod("[", c(x = "SurvMatrix", i = "ANY", j = "ANY", drop = "ANY"),
-  function(x, i, j, ..., drop = FALSE) {
-    Data <- x@.Data[i, j, drop = drop]
-    if (drop) Data else new(class(x), Data, times = x@times[j])
-  }
-)
+"[.SurvMatrix" <- function(x, i, j, drop = FALSE) {
+  y <- unclass(x)[i, j, drop = drop]
+  if (drop) y else structure(y, class = class(x), times = time(x)[j])
+}
 
 
 VarImp <- setClass("VarImp", contains = "data.frame")

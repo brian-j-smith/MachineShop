@@ -8,6 +8,20 @@ print.Resamples <- function(x, ...) {
 }
 
 
+print.SurvMatrix <- function(x, ...) {
+  cat("An object of class \"", class(x)[1], "\"\n", sep = "")
+  print(as(x, "matrix"))
+  cat("Attribute \"times\":\n")
+  print(time(x))
+}
+
+
+str.SurvMatrix <- function(object, ...) {
+  cat("'", class(object)[1], "'", sep = "")
+  str(unclass(object), ...)
+}
+
+
 setMethod("show", "MLControl",
   function(object) {
     labels <- c("times" = "Survival times", "method" = "Method",

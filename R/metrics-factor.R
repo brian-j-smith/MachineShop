@@ -143,7 +143,7 @@ setMethod(".auc", c("Curves", "NULL"),
 setMethod(".auc", c("Surv", "SurvProbs"),
   function(observed, predicted, metrics, ...) {
     x <- unname(auc(performance_curve(observed, predicted, metrics = metrics)))
-    times <- predicted@times
+    times <- time(predicted)
     if (length(times) > 1) {
       c("mean" = mean.SurvMetrics(x, times), "time" = x)
     } else {
@@ -188,7 +188,7 @@ setMethod(".brier", c("factor", "numeric"),
 
 setMethod(".brier", c("Surv", "SurvProbs"),
   function(observed, predicted, ...) {
-    times <- predicted@times
+    times <- time(predicted)
     obs_times <- observed[, "time"]
     obs_events <- observed[, "status"]
     
@@ -1076,7 +1076,7 @@ setMethod(".weighted_kappa2", c("ordered", "matrix"),
 .metric.SurvMatrix <- function(observed, predicted, FUN, cutoff = NULL, ...) {
   conf <- confusion(observed, predicted, cutoff = cutoff)
   metrics <- sapply(conf, FUN, ...)
-  times <- predicted@times
+  times <- time(predicted)
   if (length(times) > 1) {
     c("mean" = mean.SurvMetrics(metrics, times), metrics)
   } else {

@@ -46,13 +46,25 @@ setMethod(".append", c("Surv", "Surv"),
 )
 
 
-setMethod(".append", c("SurvMatrix", "SurvMatrix"),
-  function(x, y) {
-    stopifnot(class(x) == class(y))
-    stopifnot(identical(x@times, y@times))
-    as(SurvMatrix(rbind(x, y), x@times), class(x))
-  }
+setMethod(".append", c("SurvEvents", "SurvEvents"),
+  function(x, y) .append.SurvMatrix(x, y)
 )
+
+
+setMethod(".append", c("SurvMatrix", "SurvMatrix"),
+  function(x, y) .append.SurvMatrix(x, y)
+)
+
+
+setMethod(".append", c("SurvProbs", "SurvProbs"),
+  function(x, y) .append.SurvMatrix(x, y)
+)
+
+
+.append.SurvMatrix <- function(x, y) {
+  stopifnot(identical(time(x), time(y)))
+  structure(rbind(x, y), class = class(x), times = time(x))
+}
 
 
 setMethod(".append", c("vector", "vector"),
