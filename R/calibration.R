@@ -17,6 +17,8 @@
 #' \code{"gaussian"}, \code{"loggaussian"}, \code{"logistic"},
 #' \code{"loglogistic"}, \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or
 #' \code{"weibull"} (default).
+#' @param na.rm logical indicating whether to remove observed or predicted
+#' responses that are \code{NA} when calculating metrics.
 #' 
 #' @return \code{Calibration} class object that inherits from \code{data.frame}.
 #'  
@@ -33,7 +35,13 @@
 #' cal <- calibration(res)
 #' plot(cal)
 #' 
-calibration <- function(x, y = NULL, breaks = 10, dist = NULL, ...) {
+calibration <- function(x, y = NULL, breaks = 10, dist = NULL, na.rm = TRUE,
+                        ...) {
+  if (na.rm) {
+    complete <- complete_subset(x = x, y = y)
+    x <- complete$x
+    y <- complete$y
+  }
   .calibration(x, y, breaks = breaks, dist = dist)
 }
 
@@ -51,7 +59,7 @@ calibration <- function(x, y = NULL, breaks = 10, dist = NULL, ...) {
 
 .calibration.Resamples <- function(x, ...) {
   cal_list <- by(x, x$Model, function(data) {
-    calibration(data$Observed, data$Predicted, ...)
+    calibration(data$Observed, data$Predicted, na.rm = FALSE, ...)
   }, simplify = FALSE)
   do.call(Calibration, cal_list)
 }

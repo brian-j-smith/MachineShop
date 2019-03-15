@@ -70,7 +70,12 @@ performance_curve.Resamples <- function(x, metrics = c(MachineShop::tpr,
 #' 
 performance_curve.default <- function(x, y, metrics = c(MachineShop::tpr,
                                                         MachineShop::fpr),
-                                      ...) {
+                                      na.rm = TRUE, ...) {
+  if (na.rm) {
+    complete <- complete_subset(x = x, y = y)
+    x <- complete$x
+    y <- complete$y
+  }
   .curve(x, y, metrics = .get_curve_metrics(metrics))
 }
 

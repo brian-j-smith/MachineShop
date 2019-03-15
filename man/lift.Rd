@@ -7,7 +7,7 @@
 \usage{
 Lift(...)
 
-lift(x, y = NULL, ...)
+lift(x, y = NULL, na.rm = TRUE, ...)
 }
 \arguments{
 \item{...}{named or unnamed \code{lift} output to combine together with the
@@ -17,6 +17,9 @@ lift(x, y = NULL, ...)
 predicted responses.}
 
 \item{y}{predicted responses.}
+
+\item{na.rm}{logical indicating whether to remove observed or predicted
+responses that are \code{NA} when calculating metrics.}
 }
 \value{
 \code{Lift} class object that inherits from \code{Curves}.

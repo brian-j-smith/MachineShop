@@ -13,24 +13,25 @@
 \usage{
 performance(x, ...)
 
-\method{performance}{Resamples}(x, ..., na.rm = TRUE)
+\method{performance}{Resamples}(x, ...)
 
 \method{performance}{factor}(x, y, metrics = c(Brier =
   MachineShop::brier, Accuracy = MachineShop::accuracy, Kappa =
   MachineShop::kappa2, `Weighted Kappa` = MachineShop::weighted_kappa2,
   ROCAUC = MachineShop::roc_auc, Sensitivity = MachineShop::sensitivity,
-  Specificity = MachineShop::specificity), cutoff = 0.5, ...)
+  Specificity = MachineShop::specificity), cutoff = 0.5, na.rm = TRUE,
+  ...)
 
 \method{performance}{matrix}(x, y, metrics = c(RMSE = MachineShop::rmse,
-  R2 = MachineShop::r2, MAE = MachineShop::mae), ...)
+  R2 = MachineShop::r2, MAE = MachineShop::mae), na.rm = TRUE, ...)
 
 \method{performance}{numeric}(x, y, metrics = c(RMSE = MachineShop::rmse,
-  R2 = MachineShop::r2, MAE = MachineShop::mae), ...)
+  R2 = MachineShop::r2, MAE = MachineShop::mae), na.rm = TRUE, ...)
 
 \method{performance}{Surv}(x, y, metrics = c(CIndex =
   MachineShop::cindex, Brier = MachineShop::brier, ROCAUC =
   MachineShop::roc_auc, Accuracy = MachineShop::accuracy), cutoff = 0.5,
-  ...)
+  na.rm = TRUE, ...)
 
 \method{performance}{Confusion}(x, ...)
 
@@ -45,9 +46,6 @@ responses.}
 type-specific methods or from the method for \code{Confusion} to
 \code{ConfusionMatrix}.}
 
-\item{na.rm}{logical indicating whether to remove observed or predicted
-responses that are \code{NA} when calculating metrics.}
-
 \item{y}{predicted responses.}
 
 \item{metrics}{function, one or more function names, or list of named
@@ -55,6 +53,9 @@ functions to include in the calculation of performance metrics.}
 
 \item{cutoff}{threshold above which binary factor probabilities are
 classified as events and below which survival probabilities are classified.}
+
+\item{na.rm}{logical indicating whether to remove observed or predicted
+responses that are \code{NA} when calculating metrics.}
 }
 \description{
 Compute measures of model performance.

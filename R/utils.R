@@ -52,6 +52,12 @@ attachment <- function(what, pos = 2L,
 }
 
 
+complete_subset <- function(...) {
+  is_complete <- complete.cases(...)
+  lapply(list(...), function(x) subset(x, is_complete))
+}
+
+
 extract <- function(formula, data, na.action = na.pass) {
   mf <- model.frame(formula, data, na.action = na.action)
   list(x = model.matrix(formula, mf)[, -1, drop = FALSE],

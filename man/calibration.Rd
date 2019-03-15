@@ -7,7 +7,8 @@
 \usage{
 Calibration(...)
 
-calibration(x, y = NULL, breaks = 10, dist = NULL, ...)
+calibration(x, y = NULL, breaks = 10, dist = NULL, na.rm = TRUE,
+  ...)
 }
 \arguments{
 \item{...}{named or unnamed \code{calibration} output to combine together
@@ -29,6 +30,9 @@ Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
 \code{"gaussian"}, \code{"loggaussian"}, \code{"logistic"},
 \code{"loglogistic"}, \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or
 \code{"weibull"} (default).}
+
+\item{na.rm}{logical indicating whether to remove observed or predicted
+responses that are \code{NA} when calculating metrics.}
 }
 \value{
 \code{Calibration} class object that inherits from \code{data.frame}.

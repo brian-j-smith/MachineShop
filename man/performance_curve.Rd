@@ -15,7 +15,7 @@ performance_curve(x, ...)
   MachineShop::fpr), na.rm = TRUE, ...)
 
 \method{performance_curve}{default}(x, y, metrics = c(MachineShop::tpr,
-  MachineShop::fpr), ...)
+  MachineShop::fpr), na.rm = TRUE, ...)
 }
 \arguments{
 \item{...}{named or unnamed \code{performance_curve} output to combine

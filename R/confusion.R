@@ -13,6 +13,8 @@
 #' class probabilities, whereas a default cutoff of 0.5 is used for
 #' survival probabilities.  Class probability summations and survival will
 #' appear as decimal numbers that can be interpreted as expected counts.
+#' @param na.rm logical indicating whether to remove observed or predicted
+#' responses that are \code{NA} when calculating metrics.
 #' 
 #' @return
 #' The return value is a \code{ConfusionMatrix} class object that inherits from
@@ -28,7 +30,12 @@
 #' (conf <- confusion(res))
 #' plot(conf)
 #' 
-confusion <- function(x, y = NULL, cutoff = 0.5, ...) {
+confusion <- function(x, y = NULL, cutoff = 0.5, na.rm = TRUE, ...) {
+  if (na.rm) {
+    complete <- complete_subset(x = x, y = y)
+    x <- complete$x
+    y <- complete$y
+  }
   .confusion(x, y, cutoff = cutoff)
 }
 
@@ -46,7 +53,7 @@ confusion <- function(x, y = NULL, cutoff = 0.5, ...) {
 
 .confusion.Resamples <- function(x, cutoff, ...) {
   conf_list <- by(x, list(Model = x$Model), function(data) {
-   confusion(data$Observed, data$Predicted, cutoff = cutoff)
+   confusion(data$Observed, data$Predicted, cutoff = cutoff, na.rm = FALSE)
   }, simplify = FALSE)
   if (all(mapply(is, conf_list, "Confusion"))) {
     conf_list <- unlist(conf_list, recursive = FALSE)

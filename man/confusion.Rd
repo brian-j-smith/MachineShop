@@ -7,7 +7,7 @@
 \usage{
 Confusion(...)
 
-confusion(x, y = NULL, cutoff = 0.5, ...)
+confusion(x, y = NULL, cutoff = 0.5, na.rm = TRUE, ...)
 }
 \arguments{
 \item{...}{named or unnamed \code{confusion} output to combine together with
@@ -24,6 +24,9 @@ If \code{NULL}, then binary responses are summed directly over predicted
 class probabilities, whereas a default cutoff of 0.5 is used for
 survival probabilities.  Class probability summations and survival will
 appear as decimal numbers that can be interpreted as expected counts.}
+
+\item{na.rm}{logical indicating whether to remove observed or predicted
+responses that are \code{NA} when calculating metrics.}
 }
 \value{
 The return value is a \code{ConfusionMatrix} class object that inherits from
