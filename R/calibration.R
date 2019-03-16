@@ -10,7 +10,9 @@
 #' @param breaks value defining the response variable bins within which to
 #' calculate observed mean values.  May be specified as a number of bins, a
 #' vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
-#' survival responses and loess for others.
+#' predicted survival probabilities and with \link[stats:loess]{loess} for
+#' others.
+#' @param span numeric parameter controlling the degree of loess smoothing.
 #' @param dist character string specifying a distribution with which to estimate
 #' observed survival means.  Possible values are \code{"empirical"} for the
 #' Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
@@ -35,14 +37,14 @@
 #' cal <- calibration(res)
 #' plot(cal)
 #' 
-calibration <- function(x, y = NULL, breaks = 10, dist = NULL, na.rm = TRUE,
-                        ...) {
+calibration <- function(x, y = NULL, breaks = 10, span = 0.75, dist = NULL,
+                        na.rm = TRUE, ...) {
   if (na.rm) {
     complete <- complete_subset(x = x, y = y)
     x <- complete$x
     y <- complete$y
   }
-  .calibration(x, y, breaks = breaks, dist = dist)
+  .calibration(x, y, breaks = breaks, span = span, dist = dist)
 }
 
 
@@ -98,7 +100,7 @@ setMethod(".calibration_default", c("factor", "numeric"),
 
 
 setMethod(".calibration_default", c("matrix", "matrix"),
-  function(observed, predicted, breaks, ...) {
+  function(observed, predicted, breaks, span, ...) {
     df <- data.frame(Response = rep(colnames(predicted),
                                     each = nrow(predicted)))
     if (is.null(breaks)) {
@@ -106,7 +108,7 @@ setMethod(".calibration_default", c("matrix", "matrix"),
       loessfit_list <- lapply(1:ncol(predicted), function(i) {
         y <- observed[, i]
         x <- predicted[, i]
-        predict(loess(y ~ x), se = TRUE)
+        predict(loess(y ~ x, span = span), se = TRUE)
       })
       Mean <- c(sapply(loessfit_list, getElement, name = "fit"))
       SE <- c(sapply(loessfit_list, getElement, name = "se.fit"))
@@ -170,7 +172,7 @@ setMethod(".calibration_default", c("Surv", "SurvProbs"),
 
 
 setMethod(".calibration_default", c("Surv", "numeric"),
-  function(observed, predicted, breaks, dist, ...) {
+  function(observed, predicted, breaks, dist, span, ...) {
     max_time <- surv_max(observed)
     dist <- if (is.null(dist)) "weibull" else
       match.arg(dist, c("empirical", names(survreg.distributions)))
@@ -188,14 +190,19 @@ setMethod(".calibration_default", c("Surv", "numeric"),
       list(Mean = est$fit[[1]], SE = est$se.fit[[1]])
     }
     
+    tricubic <- function(x, span = 1, min_weight = 0) {
+      x <- abs(x)
+      x_range <- span * diff(range(x))
+      (1 - min_weight) * pmax((1 - (x / x_range)^3)^3, 0) + min_weight
+    }
+    
     if (is.null(breaks)) {
       df <- data.frame(
         Response = "Mean",
         Predicted = unique(predicted)
       )
       metrics_list <- lapply(df$Predicted, function(value) {
-        abs_diff <- abs(predicted - value)
-        weights <- (1 - (abs_diff / diff(range(abs_diff)))^3)^3 + 1e-10
+        weights <- tricubic(predicted - value, span = span, min_weight = 0.01)
         est <- if (dist == "empirical") {
           f_survfit(observed, weights)
         } else {

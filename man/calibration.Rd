@@ -7,8 +7,8 @@
 \usage{
 Calibration(...)
 
-calibration(x, y = NULL, breaks = 10, dist = NULL, na.rm = TRUE,
-  ...)
+calibration(x, y = NULL, breaks = 10, span = 0.75, dist = NULL,
+  na.rm = TRUE, ...)
 }
 \arguments{
 \item{...}{named or unnamed \code{calibration} output to combine together
@@ -22,7 +22,10 @@ predicted responses.}
 \item{breaks}{value defining the response variable bins within which to
 calculate observed mean values.  May be specified as a number of bins, a
 vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
-survival responses and loess for others.}
+predicted survival probabilities and with \link[stats:loess]{loess} for
+others.}
+
+\item{span}{numeric parameter controlling the degree of loess smoothing.}
 
 \item{dist}{character string specifying a distribution with which to estimate
 observed survival means.  Possible values are \code{"empirical"} for the
