@@ -2,6 +2,15 @@
 
 ## Version Updates
 
+## 1.2.2
+* Implement parametric (``"exponential"``, ``"rayleigh"``, ``"weibull"``) estimation of baseline survival functions.
+* Set ``"weibull"`` as the default distribution for survival mean estimation.
+* Add extract method for ``Resamples``.
+* Add ``na.rm`` argument to ``calibration()``, ``confusion()``, ``performance()``, and ``performance_curve()``.
+* Add loess ``span`` argument to ``calibration()``.
+* Change ``SurvMatrix`` from S4 to S3 class.
+
+
 ## 1.2.1
 * Add ``method`` option to ``predict()`` for Breslow, Efron (default), or Fleming-Harrington estimation of survival curves for Cox proportional hazards-based models.
 * Add ``dist`` option to ``predict()`` for exponential or Weibull approximation to estimated survival curves.
