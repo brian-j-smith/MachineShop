@@ -49,8 +49,10 @@
 #' Continuous: m = matrix, n = numeric;
 #' Survival: S = Surv
 #' 
-#' The following set of standard model training, prediction, performance
-#' assessment, and tuning functions are available for the model objects.
+#' The following set of model training, prediction, performance assessment, and
+#' tuning functions are available for the model objects.  Informaiton on
+#' package-supplied metrics for performance assessment can be displayed with the
+#' \code{\link{metricinfo}} function.
 #' 
 #' Training: 
 #' \tabular{ll}{
@@ -86,10 +88,10 @@
 #'   \code{\link{TrainControl}} \tab Training Resubstitution \cr
 #' }  
 #' 
-#' Tabular and graphical summaries of modeling results can be obtained with
+#' Graphical and tabular summaries of modeling results can be obtained with
 #' 
-#' \code{\link{summary}} \cr 
-#' \code{\link{plot}}
+#' \code{\link{plot}} \cr
+#' \code{\link{summary}}
 #' 
 #' Custom metrics and models can be created with the \code{\link{MLMetric}} and
 #' \code{\link{MLModel}} constructors.
