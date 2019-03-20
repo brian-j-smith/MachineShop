@@ -1,6 +1,6 @@
 # Variable Specifications
 
-Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Three main types of specifications are supported by the `fit`, `resample`, and `tune` functions: traditional formulas, model frames, and recipes.
+Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Three main types of specifications are supported by the `fit`, `resample`, and `tune` functions: traditional formula, model frame, and recipe.
 
 
 ## Traditional Formula
@@ -18,16 +18,26 @@ fit(medv ~ ., data = Boston, model = GBMModel)
 
 ## Model Frame
 
-Model frame specification is similar to the traditional formula, except with the formula and data frame pair defined within the `ModelFrame` class constructor provided by `MachineShop`.
+A `ModelFrame` class is provided by the package for specification of predictor and response variables along with other attributes to control model fitting.  Model frames can be specified in calls to the `ModelFrame` constructor function with a syntax similar to the traditional formula or with a predictor matrix and response object pair.
 
 ```{r results="hide"}
 ## Model frame specification
+
+## Formula
 mf <- ModelFrame(medv ~ ., data = Boston)
+
+fit(mf, model = GBMModel)
+
+## Predictor matrix and response object pair
+x <- model.matrix(medv ~ . - 1, data = Boston)
+y <- Boston$medv
+
+mf <- ModelFrame(x, y)
 
 fit(mf, model = GBMModel)
 ```
 
-The model frame approach has a few advantages over the traditional formula.  One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default.  This is often desirable for models that do not handle missing values.  Conversely, missing values can be retained in the model frame by setting its argument `na.action = na.pass` for models, like `GBMModel`, that do handle them.  A second advantage is that case weights can be included in the model frame to be passed on to the model fitting functions.
+The model frame approach has a few advantages over model fitting directly with a traditional formula.  One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default.  This is often desirable for models that do not handle missing values.  Conversely, missing values can be retained in the model frame by setting its argument `na.action = na.pass` for models, like `GBMModel`, that do handle them.  A second advantage is that case weights can be included in the model frame to be passed on to the model fitting functions.
 
 ```{r results="hide"}
 ## Model frame specification with case weights
@@ -63,7 +73,8 @@ df <- within(esoph, {
 })
 
 rec <- recipe(y ~ agegp + tobgp + alcgp + weights, data = df) %>%
-  update_role(weights, new_role = "case_weight")
+  update_role(weights, new_role = "case_weight") %>%
+  step_ordinalscore(agegp, tobgp, alcgp)
 
 fit(rec, model = GBMModel)
 ```

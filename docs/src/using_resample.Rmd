@@ -90,6 +90,16 @@ resample(rec, model = GBMModel)
 ```
 
 
+## Dynamic Model Parameters
+
+As discussed previously in the *Model Fit and Prediction* section, dynamic model parameters are evaluated at the time of model fitting and can depend on the number of observations in the fitted dataset.  In the context of resampling, dynamic parameters are repeatedly evaluated at each fit of the resampled datasets.  As such, their values can change based on the observations selected for training at each iteration of the resampling algorithm.
+
+```{r results="hide"}
+## Dynamic model parameter k = log number of training set observations
+resample(surv_fo, data = surv_df, model = CoxStepAICModel(k = .(log(nobs))))
+```
+
+
 ## Model Comparisons
 
 Resampled metrics from different models can be combined for comparison with the `Resamples` function.  Optional names given on the left hand side of equal operators within calls to `Resamples` will be used as labels in output from the `summary` and `plot` functions.  For comparisons of resampled output, the same control structure must be used in all associated calls to `resample` to ensure that resulting model metrics are computed on the same resampled training and test sets.
@@ -114,7 +124,7 @@ plot(res, type = "errorbar")
 plot(res, type = "violin")
 ```
 
-Pairwise model differences for each metric can be calculated with the `diff` function applied to results from a call to `Resamples`.  The differences can be summarized descriptively with the `summary` and `plot` functions and assessed for statistical significance with the `t.test` function.
+Pairwise model differences for each metric can be calculated with the `diff` function applied to results from a call to `Resamples`.  Resulting differences can be summarized descriptively with the `summary` and `plot` functions and assessed for statistical significance with the `t.test` function.
 
 ```{r}
 ## Pairwise model comparisons

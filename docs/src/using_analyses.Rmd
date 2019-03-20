@@ -32,7 +32,7 @@ plot(cal)
 
 ## Confusion Matrices
 
-Confusion matrices of cross-classified observed and predicted factor responses are available with the `confusion` function.  They can be constructed with predicted class membership or with predicted class probabilities.  In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors and according to the class with highest probability for factors with more than two levels.  Performance metrics, such as those described earlier for binary factors, can be computed with the `performance` function and summarized with `summary` and `plot`.
+Confusion matrices of cross-classified observed and predicted factor or survival probabilitie are available with the `confusion` function.  They can be constructed with predicted class membership or with predicted class probabilities.  In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors and according to the class with highest probability for factors with more than two levels.  Performance metrics, such as those described earlier for binary factors, can be computed with the `performance` function and summarized with `summary` and `plot`.
 
 ```{r}
 ## Confusion matrices
@@ -52,7 +52,7 @@ plot(conf)
 
 ## Partial Dependence Plots
 
-Partial dependence plots display the marginal effects of predictors on the response variable.  The response scale displayed in the plots will depend on the response type: probability for factors and predicted survival probabilities, original scale for numerics, and survival time for predicted survival means.
+Partial dependence plots display the marginal effects of predictors on the response variable.  The response scale displayed in the plots will depend on the response type: probability for predicted factors and survival probabilities, original scale for numerics, and survival time for predicted survival means.
 
 ```{r results = "hide"}
 ## Partial dependence plots

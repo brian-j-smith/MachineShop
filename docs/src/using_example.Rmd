@@ -2,7 +2,7 @@
 
 The package is illustrated in the following sections with an overall survival analysis example in which the response variable is a time to event outcome.  Since survival outcomes are a combination of numerical (time to event) and categorical (event) variables, package features for both variable types will be utilized in the example.  Outcomes other than survival, including nominal and ordinal factors as well as numeric vectors and matrices, are supported by `MachineShop` and will be discussed.
 
-Survival analysis is performed with the `Melanoma` dataset from the `MASS` package [@andersen:1993:SMB].  This dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas.  Also provided are potential predictors of the survival outcomes.  The analysis begins by loading required packages `MachineShop`, `survival`, and `MASS` as well as `magrittr` [@bache:2014:MFP] for its pipe (`%>%`) operator to simplify some of the code syntax.  For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one.  The dataset is then split into a training set on which a survival model will be fit and a test set on which predictions will be made.  A global formula `surv_fo` is defined to relate the predictors on the right hand side to the overall survival outcome on the left and will be used in all of the survival models in this vignette. 
+Survival analysis is performed with the `Melanoma` dataset from the `MASS` package [@andersen:1993:SMB].  This dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas.  Also provided are potential predictors of the survival outcomes.  The analysis begins by loading required packages `MachineShop`, `survival`, and `MASS` as well as `magrittr` [@bache:2014:MFP] for its pipe (`%>%`) operator to simplify some of the code syntax.  For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one.  The dataset is then split into a training set on which a survival model will be fit and a test set on which predictions will be made.  A global formula `surv_fo` is defined to relate the predictors on the right hand side to the overall survival outcome on the left and will be used in all of the survival models presented. 
 
 ```{r}
 ## Analysis libraries
@@ -14,6 +14,8 @@ library(magrittr)
 ## Malignant melanoma analysis dataset
 surv_df <- within(Melanoma, status <- as.numeric(status != 2))
 ```
+
+Descriptive summaries of the study variables are given below in Table 1, followed by a plot of estimated overall survival probabilities and 95% confidence intervals.
 
 <center>
 Table 1. Variable summaries for the Melanoma survival analysis example.

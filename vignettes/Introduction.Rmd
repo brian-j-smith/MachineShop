@@ -50,6 +50,7 @@ info <- modelinfo()
 
 * Unified and concise interface for model fitting, prediction, and performance assessment.
 * Current support for `r length(info)` established models from `r length(unique(sapply(info, function(x) x$packages[1])))` **R** packages.
+* Dynamic model parameters.
 * Ensemble modeling with stacked regression and super learners.
 * Modeling of response variables types: binary factors, multi-class nominal and ordinal factors, numeric vectors and matrices, and censored time-to-event survival.
 * Model specification with traditional formulas and with flexible pre-processing [recipes](https://cran.r-project.org/package=recipes).
@@ -99,7 +100,7 @@ RShowDoc("Introduction", package = "MachineShop")
 
 The package is illustrated in the following sections with an overall survival analysis example in which the response variable is a time to event outcome.  Since survival outcomes are a combination of numerical (time to event) and categorical (event) variables, package features for both variable types will be utilized in the example.  Outcomes other than survival, including nominal and ordinal factors as well as numeric vectors and matrices, are supported by `MachineShop` and will be discussed.
 
-Survival analysis is performed with the `Melanoma` dataset from the `MASS` package [@andersen:1993:SMB].  This dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas.  Also provided are potential predictors of the survival outcomes.  The analysis begins by loading required packages `MachineShop`, `survival`, and `MASS` as well as `magrittr` [@bache:2014:MFP] for its pipe (`%>%`) operator to simplify some of the code syntax.  For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one.  The dataset is then split into a training set on which a survival model will be fit and a test set on which predictions will be made.  A global formula `surv_fo` is defined to relate the predictors on the right hand side to the overall survival outcome on the left and will be used in all of the survival models in this vignette. 
+Survival analysis is performed with the `Melanoma` dataset from the `MASS` package [@andersen:1993:SMB].  This dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas.  Also provided are potential predictors of the survival outcomes.  The analysis begins by loading required packages `MachineShop`, `survival`, and `MASS` as well as `magrittr` [@bache:2014:MFP] for its pipe (`%>%`) operator to simplify some of the code syntax.  For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one.  The dataset is then split into a training set on which a survival model will be fit and a test set on which predictions will be made.  A global formula `surv_fo` is defined to relate the predictors on the right hand side to the overall survival outcome on the left and will be used in all of the survival models presented. 
 
 ```{r}
 ## Analysis libraries
@@ -111,6 +112,8 @@ library(magrittr)
 ## Malignant melanoma analysis dataset
 surv_df <- within(Melanoma, status <- as.numeric(status != 2))
 ```
+
+Descriptive summaries of the study variables are given below in Table 1, followed by a plot of estimated overall survival probabilities and 95% confidence intervals.
 
 <center>
 Table 1. Variable summaries for the Melanoma survival analysis example.
@@ -182,7 +185,10 @@ surv_fo <- Surv(time, status) ~ sex + age + year + thickness + ulcer
 
 # Model Fit and Prediction
 
-Model fitting requires user specification of an available model.  A named list of `MachineShop` models can be obtained interactively with the `modelinfo` function, and includes a descriptive `"label"`, the source `"packages"` on which the models depend, supported response variable `"types"`, and `"arguments"` that can be specified in calls to the model functions.  Note that in order to use a model the source packages must be installed with the `install.packages` or equivalent function, but need not be loaded with the `library` function.  Function `modelinfo` can be called with one or more model functions, function names, function calls, or observed response variables; and will return information on all models matching the calling arguments.
+
+## Model Information
+
+Model fitting requires user specification of a `MachineShop` compatible model.  A named list of package-supplied models can be obtained interactively with the `modelinfo` function, and includes a descriptive `"label"`, the source `"packages"` on which the models depend, supported response variable `"types"`, and `"arguments"` that can be specified in calls to the model functions.  Note that in order to use a model, the source packages must be installed with the `install.packages` or by equivalent means, but need not be loaded with the `library` function.  Function `modelinfo` can be called with one or more model functions, function names, function calls, or observed response variables; and will return information on all models matching the calling arguments.
 
 ```{r}
 ## All available models
@@ -195,7 +201,12 @@ modelinfo(Surv(0)) %>% names
 modelinfo(GBMModel)
 ```
 
-Information is displayed above for the `GBMModel` function which is a generalized boosted regression model --- a tree-based ensemble method that can be applied to survival outcomes.  Package models, like `GBMModel` can be specified in the `model` argument of the `fit` function to estimate a relationship (`surv_fo`) between predictors and an outcome based on a set of data (`surv_train`).  Argument specifications may be in terms of the model function, function name, or a function call.
+Information is displayed above for the `GBMModel` function which is a generalized boosted regression model --- a tree-based ensemble method that can be applied to survival outcomes.
+
+
+## Fit Function
+
+Package models, like `GBMModel`, can be specified in the `model` argument of the `fit` function to estimate a relationship (`surv_fo`) between predictors and an outcome based on a set of data (`surv_train`).  Argument specifications may be in terms of the model function, function name, or a function call.
 
 ```{r results="hide"}
 ## Generalized boosted regression fit
@@ -210,6 +221,35 @@ fit(surv_fo, data = surv_train, model = "GBMModel")
 fit(surv_fo, data = surv_train, model = GBMModel(n.trees = 100, interaction.depth = 1))
 ```
 
+
+## Dynamic Model Parameters
+
+*Dynamic model parameters* are model function arguments defined as expressions to be evaluated at the time of model fitting.  As such, their values can change based on the number of observations in the dataset supplied to the fit function.  Expressions to dynamic parameters are specified within the package-supplied quote operator `.()` and can include the following objects:
+
+`nobs`
+  : number of observations in `data`.
+   
+`nvars`
+  : number of predictor variables in `data`.
+
+`y`
+  : response variable.
+  
+In the example below, Bayesian information criterion (BIC) based stepwise variable selection is performed by creating a `CoxStepAICModel` with dynamic parameter `k` to be calculated as the log number of observations in the fitted dataset.
+
+```{r results="hide"}
+## Dynamic model parameter k = log number of observations
+
+## Number of observations: nobs
+fit(surv_fo, data = surv_df, model = CoxStepAICModel(k = .(log(nobs))))
+
+## Response variable: y
+fit (surv_fo, data = surv_df, model = CoxStepAICModel(k = .(log(length(y)))))
+```
+
+
+## Predict Function
+
 A `predict` function is supplied for application to model fit results to obtain predicted values on a dataset specified with its `newdata` argument or on the original dataset if not specified.  Survival means are predicted for survival outcomes by default.  Estimates of the associated survival distributions are needed to calculate the means.  For models, like `GBMModel`, that perform semi- or non-parametric survival analysis, Weibull approximations to the survival distributions are the default for mean estimation.  Other choices of distributional approximations are exponential, Rayleigh, and empirical.  Empirical distributions are applicable to Cox proportional hazards-based models and can be calculated with the method of Breslow [-@breslow:1972:DPC], Efron [-@efron:1977:ECL, default], or Fleming and Harrington [-@fleming:1984:NES].  Note, however, that empirical survival means are undefined mathematically if an event does not occur at the longest follow-up time.  In such situations, a restricted survival mean is calculated by changing the longest follow-up time to an event, as suggested by Efron [-@efron:1967:PFB], which will be negatively biased.  
 
 ```{r}
@@ -220,7 +260,7 @@ predict(surv_fit, newdata = surv_test) %>% head
 predict(surv_fit, newdata = surv_test, dist = "empirical") %>% head
 ```
 
-In addition to survival means, predicted survival probabilities (`type = "prob"`) or 0-1 survival events (default: `type = "response"`) can be obtained with the follow-up `times` argument.  The cutoff probability for classification of survival events (or other binary responses) can be set optionally with the `cutoff` argument (default: `cutoff = 0.5`).  As before, distributional approximations to the survival functions may be specified for the predictions, with the default for survival probabilities being the empirical distribution.
+In addition to survival means, predicted survival probabilities (`type = "prob"`) or 0-1 survival events (default: `type = "response"`) can be obtained with the follow-up `times` argument.  The cutoff probability for classification of survival events (or other binary responses) can be set optionally with the `cutoff` argument (default: `cutoff = 0.5`).  As with mean estimation, distributional approximations to the survival functions may be specified for the predictions, with the default for survival probabilities being the empirical distribution.
 
 ```{r}
 ## Predict survival probabilities and events at specified follow-up times
@@ -234,7 +274,7 @@ predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.5) %>% hea
 
 # Variable Specifications
 
-Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Three main types of specifications are supported by the `fit`, `resample`, and `tune` functions: traditional formulas, model frames, and recipes.
+Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Three main types of specifications are supported by the `fit`, `resample`, and `tune` functions: traditional formula, model frame, and recipe.
 
 
 ## Traditional Formula
@@ -252,16 +292,26 @@ fit(medv ~ ., data = Boston, model = GBMModel)
 
 ## Model Frame
 
-Model frame specification is similar to the traditional formula, except with the formula and data frame pair defined within the `ModelFrame` class constructor provided by `MachineShop`.
+A `ModelFrame` class is provided by the package for specification of predictor and response variables along with other attributes to control model fitting.  Model frames can be specified in calls to the `ModelFrame` constructor function with a syntax similar to the traditional formula or with a predictor matrix and response object pair.
 
 ```{r results="hide"}
 ## Model frame specification
+
+## Formula
 mf <- ModelFrame(medv ~ ., data = Boston)
+
+fit(mf, model = GBMModel)
+
+## Predictor matrix and response object pair
+x <- model.matrix(medv ~ . - 1, data = Boston)
+y <- Boston$medv
+
+mf <- ModelFrame(x, y)
 
 fit(mf, model = GBMModel)
 ```
 
-The model frame approach has a few advantages over the traditional formula.  One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default.  This is often desirable for models that do not handle missing values.  Conversely, missing values can be retained in the model frame by setting its argument `na.action = na.pass` for models, like `GBMModel`, that do handle them.  A second advantage is that case weights can be included in the model frame to be passed on to the model fitting functions.
+The model frame approach has a few advantages over model fitting directly with a traditional formula.  One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default.  This is often desirable for models that do not handle missing values.  Conversely, missing values can be retained in the model frame by setting its argument `na.action = na.pass` for models, like `GBMModel`, that do handle them.  A second advantage is that case weights can be included in the model frame to be passed on to the model fitting functions.
 
 ```{r results="hide"}
 ## Model frame specification with case weights
@@ -297,13 +347,16 @@ df <- within(esoph, {
 })
 
 rec <- recipe(y ~ agegp + tobgp + alcgp + weights, data = df) %>%
-  update_role(weights, new_role = "case_weight")
+  update_role(weights, new_role = "case_weight") %>%
+  step_ordinalscore(agegp, tobgp, alcgp)
 
 fit(rec, model = GBMModel)
 ```
 
 
 # Response Variable Types
+
+The R class types of response variables play a central role in their analysis with the package.  They determine, for example, the specific models that can be fit, fitting algorithms employed, predicted values produced, and applicable performance metrics and analyses.  As described below, factors, ordered factors, numeric vectors and matrices, and survival responses are supported by the package.
 
 
 ## Factors
@@ -400,7 +453,7 @@ fit(rec, model = GBMModel)
 
 ## Performance Function
 
-Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models.  Metrics can be computed with the `performance` function applied to observed responses and responses predicted with the `predict` function.  Metrics of observed versus predicted survival probabilities or events will be calculated at each survival time and returned along with their time-integrated mean.
+Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models.  Metrics can be computed with the `performance` function applied to observed responses and responses predicted with the `predict` function.  In the case of observed versus predicted survival probabilities or events, metrics will be calculated at each survival time and returned along with their time-integrated mean.
 
 ```{r}
 ## Survival performance metrics
@@ -436,7 +489,7 @@ Survival Probabilities   | Area Under ROC Curve, Brier Score, Accuracy
 Survival Events          | Accuracy
 
 
-The defaults may be changed by specifying one or more package-supplied metric functions to the `metrics` argument of `performance`.  A named list of supplied metric functions can be obtained interactively with the `metricinfo` function, and includes a descriptive `"label"`, whether to `"maximize"` the metric for better performance, the function `"arguments"`, and supported response variable `"types"` for each.  Function `metricinfo` may be called with one or more metric functions, function names, an observed response variable, or an observed and predicted response variable pair; and will return information on all matching metrics.
+These defaults may be changed by specifying one or more package-supplied metric functions to the `metrics` argument of `performance`.  A named list of supplied metrics can be obtained interactively with the `metricinfo` function, and includes a descriptive `"label"`, whether to `"maximize"` the metric for better performance, the function `"arguments"`, and supported response variable `"types"` for each.  Function `metricinfo` may be called with one or more metric functions, function names, an observed response variable, or an observed and predicted response variable pair; and will return information on all matching metrics.
 
 ```{r}
 ## Names of all available metrics
@@ -518,12 +571,6 @@ Metrics for binary factors include those given for multi-level factors as well a
 `fnr`
   : False negative rate, $FNR = \frac{FN}{TP + FN} = 1 - TPR$.
 
-`fpr`
-  : False positive rate, $FPR = \frac{FP}{TN + FP} = 1 - TNR$.
-
-`npv`
-  : Negative predictive value, $NPV = \frac{TN}{TN + FN}$.
-
 ```{r echo=FALSE}
 conf <- matrix(c("True Negative (TN)", "False Positive (FP)",
                  "False Negative (FN)", "True Positive (TP)"),
@@ -536,6 +583,12 @@ kable(conf,
   kable_styling(full_width = FALSE, position = "center") %>%
   add_header_above(c("Predicted Response" = 1, "Observed Response" = 2))
 ```
+
+`fpr`
+  : False positive rate, $FPR = \frac{FP}{TN + FP} = 1 - TNR$.
+
+`npv`
+  : Negative predictive value, $NPV = \frac{TN}{TN + FN}$.
 
 `ppv`, `precision`
   : Positive predictive value, $PPV = \frac{TP}{TP + FP}$.
@@ -558,12 +611,12 @@ kable(conf,
 `specificity`, `tnr`
   : True negative rate, $TNR = \frac{TN}{TN + FP} = 1 - FPR$.
 
-Area under the ROC and precision-recall curves are computed directly on predicted class probabilities.  The other metrics are computed on predicted class membership.  Memberships are defined to be in the second factor level if predicted probabilities are greater than the cutoff value set in the `performance` function.
+Area under the ROC and precision-recall curves as well as the concordance index are computed directly on predicted class probabilities.  The other metrics are computed on predicted class membership.  Memberships are defined to be in the second factor level if predicted probabilities are greater than the cutoff value set in the `performance` function.
 
 
 ## Numerics
 
-Performance metrics are defined below for numeric vector responses.  If applied to a numeric matrix response, the metrics are computed separately for each column of the matrix and then averaged to produce a single value.
+Performance metrics are defined below for numeric vector responses.  If applied to a numeric matrix response, the metrics are computed separately for each column and then averaged to produce a single value.
 
 `gini`
   : [Gini coefficient](https://en.wikipedia.org/wiki/Gini_coefficient).
@@ -702,6 +755,16 @@ resample(rec, model = GBMModel)
 ```
 
 
+## Dynamic Model Parameters
+
+As discussed previously in the *Model Fit and Prediction* section, dynamic model parameters are evaluated at the time of model fitting and can depend on the number of observations in the fitted dataset.  In the context of resampling, dynamic parameters are repeatedly evaluated at each fit of the resampled datasets.  As such, their values can change based on the observations selected for training at each iteration of the resampling algorithm.
+
+```{r results="hide"}
+## Dynamic model parameter k = log number of training set observations
+resample(surv_fo, data = surv_df, model = CoxStepAICModel(k = .(log(nobs))))
+```
+
+
 ## Model Comparisons
 
 Resampled metrics from different models can be combined for comparison with the `Resamples` function.  Optional names given on the left hand side of equal operators within calls to `Resamples` will be used as labels in output from the `summary` and `plot` functions.  For comparisons of resampled output, the same control structure must be used in all associated calls to `resample` to ensure that resulting model metrics are computed on the same resampled training and test sets.
@@ -726,7 +789,7 @@ plot(res, type = "errorbar")
 plot(res, type = "violin")
 ```
 
-Pairwise model differences for each metric can be calculated with the `diff` function applied to results from a call to `Resamples`.  The differences can be summarized descriptively with the `summary` and `plot` functions and assessed for statistical significance with the `t.test` function.
+Pairwise model differences for each metric can be calculated with the `diff` function applied to results from a call to `Resamples`.  Resulting differences can be summarized descriptively with the `summary` and `plot` functions and assessed for statistical significance with the `t.test` function.
 
 ```{r}
 ## Pairwise model comparisons
@@ -776,7 +839,7 @@ plot(cal)
 
 ## Confusion Matrices
 
-Confusion matrices of cross-classified observed and predicted factor responses are available with the `confusion` function.  They can be constructed with predicted class membership or with predicted class probabilities.  In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors and according to the class with highest probability for factors with more than two levels.  Performance metrics, such as those described earlier for binary factors, can be computed with the `performance` function and summarized with `summary` and `plot`.
+Confusion matrices of cross-classified observed and predicted factor or survival probabilitie are available with the `confusion` function.  They can be constructed with predicted class membership or with predicted class probabilities.  In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors and according to the class with highest probability for factors with more than two levels.  Performance metrics, such as those described earlier for binary factors, can be computed with the `performance` function and summarized with `summary` and `plot`.
 
 ```{r}
 ## Confusion matrices
@@ -796,7 +859,7 @@ plot(conf)
 
 ## Partial Dependence Plots
 
-Partial dependence plots display the marginal effects of predictors on the response variable.  The response scale displayed in the plots will depend on the response type: probability for factors and predicted survival probabilities, original scale for numerics, and survival time for predicted survival means.
+Partial dependence plots display the marginal effects of predictors on the response variable.  The response scale displayed in the plots will depend on the response type: probability for predicted factors and survival probabilities, original scale for numerics, and survival time for predicted survival means.
 
 ```{r results = "hide"}
 ## Partial dependence plots

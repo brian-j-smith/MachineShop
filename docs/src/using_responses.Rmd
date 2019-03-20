@@ -1,5 +1,7 @@
 # Response Variable Types
 
+The R class types of response variables play a central role in their analysis with the package.  They determine, for example, the specific models that can be fit, fitting algorithms employed, predicted values produced, and applicable performance metrics and analyses.  As described below, factors, ordered factors, numeric vectors and matrices, and survival responses are supported by the package.
+
 
 ## Factors
 

@@ -24,6 +24,7 @@ modeling strategies.
   - Unified and concise interface for model fitting, prediction, and
     performance assessment.
   - Current support for 49 established models from 26 **R** packages.
+  - Dynamic model parameters.
   - Ensemble modeling with stacked regression and super learners.
   - Modeling of response variables types: binary factors, multi-class
     nominal and ordinal factors, numeric vectors and matrices, and

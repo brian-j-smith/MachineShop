@@ -3,7 +3,7 @@
 
 ## Performance Function
 
-Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models.  Metrics can be computed with the `performance` function applied to observed responses and responses predicted with the `predict` function.  Metrics of observed versus predicted survival probabilities or events will be calculated at each survival time and returned along with their time-integrated mean.
+Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models.  Metrics can be computed with the `performance` function applied to observed responses and responses predicted with the `predict` function.  In the case of observed versus predicted survival probabilities or events, metrics will be calculated at each survival time and returned along with their time-integrated mean.
 
 ```{r}
 ## Survival performance metrics
@@ -39,7 +39,7 @@ Survival Probabilities   | Area Under ROC Curve, Brier Score, Accuracy
 Survival Events          | Accuracy
 
 
-The defaults may be changed by specifying one or more package-supplied metric functions to the `metrics` argument of `performance`.  A named list of supplied metric functions can be obtained interactively with the `metricinfo` function, and includes a descriptive `"label"`, whether to `"maximize"` the metric for better performance, the function `"arguments"`, and supported response variable `"types"` for each.  Function `metricinfo` may be called with one or more metric functions, function names, an observed response variable, or an observed and predicted response variable pair; and will return information on all matching metrics.
+These defaults may be changed by specifying one or more package-supplied metric functions to the `metrics` argument of `performance`.  A named list of supplied metrics can be obtained interactively with the `metricinfo` function, and includes a descriptive `"label"`, whether to `"maximize"` the metric for better performance, the function `"arguments"`, and supported response variable `"types"` for each.  Function `metricinfo` may be called with one or more metric functions, function names, an observed response variable, or an observed and predicted response variable pair; and will return information on all matching metrics.
 
 ```{r}
 ## Names of all available metrics
@@ -121,12 +121,6 @@ Metrics for binary factors include those given for multi-level factors as well a
 `fnr`
   : False negative rate, $FNR = \frac{FN}{TP + FN} = 1 - TPR$.
 
-`fpr`
-  : False positive rate, $FPR = \frac{FP}{TN + FP} = 1 - TNR$.
-
-`npv`
-  : Negative predictive value, $NPV = \frac{TN}{TN + FN}$.
-
 ```{r echo=FALSE}
 conf <- matrix(c("True Negative (TN)", "False Positive (FP)",
                  "False Negative (FN)", "True Positive (TP)"),
@@ -139,6 +133,12 @@ kable(conf,
   kable_styling(full_width = FALSE, position = "center") %>%
   add_header_above(c("Predicted Response" = 1, "Observed Response" = 2))
 ```
+
+`fpr`
+  : False positive rate, $FPR = \frac{FP}{TN + FP} = 1 - TNR$.
+
+`npv`
+  : Negative predictive value, $NPV = \frac{TN}{TN + FN}$.
 
 `ppv`, `precision`
   : Positive predictive value, $PPV = \frac{TP}{TP + FP}$.
@@ -161,12 +161,12 @@ kable(conf,
 `specificity`, `tnr`
   : True negative rate, $TNR = \frac{TN}{TN + FP} = 1 - FPR$.
 
-Area under the ROC and precision-recall curves are computed directly on predicted class probabilities.  The other metrics are computed on predicted class membership.  Memberships are defined to be in the second factor level if predicted probabilities are greater than the cutoff value set in the `performance` function.
+Area under the ROC and precision-recall curves as well as the concordance index are computed directly on predicted class probabilities.  The other metrics are computed on predicted class membership.  Memberships are defined to be in the second factor level if predicted probabilities are greater than the cutoff value set in the `performance` function.
 
 
 ## Numerics
 
-Performance metrics are defined below for numeric vector responses.  If applied to a numeric matrix response, the metrics are computed separately for each column of the matrix and then averaged to produce a single value.
+Performance metrics are defined below for numeric vector responses.  If applied to a numeric matrix response, the metrics are computed separately for each column and then averaged to produce a single value.
 
 `gini`
   : [Gini coefficient](https://en.wikipedia.org/wiki/Gini_coefficient).

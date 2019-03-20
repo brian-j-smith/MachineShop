@@ -16,8 +16,7 @@ The quoted (unevaluated) expression.
 Shorthand notation for the \code{\link{quote}} function.  The quote operator
 simply returns its argument unevaluated and can be applied to any \R
 expression.  Useful for calling model constructors with quoted parameter
-values that are defined in terms of a model \code{formula}, \code{data},
-\code{weights}, \code{nobs}, \code{nvars}, or \code{y}.
+values that are defined in terms of \code{nobs}, \code{nvars}, or \code{y}.
 }
 \examples{
 ## Stepwise variable selection with BIC
