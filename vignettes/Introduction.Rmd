@@ -311,7 +311,7 @@ mf <- ModelFrame(x, y)
 fit(mf, model = GBMModel)
 ```
 
-The model frame approach has a few advantages over model fitting directly with a traditional formula.  One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default.  This is often desirable for models that do not handle missing values.  Conversely, missing values can be retained in the model frame by setting its argument `na.action = na.pass` for models, like `GBMModel`, that do handle them.  A second advantage is that case weights can be included in the model frame to be passed on to the model fitting functions.
+The model frame approach has a few advantages over model fitting directly with a traditional formula.  One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default.  This is often desirable for models that do not handle missing values.  Conversely, missing values can be retained in the model frame by setting its argument `na.rm = FALSE` for models, like `GBMModel`, that do handle them.  A second advantage is that case weights can be included in the model frame to be passed on to the model fitting functions.
 
 ```{r results="hide"}
 ## Model frame specification with case weights

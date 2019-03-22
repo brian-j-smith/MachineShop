@@ -10,8 +10,7 @@
 #' 
 #' @return \code{ModelFrame} class object that inherits from \code{data.frame}.
 #' 
-#' @seealso \code{\link{formula}}, \code{\link{na.fail}}, \code{\link{na.omit}},
-#' \code{\link{na.pass}}
+#' @seealso \code{\link{formula}}
 #' 
 #' @examples
 #' mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
@@ -29,14 +28,12 @@ ModelFrame <- function(x, ...) {
 #' @param data \code{data.frame} or an object that can be converted to one.
 #' @param weights vector of case weights.
 #' @param strata vector of stratification levels.
-#' @param na.action action to take if cases contain missing values.  The default
-#' is first any \code{na.action} attribute of \code{data}, second a
-#' \code{na.action} setting of \code{\link{options}}, and third
-#' \code{\link{na.fail}} if unset.
+#' @param na.rm logical indicating whether to remove cases with \code{NA} values
+#' for any of the model variables.
 #' @param ... arguments passed to other methods.
 #' 
 ModelFrame.formula <- function(x, data, weights = NULL, strata = NULL,
-                               na.action = NULL, ...) {
+                               na.rm = TRUE, ...) {
   data <- as.data.frame(data)
   
   modelterms <- terms(x, data = data)
@@ -54,10 +51,14 @@ ModelFrame.formula <- function(x, data, weights = NULL, strata = NULL,
     modelframe[["(strata)"]] <- strata
   }
   
-  if (is.null(na.action)) na.action <- na.action(data)
-  if (is.null(na.action)) na.action <- get(getOption("na.action"))
-  if (is.null(na.action)) na.action <- na.fail
-  modelframe <- na.action(modelframe)
+  na.action <- list(...)$na.action
+  if (!is.null(na.action)) {
+    depwarn("'na.action' argument to ModelFrame is deprecated",
+            "use 'na.rm' instead")
+    modelframe <- na.action(modelframe)
+  } else if (na.rm) {
+    modelframe <- na.omit(modelframe)
+  }
   
   attr(modelframe, "terms") <- modelterms
   class(modelframe) <- c("ModelFrame", "data.frame")
@@ -70,7 +71,7 @@ ModelFrame.formula <- function(x, data, weights = NULL, strata = NULL,
 #' @param y response variable.
 #'
 ModelFrame.matrix <- function(x, y, weights = NULL, strata = NULL,
-                              na.action = NULL, ...) {
+                              na.rm = TRUE, ...) {
   data <- as.data.frame(x)
   end <- ncol(x) + 1
   y_name <- make.unique(c(names(data), "y"))[end]
@@ -79,18 +80,18 @@ ModelFrame.matrix <- function(x, y, weights = NULL, strata = NULL,
   
   do.call(ModelFrame, list(formula(data), data,
                            weights = weights, strata = strata,
-                           na.action = na.action))
+                           na.rm = na.rm, ...))
 }
 
 
-ModelFrame.ModelFrame <- function(x, na.action = NULL, ...) {
+ModelFrame.ModelFrame <- function(x, na.rm = TRUE, ...) {
   do.call(ModelFrame, list(formula(terms(x)), x,
                            weights = x[["(weights)"]], strata = x[["(strata)"]],
-                           na.action = na.action))
+                           na.rm = na.rm, ...))
 }
 
 
-ModelFrame.recipe <- function(x, na.action = NULL, ...) {
+ModelFrame.recipe <- function(x, ...) {
   x <- prep(x, retain = TRUE)
   df <- juice(x)
   
@@ -108,5 +109,5 @@ ModelFrame.recipe <- function(x, na.action = NULL, ...) {
 
   do.call(ModelFrame, list(formula(terms(x)), df,
                            weights = weights, strata = strata,
-                           na.action = na.action))
+                           na.rm = FALSE))
 }

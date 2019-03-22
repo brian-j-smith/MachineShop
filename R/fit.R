@@ -37,7 +37,7 @@ fit <- function(x, ...) {
 #' varimp(gbmfit)
 #' 
 fit.formula <- function(x, data, model, ...) {
-  fit(ModelFrame(x, data, na.action = na.pass), model)
+  fit(ModelFrame(x, data, na.rm = FALSE), model)
 }
 
 
@@ -70,7 +70,7 @@ fit.recipe <- function(x, model, ...) {
 
 
 .fit.MLModel <- function(model, x, ...) {
-  mf <- ModelFrame(x, na.action = na.pass)
+  mf <- ModelFrame(x, na.rm = FALSE)
   
   y <- response(mf)
   if (!any(sapply(model@types, function(type) is_response(y, type)))) {

@@ -48,14 +48,14 @@ SuperModel <- function(..., model = GBMModel, control = CVControl,
     params = as.list(environment()),
     fitbits = MLFitBits(
       predict = function(object, newdata, fitbits, times, ...) {
-        newdata <- ModelFrame(formula(fitbits), newdata, na.action = na.pass)
+        newdata <- ModelFrame(formula(fitbits), newdata, na.rm = FALSE)
         
         learner_predictors <- lapply(object$base_fits, function(fit) {
           predict(fit, newdata = newdata, times = object$times, type = "prob")
         })
         df <- make_super_df(NA, learner_predictors, row.names(newdata))
   
-        mf <- ModelFrame(formula(df), df, na.action = na.pass)
+        mf <- ModelFrame(formula(df), df, na.rm = FALSE)
         if (object$all_vars) mf <- add_predictors(newdata, mf)
         
         predict(object$super_fit, newdata = mf, times = times, type = "prob")
@@ -84,7 +84,7 @@ setClass("SuperModel", contains = "MLModel")
     learner_predictors[[i]] <- response$Predicted
   }
   df <- make_super_df(response$Observed, learner_predictors, response$Case)
-  super_mf <- ModelFrame(formula(df), df, na.action = na.omit)
+  super_mf <- ModelFrame(formula(df), df)
   if (params$all_vars) super_mf <- add_predictors(mf, super_mf)
 
   list(base_fits = lapply(base_learners,
@@ -118,5 +118,5 @@ add_predictors <- function(from, to) {
   data <- merge(from, to, by = "(row.names)", sort = FALSE)
   data[["(row.names)"]] <- NULL
 
-  ModelFrame(reformulate(rhs, lhs), data, na.action = na.pass)
+  ModelFrame(reformulate(rhs, lhs), data, na.rm = FALSE)
 }
