@@ -99,7 +99,8 @@ tune.ModelFrame <- function(x, models, grid = 3, fixed = NULL,
 #' @rdname tune-methods
 #' 
 tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
-                        metrics = NULL, stat = base::mean, maximize = TRUE, ...) {
+                        metrics = NULL, stat = base::mean, maximize = TRUE,
+                        ...) {
   .tune(x, NULL, models, grid, fixed, control, metrics, stat, maximize, ...)
 }
 
@@ -127,8 +128,7 @@ tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
       grid <- grid$length
     }
     if (is(grid, "numeric")) {
-      grid <-
-        grid(x, data = data, model = model, length = grid, random = random)
+      grid <- grid(x, data, model = model, length = grid, random = random)
     }
     grid <- combine_tune_params(grid, fixed)
     models <- expand.model(list(get(model@name, mode = "function"), grid))
@@ -139,7 +139,7 @@ tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
   perf_list <- list()
   perf_stat <- numeric()
   for (name in names(models)) {
-    res <- resample(x, data = data, model = models[[name]], control = control)
+    res <- resample(x, data, model = models[[name]], control = control)
     if (is.null(metrics)) {
       method <- getS3method("performance", class(res$Observed))
       metrics <- eval(formals(method)$metrics)

@@ -22,9 +22,8 @@ grid <- function(x, ...) {
 }
 
 
-grid.formula <- function(x, data, model, length = 3, random = FALSE, ...) {
-  ModelFrame(x, data, na.action = na.pass) %>%
-    grid(model, length = length, random = random)
+grid.formula <- function(x, data, ...) {
+  grid(ModelFrame(x, data, na.action = na.pass), ...)
 }
 
 
@@ -43,7 +42,6 @@ grid.ModelFrame <- function(x, model, length = 3, random = FALSE, ...) {
 }
 
 
-grid.recipe <- function(x, model, length = 3, random = FALSE, ...) {
-  ModelFrame(x, na.action = na.pass) %>%
-    grid(model, length = length, random = random)
+grid.recipe <- function(x, ...) {
+  grid(ModelFrame(x, na.action = na.pass), ...)
 }
