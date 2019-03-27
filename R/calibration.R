@@ -190,17 +190,16 @@ setMethod(".calibration_default", c("Surv", "numeric"),
       list(Mean = est$fit[[1]], SE = est$se.fit[[1]])
     }
     
-    tricubic <- function(x, span = 1, min_weight = 0) {
-      x <- abs(x)
-      x_range <- span * diff(range(x))
-      (1 - min_weight) * pmax((1 - (x / x_range)^3)^3, 0) + min_weight
-    }
-    
     if (is.null(breaks)) {
       df <- data.frame(
         Response = "Mean",
         Predicted = unique(predicted)
       )
+      tricubic <- function(x, span = 1, min_weight = 0) {
+        x <- abs(x)
+        x_range <- span * diff(range(x))
+        (1 - min_weight) * pmax((1 - (x / x_range)^3)^3, 0) + min_weight
+      }
       metrics_list <- lapply(df$Predicted, function(value) {
         weights <- tricubic(predicted - value, span = span, min_weight = 0.01)
         est <- if (dist == "empirical") {
