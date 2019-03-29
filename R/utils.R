@@ -179,14 +179,38 @@ match_indices <- function(indices, choices) {
 }
 
 
+model.matrix.DesignTerms <- function(object, data, ...) {
+  data <- data[, labels(object), drop = FALSE]
+  assign <- seq_len(ncol(data))
+  if (attr(object, "intercept")) {
+    data <- cbind("(Intercept)" = 1, data)
+    assign <- c(0, assign)
+  }
+  structure(as.matrix(data), assign = assign)
+}
+
+
+model.matrix.FormulaTerms <- function(object, data, ...) {
+  model.matrix.default(object, as.data.frame(data), ...)
+}
+
+
+model.matrix.ModelFrame <- function(object, intercept = NULL, ...) {
+  model_terms <- terms(object)
+  if (!is.null(intercept)) {
+    attr(model_terms, "intercept") <- as.integer(intercept)
+  }
+  model.matrix(model_terms, object, ...)
+}
+
+
 nvars <- function(x, model) {
   model <- getMLObject(model, "MLModel")
   model_terms <- terms(x)
   switch(model@design,
          "model.matrix" = {
-           fo <- formula(model_terms)
-           mf <- model.frame(fo, x[1, , drop = FALSE])
-           ncol(model.matrix(fo, mf)) - attr(model_terms, "intercept")
+           model_matrix <- model.matrix(model_terms, x[1, , drop = FALSE])
+           ncol(model_matrix) - attr(model_terms, "intercept")
          },
          "terms" = length(labels(model_terms))
   )
@@ -322,6 +346,52 @@ switch_class <- function(EXPR, ...) {
 }
 
 
+terms.character <- function(labels, response = NULL, intercept = TRUE) {
+  if (is.character(response)) response <- as.symbol(response)
+  response_indicator <- 1L - is.null(response)
+  
+  fo <- parse(text = paste(
+    "response ~",
+    paste(if (length(labels)) labels else "1", collapse = "+"),
+    if (!intercept) "- 1"
+  ))[[1]]
+  fo[[2]] <- response
+  
+  all_vars <- c(if (response_indicator) deparse(response), labels)
+  
+  structure(
+    fo,
+    variables = as.call(c(quote(list), response, lapply(labels, as.symbol))),
+    factors = matrix(NA_integer_, nrow = length(all_vars), ncol = 0,
+                     dimnames = list(all_vars, NULL)),
+    term.labels = labels,
+    order = rep(1L, length(labels)),
+    intercept = as.integer(intercept),
+    response = response_indicator,
+    .Environment = parent.frame(),
+    class = c("DesignTerms", "terms", "formula")
+  )
+}
+
+
+terms.matrix <- function(x, y = NULL, intercept = TRUE) {
+  stopifnot(is.character(colnames(x)))
+  stopifnot(!anyDuplicated(colnames(x)))
+  
+  labels <- colnames(x)
+  response <- if (!is.null(y)) {
+    make.unique(c(labels, deparse(substitute(y))))[length(labels) + 1]
+  }
+  
+  terms(labels, response, intercept = intercept)
+}
+
+
+terms.ModelFrame <- function(x, ...) {
+  attr(x, "terms")
+}
+
+
 terms.recipe <- function(x, ...) {
   info <- summary(x)
   
@@ -332,6 +402,7 @@ terms.recipe <- function(x, ...) {
     names(is_match)[is_match]
   }
   
+  outcome <- NULL
   outcome_set <- get_vars("outcome")
 
   surv_time <- get_vars(c("surv_time", "outcome"))
@@ -361,7 +432,7 @@ terms.recipe <- function(x, ...) {
 
   predictors <- info$variable[info$role == "predictor"]
   
-  terms(reformulate(predictors, outcome))
+  terms(predictors, outcome)
 }
 
 

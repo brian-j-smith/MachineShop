@@ -13,9 +13,9 @@ importFrom(rsample, assessment, bootstraps, initial_split, rsample2caret,
            testing, vfold_cv)
 importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
            formula, get_all_vars, loess, lm, median, model.frame, model.matrix,
-           model.response, model.weights, na.fail, na.omit, na.pass, p.adjust,
-           pchisq, predict, quantile, reformulate, reshape, sd, t.test, terms,
-           time, vcov)
+           model.matrix.default, model.response, model.weights, na.fail,
+           na.omit, na.pass, p.adjust, pchisq, predict, quantile, reformulate,
+           reshape, sd, t.test, terms, time, vcov)
 importFrom(survival, concordance, is.Surv, Surv, survfit, survreg,
            survreg.distributions)
 importFrom(utils, combn, getS3method, head, relist, stack, str, tail)
@@ -142,6 +142,9 @@ S3method(diff, Resamples)
 S3method(fit, ModelFrame)
 S3method(fit, formula)
 S3method(fit, recipe)
+S3method(model.matrix, DesignTerms)
+S3method(model.matrix, FormulaTerms)
+S3method(model.matrix, ModelFrame)
 S3method(ModelFrame, formula)
 S3method(ModelFrame, matrix)
 S3method(performance, Confusion)
@@ -183,6 +186,7 @@ S3method(summary, MLModelTune)
 S3method(summary, Performance)
 S3method(summary, Resamples)
 S3method(t.test, PerformanceDiff)
+S3method(terms, ModelFrame)
 S3method(tune, ModelFrame)
 S3method(tune, formula)
 S3method(tune, recipe)

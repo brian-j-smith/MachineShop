@@ -1,7 +1,6 @@
 #' ModelFrame Class
 #' 
-#' Class for storing a data frame, formula, and optionally weights for fitting
-#' MLModels.
+#' Class for storing data, formulas, and other attributes for fitting MLModels.
 #' 
 #' @name ModelFrame
 #' @rdname ModelFrame-methods
@@ -32,82 +31,73 @@ ModelFrame <- function(x, ...) {
 #' for any of the model variables.
 #' @param ... arguments passed to other methods.
 #' 
-ModelFrame.formula <- function(x, data, weights = NULL, strata = NULL,
-                               na.rm = TRUE, ...) {
+ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
+                               strata = NULL, ...) {
   data <- as.data.frame(data)
+  model_terms <- terms(x, data = data)
+  class(model_terms) <- c("FormulaTerms", class(model_terms))
   
-  modelterms <- terms(x, data = data)
-  modelframe <- data[, all.vars(modelterms), drop = FALSE]
-  
-  weights <- eval(substitute(weights), data)
-  if (!is.null(weights)) {
-    stopifnot(length(weights) == nrow(data))
-    modelframe[["(weights)"]] <- weights
-  }
-  
-  strata <- eval(substitute(strata), data)
-  if (!is.null(strata)) {
-    stopifnot(length(strata) == nrow(data))
-    modelframe[["(strata)"]] <- strata
-  }
-  
-  na.action <- list(...)$na.action
-  if (!is.null(na.action)) {
-    depwarn("'na.action' argument to ModelFrame is deprecated",
-            "use 'na.rm' instead")
-    modelframe <- na.action(modelframe)
-  } else if (na.rm) {
-    modelframe <- na.omit(modelframe)
-  }
-  
-  attr(modelframe, "terms") <- modelterms
-  class(modelframe) <- c("ModelFrame", "data.frame")
-  modelframe
+  ModelFrame(model_terms, data, na.rm = na.rm,
+             weights = eval(substitute(weights), data),
+             strata = eval(substitute(strata), data), ...)
 }
 
 
 #' @rdname ModelFrame-methods
 #' 
 #' @param y response variable.
+#' @param intercept logical indicating whether to include an intercept in the
+#' model formula.
 #'
-ModelFrame.matrix <- function(x, y, weights = NULL, strata = NULL,
-                              na.rm = TRUE, ...) {
+ModelFrame.matrix <- function(x, y = NULL, na.rm = TRUE, intercept = TRUE,
+                              weights = NULL, strata = NULL, ...) {
   data <- as.data.frame(x)
-  end <- ncol(x) + 1
-  y_name <- make.unique(c(names(data), "y"))[end]
-  data[[y_name]] <- y
-  data <- cbind(data[end], data[-end])
+  colnames(x) <- names(data)
+  model_terms <- eval(substitute(terms(x, y, intercept = intercept)))
+  data[deparse(response(model_terms))] <- y
   
-  do.call(ModelFrame, list(formula(data), data,
-                           weights = weights, strata = strata,
-                           na.rm = na.rm, ...))
+  ModelFrame(model_terms, data, na.rm = na.rm,
+             weights = weights, strata = strata, ...)
 }
 
 
-ModelFrame.ModelFrame <- function(x, na.rm = TRUE, ...) {
-  do.call(ModelFrame, list(formula(terms(x)), x,
-                           weights = x[["(weights)"]], strata = x[["(strata)"]],
-                           na.rm = na.rm, ...))
+ModelFrame.ModelFrame <- function(x, na.rm = TRUE, na.action = NULL, ...) {
+  vars <- as.data.frame(do.call(cbind, list(...)))
+  names(vars) <- sapply(names(vars), function(x) paste0("(", x, ")"))
+  x[names(vars)] <- vars
+
+  if (!is.null(na.action)) {
+    depwarn("'na.action' argument to ModelFrame is deprecated",
+            "use 'na.rm' instead")
+    na.action(x)
+  } else if (na.rm) {
+    na.omit(x)
+  } else x
 }
 
 
 ModelFrame.recipe <- function(x, ...) {
   x <- prep(x, retain = TRUE)
-  df <- juice(x)
+  data <- juice(x)
   
   info <- summary(x)
   
   var_name <- info$variable[info$role == "case_weight"]
   weights <- if (length(var_name) == 0) NULL else
-    if (length(var_name) == 1) df[[var_name]] else
+    if (length(var_name) == 1) data[[var_name]] else
       stop("multiple case weights specified")
 
   var_name <- info$variable[info$role == "case_strata"]
   strata <- if (length(var_name) == 0) NULL else
-    if (length(var_name) == 1) df[[var_name]] else
+    if (length(var_name) == 1) data[[var_name]] else
       stop("multiple strata variables specified")
 
-  do.call(ModelFrame, list(formula(terms(x)), df,
-                           weights = weights, strata = strata,
-                           na.rm = FALSE))
+  ModelFrame(terms(x), data, na.rm = FALSE, weights = weights, strata = strata)
+}
+
+
+ModelFrame.terms <- function(x, data, ...) {
+  data[, all.vars(x), drop = FALSE] %>%
+    structure(terms = x, class = c("ModelFrame", class(data))) %>%
+    ModelFrame(...)
 }

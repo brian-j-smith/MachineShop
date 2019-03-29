@@ -52,8 +52,8 @@ resample <- function(x, ...) {
 #' plot(res)
 #' 
 resample.formula <- function(x, data, model, control = CVControl, ...) {
-  resample(ModelFrame(x, data, strata = strata(response(x, data)),
-                      na.rm = FALSE), model, control)
+  resample(ModelFrame(x, data, na.rm = FALSE,
+                      strata = strata(response(x, data))), model, control)
 }
 
 
