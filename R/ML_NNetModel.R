@@ -60,7 +60,10 @@ NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
     },
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
-      nnet::nnet(formula, data = data, weights = weights, ...)
+      eval_fit(data,
+               formula = nnet::nnet(formula, data = data, weights = weights,
+                                    ...),
+               matrix = nnet::nnet(x, y, weights = weights, ...))
     },
     predict = function(object, newdata, ...) {
       predict(object, newdata = newdata, type = "raw")

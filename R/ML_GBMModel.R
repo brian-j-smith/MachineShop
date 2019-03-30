@@ -59,13 +59,17 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
     design = "terms",
     fit = function(formula, data, weights, distribution = NULL, ...) {
       if (is.null(distribution)) {
-        distribution <- switch_class(response(formula, data),
+        distribution <- switch_class(response(data),
                                      "factor" = "multinomial",
                                      "numeric" = "gaussian",
                                      "Surv" = "coxph")
       }
-      gbm::gbm(formula, data = data, weights = weights,
-               distribution = distribution, ...)
+      eval_fit(data,
+               formula = gbm::gbm(formula, data = data, weights = weights,
+                                  distribution = distribution, ...),
+               matrix = gbm::gbm.fit(x, y, w = weights,
+                                     distribution = distribution,
+                                     verbose = FALSE, ...))
     },
     predict = function(object, newdata, fitbits, times, ...) {
       n <- object$n.trees

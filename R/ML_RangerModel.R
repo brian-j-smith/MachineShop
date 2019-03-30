@@ -80,7 +80,7 @@ RangerModel <- function(num.trees = 500, mtry = NULL,
     design = "terms",
     fit = function(formula, data, weights, ...) {
       ranger::ranger(formula, data = data, case.weights = weights, 
-                     probability = is(response(formula, data), "factor"), ...)
+                     probability = is(response(data), "factor"), ...)
     },
     predict = function(object, newdata, times, ...) {
       pred <- predict(object, data = newdata)

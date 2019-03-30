@@ -42,7 +42,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
-      y <- response(formula, data)
+      y <- response(data)
       if (is.factor(y)) {
         y_name <- deparse(response(formula))
         formula[[2]] <- as.symbol(y_name)

@@ -76,9 +76,8 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
     },
     design = "model.matrix",
     fit = function(formula, data, weights, family = NULL, nlambda = 1, ...) {
-      terms <- extract(formula, data)
-      x <- terms$x
-      y <- terms$y
+      x <- model.matrix(data, intercept = FALSE)
+      y <- response(data)
       if (is.null(family)) {
         family <- switch_class(y,
                                "factor" = ifelse(nlevels(y) == 2,
@@ -94,7 +93,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
     },
     predict = function(object, newdata, fitbits, times, ...) {
       y <- response(fitbits)
-      newx <- extract(formula(fitbits)[-2], newdata)$x
+      newx <- model.matrix(newdata, intercept = FALSE)
       if (is.Surv(y)) {
         lp <- predict(object, newx = object$x, type = "link")[, 1]
         new_lp <- predict(object, newx = newx, type = "link")[, 1]

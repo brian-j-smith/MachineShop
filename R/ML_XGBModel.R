@@ -63,9 +63,8 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
     params = params(environment()),
     design = "model.matrix",
     fit = function(formula, data, weights, params, ...) {
-      terms <- extract(formula, data)
-      x <- terms$x
-      y <- terms$y
+      x <- model.matrix(data, intercept = FALSE)
+      y <- response(data)
       response_levels <- levels(y)
       switch_class(y,
                    "factor" = {
@@ -83,8 +82,8 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
       modelfit$levels <- response_levels
       modelfit
     },
-    predict = function(object, newdata, fitbits, ...) {
-      newx <- extract(formula(fitbits)[-2], newdata)$x
+    predict = function(object, newdata, ...) {
+      newx <- model.matrix(newdata, intercept = FALSE)
       pred <- predict(object, newdata = newx)
       if (object$params$objective == "multi:softprob") {
         pred <- matrix(pred, nrow = nrow(newx), byrow = TRUE)

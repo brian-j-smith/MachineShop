@@ -77,7 +77,7 @@ GAMBoostModel <- function(family = NULL,
       ), name = "mboost_exports")
       
       if (is.null(family)) {
-        family <- switch_class(response(formula, data),
+        family <- switch_class(response(data),
                                "factor" = mboost::Binomial(),
                                "numeric" = mboost::Gaussian(),
                                "Surv" = mboost::CoxPH())

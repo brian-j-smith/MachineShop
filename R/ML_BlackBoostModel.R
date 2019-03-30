@@ -84,7 +84,7 @@ BlackBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
     design = "terms",
     fit = function(formula, data, weights, family = NULL, ...) {
       if (is.null(family)) {
-        family <- switch_class(response(formula, data),
+        family <- switch_class(response(data),
                                "factor" = mboost::Binomial(),
                                "numeric" = mboost::Gaussian(),
                                "Surv" = mboost::CoxPH())

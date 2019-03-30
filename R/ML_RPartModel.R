@@ -51,7 +51,7 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
     },
     design = "terms",
     fit = function(formula, data, weights, ...) {
-      method <- switch_class(response(formula, data),
+      method <- switch_class(response(data),
                              "factor" = "class",
                              "numeric" = "anova",
                              "Surv" = "exp")
@@ -60,6 +60,7 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
     },
     predict = function(object, newdata, fitbits, times, ...) {
       y <- response(fitbits)
+      newdata <- as.data.frame(newdata)
       if (is.Surv(y)) {
         object <- partykit::as.party(object)
         fits <- predict(object, newdata = newdata, type = "prob")

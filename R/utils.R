@@ -57,13 +57,6 @@ complete_subset <- function(...) {
 }
 
 
-extract <- function(formula, data, na.action = na.pass) {
-  mf <- model.frame(formula, data, na.action = na.action)
-  list(x = model.matrix(formula, mf)[, -1, drop = FALSE],
-       y = model.response(mf))
-}
-
-
 field <- function(object, name) {
   if (isS4(object)) slot(object, name) else object[[name]]
 }
@@ -71,16 +64,6 @@ field <- function(object, name) {
 
 fitbit <- function(object, name) {
   slot(field(object, "fitbits"), name)
-}
-
-
-formula.MLFitBits <- function(object) {
-  formula(terms(object@x))
-}
-
-
-formula.MLModelFit <- function(object) {
-  formula(field(object, "fitbits"))
 }
 
 
@@ -236,13 +219,21 @@ preprocess <- function(x, data = NULL, ...) {
 }
 
 
-preprocess.default <- function(x, data = NULL, ...) {
-  as.data.frame(if (is.null(data)) x else data)
+preprocess.ModelFrame <- function(x, data = NULL, ...) {
+  mf <- switch_class(
+    data,
+    "NULL" = x,
+    "ModelFrame" = data,
+    "data.frame" = ModelFrame(delete.response(terms(x)), data, na.rm = FALSE),
+    "matrix" = ModelFrame(data, na.rm = FALSE)
+  )
+  if (is.null(mf)) stop("unsupported data structure") else mf
 }
 
 
 preprocess.recipe <- function(x, data = NULL, ...) {
-  if (is.null(data)) juice(x) else bake(x, new_data = data)
+  df <- if (is.null(data)) juice(x) else bake(x, data)
+  ModelFrame(delete.response(terms(x)), df, na.rm = FALSE)
 }
 
 

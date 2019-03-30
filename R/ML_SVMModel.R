@@ -62,7 +62,10 @@ SVMModel <- function(scaled = TRUE, type = NULL,
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
-      kernlab::ksvm(formula, data = data, prob.model = TRUE, ...)
+      eval_fit(data,
+               formula = kernlab::ksvm(formula, data = data, prob.model = TRUE,
+                                       ...),
+               matrix = kernlab::ksvm(x, y, prob.model = TRUE, ...))
     },
     predict = function(object, newdata, fitbits, ...) {
       kernlab::predict(object, newdata = newdata,
@@ -188,7 +191,7 @@ SVMTanhModel <- function(scale = 1, offset = 1, ...) {
         set_param("order", 1:min(length, 3)) %>%
         set_param("scale", 10^seq_range(-4, 2, c(-4, log10(2)), length)) %>%
         set_param("sigma", {
-          sigmas <- kernlab::sigest(extract(formula(terms(x)), x)$x,
+          sigmas <- kernlab::sigest(model.matrix(x, intercept = FALSE),
                                     scaled = scaled)
           exp(seq(log(min(sigmas)), log(max(sigmas)), length = length))
         })

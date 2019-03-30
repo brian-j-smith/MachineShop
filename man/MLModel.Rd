@@ -37,12 +37,13 @@ used to fit the model is a \code{"\link{model.matrix}"}, a data.frame
 of the original predictor variable \code{"terms"}, or unknown (default).}
 
 \item{fit}{model fitting function whose arguments are a \code{formula}, a
-\code{data} frame, case \code{weights}, and an ellipsis.}
+\code{\link{ModelFrame}} named \code{data}, case \code{weights}, and an
+ellipsis.}
 
 \item{predict}{model prediction function whose arguments are the
-\code{object} returned by \code{fit}, a \code{newdata} frame of predictor
-variables, optional vector of \code{times} at which to predict survival,
-and an ellipsis.}
+\code{object} returned by \code{fit}, a \code{\link{ModelFrame}} named
+\code{newdata} of predictor variables, optional vector of \code{times} at
+which to predict survival, and an ellipsis.}
 
 \item{varimp}{variable importance function whose arguments are the
 \code{object} returned by \code{fit}, optional arguments passed from calls

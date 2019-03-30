@@ -43,7 +43,7 @@ GLMModel <- function(family = NULL, ...) {
     design = "model.matrix",
     fit = function(formula, data, weights, family = NULL, ...) {
       if (is.null(family)) {
-        family <- switch_class(response(formula, data),
+        family <- switch_class(response(data),
                                "factor" = "binomial",
                                "numeric" = "gaussian")
       }
@@ -97,7 +97,7 @@ GLMStepAICModel <- function(family = NULL, ...,
                    scope = list(), k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()
       if (is.null(family)) {
-        family <- switch_class(response(formula, data),
+        family <- switch_class(response(data),
                                "factor" = "binomial",
                                "numeric" = "gaussian")
       }

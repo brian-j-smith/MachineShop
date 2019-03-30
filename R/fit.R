@@ -82,7 +82,7 @@ fit.recipe <- function(x, model, ...) {
   
   envir <- list2env(within(list(), {
     formula <- formula(terms(mf))
-    data <- as.data.frame(mf)
+    data <- mf
     weights <- model.weights(mf)
     y <- y
     nobs <- nrow(mf)
@@ -94,4 +94,21 @@ fit.recipe <- function(x, model, ...) {
   
   do.call(model@fit, args, envir = envir) %>%
     asMLModelFit(paste0(model@name, "Fit"), model, x, y)
+}
+
+
+eval_fit <- function(data, formula, matrix) {
+  use_model_matrix <- if (missing(formula)) TRUE else
+    if (missing(matrix)) FALSE else
+      is(terms(data), "DesignTerms")
+  
+  if (use_model_matrix) {
+    envir <- list(
+      x = model.matrix(data, intercept = FALSE),
+      y = response(data)
+    )
+    eval(substitute(matrix), envir, parent.frame())
+  } else {
+    eval.parent(substitute(formula))
+  }
 }

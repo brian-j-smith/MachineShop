@@ -55,7 +55,9 @@ RandomForestModel <- function(ntree = 500,
     design = "terms",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
-      randomForest::randomForest(formula, data = data, ...)
+      eval_fit(data,
+               formula = randomForest::randomForest(formula, data = data, ...),
+               matrix = randomForest::randomForest(x, y, ...))
     },
     predict = function(object, newdata, fitbits, ...) {
       predict(object, newdata = newdata,

@@ -29,7 +29,7 @@ LMModel <- function() {
     params = params(environment()),
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
-      y <- response(formula, data)
+      y <- response(data)
       if (is.factor(y)) {
         y_name <- deparse(response(formula))
         formula[[2]] <- as.symbol(y_name)

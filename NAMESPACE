@@ -12,10 +12,10 @@ importFrom(recipes, bake, juice, prep, prepper)
 importFrom(rsample, assessment, bootstraps, initial_split, rsample2caret,
            testing, vfold_cv)
 importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
-           formula, get_all_vars, loess, lm, median, model.frame, model.matrix,
-           model.matrix.default, model.response, model.weights, na.fail,
-           na.omit, na.pass, p.adjust, pchisq, predict, quantile, reformulate,
-           reshape, sd, t.test, terms, time, vcov)
+           delete.response, formula, get_all_vars, loess, lm, median,
+           model.frame, model.matrix, model.matrix.default, model.response,
+           model.weights, na.fail, na.omit, na.pass, p.adjust, pchisq, predict,
+           quantile, reformulate, reshape, sd, t.test, terms, time, vcov)
 importFrom(survival, concordance, is.Surv, Surv, survfit, survreg,
            survreg.distributions)
 importFrom(utils, combn, getS3method, head, relist, stack, str, tail)
