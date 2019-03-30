@@ -46,7 +46,7 @@ registerDoParallel(cores = 2)
 
 ## Resample Function
 
-Resampling is performed by calling the `resample` function with a variable specification, model, and control structure.  Like the `fit` function, variables may be specified in terms of a traditional formula, model frame, or recipe.  Summary statistics and plots of resample output can be obtained with the `summary` and `plot` functions.
+Resampling is performed by calling the `resample` function with a variable specification, model, and control structure.  Like the `fit` function, variables may be specified in terms of a traditional formula, design matrix, model frame, or recipe.  Summary statistics and plots of resample output can be obtained with the `summary` and `plot` functions.
 
 ```{r}
 ## Resample estimation for survival means and probabilities

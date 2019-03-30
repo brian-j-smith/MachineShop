@@ -5,9 +5,9 @@
 #' 
 #' @rdname resample-methods
 #' 
-#' @param x defined relationship between model predictors and an outcome.  May
-#' be a ModelFrame containing a formula, data, and optionally case weights; a
-#' formula; or a recipe.
+#' @param x defines a relationship between model predictor and response
+#' variables.  May be a \code{formula}, design matrix of predictors,
+#' \code{ModelFrame}, or \code{recipe}.
 #' 
 #' @return \code{Resamples} class object.
 #' 
@@ -54,6 +54,15 @@ resample <- function(x, ...) {
 resample.formula <- function(x, data, model, control = CVControl, ...) {
   resample(ModelFrame(x, data, na.rm = FALSE,
                       strata = strata(response(x, data))), model, control)
+}
+
+
+#' @rdname resample-methods
+#' 
+#' @param y predictor variable.
+#' 
+resample.matrix <- function(x, y, model, control = CVControl, ...) {
+  resample(ModelFrame(x, y, na.rm = FALSE, strata = strata(y)), model, control)
 }
 
 

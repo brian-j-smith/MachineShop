@@ -3,6 +3,7 @@
 \name{fit}
 \alias{fit}
 \alias{fit.formula}
+\alias{fit.matrix}
 \alias{fit.ModelFrame}
 \alias{fit.recipe}
 \title{Model Fitting}
@@ -11,14 +12,16 @@ fit(x, ...)
 
 \method{fit}{formula}(x, data, model, ...)
 
+\method{fit}{matrix}(x, y, model, ...)
+
 \method{fit}{ModelFrame}(x, model, ...)
 
 \method{fit}{recipe}(x, model, ...)
 }
 \arguments{
-\item{x}{defined relationship between model predictors and an outcome.  May
-be a \code{ModelFrame} containing a formula, data, and optionally case
-weights; a \code{formula}; or a \code{recipe}.}
+\item{x}{defines a relationship between model predictor and response
+variables.  May be a \code{formula}, design matrix of predictors,
+\code{ModelFrame}, or \code{recipe}.}
 
 \item{...}{arguments passed to other methods.}
 
@@ -26,6 +29,8 @@ weights; a \code{formula}; or a \code{recipe}.}
 
 \item{model}{\code{MLModel} object, constructor function, or character string
 naming a constructor function that returns an \code{MLModel} object.}
+
+\item{y}{predictor variable.}
 }
 \value{
 \code{MLModelFit} class object.

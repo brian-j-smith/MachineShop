@@ -3,6 +3,7 @@
 \name{tune}
 \alias{tune}
 \alias{tune.formula}
+\alias{tune.matrix}
 \alias{tune.ModelFrame}
 \alias{tune.recipe}
 \title{Model Tuning and Selection}
@@ -10,6 +11,10 @@
 tune(x, ...)
 
 \method{tune}{formula}(x, data, models, grid = 3, fixed = NULL,
+  control = CVControl, metrics = NULL, stat = base::mean,
+  maximize = TRUE, ...)
+
+\method{tune}{matrix}(x, y, models, grid = 3, fixed = NULL,
   control = CVControl, metrics = NULL, stat = base::mean,
   maximize = TRUE, ...)
 
@@ -22,9 +27,9 @@ tune(x, ...)
   maximize = TRUE, ...)
 }
 \arguments{
-\item{x}{defined relationship between model predictors and an outcome.  May
-be a \code{ModelFrame} containing a formula, data, and optionally case
-weights; a \code{formula}; or a \code{recipe.}}
+\item{x}{defines a relationship between model predictor and response
+variables.  May be a \code{formula}, design matrix of predictors,
+\code{ModelFrame}, or \code{recipe}.}
 
 \item{...}{arguments passed to the \code{metrics} functions.}
 
@@ -58,6 +63,8 @@ the metric for model selection.}
 maximum or minimum value of the performance metric.  Set automatically if a
 package \code{\link{metrics}} function is explicitly specified for the model
 selection.}
+
+\item{y}{predictor variable.}
 }
 \value{
 \code{MLModelTune} class object that inherits from \code{MLModel}.

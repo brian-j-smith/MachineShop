@@ -29,8 +29,8 @@ modeling strategies.
   - Modeling of response variables types: binary factors, multi-class
     nominal and ordinal factors, numeric vectors and matrices, and
     censored time-to-event survival.
-  - Model specification with traditional formulas and with flexible
-    pre-processing
+  - Model specification with traditional formulas, design matrices, and
+    flexible pre-processing
     [recipes](https://cran.r-project.org/package=recipes).
   - Resample estimation of predictive performance, including
     cross-validation, bootstrap resampling, and split training-test set

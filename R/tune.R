@@ -7,9 +7,9 @@
 #' @name tune
 #' @rdname tune-methods
 #' 
-#' @param x defined relationship between model predictors and an outcome.  May
-#' be a \code{ModelFrame} containing a formula, data, and optionally case
-#' weights; a \code{formula}; or a \code{recipe.}
+#' @param x defines a relationship between model predictor and response
+#' variables.  May be a \code{formula}, design matrix of predictors,
+#' \code{ModelFrame}, or \code{recipe}.
 #' @param ... arguments passed to the \code{metrics} functions.
 #' 
 #' @return \code{MLModelTune} class object that inherits from \code{MLModel}.
@@ -84,6 +84,17 @@ tune.formula <- function(x, data, models, grid = 3, fixed = NULL,
                          control = CVControl, metrics = NULL, stat = base::mean,
                          maximize = TRUE, ...) {
   .tune(x, data, models, grid, fixed, control, metrics, stat, maximize, ...)
+}
+
+
+#' @rdname tune-methods
+#' 
+#' @param y predictor variable.
+#' 
+tune.matrix <- function(x, y, models, grid = 3, fixed = NULL,
+                        control = CVControl, metrics = NULL, stat = base::mean,
+                        maximize = TRUE, ...) {
+  .tune(x, y, models, grid, fixed, control, metrics, stat, maximize, ...)
 }
 
 

@@ -5,9 +5,9 @@
 #' @name fit
 #' @rdname fit-methods
 #' 
-#' @param x defined relationship between model predictors and an outcome.  May
-#' be a \code{ModelFrame} containing a formula, data, and optionally case
-#' weights; a \code{formula}; or a \code{recipe}.
+#' @param x defines a relationship between model predictor and response
+#' variables.  May be a \code{formula}, design matrix of predictors,
+#' \code{ModelFrame}, or \code{recipe}.
 #' @param ... arguments passed to other methods.
 #' 
 fit <- function(x, ...) {
@@ -38,6 +38,15 @@ fit <- function(x, ...) {
 #' 
 fit.formula <- function(x, data, model, ...) {
   fit(ModelFrame(x, data, na.rm = FALSE), model)
+}
+
+
+#' @rdname fit-methods
+#' 
+#' @param y predictor variable.
+#' 
+fit.matrix <- function(x, y, model, ...) {
+  fit(ModelFrame(x, y, na.rm = FALSE), model)
 }
 
 

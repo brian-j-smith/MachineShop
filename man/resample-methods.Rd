@@ -4,6 +4,7 @@
 \alias{resample}
 \alias{Resamples}
 \alias{resample.formula}
+\alias{resample.matrix}
 \alias{resample.ModelFrame}
 \alias{resample.recipe}
 \title{Resample Estimation of Model Performance}
@@ -14,6 +15,8 @@ resample(x, ...)
 
 \method{resample}{formula}(x, data, model, control = CVControl, ...)
 
+\method{resample}{matrix}(x, y, model, control = CVControl, ...)
+
 \method{resample}{ModelFrame}(x, model, control = CVControl, ...)
 
 \method{resample}{recipe}(x, model, control = CVControl, ...)
@@ -22,9 +25,9 @@ resample(x, ...)
 \item{...}{named or unnamed \code{resample} output to combine together with
 the \code{Resamples} constructor.}
 
-\item{x}{defined relationship between model predictors and an outcome.  May
-be a ModelFrame containing a formula, data, and optionally case weights; a
-formula; or a recipe.}
+\item{x}{defines a relationship between model predictor and response
+variables.  May be a \code{formula}, design matrix of predictors,
+\code{ModelFrame}, or \code{recipe}.}
 
 \item{data}{\code{data.frame} containing observed predictors and outcomes.}
 
@@ -34,6 +37,8 @@ naming a constructor function that returns an \code{MLModel} object.}
 \item{control}{\code{\link{MLControl}} object, control function, or character
 string naming a control function defining the resampling method to be
 employed.}
+
+\item{y}{predictor variable.}
 }
 \value{
 \code{Resamples} class object.

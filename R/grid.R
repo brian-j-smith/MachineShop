@@ -27,6 +27,11 @@ grid.formula <- function(x, data, ...) {
 }
 
 
+grid.matrix <- function(x, y, ...) {
+  grid(ModelFrame(x, y, na.rm = FALSE), ...)
+}
+
+
 grid.ModelFrame <- function(x, model, length = 3, random = FALSE, ...) {
   model <- getMLObject(model, "MLModel")
   length <- max(as.integer(length), 1L)

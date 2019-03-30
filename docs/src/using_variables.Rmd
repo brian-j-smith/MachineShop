@@ -16,9 +16,23 @@ fit(medv ~ ., data = Boston, model = GBMModel)
 ```
 
 
+## Design Matrix
+
+Variables stored separately in a design matrix of predictors and object of responses can be supplied to the fit functions directly.  Fitting with design matrices has less computational overhead than traditional formulas and allows for greater numbers of predictor variables in some models, including `GBMModel`, `GLMNetModel`, and `RandomForestModel`.
+
+```{r results="hide"}
+## Example design matrix and response object
+x <- model.matrix(medv ~ . - 1, data = Boston)
+y <- Boston$medv
+
+## Design matrix specification
+fit(x, y, model = GBMModel)
+```
+
+
 ## Model Frame
 
-A `ModelFrame` class is provided by the package for specification of predictor and response variables along with other attributes to control model fitting.  Model frames can be specified in calls to the `ModelFrame` constructor function with a syntax similar to the traditional formula or with a predictor matrix and response object pair.
+A `ModelFrame` class is provided by the package for specification of predictor and response variables along with other attributes to control model fitting.  Model frames can be specified in calls to the `ModelFrame` constructor function with a syntax similar to the traditional formula or design matrix.
 
 ```{r results="hide"}
 ## Model frame specification
@@ -28,10 +42,7 @@ mf <- ModelFrame(medv ~ ., data = Boston)
 
 fit(mf, model = GBMModel)
 
-## Predictor matrix and response object pair
-x <- model.matrix(medv ~ . - 1, data = Boston)
-y <- Boston$medv
-
+## Design matrix
 mf <- ModelFrame(x, y)
 
 fit(mf, model = GBMModel)
