@@ -1,3 +1,8 @@
+PerformanceDiff <- function(object, model_names) {
+  new("PerformanceDiff", object, model_names = model_names)
+}
+
+
 #' Model Performance Differences
 #' 
 #' Pairwise model differences in resampled performance metrics.
@@ -56,6 +61,11 @@ diff.Resamples <- function(x, ...) {
 #' 
 diff.MLModelTune <- function(x, ...) {
   diff(x@performance)
+}
+
+
+HTestPerformanceDiff <- function(object, adjust) {
+  new("HTestPerformanceDiff", object, adjust = adjust)
 }
 
 

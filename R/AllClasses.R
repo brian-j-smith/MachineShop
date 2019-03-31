@@ -108,8 +108,8 @@ setClass("Curves",
 )
 
 
-HTestPerformanceDiff <- setClass("HTestPerformanceDiff",
-  slots = c("adjust" = "character"),
+setClass("HTestPerformanceDiff",
+  slots = c(adjust = "character"),
   contains = "array"
 )
 
@@ -124,8 +124,8 @@ setClass("Performance",
 )
 
 
-PerformanceDiff <- setClass("PerformanceDiff",
-  slots = c("model_names" = "character"),
+setClass("PerformanceDiff",
+  slots = c(model_names = "character"),
   contains = "Performance"
 )
 
