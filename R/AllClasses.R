@@ -114,21 +114,6 @@ HTestPerformanceDiff <- setClass("HTestPerformanceDiff",
 )
 
 
-#' @name lift
-#' @rdname lift
-#' 
-#' @param ... named or unnamed \code{lift} output to combine together with the
-#' \code{Lift} constructor.
-#' 
-Lift <- function(...) {
-  object <- as(Curves(...), "Lift")
-  if (!all(mapply(identical, object@metrics, c(tpr, rpp)))) {
-    stop("incorrect lift metrics")
-  }
-  object
-}
-
-
 setClass("Lift",
   contains = "Curves"
 )

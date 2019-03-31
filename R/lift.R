@@ -2,6 +2,21 @@
 #' 
 #' Calculate lift estimates from observed and predicted responses.
 #' 
+#' @name lift
+#' @rdname lift
+#' 
+#' @param ... named or unnamed \code{lift} output to combine together with the
+#' \code{Lift} constructor.
+#' 
+Lift <- function(...) {
+  object <- as(Curves(...), "Lift")
+  if (!all(mapply(identical, object@metrics, c(tpr, rpp)))) {
+    stop("incorrect lift metrics")
+  }
+  object
+}
+
+
 #' @rdname lift
 #' 
 #' @param x observed responses or \code{Resamples} object of observed and
