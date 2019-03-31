@@ -732,20 +732,16 @@ SurvProbs <- function(object = numeric(), times = NULL) {
 }
 
 
-VarImp <- setClass("VarImp", contains = "data.frame")
+VarImp <- function(object, scale = FALSE) {
+  stopifnot(nrow(object) == 0 || is.character(rownames(object)))
+
+  idx <- order(rowSums(object), decreasing = TRUE)
+  idx <- idx * (rownames(object)[idx] != "(Intercept)")
+  object <- object[idx, , drop = FALSE]
+  if (scale) object <- 100 * (object - min(object)) / diff(range(object))
+  
+  new("VarImp", object)
+}
 
 
-setMethod("initialize", "VarImp",
-  function(.Object, .Data, scale = FALSE, ...) {
-    idx <- order(rowSums(.Data), decreasing = TRUE)
-    idx <- idx * (rownames(.Data)[idx] != "(Intercept)")
-    .Data <- .Data[idx, , drop = FALSE]
-    if (scale) .Data <- 100 * (.Data - min(.Data)) / diff(range(.Data))
-    callNextMethod(.Object, .Data, ...)
-  }
-)
-
-
-setValidity("VarImp", function(object) {
-  !(nrow(object) && is.null(rownames(object)))
-})
+setClass("VarImp", contains = "data.frame")
