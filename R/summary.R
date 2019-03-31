@@ -93,6 +93,12 @@ summary.Confusion <- function(object, ...) {
 }
 
 
+SummaryConfusion <- function(object, N, Accuracy, Majority, Kappa) {
+  new("SummaryConfusion", object, N = N, Accuracy = Accuracy,
+      Majority = Majority, Kappa = Kappa)
+}
+
+
 #' @rdname summary-methods
 #' 
 summary.ConfusionMatrix <- function(object, ...) {

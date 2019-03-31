@@ -145,9 +145,11 @@ setClass("Resamples",
 )
 
 
-SummaryConfusion <- setClass("SummaryConfusion",
-  slots = c("N" = "numeric", "Accuracy" = "numeric", "Majority" = "numeric",
-            "Kappa" = "numeric"),
+setClass("SummaryConfusion",
+  slots = c(N = "numeric",
+            Accuracy = "numeric",
+            Majority = "numeric",
+            Kappa = "numeric"),
   contains = "matrix"
 )
 
