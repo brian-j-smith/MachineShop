@@ -154,16 +154,6 @@ setClass("SummaryConfusion",
 )
 
 
-VarImp <- function(object, scale = FALSE) {
-  stopifnot(nrow(object) == 0 || is.character(rownames(object)))
-
-  idx <- order(rowSums(object), decreasing = TRUE)
-  idx <- idx * (rownames(object)[idx] != "(Intercept)")
-  object <- object[idx, , drop = FALSE]
-  if (scale) object <- 100 * (object - min(object)) / diff(range(object))
-  
-  new("VarImp", object)
-}
-
-
-setClass("VarImp", contains = "data.frame")
+setClass("VarImp",
+  contains = "data.frame"
+)
