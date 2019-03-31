@@ -130,7 +130,7 @@ setClass("PerformanceDiff",
 )
 
 
-MLModelTune <- setClass("MLModelTune",
+setClass("MLModelTune",
   slots = c(tune_grid = "data.frame",
             performance = "Performance",
             selected = "numeric"),

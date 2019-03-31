@@ -1,3 +1,9 @@
+MLModelTune <- function(object, tune_grid, performance, selected) {
+  new("MLModelTune", object, tune_grid = tune_grid, performance = performance,
+      selected = selected)
+}
+
+
 #' Model Tuning and Selection
 #' 
 #' Evaluate a model over a grid of tuning parameters or a list of specified
