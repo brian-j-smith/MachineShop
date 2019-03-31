@@ -138,71 +138,9 @@ setClass("MLModelTune",
 )
 
 
-#' @name resample
-#' @rdname resample-methods
-#' 
-#' @param ... named or unnamed \code{resample} output to combine together with
-#' the \code{Resamples} constructor.
-#' 
-#' @details Output being combined from more than one model with the
-#' \code{Resamples} constructor must have been generated with the same
-#' resampling \code{control} object.
-#' 
-Resamples <- function(...) {
-  .Resamples(...)
-}
-
-
-.Resamples <- function(..., .control = NULL, .strata = NULL) {
-  args <- list(...)
-  
-  if (length(args) == 0) stop("no resample output given")
-  
-  .Data <- args[[1]]
-  if (all(mapply(is, args, "Resamples"))) {
-    
-    control <- .Data@control
-    if (!all(sapply(args, function(x) identical(x@control, control)))) {
-      stop("Resamples arguments have different control structures")
-    }
-
-    strata <- .Data@strata
-    if (!all(sapply(args, function(x) identical(x@strata, strata)))) {
-      stop("Resamples arguments have different strata variables")
-    }
-
-  } else if (length(args) > 1) {
-    
-    stop("arguments to combine must be Resamples objects")
-    
-  } else if (!is.data.frame(.Data)) {
-    
-    stop("Resamples argument must inherit from data.frame")
-    
-  } else {
-
-    control <- .control
-    if (!is(control, "MLControl")) {
-      stop("missing control structure in Resamples constructor")
-    }
-    
-    strata <- as.character(.strata)
-
-    var_names <- c("Resample", "Case", "Observed", "Predicted")
-    is_missing <- !(var_names %in% names(.Data))
-    if (any(is_missing)) {
-      stop("missing resample variables: ", toString(var_names[is_missing]))
-    }
-    
-  }
-
-  args <- make_unique_levels(args, which = "Model")
-  new("Resamples", do.call(append, args), control = control, strata = strata)
-}
-
-
 setClass("Resamples",
-  slots = c(control = "MLControl", strata = "character"),
+  slots = c(control = "MLControl",
+            strata = "character"),
   contains = "data.frame"
 )
 
