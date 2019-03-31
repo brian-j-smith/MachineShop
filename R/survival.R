@@ -235,7 +235,55 @@ predict.survfit <- function(object, times, ...) {
 }
 
 
-#################### SurvProbs Methods ####################
+#################### SurvMatrix Constructors and Methods ####################
+
+
+SurvMatrix <- function(object, times = NULL) {
+  object <- as.matrix(object)
+  
+  if (is.null(times)) times <- rep(NA_real_, ncol(object))
+  
+  if (length(times) != ncol(object)) {
+    stop("unequal number of survival times and predictions")
+  }
+  
+  dimnames(object) <- list(NULL, paste("Time", seq(ncol(object))))
+  
+  structure(object, class = "SurvMatrix", times = times)
+}
+
+
+#' SurvMatrix Class Constructor
+#' 
+#' Create an object of predicted survival events or probabilites for use with
+#' metrics provided by the \pkg{MachineShop} package.
+#' 
+#' @name SurvMatrix
+#' @rdname SurvMatrix
+#' 
+#' @param object matrix, or object that can be converted to one, of predicted
+#' survival events or probabilities with columns and rows representing
+#' prediction times and cases, respectively.
+#' @param times numeric vector of the survival prediction times.
+#' 
+#' @return Object that is of the same class as the constructor name and inherits
+#' from \code{SurvMatrix}.  Examples of these objects are the predicted survival
+#' events and probabilities returned by the \code{predict} function.
+#' 
+#' @seealso \code{\link{metrics}}, \code{\link{predict}}
+#' 
+SurvEvents <- function(object = numeric(), times = NULL) {
+  object <- SurvMatrix(object, times)
+  structure(object, class = c("SurvEvents", class(object)))
+}
+
+
+#' @rdname SurvMatrix
+#' 
+SurvProbs <- function(object = numeric(), times = NULL) {
+  object <- SurvMatrix(object, times)
+  structure(object, class = c("SurvProbs", class(object)))
+}
 
 
 mean.SurvProbs <- function(x, ...) {
@@ -248,8 +296,6 @@ predict.SurvProbs <- function(object, times, ...) {
   cbind(1, object)[, idx + 1, drop = FALSE]
 }
 
-
-#################### time Methods ####################
 
 time.SurvMatrix <- function(x, ...) attr(x, "times")
 
