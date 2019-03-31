@@ -2,6 +2,40 @@
 #' 
 #' Calculate confusion matrices of predicted and observed responses.
 #' 
+#' @name confusion
+#' @rdname confusion
+#' 
+#' @param ... named or unnamed \code{confusion} output to combine together with
+#' the \code{Confusion} constructor.
+#' 
+Confusion <- function(...) {
+  args <- list(...)
+  
+  conf_list <- list()
+  for (i in seq(args)) {
+    x <- args[[i]]
+    if (is(x, "ConfusionMatrix")) {
+      x <- list("Model" = x)
+    } else if (!is(x, "Confusion")) {
+      stop("values to combine must be Confusion or ConfusionMatrix objects")
+    }
+    arg_name <- names(args)[i]
+    if (!is.null(arg_name) && nzchar(arg_name)) {
+      names(x) <- rep(arg_name, length(x))
+    }
+    conf_list <- c(conf_list, x)
+  }
+  names(conf_list) <- make.unique(names(conf_list))
+
+  structure(conf_list, class = c("Confusion", "listof"))
+}
+
+
+ConfusionMatrix <- function(object) {
+  new("ConfusionMatrix", object)
+}
+
+
 #' @rdname confusion
 #' 
 #' @param x factor of observed responses or \code{Resamples} object of observed
