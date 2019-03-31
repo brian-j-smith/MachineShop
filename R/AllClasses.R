@@ -119,11 +119,6 @@ setClass("Lift",
 )
 
 
-PartialDependence <- function(object) {
-  structure(object, class = c("PartialDependence", "data.frame"))
-}
-
-
 Performance <- function(...) {
   args <- list(...)
   

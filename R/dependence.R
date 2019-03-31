@@ -1,3 +1,8 @@
+PartialDependence <- function(object) {
+  structure(object, class = c("PartialDependence", "data.frame"))
+}
+
+
 #' Partial Dependence
 #' 
 #' Calculate partial dependence of a response on select predictor variables.
