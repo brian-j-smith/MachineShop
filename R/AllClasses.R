@@ -119,19 +119,6 @@ setClass("Lift",
 )
 
 
-Performance <- function(...) {
-  args <- list(...)
-  
-  perf <- if (length(args) > 1) {
-    abind(args, along = 3)
-  } else {
-    args[[1]]
-  }
-  
-  new("Performance", perf)
-}
-
-
 setClass("Performance",
   contains = "array"
 )

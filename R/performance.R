@@ -1,3 +1,16 @@
+Performance <- function(...) {
+  args <- list(...)
+  
+  perf <- if (length(args) > 1) {
+    abind(args, along = 3)
+  } else {
+    args[[1]]
+  }
+  
+  new("Performance", perf)
+}
+
+
 #' Model Performance Metrics
 #' 
 #' Compute measures of model performance.
