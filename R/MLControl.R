@@ -17,13 +17,6 @@
 #' 
 MLControl <- function(times = NULL, dist = NULL, method = NULL, seed = NULL,
                       ...) {
-  args <- list(...)
-  if (!is.null(args$surv_times)) {
-    depwarn("'surv_times' argument to MLControl is deprecated",
-            "use 'times' instead", expired = TRUE)
-    times <- args$surv_times
-  }
-  
   if (is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
   new("MLControl", times = times, dist = dist, method = method, seed = seed)
 }
