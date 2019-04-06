@@ -2,6 +2,12 @@
 
 ## Version Updates
 
+## 1.2.3
+* Add `fit`, `resample`, and `tune` methods for design matrices.
+* Reduce computational overhead for design matrices and recipes.
+* Rename `ModelFrame()` argument `na.action` to `na.rm`.
+
+
 ## 1.2.2
 * Implement parametric (``"exponential"``, ``"rayleigh"``, ``"weibull"``) estimation of baseline survival functions.
 * Set ``"weibull"`` as the default distribution for survival mean estimation.
