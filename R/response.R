@@ -5,6 +5,8 @@
 #' @rdname response-methods
 #' 
 #' @param object object containing response variable values.
+#' @param data \code{data.frame} containing values at which to evaluate the
+#' response variable.
 #' @param ... arguments passed to other methods.
 #' 
 #' @seealso \code{\link[recipes]{recipe}}
@@ -22,40 +24,40 @@ response <- function(object, ...) {
 }
 
 
-response.MLFitBits <- function(object, ...) {
-  object@y
+response.MLFitBits <- function(object, data = NULL, ...) {
+  if (is.null(data)) object@y else response(object@x, data)
 }
 
 
 #' @rdname response-methods
 #' 
-#' @param data \code{data.frame} containing the values of a response variable
-#' defined in a formula.
-#' 
-response.formula <- function(object, data, ...) {
-  eval(object[[2]], data)
-}
-
-
-response.MLModelFit <- function(object, ...) {
-  response(field(object, "fitbits"))
-}
-
-
-response.ModelFrame <- function(object, ...) {
-  response(formula(terms(object)), object)
+response.formula <- function(object, data = NULL, ...) {
+  expr <- if (length(object) > 2) object[[2]]
+  if (!is.null(data)) {
+    vars <- all.vars(response(object))
+    eval(expr, as.data.frame(data[, vars, drop = FALSE]))
+  } else expr
 }
 
 
 #' @rdname response-methods
 #' 
-response.recipe <- function(object, data, ...) {
+response.MLModelFit <- function(object, data = NULL, ...) {
+  response(field(object, "fitbits"), data)
+}
+
+
+#' @rdname response-methods
+#' 
+response.ModelFrame <- function(object, data = NULL, ...) {
+  response(terms(object), if (is.null(data)) object else data)
+}
+
+
+#' @rdname response-methods
+#' 
+response.recipe <- function(object, data = NULL, ...) {
   object <- prep(object)
-  response(formula(terms(object)), bake(object, data))
-}
-
-
-response.terms <- function(object, ...) {
-  i <- attr(object, "response")
-  all.vars(object)[i]
+  data <- if (is.null(data)) juice(object) else bake(object, data)
+  response(terms(object), data)
 }

@@ -3,22 +3,28 @@
 \name{response}
 \alias{response}
 \alias{response.formula}
+\alias{response.MLModelFit}
+\alias{response.ModelFrame}
 \alias{response.recipe}
 \title{Extract Response Variable}
 \usage{
 response(object, ...)
 
-\method{response}{formula}(object, data, ...)
+\method{response}{formula}(object, data = NULL, ...)
 
-\method{response}{recipe}(object, data, ...)
+\method{response}{MLModelFit}(object, data = NULL, ...)
+
+\method{response}{ModelFrame}(object, data = NULL, ...)
+
+\method{response}{recipe}(object, data = NULL, ...)
 }
 \arguments{
 \item{object}{object containing response variable values.}
 
 \item{...}{arguments passed to other methods.}
 
-\item{data}{\code{data.frame} containing the values of a response variable
-defined in a formula.}
+\item{data}{\code{data.frame} containing values at which to evaluate the
+response variable.}
 }
 \description{
 Extract the response variable from an object.

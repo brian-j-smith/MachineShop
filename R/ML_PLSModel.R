@@ -44,11 +44,12 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
       assert_equal_weights(weights)
       y <- response(formula, data)
       if (is.factor(y)) {
-        varname <- response(terms(formula))
+        y_name <- deparse(response(formula))
+        formula[[2]] <- as.symbol(y_name)
         mm <- model.matrix(~ y - 1)
         colnames(mm) <- levels(y)
-        data[[varname]] <- mm
-        formula[[2]] <- as.symbol(varname)
+        data[[y_name]] <- mm
+        
       }
       pls::plsr(formula, data = data, ...)
     },

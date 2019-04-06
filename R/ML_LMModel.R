@@ -31,7 +31,7 @@ LMModel <- function() {
     fit = function(formula, data, weights, ...) {
       y <- response(formula, data)
       if (is.factor(y)) {
-        y_name <- response(terms(formula))
+        y_name <- deparse(response(formula))
         formula[[2]] <- as.symbol(y_name)
         if (nlevels(y) == 2) {
           y <- y == levels(y)[2]
