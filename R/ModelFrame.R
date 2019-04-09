@@ -101,3 +101,150 @@ ModelFrame.terms <- function(x, data, ...) {
     structure(terms = x, class = c("ModelFrame", class(data))) %>%
     ModelFrame(...)
 }
+
+
+#################### ModelFrame Terms ####################
+
+
+terms.character <- function(labels, response = NULL, intercept = TRUE) {
+  if (is.character(response)) response <- as.symbol(response)
+  response_indicator <- 1L - is.null(response)
+  
+  fo <- parse(text = paste(
+    "response ~",
+    paste(if (length(labels)) labels else "1", collapse = "+"),
+    if (!intercept) "- 1"
+  ))[[1]]
+  fo[[2]] <- response
+  
+  all_vars <- c(if (response_indicator) deparse(response), labels)
+  
+  structure(
+    fo,
+    variables = as.call(c(quote(list), response, lapply(labels, as.symbol))),
+    factors = matrix(NA_integer_, nrow = length(all_vars), ncol = 0,
+                     dimnames = list(all_vars, NULL)),
+    term.labels = labels,
+    order = rep(1L, length(labels)),
+    intercept = as.integer(intercept),
+    response = response_indicator,
+    .Environment = parent.frame(),
+    class = c("DesignTerms", "terms", "formula")
+  )
+}
+
+
+terms.matrix <- function(x, y = NULL, intercept = TRUE) {
+  stopifnot(is.character(colnames(x)))
+  stopifnot(!anyDuplicated(colnames(x)))
+  
+  labels <- colnames(x)
+  response <- if (!is.null(y)) {
+    make.unique(c(labels, deparse(substitute(y))))[length(labels) + 1]
+  }
+  
+  terms(labels, response, intercept = intercept)
+}
+
+
+terms.ModelFrame <- function(x, ...) {
+  attr(x, "terms")
+}
+
+
+terms.recipe <- function(x, ...) {
+  info <- summary(x)
+  
+  get_vars <- function(roles = NULL, types = NULL) {
+    is_match <- by(info, info$variable, function(split) {
+      all(roles %in% split$role) && all(types %in% split$type)
+    })
+    names(is_match)[is_match]
+  }
+  
+  outcome <- NULL
+  outcome_set <- get_vars("outcome")
+
+  surv_time <- get_vars(c("surv_time", "outcome"))
+  surv_event <- get_vars(c("surv_event", "outcome"))
+  numeric_outcomes <- get_vars("outcome", "numeric")  
+  
+  if (length(surv_time) > 1 || length(surv_event) > 1) {
+    stop("multiple instances of outcome role 'surv_time' or 'surv_event'")
+  } else if (length(surv_time)) {
+    outcome <- call("Surv", as.symbol(surv_time))
+    if (length(surv_event)) outcome[[3]] <- as.symbol(surv_event)
+    outcome_set <- setdiff(outcome_set, c(surv_time, surv_event))
+  } else if (length(surv_event)) {
+    stop("outcome role 'surv_event' specified without 'surv_time'")
+  } else if (length(numeric_outcomes) > 1) {
+    outcome <- as.call(c(.(cbind), lapply(numeric_outcomes, as.symbol)))
+    outcome_set <- setdiff(outcome_set, numeric_outcomes)
+  } else if (length(outcome_set) == 1) {
+    outcome <- outcome_set
+    outcome_set <- NULL
+  }
+  
+  if (length(outcome_set)) {
+    stop("recipe outcome must be a single variable, survival variables with ",
+         "roles 'surv_time' and 'surv_event', or multiple numeric variables")
+  }
+
+  predictors <- info$variable[info$role == "predictor"]
+  
+  terms(predictors, outcome)
+}
+
+
+#################### ModelFrame Design Matrices ####################
+
+
+model.matrix.DesignTerms <- function(object, data, ...) {
+  data <- data[, labels(object), drop = FALSE]
+  assign <- seq_len(ncol(data))
+  if (attr(object, "intercept")) {
+    data <- cbind("(Intercept)" = 1, data)
+    assign <- c(0, assign)
+  }
+  structure(as.matrix(data), assign = assign)
+}
+
+
+model.matrix.FormulaTerms <- function(object, data, ...) {
+  model.matrix.default(object, as.data.frame(data), ...)
+}
+
+
+model.matrix.ModelFrame <- function(object, intercept = NULL, ...) {
+  model_terms <- terms(object)
+  if (!is.null(intercept)) {
+    attr(model_terms, "intercept") <- as.integer(intercept)
+  }
+  model.matrix(model_terms, object, ...)
+}
+
+
+#################### ModelFrame Preprocessing ####################
+
+
+preprocess <- function(x, data = NULL, ...) {
+  UseMethod("preprocess")
+}
+
+
+preprocess.ModelFrame <- function(x, data = NULL, ...) {
+  mf <- switch_class(
+    data,
+    "NULL" = x,
+    "ModelFrame" = data,
+    "data.frame" = ModelFrame(delete.response(terms(x)), data, na.rm = FALSE),
+    "matrix" = ModelFrame(data, na.rm = FALSE)
+  )
+  if (is.null(mf)) stop("unsupported data structure") else mf
+}
+
+
+preprocess.recipe <- function(x, data = NULL, ...) {
+  df <- if (is.null(data)) juice(x) else bake(x, data)
+  ModelFrame(delete.response(terms(x)), df, na.rm = FALSE)
+}
