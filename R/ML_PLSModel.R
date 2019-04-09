@@ -43,6 +43,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       y <- response(data)
+      data <- as.data.frame(data)
       if (is.factor(y)) {
         y_name <- deparse(response(formula))
         formula[[2]] <- as.symbol(y_name)
@@ -54,6 +55,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
       pls::plsr(formula, data = data, ...)
     },
     predict = function(object, newdata, ...) {
+      newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, ncomp = object$ncomp,
               type = "response")
     },

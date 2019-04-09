@@ -65,9 +65,10 @@ MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
-      mda::mda(formula, data = data, ...)
+      mda::mda(formula, data = as.data.frame(data), ...)
     },
     predict = function(object, newdata, prior = object$prior, ...) {
+      newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, type = "posterior", prior = prior)
     }
   )

@@ -30,6 +30,7 @@ LMModel <- function() {
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       y <- response(data)
+      data <- as.data.frame(data)
       if (is.factor(y)) {
         y_name <- deparse(response(formula))
         formula[[2]] <- as.symbol(y_name)
@@ -50,6 +51,7 @@ LMModel <- function() {
       }
     },
     predict = function(object, newdata, ...) {
+      newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata)
     },
     varimp = function(object, ...) varimp_pchisq(object)

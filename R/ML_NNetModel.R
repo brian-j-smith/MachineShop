@@ -61,11 +61,12 @@ NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       eval_fit(data,
-               formula = nnet::nnet(formula, data = data, weights = weights,
-                                    ...),
+               formula = nnet::nnet(formula, data = as.data.frame(data),
+                                    weights = weights, ...),
                matrix = nnet::nnet(x, y, weights = weights, ...))
     },
     predict = function(object, newdata, ...) {
+      newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, type = "raw")
     },
     varimp = function(object, ...) {

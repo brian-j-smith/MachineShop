@@ -37,9 +37,11 @@ TreeModel <- function(mincut = 5, minsize = 10, mindev = 0.01,
     params = params(environment()),
     design = "terms",
     fit = function(formula, data, weights, split, ...) {
-      tree::tree(formula, data = data, weights = weights, split = split, ...)
+      tree::tree(formula, data = as.data.frame(data), weights = weights,
+                 split = split, ...)
     },
     predict = function(object, newdata, times, ...) {
+      newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata)
     }
   )

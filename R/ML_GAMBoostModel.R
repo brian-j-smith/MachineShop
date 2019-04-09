@@ -82,10 +82,11 @@ GAMBoostModel <- function(family = NULL,
                                "numeric" = mboost::Gaussian(),
                                "Surv" = mboost::CoxPH())
       }
-      mboost::gamboost(formula, data = data, na.action = na.pass,
+      mboost::gamboost(formula, data = as.data.frame(data), na.action = na.pass,
                        weights = weights, family = family, ...)
     },
     predict = function(object, newdata, times, ...) {
+      newdata <- as.data.frame(newdata)
       if (object$family@name == "Cox Partial Likelihood") {
         y <- object$response
         lp <- drop(predict(object, type = "link"))

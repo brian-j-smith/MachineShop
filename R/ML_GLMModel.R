@@ -47,9 +47,11 @@ GLMModel <- function(family = NULL, ...) {
                                "factor" = "binomial",
                                "numeric" = "gaussian")
       }
-      stats::glm(formula, data = data, weights = weights, family = family, ...)
+      stats::glm(formula, data = as.data.frame(data), weights = weights,
+                 family = family, ...)
     },
     predict = function(object, newdata, ...) {
+      newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, type = "response")
     },
     varimp = function(object, ...) varimp_pchisq(object)
@@ -102,6 +104,7 @@ GLMStepAICModel <- function(family = NULL, ...,
                                "numeric" = "gaussian")
       }
       stepargs <- stepAIC_args(formula, direction, scope)
+      data <- as.data.frame(data)
       stats::glm(stepargs$formula, data = data, weights = weights,
                  family = family, ...) %>%
         MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,

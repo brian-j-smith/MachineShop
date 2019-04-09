@@ -55,8 +55,8 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
                              "factor" = "class",
                              "numeric" = "anova",
                              "Surv" = "exp")
-      rpart::rpart(formula, data = data, weights = weights, na.action = na.pass,
-                   method = method, ...)
+      rpart::rpart(formula, data = as.data.frame(data), weights = weights,
+                   na.action = na.pass, method = method, ...)
     },
     predict = function(object, newdata, fitbits, times, ...) {
       y <- response(fitbits)

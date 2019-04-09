@@ -63,11 +63,12 @@ SVMModel <- function(scaled = TRUE, type = NULL,
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       eval_fit(data,
-               formula = kernlab::ksvm(formula, data = data, prob.model = TRUE,
-                                       ...),
+               formula = kernlab::ksvm(formula, data = as.data.frame(data),
+                                       prob.model = TRUE, ...),
                matrix = kernlab::ksvm(x, y, prob.model = TRUE, ...))
     },
     predict = function(object, newdata, fitbits, ...) {
+      newdata <- as.data.frame(newdata)
       kernlab::predict(object, newdata = newdata,
                        type = ifelse(is.factor(response(fitbits)),
                                      "probabilities", "response"))

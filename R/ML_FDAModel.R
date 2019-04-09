@@ -70,9 +70,10 @@ FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
     },
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
-      mda::fda(formula, data = data, weights = weights, ...)
+      mda::fda(formula, data = as.data.frame(data), weights = weights, ...)
     },
     predict = function(object, newdata, prior = object$prior, ...) {
+      newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, type = "posterior", prior = prior)
     }
   )

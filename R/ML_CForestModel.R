@@ -61,9 +61,11 @@ CForestModel <- function(teststat = c("quad", "max"),
     },
     design = "terms",
     fit = function(formula, data, weights, ...) {
-      party::cforest(formula, data = data, weights = weights, ...)
+      party::cforest(formula, data = as.data.frame(data), weights = weights,
+                     ...)
     },
     predict = function(object, newdata, fitbits, times, ...) {
+      newdata <- as.data.frame(newdata)
       if (object@responses@is_censored) {
         y <- response(fitbits)
         fits <- predict(object, newdata = newdata, type = "prob")

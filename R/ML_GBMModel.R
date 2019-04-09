@@ -65,13 +65,15 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
                                      "Surv" = "coxph")
       }
       eval_fit(data,
-               formula = gbm::gbm(formula, data = data, weights = weights,
+               formula = gbm::gbm(formula, data = as.data.frame(data),
+                                  weights = weights,
                                   distribution = distribution, ...),
                matrix = gbm::gbm.fit(x, y, w = weights,
                                      distribution = distribution,
                                      verbose = FALSE, ...))
     },
     predict = function(object, newdata, fitbits, times, ...) {
+      newdata <- as.data.frame(newdata)
       n <- object$n.trees
       if (object$distribution$name == "coxph") {
         y <- response(fitbits)

@@ -64,7 +64,7 @@ GLMBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
                                "Surv" = mboost::CoxPH())
       }
       eval_fit(data,
-               formula = mboost::glmboost(formula, data = data,
+               formula = mboost::glmboost(formula, data = as.data.frame(data),
                                           na.action = na.pass,
                                           weights = weights, family = family,
                                           ...),
@@ -72,6 +72,7 @@ GLMBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
                                          family = family, ...))
     },
     predict = function(object, newdata, times, ...) {
+      newdata <- as.data.frame(newdata)
       if (object$family@name == "Cox Partial Likelihood") {
         y <- object$response
         lp <- drop(predict(object, type = "link"))

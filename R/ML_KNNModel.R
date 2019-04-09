@@ -57,7 +57,7 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
-      list(formula = formula, train = data, ...)
+      list(formula = formula, train = as.data.frame(data), ...)
     },
     predict = function(object, newdata, ...) {
       attachment(list(
@@ -66,7 +66,7 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
         contr.metrics = kknn::contr.metric
       ), name = "kknn_exports")
 
-      object$test <- newdata
+      object$test <- as.data.frame(newdata)
       pred <- do.call(kknn::kknn, object)
       if (pred$response == "continuous") pred$fitted.values else pred$prob
     }

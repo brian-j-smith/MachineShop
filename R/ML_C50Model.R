@@ -78,11 +78,12 @@ C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
     design = "terms",
     fit = function(formula, data, weights, ...) {
       eval_fit(data,
-               formula = C50::C5.0(formula, data = data, weights = weights,
-                                   ...),
+               formula = C50::C5.0(formula, data = as.data.frame(data),
+                                   weights = weights, ...),
                matrix = C50::C5.0(x, y, weights = weights, ...))
     },
     predict = function(object, newdata, ...) {
+      newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, type = "prob")
     },
     varimp = function(object, metric = c("usage", "splits"), ...) {

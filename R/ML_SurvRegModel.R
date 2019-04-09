@@ -40,9 +40,10 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
     params = params,
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
-      rms::psm(formula, data = data, weights = weights, ...)
+      rms::psm(formula, data = as.data.frame(data), weights = weights, ...)
     },
     predict = function(object, newdata, times, ...) {
+      newdata <- as.data.frame(newdata)
       if (length(times)) {
         pred <- rms::survest(object, newdata = newdata, times = times,
                              conf.int = FALSE)
@@ -110,6 +111,7 @@ SurvRegStepAICModel <- function(dist = c("weibull", "exponential", "gaussian",
                    k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()
       stepargs <- stepAIC_args(formula, direction, scope)
+      data <- as.data.frame(data)
       rms::psm(stepargs$formula, data = data, weights = weights, ...) %>%
         MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,
                       trace = trace, steps = steps)

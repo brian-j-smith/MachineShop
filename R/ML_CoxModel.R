@@ -45,10 +45,12 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
     params = params,
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
-      survival::coxph(formula, data = data, weights = weights, ...)
+      survival::coxph(formula, data = as.data.frame(data), weights = weights,
+                      ...)
     },
     predict = function(object, newdata, times, ...) {
       y <- object$y
+      newdata <- as.data.frame(newdata)
       lp <- predict(object, type = "lp")
       new_lp <- predict(object, newdata = newdata, type = "lp")
       predict(y, lp, times, new_lp, ...)
@@ -98,6 +100,7 @@ CoxStepAICModel <- function(ties = c("efron", "breslow", "exact"), ...,
                    k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()
       stepargs <- stepAIC_args(formula, direction, scope)
+      data <- as.data.frame(data)
       survival::coxph(stepargs$formula, data = data, weights = weights, ...) %>%
         MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,
                       trace = trace, steps = steps)

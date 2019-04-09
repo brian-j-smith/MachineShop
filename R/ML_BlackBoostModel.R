@@ -89,10 +89,12 @@ BlackBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
                                "numeric" = mboost::Gaussian(),
                                "Surv" = mboost::CoxPH())
       }
-      mboost::blackboost(formula, data = data, na.action = na.pass,
-                         weights = weights, family = family, ...)
+      mboost::blackboost(formula, data = as.data.frame(data),
+                         na.action = na.pass, weights = weights,
+                         family = family, ...)
     },
     predict = function(object, newdata, times, ...) {
+      newdata <- as.data.frame(newdata)
       if (object$family@name == "Cox Partial Likelihood") {
         y <- object$response
         lp <- drop(predict(object, type = "link"))

@@ -37,9 +37,11 @@ POLRModel <- function(method = c("logistic", "probit", "loglog", "cloglog",
     params = params(environment()),
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {
-      MASS::polr(formula, data = data, weights = weights, Hess = TRUE, ...)
+      MASS::polr(formula, data = as.data.frame(data), weights = weights,
+                 Hess = TRUE, ...)
     },
     predict = function(object, newdata, ...) {
+      newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, type = "probs")
     },
     varimp = function(object, ...) {
