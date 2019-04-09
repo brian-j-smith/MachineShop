@@ -80,14 +80,17 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
   grid_list <- lapply(data_select, select_values)
   
   data_select_grid <- if (interaction) {
-    do.call(expand.grid, grid_list)
+    expand.grid(grid_list)
   } else {
-    grid_list <- lapply(seq_len(length(grid_list)), function(i) {
-      df <- as.data.frame(grid_list[i])
-      df[names(grid_list)[-i]] <- NA
-      df
-    })
-    do.call(rbind, grid_list)
+    df <- data.frame(row.names = 1:sum(sapply(grid_list, length)))
+    pos <- 0
+    for (name in names(grid_list)) {
+      n <- length(grid_list[[name]])
+      df[[name]] <- rep(grid_list[[name]], length.out = nrow(df))
+      df[[name]][-(pos + seq_len(n))] <- NA
+      pos <- pos + n
+    }
+    df
   }
 
   dependence_list <- lapply(seq_len(nrow(data_select_grid)), function(i) {
