@@ -122,8 +122,10 @@ terms.character <- function(labels, response = NULL, intercept = TRUE) {
   structure(
     fo,
     variables = as.call(c(quote(list), response, lapply(labels, as.symbol))),
-    factors = matrix(NA_integer_, nrow = length(all_vars), ncol = 0,
-                     dimnames = list(all_vars, NULL)),
+    factors = structure(
+      cbind(rep(c(0L, 1L), c(response_indicator, length(labels)))),
+      dimnames = list(all_vars, NULL)
+    ),
     term.labels = labels,
     order = rep(1L, length(labels)),
     intercept = as.integer(intercept),
@@ -211,7 +213,7 @@ model.matrix.DesignTerms <- function(object, data, ...) {
 
 
 model.matrix.FormulaTerms <- function(object, data, ...) {
-  model.matrix.default(object, as.data.frame(data), ...)
+  model.matrix.default(delete.response(object), as.data.frame(data), ...)
 }
 
 
