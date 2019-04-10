@@ -470,7 +470,7 @@ Performance metrics quantify associations between observed and predicted respons
 ## Survival performance metrics
 
 ## Observed responses
-obs <- response(surv_fo, surv_test)
+obs <- response(surv_fit, newdata = surv_test)
 
 ## Predicted survival means
 pred_means <- predict(surv_fit, newdata = surv_test)

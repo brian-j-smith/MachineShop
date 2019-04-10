@@ -73,7 +73,7 @@ library(MASS)
 fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
 gbmfit <- fit(fo, data = Melanoma, model = GBMModel)
 
-obs <- response(fo, data = Melanoma)
+obs <- response(gbmfit, newdata = Melanoma)
 pred <- predict(gbmfit, newdata = Melanoma, type = "prob")
 performance(obs, pred)
 

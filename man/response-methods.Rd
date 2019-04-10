@@ -10,21 +10,21 @@
 \usage{
 response(object, ...)
 
-\method{response}{formula}(object, data = NULL, ...)
+\method{response}{formula}(object, newdata = NULL, ...)
 
-\method{response}{MLModelFit}(object, data = NULL, ...)
+\method{response}{MLModelFit}(object, newdata = NULL, ...)
 
-\method{response}{ModelFrame}(object, data = NULL, ...)
+\method{response}{ModelFrame}(object, newdata = NULL, ...)
 
-\method{response}{recipe}(object, data = NULL, ...)
+\method{response}{recipe}(object, newdata = NULL, ...)
 }
 \arguments{
-\item{object}{object containing response variable values.}
+\item{object}{object containing the response variable definition.}
 
 \item{...}{arguments passed to other methods.}
 
-\item{data}{\code{data.frame} containing values at which to evaluate the
-response variable.}
+\item{newdata}{data frame from which to extract the response
+variable values if given; otherwise, \code{object} is used.}
 }
 \description{
 Extract the response variable from an object.
@@ -35,7 +35,7 @@ library(survival)
 library(MASS)
 
 fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
-response(fo, data = Melanoma)
+response(fo, Melanoma)
 
 }
 \seealso{

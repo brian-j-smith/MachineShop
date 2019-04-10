@@ -4,9 +4,9 @@
 #' 
 #' @rdname response-methods
 #' 
-#' @param object object containing response variable values.
-#' @param data \code{data.frame} containing values at which to evaluate the
-#' response variable.
+#' @param object object containing the response variable definition.
+#' @param newdata data frame from which to extract the response
+#' variable values if given; otherwise, \code{object} is used.
 #' @param ... arguments passed to other methods.
 #' 
 #' @seealso \code{\link[recipes]{recipe}}
@@ -17,47 +17,50 @@
 #' library(MASS)
 #' 
 #' fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
-#' response(fo, data = Melanoma)
+#' response(fo, Melanoma)
 #' 
 response <- function(object, ...) {
   UseMethod("response")
 }
 
 
-response.MLFitBits <- function(object, data = NULL, ...) {
-  if (is.null(data)) object@y else response(object@x, data)
+response.MLFitBits <- function(object, newdata = NULL, ...) {
+  if (is.null(newdata)) object@y else response(object@x, newdata)
 }
 
 
 #' @rdname response-methods
 #' 
-response.formula <- function(object, data = NULL, ...) {
+response.formula <- function(object, newdata = NULL, ...) {
+  args <- list(...)
+  if (!is.null(args$data)) newdata <- args$data
+  
   expr <- if (length(object) > 2) object[[2]]
-  if (!is.null(data)) {
+  if (!is.null(newdata)) {
     vars <- all.vars(response(object))
-    eval(expr, as.data.frame(data[, vars, drop = FALSE]))
+    eval(expr, as.data.frame(newdata[, vars, drop = FALSE]))
   } else expr
 }
 
 
 #' @rdname response-methods
 #' 
-response.MLModelFit <- function(object, data = NULL, ...) {
-  response(field(object, "fitbits"), data)
+response.MLModelFit <- function(object, newdata = NULL, ...) {
+  response(field(object, "fitbits"), newdata)
 }
 
 
 #' @rdname response-methods
 #' 
-response.ModelFrame <- function(object, data = NULL, ...) {
-  response(terms(object), if (is.null(data)) object else data)
+response.ModelFrame <- function(object, newdata = NULL, ...) {
+  response(terms(object), if (is.null(newdata)) object else newdata)
 }
 
 
 #' @rdname response-methods
 #' 
-response.recipe <- function(object, data = NULL, ...) {
+response.recipe <- function(object, newdata = NULL, ...) {
   object <- prep(object)
-  data <- if (is.null(data)) juice(object) else bake(object, data)
-  response(terms(object), data)
+  newdata <- if (is.null(newdata)) juice(object) else bake(object, newdata)
+  response(terms(object), newdata)
 }
