@@ -163,14 +163,12 @@ match_indices <- function(indices, choices) {
 
 
 nvars <- function(x, model) {
+  stopifnot(is(x, "ModelFrame"))
   model <- getMLObject(model, "MLModel")
-  model_terms <- terms(x)
   switch(model@design,
-         "model.matrix" = {
-           model_matrix <- model.matrix(model_terms, x[1, , drop = FALSE])
-           ncol(model_matrix) - attr(model_terms, "intercept")
-         },
-         "terms" = length(labels(model_terms))
+         "model.matrix" = 
+           ncol(model.matrix(x[1, , drop = FALSE], intercept = FALSE)),
+         "terms" = length(labels(terms(x)))
   )
 }
 
