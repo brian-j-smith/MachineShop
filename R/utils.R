@@ -36,6 +36,15 @@ utils::globalVariables(c("group", "i", "Lower", "Mean", "Midpoint", "model",
 }
 
 
+any_inline_calls <- function(x) {
+  found <- if (is.call(x)) {
+    is_inline <- !(as.character(x[[1]]) %in% c("~", ".", "+", "-"))
+    c(is_inline, unlist(lapply(x[-1], any_inline_calls)))
+  }
+  any(found)
+}
+
+
 assert_equal_weights <- function(weights) {
   if (any(diff(weights) != 0)) {
     warn("model weights are not supported and will be ignored")

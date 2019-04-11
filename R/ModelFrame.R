@@ -33,6 +33,11 @@ ModelFrame <- function(x, ...) {
 #' 
 ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
                                strata = NULL, ...) {
+  if (any_inline_calls(x[[length(x)]])) {
+    stop("In-line functions of predictor variables not currently supported in",
+         " ModelFrame formulas")
+  }
+
   data <- as.data.frame(data)
   model_terms <- terms(x, data = data)
   class(model_terms) <- c("FormulaTerms", class(model_terms))

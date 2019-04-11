@@ -279,7 +279,7 @@ Variable specification defines the relationship between response and predictor v
 
 ## Traditional Formula
 
-Models may be specified with a traditional formula and data frame pair, as was done at the start of the survival example.  With this specification, in-line functions, interactions, and `.` substitution of variables not already appearing in the formula may be included.
+Models may be specified with a traditional formula and data frame pair, as was done at the start of the survival example.  With this specification, `.` substitution of variables not already appearing in the formula may be used; in-line functions of predictor variables are not currently supported.
 
 ```{r results="hide"}
 ## Dataset library
