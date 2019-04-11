@@ -2,6 +2,11 @@
 
 ## Version Updates
 
+## 1.2.4
+* Prohibit in-line functions in `ModelFrame` formulas.
+* Rename `response` function argument from `data` to `newdata`.
+
+
 ## 1.2.3
 * Add `fit`, `resample`, and `tune` methods for design matrices.
 * Reduce computational overhead for design matrices and recipes.
