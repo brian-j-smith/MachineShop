@@ -96,8 +96,14 @@ ModelFrame.recipe <- function(x, ...) {
   strata <- if (length(var_name) == 0) NULL else
     if (length(var_name) == 1) data[[var_name]] else
       stop("multiple strata variables specified")
-
-  ModelFrame(terms(x), data, na.rm = FALSE, weights = weights, strata = strata)
+  
+  x <- terms(x)
+  all_numeric <- all.vars(delete.response(x)) %>%
+    sapply(function(var) is.numeric(data[[var]])) %>% all
+  if (!all_numeric) x <- formula(x)
+  
+  do.call(ModelFrame,
+          list(x, data, na.rm = FALSE, weights = weights, strata = strata))
 }
 
 
