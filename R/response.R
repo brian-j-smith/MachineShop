@@ -16,8 +16,9 @@
 #' library(survival)
 #' library(MASS)
 #' 
-#' fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
-#' response(fo, Melanoma)
+#' mf <- ModelFrame(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+#'                  data = Melanoma)
+#' response(mf)
 #' 
 response <- function(object, ...) {
   UseMethod("response")
@@ -30,19 +31,11 @@ response.MLFitBits <- function(object, newdata = NULL, ...) {
 }
 
 
-#' @rdname response-methods
-#' 
-#' @param levels vector giving the full set of levels to be assumed for a factor
-#' response.
-#' 
-response.formula <- function(object, newdata = NULL, levels = NULL, ...) {
-  args <- list(...)
-  if (!is.null(args$data)) newdata <- args$data
-  
+response.formula <- function(object, data = NULL, levels = NULL, ...) {
   expr <- if (length(object) > 2) object[[2]]
-  if (!is.null(newdata)) {
+  if (!is.null(data)) {
     vars <- all.vars(response(object))
-    y <- eval(expr, as.data.frame(newdata[, vars, drop = FALSE]))
+    y <- eval(expr, as.data.frame(data[, vars, drop = FALSE]))
     if (is.factor(y) && !is.null(levels)) {
       y_levels <- levels(y)
       new_levels <- y_levels[is.na(match(y_levels, levels))]

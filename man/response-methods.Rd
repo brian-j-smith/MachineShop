@@ -2,15 +2,12 @@
 % Please edit documentation in R/response.R
 \name{response}
 \alias{response}
-\alias{response.formula}
 \alias{response.MLModelFit}
 \alias{response.ModelFrame}
 \alias{response.recipe}
 \title{Extract Response Variable}
 \usage{
 response(object, ...)
-
-\method{response}{formula}(object, newdata = NULL, levels = NULL, ...)
 
 \method{response}{MLModelFit}(object, newdata = NULL, ...)
 
@@ -25,9 +22,6 @@ response(object, ...)
 
 \item{newdata}{data frame from which to extract the response
 variable values if given; otherwise, \code{object} is used.}
-
-\item{levels}{vector giving the full set of levels to be assumed for a factor
-response.}
 }
 \description{
 Extract the response variable from an object.
@@ -37,8 +31,9 @@ Extract the response variable from an object.
 library(survival)
 library(MASS)
 
-fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
-response(fo, Melanoma)
+mf <- ModelFrame(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+                 data = Melanoma)
+response(mf)
 
 }
 \seealso{
