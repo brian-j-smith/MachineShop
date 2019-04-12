@@ -13,7 +13,7 @@
 #' 
 #' @examples
 #' mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
-#'                  data = esoph, weights = ncases + ncontrols)
+#'                  data = esoph, weights = with(esoph, ncases + ncontrols))
 #' gbmfit <- fit(mf, model = GBMModel)
 #' varimp(gbmfit)
 #' 
@@ -25,9 +25,9 @@ ModelFrame <- function(x, ...) {
 #' @rdname ModelFrame-methods
 #'
 #' @param data \code{data.frame} or an object that can be converted to one.
+#' @param na.rm logical indicating whether to remove cases with \code{NA} values
 #' @param weights vector of case weights.
 #' @param strata vector of stratification levels.
-#' @param na.rm logical indicating whether to remove cases with \code{NA} values
 #' for any of the model variables.
 #' @param ... arguments passed to other methods.
 #' 
@@ -37,32 +37,32 @@ ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
     stop("In-line functions of predictor variables not currently supported in",
          " ModelFrame formulas")
   }
-
+  
   data <- as.data.frame(data)
-  model_terms <- terms(x, data = data)
-  class(model_terms) <- c("FormulaTerms", class(model_terms))
+  model_terms <- structure(
+    terms(x, data = data),
+    class = c("FormulaTerms", "terms", "formula")
+  )
+  data[deparse(response(model_terms))] <- response(model_terms, data)
   
   ModelFrame(model_terms, data, na.rm = na.rm,
-             weights = eval(substitute(weights), data),
-             strata = eval(substitute(strata), data), ...)
+             weights = weights, strata = strata)
 }
 
 
 #' @rdname ModelFrame-methods
 #' 
 #' @param y response variable.
-#' @param intercept logical indicating whether to include an intercept in the
-#' model formula.
 #'
-ModelFrame.matrix <- function(x, y = NULL, na.rm = TRUE, intercept = TRUE,
+ModelFrame.matrix <- function(x, y = NULL, na.rm = TRUE,
                               weights = NULL, strata = NULL, ...) {
   data <- as.data.frame(x)
   colnames(x) <- names(data)
-  model_terms <- eval(substitute(terms(x, y, intercept = intercept)))
+  model_terms <- eval(substitute(terms(x, y)))
   data[deparse(response(model_terms))] <- y
   
   ModelFrame(model_terms, data, na.rm = na.rm,
-             weights = weights, strata = strata, ...)
+             weights = weights, strata = strata)
 }
 
 
@@ -97,57 +97,76 @@ ModelFrame.recipe <- function(x, ...) {
     if (length(var_name) == 1) data[[var_name]] else
       stop("multiple strata variables specified")
   
-  x <- terms(x)
-  all_numeric <- all.vars(delete.response(x)) %>%
-    sapply(function(var) is.numeric(data[[var]])) %>% all
-  if (!all_numeric) x <- formula(x)
-  
-  do.call(ModelFrame,
-          list(x, data, na.rm = FALSE, weights = weights, strata = strata))
+  model_terms <- terms(x)
+  data[deparse(response(model_terms))] <- response(model_terms, data)
+
+  ModelFrame(model_terms, data, na.rm = FALSE,
+             weights = weights, strata = strata)
 }
 
 
 ModelFrame.terms <- function(x, data, ...) {
-  data[, all.vars(x), drop = FALSE] %>%
+  data[rownames(attr(x, "factors"))] %>%
     structure(terms = x, class = c("ModelFrame", class(data))) %>%
     ModelFrame(...)
+}
+
+
+#################### ModelFrame Formula ####################
+
+
+formula.ModelFrame <- function(x, ...) {
+  model_terms <- terms(x)
+  fo <- formula(model_terms)
+  if (attr(model_terms, "response")) {
+    fo[[2]] <- as.symbol(names(x)[1])
+  }
+  fo
 }
 
 
 #################### ModelFrame Terms ####################
 
 
-terms.character <- function(labels, response = NULL, intercept = TRUE) {
-  if (is.character(response)) response <- as.symbol(response)
-  response_indicator <- 1L - is.null(response)
+terms.character <- function(x, y = NULL, intercept = TRUE, all_numeric = FALSE,
+                            ...) {
+  if (is.character(y)) y <- as.symbol(y)
+  y_indicator <- 1L - is.null(y)
   
   fo <- parse(text = paste(
-    "response ~",
-    paste(if (length(labels)) labels else "1", collapse = "+"),
+    "y ~",
+    paste(if (length(x)) x else if (intercept) "1", collapse = "+"),
     if (!intercept) "- 1"
   ))[[1]]
-  fo[[2]] <- response
+  fo[[2]] <- y
   
-  all_vars <- c(if (response_indicator) deparse(response), labels)
+  all_vars <- c(if (y_indicator) deparse(y), x)
+  
+  if (all_numeric) {
+    class <- "DesignTerms"
+    factors <- cbind(rep(c(0L, 1L), c(y_indicator, length(x))))
+    rownames(factors) <- all_vars
+  } else {
+    class <- "FormulaTerms"
+    factors <- rbind(rep(0L, y_indicator * length(x)), diag(1L, length(x)))
+    dimnames(factors) <- list(all_vars, x)
+  }
   
   structure(
     fo,
-    variables = as.call(c(quote(list), response, lapply(labels, as.symbol))),
-    factors = structure(
-      cbind(rep(c(0L, 1L), c(response_indicator, length(labels)))),
-      dimnames = list(all_vars, NULL)
-    ),
-    term.labels = labels,
-    order = rep(1L, length(labels)),
+    variables = as.call(c(quote(list), y, lapply(x, as.symbol))),
+    factors = factors,
+    term.labels = x,
+    order = rep(1L, length(x)),
     intercept = as.integer(intercept),
-    response = response_indicator,
+    response = y_indicator,
     .Environment = parent.frame(),
-    class = c("DesignTerms", "terms", "formula")
+    class = c(class, "terms", "formula")
   )
 }
 
 
-terms.matrix <- function(x, y = NULL, intercept = TRUE) {
+terms.matrix <- function(x, y = NULL, ...) {
   stopifnot(is.character(colnames(x)))
   stopifnot(!anyDuplicated(colnames(x)))
   
@@ -156,7 +175,7 @@ terms.matrix <- function(x, y = NULL, intercept = TRUE) {
     make.unique(c(labels, deparse(substitute(y))))[length(labels) + 1]
   }
   
-  terms(labels, response, intercept = intercept)
+  terms(labels, response, all_numeric = is.numeric(x))
 }
 
 
@@ -205,7 +224,8 @@ terms.recipe <- function(x, ...) {
 
   predictors <- info$variable[info$role == "predictor"]
   
-  terms(predictors, outcome)
+  terms(predictors, outcome,
+        all_numeric = all(sapply(getdata(x)[predictors], is.numeric)))
 }
 
 
@@ -213,7 +233,7 @@ terms.recipe <- function(x, ...) {
 
 
 model.matrix.DesignTerms <- function(object, data, ...) {
-  data <- data[, labels(object), drop = FALSE]
+  data <- data[labels(object)]
   assign <- seq_len(ncol(data))
   if (attr(object, "intercept")) {
     data <- cbind("(Intercept)" = 1, data)
@@ -246,18 +266,15 @@ preprocess <- function(x, data = NULL, ...) {
 
 
 preprocess.ModelFrame <- function(x, data = NULL, ...) {
-  mf <- switch_class(
-    data,
-    "NULL" = x,
-    "ModelFrame" = data,
-    "data.frame" = ModelFrame(delete.response(terms(x)), data, na.rm = FALSE),
-    "matrix" = ModelFrame(data, na.rm = FALSE)
-  )
-  if (is.null(mf)) stop("unsupported data structure") else mf
+  preprocess(terms(x), as.data.frame(if (is.null(data)) x else data))
 }
 
 
 preprocess.recipe <- function(x, data = NULL, ...) {
-  df <- if (is.null(data)) juice(x) else bake(x, data)
-  ModelFrame(delete.response(terms(x)), df, na.rm = FALSE)
+  preprocess(terms(x), if (is.null(data)) juice(x) else bake(x, data))
+}
+
+
+preprocess.terms <- function(x, data, ...) {
+  ModelFrame(delete.response(x), data, na.rm = FALSE)
 }

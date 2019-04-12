@@ -279,7 +279,7 @@ Variable specification defines the relationship between response and predictor v
 
 ## Traditional Formula
 
-Models may be specified with a traditional formula and data frame pair, as was done at the start of the survival example.  With this specification, `.` substitution of variables not already appearing in the formula may be used; in-line functions of predictor variables are not currently supported.
+Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example.  With this specification, `.` substitution of variables not already appearing in the formula may be used; in-line functions of predictor variables are not currently supported.  Preprocessing recipes are generally recommended if the inclusion of predictor variable transformations is desired.  Another option is to include transformed variables directly in the data frame.
 
 ```{r results="hide"}
 ## Dataset library
@@ -327,7 +327,7 @@ The model frame approach has a few advantages over model fitting directly with a
 ```{r results="hide"}
 ## Model frame specification with case weights
 mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp, data = esoph,
-                 weights = ncases + ncontrols)
+                 weights = with(esoph, ncases + ncontrols))
 
 fit(mf, model = GBMModel)
 ```
@@ -752,7 +752,7 @@ Stratification of cases for the construction of resampled training and test sets
 
 ```{r results="hide"}
 ## Model frame with case status stratification
-mf <- ModelFrame(surv_fo, data = surv_df, strata = status)
+mf <- ModelFrame(surv_fo, data = surv_df, strata = surv_df$status)
 
 resample(mf, model = GBMModel)
 

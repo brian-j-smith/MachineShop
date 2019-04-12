@@ -10,7 +10,7 @@
 \usage{
 response(object, ...)
 
-\method{response}{formula}(object, newdata = NULL, ...)
+\method{response}{formula}(object, newdata = NULL, levels = NULL, ...)
 
 \method{response}{MLModelFit}(object, newdata = NULL, ...)
 
@@ -25,6 +25,9 @@ response(object, ...)
 
 \item{newdata}{data frame from which to extract the response
 variable values if given; otherwise, \code{object} is used.}
+
+\item{levels}{vector giving the full set of levels to be assumed for a factor
+response.}
 }
 \description{
 Extract the response variable from an object.

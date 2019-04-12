@@ -76,7 +76,7 @@ Stratification of cases for the construction of resampled training and test sets
 
 ```{r results="hide"}
 ## Model frame with case status stratification
-mf <- ModelFrame(surv_fo, data = surv_df, strata = status)
+mf <- ModelFrame(surv_fo, data = surv_df, strata = surv_df$status)
 
 resample(mf, model = GBMModel)
 

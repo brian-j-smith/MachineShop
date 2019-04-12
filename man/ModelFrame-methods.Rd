@@ -12,7 +12,7 @@ ModelFrame(x, ...)
   strata = NULL, ...)
 
 \method{ModelFrame}{matrix}(x, y = NULL, na.rm = TRUE,
-  intercept = TRUE, weights = NULL, strata = NULL, ...)
+  weights = NULL, strata = NULL, ...)
 }
 \arguments{
 \item{x}{model \code{\link{formula}} or \code{matrix} of predictor variables.}
@@ -21,17 +21,14 @@ ModelFrame(x, ...)
 
 \item{data}{\code{data.frame} or an object that can be converted to one.}
 
-\item{na.rm}{logical indicating whether to remove cases with \code{NA} values
-for any of the model variables.}
+\item{na.rm}{logical indicating whether to remove cases with \code{NA} values}
 
 \item{weights}{vector of case weights.}
 
-\item{strata}{vector of stratification levels.}
+\item{strata}{vector of stratification levels.
+for any of the model variables.}
 
 \item{y}{response variable.}
-
-\item{intercept}{logical indicating whether to include an intercept in the
-model formula.}
 }
 \value{
 \code{ModelFrame} class object that inherits from \code{data.frame}.
@@ -41,7 +38,7 @@ Class for storing data, formulas, and other attributes for fitting MLModels.
 }
 \examples{
 mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
-                 data = esoph, weights = ncases + ncontrols)
+                 data = esoph, weights = with(esoph, ncases + ncontrols))
 gbmfit <- fit(mf, model = GBMModel)
 varimp(gbmfit)
 

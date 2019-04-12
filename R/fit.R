@@ -80,7 +80,7 @@ fit.recipe <- function(x, model, ...) {
 
 .fit.MLModel <- function(model, x, ...) {
   mf <- ModelFrame(x, na.rm = FALSE)
-  if (is.null(mf$"(weights)")) mf$"(weights)" <- 1
+  if (is.null(mf[["(weights)"]])) mf[["(weights)"]] <- 1
   
   y <- response(mf)
   if (!any(sapply(model@types, function(type) is_response(y, type)))) {
@@ -90,7 +90,7 @@ fit.recipe <- function(x, model, ...) {
   requireModelNamespaces(model@packages)
   
   envir <- list2env(within(list(), {
-    formula <- formula(terms(mf))
+    formula <- formula(mf)
     data <- mf
     weights <- model.weights(mf)
     y <- y
