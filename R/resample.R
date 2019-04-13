@@ -189,7 +189,7 @@ setMethod(".resample", c("MLControlBoot", "recipe"),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
       set.seed(seeds[i])
       split <- splits[[i]]
-      train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
+      train <- prepper(split, recipe = x)
       resample_args(train, test, model, object, strata)
     } %>% Resamples.list
   }
@@ -230,7 +230,7 @@ setMethod(".resample", c("MLControlCV", "recipe"),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
       set.seed(seeds[i])
       split <- splits[[i]]
-      train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
+      train <- prepper(split, recipe = x)
       test <- ModelFrame(formula(terms(x)), assessment(split))
       resample_args(train, test, model, object, strata)
     } %>% Resamples.list
@@ -271,7 +271,7 @@ setMethod(".resample", c("MLControlOOB", "recipe"),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
       set.seed(seeds[i])
       split <- splits[[i]]
-      train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
+      train <- prepper(split, recipe = x)
       test <- ModelFrame(formula(terms(x)), assessment(split))
       resample_args(train, test, model, object, strata)
     } %>% Resamples.list
@@ -300,7 +300,7 @@ setMethod(".resample", c("MLControlSplit", "recipe"),
     split <- initial_split(getdata(x),
                            prop = object@prop,
                            strata = strata)
-    train <- prepper(split, recipe = x, retain = TRUE, verbose = FALSE)
+    train <- prepper(split, recipe = x)
     test <- ModelFrame(formula(terms(x)), testing(split))
     do.call(Resamples, resample_args(train, test, model, object, strata))
   }

@@ -82,7 +82,7 @@ ModelFrame.ModelFrame <- function(x, na.rm = TRUE, na.action = NULL, ...) {
 
 
 ModelFrame.recipe <- function(x, ...) {
-  x <- prep(x, retain = TRUE)
+  x <- prep(x)
   data <- juice(x)
   
   info <- summary(x)
