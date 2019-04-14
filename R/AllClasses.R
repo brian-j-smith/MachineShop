@@ -155,5 +155,6 @@ setClass("SummaryConfusion",
 
 
 setClass("VarImp",
+  slots = c(center = "numeric", scale = "numeric"),
   contains = "data.frame"
 )

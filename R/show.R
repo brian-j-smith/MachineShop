@@ -227,3 +227,11 @@ setMethod("show", "SummaryConfusion",
     print(object@.Data)
   }
 )
+
+
+setMethod("show", "VarImp",
+  function(object) {
+    cat("An object of class \"", class(object), "\"\n", sep = "")
+    print(as.data.frame(object))
+  }
+)
