@@ -318,8 +318,9 @@ setMethod(".resample", c("MLControlTrain", "ModelFrame"),
 setMethod(".resample", c("MLControlTrain", "recipe"),
   function(object, x, model) {
     set.seed(object@seed)
+    train <- prep(x)
     test <- ModelFrame(formula(terms(x)), getdata(x))
-    do.call(Resamples, resample_args(x, test, model, object))
+    do.call(Resamples, resample_args(train, test, model, object))
   }
 )
 
