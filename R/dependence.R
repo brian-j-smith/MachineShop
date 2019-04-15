@@ -56,9 +56,17 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
     if (is.factor(x)) {
       unique(x)
     } else if (is.vector(x)) {
+      x <- sort(x)
+      n <- min(n, length(x))
       switch(intervals,
-             "quantile" = quantile(x, seq(0, 1, length = n)),
-             "uniform" = seq(min(x), max(x), length = n)
+             "quantile" = x[round(seq(1, length(x), length = n))],
+             "uniform" = {
+               y <- seq(x[1], x[length(x)], length = n)
+               indices <- findInterval(y, x, all.inside = TRUE)
+               x_lower <- x[indices]
+               x_upper <- x[indices + 1]
+               unique(ifelse(y - x_lower < x_upper - y, x_lower, x_upper))
+             }
       )
     } else {
       stop("unsupported variable type")
