@@ -21,7 +21,7 @@ setAs("vector", "VarImp",
 
 asMLModelFit <- function(object, Class, model, x, y) {
   fitbits <- model@fitbits
-  fitbits@x <- prep(x)
+  fitbits@x <- x
   fitbits@y <- y
 
   if (is(object, Class)) {

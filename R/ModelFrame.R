@@ -280,6 +280,7 @@ preprocess.ModelFrame <- function(x, data = NULL, ...) {
 
 
 preprocess.recipe <- function(x, data = NULL, ...) {
+  x <- prep(x)
   preprocess(terms(x), if (is.null(data)) juice(x) else bake(x, data))
 }
 
