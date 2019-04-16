@@ -65,21 +65,6 @@ fitbit <- function(object, name) {
 }
 
 
-getdata <- function(x, ...) {
-  UseMethod("getdata")
-}
-
-
-getdata.data.frame <- function(x, ...) {
-  x
-}
-
-
-getdata.recipe <- function(x, ...) {
-  x$template
-}
-
-
 getMLObject <- function(x, class) {
   if (is.character(x)) x <- get(x)
   if (is.function(x)) x <- x()

@@ -234,7 +234,7 @@ terms.recipe <- function(x, ...) {
   predictors <- info$variable[info$role == "predictor"]
   
   terms(predictors, outcome,
-        all_numeric = all(sapply(getdata(x)[predictors], is.numeric)))
+        all_numeric = all(sapply(as.data.frame(x)[predictors], is.numeric)))
 }
 
 

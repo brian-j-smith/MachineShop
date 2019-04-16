@@ -180,11 +180,11 @@ setMethod(".resample", c("MLControlBoot", "recipe"),
   function(object, x, model) {
     strata <- strata_var(x)
     set.seed(object@seed)
-    splits <- bootstraps(getdata(x),
+    splits <- bootstraps(as.data.frame(x),
                          times = object@samples,
                          strata = strata)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
-    test <- ModelFrame(formula(terms(x)), getdata(x))
+    test <- ModelFrame(formula(terms(x)), x)
     foreach(i = seq(splits),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
       set.seed(seeds[i])
@@ -221,7 +221,7 @@ setMethod(".resample", c("MLControlCV", "recipe"),
   function(object, x, model) {
     strata <- strata_var(x)
     set.seed(object@seed)
-    splits <- vfold_cv(getdata(x),
+    splits <- vfold_cv(as.data.frame(x),
                        v = object@folds,
                        repeats = object@repeats,
                        strata = strata)$splits
@@ -263,7 +263,7 @@ setMethod(".resample", c("MLControlOOB", "recipe"),
   function(object, x, model) {
     strata <- strata_var(x)
     set.seed(object@seed)
-    splits <- bootstraps(getdata(x),
+    splits <- bootstraps(as.data.frame(x),
                          times = object@samples,
                          strata = strata)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
@@ -297,7 +297,7 @@ setMethod(".resample", c("MLControlSplit", "recipe"),
   function(object, x, model) {
     strata <- strata_var(x)
     set.seed(object@seed)
-    split <- initial_split(getdata(x),
+    split <- initial_split(as.data.frame(x),
                            prop = object@prop,
                            strata = strata)
     train <- prepper(split, recipe = x)
@@ -319,7 +319,7 @@ setMethod(".resample", c("MLControlTrain", "recipe"),
   function(object, x, model) {
     set.seed(object@seed)
     train <- prep(x)
-    test <- ModelFrame(formula(terms(x)), getdata(x))
+    test <- ModelFrame(formula(terms(x)), x)
     do.call(Resamples, resample_args(train, test, model, object))
   }
 )

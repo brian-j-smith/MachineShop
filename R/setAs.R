@@ -4,6 +4,11 @@ as.data.frame.ModelFrame <- function(x, ...) {
 }
 
 
+as.data.frame.recipe <- function(x, ...) {
+  as.data.frame(x$template)
+}
+
+
 setAs("data.frame", "VarImp",
   function(from) VarImp(from)
 )

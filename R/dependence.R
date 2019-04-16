@@ -40,7 +40,7 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
   stopifnot(is(object, "MLModelFit"))
 
   x <- fitbit(object, "x")
-  if (is.null(data)) data <- getdata(x)
+  if (is.null(data)) data <- as.data.frame(x)
 
   x_vars <- all.vars(delete.response(terms(x)))
   indices <- structure(match(x_vars, names(data)), names = x_vars)
