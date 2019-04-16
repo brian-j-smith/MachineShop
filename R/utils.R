@@ -65,6 +65,17 @@ fitbit <- function(object, name) {
 }
 
 
+findMethod <- function(generic, object) {
+  generic_name <- deparse(substitute(generic))
+  f <- function(x, ...) UseMethod("f")
+  for (method in methods(generic_name)) {
+    assign(sub(generic_name, "f", method, fixed = TRUE),
+           eval(substitute(function(x, ...) method)))
+  }
+  f(object)
+}
+
+
 getMLObject <- function(x, class) {
   if (is.character(x)) x <- get(x)
   if (is.function(x)) x <- x()

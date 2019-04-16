@@ -156,7 +156,7 @@ tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
   for (name in names(models)) {
     res <- resample(x, data, model = models[[name]], control = control)
     if (is.null(metrics)) {
-      method <- getS3method("performance", class(res$Observed))
+      method <- get(findMethod(performance, res$Observed))
       metrics <- eval(formals(method)$metrics)
       is_defined <- sapply(metrics, function(metric) {
         info <- metricinfo(metric)[[1]]
