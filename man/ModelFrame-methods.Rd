@@ -15,7 +15,13 @@ ModelFrame(x, ...)
   weights = NULL, strata = NULL, ...)
 }
 \arguments{
-\item{x}{model \code{\link{formula}} or \code{matrix} of predictor variables.}
+\item{x}{model \code{\link{formula}} or \code{matrix} of predictor variables.
+Response specifications on the left hand sides of formulas may be \pkg{R}
+expressions.  Specifications of predictors on the right hand sides may
+contain operators \code{.}, \code{+}, \code{-}, \code{:}, \code{*}, \code{^},
+\code{()}, and \code{\%in\%}; but not in-line functions.  As an alternative to
+in-line functions, transformations of pedictor variables may be defined in a
+\code{\link[recipes]{recipe}} or included directly in \code{data}.}
 
 \item{...}{arguments passed to other methods.}
 

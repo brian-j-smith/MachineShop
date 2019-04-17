@@ -6,6 +6,12 @@
 #' @rdname ModelFrame-methods
 #' 
 #' @param x model \code{\link{formula}} or \code{matrix} of predictor variables.
+#' Response specifications on the left hand sides of formulas may be \pkg{R}
+#' expressions.  Specifications of predictors on the right hand sides may
+#' contain operators \code{.}, \code{+}, \code{-}, \code{:}, \code{*}, \code{^},
+#' \code{()}, and \code{\%in\%}; but not in-line functions.  As an alternative to
+#' in-line functions, transformations of pedictor variables may be defined in a
+#' \code{\link[recipes]{recipe}} or included directly in \code{data}.
 #' 
 #' @return \code{ModelFrame} class object that inherits from \code{data.frame}.
 #' 
@@ -33,9 +39,12 @@ ModelFrame <- function(x, ...) {
 #' 
 ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
                                strata = NULL, ...) {
-  if (any_inline_calls(x[[length(x)]])) {
-    stop("In-line functions of predictor variables not currently supported in",
-         " ModelFrame formulas")
+  formula_ops <- c("-", "%in%", "(", "*", ".", ":", "^", "+")
+  if (any(!(inline_calls(x[[length(x)]]) %in% formula_ops))) {
+    stop(
+      "formulas with functions of predictor variables are not supported;",
+      " use recipes or include transformed predictors in data frames instead"
+    )
   }
   
   data <- as.data.frame(data)
