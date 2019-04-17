@@ -15,9 +15,7 @@
 #' \code{\link{tune}}
 #' 
 #' @examples
-#' library(MASS)
-#' 
-#' fit(medv ~ ., data = Boston, model = LMModel())
+#' fit(sale_amount ~ ., data = ICHomes, model = LMModel())
 #'
 LMModel <- function() {
   

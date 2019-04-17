@@ -125,9 +125,7 @@ SVMLinearModel <- function(...) {
 #' @param offset offset used in polynomial and hyperbolic tangent kernels.
 #' 
 #' @examples
-#' library(MASS)
-#' 
-#' fit(medv ~ ., data = Boston, model = SVMRadialModel())
+#' fit(sale_amount ~ ., data = ICHomes, model = SVMRadialModel())
 #' 
 SVMPolyModel <- function(degree = 1, scale = 1, offset = 1, ...) {
   .SVMModel("SVMPolyModel", "Support Vector Machines (Poly)",

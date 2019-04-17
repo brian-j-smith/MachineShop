@@ -34,9 +34,7 @@
 #' \code{\link{resample}}, \code{\link{tune}}
 #' 
 #' @examples
-#' library(MASS)
-#' 
-#' fit(medv ~ ., data = Boston, model = CForestModel())
+#' fit(sale_amount ~ ., data = ICHomes, model = CForestModel())
 #'
 CForestModel <- function(teststat = c("quad", "max"),
                          testtype = c("Univariate", "Teststatistic",

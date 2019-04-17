@@ -27,14 +27,12 @@ models.
 }
 \examples{
 ## Numeric response example
-library(MASS)
-
-fo <- medv ~ .
+fo <- sale_amount ~ .
 control <- CVControl()
 
-gbmres1 <- resample(fo, Boston, GBMModel(n.trees = 25), control)
-gbmres2 <- resample(fo, Boston, GBMModel(n.trees = 50), control)
-gbmres3 <- resample(fo, Boston, GBMModel(n.trees = 100), control)
+gbmres1 <- resample(fo, ICHomes, GBMModel(n.trees = 25), control)
+gbmres2 <- resample(fo, ICHomes, GBMModel(n.trees = 50), control)
+gbmres3 <- resample(fo, ICHomes, GBMModel(n.trees = 100), control)
 
 res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
 perfdiff <- diff(res)

@@ -47,9 +47,7 @@
 #' 
 #' @examples
 #' \donttest{
-#' library(MASS)
-#' 
-#' modelfit <- fit(medv ~ ., data = Boston, model = BARTMachineModel())
+#' modelfit <- fit(sale_amount ~ ., data = ICHomes, model = BARTMachineModel())
 #' varimp(modelfit, metric = "splits", num_replicates = 20, scale = FALSE)
 #' }
 #'

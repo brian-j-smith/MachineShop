@@ -87,9 +87,7 @@ found in the source links below.
 }
 \examples{
 \donttest{
-library(MASS)
-
-modelfit <- fit(medv ~ ., data = Boston, model = BARTModel())
+modelfit <- fit(sale_amount ~ ., data = ICHomes, model = BARTModel())
 }
 
 }

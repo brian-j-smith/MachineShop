@@ -22,9 +22,7 @@
 #' \code{\link{tune}}
 #' 
 #' @examples
-#' library(MASS)
-#' 
-#' fit(medv ~ ., data = Boston, model = PLSModel())
+#' fit(sale_amount ~ ., data = ICHomes, model = PLSModel())
 #'
 PLSModel <- function(ncomp = 1, scale = FALSE) {
   

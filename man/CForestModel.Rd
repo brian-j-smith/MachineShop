@@ -48,9 +48,7 @@ Supplied arguments are passed to \code{\link[party]{cforest_control}}.
 Further model details can be found in the source link below.
 }
 \examples{
-library(MASS)
-
-fit(medv ~ ., data = Boston, model = CForestModel())
+fit(sale_amount ~ ., data = ICHomes, model = CForestModel())
 
 }
 \seealso{

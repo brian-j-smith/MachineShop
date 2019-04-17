@@ -32,9 +32,7 @@
 #' \code{\link{tune}}
 #' 
 #' @examples
-#' library(MASS)
-#' 
-#' fit(medv ~ ., data = Boston, model = LARSModel)
+#' fit(sale_amount ~ ., data = ICHomes, model = LARSModel)
 #'
 LARSModel <- function(type = c("lasso", "lar", "forward.stagewise", "stepwise"),
                       trace = FALSE, normalize = TRUE, intercept = TRUE,

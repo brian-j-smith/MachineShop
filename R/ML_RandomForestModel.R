@@ -28,9 +28,7 @@
 #' \code{\link{resample}}, \code{\link{tune}}
 #' 
 #' @examples
-#' library(MASS)
-#' 
-#' fit(medv ~ ., data = Boston, model = RandomForestModel())
+#' fit(sale_amount ~ ., data = ICHomes, model = RandomForestModel())
 #' 
 RandomForestModel <- function(ntree = 500,
                               mtry = .(if (is.factor(y)) floor(sqrt(nvars))

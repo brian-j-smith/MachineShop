@@ -29,11 +29,9 @@ Fit a stacked regression model from multiple base learners.
 }
 }
 \examples{
-library(MASS)
-
 model <- StackedModel(GBMModel, SVMRadialModel, GLMNetModel(lambda = 0.01))
-modelfit <- fit(medv ~ ., data = Boston, model = model)
-predict(modelfit, newdata = Boston)
+modelfit <- fit(sale_amount ~ ., data = ICHomes, model = model)
+predict(modelfit, newdata = ICHomes)
 
 }
 \references{

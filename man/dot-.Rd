@@ -20,9 +20,7 @@ values that are defined in terms of \code{nobs}, \code{nvars}, or \code{y}.
 }
 \examples{
 ## Stepwise variable selection with BIC
-library(MASS)
-
-glmfit <- fit(medv ~ ., Boston, GLMStepAICModel(k = .(log(nobs))))
+glmfit <- fit(sale_amount ~ ., ICHomes, GLMStepAICModel(k = .(log(nobs))))
 varimp(glmfit)
 
 }

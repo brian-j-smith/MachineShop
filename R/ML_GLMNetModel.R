@@ -40,9 +40,7 @@
 #' \code{\link{resample}}, \code{\link{tune}}
 #' 
 #' @examples
-#' library(MASS)
-#' 
-#' fit(medv ~ ., data = Boston, model = GLMNetModel(lambda = 0.01))
+#' fit(sale_amount ~ ., data = ICHomes, model = GLMNetModel(lambda = 0.01))
 #'
 GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
                         standardize = TRUE, intercept = NULL,

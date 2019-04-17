@@ -26,9 +26,7 @@ utils::globalVariables(c("group", "i", "Lower", "Mean", "Midpoint", "model",
 #' 
 #' @examples
 #' ## Stepwise variable selection with BIC
-#' library(MASS)
-#' 
-#' glmfit <- fit(medv ~ ., Boston, GLMStepAICModel(k = .(log(nobs))))
+#' glmfit <- fit(sale_amount ~ ., ICHomes, GLMStepAICModel(k = .(log(nobs))))
 #' varimp(glmfit)
 #' 
 . <- function(expr) {

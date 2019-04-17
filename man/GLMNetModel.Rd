@@ -62,9 +62,7 @@ Default values for the \code{NULL} arguments and further model details can be
 found in the source link below.
 }
 \examples{
-library(MASS)
-
-fit(medv ~ ., data = Boston, model = GLMNetModel(lambda = 0.01))
+fit(sale_amount ~ ., data = ICHomes, model = GLMNetModel(lambda = 0.01))
 
 }
 \seealso{

@@ -23,9 +23,7 @@
 #' \code{\link{tune}}
 #' 
 #' @examples
-#' library(MASS)
-#' 
-#' fit(medv ~ ., data = Boston, model = GLMModel())
+#' fit(sale_amount ~ ., data = ICHomes, model = GLMModel())
 #' 
 GLMModel <- function(family = NULL, ...) {
   

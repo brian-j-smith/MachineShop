@@ -28,11 +28,9 @@
 #' @seealso \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
 #' 
 #' @examples
-#' library(MASS)
-#' 
 #' model <- SuperModel(GBMModel, SVMRadialModel, GLMNetModel(lambda = 0.01))
-#' modelfit <- fit(medv ~ ., data = Boston, model = model)
-#' predict(modelfit, newdata = Boston)
+#' modelfit <- fit(sale_amount ~ ., data = ICHomes, model = model)
+#' predict(modelfit, newdata = ICHomes)
 #' 
 SuperModel <- function(..., model = GBMModel, control = CVControl,
                        all_vars = FALSE) {

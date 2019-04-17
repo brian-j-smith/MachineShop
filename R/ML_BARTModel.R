@@ -56,9 +56,7 @@
 #' 
 #' @examples
 #' \donttest{
-#' library(MASS)
-#' 
-#' modelfit <- fit(medv ~ ., data = Boston, model = BARTModel())
+#' modelfit <- fit(sale_amount ~ ., data = ICHomes, model = BARTModel())
 #' }
 #'
 BARTModel <- function(K = NULL, sparse = FALSE, theta = 0, omega = 1,

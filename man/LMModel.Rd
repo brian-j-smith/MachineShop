@@ -20,9 +20,7 @@ Fits linear models.
 Further model details can be found in the source link below.
 }
 \examples{
-library(MASS)
-
-fit(medv ~ ., data = Boston, model = LMModel())
+fit(sale_amount ~ ., data = ICHomes, model = LMModel())
 
 }
 \seealso{
