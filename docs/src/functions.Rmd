@@ -12,11 +12,12 @@
 &nbsp;
 
 
-## Prediction
+## Response Values
 
 |                           |                                                  | 
 |---------------------------|--------------------------------------------------|
-| `r rdoc_url("predict")`   | Model prediction                                 |
+| `r rdoc_url("response")`  | Observed                                         |
+| `r rdoc_url("predict")`   | Predicted                                        |
 
 &nbsp;
 

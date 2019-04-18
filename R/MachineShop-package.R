@@ -61,9 +61,10 @@
 #'   \code{\link{tune}} \tab Model Tuning and Selection \cr
 #' }
 #'
-#' Prediction:
+#' Response Values:
 #' \tabular{ll}{
-#'   \code{\link{predict}} \tab Model Prediction \cr
+#'   \code{\link{response}} \tab Observed \cr
+#'   \code{\link{predict}} \tab Predicted \cr
 #' }
 #'
 #' Performance Assessment:
