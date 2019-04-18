@@ -2,6 +2,14 @@
 
 ## Version Updates
 
+## 1.2.5
+
+* Save `ModelFrame` response in first column.
+* Unexport `response` formula method.
+* Add `ICHomes` dataset.
+* Add `center` and `scale` slot to `VarImp`.
+
+
 ## 1.2.4
 * Prohibit in-line functions in `ModelFrame` formulas.
 * Rename `response` function argument from `data` to `newdata`.
