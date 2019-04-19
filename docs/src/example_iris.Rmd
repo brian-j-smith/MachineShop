@@ -45,7 +45,7 @@ predict(iris_fit, newdata = test, type = "prob") %>% head
 predict(iris_fit, newdata = test) %>% head
 
 ## Test set performance
-obs <- response(fo, data = test)
+obs <- response(iris_fit, newdata = test)
 pred <- predict(iris_fit, newdata = test, type = "prob")
 performance(obs, pred)
 ```
