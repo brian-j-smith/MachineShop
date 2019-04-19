@@ -18,11 +18,13 @@
 #' \code{\link{tune}}
 #' 
 #' @examples
-#' df <- within(ICHomes,
-#'              sale_amount <- cut(sale_amount,
-#'              breaks = c(0, 100, 200, 300, 1000) * 1000,
-#'              ordered = TRUE))
-#' fit(sale_amount ~ ., data = df, model = POLRModel())
+#' library(MASS)
+#' 
+#' df <- within(Boston,
+#'              medv <- cut(medv,
+#'                          breaks = c(0, 10, 15, 20, 25, 50),
+#'                          ordered = TRUE))
+#' fit(medv ~ ., data = df, model = POLRModel())
 #' 
 POLRModel <- function(method = c("logistic", "probit", "loglog", "cloglog",
                                  "cauchit")) {
