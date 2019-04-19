@@ -84,14 +84,6 @@ getMLObject <- function(x, class) {
 }
 
 
-inline_calls <- function(x) {
-  if (is.call(x)) {
-    call_name <- as.character(x[[1]])
-    unique(c(call_name, unlist(lapply(x[-1], inline_calls))))
-  }
-}
-
-
 is_response <- function(object, class2) {
   if (class2 == "binary") {
     is(object, "factor") && nlevels(object) == 2

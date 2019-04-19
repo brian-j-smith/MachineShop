@@ -6,12 +6,6 @@
 #' @rdname ModelFrame-methods
 #' 
 #' @param x model \code{\link{formula}} or \code{matrix} of predictor variables.
-#' Response specifications on the left hand sides of formulas may be \pkg{R}
-#' expressions.  Specifications of predictors on the right hand sides may
-#' contain operators \code{.}, \code{+}, \code{-}, \code{:}, \code{*}, \code{^},
-#' \code{()}, and \code{\%in\%}; but not in-line functions.  As an alternative to
-#' in-line functions, transformations of pedictor variables may be defined in a
-#' \code{\link[recipes]{recipe}} or included directly in \code{data}.
 #' 
 #' @return \code{ModelFrame} class object that inherits from \code{data.frame}.
 #' 
@@ -39,11 +33,11 @@ ModelFrame <- function(x, ...) {
 #' 
 ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
                                strata = NULL, ...) {
-  formula_ops <- c("-", "%in%", "(", "*", ".", ":", "^", "+")
-  if (any(!(inline_calls(predictors(x)) %in% formula_ops))) {
+  invalid_calls <- setdiff(inline_calls(predictors(x)), valid_predictor_calls)
+  if (length(invalid_calls)) {
     stop(
-      "formulas with functions of predictor variables are not supported;",
-      " use recipes or include transformed predictors in data frames instead"
+      "unsupported predictor variable functions: ", toString(invalid_calls),
+      "; use a recipe or include transformed predictors in the data frame"
     )
   }
   
@@ -115,23 +109,47 @@ ModelFrame.recipe <- function(x, ...) {
 
 
 ModelFrame.terms <- function(x, data, ...) {
-  data[rownames(attr(x, "factors"))] %>%
+  data[all.vars(model_formula(x))] %>%
     structure(terms = x, class = c("ModelFrame", class(data))) %>%
     ModelFrame(...)
 }
 
 
-#################### ModelFrame Formula ####################
+#################### ModelFrame Formulas ####################
 
 
 formula.ModelFrame <- function(x, ...) {
-  model_terms <- terms(x)
-  fo <- formula(model_terms)
-  if (attr(model_terms, "response")) {
-    fo[[2]] <- as.symbol(names(x)[1])
-  }
-  fo
+  model_formula(terms(x))
 }
+
+
+inline_calls <- function(x) {
+  if (is.call(x)) {
+    call_name <- as.character(x[[1]])
+    unique(c(call_name, unlist(lapply(x[-1], inline_calls))))
+  }
+}
+
+
+model_formula <- function(x) {
+  x <- formula(x)
+  response <- response(x)
+  if (!is.null(response)) x[[2]] <- as.symbol(deparse(response))
+  x
+}
+
+
+valid_predictor_calls <- c(
+  "abs", "sign", "sqrt", "floor", "ceiling", "trunc", "round", "signif",
+  "exp", "log", "expm1", "log1p", "cos", "sin", "tan", "cospi", "sinpi",
+  "tanpi", "acos", "asin", "atan",
+  "cosh", "sinh", "tanh", "acosh", "asinh", "atanh",
+  "lgamma", "gamma", "digamma", "trigamma",
+  "+", "-", "*", "/", "^", "%%", "%/%",
+  "&", "|", "!",
+  "==", "!=", "<", "<=", ">=", ">",
+  "%in%", "(", ".", ":", "I"
+)
 
 
 #################### ModelFrame Terms ####################

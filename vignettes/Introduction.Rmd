@@ -279,7 +279,7 @@ Variable specification defines the relationship between response and predictor v
 
 ## Traditional Formula
 
-Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example.  With this specification, `.` substitution of variables not already appearing in the formula may be used; in-line functions of predictor variables are not currently supported.  Preprocessing recipes are generally recommended if the inclusion of predictor variable transformations is desired.  Another option is to include transformed variables directly in the data frame.
+Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example.  With this specification, formula operators, such as interaction (`:`) and crossing (`*`), as well as `.` substitution of variables not already appearing in the formula may be used.
 
 ```{r results="hide"}
 ## Dataset library
