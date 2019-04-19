@@ -49,7 +49,7 @@ ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
   data[deparse(response(model_terms))] <- response(model_terms, data)
   
   ModelFrame(model_terms, data, na.rm = na.rm,
-             weights = weights, strata = strata)
+             weights = weights, strata = strata, ...)
 }
 
 
@@ -65,7 +65,7 @@ ModelFrame.matrix <- function(x, y = NULL, na.rm = TRUE,
   data[deparse(response(model_terms))] <- y
   
   ModelFrame(model_terms, data, na.rm = na.rm,
-             weights = weights, strata = strata)
+             weights = weights, strata = strata, ...)
 }
 
 
@@ -76,7 +76,7 @@ ModelFrame.ModelFrame <- function(x, na.rm = TRUE, na.action = NULL, ...) {
 
   if (!is.null(na.action)) {
     depwarn("'na.action' argument to ModelFrame is deprecated",
-            "use 'na.rm' instead")
+            "use 'na.rm' instead", expired = Sys.Date() > "2019-06-01")
     na.action(x)
   } else if (na.rm) {
     na.omit(x)
