@@ -9,21 +9,6 @@ as.data.frame.recipe <- function(x, ...) {
 }
 
 
-setAs("data.frame", "VarImp",
-  function(from) VarImp(from)
-)
-
-
-setAs("matrix", "VarImp",
-  function(from) as(as.data.frame(from), "VarImp")
-)
-
-
-setAs("vector", "VarImp",
-  function(from) as(data.frame(Overall = from), "VarImp")
-)
-
-
 asMLModelFit <- function(object, Class, model, x, y) {
   fitbits <- model@fitbits
   fitbits@x <- x

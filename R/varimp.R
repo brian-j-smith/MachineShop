@@ -1,4 +1,9 @@
-VarImp <- function(object, scale = FALSE) {
+VarImp <- function(object, ...) {
+  UseMethod("VarImp")
+}
+
+
+VarImp.default <- function(object, scale = TRUE, ...) {
   stopifnot(nrow(object) == 0 || is.character(rownames(object)))
 
   idx <- order(rowSums(object), decreasing = TRUE)
@@ -14,6 +19,16 @@ VarImp <- function(object, scale = FALSE) {
   }
   
   new("VarImp", object, center = scale_center, scale = scale_scale)
+}
+
+
+VarImp.matrix <- function(object, ...) {
+  VarImp(as.data.frame(object), ...)
+}
+
+
+VarImp.numeric <- function(object, ...) {
+  VarImp(cbind(Overall = object), ...)
 }
 
 
@@ -45,7 +60,7 @@ varimp <- function(object, scale = TRUE, ...) {
   requireModelNamespaces(fitbit(object, "packages"))
   vi <- fitbit(object, "varimp")(unMLModelFit(object), ...)
   if (is.null(vi)) vi <- varimp_undef(object)
-  VarImp(as(vi, "VarImp"), scale = scale)
+  VarImp(vi, scale = scale)
 }
 
 
