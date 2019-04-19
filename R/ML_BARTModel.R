@@ -56,7 +56,7 @@
 #' 
 #' @examples
 #' \donttest{
-#' modelfit <- fit(sale_amount ~ ., data = ICHomes, model = BARTModel())
+#' fit(sale_amount ~ ., data = ICHomes, model = BARTModel())
 #' }
 #'
 BARTModel <- function(K = NULL, sparse = FALSE, theta = 0, omega = 1,

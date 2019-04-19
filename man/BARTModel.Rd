@@ -87,7 +87,7 @@ found in the source links below.
 }
 \examples{
 \donttest{
-modelfit <- fit(sale_amount ~ ., data = ICHomes, model = BARTModel())
+fit(sale_amount ~ ., data = ICHomes, model = BARTModel())
 }
 
 }
