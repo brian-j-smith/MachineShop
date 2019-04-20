@@ -40,7 +40,7 @@ ModelFrame <- function(x, ...) {
 ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
                                strata = NULL, ...) {
   formula_ops <- c("-", "%in%", "(", "*", ".", ":", "^", "+")
-  if (any(!(inline_calls(x[[length(x)]]) %in% formula_ops))) {
+  if (any(!(inline_calls(predictors(x)) %in% formula_ops))) {
     stop(
       "formulas with functions of predictor variables are not supported;",
       " use recipes or include transformed predictors in data frames instead"
@@ -270,22 +270,22 @@ model.matrix.ModelFrame <- function(object, intercept = NULL, ...) {
 #################### ModelFrame Preprocessing ####################
 
 
-preprocess <- function(x, data = NULL, ...) {
+preprocess <- function(x, ...) {
   UseMethod("preprocess")
 }
 
 
-preprocess.ModelFrame <- function(x, data = NULL, ...) {
-  preprocess(terms(x), as.data.frame(if (is.null(data)) x else data))
+preprocess.default <- function(x, ...) {
+  preprocess(terms(x), x, ...)
 }
 
 
-preprocess.recipe <- function(x, data = NULL, ...) {
+preprocess.recipe <- function(x, ...) {
   x <- prep(x)
-  preprocess(terms(x), if (is.null(data)) juice(x) else bake(x, data))
+  preprocess(terms(x), x, ...)
 }
 
 
-preprocess.terms <- function(x, data, ...) {
-  ModelFrame(delete.response(x), data, na.rm = FALSE)
+preprocess.terms <- function(x, object, newdata = NULL, ...) {
+  ModelFrame(delete.response(x), predictors(object, newdata), na.rm = FALSE)
 }

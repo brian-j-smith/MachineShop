@@ -42,8 +42,8 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
   x <- fitbit(object, "x")
   if (is.null(data)) data <- as.data.frame(x)
 
-  x_vars <- all.vars(delete.response(terms(x)))
-  indices <- structure(match(x_vars, names(data)), names = x_vars)
+  vars <- all.vars(predictors(terms(x)))
+  indices <- structure(match(vars, names(data)), names = vars)
   select <- eval(substitute(select), as.list(indices), parent.frame())
   if (is.null(select)) select <- indices
   data_select <- data[, select, drop = FALSE]

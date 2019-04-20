@@ -103,7 +103,7 @@ make_super_df <- function(y, predictors, row.names) {
 
 add_predictors <- function(from, to) {
   from_terms <- terms(from)
-  from <- get_all_vars(formula(from_terms)[-2], from)
+  from <- predictors(from)
 
   lhs <- names(to)[1]
   rhs <- c(labels(from_terms), names(to)[-1])
