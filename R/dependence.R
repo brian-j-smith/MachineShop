@@ -40,9 +40,10 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
   stopifnot(is(object, "MLModelFit"))
 
   x <- fitbit(object, "x")
-  if (is.null(data)) data <- as.data.frame(x)
-
-  vars <- all.vars(predictors(terms(x)))
+  if (is.null(data)) data <- x
+  data <- as.data.frame(data)
+  vars <- all.vars(predictors(terms(x, original = TRUE)))
+  
   indices <- structure(match(vars, names(data)), names = vars)
   select <- eval(substitute(select), as.list(indices), parent.frame())
   if (is.null(select)) select <- indices

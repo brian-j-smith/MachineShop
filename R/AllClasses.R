@@ -1,5 +1,5 @@
 setOldClass("ModelFrame")
-setOldClass("recipe")
+setOldClass("ModelRecipe")
 setOldClass("SurvEvents")
 setOldClass("SurvMatrix")
 setOldClass("SurvProbs")

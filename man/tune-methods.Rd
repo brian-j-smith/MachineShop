@@ -29,7 +29,7 @@ tune(x, ...)
 \arguments{
 \item{x}{defines a relationship between model predictor and response
 variables.  May be a \code{formula}, design matrix of predictors,
-\code{ModelFrame}, or \code{recipe}.}
+\code{ModelFrame}, or untrained \code{recipe}.}
 
 \item{...}{arguments passed to the \code{metrics} functions.}
 

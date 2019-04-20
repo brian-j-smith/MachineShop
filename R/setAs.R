@@ -4,11 +4,6 @@ as.data.frame.ModelFrame <- function(x, ...) {
 }
 
 
-as.data.frame.recipe <- function(x, ...) {
-  as.data.frame(x$template)
-}
-
-
 asMLModelFit <- function(object, Class, model, x, y) {
   fitbits <- model@fitbits
   fitbits@x <- x

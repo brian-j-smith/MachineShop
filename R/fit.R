@@ -7,7 +7,7 @@
 #' 
 #' @param x defines a relationship between model predictor and response
 #' variables.  May be a \code{formula}, design matrix of predictors,
-#' \code{ModelFrame}, or \code{recipe}.
+#' \code{ModelFrame}, or untrained \code{recipe}.
 #' @param ... arguments passed to other methods.
 #' 
 fit <- function(x, ...) {
@@ -69,7 +69,7 @@ fit.ModelFrame <- function(x, model, ...) {
 #' "case_weight" \code{\link[recipes:roles]{role}} for them.
 #' 
 fit.recipe <- function(x, model, ...) {
-  .fit(getMLObject(model, "MLModel"), x)
+  .fit(getMLObject(model, "MLModel"), prep(ModelRecipe(x)))
 }
 
 

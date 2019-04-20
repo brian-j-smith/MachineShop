@@ -15,7 +15,7 @@ MLModelTune <- function(object, tune_grid, performance, selected) {
 #' 
 #' @param x defines a relationship between model predictor and response
 #' variables.  May be a \code{formula}, design matrix of predictors,
-#' \code{ModelFrame}, or \code{recipe}.
+#' \code{ModelFrame}, or untrained \code{recipe}.
 #' @param ... arguments passed to the \code{metrics} functions.
 #' 
 #' @return \code{MLModelTune} class object that inherits from \code{MLModel}.

@@ -176,11 +176,6 @@ params <- function(envir) {
 }
 
 
-prep.data.frame <- function(x, ...) {
-  x
-}
-
-
 requireModelNamespaces <- function(packages) {
   pass <- sapply(packages, requireNamespace)
   if (!all(pass)) stop("install required packages: ", toString(packages[!pass]))

@@ -209,8 +209,8 @@ terms.ModelFrame <- function(x, ...) {
 }
 
 
-terms.recipe <- function(x, ...) {
-  info <- summary(x)
+terms.recipe <- function(x, original = FALSE, ...) {
+  info <- summary(x, original = original)
   
   get_vars <- function(roles = NULL, types = NULL) {
     is_match <- by(info, info$variable, function(split) {
@@ -286,22 +286,6 @@ model.matrix.ModelFrame <- function(object, intercept = NULL, ...) {
 #################### ModelFrame Preprocessing ####################
 
 
-preprocess <- function(x, ...) {
-  UseMethod("preprocess")
-}
-
-
-preprocess.default <- function(x, ...) {
-  preprocess(terms(x), x, ...)
-}
-
-
-preprocess.recipe <- function(x, ...) {
-  x <- prep(x)
-  preprocess(terms(x), x, ...)
-}
-
-
-preprocess.terms <- function(x, object, newdata = NULL, ...) {
-  ModelFrame(delete.response(x), predictors(object, newdata), na.rm = FALSE)
+preprocess <- function(x, newdata = NULL) {
+  ModelFrame(delete.response(terms(x)), predictors(x, newdata), na.rm = FALSE)
 }
