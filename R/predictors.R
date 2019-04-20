@@ -1,0 +1,26 @@
+predictors <- function(object, ...) {
+  UseMethod("predictors")
+}
+
+
+predictors.formula <- function(object, data = NULL, ...) {
+  if (is.null(data)) {
+    object[[length(object)]]
+  } else {
+    data[, all.vars(predictors(object)), drop = FALSE]
+  }
+}
+
+
+predictors.ModelFrame <- function(object, newdata = NULL, ...) {
+  data <- as.data.frame(if (is.null(newdata)) object else newdata)
+  predictors(terms(object), data)
+}
+
+
+predictors.recipe <- function(object, newdata = NULL, ...) {
+  object <- prep(object)
+  data <- if (is.null(newdata)) juice(object) else bake(object, newdata)
+  info <- summary(object)
+  data[, info$variable[info$role == "predictor"], drop = FALSE]
+}
