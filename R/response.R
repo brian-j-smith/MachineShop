@@ -32,10 +32,9 @@ response.MLFitBits <- function(object, newdata = NULL, ...) {
 
 
 response.formula <- function(object, data = NULL, levels = NULL, ...) {
-  expr <- if (length(object) > 2) object[[2]]
   if (!is.null(data)) {
-    vars <- all.vars(response(object))
-    y <- eval(expr, as.data.frame(data[, vars, drop = FALSE]))
+    expr <- response(object)
+    y <- eval(expr, as.data.frame(data[, all.vars(expr), drop = FALSE]))
     if (is.factor(y) && !is.null(levels)) {
       y_levels <- levels(y)
       new_levels <- y_levels[is.na(match(y_levels, levels))]
@@ -45,7 +44,7 @@ response.formula <- function(object, data = NULL, levels = NULL, ...) {
       y <- factor(y, levels = levels, exclude = NULL)
     }
     y
-  } else expr
+  } else if (length(object) > 2) object[[2]]
 }
 
 
@@ -68,6 +67,6 @@ response.ModelFrame <- function(object, newdata = NULL, ...) {
 #' 
 response.recipe <- function(object, newdata = NULL, ...) {
   object <- prep(object)
-  newdata <- if (is.null(newdata)) juice(object) else bake(object, newdata)
-  response(terms(object), newdata)
+  data <- if (is.null(newdata)) juice(object) else bake(object, newdata)
+  response(terms(object), data)
 }
