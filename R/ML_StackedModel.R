@@ -62,7 +62,7 @@ setClass("StackedModel", contains = "MLModel")
 
 
 .fit.StackedModel <- function(model, x, ...) {
-  mf <- ModelFrame(x)
+  mf <- ModelFrame(x, na.rm = FALSE)
   
   base_learners <- model@params$base_learners
   weights <- model@params$weights

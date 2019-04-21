@@ -67,7 +67,7 @@ setClass("SuperModel", contains = "MLModel")
 
 
 .fit.SuperModel <- function(model, x, ...) {
-  mf <- ModelFrame(x)
+  mf <- ModelFrame(x, na.rm = FALSE)
   
   params <- model@params
   base_learners <- params$base_learners
