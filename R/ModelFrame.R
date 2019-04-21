@@ -231,10 +231,11 @@ terms.recipe <- function(x, ...) {
          "roles 'surv_time' and 'surv_event', or multiple numeric variables")
   }
 
-  predictors <- info$variable[info$role == "predictor"]
+  is_predictor <- info$role == "predictor"
+  predictors <- info$variable[is_predictor]
+  all_numeric <- all(info$type[is_predictor] == "numeric")
   
-  terms(predictors, outcome,
-        all_numeric = all(sapply(as.data.frame(x)[predictors], is.numeric)))
+  terms(predictors, outcome, all_numeric = all_numeric)
 }
 
 
