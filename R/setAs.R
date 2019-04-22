@@ -1,9 +1,3 @@
-as.data.frame.ModelFrame <- function(x, ...) {
-  attr(x, "terms") <- NULL
-  structure(x, class = "data.frame")
-}
-
-
 asMLModelFit <- function(object, Class, model, x, y) {
   fitbits <- model@fitbits
   fitbits@x <- x

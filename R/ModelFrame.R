@@ -115,6 +115,14 @@ ModelFrame.terms <- function(x, data, ...) {
 }
 
 
+#################### ModelFrame Conversion ####################
+
+
+as.data.frame.ModelFrame <- function(x, ...) {
+  structure(x, terms = NULL, class = "data.frame")
+}
+
+
 #################### ModelFrame Formulas ####################
 
 
