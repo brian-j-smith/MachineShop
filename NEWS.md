@@ -2,8 +2,12 @@
 
 ## Version Updates
 
-## 1.2.5
+## 1.3.0
+* Improve compatibility with preprocessing recipes.
+* Allow base math functions and operators in `ModelFrame` formulas.
 
+
+## 1.2.5
 * Save `ModelFrame` response in first column.
 * Unexport `response` formula method.
 * Add `ICHomes` dataset.
