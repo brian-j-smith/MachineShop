@@ -515,7 +515,7 @@ predict(iris_fit, newdata = test) %&gt;% head
 #&gt; Levels: setosa versicolor virginica
 
 ## Test set performance
-obs &lt;- response(fo, data = test)
+obs &lt;- response(iris_fit, newdata = test)
 pred &lt;- predict(iris_fit, newdata = test, type = &quot;prob&quot;)
 performance(obs, pred)
 #&gt;     Brier  Accuracy     Kappa 
@@ -525,12 +525,12 @@ performance(obs, pred)
 <h2>Resampling</h2>
 <pre class="r"><code>## Resample estimation of model performance
 (res &lt;- resample(fo, data = iris, model = GBMModel, control = CVControl))
-#&gt; An object of class &quot;Resamples&quot;
+#&gt; Object of class &quot;Resamples&quot;
 #&gt; 
 #&gt; Models: GBMModel
 #&gt; Stratification variable: (strata) 
 #&gt; 
-#&gt; An object from class &quot;MLControl&quot;
+#&gt; Object of class &quot;MLControl&quot;
 #&gt; 
 #&gt; Name: CVControl
 #&gt; Label: K-Fold Cross-Validation
@@ -644,7 +644,7 @@ summary(perfdiff)
 #&gt; NNet - RF  -0.004      0 0.10872170 -0.5 0.1  0
 
 t.test(perfdiff)
-#&gt; An object of class &quot;HTestPerformanceDiff&quot;
+#&gt; Object of class &quot;HTestPerformanceDiff&quot;
 #&gt; 
 #&gt; Upper diagonal: mean differences (row - column)
 #&gt; Lower diagonal: p-values
@@ -751,10 +751,10 @@ varimp(iris_fit)
 
 res &lt;- resample(rec, model = GBMModel, control = CVControl)
 summary(res)
-#&gt;                Mean    Median         SD          Min       Max NA
-#&gt; Brier    0.09069158 0.1156874 0.05188803 3.532539e-05 0.1357598  0
-#&gt; Accuracy 0.94666667 0.9333333 0.02810913 9.333333e-01 1.0000000  0
-#&gt; Kappa    0.92000000 0.9000000 0.04216370 9.000000e-01 1.0000000  0</code></pre>
+#&gt;               Mean      Median         SD          Min        Max NA
+#&gt; Brier    0.0118886 0.008803997 0.01433281 1.061177e-06 0.04497385  0
+#&gt; Accuracy 1.0000000 1.000000000 0.00000000 1.000000e+00 1.00000000  0
+#&gt; Kappa    1.0000000 1.000000000 0.00000000 1.000000e+00 1.00000000  0</code></pre>
 </div>
 </div>
 

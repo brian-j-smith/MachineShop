@@ -416,7 +416,7 @@ div.tocify {
 <div id="melanoma-example" class="section level1">
 <h1>Melanoma Example</h1>
 <p>The package is illustrated in the following sections with an overall survival analysis example in which the response variable is a time to event outcome. Since survival outcomes are a combination of numerical (time to event) and categorical (event) variables, package features for both variable types will be utilized in the example. Outcomes other than survival, including nominal and ordinal factors as well as numeric vectors and matrices, are supported by <code>MachineShop</code> and will be discussed.</p>
-<p>Survival analysis is performed with the <code>Melanoma</code> dataset from the <code>MASS</code> package <span class="citation">(Andersen et al. 1993)</span>. This dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas. Also provided are potential predictors of the survival outcomes. The analysis begins by loading required packages <code>MachineShop</code>, <code>survival</code>, and <code>MASS</code> as well as <code>magrittr</code> <span class="citation">(Bache and Wickham 2014)</span> for its pipe (<code>%&gt;%</code>) operator to simplify some of the code syntax. For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one. The dataset is then split into a training set on which a survival model will be fit and a test set on which predictions will be made. A global formula <code>surv_fo</code> is defined to relate the predictors on the right hand side to the overall survival outcome on the left and will be used in all of the survival models in this vignette.</p>
+<p>Survival analysis is performed with the <code>Melanoma</code> dataset from the <code>MASS</code> package <span class="citation">(Andersen et al. 1993)</span>. This dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas. Also provided are potential predictors of the survival outcomes. The analysis begins by loading required packages <code>MachineShop</code>, <code>survival</code>, and <code>MASS</code> as well as <code>magrittr</code> <span class="citation">(Bache and Wickham 2014)</span> for its pipe (<code>%&gt;%</code>) operator to simplify some of the code syntax. For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one. The dataset is then split into a training set on which a survival model will be fit and a test set on which predictions will be made. A global formula <code>surv_fo</code> is defined to relate the predictors on the right hand side to the overall survival outcome on the left and will be used in all of the survival models presented.</p>
 <pre class="r"><code>## Analysis libraries
 library(MachineShop)
 library(survival)
@@ -425,6 +425,7 @@ library(magrittr)
 
 ## Malignant melanoma analysis dataset
 surv_df &lt;- within(Melanoma, status &lt;- as.numeric(status != 2))</code></pre>
+<p>Descriptive summaries of the study variables are given below in Table 1, followed by a plot of estimated overall survival probabilities and 95% confidence intervals.</p>
 <center>
 Table 1. Variable summaries for the Melanoma survival analysis example.
 </center>
@@ -577,7 +578,9 @@ surv_fo &lt;- Surv(time, status) ~ sex + age + year + thickness + ulcer</code></
 </div>
 <div id="model-fit-and-prediction" class="section level1">
 <h1>Model Fit and Prediction</h1>
-<p>Model fitting requires user specification of an available model. A named list of <code>MachineShop</code> models can be obtained interactively with the <code>modelinfo</code> function, and includes a descriptive <code>&quot;label&quot;</code>, the source <code>&quot;packages&quot;</code> on which the models depend, supported response variable <code>&quot;types&quot;</code>, and <code>&quot;arguments&quot;</code> that can be specified in calls to the model functions. Note that in order to use a model the source packages must be installed with the <code>install.packages</code> or equivalent function, but need not be loaded with the <code>library</code> function. Function <code>modelinfo</code> can be called with one or more model functions, function names, function calls, or observed response variables; and will return information on all models matching the calling arguments.</p>
+<div id="model-information" class="section level2">
+<h2>Model Information</h2>
+<p>Model fitting requires user specification of a <code>MachineShop</code> compatible model. A named list of package-supplied models can be obtained interactively with the <code>modelinfo</code> function, and includes a descriptive <code>&quot;label&quot;</code>, the source <code>&quot;packages&quot;</code> on which the models depend, supported response variable <code>&quot;types&quot;</code>, and <code>&quot;arguments&quot;</code> that can be specified in calls to the model functions. Note that in order to use a model, the source packages must be installed with the <code>install.packages</code> or by equivalent means, but need not be loaded with the <code>library</code> function. Function <code>modelinfo</code> can be called with one or more model functions, function names, function calls, or observed response variables; and will return information on all models matching the calling arguments.</p>
 <pre class="r"><code>## All available models
 modelinfo() %&gt;% names
 #&gt;  [1] &quot;AdaBagModel&quot;         &quot;AdaBoostModel&quot;       &quot;BARTModel&quot;          
@@ -628,7 +631,11 @@ modelinfo(GBMModel)
 #&gt; 
 #&gt; $GBMModel$varimp
 #&gt; [1] TRUE</code></pre>
-<p>Information is displayed above for the <code>GBMModel</code> function which is a generalized boosted regression model — a tree-based ensemble method that can be applied to survival outcomes. Package models, like <code>GBMModel</code> can be specified in the <code>model</code> argument of the <code>fit</code> function to estimate a relationship (<code>surv_fo</code>) between predictors and an outcome based on a set of data (<code>surv_train</code>). Argument specifications may be in terms of the model function, function name, or a function call.</p>
+<p>Information is displayed above for the <code>GBMModel</code> function which is a generalized boosted regression model — a tree-based ensemble method that can be applied to survival outcomes.</p>
+</div>
+<div id="fit-function" class="section level2">
+<h2>Fit Function</h2>
+<p>Package models, like <code>GBMModel</code>, can be specified in the <code>model</code> argument of the <code>fit</code> function to estimate a relationship (<code>surv_fo</code>) between predictors and an outcome based on a set of data (<code>surv_train</code>). Argument specifications may be in terms of the model function, function name, or a function call.</p>
 <pre class="r"><code>## Generalized boosted regression fit
 
 ## Model function
@@ -639,61 +646,109 @@ fit(surv_fo, data = surv_train, model = &quot;GBMModel&quot;)
 
 ## Model function call
 fit(surv_fo, data = surv_train, model = GBMModel(n.trees = 100, interaction.depth = 1))</code></pre>
-<p>A <code>predict</code> function is supplied and can be applied to model fit results to obtain values predicted on a dataset specified with its <code>newdata</code> argument or on the original dataset if not specified. Survival means are predicted for survival outcomes by default. Alternatively, a <code>times</code> argument allows for specification of follow-up times at which to obtain predicted survival probabilities (<code>type = &quot;prob&quot;</code>) or 0-1 survival events (default: <code>type = &quot;response&quot;</code>). In addition, the cutoff probability for classification of survival events or other binary responses can be set optionally in <code>predict</code> (default: <code>cutoff = 0.5</code>).</p>
-<pre class="r"><code>## Predicted survival means
-predict(surv_fit, newdata = surv_test) %&gt;% head
-#&gt; [1] 4264.785 4411.585 3621.750 2069.857 2594.537 3745.281
+</div>
+<div id="dynamic-model-parameters" class="section level2">
+<h2>Dynamic Model Parameters</h2>
+<p><em>Dynamic model parameters</em> are model function arguments defined as expressions to be evaluated at the time of model fitting. As such, their values can change based on the number of observations in the dataset supplied to the fit function. Expressions to dynamic parameters are specified within the package-supplied quote operator <code>.()</code> and can include the following objects:</p>
+<dl>
+<dt><code>nobs</code></dt>
+<dd>number of observations in <code>data</code>.
+</dd>
+<dt><code>nvars</code></dt>
+<dd>number of predictor variables in <code>data</code>.
+</dd>
+<dt><code>y</code></dt>
+<dd>response variable.
+</dd>
+</dl>
+<p>In the example below, Bayesian information criterion (BIC) based stepwise variable selection is performed by creating a <code>CoxStepAICModel</code> with dynamic parameter <code>k</code> to be calculated as the log number of observations in the fitted dataset.</p>
+<pre class="r"><code>## Dynamic model parameter k = log number of observations
 
-## Predict survival probabilities and events at specified follow-up times
+## Number of observations: nobs
+fit(surv_fo, data = surv_df, model = CoxStepAICModel(k = .(log(nobs))))
+
+## Response variable: y
+fit (surv_fo, data = surv_df, model = CoxStepAICModel(k = .(log(length(y)))))</code></pre>
+</div>
+<div id="predict-function" class="section level2">
+<h2>Predict Function</h2>
+<p>A <code>predict</code> function is supplied for application to model fit results to obtain predicted values on a dataset specified with its <code>newdata</code> argument or on the original dataset if not specified. Survival means are predicted for survival outcomes by default. Estimates of the associated survival distributions are needed to calculate the means. For models, like <code>GBMModel</code>, that perform semi- or non-parametric survival analysis, Weibull approximations to the survival distributions are the default for mean estimation. Other choices of distributional approximations are exponential, Rayleigh, and empirical. Empirical distributions are applicable to Cox proportional hazards-based models and can be calculated with the method of Breslow <span class="citation">(1972)</span>, Efron <span class="citation">(1977, default)</span>, or Fleming and Harrington <span class="citation">(1984)</span>. Note, however, that empirical survival means are undefined mathematically if an event does not occur at the longest follow-up time. In such situations, a restricted survival mean is calculated by changing the longest follow-up time to an event, as suggested by Efron <span class="citation">(1967)</span>, which will be negatively biased.</p>
+<pre class="r"><code>## Predicted survival means (default: Weibull distribution)
+predict(surv_fit, newdata = surv_test) %&gt;% head
+#&gt; [1]  8619.077 12395.758  3736.115  1332.317  1808.185  4202.563
+
+## Predicted survival means (empirical distribution)
+predict(surv_fit, newdata = surv_test, dist = &quot;empirical&quot;) %&gt;% head
+#&gt; [1] 4098.222 4298.909 3269.318 1628.793 2123.959 3422.091</code></pre>
+<p>In addition to survival means, predicted survival probabilities (<code>type = &quot;prob&quot;</code>) or 0-1 survival events (default: <code>type = &quot;response&quot;</code>) can be obtained with the follow-up <code>times</code> argument. The cutoff probability for classification of survival events (or other binary responses) can be set optionally with the <code>cutoff</code> argument (default: <code>cutoff = 0.5</code>). As with mean estimation, distributional approximations to the survival functions may be specified for the predictions, with the default for survival probabilities being the empirical distribution.</p>
+<pre class="r"><code>## Predict survival probabilities and events at specified follow-up times
 surv_times &lt;- 365 * c(5, 10)
 
 predict(surv_fit, newdata = surv_test, times = surv_times, type = &quot;prob&quot;) %&gt;% head
-#&gt; An object of class &quot;SurvProbs&quot;
-#&gt;           [,1]      [,2]
-#&gt; [1,] 0.9242729 0.8539451
-#&gt; [2,] 0.9509326 0.9040459
-#&gt; [3,] 0.8019459 0.6424098
-#&gt; [4,] 0.4552399 0.2064317
-#&gt; [5,] 0.5827357 0.3386677
-#&gt; [6,] 0.8262041 0.6819637
-#&gt; Slot &quot;times&quot;:
+#&gt; Object of class &quot;SurvProbs&quot;
+#&gt;         Time 1     Time 2
+#&gt; [1,] 0.8934348 0.79307877
+#&gt; [2,] 0.9305378 0.86232916
+#&gt; [3,] 0.7291876 0.52216086
+#&gt; [4,] 0.3243167 0.09859702
+#&gt; [5,] 0.4617520 0.20396307
+#&gt; [6,] 0.7609545 0.57004119
+#&gt; Attribute &quot;times&quot;:
 #&gt; [1] 1825 3650
 
 predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.5) %&gt;% head
-#&gt; An object of class &quot;SurvEvents&quot;
-#&gt;      [,1] [,2]
-#&gt; [1,]    0    0
-#&gt; [2,]    0    0
-#&gt; [3,]    0    0
-#&gt; [4,]    1    1
-#&gt; [5,]    0    1
-#&gt; [6,]    0    0
-#&gt; Slot &quot;times&quot;:
+#&gt; Object of class &quot;SurvEvents&quot;
+#&gt;      Time 1 Time 2
+#&gt; [1,]      0      0
+#&gt; [2,]      0      0
+#&gt; [3,]      0      0
+#&gt; [4,]      1      1
+#&gt; [5,]      1      1
+#&gt; [6,]      0      0
+#&gt; Attribute &quot;times&quot;:
 #&gt; [1] 1825 3650</code></pre>
+</div>
 </div>
 <div id="variable-specifications" class="section level1">
 <h1>Variable Specifications</h1>
-<p>Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship. Three main types of specifications are supported by the <code>fit</code>, <code>resample</code>, and <code>tune</code> functions: traditional formulas, model frames, and recipes.</p>
+<p>Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship. Three main types of specifications are supported by the <code>fit</code>, <code>resample</code>, and <code>tune</code> functions: traditional formula, model frame, and recipe.</p>
 <div id="traditional-formula" class="section level2">
 <h2>Traditional Formula</h2>
-<p>Models may be specified with a traditional formula and data frame pair, as was done at the start of the survival example. With this specification, in-line functions, interactions, and <code>.</code> substitution of variables not already appearing in the formula may be included.</p>
+<p>Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example. With this specification, formula operators, such as interaction (<code>:</code>) and crossing (<code>*</code>), as well as <code>.</code> substitution of variables not already appearing in the formula may be used.</p>
 <pre class="r"><code>## Dataset library
 library(MASS)
 
 ## Formula specification
 fit(medv ~ ., data = Boston, model = GBMModel)</code></pre>
 </div>
+<div id="design-matrix" class="section level2">
+<h2>Design Matrix</h2>
+<p>Variables stored separately in a design matrix of predictors and object of responses can be supplied to the fit functions directly. Fitting with design matrices has less computational overhead than traditional formulas and allows for greater numbers of predictor variables in some models, including <code>GBMModel</code>, <code>GLMNetModel</code>, and <code>RandomForestModel</code>.</p>
+<pre class="r"><code>## Example design matrix and response object
+x &lt;- model.matrix(medv ~ . - 1, data = Boston)
+y &lt;- Boston$medv
+
+## Design matrix specification
+fit(x, y, model = GBMModel)</code></pre>
+</div>
 <div id="model-frame" class="section level2">
 <h2>Model Frame</h2>
-<p>Model frame specification is similar to the traditional formula, except with the formula and data frame pair defined within the <code>ModelFrame</code> class constructor provided by <code>MachineShop</code>.</p>
+<p>A <code>ModelFrame</code> class is provided by the package for specification of predictor and response variables along with other attributes to control model fitting. Model frames can be specified in calls to the <code>ModelFrame</code> constructor function with a syntax similar to the traditional formula or design matrix.</p>
 <pre class="r"><code>## Model frame specification
+
+## Formula
 mf &lt;- ModelFrame(medv ~ ., data = Boston)
 
+fit(mf, model = GBMModel)
+
+## Design matrix
+mf &lt;- ModelFrame(x, y)
+
 fit(mf, model = GBMModel)</code></pre>
-<p>The model frame approach has a few advantages over the traditional formula. One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default. This is often desirable for models that do not handle missing values. Conversely, missing values can be retained in the model frame by setting its argument <code>na.action = na.pass</code> for models, like <code>GBMModel</code>, that do handle them. A second advantage is that case weights can be included in the model frame to be passed on to the model fitting functions.</p>
+<p>The model frame approach has a few advantages over model fitting directly with a traditional formula. One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default. This is often desirable for models that do not handle missing values. Conversely, missing values can be retained in the model frame by setting its argument <code>na.rm = FALSE</code> for models, like <code>GBMModel</code>, that do handle them. A second advantage is that case weights can be included in the model frame to be passed on to the model fitting functions.</p>
 <pre class="r"><code>## Model frame specification with case weights
 mf &lt;- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp, data = esoph,
-                 weights = ncases + ncontrols)
+                 weights = with(esoph, ncases + ncontrols))
 
 fit(mf, model = GBMModel)</code></pre>
 <p>A third, which will be illustrated later, is user-specification of a variable for stratified resampling via the constructor’s <code>strata</code> argument.</p>
@@ -715,13 +770,15 @@ df &lt;- within(esoph, {
 })
 
 rec &lt;- recipe(y ~ agegp + tobgp + alcgp + weights, data = df) %&gt;%
-  update_role(weights, new_role = &quot;case_weight&quot;)
+  update_role(weights, new_role = &quot;case_weight&quot;) %&gt;%
+  step_ordinalscore(agegp, tobgp, alcgp)
 
 fit(rec, model = GBMModel)</code></pre>
 </div>
 </div>
 <div id="response-variable-types" class="section level1">
 <h1>Response Variable Types</h1>
+<p>The R class types of response variables play a central role in their analysis with the package. They determine, for example, the specific models that can be fit, fitting algorithms employed, predicted values produced, and applicable performance metrics and analyses. As described below, factors, ordered factors, numeric vectors and matrices, and survival responses are supported by the package.</p>
 <div id="factors" class="section level2">
 <h2>Factors</h2>
 <p>Categorical responses with two or more levels should be coded as <code>factor</code> variables for analysis.</p>
@@ -785,11 +842,11 @@ fit(rec, model = GBMModel)</code></pre>
 <h1>Model Performance Metrics</h1>
 <div id="performance-function" class="section level2">
 <h2>Performance Function</h2>
-<p>Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models. Metrics can be computed with the <code>performance</code> function applied to observed responses and responses predicted with the <code>predict</code> function. Metrics of observed versus predicted survival probabilities or events will be calculated at each survival time and returned along with their time-integrated mean.</p>
+<p>Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models. Metrics can be computed with the <code>performance</code> function applied to observed responses and responses predicted with the <code>predict</code> function. In the case of observed versus predicted survival probabilities or events, metrics will be calculated at each survival time and returned along with their time-integrated mean.</p>
 <pre class="r"><code>## Survival performance metrics
 
 ## Observed responses
-obs &lt;- response(surv_fo, surv_test)
+obs &lt;- response(surv_fit, newdata = surv_test)
 
 ## Predicted survival means
 pred_means &lt;- predict(surv_fit, newdata = surv_test)
@@ -801,15 +858,15 @@ performance(obs, pred_means)
 pred_probs &lt;- predict(surv_fit, newdata = surv_test, times = surv_times, type = &quot;prob&quot;)
 performance(obs, pred_probs)
 #&gt;     Brier.mean    Brier.time1    Brier.time2    ROCAUC.mean   ROCAUC.time1 
-#&gt;      0.2155492      0.1806647      0.2504337      0.6304049      0.6634101 
+#&gt;      0.2223704      0.1901665      0.2545743      0.6304049      0.6634101 
 #&gt;   ROCAUC.time2  Accuracy.mean Accuracy.time1 Accuracy.time2 
-#&gt;      0.5973996      0.7021586      0.7607143      0.6436028
+#&gt;      0.5973996      0.6817370      0.7607143      0.6027596
 
 ## Predicted survival events
 pred_events &lt;- predict(surv_fit, newdata = surv_test, times = surv_times)
 performance(obs, pred_events)
 #&gt;  Accuracy.mean Accuracy.time1 Accuracy.time2 
-#&gt;      0.7021586      0.7607143      0.6436028</code></pre>
+#&gt;      0.6817370      0.7607143      0.6027596</code></pre>
 <p>Function <code>performance</code> computes a default set of metrics according to the observed and predicted response types, as indicated in the table below.</p>
 <p>Table 2. Default performance metrics by response types.</p>
 <table>
@@ -850,7 +907,7 @@ performance(obs, pred_events)
 </tr>
 </tbody>
 </table>
-<p>The defaults may be changed by specifying one or more package-supplied metric functions to the <code>metrics</code> argument of <code>performance</code>. A named list of supplied metric functions can be obtained interactively with the <code>metricinfo</code> function, and includes a descriptive <code>&quot;label&quot;</code>, whether to <code>&quot;maximize&quot;</code> the metric for better performance, the function <code>&quot;arguments&quot;</code>, and supported response variable <code>&quot;types&quot;</code> for each. Function <code>metricinfo</code> may be called with one or more metric functions, function names, an observed response variable, or an observed and predicted response variable pair; and will return information on all matching metrics.</p>
+<p>These defaults may be changed by specifying one or more package-supplied metric functions to the <code>metrics</code> argument of <code>performance</code>. A named list of supplied metrics can be obtained interactively with the <code>metricinfo</code> function, and includes a descriptive <code>&quot;label&quot;</code>, whether to <code>&quot;maximize&quot;</code> the metric for better performance, the function <code>&quot;arguments&quot;</code>, and supported response variable <code>&quot;types&quot;</code> for each. Function <code>metricinfo</code> may be called with one or more metric functions, function names, an observed response variable, or an observed and predicted response variable pair; and will return information on all matching metrics.</p>
 <pre class="r"><code>## Names of all available metrics
 metricinfo() %&gt;% names
 #&gt;  [1] &quot;accuracy&quot;        &quot;auc&quot;             &quot;brier&quot;          
@@ -917,9 +974,9 @@ performance(obs, pred_means, metrics = c(&quot;CIndex&quot; = cindex,
 <pre class="r"><code>## User-specified survival probability metrics
 performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.5)
 #&gt;  sensitivity.mean sensitivity.time1 sensitivity.time2  specificity.mean 
-#&gt;         0.3286345         0.2855395         0.3717295         0.8850314 
+#&gt;         0.4210721         0.3997553         0.4423889         0.8033254 
 #&gt; specificity.time1 specificity.time2 
-#&gt;         0.9223139         0.8477489</code></pre>
+#&gt;         0.8834709         0.7231799</code></pre>
 </div>
 <div id="factors-1" class="section level2">
 <h2>Factors</h2>
@@ -958,12 +1015,6 @@ performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.5
 </dd>
 <dt><code>fnr</code></dt>
 <dd>False negative rate, <span class="math inline">\(FNR = \frac{FN}{TP + FN} = 1 - TPR\)</span>.
-</dd>
-<dt><code>fpr</code></dt>
-<dd>False positive rate, <span class="math inline">\(FPR = \frac{FP}{TN + FP} = 1 - TNR\)</span>.
-</dd>
-<dt><code>npv</code></dt>
-<dd>Negative predictive value, <span class="math inline">\(NPV = \frac{TN}{TN + FN}\)</span>.
 </dd>
 </dl>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
@@ -1020,6 +1071,12 @@ True Positive (TP)
 </tbody>
 </table>
 <dl>
+<dt><code>fpr</code></dt>
+<dd>False positive rate, <span class="math inline">\(FPR = \frac{FP}{TN + FP} = 1 - TNR\)</span>.
+</dd>
+<dt><code>npv</code></dt>
+<dd>Negative predictive value, <span class="math inline">\(NPV = \frac{TN}{TN + FN}\)</span>.
+</dd>
 <dt><code>ppv</code>, <code>precision</code></dt>
 <dd>Positive predictive value, <span class="math inline">\(PPV = \frac{TP}{TP + FP}\)</span>.
 </dd>
@@ -1042,11 +1099,11 @@ True Positive (TP)
 <dd>True negative rate, <span class="math inline">\(TNR = \frac{TN}{TN + FP} = 1 - FPR\)</span>.
 </dd>
 </dl>
-<p>Area under the ROC and precision-recall curves are computed directly on predicted class probabilities. The other metrics are computed on predicted class membership. Memberships are defined to be in the second factor level if predicted probabilities are greater than the cutoff value set in the <code>performance</code> function.</p>
+<p>Area under the ROC and precision-recall curves as well as the concordance index are computed directly on predicted class probabilities. The other metrics are computed on predicted class membership. Memberships are defined to be in the second factor level if predicted probabilities are greater than the cutoff value set in the <code>performance</code> function.</p>
 </div>
 <div id="numerics" class="section level2">
 <h2>Numerics</h2>
-<p>Performance metrics are defined below for numeric vector responses. If applied to a numeric matrix response, the metrics are computed separately for each column of the matrix and then averaged to produce a single value.</p>
+<p>Performance metrics are defined below for numeric vector responses. If applied to a numeric matrix response, the metrics are computed separately for each column and then averaged to produce a single value.</p>
 <dl>
 <dt><code>gini</code></dt>
 <dd><a href="https://en.wikipedia.org/wiki/Gini_coefficient">Gini coefficient</a>.
@@ -1170,15 +1227,15 @@ registerDoParallel(cores = 2)</code></pre>
 </div>
 <div id="resample-function" class="section level2">
 <h2>Resample Function</h2>
-<p>Resampling is performed by calling the <code>resample</code> function with a variable specification, model, and control structure. Like the <code>fit</code> function, variables may be specified in terms of a traditional formula, model frame, or recipe. Summary statistics and plots of resample output can be obtained with the <code>summary</code> and <code>plot</code> functions.</p>
+<p>Resampling is performed by calling the <code>resample</code> function with a variable specification, model, and control structure. Like the <code>fit</code> function, variables may be specified in terms of a traditional formula, design matrix, model frame, or recipe. Summary statistics and plots of resample output can be obtained with the <code>summary</code> and <code>plot</code> functions.</p>
 <pre class="r"><code>## Resample estimation for survival means and probabilities
 (res_means &lt;- resample(surv_fo, data = surv_df, model = GBMModel, control = surv_means_control))
-#&gt; An object of class &quot;Resamples&quot;
+#&gt; Object of class &quot;Resamples&quot;
 #&gt; 
 #&gt; Models: GBMModel
 #&gt; Stratification variable: (strata) 
 #&gt; 
-#&gt; An object from class &quot;MLControl&quot;
+#&gt; Object of class &quot;MLControl&quot;
 #&gt; 
 #&gt; Name: CVControl
 #&gt; Label: K-Fold Cross-Validation
@@ -1187,34 +1244,34 @@ registerDoParallel(cores = 2)</code></pre>
 #&gt; Seed: 123
 
 (res_probs &lt;- resample(surv_fo, data = surv_df, model = GBMModel, control = surv_probs_control))
-#&gt; An object of class &quot;Resamples&quot;
+#&gt; Object of class &quot;Resamples&quot;
 #&gt; 
 #&gt; Models: GBMModel
 #&gt; Stratification variable: (strata) 
 #&gt; 
-#&gt; An object from class &quot;MLControl&quot;
+#&gt; Object of class &quot;MLControl&quot;
 #&gt; 
 #&gt; Name: CVControl
 #&gt; Label: K-Fold Cross-Validation
 #&gt; Folds: 5
 #&gt; Repeats: 3
-#&gt; Survival times: 1825, 3650 
+#&gt; Survival times: 1825, 3650
 #&gt; Seed: 123
 
 summary(res_probs)
 #&gt;                     Mean    Median         SD       Min       Max NA
-#&gt; Brier.mean     0.2195629 0.2269923 0.02047342 0.1678486 0.2390358  0
-#&gt; Brier.time1    0.1853380 0.1955808 0.03318681 0.1316865 0.2438647  0
-#&gt; Brier.time2    0.2537878 0.2507074 0.04236136 0.1842553 0.3162855  0
+#&gt; Brier.mean     0.2142683 0.2209187 0.02535889 0.1651204 0.2510655  0
+#&gt; Brier.time1    0.1865732 0.1931616 0.03231917 0.1390596 0.2395902  0
+#&gt; Brier.time2    0.2419634 0.2328018 0.05029385 0.1856179 0.3554228  0
 #&gt; ROCAUC.mean    0.7003126 0.6784924 0.06065723 0.6241044 0.8151629  0
 #&gt; ROCAUC.time1   0.7269430 0.7142815 0.08019011 0.5933010 0.8597839  0
 #&gt; ROCAUC.time2   0.6736821 0.6699859 0.06283310 0.5786972 0.7795556  0
-#&gt; Accuracy.mean  0.6666261 0.6654481 0.04073922 0.5564662 0.7302533  0
-#&gt; Accuracy.time1 0.7466615 0.7544715 0.05228609 0.6720000 0.8292683  0
-#&gt; Accuracy.time2 0.5865907 0.5914104 0.08164512 0.3666360 0.6873358  0
+#&gt; Accuracy.mean  0.6903808 0.6688471 0.04750030 0.6288628 0.8034240  0
+#&gt; Accuracy.time1 0.7580823 0.7560976 0.06087687 0.6354739 0.8536585  0
+#&gt; Accuracy.time2 0.6226792 0.6405024 0.09247024 0.4611556 0.7848968  0
 
 plot(res_probs)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-38-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-41-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>The <code>summary</code> function when applied directly to output from <code>resample</code> computes default performance metrics as described in the <em>Performance Function</em> section. Likewise, the <code>metricinfo</code> and <code>performance</code> functions can be applied to the output in order to list and compute applicable metrics.</p>
 <pre class="r"><code>## Resample-specific metrics
 metricinfo(res_probs) %&gt;% names
@@ -1225,19 +1282,19 @@ metricinfo(res_probs) %&gt;% names
 
 ## User-specified survival probability metrics
 summary(performance(res_probs, metrics = c(sensitivity, specificity)))
-#&gt;                        Mean    Median         SD       Min       Max NA
-#&gt; sensitivity.mean  0.2433420 0.2455747 0.08327312 0.1309881 0.3992344  0
-#&gt; sensitivity.time1 0.2242094 0.2286585 0.13007156 0.0000000 0.5000000  0
-#&gt; sensitivity.time2 0.2624746 0.2404528 0.09444349 0.1262664 0.4489532  0
-#&gt; specificity.mean  0.9052404 0.9213255 0.06184367 0.7229870 0.9686275  0
-#&gt; specificity.time1 0.9423829 0.9372549 0.03467425 0.8660050 1.0000000  0
-#&gt; specificity.time2 0.8680980 0.8760562 0.09670937 0.5799691 1.0000000  0</code></pre>
+#&gt;                        Mean    Median         SD        Min       Max NA
+#&gt; sensitivity.mean  0.3998915 0.3549009 0.11023028 0.24838040 0.5680265  0
+#&gt; sensitivity.time1 0.3260253 0.2727273 0.14462166 0.07513094 0.6250000  0
+#&gt; sensitivity.time2 0.4737578 0.4857975 0.15010903 0.23675694 0.7295489  0
+#&gt; specificity.mean  0.8366948 0.8493977 0.06465966 0.70274111 0.9265623  0
+#&gt; specificity.time1 0.9195801 0.9321153 0.05598331 0.76550868 1.0000000  0
+#&gt; specificity.time2 0.7538094 0.7484976 0.09435790 0.58759190 0.9158697  0</code></pre>
 </div>
 <div id="stratified-resampling" class="section level2">
 <h2>Stratified Resampling</h2>
 <p>Stratification of cases for the construction of resampled training and test sets can be employed to help achieve balance across the sets. Stratified resampling is automatically performed if variable specification is in terms of a traditional formula and will be done according to the response variable if a numeric vector or factor, the event variable if survival, and the first variable if a numeric matrix. For model frames and recipes, stratification variables must be defined explicitly with the <code>strata</code> argument to the <code>ModelFrame</code> constructor or with the <code>&quot;case_strata&quot;</code> role designation in a recipe step.</p>
 <pre class="r"><code>## Model frame with case status stratification
-mf &lt;- ModelFrame(surv_fo, data = surv_df, strata = status)
+mf &lt;- ModelFrame(surv_fo, data = surv_df, strata = surv_df$status)
 
 resample(mf, model = GBMModel)
 
@@ -1248,6 +1305,12 @@ rec &lt;- recipe(time + status ~ ., data = surv_df) %&gt;%
   add_role(status, new_role = &quot;case_strata&quot;)
 
 resample(rec, model = GBMModel)</code></pre>
+</div>
+<div id="dynamic-model-parameters-1" class="section level2">
+<h2>Dynamic Model Parameters</h2>
+<p>As discussed previously in the <em>Model Fit and Prediction</em> section, dynamic model parameters are evaluated at the time of model fitting and can depend on the number of observations in the fitted dataset. In the context of resampling, dynamic parameters are repeatedly evaluated at each fit of the resampled datasets. As such, their values can change based on the observations selected for training at each iteration of the resampling algorithm.</p>
+<pre class="r"><code>## Dynamic model parameter k = log number of training set observations
+resample(surv_fo, data = surv_df, model = CoxStepAICModel(k = .(log(nobs))))</code></pre>
 </div>
 <div id="model-comparisons" class="section level2">
 <h2>Model Comparisons</h2>
@@ -1262,12 +1325,12 @@ res3 &lt;- resample(surv_fo, data = surv_df, model = GBMModel(n.trees = 100),
 
 ## Combine resample output for comparison
 (res &lt;- Resamples(GBM1 = res1, GBM2 = res2, GBM3 = res3))
-#&gt; An object of class &quot;Resamples&quot;
+#&gt; Object of class &quot;Resamples&quot;
 #&gt; 
 #&gt; Models: GBM1, GBM2, GBM3
 #&gt; Stratification variable: (strata) 
 #&gt; 
-#&gt; An object from class &quot;MLControl&quot;
+#&gt; Object of class &quot;MLControl&quot;
 #&gt; 
 #&gt; Name: CVControl
 #&gt; Label: K-Fold Cross-Validation
@@ -1284,19 +1347,19 @@ summary(res)
 #&gt; GBM3 0.6941198 0.6762295 0.05933365 0.6244541 0.8227513  0
 
 plot(res)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-41-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-45-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>plot(res, type = &quot;density&quot;)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-41-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-45-2.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>plot(res, type = &quot;errorbar&quot;)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-41-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-45-3.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>plot(res, type = &quot;violin&quot;)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-41-4.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Pairwise model differences for each metric can be calculated with the <code>diff</code> function applied to results from a call to <code>Resamples</code>. The differences can be summarized descriptively with the <code>summary</code> and <code>plot</code> functions and assessed for statistical significance with the <code>t.test</code> function.</p>
+<p><img src="using_files/figure-html/unnamed-chunk-45-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Pairwise model differences for each metric can be calculated with the <code>diff</code> function applied to results from a call to <code>Resamples</code>. Resulting differences can be summarized descriptively with the <code>summary</code> and <code>plot</code> functions and assessed for statistical significance with the <code>t.test</code> function.</p>
 <pre class="r"><code>## Pairwise model comparisons
 (perfdiff &lt;- diff(res))
-#&gt; An object of class &quot;PerformanceDiff&quot;
+#&gt; Object of class &quot;PerformanceDiff&quot;
 #&gt; 
-#&gt; Metrics: CIndex 
+#&gt; Metrics: CIndex
 #&gt; Models: GBM1 - GBM2, GBM1 - GBM3, GBM2 - GBM3
 
 summary(perfdiff)
@@ -1308,9 +1371,9 @@ summary(perfdiff)
 #&gt; GBM2 - GBM3 0.011778524 0.015267176 0.01695738 -0.01793722 0.04449153  0
 
 plot(perfdiff)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-42-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-46-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>t.test(perfdiff)
-#&gt; An object of class &quot;HTestPerformanceDiff&quot;
+#&gt; Object of class &quot;HTestPerformanceDiff&quot;
 #&gt; 
 #&gt; Upper diagonal: mean differences (row - column)
 #&gt; Lower diagonal: p-values
@@ -1339,7 +1402,7 @@ plot(perfdiff)</code></pre>
 #&gt; sex         0.00000
 
 plot(vi)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-44-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-48-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="calibration-curves" class="section level2">
 <h2>Calibration Curves</h2>
@@ -1347,80 +1410,80 @@ plot(vi)</code></pre>
 <pre class="r"><code>## Binned calibration curves
 cal &lt;- calibration(res_probs, breaks = 10)
 plot(cal, se = TRUE)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-45-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-49-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Smoothed calibration curves
 cal &lt;- calibration(res_probs, breaks = NULL)
 plot(cal)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-46-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-50-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="confusion-matrices" class="section level2">
 <h2>Confusion Matrices</h2>
-<p>Confusion matrices of cross-classified observed and predicted factor responses are available with the <code>confusion</code> function. They can be constructed with predicted class membership or with predicted class probabilities. In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors and according to the class with highest probability for factors with more than two levels. Performance metrics, such as those described earlier for binary factors, can be computed with the <code>performance</code> function and summarized with <code>summary</code> and <code>plot</code>.</p>
+<p>Confusion matrices of cross-classified observed and predicted factor or survival probabilitie are available with the <code>confusion</code> function. They can be constructed with predicted class membership or with predicted class probabilities. In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors and according to the class with highest probability for factors with more than two levels. Performance metrics, such as those described earlier for binary factors, can be computed with the <code>performance</code> function and summarized with <code>summary</code> and <code>plot</code>.</p>
 <pre class="r"><code>## Confusion matrices
 (conf &lt;- confusion(res_probs, cutoff = 0.5))
 #&gt; GBMModel.time1 :
 #&gt;          Observed
 #&gt; Predicted         0         1
-#&gt;         0 424.44865 129.55135
-#&gt;         1  25.89286  35.10714
+#&gt;         0 414.44407 112.55593
+#&gt;         1  35.89744  52.10256
 #&gt; 
 #&gt; GBMModel.time2 :
 #&gt;          Observed
 #&gt; Predicted         0         1
-#&gt;         0 297.18631 201.81369
-#&gt;         1  44.34498  71.65502
+#&gt;         0 258.77147 141.22853
+#&gt;         1  82.75981 132.24019
 
 performance(conf, metrics = c(&quot;Accuracy&quot; = accuracy,
                               &quot;Sensitivity&quot; = sensitivity,
                               &quot;Specificity&quot; = specificity))
 #&gt; GBMModel.time1 :
 #&gt;    Accuracy Sensitivity Specificity 
-#&gt;   0.7472452   0.2132119   0.9425040 
+#&gt;   0.7586124   0.3164280   0.9202884 
 #&gt; 
 #&gt; GBMModel.time2 :
 #&gt;    Accuracy Sensitivity Specificity 
-#&gt;   0.5997420   0.2620227   0.8701584
+#&gt;   0.6357913   0.4835661   0.7576801
 
 summary(conf)
 #&gt; GBMModel.time1 :
 #&gt; Number of responses: 615
-#&gt; Accuracy (SE): 0.7472452 (0.01752442)
+#&gt; Accuracy (SE): 0.7586124 (0.01725559)
 #&gt; Majority class: 0.7322626
-#&gt; Kappa: 0.1945668
+#&gt; Kappa: 0.2777282
 #&gt; 
 #&gt;                     0          1
 #&gt; Observed    0.7322626 0.26773739
-#&gt; Predicted   0.9008130 0.09918699
-#&gt; Agreement   0.6901604 0.05708479
-#&gt; Sensitivity 0.9425040 0.21321185
-#&gt; Specificity 0.2132119 0.94250395
-#&gt; PPV         0.7661528 0.57552693
-#&gt; NPV         0.5755269 0.76615280
+#&gt; Predicted   0.8569106 0.14308943
+#&gt; Agreement   0.6738928 0.08471962
+#&gt; Sensitivity 0.9202884 0.31642804
+#&gt; Specificity 0.3164280 0.92028841
+#&gt; PPV         0.7864214 0.59207459
+#&gt; NPV         0.5920746 0.78642139
 #&gt; 
 #&gt; GBMModel.time2 :
 #&gt; Number of responses: 615
-#&gt; Accuracy (SE): 0.599742 (0.01975671)
+#&gt; Accuracy (SE): 0.6357913 (0.01940416)
 #&gt; Majority class: 0.5553354
-#&gt; Kappa: 0.1402268
+#&gt; Kappa: 0.2464976
 #&gt; 
 #&gt;                     0         1
 #&gt; Observed    0.5553354 0.4446646
-#&gt; Predicted   0.8113821 0.1886179
-#&gt; Agreement   0.4832298 0.1165122
-#&gt; Sensitivity 0.8701584 0.2620227
-#&gt; Specificity 0.2620227 0.8701584
-#&gt; PPV         0.5955637 0.6177157
-#&gt; NPV         0.6177157 0.5955637</code></pre>
+#&gt; Predicted   0.6504065 0.3495935
+#&gt; Agreement   0.4207666 0.2150247
+#&gt; Sensitivity 0.7576801 0.4835661
+#&gt; Specificity 0.4835661 0.7576801
+#&gt; PPV         0.6469287 0.6150706
+#&gt; NPV         0.6150706 0.6469287</code></pre>
 <pre class="r"><code>plot(conf)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-48-1.png" width="672" style="display: block; margin: auto;" /><img src="using_files/figure-html/unnamed-chunk-48-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-52-1.png" width="672" style="display: block; margin: auto;" /><img src="using_files/figure-html/unnamed-chunk-52-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="partial-dependence-plots" class="section level2">
 <h2>Partial Dependence Plots</h2>
-<p>Partial dependence plots display the marginal effects of predictors on the response variable. The response scale displayed in the plots will depend on the response type: probability for factors and predicted survival probabilities, original scale for numerics, and survival time for predicted survival means.</p>
+<p>Partial dependence plots display the marginal effects of predictors on the response variable. The response scale displayed in the plots will depend on the response type: probability for predicted factors and survival probabilities, original scale for numerics, and survival time for predicted survival means.</p>
 <pre class="r"><code>## Partial dependence plots
 pd &lt;- dependence(surv_fit, select = c(thickness, age))
 plot(pd)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-49-1.png" width="672" style="display: block; margin: auto;" /><img src="using_files/figure-html/unnamed-chunk-49-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-53-1.png" width="672" style="display: block; margin: auto;" /><img src="using_files/figure-html/unnamed-chunk-53-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="performance-curves" class="section level2">
 <h2>Performance Curves</h2>
@@ -1431,15 +1494,15 @@ plot(pd)</code></pre>
 <pre class="r"><code>## ROC curves
 roc &lt;- performance_curve(res_probs)
 plot(roc, diagonal = TRUE)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-50-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-54-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>plot(roc, type = &quot;cutoffs&quot;)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-50-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-54-2.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>auc(roc)
 #&gt; Model: GBMModel.time1
-#&gt; [1] 0.7209396
+#&gt; [1] 0.7216004
 #&gt; -------------------------------------------------------- 
 #&gt; Model: GBMModel.time2
-#&gt; [1] 0.6683252</code></pre>
+#&gt; [1] 0.6696165</code></pre>
 </div>
 <div id="precision-recall" class="section level3">
 <h3>Precision Recall</h3>
@@ -1447,13 +1510,13 @@ plot(roc, diagonal = TRUE)</code></pre>
 <pre class="r"><code>## Precision recall curves
 pr &lt;- performance_curve(res_probs, metrics = c(precision, recall))
 plot(pr)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-52-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-56-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>auc(pr)
 #&gt; Model: GBMModel.time1
-#&gt; [1] 0.4343253
+#&gt; [1] 0.43682
 #&gt; -------------------------------------------------------- 
 #&gt; Model: GBMModel.time2
-#&gt; [1] 0.5826389</code></pre>
+#&gt; [1] 0.5887828</code></pre>
 </div>
 <div id="lift" class="section level3">
 <h3>Lift</h3>
@@ -1461,7 +1524,7 @@ plot(pr)</code></pre>
 <pre class="r"><code>## Lift curves
 lf &lt;- lift(res_probs)
 plot(lf, find = 0.75)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-54-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-58-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
@@ -1475,7 +1538,7 @@ plot(lf, find = 0.75)</code></pre>
                    grid = 3,
                    control = surv_means_control,
                    metrics = c(&quot;CIndex&quot; = cindex, &quot;RMSE&quot; = rmse)))
-#&gt; An object of class &quot;MLModelTune&quot;
+#&gt; Object of class &quot;MLModelTune&quot;
 #&gt; 
 #&gt; Model name: GBMModel
 #&gt; Label: Generalized Boosted Regression
@@ -1510,9 +1573,9 @@ plot(lf, find = 0.75)</code></pre>
 #&gt; 8     100                 3
 #&gt; 9     150                 3
 #&gt; 
-#&gt; An object of class &quot;Performance&quot;
+#&gt; Object of class &quot;Performance&quot;
 #&gt; 
-#&gt; Metrics: CIndex, RMSE 
+#&gt; Metrics: CIndex, RMSE
 #&gt; Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6, GBMModel.7, GBMModel.8, GBMModel.9 
 #&gt; 
 #&gt; Selected (CIndex): GBMModel.1
@@ -1533,19 +1596,19 @@ summary(surv_tune)
 #&gt; 
 #&gt; , , RMSE
 #&gt; 
-#&gt;                Mean   Median       SD      Min      Max NA
-#&gt; GBMModel.1 2641.262 2647.588 329.4775 2015.310 3229.041  0
-#&gt; GBMModel.2 2729.431 2716.819 351.6683 2099.813 3260.165  0
-#&gt; GBMModel.3 2762.201 2721.302 388.5256 2059.193 3346.956  0
-#&gt; GBMModel.4 2739.729 2737.601 356.4921 2010.709 3245.199  0
-#&gt; GBMModel.5 2862.102 2903.612 391.1429 2132.708 3533.432  0
-#&gt; GBMModel.6 2933.915 2954.276 392.4251 2096.266 3482.183  0
-#&gt; GBMModel.7 2803.999 2830.390 350.3109 2026.888 3290.263  0
-#&gt; GBMModel.8 2976.085 3023.242 382.5607 2184.120 3517.882  0
-#&gt; GBMModel.9 3075.965 3143.521 413.9979 2161.720 3668.848  0
+#&gt;                Mean   Median       SD      Min       Max NA
+#&gt; GBMModel.1 4622.523 4620.080 1536.488 2625.016  8292.560  0
+#&gt; GBMModel.2 4828.093 4905.842 1455.894 2847.789  7503.051  0
+#&gt; GBMModel.3 4984.213 5181.052 1548.834 2124.061  7327.174  0
+#&gt; GBMModel.4 4785.732 4823.784 1644.107 2669.812  7365.786  0
+#&gt; GBMModel.5 4396.219 4235.812 1723.906 1886.119  7491.740  0
+#&gt; GBMModel.6 3810.610 4116.190 1476.657 1772.266  6017.007  0
+#&gt; GBMModel.7 5013.930 4504.273 1766.908 2760.226  9407.171  0
+#&gt; GBMModel.8 4984.817 4944.546 2052.461 1831.480  8473.961  0
+#&gt; GBMModel.9 5213.172 4556.378 2745.462 2307.150 12983.578  0
 
 plot(surv_tune, type = &quot;line&quot;)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-55-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-59-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Tune over randomly sampled grid points
 tune(surv_fo, data = surv_df, model = GBMModel,
      grid = Grid(length = 100, random = 10),
@@ -1589,15 +1652,15 @@ stackedmodel &lt;- StackedModel(GLMBoostModel, CForestModel, CoxModel)
 res_stacked &lt;- resample(surv_fo, data = surv_df, model = stackedmodel)
 summary(res_stacked)
 #&gt;             Mean    Median        SD  Min       Max NA
-#&gt; CIndex 0.6960906 0.7205175 0.1134739 0.48 0.8378378  0
+#&gt; CIndex 0.6847059 0.7261905 0.1185994 0.44 0.8198198  0
 
 ## Super learner
 supermodel &lt;- SuperModel(GLMBoostModel, CForestModel, CoxModel,
                          model = GBMModel)
 res_super &lt;- resample(surv_fo, data = surv_df, model = supermodel)
 summary(res_super)
-#&gt;            Mean    Median        SD      Min   Max NA
-#&gt; CIndex 0.707372 0.6994528 0.1068744 0.468254 0.845  0</code></pre>
+#&gt;             Mean    Median         SD       Min       Max NA
+#&gt; CIndex 0.7060767 0.7133354 0.09206905 0.4960317 0.8138298  0</code></pre>
 </div>
 </div>
 <div id="package-extensions" class="section level1">
@@ -1645,6 +1708,18 @@ summary(performance(res, metric = f2_score))
 </div>
 <div id="ref-breiman:1996:SR">
 <p>Breiman, Leo. 1996. “Stacked Regression.” <em>Machine Learning</em> 24: 49–64.</p>
+</div>
+<div id="ref-breslow:1972:DPC">
+<p>Breslow, Norman E. 1972. “Discussion of Professor Cox’s Paper.” <em>Journal of the Royal Statistical Society, Series B</em> 34: 216–17.</p>
+</div>
+<div id="ref-efron:1967:PFB">
+<p>Efron, Bradley. 1967. “The Two Sample Problem with Censored Data.” In <em>Proceedings of the Fifth Berkeley Symposium on Mathematical Statistics and Probability, Volume 4: Biology and Problems of Health</em>, 831–53. Berkeley, California: University of California Press.</p>
+</div>
+<div id="ref-efron:1977:ECL">
+<p>———. 1977. “The Efficiency of Cox’s Likelihood Function for Censored Data.” <em>Journal of the American Statistical Association</em> 72 (359): 557–65.</p>
+</div>
+<div id="ref-fleming:1984:NES">
+<p>Fleming, Thomas R, and David P Harrington. 1984. “Nonparametric Estimation of the Survival Distribution in Censored Data.” <em>Communications in Statistics - Theory and Methods</em> 13 (20): 2469–86.</p>
 </div>
 <div id="ref-graf:1999:ACP">
 <p>Graf, Erika, Claudia Schmoor, Willi Sauerbrei, and Martin Schumacher. 1999. “Assessment and Comparison of Prognostic Classification Schemes for Survival Data.” <em>Statistics in Medicine</em> 18 (17–18): 2529–45.</p>
