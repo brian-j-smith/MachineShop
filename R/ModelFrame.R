@@ -61,7 +61,7 @@ ModelFrame.matrix <- function(x, y = NULL, na.rm = TRUE,
                               weights = NULL, strata = NULL, ...) {
   data <- as.data.frame(x)
   colnames(x) <- names(data)
-  model_terms <- eval(substitute(terms(x, y)))
+  model_terms <- terms(x, y)
   data[deparse(response(model_terms))] <- y
   
   ModelFrame(model_terms, data, na.rm = na.rm,
@@ -198,10 +198,8 @@ terms.matrix <- function(x, y = NULL, ...) {
   stopifnot(!anyDuplicated(colnames(x)))
   
   labels <- colnames(x)
-  response <- if (!is.null(y)) {
-    make.unique(c(labels, deparse(substitute(y))))[length(labels) + 1]
-  }
-  
+  response <- if (!is.null(y)) make.unique(c(labels, "y"))[length(labels) + 1]
+
   terms(labels, response, all_numeric = is.numeric(x))
 }
 
