@@ -26,22 +26,23 @@ response <- function(object, ...) {
 
 
 response.MLFitBits <- function(object, newdata = NULL, ...) {
-  y <- object@y
-  if (is.null(newdata)) y else response(object@x, newdata, levels(y))
+  if (is.null(newdata)) object@y else response(object@x, newdata)
 }
 
 
-response.formula <- function(object, data = NULL, levels = NULL, ...) {
+response.formula <- function(object, data = NULL, template = NULL, ...) {
   if (!is.null(data)) {
     expr <- response(object)
     y <- eval(expr, as.data.frame(data[, all.vars(expr), drop = FALSE]))
-    if (is.factor(y) && !is.null(levels)) {
-      y_levels <- levels(y)
-      new_levels <- y_levels[is.na(match(y_levels, levels))]
+    if (is.factor(template)) {
+      y_levels <- as.character(unique(y))
+      template_levels <- levels(template)
+      new_levels <- y_levels[is.na(match(y_levels, template_levels))]
       if (length(new_levels)) {
-        stop("response factor has new levels ", toString(new_levels))
+        stop("response factor has new levels: ", toString(new_levels))
       }
-      y <- factor(y, levels = levels, exclude = NULL)
+      y <- factor(y, levels = template_levels, ordered = is.ordered(template),
+                  exclude = NULL)
     }
     y
   } else if (length(object) > 2) object[[2]]
@@ -59,7 +60,7 @@ response.MLModelFit <- function(object, newdata = NULL, ...) {
 #' 
 response.ModelFrame <- function(object, newdata = NULL, ...) {
   y <- model.response(object)
-  if (is.null(newdata)) y else response(terms(object), newdata, levels(y))
+  if (is.null(newdata)) y else response(terms(object), newdata, y)
 }
 
 
