@@ -1,0 +1,116 @@
+# IC Home Prices
+
+In this example, a generalized boosted model is developed to predict the prices of homes sold in Iowa City, IA during 2005-2008.
+
+```{r echo=FALSE}
+library(MachineShop)
+
+stats <- list(
+  list("Number of homes" = ~ length(sale_amount)),
+  "sale_amount" = list("Median (Range)" = ~ median_range(sale_amount, "$",
+                                                         big.mark = ",",
+                                                         big.interval = 3)),
+  "sale_year" = list("Median (Range)" = ~ median_range(sale_year)),
+  "sale_month" = list("Median (Range)" = ~ median_range(sale_month)),
+  "built" = list("Median (Range)" = ~ median_range(built)),
+  "style" = list("Home" = ~ n_perc(style == "Home"),
+                 "Condo" = ~ n_perc(style == "Condo")),
+  "construction" = list(
+    "1 1/2 Story Frame" = ~ n_perc(construction == "1 1/2 Story Frame"),
+    "1 Story Brick" = ~ n_perc(construction == "1 Story Brick"),
+    "1 Story Condo" = ~ n_perc(construction == "1 Story Condo"),
+    "1 Story Frame" = ~ n_perc(construction == "1 Story Frame"),
+    "2 Story Brick" = ~ n_perc(construction == "2 Story Brick"),
+    "2 Story Condo" = ~ n_perc(construction == "2 Story Condo"),
+    "2 Story Frame" = ~ n_perc(construction == "2 Story Frame"),
+    "Split Foyer Frame" = ~ n_perc(construction == "Split Foyer Frame"),
+    "Split Level Frame" = ~ n_perc(construction == "Split Level Frame")),
+  "base_size (sq ft)" = list("Median (Range)" = ~ median_range(base_size)),
+  "garage1_size (sq ft)" = list("Median (Range)" = ~ median_range(garage1_size)),
+  "garage2_size (sq ft)" = list("Median (Range)" = ~ median_range(garage2_size)),
+  "lot_size (sq ft)" = list("Median (Range)" = ~ median_range(lot_size)),
+  "bedrooms" = list("1-2" = ~ n_perc(bedrooms %in% 1:2),
+                    "3" = ~ n_perc(bedrooms == 3),
+                    "4" = ~ n_perc(bedrooms == 4),
+                    "5+" = ~ n_perc(bedrooms > 4)),
+  "basement" = list("Yes" = ~ n_perc(basement == "Yes"),
+                    "No" = ~ n_perc(basement == "No")),
+  "ac" = list("Yes" = ~ n_perc(ac == "Yes"),
+              "No" = ~ n_perc(ac == "No")),
+  "attic" = list("Yes" = ~ n_perc(attic == "Yes"),
+                 "No" = ~ n_perc(attic == "No")),
+  "lon" = list("Median (Range)" = ~ median_range(lon)),
+  "lat" = list("Median (Range)" = ~ median_range(lat)))
+
+summary_kbl(stats, ICHomes)
+```
+
+
+## Training Set Analysis
+
+```{r}
+## Analysis package
+library(MachineShop)
+library(ggplot2)
+
+## Training and test sets
+set.seed(123)
+train_indices <- sample(nrow(ICHomes), nrow(ICHomes) * 2 / 3)
+trainset <- ICHomes[train_indices, ]
+testset <- ICHomes[-train_indices, ]
+
+## Model formula
+fo <- sale_amount ~ .
+
+## Boosted regression model tuned with the training set
+(tuned_model <- tune(fo, data = trainset, model = GBMModel, grid = 5))
+plot(tuned_model, type = "line")
+```
+
+```{r}
+## Tuned model fit to the training set
+model_fit <- fit(fo, data = trainset, model = tuned_model)
+
+## Variable importance
+vi <- varimp(model_fit)
+plot(vi)
+```
+
+
+## Generalization Performance
+
+```{r}
+## Test set observed and predicted sale amounts
+obs <- response(model_fit, newdata = testset)
+pred <- predict(model_fit, newdata = testset)
+
+## Test set performance
+performance(obs, pred)
+```
+
+
+## Calibration Curve
+
+```{r results = "hide"}
+cal <- calibration(obs, pred, breaks = NULL)
+plot(cal, se = TRUE)
+```
+
+
+## Partial Dependence Plots
+
+```{r results = "hide"}
+## Marginal predictor effects
+pd <- dependence(model_fit, select = c(base_size, built, basement))
+plot(pd)
+```
+
+```{r}
+## Spatial distribution
+pd <- dependence(model_fit, select = c(lon, lat), interaction = TRUE, n = 25)
+df <- cbind(pd$Predictors, sale_amount = pd$Value)
+ggplot(df) +
+  stat_summary_2d(aes(lon, lat, z = sale_amount), binwidth = 0.006) +
+  geom_point(aes(lon, lat), data = trainset) +
+  labs(x = "Longitude", y = "Latitude", fill = "Sale Amount")
+```

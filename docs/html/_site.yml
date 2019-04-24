@@ -10,7 +10,13 @@ navbar:
     - text: "Reference"
       href: reference.html
     - text: "Examples"
-      href: examples.html
+      menu:
+        - text: "IC Home Prices"
+          href: example_ichomes.html
+        - text: "Iris Flowers Species"
+          href: example_iris.html
+        - text: "Pima Indians Diabetes"
+          href: example_pima.html
   right:
     - icon: fa-github fa-lg
       href: https://github.com/brian-j-smith/MachineShop

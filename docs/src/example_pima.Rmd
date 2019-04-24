@@ -1,0 +1,128 @@
+# Diabetes in Pima Indian Women
+
+Characteristics of Pima Indian women tested for diabetes are used in this example to predict their disease statuses.
+
+```{r echo=FALSE}
+library(mlbench)
+data(PimaIndiansDiabetes2)
+
+stats <- list(
+  list("Number of women" = ~ length(diabetes)),
+  "diabetes" = list("pos" = ~ n_perc(diabetes == "pos"),
+                    "neg" = ~ n_perc(diabetes == "neg")),
+  "pregnant" = list("Median (Range)" = ~ median_range(pregnant)),
+  "glucose" = list("Median (Range)" = ~ median_range(glucose)),
+  "pressure" = list("Median (Range)" = ~ median_range(pressure)),
+  "triceps" = list("Median (Range)" = ~ median_range(triceps)),
+  "insulin" = list("Median (Range)" = ~ median_range(insulin)),
+  "mass" = list("Median (Range)" = ~ median_range(mass)),
+  "pedigree" = list("Median (Range)" = ~ median_range(pedigree)),
+  "age" = list("Median (Range)" = ~ median_range(age))
+)
+
+summary_kbl(stats, na.omit(PimaIndiansDiabetes2))
+```
+
+
+## Training Set Analysis
+
+```{r}
+## Analysis packages
+library(MachineShop)
+library(mlbench)
+library(ggplot2)
+
+## Dataset
+data(PimaIndiansDiabetes2)
+Pima <- na.omit(PimaIndiansDiabetes2)
+
+## Training and test sets
+set.seed(123)
+train_indices <- sample(nrow(Pima), nrow(Pima) * 2 / 3)
+trainset <- Pima[train_indices, ]
+testset <- Pima[-train_indices, ]
+
+## Model formula
+fo <- diabetes ~ .
+
+## Tuned classes of models
+tuned_models <- lapply(
+  c(KNNModel, NNetModel, RandomForestModel),
+  function(model) {
+    tune(fo, data = trainset, model = model, grid = 5)
+  }
+)
+
+## Select among tuned models
+(final_model <- tune(fo, data = trainset, models = tuned_models))
+
+## Final model fit
+model_fit <- fit(fo, data = trainset, model = final_model)
+
+## Variable importance
+vi <- varimp(model_fit)
+plot(vi)
+```
+
+
+## Generalization Performance
+
+```{r}
+## Test set observed disease statuses and predicted probabilities
+obs <- response(model_fit, newdata = testset)
+pred <- predict(model_fit, newdata = testset, type = "prob")
+
+## Test set performance
+performance(obs, pred)
+
+## Variable probability cutoff
+performance(obs, pred, cutoff = 0.25)
+```
+
+
+## ROC Curve
+
+```{r}
+## True positive and false positive rates over all probability cutoffs
+roc <- performance_curve(obs, pred)
+
+## ROC curve
+plot(roc, diagonal = TRUE) + coord_fixed()
+```
+
+```{r}
+## Area under the curve
+auc(roc)
+```
+
+
+## Confusion Matrices
+
+```{r}
+(conf <- confusion(obs, pred))
+
+summary(conf)
+
+plot(conf)
+```
+
+```{r}
+## Variable probability cutoff
+summary(confusion(obs, pred, cutoff = 0.25))
+```
+
+
+## Calibration Curve
+
+```{r results = "hide"}
+cal <- calibration(obs, pred, breaks = NULL)
+plot(cal, se = TRUE)
+```
+
+
+## Partial Dependence Plots
+
+```{r results = "hide"}
+pd <- dependence(model_fit, select = c(glucose, age, insulin))
+plot(pd)
+```

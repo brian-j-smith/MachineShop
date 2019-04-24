@@ -30,7 +30,6 @@ knitr::opts_chunk$set(
 )
 
 library(kableExtra)
-library(ggplot2)
 
 rdoc_url <- function(name) name
 ```

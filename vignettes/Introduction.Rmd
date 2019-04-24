@@ -30,7 +30,6 @@ knitr::opts_chunk$set(
 )
 
 library(kableExtra)
-library(ggplot2)
 
 rdoc_url <- function(name) name
 ```
@@ -159,6 +158,8 @@ kbl
 ```
 
 ```{r echo=FALSE}
+library(ggplot2)
+
 col <- "#F8766D"
 survfit(Surv(time, status) ~ 1, data = surv_df) %>%
   with(data.frame(time, surv, lower, upper, censor = ifelse(n.censor > 0, time, NA))) %>%

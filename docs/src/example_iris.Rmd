@@ -2,6 +2,21 @@
 
 The following illustrates use of the package to predict the species of flowers in Edgar Anderson's iris data set.
 
+```{r echo=FALSE}
+stats <- list(
+  list("Number of flowers" = ~ length(Species)),
+  "Species" = list("setosa" = ~ n_perc(Species == "setosa"),
+                   "versicolor" = ~ n_perc(Species == "versicolor"),
+                   "virginica" = ~ n_perc(Species == "virginica")),
+  "Sepal.Length" = list("Median (Range)" = ~ median_range(Sepal.Length)),
+  "Sepal.Width" = list("Median (Range)" = ~ median_range(Sepal.Width)),
+  "Petal.Length" = list("Median (Range)" = ~ median_range(Petal.Length)),
+  "Petal.Width" = list("Median (Range)" = ~ median_range(Petal.Width))
+)
+
+summary_kbl(stats, iris)
+```
+
 
 ## Training and Test Set Analysis
 
@@ -10,14 +25,11 @@ The following illustrates use of the package to predict the species of flowers i
 library(MachineShop)
 library(magrittr)
 
-## Iris flower species dataset
-summary(iris)
-
 ## Training and test sets
 set.seed(123)
 train_indices <- sample(nrow(iris), nrow(iris) * 2 / 3)
-train <- iris[train_indices, ]
-test <- iris[-train_indices, ]
+trainset <- iris[train_indices, ]
+testset <- iris[-train_indices, ]
 
 ## Model formula
 fo <- Species ~ .
@@ -29,7 +41,7 @@ modelinfo(factor(0)) %>% names
 modelinfo(GBMModel)
 
 ## Generalized boosted model fit to training set
-iris_fit <- fit(fo, data = train, model = GBMModel)
+iris_fit <- fit(fo, data = trainset, model = GBMModel)
 
 ## Variable importance
 (vi <- varimp(iris_fit))
@@ -39,14 +51,14 @@ plot(vi)
 
 ```{r}
 ## Test set predicted probabilities
-predict(iris_fit, newdata = test, type = "prob") %>% head
+predict(iris_fit, newdata = testset, type = "prob") %>% head
 
 ## Test set predicted classifications
-predict(iris_fit, newdata = test) %>% head
+predict(iris_fit, newdata = testset) %>% head
 
 ## Test set performance
-obs <- response(iris_fit, newdata = test)
-pred <- predict(iris_fit, newdata = test, type = "prob")
+obs <- response(iris_fit, newdata = testset)
+pred <- predict(iris_fit, newdata = testset, type = "prob")
 performance(obs, pred)
 ```
 
@@ -81,17 +93,17 @@ performance(res, c(accuracy, kappa2)) %>% summary
 
 ```{r, fig.height = 4}
 ## Tune over a grid of model parameters
-iris_tune <- tune(fo, data = iris, model = GBMModel,
-                  grid = expand.grid(n.trees = c(25, 50, 100),
-                                     interaction.depth = 1:3,
-                                     n.minobsinnode = c(5, 10)))
+tuned_model <- tune(fo, data = iris, model = GBMModel,
+                    grid = expand.grid(n.trees = c(25, 50, 100),
+                                       interaction.depth = 1:3,
+                                       n.minobsinnode = c(5, 10)))
 
-plot(iris_tune, type = "line")
+plot(tuned_model, type = "line")
 ```
 
 ```{r}
 ## Fit the selected model
-iris_fit <- fit(fo, data = iris, model = iris_tune)
+iris_fit <- fit(fo, data = iris, model = tuned_model)
 varimp(iris_fit)
 ```
 
