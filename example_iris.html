@@ -25,6 +25,7 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -426,28 +427,106 @@ div.tocify {
 <div id="iris-flowers-species" class="section level1">
 <h1>Iris Flowers Species</h1>
 <p>The following illustrates use of the package to predict the species of flowers in Edgar Anderson’s iris data set.</p>
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Characteristic
+</th>
+<th style="text-align:center;">
+Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr grouplength="3">
+<td colspan="2" style="border-bottom: 1px solid;">
+<strong>Species</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+setosa
+</td>
+<td style="text-align:center;">
+50 (33.33%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+versicolor
+</td>
+<td style="text-align:center;">
+50 (33.33%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+virginica
+</td>
+<td style="text-align:center;">
+50 (33.33%)
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="2" style="border-bottom: 1px solid;">
+<strong>Sepal.Length</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+Median (Range)
+</td>
+<td style="text-align:center;">
+5.8 (4.3, 7.9)
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="2" style="border-bottom: 1px solid;">
+<strong>Sepal.Width</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+Median (Range)
+</td>
+<td style="text-align:center;">
+3 (2.0, 4.4)
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="2" style="border-bottom: 1px solid;">
+<strong>Petal.Length</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+Median (Range)
+</td>
+<td style="text-align:center;">
+4.35 (1.0, 6.9)
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="2" style="border-bottom: 1px solid;">
+<strong>Petal.Width</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+Median (Range)
+</td>
+<td style="text-align:center;">
+1.3 (0.1, 2.5)
+</td>
+</tr>
+</tbody>
+</table>
 <div id="training-and-test-set-analysis" class="section level2">
 <h2>Training and Test Set Analysis</h2>
 <pre class="r"><code>## Analysis packages
 library(MachineShop)
 library(magrittr)
-
-## Iris flower species dataset
-summary(iris)
-#&gt;   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
-#&gt;  Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  
-#&gt;  1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300  
-#&gt;  Median :5.800   Median :3.000   Median :4.350   Median :1.300  
-#&gt;  Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199  
-#&gt;  3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800  
-#&gt;  Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500  
-#&gt;        Species  
-#&gt;  setosa    :50  
-#&gt;  versicolor:50  
-#&gt;  virginica :50  
-#&gt;                 
-#&gt;                 
-#&gt; 
 
 ## Training and test sets
 set.seed(123)
@@ -509,7 +588,7 @@ iris_fit &lt;- fit(fo, data = train, model = GBMModel)
 #&gt; Sepal.Length   0.000000
 
 plot(vi)</code></pre>
-<p><img src="example_iris_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_iris_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Test set predicted probabilities
 predict(iris_fit, newdata = test, type = &quot;prob&quot;) %&gt;% head
 #&gt;         setosa   versicolor    virginica
@@ -556,7 +635,7 @@ summary(res)
 #&gt; Kappa    0.93000000 0.9000000 0.04830459 9.000000e-01 1.0000000  0
 
 plot(res)</code></pre>
-<p><img src="example_iris_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_iris_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="performance-metrics" class="section level2">
 <h2>Performance Metrics</h2>
@@ -586,7 +665,7 @@ iris_tune &lt;- tune(fo, data = iris, model = GBMModel,
                                      n.minobsinnode = c(5, 10)))
 
 plot(iris_tune, type = &quot;line&quot;)</code></pre>
-<p><img src="example_iris_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_iris_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Fit the selected model
 iris_fit &lt;- fit(fo, data = iris, model = iris_tune)
 varimp(iris_fit)
@@ -629,7 +708,7 @@ summary(res)
 #&gt; RF   0.928    0.9 0.08339725 0.7   1  0
 
 plot(res)</code></pre>
-<p><img src="example_iris_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_iris_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Pairwise model differences and t-tests
 perfdiff &lt;- diff(res)
 summary(perfdiff)
@@ -683,7 +762,7 @@ t.test(perfdiff)
 #&gt; RF   0.2876949  1.000     NA
 
 plot(perfdiff)</code></pre>
-<p><img src="example_iris_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_iris_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="ensemble-models" class="section level2">
 <h2>Ensemble Models</h2>
@@ -709,7 +788,7 @@ summary(res_super)
 <h2>Calibration Curves</h2>
 <pre class="r"><code>cal &lt;- calibration(res1)
 plot(cal, se = TRUE)</code></pre>
-<p><img src="example_iris_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_iris_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="confusion-matrices" class="section level2">
 <h2>Confusion Matrices</h2>
@@ -737,13 +816,13 @@ summary(conf)
 #&gt; PPV         0.9985781  0.8988811 0.9198378
 #&gt; NPV         0.9984463  0.9598449 0.9501139</code></pre>
 <pre class="r"><code>plot(conf)</code></pre>
-<p><img src="example_iris_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_iris_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="partial-dependence-plots" class="section level2">
 <h2>Partial Dependence Plots</h2>
 <pre class="r"><code>pd &lt;- dependence(iris_fit, select = c(Petal.Length, Petal.Width))
 plot(pd)</code></pre>
-<p><img src="example_iris_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /><img src="example_iris_files/figure-html/unnamed-chunk-14-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_iris_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /><img src="example_iris_files/figure-html/unnamed-chunk-15-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="preprocessing-recipe" class="section level2">
 <h2>Preprocessing Recipe</h2>
