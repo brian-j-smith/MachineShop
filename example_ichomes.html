@@ -401,6 +401,9 @@ div.tocify {
     <li>
       <a href="example_iris.html">Iris Flowers Species</a>
     </li>
+    <li>
+      <a href="example_pima.html">Pima Indian Women</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -777,10 +780,11 @@ Median (Range)
 </tr>
 </tbody>
 </table>
-<div id="training-and-test-set-analysis" class="section level2">
-<h2>Training and Test Set Analysis</h2>
+<div id="training-set-analysis" class="section level2">
+<h2>Training Set Analysis</h2>
 <pre class="r"><code>## Analysis package
 library(MachineShop)
+library(ggplot2)
 
 ## Training and test sets
 set.seed(123)

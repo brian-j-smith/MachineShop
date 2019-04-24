@@ -11,7 +11,7 @@
 
 
 
-<title>MachineShop: Machine Learning Models and Tools for R</title>
+<title>example_pima.utf8.md</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,6 +25,7 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -422,58 +423,287 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">MachineShop: Machine Learning Models and Tools for R</h1>
 
 </div>
 
 
-<p><a href="https://CRAN.R-project.org/package=MachineShop"><img src="http://www.r-pkg.org/badges/version/MachineShop" alt="CRAN_Status_Badge" /></a></p>
-<div id="description" class="section level1">
-<h1>Description</h1>
-<p><code>MachineShop</code> is a meta-package for statistical and machine learning with a unified interface for model fitting, prediction, performance assessment, and presentation of results. Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes and for resample (bootstrap, cross-validation, and split training-test sets) estimation of model performance. This vignette introduces the package interface with a survival data analysis example, followed by supported methods of variable specification; applications to other response variable types; available performance metrics, resampling techniques, and graphical and tabular summaries; and modeling strategies.</p>
+<div id="diabetes-in-pima-indian-women" class="section level1">
+<h1>Diabetes in Pima Indian Women</h1>
+<p>Characteristics of Pima Indian women tested for diabetes are used in this example to predict their disease statuses (<code>type</code>).</p>
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Characteristic
+</th>
+<th style="text-align:center;">
+Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Number of women
+</td>
+<td style="text-align:center;">
+532
+</td>
+</tr>
+<tr grouplength="2">
+<td colspan="2" style="border-bottom: 1px solid;">
+<strong>type</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+Yes
+</td>
+<td style="text-align:center;">
+177 (33.27%)
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+No
+</td>
+<td style="text-align:center;">
+355 (66.73%)
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="2" style="border-bottom: 1px solid;">
+<strong>npreg</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+Median (Range)
+</td>
+<td style="text-align:center;">
+2 (0, 17)
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="2" style="border-bottom: 1px solid;">
+<strong>glu</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+Median (Range)
+</td>
+<td style="text-align:center;">
+115 (56, 199)
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="2" style="border-bottom: 1px solid;">
+<strong>bp</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+Median (Range)
+</td>
+<td style="text-align:center;">
+72 (24, 110)
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="2" style="border-bottom: 1px solid;">
+<strong>skin</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+Median (Range)
+</td>
+<td style="text-align:center;">
+29 (7, 99)
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="2" style="border-bottom: 1px solid;">
+<strong>bmi</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+Median (Range)
+</td>
+<td style="text-align:center;">
+32.8 (18.2, 67.1)
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="2" style="border-bottom: 1px solid;">
+<strong>ped</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+Median (Range)
+</td>
+<td style="text-align:center;">
+0.416 (0.085, 2.420)
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="2" style="border-bottom: 1px solid;">
+<strong>age</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+Median (Range)
+</td>
+<td style="text-align:center;">
+28 (21, 81)
+</td>
+</tr>
+</tbody>
+</table>
+<div id="training-set-analysis" class="section level2">
+<h2>Training Set Analysis</h2>
+<pre class="r"><code>## Analysis packages
+library(MachineShop)
+library(MASS)
+library(ggplot2)
+
+## Model formula
+fo &lt;- type ~ .
+
+## Tuned classes of models
+models_tune &lt;- lapply(
+  c(KNNModel, NNetModel, RandomForestModel),
+  function(model) {
+    tune(fo, data = Pima.tr, model = model, grid = 5)
+  }
+)
+
+## Select among tuned models
+(model_final &lt;- tune(fo, data = Pima.tr, models = models_tune))
+#&gt; Object of class &quot;MLModelTune&quot;
+#&gt; 
+#&gt; Model name: RandomForestModel
+#&gt; Label: Random Forests
+#&gt; Packages: randomForest
+#&gt; Response types: factor, numeric
+#&gt; 
+#&gt; Parameters:
+#&gt; $ntree
+#&gt; [1] 500
+#&gt; 
+#&gt; $mtry
+#&gt; [1] 2
+#&gt; 
+#&gt; $replace
+#&gt; [1] TRUE
+#&gt; 
+#&gt; $nodesize
+#&gt; if (is.factor(y)) 1 else 5
+#&gt; 
+#&gt; Grid:
+#&gt; data frame with 0 columns and 0 rows
+#&gt; 
+#&gt; Object of class &quot;Performance&quot;
+#&gt; 
+#&gt; Metrics: Brier, Accuracy, Kappa, ROCAUC, Sensitivity, Specificity
+#&gt; Models: KNNModel, NNetModel, RandomForestModel 
+#&gt; 
+#&gt; Selected (Brier): RandomForestModel
+
+## Final model fit
+model_fit &lt;- fit(fo, data = Pima.tr, model = model_final)
+
+## Variable importance
+vi &lt;- varimp(model_fit)
+plot(vi)</code></pre>
+<p><img src="example_pima_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="features" class="section level1">
-<h1>Features</h1>
-<ul>
-<li>Unified and concise interface for model fitting, prediction, and performance assessment.</li>
-<li>Current support for 49 established models from 26 <strong>R</strong> packages.</li>
-<li>Dynamic model parameters.</li>
-<li>Ensemble modeling with stacked regression and super learners.</li>
-<li>Modeling of response variables types: binary factors, multi-class nominal and ordinal factors, numeric vectors and matrices, and censored time-to-event survival.</li>
-<li>Model specification with traditional formulas, design matrices, and flexible pre-processing <a href="https://cran.r-project.org/package=recipes">recipes</a>.</li>
-<li>Resample estimation of predictive performance, including cross-validation, bootstrap resampling, and split training-test set validation.</li>
-<li>Parallel execution of resampling algorithms.</li>
-<li>Choices of performance metrics: accuracy, areas under ROC and precision recall curves, Brier score, coefficient of determination (R<sup>2</sup>), concordance index, cross entropy, F score, Gini coefficient, unweighted and weighted Cohen’s kappa, mean absolute error, mean squared error, mean squared log error, positive and negative predictive values, precision and recall, and sensitivity and specificity.</li>
-<li>Graphical and tabular performance summaries: calibration curves, confusion matrices, partial dependence plots, performance curves, lift curves, and variable importance.</li>
-<li>Model tuning over automatically generated grids of parameter values and randomly sampled grid points.</li>
-<li>Model selection and comparisons for any combination of models and model parameter values.</li>
-<li>User-definable models and performance metrics.</li>
-</ul>
+<div id="generalization-performance" class="section level2">
+<h2>Generalization Performance</h2>
+<pre class="r"><code>## Test set observed disease statuses and predicted probabilities
+obs &lt;- response(model_fit, newdata = Pima.te)
+pred &lt;- predict(model_fit, newdata = Pima.te, type = &quot;prob&quot;)
+
+## Test set performance
+performance(obs, pred)
+#&gt;       Brier    Accuracy       Kappa      ROCAUC Sensitivity Specificity 
+#&gt;   0.1579750   0.7771084   0.4774767   0.8183445   0.5963303   0.8654709
+
+## Variable probability cutoff
+performance(obs, pred, cutoff = 0.25)
+#&gt;       Brier    Accuracy       Kappa      ROCAUC Sensitivity Specificity 
+#&gt;   0.1579750   0.6867470   0.3947765   0.8183445   0.8623853   0.6008969</code></pre>
 </div>
-<div id="getting-started" class="section level1">
-<h1>Getting Started</h1>
-<div id="installation" class="section level2">
-<h2>Installation</h2>
-<pre class="r"><code># Current release from CRAN
-install.packages(&quot;MachineShop&quot;)
+<div id="roc-curve" class="section level2">
+<h2>ROC Curve</h2>
+<pre class="r"><code>## True positive and false positive rates over all probability cutoffs
+roc &lt;- performance_curve(obs, pred)
 
-# Development version from GitHub
-# install.packages(&quot;devtools&quot;)
-devtools::install_github(&quot;brian-j-smith/MachineShop&quot;)
-
-# Development version with vignettes
-devtools::install_github(&quot;brian-j-smith/MachineShop&quot;, build_vignettes = TRUE)</code></pre>
+## ROC curve
+plot(roc, diagonal = TRUE) + coord_fixed()</code></pre>
+<p><img src="example_pima_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## Area under the curve
+auc(roc)
+#&gt; Model: Model
+#&gt; [1] 0.8183445</code></pre>
 </div>
-<div id="documentation" class="section level2">
-<h2>Documentation</h2>
-<p>Once installed, the following <strong>R</strong> commands will load the package and display its help system documentation. Online documentation and examples are available at the <a href="https://brian-j-smith.github.io/MachineShop">MachineShop website</a>.</p>
-<pre class="r"><code>library(MachineShop)
+<div id="confusion-matrices" class="section level2">
+<h2>Confusion Matrices</h2>
+<pre class="r"><code>(conf &lt;- confusion(obs, pred))
+#&gt; Object of class &quot;ConfusionMatrix&quot;
+#&gt;          Observed
+#&gt; Predicted  No Yes
+#&gt;       No  193  44
+#&gt;       Yes  30  65
 
-# Package help summary
-?MachineShop
+summary(conf)
+#&gt; Number of responses: 332
+#&gt; Accuracy (SE): 0.7771084 (0.02284118)
+#&gt; Majority class: 0.6716867
+#&gt; Kappa: 0.4774767
+#&gt; 
+#&gt;                    No       Yes
+#&gt; Observed    0.6716867 0.3283133
+#&gt; Predicted   0.7138554 0.2861446
+#&gt; Agreement   0.5813253 0.1957831
+#&gt; Sensitivity 0.8654709 0.5963303
+#&gt; Specificity 0.5963303 0.8654709
+#&gt; PPV         0.8143460 0.6842105
+#&gt; NPV         0.6842105 0.8143460
 
-# Vignette
-RShowDoc(&quot;Introduction&quot;, package = &quot;MachineShop&quot;)</code></pre>
+plot(conf)</code></pre>
+<p><img src="example_pima_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## Variable probability cutoff
+summary(confusion(obs, pred, cutoff = 0.25))
+#&gt; Number of responses: 332
+#&gt; Accuracy (SE): 0.686747 (0.02545523)
+#&gt; Majority class: 0.6716867
+#&gt; Kappa: 0.3947765
+#&gt; 
+#&gt;                    No       Yes
+#&gt; Observed    0.6716867 0.3283133
+#&gt; Predicted   0.4487952 0.5512048
+#&gt; Agreement   0.4036145 0.2831325
+#&gt; Sensitivity 0.6008969 0.8623853
+#&gt; Specificity 0.8623853 0.6008969
+#&gt; PPV         0.8993289 0.5136612
+#&gt; NPV         0.5136612 0.8993289</code></pre>
+</div>
+<div id="calibration-curve" class="section level2">
+<h2>Calibration Curve</h2>
+<pre class="r"><code>cal &lt;- calibration(obs, pred, breaks = NULL)
+plot(cal, se = TRUE)</code></pre>
+<p><img src="example_pima_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="partial-dependence-plots" class="section level2">
+<h2>Partial Dependence Plots</h2>
+<pre class="r"><code>pd &lt;- dependence(model_fit, select = c(glu, age, ped))
+plot(pd)</code></pre>
+<p><img src="example_pima_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /><img src="example_pima_files/figure-html/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /><img src="example_pima_files/figure-html/unnamed-chunk-10-3.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 
