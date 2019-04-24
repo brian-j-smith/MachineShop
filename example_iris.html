@@ -11,7 +11,7 @@
 
 
 
-<title>Examples</title>
+<title>example_iris.utf8.md</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -387,8 +387,20 @@ div.tocify {
 <li>
   <a href="reference.html">Reference</a>
 </li>
-<li>
-  <a href="examples.html">Examples</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Examples
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="example_ichomes.html">IC Home Prices</a>
+    </li>
+    <li>
+      <a href="example_iris.html">Iris Flowers Species</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -407,7 +419,6 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Examples</h1>
 
 </div>
 
@@ -498,7 +509,7 @@ iris_fit &lt;- fit(fo, data = train, model = GBMModel)
 #&gt; Sepal.Length   0.000000
 
 plot(vi)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_iris_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Test set predicted probabilities
 predict(iris_fit, newdata = test, type = &quot;prob&quot;) %&gt;% head
 #&gt;         setosa   versicolor    virginica
@@ -545,7 +556,7 @@ summary(res)
 #&gt; Kappa    0.93000000 0.9000000 0.04830459 9.000000e-01 1.0000000  0
 
 plot(res)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_iris_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="performance-metrics" class="section level2">
 <h2>Performance Metrics</h2>
@@ -575,7 +586,7 @@ iris_tune &lt;- tune(fo, data = iris, model = GBMModel,
                                      n.minobsinnode = c(5, 10)))
 
 plot(iris_tune, type = &quot;line&quot;)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_iris_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Fit the selected model
 iris_fit &lt;- fit(fo, data = iris, model = iris_tune)
 varimp(iris_fit)
@@ -618,7 +629,7 @@ summary(res)
 #&gt; RF   0.928    0.9 0.08339725 0.7   1  0
 
 plot(res)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_iris_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Pairwise model differences and t-tests
 perfdiff &lt;- diff(res)
 summary(perfdiff)
@@ -672,7 +683,7 @@ t.test(perfdiff)
 #&gt; RF   0.2876949  1.000     NA
 
 plot(perfdiff)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_iris_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="ensemble-models" class="section level2">
 <h2>Ensemble Models</h2>
@@ -698,7 +709,7 @@ summary(res_super)
 <h2>Calibration Curves</h2>
 <pre class="r"><code>cal &lt;- calibration(res1)
 plot(cal, se = TRUE)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_iris_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="confusion-matrices" class="section level2">
 <h2>Confusion Matrices</h2>
@@ -726,13 +737,13 @@ summary(conf)
 #&gt; PPV         0.9985781  0.8988811 0.9198378
 #&gt; NPV         0.9984463  0.9598449 0.9501139</code></pre>
 <pre class="r"><code>plot(conf)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_iris_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="partial-dependence-plots" class="section level2">
 <h2>Partial Dependence Plots</h2>
 <pre class="r"><code>pd &lt;- dependence(iris_fit, select = c(Petal.Length, Petal.Width))
 plot(pd)</code></pre>
-<p><img src="examples_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /><img src="examples_files/figure-html/unnamed-chunk-14-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_iris_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /><img src="example_iris_files/figure-html/unnamed-chunk-14-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="preprocessing-recipe" class="section level2">
 <h2>Preprocessing Recipe</h2>
