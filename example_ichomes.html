@@ -889,9 +889,9 @@ plot(pd)</code></pre>
 <p><img src="example_ichomes_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /><img src="example_ichomes_files/figure-html/unnamed-chunk-7-2.png" width="672" style="display: block; margin: auto;" /><img src="example_ichomes_files/figure-html/unnamed-chunk-7-3.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Spatial distribution
 pd &lt;- dependence(model_fit, select = c(lon, lat), interaction = TRUE, n = 25)
-df &lt;- data.frame(value = pd$Value, pd$Predictors)
+df &lt;- cbind(pd$Predictors, sale_amount = pd$Value)
 ggplot(df) +
-  stat_summary_2d(aes(lon, lat, z = value), binwidth = 0.006) +
+  stat_summary_2d(aes(lon, lat, z = sale_amount), binwidth = 0.006) +
   geom_point(aes(lon, lat), data = train) +
   labs(x = &quot;Longitude&quot;, y = &quot;Latitude&quot;, fill = &quot;Sale Amount&quot;)</code></pre>
 <p><img src="example_ichomes_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
