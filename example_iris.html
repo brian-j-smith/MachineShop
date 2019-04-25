@@ -402,7 +402,7 @@ div.tocify {
       <a href="example_iris.html">Iris Flowers Species</a>
     </li>
     <li>
-      <a href="example_pima.html">Pima Indian Women</a>
+      <a href="example_pima.html">Pima Indians Diabetes</a>
     </li>
   </ul>
 </li>
@@ -542,8 +542,8 @@ library(magrittr)
 ## Training and test sets
 set.seed(123)
 train_indices &lt;- sample(nrow(iris), nrow(iris) * 2 / 3)
-train &lt;- iris[train_indices, ]
-test &lt;- iris[-train_indices, ]
+trainset &lt;- iris[train_indices, ]
+testset &lt;- iris[-train_indices, ]
 
 ## Model formula
 fo &lt;- Species ~ .
@@ -588,7 +588,7 @@ modelinfo(GBMModel)
 #&gt; [1] TRUE
 
 ## Generalized boosted model fit to training set
-iris_fit &lt;- fit(fo, data = train, model = GBMModel)
+iris_fit &lt;- fit(fo, data = trainset, model = GBMModel)
 
 ## Variable importance
 (vi &lt;- varimp(iris_fit))
@@ -601,7 +601,7 @@ iris_fit &lt;- fit(fo, data = train, model = GBMModel)
 plot(vi)</code></pre>
 <p><img src="example_iris_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Test set predicted probabilities
-predict(iris_fit, newdata = test, type = &quot;prob&quot;) %&gt;% head
+predict(iris_fit, newdata = testset, type = &quot;prob&quot;) %&gt;% head
 #&gt;         setosa   versicolor    virginica
 #&gt; [1,] 0.9999737 2.627994e-05 4.493784e-08
 #&gt; [2,] 0.9999154 8.456383e-05 4.205211e-09
@@ -611,13 +611,13 @@ predict(iris_fit, newdata = test, type = &quot;prob&quot;) %&gt;% head
 #&gt; [6,] 0.9999024 9.764241e-05 2.445639e-09
 
 ## Test set predicted classifications
-predict(iris_fit, newdata = test) %&gt;% head
+predict(iris_fit, newdata = testset) %&gt;% head
 #&gt; [1] setosa setosa setosa setosa setosa setosa
 #&gt; Levels: setosa versicolor virginica
 
 ## Test set performance
-obs &lt;- response(iris_fit, newdata = test)
-pred &lt;- predict(iris_fit, newdata = test, type = &quot;prob&quot;)
+obs &lt;- response(iris_fit, newdata = testset)
+pred &lt;- predict(iris_fit, newdata = testset, type = &quot;prob&quot;)
 performance(obs, pred)
 #&gt;     Brier  Accuracy     Kappa 
 #&gt; 0.1502442 0.9200000 0.8793727</code></pre>
@@ -670,15 +670,15 @@ performance(res, c(accuracy, kappa2)) %&gt;% summary
 <div id="model-tuning" class="section level2">
 <h2>Model Tuning</h2>
 <pre class="r"><code>## Tune over a grid of model parameters
-iris_tune &lt;- tune(fo, data = iris, model = GBMModel,
-                  grid = expand.grid(n.trees = c(25, 50, 100),
-                                     interaction.depth = 1:3,
-                                     n.minobsinnode = c(5, 10)))
+tuned_model &lt;- tune(fo, data = iris, model = GBMModel,
+                    grid = expand.grid(n.trees = c(25, 50, 100),
+                                       interaction.depth = 1:3,
+                                       n.minobsinnode = c(5, 10)))
 
-plot(iris_tune, type = &quot;line&quot;)</code></pre>
+plot(tuned_model, type = &quot;line&quot;)</code></pre>
 <p><img src="example_iris_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Fit the selected model
-iris_fit &lt;- fit(fo, data = iris, model = iris_tune)
+iris_fit &lt;- fit(fo, data = iris, model = tuned_model)
 varimp(iris_fit)
 #&gt;                 Overall
 #&gt; Petal.Length 100.000000

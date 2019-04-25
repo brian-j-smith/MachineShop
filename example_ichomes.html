@@ -402,7 +402,7 @@ div.tocify {
       <a href="example_iris.html">Iris Flowers Species</a>
     </li>
     <li>
-      <a href="example_pima.html">Pima Indian Women</a>
+      <a href="example_pima.html">Pima Indians Diabetes</a>
     </li>
   </ul>
 </li>
@@ -789,14 +789,14 @@ library(ggplot2)
 ## Training and test sets
 set.seed(123)
 train_indices &lt;- sample(nrow(ICHomes), nrow(ICHomes) * 2 / 3)
-train &lt;- ICHomes[train_indices, ]
-test &lt;- ICHomes[-train_indices, ]
+trainset &lt;- ICHomes[train_indices, ]
+testset &lt;- ICHomes[-train_indices, ]
 
 ## Model formula
 fo &lt;- sale_amount ~ .
 
 ## Boosted regression model tuned with the training set
-(model_tune &lt;- tune(fo, data = train, model = GBMModel, grid = 5))
+(tuned_model &lt;- tune(fo, data = trainset, model = GBMModel, grid = 5))
 #&gt; Object of class &quot;MLModelTune&quot;
 #&gt; 
 #&gt; Model name: GBMModel
@@ -854,10 +854,10 @@ fo &lt;- sale_amount ~ .
 #&gt; Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6, GBMModel.7, GBMModel.8, GBMModel.9, GBMModel.10, GBMModel.11, GBMModel.12, GBMModel.13, GBMModel.14, GBMModel.15, GBMModel.16, GBMModel.17, GBMModel.18, GBMModel.19, GBMModel.20, GBMModel.21, GBMModel.22, GBMModel.23, GBMModel.24, GBMModel.25 
 #&gt; 
 #&gt; Selected (RMSE): GBMModel.23
-plot(model_tune, type = &quot;line&quot;)</code></pre>
+plot(tuned_model, type = &quot;line&quot;)</code></pre>
 <p><img src="example_ichomes_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Tuned model fit to the training set
-model_fit &lt;- fit(fo, data = train, model = model_tune)
+model_fit &lt;- fit(fo, data = trainset, model = tuned_model)
 
 ## Variable importance
 vi &lt;- varimp(model_fit)
@@ -867,8 +867,8 @@ plot(vi)</code></pre>
 <div id="generalization-performance" class="section level2">
 <h2>Generalization Performance</h2>
 <pre class="r"><code>## Test set observed and predicted sale amounts
-obs &lt;- response(model_fit, newdata = test)
-pred &lt;- predict(model_fit, newdata = test)
+obs &lt;- response(model_fit, newdata = testset)
+pred &lt;- predict(model_fit, newdata = testset)
 
 ## Test set performance
 performance(obs, pred)
@@ -892,7 +892,7 @@ pd &lt;- dependence(model_fit, select = c(lon, lat), interaction = TRUE, n = 25)
 df &lt;- cbind(pd$Predictors, sale_amount = pd$Value)
 ggplot(df) +
   stat_summary_2d(aes(lon, lat, z = sale_amount), binwidth = 0.006) +
-  geom_point(aes(lon, lat), data = train) +
+  geom_point(aes(lon, lat), data = trainset) +
   labs(x = &quot;Longitude&quot;, y = &quot;Latitude&quot;, fill = &quot;Sale Amount&quot;)</code></pre>
 <p><img src="example_ichomes_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>

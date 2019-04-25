@@ -402,7 +402,7 @@ div.tocify {
       <a href="example_iris.html">Iris Flowers Species</a>
     </li>
     <li>
-      <a href="example_pima.html">Pima Indian Women</a>
+      <a href="example_pima.html">Pima Indians Diabetes</a>
     </li>
   </ul>
 </li>
@@ -429,7 +429,7 @@ div.tocify {
 
 <div id="diabetes-in-pima-indian-women" class="section level1">
 <h1>Diabetes in Pima Indian Women</h1>
-<p>Characteristics of Pima Indian women tested for diabetes are used in this example to predict their disease statuses (<code>type</code>).</p>
+<p>Characteristics of Pima Indian women tested for diabetes are used in this example to predict their disease statuses.</p>
 <table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -447,33 +447,33 @@ Value
 Number of women
 </td>
 <td style="text-align:center;">
-532
+392
 </td>
 </tr>
 <tr grouplength="2">
 <td colspan="2" style="border-bottom: 1px solid;">
-<strong>type</strong>
+<strong>diabetes</strong>
 </td>
 </tr>
 <tr>
 <td style="text-align:left; padding-left: 2em;" indentlevel="1">
-Yes
+pos
 </td>
 <td style="text-align:center;">
-177 (33.27%)
+130 (33.16%)
 </td>
 </tr>
 <tr>
 <td style="text-align:left; padding-left: 2em;" indentlevel="1">
-No
+neg
 </td>
 <td style="text-align:center;">
-355 (66.73%)
+262 (66.84%)
 </td>
 </tr>
 <tr grouplength="1">
 <td colspan="2" style="border-bottom: 1px solid;">
-<strong>npreg</strong>
+<strong>pregnant</strong>
 </td>
 </tr>
 <tr>
@@ -486,7 +486,7 @@ Median (Range)
 </tr>
 <tr grouplength="1">
 <td colspan="2" style="border-bottom: 1px solid;">
-<strong>glu</strong>
+<strong>glucose</strong>
 </td>
 </tr>
 <tr>
@@ -494,12 +494,12 @@ Median (Range)
 Median (Range)
 </td>
 <td style="text-align:center;">
-115 (56, 199)
+119 (56, 198)
 </td>
 </tr>
 <tr grouplength="1">
 <td colspan="2" style="border-bottom: 1px solid;">
-<strong>bp</strong>
+<strong>pressure</strong>
 </td>
 </tr>
 <tr>
@@ -507,12 +507,12 @@ Median (Range)
 Median (Range)
 </td>
 <td style="text-align:center;">
-72 (24, 110)
+70 (24, 110)
 </td>
 </tr>
 <tr grouplength="1">
 <td colspan="2" style="border-bottom: 1px solid;">
-<strong>skin</strong>
+<strong>triceps</strong>
 </td>
 </tr>
 <tr>
@@ -520,12 +520,12 @@ Median (Range)
 Median (Range)
 </td>
 <td style="text-align:center;">
-29 (7, 99)
+29 (7, 63)
 </td>
 </tr>
 <tr grouplength="1">
 <td colspan="2" style="border-bottom: 1px solid;">
-<strong>bmi</strong>
+<strong>insulin</strong>
 </td>
 </tr>
 <tr>
@@ -533,12 +533,12 @@ Median (Range)
 Median (Range)
 </td>
 <td style="text-align:center;">
-32.8 (18.2, 67.1)
+125.5 (14, 846)
 </td>
 </tr>
 <tr grouplength="1">
 <td colspan="2" style="border-bottom: 1px solid;">
-<strong>ped</strong>
+<strong>mass</strong>
 </td>
 </tr>
 <tr>
@@ -546,7 +546,20 @@ Median (Range)
 Median (Range)
 </td>
 <td style="text-align:center;">
-0.416 (0.085, 2.420)
+33.2 (18.2, 67.1)
+</td>
+</tr>
+<tr grouplength="1">
+<td colspan="2" style="border-bottom: 1px solid;">
+<strong>pedigree</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+Median (Range)
+</td>
+<td style="text-align:center;">
+0.4495 (0.085, 2.420)
 </td>
 </tr>
 <tr grouplength="1">
@@ -559,7 +572,7 @@ Median (Range)
 Median (Range)
 </td>
 <td style="text-align:center;">
-28 (21, 81)
+27 (21, 81)
 </td>
 </tr>
 </tbody>
@@ -568,22 +581,32 @@ Median (Range)
 <h2>Training Set Analysis</h2>
 <pre class="r"><code>## Analysis packages
 library(MachineShop)
-library(MASS)
+library(mlbench)
 library(ggplot2)
 
+## Dataset
+data(PimaIndiansDiabetes2)
+Pima &lt;- na.omit(PimaIndiansDiabetes2)
+
+## Training and test sets
+set.seed(123)
+train_indices &lt;- sample(nrow(Pima), nrow(Pima) * 2 / 3)
+trainset &lt;- Pima[train_indices, ]
+testset &lt;- Pima[-train_indices, ]
+
 ## Model formula
-fo &lt;- type ~ .
+fo &lt;- diabetes ~ .
 
 ## Tuned classes of models
-models_tune &lt;- lapply(
+tuned_models &lt;- lapply(
   c(KNNModel, NNetModel, RandomForestModel),
   function(model) {
-    tune(fo, data = Pima.tr, model = model, grid = 5)
+    tune(fo, data = trainset, model = model, grid = 5)
   }
 )
 
 ## Select among tuned models
-(model_final &lt;- tune(fo, data = Pima.tr, models = models_tune))
+(final_model &lt;- tune(fo, data = trainset, models = tuned_models))
 #&gt; Object of class &quot;MLModelTune&quot;
 #&gt; 
 #&gt; Model name: RandomForestModel
@@ -596,7 +619,7 @@ models_tune &lt;- lapply(
 #&gt; [1] 500
 #&gt; 
 #&gt; $mtry
-#&gt; [1] 2
+#&gt; [1] 4
 #&gt; 
 #&gt; $replace
 #&gt; [1] TRUE
@@ -615,7 +638,7 @@ models_tune &lt;- lapply(
 #&gt; Selected (Brier): RandomForestModel
 
 ## Final model fit
-model_fit &lt;- fit(fo, data = Pima.tr, model = model_final)
+model_fit &lt;- fit(fo, data = trainset, model = final_model)
 
 ## Variable importance
 vi &lt;- varimp(model_fit)
@@ -625,18 +648,18 @@ plot(vi)</code></pre>
 <div id="generalization-performance" class="section level2">
 <h2>Generalization Performance</h2>
 <pre class="r"><code>## Test set observed disease statuses and predicted probabilities
-obs &lt;- response(model_fit, newdata = Pima.te)
-pred &lt;- predict(model_fit, newdata = Pima.te, type = &quot;prob&quot;)
+obs &lt;- response(model_fit, newdata = testset)
+pred &lt;- predict(model_fit, newdata = testset, type = &quot;prob&quot;)
 
 ## Test set performance
 performance(obs, pred)
 #&gt;       Brier    Accuracy       Kappa      ROCAUC Sensitivity Specificity 
-#&gt;   0.1579750   0.7771084   0.4774767   0.8183445   0.5963303   0.8654709
+#&gt;   0.1337154   0.8015267   0.5552364   0.8813953   0.6888889   0.8604651
 
 ## Variable probability cutoff
 performance(obs, pred, cutoff = 0.25)
 #&gt;       Brier    Accuracy       Kappa      ROCAUC Sensitivity Specificity 
-#&gt;   0.1579750   0.6867470   0.3947765   0.8183445   0.8623853   0.6008969</code></pre>
+#&gt;   0.1337154   0.7709924   0.5408879   0.8813953   0.8888889   0.7093023</code></pre>
 </div>
 <div id="roc-curve" class="section level2">
 <h2>ROC Curve</h2>
@@ -649,49 +672,49 @@ plot(roc, diagonal = TRUE) + coord_fixed()</code></pre>
 <pre class="r"><code>## Area under the curve
 auc(roc)
 #&gt; Model: Model
-#&gt; [1] 0.8183445</code></pre>
+#&gt; [1] 0.8813953</code></pre>
 </div>
 <div id="confusion-matrices" class="section level2">
 <h2>Confusion Matrices</h2>
 <pre class="r"><code>(conf &lt;- confusion(obs, pred))
 #&gt; Object of class &quot;ConfusionMatrix&quot;
 #&gt;          Observed
-#&gt; Predicted  No Yes
-#&gt;       No  193  44
-#&gt;       Yes  30  65
+#&gt; Predicted neg pos
+#&gt;       neg  74  14
+#&gt;       pos  12  31
 
 summary(conf)
-#&gt; Number of responses: 332
-#&gt; Accuracy (SE): 0.7771084 (0.02284118)
-#&gt; Majority class: 0.6716867
-#&gt; Kappa: 0.4774767
+#&gt; Number of responses: 131
+#&gt; Accuracy (SE): 0.8015267 (0.03484772)
+#&gt; Majority class: 0.6564885
+#&gt; Kappa: 0.5552364
 #&gt; 
-#&gt;                    No       Yes
-#&gt; Observed    0.6716867 0.3283133
-#&gt; Predicted   0.7138554 0.2861446
-#&gt; Agreement   0.5813253 0.1957831
-#&gt; Sensitivity 0.8654709 0.5963303
-#&gt; Specificity 0.5963303 0.8654709
-#&gt; PPV         0.8143460 0.6842105
-#&gt; NPV         0.6842105 0.8143460
+#&gt;                   neg       pos
+#&gt; Observed    0.6564885 0.3435115
+#&gt; Predicted   0.6717557 0.3282443
+#&gt; Agreement   0.5648855 0.2366412
+#&gt; Sensitivity 0.8604651 0.6888889
+#&gt; Specificity 0.6888889 0.8604651
+#&gt; PPV         0.8409091 0.7209302
+#&gt; NPV         0.7209302 0.8409091
 
 plot(conf)</code></pre>
 <p><img src="example_pima_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Variable probability cutoff
 summary(confusion(obs, pred, cutoff = 0.25))
-#&gt; Number of responses: 332
-#&gt; Accuracy (SE): 0.686747 (0.02545523)
-#&gt; Majority class: 0.6716867
-#&gt; Kappa: 0.3947765
+#&gt; Number of responses: 131
+#&gt; Accuracy (SE): 0.7709924 (0.03671253)
+#&gt; Majority class: 0.6564885
+#&gt; Kappa: 0.5408879
 #&gt; 
-#&gt;                    No       Yes
-#&gt; Observed    0.6716867 0.3283133
-#&gt; Predicted   0.4487952 0.5512048
-#&gt; Agreement   0.4036145 0.2831325
-#&gt; Sensitivity 0.6008969 0.8623853
-#&gt; Specificity 0.8623853 0.6008969
-#&gt; PPV         0.8993289 0.5136612
-#&gt; NPV         0.5136612 0.8993289</code></pre>
+#&gt;                   neg       pos
+#&gt; Observed    0.6564885 0.3435115
+#&gt; Predicted   0.5038168 0.4961832
+#&gt; Agreement   0.4656489 0.3053435
+#&gt; Sensitivity 0.7093023 0.8888889
+#&gt; Specificity 0.8888889 0.7093023
+#&gt; PPV         0.9242424 0.6153846
+#&gt; NPV         0.6153846 0.9242424</code></pre>
 </div>
 <div id="calibration-curve" class="section level2">
 <h2>Calibration Curve</h2>
@@ -701,7 +724,7 @@ plot(cal, se = TRUE)</code></pre>
 </div>
 <div id="partial-dependence-plots" class="section level2">
 <h2>Partial Dependence Plots</h2>
-<pre class="r"><code>pd &lt;- dependence(model_fit, select = c(glu, age, ped))
+<pre class="r"><code>pd &lt;- dependence(model_fit, select = c(glucose, age, insulin))
 plot(pd)</code></pre>
 <p><img src="example_pima_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /><img src="example_pima_files/figure-html/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /><img src="example_pima_files/figure-html/unnamed-chunk-10-3.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
