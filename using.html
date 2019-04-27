@@ -404,6 +404,9 @@ div.tocify {
     <li>
       <a href="example_pima.html">Pima Indians Diabetes</a>
     </li>
+    <li>
+      <a href="example_var_spec.html">Variable Specifications and Preprocessing</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -595,7 +598,7 @@ surv_fo &lt;- Surv(time, status) ~ sex + age + year + thickness + ulcer</code></
 <h1>Model Fit and Prediction</h1>
 <div id="model-information" class="section level2">
 <h2>Model Information</h2>
-<p>Model fitting requires user specification of a <code>MachineShop</code> compatible model. A named list of package-supplied models can be obtained interactively with the <code>modelinfo</code> function, and includes a descriptive <code>&quot;label&quot;</code>, the source <code>&quot;packages&quot;</code> on which the models depend, supported response variable <code>&quot;types&quot;</code>, and <code>&quot;arguments&quot;</code> that can be specified in calls to the model functions. Note that in order to use a model, the source packages must be installed with the <code>install.packages</code> or by equivalent means, but need not be loaded with the <code>library</code> function. Function <code>modelinfo</code> can be called with one or more model functions, function names, function calls, or observed response variables; and will return information on all models matching the calling arguments.</p>
+<p>Model fitting requires user specification of a <code>MachineShop</code> compatible model. A named list of package-supplied models can be obtained interactively with the <code>modelinfo</code> function, and includes a descriptive <code>"label"</code>, the source <code>"packages"</code> on which the models depend, supported response variable <code>"types"</code>, and <code>"arguments"</code> that can be specified in calls to the model functions. Note that in order to use a model, the source packages must be installed with the <code>install.packages</code> or by equivalent means, but need not be loaded with the <code>library</code> function. Function <code>modelinfo</code> can be called with one or more model functions, function names, function calls, or observed response variables; and will return information on all models matching the calling arguments.</p>
 <pre class="r"><code>## All available models
 modelinfo() %&gt;% names
 #&gt;  [1] &quot;AdaBagModel&quot;         &quot;AdaBoostModel&quot;       &quot;BARTModel&quot;          
@@ -695,7 +698,7 @@ predict(surv_fit, newdata = surv_test) %&gt;% head
 ## Predicted survival means (empirical distribution)
 predict(surv_fit, newdata = surv_test, dist = &quot;empirical&quot;) %&gt;% head
 #&gt; [1] 4098.222 4298.909 3269.318 1628.793 2123.959 3422.091</code></pre>
-<p>In addition to survival means, predicted survival probabilities (<code>type = &quot;prob&quot;</code>) or 0-1 survival events (default: <code>type = &quot;response&quot;</code>) can be obtained with the follow-up <code>times</code> argument. The cutoff probability for classification of survival events (or other binary responses) can be set optionally with the <code>cutoff</code> argument (default: <code>cutoff = 0.5</code>). As with mean estimation, distributional approximations to the survival functions may be specified for the predictions, with the default for survival probabilities being the empirical distribution.</p>
+<p>In addition to survival means, predicted survival probabilities (<code>type = "prob"</code>) or 0-1 survival events (default: <code>type = "response"</code>) can be obtained with the follow-up <code>times</code> argument. The cutoff probability for classification of survival events (or other binary responses) can be set optionally with the <code>cutoff</code> argument (default: <code>cutoff = 0.5</code>). As with mean estimation, distributional approximations to the survival functions may be specified for the predictions, with the default for survival probabilities being the empirical distribution.</p>
 <pre class="r"><code>## Predict survival probabilities and events at specified follow-up times
 surv_times &lt;- 365 * c(5, 10)
 
@@ -726,10 +729,10 @@ predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.5) %&gt;% 
 </div>
 <div id="variable-specifications" class="section level1">
 <h1>Variable Specifications</h1>
-<p>Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship. Three main types of specifications are supported by the <code>fit</code>, <code>resample</code>, and <code>tune</code> functions: traditional formula, model frame, and recipe.</p>
+<p>Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship. Four main types of specifications are supported by the <code>fit</code>, <code>resample</code>, and <code>tune</code> functions: traditional formula, design matrix, model frame, and recipe.</p>
 <div id="traditional-formula" class="section level2">
 <h2>Traditional Formula</h2>
-<p>Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example. With this specification, formula operators, such as interaction (<code>:</code>) and crossing (<code>*</code>), as well as <code>.</code> substitution of variables not already appearing in the formula may be used.</p>
+<p>Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example. With this specification, formula operators, such as interaction (<code>:</code>), crossing (<code>*</code>), and deletion (<code>-</code>) as well as <code>.</code> substitution of variables not already appearing in the formula may be used.</p>
 <pre class="r"><code>## Dataset library
 library(MASS)
 
@@ -777,7 +780,7 @@ library(recipes)
 rec &lt;- recipe(medv ~ ., data = Boston)
 
 fit(rec, model = GBMModel)</code></pre>
-<p>Case weights and stratified resampling are also supported for recipes via the designations of <code>&quot;case_weight&quot;</code> and <code>&quot;case_strata&quot;</code> roles, respectively.</p>
+<p>Case weights and stratified resampling are also supported for recipes via the designations of <code>"case_weight"</code> and <code>"case_strata"</code> roles, respectively.</p>
 <pre class="r"><code>## Recipe specification with case weights
 df &lt;- within(esoph, {
   y &lt;- ncases / (ncases + ncontrols)
@@ -844,7 +847,7 @@ fit(rec, model = LMModel)</code></pre>
 library(survival)
 
 fit(Surv(time, status) ~ ., data = surv_df, model = GBMModel)</code></pre>
-<p>For recipes, survival outcomes should be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated as <code>&quot;surv_time&quot;</code> and <code>&quot;surv_event&quot;</code>.</p>
+<p>For recipes, survival outcomes should be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated as <code>"surv_time"</code> and <code>"surv_event"</code>.</p>
 <pre class="r"><code>## Survival response recipe
 rec &lt;- recipe(time + status ~ ., data = surv_df) %&gt;%
   add_role(time, new_role = &quot;surv_time&quot;) %&gt;%
@@ -922,7 +925,7 @@ performance(obs, pred_events)
 </tr>
 </tbody>
 </table>
-<p>These defaults may be changed by specifying one or more package-supplied metric functions to the <code>metrics</code> argument of <code>performance</code>. A named list of supplied metrics can be obtained interactively with the <code>metricinfo</code> function, and includes a descriptive <code>&quot;label&quot;</code>, whether to <code>&quot;maximize&quot;</code> the metric for better performance, the function <code>&quot;arguments&quot;</code>, and supported response variable <code>&quot;types&quot;</code> for each. Function <code>metricinfo</code> may be called with one or more metric functions, function names, an observed response variable, or an observed and predicted response variable pair; and will return information on all matching metrics.</p>
+<p>These defaults may be changed by specifying one or more package-supplied metric functions to the <code>metrics</code> argument of <code>performance</code>. A named list of supplied metrics can be obtained interactively with the <code>metricinfo</code> function, and includes a descriptive <code>"label"</code>, whether to <code>"maximize"</code> the metric for better performance, the function <code>"arguments"</code>, and supported response variable <code>"types"</code> for each. Function <code>metricinfo</code> may be called with one or more metric functions, function names, an observed response variable, or an observed and predicted response variable pair; and will return information on all matching metrics.</p>
 <pre class="r"><code>## Names of all available metrics
 metricinfo() %&gt;% names
 #&gt;  [1] &quot;accuracy&quot;        &quot;auc&quot;             &quot;brier&quot;          
@@ -1145,7 +1148,7 @@ True Positive (TP)
 </div>
 <div id="survival-objects-1" class="section level2">
 <h2>Survival Objects</h2>
-<p>All previously described metrics for binary factor responses—plus accuracy, Brier score and Cohen’s kappa—are applicable to survival probabilities predicted at specified follow-up times. Metrics are evaluated separately at each follow-up time and reported along with a time-integrated mean. The survival concordance index is computed with the method of Harrell <span class="citation">(1982)</span> and Brier score according to Graf et al. <span class="citation">(1999)</span>; whereas, the others are computed according to the confusion matrix probabilities below, in which term <span class="math inline">\(\hat{S}(t)\)</span> is the predicted survival probability at follow-up time <span class="math inline">\(t\)</span> and <span class="math inline">\(T\)</span> is the survival time <span class="citation">(Heagerty, Lumley, and Pepe 2004)</span>.</p>
+<p>All previously described metrics for binary factor responses—plus accuracy, Brier score and Cohen’s kappa—are applicable to survival probabilities predicted at specified follow-up times. Metrics are evaluated separately at each follow-up time and reported along with a time-integrated mean. The survival concordance index is computed with the method of Harrell <span class="citation">(1982)</span> and Brier score according to Graf et al. <span class="citation">(1999)</span>; whereas, the others are computed according to the confusion matrix probabilities below, in which term <span class="math inline">\(\hat{S}(t)\)</span> is the predicted survival probability at follow-up time <span class="math inline">\(t\)</span> and <span class="math inline">\(T\)</span> is the survival time <span class="citation">(Heagerty, Lumley, and Pepe 2004)</span>.</p>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 Table 4. Confusion matrix of observed and predicted survival response classifications.
@@ -1307,7 +1310,7 @@ summary(performance(res_probs, metrics = c(sensitivity, specificity)))
 </div>
 <div id="stratified-resampling" class="section level2">
 <h2>Stratified Resampling</h2>
-<p>Stratification of cases for the construction of resampled training and test sets can be employed to help achieve balance across the sets. Stratified resampling is automatically performed if variable specification is in terms of a traditional formula and will be done according to the response variable if a numeric vector or factor, the event variable if survival, and the first variable if a numeric matrix. For model frames and recipes, stratification variables must be defined explicitly with the <code>strata</code> argument to the <code>ModelFrame</code> constructor or with the <code>&quot;case_strata&quot;</code> role designation in a recipe step.</p>
+<p>Stratification of cases for the construction of resampled training and test sets can be employed to help achieve balance across the sets. Stratified resampling is automatically performed if variable specification is in terms of a traditional formula and will be done according to the response variable if a numeric vector or factor, the event variable if survival, and the first variable if a numeric matrix. For model frames and recipes, stratification variables must be defined explicitly with the <code>strata</code> argument to the <code>ModelFrame</code> constructor or with the <code>"case_strata"</code> role designation in a recipe step.</p>
 <pre class="r"><code>## Model frame with case status stratification
 mf &lt;- ModelFrame(surv_fo, data = surv_df, strata = surv_df$status)
 
@@ -1719,7 +1722,7 @@ summary(performance(res, metric = f2_score))
 <p>Andersen, Per K, Ornulf Borgan, Richard D Gill, and Niels Keiding. 1993. <em>Statistical Models Based on Counting Processes</em>. New York: Springer.</p>
 </div>
 <div id="ref-bache:2014:MFP">
-<p>Bache, Stefan Milton, and Hadley Wickham. 2014. <em>magrittr: A Forward-Pipe Operator for R</em>. <a href="https://CRAN.R-project.org/package=magrittr" class="uri">https://CRAN.R-project.org/package=magrittr</a>.</p>
+<p>Bache, Stefan Milton, and Hadley Wickham. 2014. <em>magrittr: A Forward-Pipe Operator for R</em>. <a href="https://CRAN.R-project.org/package=magrittr">https://CRAN.R-project.org/package=magrittr</a>.</p>
 </div>
 <div id="ref-breiman:1996:SR">
 <p>Breiman, Leo. 1996. “Stacked Regression.” <em>Machine Learning</em> 24: 49–64.</p>
@@ -1746,16 +1749,16 @@ summary(performance(res, metric = f2_score))
 <p>Heagerty, Patrick J, Thomas Lumley, and Margaret S Pepe. 2004. “Time-Dependent ROC Curves for Censored Survival Data and a Diagnostic Marker.” <em>Biometrics</em> 56 (2): 337–44.</p>
 </div>
 <div id="ref-kuhn:2018:RPT">
-<p>Kuhn, Max, and Hadley Wickham. 2018. <em>recipes: Preprocessing Tools to Create Design Matrices</em>. <a href="https://CRAN.R-project.org/package=recipes" class="uri">https://CRAN.R-project.org/package=recipes</a>.</p>
+<p>Kuhn, Max, and Hadley Wickham. 2018. <em>recipes: Preprocessing Tools to Create Design Matrices</em>. <a href="https://CRAN.R-project.org/package=recipes">https://CRAN.R-project.org/package=recipes</a>.</p>
 </div>
 <div id="ref-microsoft:2017:FPF">
-<p>Microsoft, and Steve Weston. 2017. <em>foreach: Provides Foreach Looping Construct for R</em>. <a href="https://CRAN.R-project.org/package=foreach" class="uri">https://CRAN.R-project.org/package=foreach</a>.</p>
+<p>Microsoft, and Steve Weston. 2017. <em>foreach: Provides Foreach Looping Construct for R</em>. <a href="https://CRAN.R-project.org/package=foreach">https://CRAN.R-project.org/package=foreach</a>.</p>
 </div>
 <div id="ref-microsoft:2017:DFP">
-<p>———. 2018. <em>doParallel: Foreach Parallel Adaptor for the ’Parallel’ Package</em>. <a href="https://CRAN.R-project.org/package=doParallel" class="uri">https://CRAN.R-project.org/package=doParallel</a>.</p>
+<p>———. 2018. <em>doParallel: Foreach Parallel Adaptor for the ’Parallel’ Package</em>. <a href="https://CRAN.R-project.org/package=doParallel">https://CRAN.R-project.org/package=doParallel</a>.</p>
 </div>
 <div id="ref-perkins:2006:IOC">
-<p>Perkins, Neil J, and Enrique F Schisterman. 2006. “The Inconsistency of &quot;Optimal&quot; Cutpoints Obtained Using Two Criteria Based on the Receiver Operating Characteristic Curve.” <em>American Journal of Epidemiology</em> 163 (7): 670–75.</p>
+<p>Perkins, Neil J, and Enrique F Schisterman. 2006. “The Inconsistency of "Optimal" Cutpoints Obtained Using Two Criteria Based on the Receiver Operating Characteristic Curve.” <em>American Journal of Epidemiology</em> 163 (7): 670–75.</p>
 </div>
 <div id="ref-vanderLann:2007:SL">
 <p>van der Lann, Mark J, and Alan E Hubbard. 2007. “Super Learner.” <em>Statistical Applications in Genetics and Molecular Biology</em> 6 (1).</p>
