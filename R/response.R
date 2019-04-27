@@ -44,6 +44,10 @@ response.formula <- function(object, data = NULL, template = NULL, ...) {
       y <- factor(y, levels = template_levels, ordered = is.ordered(template),
                   exclude = NULL)
     }
+    template_class <- class(template)[1]
+    if (!(is.null(template) || is(y, template_class))) {
+      stop("response variable must be of type ", template_class)
+    }
     y
   } else if (length(object) > 2) object[[2]]
 }
