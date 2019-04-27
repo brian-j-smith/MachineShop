@@ -1,11 +1,11 @@
 # Variable Specifications
 
-Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Three main types of specifications are supported by the `fit`, `resample`, and `tune` functions: traditional formula, model frame, and recipe.
+Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Four main types of specifications are supported by the `fit`, `resample`, and `tune` functions: traditional formula, design matrix, model frame, and recipe.
 
 
 ## Traditional Formula
 
-Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example.  With this specification, formula operators, such as interaction (`:`) and crossing (`*`), as well as `.` substitution of variables not already appearing in the formula may be used.
+Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example.  With this specification, formula operators, such as interaction (`:`), crossing (`*`), and deletion (`-`) as well as `.` substitution of variables not already appearing in the formula may be used.
 
 ```{r results="hide"}
 ## Dataset library
@@ -88,4 +88,40 @@ rec <- recipe(y ~ agegp + tobgp + alcgp + weights, data = df) %>%
   step_ordinalscore(agegp, tobgp, alcgp)
 
 fit(rec, model = GBMModel)
+```
+
+
+## Summary
+
+The variable specification approaches differ with respect to support for preprocessing, in-line functions, case weights, resampling strata, and computational overhead, as summarized in the table below.  Only recipes apply preprocessing steps automatically during model fitting and should be used when it is important to account for such steps in the estimation of model predictive performance.  Preprocessing would have to be done manually and separately otherwise.  Design matrices have the lowest computational overhead and can enable analyses involving larger numbers of predictors than the other approaches.  Both recipes and model frames allow for user-defined case weights (default: equal) and resampling strata (default: none).  The remaining approaches default to equal weights and to strata defined by the response variable.  Syntax ranges from simplest to most complex for design matrices, traditional formulas, model frames, and recipes, respectively.  The relative strengths of each approach should be considered within the context of a given analysis when deciding upon which one to use.
+
+```{r echo=FALSE}
+df <- data.frame(
+  "Specification" = c("Traditional Formula", "Design Matrix",
+                      "Traditional Formula", "Design Matrix", "Recipe"),
+  "Preprocessing" = factor(c("manual", "manual", "manual", "manual",
+                             "automatic"), levels = c("manual", "automatic")),
+  "In-line Functions" = factor(c("yes", "no", "yes", "no", "no"),
+                               levels = c("no", "yes")),
+  "Case Weights" = factor(c("equal", "equal", "user", "user", "user"),
+                          levels = c("equal", "user")),
+  "Resampling Strata" = factor(c("response", "response", "user", "user",
+                                 "user"), levels = c("response", "user")),
+  "Computational Overhead" = factor(c("medium", "low", "medium", "low", "high"),
+                                    levels = c("high", "medium", "low")),
+  check.names = FALSE
+)
+
+bg_colors <- c("orange", "blue", "green")
+df[-1] <- lapply(df[-1], function(x) {
+  bg_colors <- if (nlevels(x) == 2) bg_colors[c(1, 3)] else bg_colors
+  cell_spec(x, color = "white", background = bg_colors[x])
+})
+
+kable(df, align = c("l", rep("c", ncol(df) - 1)), escape = FALSE,
+      caption = "Table 2. Characteristics of available variable specification approaches.") %>%
+  kable_styling(c("striped", "condensed"), full_width = FALSE,
+                position = "center") %>%
+  column_spec(1, bold = TRUE) %>%
+  group_rows("Model Frame", 3, 4)
 ```

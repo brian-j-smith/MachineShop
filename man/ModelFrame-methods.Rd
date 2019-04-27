@@ -21,12 +21,12 @@ ModelFrame(x, ...)
 
 \item{data}{\code{data.frame} or an object that can be converted to one.}
 
-\item{na.rm}{logical indicating whether to remove cases with \code{NA} values}
-
-\item{weights}{vector of case weights.}
-
-\item{strata}{vector of stratification levels.
+\item{na.rm}{logical indicating whether to remove cases with \code{NA} values
 for any of the model variables.}
+
+\item{weights}{vector of case weights [default: equal].}
+
+\item{strata}{vector of resampling stratification levels [default: none].}
 
 \item{y}{response variable.}
 }

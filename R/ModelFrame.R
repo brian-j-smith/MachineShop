@@ -26,9 +26,9 @@ ModelFrame <- function(x, ...) {
 #'
 #' @param data \code{data.frame} or an object that can be converted to one.
 #' @param na.rm logical indicating whether to remove cases with \code{NA} values
-#' @param weights vector of case weights.
-#' @param strata vector of stratification levels.
 #' for any of the model variables.
+#' @param weights vector of case weights [default: equal].
+#' @param strata vector of resampling stratification levels [default: none].
 #' @param ... arguments passed to other methods.
 #' 
 ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,

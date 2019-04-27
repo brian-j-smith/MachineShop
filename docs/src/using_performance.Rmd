@@ -27,7 +27,7 @@ performance(obs, pred_events)
 Function `performance` computes a default set of metrics according to the observed and predicted response types, as indicated in the table below.
 
 
-Table 2. Default performance metrics by response types.
+Table 3. Default performance metrics by response types.
 
 Response                 | Default Metrics
 :----------------------- | :------------------------------------------------------
@@ -128,7 +128,7 @@ conf <- matrix(c("True Negative (TN)", "False Positive (FP)",
                dimnames = list("Predicted Response" = c("Negative", "Positive"),
                                "Observed Response" = c("Negative", "Positive")))
 kable(conf,
-      caption = "Table 3. Confusion matrix of observed and predicted response classifications.",
+      caption = "Table 4. Confusion matrix of observed and predicted response classifications.",
       align = c("c", "c")) %>%
   kable_styling(full_width = FALSE, position = "center") %>%
   add_header_above(c("Predicted Response" = 1, "Observed Response" = 2))
@@ -203,7 +203,7 @@ conf <- matrix(c("$TN = \\Pr(\\hat{S}(t) \\gt \\text{cutoff} \\cap T \\ge t)$",
                dimnames = list("Predicted Response" = c("Non-Event", "Event"),
                                "Observed Response" = c("Non-Event", "Event")))
 kable(conf,
-      caption = "Table 4. Confusion matrix of observed and predicted survival response classifications.",
+      caption = "Table 5. Confusion matrix of observed and predicted survival response classifications.",
       align = c("c", "c"),
       escape = FALSE) %>%
   kable_styling(full_width = FALSE, position = "center") %>%

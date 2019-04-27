@@ -17,6 +17,8 @@ navbar:
           href: example_iris.html
         - text: "Pima Indians Diabetes"
           href: example_pima.html
+        - text: "Variable Specifications and Preprocessing"
+          href: example_var_spec.html
   right:
     - icon: fa-github fa-lg
       href: https://github.com/brian-j-smith/MachineShop
