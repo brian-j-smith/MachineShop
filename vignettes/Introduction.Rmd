@@ -18,19 +18,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  warning = FALSE,
-  message = FALSE,
-  fig.width = 7,
-  fig.height = 4,
-  fig.align = "center"
-)
-
-library(kableExtra)
-
+```{r setup, include=FALSE}
+source("setup.R")
 rdoc_url <- function(name) name
 ```
 
@@ -119,10 +108,7 @@ Table 1. Variable summaries for the Melanoma survival analysis example.
 </center>
 
 ```{r echo=FALSE}
-median_range <- function(x) paste0(median(x), " (", toString(range(x)), ")")
-n_perc <- function(x) paste0(sum(x), " (", round(100 * mean(x), 2), "%)")
-
-surv_summary <- list(
+surv_stats <- list(
   list("Number of subjects" = ~ length(status)),
   "time" = list("Median (Range)" = ~ median_range(time)),
   "status" = list("1 = Dead" = ~ n_perc(status == 1),
@@ -136,25 +122,7 @@ surv_summary <- list(
                  "0 = Absence" = ~ n_perc(ulcer == 0))
 )
 
-vals <- sapply(unlist(unname(surv_summary), recursive = FALSE), function(x) {
-  eval(x[[2]], envir = surv_df)
-})
-
-kbl <- data.frame(Characteristic = names(vals), Value = vals) %>%
-  kable(align = c("l", "c")) %>%
-  kable_styling(c("striped", "condensed"), full_width = FALSE, position = "center")
-
-start_row <- 1
-for (i in seq(surv_summary)) {
-  group_label <- names(surv_summary)[i]
-  group_length <- length(surv_summary[[i]])
-  if (nzchar(group_label)) {
-    kbl <- group_rows(kbl, group_label, start_row, start_row + group_length - 1)
-  }
-  start_row <- start_row + group_length
-}
-
-kbl
+summary_kbl(surv_stats, surv_df)
 ```
 
 ```{r echo=FALSE}

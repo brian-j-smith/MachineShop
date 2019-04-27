@@ -30,5 +30,6 @@ writeLines("# References", out)
 
 close(out)
 
+file.copy("docs/src/setup.R", file.path(dest, "setup.R"), overwrite = TRUE)
 file.copy("docs/src/bibliography.bib", file.path(dest, "bibliography.bib"),
           overwrite = TRUE)
