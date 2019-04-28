@@ -558,7 +558,7 @@ Median (Range)
 Median (Range)
 </td>
 <td style="text-align:center;">
-1.94 (0.1, 17.42)
+1.94 (0.10, 17.42)
 </td>
 </tr>
 <tr grouplength="2">
@@ -793,6 +793,144 @@ rec &lt;- recipe(y ~ agegp + tobgp + alcgp + weights, data = df) %&gt;%
 
 fit(rec, model = GBMModel)</code></pre>
 </div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>The variable specification approaches differ with respect to support for preprocessing, in-line functions, case weights, resampling strata, and computational overhead, as summarized in the table below. Only recipes apply preprocessing steps automatically during model fitting and should be used when it is important to account for such steps in the estimation of model predictive performance. Preprocessing would have to be done manually and separately otherwise. Design matrices have the lowest computational overhead and can enable analyses involving larger numbers of predictors than the other approaches. Both recipes and model frames allow for user-defined case weights (default: equal) and resampling strata (default: none). The remaining approaches default to equal weights and to strata defined by the response variable. Syntax ranges from simplest to most complex for design matrices, traditional formulas, model frames, and recipes, respectively. The relative strengths of each approach should be considered within the context of a given analysis when deciding upon which one to use.</p>
+<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+Table 2. Characteristics of available variable specification approaches.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Specification
+</th>
+<th style="text-align:center;">
+Preprocessing
+</th>
+<th style="text-align:center;">
+In-line Functions
+</th>
+<th style="text-align:center;">
+Case Weights
+</th>
+<th style="text-align:center;">
+Resampling Strata
+</th>
+<th style="text-align:center;">
+Computational Overhead
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Traditional Formula
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">manual</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">yes</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">equal</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">response</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: blue;">medium</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Design Matrix
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">manual</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">no</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">equal</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">response</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">low</span>
+</td>
+</tr>
+<tr grouplength="2">
+<td colspan="6" style="border-bottom: 1px solid;">
+<strong>Model Frame</strong>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold; padding-left: 2em;" indentlevel="1">
+Traditional Formula
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">manual</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">yes</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">user</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">user</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: blue;">medium</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold; padding-left: 2em;" indentlevel="1">
+Design Matrix
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">manual</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">no</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">user</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">user</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">low</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Recipe
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">automatic</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">no</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">user</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">user</span>
+</td>
+<td style="text-align:center;">
+<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">high</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div id="response-variable-types" class="section level1">
 <h1>Response Variable Types</h1>
@@ -886,7 +1024,7 @@ performance(obs, pred_events)
 #&gt;  Accuracy.mean Accuracy.time1 Accuracy.time2 
 #&gt;      0.6817370      0.7607143      0.6027596</code></pre>
 <p>Function <code>performance</code> computes a default set of metrics according to the observed and predicted response types, as indicated in the table below.</p>
-<p>Table 2. Default performance metrics by response types.</p>
+<p>Table 3. Default performance metrics by response types.</p>
 <table>
 <colgroup>
 <col width="30%" />
@@ -1037,7 +1175,7 @@ performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.5
 </dl>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-Table 3. Confusion matrix of observed and predicted response classifications.
+Table 4. Confusion matrix of observed and predicted response classifications.
 </caption>
 <thead>
 <tr>
@@ -1151,7 +1289,7 @@ True Positive (TP)
 <p>All previously described metrics for binary factor responses—plus accuracy, Brier score and Cohen’s kappa—are applicable to survival probabilities predicted at specified follow-up times. Metrics are evaluated separately at each follow-up time and reported along with a time-integrated mean. The survival concordance index is computed with the method of Harrell <span class="citation">(1982)</span> and Brier score according to Graf et al. <span class="citation">(1999)</span>; whereas, the others are computed according to the confusion matrix probabilities below, in which term <span class="math inline">\(\hat{S}(t)\)</span> is the predicted survival probability at follow-up time <span class="math inline">\(t\)</span> and <span class="math inline">\(T\)</span> is the survival time <span class="citation">(Heagerty, Lumley, and Pepe 2004)</span>.</p>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
-Table 4. Confusion matrix of observed and predicted survival response classifications.
+Table 5. Confusion matrix of observed and predicted survival response classifications.
 </caption>
 <thead>
 <tr>
@@ -1289,7 +1427,7 @@ summary(res_probs)
 #&gt; Accuracy.time2 0.6226792 0.6405024 0.09247024 0.4611556 0.7848968  0
 
 plot(res_probs)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-41-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-42-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>The <code>summary</code> function when applied directly to output from <code>resample</code> computes default performance metrics as described in the <em>Performance Function</em> section. Likewise, the <code>metricinfo</code> and <code>performance</code> functions can be applied to the output in order to list and compute applicable metrics.</p>
 <pre class="r"><code>## Resample-specific metrics
 metricinfo(res_probs) %&gt;% names
@@ -1365,13 +1503,13 @@ summary(res)
 #&gt; GBM3 0.6941198 0.6762295 0.05933365 0.6244541 0.8227513  0
 
 plot(res)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-45-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-46-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>plot(res, type = &quot;density&quot;)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-45-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-46-2.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>plot(res, type = &quot;errorbar&quot;)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-45-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-46-3.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>plot(res, type = &quot;violin&quot;)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-45-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-46-4.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Pairwise model differences for each metric can be calculated with the <code>diff</code> function applied to results from a call to <code>Resamples</code>. Resulting differences can be summarized descriptively with the <code>summary</code> and <code>plot</code> functions and assessed for statistical significance with the <code>t.test</code> function.</p>
 <pre class="r"><code>## Pairwise model comparisons
 (perfdiff &lt;- diff(res))
@@ -1389,7 +1527,7 @@ summary(perfdiff)
 #&gt; GBM2 - GBM3 0.011778524 0.015267176 0.01695738 -0.01793722 0.04449153  0
 
 plot(perfdiff)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-46-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-47-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>t.test(perfdiff)
 #&gt; Object of class &quot;HTestPerformanceDiff&quot;
 #&gt; 
@@ -1420,7 +1558,7 @@ plot(perfdiff)</code></pre>
 #&gt; sex         0.00000
 
 plot(vi)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-48-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-49-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="calibration-curves" class="section level2">
 <h2>Calibration Curves</h2>
@@ -1428,11 +1566,11 @@ plot(vi)</code></pre>
 <pre class="r"><code>## Binned calibration curves
 cal &lt;- calibration(res_probs, breaks = 10)
 plot(cal, se = TRUE)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-49-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-50-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Smoothed calibration curves
 cal &lt;- calibration(res_probs, breaks = NULL)
 plot(cal)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-50-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-51-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="confusion-matrices" class="section level2">
 <h2>Confusion Matrices</h2>
@@ -1493,7 +1631,7 @@ summary(conf)
 #&gt; PPV         0.6469287 0.6150706
 #&gt; NPV         0.6150706 0.6469287</code></pre>
 <pre class="r"><code>plot(conf)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-52-1.png" width="672" style="display: block; margin: auto;" /><img src="using_files/figure-html/unnamed-chunk-52-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-53-1.png" width="672" style="display: block; margin: auto;" /><img src="using_files/figure-html/unnamed-chunk-53-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="partial-dependence-plots" class="section level2">
 <h2>Partial Dependence Plots</h2>
@@ -1501,7 +1639,7 @@ summary(conf)
 <pre class="r"><code>## Partial dependence plots
 pd &lt;- dependence(surv_fit, select = c(thickness, age))
 plot(pd)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-53-1.png" width="672" style="display: block; margin: auto;" /><img src="using_files/figure-html/unnamed-chunk-53-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-54-1.png" width="672" style="display: block; margin: auto;" /><img src="using_files/figure-html/unnamed-chunk-54-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="performance-curves" class="section level2">
 <h2>Performance Curves</h2>
@@ -1512,9 +1650,9 @@ plot(pd)</code></pre>
 <pre class="r"><code>## ROC curves
 roc &lt;- performance_curve(res_probs)
 plot(roc, diagonal = TRUE)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-54-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-55-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>plot(roc, type = &quot;cutoffs&quot;)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-54-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-55-2.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>auc(roc)
 #&gt; Model: GBMModel.time1
 #&gt; [1] 0.7216004
@@ -1528,7 +1666,7 @@ plot(roc, diagonal = TRUE)</code></pre>
 <pre class="r"><code>## Precision recall curves
 pr &lt;- performance_curve(res_probs, metrics = c(precision, recall))
 plot(pr)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-56-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-57-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>auc(pr)
 #&gt; Model: GBMModel.time1
 #&gt; [1] 0.43682
@@ -1542,7 +1680,7 @@ plot(pr)</code></pre>
 <pre class="r"><code>## Lift curves
 lf &lt;- lift(res_probs)
 plot(lf, find = 0.75)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-58-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-59-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
@@ -1626,7 +1764,7 @@ summary(surv_tune)
 #&gt; GBMModel.9 5213.172 4556.378 2745.462 2307.150 12983.578  0
 
 plot(surv_tune, type = &quot;line&quot;)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-59-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/unnamed-chunk-60-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Tune over randomly sampled grid points
 tune(surv_fo, data = surv_df, model = GBMModel,
      grid = Grid(length = 100, random = 10),
