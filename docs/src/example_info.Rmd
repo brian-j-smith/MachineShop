@@ -1,0 +1,86 @@
+# Model Information
+
+A named list of package-supplied models can be obtained interactively with the `modelinfo` function, and includes a descriptive `"label"` for each, source `"packages"` on which the models depend, supported response variable `"types"`, and `"arguments"` that can be specified in calls to the model functions.  Function `modelinfo` can be called with one or more model functions, variable types, or response variables; and will return information on all models matching the calling arguments.
+
+```{r}
+## Analysis packages
+library(MachineShop)
+library(magrittr)
+
+## All availble models
+modelinfo() %>% names
+
+## Model-specific information
+modelinfo(C50Model, CoxModel)
+```
+
+
+## Type-Specific
+
+```{r}
+## All factor response-specific models
+modelinfo(factor(0)) %>% names
+
+## Identify factor response-specific models
+modelinfo(factor(0), AdaBagModel, C50Model, CoxModel) %>% names
+```
+
+
+## Response Variable-Specific
+
+```{r}
+## Models for a responses variable
+modelinfo(iris$Species) %>% names
+```
+
+
+# Metric Information
+
+A named list of supplied metrics can be obtained with the `metricinfo` function, and includes a descriptive `"label"` for each, whether to `"maximize"` the metrics for better performance, their function `"arguments"`, and supported observed and predicted response variable `"types"`.  Function `metricinfo` may be called with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.
+
+```{r}
+## Analysis packages
+library(MachineShop)
+library(magrittr)
+
+## All availble metrics
+metricinfo() %>% names
+
+## Metric-specific information
+metricinfo(auc, r2)
+```
+
+
+## Type-Specific
+
+```{r}
+## Metrics for observed and predicted response variable types
+metricinfo(factor(0)) %>% names
+
+metricinfo(factor(0), matrix(0)) %>% names
+
+metricinfo(factor(0), factor(0)) %>% names
+
+## Identify factor-specific metrics
+metricinfo(factor(0), accuracy, auc, r2) %>% names
+```
+
+
+## Response Variable-Specific
+
+```{r}
+## Metrics for observed and predicted responses from a model fit
+model_fit <- fit(Species ~ ., data = iris, model = C50Model)
+obs <- response(model_fit)
+pred <- predict(model_fit, type = "prob")
+metricinfo(obs, pred) %>% names
+```
+
+
+## Resample-Specific
+
+```{r}
+## Metrics for resampled output
+model_res <- resample(Species ~ ., data = iris, model = C50Model)
+metricinfo(model_res) %>% names
+```

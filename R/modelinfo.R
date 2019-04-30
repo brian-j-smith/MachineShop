@@ -7,11 +7,23 @@
 #' none are specified, information is returned on all available models by
 #' default.
 #' 
-#' @return List of named models containing a descriptive \code{"label"}, source
-#' \code{"packages"}, supported response variable \code{"types"}, the
-#' constructor \code{"arguments"}, whether there is a pre-defined \code{"grid"}
-#' of tuning parameters, and whether a \code{"varimp"} function is implemented
-#' for each.
+#' @return List of named model elements each containing the following
+#' components:
+#' \describe{
+#' \item{label}{character descriptor for the model.}
+#' \item{packages}{character vector of source packages required to use the
+#' model.  These need only be installed with the \code{\link{install.packages}}
+#' function or by equivalent means; but need not be loaded with, for example,
+#' the \code{\link{library}} function.}
+#' \item{types}{character vector of response variable types supported by the
+#' model.}
+#' \item{arguments}{closure with the argument names and corresponding default
+#' values of the model function.}
+#' \item{grid}{logical indicating whether automatic generation of tuning
+#' parameter grids is implemented for the model.}
+#' \item{varimp}{logical indicating whether variable importance is defined for
+#' the model.}
+#' }
 #' 
 #' @seealso \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
 #' 
@@ -22,6 +34,9 @@
 #' ## Models by response types
 #' names(modelinfo(factor(0)))
 #' names(modelinfo(factor(0), numeric(0)))
+#' 
+#' ## Model-specific information
+#' modelinfo(GBMModel)
 #' 
 modelinfo <- function(...) {
   args <- unname(list(...))

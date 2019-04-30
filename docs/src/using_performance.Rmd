@@ -39,25 +39,7 @@ Survival Probabilities   | Area Under ROC Curve, Brier Score, Accuracy
 Survival Events          | Accuracy
 
 
-These defaults may be changed by specifying one or more package-supplied metric functions to the `metrics` argument of `performance`.  A named list of supplied metrics can be obtained interactively with the `metricinfo` function, and includes a descriptive `"label"`, whether to `"maximize"` the metric for better performance, the function `"arguments"`, and supported response variable `"types"` for each.  Function `metricinfo` may be called with one or more metric functions, function names, an observed response variable, or an observed and predicted response variable pair; and will return information on all matching metrics.
-
-```{r}
-## Names of all available metrics
-metricinfo() %>% names
-
-## Metrics for observed and predicted response variables
-metricinfo(obs, pred_means) %>% names
-metricinfo(obs, pred_probs) %>% names
-
-## Metrics for response variable types
-metricinfo(Surv(0), numeric(0)) %>% names
-metricinfo(Surv(0), SurvProbs(0)) %>% names
-
-## Metric-specific information
-metricinfo(cindex)
-```
-
-Specification of the `metrics` argument can be in terms of a single metric function, function name, or list of metric functions.  List names, if specified, will be displayed as metric labels in graphical and tabular summaries; otherwise, the function names will be used as labels for unnamed lists.
+These defaults may be changed by specifying one or more package-supplied metric functions to the `metrics` argument of `performance`.  Specification of the `metrics` argument can be in terms of a single metric function, function name, or list of metric functions.  List names, if specified, will be displayed as metric labels in graphical and tabular summaries; otherwise, the function names will be used as labels for unnamed lists.
 
 ```{r eval=FALSE}
 ## Single metric function
@@ -80,6 +62,42 @@ Metrics based on classification of two-level class probabilities, like sensitivi
 ```{r}
 ## User-specified survival probability metrics
 performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.5)
+```
+
+
+## Metric Information
+
+A named list of supplied metrics can be obtained interactively with the `metricinfo` function, and includes the following components for each.
+
+`label`
+  : Character descriptor for the metric.
+  
+`maximize`
+  : Logical indicating whether higher values of the metric correspond to better predictive performance.
+  
+`arguments`
+  : Closure with the argument names and corresponding default values of the metric function.
+  
+`types`
+  : Data frame of the observed and predicted response variable types supported by the metric.
+
+
+Function `metricinfo` may be called with one or more metric functions, function names, an observed response variable, or an observed and predicted response variable pair; and will return information on all matching metrics.
+
+```{r}
+## Names of all available metrics
+metricinfo() %>% names
+
+## Metrics for observed and predicted response variables
+metricinfo(obs, pred_means) %>% names
+metricinfo(obs, pred_probs) %>% names
+
+## Metrics for response variable types
+metricinfo(Surv(0), numeric(0)) %>% names
+metricinfo(Surv(0), SurvProbs(0)) %>% names
+
+## Metric-specific information
+metricinfo(cindex)
 ```
 
 

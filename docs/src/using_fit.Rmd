@@ -3,7 +3,27 @@
 
 ## Model Information
 
-Model fitting requires user specification of a `MachineShop` compatible model.  A named list of package-supplied models can be obtained interactively with the `modelinfo` function, and includes a descriptive `"label"`, the source `"packages"` on which the models depend, supported response variable `"types"`, and `"arguments"` that can be specified in calls to the model functions.  Note that in order to use a model, the source packages must be installed with the `install.packages` or by equivalent means, but need not be loaded with the `library` function.  Function `modelinfo` can be called with one or more model functions, function names, function calls, or observed response variables; and will return information on all models matching the calling arguments.
+Model fitting requires user specification of a `MachineShop` compatible model.  A named list of package-supplied models can be obtained interactively with the `modelinfo` function, and includes the following components for each.
+
+`label`
+  : Character descriptor for the model.
+  
+`packages`
+  : Character vector of source packages required to use the model.  These need only be installed with the `install.packages` function or by equivalent means; but need not be loaded with, for example, the `library` function.
+  
+`types`
+  : Character vector of response variable types supported by the model.
+  
+`arguments`
+  : Closure with the argument names and corresponding default values of the model function.
+  
+`grid`
+  : Logical indicating whether automatic generation of tuning parameter grids is implemented for the model.
+  
+`varimp`
+  : Logical indicating whether variable importance is defined for the model.
+
+Function `modelinfo` can be called with one or more model functions, function names, function calls, or observed response variables; and will return information on all models matching the calling arguments.
 
 ```{r}
 ## All available models

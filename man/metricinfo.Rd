@@ -12,9 +12,17 @@ observed and predicted responses, or a \code{Resamples} object.  If none are
 specified, information is returned on all available metrics by default.}
 }
 \value{
-List of named metrics containing a descriptive \code{"label"},
-whether to \code{"maximize"} the metric for better performance, the function
-\code{"arguments"}, and supported response variable \code{"types"} for each.
+List of named metric elements each containing the following
+components:
+\describe{
+\item{label}{character descriptor for the metric.}
+\item{maximize}{logical indicating whether higher values of the metric
+correspond to better predictive performance.}
+\item{arguments}{closure with the argument names and corresponding default
+values of the metric function.}
+\item{types}{data frame of the observed and predicted response variable
+types supported by the metric.}
+}
 }
 \description{
 Display information about metrics provided by the \pkg{MachineShop} package.
@@ -28,6 +36,9 @@ names(metricinfo(factor(0)))
 names(metricinfo(factor(0), factor(0)))
 names(metricinfo(factor(0), matrix(0)))
 names(metricinfo(factor(0), numeric(0)))
+
+## Metric-specific information
+metricinfo(auc)
 
 }
 \seealso{
