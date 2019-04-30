@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Example</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">MachineShop for R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="using.html">Using</a>
+</li>
+<li>
+  <a href="reference.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Examples
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="example_info.html">Model and Metric Information</a>
+    </li>
+    <li>
+      <a href="example_var_spec.html">Variable Specifications and Preprocessing</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="example_ichomes.html">IC Home Prices</a>
+    </li>
+    <li>
+      <a href="example_iris.html">Iris Flowers Species</a>
+    </li>
+    <li>
+      <a href="example_pima.html">Pima Indians Diabetes</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/brian-j-smith/MachineShop">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Example</h1>
+
+</div>
+
+
+<div id="model-information" class="section level1">
+<h1>Model Information</h1>
+<p>A named list of package-supplied models can be obtained interactively with the <code>modelinfo</code> function, and includes a descriptive <code>"label"</code> for each, source <code>"packages"</code> on which the models depend, supported response variable <code>"types"</code>, and <code>"arguments"</code> that can be specified in calls to the model functions. Function <code>modelinfo</code> can be called with one or more model functions, variable types, or response variables; and will return information on all models matching the calling arguments.</p>
+<pre class="r"><code>## Analysis packages
+library(MachineShop)
+library(magrittr)
+
+## All availble models
+modelinfo() %&gt;% names
+#&gt;  [1] &quot;AdaBagModel&quot;         &quot;AdaBoostModel&quot;       &quot;BARTModel&quot;          
+#&gt;  [4] &quot;BARTMachineModel&quot;    &quot;BlackBoostModel&quot;     &quot;C50Model&quot;           
+#&gt;  [7] &quot;CForestModel&quot;        &quot;CoxModel&quot;            &quot;CoxStepAICModel&quot;    
+#&gt; [10] &quot;EarthModel&quot;          &quot;FDAModel&quot;            &quot;GAMBoostModel&quot;      
+#&gt; [13] &quot;GBMModel&quot;            &quot;GLMBoostModel&quot;       &quot;GLMModel&quot;           
+#&gt; [16] &quot;GLMStepAICModel&quot;     &quot;GLMNetModel&quot;         &quot;KNNModel&quot;           
+#&gt; [19] &quot;LARSModel&quot;           &quot;LDAModel&quot;            &quot;LMModel&quot;            
+#&gt; [22] &quot;MDAModel&quot;            &quot;NaiveBayesModel&quot;     &quot;NNetModel&quot;          
+#&gt; [25] &quot;PDAModel&quot;            &quot;PLSModel&quot;            &quot;POLRModel&quot;          
+#&gt; [28] &quot;QDAModel&quot;            &quot;RandomForestModel&quot;   &quot;RangerModel&quot;        
+#&gt; [31] &quot;RPartModel&quot;          &quot;StackedModel&quot;        &quot;SuperModel&quot;         
+#&gt; [34] &quot;SurvRegModel&quot;        &quot;SurvRegStepAICModel&quot; &quot;SVMModel&quot;           
+#&gt; [37] &quot;SVMANOVAModel&quot;       &quot;SVMBesselModel&quot;      &quot;SVMLaplaceModel&quot;    
+#&gt; [40] &quot;SVMLinearModel&quot;      &quot;SVMPolyModel&quot;        &quot;SVMRadialModel&quot;     
+#&gt; [43] &quot;SVMSplineModel&quot;      &quot;SVMTanhModel&quot;        &quot;TreeModel&quot;          
+#&gt; [46] &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;     
+#&gt; [49] &quot;XGBTreeModel&quot;
+
+## Model-specific information
+modelinfo(C50Model, CoxModel)
+#&gt; $C50Model
+#&gt; $C50Model$label
+#&gt; [1] &quot;C5.0 Classification&quot;
+#&gt; 
+#&gt; $C50Model$packages
+#&gt; [1] &quot;C50&quot;
+#&gt; 
+#&gt; $C50Model$types
+#&gt; [1] &quot;factor&quot;
+#&gt; 
+#&gt; $C50Model$arguments
+#&gt; function (trials = 1, rules = FALSE, subset = TRUE, bands = 0, 
+#&gt;     winnow = FALSE, noGlobalPruning = FALSE, CF = 0.25, minCases = 2, 
+#&gt;     fuzzyThreshold = FALSE, sample = 0, earlyStopping = TRUE) 
+#&gt; NULL
+#&gt; 
+#&gt; $C50Model$grid
+#&gt; [1] TRUE
+#&gt; 
+#&gt; $C50Model$varimp
+#&gt; [1] TRUE
+#&gt; 
+#&gt; 
+#&gt; $CoxModel
+#&gt; $CoxModel$label
+#&gt; [1] &quot;Cox Regression&quot;
+#&gt; 
+#&gt; $CoxModel$packages
+#&gt; [1] &quot;survival&quot;
+#&gt; 
+#&gt; $CoxModel$types
+#&gt; [1] &quot;Surv&quot;
+#&gt; 
+#&gt; $CoxModel$arguments
+#&gt; function (ties = c(&quot;efron&quot;, &quot;breslow&quot;, &quot;exact&quot;), ...) 
+#&gt; NULL
+#&gt; 
+#&gt; $CoxModel$grid
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $CoxModel$varimp
+#&gt; [1] TRUE</code></pre>
+<div id="type-specific" class="section level2">
+<h2>Type-Specific</h2>
+<pre class="r"><code>## All factor response-specific models
+modelinfo(factor(0)) %&gt;% names
+#&gt;  [1] &quot;AdaBagModel&quot;       &quot;AdaBoostModel&quot;     &quot;BARTModel&quot;        
+#&gt;  [4] &quot;C50Model&quot;          &quot;CForestModel&quot;      &quot;EarthModel&quot;       
+#&gt;  [7] &quot;FDAModel&quot;          &quot;GBMModel&quot;          &quot;GLMNetModel&quot;      
+#&gt; [10] &quot;KNNModel&quot;          &quot;LDAModel&quot;          &quot;LMModel&quot;          
+#&gt; [13] &quot;MDAModel&quot;          &quot;NaiveBayesModel&quot;   &quot;NNetModel&quot;        
+#&gt; [16] &quot;PDAModel&quot;          &quot;PLSModel&quot;          &quot;QDAModel&quot;         
+#&gt; [19] &quot;RandomForestModel&quot; &quot;RangerModel&quot;       &quot;RPartModel&quot;       
+#&gt; [22] &quot;StackedModel&quot;      &quot;SuperModel&quot;        &quot;SVMModel&quot;         
+#&gt; [25] &quot;SVMANOVAModel&quot;     &quot;SVMBesselModel&quot;    &quot;SVMLaplaceModel&quot;  
+#&gt; [28] &quot;SVMLinearModel&quot;    &quot;SVMPolyModel&quot;      &quot;SVMRadialModel&quot;   
+#&gt; [31] &quot;SVMSplineModel&quot;    &quot;SVMTanhModel&quot;      &quot;TreeModel&quot;        
+#&gt; [34] &quot;XGBModel&quot;          &quot;XGBDARTModel&quot;      &quot;XGBLinearModel&quot;   
+#&gt; [37] &quot;XGBTreeModel&quot;
+
+## Identify factor response-specific models
+modelinfo(factor(0), AdaBagModel, C50Model, CoxModel) %&gt;% names
+#&gt; [1] &quot;AdaBagModel&quot; &quot;C50Model&quot;</code></pre>
+</div>
+<div id="response-variable-specific" class="section level2">
+<h2>Response Variable-Specific</h2>
+<pre class="r"><code>## Models for a responses variable
+modelinfo(iris$Species) %&gt;% names
+#&gt;  [1] &quot;AdaBagModel&quot;       &quot;AdaBoostModel&quot;     &quot;BARTModel&quot;        
+#&gt;  [4] &quot;C50Model&quot;          &quot;CForestModel&quot;      &quot;EarthModel&quot;       
+#&gt;  [7] &quot;FDAModel&quot;          &quot;GBMModel&quot;          &quot;GLMNetModel&quot;      
+#&gt; [10] &quot;KNNModel&quot;          &quot;LDAModel&quot;          &quot;LMModel&quot;          
+#&gt; [13] &quot;MDAModel&quot;          &quot;NaiveBayesModel&quot;   &quot;NNetModel&quot;        
+#&gt; [16] &quot;PDAModel&quot;          &quot;PLSModel&quot;          &quot;QDAModel&quot;         
+#&gt; [19] &quot;RandomForestModel&quot; &quot;RangerModel&quot;       &quot;RPartModel&quot;       
+#&gt; [22] &quot;StackedModel&quot;      &quot;SuperModel&quot;        &quot;SVMModel&quot;         
+#&gt; [25] &quot;SVMANOVAModel&quot;     &quot;SVMBesselModel&quot;    &quot;SVMLaplaceModel&quot;  
+#&gt; [28] &quot;SVMLinearModel&quot;    &quot;SVMPolyModel&quot;      &quot;SVMRadialModel&quot;   
+#&gt; [31] &quot;SVMSplineModel&quot;    &quot;SVMTanhModel&quot;      &quot;TreeModel&quot;        
+#&gt; [34] &quot;XGBModel&quot;          &quot;XGBDARTModel&quot;      &quot;XGBLinearModel&quot;   
+#&gt; [37] &quot;XGBTreeModel&quot;</code></pre>
+</div>
+</div>
+<div id="metric-information" class="section level1">
+<h1>Metric Information</h1>
+<p>A named list of supplied metrics can be obtained with the <code>metricinfo</code> function, and includes a descriptive <code>"label"</code> for each, whether to <code>"maximize"</code> the metrics for better performance, their function <code>"arguments"</code>, and supported observed and predicted response variable <code>"types"</code>. Function <code>metricinfo</code> may be called with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.</p>
+<pre class="r"><code>## Analysis packages
+library(MachineShop)
+library(magrittr)
+
+## All availble metrics
+metricinfo() %&gt;% names
+#&gt;  [1] &quot;accuracy&quot;        &quot;auc&quot;             &quot;brier&quot;          
+#&gt;  [4] &quot;cindex&quot;          &quot;cross_entropy&quot;   &quot;f_score&quot;        
+#&gt;  [7] &quot;fnr&quot;             &quot;fpr&quot;             &quot;gini&quot;           
+#&gt; [10] &quot;kappa2&quot;          &quot;mae&quot;             &quot;mse&quot;            
+#&gt; [13] &quot;msle&quot;            &quot;npv&quot;             &quot;ppv&quot;            
+#&gt; [16] &quot;pr_auc&quot;          &quot;precision&quot;       &quot;r2&quot;             
+#&gt; [19] &quot;recall&quot;          &quot;rmse&quot;            &quot;rmsle&quot;          
+#&gt; [22] &quot;roc_auc&quot;         &quot;roc_index&quot;       &quot;rpp&quot;            
+#&gt; [25] &quot;sensitivity&quot;     &quot;specificity&quot;     &quot;tnr&quot;            
+#&gt; [28] &quot;tpr&quot;             &quot;weighted_kappa2&quot;
+
+## Metric-specific information
+metricinfo(auc, r2)
+#&gt; $auc
+#&gt; $auc$label
+#&gt; [1] &quot;Area Under Performance Curve&quot;
+#&gt; 
+#&gt; $auc$maximize
+#&gt; [1] TRUE
+#&gt; 
+#&gt; $auc$arguments
+#&gt; function (observed, predicted = NULL, metrics = c(MachineShop::tpr, 
+#&gt;     MachineShop::fpr), stat = base::mean, ...) 
+#&gt; NULL
+#&gt; 
+#&gt; $auc$types
+#&gt;   observed predicted
+#&gt; 1   Curves      NULL
+#&gt; 2   factor   numeric
+#&gt; 3     Surv SurvProbs
+#&gt; 
+#&gt; 
+#&gt; $r2
+#&gt; $r2$label
+#&gt; [1] &quot;Coefficient of Determination&quot;
+#&gt; 
+#&gt; $r2$maximize
+#&gt; [1] TRUE
+#&gt; 
+#&gt; $r2$arguments
+#&gt; function (observed, predicted = NULL, dist = NULL, ...) 
+#&gt; NULL
+#&gt; 
+#&gt; $r2$types
+#&gt;   observed predicted
+#&gt; 1   matrix    matrix
+#&gt; 2  numeric   numeric
+#&gt; 3     Surv   numeric</code></pre>
+<div id="type-specific-1" class="section level2">
+<h2>Type-Specific</h2>
+<pre class="r"><code>## Metrics for observed and predicted response variable types
+metricinfo(factor(0)) %&gt;% names
+#&gt;  [1] &quot;accuracy&quot;      &quot;auc&quot;           &quot;brier&quot;         &quot;cindex&quot;       
+#&gt;  [5] &quot;cross_entropy&quot; &quot;f_score&quot;       &quot;fnr&quot;           &quot;fpr&quot;          
+#&gt;  [9] &quot;kappa2&quot;        &quot;npv&quot;           &quot;ppv&quot;           &quot;pr_auc&quot;       
+#&gt; [13] &quot;precision&quot;     &quot;recall&quot;        &quot;roc_auc&quot;       &quot;roc_index&quot;    
+#&gt; [17] &quot;rpp&quot;           &quot;sensitivity&quot;   &quot;specificity&quot;   &quot;tnr&quot;          
+#&gt; [21] &quot;tpr&quot;
+
+metricinfo(factor(0), matrix(0)) %&gt;% names
+#&gt; [1] &quot;accuracy&quot;      &quot;brier&quot;         &quot;cross_entropy&quot; &quot;kappa2&quot;
+
+metricinfo(factor(0), factor(0)) %&gt;% names
+#&gt; [1] &quot;accuracy&quot; &quot;kappa2&quot;
+
+## Select factor-specific metrics
+metricinfo(factor(0), accuracy, auc, r2) %&gt;% names
+#&gt; [1] &quot;accuracy&quot; &quot;auc&quot;</code></pre>
+</div>
+<div id="response-variable-specific-1" class="section level2">
+<h2>Response Variable-Specific</h2>
+<pre class="r"><code>## Metrics for observed and predicted responses from a model fit
+model_fit &lt;- fit(Species ~ ., data = iris, model = C50Model)
+obs &lt;- response(model_fit)
+pred &lt;- predict(model_fit, type = &quot;prob&quot;)
+metricinfo(obs, pred) %&gt;% names
+#&gt; [1] &quot;accuracy&quot;      &quot;brier&quot;         &quot;cross_entropy&quot; &quot;kappa2&quot;</code></pre>
+</div>
+<div id="resample-specific" class="section level2">
+<h2>Resample-Specific</h2>
+<pre class="r"><code>## Metrics for resampled output
+model_res &lt;- resample(Species ~ ., data = iris, model = C50Model)
+metricinfo(model_res) %&gt;% names
+#&gt; [1] &quot;accuracy&quot;      &quot;brier&quot;         &quot;cross_entropy&quot; &quot;kappa2&quot;</code></pre>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

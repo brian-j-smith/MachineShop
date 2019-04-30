@@ -396,6 +396,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="example_info.html">Model and Metric Information</a>
+    </li>
+    <li>
+      <a href="example_var_spec.html">Variable Specifications and Preprocessing</a>
+    </li>
+    <li class="divider"></li>
+    <li>
       <a href="example_ichomes.html">IC Home Prices</a>
     </li>
     <li>
@@ -403,9 +410,6 @@ div.tocify {
     </li>
     <li>
       <a href="example_pima.html">Pima Indians Diabetes</a>
-    </li>
-    <li>
-      <a href="example_var_spec.html">Variable Specifications and Preprocessing</a>
     </li>
   </ul>
 </li>
@@ -598,7 +602,28 @@ surv_fo &lt;- Surv(time, status) ~ sex + age + year + thickness + ulcer</code></
 <h1>Model Fit and Prediction</h1>
 <div id="model-information" class="section level2">
 <h2>Model Information</h2>
-<p>Model fitting requires user specification of a <code>MachineShop</code> compatible model. A named list of package-supplied models can be obtained interactively with the <code>modelinfo</code> function, and includes a descriptive <code>"label"</code>, the source <code>"packages"</code> on which the models depend, supported response variable <code>"types"</code>, and <code>"arguments"</code> that can be specified in calls to the model functions. Note that in order to use a model, the source packages must be installed with the <code>install.packages</code> or by equivalent means, but need not be loaded with the <code>library</code> function. Function <code>modelinfo</code> can be called with one or more model functions, function names, function calls, or observed response variables; and will return information on all models matching the calling arguments.</p>
+<p>Model fitting requires user specification of a <code>MachineShop</code> compatible model. A named list of package-supplied models can be obtained interactively with the <code>modelinfo</code> function, and includes the following components for each.</p>
+<dl>
+<dt><code>label</code></dt>
+<dd>Character descriptor for the model.
+</dd>
+<dt><code>packages</code></dt>
+<dd>Character vector of source packages required to use the model. These need only be installed with the <code>install.packages</code> function or by equivalent means; but need not be loaded with, for example, the <code>library</code> function.
+</dd>
+<dt><code>types</code></dt>
+<dd>Character vector of response variable types supported by the model.
+</dd>
+<dt><code>arguments</code></dt>
+<dd>Closure with the argument names and corresponding default values of the model function.
+</dd>
+<dt><code>grid</code></dt>
+<dd>Logical indicating whether automatic generation of tuning parameter grids is implemented for the model.
+</dd>
+<dt><code>varimp</code></dt>
+<dd>Logical indicating whether variable importance is defined for the model.
+</dd>
+</dl>
+<p>Function <code>modelinfo</code> can be called with one or more model functions, function names, function calls, or observed response variables; and will return information on all models matching the calling arguments.</p>
 <pre class="r"><code>## All available models
 modelinfo() %&gt;% names
 #&gt;  [1] &quot;AdaBagModel&quot;         &quot;AdaBoostModel&quot;       &quot;BARTModel&quot;          
@@ -1063,7 +1088,46 @@ performance(obs, pred_events)
 </tr>
 </tbody>
 </table>
-<p>These defaults may be changed by specifying one or more package-supplied metric functions to the <code>metrics</code> argument of <code>performance</code>. A named list of supplied metrics can be obtained interactively with the <code>metricinfo</code> function, and includes a descriptive <code>"label"</code>, whether to <code>"maximize"</code> the metric for better performance, the function <code>"arguments"</code>, and supported response variable <code>"types"</code> for each. Function <code>metricinfo</code> may be called with one or more metric functions, function names, an observed response variable, or an observed and predicted response variable pair; and will return information on all matching metrics.</p>
+<p>These defaults may be changed by specifying one or more package-supplied metric functions to the <code>metrics</code> argument of <code>performance</code>. Specification of the <code>metrics</code> argument can be in terms of a single metric function, function name, or list of metric functions. List names, if specified, will be displayed as metric labels in graphical and tabular summaries; otherwise, the function names will be used as labels for unnamed lists.</p>
+<pre class="r"><code>## Single metric function
+performance(obs, pred_means, metrics = cindex)
+
+## Single metric function name
+performance(obs, pred_means, metrics = &quot;cindex&quot;)
+
+## List of metric functions
+performance(obs, pred_means, metrics = c(cindex, rmse, rmsle))
+
+## Named list of metric functions
+performance(obs, pred_means, metrics = c(&quot;CIndex&quot; = cindex,
+                                         &quot;RMSE&quot; = rmse,
+                                         &quot;RMSLE&quot; = rmsle))</code></pre>
+<p>Metrics based on classification of two-level class probabilities, like sensitivity and specificity, optionally allow for specification of the classification cutoff probability (default: <code>cutoff = 0.5</code>).</p>
+<pre class="r"><code>## User-specified survival probability metrics
+performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.5)
+#&gt;  sensitivity.mean sensitivity.time1 sensitivity.time2  specificity.mean 
+#&gt;         0.4210721         0.3997553         0.4423889         0.8033254 
+#&gt; specificity.time1 specificity.time2 
+#&gt;         0.8834709         0.7231799</code></pre>
+</div>
+<div id="metric-information" class="section level2">
+<h2>Metric Information</h2>
+<p>A named list of supplied metrics can be obtained interactively with the <code>metricinfo</code> function, and includes the following components for each.</p>
+<dl>
+<dt><code>label</code></dt>
+<dd>Character descriptor for the metric.
+</dd>
+<dt><code>maximize</code></dt>
+<dd>Logical indicating whether larger values of the metric correspond to better predictive performance.
+</dd>
+<dt><code>arguments</code></dt>
+<dd>Closure with the argument names and corresponding default values of the metric function.
+</dd>
+<dt><code>types</code></dt>
+<dd>Data frame of the observed and predicted response variable types supported by the metric.
+</dd>
+</dl>
+<p>Function <code>metricinfo</code> may be called with one or more metric functions, function names, an observed response variable, or an observed and predicted response variable pair; and will return information on all matching metrics.</p>
 <pre class="r"><code>## Names of all available metrics
 metricinfo() %&gt;% names
 #&gt;  [1] &quot;accuracy&quot;        &quot;auc&quot;             &quot;brier&quot;          
@@ -1112,27 +1176,6 @@ metricinfo(cindex)
 #&gt;   observed predicted
 #&gt; 1   factor   numeric
 #&gt; 2     Surv   numeric</code></pre>
-<p>Specification of the <code>metrics</code> argument can be in terms of a single metric function, function name, or list of metric functions. List names, if specified, will be displayed as metric labels in graphical and tabular summaries; otherwise, the function names will be used as labels for unnamed lists.</p>
-<pre class="r"><code>## Single metric function
-performance(obs, pred_means, metrics = cindex)
-
-## Single metric function name
-performance(obs, pred_means, metrics = &quot;cindex&quot;)
-
-## List of metric functions
-performance(obs, pred_means, metrics = c(cindex, rmse, rmsle))
-
-## Named list of metric functions
-performance(obs, pred_means, metrics = c(&quot;CIndex&quot; = cindex,
-                                         &quot;RMSE&quot; = rmse,
-                                         &quot;RMSLE&quot; = rmsle))</code></pre>
-<p>Metrics based on classification of two-level class probabilities, like sensitivity and specificity, optionally allow for specification of the classification cutoff probability (default: <code>cutoff = 0.5</code>).</p>
-<pre class="r"><code>## User-specified survival probability metrics
-performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.5)
-#&gt;  sensitivity.mean sensitivity.time1 sensitivity.time2  specificity.mean 
-#&gt;         0.4210721         0.3997553         0.4423889         0.8033254 
-#&gt; specificity.time1 specificity.time2 
-#&gt;         0.8834709         0.7231799</code></pre>
 </div>
 <div id="factors-1" class="section level2">
 <h2>Factors</h2>
