@@ -7,24 +7,24 @@ Many of the modeling functions have arguments, or parameters, that control aspec
 
 ```{r}
 ## Tune over automatic grid of model parameters
-(surv_tune <- tune(surv_fo, data = surv_df, model = GBMModel,
-                   grid = 3,
-                   control = surv_means_control,
-                   metrics = c("CIndex" = cindex, "RMSE" = rmse)))
+(tuned_model <- tune(surv_fo, data = surv_train, model = GBMModel,
+                     grid = 3,
+                     control = surv_means_control,
+                     metrics = c("CIndex" = cindex, "RMSE" = rmse)))
 
-summary(surv_tune)
+summary(tuned_model)
 
-plot(surv_tune, type = "line")
+plot(tuned_model, type = "line")
 ```
 
 ```{r eval=FALSE}
 ## Tune over randomly sampled grid points
-tune(surv_fo, data = surv_df, model = GBMModel,
+tune(surv_fo, data = surv_train, model = GBMModel,
      grid = Grid(length = 100, random = 10),
      control = surv_means_control)
 
 ## Tune over user-specified grid points
-tune(surv_fo, data = surv_df, model = GBMModel,
+tune(surv_fo, data = surv_train, model = GBMModel,
      grid = expand.grid(n.trees = c(25, 50, 100),
                         interaction.depth = 1:3),
      control = surv_means_control)
@@ -34,7 +34,7 @@ The return value of `tune` is a model object with the optimal tuning parameters 
 
 ```{r}
 ## Fit the tuned model
-surv_fit <- fit(surv_fo, data = surv_df, model = surv_tune)
+surv_fit <- fit(surv_fo, data = surv_train, model = tuned_model)
 (vi <- varimp(surv_fit))
 ```
 
@@ -45,14 +45,14 @@ Model selection can be performed with the `tune` function to select from any com
 
 ```{r results="hide"}
 ## Select from a list of candidate models
-model_list <- c(
+candidate_models <- c(
   expand.model(GBMModel, n.trees = c(50, 100), interaction.depth = 1:2),
   GLMNetModel(lambda = 0.01),
   CoxModel,
   SurvRegModel
 )
 
-tune(surv_fo, data = surv_df, models = model_list,
+tune(surv_fo, data = surv_train, models = candidate_models,
      control = surv_means_control)
 ```
 
@@ -64,12 +64,12 @@ Ensemble methods combine multiple base learning algorithms as a strategy to impr
 ```{r}
 ## Stacked regression
 stackedmodel <- StackedModel(GLMBoostModel, CForestModel, CoxModel)
-res_stacked <- resample(surv_fo, data = surv_df, model = stackedmodel)
+res_stacked <- resample(surv_fo, data = surv_train, model = stackedmodel)
 summary(res_stacked)
 
 ## Super learner
 supermodel <- SuperModel(GLMBoostModel, CForestModel, CoxModel,
                          model = GBMModel)
-res_super <- resample(surv_fo, data = surv_df, model = supermodel)
+res_super <- resample(surv_fo, data = surv_train, model = supermodel)
 summary(res_super)
 ```

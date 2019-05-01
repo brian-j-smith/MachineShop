@@ -77,14 +77,14 @@ Survival responses should be coded as `Surv` variables for model fitting with tr
 ## Survival response formula
 library(survival)
 
-fit(Surv(time, status) ~ ., data = surv_df, model = GBMModel)
+fit(Surv(time, status) ~ ., data = surv_train, model = GBMModel)
 ```
 
 For recipes, survival outcomes should be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated as `"surv_time"` and `"surv_event"`.
 
 ```{r results="hide"}
 ## Survival response recipe
-rec <- recipe(time + status ~ ., data = surv_df) %>%
+rec <- recipe(time + status ~ ., data = surv_train) %>%
   add_role(time, new_role = "surv_time") %>%
   add_role(status, new_role = "surv_event")
 

@@ -76,10 +76,10 @@ In the example below, Bayesian information criterion (BIC) based stepwise variab
 ## Dynamic model parameter k = log number of observations
 
 ## Number of observations: nobs
-fit(surv_fo, data = surv_df, model = CoxStepAICModel(k = .(log(nobs))))
+fit(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(nobs))))
 
 ## Response variable: y
-fit (surv_fo, data = surv_df, model = CoxStepAICModel(k = .(log(length(y)))))
+fit (surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(length(y)))))
 ```
 
 

@@ -50,9 +50,9 @@ Resampling is performed by calling the `resample` function with a variable speci
 
 ```{r}
 ## Resample estimation for survival means and probabilities
-(res_means <- resample(surv_fo, data = surv_df, model = GBMModel, control = surv_means_control))
+(res_means <- resample(surv_fo, data = surv_train, model = GBMModel, control = surv_means_control))
 
-(res_probs <- resample(surv_fo, data = surv_df, model = GBMModel, control = surv_probs_control))
+(res_probs <- resample(surv_fo, data = surv_train, model = GBMModel, control = surv_probs_control))
 
 summary(res_probs)
 
@@ -76,12 +76,12 @@ Stratification of cases for the construction of resampled training and test sets
 
 ```{r results="hide"}
 ## Model frame with case status stratification
-mf <- ModelFrame(surv_fo, data = surv_df, strata = surv_df$status)
+mf <- ModelFrame(surv_fo, data = surv_train, strata = surv_train$status)
 
 resample(mf, model = GBMModel)
 
 ## Recipe with case status stratification
-rec <- recipe(time + status ~ ., data = surv_df) %>%
+rec <- recipe(time + status ~ ., data = surv_train) %>%
   add_role(time, new_role = "surv_time") %>%
   add_role(status, new_role = "surv_event") %>%
   add_role(status, new_role = "case_strata")
@@ -96,7 +96,7 @@ As discussed previously in the *Model Fit and Prediction* section, dynamic model
 
 ```{r results="hide"}
 ## Dynamic model parameter k = log number of training set observations
-resample(surv_fo, data = surv_df, model = CoxStepAICModel(k = .(log(nobs))))
+resample(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(nobs))))
 ```
 
 
@@ -106,11 +106,11 @@ Resampled metrics from different models can be combined for comparison with the 
 
 ```{r}
 ## Resample estimation
-res1 <- resample(surv_fo, data = surv_df, model = GBMModel(n.trees = 25),
+res1 <- resample(surv_fo, data = surv_train, model = GBMModel(n.trees = 25),
                  control = surv_means_control)
-res2 <- resample(surv_fo, data = surv_df, model = GBMModel(n.trees = 50),
+res2 <- resample(surv_fo, data = surv_train, model = GBMModel(n.trees = 50),
                  control = surv_means_control)
-res3 <- resample(surv_fo, data = surv_df, model = GBMModel(n.trees = 100),
+res3 <- resample(surv_fo, data = surv_train, model = GBMModel(n.trees = 100),
                  control = surv_means_control)
 
 ## Combine resample output for comparison
