@@ -32,7 +32,7 @@ plot(cal)
 
 ## Confusion Matrices
 
-Confusion matrices of cross-classified observed and predicted factor or survival probabilitie are available with the `confusion` function.  They can be constructed with predicted class membership or with predicted class probabilities.  In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors and according to the class with highest probability for factors with more than two levels.  Performance metrics, such as those described earlier for binary factors, can be computed with the `performance` function and summarized with `summary` and `plot`.
+Confusion matrices of cross-classified observed and predicted factor or survival probabilities are available with the `confusion` function.  They can be constructed with predicted class membership or with predicted class probabilities.  In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors and according to the class with highest probability for factors with more than two levels.  Performance metrics, such as those described earlier for binary factors, can be computed with the `performance` function and summarized with `summary` and `plot`.
 
 ```{r}
 ## Confusion matrices
@@ -52,13 +52,27 @@ plot(conf)
 
 ## Partial Dependence Plots
 
-Partial dependence plots display the marginal effects of predictors on the response variable.  The response scale displayed in the plots will depend on the response type: probability for predicted factors and survival probabilities, original scale for numerics, and survival time for predicted survival means.
+Partial dependence plots display the marginal effects of predictors on a response variable.  Dependence for a select set of one or more predictor variables $X_S$ is computed as
+$$
+\bar{f}_S(X_S) = \frac{1}{N}\sum_{i=1}^N f(X_S, x_{iS'}),
+$$
+where $f$ is a fitted prediction function and $x_{iS'}$ are values of the remaining predictors in a dataset of $N$ cases.  The response scale displayed in dependence plots will depend on the response variable type: probability for predicted factors and survival probabilities, original scale for numerics, and survival time for predicted survival means.  By default, dependence is computed for each select predictor individually over a grid of 10 approximately evenly spaced values and averaged over the dataset on which the prediction function was fit.
 
 ```{r results = "hide"}
 ## Partial dependence plots
 pd <- dependence(surv_fit, select = c(thickness, age))
 plot(pd)
 ```
+
+Averaging may be performed over different datasets to estimate marginal effects in other populations of cases, over different numbers of predictor values, and over quantile spacing of the values.
+
+```{r results = "hide"}
+pd <- dependence(surv_fit, data = surv_test, select = thickness, n = 20,
+                 intervals = "quantile")
+plot(pd)
+```
+
+In addition, dependence may be computed for combinations of multiple predictors to examine interaction effects and for summary statistics other than the mean.
 
 
 ## Performance Curves

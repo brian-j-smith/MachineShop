@@ -163,7 +163,7 @@ Model fitting requires user specification of a `MachineShop` compatible model.  
   : Character descriptor for the model.
   
 `packages`
-  : Character vector of source packages required to use the model.  These need only be installed with the `install.packages` function or by equivalent means; but need not be loaded, for example, with the `library` function.
+  : Character vector of source packages required to use the model.  These need only be installed with the `install.packages` function or by equivalent means; but need not be loaded with, for example, the `library` function.
   
 `types`
   : Character vector of response variable types supported by the model.
@@ -230,10 +230,10 @@ In the example below, Bayesian information criterion (BIC) based stepwise variab
 ## Dynamic model parameter k = log number of observations
 
 ## Number of observations: nobs
-fit(surv_fo, data = surv_df, model = CoxStepAICModel(k = .(log(nobs))))
+fit(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(nobs))))
 
 ## Response variable: y
-fit (surv_fo, data = surv_df, model = CoxStepAICModel(k = .(log(length(y)))))
+fit (surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(length(y)))))
 ```
 
 
@@ -469,14 +469,14 @@ Survival responses should be coded as `Surv` variables for model fitting with tr
 ## Survival response formula
 library(survival)
 
-fit(Surv(time, status) ~ ., data = surv_df, model = GBMModel)
+fit(Surv(time, status) ~ ., data = surv_train, model = GBMModel)
 ```
 
 For recipes, survival outcomes should be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated as `"surv_time"` and `"surv_event"`.
 
 ```{r results="hide"}
 ## Survival response recipe
-rec <- recipe(time + status ~ ., data = surv_df) %>%
+rec <- recipe(time + status ~ ., data = surv_train) %>%
   add_role(time, new_role = "surv_time") %>%
   add_role(status, new_role = "surv_event")
 
@@ -559,7 +559,7 @@ A named list of supplied metrics can be obtained interactively with the `metrici
   : Character descriptor for the metric.
   
 `maximize`
-  : Logical indicating whether larger values of the metric correspond to better predictive performance.
+  : Logical indicating whether higher values of the metric correspond to better predictive performance.
   
 `arguments`
   : Closure with the argument names and corresponding default values of the metric function.
@@ -769,9 +769,9 @@ Resampling is performed by calling the `resample` function with a variable speci
 
 ```{r}
 ## Resample estimation for survival means and probabilities
-(res_means <- resample(surv_fo, data = surv_df, model = GBMModel, control = surv_means_control))
+(res_means <- resample(surv_fo, data = surv_train, model = GBMModel, control = surv_means_control))
 
-(res_probs <- resample(surv_fo, data = surv_df, model = GBMModel, control = surv_probs_control))
+(res_probs <- resample(surv_fo, data = surv_train, model = GBMModel, control = surv_probs_control))
 
 summary(res_probs)
 
@@ -795,12 +795,12 @@ Stratification of cases for the construction of resampled training and test sets
 
 ```{r results="hide"}
 ## Model frame with case status stratification
-mf <- ModelFrame(surv_fo, data = surv_df, strata = surv_df$status)
+mf <- ModelFrame(surv_fo, data = surv_train, strata = surv_train$status)
 
 resample(mf, model = GBMModel)
 
 ## Recipe with case status stratification
-rec <- recipe(time + status ~ ., data = surv_df) %>%
+rec <- recipe(time + status ~ ., data = surv_train) %>%
   add_role(time, new_role = "surv_time") %>%
   add_role(status, new_role = "surv_event") %>%
   add_role(status, new_role = "case_strata")
@@ -815,7 +815,7 @@ As discussed previously in the *Model Fit and Prediction* section, dynamic model
 
 ```{r results="hide"}
 ## Dynamic model parameter k = log number of training set observations
-resample(surv_fo, data = surv_df, model = CoxStepAICModel(k = .(log(nobs))))
+resample(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(nobs))))
 ```
 
 
@@ -825,11 +825,11 @@ Resampled metrics from different models can be combined for comparison with the 
 
 ```{r}
 ## Resample estimation
-res1 <- resample(surv_fo, data = surv_df, model = GBMModel(n.trees = 25),
+res1 <- resample(surv_fo, data = surv_train, model = GBMModel(n.trees = 25),
                  control = surv_means_control)
-res2 <- resample(surv_fo, data = surv_df, model = GBMModel(n.trees = 50),
+res2 <- resample(surv_fo, data = surv_train, model = GBMModel(n.trees = 50),
                  control = surv_means_control)
-res3 <- resample(surv_fo, data = surv_df, model = GBMModel(n.trees = 100),
+res3 <- resample(surv_fo, data = surv_train, model = GBMModel(n.trees = 100),
                  control = surv_means_control)
 
 ## Combine resample output for comparison
@@ -893,7 +893,7 @@ plot(cal)
 
 ## Confusion Matrices
 
-Confusion matrices of cross-classified observed and predicted factor or survival probabilitie are available with the `confusion` function.  They can be constructed with predicted class membership or with predicted class probabilities.  In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors and according to the class with highest probability for factors with more than two levels.  Performance metrics, such as those described earlier for binary factors, can be computed with the `performance` function and summarized with `summary` and `plot`.
+Confusion matrices of cross-classified observed and predicted factor or survival probabilities are available with the `confusion` function.  They can be constructed with predicted class membership or with predicted class probabilities.  In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors and according to the class with highest probability for factors with more than two levels.  Performance metrics, such as those described earlier for binary factors, can be computed with the `performance` function and summarized with `summary` and `plot`.
 
 ```{r}
 ## Confusion matrices
@@ -913,13 +913,27 @@ plot(conf)
 
 ## Partial Dependence Plots
 
-Partial dependence plots display the marginal effects of predictors on the response variable.  The response scale displayed in the plots will depend on the response type: probability for predicted factors and survival probabilities, original scale for numerics, and survival time for predicted survival means.
+Partial dependence plots display the marginal effects of predictors on a response variable.  Dependence for a select set of one or more predictor variables $X_S$ is computed as
+$$
+\bar{f}_S(X_S) = \frac{1}{N}\sum_{i=1}^N f(X_S, x_{iS'}),
+$$
+where $f$ is a fitted prediction function and $x_{iS'}$ are values of the remaining predictors in a dataset of $N$ cases.  The response scale displayed in dependence plots will depend on the response variable type: probability for predicted factors and survival probabilities, original scale for numerics, and survival time for predicted survival means.  By default, dependence is computed for each select predictor individually over a grid of 10 approximately evenly spaced values and averaged over the dataset on which the prediction function was fit.
 
 ```{r results = "hide"}
 ## Partial dependence plots
 pd <- dependence(surv_fit, select = c(thickness, age))
 plot(pd)
 ```
+
+Averaging may be performed over different datasets to estimate marginal effects in other populations of cases, over different numbers of predictor values, and over quantile spacing of the values.
+
+```{r results = "hide"}
+pd <- dependence(surv_fit, data = surv_test, select = thickness, n = 20,
+                 intervals = "quantile")
+plot(pd)
+```
+
+In addition, dependence may be computed for combinations of multiple predictors to examine interaction effects and for summary statistics other than the mean.
 
 
 ## Performance Curves
@@ -978,24 +992,24 @@ Many of the modeling functions have arguments, or parameters, that control aspec
 
 ```{r}
 ## Tune over automatic grid of model parameters
-(surv_tune <- tune(surv_fo, data = surv_df, model = GBMModel,
-                   grid = 3,
-                   control = surv_means_control,
-                   metrics = c("CIndex" = cindex, "RMSE" = rmse)))
+(tuned_model <- tune(surv_fo, data = surv_train, model = GBMModel,
+                     grid = 3,
+                     control = surv_means_control,
+                     metrics = c("CIndex" = cindex, "RMSE" = rmse)))
 
-summary(surv_tune)
+summary(tuned_model)
 
-plot(surv_tune, type = "line")
+plot(tuned_model, type = "line")
 ```
 
 ```{r eval=FALSE}
 ## Tune over randomly sampled grid points
-tune(surv_fo, data = surv_df, model = GBMModel,
+tune(surv_fo, data = surv_train, model = GBMModel,
      grid = Grid(length = 100, random = 10),
      control = surv_means_control)
 
 ## Tune over user-specified grid points
-tune(surv_fo, data = surv_df, model = GBMModel,
+tune(surv_fo, data = surv_train, model = GBMModel,
      grid = expand.grid(n.trees = c(25, 50, 100),
                         interaction.depth = 1:3),
      control = surv_means_control)
@@ -1005,7 +1019,7 @@ The return value of `tune` is a model object with the optimal tuning parameters 
 
 ```{r}
 ## Fit the tuned model
-surv_fit <- fit(surv_fo, data = surv_df, model = surv_tune)
+surv_fit <- fit(surv_fo, data = surv_train, model = tuned_model)
 (vi <- varimp(surv_fit))
 ```
 
@@ -1016,14 +1030,14 @@ Model selection can be performed with the `tune` function to select from any com
 
 ```{r results="hide"}
 ## Select from a list of candidate models
-model_list <- c(
+candidate_models <- c(
   expand.model(GBMModel, n.trees = c(50, 100), interaction.depth = 1:2),
   GLMNetModel(lambda = 0.01),
   CoxModel,
   SurvRegModel
 )
 
-tune(surv_fo, data = surv_df, models = model_list,
+tune(surv_fo, data = surv_train, models = candidate_models,
      control = surv_means_control)
 ```
 
@@ -1035,13 +1049,13 @@ Ensemble methods combine multiple base learning algorithms as a strategy to impr
 ```{r}
 ## Stacked regression
 stackedmodel <- StackedModel(GLMBoostModel, CForestModel, CoxModel)
-res_stacked <- resample(surv_fo, data = surv_df, model = stackedmodel)
+res_stacked <- resample(surv_fo, data = surv_train, model = stackedmodel)
 summary(res_stacked)
 
 ## Super learner
 supermodel <- SuperModel(GLMBoostModel, CForestModel, CoxModel,
                          model = GBMModel)
-res_super <- resample(surv_fo, data = surv_df, model = supermodel)
+res_super <- resample(surv_fo, data = surv_train, model = supermodel)
 summary(res_super)
 ```
 
