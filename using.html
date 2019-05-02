@@ -1872,23 +1872,67 @@ summary(res_super)
 </div>
 <div id="package-extensions" class="section level1">
 <h1>Package Extensions</h1>
-<p>Custom models and metrics can be defined with the <code>MLModel</code> and <code>MLMetric</code> constructors for use with the model fitting, prediction, and performance assessment tools provided by the package.</p>
-<pre class="r"><code>## Logistic regression model
+<p>Custom models and metrics can be defined with <code>MLModel</code> and <code>MLMetric</code> for use with the model fitting, prediction, and performance assessment tools provided by the package. The <code>MLModel</code> function creates a model object that can be used with the previously described fitting functions. It take the following arguments.</p>
+<dl>
+<dt><code>name</code></dt>
+<dd>Character name of the object to which the model is assigned.
+</dd>
+<dt><code>label</code></dt>
+<dd>Optional character descriptor for the model (default: <code>name</code>).
+</dd>
+<dt><code>packages</code></dt>
+<dd>Character vector of source packages required to use the model.
+</dd>
+<dt><code>types</code></dt>
+<dd>Character vector of response variable types to which the model can be fit. Supported types are <code>"binary"</code>, <code>"factor"</code>, <code>"matrix"</code>, <code>"numeric"</code>, <code>"ordered"</code>, and <code>"Surv"</code>.
+</dd>
+<dt><code>fit</code></dt>
+<dd>Model fitting function whose arguments are a <code>formula</code>, a <code>ModelFrame</code> named <code>data</code>, case <code>weights</code>, and an ellipsis. Argument <code>data</code> may be converted to a data frame with the <code>as.data.frame</code> function as needed. The fit function should return the object resulting from the model fit.
+</dd>
+<dt><code>predict</code></dt>
+<dd>Prediction function whose arguments are the <code>object</code> returned by <code>fit</code>, a <code>ModelFrame</code> named <code>newdata</code> of predictor variables, optional vector of <code>times</code> at which to predict survival, and an ellipsis. Argument <code>data</code> may be converted to a data frame with the <code>as.data.frame</code> function as needed. Values returned by the function should be formatted according to the response variable types below.
+</dd>
+</dl>
+<ul>
+<li><code>factor</code> : Vector or column matrix of probabilities for the second level of binary factors or a matrix whose columns contain the probabilities for factors with more than two levels.</li>
+<li><code>matrix</code> : Matrix of predicted responses.</li>
+<li><code>numeric</code> : Vector or column matrix of predicted responses.</li>
+<li><code>Surv</code> : Matrix whose columns contain survival probabilities at <code>times</code> if supplied or a vector of predicted survival means otherwise.</li>
+</ul>
+<dl>
+<dt><code>varimp</code></dt>
+<dd>Variable importance function whose arguments are the <code>object</code> returned by <code>fit</code>, optional arguments passed from calls to <code>varimp</code>, and an ellipsis. The function should return a vector of importance values named after the predictor variables or a matrix or data frame whose rows are named after the predictors.
+</dd>
+</dl>
+<pre class="r"><code>## Logistic regression model extension
 LogisticModel &lt;- MLModel(
   name = &quot;LogisticModel&quot;,
+  label = &quot;Logistic Model&quot;,
   types = &quot;binary&quot;,
   fit = function(formula, data, weights, ...) {
-    glm(formula, data = data, weights = weights, family = binomial, ...)
+    glm(formula, data = as.data.frame(data), weights = weights,
+        family = binomial, ...)
   },
   predict = function(object, newdata, ...) {
-    predict(object, newdata = newdata, type = &quot;response&quot;)
+    predict(object, newdata = as.data.frame(newdata), type = &quot;response&quot;)
   },
   varimp = function(object, ...) {
     pchisq(coef(object)^2 / diag(vcov(object)), 1)
   }
-)
-
-## F2 score metric
+)</code></pre>
+<p>The <code>MLMetric</code> function creates a metric object that can be used as previously described for the model performance metrics. Its first argument is a function to compute the metric, defined to accept <code>observed</code> and <code>predicted</code> as the first two arguments and with an ellipsis to accommodate others. Its remaining arguments are as follows.</p>
+<dl>
+<dt><code>name</code></dt>
+<dd>Character name of the object to which the metric is assigned.
+</dd>
+<dt><code>label</code></dt>
+<dd>Optional character descriptor for the metric (default: <code>name</code>).
+</dd>
+<dt><code>maximize</code></dt>
+<dd>Logical indicating whether higher values of the metric correspond to better predictive performance.
+</dd>
+</dl>
+<pre class="r"><code>## F2 score metric extension
 f2_score &lt;- MLMetric(
   function(observed, predicted, ...) {
     f_score(observed, predicted, beta = 2, ...)
@@ -1896,8 +1940,9 @@ f2_score &lt;- MLMetric(
   name = &quot;f2_score&quot;,
   label = &quot;F2 Score&quot;,
   maximize = TRUE
-)
-
+)</code></pre>
+<p>Once created, model and metric extensions can be used with the package-supplied fitting and performance functions.</p>
+<pre class="r"><code>## Logistic regression analysis
 library(MASS)
 res &lt;- resample(type ~ ., data = Pima.tr, model = LogisticModel)
 summary(performance(res, metric = f2_score))
