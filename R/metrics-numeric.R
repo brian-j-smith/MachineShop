@@ -35,6 +35,13 @@ setMethod(".gini", c("numeric", "numeric"),
 )
 
 
+setMethod(".gini", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = gini, ...)
+  }
+)
+
+
 setMethod(".gini", c("Surv", "numeric"),
   function(observed, predicted, ...) {
     .metric.SurvMean(observed, predicted, gini)
@@ -70,6 +77,13 @@ setMethod(".mae", c("matrix", "matrix"),
 setMethod(".mae", c("numeric", "numeric"),
   function(observed, predicted, ...) {
     mean(abs(observed - predicted))
+  }
+)
+
+
+setMethod(".mae", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = mae, ...)
   }
 )
 
@@ -113,6 +127,13 @@ setMethod(".mse", c("numeric", "numeric"),
 )
 
 
+setMethod(".mse", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = mse, ...)
+  }
+)
+
+
 setMethod(".mse", c("Surv", "numeric"),
   function(observed, predicted, ...) {
     .metric.SurvMean(observed, predicted, mse)
@@ -152,6 +173,13 @@ setMethod(".msle", c("numeric", "numeric"),
 )
 
 
+setMethod(".msle", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = msle, ...)
+  }
+)
+
+
 setMethod(".msle", c("Surv", "numeric"),
   function(observed, predicted, ...) {
     .metric.SurvMean(observed, predicted, msle)
@@ -187,6 +215,13 @@ setMethod(".r2", c("matrix", "matrix"),
 setMethod(".r2", c("numeric", "numeric"),
   function(observed, predicted, ...) {
     1 - mse(observed, predicted) / mse(observed, mean(observed))
+  }
+)
+
+
+setMethod(".r2", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = r2, ...)
   }
 )
 
@@ -240,6 +275,13 @@ setMethod(".rmse", c("numeric", "numeric"),
 )
 
 
+setMethod(".rmse", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = rmse, ...)
+  }
+)
+
+
 setMethod(".rmse", c("Surv", "numeric"),
   function(observed, predicted, ...) {
     sqrt(mse(observed, predicted))
@@ -275,6 +317,13 @@ setMethod(".rmsle", c("matrix", "matrix"),
 setMethod(".rmsle", c("numeric", "numeric"),
   function(observed, predicted, ...) {
     sqrt(msle(observed, predicted))
+  }
+)
+
+
+setMethod(".rmsle", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = rmsle, ...)
   }
 )
 

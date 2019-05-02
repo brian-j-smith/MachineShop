@@ -78,6 +78,13 @@ setMethod(".accuracy", c("factor", "numeric"),
 )
 
 
+setMethod(".accuracy", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = accuracy, ...)
+  }
+)
+
+
 setMethod(".accuracy", c("Surv", "SurvEvents"),
   function(observed, predicted, ...) {
     .metric.SurvMatrix(observed, predicted, accuracy)
@@ -140,6 +147,14 @@ setMethod(".auc", c("Curves", "NULL"),
 )
 
 
+setMethod(".auc", c("Resamples", "NULL"),
+  function(observed, predicted, metrics, ...) {
+    auc@.Data <- function(...) MachineShop::auc(..., metrics = metrics)
+    performance(observed, metrics = auc, ...)
+  }
+)
+
+
 setMethod(".auc", c("Surv", "SurvProbs"),
   function(observed, predicted, metrics, ...) {
     x <- unname(auc(performance_curve(observed, predicted, metrics = metrics)))
@@ -182,6 +197,13 @@ setMethod(".brier", c("factor", "matrix"),
 setMethod(".brier", c("factor", "numeric"),
   function(observed, predicted, ...) {
     mse(as.numeric(observed == levels(observed)[2]), predicted)
+  }
+)
+
+
+setMethod(".brier", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = brier, ...)
   }
 )
 
@@ -236,6 +258,13 @@ setMethod(".cindex", c("factor", "numeric"),
 )
 
 
+setMethod(".cindex", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = cindex, ...)
+  }
+)
+
+
 setMethod(".cindex", c("Surv", "numeric"),
   function(observed, predicted, ...) {
     concordance(observed ~ predicted)$concordance
@@ -278,6 +307,13 @@ setMethod(".cross_entropy", c("factor", "numeric"),
 )
 
 
+setMethod(".cross_entropy", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = cross_entropy, ...)
+  }
+)
+
+
 #' @rdname metrics
 #' 
 f_score <- function(observed, predicted = NULL, cutoff = 0.5, beta = 1, ...) {
@@ -313,6 +349,13 @@ setMethod(".f_score", c("ConfusionMatrix", "NULL"),
 setMethod(".f_score", c("factor", "numeric"),
   function(observed, predicted, cutoff, beta, ...) {
     f_score(confusion(observed, predicted, cutoff = cutoff), beta = beta)
+  }
+)
+
+
+setMethod(".f_score", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = f_score, ...)
   }
 )
 
@@ -363,6 +406,13 @@ setMethod(".fnr", c("factor", "numeric"),
 )
 
 
+setMethod(".fnr", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = fnr, ...)
+  }
+)
+
+
 setMethod(".fnr", c("Surv", "SurvEvents"),
   function(observed, predicted, ...) {
     1 - tpr(observed, predicted)
@@ -404,6 +454,13 @@ setMethod(".fpr", c("ConfusionMatrix", "NULL"),
 setMethod(".fpr", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
     1 - tnr(observed, predicted, cutoff = cutoff)
+  }
+)
+
+
+setMethod(".fpr", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = fpr, ...)
   }
 )
 
@@ -469,6 +526,13 @@ setMethod(".kappa2", c("factor", "numeric"),
 )
 
 
+setMethod(".kappa2", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = kappa2, ...)
+  }
+)
+
+
 setMethod(".kappa2", c("Surv", "SurvEvents"),
   function(observed, predicted, ...) {
     .metric.SurvMatrix(observed, predicted, kappa2)
@@ -516,6 +580,13 @@ setMethod(".npv", c("ConfusionMatrix", "NULL"),
 setMethod(".npv", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
     npv(confusion(observed, predicted, cutoff = cutoff))
+  }
+)
+
+
+setMethod(".npv", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = npv, ...)
   }
 )
 
@@ -571,6 +642,13 @@ setMethod(".ppv", c("factor", "numeric"),
 )
 
 
+setMethod(".ppv", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = ppv, ...)
+  }
+)
+
+
 setMethod(".ppv", c("Surv", "SurvEvents"),
   function(observed, predicted, ...) {
     .metric.SurvMatrix(observed, predicted, ppv)
@@ -610,6 +688,13 @@ setMethod(".pr_auc", c("factor", "numeric"),
 )
 
 
+setMethod(".pr_auc", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = pr_auc, ...)
+  }
+)
+
+
 setMethod(".pr_auc", c("Surv", "SurvProbs"),
   function(observed, predicted, ...) {
     auc(observed, predicted, metrics = c(precision, recall))
@@ -645,6 +730,13 @@ setMethod(".precision", c("ConfusionMatrix", "NULL"),
 setMethod(".precision", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
     ppv(observed, predicted, cutoff = cutoff)
+  }
+)
+
+
+setMethod(".precision", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = precision, ...)
   }
 )
 
@@ -695,6 +787,13 @@ setMethod(".recall", c("factor", "numeric"),
 )
 
 
+setMethod(".recall", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = recall, ...)
+  }
+)
+
+
 setMethod(".recall", c("Surv", "SurvEvents"),
   function(observed, predicted, ...) {
     tpr(observed, predicted)
@@ -730,6 +829,13 @@ setMethod(".roc_auc", c("ANY", "ANY"),
 setMethod(".roc_auc", c("factor", "numeric"),
   function(observed, predicted, ...) {
     auc(observed, predicted)
+  }
+)
+
+
+setMethod(".roc_auc", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = roc_auc, ...)
   }
 )
 
@@ -771,6 +877,13 @@ setMethod(".roc_index", c("ConfusionMatrix", "NULL"),
 setMethod(".roc_index", c("factor", "numeric"),
   function(observed, predicted, cutoff, f, ...) {
     roc_index(confusion(observed, predicted, cutoff = cutoff), f = f)
+  }
+)
+
+
+setMethod(".roc_index", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = roc_index, ...)
   }
 )
 
@@ -825,6 +938,13 @@ setMethod(".rpp", c("factor", "numeric"),
 )
 
 
+setMethod(".rpp", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = rpp, ...)
+  }
+)
+
+
 setMethod(".rpp", c("Surv", "SurvEvents"),
   function(observed, predicted, ...) {
     .metric.SurvMatrix(observed, predicted, rpp)
@@ -871,6 +991,13 @@ setMethod(".sensitivity", c("factor", "numeric"),
 )
 
 
+setMethod(".sensitivity", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = sensitivity, ...)
+  }
+)
+
+
 setMethod(".sensitivity", c("Surv", "SurvEvents"),
   function(observed, predicted, ...) {
     tpr(observed, predicted)
@@ -913,6 +1040,13 @@ setMethod(".specificity", c("ConfusionMatrix", "NULL"),
 setMethod(".specificity", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
     tnr(observed, predicted, cutoff = cutoff)
+  }
+)
+
+
+setMethod(".specificity", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = specificity, ...)
   }
 )
 
@@ -967,6 +1101,13 @@ setMethod(".tnr", c("factor", "numeric"),
 )
 
 
+setMethod(".tnr", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = tnr, ...)
+  }
+)
+
+
 setMethod(".tnr", c("Surv", "SurvEvents"),
   function(observed, predicted, ...) {
     .metric.SurvMatrix(observed, predicted, tnr)
@@ -1013,6 +1154,13 @@ setMethod(".tpr", c("ConfusionMatrix", "NULL"),
 setMethod(".tpr", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
     tpr(confusion(observed, predicted, cutoff = cutoff))
+  }
+)
+
+
+setMethod(".tpr", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = tpr, ...)
   }
 )
 
@@ -1069,6 +1217,13 @@ setMethod(".weighted_kappa2", c("ordered", "ordered"),
 setMethod(".weighted_kappa2", c("ordered", "matrix"),
   function(observed, predicted, power, ...) {
     weighted_kappa2(confusion(observed, predicted), power = power)
+  }
+)
+
+
+setMethod(".weighted_kappa2", c("Resamples", "NULL"),
+  function(observed, predicted, ...) {
+    performance(observed, metrics = weighted_kappa2, ...)
   }
 )
 
