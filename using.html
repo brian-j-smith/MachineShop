@@ -1872,7 +1872,10 @@ summary(res_super)
 </div>
 <div id="package-extensions" class="section level1">
 <h1>Package Extensions</h1>
-<p>Custom models and metrics can be defined with <code>MLModel</code> and <code>MLMetric</code> for use with the model fitting, prediction, and performance assessment tools provided by the package. The <code>MLModel</code> function creates a model object that can be used with the previously described fitting functions. It take the following arguments.</p>
+<p>Custom models and metrics can be defined with <code>MLModel</code> and <code>MLMetric</code> for use with the model fitting, prediction, and performance assessment tools provided by the package.</p>
+<div id="mlmodel" class="section level2">
+<h2>MLModel</h2>
+<p>The <code>MLModel</code> function creates a model object that can be used with the previously described fitting functions. It take the following arguments.</p>
 <dl>
 <dt><code>name</code></dt>
 <dd>Character name of the object to which the model is assigned.
@@ -1920,6 +1923,9 @@ LogisticModel &lt;- MLModel(
     pchisq(coef(object)^2 / diag(vcov(object)), 1)
   }
 )</code></pre>
+</div>
+<div id="mlmetric" class="section level2">
+<h2>MLMetric</h2>
 <p>The <code>MLMetric</code> function creates a metric object that can be used as previously described for the model performance metrics. Its first argument is a function to compute the metric, defined to accept <code>observed</code> and <code>predicted</code> as the first two arguments and with an ellipsis to accommodate others. Its remaining arguments are as follows.</p>
 <dl>
 <dt><code>name</code></dt>
@@ -1941,6 +1947,9 @@ f2_score &lt;- MLMetric(
   label = &quot;F2 Score&quot;,
   maximize = TRUE
 )</code></pre>
+</div>
+<div id="usage" class="section level2">
+<h2>Usage</h2>
 <p>Once created, model and metric extensions can be used with the package-supplied fitting and performance functions.</p>
 <pre class="r"><code>## Logistic regression analysis
 library(MASS)
@@ -1948,6 +1957,7 @@ res &lt;- resample(type ~ ., data = Pima.tr, model = LogisticModel)
 summary(performance(res, metric = f2_score))
 #&gt;               Mean    Median        SD       Min       Max NA
 #&gt; f2_score 0.5791289 0.5882353 0.1448688 0.3225806 0.8064516  0</code></pre>
+</div>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
