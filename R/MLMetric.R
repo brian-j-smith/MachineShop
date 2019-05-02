@@ -4,14 +4,13 @@
 #' 
 #' @rdname MLMetric
 #' 
-#' @param object function to compute the metric.  Must be defined to accept
+#' @param object function to compute the metric, defined to accept
 #' \code{observed} and \code{predicted} as the first two arguments and with an
 #' ellipsis (\code{...}) to accommodate others.
-#' @param name character string name for the instantiated \code{MLMetric}
-#' object; same as the metric function name.
-#' @param label descriptive label for the metric.
-#' @param maximize logical indicating whether to maximize the metric for better
-#' performance.
+#' @param name character name of the object to which the metric is assigned.
+#' @param label optional character descriptor for the model.
+#' @param maximize logical indicating whether higher values of the metric
+#' correspond to better predictive performance.
 #' 
 #' @return \code{MLMetric} class object.
 #' 

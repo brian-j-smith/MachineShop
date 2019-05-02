@@ -10,17 +10,16 @@ MLMetric(object, name = "MLMetric", label = name, maximize = TRUE)
 MLMetric(object) <- value
 }
 \arguments{
-\item{object}{function to compute the metric.  Must be defined to accept
+\item{object}{function to compute the metric, defined to accept
 \code{observed} and \code{predicted} as the first two arguments and with an
 ellipsis (\code{...}) to accommodate others.}
 
-\item{name}{character string name for the instantiated \code{MLMetric}
-object; same as the metric function name.}
+\item{name}{character name of the object to which the metric is assigned.}
 
-\item{label}{descriptive label for the metric.}
+\item{label}{optional character descriptor for the model.}
 
-\item{maximize}{logical indicating whether to maximize the metric for better
-performance.}
+\item{maximize}{logical indicating whether higher values of the metric
+correspond to better predictive performance.}
 
 \item{value}{list of arguments to pass to the \code{MLMetric} constructor.}
 }

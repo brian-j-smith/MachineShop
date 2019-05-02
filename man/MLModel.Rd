@@ -12,13 +12,11 @@ MLModel(name = "MLModel", label = name, packages = character(),
   stop("no predict function"), varimp = function(object, ...) NULL, ...)
 }
 \arguments{
-\item{name}{character string name for the instantiated \code{MLModel} object;
-same name as the object to which the model is assigned.}
+\item{name}{character name of the object to which the model is assigned.}
 
-\item{label}{descriptive label for the model.}
+\item{label}{optional character descriptor for the model.}
 
-\item{packages}{character vector of packages whose namespaces are required by
-the model.}
+\item{packages}{character vector of packages required to use the model.}
 
 \item{types}{character vector of response variable types to which the model
 can be fit.  Supported types are \code{"binary"}, \code{"factor"},
@@ -62,15 +60,19 @@ If supplied, the \code{grid} function should return a list whose elements are
 named after and contain values of parameters to include in a tuning grid to
 be constructed automatically by the package.
 
+Argument \code{data} in the \code{fit} function may be converted to a data
+frame with the \code{as.data.frame} function as needed.  The function should
+return the object resulting from the model fit.
+
 Values returned by the \code{predict} functions should be formatted according
 to the response variable types below.
 \describe{
-\item{factor}{a vector or column matrix of probabilities for the second level
+\item{factor}{vector or column matrix of probabilities for the second level
 of binary factors or a matrix whose columns contain the probabilities for
 factors with more than two levels.}
-\item{matrix}{a matrix of predicted responses.}
-\item{numeric}{a vector or column matrix of predicted responses.}
-\item{Surv}{a matrix whose columns contain survival probabilities at
+\item{matrix}{matrix of predicted responses.}
+\item{numeric}{vector or column matrix of predicted responses.}
+\item{Surv}{matrix whose columns contain survival probabilities at
 \code{times} if supplied or a vector of predicted survival means otherwise.}
 }
 

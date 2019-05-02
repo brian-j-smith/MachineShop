@@ -1062,25 +1062,75 @@ summary(res_super)
 
 # Package Extensions
 
-Custom models and metrics can be defined with the `MLModel` and `MLMetric` constructors for use with the model fitting, prediction, and performance assessment tools provided by the package.
+Custom models and metrics can be defined with `MLModel` and `MLMetric` for use with the model fitting, prediction, and performance assessment tools provided by the package.
+
+
+## MLModel
+
+The `MLModel` function creates a model object that can be used with the previously described fitting functions.  It take the following arguments.
+
+`name`
+  : Character name of the object to which the model is assigned.
+  
+`label`
+  : Optional character descriptor for the model (default: `name`).
+  
+`packages`
+  : Character vector of source packages required to use the model.
+  
+`types`
+  : Character vector of response variable types to which the model can be fit.  Supported types are `"binary"`, `"factor"`, `"matrix"`, `"numeric"`, `"ordered"`, and `"Surv"`.
+  
+`fit`
+  : Model fitting function whose arguments are a `formula`, a `ModelFrame` named `data`, case `weights`, and an ellipsis.  Argument `data` may be converted to a data frame with the `as.data.frame` function as needed.  The fit function should return the object resulting from the model fit.
+  
+`predict`
+  : Prediction function whose arguments are the `object` returned by `fit`, a `ModelFrame` named
+`newdata` of predictor variables, optional vector of `times` at which to predict survival, and an ellipsis.  Argument `data` may be converted to a data frame with the `as.data.frame` function as needed.  Values returned by the function should be formatted according to the response variable types below.
+
+* `factor` : Vector or column matrix of probabilities for the second level of binary factors or a matrix whose columns contain the probabilities for factors with more than two levels.
+* `matrix` : Matrix of predicted responses.
+* `numeric` : Vector or column matrix of predicted responses.
+* `Surv` : Matrix whose columns contain survival probabilities at `times` if supplied or a vector of predicted survival means otherwise.
+  
+`varimp`
+  : Variable importance function whose arguments are the `object` returned by `fit`, optional arguments passed from calls to `varimp`, and an ellipsis.  The function should return a vector of importance values named after the predictor variables or a matrix or data frame whose rows are named after the predictors.
 
 ```{r}
-## Logistic regression model
+## Logistic regression model extension
 LogisticModel <- MLModel(
   name = "LogisticModel",
+  label = "Logistic Model",
   types = "binary",
   fit = function(formula, data, weights, ...) {
-    glm(formula, data = data, weights = weights, family = binomial, ...)
+    glm(formula, data = as.data.frame(data), weights = weights,
+        family = binomial, ...)
   },
   predict = function(object, newdata, ...) {
-    predict(object, newdata = newdata, type = "response")
+    predict(object, newdata = as.data.frame(newdata), type = "response")
   },
   varimp = function(object, ...) {
     pchisq(coef(object)^2 / diag(vcov(object)), 1)
   }
 )
+```
 
-## F2 score metric
+
+## MLMetric
+
+The `MLMetric` function creates a metric object that can be used as previously described for the model performance metrics.  Its first argument is a function to compute the metric, defined to accept `observed` and `predicted` as the first two arguments and with an ellipsis to accommodate others.  Its remaining arguments are as follows.
+
+`name`
+  :  Character name of the object to which the metric is assigned.
+  
+`label`
+  : Optional character descriptor for the metric (default: `name`).
+  
+`maximize`
+  : Logical indicating whether higher values of the metric correspond to better predictive performance.
+
+```{r}
+## F2 score metric extension
 f2_score <- MLMetric(
   function(observed, predicted, ...) {
     f_score(observed, predicted, beta = 2, ...)
@@ -1089,7 +1139,15 @@ f2_score <- MLMetric(
   label = "F2 Score",
   maximize = TRUE
 )
+```
 
+
+## Usage
+
+Once created, model and metric extensions can be used with the package-supplied fitting and performance functions.
+
+```{r}
+## Logistic regression analysis
 library(MASS)
 res <- resample(type ~ ., data = Pima.tr, model = LogisticModel)
 summary(performance(res, metric = f2_score))
