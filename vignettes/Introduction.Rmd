@@ -551,6 +551,25 @@ performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.5
 ```
 
 
+## Metric Functions
+
+Whereas multiple package-supplied metrics can be calculated simultaneously with the `performance` function, each exists as a stand-alone function that can be called individually.
+
+```{r}
+## Numeric metric functions
+cindex(obs, pred_means)
+
+rmse(obs, pred_means)
+
+rmsle(obs, pred_means)
+
+## Binary metric functions
+sensitivity(obs, pred_probs)
+
+specificity(obs, pred_probs)
+```
+
+
 ## Metric Information
 
 A named list of supplied metrics can be obtained interactively with the `metricinfo` function, and includes the following components for each.
