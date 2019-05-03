@@ -13,13 +13,13 @@ files <- c(
   "using_fit.Rmd",
   "using_variables.Rmd",
   "using_responses.Rmd",
-  "using_performance.Rmd",
+  "using_metrics.Rmd",
   "using_resample.Rmd",
   "using_analyses.Rmd",
   "using_strategies.Rmd",
   "using_extensions.Rmd",
-  "models.Rmd",
-  "metrics.Rmd"
+  "reference_models.Rmd",
+  "reference_metrics.Rmd"
 )
 
 for (file in files) {

@@ -7,5 +7,5 @@ knitr::opts_chunk$set(cache = TRUE)
 source("../src/setup.R")
 ```
 
-```{r child = "../src/example_var_spec.Rmd"}
+```{r child = "../src/example_variables.Rmd"}
 ```

@@ -14,7 +14,7 @@ navbar:
         - text: "Model and Metric Information"
           href: example_info.html
         - text: "Variable Specifications and Preprocessing"
-          href: example_var_spec.html
+          href: example_variables.html
         - text: "---------"
         - text: "IC Home Prices"
           href: example_ichomes.html

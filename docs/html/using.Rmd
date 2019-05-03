@@ -20,7 +20,7 @@ source("../src/setup.R")
 ```{r child = "../src/using_responses.Rmd"}
 ```
 
-```{r child = "../src/using_performance.Rmd"}
+```{r child = "../src/using_metrics.Rmd"}
 ```
 
 ```{r child = "../src/using_resample.Rmd"}
