@@ -399,7 +399,7 @@ div.tocify {
       <a href="example_info.html">Model and Metric Information</a>
     </li>
     <li>
-      <a href="example_var_spec.html">Variable Specifications and Preprocessing</a>
+      <a href="example_variables.html">Variable Specifications and Preprocessing</a>
     </li>
     <li class="divider"></li>
     <li>
@@ -588,7 +588,7 @@ Median (Range)
 </tr>
 </tbody>
 </table>
-<p><img src="using_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_example_survfit-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Training and test sets
 set.seed(123)
 train_indices &lt;- sample(nrow(surv_df), nrow(surv_df) * 2 / 3)
@@ -1110,6 +1110,28 @@ performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.5
 #&gt; specificity.time1 specificity.time2 
 #&gt;         0.8834709         0.7231799</code></pre>
 </div>
+<div id="metric-functions" class="section level2">
+<h2>Metric Functions</h2>
+<p>Whereas multiple package-supplied metrics can be calculated simultaneously with the <code>performance</code> function, each exists as a stand-alone function that can be called individually.</p>
+<pre class="r"><code>## Numeric metric functions
+cindex(obs, pred_means)
+#&gt; [1] 0.6414234
+
+rmse(obs, pred_means)
+#&gt; [1] 3950.521
+
+rmsle(obs, pred_means)
+#&gt; [1] 1.914526
+
+## Binary metric functions
+sensitivity(obs, pred_probs)
+#&gt;      mean     time1     time2 
+#&gt; 0.4210721 0.3997553 0.4423889
+
+specificity(obs, pred_probs)
+#&gt;      mean     time1     time2 
+#&gt; 0.8033254 0.8834709 0.7231799</code></pre>
+</div>
 <div id="metric-information" class="section level2">
 <h2>Metric Information</h2>
 <p>A named list of supplied metrics can be obtained interactively with the <code>metricinfo</code> function, and includes the following components for each.</p>
@@ -1173,9 +1195,10 @@ metricinfo(cindex)
 #&gt; NULL
 #&gt; 
 #&gt; $cindex$types
-#&gt;   observed predicted
-#&gt; 1   factor   numeric
-#&gt; 2     Surv   numeric</code></pre>
+#&gt;    observed predicted
+#&gt; 1    factor   numeric
+#&gt; 2 Resamples      NULL
+#&gt; 3      Surv   numeric</code></pre>
 </div>
 <div id="factors-1" class="section level2">
 <h2>Factors</h2>
@@ -1470,7 +1493,7 @@ summary(res_probs)
 #&gt; Accuracy.time2 0.5996325 0.6334283 0.11343908 0.2339744 0.7080063  0
 
 plot(res_probs)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-42-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_resample_function-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>The <code>summary</code> function when applied directly to output from <code>resample</code> computes default performance metrics as described in the <em>Performance Function</em> section. Likewise, the <code>metricinfo</code> and <code>performance</code> functions can be applied to the output in order to list and compute applicable metrics.</p>
 <pre class="r"><code>## Resample-specific metrics
 metricinfo(res_probs) %&gt;% names
@@ -1546,13 +1569,13 @@ summary(res)
 #&gt; GBM3 0.7317191 0.7323232 0.05100769 0.6376147 0.8042328  0
 
 plot(res)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-46-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_resample_comparisons-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>plot(res, type = &quot;density&quot;)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-46-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_resample_comparisons-2.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>plot(res, type = &quot;errorbar&quot;)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-46-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_resample_comparisons-3.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>plot(res, type = &quot;violin&quot;)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-46-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_resample_comparisons-4.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Pairwise model differences for each metric can be calculated with the <code>diff</code> function applied to results from a call to <code>Resamples</code>. Resulting differences can be summarized descriptively with the <code>summary</code> and <code>plot</code> functions and assessed for statistical significance with the <code>t.test</code> function.</p>
 <pre class="r"><code>## Pairwise model comparisons
 (perfdiff &lt;- diff(res))
@@ -1570,7 +1593,7 @@ summary(perfdiff)
 #&gt; GBM2 - GBM3 0.003308219 0.00000000 0.02142713 -0.04469274 0.04232804  0
 
 plot(perfdiff)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-47-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_resample_diff-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>t.test(perfdiff)
 #&gt; Object of class &quot;HTestPerformanceDiff&quot;
 #&gt; 
@@ -1601,7 +1624,7 @@ plot(perfdiff)</code></pre>
 #&gt; sex         0.00000
 
 plot(vi)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-49-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_analyses_vi-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="calibration-curves" class="section level2">
 <h2>Calibration Curves</h2>
@@ -1609,11 +1632,11 @@ plot(vi)</code></pre>
 <pre class="r"><code>## Binned calibration curves
 cal &lt;- calibration(res_probs, breaks = 10)
 plot(cal, se = TRUE)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-50-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_analyses_cal-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Smoothed calibration curves
 cal &lt;- calibration(res_probs, breaks = NULL)
 plot(cal)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-51-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_analyses_cal_smoothed-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="confusion-matrices" class="section level2">
 <h2>Confusion Matrices</h2>
@@ -1674,7 +1697,7 @@ summary(conf)
 #&gt; PPV         0.6454675 0.6173592
 #&gt; NPV         0.6173592 0.6454675</code></pre>
 <pre class="r"><code>plot(conf)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-53-1.png" width="672" style="display: block; margin: auto;" /><img src="using_files/figure-html/unnamed-chunk-53-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_analyses_conf_plot-1.png" width="672" style="display: block; margin: auto;" /><img src="using_files/figure-html/using_analyses_conf_plot-2.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="partial-dependence-plots" class="section level2">
 <h2>Partial Dependence Plots</h2>
@@ -1684,12 +1707,12 @@ summary(conf)
 <pre class="r"><code>## Partial dependence plots
 pd &lt;- dependence(surv_fit, select = c(thickness, age))
 plot(pd)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-54-1.png" width="672" style="display: block; margin: auto;" /><img src="using_files/figure-html/unnamed-chunk-54-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_analyses_pd-1.png" width="672" style="display: block; margin: auto;" /><img src="using_files/figure-html/using_analyses_pd-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Averaging may be performed over different datasets to estimate marginal effects in other populations of cases, over different numbers of predictor values, and over quantile spacing of the values.</p>
 <pre class="r"><code>pd &lt;- dependence(surv_fit, data = surv_test, select = thickness, n = 20,
                  intervals = &quot;quantile&quot;)
 plot(pd)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-55-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_analyses_pd_data-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>In addition, dependence may be computed for combinations of multiple predictors to examine interaction effects and for summary statistics other than the mean.</p>
 </div>
 <div id="performance-curves" class="section level2">
@@ -1701,9 +1724,9 @@ plot(pd)</code></pre>
 <pre class="r"><code>## ROC curves
 roc &lt;- performance_curve(res_probs)
 plot(roc, diagonal = TRUE)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-56-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_analyses_roc-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>plot(roc, type = &quot;cutoffs&quot;)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-56-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_analyses_roc-2.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>auc(roc)
 #&gt; Model: GBMModel.time1
 #&gt; [1] 0.7621002
@@ -1717,7 +1740,7 @@ plot(roc, diagonal = TRUE)</code></pre>
 <pre class="r"><code>## Precision recall curves
 pr &lt;- performance_curve(res_probs, metrics = c(precision, recall))
 plot(pr)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-58-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_analyses_pr-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>auc(pr)
 #&gt; Model: GBMModel.time1
 #&gt; [1] 0.5368379
@@ -1731,7 +1754,7 @@ plot(pr)</code></pre>
 <pre class="r"><code>## Lift curves
 lf &lt;- lift(res_probs)
 plot(lf, find = 0.75)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-60-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_analyses_lift-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
@@ -1815,7 +1838,7 @@ summary(tuned_model)
 #&gt; GBMModel.9 11552.713 10287.026 7603.593 3063.088 26924.988  0
 
 plot(tuned_model, type = &quot;line&quot;)</code></pre>
-<p><img src="using_files/figure-html/unnamed-chunk-61-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_strategies_tune-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Tune over randomly sampled grid points
 tune(surv_fo, data = surv_train, model = GBMModel,
      grid = Grid(length = 100, random = 10),
@@ -1832,9 +1855,9 @@ surv_fit &lt;- fit(surv_fo, data = surv_train, model = tuned_model)
 (vi &lt;- varimp(surv_fit))
 #&gt;             Overall
 #&gt; thickness 100.00000
-#&gt; age        57.36709
-#&gt; year       37.43203
-#&gt; ulcer      28.06869
+#&gt; age        57.02079
+#&gt; ulcer      26.60997
+#&gt; year       16.92719
 #&gt; sex         0.00000</code></pre>
 </div>
 <div id="model-selection" class="section level2">
@@ -1858,16 +1881,16 @@ tune(surv_fo, data = surv_train, models = candidate_models,
 stackedmodel &lt;- StackedModel(GLMBoostModel, CForestModel, CoxModel)
 res_stacked &lt;- resample(surv_fo, data = surv_train, model = stackedmodel)
 summary(res_stacked)
-#&gt;             Mean    Median         SD       Min      Max NA
-#&gt; CIndex 0.7429865 0.7579787 0.07663561 0.6341463 0.893617  0
+#&gt;             Mean    Median        SD       Min       Max NA
+#&gt; CIndex 0.7072839 0.6971154 0.1566273 0.4761905 0.9215686  0
 
 ## Super learner
 supermodel &lt;- SuperModel(GLMBoostModel, CForestModel, CoxModel,
                          model = GBMModel)
 res_super &lt;- resample(surv_fo, data = surv_train, model = supermodel)
 summary(res_super)
-#&gt;             Mean    Median       SD       Min      Max NA
-#&gt; CIndex 0.7184789 0.7266076 0.144303 0.4636364 0.890625  0</code></pre>
+#&gt;             Mean    Median        SD  Min       Max NA
+#&gt; CIndex 0.7069771 0.6769231 0.1050626 0.57 0.8714286  0</code></pre>
 </div>
 </div>
 <div id="package-extensions" class="section level1">
@@ -1955,8 +1978,8 @@ f2_score &lt;- MLMetric(
 library(MASS)
 res &lt;- resample(type ~ ., data = Pima.tr, model = LogisticModel)
 summary(performance(res, metric = f2_score))
-#&gt;               Mean    Median        SD       Min       Max NA
-#&gt; f2_score 0.5791289 0.5882353 0.1448688 0.3225806 0.8064516  0</code></pre>
+#&gt;               Mean    Median        SD       Min   Max NA
+#&gt; f2_score 0.5514716 0.5200893 0.2023857 0.3030303 0.875  0</code></pre>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">

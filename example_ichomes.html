@@ -399,7 +399,7 @@ div.tocify {
       <a href="example_info.html">Model and Metric Information</a>
     </li>
     <li>
-      <a href="example_var_spec.html">Variable Specifications and Preprocessing</a>
+      <a href="example_variables.html">Variable Specifications and Preprocessing</a>
     </li>
     <li class="divider"></li>
     <li>
@@ -790,7 +790,7 @@ Median (Range)
 </table>
 <div id="training-set-analysis" class="section level2">
 <h2>Training Set Analysis</h2>
-<pre class="r"><code>## Analysis package
+<pre class="r"><code>## Analysis libraries
 library(MachineShop)
 library(ggplot2)
 
@@ -863,14 +863,14 @@ fo &lt;- sale_amount ~ .
 #&gt; 
 #&gt; Selected (RMSE): GBMModel.23
 plot(tuned_model, type = &quot;line&quot;)</code></pre>
-<p><img src="example_ichomes_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_ichomes_files/figure-html/ex_ichomes_tune-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Tuned model fit to the training set
 model_fit &lt;- fit(fo, data = trainset, model = tuned_model)
 
 ## Variable importance
 vi &lt;- varimp(model_fit)
 plot(vi)</code></pre>
-<p><img src="example_ichomes_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_ichomes_files/figure-html/ex_ichomes_tune_fit-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="generalization-performance" class="section level2">
 <h2>Generalization Performance</h2>
@@ -887,14 +887,14 @@ performance(obs, pred)
 <h2>Calibration Curve</h2>
 <pre class="r"><code>cal &lt;- calibration(obs, pred, breaks = NULL)
 plot(cal, se = TRUE)</code></pre>
-<p><img src="example_ichomes_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_ichomes_files/figure-html/ex_ichomes_cal-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="partial-dependence-plots" class="section level2">
 <h2>Partial Dependence Plots</h2>
 <pre class="r"><code>## Marginal predictor effects
 pd &lt;- dependence(model_fit, select = c(base_size, built, basement))
 plot(pd)</code></pre>
-<p><img src="example_ichomes_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /><img src="example_ichomes_files/figure-html/unnamed-chunk-7-2.png" width="672" style="display: block; margin: auto;" /><img src="example_ichomes_files/figure-html/unnamed-chunk-7-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_ichomes_files/figure-html/ex_ichomes_pd-1.png" width="672" style="display: block; margin: auto;" /><img src="example_ichomes_files/figure-html/ex_ichomes_pd-2.png" width="672" style="display: block; margin: auto;" /><img src="example_ichomes_files/figure-html/ex_ichomes_pd-3.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Spatial distribution
 pd &lt;- dependence(model_fit, select = c(lon, lat), interaction = TRUE, n = 25)
 df &lt;- cbind(pd$Predictors, sale_amount = pd$Value)
@@ -902,7 +902,7 @@ ggplot(df) +
   stat_summary_2d(aes(lon, lat, z = sale_amount), binwidth = 0.006) +
   geom_point(aes(lon, lat), data = trainset) +
   labs(x = &quot;Longitude&quot;, y = &quot;Latitude&quot;, fill = &quot;Sale Amount&quot;)</code></pre>
-<p><img src="example_ichomes_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_ichomes_files/figure-html/ex_ichomes_pd_interaction-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 

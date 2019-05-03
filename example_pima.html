@@ -399,7 +399,7 @@ div.tocify {
       <a href="example_info.html">Model and Metric Information</a>
     </li>
     <li>
-      <a href="example_var_spec.html">Variable Specifications and Preprocessing</a>
+      <a href="example_variables.html">Variable Specifications and Preprocessing</a>
     </li>
     <li class="divider"></li>
     <li>
@@ -587,7 +587,7 @@ Median (Range)
 </table>
 <div id="training-set-analysis" class="section level2">
 <h2>Training Set Analysis</h2>
-<pre class="r"><code>## Analysis packages
+<pre class="r"><code>## Analysis libraries
 library(MachineShop)
 library(mlbench)
 library(ggplot2)
@@ -651,7 +651,7 @@ model_fit &lt;- fit(fo, data = trainset, model = final_model)
 ## Variable importance
 vi &lt;- varimp(model_fit)
 plot(vi)</code></pre>
-<p><img src="example_pima_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_pima_files/figure-html/ex_pima_fit-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="generalization-performance" class="section level2">
 <h2>Generalization Performance</h2>
@@ -676,7 +676,7 @@ roc &lt;- performance_curve(obs, pred)
 
 ## ROC curve
 plot(roc, diagonal = TRUE) + coord_fixed()</code></pre>
-<p><img src="example_pima_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_pima_files/figure-html/ex_pima_roc-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Area under the curve
 auc(roc)
 #&gt; Model: Model
@@ -707,7 +707,7 @@ summary(conf)
 #&gt; NPV         0.7209302 0.8409091
 
 plot(conf)</code></pre>
-<p><img src="example_pima_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_pima_files/figure-html/ex_pima_conf-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Variable probability cutoff
 summary(confusion(obs, pred, cutoff = 0.25))
 #&gt; Number of responses: 131
@@ -728,13 +728,13 @@ summary(confusion(obs, pred, cutoff = 0.25))
 <h2>Calibration Curve</h2>
 <pre class="r"><code>cal &lt;- calibration(obs, pred, breaks = NULL)
 plot(cal, se = TRUE)</code></pre>
-<p><img src="example_pima_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_pima_files/figure-html/ex_pima_cal-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="partial-dependence-plots" class="section level2">
 <h2>Partial Dependence Plots</h2>
 <pre class="r"><code>pd &lt;- dependence(model_fit, select = c(glucose, age, insulin))
 plot(pd)</code></pre>
-<p><img src="example_pima_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /><img src="example_pima_files/figure-html/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /><img src="example_pima_files/figure-html/unnamed-chunk-10-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_pima_files/figure-html/ex_pima_pd-1.png" width="672" style="display: block; margin: auto;" /><img src="example_pima_files/figure-html/ex_pima_pd-2.png" width="672" style="display: block; margin: auto;" /><img src="example_pima_files/figure-html/ex_pima_pd-3.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 
