@@ -5,7 +5,7 @@
 
 Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models.  Metrics can be computed with the `performance` function applied to observed responses and responses predicted with the `predict` function.  In the case of observed versus predicted survival probabilities or events, metrics will be calculated at each survival time and returned along with their time-integrated mean.
 
-```{r}
+```{r using_performance_function}
 ## Survival performance metrics
 
 ## Observed responses
@@ -41,7 +41,7 @@ Survival Events          | Accuracy
 
 These defaults may be changed by specifying one or more package-supplied metric functions to the `metrics` argument of `performance`.  Specification of the `metrics` argument can be in terms of a single metric function, function name, or list of metric functions.  List names, if specified, will be displayed as metric labels in graphical and tabular summaries; otherwise, the function names will be used as labels for unnamed lists.
 
-```{r eval=FALSE}
+```{r using_performance_function_metrics, eval=FALSE}
 ## Single metric function
 performance(obs, pred_means, metrics = cindex)
 
@@ -59,7 +59,7 @@ performance(obs, pred_means, metrics = c("CIndex" = cindex,
 
 Metrics based on classification of two-level class probabilities, like sensitivity and specificity, optionally allow for specification of the classification cutoff probability (default: `cutoff = 0.5`).
 
-```{r}
+```{r using_performance_function_cutoff}
 ## User-specified survival probability metrics
 performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.5)
 ```
@@ -69,7 +69,7 @@ performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.5
 
 Whereas multiple package-supplied metrics can be calculated simultaneously with the `performance` function, each exists as a stand-alone function that can be called individually.
 
-```{r}
+```{r using_metrics_functions}
 ## Numeric metric functions
 cindex(obs, pred_means)
 
@@ -103,7 +103,7 @@ A named list of supplied metrics can be obtained interactively with the `metrici
 
 Function `metricinfo` may be called with one or more metric functions, function names, an observed response variable, or an observed and predicted response variable pair; and will return information on all matching metrics.
 
-```{r}
+```{r using_metrics_metricinfo}
 ## Names of all available metrics
 metricinfo() %>% names
 
@@ -158,7 +158,7 @@ Metrics for binary factors include those given for multi-level factors as well a
 `fnr`
   : False negative rate, $FNR = \frac{FN}{TP + FN} = 1 - TPR$.
 
-```{r echo=FALSE}
+```{r using_metrics_conf, echo=FALSE}
 conf <- matrix(c("True Negative (TN)", "False Positive (FP)",
                  "False Negative (FN)", "True Positive (TP)"),
                2, 2,
@@ -231,7 +231,7 @@ Performance metrics are defined below for numeric vector responses.  If applied 
 
 All previously described metrics for binary factor responses---plus accuracy, Brier score and Cohen's kappa---are applicable to survival probabilities predicted at specified follow-up times.  Metrics are evaluated separately at each follow-up time and reported along with a time-integrated mean.  The survival concordance index is computed with the method of Harrell [-@harrell:1982:EYM] and Brier score according to Graf et al. [-@graf:1999:ACP]; whereas, the others are computed according to the confusion matrix probabilities below, in which term $\hat{S}(t)$ is the predicted survival probability at follow-up time $t$ and $T$ is the survival time [@heagerty:2004:TDR].
 
-```{r echo=FALSE}
+```{r using_metrics_conf_surv, echo=FALSE}
 conf <- matrix(c("$TN = \\Pr(\\hat{S}(t) \\gt \\text{cutoff} \\cap T \\ge t)$",
                  "$FP = \\Pr(\\hat{S}(t) \\le \\text{cutoff} \\cap T \\ge t)$",
                  "$FN = \\Pr(\\hat{S}(t) \\gt \\text{cutoff} \\cap T \\lt t)$",

@@ -5,7 +5,7 @@
 
 The importance of variables in a model fit is estimated with the `varimp` function and plotted with `plot`.  Variable importance is a measure of the relative importance of predictors in a model and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most.
 
-```{r}
+```{r using_analyses_vi}
 ## Predictor variable importance
 (vi <- varimp(surv_fit))
 
@@ -17,13 +17,13 @@ plot(vi)
 
 Agreement between model-predicted and observed values can be visualized with calibration curves.  In the construction of these curves, cases are partitioned into bins according to their (resampled) predicted responses.  Mean observed responses are then calculated within each of the bins and plotted on the vertical axis against the bin midpoints on the horizontal axis.  An option to produce curves smoothed over the individual predicted values is also provided.  Calibration curves that are close to the 45-degree line indicate close agreement between observed and predicted responses and a model that is said to be well calibrated. 
 
-```{r results="hide"}
+```{r using_analyses_cal, results="hide"}
 ## Binned calibration curves
 cal <- calibration(res_probs, breaks = 10)
 plot(cal, se = TRUE)
 ```
 
-```{r results="hide"}
+```{r using_analyses_cal_smoothed, results="hide"}
 ## Smoothed calibration curves
 cal <- calibration(res_probs, breaks = NULL)
 plot(cal)
@@ -34,7 +34,7 @@ plot(cal)
 
 Confusion matrices of cross-classified observed and predicted factor or survival probabilities are available with the `confusion` function.  They can be constructed with predicted class membership or with predicted class probabilities.  In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors and according to the class with highest probability for factors with more than two levels.  Performance metrics, such as those described earlier for binary factors, can be computed with the `performance` function and summarized with `summary` and `plot`.
 
-```{r}
+```{r using_analyses_conf}
 ## Confusion matrices
 (conf <- confusion(res_probs, cutoff = 0.5))
 
@@ -45,7 +45,7 @@ performance(conf, metrics = c("Accuracy" = accuracy,
 summary(conf)
 ```
 
-```{r results="hide"}
+```{r using_analyses_conf_plot, results="hide"}
 plot(conf)
 ```
 
@@ -58,7 +58,7 @@ $$
 $$
 where $f$ is a fitted prediction function and $x_{iS'}$ are values of the remaining predictors in a dataset of $N$ cases.  The response scale displayed in dependence plots will depend on the response variable type: probability for predicted factors and survival probabilities, original scale for numerics, and survival time for predicted survival means.  By default, dependence is computed for each select predictor individually over a grid of 10 approximately evenly spaced values and averaged over the dataset on which the prediction function was fit.
 
-```{r results = "hide"}
+```{r using_analyses_pd, results = "hide"}
 ## Partial dependence plots
 pd <- dependence(surv_fit, select = c(thickness, age))
 plot(pd)
@@ -66,7 +66,7 @@ plot(pd)
 
 Averaging may be performed over different datasets to estimate marginal effects in other populations of cases, over different numbers of predictor values, and over quantile spacing of the values.
 
-```{r results = "hide"}
+```{r using_analyses_pd_data, results = "hide"}
 pd <- dependence(surv_fit, data = surv_test, select = thickness, n = 20,
                  intervals = "quantile")
 plot(pd)
@@ -84,14 +84,14 @@ Tradeoffs between correct and incorrect classifications of binary outcomes, acro
 
 Receiver operating characteristic (ROC) curves are one example in which true positive rates (sensitivity) are plotted against false positive rates (1 - specificity).  Area under resulting ROC curves can be computed as an overall measure of model predictive performance and interpreted as the probability that a randomly selected event case will have a higher predicted value than a randomly selected non-event case.
 
-```{r}
+```{r using_analyses_roc}
 ## ROC curves
 roc <- performance_curve(res_probs)
 plot(roc, diagonal = TRUE)
 plot(roc, type = "cutoffs")
 ```
 
-```{r}
+```{r using_analyses_roc_auc}
 auc(roc)
 ```
 
@@ -100,13 +100,13 @@ auc(roc)
 
 In general, any two binary response metrics may be specified for the construction of a performance curve.  Precision recall curves are another example.
 
-```{r}
+```{r using_analyses_pr}
 ## Precision recall curves
 pr <- performance_curve(res_probs, metrics = c(precision, recall))
 plot(pr)
 ```
 
-```{r}
+```{r using_analyses_pr_auc}
 auc(pr)
 ```
 
@@ -115,7 +115,7 @@ auc(pr)
 
 Lift curves depict the rate at which observed binary responses are identifiable from (resampled) predicted response probabilities.  In particular, they plot the true positive findings (sensitivity) against the positive test rates for all possible classification probability cutoffs.  Accordingly, a lift curve can be interpreted as the rate at which positive responses are found as a function of the positive test rate among cases.
 
-```{r}
+```{r using_analyses_lift}
 ## Lift curves
 lf <- lift(res_probs)
 plot(lf, find = 0.75)

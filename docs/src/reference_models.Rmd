@@ -1,6 +1,6 @@
 # Model Constructor Functions
 
-```{r echo = FALSE}
+```{r reference_models, echo = FALSE}
 library(MachineShop)
 
 info <- modelinfo()

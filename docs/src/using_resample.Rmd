@@ -22,7 +22,7 @@ TrainControl
   
 For the survival example, repeated cross-validation control structures are defined to estimate model performance in predicting survival means and 5 and 10-year survival probabilities.  In addition to arguments controlling the resampling algorithms, a `seed` can be set to ensure reproducibility of resampling results obtained with the structures.
 
-```{r}
+```{r using_resample_control}
 ## Control parameters for K-fold cross-validation
 
 ## Prediction of survival means
@@ -37,7 +37,7 @@ surv_probs_control <- CVControl(folds = 5, repeats = 3, times = surv_times, seed
 
 Resampling is implemented with the `foreach` package [@microsoft:2017:FPF] and will run in parallel if a compatible backend is loaded, such as that provided by the `doParallel` package [@microsoft:2017:DFP].
 
-```{r}
+```{r using_resample_parallel}
 ## Register multiple cores for parallel computations
 library(doParallel)
 registerDoParallel(cores = 2)
@@ -48,7 +48,7 @@ registerDoParallel(cores = 2)
 
 Resampling is performed by calling the `resample` function with a variable specification, model, and control structure.  Like the `fit` function, variables may be specified in terms of a traditional formula, design matrix, model frame, or recipe.  Summary statistics and plots of resample output can be obtained with the `summary` and `plot` functions.
 
-```{r}
+```{r using_resample_function}
 ## Resample estimation for survival means and probabilities
 (res_means <- resample(surv_fo, data = surv_train, model = GBMModel, control = surv_means_control))
 
@@ -61,7 +61,7 @@ plot(res_probs)
 
 The `summary` function when applied directly to output from `resample` computes default performance metrics as described in the *Performance Function* section.  Likewise, the `metricinfo` and `performance` functions can be applied to the output in order to list and compute applicable metrics.
 
-```{r}
+```{r using_resample_metricinfo}
 ## Resample-specific metrics
 metricinfo(res_probs) %>% names
 
@@ -74,7 +74,7 @@ summary(performance(res_probs, metrics = c(sensitivity, specificity)))
 
 Stratification of cases for the construction of resampled training and test sets can be employed to help achieve balance across the sets.  Stratified resampling is automatically performed if variable specification is in terms of a traditional formula and will be done according to the response variable if a numeric vector or factor, the event variable if survival, and the first variable if a numeric matrix.  For model frames and recipes, stratification variables must be defined explicitly with the `strata` argument to the `ModelFrame` constructor or with the `"case_strata"` role designation in a recipe step. 
 
-```{r results="hide"}
+```{r using_resample_strata, results="hide"}
 ## Model frame with case status stratification
 mf <- ModelFrame(surv_fo, data = surv_train, strata = surv_train$status)
 
@@ -94,7 +94,7 @@ resample(rec, model = GBMModel)
 
 As discussed previously in the *Model Fit and Prediction* section, dynamic model parameters are evaluated at the time of model fitting and can depend on the number of observations in the fitted dataset.  In the context of resampling, dynamic parameters are repeatedly evaluated at each fit of the resampled datasets.  As such, their values can change based on the observations selected for training at each iteration of the resampling algorithm.
 
-```{r results="hide"}
+```{r using_resample_dynamic, results="hide"}
 ## Dynamic model parameter k = log number of training set observations
 resample(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(nobs))))
 ```
@@ -104,7 +104,7 @@ resample(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(nobs))))
 
 Resampled metrics from different models can be combined for comparison with the `Resamples` function.  Optional names given on the left hand side of equal operators within calls to `Resamples` will be used as labels in output from the `summary` and `plot` functions.  For comparisons of resampled output, the same control structure must be used in all associated calls to `resample` to ensure that resulting model metrics are computed on the same resampled training and test sets.
 
-```{r}
+```{r using_resample_comparisons}
 ## Resample estimation
 res1 <- resample(surv_fo, data = surv_train, model = GBMModel(n.trees = 25),
                  control = surv_means_control)
@@ -126,7 +126,7 @@ plot(res, type = "violin")
 
 Pairwise model differences for each metric can be calculated with the `diff` function applied to results from a call to `Resamples`.  Resulting differences can be summarized descriptively with the `summary` and `plot` functions and assessed for statistical significance with the `t.test` function.
 
-```{r}
+```{r using_resample_diff}
 ## Pairwise model comparisons
 (perfdiff <- diff(res))
 
@@ -135,6 +135,6 @@ summary(perfdiff)
 plot(perfdiff)
 ```
 
-```{r}
+```{r using_resample_diff_test}
 t.test(perfdiff)
 ```

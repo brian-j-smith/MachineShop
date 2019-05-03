@@ -2,7 +2,7 @@
 
 The following illustrates use of the package to predict the species of flowers in Edgar Anderson's iris data set.
 
-```{r echo=FALSE}
+```{r ex_iris_summary, echo=FALSE}
 stats <- list(
   list("Number of flowers" = ~ length(Species)),
   "Species" = list("setosa" = ~ n_perc(Species == "setosa"),
@@ -20,8 +20,8 @@ summary_kbl(stats, iris)
 
 ## Training and Test Set Analysis
 
-```{r}
-## Analysis packages
+```{r ex_iris_fit}
+## Analysis libraries
 library(MachineShop)
 library(magrittr)
 
@@ -49,7 +49,7 @@ iris_fit <- fit(fo, data = trainset, model = GBMModel)
 plot(vi)
 ```
 
-```{r}
+```{r ex_iris_predict}
 ## Test set predicted probabilities
 predict(iris_fit, newdata = testset, type = "prob") %>% head
 
@@ -65,7 +65,7 @@ performance(obs, pred)
 
 ## Resampling
 
-```{r, fig.height = 4}
+```{r ex_iris_resample, fig.height = 4}
 ## Resample estimation of model performance
 (res <- resample(fo, data = iris, model = GBMModel, control = CVControl))
 
@@ -77,7 +77,7 @@ plot(res)
 
 ## Performance Metrics
 
-```{r}
+```{r ex_iris_metrics}
 ## Default performance metrics
 performance(res) %>% summary
 
@@ -91,7 +91,7 @@ performance(res, c(accuracy, kappa2)) %>% summary
 
 ## Model Tuning
 
-```{r, fig.height = 4}
+```{r ex_iris_tune, fig.height = 4}
 ## Tune over a grid of model parameters
 tuned_model <- tune(fo, data = iris, model = GBMModel,
                     grid = expand.grid(n.trees = c(25, 50, 100),
@@ -101,7 +101,7 @@ tuned_model <- tune(fo, data = iris, model = GBMModel,
 plot(tuned_model, type = "line")
 ```
 
-```{r}
+```{r ex_iris_tune_fit}
 ## Fit the selected model
 iris_fit <- fit(fo, data = iris, model = tuned_model)
 varimp(iris_fit)
@@ -110,7 +110,7 @@ varimp(iris_fit)
 
 ## Model Comparisons
 
-```{r}
+```{r ex_iris_comparisons}
 ## Model comparisons
 control <- CVControl(folds = 10, repeats = 5)
 
@@ -124,7 +124,7 @@ summary(res)
 plot(res)
 ```
 
-```{r}
+```{r ex_iris_diff}
 ## Pairwise model differences and t-tests
 perfdiff <- diff(res)
 summary(perfdiff)
@@ -137,7 +137,7 @@ plot(perfdiff)
 
 ## Ensemble Models
 
-```{r}
+```{r ex_iris_ensembles}
 ## Stacked regression
 stackedmodel <- StackedModel(GBMModel, RandomForestModel, NNetModel)
 res_stacked <- resample(fo, data = iris, model = stackedmodel)
@@ -152,7 +152,7 @@ summary(res_super)
 
 ## Calibration Curves
 
-```{r results = "hide"}
+```{r ex_iris_cal, results = "hide"}
 cal <- calibration(res1)
 plot(cal, se = TRUE)
 ```
@@ -160,20 +160,20 @@ plot(cal, se = TRUE)
 
 ## Confusion Matrices
 
-```{r}
+```{r ex_iris_conf}
 (conf <- confusion(res1, cutoff = NULL))
 
 summary(conf)
 ```
 
-```{r results = "hide"}
+```{r ex_iris_conf_plot, results = "hide"}
 plot(conf)
 ```
 
 
 ## Partial Dependence Plots
 
-```{r results = "hide"}
+```{r ex_iris_pd, results = "hide"}
 pd <- dependence(iris_fit, select = c(Petal.Length, Petal.Width))
 plot(pd)
 ```
@@ -181,7 +181,7 @@ plot(pd)
 
 ## Preprocessing Recipe
 
-```{r}
+```{r ex_iris_recipe}
 library(recipes)
 
 rec <- recipe(fo, data = iris) %>%

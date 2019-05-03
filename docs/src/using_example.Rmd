@@ -4,7 +4,7 @@ The package is illustrated in the following sections with an overall survival an
 
 Survival analysis is performed with the `Melanoma` dataset from the `MASS` package [@andersen:1993:SMB].  This dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas.  Also provided are potential predictors of the survival outcomes.  The analysis begins by loading required packages `MachineShop`, `survival`, and `MASS` as well as `magrittr` [@bache:2014:MFP] for its pipe (`%>%`) operator to simplify some of the code syntax.  For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one.  The dataset is then split into a training set on which a survival model will be fit and a test set on which predictions will be made.  A global formula `surv_fo` is defined to relate the predictors on the right hand side to the overall survival outcome on the left and will be used in all of the survival models presented. 
 
-```{r}
+```{r using_example_melanoma}
 ## Analysis libraries
 library(MachineShop)
 library(survival)
@@ -21,7 +21,7 @@ Descriptive summaries of the study variables are given below in Table 1, followe
 Table 1. Variable summaries for the Melanoma survival analysis example.
 </center>
 
-```{r echo=FALSE}
+```{r using_example_summary, echo=FALSE}
 surv_stats <- list(
   list("Number of subjects" = ~ length(status)),
   "time" = list("Median (Range)" = ~ median_range(time)),
@@ -39,7 +39,7 @@ surv_stats <- list(
 summary_kbl(surv_stats, surv_df)
 ```
 
-```{r echo=FALSE}
+```{r using_example_survfit, echo=FALSE}
 library(ggplot2)
 
 col <- "#F8766D"
@@ -54,7 +54,7 @@ survfit(Surv(time, status) ~ 1, data = surv_df) %>%
        title = "Kaplan-Meier survival plot")
 ```
 
-```{r}
+```{r using_example_datasets}
 ## Training and test sets
 set.seed(123)
 train_indices <- sample(nrow(surv_df), nrow(surv_df) * 2 / 3)

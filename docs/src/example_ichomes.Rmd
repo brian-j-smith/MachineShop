@@ -2,7 +2,7 @@
 
 In this example, a generalized boosted model is developed to predict the prices of homes sold in Iowa City, IA during 2005-2008.
 
-```{r echo=FALSE}
+```{r ex_ichomes_summary, echo=FALSE}
 library(MachineShop)
 
 stats <- list(
@@ -48,8 +48,8 @@ summary_kbl(stats, ICHomes)
 
 ## Training Set Analysis
 
-```{r}
-## Analysis package
+```{r ex_ichomes_tune}
+## Analysis libraries
 library(MachineShop)
 library(ggplot2)
 
@@ -67,7 +67,7 @@ fo <- sale_amount ~ .
 plot(tuned_model, type = "line")
 ```
 
-```{r}
+```{r ex_ichomes_tune_fit}
 ## Tuned model fit to the training set
 model_fit <- fit(fo, data = trainset, model = tuned_model)
 
@@ -79,7 +79,7 @@ plot(vi)
 
 ## Generalization Performance
 
-```{r}
+```{r ex_ichomes_metrics}
 ## Test set observed and predicted sale amounts
 obs <- response(model_fit, newdata = testset)
 pred <- predict(model_fit, newdata = testset)
@@ -91,7 +91,7 @@ performance(obs, pred)
 
 ## Calibration Curve
 
-```{r results = "hide"}
+```{r ex_ichomes_cal, results = "hide"}
 cal <- calibration(obs, pred, breaks = NULL)
 plot(cal, se = TRUE)
 ```
@@ -99,13 +99,13 @@ plot(cal, se = TRUE)
 
 ## Partial Dependence Plots
 
-```{r results = "hide"}
+```{r ex_ichomes_pd, results = "hide"}
 ## Marginal predictor effects
 pd <- dependence(model_fit, select = c(base_size, built, basement))
 plot(pd)
 ```
 
-```{r}
+```{r ex_ichomes_pd_interaction}
 ## Spatial distribution
 pd <- dependence(model_fit, select = c(lon, lat), interaction = TRUE, n = 25)
 df <- cbind(pd$Predictors, sale_amount = pd$Value)

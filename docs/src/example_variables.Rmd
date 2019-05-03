@@ -7,8 +7,8 @@ Variable specification defines the relationship between response and predictor v
 
 Different variable specifications will be illustrated with the Iowa City home prices dataset from the package.  To start, a formula is defined relating sale amount to home characteristics.  Two equivalent definitions are given.  One in which predictors on the right hand side of the equation are explicitly included, and another in which `.` notation is used to indicate that all remaining variable not already in the model be included on the right hand side.
 
-```{r}
-## Analysis package
+```{r ex_variables_ichomes}
+## Analysis library
 library(MachineShop)
 
 ## Iowa City home prices dataset
@@ -28,7 +28,7 @@ fo <- sale_amount ~ .
 
 Traditional formula calls to the fitting functions consist of a formula and dataset pair.  This specification additionally allows for crossing (`*`), interaction (`:`), and removal (`-`) of predictors in the formula; in-line functions of response variables; and some in-line functions of predictors.
 
-```{r}
+```{r ex_variables_formula}
 tuned_model <- tune(fo, ICHomes, model = SVMRadialModel)
 model_fit <- fit(fo, ICHomes, model = tuned_model)
 model_res <- resample(fo, ICHomes, model = tuned_model)
@@ -40,7 +40,7 @@ summary(model_res)
 
 Support is provided for calls with a numeric design matrix and response object pair.  The design matrix approach has lower computational overhead than the others and can thus enable a larger number of predictors to be included in an analysis.
 
-```{r}
+```{r ex_variables_matrix}
 x <- as.matrix(ICHomes[c("built", "base_size", "lot_size", "bedrooms")])
 y <- ICHomes$sale_amount
 
@@ -55,7 +55,7 @@ summary(model_res)
 
 Model frames are created with the traditional formula or design matrix syntax described above and then passed to the fitting functions.  They allow for the specification of variables for stratified resampling or for weighting of cases in model fitting.
 
-```{r}
+```{r ex_variables_modelframe}
 mf <- ModelFrame(fo, data = ICHomes, strata = ICHomes$sale_amount)
 
 tuned_model <- tune(mf, model = SVMRadialModel)
@@ -69,7 +69,7 @@ summary(model_res)
 
 Preprocessing [recipes](https://cran.r-project.org/package=recipes) provide a flexible framework for defining predictor and response variables as well as preprocessing steps to be applied to them prior to model fitting.  Using recipes helps ensure that estimation of predictive performance accounts for all modeling step.  As with model frames, the recipes approach allows for specification of case strata and weights.
 
-```{r}
+```{r ex_variables_recipe}
 library(recipes)
 
 rec <- recipe(fo, data = ICHomes) %>%

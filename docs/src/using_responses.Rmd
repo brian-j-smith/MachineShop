@@ -7,12 +7,12 @@ The R class types of response variables play a central role in their analysis wi
 
 Categorical responses with two or more levels should be coded as `factor` variables for analysis.
 
-```{r results="hide"}
+```{r using_responses_factor, results="hide"}
 ## Iris flowers species (3-level factor)
 fit(Species ~ ., data = iris, model = GBMModel)
 ```
 
-```{r results="hide"}
+```{r using_responses_factor_binary, results="hide"}
 ## Pima Indians diabetes statuses (binary factor)
 library(MASS)
 
@@ -24,7 +24,7 @@ fit(type ~ ., data = Pima.tr, model = GBMModel)
 
 Ordinal categorical responses should be coded as `ordered` factor variables.  For categorical vectors, this can be accomplished  with the `factor` function and its argument `ordered = TRUE` or more simply with the `ordered` function.  Numeric vectors can be converted to ordered factors with the `cut` function.
 
-```{r results="hide"}
+```{r using_responses_ordered, results="hide"}
 ## Boston housing prices (ordered factor)
 library(MASS)
 
@@ -40,7 +40,7 @@ fit(medv ~ ., data = df, model = GBMModel)
 
 Univariate numerical responses should be coded as `numeric` variables.
 
-```{r results="hide"}
+```{r using_responses_numeric, results="hide"}
 ## Boston housing prices
 library(MASS)
 
@@ -52,7 +52,7 @@ fit(medv ~ ., data = Boston, model = GBMModel)
 
 Multivariate numerical responses should be given as numeric `matrix` variables for model fitting with traditional formulas or model frames.
 
-```{r results="hide"}
+```{r using_responses_matrix, results="hide"}
 ## Anscombe's multiple regression models dataset
 
 ## Numeric matrix response formula
@@ -61,7 +61,7 @@ fit(cbind(y1, y2, y3) ~ x1, data = anscombe, model = LMModel)
 
 For recipes, the multiple response variables should be given on the left hand side of the formula specification.
 
-```{r results="hide"}
+```{r using_responses_matrix_recipe, results="hide"}
 ## Numeric matrix response recipe
 rec <- recipe(y1 + y2 + y3 ~ x1, data = anscombe)
 
@@ -73,7 +73,7 @@ fit(rec, model = LMModel)
 
 Survival responses should be coded as `Surv` variables for model fitting with traditional formulas or model frames.
 
-```{r results="hide"}
+```{r using_responses_surv, results="hide"}
 ## Survival response formula
 library(survival)
 
@@ -82,7 +82,7 @@ fit(Surv(time, status) ~ ., data = surv_train, model = GBMModel)
 
 For recipes, survival outcomes should be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated as `"surv_time"` and `"surv_event"`.
 
-```{r results="hide"}
+```{r using_responses_surv_recipe, results="hide"}
 ## Survival response recipe
 rec <- recipe(time + status ~ ., data = surv_train) %>%
   add_role(time, new_role = "surv_time") %>%

@@ -5,7 +5,7 @@
 
 # Features
 
-```{r echo=FALSE}
+```{r overview_modelinfo, echo=FALSE}
 library("MachineShop")
 info <- modelinfo()
 ```
@@ -30,7 +30,7 @@ info <- modelinfo()
 
 ## Installation
 
-```{r eval = FALSE}
+```{r overview_install, eval = FALSE}
 # Current release from CRAN
 install.packages("MachineShop")
 
@@ -47,7 +47,7 @@ devtools::install_github("brian-j-smith/MachineShop", build_vignettes = TRUE)
 
 Once installed, the following **R** commands will load the package and display its help system documentation.  Online documentation and examples are available at the [MachineShop website](https://brian-j-smith.github.io/MachineShop).
 
-```{r eval = FALSE, message = FALSE}
+```{r overview_docs, eval = FALSE, message = FALSE}
 library(MachineShop)
 
 # Package help summary

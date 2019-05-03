@@ -25,7 +25,7 @@ Model fitting requires user specification of a `MachineShop` compatible model.  
 
 Function `modelinfo` can be called with one or more model functions, function names, function calls, or observed response variables; and will return information on all models matching the calling arguments.
 
-```{r}
+```{r using_fit_modelinfo}
 ## All available models
 modelinfo() %>% names
 
@@ -43,7 +43,7 @@ Information is displayed above for the `GBMModel` function which is a generalize
 
 Package models, like `GBMModel`, can be specified in the `model` argument of the `fit` function to estimate a relationship (`surv_fo`) between predictors and an outcome based on a set of data (`surv_train`).  Argument specifications may be in terms of the model function, function name, or a function call.
 
-```{r results="hide"}
+```{r using_fit_function, results="hide"}
 ## Generalized boosted regression fit
 
 ## Model function
@@ -72,7 +72,7 @@ fit(surv_fo, data = surv_train, model = GBMModel(n.trees = 100, interaction.dept
   
 In the example below, Bayesian information criterion (BIC) based stepwise variable selection is performed by creating a `CoxStepAICModel` with dynamic parameter `k` to be calculated as the log number of observations in the fitted dataset.
 
-```{r results="hide"}
+```{r using_fit_dynamic, results="hide"}
 ## Dynamic model parameter k = log number of observations
 
 ## Number of observations: nobs
@@ -87,7 +87,7 @@ fit (surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(length(y)))))
 
 A `predict` function is supplied for application to model fit results to obtain predicted values on a dataset specified with its `newdata` argument or on the original dataset if not specified.  Survival means are predicted for survival outcomes by default.  Estimates of the associated survival distributions are needed to calculate the means.  For models, like `GBMModel`, that perform semi- or non-parametric survival analysis, Weibull approximations to the survival distributions are the default for mean estimation.  Other choices of distributional approximations are exponential, Rayleigh, and empirical.  Empirical distributions are applicable to Cox proportional hazards-based models and can be calculated with the method of Breslow [-@breslow:1972:DPC], Efron [-@efron:1977:ECL, default], or Fleming and Harrington [-@fleming:1984:NES].  Note, however, that empirical survival means are undefined mathematically if an event does not occur at the longest follow-up time.  In such situations, a restricted survival mean is calculated by changing the longest follow-up time to an event, as suggested by Efron [-@efron:1967:PFB], which will be negatively biased.  
 
-```{r}
+```{r using_predict_function}
 ## Predicted survival means (default: Weibull distribution)
 predict(surv_fit, newdata = surv_test) %>% head
 
@@ -97,7 +97,7 @@ predict(surv_fit, newdata = surv_test, dist = "empirical") %>% head
 
 In addition to survival means, predicted survival probabilities (`type = "prob"`) or 0-1 survival events (default: `type = "response"`) can be obtained with the follow-up `times` argument.  The cutoff probability for classification of survival events (or other binary responses) can be set optionally with the `cutoff` argument (default: `cutoff = 0.5`).  As with mean estimation, distributional approximations to the survival functions may be specified for the predictions, with the default for survival probabilities being the empirical distribution.
 
-```{r}
+```{r using_predict_function_times}
 ## Predict survival probabilities and events at specified follow-up times
 surv_times <- 365 * c(5, 10)
 
