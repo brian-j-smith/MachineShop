@@ -2,6 +2,12 @@
 
 ## Version Updates
 
+## 1.3.1
+* Check and convert ordered factors in response methods.
+* Check consistency of extracted variables in response methods.
+* Add metrics methods for `Resamples`.
+
+
 ## 1.3.0
 * Improve compatibility with preprocessing recipes.
 * Allow base math functions and operators in `ModelFrame` formulas.
