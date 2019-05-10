@@ -64,8 +64,18 @@ varimp <- function(object, scale = TRUE, ...) {
 }
 
 
-varimp_pchisq <- function(object) {
-  pchisq(coef(object)^2 / diag(vcov(object)), 1)
+varimp_wald <- function(object, ...) {
+  UseMethod("varimp_wald")
+}
+
+
+varimp_wald.default <- function(object, ...) {
+  varimp_wald(coef(object), diag(vcov(object)))
+}
+
+
+varimp_wald.numeric <- function(object, var, ...) {
+  pchisq(object^2 / var, 1)
 }
 
 

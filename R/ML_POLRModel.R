@@ -47,9 +47,9 @@ POLRModel <- function(method = c("logistic", "probit", "loglog", "cloglog",
       predict(object, newdata = newdata, type = "probs")
     },
     varimp = function(object, ...) {
-      beta <- coef(object)
-      s2 <- diag(vcov(object))[seq_along(beta)]
-      pchisq(beta^2 / s2, 1)
+      beta_est <- coef(object)
+      beta_var <- diag(vcov(object))[seq_along(beta_est)]
+      varimp_wald(beta_est, beta_var)
     }
   )
   

@@ -52,7 +52,7 @@ LMModel <- function() {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata)
     },
-    varimp = function(object, ...) varimp_pchisq(object)
+    varimp = function(object, ...) varimp_wald(object)
   )
   
 }
