@@ -2,8 +2,9 @@
 #' 
 #' Display information about metrics provided by the \pkg{MachineShop} package.
 #' 
-#' @param ... one or more metric functions, function names, observed response,
-#' observed and predicted responses, or a \code{Resamples} object.  If none are
+#' @param ... one or more metric functions; function names; observed response;
+#' observed and predicted responses; or \code{\link{ConfusionMatrix}},
+#' \code{\link{Confusion}}, or \code{\link{Resamples}} object.  If none are
 #' specified, information is returned on all available metrics by default.
 #' 
 #' @return List of named metric elements each containing the following
@@ -18,7 +19,8 @@
 #' types supported by the metric.}
 #' }
 #' 
-#' @seealso \code{\link{metrics}}, \code{\link{resample}}
+#' @seealso \code{\link{metrics}}, \code{\link{confusion}},
+#' \code{\link{resample}}
 #' 
 #' @examples
 #' ## All metrics
@@ -99,6 +101,16 @@ metricinfo <- function(...) {
 }
 
 
+.metricinfo.Confusion <- function(x, ...) {
+  .metricinfo(x[[1]], ...)
+}
+
+
+.metricinfo.ConfusionMatrix <- function(x, ...) {
+  c(list(x), .metricinfo(NULL, ...))
+}
+
+
 .metricinfo.function <- function(x, ...) {
   .metricinfo(list(), ...)
 }
@@ -140,11 +152,12 @@ metricinfo <- function(...) {
 }
 
 
-.metricinfo_types <- function(x, y = NULL, ...) {
+.metricinfo_types <- function(x, y, ...) {
+  not_missing_y <- !missing(y)
   info <- metricinfo()
   is_supported <- sapply(info, function(this) {
     is_types <- mapply(is, list(x), this$types$observed)
-    if (!is.null(y)) {
+    if (not_missing_y) {
       is_types <- is_types & mapply(is, list(y), this$types$predicted)
     }
     any(is_types)

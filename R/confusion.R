@@ -5,6 +5,32 @@
 #' @name confusion
 #' @rdname confusion
 #' 
+#' @param object square matrix, or object that can be converted to one, of
+#' predicted and observed values in the rows and columns, respectively.
+#' @param ordered logical indicating whether the confusion matrix row and
+#' columns should be regarded as ordered.
+#' 
+ConfusionMatrix <- function(object = numeric(), ordered = FALSE) {
+  
+  object <- if (length(object)) as.matrix(object) else matrix(NA_real_, 0, 0)
+  
+  n <- nrow(object)
+  if (n != ncol(object)) stop("unequal number of rows and columns")
+
+  object_dimnames <- dimnames(object)
+  if (is.null(object_dimnames)) object_dimnames <- list(NULL, NULL)
+  names(object_dimnames) <- c("Predicted", "Observed")
+  
+  object_class <- "ConfusionMatrix"
+  if (n == 2) object_class <- paste0("Binary", object_class)
+  if (ordered) object_class <- paste0("Ordered", object_class)
+
+  new(object_class, structure(object, dimnames = object_dimnames))
+}
+
+
+#' @rdname confusion
+#' 
 #' @param ... named or unnamed \code{confusion} output to combine together with
 #' the \code{Confusion} constructor.
 #' 
@@ -28,11 +54,6 @@ Confusion <- function(...) {
   names(conf_list) <- make.unique(names(conf_list))
 
   structure(conf_list, class = c("Confusion", "listof"))
-}
-
-
-ConfusionMatrix <- function(object) {
-  new("ConfusionMatrix", object)
 }
 
 
@@ -81,7 +102,7 @@ confusion <- function(x, y = NULL, cutoff = 0.5, na.rm = TRUE, ...) {
 
 .confusion.default <- function(x, y, cutoff, ...) {
   if (!is.null(cutoff)) y <- convert_response(x, y, cutoff = cutoff)
-  ConfusionMatrix(.confusion_matrix(x, y))
+  ConfusionMatrix(.confusion_matrix(x, y), ordered = is.ordered(x))
 }
 
 

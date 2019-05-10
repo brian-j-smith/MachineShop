@@ -332,16 +332,11 @@ setMethod(".f_score", c("ANY", "ANY"),
 )
 
 
-setMethod(".f_score", c("ConfusionMatrix", "NULL"),
+setMethod(".f_score", c("BinaryConfusionMatrix", "NULL"),
   function(observed, predicted, beta, ...) {
-    if (any(dim(observed) != c(2, 2))) {
-      warn("'f_score' requires a 2-level response")
-      numeric()
-    } else {
-      beta2 <- beta^2
-      (1 + beta2) * observed[2, 2] /
-        ((1 + beta2) * observed[2, 2] + beta2 * observed[1, 2] + observed[2, 1])
-    }
+    beta2 <- beta^2
+    (1 + beta2) * observed[2, 2] /
+      ((1 + beta2) * observed[2, 2] + beta2 * observed[1, 2] + observed[2, 1])
   }
 )
 
@@ -392,7 +387,7 @@ setMethod(".fnr", c("ANY", "ANY"),
 )
 
 
-setMethod(".fnr", c("ConfusionMatrix", "NULL"),
+setMethod(".fnr", c("BinaryConfusionMatrix", "NULL"),
   function(observed, predicted, ...) {
     1 - tpr(observed)
   }
@@ -444,7 +439,7 @@ setMethod(".fpr", c("ANY", "ANY"),
 )
 
 
-setMethod(".fpr", c("ConfusionMatrix", "NULL"),
+setMethod(".fpr", c("BinaryConfusionMatrix", "NULL"),
   function(observed, predicted, ...) {
     1 - tnr(observed)
   }
@@ -565,14 +560,9 @@ setMethod(".npv", c("ANY", "ANY"),
 )
 
 
-setMethod(".npv", c("ConfusionMatrix", "NULL"),
+setMethod(".npv", c("BinaryConfusionMatrix", "NULL"),
   function(observed, predicted, ...) {
-    if (any(dim(observed) != c(2, 2))) {
-      warn("'npv' requires a 2-level response")
-      numeric()
-    } else {
-      observed[1, 1] / (observed[1, 1] + observed[1, 2])
-    }
+    observed[1, 1] / (observed[1, 1] + observed[1, 2])
   }
 )
 
@@ -623,14 +613,9 @@ setMethod(".ppv", c("ANY", "ANY"),
 )
 
 
-setMethod(".ppv", c("ConfusionMatrix", "NULL"),
+setMethod(".ppv", c("BinaryConfusionMatrix", "NULL"),
   function(observed, predicted, ...) {
-    if (any(dim(observed) != c(2, 2))) {
-      warn("'ppv' requires a 2-level response")
-      numeric()
-    } else {
-      observed[2, 2] / (observed[2, 1] + observed[2, 2])
-    }
+    observed[2, 2] / (observed[2, 1] + observed[2, 2])
   }
 )
 
@@ -720,7 +705,7 @@ setMethod(".precision", c("ANY", "ANY"),
 )
 
 
-setMethod(".precision", c("ConfusionMatrix", "NULL"),
+setMethod(".precision", c("BinaryConfusionMatrix", "NULL"),
   function(observed, predicted, ...) {
     ppv(observed)
   }
@@ -773,7 +758,7 @@ setMethod(".recall", c("ANY", "ANY"),
 )
 
 
-setMethod(".recall", c("ConfusionMatrix", "NULL"),
+setMethod(".recall", c("BinaryConfusionMatrix", "NULL"),
   function(observed, predicted, ...) {
     tpr(observed)
   }
@@ -867,7 +852,7 @@ setMethod(".roc_index", c("ANY", "ANY"),
 )
 
 
-setMethod(".roc_index", c("ConfusionMatrix", "NULL"),
+setMethod(".roc_index", c("BinaryConfusionMatrix", "NULL"),
   function(observed, predicted, f, ...) {
     f(sensitivity(observed), specificity(observed))
   }
@@ -919,14 +904,9 @@ setMethod(".rpp", c("ANY", "ANY"),
 )
 
 
-setMethod(".rpp", c("ConfusionMatrix", "NULL"),
+setMethod(".rpp", c("BinaryConfusionMatrix", "NULL"),
   function(observed, predicted, ...) {
-    if (any(dim(observed) != c(2, 2))) {
-      warn("'rpp' requires a 2-level response")
-      numeric()
-    } else {
-      (observed[2, 1] + observed[2, 2]) / sum(observed)
-    }
+    (observed[2, 1] + observed[2, 2]) / sum(observed)
   }
 )
 
@@ -977,7 +957,7 @@ setMethod(".sensitivity", c("ANY", "ANY"),
 )
 
 
-setMethod(".sensitivity", c("ConfusionMatrix", "NULL"),
+setMethod(".sensitivity", c("BinaryConfusionMatrix", "NULL"),
   function(observed, predicted, ...) {
     tpr(observed)
   }
@@ -1030,7 +1010,7 @@ setMethod(".specificity", c("ANY", "ANY"),
 )
 
 
-setMethod(".specificity", c("ConfusionMatrix", "NULL"),
+setMethod(".specificity", c("BinaryConfusionMatrix", "NULL"),
   function(observed, predicted, ...) {
     tnr(observed)
   }
@@ -1082,14 +1062,9 @@ setMethod(".tnr", c("ANY", "ANY"),
 )
 
 
-setMethod(".tnr", c("ConfusionMatrix", "NULL"),
+setMethod(".tnr", c("BinaryConfusionMatrix", "NULL"),
   function(observed, predicted, ...) {
-    if (any(dim(observed) != c(2, 2))) {
-      warn("'tnr' requires a 2-level response")
-      numeric()
-    } else{
-      observed[1, 1] / (observed[1, 1] + observed[2, 1])
-    }
+    observed[1, 1] / (observed[1, 1] + observed[2, 1])
   }
 )
 
@@ -1139,14 +1114,9 @@ setMethod(".tpr", c("ANY", "ANY"),
 )
 
 
-setMethod(".tpr", c("ConfusionMatrix", "NULL"),
+setMethod(".tpr", c("BinaryConfusionMatrix", "NULL"),
   function(observed, predicted, ...) {
-    if (any(dim(observed) != c(2, 2))) {
-      warn("'tpr' requires a 2-level response")
-      numeric()
-    } else {
-      observed[2, 2] / (observed[1, 2] + observed[2, 2])
-    }
+    observed[2, 2] / (observed[1, 2] + observed[2, 2])
   }
 )
 
@@ -1198,7 +1168,7 @@ setMethod(".weighted_kappa2", c("ANY", "ANY"),
 )
 
 
-setMethod(".weighted_kappa2", c("ConfusionMatrix", "NULL"),
+setMethod(".weighted_kappa2", c("OrderedConfusionMatrix", "NULL"),
   function(observed, predicted, power, ...) {
     expected <- (rowSums(observed) %o% colSums(observed)) / sum(observed)
     weights <- abs(row(observed) - col(observed))^power

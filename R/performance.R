@@ -134,10 +134,13 @@ performance.Confusion <- function(x, ...) {
 
 #' @rdname performance
 #' 
-performance.ConfusionMatrix <- function(x, metrics =
-                                          c("Accuracy" = MachineShop::accuracy,
-                                            "Kappa" = MachineShop::kappa2),
-                                        ...) {
+performance.ConfusionMatrix <-
+  function(x, metrics = c("Accuracy" = MachineShop::accuracy,
+                          "Kappa" = MachineShop::kappa2,
+                          "Weighted Kappa" =
+                            MachineShop::weighted_kappa2,
+                          "Sensitivity" = MachineShop::sensitivity,
+                          "Specificity" = MachineShop::specificity), ...) {
   list2function(metrics)(x)
 }
 

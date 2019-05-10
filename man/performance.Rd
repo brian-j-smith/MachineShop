@@ -36,7 +36,9 @@ performance(x, ...)
 \method{performance}{Confusion}(x, ...)
 
 \method{performance}{ConfusionMatrix}(x, metrics = c(Accuracy =
-  MachineShop::accuracy, Kappa = MachineShop::kappa2), ...)
+  MachineShop::accuracy, Kappa = MachineShop::kappa2, `Weighted Kappa` =
+  MachineShop::weighted_kappa2, Sensitivity = MachineShop::sensitivity,
+  Specificity = MachineShop::specificity), ...)
 }
 \arguments{
 \item{x}{observed responses or class containing observed and predicted

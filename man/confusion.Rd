@@ -2,14 +2,23 @@
 % Please edit documentation in R/confusion.R
 \name{confusion}
 \alias{confusion}
+\alias{ConfusionMatrix}
 \alias{Confusion}
 \title{Confusion Matrix}
 \usage{
+ConfusionMatrix(object = numeric(), ordered = FALSE)
+
 Confusion(...)
 
 confusion(x, y = NULL, cutoff = 0.5, na.rm = TRUE, ...)
 }
 \arguments{
+\item{object}{square matrix, or object that can be converted to one, of
+predicted and observed values in the rows and columns, respectively.}
+
+\item{ordered}{logical indicating whether the confusion matrix row and
+columns should be regarded as ordered.}
+
 \item{...}{named or unnamed \code{confusion} output to combine together with
 the \code{Confusion} constructor.}
 

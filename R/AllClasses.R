@@ -102,6 +102,21 @@ setClass("ConfusionMatrix",
 )
 
 
+setClass("BinaryConfusionMatrix",
+  contains = "ConfusionMatrix"
+)
+
+
+setClass("OrderedConfusionMatrix",
+  contains = "ConfusionMatrix"
+)
+
+
+setClass("OrderedBinaryConfusionMatrix",
+  contains = c("OrderedConfusionMatrix", "BinaryConfusionMatrix")
+)
+
+
 setClass("Curves",
   slots = c(metrics = "list"),
   contains = "data.frame"

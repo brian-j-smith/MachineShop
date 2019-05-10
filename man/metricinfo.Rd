@@ -7,8 +7,9 @@
 metricinfo(...)
 }
 \arguments{
-\item{...}{one or more metric functions, function names, observed response,
-observed and predicted responses, or a \code{Resamples} object.  If none are
+\item{...}{one or more metric functions; function names; observed response;
+observed and predicted responses; or \code{\link{ConfusionMatrix}},
+\code{\link{Confusion}}, or \code{\link{Resamples}} object.  If none are
 specified, information is returned on all available metrics by default.}
 }
 \value{
@@ -42,5 +43,6 @@ metricinfo(auc)
 
 }
 \seealso{
-\code{\link{metrics}}, \code{\link{resample}}
+\code{\link{metrics}}, \code{\link{confusion}},
+\code{\link{resample}}
 }
