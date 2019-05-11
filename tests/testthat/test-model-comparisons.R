@@ -41,7 +41,7 @@ test_tune <- function() {
 test_that("model comparisons", {
   skip_if_not(TEST_MODEL_COMPARISONS)
   with_parallel({
-    expect_is(test_Resamples(), "HTestPerformanceDiff")
-    expect_is(test_tune(), "HTestPerformanceDiff")
+    expect_is(test_Resamples(), "PerformanceDiffTest")
+    expect_is(test_tune(), "PerformanceDiffTest")
   })
 })

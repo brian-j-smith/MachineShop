@@ -199,19 +199,6 @@ setMethod("show", "Curves",
 )
 
 
-setMethod("show", "HTestPerformanceDiff",
-  function(object) {
-    show_title(object)
-    cat("\n",
-        "Upper diagonal: mean differences (row - column)\n",
-        "Lower diagonal: p-values\n",
-        "P-value adjustment method: ", object@adjust, "\n\n",
-        sep = "")
-    print(object@.Data)
-  }
-)
-
-
 setMethod("show", "Performance",
   function(object) {
     show_title(object)
@@ -222,6 +209,19 @@ setMethod("show", "Performance",
       cat("Models:", toString(dimnames(object)[[3]]), "\n")
     }
     cat("\n")
+  }
+)
+
+
+setMethod("show", "PerformanceDiffTest",
+  function(object) {
+    show_title(object)
+    cat("\n",
+        "Upper diagonal: mean differences (row - column)\n",
+        "Lower diagonal: p-values\n",
+        "P-value adjustment method: ", object@adjust, "\n\n",
+        sep = "")
+    print(object@.Data)
   }
 )
 

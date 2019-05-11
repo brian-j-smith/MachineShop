@@ -16,7 +16,7 @@ implemented by \code{\link[stats]{p.adjust}}.}
 \item{...}{arguments passed to other methods.}
 }
 \value{
-\code{HTestPerformanceDiff} class object that inherits from
+\code{PerformanceDiffTest} class object that inherits from
 \code{array}.  p-values and mean differences are contained in the lower and
 upper triangular portions, respectively, of the first two dimensions.  Model
 pairs are contined in the third dimension.

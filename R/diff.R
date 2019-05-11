@@ -64,11 +64,6 @@ diff.MLModelTune <- function(x, ...) {
 }
 
 
-HTestPerformanceDiff <- function(object, adjust) {
-  new("HTestPerformanceDiff", object, adjust = adjust)
-}
-
-
 #' Paired t-Tests for Model Comparisons
 #' 
 #' Paired t-test comparisons of resampled performance metrics from different
@@ -83,7 +78,7 @@ HTestPerformanceDiff <- function(object, adjust) {
 #' implemented by \code{\link[stats]{p.adjust}}.
 #' @param ... arguments passed to other methods.
 #' 
-#' @return \code{HTestPerformanceDiff} class object that inherits from
+#' @return \code{PerformanceDiffTest} class object that inherits from
 #' \code{array}.  p-values and mean differences are contained in the lower and
 #' upper triangular portions, respectively, of the first two dimensions.  Model
 #' pairs are contined in the third dimension.
@@ -119,5 +114,5 @@ t.test.PerformanceDiff <- function(x, adjust = "holm", ...)
   results <- aperm(results, perm = c(2, 1, 3))
   results[indices] <- pvalues
 
-  HTestPerformanceDiff(results, adjust = adjust)
+  PerformanceDiffTest(results, adjust = adjust)
 }
