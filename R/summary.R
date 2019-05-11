@@ -93,12 +93,6 @@ summary.Confusion <- function(object, ...) {
 }
 
 
-SummaryConfusion <- function(object, N, Accuracy, Majority, Kappa) {
-  new("SummaryConfusion", object, N = N, Accuracy = Accuracy,
-      Majority = Majority, Kappa = Kappa)
-}
-
-
 #' @rdname summary-methods
 #' 
 summary.ConfusionMatrix <- function(object, ...) {
@@ -119,7 +113,7 @@ summary.ConfusionMatrix <- function(object, ...) {
     NPV = (1 - observed - predicted + agreement) / (1 - predicted)
   )
   
-  SummaryConfusion(perf,
+  ConfusionSummary(perf,
                    N = n,
                    Accuracy = sum(agreement),
                    Majority = max(observed),

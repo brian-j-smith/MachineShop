@@ -172,6 +172,20 @@ setMethod("show", "ConfusionMatrix",
 )
 
 
+setMethod("show", "ConfusionSummary",
+  function(object) {
+    n <- object@N
+    acc <- object@Accuracy
+    cat("Number of responses: ", n, "\n",
+        "Accuracy (SE): ", acc, " (", sqrt(acc * (1 - acc) / n), ")\n",
+        "Majority class: ", object@Majority, "\n",
+        "Kappa: ", object@Kappa, "\n\n",
+        sep = "")
+    print(object@.Data)
+  }
+)
+
+
 setMethod("show", "Curves",
   function(object){
     show_title(object)
@@ -224,20 +238,6 @@ setMethod("show", "Resamples",
     cat("\n")
     show(object@control)
     invisible()
-  }
-)
-
-
-setMethod("show", "SummaryConfusion",
-  function(object) {
-    n <- object@N
-    acc <- object@Accuracy
-    cat("Number of responses: ", n, "\n",
-        "Accuracy (SE): ", acc, " (", sqrt(acc * (1 - acc) / n), ")\n",
-        "Majority class: ", object@Majority, "\n",
-        "Kappa: ", object@Kappa, "\n\n",
-        sep = "")
-    print(object@.Data)
   }
 )
 

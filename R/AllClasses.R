@@ -117,6 +117,15 @@ setClass("OrderedBinaryConfusionMatrix",
 )
 
 
+ConfusionSummary <- setClass("ConfusionSummary",
+  slots = c(N = "numeric",
+            Accuracy = "numeric",
+            Majority = "numeric",
+            Kappa = "numeric"),
+  contains = "matrix"
+)
+
+
 setClass("Curves",
   slots = c(metrics = "list"),
   contains = "data.frame"
@@ -157,15 +166,6 @@ setClass("Resamples",
   slots = c(control = "MLControl",
             strata = "character"),
   contains = "data.frame"
-)
-
-
-setClass("SummaryConfusion",
-  slots = c(N = "numeric",
-            Accuracy = "numeric",
-            Majority = "numeric",
-            Kappa = "numeric"),
-  contains = "matrix"
 )
 
 
