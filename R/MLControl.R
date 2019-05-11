@@ -36,7 +36,7 @@ MLControl <- function(times = NULL, dist = NULL, method = NULL, seed = NULL,
 #' BootControl(samples = 100)
 #' 
 BootControl <- function(samples = 25, ...) {
-  new("MLControlBoot", MLControl(...), samples = samples)
+  new("MLBootControl", MLControl(...), samples = samples)
 }
 
 
@@ -56,7 +56,7 @@ BootControl <- function(samples = 25, ...) {
 #' CVControl(folds = 10, repeats = 5)
 #' 
 CVControl <- function(folds = 10, repeats = 1, ...) {
-  new("MLControlCV", MLControl(...), folds = folds, repeats = repeats)
+  new("MLCVControl", MLControl(...), folds = folds, repeats = repeats)
 }
 
 
@@ -72,7 +72,7 @@ CVControl <- function(folds = 10, repeats = 1, ...) {
 #' OOBControl(samples = 100)
 #' 
 OOBControl <- function(samples = 25, ...) {
-  new("MLControlOOB", MLControl(...), samples = samples)
+  new("MLOOBControl", MLControl(...), samples = samples)
 }
 
 
@@ -90,7 +90,7 @@ OOBControl <- function(samples = 25, ...) {
 #' SplitControl(prop = 2/3)
 #' 
 SplitControl <- function(prop = 2/3, ...) {
-  new("MLControlSplit", MLControl(...), prop = prop)
+  new("MLSplitControl", MLControl(...), prop = prop)
 }
 
 
@@ -105,5 +105,5 @@ SplitControl <- function(prop = 2/3, ...) {
 #' TrainControl()
 #' 
 TrainControl <- function(...) {
-  new("MLControlTrain", MLControl(...))
+  new("MLTrainControl", MLControl(...))
 }

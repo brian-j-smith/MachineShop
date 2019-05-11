@@ -36,7 +36,7 @@ setMethod("show", "MLControl",
 )
 
 
-setMethod("show", "MLControlBoot",
+setMethod("show", "MLBootControl",
   function(object) {
     show_title("MLControl")
     cat("\n",
@@ -50,7 +50,7 @@ setMethod("show", "MLControlBoot",
 )
 
 
-setMethod("show", "MLControlCV",
+setMethod("show", "MLCVControl",
   function(object) {
     show_title("MLControl")
     cat("\n",
@@ -65,7 +65,7 @@ setMethod("show", "MLControlCV",
 )
 
 
-setMethod("show", "MLControlOOB",
+setMethod("show", "MLOOBControl",
   function(object) {
     show_title("MLControl")
     cat("\n",
@@ -79,7 +79,7 @@ setMethod("show", "MLControlOOB",
 )
 
 
-setMethod("show", "MLControlSplit",
+setMethod("show", "MLSplitControl",
   function(object) {
     show_title("MLControl")
     cat("\n",
@@ -93,7 +93,7 @@ setMethod("show", "MLControlSplit",
 )
 
 
-setMethod("show", "MLControlTrain",
+setMethod("show", "MLTrainControl",
   function(object) {
     show_title("MLControl")
     cat("\n",

@@ -13,32 +13,32 @@ setClass("MLControl",
 )
 
 
-setClass("MLControlBoot",
+setClass("MLBootControl",
   slots = c(samples = "numeric"),
   contains = "MLControl"
 )
 
 
-setClass("MLControlCV",
+setClass("MLCVControl",
   slots = c(folds = "numeric",
             repeats = "numeric"),
   contains = "MLControl"
 )
 
 
-setClass("MLControlOOB",
+setClass("MLOOBControl",
   slots = c(samples = "numeric"),
   contains = "MLControl"
 )
 
 
-setClass("MLControlSplit",
+setClass("MLSplitControl",
   slots = c(prop = "numeric"),
   contains = "MLControl"
 )
 
 
-setClass("MLControlTrain",
+setClass("MLTrainControl",
   contains = "MLControl"
 )
 
