@@ -50,9 +50,7 @@ metrics to plot.}
 \code{MLModelTune} line plots and \code{Resamples} model sorting.  For
 \code{Curves} and \code{Lift} classes, plots are of resampled metrics
 aggregated by the statistic if given or of resample-specific metrics if
-\code{NULL}.
-\code{Curves}, or \code{NULL} for resample-specific
-metrics.}
+\code{NULL}.}
 
 \item{type}{type of plot to construct.}
 
