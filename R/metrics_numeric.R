@@ -1,29 +1,13 @@
 #' @rdname metrics
 #' 
 gini <- function(observed, predicted = NULL, ...) {
-  .gini(observed, predicted)
+  call_metric_method("gini", environment())
 }
 
 MLMetric(gini) <- list("gini", "Gini Coefficient", FALSE)
 
 
-setGeneric(".gini",
-           function(observed, predicted, ...) standardGeneric(".gini"))
-
-
-setMethod(".gini", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".gini", c("matrix", "matrix"),
-  function(observed, predicted, ...) {
-    .metric.matrix(observed, predicted, gini)
-  }
-)
-
-
-setMethod(".gini", c("numeric", "numeric"),
+setMetric_numeric("gini",
   function(observed, predicted, ...) {
     gini_sum <- function(x) {
       n <- length(x)
@@ -35,62 +19,18 @@ setMethod(".gini", c("numeric", "numeric"),
 )
 
 
-setMethod(".gini", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = gini, ...)
-  }
-)
-
-
-setMethod(".gini", c("Surv", "numeric"),
-  function(observed, predicted, ...) {
-    .metric.SurvMean(observed, predicted, gini)
-  }
-)
-
-
 #' @rdname metrics
 #' 
 mae <- function(observed, predicted = NULL, ...) {
-  .mae(observed, predicted)
+  call_metric_method("mae", environment())
 }
 
 MLMetric(mae) <- list("mae", "Mean Absolute Error", FALSE)
 
 
-setGeneric(".mae",
-           function(observed, predicted, ...) standardGeneric(".mae"))
-
-
-setMethod(".mae", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".mae", c("matrix", "matrix"),
-  function(observed, predicted, ...) {
-    .metric.matrix(observed, predicted, mae)
-  }
-)
-
-
-setMethod(".mae", c("numeric", "numeric"),
+setMetric_numeric("mae",
   function(observed, predicted, ...) {
     mean(abs(observed - predicted))
-  }
-)
-
-
-setMethod(".mae", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = mae, ...)
-  }
-)
-
-
-setMethod(".mae", c("Surv", "numeric"),
-  function(observed, predicted, ...) {
-    .metric.SurvMean(observed, predicted, mae)
   }
 )
 
@@ -98,45 +38,15 @@ setMethod(".mae", c("Surv", "numeric"),
 #' @rdname metrics
 #' 
 mse <- function(observed, predicted = NULL, ...) {
-  .mse(observed, predicted)
+  call_metric_method("mse", environment())
 }
 
 MLMetric(mse) <- list("mse", "Mean Squared Error", FALSE)
 
 
-setGeneric(".mse",
-           function(observed, predicted, ...) standardGeneric(".mse"))
-
-
-setMethod(".mse", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".mse", c("matrix", "matrix"),
-  function(observed, predicted, ...) {
-    .metric.matrix(observed, predicted, mse)
-  }
-)
-
-
-setMethod(".mse", c("numeric", "numeric"),
+setMetric_numeric("mse",
   function(observed, predicted, ...) {
     mean((observed - predicted)^2)
-  }
-)
-
-
-setMethod(".mse", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = mse, ...)
-  }
-)
-
-
-setMethod(".mse", c("Surv", "numeric"),
-  function(observed, predicted, ...) {
-    .metric.SurvMean(observed, predicted, mse)
   }
 )
 
@@ -144,45 +54,15 @@ setMethod(".mse", c("Surv", "numeric"),
 #' @rdname metrics
 #' 
 msle <- function(observed, predicted = NULL, ...) {
-  .msle(observed, predicted)
+  call_metric_method("msle", environment())
 }
 
 MLMetric(msle) <- list("msle", "Mean Squared Log Error", FALSE)
 
 
-setGeneric(".msle",
-           function(observed, predicted, ...) standardGeneric(".msle"))
-
-
-setMethod(".msle", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".msle", c("matrix", "matrix"),
-  function(observed, predicted, ...) {
-    .metric.matrix(observed, predicted, msle)
-  }
-)
-
-
-setMethod(".msle", c("numeric", "numeric"),
+setMetric_numeric("msle",
   function(observed, predicted, ...) {
     mean((log(1 + observed) - log(1 + predicted))^2)
-  }
-)
-
-
-setMethod(".msle", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = msle, ...)
-  }
-)
-
-
-setMethod(".msle", c("Surv", "numeric"),
-  function(observed, predicted, ...) {
-    .metric.SurvMean(observed, predicted, msle)
   }
 )
 
@@ -190,43 +70,29 @@ setMethod(".msle", c("Surv", "numeric"),
 #' @rdname metrics
 #' 
 r2 <- function(observed, predicted = NULL, dist = NULL, ...) {
-  .r2(observed, predicted, dist = dist)
+  call_metric_method("r2", environment())
 }
 
 MLMetric(r2) <- list("r2", "Coefficient of Determination", TRUE)
 
 
-setGeneric(".r2",
-           function(observed, predicted, ...) standardGeneric(".r2"))
+setMetricGeneric("r2")
 
 
-setMethod(".r2", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
+setMetricMethod_matrix_matrix("r2")
 
 
-setMethod(".r2", c("matrix", "matrix"),
-  function(observed, predicted, ...) {
-    .metric.matrix(observed, predicted, r2)
-  }
-)
-
-
-setMethod(".r2", c("numeric", "numeric"),
+setMetricMethod("r2", c("numeric", "numeric"),
   function(observed, predicted, ...) {
     1 - mse(observed, predicted) / mse(observed, mean(observed))
   }
 )
 
 
-setMethod(".r2", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = r2, ...)
-  }
-)
+setMetricMethod_Resamples("r2")
 
 
-setMethod(".r2", c("Surv", "numeric"),
+setMetricMethod("r2", c("Surv", "numeric"),
   function(observed, predicted, dist, ...) {
     dist <- if (is.null(dist)) "weibull" else
       match.arg(dist, c("empirical", names(survreg.distributions)))
@@ -246,43 +112,13 @@ setMethod(".r2", c("Surv", "numeric"),
 #' @rdname metrics
 #' 
 rmse <- function(observed, predicted = NULL, ...) {
-  .rmse(observed, predicted)
+  call_metric_method("rmse", environment())
 }
 
 MLMetric(rmse) <- list("rmse", "Root Mean Squared Error", FALSE)
 
 
-setGeneric(".rmse",
-           function(observed, predicted, ...) standardGeneric(".rmse"))
-
-
-setMethod(".rmse", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".rmse", c("matrix", "matrix"),
-  function(observed, predicted, ...) {
-    sqrt(mse(observed, predicted))
-  }
-)
-
-
-setMethod(".rmse", c("numeric", "numeric"),
-  function(observed, predicted, ...) {
-    sqrt(mse(observed, predicted))
-  }
-)
-
-
-setMethod(".rmse", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = rmse, ...)
-  }
-)
-
-
-setMethod(".rmse", c("Surv", "numeric"),
+setMetric_numeric("rmse",
   function(observed, predicted, ...) {
     sqrt(mse(observed, predicted))
   }
@@ -292,57 +128,14 @@ setMethod(".rmse", c("Surv", "numeric"),
 #' @rdname metrics
 #' 
 rmsle <- function(observed, predicted = NULL, ...) {
-  .rmsle(observed, predicted)
+  call_metric_method("rmsle", environment())
 }
 
 MLMetric(rmsle) <- list("rmsle", "Root Mean Squared Log Error", FALSE)
 
 
-setGeneric(".rmsle",
-           function(observed, predicted, ...) standardGeneric(".rmsle"))
-
-
-setMethod(".rmsle", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".rmsle", c("matrix", "matrix"),
+setMetric_numeric("rmsle",
   function(observed, predicted, ...) {
     sqrt(msle(observed, predicted))
   }
 )
-
-
-setMethod(".rmsle", c("numeric", "numeric"),
-  function(observed, predicted, ...) {
-    sqrt(msle(observed, predicted))
-  }
-)
-
-
-setMethod(".rmsle", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = rmsle, ...)
-  }
-)
-
-
-setMethod(".rmsle", c("Surv", "numeric"),
-  function(observed, predicted, ...) {
-    sqrt(msle(observed, predicted))
-  }
-)
-
-
-.metric.matrix <- function(observed, predicted, FUN, ...) {
-  mean(sapply(1:ncol(observed), function(i) {
-    FUN(observed[, i], predicted[, i], ...)
-  }))
-}
-
-
-.metric.SurvMean <- function(observed, predicted, FUN, ...) {
-  events <- observed[, "status"] == 1
-  FUN(observed[events, "time"], predicted[events], ...)
-}

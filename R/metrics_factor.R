@@ -35,66 +35,15 @@
 #' \code{\link{performance}}, \code{\link{performance_curve}}
 #' 
 accuracy <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
-  .accuracy(observed, predicted, cutoff = cutoff)
+  call_metric_method("accuracy", environment())
 }
 
 MLMetric(accuracy) <- list("accuracy", "Accuracy", TRUE)
 
 
-setGeneric(".accuracy",
-           function(observed, predicted, ...) standardGeneric(".accuracy"))
-
-
-setMethod(".accuracy", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".accuracy", c("ConfusionMatrix", "NULL"),
+setMetric_ConfusionMatrix("accuracy",
   function(observed, predicted, ...) {
     sum(diag(observed)) / sum(observed)
-  }
-)
-
-
-setMethod(".accuracy", c("factor", "factor"),
-  function(observed, predicted, ...) {
-    accuracy(confusion(observed, predicted))
-  }
-)
-
-
-setMethod(".accuracy", c("factor", "matrix"),
-  function(observed, predicted, ...) {
-    accuracy(confusion(observed, predicted))
-  }
-)
-
-
-setMethod(".accuracy", c("factor", "numeric"),
-  function(observed, predicted, cutoff, ...) {
-    accuracy(confusion(observed, predicted, cutoff = cutoff))
-  }
-)
-
-
-setMethod(".accuracy", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = accuracy, ...)
-  }
-)
-
-
-setMethod(".accuracy", c("Surv", "SurvEvents"),
-  function(observed, predicted, ...) {
-    .metric.SurvMatrix(observed, predicted, accuracy)
-  }
-)
-
-
-setMethod(".accuracy", c("Surv", "SurvProbs"),
-  function(observed, predicted, cutoff, ...) {
-    .metric.SurvMatrix(observed, predicted, accuracy, cutoff = cutoff)
   }
 )
 
@@ -104,21 +53,33 @@ setMethod(".accuracy", c("Surv", "SurvProbs"),
 auc <- function(observed, predicted = NULL,
                 metrics = c(MachineShop::tpr, MachineShop::fpr),
                 stat = base::mean, ...) {
-  .auc(observed, predicted, metrics = metrics, stat = stat)
+  call_metric_method("auc", environment())
 }
 
 MLMetric(auc) <- list("auc", "Area Under Performance Curve", TRUE)
 
 
-setGeneric(".auc", function(observed, predicted, ...) standardGeneric(".auc"))
+setMetricGeneric("auc")
 
 
-setMethod(".auc", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
+setMetricMethod("auc", c("Curves", "NULL"),
+  function(observed, predicted, stat, ...) {
+    observed <- summary(observed, stat = stat)
+    indices <- observed["Model"]
+    indices$Resample <- observed$Resample
+    by(observed, indices, function(split) {
+      split <- na.omit(split)
+      n <- nrow(split)
+      if (n > 1) with(split, sum(diff(x) * (y[-n] + y[-1]) / 2)) else NA
+    })  
+  }
 )
 
 
-setMethod(".auc", c("factor", "numeric"),
+setMetricMethod("auc", c("factor", "factor"))
+
+
+setMetricMethod("auc", c("factor", "numeric"),
   function(observed, predicted, metrics, ...) {
     if (identical(metrics[[1]], tpr) && identical(metrics[[2]], fpr)) {
       R <- rank(predicted)
@@ -133,21 +94,7 @@ setMethod(".auc", c("factor", "numeric"),
 )
 
 
-setMethod(".auc", c("Curves", "NULL"),
-  function(observed, predicted, stat, ...) {
-    observed <- summary(observed, stat = stat)
-    indices <- observed["Model"]
-    indices$Resample <- observed$Resample
-    by(observed, indices, function(split) {
-      split <- na.omit(split)
-      n <- nrow(split)
-      if (n > 1) with(split, sum(diff(x) * (y[-n] + y[-1]) / 2)) else NA
-    })  
-  }
-)
-
-
-setMethod(".auc", c("Resamples", "NULL"),
+setMetricMethod("auc", c("Resamples", "NULL"),
   function(observed, predicted, metrics, ...) {
     auc@.Data <- function(...) MachineShop::auc(..., metrics = metrics)
     performance(observed, metrics = auc, ...)
@@ -155,12 +102,12 @@ setMethod(".auc", c("Resamples", "NULL"),
 )
 
 
-setMethod(".auc", c("Surv", "SurvProbs"),
+setMetricMethod("auc", c("Surv", "SurvProbs"),
   function(observed, predicted, metrics, ...) {
     x <- unname(auc(performance_curve(observed, predicted, metrics = metrics)))
     times <- time(predicted)
     if (length(times) > 1) {
-      c("mean" = mean.SurvMetrics(x, times), "time" = x)
+      c("mean" = surv_metric_mean(x, times), "time" = x)
     } else {
       x
     }
@@ -171,22 +118,19 @@ setMethod(".auc", c("Surv", "SurvProbs"),
 #' @rdname metrics
 #' 
 brier <- function(observed, predicted = NULL, ...) {
-  .brier(observed, predicted)
+  call_metric_method("brier", environment())
 }
 
 MLMetric(brier) <- list("brier", "Brier Score", FALSE)
 
 
-setGeneric(".brier",
-           function(observed, predicted, ...) standardGeneric(".brier"))
+setMetricGeneric("brier")
 
 
-setMethod(".brier", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
+setMetricMethod("brier", c("factor", "factor"))
 
 
-setMethod(".brier", c("factor", "matrix"),
+setMetricMethod("brier", c("factor", "matrix"),
   function(observed, predicted, ...) {
     observed <- model.matrix(~ observed - 1)
     sum((observed - predicted)^2) / nrow(observed)
@@ -194,21 +138,17 @@ setMethod(".brier", c("factor", "matrix"),
 )
 
 
-setMethod(".brier", c("factor", "numeric"),
+setMetricMethod("brier", c("factor", "numeric"),
   function(observed, predicted, ...) {
     mse(as.numeric(observed == levels(observed)[2]), predicted)
   }
 )
 
 
-setMethod(".brier", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = brier, ...)
-  }
-)
+setMetricMethod_Resamples("brier")
 
 
-setMethod(".brier", c("Surv", "SurvProbs"),
+setMetricMethod("brier", c("Surv", "SurvProbs"),
   function(observed, predicted, ...) {
     times <- time(predicted)
     obs_times <- observed[, "time"]
@@ -216,7 +156,7 @@ setMethod(".brier", c("Surv", "SurvProbs"),
     
     cens_fit <- survfit(Surv(obs_times, 1 - obs_events) ~ 1, se.fit = FALSE)
   
-    metrics <- sapply(seq_along(times), function(i) {
+    x <- sapply(seq_along(times), function(i) {
       time <- times[i]
       obs_after_time <- obs_times > time
       cens <- predict(cens_fit, pmin(obs_times, time))
@@ -225,9 +165,9 @@ setMethod(".brier", c("Surv", "SurvProbs"),
     })
     
     if (length(times) > 1) {
-      c("mean" = mean.SurvMetrics(metrics, times), "time" = metrics)
+      c("mean" = surv_metric_mean(x, times), "time" = x)
     } else {
-      metrics
+      x
     }
   }
 )
@@ -236,36 +176,29 @@ setMethod(".brier", c("Surv", "SurvProbs"),
 #' @rdname metrics
 #' 
 cindex <- function(observed, predicted = NULL, ...) {
-  .cindex(observed, predicted)
+  call_metric_method("cindex", environment())
 }
 
 MLMetric(cindex) <- list("cindex", "Concordance Index", TRUE)
 
 
-setGeneric(".cindex",
-           function(observed, predicted, ...) standardGeneric(".cindex"))
+setMetricGeneric("cindex")
 
 
-setMethod(".cindex", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
+setMetricMethod("cindex", c("factor", "factor"))
 
 
-setMethod(".cindex", c("factor", "numeric"),
+setMetricMethod("cindex", c("factor", "numeric"),
   function(observed, predicted, ...) {
     roc_auc(observed, predicted)
   }
 )
 
 
-setMethod(".cindex", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = cindex, ...)
-  }
-)
+setMetricMethod_Resamples("cindex")
 
 
-setMethod(".cindex", c("Surv", "numeric"),
+setMetricMethod("cindex", c("Surv", "numeric"),
   function(observed, predicted, ...) {
     concordance(observed ~ predicted)$concordance
   }
@@ -275,22 +208,19 @@ setMethod(".cindex", c("Surv", "numeric"),
 #' @rdname metrics
 #' 
 cross_entropy <- function(observed, predicted = NULL, ...) {
-  .cross_entropy(observed, predicted)
+  call_metric_method("cross_entropy", environment())
 }
 
 MLMetric(cross_entropy) <- list("cross_entropy", "Cross Entropy", FALSE)
 
 
-setGeneric(".cross_entropy",
-           function(observed, predicted, ...) standardGeneric(".cross_entropy"))
+setMetricGeneric("cross_entropy")
 
 
-setMethod(".cross_entropy", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
+setMetricMethod("cross_entropy", c("factor", "factor"))
 
 
-setMethod(".cross_entropy", c("factor", "matrix"),
+setMetricMethod("cross_entropy", c("factor", "matrix"),
   function(observed, predicted, ...) {
     observed <- model.matrix(~ observed - 1)
     eps <- 1e-15
@@ -300,39 +230,26 @@ setMethod(".cross_entropy", c("factor", "matrix"),
 )
 
 
-setMethod(".cross_entropy", c("factor", "numeric"),
+setMetricMethod("cross_entropy", c("factor", "numeric"),
   function(observed, predicted, ...) {
     cross_entropy(observed, cbind(1 - predicted, predicted))
   }
 )
 
 
-setMethod(".cross_entropy", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = cross_entropy, ...)
-  }
-)
+setMetricMethod_Resamples("cross_entropy")
 
 
 #' @rdname metrics
 #' 
 f_score <- function(observed, predicted = NULL, cutoff = 0.5, beta = 1, ...) {
-  .f_score(observed, predicted, cutoff = cutoff, beta = beta)
+  call_metric_method("f_score", environment())
 }
 
 MLMetric(f_score) <- list("f_score", "F Score", TRUE)
 
 
-setGeneric(".f_score",
-           function(observed, predicted, ...) standardGeneric(".f_score"))
-
-
-setMethod(".f_score", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".f_score", c("BinaryConfusionMatrix", "NULL"),
+setMetric_BinaryConfusionMatrix("f_score",
   function(observed, predicted, beta, ...) {
     beta2 <- beta^2
     (1 + beta2) * observed[2, 2] /
@@ -341,83 +258,18 @@ setMethod(".f_score", c("BinaryConfusionMatrix", "NULL"),
 )
 
 
-setMethod(".f_score", c("factor", "numeric"),
-  function(observed, predicted, cutoff, beta, ...) {
-    f_score(confusion(observed, predicted, cutoff = cutoff), beta = beta)
-  }
-)
-
-
-setMethod(".f_score", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = f_score, ...)
-  }
-)
-
-
-setMethod(".f_score", c("Surv", "SurvEvents"),
-  function(observed, predicted, beta, ...) {
-    .metric.SurvMatrix(observed, predicted, f_score, beta = beta)
-  }
-)
-
-
-setMethod(".f_score", c("Surv", "SurvProbs"),
-  function(observed, predicted, cutoff, beta, ...) {
-    .metric.SurvMatrix(observed, predicted, f_score, cutoff = cutoff,
-                       beta = beta)
-  }
-)
-
-
 #' @rdname metrics
 #' 
 fnr <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
-  .fnr(observed, predicted, cutoff = cutoff)
+  call_metric_method("fnr", environment())
 }
 
 MLMetric(fnr) <- list("fnr", "False Negative Rate", FALSE)
 
 
-setGeneric(".fnr", function(observed, predicted, ...) standardGeneric(".fnr"))
-
-
-setMethod(".fnr", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".fnr", c("BinaryConfusionMatrix", "NULL"),
+setMetric_BinaryConfusionMatrix("fnr",
   function(observed, predicted, ...) {
     1 - tpr(observed)
-  }
-)
-
-
-setMethod(".fnr", c("factor", "numeric"),
-  function(observed, predicted, cutoff, ...) {
-    1 - tpr(observed, predicted, cutoff = cutoff)
-  }
-)
-
-
-setMethod(".fnr", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = fnr, ...)
-  }
-)
-
-
-setMethod(".fnr", c("Surv", "SurvEvents"),
-  function(observed, predicted, ...) {
-    1 - tpr(observed, predicted)
-  }
-)
-
-
-setMethod(".fnr", c("Surv", "SurvProbs"),
-  function(observed, predicted, cutoff, ...) {
-    1 - tpr(observed, predicted, cutoff = cutoff)
   }
 )
 
@@ -425,51 +277,15 @@ setMethod(".fnr", c("Surv", "SurvProbs"),
 #' @rdname metrics
 #' 
 fpr <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
-  .fpr(observed, predicted, cutoff = cutoff)
+  call_metric_method("fpr", environment())
 }
 
 MLMetric(fpr) <- list("fpr", "False Positive Rate", FALSE)
 
 
-setGeneric(".fpr", function(observed, predicted, ...) standardGeneric(".fpr"))
-
-
-setMethod(".fpr", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".fpr", c("BinaryConfusionMatrix", "NULL"),
+setMetric_BinaryConfusionMatrix("fpr",
   function(observed, predicted, ...) {
     1 - tnr(observed)
-  }
-)
-
-
-setMethod(".fpr", c("factor", "numeric"),
-  function(observed, predicted, cutoff, ...) {
-    1 - tnr(observed, predicted, cutoff = cutoff)
-  }
-)
-
-
-setMethod(".fpr", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = fpr, ...)
-  }
-)
-
-
-setMethod(".fpr", c("Surv", "SurvEvents"),
-  function(observed, predicted, ...) {
-    1 - tnr(observed, predicted)
-  }
-)
-
-
-setMethod(".fpr", c("Surv", "SurvProbs"),
-  function(observed, predicted, cutoff, ...) {
-    1 - tnr(observed, predicted, cutoff = cutoff)
   }
 )
 
@@ -477,22 +293,13 @@ setMethod(".fpr", c("Surv", "SurvProbs"),
 #' @rdname metrics
 #' 
 kappa2 <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
-  .kappa2(observed, predicted, cutoff = cutoff)
+  call_metric_method("kappa2", environment())
 }
 
 MLMetric(kappa2) <- list("kappa2", "Cohen's Kappa", TRUE)
 
 
-setGeneric(".kappa2",
-           function(observed, predicted, ...) standardGeneric(".kappa2"))
-
-
-setMethod(".kappa2", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".kappa2", c("ConfusionMatrix", "NULL"),
+setMetric_ConfusionMatrix("kappa2",
   function(observed, predicted, ...) {
     p <- prop.table(observed)
     1 - (1 - sum(diag(p))) / (1 - sum(rowSums(p) * colSums(p)))
@@ -500,97 +307,18 @@ setMethod(".kappa2", c("ConfusionMatrix", "NULL"),
 )
 
 
-setMethod(".kappa2", c("factor", "factor"),
-  function(observed, predicted, ...) {
-    kappa2(confusion(observed, predicted))
-  }
-)
-
-
-setMethod(".kappa2", c("factor", "matrix"),
-  function(observed, predicted, ...) {
-    kappa2(confusion(observed, predicted))
-  }
-)
-
-
-setMethod(".kappa2", c("factor", "numeric"),
-  function(observed, predicted, cutoff, ...) {
-    kappa2(confusion(observed, predicted, cutoff = cutoff))
-  }
-)
-
-
-setMethod(".kappa2", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = kappa2, ...)
-  }
-)
-
-
-setMethod(".kappa2", c("Surv", "SurvEvents"),
-  function(observed, predicted, ...) {
-    .metric.SurvMatrix(observed, predicted, kappa2)
-  }
-)
-
-
-setMethod(".kappa2", c("Surv", "SurvProbs"),
-  function(observed, predicted, cutoff, ...) {
-    .metric.SurvMatrix(observed, predicted, kappa2, cutoff = cutoff)
-  }
-)
-
-
 #' @rdname metrics
 #' 
 npv <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
-  .npv(observed, predicted, cutoff = cutoff)
+  call_metric_method("npv", environment())
 }
 
 MLMetric(npv) <- list("npv", "Negative Predictive Value", TRUE)
 
 
-setGeneric(".npv",
-           function(observed, predicted, ...) standardGeneric(".npv"))
-
-
-setMethod(".npv", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".npv", c("BinaryConfusionMatrix", "NULL"),
+setMetric_BinaryConfusionMatrix("npv",
   function(observed, predicted, ...) {
     observed[1, 1] / (observed[1, 1] + observed[1, 2])
-  }
-)
-
-
-setMethod(".npv", c("factor", "numeric"),
-  function(observed, predicted, cutoff, ...) {
-    npv(confusion(observed, predicted, cutoff = cutoff))
-  }
-)
-
-
-setMethod(".npv", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = npv, ...)
-  }
-)
-
-
-setMethod(".npv", c("Surv", "SurvEvents"),
-  function(observed, predicted, ...) {
-    .metric.SurvMatrix(observed, predicted, npv)
-  }
-)
-
-
-setMethod(".npv", c("Surv", "SurvProbs"),
-  function(observed, predicted, cutoff, ...) {
-    .metric.SurvMatrix(observed, predicted, npv, cutoff = cutoff)
   }
 )
 
@@ -598,52 +326,15 @@ setMethod(".npv", c("Surv", "SurvProbs"),
 #' @rdname metrics
 #' 
 ppv <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
-  .ppv(observed, predicted, cutoff = cutoff)
+  call_metric_method("ppv", environment())
 }
 
 MLMetric(ppv) <- list("ppv", "Positive Predictive Value", TRUE)
 
 
-setGeneric(".ppv",
-           function(observed, predicted, ...) standardGeneric(".ppv"))
-
-
-setMethod(".ppv", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".ppv", c("BinaryConfusionMatrix", "NULL"),
+setMetric_BinaryConfusionMatrix("ppv",
   function(observed, predicted, ...) {
     observed[2, 2] / (observed[2, 1] + observed[2, 2])
-  }
-)
-
-
-setMethod(".ppv", c("factor", "numeric"),
-  function(observed, predicted, cutoff, ...) {
-    ppv(confusion(observed, predicted, cutoff = cutoff))
-  }
-)
-
-
-setMethod(".ppv", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = ppv, ...)
-  }
-)
-
-
-setMethod(".ppv", c("Surv", "SurvEvents"),
-  function(observed, predicted, ...) {
-    .metric.SurvMatrix(observed, predicted, ppv)
-  }
-)
-
-
-setMethod(".ppv", c("Surv", "SurvProbs"),
-  function(observed, predicted, cutoff, ...) {
-    .metric.SurvMatrix(observed, predicted, ppv, cutoff = cutoff)
   }
 )
 
@@ -651,91 +342,27 @@ setMethod(".ppv", c("Surv", "SurvProbs"),
 #' @rdname metrics
 #' 
 pr_auc <- function(observed, predicted = NULL, ...) {
-  .pr_auc(observed, predicted)
+  call_metric_method("pr_auc", environment())
 }
 
 MLMetric(pr_auc) <- list("pr_auc", "Area Under Precision-Recall Curve", TRUE)
 
 
-setGeneric(".pr_auc",
-           function(observed, predicted, ...) standardGeneric(".pr_auc"))
-
-
-setMethod(".pr_auc", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".pr_auc", c("factor", "numeric"),
-  function(observed, predicted, ...) {
-    auc(observed, predicted, metrics = c(precision, recall))
-  }
-)
-
-
-setMethod(".pr_auc", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = pr_auc, ...)
-  }
-)
-
-
-setMethod(".pr_auc", c("Surv", "SurvProbs"),
-  function(observed, predicted, ...) {
-    auc(observed, predicted, metrics = c(precision, recall))
-  }
-)
+setMetric_auc("pr_auc", c(precision, recall))
 
 
 #' @rdname metrics
 #' 
 precision <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
-  .precision(observed, predicted, cutoff = cutoff)
+  call_metric_method("precision", environment())
 }
 
 MLMetric(precision) <- list("precision", "Precision", TRUE)
 
 
-setGeneric(".precision",
-           function(observed, predicted, ...) standardGeneric(".precision"))
-
-
-setMethod(".precision", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".precision", c("BinaryConfusionMatrix", "NULL"),
+setMetric_BinaryConfusionMatrix("precision",
   function(observed, predicted, ...) {
     ppv(observed)
-  }
-)
-
-
-setMethod(".precision", c("factor", "numeric"),
-  function(observed, predicted, cutoff, ...) {
-    ppv(observed, predicted, cutoff = cutoff)
-  }
-)
-
-
-setMethod(".precision", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = precision, ...)
-  }
-)
-
-
-setMethod(".precision", c("Surv", "SurvEvents"),
-  function(observed, predicted, ...) {
-    ppv(observed, predicted)
-  }
-)
-
-
-setMethod(".precision", c("Surv", "SurvProbs"),
-  function(observed, predicted, cutoff, ...) {
-    ppv(observed, predicted, cutoff = cutoff)
   }
 )
 
@@ -743,52 +370,15 @@ setMethod(".precision", c("Surv", "SurvProbs"),
 #' @rdname metrics
 #' 
 recall <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
-  .recall(observed, predicted, cutoff = cutoff)
+  call_metric_method("recall", environment())
 }
 
 MLMetric(recall) <- list("recall", "Recall", TRUE)
 
 
-setGeneric(".recall",
-           function(observed, predicted, ...) standardGeneric(".recall"))
-
-
-setMethod(".recall", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".recall", c("BinaryConfusionMatrix", "NULL"),
+setMetric_BinaryConfusionMatrix("recall",
   function(observed, predicted, ...) {
     tpr(observed)
-  }
-)
-
-
-setMethod(".recall", c("factor", "numeric"),
-  function(observed, predicted, cutoff, ...) {
-    tpr(observed, predicted, cutoff = cutoff)
-  }
-)
-
-
-setMethod(".recall", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = recall, ...)
-  }
-)
-
-
-setMethod(".recall", c("Surv", "SurvEvents"),
-  function(observed, predicted, ...) {
-    tpr(observed, predicted)
-  }
-)
-
-
-setMethod(".recall", c("Surv", "SurvProbs"),
-  function(observed, predicted, cutoff, ...) {
-    tpr(observed, predicted, cutoff = cutoff)
   }
 )
 
@@ -796,40 +386,13 @@ setMethod(".recall", c("Surv", "SurvProbs"),
 #' @rdname metrics
 #' 
 roc_auc <- function(observed, predicted = NULL, ...) {
-  .roc_auc(observed, predicted)
+  call_metric_method("roc_auc", environment())
 }
 
 MLMetric(roc_auc) <- list("roc_auc", "Area Under ROC Curve", TRUE)
 
 
-setGeneric(".roc_auc",
-           function(observed, predicted, ...) standardGeneric(".roc_auc"))
-
-
-setMethod(".roc_auc", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".roc_auc", c("factor", "numeric"),
-  function(observed, predicted, ...) {
-    auc(observed, predicted)
-  }
-)
-
-
-setMethod(".roc_auc", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = roc_auc, ...)
-  }
-)
-
-
-setMethod(".roc_auc", c("Surv", "SurvProbs"),
-  function(observed, predicted, ...) {
-    auc(observed, predicted)
-  }
-)
+setMetric_auc("roc_auc", c(tpr, fpr))
 
 
 #' @rdname metrics
@@ -837,52 +400,15 @@ setMethod(".roc_auc", c("Surv", "SurvProbs"),
 roc_index <- function(observed, predicted = NULL, cutoff = 0.5,
                       f = function(sensitivity, specificity)
                         (sensitivity + specificity) / 2, ...) {
-  .roc_index(observed, predicted, cutoff = cutoff, f = f)
+  call_metric_method("roc_index", environment())
 }
 
 MLMetric(roc_index) <- list("roc_index", "ROC Index", TRUE)
 
 
-setGeneric(".roc_index",
-           function(observed, predicted, ...) standardGeneric(".roc_index"))
-
-
-setMethod(".roc_index", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".roc_index", c("BinaryConfusionMatrix", "NULL"),
+setMetric_BinaryConfusionMatrix("roc_index",
   function(observed, predicted, f, ...) {
     f(sensitivity(observed), specificity(observed))
-  }
-)
-
-
-setMethod(".roc_index", c("factor", "numeric"),
-  function(observed, predicted, cutoff, f, ...) {
-    roc_index(confusion(observed, predicted, cutoff = cutoff), f = f)
-  }
-)
-
-
-setMethod(".roc_index", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = roc_index, ...)
-  }
-)
-
-
-setMethod(".roc_index", c("Surv", "SurvEvents"),
-  function(observed, predicted, f, ...) {
-    .metric.SurvMatrix(observed, predicted, roc_index, f = f)
-  }
-)
-
-
-setMethod(".roc_index", c("Surv", "SurvProbs"),
-  function(observed, predicted, cutoff, f, ...) {
-    .metric.SurvMatrix(observed, predicted, roc_index, cutoff = cutoff, f = f)
   }
 )
 
@@ -890,51 +416,15 @@ setMethod(".roc_index", c("Surv", "SurvProbs"),
 #' @rdname metrics
 #' 
 rpp <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
-  .rpp(observed, predicted, cutoff = cutoff)
+  call_metric_method("rpp", environment())
 }
 
 MLMetric(rpp) <- list("rpp", "Rate of Positive Prediction", FALSE)
 
 
-setGeneric(".rpp", function(observed, predicted, ...) standardGeneric(".rpp"))
-
-
-setMethod(".rpp", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".rpp", c("BinaryConfusionMatrix", "NULL"),
+setMetric_BinaryConfusionMatrix("rpp",
   function(observed, predicted, ...) {
     (observed[2, 1] + observed[2, 2]) / sum(observed)
-  }
-)
-
-
-setMethod(".rpp", c("factor", "numeric"),
-  function(observed, predicted, cutoff, ...) {
-    rpp(confusion(observed, predicted, cutoff = cutoff))
-  }
-)
-
-
-setMethod(".rpp", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = rpp, ...)
-  }
-)
-
-
-setMethod(".rpp", c("Surv", "SurvEvents"),
-  function(observed, predicted, ...) {
-    .metric.SurvMatrix(observed, predicted, rpp)
-  }
-)
-
-
-setMethod(".rpp", c("Surv", "SurvProbs"),
-  function(observed, predicted, cutoff, ...) {
-    .metric.SurvMatrix(observed, predicted, rpp, cutoff = cutoff)
   }
 )
 
@@ -942,52 +432,15 @@ setMethod(".rpp", c("Surv", "SurvProbs"),
 #' @rdname metrics
 #' 
 sensitivity <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
-  .sensitivity(observed, predicted, cutoff = cutoff)
+  call_metric_method("sensitivity", environment())
 }
 
 MLMetric(sensitivity) <- list("sensitivity", "Sensitivity", TRUE)
 
 
-setGeneric(".sensitivity",
-           function(observed, predicted, ...) standardGeneric(".sensitivity"))
-
-
-setMethod(".sensitivity", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".sensitivity", c("BinaryConfusionMatrix", "NULL"),
+setMetric_BinaryConfusionMatrix("sensitivity",
   function(observed, predicted, ...) {
     tpr(observed)
-  }
-)
-
-
-setMethod(".sensitivity", c("factor", "numeric"),
-  function(observed, predicted, cutoff, ...) {
-    tpr(observed, predicted, cutoff = cutoff)
-  }
-)
-
-
-setMethod(".sensitivity", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = sensitivity, ...)
-  }
-)
-
-
-setMethod(".sensitivity", c("Surv", "SurvEvents"),
-  function(observed, predicted, ...) {
-    tpr(observed, predicted)
-  }
-)
-
-
-setMethod(".sensitivity", c("Surv", "SurvProbs"),
-  function(observed, predicted, cutoff, ...) {
-    tpr(observed, predicted, cutoff = cutoff)
   }
 )
 
@@ -995,52 +448,15 @@ setMethod(".sensitivity", c("Surv", "SurvProbs"),
 #' @rdname metrics
 #' 
 specificity <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
-  .specificity(observed, predicted, cutoff = cutoff)
+  call_metric_method("specificity", environment())
 }
 
 MLMetric(specificity) <- list("specificity", "Specificity", TRUE)
 
 
-setGeneric(".specificity",
-           function(observed, predicted, ...) standardGeneric(".specificity"))
-
-
-setMethod(".specificity", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".specificity", c("BinaryConfusionMatrix", "NULL"),
+setMetric_BinaryConfusionMatrix("specificity",
   function(observed, predicted, ...) {
     tnr(observed)
-  }
-)
-
-
-setMethod(".specificity", c("factor", "numeric"),
-  function(observed, predicted, cutoff, ...) {
-    tnr(observed, predicted, cutoff = cutoff)
-  }
-)
-
-
-setMethod(".specificity", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = specificity, ...)
-  }
-)
-
-
-setMethod(".specificity", c("Surv", "SurvEvents"),
-  function(observed, predicted, ...) {
-    tnr(observed, predicted)
-  }
-)
-
-
-setMethod(".specificity", c("Surv", "SurvProbs"),
-  function(observed, predicted, cutoff, ...) {
-    tnr(observed, predicted, cutoff = cutoff)
   }
 )
 
@@ -1048,51 +464,15 @@ setMethod(".specificity", c("Surv", "SurvProbs"),
 #' @rdname metrics
 #' 
 tnr <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
-  .tnr(observed, predicted, cutoff = cutoff)
+  call_metric_method("tnr", environment())
 }
 
 MLMetric(tnr) <- list("tnr", "True Negative Rate", TRUE)
 
 
-setGeneric(".tnr", function(observed, predicted, ...) standardGeneric(".tnr"))
-
-
-setMethod(".tnr", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".tnr", c("BinaryConfusionMatrix", "NULL"),
+setMetric_BinaryConfusionMatrix("tnr",
   function(observed, predicted, ...) {
     observed[1, 1] / (observed[1, 1] + observed[2, 1])
-  }
-)
-
-
-setMethod(".tnr", c("factor", "numeric"),
-  function(observed, predicted, cutoff, ...) {
-    tnr(confusion(observed, predicted, cutoff = cutoff))
-  }
-)
-
-
-setMethod(".tnr", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = tnr, ...)
-  }
-)
-
-
-setMethod(".tnr", c("Surv", "SurvEvents"),
-  function(observed, predicted, ...) {
-    .metric.SurvMatrix(observed, predicted, tnr)
-  }
-)
-
-
-setMethod(".tnr", c("Surv", "SurvProbs"),
-  function(observed, predicted, cutoff, ...) {
-    .metric.SurvMatrix(observed, predicted, tnr, cutoff = cutoff)
   }
 )
 
@@ -1100,51 +480,15 @@ setMethod(".tnr", c("Surv", "SurvProbs"),
 #' @rdname metrics
 #' 
 tpr <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
-  .tpr(observed, predicted, cutoff = cutoff)
+  call_metric_method("tpr", environment())
 }
 
 MLMetric(tpr) <- list("tpr", "True Positive Rate", TRUE)
 
 
-setGeneric(".tpr", function(observed, predicted, ...) standardGeneric(".tpr"))
-
-
-setMethod(".tpr", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".tpr", c("BinaryConfusionMatrix", "NULL"),
+setMetric_BinaryConfusionMatrix("tpr",
   function(observed, predicted, ...) {
     observed[2, 2] / (observed[1, 2] + observed[2, 2])
-  }
-)
-
-
-setMethod(".tpr", c("factor", "numeric"),
-  function(observed, predicted, cutoff, ...) {
-    tpr(confusion(observed, predicted, cutoff = cutoff))
-  }
-)
-
-
-setMethod(".tpr", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = tpr, ...)
-  }
-)
-
-
-setMethod(".tpr", c("Surv", "SurvEvents"),
-  function(observed, predicted, ...) {
-    .metric.SurvMatrix(observed, predicted, tpr)
-  }
-)
-
-
-setMethod(".tpr", c("Surv", "SurvProbs"),
-  function(observed, predicted, cutoff, ...) {
-    .metric.SurvMatrix(observed, predicted, tpr, cutoff = cutoff)
   }
 )
 
@@ -1152,23 +496,17 @@ setMethod(".tpr", c("Surv", "SurvProbs"),
 #' @rdname metrics
 #' 
 weighted_kappa2 <- function(observed, predicted = NULL, power = 1, ...) {
-  .weighted_kappa2(observed, predicted, power = power)
+  call_metric_method("weighted_kappa2", environment())
 }
 
-MLMetric(weighted_kappa2) <- list("weighted_kappa2", "Weighted Cohen's Kappa",
-                                  TRUE)
+MLMetric(weighted_kappa2) <-
+  list("weighted_kappa2", "Weighted Cohen's Kappa", TRUE)
 
 
-setGeneric(".weighted_kappa2", function(observed, predicted, ...)
-  standardGeneric(".weighted_kappa2"))
+setMetricGeneric("weighted_kappa2")
 
 
-setMethod(".weighted_kappa2", c("ANY", "ANY"),
-  function(observed, predicted, ...) numeric()
-)
-
-
-setMethod(".weighted_kappa2", c("OrderedConfusionMatrix", "NULL"),
+setMetricMethod("weighted_kappa2", c("OrderedConfusionMatrix", "NULL"),
   function(observed, predicted, power, ...) {
     expected <- (rowSums(observed) %o% colSums(observed)) / sum(observed)
     weights <- abs(row(observed) - col(observed))^power
@@ -1177,40 +515,18 @@ setMethod(".weighted_kappa2", c("OrderedConfusionMatrix", "NULL"),
 )
 
 
-setMethod(".weighted_kappa2", c("ordered", "ordered"),
+setMetricMethod("weighted_kappa2", c("ordered", "ordered"),
   function(observed, predicted, power, ...) {
     weighted_kappa2(confusion(observed, predicted), power = power)
   }
 )
 
 
-setMethod(".weighted_kappa2", c("ordered", "matrix"),
+setMetricMethod("weighted_kappa2", c("ordered", "matrix"),
   function(observed, predicted, power, ...) {
     weighted_kappa2(confusion(observed, predicted), power = power)
   }
 )
 
 
-setMethod(".weighted_kappa2", c("Resamples", "NULL"),
-  function(observed, predicted, ...) {
-    performance(observed, metrics = weighted_kappa2, ...)
-  }
-)
-
-
-.metric.SurvMatrix <- function(observed, predicted, FUN, cutoff = NULL, ...) {
-  conf <- confusion(observed, predicted, cutoff = cutoff)
-  metrics <- sapply(conf, FUN, ...)
-  times <- time(predicted)
-  if (length(times) > 1) {
-    c("mean" = mean.SurvMetrics(metrics, times), metrics)
-  } else {
-    metrics[[1]]
-  }
-}
-
-
-mean.SurvMetrics <- function(x, times) {
-  weights <- diff(c(0, times)) / tail(times, 1)
-  sum(weights * x)
-}
+setMetricMethod_Resamples("weighted_kappa2")

@@ -341,6 +341,12 @@ surv_mean <- function(times, surv, max_time = max(times)) {
 }
 
 
+surv_metric_mean <- function(x, times) {
+  weights <- diff(c(0, times)) / tail(times, 1)
+  sum(weights * x)
+}
+
+
 surv_times <- function(y) {
   sort(unique(y[y[, "status"] != 0, "time"]))
 }
