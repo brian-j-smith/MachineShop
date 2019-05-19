@@ -1,6 +1,6 @@
 # Response Variable Types
 
-The R class types of response variables play a central role in their analysis with the package.  They determine, for example, the specific models that can be fit, fitting algorithms employed, predicted values produced, and applicable performance metrics and analyses.  As described below, factors, ordered factors, numeric vectors and matrices, and survival responses are supported by the package.
+The **R** class types of response variables play a central role in their analysis with the package.  They determine, for example, the specific models that can be fit, fitting algorithms employed, predicted values produced, and applicable performance metrics and analyses.  As described below, factors, ordered factors, numeric vectors and matrices, and survival responses are supported by the package.
 
 
 ## Factors
@@ -22,7 +22,7 @@ fit(type ~ ., data = Pima.tr, model = GBMModel)
 
 ## Ordered Factors
 
-Ordinal categorical responses should be coded as `ordered` factor variables.  For categorical vectors, this can be accomplished  with the `factor` function and its argument `ordered = TRUE` or more simply with the `ordered` function.  Numeric vectors can be converted to ordered factors with the `cut` function.
+Categorical responses can be designated as having ordered levels by storing them as `ordered` factor variables.  For categorical vectors, this can be accomplished with the `factor` function and its argument `ordered = TRUE` or more simply with the `ordered` function.  Numeric vectors can be converted to ordered factors with the `cut` function.
 
 ```{r using_responses_ordered, results="hide"}
 ## Boston housing prices (ordered factor)
@@ -38,7 +38,7 @@ fit(medv ~ ., data = df, model = GBMModel)
 
 ## Numeric Vectors
 
-Univariate numerical responses should be coded as `numeric` variables.
+Code univariate numerical responses as `numeric` variables.
 
 ```{r using_responses_numeric, results="hide"}
 ## Boston housing prices
@@ -50,7 +50,7 @@ fit(medv ~ ., data = Boston, model = GBMModel)
 
 ## Numeric Matrices
 
-Multivariate numerical responses should be given as numeric `matrix` variables for model fitting with traditional formulas or model frames.
+Store multivariate numerical responses as numeric `matrix` variables for model fitting with traditional formulas or model frames.
 
 ```{r using_responses_matrix, results="hide"}
 ## Anscombe's multiple regression models dataset
@@ -59,7 +59,7 @@ Multivariate numerical responses should be given as numeric `matrix` variables f
 fit(cbind(y1, y2, y3) ~ x1, data = anscombe, model = LMModel)
 ```
 
-For recipes, the multiple response variables should be given on the left hand side of the formula specification.
+For recipes, include the multiple response variables on the left hand side of the formula specification.
 
 ```{r using_responses_matrix_recipe, results="hide"}
 ## Numeric matrix response recipe
@@ -71,7 +71,7 @@ fit(rec, model = LMModel)
 
 ## Survival Objects
 
-Survival responses should be coded as `Surv` variables for model fitting with traditional formulas or model frames.
+Censored time-to-event survival responses should be stored as `Surv` variables for model fitting with traditional formulas or model frames.
 
 ```{r using_responses_surv, results="hide"}
 ## Survival response formula
@@ -80,7 +80,7 @@ library(survival)
 fit(Surv(time, status) ~ ., data = surv_train, model = GBMModel)
 ```
 
-For recipes, survival outcomes should be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated as `"surv_time"` and `"surv_event"`.
+For recipes, survival responses should be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated as `"surv_time"` and `"surv_event"`.
 
 ```{r using_responses_surv_recipe, results="hide"}
 ## Survival response recipe

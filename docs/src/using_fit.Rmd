@@ -23,20 +23,40 @@ Model fitting requires user specification of a `MachineShop` compatible model.  
 `varimp`
   : Logical indicating whether variable importance is defined for the model.
 
-Function `modelinfo` can be called with one or more model functions, function names, function calls, or observed response variables; and will return information on all models matching the calling arguments.
+Function `modelinfo` may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.
 
 ```{r using_fit_modelinfo}
 ## All available models
 modelinfo() %>% names
 
-## Survival-specific models
-modelinfo(Surv(0)) %>% names
-
 ## Model-specific information
 modelinfo(GBMModel)
 ```
 
-Information is displayed above for the `GBMModel` function which is a generalized boosted regression model --- a tree-based ensemble method that can be applied to survival outcomes.
+Information is displayed above for the `GBMModel` function --- a generalized boosted regression model that can be applied to survival outcomes.
+
+
+### Type-Specific
+
+When data objects are supplied as arguments, information is returned on all models applicable to response variables of the same data types.  If model functions are additionally supplied as arguments, information on the subset matching the data types is returned. 
+
+```{r using_fit_modelinfo_type}
+## All survival response-specific models
+modelinfo(Surv(0)) %>% names
+
+## Identify survival response-specific models
+modelinfo(Surv(0), CoxModel, GBMModel, SVMModel) %>% names
+```
+
+
+### Response Variable-Specific
+
+As a special case of type-specific arguments, existing response variables to be used in analyses may be given as arguments to identify applicable models.
+
+```{r using_fit_modelinfo_response}
+## Models for a responses variable
+modelinfo(Surv(surv_df$time, surv_df$status)) %>% names
+```
 
 
 ## Fit Function

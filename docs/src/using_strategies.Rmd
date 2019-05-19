@@ -3,7 +3,7 @@
 
 ## Model Tuning
 
-Many of the modeling functions have arguments, or parameters, that control aspects of their model fitting algorithms.  For example, `GBMModel` parameters `n.trees` and `interaction.depth` control the number of decision trees to fit and the maximum depth of variable interactions.  The `tune` function performs model fitting over a grid of parameter values and returns the model with the most optimal values.  Optimality is determined based on the first performance metric supplied to the `metrics` argument of `tune`.  Furthermore, argument `grid` controls the construction of grid values and can be a single numeric value giving the grid length in each parameter dimension, a call to `Grid` with the grid `length` and number of grid points to sample at `random`, or a user-specified data frame of grid points.  Summary statistics and plots of resulting performances across all metrics and tuning parameters can be obtained with the `summary` and `plot` functions.
+Many of the modeling functions have arguments, or tuning parameters, that control aspects of their model fitting algorithms.  For example, `GBMModel` parameters `n.trees` and `interaction.depth` control the number of decision trees to fit and the maximum depth of variable interactions.  The `tune` function performs model fitting over a grid of parameter values and returns the model with the most optimal values.  Optimality is determined based on the first performance metric of the `metrics` argument of `tune` if supplied or the first default metric of the `performance` function otherwise.  Argument `grid` additionally controls the construction of grid values and can be a single numeric value giving the grid length in each parameter dimension.  As shown in the output below, tuning results include the tuning parameter grid values, the names of models fit to each, all calculated metrics, the final model selected, the metric upon which its selection was based, and its tuning parameters.
 
 ```{r using_strategies_tune}
 ## Tune over automatic grid of model parameters
@@ -11,11 +11,9 @@ Many of the modeling functions have arguments, or parameters, that control aspec
                      grid = 3,
                      control = surv_means_control,
                      metrics = c("CIndex" = cindex, "RMSE" = rmse)))
-
-summary(tuned_model)
-
-plot(tuned_model, type = "line")
 ```
+
+Grid values may also be a call to `Grid` with the grid `length` and number of grid points to sample at `random` or a user-specified data frame of grid points.
 
 ```{r using_strategies_tune_grid, eval=FALSE}
 ## Tune over randomly sampled grid points
@@ -30,7 +28,19 @@ tune(surv_fo, data = surv_train, model = GBMModel,
      control = surv_means_control)
 ```
 
-The return value of `tune` is a model object with the optimal tuning parameters and not a model fit object.  The returned model can be fit subsequently to a set of data with the `fit` function.
+Statistics summarizing the resampled performance metrics across all tuning parameter combinations can be obtained with the `summary` function.
+  
+```{r using_strategies_tune_summary}
+summary(tuned_model)
+```
+
+Line plots of tuning results display the resampled metric means, or another statistic specified with the `stat` argument, versus the first tuning parameter values and with lines grouped according to the remaining parameters, if any.
+
+```{r using_strategies_tune_plot}
+plot(tuned_model, type = "line")
+```
+
+The return value of `tune` is a model object with the optimal tuning parameters and not a model fit object.  The returned model can be fit subsequently to a set of data with the `fit` function.  Having the final model allows for fitting to the same dataset on which tuning was performed or to datasets from other case populations.
 
 ```{r using_strategies_tune_fit}
 ## Fit the tuned model
@@ -41,10 +51,10 @@ surv_fit <- fit(surv_fo, data = surv_train, model = tuned_model)
 
 ## Model Selection
 
-Model selection can be performed with the `tune` function to select from any combination of models and model parameters.  It has as a special case the just-discussed tuning of a single model over a grid of parameter values.  In general, a list containing any combination of model functions, function names, and function calls can be supplied to the `models` argument of `tune` to perform model selection.  An `expand.model` helper function is additionally provided to expand a model over a grid of tuning parameters for inclusion in the list if so desired.  In this general form of model selection, the `grid` argument discussed previously for grid tuning is not used.
+Model selection can be performed with the `tune` function to automatically choose from any combination of models and model parameters.  Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values.  In general, a list containing any combination of model functions, function names, and function calls can be supplied to the `models` argument of `tune` to perform model selection.  An `expand.model` helper function is additionally provided to expand a model over a grid of tuning parameters for inclusion in the list if so desired.  In this general form of model selection, the `grid` argument discussed previously for grid tuning is not used.
 
 ```{r using_strategies_selection, results="hide"}
-## Select from a list of candidate models
+## List of candidate models
 candidate_models <- c(
   expand.model(GBMModel, n.trees = c(50, 100), interaction.depth = 1:2),
   GLMNetModel(lambda = 0.01),
@@ -52,14 +62,41 @@ candidate_models <- c(
   SurvRegModel
 )
 
+## Select among candidate models
 tune(surv_fo, data = surv_train, models = candidate_models,
+     control = surv_means_control)
+```
+
+Selection may also be performed over sets that include tuned models.  For instance, the `tune` function could be applied to a candidate list containing different classes of models each individually tuned over a grid of parameters.
+
+```{r using_strategies_selection_tuned, results="hide"}
+## Tuned classes of models
+tuned_models <- lapply(c(GBMModel, GLMNetModel, CoxModel), function(model) {
+  tune(surv_fo, data = surv_train, model = model, control = surv_means_control)
+})
+
+## Select among tuned models
+tune(surv_fo, data = surv_train, models = tuned_models,
      control = surv_means_control)
 ```
 
 
 ## Ensemble Models
 
-Ensemble methods combine multiple base learning algorithms as a strategy to improve predictive performance.  Two ensemble methods implemented in `Machineshop` are *stacked regression* [@breiman:1996:SR] and *super learners* [@vanderLann:2007:SL].  Stacked regression fits a linear combination of resampled predictions from specified base learners; whereas, super learners fit a specified model, such as `GBMModel`, to the base learner predictions and optionally also to the original predictor variables.  Illustrated below is a performance evaluation of stacked regression and a super learner fit to gradient boosted, random forest, and Cox regression base learners.  In the second case, a separate gradient boosted model is used as the super learner.
+Ensemble modelling methods combine $m = 1, \ldots, M$ base learning models as a strategy to improve predictive performance.  Two methods implemented in `Machineshop` are *stacked regression* [@breiman:1996:SR] and *super learners* [@vanderLann:2007:SL].  Stacked regression fits a linear combination of predictions from specified base learners to produce a prediction function of the form
+$$
+\hat{f}(x) = \sum_{m=1}^M \hat{w}_m \hat{f}_m(x).
+$$
+Stacking weights $w$ are estimated by (constrained) least squares regression of case responses $y_i$ on predictions $\hat{f}^{-\kappa(i)}(x_i)$ from learners fit to data subsamples $-\kappa(i)$ not containing the corresponding cases. In particular, they are obtained as the solution
+$$
+\hat{w} = \underset{w}{\operatorname{argmin}} \sum_{i=1}^{N}\left(y_i - \sum_{m=1}^{M} w_m \hat{f}^{-\kappa(i)}(x_i) \right)^2
+$$
+subject to the constraints that all $w_m \ge 0$ and $\sum_m w_m = 1$.  K-fold cross-validation is the default subsampling method employed in the estimation, with the other resampling methods provided by the package available as other options.  Survival outcomes are handled with a modified version of the stacked regression algorithm in which
+
+* minimization of least squares is replaced by maximization of Harrell's concordance index [-@harrell:1982:EYM] to accommodate censoring, and
+* prediction can only be performed on the same response type used for the model fit; i.e., either survival means or survival probabilities at set follow-up times.
+
+Super learners are a generalization of stacked regression that fit a specified model, such as `GBMModel`, to case responses $y_i$, base learner predictions $\hat{f}^{-\kappa(i)}(x_i)$, and optionally also to the original predictor variables $x_i$.  Given below are examples of a stacked regression and super learner each fit with gradient boosted, random forest, and Cox regression base learners.  A separate gradient boosted model is used as the super learner in the latter.
 
 ```{r using_strategies_ensembles}
 ## Stacked regression

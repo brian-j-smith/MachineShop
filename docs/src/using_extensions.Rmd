@@ -3,7 +3,7 @@
 Custom models and metrics can be defined with `MLModel` and `MLMetric` for use with the model fitting, prediction, and performance assessment tools provided by the package.
 
 
-## MLModel
+## Custom Models
 
 The `MLModel` function creates a model object that can be used with the previously described fitting functions.  It take the following arguments.
 
@@ -20,7 +20,7 @@ The `MLModel` function creates a model object that can be used with the previous
   : Character vector of response variable types to which the model can be fit.  Supported types are `"binary"`, `"factor"`, `"matrix"`, `"numeric"`, `"ordered"`, and `"Surv"`.
   
 `fit`
-  : Model fitting function whose arguments are a `formula`, a `ModelFrame` named `data`, case `weights`, and an ellipsis.  Argument `data` may be converted to a data frame with the `as.data.frame` function as needed.  The fit function should return the object resulting from the model fit.
+  : Model fitting function whose arguments are a `formula`, a `ModelFrame` named `data`, case `weights`, and an ellipsis.  Argument `data` may be converted to a data frame with the `as.data.frame` function as commonly needed.  The fit function should return the object resulting from the model fit.
   
 `predict`
   : Prediction function whose arguments are the `object` returned by `fit`, a `ModelFrame` named
@@ -54,7 +54,7 @@ LogisticModel <- MLModel(
 ```
 
 
-## MLMetric
+## Custom Metrics
 
 The `MLMetric` function creates a metric object that can be used as previously described for the model performance metrics.  Its first argument is a function to compute the metric, defined to accept `observed` and `predicted` as the first two arguments and with an ellipsis to accommodate others.  Its remaining arguments are as follows.
 

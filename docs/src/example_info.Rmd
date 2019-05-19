@@ -1,6 +1,6 @@
 # Model Information
 
-A named list of package-supplied models can be obtained interactively with the `modelinfo` function, and includes a descriptive `"label"` for each, source `"packages"` on which the models depend, supported response variable `"types"`, and `"arguments"` that can be specified in calls to the model functions.  Function `modelinfo` can be called with one or more model functions, variable types, or response variables; and will return information on all models matching the calling arguments.
+A named list of package-supplied models can be obtained interactively with the `modelinfo` function, and includes a descriptive `"label"` for each, source `"packages"` on which the models depend, supported response variable `"types"`, and `"arguments"` that can be specified in calls to the model functions.  Function `modelinfo` can be called without arguments, with one or more model functions, variable types, or response variables; and will return information on all models matching the calling arguments.
 
 ```{r ex_modelinfo}
 ## Analysis libraries
@@ -36,7 +36,7 @@ modelinfo(iris$Species) %>% names
 
 # Metric Information
 
-A named list of supplied metrics can be obtained with the `metricinfo` function, and includes a descriptive `"label"` for each, whether to `"maximize"` the metrics for better performance, their function `"arguments"`, and supported observed and predicted response variable `"types"`.  Function `metricinfo` may be called with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.
+A named list of supplied metrics can be obtained with the `metricinfo` function, and includes a descriptive `"label"` for each, whether to `"maximize"` the metrics for better performance, their function `"arguments"`, and supported observed and predicted response variable `"types"`.  Function `metricinfo` may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.
 
 ```{r ex_metricinfo}
 ## Analysis libraries
@@ -57,9 +57,9 @@ metricinfo(auc, r2)
 ## Metrics for observed and predicted response variable types
 metricinfo(factor(0)) %>% names
 
-metricinfo(factor(0), matrix(0)) %>% names
-
 metricinfo(factor(0), factor(0)) %>% names
+
+metricinfo(factor(0), matrix(0)) %>% names
 
 ## Identify factor-specific metrics
 metricinfo(factor(0), accuracy, auc, r2) %>% names

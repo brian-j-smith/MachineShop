@@ -1,9 +1,11 @@
 # Performance Analyses
 
+Calculation of performance metrics on test sets or by resampling, as discussed previously, is one method of assessing model performance.  Others available include measures of predictor variable importance, calibration curves comparing observed and predicted response values, partial dependence plots, and receiver operating characteristic analysis.
+
 
 ## Variable Importance
 
-The importance of variables in a model fit is estimated with the `varimp` function and plotted with `plot`.  Variable importance is a measure of the relative importance of predictors in a model and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most.
+The importance of variables in a model fit is estimated with the `varimp` function and plotted with `plot`.  Variable importance is a relative measure of the contributions of model predictors and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most.  Classes of models can differ with respect to how variable importance is defined.  In the case of a `GBMModel`, importance of each predictor is based on the sum of squared empirical improvements over all internal tree nodes created by splitting on that variable [@greenwell:2019:GBM].
 
 ```{r using_analyses_vi}
 ## Predictor variable importance
@@ -12,10 +14,12 @@ The importance of variables in a model fit is estimated with the `varimp` functi
 plot(vi)
 ```
 
+Alternatively, importance is based on one minus predictor variable p-values for statistical models, like `CoxModel`, that produce them.  For other classes of models, variable importance is generally defined and calculated by their underlying source packages.
+
 
 ## Calibration Curves
 
-Agreement between model-predicted and observed values can be visualized with calibration curves.  In the construction of these curves, cases are partitioned into bins according to their (resampled) predicted responses.  Mean observed responses are then calculated within each of the bins and plotted on the vertical axis against the bin midpoints on the horizontal axis.  An option to produce curves smoothed over the individual predicted values is also provided.  Calibration curves that are close to the 45-degree line indicate close agreement between observed and predicted responses and a model that is said to be well calibrated. 
+Agreement between model-predicted and observed values can be visualized with calibration curves.  In the construction of these curves, cases are partitioned into equally spaced bins according to their (resampled) predicted responses.  Mean observed responses are then calculated within each of the bins and plotted on the vertical axis against the bin midpoints on the horizontal axis. 
 
 ```{r using_analyses_cal, results="hide"}
 ## Binned calibration curves
@@ -23,30 +27,48 @@ cal <- calibration(res_probs, breaks = 10)
 plot(cal, se = TRUE)
 ```
 
+As an alternative to discrete bins, curves can be smoothed over the individual predicted values by setting `breaks = NULL`.
+
 ```{r using_analyses_cal_smoothed, results="hide"}
 ## Smoothed calibration curves
 cal <- calibration(res_probs, breaks = NULL)
 plot(cal)
 ```
 
+Calibration curves that are close to the 45$^\circ$ line indicate close agreement between observed and predicted responses and a model that is said to be well calibrated.
+
 
 ## Confusion Matrices
 
-Confusion matrices of cross-classified observed and predicted factor or survival probabilities are available with the `confusion` function.  They can be constructed with predicted class membership or with predicted class probabilities.  In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors and according to the class with highest probability for factors with more than two levels.  Performance metrics, such as those described earlier for binary factors, can be computed with the `performance` function and summarized with `summary` and `plot`.
+Confusion matrices of cross-classified observed and predicted categorical responses are available with the `confusion` function.  They can be constructed with predicted class membership or with predicted class probabilities.  In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors (default: `cutoff = 0.5`) and according to the class with highest probability for factors with more than two levels.
+
 
 ```{r using_analyses_conf}
 ## Confusion matrices
 (conf <- confusion(res_probs, cutoff = 0.5))
-
-performance(conf, metrics = c("Accuracy" = accuracy,
-                              "Sensitivity" = sensitivity,
-                              "Specificity" = specificity))
-
-summary(conf)
 ```
 
 ```{r using_analyses_conf_plot, results="hide"}
 plot(conf)
+```
+
+Confusion matrices are the data structure upon which many of the performance metrics described earlier for factor predictor variables are based.  Metrics commonly reported for confusion matrices are generated by the `summary` function.
+
+```{r using_analyses_conf_summary}
+## Summary performance metrics
+summary(conf)
+```
+
+Summaries can also be obtained with `performance` function but for select metrics specified by the user.
+
+```{r using_analyses_conf_performance}
+## Confusion matrix-specific metrics
+metricinfo(conf) %>% names
+
+## User-specified metrics
+performance(conf, metrics = c("Accuracy" = accuracy,
+                              "Sensitivity" = sensitivity,
+                              "Specificity" = specificity))
 ```
 
 
@@ -82,14 +104,21 @@ Tradeoffs between correct and incorrect classifications of binary outcomes, acro
 
 ### ROC
 
-Receiver operating characteristic (ROC) curves are one example in which true positive rates (sensitivity) are plotted against false positive rates (1 - specificity).  Area under resulting ROC curves can be computed as an overall measure of model predictive performance and interpreted as the probability that a randomly selected event case will have a higher predicted value than a randomly selected non-event case.
+Receiver operating characteristic (ROC) curves are one example in which true positive rates (sensitivity) are plotted against false positive rates (1 - specificity) [@fawcett:2006:IRA].  Higher ROC curves are indicative of better predictive performance.
 
 ```{r using_analyses_roc}
 ## ROC curves
 roc <- performance_curve(res_probs)
 plot(roc, diagonal = TRUE)
+```
+
+ROC curves show the relation between the two rates being plotted but not their relationships with specific cutoff values.  The latter may be helpful for the selection of a cutoff value to apply in practice.  Accordingly, separate plots of each rate versus the range of possible cutoff values are available with the `type = "cutoffs"` option.
+
+```{r using_analyses_roc_cutoffs}
 plot(roc, type = "cutoffs")
 ```
+
+Area under resulting ROC curves can be computed as an overall measure of model predictive performance and interpreted as the probability that a randomly selected event case will have a higher predicted value than a randomly selected non-event case.
 
 ```{r using_analyses_roc_auc}
 auc(roc)
@@ -98,7 +127,7 @@ auc(roc)
 
 ### Precision Recall
 
-In general, any two binary response metrics may be specified for the construction of a performance curve.  Precision recall curves are another example.
+In general, any two binary response metrics may be specified for the construction of a performance curve.  Precision recall curves are another example [@davis:2006:RPR].
 
 ```{r using_analyses_pr}
 ## Precision recall curves

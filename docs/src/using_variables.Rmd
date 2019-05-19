@@ -5,7 +5,7 @@ Variable specification defines the relationship between response and predictor v
 
 ## Traditional Formula
 
-Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example.  With this specification, formula operators, such as interaction (`:`), crossing (`*`), and deletion (`-`) as well as `.` substitution of variables not already appearing in the formula may be used.
+Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example.  This specification allows for allows for crossing (`*`), interaction (`:`), and removal (`-`) of predictors in the formula; `.` substitution of variables not already appearing in the formula; in-line functions of response variables; and in-lining of base **R** operators and math functions of predictors.
 
 ```{r using_variables_formula, results="hide"}
 ## Dataset library
@@ -74,7 +74,7 @@ rec <- recipe(medv ~ ., data = Boston)
 fit(rec, model = GBMModel)
 ```
 
-Case weights and stratified resampling are also supported for recipes via the designations of `"case_weight"` and `"case_strata"` roles, respectively.
+Case weights and stratified resampling are also supported for recipes via the designations of `"case_weight"` and `"case_strata"` roles, respectively.  As an example, an initial step is included in the recipe below to update (alter) the role of variable `weights` to be case weights.  That is followed by a step to convert three ordinal factors to integer scores.
 
 ```{r using_variables_recipe_weights, results="hide"}
 ## Recipe specification with case weights
