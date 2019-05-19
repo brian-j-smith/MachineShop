@@ -1,8 +1,7 @@
 setOldClass("ModelFrame")
 setOldClass("ModelRecipe")
-setOldClass("SurvEvents")
-setOldClass("SurvMatrix")
-setOldClass("SurvProbs")
+setOldClass(c("SurvEvents", "SurvMatrix"))
+setOldClass(c("SurvProbs", "SurvMatrix"))
 
 
 setClass("MLControl",
