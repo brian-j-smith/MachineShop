@@ -2,6 +2,13 @@
 
 ## Version Updates
 
+## 1.3.2
+* Add `BinaryConfusionMatrix` and `OrderedConfusionMatrix` classes.
+* Export `ConfusionMatrix` constructor.
+* Extend `metricinfo()` to confusion matrices.
+* Refactor performance metrics methods code.
+
+
 ## 1.3.1
 * Check and convert ordered factors in response methods.
 * Check consistency of extracted variables in response methods.
