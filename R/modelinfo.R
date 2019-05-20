@@ -43,7 +43,7 @@ modelinfo <- function(...) {
   if (length(args) == 0) args <- as.list(.model_names)
   info <- do.call(.modelinfo, args)
   
-  is_type <- !mapply(is, info, "list")
+  is_type <- if (length(info)) !mapply(is, info, "list") else NULL
   if (any(is_type)) {
     info_models <- if (all(is_type)) modelinfo() else info[!is_type]
     info_types <- do.call(.modelinfo_types, info[is_type])

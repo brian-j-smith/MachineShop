@@ -40,7 +40,7 @@ metricinfo <- function(...) {
   if (length(args) == 0) args <- as.list(.metric_names)
   info <- do.call(.metricinfo, args)
   
-  is_type <- !mapply(is, info, "list")
+  is_type <- if (length(info)) !mapply(is, info, "list") else NULL
   if (any(is_type)) {
     info_metrics <- if (all(is_type)) metricinfo() else info[!is_type]
     info_types <- do.call(.metricinfo_types, info[is_type])
