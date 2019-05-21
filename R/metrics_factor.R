@@ -516,15 +516,15 @@ setMetricMethod("weighted_kappa2", c("OrderedConfusionMatrix", "NULL"),
 
 
 setMetricMethod("weighted_kappa2", c("ordered", "ordered"),
-  function(observed, predicted, power, ...) {
-    weighted_kappa2(confusion(observed, predicted), power = power)
+  function(observed, predicted, ...) {
+    weighted_kappa2(confusion(observed, predicted), ...)
   }
 )
 
 
 setMetricMethod("weighted_kappa2", c("ordered", "matrix"),
-  function(observed, predicted, power, ...) {
-    weighted_kappa2(confusion(observed, predicted), power = power)
+  function(observed, predicted, ...) {
+    weighted_kappa2(confusion(observed, predicted), ...)
   }
 )
 
