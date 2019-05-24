@@ -2,19 +2,14 @@
 
 
 setMetric_auc <- function(f, metrics) {
+  definition <- function(observed, predicted, ...) {
+    auc(observed, predicted, metrics = metrics)
+  }
   setMetricGeneric(f)
   setMetricMethod(f, c("factor", "factor"))
-  setMetricMethod(f, c("factor", "numeric"),
-    function(observed, predicted, ...) {
-      auc(observed, predicted, metrics = metrics)
-    }
-  )
+  setMetricMethod(f, c("factor", "numeric"), definition)
   setMetricMethod_Resamples(f)
-  setMetricMethod(f, c("Surv", "SurvProbs"),
-    function(observed, predicted, ...) {
-      auc(observed, predicted, metrics = metrics)
-    }
-  )
+  setMetricMethod(f, c("Surv", "SurvProbs"), definition)
 }
 
 
@@ -164,11 +159,7 @@ metric_SurvMatrix <- function(observed, predicted, FUN, cutoff = NULL, ...) {
   conf <- confusion(observed, predicted, cutoff = cutoff)
   x <- sapply(conf, FUN, ...)
   times <- time(predicted)
-  if (length(times) > 1) {
-    c("mean" = surv_metric_mean(x, times), x)
-  } else {
-    x[[1]]
-  }
+  if (length(times) > 1) c("mean" = surv_metric_mean(x, times), x) else x[[1]]
 }
 
 
