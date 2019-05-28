@@ -107,7 +107,7 @@ performance_curve.Resamples <- function(x, metrics = c(MachineShop::tpr,
   curves <- NULL
   for (model in unique(x$Model)) {
     for (resample in unique(x$Resample)) {
-      df <- subset(x, Model == model & Resample == resample)
+      df <- x[x$Model == model & x$Resample == resample, ]
       curve <- .curve_default(df$Observed, df$Predicted, metrics = metrics)
       curve <- if (is(curve, "listof")) {
         structure(curve, names = paste0(model, ".", names(curve)))
