@@ -166,11 +166,28 @@ setMethod(".resample", c("MLBootControl", "ModelFrame"),
                          strata = strata) %>% rsample2caret
     index <- splits$index
     seeds <- sample.int(.Machine$integer.max, length(index))
+    
+    is_optimism_control <- is(object, "MLBootOptimismControl")
+    if (is_optimism_control) {
+      train_pred <- resample_args(x, x, model, object)[[1]]$Predicted
+    }
+    
     foreach(i = seq(index),
             .packages = c("MachineShop", "survival")) %dopar% {
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
-      resample_args(train, x, model, object, strata)
+      if (is_optimism_control) {
+        args <- resample_args(train, list(x, train), model, object, strata)
+        df <- args[[1]][[1]]
+        df_boot <- args[[1]][[2]]
+        df$Boot.Observed <- df_boot$Observed
+        df$Boot.Predicted <- df_boot$Predicted
+        df$Train.Predicted <- train_pred
+        args[[1]] <- df
+        args
+      } else {
+        resample_args(train, x, model, object, strata)
+      }
     } %>% Resamples.list
   }
 )
@@ -184,13 +201,34 @@ setMethod(".resample", c("MLBootControl", "ModelRecipe"),
                          times = object@samples,
                          strata = strata)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
-    test <- ModelFrame(formula(terms(x)), x, na.rm = FALSE)
+    
+    fo <- formula(terms(x))
+    test <- ModelFrame(fo, x, na.rm = FALSE)
+    
+    is_optimism_control <- is(object, "MLBootOptimismControl")
+    if (is_optimism_control) {
+      train_pred <- resample_args(x, test, model, object)[[1]]$Predicted
+    }
+    
     foreach(i = seq(splits),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- recipe(x, analysis(split))
-      resample_args(train, test, model, object, strata)
+      if (is_optimism_control) {
+        test_list <- list(test, ModelFrame(fo, train, na.rm = FALSE))
+        args <- resample_args(train, test_list, model, object, strata)
+        df <- args[[1]][[1]]
+        df_boot <- args[[1]][[2]]
+        indices <- seq_boot(df_boot, df)
+        df$Boot.Observed <- df_boot$Observed[indices]
+        df$Boot.Predicted <- df_boot$Predicted[indices]
+        df$Train.Predicted <- train_pred
+        args[[1]] <- df
+        args
+      } else {
+        resample_args(train, test, model, object, strata)
+      }
     } %>% Resamples.list
   }
 )
@@ -226,12 +264,13 @@ setMethod(".resample", c("MLCVControl", "ModelRecipe"),
                        repeats = object@repeats,
                        strata = strata)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
+    fo <- formula(terms(x))
     foreach(i = seq(splits),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- recipe(x, analysis(split))
-      test <- ModelFrame(formula(terms(x)), assessment(split), na.rm = FALSE)
+      test <- ModelFrame(fo, assessment(split), na.rm = FALSE)
       resample_args(train, test, model, object, strata)
     } %>% Resamples.list
   }
@@ -330,14 +369,19 @@ resample_args <- function(train, test, model, control, strata = character()) {
   trainfit <- fit(train, model)
   if (is(trainfit, "StackedModel")) control@times <- trainfit$times
   
-  df <- data.frame(Model = factor(model@name),
-                   Resample = 1,
-                   Case = row.names(test))
-  df$Observed <- response(test)
-  df$Predicted <- predict(trainfit, test, type = "prob", times = control@times,
-                          method = control@method, dist = control@dist)
+  f <- function(test) {
+    df <- data.frame(Model = factor(model@name),
+                     Resample = 1,
+                     Case = rownames(test))
+    df$Observed <- response(test)
+    df$Predicted <- predict(trainfit, test, type = "prob",
+                            times = control@times, method = control@method,
+                            dist = control@dist)
+    df
+  }
   
-  list(df, .control = control, .strata = strata)
+  list(if (class(test)[1] == "list") lapply(test, f) else f(test),
+       .control = control, .strata = strata)
 }
 
 

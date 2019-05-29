@@ -48,18 +48,41 @@ performance <- function(x, ...) {
 #' plot(perf)
 #' 
 performance.Resamples <- function(x, ...) {
-  perf_by <- by(x, x[c("Model", "Resample")], function(x) {
-    performance(x$Observed, x$Predicted, ...)
+  perf_list <- by(x, x$Model, function(resamples) {
+    performance(x@control, resamples, ...)
   }, simplify = FALSE)
   
-  perf_list <- tapply(perf_by, rep(dimnames(perf_by)$Model, dim(perf_by)[2]),
-                      function(perf) {
-                        perf_model <- do.call(rbind, perf)
-                        rownames(perf_model) <- dimnames(perf_by)$Resample
-                        perf_model
-                      }, simplify = FALSE)
-  
   do.call(Performance, perf_list)
+}
+
+
+performance.MLControl <- function(x, resamples, ...) {
+  perf_list <- by(resamples[c("Observed", "Predicted")], resamples$Resample,
+                  function(resample) {
+                    performance(resample[[1]], resample[[2]], ...)
+                  }, simplify = FALSE)
+  do.call(rbind, perf_list)
+}
+
+
+performance.MLBootOptimismControl <- function(x, resamples, ...) {
+  vars <- c("Observed", "Predicted", "Boot.Observed", "Boot.Predicted",
+            "Train.Predicted")
+  
+  test_perf_list <- list()
+  boot_perf_list <- list()
+  resamples_split <- split(resamples[vars], resamples$Resample)
+  for (name in names(resamples_split)) {
+    resample <- resamples_split[[name]]
+    test_perf_list[[name]] <- performance(resample[[1]], resample[[2]], ...)
+    boot_perf_list[[name]] <- performance(resample[[3]], resample[[4]], ...)
+  }
+  test_perf <- do.call(rbind, test_perf_list)
+  boot_perf <- do.call(rbind, boot_perf_list)
+  train_perf <- performance(resample[[1]], resample[[5]], ...)
+  
+  pessimism <- test_perf - boot_perf
+  sweep(pessimism, 2, train_perf, "+")
 }
 
 

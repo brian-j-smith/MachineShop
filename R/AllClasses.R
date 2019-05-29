@@ -18,6 +18,11 @@ setClass("MLBootControl",
 )
 
 
+setClass("MLBootOptimismControl",
+  contains = "MLBootControl"
+)
+
+
 setClass("MLCVControl",
   slots = c(folds = "numeric",
             repeats = "numeric"),

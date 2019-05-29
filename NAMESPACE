@@ -79,6 +79,7 @@ export(accuracy,
        weighted_kappa2)
 
 export(BootControl,
+       BootOptimismControl,
        CVControl,
        OOBControl,
        SplitControl,

@@ -180,6 +180,17 @@ requireModelNamespaces <- function(packages) {
 }
 
 
+seq_boot <- function(src, dest) {
+  indices <- seq_len(nrow(src))
+  pad_size <- nrow(dest) - nrow(src)
+  if (pad_size >= 0) {
+    c(indices, sample(indices, pad_size, replace = TRUE))
+  } else {
+    sample(indices, nrow(dest))
+  }
+}
+
+
 seq_inner <- function(from, to, length) {
   x <- seq(from, to, length = length + 2)
   x[-c(1, length + 2)]

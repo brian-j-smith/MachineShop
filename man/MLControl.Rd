@@ -3,6 +3,7 @@
 \name{MLControl}
 \alias{MLControl}
 \alias{BootControl}
+\alias{BootOptimismControl}
 \alias{CVControl}
 \alias{OOBControl}
 \alias{SplitControl}
@@ -13,6 +14,8 @@ MLControl(times = NULL, dist = NULL, method = NULL, seed = NULL,
   ...)
 
 BootControl(samples = 25, ...)
+
+BootOptimismControl(samples = 25, ...)
 
 CVControl(folds = 10, repeats = 1, ...)
 
@@ -48,39 +51,69 @@ that are common to all resampling methods.
 
 \code{BootControl} constructs an \code{MLControl} object for simple bootstrap
 resampling in which models are fit with bootstrap resampled training sets and
-used to predict the full data set.
+used to predict the full data set (Efron and Tibshirani 1993).
+
+\code{BootOptimismControl} constructs an \code{MLControl} object for
+optimism-corrected bootstrap resampling (Efron and Gong 1983, Harrell et al. 1996).
 
 \code{CVControl} constructs an \code{MLControl} object for repeated K-fold
-cross-validation.  In this procedure, the full data set is repeatedly
-partitioned into K-folds.  Within a partitioning, prediction is performed on
-each of the K folds with models fit on all remaining folds.
+cross-validation (Kohavi 1995).  In this procedure, the full data set is
+repeatedly partitioned into K-folds.  Within a partitioning, prediction is
+performed on each of the K folds with models fit on all remaining folds.
 
 \code{OOBControl} constructs an \code{MLControl} object for out-of-bootstrap
 resampling in which models are fit with bootstrap resampled training sets and
 used to predict the unsampled cases.
 
 \code{SplitControl} constructs an \code{MLControl} object for splitting data
-into a seperate trianing and test set.
+into a seperate trianing and test set (Hastie et al. 2009).
 
 \code{TrainControl} constructs an \code{MLControl} object for training and
-performance evaluation to be performed on the same training set.
+performance evaluation to be performed on the same training set (Efron 1986).
 }
 \examples{
-## 100 bootstrap samples
+## Bootstrapping with 100 samples
 BootControl(samples = 100)
 
-## 5 repeats of 10-fold cross-validation
+## Optimism-corrected bootstrapping with 100 samples
+BootOptimismControl(samples = 100)
+
+## Cross-validation with 5 repeats of 10 folds
 CVControl(folds = 10, repeats = 5)
 
-## 100 out-of-bootstrap samples
+## Out-of-bootstrap validation with 100 samples
 OOBControl(samples = 100)
 
-## Split sample of 2/3 training and 1/3 testing
+## Split sample validation with 2/3 training and 1/3 testing
 SplitControl(prop = 2/3)
 
-## Same training and test set
+## Training set evaluation
 TrainControl()
 
+}
+\references{
+Efron B and Tibshirani RJ (1993). An Introduction to the Bootstrap.
+Monographs on Statistics and Applied Probability 57. Boca Raton, Florida,
+USA: Chapman & Hall/CRC.
+
+Efron B and Gong G (1983). A leisurely look at the bootstrap, the jackknife,
+and cross-validation. The American Statistician, 37 (1): 36-48.
+
+Harrell FE, Lee KL, and Mark DB (1996). Multivariable prognostic models:
+issues in developing models, evaluating assumptions and adequacy, and
+measuring and reducing errors. Statistics in Medicine, 15 (4): 361-387.
+
+Kohavi R (1995). A Study of Cross-Validation and Bootstrap for Accuracy
+Estimation and Model Selection. In Proceedings of the 14th International
+Joint Conference on Artificial Intelligence - Volume 2, 1137-43. IJCAI'95.
+San Francisco, CA, USA: Morgan Kaufmann Publishers Inc.
+
+Hastie T, Tibshirani R, and Friedman J (2009). The Elements of Statistical
+Learning: Data Mining, Inference, and Prediction, Second Edition. Springer
+Series in Statistics. New York, NY, USA: Springer.
+
+Efron B (1986). How biased is the apparent error rate of a prediction rule?
+Journal of the American Statistical Association, 81 (394): 461-70.
 }
 \seealso{
 \code{\link{resample}}
