@@ -49,8 +49,8 @@ summary_kbl <- function(x, data) {
     group_label <- names(x)[i]
     group_length <- length(x[[i]])
     if (nzchar(group_label)) {
-      kbl <- group_rows(kbl, group_label, start_row,
-                        start_row + group_length - 1)
+      kbl <- kableExtra::group_rows(kbl, group_label, start_row,
+                                    start_row + group_length - 1)
     }
     start_row <- start_row + group_length
   }

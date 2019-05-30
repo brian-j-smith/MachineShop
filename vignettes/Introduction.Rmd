@@ -408,7 +408,7 @@ kable(df, align = c("l", rep("c", ncol(df) - 1)), escape = FALSE,
   kable_styling(c("striped", "condensed"), full_width = FALSE,
                 position = "center") %>%
   column_spec(1, bold = TRUE) %>%
-  group_rows("Model Frame", 3, 4)
+  kableExtra::group_rows("Model Frame", 3, 4)
 ```
 
 
