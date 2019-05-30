@@ -436,7 +436,7 @@ div.tocify {
 
 <div id="model-information" class="section level1">
 <h1>Model Information</h1>
-<p>A named list of package-supplied models can be obtained interactively with the <code>modelinfo</code> function, and includes a descriptive <code>"label"</code> for each, source <code>"packages"</code> on which the models depend, supported response variable <code>"types"</code>, and <code>"arguments"</code> that can be specified in calls to the model functions. Function <code>modelinfo</code> can be called with one or more model functions, variable types, or response variables; and will return information on all models matching the calling arguments.</p>
+<p>A named list of package-supplied models can be obtained interactively with the <code>modelinfo</code> function, and includes a descriptive <code>"label"</code> for each, source <code>"packages"</code> on which the models depend, supported response variable <code>"types"</code>, and <code>"arguments"</code> that can be specified in calls to the model functions. Function <code>modelinfo</code> can be called without arguments, with one or more model functions, variable types, or response variables; and will return information on all models matching the calling arguments.</p>
 <pre class="r"><code>## Analysis libraries
 library(MachineShop)
 library(magrittr)
@@ -548,7 +548,7 @@ modelinfo(iris$Species) %&gt;% names
 </div>
 <div id="metric-information" class="section level1">
 <h1>Metric Information</h1>
-<p>A named list of supplied metrics can be obtained with the <code>metricinfo</code> function, and includes a descriptive <code>"label"</code> for each, whether to <code>"maximize"</code> the metrics for better performance, their function <code>"arguments"</code>, and supported observed and predicted response variable <code>"types"</code>. Function <code>metricinfo</code> may be called with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.</p>
+<p>A named list of supplied metrics can be obtained with the <code>metricinfo</code> function, and includes a descriptive <code>"label"</code> for each, whether to <code>"maximize"</code> the metrics for better performance, their function <code>"arguments"</code>, and supported observed and predicted response variable <code>"types"</code>. Function <code>metricinfo</code> may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.</p>
 <pre class="r"><code>## Analysis libraries
 library(MachineShop)
 library(magrittr)
@@ -616,11 +616,13 @@ metricinfo(factor(0)) %&gt;% names
 #&gt; [17] &quot;rpp&quot;           &quot;sensitivity&quot;   &quot;specificity&quot;   &quot;tnr&quot;          
 #&gt; [21] &quot;tpr&quot;
 
+metricinfo(factor(0), factor(0)) %&gt;% names
+#&gt;  [1] &quot;accuracy&quot;    &quot;f_score&quot;     &quot;fnr&quot;         &quot;fpr&quot;         &quot;kappa2&quot;     
+#&gt;  [6] &quot;npv&quot;         &quot;ppv&quot;         &quot;precision&quot;   &quot;recall&quot;      &quot;roc_index&quot;  
+#&gt; [11] &quot;rpp&quot;         &quot;sensitivity&quot; &quot;specificity&quot; &quot;tnr&quot;         &quot;tpr&quot;
+
 metricinfo(factor(0), matrix(0)) %&gt;% names
 #&gt; [1] &quot;accuracy&quot;      &quot;brier&quot;         &quot;cross_entropy&quot; &quot;kappa2&quot;
-
-metricinfo(factor(0), factor(0)) %&gt;% names
-#&gt; [1] &quot;accuracy&quot; &quot;kappa2&quot;
 
 ## Identify factor-specific metrics
 metricinfo(factor(0), accuracy, auc, r2) %&gt;% names

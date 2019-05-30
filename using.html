@@ -437,8 +437,8 @@ div.tocify {
 
 <div id="melanoma-example" class="section level1">
 <h1>Melanoma Example</h1>
-<p>The package is illustrated in the following sections with an overall survival analysis example in which the response variable is a time to event outcome. Since survival outcomes are a combination of numerical (time to event) and categorical (event) variables, package features for both variable types will be utilized in the example. Outcomes other than survival, including nominal and ordinal factors as well as numeric vectors and matrices, are supported by <code>MachineShop</code> and will be discussed.</p>
-<p>Survival analysis is performed with the <code>Melanoma</code> dataset from the <code>MASS</code> package <span class="citation">(Andersen et al. 1993)</span>. This dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas. Also provided are potential predictors of the survival outcomes. The analysis begins by loading required packages <code>MachineShop</code>, <code>survival</code>, and <code>MASS</code> as well as <code>magrittr</code> <span class="citation">(Bache and Wickham 2014)</span> for its pipe (<code>%&gt;%</code>) operator to simplify some of the code syntax. For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one. The dataset is then split into a training set on which a survival model will be fit and a test set on which predictions will be made. A global formula <code>surv_fo</code> is defined to relate the predictors on the right hand side to the overall survival outcome on the left and will be used in all of the survival models presented.</p>
+<p>The package is illustrated in the following sections with an overall survival analysis example in which the response variable is a time to event outcome. Since survival outcomes are a combination of numerical (time to event) and categorical (event) variables, package features for both variable types are illustrated in the example. Outcomes other than survival, including nominal and ordinal factors as well as numeric vectors and matrices, are supported by <code>MachineShop</code> and will be discussed.</p>
+<p>Survival analysis is performed with the <code>Melanoma</code> dataset from the <code>MASS</code> package <span class="citation">(Andersen et al. 1993)</span>. The dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas. Also provided are potential predictors of the survival outcomes. The analysis begins by loading required packages <code>MachineShop</code>, <code>survival</code>, and <code>MASS</code> as well as <code>magrittr</code> <span class="citation">(Bache and Wickham 2014)</span> for its pipe (<code>%&gt;%</code>) operator to simplify some of the code syntax. For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one.</p>
 <pre class="r"><code>## Analysis libraries
 library(MachineShop)
 library(survival)
@@ -589,6 +589,7 @@ Median (Range)
 </tbody>
 </table>
 <p><img src="using_files/figure-html/using_example_survfit-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>For the analyses, the dataset is split into a training set on which a survival model will be fit and a test set on which predictions will be made and performance evaluated. A global formula <code>surv_fo</code> is defined to relate the predictors on the right hand side to the overall survival outcome on the left and will be used for all subsequent survival models.</p>
 <pre class="r"><code>## Training and test sets
 set.seed(123)
 train_indices &lt;- sample(nrow(surv_df), nrow(surv_df) * 2 / 3)
@@ -623,7 +624,7 @@ surv_fo &lt;- Surv(time, status) ~ sex + age + year + thickness + ulcer</code></
 <dd>Logical indicating whether variable importance is defined for the model.
 </dd>
 </dl>
-<p>Function <code>modelinfo</code> can be called with one or more model functions, function names, function calls, or observed response variables; and will return information on all models matching the calling arguments.</p>
+<p>Function <code>modelinfo</code> may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.</p>
 <pre class="r"><code>## All available models
 modelinfo() %&gt;% names
 #&gt;  [1] &quot;AdaBagModel&quot;         &quot;AdaBoostModel&quot;       &quot;BARTModel&quot;          
@@ -643,14 +644,6 @@ modelinfo() %&gt;% names
 #&gt; [43] &quot;SVMSplineModel&quot;      &quot;SVMTanhModel&quot;        &quot;TreeModel&quot;          
 #&gt; [46] &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;     
 #&gt; [49] &quot;XGBTreeModel&quot;
-
-## Survival-specific models
-modelinfo(Surv(0)) %&gt;% names
-#&gt;  [1] &quot;BARTModel&quot;           &quot;BlackBoostModel&quot;     &quot;CForestModel&quot;       
-#&gt;  [4] &quot;CoxModel&quot;            &quot;CoxStepAICModel&quot;     &quot;GAMBoostModel&quot;      
-#&gt;  [7] &quot;GBMModel&quot;            &quot;GLMBoostModel&quot;       &quot;GLMNetModel&quot;        
-#&gt; [10] &quot;RangerModel&quot;         &quot;RPartModel&quot;          &quot;StackedModel&quot;       
-#&gt; [13] &quot;SuperModel&quot;          &quot;SurvRegModel&quot;        &quot;SurvRegStepAICModel&quot;
 
 ## Model-specific information
 modelinfo(GBMModel)
@@ -674,7 +667,33 @@ modelinfo(GBMModel)
 #&gt; 
 #&gt; $GBMModel$varimp
 #&gt; [1] TRUE</code></pre>
-<p>Information is displayed above for the <code>GBMModel</code> function which is a generalized boosted regression model — a tree-based ensemble method that can be applied to survival outcomes.</p>
+<p>Information is displayed above for the <code>GBMModel</code> function — a generalized boosted regression model that can be applied to survival outcomes.</p>
+<div id="type-specific" class="section level3">
+<h3>Type-Specific</h3>
+<p>When data objects are supplied as arguments, information is returned on all models applicable to response variables of the same data types. If model functions are additionally supplied as arguments, information on the subset matching the data types is returned.</p>
+<pre class="r"><code>## All survival response-specific models
+modelinfo(Surv(0)) %&gt;% names
+#&gt;  [1] &quot;BARTModel&quot;           &quot;BlackBoostModel&quot;     &quot;CForestModel&quot;       
+#&gt;  [4] &quot;CoxModel&quot;            &quot;CoxStepAICModel&quot;     &quot;GAMBoostModel&quot;      
+#&gt;  [7] &quot;GBMModel&quot;            &quot;GLMBoostModel&quot;       &quot;GLMNetModel&quot;        
+#&gt; [10] &quot;RangerModel&quot;         &quot;RPartModel&quot;          &quot;StackedModel&quot;       
+#&gt; [13] &quot;SuperModel&quot;          &quot;SurvRegModel&quot;        &quot;SurvRegStepAICModel&quot;
+
+## Identify survival response-specific models
+modelinfo(Surv(0), CoxModel, GBMModel, SVMModel) %&gt;% names
+#&gt; [1] &quot;CoxModel&quot; &quot;GBMModel&quot;</code></pre>
+</div>
+<div id="response-variable-specific" class="section level3">
+<h3>Response Variable-Specific</h3>
+<p>As a special case of type-specific arguments, existing response variables to be used in analyses may be given as arguments to identify applicable models.</p>
+<pre class="r"><code>## Models for a responses variable
+modelinfo(Surv(surv_df$time, surv_df$status)) %&gt;% names
+#&gt;  [1] &quot;BARTModel&quot;           &quot;BlackBoostModel&quot;     &quot;CForestModel&quot;       
+#&gt;  [4] &quot;CoxModel&quot;            &quot;CoxStepAICModel&quot;     &quot;GAMBoostModel&quot;      
+#&gt;  [7] &quot;GBMModel&quot;            &quot;GLMBoostModel&quot;       &quot;GLMNetModel&quot;        
+#&gt; [10] &quot;RangerModel&quot;         &quot;RPartModel&quot;          &quot;StackedModel&quot;       
+#&gt; [13] &quot;SuperModel&quot;          &quot;SurvRegModel&quot;        &quot;SurvRegStepAICModel&quot;</code></pre>
+</div>
 </div>
 <div id="fit-function" class="section level2">
 <h2>Fit Function</h2>
@@ -718,11 +737,11 @@ fit (surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(length(y)))))
 <p>A <code>predict</code> function is supplied for application to model fit results to obtain predicted values on a dataset specified with its <code>newdata</code> argument or on the original dataset if not specified. Survival means are predicted for survival outcomes by default. Estimates of the associated survival distributions are needed to calculate the means. For models, like <code>GBMModel</code>, that perform semi- or non-parametric survival analysis, Weibull approximations to the survival distributions are the default for mean estimation. Other choices of distributional approximations are exponential, Rayleigh, and empirical. Empirical distributions are applicable to Cox proportional hazards-based models and can be calculated with the method of Breslow <span class="citation">(1972)</span>, Efron <span class="citation">(1977, default)</span>, or Fleming and Harrington <span class="citation">(1984)</span>. Note, however, that empirical survival means are undefined mathematically if an event does not occur at the longest follow-up time. In such situations, a restricted survival mean is calculated by changing the longest follow-up time to an event, as suggested by Efron <span class="citation">(1967)</span>, which will be negatively biased.</p>
 <pre class="r"><code>## Predicted survival means (default: Weibull distribution)
 predict(surv_fit, newdata = surv_test) %&gt;% head
-#&gt; [1]  8619.077 12395.758  3736.115  1332.317  1808.185  4202.563
+#&gt; [1] 11209.990 19271.235  4765.472  1313.867  2574.956  3812.546
 
 ## Predicted survival means (empirical distribution)
 predict(surv_fit, newdata = surv_test, dist = &quot;empirical&quot;) %&gt;% head
-#&gt; [1] 4098.222 4298.909 3269.318 1628.793 2123.959 3422.091</code></pre>
+#&gt; [1] 4167.821 4406.176 3418.846 1479.466 2533.279 3127.846</code></pre>
 <p>In addition to survival means, predicted survival probabilities (<code>type = "prob"</code>) or 0-1 survival events (default: <code>type = "response"</code>) can be obtained with the follow-up <code>times</code> argument. The cutoff probability for classification of survival events (or other binary responses) can be set optionally with the <code>cutoff</code> argument (default: <code>cutoff = 0.5</code>). As with mean estimation, distributional approximations to the survival functions may be specified for the predictions, with the default for survival probabilities being the empirical distribution.</p>
 <pre class="r"><code>## Predict survival probabilities and events at specified follow-up times
 surv_times &lt;- 365 * c(5, 10)
@@ -730,12 +749,12 @@ surv_times &lt;- 365 * c(5, 10)
 predict(surv_fit, newdata = surv_test, times = surv_times, type = &quot;prob&quot;) %&gt;% head
 #&gt; Object of class &quot;SurvProbs&quot;
 #&gt;         Time 1     Time 2
-#&gt; [1,] 0.8934348 0.79307877
-#&gt; [2,] 0.9305378 0.86232916
-#&gt; [3,] 0.7291876 0.52216086
-#&gt; [4,] 0.3243167 0.09859702
-#&gt; [5,] 0.4617520 0.20396307
-#&gt; [6,] 0.7609545 0.57004119
+#&gt; [1,] 0.9081067 0.81488503
+#&gt; [2,] 0.9509477 0.89869384
+#&gt; [3,] 0.7639890 0.56456646
+#&gt; [4,] 0.2824026 0.06820619
+#&gt; [5,] 0.5690995 0.30206439
+#&gt; [6,] 0.7033572 0.47364336
 #&gt; Attribute &quot;times&quot;:
 #&gt; [1] 1825 3650
 
@@ -746,8 +765,8 @@ predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.5) %&gt;% 
 #&gt; [2,]      0      0
 #&gt; [3,]      0      0
 #&gt; [4,]      1      1
-#&gt; [5,]      1      1
-#&gt; [6,]      0      0
+#&gt; [5,]      0      1
+#&gt; [6,]      0      1
 #&gt; Attribute &quot;times&quot;:
 #&gt; [1] 1825 3650</code></pre>
 </div>
@@ -757,7 +776,7 @@ predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.5) %&gt;% 
 <p>Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship. Four main types of specifications are supported by the <code>fit</code>, <code>resample</code>, and <code>tune</code> functions: traditional formula, design matrix, model frame, and recipe.</p>
 <div id="traditional-formula" class="section level2">
 <h2>Traditional Formula</h2>
-<p>Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example. With this specification, formula operators, such as interaction (<code>:</code>), crossing (<code>*</code>), and deletion (<code>-</code>) as well as <code>.</code> substitution of variables not already appearing in the formula may be used.</p>
+<p>Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example. This specification allows for allows for crossing (<code>*</code>), interaction (<code>:</code>), and removal (<code>-</code>) of predictors in the formula; <code>.</code> substitution of variables not already appearing in the formula; in-line functions of response variables; and in-lining of base <strong>R</strong> operators and math functions of predictors.</p>
 <pre class="r"><code>## Dataset library
 library(MASS)
 
@@ -805,7 +824,7 @@ library(recipes)
 rec &lt;- recipe(medv ~ ., data = Boston)
 
 fit(rec, model = GBMModel)</code></pre>
-<p>Case weights and stratified resampling are also supported for recipes via the designations of <code>"case_weight"</code> and <code>"case_strata"</code> roles, respectively.</p>
+<p>Case weights and stratified resampling are also supported for recipes via the designations of <code>"case_weight"</code> and <code>"case_strata"</code> roles, respectively. As an example, an initial step is included in the recipe below to update (alter) the role of variable <code>weights</code> to be case weights. That is followed by a step to convert three ordinal factors to integer scores.</p>
 <pre class="r"><code>## Recipe specification with case weights
 df &lt;- within(esoph, {
   y &lt;- ncases / (ncases + ncontrols)
@@ -853,19 +872,19 @@ Computational Overhead
 Traditional Formula
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">manual</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange !important;">manual</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">yes</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;">yes</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">equal</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange !important;">equal</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">response</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange !important;">response</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: blue;">medium</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: blue !important;">medium</span>
 </td>
 </tr>
 <tr>
@@ -873,19 +892,19 @@ Traditional Formula
 Design Matrix
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">manual</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange !important;">manual</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">no</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange !important;">no</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">equal</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange !important;">equal</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">response</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange !important;">response</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">low</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;">low</span>
 </td>
 </tr>
 <tr grouplength="2">
@@ -898,19 +917,19 @@ Design Matrix
 Traditional Formula
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">manual</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange !important;">manual</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">yes</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;">yes</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">user</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;">user</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">user</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;">user</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: blue;">medium</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: blue !important;">medium</span>
 </td>
 </tr>
 <tr>
@@ -918,19 +937,19 @@ Traditional Formula
 Design Matrix
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">manual</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange !important;">manual</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">no</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange !important;">no</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">user</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;">user</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">user</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;">user</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">low</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;">low</span>
 </td>
 </tr>
 <tr>
@@ -938,19 +957,19 @@ Design Matrix
 Recipe
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">automatic</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;">automatic</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">no</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange !important;">no</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">user</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;">user</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green;">user</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: green !important;">user</span>
 </td>
 <td style="text-align:center;">
-<span style="     color: white;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange;">high</span>
+<span style="     color: white !important;border-radius: 4px; padding-right: 4px; padding-left: 4px; background-color: orange !important;">high</span>
 </td>
 </tr>
 </tbody>
@@ -959,7 +978,7 @@ Recipe
 </div>
 <div id="response-variable-types" class="section level1">
 <h1>Response Variable Types</h1>
-<p>The R class types of response variables play a central role in their analysis with the package. They determine, for example, the specific models that can be fit, fitting algorithms employed, predicted values produced, and applicable performance metrics and analyses. As described below, factors, ordered factors, numeric vectors and matrices, and survival responses are supported by the package.</p>
+<p>The <strong>R</strong> class types of response variables play a central role in their analysis with the package. They determine, for example, the specific models that can be fit, fitting algorithms employed, predicted values produced, and applicable performance metrics and analyses. As described below, factors, ordered factors, numeric vectors and matrices, and survival responses are supported by the package.</p>
 <div id="factors" class="section level2">
 <h2>Factors</h2>
 <p>Categorical responses with two or more levels should be coded as <code>factor</code> variables for analysis.</p>
@@ -972,7 +991,7 @@ fit(type ~ ., data = Pima.tr, model = GBMModel)</code></pre>
 </div>
 <div id="ordered-factors" class="section level2">
 <h2>Ordered Factors</h2>
-<p>Ordinal categorical responses should be coded as <code>ordered</code> factor variables. For categorical vectors, this can be accomplished with the <code>factor</code> function and its argument <code>ordered = TRUE</code> or more simply with the <code>ordered</code> function. Numeric vectors can be converted to ordered factors with the <code>cut</code> function.</p>
+<p>Categorical responses can be designated as having ordered levels by storing them as <code>ordered</code> factor variables. For categorical vectors, this can be accomplished with the <code>factor</code> function and its argument <code>ordered = TRUE</code> or more simply with the <code>ordered</code> function. Numeric vectors can be converted to ordered factors with the <code>cut</code> function.</p>
 <pre class="r"><code>## Boston housing prices (ordered factor)
 library(MASS)
 
@@ -984,7 +1003,7 @@ fit(medv ~ ., data = df, model = GBMModel)</code></pre>
 </div>
 <div id="numeric-vectors" class="section level2">
 <h2>Numeric Vectors</h2>
-<p>Univariate numerical responses should be coded as <code>numeric</code> variables.</p>
+<p>Code univariate numerical responses as <code>numeric</code> variables.</p>
 <pre class="r"><code>## Boston housing prices
 library(MASS)
 
@@ -992,12 +1011,12 @@ fit(medv ~ ., data = Boston, model = GBMModel)</code></pre>
 </div>
 <div id="numeric-matrices" class="section level2">
 <h2>Numeric Matrices</h2>
-<p>Multivariate numerical responses should be given as numeric <code>matrix</code> variables for model fitting with traditional formulas or model frames.</p>
+<p>Store multivariate numerical responses as numeric <code>matrix</code> variables for model fitting with traditional formulas or model frames.</p>
 <pre class="r"><code>## Anscombe&#39;s multiple regression models dataset
 
 ## Numeric matrix response formula
 fit(cbind(y1, y2, y3) ~ x1, data = anscombe, model = LMModel)</code></pre>
-<p>For recipes, the multiple response variables should be given on the left hand side of the formula specification.</p>
+<p>For recipes, include the multiple response variables on the left hand side of the formula specification.</p>
 <pre class="r"><code>## Numeric matrix response recipe
 rec &lt;- recipe(y1 + y2 + y3 ~ x1, data = anscombe)
 
@@ -1005,12 +1024,12 @@ fit(rec, model = LMModel)</code></pre>
 </div>
 <div id="survival-objects" class="section level2">
 <h2>Survival Objects</h2>
-<p>Survival responses should be coded as <code>Surv</code> variables for model fitting with traditional formulas or model frames.</p>
+<p>Censored time-to-event survival responses should be stored as <code>Surv</code> variables for model fitting with traditional formulas or model frames.</p>
 <pre class="r"><code>## Survival response formula
 library(survival)
 
 fit(Surv(time, status) ~ ., data = surv_train, model = GBMModel)</code></pre>
-<p>For recipes, survival outcomes should be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated as <code>"surv_time"</code> and <code>"surv_event"</code>.</p>
+<p>For recipes, survival responses should be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated as <code>"surv_time"</code> and <code>"surv_event"</code>.</p>
 <pre class="r"><code>## Survival response recipe
 rec &lt;- recipe(time + status ~ ., data = surv_train) %&gt;%
   add_role(time, new_role = &quot;surv_time&quot;) %&gt;%
@@ -1021,9 +1040,10 @@ fit(rec, model = GBMModel)</code></pre>
 </div>
 <div id="model-performance-metrics" class="section level1">
 <h1>Model Performance Metrics</h1>
+<p>Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models.</p>
 <div id="performance-function" class="section level2">
 <h2>Performance Function</h2>
-<p>Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models. Metrics can be computed with the <code>performance</code> function applied to observed responses and responses predicted with the <code>predict</code> function. In the case of observed versus predicted survival probabilities or events, metrics will be calculated at each survival time and returned along with their time-integrated mean.</p>
+<p>Metrics can be computed with the <code>performance</code> function applied to observed responses and responses predicted with the <code>predict</code> function. In the case of observed versus predicted survival probabilities or events, metrics will be calculated at each survival time and returned along with their time-integrated mean.</p>
 <pre class="r"><code>## Survival performance metrics
 
 ## Observed responses
@@ -1032,23 +1052,23 @@ obs &lt;- response(surv_fit, newdata = surv_test)
 ## Predicted survival means
 pred_means &lt;- predict(surv_fit, newdata = surv_test)
 performance(obs, pred_means)
-#&gt;    CIndex 
-#&gt; 0.6414234
+#&gt;   CIndex 
+#&gt; 0.649635
 
 ## Predicted survival probabilities
 pred_probs &lt;- predict(surv_fit, newdata = surv_test, times = surv_times, type = &quot;prob&quot;)
 performance(obs, pred_probs)
 #&gt;     Brier.mean    Brier.time1    Brier.time2    ROCAUC.mean   ROCAUC.time1 
-#&gt;      0.2223704      0.1901665      0.2545743      0.6304049      0.6634101 
+#&gt;      0.2147069      0.2007854      0.2286283      0.6458601      0.6812854 
 #&gt;   ROCAUC.time2  Accuracy.mean Accuracy.time1 Accuracy.time2 
-#&gt;      0.5973996      0.6817370      0.7607143      0.6027596
+#&gt;      0.6104347      0.6514339      0.7172361      0.5856318
 
 ## Predicted survival events
 pred_events &lt;- predict(surv_fit, newdata = surv_test, times = surv_times)
 performance(obs, pred_events)
 #&gt;  Accuracy.mean Accuracy.time1 Accuracy.time2 
-#&gt;      0.6817370      0.7607143      0.6027596</code></pre>
-<p>Function <code>performance</code> computes a default set of metrics according to the observed and predicted response types, as indicated in the table below.</p>
+#&gt;      0.6514339      0.7172361      0.5856318</code></pre>
+<p>Function <code>performance</code> computes a default set of metrics according to the observed and predicted response types, as indicated and in the order given in the table below.</p>
 <p>Table 3. Default performance metrics by response types.</p>
 <table>
 <colgroup>
@@ -1106,35 +1126,35 @@ performance(obs, pred_means, metrics = c(&quot;CIndex&quot; = cindex,
 <pre class="r"><code>## User-specified survival probability metrics
 performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.5)
 #&gt;  sensitivity.mean sensitivity.time1 sensitivity.time2  specificity.mean 
-#&gt;         0.4210721         0.3997553         0.4423889         0.8033254 
+#&gt;         0.3909821         0.3426474         0.4393167         0.7700629 
 #&gt; specificity.time1 specificity.time2 
-#&gt;         0.8834709         0.7231799</code></pre>
+#&gt;         0.8446279         0.6954979</code></pre>
 </div>
 <div id="metric-functions" class="section level2">
 <h2>Metric Functions</h2>
 <p>Whereas multiple package-supplied metrics can be calculated simultaneously with the <code>performance</code> function, each exists as a stand-alone function that can be called individually.</p>
-<pre class="r"><code>## Numeric metric functions
+<pre class="r"><code>## Metric functions for survival means
 cindex(obs, pred_means)
-#&gt; [1] 0.6414234
+#&gt; [1] 0.649635
 
 rmse(obs, pred_means)
-#&gt; [1] 3950.521
+#&gt; [1] 5219.239
 
 rmsle(obs, pred_means)
-#&gt; [1] 1.914526
+#&gt; [1] 2.050654
 
-## Binary metric functions
+## Metric functions for survival probabilities
 sensitivity(obs, pred_probs)
 #&gt;      mean     time1     time2 
-#&gt; 0.4210721 0.3997553 0.4423889
+#&gt; 0.3909821 0.3426474 0.4393167
 
 specificity(obs, pred_probs)
 #&gt;      mean     time1     time2 
-#&gt; 0.8033254 0.8834709 0.7231799</code></pre>
+#&gt; 0.7700629 0.8446279 0.6954979</code></pre>
 </div>
 <div id="metric-information" class="section level2">
 <h2>Metric Information</h2>
-<p>A named list of supplied metrics can be obtained interactively with the <code>metricinfo</code> function, and includes the following components for each.</p>
+<p>A named list of available metrics can be obtained interactively with the <code>metricinfo</code> function, and includes the following components for each one.</p>
 <dl>
 <dt><code>label</code></dt>
 <dd>Character descriptor for the metric.
@@ -1149,8 +1169,8 @@ specificity(obs, pred_probs)
 <dd>Data frame of the observed and predicted response variable types supported by the metric.
 </dd>
 </dl>
-<p>Function <code>metricinfo</code> may be called with one or more metric functions, function names, an observed response variable, or an observed and predicted response variable pair; and will return information on all matching metrics.</p>
-<pre class="r"><code>## Names of all available metrics
+<p>Function <code>metricinfo</code> may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.</p>
+<pre class="r"><code>## All available metrics
 metricinfo() %&gt;% names
 #&gt;  [1] &quot;accuracy&quot;        &quot;auc&quot;             &quot;brier&quot;          
 #&gt;  [4] &quot;cindex&quot;          &quot;cross_entropy&quot;   &quot;f_score&quot;        
@@ -1162,24 +1182,6 @@ metricinfo() %&gt;% names
 #&gt; [22] &quot;roc_auc&quot;         &quot;roc_index&quot;       &quot;rpp&quot;            
 #&gt; [25] &quot;sensitivity&quot;     &quot;specificity&quot;     &quot;tnr&quot;            
 #&gt; [28] &quot;tpr&quot;             &quot;weighted_kappa2&quot;
-
-## Metrics for observed and predicted response variables
-metricinfo(obs, pred_means) %&gt;% names
-#&gt; [1] &quot;cindex&quot; &quot;gini&quot;   &quot;mae&quot;    &quot;mse&quot;    &quot;msle&quot;   &quot;r2&quot;     &quot;rmse&quot;   &quot;rmsle&quot;
-metricinfo(obs, pred_probs) %&gt;% names
-#&gt;  [1] &quot;accuracy&quot;    &quot;auc&quot;         &quot;brier&quot;       &quot;f_score&quot;     &quot;fnr&quot;        
-#&gt;  [6] &quot;fpr&quot;         &quot;kappa2&quot;      &quot;npv&quot;         &quot;ppv&quot;         &quot;pr_auc&quot;     
-#&gt; [11] &quot;precision&quot;   &quot;recall&quot;      &quot;roc_auc&quot;     &quot;roc_index&quot;   &quot;rpp&quot;        
-#&gt; [16] &quot;sensitivity&quot; &quot;specificity&quot; &quot;tnr&quot;         &quot;tpr&quot;
-
-## Metrics for response variable types
-metricinfo(Surv(0), numeric(0)) %&gt;% names
-#&gt; [1] &quot;cindex&quot; &quot;gini&quot;   &quot;mae&quot;    &quot;mse&quot;    &quot;msle&quot;   &quot;r2&quot;     &quot;rmse&quot;   &quot;rmsle&quot;
-metricinfo(Surv(0), SurvProbs(0)) %&gt;% names
-#&gt;  [1] &quot;accuracy&quot;    &quot;auc&quot;         &quot;brier&quot;       &quot;f_score&quot;     &quot;fnr&quot;        
-#&gt;  [6] &quot;fpr&quot;         &quot;kappa2&quot;      &quot;npv&quot;         &quot;ppv&quot;         &quot;pr_auc&quot;     
-#&gt; [11] &quot;precision&quot;   &quot;recall&quot;      &quot;roc_auc&quot;     &quot;roc_index&quot;   &quot;rpp&quot;        
-#&gt; [16] &quot;sensitivity&quot; &quot;specificity&quot; &quot;tnr&quot;         &quot;tpr&quot;
 
 ## Metric-specific information
 metricinfo(cindex)
@@ -1199,6 +1201,49 @@ metricinfo(cindex)
 #&gt; 1    factor   numeric
 #&gt; 2 Resamples      NULL
 #&gt; 3      Surv   numeric</code></pre>
+<div id="type-specific-1" class="section level3">
+<h3>Type-Specific</h3>
+<p>When data objects are supplied as arguments, information is returned on all metrics applicable to response variables of the same data types. Observed response variable type is inferred from the first data argument and predicted type from the second, if given. For survival responses, predicted types may be <code>numeric</code> for survival means, <code>SurvEvents</code> for 0-1 survival events at specified follow-up times, or <code>SurvProbs</code> for follow-up time survival probabilities. If model functions are additionally supplied as arguments, information on the subset matching the data types is returned.</p>
+<pre class="r"><code>## Metrics for observed and predicted response variable types
+metricinfo(Surv(0)) %&gt;% names
+#&gt;  [1] &quot;accuracy&quot;    &quot;auc&quot;         &quot;brier&quot;       &quot;cindex&quot;      &quot;f_score&quot;    
+#&gt;  [6] &quot;fnr&quot;         &quot;fpr&quot;         &quot;gini&quot;        &quot;kappa2&quot;      &quot;mae&quot;        
+#&gt; [11] &quot;mse&quot;         &quot;msle&quot;        &quot;npv&quot;         &quot;ppv&quot;         &quot;pr_auc&quot;     
+#&gt; [16] &quot;precision&quot;   &quot;r2&quot;          &quot;recall&quot;      &quot;rmse&quot;        &quot;rmsle&quot;      
+#&gt; [21] &quot;roc_auc&quot;     &quot;roc_index&quot;   &quot;rpp&quot;         &quot;sensitivity&quot; &quot;specificity&quot;
+#&gt; [26] &quot;tnr&quot;         &quot;tpr&quot;
+
+metricinfo(Surv(0), numeric(0)) %&gt;% names
+#&gt; [1] &quot;cindex&quot; &quot;gini&quot;   &quot;mae&quot;    &quot;mse&quot;    &quot;msle&quot;   &quot;r2&quot;     &quot;rmse&quot;   &quot;rmsle&quot;
+
+metricinfo(Surv(0), SurvEvents(0)) %&gt;% names
+#&gt;  [1] &quot;accuracy&quot;    &quot;f_score&quot;     &quot;fnr&quot;         &quot;fpr&quot;         &quot;kappa2&quot;     
+#&gt;  [6] &quot;npv&quot;         &quot;ppv&quot;         &quot;precision&quot;   &quot;recall&quot;      &quot;roc_index&quot;  
+#&gt; [11] &quot;rpp&quot;         &quot;sensitivity&quot; &quot;specificity&quot; &quot;tnr&quot;         &quot;tpr&quot;
+
+metricinfo(Surv(0), SurvProbs(0)) %&gt;% names
+#&gt;  [1] &quot;accuracy&quot;    &quot;auc&quot;         &quot;brier&quot;       &quot;f_score&quot;     &quot;fnr&quot;        
+#&gt;  [6] &quot;fpr&quot;         &quot;kappa2&quot;      &quot;npv&quot;         &quot;ppv&quot;         &quot;pr_auc&quot;     
+#&gt; [11] &quot;precision&quot;   &quot;recall&quot;      &quot;roc_auc&quot;     &quot;roc_index&quot;   &quot;rpp&quot;        
+#&gt; [16] &quot;sensitivity&quot; &quot;specificity&quot; &quot;tnr&quot;         &quot;tpr&quot;
+
+## Identify survival-specific metrics
+metricinfo(Surv(0), auc, cross_entropy, cindex) %&gt;% names
+#&gt; [1] &quot;auc&quot;    &quot;cindex&quot;</code></pre>
+</div>
+<div id="response-variable-specific-1" class="section level3">
+<h3>Response Variable-Specific</h3>
+<p>Existing response variables observed and those obtained from the <code>predict</code> function may be given as arguments to identify metrics that are applicable to them.</p>
+<pre class="r"><code>## Metrics for observed and predicted responses from model fits
+metricinfo(obs, pred_means) %&gt;% names
+#&gt; [1] &quot;cindex&quot; &quot;gini&quot;   &quot;mae&quot;    &quot;mse&quot;    &quot;msle&quot;   &quot;r2&quot;     &quot;rmse&quot;   &quot;rmsle&quot;
+
+metricinfo(obs, pred_probs) %&gt;% names
+#&gt;  [1] &quot;accuracy&quot;    &quot;auc&quot;         &quot;brier&quot;       &quot;f_score&quot;     &quot;fnr&quot;        
+#&gt;  [6] &quot;fpr&quot;         &quot;kappa2&quot;      &quot;npv&quot;         &quot;ppv&quot;         &quot;pr_auc&quot;     
+#&gt; [11] &quot;precision&quot;   &quot;recall&quot;      &quot;roc_auc&quot;     &quot;roc_index&quot;   &quot;rpp&quot;        
+#&gt; [16] &quot;sensitivity&quot; &quot;specificity&quot; &quot;tnr&quot;         &quot;tpr&quot;</code></pre>
+</div>
 </div>
 <div id="factors-1" class="section level2">
 <h2>Factors</h2>
@@ -1321,7 +1366,7 @@ True Positive (TP)
 <dd>True negative rate, <span class="math inline">\(TNR = \frac{TN}{TN + FP} = 1 - FPR\)</span>.
 </dd>
 </dl>
-<p>Area under the ROC and precision-recall curves as well as the concordance index are computed directly on predicted class probabilities. The other metrics are computed on predicted class membership. Memberships are defined to be in the second factor level if predicted probabilities are greater than the cutoff value set in the <code>performance</code> function.</p>
+<p>Area under the ROC and precision-recall curves as well as the concordance index are computed directly on predicted class probabilities. The other metrics are computed on predicted class membership. Memberships are defined to be in the second factor level if predicted probabilities are greater than the function default or user-specified cutoff value.</p>
 </div>
 <div id="numerics" class="section level2">
 <h2>Numerics</h2>
@@ -1416,19 +1461,22 @@ Event
 <p>Model performance can be estimated with resampling methods that simulate repeated training and test set fits and predictions. With these methods, performance metrics are computed on each resample to produce an empirical distribution for inference. Resampling is controlled in the <code>MachineShop</code> with the functions:</p>
 <dl>
 <dt>BootControl</dt>
-<dd>Simple bootstrap resampling. Models are repeatedly fit with bootstrap resampled training sets and used to predict the full data set.
+<dd>Simple bootstrap resampling <span class="citation">(Efron and Tibshirani 1993)</span>. Models are repeatedly fit with bootstrap resampled training sets and used to predict the full data set.
+</dd>
+<dt>BootOptimismControl</dt>
+<dd>Optimism-corrected bootstrap resampling <span class="citation">(Efron and Gong 1983, @harrell:1996:MPM)</span>.
 </dd>
 <dt>CVControl</dt>
-<dd>Repeated K-fold cross-validation. The full data set is repeatedly partitioned into K-folds. For a given partitioning, prediction is performed on each of the K folds with models fit on all remaining folds.
+<dd>Repeated K-fold cross-validation <span class="citation">(Kohavi 1995)</span>. The full data set is repeatedly partitioned into K-folds. For a given partitioning, prediction is performed on each of the K folds with models fit on all remaining folds.
 </dd>
 <dt>OOBControl</dt>
 <dd>Out-of-bootstrap resampling. Models are fit with bootstrap resampled training sets and used to predict the unsampled cases.
 </dd>
 <dt>SplitControl</dt>
-<dd>Split training and test sets. The data are randomly partitioned into a training and test set.
+<dd>Split training and test sets <span class="citation">(Hastie, Tibshirani, and Friedman 2009)</span>. The data are randomly partitioned into a training and test set.
 </dd>
 <dt>TrainControl</dt>
-<dd>Training resubstitution. A model is fit on and used to predict the full training set in order to estimate training, or apparent, error.
+<dd>Training resubstitution. A model is fit on and used to predict the full training set in order to estimate training, or apparent, error <span class="citation">(Efron 1986)</span>.
 </dd>
 </dl>
 <p>For the survival example, repeated cross-validation control structures are defined to estimate model performance in predicting survival means and 5 and 10-year survival probabilities. In addition to arguments controlling the resampling algorithms, a <code>seed</code> can be set to ensure reproducibility of resampling results obtained with the structures.</p>
@@ -1449,7 +1497,7 @@ registerDoParallel(cores = 2)</code></pre>
 </div>
 <div id="resample-function" class="section level2">
 <h2>Resample Function</h2>
-<p>Resampling is performed by calling the <code>resample</code> function with a variable specification, model, and control structure. Like the <code>fit</code> function, variables may be specified in terms of a traditional formula, design matrix, model frame, or recipe. Summary statistics and plots of resample output can be obtained with the <code>summary</code> and <code>plot</code> functions.</p>
+<p>Resampling is performed by calling the <code>resample</code> function with a variable specification, model, and control structure. Like the <code>fit</code> function, variables may be specified in terms of a traditional formula, design matrix, model frame, or recipe.</p>
 <pre class="r"><code>## Resample estimation for survival means and probabilities
 (res_means &lt;- resample(surv_fo, data = surv_train, model = GBMModel, control = surv_means_control))
 #&gt; Object of class &quot;Resamples&quot;
@@ -1478,8 +1526,17 @@ registerDoParallel(cores = 2)</code></pre>
 #&gt; Folds: 5
 #&gt; Repeats: 3
 #&gt; Survival times: 1825, 3650
-#&gt; Seed: 123
+#&gt; Seed: 123</code></pre>
+</div>
+<div id="summary-statistics" class="section level2">
+<h2>Summary Statistics</h2>
+<p>The <code>summary</code> function when applied directly to output from <code>resample</code> computes summary statistics for the default performance metrics described in the <em>Performance Function</em> section.</p>
+<pre class="r"><code>## Summary of survival means metric
+summary(res_means)
+#&gt;             Mean    Median         SD       Min       Max NA
+#&gt; CIndex 0.7317191 0.7323232 0.05100769 0.6376147 0.8042328  0
 
+## Summary of survival probability metrics
 summary(res_probs)
 #&gt;                     Mean    Median         SD       Min       Max NA
 #&gt; Brier.mean     0.2379945 0.2190579 0.06423955 0.1679257 0.4033905  0
@@ -1490,27 +1547,45 @@ summary(res_probs)
 #&gt; ROCAUC.time2   0.6835732 0.7085830 0.08105675 0.5185980 0.8124195  0
 #&gt; Accuracy.mean  0.6782627 0.6775758 0.07508444 0.4823718 0.7817242  0
 #&gt; Accuracy.time1 0.7568929 0.7388889 0.08207762 0.6417004 0.8888889  0
-#&gt; Accuracy.time2 0.5996325 0.6334283 0.11343908 0.2339744 0.7080063  0
-
-plot(res_probs)</code></pre>
-<p><img src="using_files/figure-html/using_resample_function-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>The <code>summary</code> function when applied directly to output from <code>resample</code> computes default performance metrics as described in the <em>Performance Function</em> section. Likewise, the <code>metricinfo</code> and <code>performance</code> functions can be applied to the output in order to list and compute applicable metrics.</p>
+#&gt; Accuracy.time2 0.5996325 0.6334283 0.11343908 0.2339744 0.7080063  0</code></pre>
+<p>Other relevant metrics can be identified and summarized with the <code>metricinfo</code> and <code>performance</code> functions.</p>
 <pre class="r"><code>## Resample-specific metrics
-metricinfo(res_probs) %&gt;% names
-#&gt;  [1] &quot;accuracy&quot;    &quot;auc&quot;         &quot;brier&quot;       &quot;f_score&quot;     &quot;fnr&quot;        
-#&gt;  [6] &quot;fpr&quot;         &quot;kappa2&quot;      &quot;npv&quot;         &quot;ppv&quot;         &quot;pr_auc&quot;     
-#&gt; [11] &quot;precision&quot;   &quot;recall&quot;      &quot;roc_auc&quot;     &quot;roc_index&quot;   &quot;rpp&quot;        
-#&gt; [16] &quot;sensitivity&quot; &quot;specificity&quot; &quot;tnr&quot;         &quot;tpr&quot;
+metricinfo(res_means) %&gt;% names
+#&gt; [1] &quot;cindex&quot; &quot;gini&quot;   &quot;mae&quot;    &quot;mse&quot;    &quot;msle&quot;   &quot;r2&quot;     &quot;rmse&quot;   &quot;rmsle&quot;
 
-## User-specified survival probability metrics
-summary(performance(res_probs, metrics = c(sensitivity, specificity)))
-#&gt;                        Mean    Median         SD        Min       Max NA
-#&gt; sensitivity.mean  0.4684142 0.4396008 0.09213395 0.37425329 0.6623932  0
-#&gt; sensitivity.time1 0.4425560 0.4285714 0.12196740 0.22222222 0.6666667  0
-#&gt; sensitivity.time2 0.4942723 0.4797405 0.12902720 0.24850657 0.6581197  0
-#&gt; specificity.mean  0.7870936 0.7957983 0.12795585 0.44685315 1.0000000  0
-#&gt; specificity.time1 0.8769087 0.8888889 0.08874433 0.73529412 1.0000000  0
-#&gt; specificity.time2 0.6972785 0.6944444 0.19975265 0.09370629 1.0000000  0</code></pre>
+## User-specified survival means metrics
+summary(performance(res_means, metrics = c(cindex, rmse)))
+#&gt;                Mean       Median           SD          Min          Max NA
+#&gt; cindex    0.7317191    0.7323232 5.100769e-02    0.6376147    0.8042328  0
+#&gt; rmse   4400.3637796 4199.8860656 1.767956e+03 2054.1673515 8733.1045193  0</code></pre>
+<p>Futhermore, summaries can be customized with a user-defined statistics function or list of statistics functions passed to the <code>stats</code> argument of <code>summary</code>.</p>
+<pre class="r"><code>## User-defined statistics function
+percentiles &lt;- function(x) quantile(x, probs = c(0.25, 0.50, 0.75))
+summary(res_means, stats = percentiles)
+#&gt;              25%       50%       75% NA
+#&gt; CIndex 0.7066286 0.7323232 0.7659303  0
+
+## User-defined list of statistics functions
+summary(res_means, stats = c(Mean = mean, Percentile = percentiles))
+#&gt;             Mean Percentile.25% Percentile.50% Percentile.75% NA
+#&gt; CIndex 0.7317191      0.7066286      0.7323232      0.7659303  0</code></pre>
+</div>
+<div id="plots" class="section level2">
+<h2>Plots</h2>
+<p>Summary plots of resample output can be obtained with the <code>plot</code> function. Boxplots are the default plot type; but density, errorbar, and violin plots are also available. Plots are generated with the <code>ggplot2</code> package <span class="citation">(Wickham 2016)</span> and returned as <code>ggplot</code> objects. As such, annotation and formatting defined for ggplots can be applied to the returned plots.</p>
+<pre class="r"><code>## Libraries for plot annotation and fomatting
+library(ggplot2)
+library(gridExtra)
+
+## Individual ggplots
+p1 &lt;- plot(res_means)
+p2 &lt;- plot(res_means, type = &quot;density&quot;)
+p3 &lt;- plot(res_means, type = &quot;errorbar&quot;)
+p4 &lt;- plot(res_means, type = &quot;violin&quot;)
+
+## Grid of plots
+grid.arrange(p1, p2, p3, p4, nrow = 2)</code></pre>
+<p><img src="using_files/figure-html/using_resample_plots-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="stratified-resampling" class="section level2">
 <h2>Stratified Resampling</h2>
@@ -1536,7 +1611,7 @@ resample(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(nobs))))<
 </div>
 <div id="model-comparisons" class="section level2">
 <h2>Model Comparisons</h2>
-<p>Resampled metrics from different models can be combined for comparison with the <code>Resamples</code> function. Optional names given on the left hand side of equal operators within calls to <code>Resamples</code> will be used as labels in output from the <code>summary</code> and <code>plot</code> functions. For comparisons of resampled output, the same control structure must be used in all associated calls to <code>resample</code> to ensure that resulting model metrics are computed on the same resampled training and test sets.</p>
+<p>Resampled metrics from different models can be combined for comparison with the <code>Resamples</code> function. Optional names given on the left hand side of equal operators within calls to <code>Resamples</code> will be used as labels in output from the <code>summary</code> and <code>plot</code> functions. For comparisons of resampled output, the same control structure must be used in all associated calls to <code>resample</code> to ensure that resulting model metrics are computed on the same resampled training and test sets. The combined resample output can be summarized and plotted as usual.</p>
 <pre class="r"><code>## Resample estimation
 res1 &lt;- resample(surv_fo, data = surv_train, model = GBMModel(n.trees = 25),
                  control = surv_means_control)
@@ -1570,12 +1645,6 @@ summary(res)
 
 plot(res)</code></pre>
 <p><img src="using_files/figure-html/using_resample_comparisons-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>plot(res, type = &quot;density&quot;)</code></pre>
-<p><img src="using_files/figure-html/using_resample_comparisons-2.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>plot(res, type = &quot;errorbar&quot;)</code></pre>
-<p><img src="using_files/figure-html/using_resample_comparisons-3.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>plot(res, type = &quot;violin&quot;)</code></pre>
-<p><img src="using_files/figure-html/using_resample_comparisons-4.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Pairwise model differences for each metric can be calculated with the <code>diff</code> function applied to results from a call to <code>Resamples</code>. Resulting differences can be summarized descriptively with the <code>summary</code> and <code>plot</code> functions and assessed for statistical significance with the <code>t.test</code> function.</p>
 <pre class="r"><code>## Pairwise model comparisons
 (perfdiff &lt;- diff(res))
@@ -1595,7 +1664,7 @@ summary(perfdiff)
 plot(perfdiff)</code></pre>
 <p><img src="using_files/figure-html/using_resample_diff-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>t.test(perfdiff)
-#&gt; Object of class &quot;HTestPerformanceDiff&quot;
+#&gt; Object of class &quot;PerformanceDiffTest&quot;
 #&gt; 
 #&gt; Upper diagonal: mean differences (row - column)
 #&gt; Lower diagonal: p-values
@@ -1611,36 +1680,40 @@ plot(perfdiff)</code></pre>
 </div>
 <div id="performance-analyses" class="section level1">
 <h1>Performance Analyses</h1>
+<p>Calculation of performance metrics on test sets or by resampling, as discussed previously, is one method of assessing model performance. Others available include measures of predictor variable importance, calibration curves comparing observed and predicted response values, partial dependence plots, and receiver operating characteristic analysis.</p>
 <div id="variable-importance" class="section level2">
 <h2>Variable Importance</h2>
-<p>The importance of variables in a model fit is estimated with the <code>varimp</code> function and plotted with <code>plot</code>. Variable importance is a measure of the relative importance of predictors in a model and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most.</p>
+<p>The importance of variables in a model fit is estimated with the <code>varimp</code> function and plotted with <code>plot</code>. Variable importance is a relative measure of the contributions of model predictors and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most. Classes of models can differ with respect to how variable importance is defined. In the case of a <code>GBMModel</code>, importance of each predictor is based on the sum of squared empirical improvements over all internal tree nodes created by splitting on that variable <span class="citation">(Greenwell et al. 2019)</span>.</p>
 <pre class="r"><code>## Predictor variable importance
 (vi &lt;- varimp(surv_fit))
 #&gt;             Overall
 #&gt; thickness 100.00000
-#&gt; year       53.78039
-#&gt; age        50.98203
-#&gt; ulcer      20.00854
+#&gt; age        60.61137
+#&gt; year       20.02331
+#&gt; ulcer      11.37697
 #&gt; sex         0.00000
 
 plot(vi)</code></pre>
 <p><img src="using_files/figure-html/using_analyses_vi-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Alternatively, importance is based on one minus predictor variable p-values for statistical models, like <code>CoxModel</code>, that produce them. For other classes of models, variable importance is generally defined and calculated by their underlying source packages.</p>
 </div>
 <div id="calibration-curves" class="section level2">
 <h2>Calibration Curves</h2>
-<p>Agreement between model-predicted and observed values can be visualized with calibration curves. In the construction of these curves, cases are partitioned into bins according to their (resampled) predicted responses. Mean observed responses are then calculated within each of the bins and plotted on the vertical axis against the bin midpoints on the horizontal axis. An option to produce curves smoothed over the individual predicted values is also provided. Calibration curves that are close to the 45-degree line indicate close agreement between observed and predicted responses and a model that is said to be well calibrated.</p>
+<p>Agreement between model-predicted and observed values can be visualized with calibration curves. In the construction of these curves, cases are partitioned into equally spaced bins according to their (resampled) predicted responses. Mean observed responses are then calculated within each of the bins and plotted on the vertical axis against the bin midpoints on the horizontal axis.</p>
 <pre class="r"><code>## Binned calibration curves
 cal &lt;- calibration(res_probs, breaks = 10)
 plot(cal, se = TRUE)</code></pre>
 <p><img src="using_files/figure-html/using_analyses_cal-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>As an alternative to discrete bins, curves can be smoothed over the individual predicted values by setting <code>breaks = NULL</code>.</p>
 <pre class="r"><code>## Smoothed calibration curves
 cal &lt;- calibration(res_probs, breaks = NULL)
 plot(cal)</code></pre>
 <p><img src="using_files/figure-html/using_analyses_cal_smoothed-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Calibration curves that are close to the 45<span class="math inline">\(^\circ\)</span> line indicate close agreement between observed and predicted responses and a model that is said to be well calibrated.</p>
 </div>
 <div id="confusion-matrices" class="section level2">
 <h2>Confusion Matrices</h2>
-<p>Confusion matrices of cross-classified observed and predicted factor or survival probabilities are available with the <code>confusion</code> function. They can be constructed with predicted class membership or with predicted class probabilities. In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors and according to the class with highest probability for factors with more than two levels. Performance metrics, such as those described earlier for binary factors, can be computed with the <code>performance</code> function and summarized with <code>summary</code> and <code>plot</code>.</p>
+<p>Confusion matrices of cross-classified observed and predicted categorical responses are available with the <code>confusion</code> function. They can be constructed with predicted class membership or with predicted class probabilities. In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors (default: <code>cutoff = 0.5</code>) and according to the class with highest probability for factors with more than two levels.</p>
 <pre class="r"><code>## Confusion matrices
 (conf &lt;- confusion(res_probs, cutoff = 0.5))
 #&gt; GBMModel.time1 :
@@ -1653,19 +1726,11 @@ plot(cal)</code></pre>
 #&gt;          Observed
 #&gt; Predicted         0         1
 #&gt;         0 163.30328  89.69672
-#&gt;         1  59.30933  95.69067
-
-performance(conf, metrics = c(&quot;Accuracy&quot; = accuracy,
-                              &quot;Sensitivity&quot; = sensitivity,
-                              &quot;Specificity&quot; = specificity))
-#&gt; GBMModel.time1 :
-#&gt;    Accuracy Sensitivity Specificity 
-#&gt;   0.7571397   0.4371604   0.8783426 
-#&gt; 
-#&gt; GBMModel.time2 :
-#&gt;    Accuracy Sensitivity Specificity 
-#&gt;   0.6347891   0.5161660   0.7335761
-
+#&gt;         1  59.30933  95.69067</code></pre>
+<pre class="r"><code>plot(conf)</code></pre>
+<p><img src="using_files/figure-html/using_analyses_conf_plot-1.png" width="672" style="display: block; margin: auto;" /><img src="using_files/figure-html/using_analyses_conf_plot-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Confusion matrices are the data structure upon which many of the performance metrics described earlier for factor predictor variables are based. Metrics commonly reported for confusion matrices are generated by the <code>summary</code> function.</p>
+<pre class="r"><code>## Summary performance metrics
 summary(conf)
 #&gt; GBMModel.time1 :
 #&gt; Number of responses: 408
@@ -1696,8 +1761,24 @@ summary(conf)
 #&gt; Specificity 0.5161660 0.7335761
 #&gt; PPV         0.6454675 0.6173592
 #&gt; NPV         0.6173592 0.6454675</code></pre>
-<pre class="r"><code>plot(conf)</code></pre>
-<p><img src="using_files/figure-html/using_analyses_conf_plot-1.png" width="672" style="display: block; margin: auto;" /><img src="using_files/figure-html/using_analyses_conf_plot-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Summaries can also be obtained with <code>performance</code> function but for select metrics specified by the user.</p>
+<pre class="r"><code>## Confusion matrix-specific metrics
+metricinfo(conf) %&gt;% names
+#&gt;  [1] &quot;accuracy&quot;    &quot;f_score&quot;     &quot;fnr&quot;         &quot;fpr&quot;         &quot;kappa2&quot;     
+#&gt;  [6] &quot;npv&quot;         &quot;ppv&quot;         &quot;precision&quot;   &quot;recall&quot;      &quot;roc_index&quot;  
+#&gt; [11] &quot;rpp&quot;         &quot;sensitivity&quot; &quot;specificity&quot; &quot;tnr&quot;         &quot;tpr&quot;
+
+## User-specified metrics
+performance(conf, metrics = c(&quot;Accuracy&quot; = accuracy,
+                              &quot;Sensitivity&quot; = sensitivity,
+                              &quot;Specificity&quot; = specificity))
+#&gt; GBMModel.time1 :
+#&gt;    Accuracy Sensitivity Specificity 
+#&gt;   0.7571397   0.4371604   0.8783426 
+#&gt; 
+#&gt; GBMModel.time2 :
+#&gt;    Accuracy Sensitivity Specificity 
+#&gt;   0.6347891   0.5161660   0.7335761</code></pre>
 </div>
 <div id="partial-dependence-plots" class="section level2">
 <h2>Partial Dependence Plots</h2>
@@ -1720,13 +1801,15 @@ plot(pd)</code></pre>
 <p>Tradeoffs between correct and incorrect classifications of binary outcomes, across the range of possible cutoff probabilities, can be studied with performance curves.</p>
 <div id="roc" class="section level3">
 <h3>ROC</h3>
-<p>Receiver operating characteristic (ROC) curves are one example in which true positive rates (sensitivity) are plotted against false positive rates (1 - specificity). Area under resulting ROC curves can be computed as an overall measure of model predictive performance and interpreted as the probability that a randomly selected event case will have a higher predicted value than a randomly selected non-event case.</p>
+<p>Receiver operating characteristic (ROC) curves are one example in which true positive rates (sensitivity) are plotted against false positive rates (1 - specificity) <span class="citation">(Fawcett 2006)</span>. Higher ROC curves are indicative of better predictive performance.</p>
 <pre class="r"><code>## ROC curves
 roc &lt;- performance_curve(res_probs)
 plot(roc, diagonal = TRUE)</code></pre>
 <p><img src="using_files/figure-html/using_analyses_roc-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>ROC curves show the relation between the two rates being plotted but not their relationships with specific cutoff values. The latter may be helpful for the selection of a cutoff value to apply in practice. Accordingly, separate plots of each rate versus the range of possible cutoff values are available with the <code>type = "cutoffs"</code> option.</p>
 <pre class="r"><code>plot(roc, type = &quot;cutoffs&quot;)</code></pre>
-<p><img src="using_files/figure-html/using_analyses_roc-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="using_files/figure-html/using_analyses_roc_cutoffs-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Area under resulting ROC curves can be computed as an overall measure of model predictive performance and interpreted as the probability that a randomly selected event case will have a higher predicted value than a randomly selected non-event case.</p>
 <pre class="r"><code>auc(roc)
 #&gt; Model: GBMModel.time1
 #&gt; [1] 0.7621002
@@ -1736,7 +1819,7 @@ plot(roc, diagonal = TRUE)</code></pre>
 </div>
 <div id="precision-recall" class="section level3">
 <h3>Precision Recall</h3>
-<p>In general, any two binary response metrics may be specified for the construction of a performance curve. Precision recall curves are another example.</p>
+<p>In general, any two binary response metrics may be specified for the construction of a performance curve. Precision recall curves are another example <span class="citation">(Davis and Goadrich 2006)</span>.</p>
 <pre class="r"><code>## Precision recall curves
 pr &lt;- performance_curve(res_probs, metrics = c(precision, recall))
 plot(pr)</code></pre>
@@ -1762,7 +1845,7 @@ plot(lf, find = 0.75)</code></pre>
 <h1>Modeling Strategies</h1>
 <div id="model-tuning" class="section level2">
 <h2>Model Tuning</h2>
-<p>Many of the modeling functions have arguments, or parameters, that control aspects of their model fitting algorithms. For example, <code>GBMModel</code> parameters <code>n.trees</code> and <code>interaction.depth</code> control the number of decision trees to fit and the maximum depth of variable interactions. The <code>tune</code> function performs model fitting over a grid of parameter values and returns the model with the most optimal values. Optimality is determined based on the first performance metric supplied to the <code>metrics</code> argument of <code>tune</code>. Furthermore, argument <code>grid</code> controls the construction of grid values and can be a single numeric value giving the grid length in each parameter dimension, a call to <code>Grid</code> with the grid <code>length</code> and number of grid points to sample at <code>random</code>, or a user-specified data frame of grid points. Summary statistics and plots of resulting performances across all metrics and tuning parameters can be obtained with the <code>summary</code> and <code>plot</code> functions.</p>
+<p>Many of the modeling functions have arguments, or tuning parameters, that control aspects of their model fitting algorithms. For example, <code>GBMModel</code> parameters <code>n.trees</code> and <code>interaction.depth</code> control the number of decision trees to fit and the maximum depth of variable interactions. The <code>tune</code> function performs model fitting over a grid of parameter values and returns the model with the most optimal values. Optimality is determined based on the first performance metric of the <code>metrics</code> argument of <code>tune</code> if supplied or the first default metric of the <code>performance</code> function otherwise. Argument <code>grid</code> additionally controls the construction of grid values and can be a single numeric value giving the grid length in each parameter dimension. As shown in the output below, tuning results include the tuning parameter grid values, the names of models fit to each, all calculated metrics, the final model selected, the metric upon which its selection was based, and its tuning parameters.</p>
 <pre class="r"><code>## Tune over automatic grid of model parameters
 (tuned_model &lt;- tune(surv_fo, data = surv_train, model = GBMModel,
                      grid = 3,
@@ -1808,9 +1891,20 @@ plot(lf, find = 0.75)</code></pre>
 #&gt; Metrics: CIndex, RMSE
 #&gt; Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6, GBMModel.7, GBMModel.8, GBMModel.9 
 #&gt; 
-#&gt; Selected (CIndex): GBMModel.1
+#&gt; Selected (CIndex): GBMModel.1</code></pre>
+<p>Grid values may also be a call to <code>Grid</code> with the grid <code>length</code> and number of grid points to sample at <code>random</code> or a user-specified data frame of grid points.</p>
+<pre class="r"><code>## Tune over randomly sampled grid points
+tune(surv_fo, data = surv_train, model = GBMModel,
+     grid = Grid(length = 100, random = 10),
+     control = surv_means_control)
 
-summary(tuned_model)
+## Tune over user-specified grid points
+tune(surv_fo, data = surv_train, model = GBMModel,
+     grid = expand.grid(n.trees = c(25, 50, 100),
+                        interaction.depth = 1:3),
+     control = surv_means_control)</code></pre>
+<p>Statistics summarizing the resampled performance metrics across all tuning parameter combinations can be obtained with the <code>summary</code> function.</p>
+<pre class="r"><code>summary(tuned_model)
 #&gt; , , CIndex
 #&gt; 
 #&gt;                 Mean    Median         SD       Min       Max NA
@@ -1835,21 +1929,11 @@ summary(tuned_model)
 #&gt; GBMModel.6  5155.504  4742.489 2622.075 1563.192 10888.836  0
 #&gt; GBMModel.7  7377.833  7694.407 3004.460 3153.395 13469.921  0
 #&gt; GBMModel.8  9300.410  9393.884 4819.724 3048.763 20100.134  0
-#&gt; GBMModel.9 11552.713 10287.026 7603.593 3063.088 26924.988  0
-
-plot(tuned_model, type = &quot;line&quot;)</code></pre>
-<p><img src="using_files/figure-html/using_strategies_tune-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>## Tune over randomly sampled grid points
-tune(surv_fo, data = surv_train, model = GBMModel,
-     grid = Grid(length = 100, random = 10),
-     control = surv_means_control)
-
-## Tune over user-specified grid points
-tune(surv_fo, data = surv_train, model = GBMModel,
-     grid = expand.grid(n.trees = c(25, 50, 100),
-                        interaction.depth = 1:3),
-     control = surv_means_control)</code></pre>
-<p>The return value of <code>tune</code> is a model object with the optimal tuning parameters and not a model fit object. The returned model can be fit subsequently to a set of data with the <code>fit</code> function.</p>
+#&gt; GBMModel.9 11552.713 10287.026 7603.593 3063.088 26924.988  0</code></pre>
+<p>Line plots of tuning results display the resampled metric means, or another statistic specified with the <code>stat</code> argument, versus the first tuning parameter values and with lines grouped according to the remaining parameters, if any.</p>
+<pre class="r"><code>plot(tuned_model, type = &quot;line&quot;)</code></pre>
+<p><img src="using_files/figure-html/using_strategies_tune_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The return value of <code>tune</code> is a model object with the optimal tuning parameters and not a model fit object. The returned model can be fit subsequently to a set of data with the <code>fit</code> function. Having the final model allows for fitting to the same dataset on which tuning was performed or to datasets from other case populations.</p>
 <pre class="r"><code>## Fit the tuned model
 surv_fit &lt;- fit(surv_fo, data = surv_train, model = tuned_model)
 (vi &lt;- varimp(surv_fit))
@@ -1862,8 +1946,8 @@ surv_fit &lt;- fit(surv_fo, data = surv_train, model = tuned_model)
 </div>
 <div id="model-selection" class="section level2">
 <h2>Model Selection</h2>
-<p>Model selection can be performed with the <code>tune</code> function to select from any combination of models and model parameters. It has as a special case the just-discussed tuning of a single model over a grid of parameter values. In general, a list containing any combination of model functions, function names, and function calls can be supplied to the <code>models</code> argument of <code>tune</code> to perform model selection. An <code>expand.model</code> helper function is additionally provided to expand a model over a grid of tuning parameters for inclusion in the list if so desired. In this general form of model selection, the <code>grid</code> argument discussed previously for grid tuning is not used.</p>
-<pre class="r"><code>## Select from a list of candidate models
+<p>Model selection can be performed with the <code>tune</code> function to automatically choose from any combination of models and model parameters. Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values. In general, a list containing any combination of model functions, function names, and function calls can be supplied to the <code>models</code> argument of <code>tune</code> to perform model selection. An <code>expand.model</code> helper function is additionally provided to expand a model over a grid of tuning parameters for inclusion in the list if so desired. In this general form of model selection, the <code>grid</code> argument discussed previously for grid tuning is not used.</p>
+<pre class="r"><code>## List of candidate models
 candidate_models &lt;- c(
   expand.model(GBMModel, n.trees = c(50, 100), interaction.depth = 1:2),
   GLMNetModel(lambda = 0.01),
@@ -1871,12 +1955,31 @@ candidate_models &lt;- c(
   SurvRegModel
 )
 
+## Select among candidate models
 tune(surv_fo, data = surv_train, models = candidate_models,
+     control = surv_means_control)</code></pre>
+<p>Selection may also be performed over sets that include tuned models. For instance, the <code>tune</code> function could be applied to a candidate list containing different classes of models each individually tuned over a grid of parameters.</p>
+<pre class="r"><code>## Tuned classes of models
+tuned_models &lt;- lapply(c(GBMModel, GLMNetModel, CoxModel), function(model) {
+  tune(surv_fo, data = surv_train, model = model, control = surv_means_control)
+})
+
+## Select among tuned models
+tune(surv_fo, data = surv_train, models = tuned_models,
      control = surv_means_control)</code></pre>
 </div>
 <div id="ensemble-models" class="section level2">
 <h2>Ensemble Models</h2>
-<p>Ensemble methods combine multiple base learning algorithms as a strategy to improve predictive performance. Two ensemble methods implemented in <code>Machineshop</code> are <em>stacked regression</em> <span class="citation">(Breiman 1996)</span> and <em>super learners</em> <span class="citation">(van der Lann and Hubbard 2007)</span>. Stacked regression fits a linear combination of resampled predictions from specified base learners; whereas, super learners fit a specified model, such as <code>GBMModel</code>, to the base learner predictions and optionally also to the original predictor variables. Illustrated below is a performance evaluation of stacked regression and a super learner fit to gradient boosted, random forest, and Cox regression base learners. In the second case, a separate gradient boosted model is used as the super learner.</p>
+<p>Ensemble modelling methods combine <span class="math inline">\(m = 1, \ldots, M\)</span> base learning models as a strategy to improve predictive performance. Two methods implemented in <code>Machineshop</code> are <em>stacked regression</em> <span class="citation">(Breiman 1996)</span> and <em>super learners</em> <span class="citation">(van der Lann and Hubbard 2007)</span>. Stacked regression fits a linear combination of predictions from specified base learners to produce a prediction function of the form <span class="math display">\[
+\hat{f}(x) = \sum_{m=1}^M \hat{w}_m \hat{f}_m(x).
+\]</span> Stacking weights <span class="math inline">\(w\)</span> are estimated by (constrained) least squares regression of case responses <span class="math inline">\(y_i\)</span> on predictions <span class="math inline">\(\hat{f}^{-\kappa(i)}(x_i)\)</span> from learners fit to data subsamples <span class="math inline">\(-\kappa(i)\)</span> not containing the corresponding cases. In particular, they are obtained as the solution <span class="math display">\[
+\hat{w} = \underset{w}{\operatorname{argmin}} \sum_{i=1}^{N}\left(y_i - \sum_{m=1}^{M} w_m \hat{f}^{-\kappa(i)}(x_i) \right)^2
+\]</span> subject to the constraints that all <span class="math inline">\(w_m \ge 0\)</span> and <span class="math inline">\(\sum_m w_m = 1\)</span>. K-fold cross-validation is the default subsampling method employed in the estimation, with the other resampling methods provided by the package available as other options. Survival outcomes are handled with a modified version of the stacked regression algorithm in which</p>
+<ul>
+<li>minimization of least squares is replaced by maximization of Harrell’s concordance index <span class="citation">(1982)</span> to accommodate censoring, and</li>
+<li>prediction can only be performed on the same response type used for the model fit; i.e., either survival means or survival probabilities at set follow-up times.</li>
+</ul>
+<p>Super learners are a generalization of stacked regression that fit a specified model, such as <code>GBMModel</code>, to case responses <span class="math inline">\(y_i\)</span>, base learner predictions <span class="math inline">\(\hat{f}^{-\kappa(i)}(x_i)\)</span>, and optionally also to the original predictor variables <span class="math inline">\(x_i\)</span>. Given below are examples of a stacked regression and super learner each fit with gradient boosted, random forest, and Cox regression base learners. A separate gradient boosted model is used as the super learner in the latter.</p>
 <pre class="r"><code>## Stacked regression
 stackedmodel &lt;- StackedModel(GLMBoostModel, CForestModel, CoxModel)
 res_stacked &lt;- resample(surv_fo, data = surv_train, model = stackedmodel)
@@ -1896,8 +1999,8 @@ summary(res_super)
 <div id="package-extensions" class="section level1">
 <h1>Package Extensions</h1>
 <p>Custom models and metrics can be defined with <code>MLModel</code> and <code>MLMetric</code> for use with the model fitting, prediction, and performance assessment tools provided by the package.</p>
-<div id="mlmodel" class="section level2">
-<h2>MLModel</h2>
+<div id="custom-models" class="section level2">
+<h2>Custom Models</h2>
 <p>The <code>MLModel</code> function creates a model object that can be used with the previously described fitting functions. It take the following arguments.</p>
 <dl>
 <dt><code>name</code></dt>
@@ -1913,7 +2016,7 @@ summary(res_super)
 <dd>Character vector of response variable types to which the model can be fit. Supported types are <code>"binary"</code>, <code>"factor"</code>, <code>"matrix"</code>, <code>"numeric"</code>, <code>"ordered"</code>, and <code>"Surv"</code>.
 </dd>
 <dt><code>fit</code></dt>
-<dd>Model fitting function whose arguments are a <code>formula</code>, a <code>ModelFrame</code> named <code>data</code>, case <code>weights</code>, and an ellipsis. Argument <code>data</code> may be converted to a data frame with the <code>as.data.frame</code> function as needed. The fit function should return the object resulting from the model fit.
+<dd>Model fitting function whose arguments are a <code>formula</code>, a <code>ModelFrame</code> named <code>data</code>, case <code>weights</code>, and an ellipsis. Argument <code>data</code> may be converted to a data frame with the <code>as.data.frame</code> function as commonly needed. The fit function should return the object resulting from the model fit.
 </dd>
 <dt><code>predict</code></dt>
 <dd>Prediction function whose arguments are the <code>object</code> returned by <code>fit</code>, a <code>ModelFrame</code> named <code>newdata</code> of predictor variables, optional vector of <code>times</code> at which to predict survival, and an ellipsis. Argument <code>data</code> may be converted to a data frame with the <code>as.data.frame</code> function as needed. Values returned by the function should be formatted according to the response variable types below.
@@ -1947,8 +2050,8 @@ LogisticModel &lt;- MLModel(
   }
 )</code></pre>
 </div>
-<div id="mlmetric" class="section level2">
-<h2>MLMetric</h2>
+<div id="custom-metrics" class="section level2">
+<h2>Custom Metrics</h2>
 <p>The <code>MLMetric</code> function creates a metric object that can be used as previously described for the model performance metrics. Its first argument is a function to compute the metric, defined to accept <code>observed</code> and <code>predicted</code> as the first two arguments and with an ellipsis to accommodate others. Its remaining arguments are as follows.</p>
 <dl>
 <dt><code>name</code></dt>
@@ -1997,11 +2100,26 @@ summary(performance(res, metric = f2_score))
 <div id="ref-breslow:1972:DPC">
 <p>Breslow, Norman E. 1972. “Discussion of Professor Cox’s Paper.” <em>Journal of the Royal Statistical Society, Series B</em> 34: 216–17.</p>
 </div>
+<div id="ref-davis:2006:RPR">
+<p>Davis, Jesse, and Mark Goadrich. 2006. “The Relationship Between Precision-Recall and ROC Curves.” In <em>Proceedings of the 23rd International Conference on Machine Learning</em>, 233–40. ICML ’06. New York, NY, USA: ACM.</p>
+</div>
 <div id="ref-efron:1967:PFB">
 <p>Efron, Bradley. 1967. “The Two Sample Problem with Censored Data.” In <em>Proceedings of the Fifth Berkeley Symposium on Mathematical Statistics and Probability, Volume 4: Biology and Problems of Health</em>, 831–53. Berkeley, California: University of California Press.</p>
 </div>
 <div id="ref-efron:1977:ECL">
 <p>———. 1977. “The Efficiency of Cox’s Likelihood Function for Censored Data.” <em>Journal of the American Statistical Association</em> 72 (359): 557–65.</p>
+</div>
+<div id="ref-efron:1986:HBA">
+<p>———. 1986. “How Biased Is the Apparent Error Rate of a Prediction Rule?” <em>Journal of the American Statistical Association</em> 81 (394): 461–70.</p>
+</div>
+<div id="ref-efron:1983:LLB">
+<p>Efron, Bradley, and Gail Gong. 1983. “A Leisurely Look at the Bootstrap, the Jackknife, and Cross-Validation.” <em>The American Statistician</em> 37 (1): 36–48.</p>
+</div>
+<div id="ref-efron:1993:IB">
+<p>Efron, Bradley, and Robert J Tibshirani. 1993. <em>An Introduction to the Bootstrap</em>. Monographs on Statistics and Applied Probability 57. Boca Raton, Florida, USA: Chapman &amp; Hall/CRC.</p>
+</div>
+<div id="ref-fawcett:2006:IRA">
+<p>Fawcett, Tom. 2006. “An Introduction to ROC Analysis.” <em>Pattern Recognition Letters</em> 27 (8): 861–74.</p>
 </div>
 <div id="ref-fleming:1984:NES">
 <p>Fleming, Thomas R, and David P Harrington. 1984. “Nonparametric Estimation of the Survival Distribution in Censored Data.” <em>Communications in Statistics - Theory and Methods</em> 13 (20): 2469–86.</p>
@@ -2009,11 +2127,23 @@ summary(performance(res, metric = f2_score))
 <div id="ref-graf:1999:ACP">
 <p>Graf, Erika, Claudia Schmoor, Willi Sauerbrei, and Martin Schumacher. 1999. “Assessment and Comparison of Prognostic Classification Schemes for Survival Data.” <em>Statistics in Medicine</em> 18 (17–18): 2529–45.</p>
 </div>
+<div id="ref-greenwell:2019:GBM">
+<p>Greenwell, Brandon, Bradley Boehmke, Jay Cunningham, and GBM Developers. 2019. <em>gbm: Generalized Boosted Regression Models</em>. <a href="https://CRAN.R-project.org/package=gbm">https://CRAN.R-project.org/package=gbm</a>.</p>
+</div>
 <div id="ref-harrell:1982:EYM">
 <p>Harrell, Frank E, Robert M Califf, David B Pryor, Kerry L Lee, and Robert A Rosati. 1982. “Evaluating the Yield of Medical Tests.” <em>JAMA</em> 247 (18): 2543–6.</p>
 </div>
+<div id="ref-harrell:1996:MPM">
+<p>Harrell, Frank E, Kerry L Lee, and Daniel B Mark. 1996. “Multivariable Prognostic Models: Issues in Developing Models, Evaluating Assumptions and Adequacy, and Measuring and Reducing Errors.” <em>Statistics in Medicine</em> 15 (4): 361–87.</p>
+</div>
+<div id="ref-hastie:2009:ESL7">
+<p>Hastie, Trevor, Robert Tibshirani, and Jerome Friedman. 2009. “The Elements of Statistical Learning: Data Mining, Inference, and Prediction, Second Edition.” In. Springer Series in Statistics. New York, NY, USA: Springer.</p>
+</div>
 <div id="ref-heagerty:2004:TDR">
 <p>Heagerty, Patrick J, Thomas Lumley, and Margaret S Pepe. 2004. “Time-Dependent ROC Curves for Censored Survival Data and a Diagnostic Marker.” <em>Biometrics</em> 56 (2): 337–44.</p>
+</div>
+<div id="ref-kohavi:1995:SCB">
+<p>Kohavi, Ron. 1995. “A Study of Cross-Validation and Bootstrap for Accuracy Estimation and Model Selection.” In <em>Proceedings of the 14th International Joint Conference on Artificial Intelligence - Volume 2</em>, 1137–43. IJCAI’95. San Francisco, CA, USA: Morgan Kaufmann Publishers Inc.</p>
 </div>
 <div id="ref-kuhn:2018:RPT">
 <p>Kuhn, Max, and Hadley Wickham. 2018. <em>recipes: Preprocessing Tools to Create Design Matrices</em>. <a href="https://CRAN.R-project.org/package=recipes">https://CRAN.R-project.org/package=recipes</a>.</p>
@@ -2029,6 +2159,9 @@ summary(performance(res, metric = f2_score))
 </div>
 <div id="ref-vanderLann:2007:SL">
 <p>van der Lann, Mark J, and Alan E Hubbard. 2007. “Super Learner.” <em>Statistical Applications in Genetics and Molecular Biology</em> 6 (1).</p>
+</div>
+<div id="ref-wickham:2016:GEG">
+<p>Wickham, Hadley. 2016. <em>ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.</p>
 </div>
 <div id="ref-youden:1950:IRD">
 <p>Youden, William J. 1950. “Index for Rating Diagnostic Tests.” <em>Cancer</em> 3 (1): 32–35.</p>
