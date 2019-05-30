@@ -16,12 +16,11 @@
 #' 
 setMethod("[", c(x = "Resamples", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, drop = FALSE) {
-    if (drop) {
-      callNextMethod()
-    } else {
-      j <- TRUE
-      new("Resamples", callNextMethod(), control = x@control, strata = x@strata)
-    }
+    y <- callNextMethod()
+    if (identical(colnames(x), colnames(y)) && !drop) {
+      y$Model <- droplevels(y$Model)
+      new("Resamples", y, control = x@control, strata = x@strata)
+    } else y
   }
 )
 
