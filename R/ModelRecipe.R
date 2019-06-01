@@ -47,9 +47,8 @@ prep.ModelRecipe <- function(x, ...) {
 
 recipe.ModelRecipe <- function(x, data, ...) {
   if (fully_trained(x)) {
-    prep(x, training = data, fresh = TRUE, retain = FALSE)
-  } else {
-    x$template <- as_tibble(data)
-    x
+    x <- prep(x, training = data, fresh = TRUE, retain = FALSE)
   }
+  x$template <- as_tibble(data)
+  x
 }
