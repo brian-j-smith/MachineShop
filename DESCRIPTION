@@ -11,7 +11,7 @@ Maintainer: Brian J Smith <brian-j-smith@uiowa.edu>
 Description: Meta-package for statistical and machine learning with a common interface for model fitting, prediction, performance assessment, and presentation of results.  Supports predictive modeling of numerical, categorical, and censored time-to-event outcomes and resample (bootstrap and cross-validation) estimation of model performance.
 LazyData: yes
 Imports: abind, foreach, ggplot2, kernlab, magrittr, methods, party, polspline,
-         recipes (>= 0.1.4), rsample, Rsolnp, survival, tibble, utils
+         recipes (>= 0.1.4), rlang, rsample, Rsolnp, survival, tibble, utils
 Suggests: adabag, BART, bartMachine, C50, doParallel, e1071, earth, gbm, glmnet,
           gridExtra, Hmisc, kableExtra, kknn, knitr, lars, mda, MASS, mboost,
           nnet, partykit, pls, randomForest, ranger, rmarkdown, rms, rpart,

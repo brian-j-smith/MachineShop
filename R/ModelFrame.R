@@ -48,7 +48,7 @@ ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
   )
   data[deparse(response(model_terms))] <- response(model_terms, data)
   
-  ModelFrame(model_terms, data, na.rm = na.rm,
+  ModelFrame(model_terms, data, na.rm = na.rm, casenames = rownames(data),
              weights = weights, strata = strata, ...)
 }
 
@@ -64,13 +64,13 @@ ModelFrame.matrix <- function(x, y = NULL, na.rm = TRUE,
   model_terms <- terms(x, y)
   data[deparse(response(model_terms))] <- y
   
-  ModelFrame(model_terms, data, na.rm = na.rm,
+  ModelFrame(model_terms, data, na.rm = na.rm, casenames = rownames(data),
              weights = weights, strata = strata, ...)
 }
 
 
 ModelFrame.ModelFrame <- function(x, na.rm = TRUE, na.action = NULL, ...) {
-  vars <- as.data.frame(do.call(cbind, list(...)))
+  vars <- as.data.frame(Filter(length, list(...)), stringsAsFactors = FALSE)
   names(vars) <- sapply(names(vars), function(x) paste0("(", x, ")"))
   x[names(vars)] <- vars
 
@@ -102,8 +102,11 @@ ModelFrame.recipe <- function(x, ...) {
   
   model_terms <- terms(x)
   data[deparse(response(model_terms))] <- response(model_terms, data)
-
-  ModelFrame(model_terms, data, na.rm = FALSE,
+  
+  casenames <- data[["(casenames)"]]
+  if (is.null(casenames)) casenames <- rownames(data)
+  
+  ModelFrame(model_terms, data, na.rm = FALSE, casenames = casenames,
              weights = weights, strata = strata)
 }
 
