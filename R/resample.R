@@ -202,9 +202,7 @@ setMethod(".resample", c("MLBootControl", "ModelRecipe"),
                          strata = strata)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     
-    fo <- formula(terms(x))
-    test <- ModelFrame(fo, x, na.rm = FALSE)
-    
+    test <- prep(x)
     is_optimism_control <- is(object, "MLBootOptimismControl")
     if (is_optimism_control) {
       train_pred <- resample_args(x, test, model, object)[[1]]$Predicted
@@ -216,7 +214,7 @@ setMethod(".resample", c("MLBootControl", "ModelRecipe"),
       split <- splits[[i]]
       train <- recipe(x, analysis(split))
       if (is_optimism_control) {
-        test_list <- list(test, ModelFrame(fo, train, na.rm = FALSE))
+        test_list <- list(test, prep(train))
         args <- resample_args(train, test_list, model, object, strata)
         df <- args[[1]][[1]]
         df_boot <- args[[1]][[2]]
@@ -270,7 +268,7 @@ setMethod(".resample", c("MLCVControl", "ModelRecipe"),
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- recipe(x, analysis(split))
-      test <- ModelFrame(fo, assessment(split), na.rm = FALSE)
+      test <- prep(recipe(x, assessment(split)))
       resample_args(train, test, model, object, strata)
     } %>% Resamples.list
   }
@@ -311,7 +309,7 @@ setMethod(".resample", c("MLOOBControl", "ModelRecipe"),
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- recipe(x, analysis(split))
-      test <- ModelFrame(formula(terms(x)), assessment(split), na.rm = FALSE)
+      test <- prep(recipe(x, assessment(split)))
       resample_args(train, test, model, object, strata)
     } %>% Resamples.list
   }
@@ -340,7 +338,7 @@ setMethod(".resample", c("MLSplitControl", "ModelRecipe"),
                            prop = object@prop,
                            strata = strata)
     train <- recipe(x, analysis(split))
-    test <- ModelFrame(formula(terms(x)), testing(split), na.rm = FALSE)
+    test <- prep(recipe(x, testing(split)))
     do.call(Resamples, resample_args(train, test, model, object, strata))
   }
 )
@@ -357,8 +355,8 @@ setMethod(".resample", c("MLTrainControl", "ModelFrame"),
 setMethod(".resample", c("MLTrainControl", "ModelRecipe"),
   function(object, x, model) {
     set.seed(object@seed)
-    test <- ModelFrame(formula(terms(x)), x, na.rm = FALSE)
-    do.call(Resamples, resample_args(x, test, model, object))
+    x <- prep(x)
+    do.call(Resamples, resample_args(x, x, model, object))
   }
 )
 
@@ -372,9 +370,10 @@ resample_args <- function(train, test, model, control, strata = character()) {
   f <- function(test) {
     df <- data.frame(Model = factor(model@name),
                      Resample = 1,
-                     Case = rownames(test))
+                     Case = as.data.frame(test, original = FALSE)$"(casenames)",
+                     stringsAsFactors = FALSE)
     df$Observed <- response(test)
-    df$Predicted <- predict(trainfit, test, type = "prob",
+    df$Predicted <- predict(trainfit, as.data.frame(test), type = "prob",
                             times = control@times, method = control@method,
                             dist = control@dist)
     df

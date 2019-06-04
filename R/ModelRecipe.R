@@ -40,8 +40,8 @@ ModelRecipe.recipe <- function(object, ...) {
 }
 
 
-as.data.frame.ModelRecipe <- function(x, ...) {
-  as.data.frame(x$template)
+as.data.frame.ModelRecipe <- function(x, original = TRUE, ...) {
+  as.data.frame(if (original) x$template else juice(prep(x)))
 }
 
 
