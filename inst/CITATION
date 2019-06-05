@@ -3,7 +3,7 @@ note <- sprintf("R package version %s", meta$Version)
 
 bibentry(bibtype = "Manual",
          title = "{MachineShop}: Machine Learning Models and Tools",
-         author = c(person("Brian", "Smith", "J",
+         author = c(person(c("Brian", "J"), "Smith",
                            email = "brian-j-smith@uiowa.edu",
                            role = c("aut", "cre"))),
          year = year,

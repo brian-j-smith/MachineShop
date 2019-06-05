@@ -1,9 +1,9 @@
 Package: MachineShop
 Type: Package
 Title: Machine Learning Models and Tools
-Version: 1.3.2
-Date: 2019-05-20
-Authors@R: person("Brian J", "Smith",
+Version: 1.3.3
+Date: 2019-06-05
+Authors@R: person(c("Brian", "J"), "Smith",
                   email = "brian-j-smith@uiowa.edu",
                   role = c("aut", "cre"))
 Author: Brian J Smith [aut, cre]
