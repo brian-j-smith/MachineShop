@@ -49,12 +49,11 @@ SuperModel <- function(..., model = GBMModel, control = CVControl,
         learner_predictors <- lapply(object$base_fits, function(fit) {
           predict(fit, newdata = newdata, times = object$times, type = "prob")
         })
-        df <- make_super_df(NA, learner_predictors, row.names(newdata))
-  
-        mf <- ModelFrame(formula(df), df, na.rm = FALSE)
-        if (object$all_vars) mf <- add_predictors(newdata, mf)
         
-        predict(object$super_fit, newdata = mf, times = times, type = "prob")
+        df <- make_super_df(NA, learner_predictors, nrow(newdata))
+        if (object$all_vars) df <- add_super_predictors(newdata, df)
+
+        predict(object$super_fit, newdata = df, times = times, type = "prob")
       },
       varimp = function(object, ...) NULL
     )
@@ -79,9 +78,10 @@ setClass("SuperModel", contains = "MLModel")
     response <- resample(x, model = base_learners[[i]], control = control)
     learner_predictors[[i]] <- response$Predicted
   }
-  df <- make_super_df(response$Observed, learner_predictors, response$Case)
+  
+  df <- make_super_df(response$Observed, learner_predictors, nrow(response))
+  if (params$all_vars) df <- add_super_predictors(mf, df, response$Case)
   super_mf <- ModelFrame(formula(df), df)
-  if (params$all_vars) super_mf <- add_predictors(mf, super_mf)
 
   list(base_fits = lapply(base_learners,
                           function(learner) fit(mf, model = learner)),
@@ -92,26 +92,27 @@ setClass("SuperModel", contains = "MLModel")
 }
 
 
-make_super_df <- function(y, predictors, row.names) {
+make_super_df <- function(y, predictors, nrow) {
   predictors <- do.call(cbind, predictors)
   colnames(predictors) <- make.names(1:ncol(predictors))
-  df <- data.frame(row.names = paste0(seq_along(row.names), ".", row.names))
+  df <- data.frame(row.names = seq_len(nrow))
   df$y <- y
   cbind(df, predictors)
 }
 
 
-add_predictors <- function(from, to) {
-  from_terms <- terms(from)
-  from <- predictors(from)
-
-  lhs <- names(to)[1]
-  rhs <- c(labels(from_terms), names(to)[-1])
+add_super_predictors <- function(from, to, casenames) {
+  from_predictors <- predictors(from)
   
-  from[["(row.names)"]] <- row.names(from)
-  to[["(row.names)"]] <- sub(".+?[.]", "", row.names(to))
-  data <- merge(from, to, by = "(row.names)", sort = FALSE)
-  data[["(row.names)"]] <- NULL
+  unique_names <- make.unique(c(names(to), names(from_predictors)))
+  names(from_predictors) <- tail(unique_names, length(from_predictors))
 
-  ModelFrame(reformulate(rhs, lhs), data, na.rm = FALSE)
+  if (missing(casenames)) {
+    cbind(to, from_predictors)
+  } else {
+    case_name_var <- "(casenames)"
+    from_predictors[[case_name_var]] <- from[[case_name_var]]
+    to[[case_name_var]] <- casenames
+    merge(to, from_predictors, by = case_name_var, sort = FALSE)[-1]
+  }
 }
