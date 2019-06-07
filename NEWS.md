@@ -2,6 +2,9 @@
 
 ## Version Updates
 
+## 1.4.0
+* CRAN release.
+
 ## 1.3.3
 * Implement optimism-corrected bootstrap resampling (`BootOptimismControl`).
 * Store case names in `ModelFrame` and `ModelRecipe` and save to `Resamples`.
