@@ -9,7 +9,7 @@ BootControl
   : Simple bootstrap resampling [@efron:1993:IB].  Models are repeatedly fit with bootstrap resampled training sets and used to predict the full data set.
 
 BootOptimismControl
-  : Optimism-corrected bootstrap resampling [@efron:1983:LLB, @harrell:1996:MPM].
+  : Optimism-corrected bootstrap resampling [@efron:1983:LLB; @harrell:1996:MPM].
 
 CVControl
   : Repeated K-fold cross-validation [@kohavi:1995:SCB].  The full data set is repeatedly partitioned into K-folds.  For a given partitioning, prediction is performed on each of the K folds with models fit on all remaining folds.
