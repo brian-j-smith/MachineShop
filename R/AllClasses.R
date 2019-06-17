@@ -1,5 +1,6 @@
 setOldClass("ModelFrame")
 setOldClass("ModelRecipe")
+setOldClass("Surv")
 setOldClass(c("SurvEvents", "SurvMatrix"))
 setOldClass(c("SurvProbs", "SurvMatrix"))
 
