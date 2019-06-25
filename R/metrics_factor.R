@@ -503,30 +503,10 @@ MLMetric(weighted_kappa2) <-
   list("weighted_kappa2", "Weighted Cohen's Kappa", TRUE)
 
 
-setMetricGeneric("weighted_kappa2")
-
-
-setMetricMethod("weighted_kappa2", c("OrderedConfusionMatrix", "NULL"),
+setMetric_OrderedConfusionMatrix("weighted_kappa2",
   function(observed, predicted, power, ...) {
     expected <- (rowSums(observed) %o% colSums(observed)) / sum(observed)
     weights <- abs(row(observed) - col(observed))^power
     1 - sum(weights * observed) / sum(weights * expected)
   }
 )
-
-
-setMetricMethod("weighted_kappa2", c("ordered", "ordered"),
-  function(observed, predicted, ...) {
-    weighted_kappa2(confusion(observed, predicted), ...)
-  }
-)
-
-
-setMetricMethod("weighted_kappa2", c("ordered", "matrix"),
-  function(observed, predicted, ...) {
-    weighted_kappa2(confusion(observed, predicted), ...)
-  }
-)
-
-
-setMetricMethod_Resamples("weighted_kappa2")

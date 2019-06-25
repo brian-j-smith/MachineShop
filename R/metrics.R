@@ -36,6 +36,18 @@ setMetric_ConfusionMatrix <- function(f, definition) {
 }
 
 
+setMetric_OrderedConfusionMatrix <- function(f, definition) {
+  setMetricGeneric(f)
+  setMetricMethod(f, c("OrderedConfusionMatrix", "NULL"), definition)
+  definition_ordered <- function(observed, predicted, ...) {
+    get(f)(confusion(observed, predicted), ...)
+  }
+  setMetricMethod(f, c("ordered", "ordered"), definition_ordered)
+  setMetricMethod(f, c("ordered", "matrix"), definition_ordered)
+  setMetricMethod_Resamples(f)
+}
+
+
 setMetric_numeric <- function(f, definition) {
   setMetricGeneric(f)
   setMetricMethod(f, c("numeric", "numeric"), definition)
