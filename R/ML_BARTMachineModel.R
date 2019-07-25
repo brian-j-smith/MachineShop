@@ -60,7 +60,7 @@ BARTMachineModel <- function(num_trees = 50, num_burn = 250, num_iter = 1000,
     name = "BARTMachineModel",
     label = "Bayesian Additive Regression Trees",
     packages = "bartMachine",
-    types = c("binary", "numeric"),
+    response_types = c("binary", "numeric"),
     params = params(environment()),
     grid = function(x, length, ...) {
       list(

@@ -50,7 +50,7 @@ CForestModel <- function(teststat = c("quad", "max"),
     name = "CForestModel",
     label = "Conditional Random Forests",
     packages = "party",
-    types = c("factor", "numeric", "Surv"),
+    response_types = c("factor", "numeric", "Surv"),
     params = list(controls = as.call(c(.(party::cforest_control), args))),
     grid = function(x, length, ...) {
       list(

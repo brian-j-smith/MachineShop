@@ -16,7 +16,7 @@ The `MLModel` function creates a model object that can be used with the previous
 `packages`
   : Character vector of source packages required to use the model.
   
-`types`
+`response_types`
   : Character vector of response variable types to which the model can be fit.  Supported types are `"binary"`, `"factor"`, `"matrix"`, `"numeric"`, `"ordered"`, and `"Surv"`.
   
 `fit`
@@ -39,7 +39,7 @@ The `MLModel` function creates a model object that can be used with the previous
 LogisticModel <- MLModel(
   name = "LogisticModel",
   label = "Logistic Model",
-  types = "binary",
+  response_types = "binary",
   fit = function(formula, data, weights, ...) {
     glm(formula, data = as.data.frame(data), weights = weights,
         family = binomial, ...)

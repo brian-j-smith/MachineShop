@@ -41,7 +41,7 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
     name = "RPartModel",
     label = "Recursive Partitioning and Regression Trees",
     packages = c("rpart", "partykit"),
-    types = c("factor", "numeric", "Surv"),
+    response_types = c("factor", "numeric", "Surv"),
     params = list(control = as.call(c(.(list), params(environment())))),
     grid = function(x, length, ...) {
       cptable <- fit(x, model = RPartModel(cp = 0))$cptable[, "CP"]

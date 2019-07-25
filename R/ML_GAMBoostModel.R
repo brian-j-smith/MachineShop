@@ -59,7 +59,7 @@ GAMBoostModel <- function(family = NULL,
     name = "GAMBoostModel",
     label = "Gradient Boosting with Additive Models",
     packages = "mboost",
-    types = c("binary", "numeric", "Surv"),
+    response_types = c("binary", "numeric", "Surv"),
     params = params,
     grid = function(x, length, ...) {
       list(

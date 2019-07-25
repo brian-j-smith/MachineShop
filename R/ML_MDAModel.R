@@ -55,7 +55,7 @@ MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
     name = "MDAModel",
     label = "Mixture Discriminant Analysis",
     packages = "mda",
-    types = "factor",
+    response_types = "factor",
     params = params(environment()),
     grid = function(x, length, ...) {
       list(

@@ -57,7 +57,7 @@ AdaBoostModel <- function(boos = TRUE, mfinal = 100,
     name = "AdaBoostModel",
     label = "Boosting with Classification Trees",
     packages = "adabag",
-    types = "factor",
+    response_types = "factor",
     params = params,
     grid = function(x, length, random, ...) {
       params <- list(

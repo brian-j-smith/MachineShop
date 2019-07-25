@@ -23,7 +23,7 @@ LMModel <- function() {
     name = "LMModel",
     label = "Linear Model",
     packages = "stats",
-    types = c("factor", "matrix", "numeric"),
+    response_types = c("factor", "matrix", "numeric"),
     params = params(environment()),
     design = "model.matrix",
     fit = function(formula, data, weights, ...) {

@@ -167,7 +167,7 @@ Model fitting requires user specification of a `MachineShop` compatible model.  
 `packages`
   : Character vector of source packages required to use the model.  These need only be installed with the `install.packages` function or by equivalent means; but need not be loaded with, for example, the `library` function.
   
-`types`
+`response_types`
   : Character vector of response variable types supported by the model.
   
 `arguments`
@@ -607,7 +607,7 @@ A named list of available metrics can be obtained interactively with the `metric
 `arguments`
   : Closure with the argument names and corresponding default values of the metric function.
   
-`types`
+`response_types`
   : Data frame of the observed and predicted response variable types supported by the metric.
 
 
@@ -1250,7 +1250,7 @@ The `MLModel` function creates a model object that can be used with the previous
 `packages`
   : Character vector of source packages required to use the model.
   
-`types`
+`response_types`
   : Character vector of response variable types to which the model can be fit.  Supported types are `"binary"`, `"factor"`, `"matrix"`, `"numeric"`, `"ordered"`, and `"Surv"`.
   
 `fit`
@@ -1273,7 +1273,7 @@ The `MLModel` function creates a model object that can be used with the previous
 LogisticModel <- MLModel(
   name = "LogisticModel",
   label = "Logistic Model",
-  types = "binary",
+  response_types = "binary",
   fit = function(formula, data, weights, ...) {
     glm(formula, data = as.data.frame(data), weights = weights,
         family = binomial, ...)
@@ -1335,7 +1335,7 @@ info <- modelinfo()
 types <- c("binary" = "b", "factor" = "f", "matrix" = "m", "numeric" = "n",
            "ordered" = "o", "Surv" = "S")
 x <- lapply(names(info), function(modelname) {
-  c(modelname, ifelse(names(types) %in% info[[modelname]]$types, types, NA))
+  c(modelname, ifelse(names(types) %in% info[[modelname]]$response_types, types, NA))
 })
 df <- as.data.frame(do.call(rbind, x), stringsAsFactors = FALSE)
 names(df) <- c("Function", names(types))
@@ -1368,7 +1368,7 @@ kable(df_classes,
 library(MachineShop)
 
 f <- function(x) {
-  types <- x$types
+  types <- x$response_types
   
   is_type <- function(observed, predicted) {
     any(types$observed == observed & types$predicted == predicted)

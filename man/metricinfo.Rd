@@ -21,8 +21,8 @@ components:
 correspond to better predictive performance.}
 \item{arguments}{closure with the argument names and corresponding default
 values of the metric function.}
-\item{types}{data frame of the observed and predicted response variable
-types supported by the metric.}
+\item{response_types}{data frame of the observed and predicted response
+variable types supported by the metric.}
 }
 }
 \description{

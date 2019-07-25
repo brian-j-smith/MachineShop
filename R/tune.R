@@ -160,8 +160,8 @@ tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
       metrics <- eval(formals(method)$metrics)
       is_defined <- sapply(metrics, function(metric) {
         info <- metricinfo(metric)[[1]]
-        any(mapply(is, list(res$Observed), info$types$observed) &
-              mapply(is, list(res$Predicted), info$types$predicted))
+        any(mapply(is, list(res$Observed), info$response_types$observed) &
+              mapply(is, list(res$Predicted), info$response_types$predicted))
       })
       metrics <- metrics[is_defined]
     }

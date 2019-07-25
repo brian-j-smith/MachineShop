@@ -15,8 +15,8 @@
 #' correspond to better predictive performance.}
 #' \item{arguments}{closure with the argument names and corresponding default
 #' values of the metric function.}
-#' \item{types}{data frame of the observed and predicted response variable
-#' types supported by the metric.}
+#' \item{response_types}{data frame of the observed and predicted response
+#' variable types supported by the metric.}
 #' }
 #' 
 #' @seealso \code{\link{metrics}}, \code{\link{confusion}},
@@ -140,7 +140,7 @@ metricinfo <- function(...) {
     label = x@label,
     maximize = x@maximize,
     arguments = args(x),
-    types = types
+    response_types = types
   )), names = x@name)
   
   if (length(list(...))) c(info, .metricinfo(...)) else info
@@ -156,9 +156,9 @@ metricinfo <- function(...) {
   not_missing_y <- !missing(y)
   info <- metricinfo()
   is_supported <- sapply(info, function(this) {
-    is_types <- mapply(is, list(x), this$types$observed)
+    is_types <- mapply(is, list(x), this$response_types$observed)
     if (not_missing_y) {
-      is_types <- is_types & mapply(is, list(y), this$types$predicted)
+      is_types <- is_types & mapply(is, list(y), this$response_types$predicted)
     }
     any(is_types)
   })

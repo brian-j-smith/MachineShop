@@ -42,7 +42,7 @@ QDAModel <- function(prior = NULL, method = c("moment", "mle", "mve", "t"),
     name = "QDAModel",
     label = "Quadratic Discriminant Analysis",
     packages = "MASS",
-    types = "factor",
+    response_types = "factor",
     params = params(environment()),
     design = "model.matrix",
     fit = function(formula, data, weights, use, ...) {

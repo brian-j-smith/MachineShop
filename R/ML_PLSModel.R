@@ -30,7 +30,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
     name = "PLSModel",
     label = "Partial Least Squares",
     packages = "pls",
-    types = c("factor", "numeric"),
+    response_types = c("factor", "numeric"),
     params = params(environment()),
     grid = function(x, length, ...) {
       list(

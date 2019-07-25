@@ -15,8 +15,8 @@
 #' model.  These need only be installed with the \code{\link{install.packages}}
 #' function or by equivalent means; but need not be loaded with, for example,
 #' the \code{\link{library}} function.}
-#' \item{types}{character vector of response variable types supported by the
-#' model.}
+#' \item{response_types}{character vector of response variable types supported
+#' by the model.}
 #' \item{arguments}{closure with the argument names and corresponding default
 #' values of the model function.}
 #' \item{grid}{logical indicating whether automatic generation of tuning
@@ -140,7 +140,7 @@ modelinfo <- function(...) {
   info <- structure(list(list(
     label = x@label,
     packages = x@packages,
-    types = x@types,
+    response_types = x@response_types,
     arguments = args(get(x@name)),
     grid = !is.null(body(x@grid)),
     varimp = !is.null(body(fitbit(x, "varimp")))
@@ -153,7 +153,7 @@ modelinfo <- function(...) {
   info <- modelinfo()
   is_supported <- sapply(info, function(this) {
     all(sapply(list(...), function(object) {
-      any(mapply(is_response, list(object), this$types))
+      any(mapply(is_response, list(object), this$response_types))
     }))
   })
   info[is_supported]

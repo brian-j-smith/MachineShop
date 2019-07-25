@@ -61,7 +61,7 @@ RangerModel <- function(num.trees = 500, mtry = NULL,
     name = "RangerModel",
     label = "Fast Random Forests",
     packages = "ranger",
-    types = c("factor", "numeric", "Surv"),
+    response_types = c("factor", "numeric", "Surv"),
     params = params(environment()),
     grid = function(x, length, random, ...) {
       params <- list(

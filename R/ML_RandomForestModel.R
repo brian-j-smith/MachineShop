@@ -41,7 +41,7 @@ RandomForestModel <- function(ntree = 500,
     name = "RandomForestModel",
     label = "Random Forests",
     packages = "randomForest",
-    types = c("factor", "numeric"),
+    response_types = c("factor", "numeric"),
     params = params(environment()),
     grid = function(x, length, random, ...) {
       params <- list(

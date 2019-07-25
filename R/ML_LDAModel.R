@@ -48,7 +48,7 @@ LDAModel <- function(prior = NULL, tol = 1e-4,
     name = "LDAModel",
     label = "Linear Discriminant Analysis",
     packages = "MASS",
-    types = "factor",
+    response_types = "factor",
     params = params(environment()),
     grid = function(x, length, ...) {
       list(

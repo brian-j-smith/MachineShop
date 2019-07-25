@@ -54,7 +54,7 @@ EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
     name = "EarthModel",
     label = "Multivariate Adaptive Regression Splines",
     packages = "earth",
-    types = c("factor", "numeric"),
+    response_types = c("factor", "numeric"),
     params = params(environment()),
     grid = function(x, length, random, ...) {
       modelfit <- fit(x, model = EarthModel(pmethod = "none"))

@@ -43,7 +43,7 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
     name = "GBMModel",
     label = "Generalized Boosted Regression",
     packages = "gbm",
-    types = c("factor", "numeric", "Surv"),
+    response_types = c("factor", "numeric", "Surv"),
     params = params(environment()),
     grid = function(x, length, random, ...) {
       params <- list(

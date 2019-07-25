@@ -7,7 +7,7 @@ info <- modelinfo()
 types <- c("binary" = "b", "factor" = "f", "matrix" = "m", "numeric" = "n",
            "ordered" = "o", "Surv" = "S")
 x <- lapply(names(info), function(modelname) {
-  c(modelname, ifelse(names(types) %in% info[[modelname]]$types, types, NA))
+  c(modelname, ifelse(names(types) %in% info[[modelname]]$response_types, types, NA))
 })
 df <- as.data.frame(do.call(rbind, x), stringsAsFactors = FALSE)
 names(df) <- c("Function", names(types))

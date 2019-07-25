@@ -48,7 +48,7 @@ AdaBagModel <- function(mfinal = 100, minsplit = 20,
     name = "AdaBagModel",
     label = "Bagging with Classification Trees",
     packages = "adabag",
-    types = "factor",
+    response_types = "factor",
     params = params,
     grid = function(x, length, ...) {
       list(

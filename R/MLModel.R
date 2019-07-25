@@ -5,8 +5,8 @@
 #' @param name character name of the object to which the model is assigned.
 #' @param label optional character descriptor for the model.
 #' @param packages character vector of packages required to use the model.
-#' @param types character vector of response variable types to which the model
-#' can be fit.  Supported types are \code{"binary"}, \code{"factor"},
+#' @param response_types character vector of response variable types to which
+#' the model can be fit.  Supported types are \code{"binary"}, \code{"factor"},
 #' \code{"matrix"}, \code{"numeric"}, \code{"ordered"}, and \code{"Surv"}.
 #' @param params list of user-specified model parameters to be passed to the
 #' \code{fit} function.
@@ -63,7 +63,7 @@
 #' ## Logistic regression model
 #' LogisticModel <- MLModel(
 #'   name = "LogisticModel",
-#'   types = "binary",
+#'   response_types = "binary",
 #'   fit = function(formula, data, weights, ...) {
 #'     glm(formula, data = data, weights = weights, family = binomial, ...)
 #'   },
@@ -80,7 +80,7 @@
 #' summary(res)
 #' 
 MLModel <- function(name = "MLModel", label = name, packages = character(),
-                    types = character(), params = list(),
+                    response_types = character(), params = list(),
                     grid = function(x, length, random, ...) NULL,
                     design = c(NA, "model.matrix", "terms"),
                     fit = function(formula, data, weights, ...)
@@ -89,14 +89,22 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
                       stop("no predict function"),
                     varimp = function(object, ...) NULL, ...) {
   
-  stopifnot(types %in% c("binary", "factor", "matrix", "numeric", "ordered",
-                         "Surv"))
+  stopifnot(response_types %in% c("binary", "factor", "matrix", "numeric",
+                                  "ordered", "Surv"))
+  
+  args <- list(...)
+  if (!is.null(args$types)) {
+    depwarn("'types' argument to MLModel is deprecated",
+            "use 'response_types' instead",
+            expired = Sys.Date() >= "2019-09-01")
+    response_types <- args$types
+  }
   
   new("MLModel",
       name = name,
       label = label,
       packages = packages,
-      types = types,
+      response_types = response_types,
       params = params,
       grid = grid,
       design = match.arg(design),

@@ -4,7 +4,7 @@
 library(MachineShop)
 
 f <- function(x) {
-  types <- x$types
+  types <- x$response_types
   
   is_type <- function(observed, predicted) {
     any(types$observed == observed & types$predicted == predicted)

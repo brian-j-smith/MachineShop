@@ -99,7 +99,7 @@ A named list of available metrics can be obtained interactively with the `metric
 `arguments`
   : Closure with the argument names and corresponding default values of the metric function.
   
-`types`
+`response_types`
   : Data frame of the observed and predicted response variable types supported by the metric.
 
 

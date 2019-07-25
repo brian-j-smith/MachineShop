@@ -132,7 +132,7 @@ setMethod("show", "MLMetric",
     cat("Arguments:\n")
     print(info$arguments)
     cat("\nTypes:\n")
-    print(info$types)
+    print(info$response_types)
   }
 )
 
@@ -144,7 +144,7 @@ setMethod("show", "MLModel",
         "Model name: ", object@name, "\n",
         "Label: ", object@label, "\n",
         "Packages: ", toString(object@packages), "\n",
-        "Response types: ", toString(object@types), "\n\n",
+        "Response types: ", toString(object@response_types), "\n\n",
         "Parameters:\n",
         sep = "")
     print(object@params)

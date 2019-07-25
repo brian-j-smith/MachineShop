@@ -73,7 +73,7 @@ BlackBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
     name = "BlackBoostModel",
     label = "Gradient Boosting with Regression Trees",
     packages = c("mboost", "partykit"),
-    types = c("binary", "numeric", "Surv"),
+    response_types = c("binary", "numeric", "Surv"),
     params = params,
     grid = function(x, length, ...) {
       list(

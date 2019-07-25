@@ -57,7 +57,7 @@ FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
     name = "FDAModel",
     label = "Flexible Discriminant Analysis",
     packages = "mda",
-    types = "factor",
+    response_types = "factor",
     params = params(environment()),
     grid = function(x, length, random, ...) {
       modelfit <- fit(x, model = EarthModel(pmethod = "none"))

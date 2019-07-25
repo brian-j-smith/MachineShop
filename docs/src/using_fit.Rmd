@@ -11,7 +11,7 @@ Model fitting requires user specification of a `MachineShop` compatible model.  
 `packages`
   : Character vector of source packages required to use the model.  These need only be installed with the `install.packages` function or by equivalent means; but need not be loaded with, for example, the `library` function.
   
-`types`
+`response_types`
   : Character vector of response variable types supported by the model.
   
 `arguments`

@@ -5,8 +5,8 @@
 \title{MLModel Class Constructor}
 \usage{
 MLModel(name = "MLModel", label = name, packages = character(),
-  types = character(), params = list(), grid = function(x, length,
-  random, ...) NULL, design = c(NA, "model.matrix", "terms"),
+  response_types = character(), params = list(), grid = function(x,
+  length, random, ...) NULL, design = c(NA, "model.matrix", "terms"),
   fit = function(formula, data, weights, ...) stop("no fit function"),
   predict = function(object, newdata, times, ...)
   stop("no predict function"), varimp = function(object, ...) NULL, ...)
@@ -18,8 +18,8 @@ MLModel(name = "MLModel", label = name, packages = character(),
 
 \item{packages}{character vector of packages required to use the model.}
 
-\item{types}{character vector of response variable types to which the model
-can be fit.  Supported types are \code{"binary"}, \code{"factor"},
+\item{response_types}{character vector of response variable types to which
+the model can be fit.  Supported types are \code{"binary"}, \code{"factor"},
 \code{"matrix"}, \code{"numeric"}, \code{"ordered"}, and \code{"Surv"}.}
 
 \item{params}{list of user-specified model parameters to be passed to the
@@ -84,7 +84,7 @@ after the predictors.
 ## Logistic regression model
 LogisticModel <- MLModel(
   name = "LogisticModel",
-  types = "binary",
+  response_types = "binary",
   fit = function(formula, data, weights, ...) {
     glm(formula, data = data, weights = weights, family = binomial, ...)
   },
