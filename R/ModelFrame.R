@@ -69,18 +69,11 @@ ModelFrame.matrix <- function(x, y = NULL, na.rm = TRUE,
 }
 
 
-ModelFrame.ModelFrame <- function(x, na.rm = TRUE, na.action = NULL, ...) {
+ModelFrame.ModelFrame <- function(x, na.rm = TRUE, ...) {
   vars <- as.data.frame(Filter(length, list(...)), stringsAsFactors = FALSE)
   names(vars) <- sapply(names(vars), function(x) paste0("(", x, ")"))
   x[names(vars)] <- vars
-
-  if (!is.null(na.action)) {
-    depwarn("'na.action' argument to ModelFrame is deprecated",
-            "use 'na.rm' instead", expired = Sys.Date() > "2019-06-01")
-    na.action(x)
-  } else if (na.rm) {
-    na.omit(x)
-  } else x
+  if (na.rm) na.omit(x) else x
 }
 
 
