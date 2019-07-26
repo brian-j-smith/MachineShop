@@ -45,13 +45,13 @@ LARSModel <- function(type = c("lasso", "lar", "forward.stagewise", "stepwise"),
     label = "Least Angle Regression",
     packages = "lars",
     response_types = "numeric",
+    predictor_encoding = "model.matrix",
     params = params(environment()),
     grid = function(x, length, ...) {
       list(
         step = seq_nvars(x, LARSModel, length)
       )
     },
-    design = "model.matrix",
     fit = function(formula, data, weights, step = NULL, ...) {
       assert_equal_weights(weights)
       x <- model.matrix(data, intercept = FALSE)

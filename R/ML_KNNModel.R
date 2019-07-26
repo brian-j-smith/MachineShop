@@ -41,6 +41,7 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
     label = "K-Nearest Neighbors Model",
     packages = "kknn",
     response_types = c("factor", "numeric", "ordered"),
+    predictor_encoding = "model.matrix",
     params = params(environment()),
     grid = function(x, length, random, ...) {
       params <- list(
@@ -54,7 +55,6 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
       }
       params
     },
-    design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       list(formula = formula, train = as.data.frame(data), ...)

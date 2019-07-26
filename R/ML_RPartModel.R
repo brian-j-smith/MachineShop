@@ -42,6 +42,7 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
     label = "Recursive Partitioning and Regression Trees",
     packages = c("rpart", "partykit"),
     response_types = c("factor", "numeric", "Surv"),
+    predictor_encoding = "terms",
     params = list(control = as.call(c(.(list), params(environment())))),
     grid = function(x, length, ...) {
       cptable <- fit(x, model = RPartModel(cp = 0))$cptable[, "CP"]
@@ -49,7 +50,6 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
         cp = seq(min(cptable), max(cptable), length = length)
       )
     },
-    design = "terms",
     fit = function(formula, data, weights, ...) {
       method <- switch_class(response(data),
                              "factor" = "class",

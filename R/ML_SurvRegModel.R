@@ -37,8 +37,8 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
     label = "Parametric Survival",
     packages = c("rms", "Hmisc"),
     response_types = "Surv",
+    predictor_encoding = "model.matrix",
     params = params,
-    design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       rms::psm(formula, data = as.data.frame(data), weights = weights, ...)
     },
@@ -105,8 +105,8 @@ SurvRegStepAICModel <- function(dist = c("weibull", "exponential", "gaussian",
     label = "Parametric Survival (Stepwise)",
     packages = c(stepmodel@packages, "MASS"),
     response_types = stepmodel@response_types,
+    predictor_encoding = stepmodel@predictor_encoding,
     params = c(stepmodel@params, params),
-    design = stepmodel@design,
     fit = function(formula, data, weights, direction = "both", scope = list(),
                    k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()

@@ -60,6 +60,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
     label = "Lasso and Elastic-Net",
     packages = "glmnet",
     response_types = c("factor", "matrix", "numeric", "Surv"),
+    predictor_encoding = "model.matrix",
     params = params(environment()),
     grid = function(x, length, ...) {
       model <- GLMNetModel(lambda = NULL)
@@ -72,7 +73,6 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
         alpha = seq(0.1, 1, length = length)
       )
     },
-    design = "model.matrix",
     fit = function(formula, data, weights, family = NULL, nlambda = 1, ...) {
       x <- model.matrix(data, intercept = FALSE)
       y <- response(data)

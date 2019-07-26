@@ -8,15 +8,15 @@
 #' @param response_types character vector of response variable types to which
 #' the model can be fit.  Supported types are \code{"binary"}, \code{"factor"},
 #' \code{"matrix"}, \code{"numeric"}, \code{"ordered"}, and \code{"Surv"}.
+#' @param predictor_encoding character string indicating whether the model is
+#' fit with predictor variables encoded as a \code{"\link{model.matrix}"}, a
+#' data.frame containing the original \code{"terms"}, or unknown (default).
 #' @param params list of user-specified model parameters to be passed to the
 #' \code{fit} function.
 #' @param grid tuning grid function whose first agument \code{x} is a
 #' \code{\link{ModelFrame}} of the model fit data and formula, followed by a
 #' \code{length} to use in generating sequences of parameter values, a number of
 #' grid points to sample at \code{random}, and an ellipsis (\code{...}).
-#' @param design character string indicating whether the type of design matrix
-#' used to fit the model is a \code{"\link{model.matrix}"}, a data.frame
-#' of the original predictor variable \code{"terms"}, or unknown (default).
 #' @param fit model fitting function whose arguments are a \code{formula}, a
 #' \code{\link{ModelFrame}} named \code{data}, case \code{weights}, and an
 #' ellipsis.
@@ -80,9 +80,10 @@
 #' summary(res)
 #' 
 MLModel <- function(name = "MLModel", label = name, packages = character(),
-                    response_types = character(), params = list(),
+                    response_types = character(),
+                    predictor_encoding = c(NA, "model.matrix", "terms"),
+                    params = list(),
                     grid = function(x, length, random, ...) NULL,
-                    design = c(NA, "model.matrix", "terms"),
                     fit = function(formula, data, weights, ...)
                       stop("no fit function"),
                     predict = function(object, newdata, times, ...)
@@ -99,15 +100,21 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
             expired = Sys.Date() >= "2019-09-01")
     response_types <- args$types
   }
+  if (!is.null(args$design)) {
+    depwarn("'design' argument to MLModel is deprecated",
+            "use 'predictor_encoding' instead",
+            expired = Sys.Date() >= "2019-09-01")
+    predictor_encoding <- args$design
+  }
   
   new("MLModel",
       name = name,
       label = label,
       packages = packages,
       response_types = response_types,
+      predictor_encoding = match.arg(predictor_encoding),
       params = params,
       grid = grid,
-      design = match.arg(design),
       fit = fit,
       fitbits = MLFitBits(packages = packages,
                           predict = predict,

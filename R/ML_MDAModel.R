@@ -56,13 +56,13 @@ MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
     label = "Mixture Discriminant Analysis",
     packages = "mda",
     response_types = "factor",
+    predictor_encoding = "model.matrix",
     params = params(environment()),
     grid = function(x, length, ...) {
       list(
         subclasses = 1:min(length, 10) + 1
       )
     },
-    design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       mda::mda(formula, data = as.data.frame(data), ...)

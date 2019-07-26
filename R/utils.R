@@ -156,7 +156,7 @@ match_indices <- function(indices, choices) {
 nvars <- function(x, model) {
   stopifnot(is(x, "ModelFrame"))
   model <- getMLObject(model, "MLModel")
-  switch(model@design,
+  switch(model@predictor_encoding,
          "model.matrix" = 
            ncol(model.matrix(x[1, , drop = FALSE], intercept = FALSE)),
          "terms" = length(labels(terms(x)))

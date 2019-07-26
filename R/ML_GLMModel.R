@@ -37,8 +37,8 @@ GLMModel <- function(family = NULL, ...) {
     label = "Generalized Linear Models",
     packages = "stats",
     response_types = c("binary", "numeric"),
+    predictor_encoding = "model.matrix",
     params = params,
-    design = "model.matrix",
     fit = function(formula, data, weights, family = NULL, ...) {
       if (is.null(family)) {
         family <- switch_class(response(data),
@@ -91,8 +91,8 @@ GLMStepAICModel <- function(family = NULL, ...,
     label = "Generalized Linear Models (Stepwise)",
     packages = c(stepmodel@packages, "MASS"),
     response_types = stepmodel@response_types,
+    predictor_encoding = stepmodel@predictor_encoding,
     params = c(stepmodel@params, params),
-    design = stepmodel@design,
     fit = function(formula, data, weights, family = NULL, direction = "both",
                    scope = list(), k = 2, trace = 1, steps = 1000, ...) {
       environment(formula) <- environment()

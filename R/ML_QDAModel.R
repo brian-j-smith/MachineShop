@@ -43,8 +43,8 @@ QDAModel <- function(prior = NULL, method = c("moment", "mle", "mve", "t"),
     label = "Quadratic Discriminant Analysis",
     packages = "MASS",
     response_types = "factor",
+    predictor_encoding = "model.matrix",
     params = params(environment()),
-    design = "model.matrix",
     fit = function(formula, data, weights, use, ...) {
       assert_equal_weights(weights)
       modelfit <- eval_fit(data,

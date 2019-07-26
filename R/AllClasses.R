@@ -70,9 +70,9 @@ setClass("MLModel",
             label = "character",
             packages = "character",
             response_types = "character",
+            predictor_encoding = "character",
             params = "list",
             grid = "function",
-            design = "character",
             fit = "function",
             fitbits = "MLFitBits")
 )

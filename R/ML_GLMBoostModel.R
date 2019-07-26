@@ -49,13 +49,13 @@ GLMBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
     label = "Gradient Boosting with Linear Models",
     packages = "mboost",
     response_types = c("binary", "numeric", "Surv"),
+    predictor_encoding = "terms",
     params = params,
     grid = function(x, length, ...) {
       list(
         mstop = round(seq_range(0, 50, c(1, 1000), length + 1))
       )
     },
-    design = "terms",
     fit = function(formula, data, weights, family = NULL, ...) {
       if (is.null(family)) {
         family <- switch_class(response(data),

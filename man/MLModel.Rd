@@ -5,11 +5,12 @@
 \title{MLModel Class Constructor}
 \usage{
 MLModel(name = "MLModel", label = name, packages = character(),
-  response_types = character(), params = list(), grid = function(x,
-  length, random, ...) NULL, design = c(NA, "model.matrix", "terms"),
-  fit = function(formula, data, weights, ...) stop("no fit function"),
-  predict = function(object, newdata, times, ...)
-  stop("no predict function"), varimp = function(object, ...) NULL, ...)
+  response_types = character(), predictor_encoding = c(NA,
+  "model.matrix", "terms"), params = list(), grid = function(x, length,
+  random, ...) NULL, fit = function(formula, data, weights, ...)
+  stop("no fit function"), predict = function(object, newdata, times,
+  ...) stop("no predict function"), varimp = function(object, ...) NULL,
+  ...)
 }
 \arguments{
 \item{name}{character name of the object to which the model is assigned.}
@@ -22,6 +23,10 @@ MLModel(name = "MLModel", label = name, packages = character(),
 the model can be fit.  Supported types are \code{"binary"}, \code{"factor"},
 \code{"matrix"}, \code{"numeric"}, \code{"ordered"}, and \code{"Surv"}.}
 
+\item{predictor_encoding}{character string indicating whether the model is
+fit with predictor variables encoded as a \code{"\link{model.matrix}"}, a
+data.frame containing the original \code{"terms"}, or unknown (default).}
+
 \item{params}{list of user-specified model parameters to be passed to the
 \code{fit} function.}
 
@@ -29,10 +34,6 @@ the model can be fit.  Supported types are \code{"binary"}, \code{"factor"},
 \code{\link{ModelFrame}} of the model fit data and formula, followed by a
 \code{length} to use in generating sequences of parameter values, a number of
 grid points to sample at \code{random}, and an ellipsis (\code{...}).}
-
-\item{design}{character string indicating whether the type of design matrix
-used to fit the model is a \code{"\link{model.matrix}"}, a data.frame
-of the original predictor variable \code{"terms"}, or unknown (default).}
 
 \item{fit}{model fitting function whose arguments are a \code{formula}, a
 \code{\link{ModelFrame}} named \code{data}, case \code{weights}, and an

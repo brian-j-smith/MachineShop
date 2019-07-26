@@ -55,6 +55,7 @@ EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
     label = "Multivariate Adaptive Regression Splines",
     packages = "earth",
     response_types = c("factor", "numeric"),
+    predictor_encoding = "model.matrix",
     params = params(environment()),
     grid = function(x, length, random, ...) {
       modelfit <- fit(x, model = EarthModel(pmethod = "none"))
@@ -65,7 +66,6 @@ EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
       if (random) params$degree <- 1:2
       params
     },
-    design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       attachment(list(
         contr.earth.response = earth::contr.earth.response

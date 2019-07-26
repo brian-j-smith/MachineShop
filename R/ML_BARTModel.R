@@ -73,8 +73,8 @@ BARTModel <- function(K = NULL, sparse = FALSE, theta = 0, omega = 1,
     label = "Bayesian Additive Regression Trees",
     packages = "BART",
     response_types = c("factor", "numeric", "Surv"),
+    predictor_encoding = "model.matrix",
     params = params(environment()),
-    design = "model.matrix",
     fit = function(formula, data, weights, K = NULL, sigest = NA, sigdf = 3,
                    sigquant = 0.90, lambda = NA, ...) {
       x <- model.matrix(data, intercept = FALSE)

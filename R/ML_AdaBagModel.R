@@ -49,6 +49,7 @@ AdaBagModel <- function(mfinal = 100, minsplit = 20,
     label = "Bagging with Classification Trees",
     packages = "adabag",
     response_types = "factor",
+    predictor_encoding = "terms",
     params = params,
     grid = function(x, length, ...) {
       list(
@@ -56,7 +57,6 @@ AdaBagModel <- function(mfinal = 100, minsplit = 20,
         maxdepth = 1:min(length, 30)
       )
     },
-    design = "terms",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       adabag::bagging(formula, data = as.data.frame(data), ...)

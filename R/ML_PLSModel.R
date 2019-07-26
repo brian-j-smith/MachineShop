@@ -31,13 +31,13 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
     label = "Partial Least Squares",
     packages = "pls",
     response_types = c("factor", "numeric"),
+    predictor_encoding = "model.matrix",
     params = params(environment()),
     grid = function(x, length, ...) {
       list(
         ncomp = 1:min(nrow(x), nvars(x, PLSModel) - 1, length)
       )
     },
-    design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       y <- response(data)

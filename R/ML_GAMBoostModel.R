@@ -60,13 +60,13 @@ GAMBoostModel <- function(family = NULL,
     label = "Gradient Boosting with Additive Models",
     packages = "mboost",
     response_types = c("binary", "numeric", "Surv"),
+    predictor_encoding = "terms",
     params = params,
     grid = function(x, length, ...) {
       list(
         mstop = round(seq_range(0, 50, c(1, 1000), length + 1))
       )
     },
-    design = "terms",
     fit = function(formula, data, weights, family = NULL, ...) {
       attachment(list(
         bbs = mboost::bbs,

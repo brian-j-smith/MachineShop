@@ -58,6 +58,7 @@ FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
     label = "Flexible Discriminant Analysis",
     packages = "mda",
     response_types = "factor",
+    predictor_encoding = "model.matrix",
     params = params(environment()),
     grid = function(x, length, random, ...) {
       modelfit <- fit(x, model = EarthModel(pmethod = "none"))
@@ -68,7 +69,6 @@ FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
       if (random) params$degree <- 1:2
       params
     },
-    design = "model.matrix",
     fit = function(formula, data, weights, ...) {
       mda::fda(formula, data = as.data.frame(data), weights = weights, ...)
     },

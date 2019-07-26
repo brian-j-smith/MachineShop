@@ -62,6 +62,7 @@ RangerModel <- function(num.trees = 500, mtry = NULL,
     label = "Fast Random Forests",
     packages = "ranger",
     response_types = c("factor", "numeric", "Surv"),
+    predictor_encoding = "terms",
     params = params(environment()),
     grid = function(x, length, random, ...) {
       params <- list(
@@ -77,7 +78,6 @@ RangerModel <- function(num.trees = 500, mtry = NULL,
       }
       params
     },
-    design = "terms",
     fit = function(formula, data, weights, ...) {
       ranger::ranger(formula, data = as.data.frame(data),
                      case.weights = weights, 
