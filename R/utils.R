@@ -73,10 +73,18 @@ findMethod <- function(generic, object) {
 }
 
 
-getMLObject <- function(x, class) {
+getMLObject <- function(x, class = c("MLControl", "MLModel")) {
+  class <- match.arg(class)
+  
   if (is.character(x)) x <- get(x)
   if (is.function(x)) x <- x()
   if (!is(x, class)) stop("object not of class ", class)
+  
+  if (class == "MLModel") {
+    x <- as(x, class)
+    if (extends(x@name, class)) x <- as(x, x@name)
+  }
+  
   x
 }
 
