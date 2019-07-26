@@ -63,9 +63,6 @@ SuperModel <- function(..., model = GBMModel, control = CVControl,
 }
 
 
-setClass("SuperModel", contains = "MLModel")
-
-
 .fit.SuperModel <- function(model, x, ...) {
   mf <- ModelFrame(x, na.rm = FALSE)
   

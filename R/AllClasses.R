@@ -78,6 +78,10 @@ setClass("MLModel",
 )
 
 
+setClass("StackedModel", contains = "MLModel")
+setClass("SuperModel", contains = "MLModel")
+
+
 setClass("MLModelFit",
   slots = c(fitbits = "MLFitBits"),
   contains = "VIRTUAL"

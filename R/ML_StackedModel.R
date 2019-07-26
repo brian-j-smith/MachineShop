@@ -59,9 +59,6 @@ StackedModel <- function(..., control = CVControl, weights = NULL) {
 }
 
 
-setClass("StackedModel", contains = "MLModel")
-
-
 .fit.StackedModel <- function(model, x, ...) {
   mf <- ModelFrame(x, na.rm = FALSE)
   
