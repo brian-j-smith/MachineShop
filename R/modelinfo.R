@@ -100,6 +100,7 @@ modelinfo <- function(...) {
                   "SVMSplineModel",
                   "SVMTanhModel",
                   "TreeModel",
+                  "TunedModel",
                   "XGBModel",
                   "XGBDARTModel",
                   "XGBLinearModel",

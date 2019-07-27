@@ -42,6 +42,7 @@
 #'   \code{\link{SurvRegModel}}        \tab     \tab     \tab S \cr
 #'   \code{\link{SVMModel}}            \tab f   \tab n   \tab   \cr
 #'   \code{\link{TreeModel}}           \tab f   \tab n   \tab   \cr
+#'   \code{\link{TunedModel}}          \tab f,o \tab m,n \tab S \cr
 #'   \code{\link{XGBModel}}            \tab f   \tab n   \tab   \cr
 #' }
 #' 
