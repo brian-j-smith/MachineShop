@@ -51,12 +51,12 @@ surv_fit <- fit(surv_fo, data = surv_train, model = tuned_model)
 
 ## Model Selection
 
-Model selection can be performed with the `tune` function to automatically choose from any combination of models and model parameters.  Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values.  In general, a list containing any combination of model functions, function names, and function calls can be supplied to the `models` argument of `tune` to perform model selection.  An `expand.model` helper function is additionally provided to expand a model over a grid of tuning parameters for inclusion in the list if so desired.  In this general form of model selection, the `grid` argument discussed previously for grid tuning is not used.
+Model selection can be performed with the `tune` function to automatically choose from any combination of models and model parameters.  Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values.  In general, a list containing any combination of model functions, function names, and function calls can be supplied to the `models` argument of `tune` to perform model selection.  An `expand_model` helper function is additionally provided to expand a model over a grid of tuning parameters for inclusion in the list if so desired.  In this general form of model selection, the `grid` argument discussed previously for grid tuning is not used.
 
 ```{r using_strategies_selection, results="hide"}
 ## List of candidate models
 candidate_models <- c(
-  expand.model(GBMModel, n.trees = c(50, 100), interaction.depth = 1:2),
+  expand_model(GBMModel, n.trees = c(50, 100), interaction.depth = 1:2),
   GLMNetModel(lambda = 0.01),
   CoxModel,
   SurvRegModel

@@ -36,7 +36,7 @@ variables.  May be a \code{formula}, design matrix of predictors,
 \item{data}{\code{data.frame} containing observed predictors and outcomes.}
 
 \item{models}{\code{MLModel} function, function name, object or list of the
-aforementioned elements, such as that returned by \code{\link{expand.model}}.}
+aforementioned elements, such as that returned by \code{\link{expand_model}}.}
 
 \item{grid}{\code{data.frame} containing parameter values at which to
 evaluate a single model supplied to \code{models}, the number of
@@ -105,7 +105,7 @@ varimp(gbmfit)
 }
 \seealso{
 \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-\code{\link{modelinfo}}, \code{\link{expand.model}}, \code{\link{Grid}},
+\code{\link{modelinfo}}, \code{\link{expand_model}}, \code{\link{Grid}},
 \code{\link{MLControl}}, \code{\link{fit}}, \code{\link{plot}},
 \code{\link{summary}}
 }
