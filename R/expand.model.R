@@ -2,8 +2,6 @@
 #'
 #' Expand a model over all combinations of a grid of tuning parameters.
 #' 
-#' @rdname expand_model
-#' 
 #' @param x \code{MLModel} function, function name, or object.
 #' @param ... vectors, factors, or a list containing the parameter values.
 #' 
@@ -13,36 +11,26 @@
 #' @seealso \code{\link{modelinfo}}, \code{\link{tune}}
 #' 
 #' @examples
-#' expand_model(GBMModel, n.trees = c(25, 50, 100),
+#' expand.model(GBMModel, n.trees = c(25, 50, 100),
 #'                        interaction.depth = 1:3,
 #'                        n.minobsinnode = c(5, 10))
 #' 
-expand_model <- function(x, ...) {
-  .expand_model(x, ...)
+expand.model <- function(x, ...) {
+  .expand.model(x, ...)
 }
 
 
-#' @rdname expand_model
-#' 
-expand.model <- function(...) {
-  depwarn("'expand.model' function is deprecated",
-          "use 'expand_model' instead",
-          expired = Sys.Date() >= "2019-09-01")
-  expand_model(...)
+.expand.model <- function(x, ...) {
+  UseMethod(".expand.model")
 }
 
 
-.expand_model <- function(x, ...) {
-  UseMethod(".expand_model")
+.expand.model.default <- function(x, ...) {
+  expand.model(getMLObject(x, class = "MLModel"), ...)
 }
 
 
-.expand_model.default <- function(x, ...) {
-  expand_model(getMLObject(x, class = "MLModel"), ...)
-}
-
-
-.expand_model.list <- function(x, ...) {
+.expand.model.list <- function(x, ...) {
   grid <- x[[2]]
   models <- split(grid, seq(max(1, nrow(grid)))) %>%
     lapply(function(args) do.call(x[[1]], args))
@@ -50,7 +38,7 @@ expand.model <- function(...) {
 }
 
 
-.expand_model.MLModel <- function(x, ...) {
+.expand.model.MLModel <- function(x, ...) {
   grid <- expand.grid(..., KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
-  expand_model(list(get(x@name, mode = "function"), grid))
+  expand.model(list(get(x@name, mode = "function"), grid))
 }

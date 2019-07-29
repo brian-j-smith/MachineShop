@@ -4,7 +4,7 @@
 #' of candidate models as implemented with the \code{\link{tune}} function.
 #' 
 #' @param models \code{MLModel} function, function name, object or list of the
-#' aforementioned elements, such as that returned by \code{\link{expand_model}}.
+#' aforementioned elements, such as that returned by \code{\link{expand.model}}.
 #' @param grid \code{data.frame} containing parameter values at which to
 #' evaluate a single model supplied to \code{models}, the number of
 #' parameter-specific values to generate automatically if the model has a

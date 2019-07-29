@@ -29,7 +29,7 @@ tune <- function(x, ...) {
 #' 
 #' @param data \code{data.frame} containing observed predictors and outcomes.
 #' @param models \code{MLModel} function, function name, object or list of the
-#' aforementioned elements, such as that returned by \code{\link{expand_model}}.
+#' aforementioned elements, such as that returned by \code{\link{expand.model}}.
 #' @param grid \code{data.frame} containing parameter values at which to
 #' evaluate a single model supplied to \code{models}, the number of
 #' parameter-specific values to generate automatically if the model has a
@@ -52,7 +52,7 @@ tune <- function(x, ...) {
 #' selection.
 #' 
 #' @seealso \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-#' \code{\link{modelinfo}}, \code{\link{expand_model}}, \code{\link{Grid}},
+#' \code{\link{modelinfo}}, \code{\link{expand.model}}, \code{\link{Grid}},
 #' \code{\link{MLControl}}, \code{\link{fit}}, \code{\link{plot}},
 #' \code{\link{summary}}
 #' 
@@ -146,7 +146,7 @@ tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
       grid <- grid(x, data, model = model, length = grid, random = random)
     }
     grid <- combine_tune_params(grid, fixed)
-    models <- expand_model(list(get(model@name, mode = "function"), grid))
+    models <- expand.model(list(get(model@name, mode = "function"), grid))
   }
   
   control <- getMLObject(control, "MLControl")

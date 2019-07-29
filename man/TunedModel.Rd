@@ -10,7 +10,7 @@ TunedModel(models = NULL, grid = 3, fixed = NULL,
 }
 \arguments{
 \item{models}{\code{MLModel} function, function name, object or list of the
-aforementioned elements, such as that returned by \code{\link{expand_model}}.}
+aforementioned elements, such as that returned by \code{\link{expand.model}}.}
 
 \item{grid}{\code{data.frame} containing parameter values at which to
 evaluate a single model supplied to \code{models}, the number of
