@@ -2,6 +2,12 @@
 
 ## Version Updates
 
+## 1.4.2
+* Revert renaming of `expand.model()`.
+* Exclue 0 distance from `KNNModel` tuning grid.
+* Improve random tuning grid coverage.
+
+
 ## 1.4.1
 * Implement model: `TunedModel`.
 * Remove deprecated `na.action` argument from `ModelFrame` methods.
