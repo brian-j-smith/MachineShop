@@ -48,7 +48,7 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
         k = round(seq_range(0, 5, c(1, nrow(x) / 3), length + 1))
       )
       if (random) {
-        params$distance <- seq(0, 3, length = length)
+        params$distance <- seq_inner(0, 4, length = length)
         params$kernel <- c("optimal", "biweight", "cos", "epanechnikov",
                            "gaussian", "inv", "rank", "rectangular",
                            "triangular", "triweight")
