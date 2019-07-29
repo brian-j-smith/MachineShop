@@ -188,6 +188,40 @@ requireModelNamespaces <- function(packages) {
 }
 
 
+sample.grid <- function(x, size, replace = FALSE, stringsAsFactors = TRUE) {
+  stopifnot(is.list(x))
+  
+  n <- length(x)
+  if (n == 0) return(data.frame())
+  
+  var_names <- paste0("Var", seq(x))
+  x_names <- names(x)
+  if (!is.null(x_names)) {
+    is_nzchar <- nzchar(x_names)
+    var_names[is_nzchar] <- x_names[is_nzchar]
+  }
+  names(x) <- var_names
+
+  if (!replace) size <- min(size, prod(sapply(x, length)))
+  
+  grid <- as.data.frame(matrix(nrow = 0, ncol = n))
+  names(grid) <- names(x)
+  iter <- 0
+  while (nrow(grid) < size && iter < 100) {
+    iter <- iter + 1
+    new_grid <- as.data.frame(
+      lapply(x, sample, size = size, replace = TRUE),
+      stringsAsFactors = stringsAsFactors
+    )
+    grid <- rbind(grid, new_grid)
+    if (!replace) grid <- unique(grid)
+  }
+  rownames(grid) <- NULL
+  
+  head(grid, size)
+}
+
+
 seq_boot <- function(src, dest) {
   indices <- seq_len(nrow(src))
   pad_size <- nrow(dest) - nrow(src)

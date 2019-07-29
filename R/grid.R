@@ -38,9 +38,7 @@ grid.ModelFrame <- function(x, model, length = 3, random = FALSE, ...) {
   params <- lapply(model@grid(x, length = length, random = random), unique)
   params[sapply(params, length) == 0] <- NULL
   if (random) {
-    grid <- as.data.frame(lapply(params, sample, size = random, replace = TRUE),
-                          stringsAsFactors = FALSE)
-    grid[!duplicated(grid), , drop = FALSE]
+    sample.grid(params, random, stringsAsFactors = FALSE)
   } else {
     expand.grid(params, stringsAsFactors = FALSE)
   }
