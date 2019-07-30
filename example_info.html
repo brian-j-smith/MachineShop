@@ -7,6 +7,7 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -74,9 +75,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -195,8 +194,6 @@ $(document).ready(function () {
 });
 </script>
 
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
 
 <style type="text/css">
@@ -253,48 +250,9 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -343,8 +301,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -353,6 +309,16 @@ div.tocify {
 
 
 </style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row-fluid">
@@ -453,13 +419,13 @@ modelinfo() %&gt;% names
 #&gt; [22] &quot;MDAModel&quot;            &quot;NaiveBayesModel&quot;     &quot;NNetModel&quot;          
 #&gt; [25] &quot;PDAModel&quot;            &quot;PLSModel&quot;            &quot;POLRModel&quot;          
 #&gt; [28] &quot;QDAModel&quot;            &quot;RandomForestModel&quot;   &quot;RangerModel&quot;        
-#&gt; [31] &quot;RPartModel&quot;          &quot;StackedModel&quot;        &quot;SuperModel&quot;         
-#&gt; [34] &quot;SurvRegModel&quot;        &quot;SurvRegStepAICModel&quot; &quot;SVMModel&quot;           
-#&gt; [37] &quot;SVMANOVAModel&quot;       &quot;SVMBesselModel&quot;      &quot;SVMLaplaceModel&quot;    
-#&gt; [40] &quot;SVMLinearModel&quot;      &quot;SVMPolyModel&quot;        &quot;SVMRadialModel&quot;     
-#&gt; [43] &quot;SVMSplineModel&quot;      &quot;SVMTanhModel&quot;        &quot;TreeModel&quot;          
-#&gt; [46] &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;     
-#&gt; [49] &quot;XGBTreeModel&quot;
+#&gt; [31] &quot;RPartModel&quot;          &quot;SelectedModel&quot;       &quot;StackedModel&quot;       
+#&gt; [34] &quot;SuperModel&quot;          &quot;SurvRegModel&quot;        &quot;SurvRegStepAICModel&quot;
+#&gt; [37] &quot;SVMModel&quot;            &quot;SVMANOVAModel&quot;       &quot;SVMBesselModel&quot;     
+#&gt; [40] &quot;SVMLaplaceModel&quot;     &quot;SVMLinearModel&quot;      &quot;SVMPolyModel&quot;       
+#&gt; [43] &quot;SVMRadialModel&quot;      &quot;SVMSplineModel&quot;      &quot;SVMTanhModel&quot;       
+#&gt; [46] &quot;TreeModel&quot;           &quot;TunedModel&quot;          &quot;XGBModel&quot;           
+#&gt; [49] &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;      &quot;XGBTreeModel&quot;
 
 ## Model-specific information
 modelinfo(C50Model, CoxModel)
@@ -470,7 +436,7 @@ modelinfo(C50Model, CoxModel)
 #&gt; $C50Model$packages
 #&gt; [1] &quot;C50&quot;
 #&gt; 
-#&gt; $C50Model$types
+#&gt; $C50Model$response_types
 #&gt; [1] &quot;factor&quot;
 #&gt; 
 #&gt; $C50Model$arguments
@@ -493,7 +459,7 @@ modelinfo(C50Model, CoxModel)
 #&gt; $CoxModel$packages
 #&gt; [1] &quot;survival&quot;
 #&gt; 
-#&gt; $CoxModel$types
+#&gt; $CoxModel$response_types
 #&gt; [1] &quot;Surv&quot;
 #&gt; 
 #&gt; $CoxModel$arguments
@@ -516,12 +482,12 @@ modelinfo(factor(0)) %&gt;% names
 #&gt; [13] &quot;MDAModel&quot;          &quot;NaiveBayesModel&quot;   &quot;NNetModel&quot;        
 #&gt; [16] &quot;PDAModel&quot;          &quot;PLSModel&quot;          &quot;QDAModel&quot;         
 #&gt; [19] &quot;RandomForestModel&quot; &quot;RangerModel&quot;       &quot;RPartModel&quot;       
-#&gt; [22] &quot;StackedModel&quot;      &quot;SuperModel&quot;        &quot;SVMModel&quot;         
-#&gt; [25] &quot;SVMANOVAModel&quot;     &quot;SVMBesselModel&quot;    &quot;SVMLaplaceModel&quot;  
-#&gt; [28] &quot;SVMLinearModel&quot;    &quot;SVMPolyModel&quot;      &quot;SVMRadialModel&quot;   
-#&gt; [31] &quot;SVMSplineModel&quot;    &quot;SVMTanhModel&quot;      &quot;TreeModel&quot;        
-#&gt; [34] &quot;XGBModel&quot;          &quot;XGBDARTModel&quot;      &quot;XGBLinearModel&quot;   
-#&gt; [37] &quot;XGBTreeModel&quot;
+#&gt; [22] &quot;SelectedModel&quot;     &quot;StackedModel&quot;      &quot;SuperModel&quot;       
+#&gt; [25] &quot;SVMModel&quot;          &quot;SVMANOVAModel&quot;     &quot;SVMBesselModel&quot;   
+#&gt; [28] &quot;SVMLaplaceModel&quot;   &quot;SVMLinearModel&quot;    &quot;SVMPolyModel&quot;     
+#&gt; [31] &quot;SVMRadialModel&quot;    &quot;SVMSplineModel&quot;    &quot;SVMTanhModel&quot;     
+#&gt; [34] &quot;TreeModel&quot;         &quot;TunedModel&quot;        &quot;XGBModel&quot;         
+#&gt; [37] &quot;XGBDARTModel&quot;      &quot;XGBLinearModel&quot;    &quot;XGBTreeModel&quot;
 
 ## Identify factor response-specific models
 modelinfo(factor(0), AdaBagModel, C50Model, CoxModel) %&gt;% names
@@ -538,12 +504,12 @@ modelinfo(iris$Species) %&gt;% names
 #&gt; [13] &quot;MDAModel&quot;          &quot;NaiveBayesModel&quot;   &quot;NNetModel&quot;        
 #&gt; [16] &quot;PDAModel&quot;          &quot;PLSModel&quot;          &quot;QDAModel&quot;         
 #&gt; [19] &quot;RandomForestModel&quot; &quot;RangerModel&quot;       &quot;RPartModel&quot;       
-#&gt; [22] &quot;StackedModel&quot;      &quot;SuperModel&quot;        &quot;SVMModel&quot;         
-#&gt; [25] &quot;SVMANOVAModel&quot;     &quot;SVMBesselModel&quot;    &quot;SVMLaplaceModel&quot;  
-#&gt; [28] &quot;SVMLinearModel&quot;    &quot;SVMPolyModel&quot;      &quot;SVMRadialModel&quot;   
-#&gt; [31] &quot;SVMSplineModel&quot;    &quot;SVMTanhModel&quot;      &quot;TreeModel&quot;        
-#&gt; [34] &quot;XGBModel&quot;          &quot;XGBDARTModel&quot;      &quot;XGBLinearModel&quot;   
-#&gt; [37] &quot;XGBTreeModel&quot;</code></pre>
+#&gt; [22] &quot;SelectedModel&quot;     &quot;StackedModel&quot;      &quot;SuperModel&quot;       
+#&gt; [25] &quot;SVMModel&quot;          &quot;SVMANOVAModel&quot;     &quot;SVMBesselModel&quot;   
+#&gt; [28] &quot;SVMLaplaceModel&quot;   &quot;SVMLinearModel&quot;    &quot;SVMPolyModel&quot;     
+#&gt; [31] &quot;SVMRadialModel&quot;    &quot;SVMSplineModel&quot;    &quot;SVMTanhModel&quot;     
+#&gt; [34] &quot;TreeModel&quot;         &quot;TunedModel&quot;        &quot;XGBModel&quot;         
+#&gt; [37] &quot;XGBDARTModel&quot;      &quot;XGBLinearModel&quot;    &quot;XGBTreeModel&quot;</code></pre>
 </div>
 </div>
 <div id="metric-information" class="section level1">
@@ -580,7 +546,7 @@ metricinfo(auc, r2)
 #&gt;     MachineShop::fpr), stat = base::mean, ...) 
 #&gt; NULL
 #&gt; 
-#&gt; $auc$types
+#&gt; $auc$response_types
 #&gt;    observed predicted
 #&gt; 1    Curves      NULL
 #&gt; 2    factor   numeric
@@ -599,7 +565,7 @@ metricinfo(auc, r2)
 #&gt; function (observed, predicted = NULL, dist = NULL, ...) 
 #&gt; NULL
 #&gt; 
-#&gt; $r2$types
+#&gt; $r2$response_types
 #&gt;    observed predicted
 #&gt; 1    matrix    matrix
 #&gt; 2   numeric   numeric
@@ -664,6 +630,49 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

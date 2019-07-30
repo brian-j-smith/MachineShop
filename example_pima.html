@@ -7,6 +7,7 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -75,9 +76,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -196,8 +195,6 @@ $(document).ready(function () {
 });
 </script>
 
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
 
 <style type="text/css">
@@ -254,48 +251,9 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -344,8 +302,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -354,6 +310,16 @@ div.tocify {
 
 
 </style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row-fluid">
@@ -592,61 +558,24 @@ library(MachineShop)
 library(mlbench)
 library(ggplot2)
 
+## Parallel processing
+library(doParallel)
+registerDoParallel(cores = 6)
+
 ## Dataset
 data(PimaIndiansDiabetes2)
 Pima &lt;- na.omit(PimaIndiansDiabetes2)
 
-## Training and test sets
-set.seed(123)
-train_indices &lt;- sample(nrow(Pima), nrow(Pima) * 2 / 3)
-trainset &lt;- Pima[train_indices, ]
-testset &lt;- Pima[-train_indices, ]
-
 ## Model formula
 fo &lt;- diabetes ~ .
 
-## Tuned classes of models
-tuned_models &lt;- lapply(
-  c(KNNModel, NNetModel, RandomForestModel),
-  function(model) {
-    tune(fo, data = trainset, model = model, grid = 5)
-  }
-)
+## Model selected from tuned models
+selected_model &lt;- SelectedModel(TunedModel(KNNModel, grid = 5),
+                                TunedModel(NNetModel, grid = 5),
+                                TunedModel(RandomForestModel, grid = 5))
 
-## Select among tuned models
-(final_model &lt;- tune(fo, data = trainset, models = tuned_models))
-#&gt; Object of class &quot;MLModelTune&quot;
-#&gt; 
-#&gt; Model name: RandomForestModel
-#&gt; Label: Random Forests
-#&gt; Packages: randomForest
-#&gt; Response types: factor, numeric
-#&gt; 
-#&gt; Parameters:
-#&gt; $ntree
-#&gt; [1] 500
-#&gt; 
-#&gt; $mtry
-#&gt; [1] 4
-#&gt; 
-#&gt; $replace
-#&gt; [1] TRUE
-#&gt; 
-#&gt; $nodesize
-#&gt; if (is.factor(y)) 1 else 5
-#&gt; 
-#&gt; Grid:
-#&gt; data frame with 0 columns and 0 rows
-#&gt; 
-#&gt; Object of class &quot;Performance&quot;
-#&gt; 
-#&gt; Metrics: Brier, Accuracy, Kappa, ROCAUC, Sensitivity, Specificity
-#&gt; Models: KNNModel, NNetModel, RandomForestModel 
-#&gt; 
-#&gt; Selected (Brier): RandomForestModel
-
-## Final model fit
-model_fit &lt;- fit(fo, data = trainset, model = final_model)
+## Model fit
+model_fit &lt;- fit(fo, data = Pima, model = selected_model)
 
 ## Variable importance
 vi &lt;- varimp(model_fit)
@@ -655,78 +584,90 @@ plot(vi)</code></pre>
 </div>
 <div id="generalization-performance" class="section level2">
 <h2>Generalization Performance</h2>
-<pre class="r"><code>## Test set observed disease statuses and predicted probabilities
-obs &lt;- response(model_fit, newdata = testset)
-pred &lt;- predict(model_fit, newdata = testset, type = &quot;prob&quot;)
+<pre class="r"><code>## Resample estimation with cross-validation
+res &lt;- resample(fo, data = Pima, model = selected_model, control = CVControl)
 
-## Test set performance
-performance(obs, pred)
-#&gt;       Brier    Accuracy       Kappa      ROCAUC Sensitivity Specificity 
-#&gt;   0.1337154   0.8015267   0.5552364   0.8813953   0.6888889   0.8604651
+## Estimated performance
+summary(performance(res))
+#&gt;                  Mean    Median         SD       Min       Max NA
+#&gt; Brier       0.1523680 0.1580050 0.03256046 0.1050739 0.2004179  0
+#&gt; Accuracy    0.7704487 0.7692308 0.06475061 0.6923077 0.8717949  0
+#&gt; Kappa       0.4639160 0.4661003 0.14431823 0.2500000 0.7058824  0
+#&gt; ROCAUC      0.8459676 0.8461538 0.06790427 0.7588757 0.9822485  0
+#&gt; Sensitivity 0.5846154 0.6153846 0.15889162 0.3846154 0.8461538  0
+#&gt; Specificity 0.8629630 0.8653846 0.10656566 0.6666667 1.0000000  0
 
 ## Variable probability cutoff
-performance(obs, pred, cutoff = 0.25)
-#&gt;       Brier    Accuracy       Kappa      ROCAUC Sensitivity Specificity 
-#&gt;   0.1337154   0.7709924   0.5408879   0.8813953   0.8888889   0.7093023</code></pre>
+summary(performance(res, cutoff = 0.25))
+#&gt;                  Mean    Median         SD       Min       Max NA
+#&gt; Brier       0.1523680 0.1580050 0.03256046 0.1050739 0.2004179  0
+#&gt; Accuracy    0.7352564 0.7342949 0.10045735 0.5250000 0.8974359  0
+#&gt; Kappa       0.4853366 0.4750000 0.16588772 0.1914894 0.7777778  0
+#&gt; ROCAUC      0.8459676 0.8461538 0.06790427 0.7588757 0.9822485  0
+#&gt; Sensitivity 0.8846154 0.9230769 0.09065472 0.7692308 1.0000000  0
+#&gt; Specificity 0.6615385 0.6538462 0.14456830 0.3333333 0.8846154  0</code></pre>
 </div>
 <div id="roc-curve" class="section level2">
 <h2>ROC Curve</h2>
 <pre class="r"><code>## True positive and false positive rates over all probability cutoffs
-roc &lt;- performance_curve(obs, pred)
+roc &lt;- performance_curve(res)
 
 ## ROC curve
 plot(roc, diagonal = TRUE) + coord_fixed()</code></pre>
 <p><img src="example_pima_files/figure-html/ex_pima_roc-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Area under the curve
 auc(roc)
-#&gt; Model: Model
-#&gt; [1] 0.8813953</code></pre>
+#&gt; Model: SelectedModel
+#&gt; [1] 0.835656</code></pre>
 </div>
 <div id="confusion-matrices" class="section level2">
 <h2>Confusion Matrices</h2>
-<pre class="r"><code>(conf &lt;- confusion(obs, pred))
-#&gt; Object of class &quot;BinaryConfusionMatrix&quot;
+<pre class="r"><code>(conf &lt;- confusion(res))
+#&gt; SelectedModel :
 #&gt;          Observed
 #&gt; Predicted neg pos
-#&gt;       neg  74  14
-#&gt;       pos  12  31
+#&gt;       neg 226  54
+#&gt;       pos  36  76
 
 summary(conf)
-#&gt; Number of responses: 131
-#&gt; Accuracy (SE): 0.8015267 (0.03484772)
-#&gt; Majority class: 0.6564885
-#&gt; Kappa: 0.5552364
+#&gt; SelectedModel :
+#&gt; Number of responses: 392
+#&gt; Accuracy (SE): 0.7704082 (0.02124201)
+#&gt; Majority class: 0.6683673
+#&gt; Kappa: 0.4633731
 #&gt; 
 #&gt;                   neg       pos
-#&gt; Observed    0.6564885 0.3435115
-#&gt; Predicted   0.6717557 0.3282443
-#&gt; Agreement   0.5648855 0.2366412
-#&gt; Sensitivity 0.8604651 0.6888889
-#&gt; Specificity 0.6888889 0.8604651
-#&gt; PPV         0.8409091 0.7209302
-#&gt; NPV         0.7209302 0.8409091
+#&gt; Observed    0.6683673 0.3316327
+#&gt; Predicted   0.7142857 0.2857143
+#&gt; Agreement   0.5765306 0.1938776
+#&gt; Sensitivity 0.8625954 0.5846154
+#&gt; Specificity 0.5846154 0.8625954
+#&gt; PPV         0.8071429 0.6785714
+#&gt; NPV         0.6785714 0.8071429
 
-plot(conf)</code></pre>
+plot(conf)
+#&gt; $SelectedModel</code></pre>
 <p><img src="example_pima_files/figure-html/ex_pima_conf-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Variable probability cutoff
-summary(confusion(obs, pred, cutoff = 0.25))
-#&gt; Number of responses: 131
-#&gt; Accuracy (SE): 0.7709924 (0.03671253)
-#&gt; Majority class: 0.6564885
-#&gt; Kappa: 0.5408879
+summary(confusion(res, cutoff = 0.25))
+#&gt; SelectedModel :
+#&gt; Number of responses: 392
+#&gt; Accuracy (SE): 0.7346939 (0.02229892)
+#&gt; Majority class: 0.6683673
+#&gt; Kappa: 0.4765818
 #&gt; 
 #&gt;                   neg       pos
-#&gt; Observed    0.6564885 0.3435115
-#&gt; Predicted   0.5038168 0.4961832
-#&gt; Agreement   0.4656489 0.3053435
-#&gt; Sensitivity 0.7093023 0.8888889
-#&gt; Specificity 0.8888889 0.7093023
-#&gt; PPV         0.9242424 0.6153846
-#&gt; NPV         0.6153846 0.9242424</code></pre>
+#&gt; Observed    0.6683673 0.3316327
+#&gt; Predicted   0.4795918 0.5204082
+#&gt; Agreement   0.4413265 0.2933673
+#&gt; Sensitivity 0.6603053 0.8846154
+#&gt; Specificity 0.8846154 0.6603053
+#&gt; PPV         0.9202128 0.5637255
+#&gt; NPV         0.5637255 0.9202128</code></pre>
 </div>
 <div id="calibration-curve" class="section level2">
 <h2>Calibration Curve</h2>
-<pre class="r"><code>cal &lt;- calibration(obs, pred, breaks = NULL)
+<pre class="r"><code>cal &lt;- calibration(res, breaks = NULL)
 plot(cal, se = TRUE)</code></pre>
 <p><img src="example_pima_files/figure-html/ex_pima_cal-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
@@ -756,6 +697,49 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

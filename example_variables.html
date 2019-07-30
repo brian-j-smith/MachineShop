@@ -7,6 +7,7 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -74,9 +75,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -195,8 +194,6 @@ $(document).ready(function () {
 });
 </script>
 
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
 
 <style type="text/css">
@@ -253,48 +250,9 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -343,8 +301,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -353,6 +309,16 @@ div.tocify {
 
 
 </style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row-fluid">
@@ -479,10 +445,10 @@ fo &lt;- sale_amount ~ .</code></pre>
 model_fit &lt;- fit(fo, ICHomes, model = tuned_model)
 model_res &lt;- resample(fo, ICHomes, model = tuned_model)
 summary(model_res)
-#&gt;             Mean       Median           SD          Min          Max NA
-#&gt; RMSE 53733.74709 56402.025006 1.127398e+04 3.702534e+04 7.297870e+04  0
-#&gt; R2       0.64624     0.650344 9.420438e-02 5.122808e-01 8.076727e-01  0
-#&gt; MAE  28803.69826 28174.804521 3.631947e+03 2.431245e+04 3.499148e+04  0</code></pre>
+#&gt;              Mean       Median           SD          Min          Max NA
+#&gt; RMSE 5.446741e+04 5.692756e+04 1.205796e+04 3.590144e+04 7.338563e+04  0
+#&gt; R2   6.247074e-01 6.484983e-01 1.169232e-01 3.861575e-01 7.703812e-01  0
+#&gt; MAE  2.926885e+04 2.803412e+04 3.756001e+03 2.533105e+04 3.538850e+04  0</code></pre>
 </div>
 <div id="design-matrix" class="section level2">
 <h2>Design Matrix</h2>
@@ -495,9 +461,9 @@ model_fit &lt;- fit(x, y, model = tuned_model)
 model_res &lt;- resample(x, y, model = tuned_model)
 summary(model_res)
 #&gt;              Mean       Median           SD          Min          Max NA
-#&gt; RMSE 6.145824e+04 6.092891e+04 1.474624e+04 3.908531e+04 8.766382e+04  0
-#&gt; R2   5.402827e-01 5.405941e-01 8.216356e-02 4.264787e-01 7.020835e-01  0
-#&gt; MAE  3.476989e+04 3.378063e+04 4.606949e+03 2.865194e+04 4.464683e+04  0</code></pre>
+#&gt; RMSE 5.949771e+04 6.030414e+04 1.970369e+04 3.107880e+04 8.855915e+04  0
+#&gt; R2   5.700382e-01 5.638145e-01 1.413462e-01 4.078289e-01 8.323741e-01  0
+#&gt; MAE  3.407460e+04 3.467444e+04 6.327783e+03 2.267560e+04 4.483100e+04  0</code></pre>
 </div>
 <div id="model-frame" class="section level2">
 <h2>Model Frame</h2>
@@ -509,9 +475,9 @@ model_fit &lt;- fit(mf, model = tuned_model)
 model_res &lt;- resample(mf, model = tuned_model)
 summary(model_res)
 #&gt;              Mean       Median           SD          Min          Max NA
-#&gt; RMSE 5.379582e+04 5.400323e+04 1.321930e+04 3.371776e+04 7.647557e+04  0
-#&gt; R2   6.398891e-01 6.488233e-01 4.696649e-02 5.603493e-01 6.981321e-01  0
-#&gt; MAE  2.884281e+04 2.878845e+04 2.711008e+03 2.499585e+04 3.356268e+04  0</code></pre>
+#&gt; RMSE 5.416380e+04 5.302785e+04 9.561974e+03 4.257813e+04 7.283756e+04  0
+#&gt; R2   6.402258e-01 6.405792e-01 6.305773e-02 5.499315e-01 7.377533e-01  0
+#&gt; MAE  2.870328e+04 2.810383e+04 2.940990e+03 2.531644e+04 3.301788e+04  0</code></pre>
 </div>
 <div id="preprocessing-recipe" class="section level2">
 <h2>Preprocessing Recipe</h2>
@@ -529,9 +495,9 @@ model_fit &lt;- fit(rec, model = tuned_model)
 model_res &lt;- resample(rec, model = tuned_model)
 summary(model_res)
 #&gt;              Mean       Median           SD          Min          Max NA
-#&gt; RMSE 5.423943e+04 5.056099e+04 1.736811e+04 3.417280e+04 8.389551e+04  0
-#&gt; R2   6.327355e-01 6.270162e-01 8.964081e-02 5.236292e-01 7.901367e-01  0
-#&gt; MAE  3.037619e+04 3.063563e+04 4.852178e+03 2.473784e+04 3.917042e+04  0</code></pre>
+#&gt; RMSE 5.494150e+04 55145.024335 1.425161e+04 3.232088e+04 7.298636e+04  0
+#&gt; R2   6.367116e-01     0.654785 1.176179e-01 4.753078e-01 7.936387e-01  0
+#&gt; MAE  3.033933e+04 31347.645088 5.529738e+03 1.913074e+04 3.738154e+04  0</code></pre>
 </div>
 </div>
 
@@ -553,6 +519,49 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
