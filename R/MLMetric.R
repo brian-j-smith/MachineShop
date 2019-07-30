@@ -14,7 +14,7 @@
 #' 
 #' @return \code{MLMetric} class object.
 #' 
-#' @seealso \code{\link{metrics}}, \code{\link{metricinfo}}
+#' @seealso \code{\link{metrics}}
 #' 
 MLMetric <- function(object, name = "MLMetric", label = name, maximize = TRUE) {
   new("MLMetric", object, name = name, label = label, maximize = maximize)

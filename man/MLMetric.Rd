@@ -40,5 +40,5 @@ MLMetric(f2_score) <- list(name = "f2_score",
 
 }
 \seealso{
-\code{\link{metrics}}, \code{\link{metricinfo}}
+\code{\link{metrics}}
 }
