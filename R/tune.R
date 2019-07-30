@@ -6,9 +6,8 @@ MLModelTune <- function(object, tune_grid, performance, selected) {
 
 #' Model Tuning and Selection
 #' 
-#' Evaluate a model over a grid of tuning parameters or a list of specified
-#' models and select the best one according to resample estimation of predictive
-#' performance.
+#' Predictive peformance-based tuning of a model over a grid of parameters
+#' values or selection from a set of candidate models.
 #' 
 #' @name tune
 #' @rdname tune-methods
@@ -28,8 +27,8 @@ tune <- function(x, ...) {
 #' @rdname tune-methods
 #' 
 #' @param data \code{data.frame} containing observed predictors and outcomes.
-#' @param models \code{MLModel} function, function name, object or list of the
-#' aforementioned elements, such as that returned by \code{\link{expand.model}}.
+#' @param models \code{MLModel} function, function name, or object to be tuned;
+#' or list of the aforementioned elements from which to select.
 #' @param grid \code{data.frame} containing parameter values at which to
 #' evaluate a single model supplied to \code{models}, the number of
 #' parameter-specific values to generate automatically if the model has a
@@ -41,20 +40,16 @@ tune <- function(x, ...) {
 #' string naming a control function defining the resampling method to be
 #' employed.
 #' @param metrics function, one or more function names, or list of named
-#' functions to include in the calculation of performance metrics.  The default
-#' \code{\link{performance}} metrics are used unless otherwise specified.  Model
-#' selection is based on the first specified metric.
+#' functions representing performance metrics to be calculated.  If not
+#' specified, default metrics defined in the \code{\link{performance}}
+#' functions are used.  Model tuning is based on the first calculated metric.
 #' @param stat function to compute a summary statistic on resampled values of
 #' the metric for model selection.
-#' @param maximize logical indicating whether to select the model having the
-#' maximum or minimum value of the performance metric.  Set automatically if a
-#' package \code{\link{metrics}} function is explicitly specified for the model
-#' selection.
 #' 
 #' @seealso \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
 #' \code{\link{modelinfo}}, \code{\link{expand.model}}, \code{\link{Grid}},
-#' \code{\link{MLControl}}, \code{\link{fit}}, \code{\link{plot}},
-#' \code{\link{summary}}
+#' \code{\link{MLControl}}, \code{\link{metrics}}, \code{\link{fit}},
+#' \code{\link{plot}}, \code{\link{summary}}
 #' 
 #' @examples
 #' \donttest{
@@ -86,8 +81,8 @@ tune <- function(x, ...) {
 #' 
 tune.formula <- function(x, data, models, grid = 3, fixed = NULL,
                          control = CVControl, metrics = NULL, stat = base::mean,
-                         maximize = TRUE, ...) {
-  .tune(x, data, models, grid, fixed, control, metrics, stat, maximize, ...)
+                         ...) {
+  .tune(x, data, models, grid, fixed, control, metrics, stat, ...)
 }
 
 
@@ -97,8 +92,8 @@ tune.formula <- function(x, data, models, grid = 3, fixed = NULL,
 #' 
 tune.matrix <- function(x, y, models, grid = 3, fixed = NULL,
                         control = CVControl, metrics = NULL, stat = base::mean,
-                        maximize = TRUE, ...) {
-  .tune(x, y, models, grid, fixed, control, metrics, stat, maximize, ...)
+                        ...) {
+  .tune(x, y, models, grid, fixed, control, metrics, stat, ...)
 }
 
 
@@ -106,22 +101,20 @@ tune.matrix <- function(x, y, models, grid = 3, fixed = NULL,
 #' 
 tune.ModelFrame <- function(x, models, grid = 3, fixed = NULL,
                             control = CVControl, metrics = NULL,
-                            stat = base::mean, maximize = TRUE, ...) {
-  .tune(x, NULL, models, grid, fixed, control, metrics, stat, maximize, ...)
+                            stat = base::mean, ...) {
+  .tune(x, NULL, models, grid, fixed, control, metrics, stat, ...)
 }
 
 
 #' @rdname tune-methods
 #' 
 tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
-                        metrics = NULL, stat = base::mean, maximize = TRUE,
-                        ...) {
-  .tune(x, NULL, models, grid, fixed, control, metrics, stat, maximize, ...)
+                        metrics = NULL, stat = base::mean, ...) {
+  .tune(x, NULL, models, grid, fixed, control, metrics, stat, ...)
 }
 
 
-.tune <- function(x, data, models, grid, fixed, control, metrics, stat,
-                  maximize, ...) {
+.tune <- function(x, data, models, grid, fixed, control, metrics, stat, ...) {
   
   if (is.list(models)) {
     model_names <- character()
@@ -151,6 +144,15 @@ tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
   
   control <- getMLObject(control, "MLControl")
   
+  metric <- metrics
+  if (!is.null(metric)) {
+    if (is(metric, "vector")) metric <- metric[[1]]
+    if (is(metric, "character")) metric <- get(metric, mode = "function")
+    if (!is(metric, "MLMetric")) {
+      stop("tuning metric must be an MLMetric object")
+    }
+  }
+  
   perf_list <- list()
   perf_stat <- numeric()
   for (name in names(models)) {
@@ -164,17 +166,14 @@ tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
               mapply(is, list(res$Predicted), info$response_types$predicted))
       })
       metrics <- metrics[is_defined]
+      metric <- metrics[[1]]
     }
     perf_list[[name]] <- performance(res, metrics = metrics, ...)
     perf_stat[name] <- stat(na.omit(perf_list[[name]][, 1]))
   }
-  perf <- do.call(Performance, perf_list)
   
-  metric <- metrics
-  if (is(metric, "vector")) metric <- metric[[1]]
-  if (is(metric, "character")) metric <- get(metric, mode = "function")
-  if (is(metric, "MLMetric")) maximize <- metric@maximize
-  selected <- ifelse(maximize, which.max, which.min)(perf_stat)
+  perf <- do.call(Performance, perf_list)
+  selected <- ifelse(metric@maximize, which.max, which.min)(perf_stat)
   
   MLModelTune(models[[selected]], tune_grid = grid, performance = perf,
               selected = structure(selected, names = colnames(perf)[1]))

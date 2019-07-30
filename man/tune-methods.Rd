@@ -11,20 +11,16 @@
 tune(x, ...)
 
 \method{tune}{formula}(x, data, models, grid = 3, fixed = NULL,
-  control = CVControl, metrics = NULL, stat = base::mean,
-  maximize = TRUE, ...)
+  control = CVControl, metrics = NULL, stat = base::mean, ...)
 
 \method{tune}{matrix}(x, y, models, grid = 3, fixed = NULL,
-  control = CVControl, metrics = NULL, stat = base::mean,
-  maximize = TRUE, ...)
+  control = CVControl, metrics = NULL, stat = base::mean, ...)
 
 \method{tune}{ModelFrame}(x, models, grid = 3, fixed = NULL,
-  control = CVControl, metrics = NULL, stat = base::mean,
-  maximize = TRUE, ...)
+  control = CVControl, metrics = NULL, stat = base::mean, ...)
 
 \method{tune}{recipe}(x, models, grid = 3, fixed = NULL,
-  control = CVControl, metrics = NULL, stat = base::mean,
-  maximize = TRUE, ...)
+  control = CVControl, metrics = NULL, stat = base::mean, ...)
 }
 \arguments{
 \item{x}{defines a relationship between model predictor and response
@@ -35,8 +31,8 @@ variables.  May be a \code{formula}, design matrix of predictors,
 
 \item{data}{\code{data.frame} containing observed predictors and outcomes.}
 
-\item{models}{\code{MLModel} function, function name, object or list of the
-aforementioned elements, such as that returned by \code{\link{expand.model}}.}
+\item{models}{\code{MLModel} function, function name, or object to be tuned;
+or list of the aforementioned elements from which to select.}
 
 \item{grid}{\code{data.frame} containing parameter values at which to
 evaluate a single model supplied to \code{models}, the number of
@@ -52,17 +48,12 @@ string naming a control function defining the resampling method to be
 employed.}
 
 \item{metrics}{function, one or more function names, or list of named
-functions to include in the calculation of performance metrics.  The default
-\code{\link{performance}} metrics are used unless otherwise specified.  Model
-selection is based on the first specified metric.}
+functions representing performance metrics to be calculated.  If not
+specified, default metrics defined in the \code{\link{performance}}
+functions are used.  Model tuning is based on the first calculated metric.}
 
 \item{stat}{function to compute a summary statistic on resampled values of
 the metric for model selection.}
-
-\item{maximize}{logical indicating whether to select the model having the
-maximum or minimum value of the performance metric.  Set automatically if a
-package \code{\link{metrics}} function is explicitly specified for the model
-selection.}
 
 \item{y}{predictor variable.}
 }
@@ -70,9 +61,8 @@ selection.}
 \code{MLModelTune} class object that inherits from \code{MLModel}.
 }
 \description{
-Evaluate a model over a grid of tuning parameters or a list of specified
-models and select the best one according to resample estimation of predictive
-performance.
+Predictive peformance-based tuning of a model over a grid of parameters
+values or selection from a set of candidate models.
 }
 \examples{
 \donttest{
@@ -106,6 +96,6 @@ varimp(gbmfit)
 \seealso{
 \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
 \code{\link{modelinfo}}, \code{\link{expand.model}}, \code{\link{Grid}},
-\code{\link{MLControl}}, \code{\link{fit}}, \code{\link{plot}},
-\code{\link{summary}}
+\code{\link{MLControl}}, \code{\link{metrics}}, \code{\link{fit}},
+\code{\link{plot}}, \code{\link{summary}}
 }

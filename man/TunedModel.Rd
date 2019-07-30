@@ -4,13 +4,11 @@
 \alias{TunedModel}
 \title{Tuned Model}
 \usage{
-TunedModel(models = NULL, grid = 3, fixed = NULL,
-  control = CVControl, metrics = NULL, stat = base::mean,
-  maximize = TRUE, ...)
+TunedModel(model, grid = 3, fixed = NULL, control = CVControl,
+  metrics = NULL, stat = base::mean, cutoff = NULL)
 }
 \arguments{
-\item{models}{\code{MLModel} function, function name, object or list of the
-aforementioned elements, such as that returned by \code{\link{expand.model}}.}
+\item{model}{\code{MLModel} function, function name, or object to be tuned.}
 
 \item{grid}{\code{data.frame} containing parameter values at which to
 evaluate a single model supplied to \code{models}, the number of
@@ -26,26 +24,21 @@ string naming a control function defining the resampling method to be
 employed.}
 
 \item{metrics}{function, one or more function names, or list of named
-functions to include in the calculation of performance metrics.  The default
-\code{\link{performance}} metrics are used unless otherwise specified.  Model
-selection is based on the first specified metric.}
+functions representing performance metrics to be calculated.  If not
+specified, default metrics defined in the \code{\link{performance}}
+functions are used.  Model tuning is based on the first calculated metric.}
 
 \item{stat}{function to compute a summary statistic on resampled values of
-the metric for model selection.}
+the metric for model tuning.}
 
-\item{maximize}{logical indicating whether to select the model having the
-maximum or minimum value of the performance metric.  Set automatically if a
-package \code{\link{metrics}} function is explicitly specified for the model
-selection.}
-
-\item{...}{arguments passed to the \code{metrics} functions.}
+\item{cutoff}{argument passed to the \code{metrics} functions.}
 }
 \value{
 \code{TunedModel} class object that inherits from \code{MLModel}.
 }
 \description{
-A model tuned over a grid of parameter values or selected from a list
-of candidate models as implemented with the \code{\link{tune}} function.
+Model tuned over a grid of parameter values, as produced by the
+\code{\link{tune}} function.
 }
 \details{
 \describe{
