@@ -2,6 +2,8 @@
 #' 
 #' Display information about models provided by the \pkg{MachineShop} package.
 #' 
+#' @aliases models
+#' 
 #' @param ... \code{MLModel} objects, constructor functions, constructor
 #' function names, or supported responses for which to display information.  If
 #' none are specified, information is returned on all available models by

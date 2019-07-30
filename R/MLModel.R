@@ -56,7 +56,7 @@
 #' 
 #' @return \code{MLModel} class object.
 #' 
-#' @seealso \code{\link{modelinfo}}, \code{\link{fit}}, \code{\link{resample}},
+#' @seealso \code{\link{models}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}
 #' 
 #' @examples

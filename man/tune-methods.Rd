@@ -95,7 +95,7 @@ varimp(gbmfit)
 }
 \seealso{
 \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-\code{\link{modelinfo}}, \code{\link{expand.model}}, \code{\link{Grid}},
+\code{\link{models}}, \code{\link{expand.model}}, \code{\link{Grid}},
 \code{\link{MLControl}}, \code{\link{metrics}}, \code{\link{fit}},
 \code{\link{plot}}, \code{\link{summary}}
 }

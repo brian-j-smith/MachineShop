@@ -8,7 +8,7 @@
 #' @return A list of \code{MLModel} objects created from the parameter
 #' combinations.
 #' 
-#' @seealso \code{\link{modelinfo}}, \code{\link{tune}}
+#' @seealso \code{\link{models}}, \code{\link{tune}}
 #' 
 #' @examples
 #' expand.model(GBMModel, n.trees = c(25, 50, 100),

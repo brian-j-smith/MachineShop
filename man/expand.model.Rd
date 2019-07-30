@@ -25,5 +25,5 @@ expand.model(GBMModel, n.trees = c(25, 50, 100),
 
 }
 \seealso{
-\code{\link{modelinfo}}, \code{\link{tune}}
+\code{\link{models}}, \code{\link{tune}}
 }

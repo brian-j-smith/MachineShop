@@ -2,6 +2,7 @@
 % Please edit documentation in R/modelinfo.R
 \name{modelinfo}
 \alias{modelinfo}
+\alias{models}
 \title{Display Model Information}
 \usage{
 modelinfo(...)
