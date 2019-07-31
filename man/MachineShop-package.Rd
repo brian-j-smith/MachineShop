@@ -47,6 +47,7 @@ with the \code{\link{modelinfo}} function.
   \code{\link{RandomForestModel}}   \tab f   \tab n   \tab   \cr
   \code{\link{RangerModel}}         \tab f   \tab n   \tab S \cr
   \code{\link{RPartModel}}          \tab f   \tab n   \tab S \cr
+  \code{\link{SelectedModel}}       \tab f,o \tab m,n \tab S \cr
   \code{\link{StackedModel}}        \tab f,o \tab m,n \tab S \cr
   \code{\link{SuperModel}}          \tab f,o \tab m,n \tab S \cr
   \code{\link{SurvRegModel}}        \tab     \tab     \tab S \cr

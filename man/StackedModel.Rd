@@ -7,7 +7,8 @@
 StackedModel(..., control = CVControl, weights = NULL)
 }
 \arguments{
-\item{...}{\code{MLModel} objects to serve as base learners.}
+\item{...}{\code{MLModel} functions, function names, objects, or lists of
+these to serve as base learners.}
 
 \item{control}{\code{\link{MLControl}} object, control function, or character
 string naming a control function defining the resampling method to be

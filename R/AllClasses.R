@@ -78,6 +78,7 @@ setClass("MLModel",
 )
 
 
+setClass("SelectedModel", contains = "MLModel")
 setClass("StackedModel", contains = "MLModel")
 setClass("SuperModel", contains = "MLModel")
 setClass("TunedModel", contains = "MLModel")

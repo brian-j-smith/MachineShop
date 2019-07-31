@@ -86,6 +86,7 @@ modelinfo <- function(...) {
                   "RandomForestModel",
                   "RangerModel",
                   "RPartModel",
+                  "SelectedModel",
                   "StackedModel",
                   "SuperModel",
                   "SurvRegModel",
