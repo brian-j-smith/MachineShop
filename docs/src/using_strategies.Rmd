@@ -45,39 +45,53 @@ The return value of `tune` is a model object with the optimal tuning parameters 
 ```{r using_strategies_tune_fit}
 ## Fit the tuned model
 surv_fit <- fit(surv_fo, data = surv_train, model = tuned_model)
+```
+
+As illustrated in the examples above, the `tune` function allows for comparisons of all models fit to the parameter grid points and returns the optimal model for subsequent fitting.  For applications in which fitting, performance assessment, and prediction with the optimal model are of primary interest, the `TunedModel` function is provided as a model interface to the `tune` function.  The model interface has the advantage of enabling predictive performance estimation, with the `resample` function, that accounts for the full tuning grid process.
+
+```{r using_strategies_tune_model}
+## Model interface for grid tuning
+tuned_model <- TunedModel(GBMModel, grid = 3, control = surv_means_control,
+                          metrics = c("CIndex" = cindex, "RMSE" = rmse))
+surv_fit <- fit(surv_fo, data = surv_train, model = tuned_model)
 (vi <- varimp(surv_fit))
+
+## Predictive performance of the tuning process
+res_tuned <- resample(surv_fo, data = surv_train, model = tuned_model,
+                      control = surv_means_control)
+summary(performance(res_tuned))
 ```
 
 
 ## Model Selection
 
-Model selection can be performed with the `tune` function to automatically choose from any combination of models and model parameters.  Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values.  In general, a list containing any combination of model functions, function names, and function calls can be supplied to the `models` argument of `tune` to perform model selection.  An `expand.model` helper function is additionally provided to expand a model over a grid of tuning parameters for inclusion in the list if so desired.  In this general form of model selection, the `grid` argument discussed previously for grid tuning is not used.
+Model selection can be conducted with the `tune` or `SelectedModel` function to automatically choose from any combination of models and model parameters.  Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values.  Combinations of model functions, function names, or function calls can be supplied as lists to the `models` argument of `tune` or as arguments to `SelectedModel` in order to define sets of candidate models from which to select.  An `expand.model` helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired.  In this general form of model selection, the `grid` argument in the tuning functions is not used.
 
 ```{r using_strategies_selection, results="hide"}
-## List of candidate models
-candidate_models <- c(
+## Model interface for model selection
+selected_model <- SelectedModel(
   expand.model(GBMModel, n.trees = c(50, 100), interaction.depth = 1:2),
   GLMNetModel(lambda = 0.01),
   CoxModel,
   SurvRegModel
 )
 
-## Select among candidate models
-tune(surv_fo, data = surv_train, models = candidate_models,
-     control = surv_means_control)
+## Fit the selected model
+fit(surv_fo, data = surv_train, model = selected_model)
 ```
 
-Selection may also be performed over sets that include tuned models.  For instance, the `tune` function could be applied to a candidate list containing different classes of models each individually tuned over a grid of parameters.
+Selection may also be performed over candidate sets that include tuned models.  For instance, the `SelectedModel` function is applicable to sets containing different classes of models each individually tuned over a grid of parameters.
 
 ```{r using_strategies_selection_tuned, results="hide"}
-## Tuned classes of models
-tuned_models <- lapply(c(GBMModel, GLMNetModel, CoxModel), function(model) {
-  tune(surv_fo, data = surv_train, model = model, control = surv_means_control)
-})
+## Model interface for selection among tuned models
+selected_tuned_model <- SelectedModel(
+  TunedModel(GBMModel, control = surv_means_control),
+  TunedModel(GLMNetModel, control = surv_means_control),
+  TunedModel(CoxModel, control = surv_means_control)
+)
 
-## Select among tuned models
-tune(surv_fo, data = surv_train, models = tuned_models,
-     control = surv_means_control)
+## Fit the selected tuned model
+fit(surv_fo, data = surv_train, model = selected_tuned_model)
 ```
 
 

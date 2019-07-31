@@ -32,32 +32,24 @@ library(MachineShop)
 library(mlbench)
 library(ggplot2)
 
+## Parallel processing
+library(doParallel)
+registerDoParallel(cores = 6)
+
 ## Dataset
 data(PimaIndiansDiabetes2)
 Pima <- na.omit(PimaIndiansDiabetes2)
 
-## Training and test sets
-set.seed(123)
-train_indices <- sample(nrow(Pima), nrow(Pima) * 2 / 3)
-trainset <- Pima[train_indices, ]
-testset <- Pima[-train_indices, ]
-
 ## Model formula
 fo <- diabetes ~ .
 
-## Tuned classes of models
-tuned_models <- lapply(
-  c(KNNModel, NNetModel, RandomForestModel),
-  function(model) {
-    tune(fo, data = trainset, model = model, grid = 5)
-  }
-)
+## Model selected from tuned models
+selected_model <- SelectedModel(TunedModel(KNNModel, grid = 5),
+                                TunedModel(NNetModel, grid = 5),
+                                TunedModel(RandomForestModel, grid = 5))
 
-## Select among tuned models
-(final_model <- tune(fo, data = trainset, models = tuned_models))
-
-## Final model fit
-model_fit <- fit(fo, data = trainset, model = final_model)
+## Model fit
+model_fit <- fit(fo, data = Pima, model = selected_model)
 
 ## Variable importance
 vi <- varimp(model_fit)
@@ -68,15 +60,14 @@ plot(vi)
 ## Generalization Performance
 
 ```{r ex_pima_metrics}
-## Test set observed disease statuses and predicted probabilities
-obs <- response(model_fit, newdata = testset)
-pred <- predict(model_fit, newdata = testset, type = "prob")
+## Resample estimation with cross-validation
+res <- resample(fo, data = Pima, model = selected_model, control = CVControl)
 
-## Test set performance
-performance(obs, pred)
+## Estimated performance
+summary(performance(res))
 
 ## Variable probability cutoff
-performance(obs, pred, cutoff = 0.25)
+summary(performance(res, cutoff = 0.25))
 ```
 
 
@@ -84,7 +75,7 @@ performance(obs, pred, cutoff = 0.25)
 
 ```{r ex_pima_roc}
 ## True positive and false positive rates over all probability cutoffs
-roc <- performance_curve(obs, pred)
+roc <- performance_curve(res)
 
 ## ROC curve
 plot(roc, diagonal = TRUE) + coord_fixed()
@@ -99,7 +90,7 @@ auc(roc)
 ## Confusion Matrices
 
 ```{r ex_pima_conf}
-(conf <- confusion(obs, pred))
+(conf <- confusion(res))
 
 summary(conf)
 
@@ -108,14 +99,14 @@ plot(conf)
 
 ```{r ex_pima_conf_cutoff}
 ## Variable probability cutoff
-summary(confusion(obs, pred, cutoff = 0.25))
+summary(confusion(res, cutoff = 0.25))
 ```
 
 
 ## Calibration Curve
 
 ```{r ex_pima_cal, results = "hide"}
-cal <- calibration(obs, pred, breaks = NULL)
+cal <- calibration(res, breaks = NULL)
 plot(cal, se = TRUE)
 ```
 
