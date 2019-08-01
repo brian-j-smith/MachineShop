@@ -1179,7 +1179,7 @@ surv_fit <- fit(surv_fo, data = surv_train, model = tuned_model)
 ## Predictive performance of the tuning process
 res_tuned <- resample(surv_fo, data = surv_train, model = tuned_model,
                       control = surv_means_control)
-summary(performance(res_tuned))
+summary(res_tuned)
 ```
 
 
