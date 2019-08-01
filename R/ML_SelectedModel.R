@@ -3,8 +3,8 @@
 #' Model selected from a candidate set, as produced by the \code{\link{tune}}
 #' function.
 #' 
-#' @param ... \code{MLModel} functions, function names, objects, or list of the
-#' aforementioned elements in the candidate set from which to select.
+#' @param ... \code{MLModel} functions, function names, objects, or lists of
+#' these to serve as the candidate set from which to select.
 #' @param control \code{\link{MLControl}} object, control function, or character
 #' string naming a control function defining the resampling method to be
 #' employed.

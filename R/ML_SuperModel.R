@@ -2,7 +2,8 @@
 #' 
 #' Fit a super learner model to predictions from multiple base learners.
 #' 
-#' @param ... \code{MLModel} objects to serve as base learners.
+#' @param ... \code{MLModel} functions, function names, objects, or lists of
+#' these to serve as base learners.
 #' @param model \code{MLModel} object, constructor function, or character string
 #' naming a constructor function to serve as the super model.
 #' @param control \code{\link{MLControl}} object, control function, or character
@@ -35,7 +36,7 @@
 SuperModel <- function(..., model = GBMModel, control = CVControl,
                        all_vars = FALSE) {
   
-  base_learners <- lapply(list(...), getMLObject, class = "MLModel")
+  base_learners <- lapply(unlist(list(...)), getMLObject, class = "MLModel")
 
   control <- getMLObject(control, "MLControl")
 

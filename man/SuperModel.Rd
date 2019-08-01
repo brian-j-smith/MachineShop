@@ -8,7 +8,8 @@ SuperModel(..., model = GBMModel, control = CVControl,
   all_vars = FALSE)
 }
 \arguments{
-\item{...}{\code{MLModel} objects to serve as base learners.}
+\item{...}{\code{MLModel} functions, function names, objects, or lists of
+these to serve as base learners.}
 
 \item{model}{\code{MLModel} object, constructor function, or character string
 naming a constructor function to serve as the super model.}
