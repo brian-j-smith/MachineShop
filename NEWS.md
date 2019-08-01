@@ -2,6 +2,12 @@
 
 ## Version Updates
 
+## 1.5.0
+* Implement model: `SelectedModel`.
+* Remove `maximize` argument from `tune()` and `TunedModel`.
+* Support lists as arguments to `StackedModel()` and `SuperModel`.
+
+
 ## 1.4.2
 * Revert renaming of `expand.model()`.
 * Exclue 0 distance from `KNNModel` tuning grid.

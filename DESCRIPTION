@@ -1,14 +1,14 @@
 Package: MachineShop
 Type: Package
 Title: Machine Learning Models and Tools
-Version: 1.4.2
-Date: 2019-07-29
+Version: 1.5.0
+Date: 2019-08-01
 Authors@R: person(c("Brian", "J"), "Smith",
                   email = "brian-j-smith@uiowa.edu",
                   role = c("aut", "cre"))
 Author: Brian J Smith [aut, cre]
 Maintainer: Brian J Smith <brian-j-smith@uiowa.edu>
-Description: Meta-package for statistical and machine learning with a unified interface for model fitting, prediction, performance assessment, and presentation of results.  Approaches for model fitting and prediction of numerical, categorical, or censored time-to-event outcomes include traditional regression models, regularization methods, tree-based methods, support vector machines, neural networks, ensembles, data preprocessing, filtering, and model tuning and selection.  Performance metrics are provided for model assessment and can be estimated with independent test sets, split sampling, cross-validation, or bootstrap resampling.  Resample estimation can be executed in parallel for faster processing and nested in cases of model tuning and selection.  Modeling results can be summarized tabularly with descriptive statistics and graphically with calibration curves; variable importance plots; partial dependence plots; confusion matrices; and ROC, lift, and other performance curves.
+Description: Meta-package for statistical and machine learning with a unified interface for model fitting, prediction, performance assessment, and presentation of results.  Approaches for model fitting and prediction of numerical, categorical, or censored time-to-event outcomes include traditional regression models, regularization methods, tree-based methods, support vector machines, neural networks, ensembles, data preprocessing, filtering, and model tuning and selection.  Performance metrics are provided for model assessment and can be estimated with independent test sets, split sampling, cross-validation, or bootstrap resampling.  Resample estimation can be executed in parallel for faster processing and nested in cases of model tuning and selection.  Modeling results can be summarized with descriptive statistics; calibration curves; variable importance; partial dependence plots; confusion matrices; and ROC, lift, and other performance curves.
 LazyData: yes
 Imports: abind, foreach, ggplot2, kernlab, magrittr, methods, party, polspline,
          recipes (>= 0.1.4), rlang, rsample, Rsolnp, survival, tibble, utils
