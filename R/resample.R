@@ -159,6 +159,7 @@ setGeneric(".resample", function(object, x, ...) standardGeneric(".resample"))
 
 setMethod(".resample", c("MLBootControl", "ModelFrame"),
   function(object, x, model) {
+    presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
     splits <- bootstraps(x,
@@ -174,6 +175,7 @@ setMethod(".resample", c("MLBootControl", "ModelFrame"),
     
     foreach(i = seq(index),
             .packages = c("MachineShop", "survival")) %dopar% {
+      MachineShop::settings(presets)
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
       if (is_optimism_control) {
@@ -195,6 +197,7 @@ setMethod(".resample", c("MLBootControl", "ModelFrame"),
 
 setMethod(".resample", c("MLBootControl", "ModelRecipe"),
   function(object, x, model) {
+    presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
     splits <- bootstraps(as.data.frame(x),
@@ -210,6 +213,7 @@ setMethod(".resample", c("MLBootControl", "ModelRecipe"),
     
     foreach(i = seq(splits),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
+      MachineShop::settings(presets)
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- recipe(x, analysis(split))
@@ -234,6 +238,7 @@ setMethod(".resample", c("MLBootControl", "ModelRecipe"),
 
 setMethod(".resample", c("MLCVControl", "ModelFrame"),
   function(object, x, model) {
+    presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
     splits <- vfold_cv(x,
@@ -244,6 +249,7 @@ setMethod(".resample", c("MLCVControl", "ModelFrame"),
     seeds <- sample.int(.Machine$integer.max, length(index))
     foreach(i = seq(index),
             .packages = c("MachineShop", "survival")) %dopar% {
+      MachineShop::settings(presets)
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
       test <- x[-index[[i]], , drop = FALSE]
@@ -255,6 +261,7 @@ setMethod(".resample", c("MLCVControl", "ModelFrame"),
 
 setMethod(".resample", c("MLCVControl", "ModelRecipe"),
   function(object, x, model) {
+    presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
     splits <- vfold_cv(as.data.frame(x),
@@ -265,6 +272,7 @@ setMethod(".resample", c("MLCVControl", "ModelRecipe"),
     fo <- formula(terms(x))
     foreach(i = seq(splits),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
+      MachineShop::settings(presets)
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- recipe(x, analysis(split))
@@ -277,6 +285,7 @@ setMethod(".resample", c("MLCVControl", "ModelRecipe"),
 
 setMethod(".resample", c("MLOOBControl", "ModelFrame"),
   function(object, x, model) {
+    presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
     splits <- bootstraps(x,
@@ -287,6 +296,7 @@ setMethod(".resample", c("MLOOBControl", "ModelFrame"),
     seeds <- sample.int(.Machine$integer.max, length(index))
     foreach(i = seq(index),
             .packages = c("MachineShop", "survival")) %dopar% {
+      MachineShop::settings(presets)
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
       test <- x[indexOut[[i]], , drop = FALSE]
@@ -298,6 +308,7 @@ setMethod(".resample", c("MLOOBControl", "ModelFrame"),
 
 setMethod(".resample", c("MLOOBControl", "ModelRecipe"),
   function(object, x, model) {
+    presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
     splits <- bootstraps(as.data.frame(x),
@@ -306,6 +317,7 @@ setMethod(".resample", c("MLOOBControl", "ModelRecipe"),
     seeds <- sample.int(.Machine$integer.max, length(splits))
     foreach(i = seq(splits),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
+      MachineShop::settings(presets)
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- recipe(x, analysis(split))

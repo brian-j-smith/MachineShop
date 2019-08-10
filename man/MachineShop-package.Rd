@@ -12,8 +12,7 @@ Meta-package for statistical and machine learning with a unified interface for m
 \pkg{MachineShop} provides a unified interface to machine learning and
 statistical models provided by other packages.  Supported models are
 summarized in the table below according to the types of response variables
-with which each can be used.  Additional model information can be obtained
-with the \code{\link{modelinfo}} function.
+with which each can be used.
 
 \tabular{lcccc}{
   \strong{Model Objects} \tab \strong{Categorical} \tab \strong{Continuous}
@@ -62,9 +61,7 @@ Continuous: m = matrix, n = numeric;
 Survival: S = Surv
 
 The following set of model training, prediction, performance assessment, and
-tuning functions are available for the model objects.  Informaiton on
-package-supplied metrics for performance assessment can be displayed with the
-\code{\link{metricinfo}} function.
+tuning functions are available for the model objects.
 
 Training: 
 \tabular{ll}{
@@ -106,6 +103,14 @@ Graphical and tabular summaries of modeling results can be obtained with
 
 \code{\link{plot}} \cr
 \code{\link{summary}}
+
+Further information on package features is available with
+
+\tabular{ll}{
+  \code{\link{metricinfo}} \tab Performance Metric Information \cr
+  \code{\link{modelinfo}} \tab Model Information \cr
+  \code{\link{settings}} \tab Global Settings \cr
+}
 
 Custom metrics and models can be created with the \code{\link{MLMetric}} and
 \code{\link{MLModel}} constructors.

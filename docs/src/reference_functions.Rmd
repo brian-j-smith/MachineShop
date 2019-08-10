@@ -68,6 +68,7 @@
 |-------------------------------|----------------------------------------------|
 | `r rdoc_url("metricinfo")`    | Metric function names and attributes         |
 | `r rdoc_url("modelinfo")`     | Model constructor names and attributes       |
+| `r rdoc_url("settings")`      | Global settings                              |
 
 &nbsp;
 
