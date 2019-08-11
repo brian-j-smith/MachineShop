@@ -10,8 +10,8 @@
 \alias{TrainControl}
 \title{Resampling Controls}
 \usage{
-MLControl(times = NULL, dist = NULL, method = NULL, seed = NULL,
-  ...)
+MLControl(times = NULL, dist = NULL, method = NULL,
+  seed = sample(.Machine$integer.max, 1), ...)
 
 BootControl(samples = 25, ...)
 
@@ -28,8 +28,7 @@ TrainControl(...)
 \arguments{
 \item{times, dist, method}{arguments passed to \code{\link{predict}}.}
 
-\item{seed}{integer to set the seed at the start of resampling.  This is set
-to a random integer by default (NULL).}
+\item{seed}{integer to set the seed at the start of resampling.}
 
 \item{...}{arguments passed to \code{MLControl}.}
 

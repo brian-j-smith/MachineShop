@@ -7,17 +7,15 @@
 #' @rdname MLControl
 #' 
 #' @param times,dist,method arguments passed to \code{\link{predict}}.
-#' @param seed integer to set the seed at the start of resampling.  This is set
-#' to a random integer by default (NULL).
+#' @param seed integer to set the seed at the start of resampling.
 #' @param ...  arguments passed to \code{MLControl}.
 #' 
 #' @return \code{MLControl} class object.
 #' 
 #' @seealso \code{\link{resample}}
 #' 
-MLControl <- function(times = NULL, dist = NULL, method = NULL, seed = NULL,
-                      ...) {
-  if (is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
+MLControl <- function(times = NULL, dist = NULL, method = NULL,
+                      seed = sample(.Machine$integer.max, 1), ...) {
   new("MLControl", times = times, dist = dist, method = method, seed = seed)
 }
 
