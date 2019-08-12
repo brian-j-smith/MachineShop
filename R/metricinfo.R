@@ -2,10 +2,11 @@
 #' 
 #' Display information about metrics provided by the \pkg{MachineShop} package.
 #' 
-#' @param ... one or more metric functions; function names; observed response;
-#' observed and predicted responses; or \code{\link{ConfusionMatrix}},
-#' \code{\link{Confusion}}, or \code{\link{Resamples}} object.  If none are
-#' specified, information is returned on all available metrics by default.
+#' @param ... \link{metrics} functions, function names, observed response,
+#' observed and predicted responses, \code{\link{ConfusionMatrix}},
+#' \code{\link{Confusion}}, \code{\link{Resamples}} object, or vector of these
+#' for which to display information.  If none are specified, information is
+#' returned on all available metrics by default.
 #' 
 #' @return List of named metric elements each containing the following
 #' components:
@@ -36,8 +37,9 @@
 #' metricinfo(auc)
 #' 
 metricinfo <- function(...) {
-  args <- unname(list(...))
-  if (length(args) == 0) args <- as.list(.metric_names)
+  args <- list(...)
+  if (length(args) == 1 && is.vector(args[[1]])) args <- as.list(args[[1]])
+  args <- if (length(args)) unname(args) else as.list(.metric_names)
   info <- do.call(.metricinfo, args)
   
   is_type <- if (length(info)) !mapply(is, info, "list") else NULL

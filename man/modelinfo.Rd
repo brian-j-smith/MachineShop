@@ -9,9 +9,9 @@ modelinfo(...)
 }
 \arguments{
 \item{...}{\code{MLModel} objects, constructor functions, constructor
-function names, or supported responses for which to display information.  If
-none are specified, information is returned on all available models by
-default.}
+function names, supported responses, or vector of these for which to display
+information.  If none are specified, information is returned on all available
+models by default.}
 }
 \value{
 List of named model elements each containing the following

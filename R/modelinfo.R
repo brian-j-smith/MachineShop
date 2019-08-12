@@ -5,9 +5,9 @@
 #' @aliases models
 #' 
 #' @param ... \code{MLModel} objects, constructor functions, constructor
-#' function names, or supported responses for which to display information.  If
-#' none are specified, information is returned on all available models by
-#' default.
+#' function names, supported responses, or vector of these for which to display
+#' information.  If none are specified, information is returned on all available
+#' models by default.
 #' 
 #' @return List of named model elements each containing the following
 #' components:
@@ -41,8 +41,9 @@
 #' modelinfo(GBMModel)
 #' 
 modelinfo <- function(...) {
-  args <- unname(list(...))
-  if (length(args) == 0) args <- as.list(.model_names)
+  args <- list(...)
+  if (length(args) == 1 && is.vector(args[[1]])) args <- as.list(args[[1]])
+  args <- if (length(args)) unname(args) else as.list(.model_names)
   info <- do.call(.modelinfo, args)
   
   is_type <- if (length(info)) !mapply(is, info, "list") else NULL
