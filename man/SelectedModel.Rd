@@ -20,8 +20,8 @@ functions representing performance metrics to be calculated.  If not
 specified, default metrics defined in the \code{\link{performance}}
 functions are used.  Model selection is based on the first calculated metric.}
 
-\item{stat}{function to compute a summary statistic on resampled values of
-the metric for model selection.}
+\item{stat}{function or character string naming a function to compute a
+summary statistic on resampled values of the metric for model selection.}
 
 \item{cutoff}{argument passed to the \code{metrics} functions.}
 }

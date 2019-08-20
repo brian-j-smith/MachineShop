@@ -6,9 +6,9 @@
 #' @rdname summary-methods
 #' 
 #' @param object object to summarize.
-#' @param stat function to compute a summary statistic at each cutoff value of
-#' resampled metrics in \code{Curves}, or \code{NULL} for resample-specific
-#' metrics.
+#' @param stat function or character string naming a function to compute a
+#' summary statistic at each cutoff value of resampled metrics in \code{Curves},
+#' or \code{NULL} for resample-specific metrics.
 #' @param stats function, one or more function names, or list of named functions
 #' to include in the calculation of summary statistics.
 #' @param na.rm logical indicating whether to exclude missing values.
@@ -126,6 +126,8 @@ summary.ConfusionMatrix <- function(object, ...) {
 #' 
 summary.Curves <- function(object, stat = base::mean, ...) {
   if (!(is.null(object$Resample) || is.null(stat))) {
+    
+    stat <- fget(stat)
     
     object_class <- class(object)
     stat_na_omit <- function(x) stat(na.omit(x))

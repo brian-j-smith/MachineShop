@@ -109,9 +109,9 @@ classified as events and below which survival probabilities are classified.}
 \item{metrics}{list of two performance metrics for the calculation [default:
 ROC metrics].}
 
-\item{stat}{function to compute a summary statistic at each cutoff value of
-resampled metrics in \code{Curves}, or \code{NULL} for resample-specific
-metrics.}
+\item{stat}{function or character string naming a function to compute a
+summary statistic at each cutoff value of resampled metrics in \code{Curves},
+or \code{NULL} for resample-specific metrics.}
 
 \item{beta}{relative importance of recall to precision in the calculation of
 \code{f_score} [default: F1 score].}

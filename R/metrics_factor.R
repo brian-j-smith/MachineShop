@@ -26,9 +26,9 @@
 #' @param power power to which positional distances of off-diagonals from the
 #' main diagonal in confusion matrices are raised to calculate
 #' \code{weighted_kappa2}.
-#' @param stat function to compute a summary statistic at each cutoff value of
-#' resampled metrics in \code{Curves}, or \code{NULL} for resample-specific
-#' metrics.
+#' @param stat function or character string naming a function to compute a
+#' summary statistic at each cutoff value of resampled metrics in \code{Curves},
+#' or \code{NULL} for resample-specific metrics.
 #' @param ... arguments passed to or from other methods.
 #' 
 #' @seealso \code{\link{metricinfo}}, \code{\link{confusion}},

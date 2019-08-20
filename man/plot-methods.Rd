@@ -46,11 +46,11 @@
 \item{metrics}{vector of numeric indexes or character names of performance
 metrics to plot.}
 
-\item{stat}{function to compute a summary statistic on resampled values for
-\code{MLModelTune} line plots and \code{Resamples} model sorting.  For
-\code{Curves} and \code{Lift} classes, plots are of resampled metrics
-aggregated by the statistic if given or of resample-specific metrics if
-\code{NULL}.}
+\item{stat}{function or character string naming a function to compute a
+summary statistic on resampled values for \code{MLModelTune} line plots and
+\code{Resamples} model sorting.  For \code{Curves} and \code{Lift} classes,
+plots are of resampled metrics aggregated by the statistic if given or of
+resample-specific metrics if \code{NULL}.}
 
 \item{type}{type of plot to construct.}
 

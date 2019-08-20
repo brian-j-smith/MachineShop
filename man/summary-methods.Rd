@@ -38,9 +38,9 @@ to include in the calculation of summary statistics.}
 
 \item{...}{arguments passed to other methods.}
 
-\item{stat}{function to compute a summary statistic at each cutoff value of
-resampled metrics in \code{Curves}, or \code{NULL} for resample-specific
-metrics.}
+\item{stat}{function or character string naming a function to compute a
+summary statistic at each cutoff value of resampled metrics in \code{Curves},
+or \code{NULL} for resample-specific metrics.}
 }
 \value{
 array with summmary statistics in the second dimension, metrics in

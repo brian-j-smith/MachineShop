@@ -43,8 +43,8 @@ tune <- function(x, ...) {
 #' functions representing performance metrics to be calculated.  If not
 #' specified, default metrics defined in the \code{\link{performance}}
 #' functions are used.  Model tuning is based on the first calculated metric.
-#' @param stat function to compute a summary statistic on resampled values of
-#' the metric for model selection.
+#' @param stat function or character string naming a function to compute a
+#' summary statistic on resampled values of the metric for model selection.
 #' 
 #' @seealso \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
 #' \code{\link{models}}, \code{\link{expand.model}}, \code{\link{Grid}},
@@ -152,6 +152,8 @@ tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
       stop("tuning metric must be an MLMetric object")
     }
   }
+  
+  stat <- fget(stat)
   
   perf_list <- list()
   perf_stat <- numeric()
