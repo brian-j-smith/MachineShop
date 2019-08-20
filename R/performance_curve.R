@@ -139,14 +139,10 @@ performance_curve.default <- function(x, y, metrics = c(MachineShop::tpr,
 
 
 .get_curve_metrics <- function(metrics) {
-  if (is.character(metrics)) {
-    metrics <- mget(metrics, mode = "function", inherits = TRUE)
-  }
-  
+  metrics <- lapply(metrics, fget)
   if (length(metrics) != 2 || !all(mapply(is, metrics, "MLMetric"))) {
     stop("'metrics' must be a list of two performance metrics")
   }
-  
   metrics
 }
 

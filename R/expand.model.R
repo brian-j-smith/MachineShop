@@ -40,5 +40,5 @@ expand.model <- function(x, ...) {
 
 .expand.model.MLModel <- function(x, ...) {
   grid <- expand.grid(..., KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
-  expand.model(list(get(x@name, mode = "function"), grid))
+  expand.model(list(fget(x@name), grid))
 }

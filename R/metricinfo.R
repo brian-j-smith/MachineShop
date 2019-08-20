@@ -97,7 +97,7 @@ metricinfo <- function(...) {
 
 
 .metricinfo.character <- function(x, ...) {
-  metric <- try(get(x, mode = "function"), silent = TRUE)
+  metric <- try(fget(x), silent = TRUE)
   if (is(metric, "try-error")) metric <- list()
   .metricinfo(metric, ...)
 }

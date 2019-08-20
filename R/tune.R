@@ -129,7 +129,7 @@ tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
   } else {
     model <- getMLObject(models, class = "MLModel")
     random <- FALSE
-    if (is(grid, "character")) grid <- get(grid, mode = "function")
+    if (is(grid, "character")) grid <- fget(grid)
     if (is(grid, "function")) grid <- grid()
     if (is(grid, "Grid")) {
       random <- grid$random
@@ -139,7 +139,7 @@ tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
       grid <- grid(x, data, model = model, length = grid, random = random)
     }
     grid <- combine_tune_params(grid, fixed)
-    models <- expand.model(list(get(model@name, mode = "function"), grid))
+    models <- expand.model(list(fget(model@name), grid))
   }
   
   control <- getMLObject(control, "MLControl")
@@ -147,7 +147,7 @@ tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
   metric <- metrics
   if (!is.null(metric)) {
     if (is(metric, "vector")) metric <- metric[[1]]
-    if (is(metric, "character")) metric <- get(metric, mode = "function")
+    metric <- fget(metric)
     if (!is(metric, "MLMetric")) {
       stop("tuning metric must be an MLMetric object")
     }
@@ -158,7 +158,7 @@ tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
   for (name in names(models)) {
     res <- resample(x, data, model = models[[name]], control = control)
     if (is.null(metrics)) {
-      method <- get(findMethod(performance, res$Observed))
+      method <- fget(findMethod(performance, res$Observed))
       metrics <- eval(formals(method)$metrics)
       is_defined <- sapply(metrics, function(metric) {
         info <- metricinfo(metric)[[1]]

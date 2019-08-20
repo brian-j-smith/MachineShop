@@ -52,6 +52,23 @@ complete_subset <- function(...) {
 }
 
 
+fget <- function(x) {
+  if (is.character(x)) {
+    x_expr <- str2lang(x)
+    x_name <- x
+    x <- if (is.symbol(x_expr)) {
+      get0(x_name, mode = "function")
+    } else if (is.call(x_expr) && x_expr[[1]] == "::") {
+      get0(as.character(x_expr[[3]]),
+           envir = asNamespace(x_expr[[2]]),
+           mode = "function")
+    }
+    if (is.null(x)) stop("function '", x_name, "' not found")
+  }
+  if (!is.function(x)) stop("invalid function") else x
+}
+
+
 field <- function(object, name) {
   if (isS4(object)) slot(object, name) else object[[name]]
 }
@@ -76,7 +93,7 @@ findMethod <- function(generic, object) {
 getMLObject <- function(x, class = c("MLControl", "MLModel")) {
   class <- match.arg(class)
   
-  if (is.character(x)) x <- get(x)
+  if (is.character(x)) x <- fget(x)
   if (is.function(x)) x <- x()
   if (!is(x, class)) stop("object not of class ", class)
   
@@ -108,7 +125,7 @@ list2function <- function(x) {
     for (i in seq(x)) {
       if (is(x[[i]], "character")) {
         metric_name <- x[[i]]
-        x[[i]] <- get(metric_name, mode = "function")
+        x[[i]] <- fget(metric_name)
       } else if (is(x[[i]], "MLMetric")) {
         metric_name <- x[[i]]@name
       } else if (is(x[[i]], "function")) {
