@@ -4,7 +4,7 @@
 \alias{TunedModel}
 \title{Tuned Model}
 \usage{
-TunedModel(model, grid = 3, fixed = NULL,
+TunedModel(model, grid = MachineShop::settings("grid"), fixed = NULL,
   control = MachineShop::settings("control"), metrics = NULL,
   stat = MachineShop::settings("stat.ModelTune"), cutoff = NULL)
 }

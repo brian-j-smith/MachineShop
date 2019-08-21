@@ -79,7 +79,8 @@ tune <- function(x, ...) {
 #' varimp(gbmfit)
 #' }
 #' 
-tune.formula <- function(x, data, models, grid = 3, fixed = NULL,
+tune.formula <- function(x, data, models, grid = MachineShop::settings("grid"),
+                         fixed = NULL,
                          control = MachineShop::settings("control"),
                          metrics = NULL,
                          stat = MachineShop::settings("stat.ModelTune"), ...) {
@@ -91,7 +92,8 @@ tune.formula <- function(x, data, models, grid = 3, fixed = NULL,
 #' 
 #' @param y predictor variable.
 #' 
-tune.matrix <- function(x, y, models, grid = 3, fixed = NULL,
+tune.matrix <- function(x, y, models, grid = MachineShop::settings("grid"),
+                        fixed = NULL,
                         control = MachineShop::settings("control"),
                         metrics = NULL,
                         stat = MachineShop::settings("stat.ModelTune"), ...) {
@@ -101,7 +103,8 @@ tune.matrix <- function(x, y, models, grid = 3, fixed = NULL,
 
 #' @rdname tune-methods
 #' 
-tune.ModelFrame <- function(x, models, grid = 3, fixed = NULL,
+tune.ModelFrame <- function(x, models, grid = MachineShop::settings("grid"),
+                            fixed = NULL,
                             control = MachineShop::settings("control"),
                             metrics = NULL,
                             stat = MachineShop::settings("stat.ModelTune"),
@@ -112,7 +115,8 @@ tune.ModelFrame <- function(x, models, grid = 3, fixed = NULL,
 
 #' @rdname tune-methods
 #' 
-tune.recipe <- function(x, models, grid = 3, fixed = NULL,
+tune.recipe <- function(x, models, grid = MachineShop::settings("grid"),
+                        fixed = NULL,
                         control = MachineShop::settings("control"),
                         metrics = NULL,
                         stat = MachineShop::settings("stat.ModelTune"), ...) {

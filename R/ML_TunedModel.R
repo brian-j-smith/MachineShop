@@ -36,8 +36,8 @@
 #' @examples
 #' fit(sale_amount ~ ., data = ICHomes, model = TunedModel(GLMNetModel))
 #' 
-TunedModel <- function(model, grid = 3, fixed = NULL,
-                       control = MachineShop::settings("control"),
+TunedModel <- function(model, grid = MachineShop::settings("grid"),
+                       fixed = NULL, control = MachineShop::settings("control"),
                        metrics = NULL,
                        stat = MachineShop::settings("stat.ModelTune"),
                        cutoff = NULL) {

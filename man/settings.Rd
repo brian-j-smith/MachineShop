@@ -28,6 +28,10 @@ behaviors of functions in the the \pkg{MachineShop} package.
   \item{\code{control}}{\code{\link{MLControl}} object, control function, or
   character string naming a control function defining a default resampling
   method [default: \code{"CVControl"}].}
+  \item{\code{grid}}{number of parameter-specific values to generate
+  automatically for \link[=tune]{tuning} of models that have pre-defined
+  grids or a \code{\link{Grid}} function, function name, or call
+  [default: 3].}
   \item{\code{metrics.ConfusionMatrix}}{function, function name, or vector of
   these with which to calculate \link{performance} \link{metrics} for
   confusion matrices [default: \code{c(Accuracy = "accuracy", Kappa =

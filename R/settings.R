@@ -18,6 +18,10 @@
 #'   \item{\code{control}}{\code{\link{MLControl}} object, control function, or
 #'   character string naming a control function defining a default resampling
 #'   method [default: \code{"CVControl"}].}
+#'   \item{\code{grid}}{number of parameter-specific values to generate
+#'   automatically for \link[=tune]{tuning} of models that have pre-defined
+#'   grids or a \code{\link{Grid}} function, function name, or call
+#'   [default: 3].}
 #'   \item{\code{metrics.ConfusionMatrix}}{function, function name, or vector of
 #'   these with which to calculate \link{performance} \link{metrics} for
 #'   confusion matrices [default: \code{c(Accuracy = "accuracy", Kappa =
@@ -152,6 +156,21 @@ MachineShop_global <- as.environment(list(
         if (is(result, "try-error")) {
           DomainError(x, "must be an MLControl object, function, ",
                          "or function name")
+        } else x
+      }
+    ),
+    
+    grid = list(
+      value = 3,
+      check = function(x) {
+        result <- try({
+          if (is.character(x)) x <- fget(x)
+          if (is.function(x)) x <- x()
+          stopifnot((is.numeric(x) && length(x) == 1) || is(x, "Grid"))
+        }, silent = TRUE)
+        if (is(result, "try-error")) {
+          DomainError(x, "must be a numeric value or ",
+                         "a Grid function, function name, or call")
         } else x
       }
     ),

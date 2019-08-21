@@ -10,21 +10,23 @@
 \usage{
 tune(x, ...)
 
-\method{tune}{formula}(x, data, models, grid = 3, fixed = NULL,
+\method{tune}{formula}(x, data, models,
+  grid = MachineShop::settings("grid"), fixed = NULL,
   control = MachineShop::settings("control"), metrics = NULL,
   stat = MachineShop::settings("stat.ModelTune"), ...)
 
-\method{tune}{matrix}(x, y, models, grid = 3, fixed = NULL,
+\method{tune}{matrix}(x, y, models, grid = MachineShop::settings("grid"),
+  fixed = NULL, control = MachineShop::settings("control"),
+  metrics = NULL, stat = MachineShop::settings("stat.ModelTune"), ...)
+
+\method{tune}{ModelFrame}(x, models,
+  grid = MachineShop::settings("grid"), fixed = NULL,
   control = MachineShop::settings("control"), metrics = NULL,
   stat = MachineShop::settings("stat.ModelTune"), ...)
 
-\method{tune}{ModelFrame}(x, models, grid = 3, fixed = NULL,
-  control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.ModelTune"), ...)
-
-\method{tune}{recipe}(x, models, grid = 3, fixed = NULL,
-  control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.ModelTune"), ...)
+\method{tune}{recipe}(x, models, grid = MachineShop::settings("grid"),
+  fixed = NULL, control = MachineShop::settings("control"),
+  metrics = NULL, stat = MachineShop::settings("stat.ModelTune"), ...)
 }
 \arguments{
 \item{x}{defines a relationship between model predictor and response
