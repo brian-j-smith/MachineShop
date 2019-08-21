@@ -90,8 +90,8 @@ performance.MLBootOptimismControl <- function(x, resamples, ...) {
 #' 
 performance.factor <- function(x, y, metrics =
                                  MachineShop::settings("metrics.factor"),
-                                cutoff = 0.5, na.rm = TRUE, ...) {
-  .performance(x, y, metrics, na.rm, cutoff)
+                               cutoff = 0.5, na.rm = TRUE, ...) {
+  .performance(x, y, metrics, na.rm, cutoff = cutoff)
 }
 
 
@@ -130,7 +130,7 @@ performance.numeric <- function(x, y, metrics =
 performance.Surv <- function(x, y, metrics =
                                MachineShop::settings("metrics.Surv"),
                              cutoff = 0.5, na.rm = TRUE, ...) {
-  .performance(x, y, metrics, na.rm, cutoff)
+  .performance(x, y, metrics, na.rm, cutoff = cutoff)
 }
 
 
@@ -149,11 +149,11 @@ performance.ConfusionMatrix <-
 }
 
 
-.performance <- function(x, y, metrics, na.rm, cutoff = 0.5) {
+.performance <- function(x, y, metrics, na.rm, ...) {
   if (na.rm) {
     complete <- complete_subset(x = x, y = y)
     x <- complete$x
     y <- complete$y
   }
-  if (length(x)) list2function(metrics)(x, y, cutoff = cutoff) else NA_real_
+  if (length(x)) list2function(metrics)(x, y, ...) else NA_real_
 }
