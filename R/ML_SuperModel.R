@@ -33,7 +33,8 @@
 #' modelfit <- fit(sale_amount ~ ., data = ICHomes, model = model)
 #' predict(modelfit, newdata = ICHomes)
 #' 
-SuperModel <- function(..., model = GBMModel, control = CVControl,
+SuperModel <- function(..., model = GBMModel,
+                       control = MachineShop::settings("control"),
                        all_vars = FALSE) {
   
   base_learners <- lapply(unlist(list(...)), getMLObject, class = "MLModel")

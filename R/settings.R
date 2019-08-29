@@ -12,6 +12,14 @@
 #' requested changes.  Such a list can be passed as an argument to
 #' \code{settings} to restore their values.
 #' 
+#' @section Settings:
+#' 
+#' \describe{
+#'   \item{\code{control}}{\code{\link{MLControl}} object, control function, or
+#'   character string naming a control function defining a default resampling
+#'   method [default: \code{"CVControl"}].}
+#' }
+#' 
 settings <- function(...) {
   
   args <- list(...)
@@ -68,6 +76,19 @@ settings <- function(...) {
 
 MachineShop_global <- as.environment(list(
   
-  settings = list()
+  settings = list(
+    
+    control = list(
+      value = "CVControl",
+      check = function(x) {
+        result <- try(getMLObject(x, "MLControl"), silent = TRUE)
+        if (is(result, "try-error")) {
+          DomainError(x, "must be an MLControl object, function, ",
+                         "or function name")
+        } else x
+      }
+    )
+    
+  )
   
 ))

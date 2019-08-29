@@ -4,8 +4,8 @@
 \alias{SelectedModel}
 \title{Selected Model}
 \usage{
-SelectedModel(..., control = CVControl, metrics = NULL,
-  stat = base::mean, cutoff = NULL)
+SelectedModel(..., control = MachineShop::settings("control"),
+  metrics = NULL, stat = base::mean, cutoff = NULL)
 }
 \arguments{
 \item{...}{\code{MLModel} functions, function names, objects, or lists of

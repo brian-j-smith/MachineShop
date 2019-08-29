@@ -11,16 +11,20 @@
 tune(x, ...)
 
 \method{tune}{formula}(x, data, models, grid = 3, fixed = NULL,
-  control = CVControl, metrics = NULL, stat = base::mean, ...)
+  control = MachineShop::settings("control"), metrics = NULL,
+  stat = base::mean, ...)
 
 \method{tune}{matrix}(x, y, models, grid = 3, fixed = NULL,
-  control = CVControl, metrics = NULL, stat = base::mean, ...)
+  control = MachineShop::settings("control"), metrics = NULL,
+  stat = base::mean, ...)
 
 \method{tune}{ModelFrame}(x, models, grid = 3, fixed = NULL,
-  control = CVControl, metrics = NULL, stat = base::mean, ...)
+  control = MachineShop::settings("control"), metrics = NULL,
+  stat = base::mean, ...)
 
 \method{tune}{recipe}(x, models, grid = 3, fixed = NULL,
-  control = CVControl, metrics = NULL, stat = base::mean, ...)
+  control = MachineShop::settings("control"), metrics = NULL,
+  stat = base::mean, ...)
 }
 \arguments{
 \item{x}{defines a relationship between model predictor and response

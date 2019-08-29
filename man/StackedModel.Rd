@@ -4,7 +4,8 @@
 \alias{StackedModel}
 \title{Stacked Regression Model}
 \usage{
-StackedModel(..., control = CVControl, weights = NULL)
+StackedModel(..., control = MachineShop::settings("control"),
+  weights = NULL)
 }
 \arguments{
 \item{...}{\code{MLModel} functions, function names, objects, or lists of

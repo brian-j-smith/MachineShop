@@ -114,7 +114,8 @@ resample <- function(x, ...) {
 #' summary(res)
 #' plot(res)
 #' 
-resample.formula <- function(x, data, model, control = CVControl, ...) {
+resample.formula <- function(x, data, model,
+                             control = MachineShop::settings("control"), ...) {
   resample(ModelFrame(x, data, na.rm = FALSE,
                       strata = strata(response(x, data))), model, control)
 }
@@ -124,7 +125,8 @@ resample.formula <- function(x, data, model, control = CVControl, ...) {
 #' 
 #' @param y predictor variable.
 #' 
-resample.matrix <- function(x, y, model, control = CVControl, ...) {
+resample.matrix <- function(x, y, model,
+                            control = MachineShop::settings("control"), ...) {
   resample(ModelFrame(x, y, na.rm = FALSE, strata = strata(y)), model, control)
 }
 
@@ -137,7 +139,9 @@ resample.matrix <- function(x, y, model, control = CVControl, ...) {
 #' argument in its constructor.  Resampling of this class is unstratified by
 #' default.
 #' 
-resample.ModelFrame <- function(x, model, control = CVControl, ...) {
+resample.ModelFrame <- function(x, model,
+                                control = MachineShop::settings("control"),
+                                ...) {
   .resample(getMLObject(control, "MLControl"), x, model)
 }
 
@@ -149,7 +153,8 @@ resample.ModelFrame <- function(x, model, control = CVControl, ...) {
 #' "case_strata" \code{\link[recipes:roles]{role}} for them.  Resampling will
 #' be unstratified if no variables have that role.
 #' 
-resample.recipe <- function(x, model, control = CVControl, ...) {
+resample.recipe <- function(x, model,
+                            control = MachineShop::settings("control"), ...) {
   .resample(getMLObject(control, "MLControl"), ModelRecipe(x), model)
 }
 

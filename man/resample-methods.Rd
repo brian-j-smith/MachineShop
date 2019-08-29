@@ -13,13 +13,17 @@ Resamples(...)
 
 resample(x, ...)
 
-\method{resample}{formula}(x, data, model, control = CVControl, ...)
+\method{resample}{formula}(x, data, model,
+  control = MachineShop::settings("control"), ...)
 
-\method{resample}{matrix}(x, y, model, control = CVControl, ...)
+\method{resample}{matrix}(x, y, model,
+  control = MachineShop::settings("control"), ...)
 
-\method{resample}{ModelFrame}(x, model, control = CVControl, ...)
+\method{resample}{ModelFrame}(x, model,
+  control = MachineShop::settings("control"), ...)
 
-\method{resample}{recipe}(x, model, control = CVControl, ...)
+\method{resample}{recipe}(x, model,
+  control = MachineShop::settings("control"), ...)
 }
 \arguments{
 \item{...}{named or unnamed \code{resample} output to combine together with

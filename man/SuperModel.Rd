@@ -4,8 +4,8 @@
 \alias{SuperModel}
 \title{Super Learner Model}
 \usage{
-SuperModel(..., model = GBMModel, control = CVControl,
-  all_vars = FALSE)
+SuperModel(..., model = GBMModel,
+  control = MachineShop::settings("control"), all_vars = FALSE)
 }
 \arguments{
 \item{...}{\code{MLModel} functions, function names, objects, or lists of

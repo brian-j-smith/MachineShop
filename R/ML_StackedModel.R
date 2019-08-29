@@ -28,7 +28,8 @@
 #' modelfit <- fit(sale_amount ~ ., data = ICHomes, model = model)
 #' predict(modelfit, newdata = ICHomes)
 #' 
-StackedModel <- function(..., control = CVControl, weights = NULL) {
+StackedModel <- function(..., control = MachineShop::settings("control"),
+                         weights = NULL) {
   
   base_learners <- lapply(unlist(list(...)), getMLObject, class = "MLModel")
   

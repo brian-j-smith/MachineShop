@@ -80,8 +80,8 @@ tune <- function(x, ...) {
 #' }
 #' 
 tune.formula <- function(x, data, models, grid = 3, fixed = NULL,
-                         control = CVControl, metrics = NULL, stat = base::mean,
-                         ...) {
+                         control = MachineShop::settings("control"),
+                         metrics = NULL, stat = base::mean, ...) {
   .tune(x, data, models, grid, fixed, control, metrics, stat, ...)
 }
 
@@ -91,8 +91,8 @@ tune.formula <- function(x, data, models, grid = 3, fixed = NULL,
 #' @param y predictor variable.
 #' 
 tune.matrix <- function(x, y, models, grid = 3, fixed = NULL,
-                        control = CVControl, metrics = NULL, stat = base::mean,
-                        ...) {
+                        control = MachineShop::settings("control"),
+                        metrics = NULL, stat = base::mean, ...) {
   .tune(x, y, models, grid, fixed, control, metrics, stat, ...)
 }
 
@@ -100,15 +100,16 @@ tune.matrix <- function(x, y, models, grid = 3, fixed = NULL,
 #' @rdname tune-methods
 #' 
 tune.ModelFrame <- function(x, models, grid = 3, fixed = NULL,
-                            control = CVControl, metrics = NULL,
-                            stat = base::mean, ...) {
+                            control = MachineShop::settings("control"),
+                            metrics = NULL, stat = base::mean, ...) {
   .tune(x, NULL, models, grid, fixed, control, metrics, stat, ...)
 }
 
 
 #' @rdname tune-methods
 #' 
-tune.recipe <- function(x, models, grid = 3, fixed = NULL, control = CVControl,
+tune.recipe <- function(x, models, grid = 3, fixed = NULL,
+                        control = MachineShop::settings("control"),
                         metrics = NULL, stat = base::mean, ...) {
   .tune(x, NULL, models, grid, fixed, control, metrics, stat, ...)
 }

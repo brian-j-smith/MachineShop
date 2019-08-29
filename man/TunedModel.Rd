@@ -4,8 +4,9 @@
 \alias{TunedModel}
 \title{Tuned Model}
 \usage{
-TunedModel(model, grid = 3, fixed = NULL, control = CVControl,
-  metrics = NULL, stat = base::mean, cutoff = NULL)
+TunedModel(model, grid = 3, fixed = NULL,
+  control = MachineShop::settings("control"), metrics = NULL,
+  stat = base::mean, cutoff = NULL)
 }
 \arguments{
 \item{model}{\code{MLModel} function, function name, or object to be tuned.}

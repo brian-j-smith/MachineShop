@@ -21,3 +21,13 @@ requested changes.  Such a list can be passed as an argument to
 Allow the user to view or change global settings which affect default
 behaviors of functions in the the \pkg{MachineShop} package.
 }
+\section{Settings}{
+
+
+\describe{
+  \item{\code{control}}{\code{\link{MLControl}} object, control function, or
+  character string naming a control function defining a default resampling
+  method [default: \code{"CVControl"}].}
+}
+}
+

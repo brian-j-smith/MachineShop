@@ -31,8 +31,8 @@
 #' fit(sale_amount ~ ., data = ICHomes,
 #'     model = SelectedModel(GBMModel, GLMNetModel, SVMRadialModel))
 #' 
-SelectedModel <- function(..., control = CVControl, metrics = NULL,
-                          stat = base::mean, cutoff = NULL) {
+SelectedModel <- function(..., control = MachineShop::settings("control"),
+                          metrics = NULL, stat = base::mean, cutoff = NULL) {
   
   models <- unlist(list(...))
   control <- getMLObject(control, "MLControl")
