@@ -36,7 +36,7 @@
 accuracy(observed, predicted = NULL, cutoff = 0.5, ...)
 
 auc(observed, predicted = NULL, metrics = c(MachineShop::tpr,
-  MachineShop::fpr), stat = base::mean, ...)
+  MachineShop::fpr), stat = MachineShop::settings("stat.Curves"), ...)
 
 brier(observed, predicted = NULL, ...)
 

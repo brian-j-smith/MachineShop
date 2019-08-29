@@ -5,8 +5,8 @@
 \title{Partial Dependence}
 \usage{
 dependence(object, data = NULL, select = NULL, interaction = FALSE,
-  n = 10, intervals = c("uniform", "quantile"), stats = c(Mean =
-  base::mean))
+  n = 10, intervals = c("uniform", "quantile"),
+  stats = MachineShop::settings("stats.PartialDependence"))
 }
 \arguments{
 \item{object}{\code{MLModelFit} object.}
@@ -27,8 +27,8 @@ interacted predictors.}
 spaced uniformly (\code{"uniform"}) or according to variable quantiles
 (\code{"quantile"}).}
 
-\item{stats}{function, one or more function names, or list of named functions
-with which to aggregate the response variable over the non-selected predictor
+\item{stats}{function, function name, or vector of these with which to
+compute response variable summary statistics over non-selected predictor
 variables.}
 }
 \value{

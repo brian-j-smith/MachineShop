@@ -14,14 +14,17 @@
 \alias{plot.VarImp}
 \title{Model Performance Plots}
 \usage{
-\method{plot}{Performance}(x, metrics = NULL, stat = base::mean,
-  type = c("boxplot", "density", "errorbar", "violin"), ...)
+\method{plot}{Performance}(x, metrics = NULL,
+  stat = MachineShop::settings("stat.Resamples"), type = c("boxplot",
+  "density", "errorbar", "violin"), ...)
 
-\method{plot}{Resamples}(x, metrics = NULL, stat = base::mean,
-  type = c("boxplot", "density", "errorbar", "violin"), ...)
+\method{plot}{Resamples}(x, metrics = NULL,
+  stat = MachineShop::settings("stat.Resamples"), type = c("boxplot",
+  "density", "errorbar", "violin"), ...)
 
-\method{plot}{MLModelTune}(x, metrics = NULL, stat = base::mean,
-  type = c("boxplot", "density", "errorbar", "line", "violin"), ...)
+\method{plot}{MLModelTune}(x, metrics = NULL,
+  stat = MachineShop::settings("stat.ModelTune"), type = c("boxplot",
+  "density", "errorbar", "line", "violin"), ...)
 
 \method{plot}{Calibration}(x, type = c("line", "point"), se = FALSE,
   ...)
@@ -31,10 +34,10 @@
 \method{plot}{ConfusionMatrix}(x, ...)
 
 \method{plot}{Curves}(x, type = c("tradeoffs", "cutoffs"),
-  diagonal = FALSE, stat = base::mean, ...)
+  diagonal = FALSE, stat = MachineShop::settings("stat.Curves"), ...)
 
 \method{plot}{Lift}(x, find = NULL, diagonal = TRUE,
-  stat = base::mean, ...)
+  stat = MachineShop::settings("stat.Curves"), ...)
 
 \method{plot}{PartialDependence}(x, stats = NULL, ...)
 
@@ -47,8 +50,8 @@
 metrics to plot.}
 
 \item{stat}{function or character string naming a function to compute a
-summary statistic on resampled values for \code{MLModelTune} line plots and
-\code{Resamples} model sorting.  For \code{Curves} and \code{Lift} classes,
+summary statistic on resampled metrics for \code{MLModelTune} line plots and
+\code{Resamples} model ordering.  For \code{Curves} and \code{Lift} classes,
 plots are of resampled metrics aggregated by the statistic if given or of
 resample-specific metrics if \code{NULL}.}
 

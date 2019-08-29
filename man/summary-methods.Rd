@@ -10,29 +10,27 @@
 \alias{summary.Curves}
 \title{Model Performance Summary}
 \usage{
-\method{summary}{Performance}(object, stats = c(Mean = base::mean, Median
-  = stats::median, SD = stats::sd, Min = base::min, Max = base::max),
-  na.rm = TRUE, ...)
+\method{summary}{Performance}(object,
+  stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
 
-\method{summary}{Resamples}(object, stats = c(Mean = base::mean, Median =
-  stats::median, SD = stats::sd, Min = base::min, Max = base::max),
-  na.rm = TRUE, ...)
+\method{summary}{Resamples}(object,
+  stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
 
-\method{summary}{MLModelTune}(object, stats = c(Mean = base::mean, Median
-  = stats::median, SD = stats::sd, Min = base::min, Max = base::max),
-  na.rm = TRUE, ...)
+\method{summary}{MLModelTune}(object,
+  stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
 
 \method{summary}{Confusion}(object, ...)
 
 \method{summary}{ConfusionMatrix}(object, ...)
 
-\method{summary}{Curves}(object, stat = base::mean, ...)
+\method{summary}{Curves}(object,
+  stat = MachineShop::settings("stat.Curves"), ...)
 }
 \arguments{
 \item{object}{object to summarize.}
 
-\item{stats}{function, one or more function names, or list of named functions
-to include in the calculation of summary statistics.}
+\item{stats}{function, function name, or vector of these with which to
+compute summary statistics.}
 
 \item{na.rm}{logical indicating whether to exclude missing values.}
 

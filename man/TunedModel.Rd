@@ -6,7 +6,7 @@
 \usage{
 TunedModel(model, grid = 3, fixed = NULL,
   control = MachineShop::settings("control"), metrics = NULL,
-  stat = base::mean, cutoff = NULL)
+  stat = MachineShop::settings("stat.ModelTune"), cutoff = NULL)
 }
 \arguments{
 \item{model}{\code{MLModel} function, function name, or object to be tuned.}
@@ -30,7 +30,7 @@ the \code{\link{performance}} functions are used.  Model selection is based
 on the first calculated metric.}
 
 \item{stat}{function or character string naming a function to compute a
-summary statistic on resampled values of the metric for model tuning.}
+summary statistic on resampled metric values for model tuning.}
 
 \item{cutoff}{argument passed to the \code{metrics} functions.}
 }

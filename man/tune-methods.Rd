@@ -12,19 +12,19 @@ tune(x, ...)
 
 \method{tune}{formula}(x, data, models, grid = 3, fixed = NULL,
   control = MachineShop::settings("control"), metrics = NULL,
-  stat = base::mean, ...)
+  stat = MachineShop::settings("stat.ModelTune"), ...)
 
 \method{tune}{matrix}(x, y, models, grid = 3, fixed = NULL,
   control = MachineShop::settings("control"), metrics = NULL,
-  stat = base::mean, ...)
+  stat = MachineShop::settings("stat.ModelTune"), ...)
 
 \method{tune}{ModelFrame}(x, models, grid = 3, fixed = NULL,
   control = MachineShop::settings("control"), metrics = NULL,
-  stat = base::mean, ...)
+  stat = MachineShop::settings("stat.ModelTune"), ...)
 
 \method{tune}{recipe}(x, models, grid = 3, fixed = NULL,
   control = MachineShop::settings("control"), metrics = NULL,
-  stat = base::mean, ...)
+  stat = MachineShop::settings("stat.ModelTune"), ...)
 }
 \arguments{
 \item{x}{defines a relationship between model predictor and response
@@ -57,7 +57,7 @@ the \code{\link{performance}} functions are used.  Model selection is based
 on the first calculated metric.}
 
 \item{stat}{function or character string naming a function to compute a
-summary statistic on resampled values of the metric for model selection.}
+summary statistic on resampled metric values for model tuning.}
 
 \item{y}{predictor variable.}
 }

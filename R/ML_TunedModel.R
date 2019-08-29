@@ -19,7 +19,7 @@
 #' the \code{\link{performance}} functions are used.  Model selection is based
 #' on the first calculated metric.
 #' @param stat function or character string naming a function to compute a
-#' summary statistic on resampled values of the metric for model tuning.
+#' summary statistic on resampled metric values for model tuning.
 #' @param cutoff argument passed to the \code{metrics} functions.
 #' 
 #' @details
@@ -38,7 +38,9 @@
 #' 
 TunedModel <- function(model, grid = 3, fixed = NULL,
                        control = MachineShop::settings("control"),
-                       metrics = NULL, stat = base::mean, cutoff = NULL) {
+                       metrics = NULL,
+                       stat = MachineShop::settings("stat.ModelTune"),
+                       cutoff = NULL) {
   
   if (missing(model)) model <- NULL
   control <- getMLObject(control, "MLControl")

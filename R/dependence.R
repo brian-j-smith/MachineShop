@@ -19,8 +19,8 @@ PartialDependence <- function(object) {
 #' @param intervals character string specifying whether the \code{n} values are
 #' spaced uniformly (\code{"uniform"}) or according to variable quantiles
 #' (\code{"quantile"}).
-#' @param stats function, one or more function names, or list of named functions
-#' with which to aggregate the response variable over the non-selected predictor
+#' @param stats function, function name, or vector of these with which to
+#' compute response variable summary statistics over non-selected predictor
 #' variables.
 #' 
 #' @return \code{PartialDependence} class object that inherits from
@@ -34,8 +34,8 @@ PartialDependence <- function(object) {
 #' plot(pd)
 #' 
 dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
-                       n = 10, intervals = c("uniform", "quantile"),
-                       stats = c("Mean" = base::mean)) {
+                       n = 10, intervals = c("uniform", "quantile"), stats =
+                         MachineShop::settings("stats.PartialDependence")) {
   
   stopifnot(is(object, "MLModelFit"))
 

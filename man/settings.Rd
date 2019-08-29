@@ -48,6 +48,24 @@ behaviors of functions in the the \pkg{MachineShop} package.
   which to calculate \link{performance} \link{metrics} for survival responses
   [default: \code{c(`C-Index` = "cindex", Brier = "brier", `ROC AUC` =
   "roc_auc", Accuracy = "accuracy")}].}
+  \item{\code{stat.Curves}}{function or character string naming a function
+  to compute one \link{summary} statistic at each cutoff value of resampled
+  metrics in performance curves, or \code{NULL} for resample-specific metrics
+  [default: \code{"base::mean"}].}
+  \item{\code{stat.ModelTune}}{function or character string naming a function
+  to compute one summary statistic on resampled performance metrics for
+  \link[=tune]{model tuning and selection} [default: \code{"base::mean"}].}
+  \item{\code{stat.Resamples}}{function or character string naming a function
+  to compute one summary statistic to control the ordering of models in
+  \link[=plot]{plots} [default: \code{"base::mean"}].}
+  \item{\code{stats.PartialDependence}}{function, function name, or vector of
+  these with which to compute \link[=dependence]{partial dependence} summary
+  statistics [default: \code{c(Mean = "base::mean")}].}
+  \item{\code{stats.Resamples}}{function, function name, or vector of these
+  with which to compute \link{summary} statistics on resampled performance
+  metrics [default: \code{c(Mean = "base::mean", Median = "stats::median",
+  SD = "stats::sd", Min = "base::min", Max = "base::max")}].
+  }
 }
 }
 

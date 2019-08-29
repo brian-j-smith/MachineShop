@@ -52,7 +52,7 @@ setMetric_ConfusionMatrix("accuracy",
 #' 
 auc <- function(observed, predicted = NULL,
                 metrics = c(MachineShop::tpr, MachineShop::fpr),
-                stat = base::mean, ...) {
+                stat = MachineShop::settings("stat.Curves"), ...) {
   call_metric_method("auc", environment())
 }
 

@@ -13,7 +13,7 @@
 #' the \code{\link{performance}} functions are used.  Model selection is based
 #' on the first calculated metric.
 #' @param stat function or character string naming a function to compute a
-#' summary statistic on resampled values of the metric for model selection.
+#' summary statistic on resampled metric values for model selection.
 #' @param cutoff argument passed to the \code{metrics} functions.
 #' 
 #' @details
@@ -32,7 +32,9 @@
 #'     model = SelectedModel(GBMModel, GLMNetModel, SVMRadialModel))
 #' 
 SelectedModel <- function(..., control = MachineShop::settings("control"),
-                          metrics = NULL, stat = base::mean, cutoff = NULL) {
+                          metrics = NULL,
+                          stat = MachineShop::settings("stat.ModelTune"),
+                          cutoff = NULL) {
   
   models <- unlist(list(...))
   control <- getMLObject(control, "MLControl")

@@ -38,6 +38,24 @@
 #'   which to calculate \link{performance} \link{metrics} for survival responses
 #'   [default: \code{c(`C-Index` = "cindex", Brier = "brier", `ROC AUC` =
 #'   "roc_auc", Accuracy = "accuracy")}].}
+#'   \item{\code{stat.Curves}}{function or character string naming a function
+#'   to compute one \link{summary} statistic at each cutoff value of resampled
+#'   metrics in performance curves, or \code{NULL} for resample-specific metrics
+#'   [default: \code{"base::mean"}].}
+#'   \item{\code{stat.ModelTune}}{function or character string naming a function
+#'   to compute one summary statistic on resampled performance metrics for
+#'   \link[=tune]{model tuning and selection} [default: \code{"base::mean"}].}
+#'   \item{\code{stat.Resamples}}{function or character string naming a function
+#'   to compute one summary statistic to control the ordering of models in
+#'   \link[=plot]{plots} [default: \code{"base::mean"}].}
+#'   \item{\code{stats.PartialDependence}}{function, function name, or vector of
+#'   these with which to compute \link[=dependence]{partial dependence} summary
+#'   statistics [default: \code{c(Mean = "base::mean")}].}
+#'   \item{\code{stats.Resamples}}{function, function name, or vector of these
+#'   with which to compute \link{summary} statistics on resampled performance
+#'   metrics [default: \code{c(Mean = "base::mean", Median = "stats::median",
+#'   SD = "stats::sd", Min = "base::min", Max = "base::max")}].
+#'   }
 #' }
 #' 
 settings <- function(...) {
@@ -103,6 +121,23 @@ check_metrics <- function(x) {
 }
 
 
+check_stat <- function(x) {
+  result <- try(fget(x)(1:5), silent = TRUE)
+  if (is(result, "try-error") || !is.numeric(result) || length(result) != 1) {
+    DomainError(x, "must be a statistic function or function name")
+  } else x
+}
+
+
+check_stats <- function(x) {
+  result <- try(list2function(x)(1:5), silent = TRUE)
+  if (is(result, "try-error") || !is.numeric(result)) {
+    DomainError(x, "must be a statistics function, function name, ",
+                   "or vector of these")
+  } else x
+}
+
+
 #################### Global Environment ####################
 
 
@@ -161,6 +196,41 @@ MachineShop_global <- as.environment(list(
                 "ROC AUC" = "roc_auc",
                 "Accuracy" = "accuracy"),
       check = check_metrics
+    ),
+    
+    stat.Curves = list(
+      value = "base::mean",
+      check = function(x) {
+        if (!is.null(x) && is(check_stat(x), "error")) {
+          DomainError(x, "must be a statistics function, function name, ",
+                         "vector of these, or NULL")
+        } else x
+      }
+    ),
+    
+    stat.ModelTune = list(
+      value = "base::mean",
+      check = check_stat
+    ),
+    
+    stat.Resamples = list(
+      value = "base::mean",
+      check = check_stat
+    ),
+    
+    stats.PartialDependence = list(
+      value = c("Mean" = "base::mean"),
+      check = check_stats
+      
+    ),
+    
+    stats.Resamples = list(
+      value = c("Mean" = "base::mean",
+                "Median" = "stats::median",
+                "SD" = "stats::sd",
+                "Min" = "base::min",
+                "Max" = "base::max"),
+      check = check_stats
     )
     
   )

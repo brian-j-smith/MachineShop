@@ -5,7 +5,8 @@
 \title{Selected Model}
 \usage{
 SelectedModel(..., control = MachineShop::settings("control"),
-  metrics = NULL, stat = base::mean, cutoff = NULL)
+  metrics = NULL, stat = MachineShop::settings("stat.ModelTune"),
+  cutoff = NULL)
 }
 \arguments{
 \item{...}{\code{MLModel} functions, function names, objects, or lists of
@@ -21,7 +22,7 @@ the \code{\link{performance}} functions are used.  Model selection is based
 on the first calculated metric.}
 
 \item{stat}{function or character string naming a function to compute a
-summary statistic on resampled values of the metric for model selection.}
+summary statistic on resampled metric values for model selection.}
 
 \item{cutoff}{argument passed to the \code{metrics} functions.}
 }

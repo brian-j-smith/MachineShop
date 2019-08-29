@@ -9,8 +9,8 @@
 #' @param stat function or character string naming a function to compute a
 #' summary statistic at each cutoff value of resampled metrics in \code{Curves},
 #' or \code{NULL} for resample-specific metrics.
-#' @param stats function, one or more function names, or list of named functions
-#' to include in the calculation of summary statistics.
+#' @param stats function, function name, or vector of these with which to
+#' compute summary statistics.
 #' @param na.rm logical indicating whether to exclude missing values.
 #' @param ... arguments passed to other methods.
 #' 
@@ -21,12 +21,8 @@
 #' @seealso \code{\link{performance}}, \code{\link{resample}},
 #' \code{\link{diff}}, \code{\link{tune}}, \code{\link{confusion}}
 #' 
-summary.Performance <- function(object,
-                                stats = c("Mean" = base::mean,
-                                          "Median" = stats::median,
-                                          "SD" = stats::sd,
-                                          "Min" = base::min,
-                                          "Max" = base::max),
+summary.Performance <- function(object, stats =
+                                  MachineShop::settings("stats.Resamples"),
                                 na.rm = TRUE, ...) {
   stats <- list2function(stats)
 
@@ -62,12 +58,8 @@ summary.Performance <- function(object,
 #' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
 #' summary(res)
 #' 
-summary.Resamples <- function(object,
-                              stats = c("Mean" = base::mean,
-                                        "Median" = stats::median,
-                                        "SD" = stats::sd,
-                                        "Min" = base::min,
-                                        "Max" = base::max),
+summary.Resamples <- function(object, stats =
+                                MachineShop::settings("stats.Resamples"),
                               na.rm = TRUE, ...) {
   summary(performance(object), stats = stats, na.rm = na.rm)
 }
@@ -75,12 +67,8 @@ summary.Resamples <- function(object,
 
 #' @rdname summary-methods
 #' 
-summary.MLModelTune <- function(object,
-                                stats = c("Mean" = base::mean,
-                                          "Median" = stats::median,
-                                          "SD" = stats::sd,
-                                          "Min" = base::min,
-                                          "Max" = base::max),
+summary.MLModelTune <- function(object, stats =
+                                  MachineShop::settings("stats.Resamples"),
                                 na.rm = TRUE, ...) {
   summary(object@performance, stats = stats, na.rm = na.rm, ...)
 }
@@ -124,7 +112,8 @@ summary.ConfusionMatrix <- function(object, ...) {
 
 #' @rdname summary-methods
 #' 
-summary.Curves <- function(object, stat = base::mean, ...) {
+summary.Curves <- function(object, stat = MachineShop::settings("stat.Curves"),
+                           ...) {
   if (!(is.null(object$Resample) || is.null(stat))) {
     
     stat <- fget(stat)

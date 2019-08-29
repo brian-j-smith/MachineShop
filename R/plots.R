@@ -11,8 +11,8 @@
 #' @param metrics vector of numeric indexes or character names of performance
 #' metrics to plot.
 #' @param stat function or character string naming a function to compute a
-#' summary statistic on resampled values for \code{MLModelTune} line plots and
-#' \code{Resamples} model sorting.  For \code{Curves} and \code{Lift} classes,
+#' summary statistic on resampled metrics for \code{MLModelTune} line plots and
+#' \code{Resamples} model ordering.  For \code{Curves} and \code{Lift} classes,
 #' plots are of resampled metrics aggregated by the statistic if given or of
 #' resample-specific metrics if \code{NULL}.
 #' @param type type of plot to construct.
@@ -23,7 +23,8 @@
 #' \code{\link{confusion}}, \code{\link{lift}}, \code{\link{dependence}},
 #' \code{\link{varimp}}
 #' 
-plot.Performance <- function(x, metrics = NULL, stat = base::mean,
+plot.Performance <- function(x, metrics = NULL, stat =
+                               MachineShop::settings("stat.Resamples"),
                              type = c("boxplot", "density", "errorbar",
                                       "violin"), ...) {
   df <- as.data.frame.table(x)
@@ -88,7 +89,8 @@ plot.Performance <- function(x, metrics = NULL, stat = base::mean,
 #' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
 #' plot(res)
 #' 
-plot.Resamples <- function(x, metrics = NULL, stat = base::mean,
+plot.Resamples <- function(x, metrics = NULL, stat =
+                             MachineShop::settings("stat.Resamples"),
                            type = c("boxplot", "density", "errorbar", "violin"),
                            ...) {
   plot(performance(x), metrics = metrics, stat = stat, type = type)
@@ -97,7 +99,8 @@ plot.Resamples <- function(x, metrics = NULL, stat = base::mean,
 
 #' @rdname plot-methods
 #' 
-plot.MLModelTune <- function(x, metrics = NULL, stat = base::mean,
+plot.MLModelTune <- function(x, metrics = NULL,
+                             stat = MachineShop::settings("stat.ModelTune"),
                              type = c("boxplot", "density", "errorbar", "line",
                                       "violin"), ...) {
   perf <- x@performance
@@ -214,7 +217,7 @@ plot.ConfusionMatrix <- function(x, ...) {
 #' @rdname plot-methods
 #' 
 plot.Curves <- function(x, type = c("tradeoffs", "cutoffs"), diagonal = FALSE,
-                        stat = base::mean, ...) {
+                        stat = MachineShop::settings("stat.Curves"), ...) {
   x <- summary(x, stat = stat)
   
   args <- list(~ x, ~ y)
@@ -257,7 +260,8 @@ plot.Curves <- function(x, type = c("tradeoffs", "cutoffs"), diagonal = FALSE,
 #' @param find numeric true positive rate at which to display reference lines
 #' identifying the corresponding rates of positive predictions.
 #' 
-plot.Lift <- function(x, find = NULL, diagonal = TRUE, stat = base::mean, ...) {
+plot.Lift <- function(x, find = NULL, diagonal = TRUE,
+                      stat = MachineShop::settings("stat.Curves"), ...) {
   x <- summary(x, stat = stat)
   p <- plot(Curves(x), diagonal = diagonal, stat = NULL)
 

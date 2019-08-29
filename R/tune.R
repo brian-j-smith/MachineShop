@@ -44,7 +44,7 @@ tune <- function(x, ...) {
 #' the \code{\link{performance}} functions are used.  Model selection is based
 #' on the first calculated metric.
 #' @param stat function or character string naming a function to compute a
-#' summary statistic on resampled values of the metric for model selection.
+#' summary statistic on resampled metric values for model tuning.
 #' 
 #' @seealso \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
 #' \code{\link{models}}, \code{\link{expand.model}}, \code{\link{Grid}},
@@ -81,7 +81,8 @@ tune <- function(x, ...) {
 #' 
 tune.formula <- function(x, data, models, grid = 3, fixed = NULL,
                          control = MachineShop::settings("control"),
-                         metrics = NULL, stat = base::mean, ...) {
+                         metrics = NULL,
+                         stat = MachineShop::settings("stat.ModelTune"), ...) {
   .tune(x, data, models, grid, fixed, control, metrics, stat, ...)
 }
 
@@ -92,7 +93,8 @@ tune.formula <- function(x, data, models, grid = 3, fixed = NULL,
 #' 
 tune.matrix <- function(x, y, models, grid = 3, fixed = NULL,
                         control = MachineShop::settings("control"),
-                        metrics = NULL, stat = base::mean, ...) {
+                        metrics = NULL,
+                        stat = MachineShop::settings("stat.ModelTune"), ...) {
   .tune(x, y, models, grid, fixed, control, metrics, stat, ...)
 }
 
@@ -101,7 +103,9 @@ tune.matrix <- function(x, y, models, grid = 3, fixed = NULL,
 #' 
 tune.ModelFrame <- function(x, models, grid = 3, fixed = NULL,
                             control = MachineShop::settings("control"),
-                            metrics = NULL, stat = base::mean, ...) {
+                            metrics = NULL,
+                            stat = MachineShop::settings("stat.ModelTune"),
+                            ...) {
   .tune(x, NULL, models, grid, fixed, control, metrics, stat, ...)
 }
 
@@ -110,7 +114,8 @@ tune.ModelFrame <- function(x, models, grid = 3, fixed = NULL,
 #' 
 tune.recipe <- function(x, models, grid = 3, fixed = NULL,
                         control = MachineShop::settings("control"),
-                        metrics = NULL, stat = base::mean, ...) {
+                        metrics = NULL,
+                        stat = MachineShop::settings("stat.ModelTune"), ...) {
   .tune(x, NULL, models, grid, fixed, control, metrics, stat, ...)
 }
 
