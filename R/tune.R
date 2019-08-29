@@ -39,10 +39,10 @@ tune <- function(x, ...) {
 #' @param control \code{\link{MLControl}} object, control function, or character
 #' string naming a control function defining the resampling method to be
 #' employed.
-#' @param metrics function, one or more function names, or list of named
-#' functions representing performance metrics to be calculated.  If not
-#' specified, default metrics defined in the \code{\link{performance}}
-#' functions are used.  Model tuning is based on the first calculated metric.
+#' @param metrics function, function name, or vector of these with which to
+#' calculate performance metrics.  If not specified, default metrics defined in
+#' the \code{\link{performance}} functions are used.  Model selection is based
+#' on the first calculated metric.
 #' @param stat function or character string naming a function to compute a
 #' summary statistic on resampled values of the metric for model selection.
 #' 
@@ -144,16 +144,7 @@ tune.recipe <- function(x, models, grid = 3, fixed = NULL,
   }
   
   control <- getMLObject(control, "MLControl")
-  
-  metric <- metrics
-  if (!is.null(metric)) {
-    if (is(metric, "vector")) metric <- metric[[1]]
-    metric <- fget(metric)
-    if (!is(metric, "MLMetric")) {
-      stop("tuning metric must be an MLMetric object")
-    }
-  }
-  
+  metric <- if (!is.null(metrics)) getMLObject(c(metrics)[[1]], "MLMetric")
   stat <- fget(stat)
   
   perf_list <- list()
@@ -162,14 +153,14 @@ tune.recipe <- function(x, models, grid = 3, fixed = NULL,
     res <- resample(x, data, model = models[[name]], control = control)
     if (is.null(metrics)) {
       method <- fget(findMethod(performance, res$Observed))
-      metrics <- eval(formals(method)$metrics)
+      metrics <- c(eval(formals(method)$metrics))
       is_defined <- sapply(metrics, function(metric) {
         info <- metricinfo(metric)[[1]]
         any(mapply(is, list(res$Observed), info$response_types$observed) &
               mapply(is, list(res$Predicted), info$response_types$predicted))
       })
       metrics <- metrics[is_defined]
-      metric <- metrics[[1]]
+      metric <- getMLObject(metrics[[1]], "MLMetric")
     }
     perf_list[[name]] <- performance(res, metrics = metrics, ...)
     perf_stat[name] <- stat(na.omit(perf_list[[name]][, 1]))

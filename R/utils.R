@@ -90,11 +90,11 @@ findMethod <- function(generic, object) {
 }
 
 
-getMLObject <- function(x, class = c("MLControl", "MLModel")) {
+getMLObject <- function(x, class = c("MLControl", "MLMetric", "MLModel")) {
   class <- match.arg(class)
   
   if (is.character(x)) x <- fget(x)
-  if (is.function(x)) x <- x()
+  if (is.function(x) && class %in% c("MLControl", "MLModel")) x <- x()
   if (!is(x, class)) stop("object not of class ", class)
   
   if (class == "MLModel") {
@@ -117,7 +117,7 @@ is_response <- function(object, class2) {
 
 list2function <- function(x) {
   error_msg <- paste0("'", deparse(substitute(x)), "' must be a function, ",
-                      "one or more function names, or a list of functions")
+                      "function name, or vector of these")
   if (is(x, "MLMetric")) x <- list(x)
   if (is(x, "vector")) {
     x <- as.list(x)

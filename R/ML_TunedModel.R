@@ -14,10 +14,10 @@
 #' @param control \code{\link{MLControl}} object, control function, or character
 #' string naming a control function defining the resampling method to be
 #' employed.
-#' @param metrics function, one or more function names, or list of named
-#' functions representing performance metrics to be calculated.  If not
-#' specified, default metrics defined in the \code{\link{performance}}
-#' functions are used.  Model tuning is based on the first calculated metric.
+#' @param metrics function, function name, or vector of these with which to
+#' calculate performance metrics.  If not specified, default metrics defined in
+#' the \code{\link{performance}} functions are used.  Model selection is based
+#' on the first calculated metric.
 #' @param stat function or character string naming a function to compute a
 #' summary statistic on resampled values of the metric for model tuning.
 #' @param cutoff argument passed to the \code{metrics} functions.

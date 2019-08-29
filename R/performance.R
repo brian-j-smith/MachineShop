@@ -20,8 +20,8 @@ Performance <- function(...) {
 #' @param x observed responses or class containing observed and predicted
 #' responses.
 #' @param y predicted responses.
-#' @param metrics function, one or more function names, or list of named
-#' functions to include in the calculation of performance metrics.
+#' @param metrics function, function name, or vector of these with which to
+#' calculate performance metrics.
 #' @param cutoff threshold above which binary factor probabilities are
 #' classified as events and below which survival probabilities are classified.
 #' @param na.rm logical indicating whether to remove observed or predicted
@@ -89,14 +89,7 @@ performance.MLBootOptimismControl <- function(x, resamples, ...) {
 #' @rdname performance
 #' 
 performance.factor <- function(x, y, metrics =
-                                 c("Brier" = MachineShop::brier,
-                                   "Accuracy" = MachineShop::accuracy,
-                                   "Kappa" = MachineShop::kappa2,
-                                   "Weighted Kappa" =
-                                     MachineShop::weighted_kappa2,
-                                   "ROCAUC" = MachineShop::roc_auc,
-                                   "Sensitivity" = MachineShop::sensitivity,
-                                   "Specificity" = MachineShop::specificity),
+                                 MachineShop::settings("metrics.factor"),
                                 cutoff = 0.5, na.rm = TRUE, ...) {
   .performance(x, y, metrics, na.rm, cutoff)
 }
@@ -105,10 +98,8 @@ performance.factor <- function(x, y, metrics =
 #' @rdname performance
 #' 
 performance.matrix <- function(x, y, metrics =
-                                 c("RMSE" = MachineShop::rmse,
-                                   "R2" = MachineShop::r2,
-                                   "MAE" = MachineShop::mae), na.rm = TRUE,
-                               ...) {
+                                 MachineShop::settings("metrics.matrix"),
+                               na.rm = TRUE, ...) {
   .performance(x, y, metrics, na.rm)
 }
 
@@ -116,10 +107,8 @@ performance.matrix <- function(x, y, metrics =
 #' @rdname performance
 #' 
 performance.numeric <- function(x, y, metrics =
-                                  c("RMSE" = MachineShop::rmse,
-                                    "R2" = MachineShop::r2,
-                                    "MAE" = MachineShop::mae), na.rm = TRUE,
-                                ...) {
+                                  MachineShop::settings("metrics.numeric"),
+                                na.rm = TRUE, ...) {
   .performance(x, y, metrics, na.rm)
 }
 
@@ -139,11 +128,8 @@ performance.numeric <- function(x, y, metrics =
 #' performance(obs, pred)
 #' 
 performance.Surv <- function(x, y, metrics =
-                               c("CIndex" = MachineShop::cindex,
-                                 "Brier" = MachineShop::brier,
-                                 "ROCAUC" = MachineShop::roc_auc,
-                                 "Accuracy" = MachineShop::accuracy),
-                              cutoff = 0.5, na.rm = TRUE, ...) {
+                               MachineShop::settings("metrics.Surv"),
+                             cutoff = 0.5, na.rm = TRUE, ...) {
   .performance(x, y, metrics, na.rm, cutoff)
 }
 
@@ -158,12 +144,7 @@ performance.Confusion <- function(x, ...) {
 #' @rdname performance
 #' 
 performance.ConfusionMatrix <-
-  function(x, metrics = c("Accuracy" = MachineShop::accuracy,
-                          "Kappa" = MachineShop::kappa2,
-                          "Weighted Kappa" =
-                            MachineShop::weighted_kappa2,
-                          "Sensitivity" = MachineShop::sensitivity,
-                          "Specificity" = MachineShop::specificity), ...) {
+  function(x, metrics = MachineShop::settings("metrics.ConfusionMatrix"), ...) {
   list2function(metrics)(x)
 }
 

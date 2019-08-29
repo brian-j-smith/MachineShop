@@ -28,6 +28,26 @@ behaviors of functions in the the \pkg{MachineShop} package.
   \item{\code{control}}{\code{\link{MLControl}} object, control function, or
   character string naming a control function defining a default resampling
   method [default: \code{"CVControl"}].}
+  \item{\code{metrics.ConfusionMatrix}}{function, function name, or vector of
+  these with which to calculate \link{performance} \link{metrics} for
+  confusion matrices [default: \code{c(Accuracy = "accuracy", Kappa =
+  "kappa2", `Weighted Kappa` = "weighted_kappa2", Sensitivity =
+  "sensitivity", Specificity = "specificity")}].}
+  \item{\code{metrics.factor}}{function, function name, or vector of these
+  with which to calculate \link{performance} \link{metrics} for factor
+  responses [default: \code{c(Brier = "brier", Accuracy = "accuracy", Kappa =
+  "kappa2", `Weighted Kappa` = "weighted_kappa2", `ROC AUC` = "roc_auc",
+  Sensitivity = "sensitivity", Specificity = "specificity")}].}
+  \item{\code{metrics.matrix}}{function, function name, or vector of these
+  with which to calculate \link{performance} \link{metrics} for matrix
+  responses [default: \code{c(RMSE = "rmse", R2 = "r2", MAE = "mae")}].}
+  \item{\code{metrics.numeric}}{function, function name, or vector of these
+  with which to calculate \link{performance} \link{metrics} for numeric
+  responses [default: \code{c(RMSE = "rmse", R2 = "r2", MAE = "mae")}].}
+  \item{\code{metrics.Surv}}{function, function name, or vector of these with
+  which to calculate \link{performance} \link{metrics} for survival responses
+  [default: \code{c(`C-Index` = "cindex", Brier = "brier", `ROC AUC` =
+  "roc_auc", Accuracy = "accuracy")}].}
 }
 }
 

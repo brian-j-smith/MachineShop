@@ -15,30 +15,25 @@ performance(x, ...)
 
 \method{performance}{Resamples}(x, ...)
 
-\method{performance}{factor}(x, y, metrics = c(Brier =
-  MachineShop::brier, Accuracy = MachineShop::accuracy, Kappa =
-  MachineShop::kappa2, `Weighted Kappa` = MachineShop::weighted_kappa2,
-  ROCAUC = MachineShop::roc_auc, Sensitivity = MachineShop::sensitivity,
-  Specificity = MachineShop::specificity), cutoff = 0.5, na.rm = TRUE,
+\method{performance}{factor}(x, y,
+  metrics = MachineShop::settings("metrics.factor"), cutoff = 0.5,
+  na.rm = TRUE, ...)
+
+\method{performance}{matrix}(x, y,
+  metrics = MachineShop::settings("metrics.matrix"), na.rm = TRUE, ...)
+
+\method{performance}{numeric}(x, y,
+  metrics = MachineShop::settings("metrics.numeric"), na.rm = TRUE,
   ...)
 
-\method{performance}{matrix}(x, y, metrics = c(RMSE = MachineShop::rmse,
-  R2 = MachineShop::r2, MAE = MachineShop::mae), na.rm = TRUE, ...)
-
-\method{performance}{numeric}(x, y, metrics = c(RMSE = MachineShop::rmse,
-  R2 = MachineShop::r2, MAE = MachineShop::mae), na.rm = TRUE, ...)
-
-\method{performance}{Surv}(x, y, metrics = c(CIndex =
-  MachineShop::cindex, Brier = MachineShop::brier, ROCAUC =
-  MachineShop::roc_auc, Accuracy = MachineShop::accuracy), cutoff = 0.5,
+\method{performance}{Surv}(x, y,
+  metrics = MachineShop::settings("metrics.Surv"), cutoff = 0.5,
   na.rm = TRUE, ...)
 
 \method{performance}{Confusion}(x, ...)
 
-\method{performance}{ConfusionMatrix}(x, metrics = c(Accuracy =
-  MachineShop::accuracy, Kappa = MachineShop::kappa2, `Weighted Kappa` =
-  MachineShop::weighted_kappa2, Sensitivity = MachineShop::sensitivity,
-  Specificity = MachineShop::specificity), ...)
+\method{performance}{ConfusionMatrix}(x,
+  metrics = MachineShop::settings("metrics.ConfusionMatrix"), ...)
 }
 \arguments{
 \item{x}{observed responses or class containing observed and predicted
@@ -50,8 +45,8 @@ type-specific methods or from the method for \code{Confusion} to
 
 \item{y}{predicted responses.}
 
-\item{metrics}{function, one or more function names, or list of named
-functions to include in the calculation of performance metrics.}
+\item{metrics}{function, function name, or vector of these with which to
+calculate performance metrics.}
 
 \item{cutoff}{threshold above which binary factor probabilities are
 classified as events and below which survival probabilities are classified.}

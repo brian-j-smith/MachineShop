@@ -18,6 +18,26 @@
 #'   \item{\code{control}}{\code{\link{MLControl}} object, control function, or
 #'   character string naming a control function defining a default resampling
 #'   method [default: \code{"CVControl"}].}
+#'   \item{\code{metrics.ConfusionMatrix}}{function, function name, or vector of
+#'   these with which to calculate \link{performance} \link{metrics} for
+#'   confusion matrices [default: \code{c(Accuracy = "accuracy", Kappa =
+#'   "kappa2", `Weighted Kappa` = "weighted_kappa2", Sensitivity =
+#'   "sensitivity", Specificity = "specificity")}].}
+#'   \item{\code{metrics.factor}}{function, function name, or vector of these
+#'   with which to calculate \link{performance} \link{metrics} for factor
+#'   responses [default: \code{c(Brier = "brier", Accuracy = "accuracy", Kappa =
+#'   "kappa2", `Weighted Kappa` = "weighted_kappa2", `ROC AUC` = "roc_auc",
+#'   Sensitivity = "sensitivity", Specificity = "specificity")}].}
+#'   \item{\code{metrics.matrix}}{function, function name, or vector of these
+#'   with which to calculate \link{performance} \link{metrics} for matrix
+#'   responses [default: \code{c(RMSE = "rmse", R2 = "r2", MAE = "mae")}].}
+#'   \item{\code{metrics.numeric}}{function, function name, or vector of these
+#'   with which to calculate \link{performance} \link{metrics} for numeric
+#'   responses [default: \code{c(RMSE = "rmse", R2 = "r2", MAE = "mae")}].}
+#'   \item{\code{metrics.Surv}}{function, function name, or vector of these with
+#'   which to calculate \link{performance} \link{metrics} for survival responses
+#'   [default: \code{c(`C-Index` = "cindex", Brier = "brier", `ROC AUC` =
+#'   "roc_auc", Accuracy = "accuracy")}].}
 #' }
 #' 
 settings <- function(...) {
@@ -71,6 +91,18 @@ settings <- function(...) {
 }
 
 
+#################### Settings Utility Functions ####################
+
+
+check_metrics <- function(x) {
+  result <- try(lapply(c(x), getMLObject, class = "MLMetric"), silent = TRUE)
+  if (is(result, "try-error")) {
+    DomainError(x, "must be a metrics function, function name, ",
+                   "or vector of these")
+  } else x
+}
+
+
 #################### Global Environment ####################
 
 
@@ -87,6 +119,48 @@ MachineShop_global <- as.environment(list(
                          "or function name")
         } else x
       }
+    ),
+    
+    metrics.ConfusionMatrix = list(
+      value = c("Accuracy" = "accuracy",
+                "Kappa" = "kappa2",
+                "Weighted Kappa" = "weighted_kappa2",
+                "Sensitivity" = "sensitivity",
+                "Specificity" = "specificity"),
+      check = check_metrics
+    ),
+    
+    metrics.factor = list(
+      value = c("Brier" = "brier",
+                "Accuracy" = "accuracy",
+                "Kappa" = "kappa2",
+                "Weighted Kappa" = "weighted_kappa2",
+                "ROC AUC" = "roc_auc",
+                "Sensitivity" = "sensitivity",
+                "Specificity" = "specificity"),
+      check = check_metrics
+    ),
+    
+    metrics.matrix = list(
+      value = c("RMSE" = "rmse",
+                "R2" = "r2",
+                "MAE" = "mae"),
+      check = check_metrics
+    ),
+    
+    metrics.numeric = list(
+      value = c("RMSE" = "rmse",
+                "R2" = "r2",
+                "MAE" = "mae"),
+      check = check_metrics
+    ),
+    
+    metrics.Surv = list(
+      value = c("C-Index" = "cindex",
+                "Brier" = "brier",
+                "ROC AUC" = "roc_auc",
+                "Accuracy" = "accuracy"),
+      check = check_metrics
     )
     
   )
