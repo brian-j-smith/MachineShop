@@ -17,6 +17,7 @@ files <- c(
   "using_resample.Rmd",
   "using_analyses.Rmd",
   "using_strategies.Rmd",
+  "using_settings.Rmd",
   "using_extensions.Rmd",
   "reference_models.Rmd",
   "reference_metrics.Rmd"

@@ -74,6 +74,22 @@
 #'   }
 #' }
 #' 
+#' @examples
+#' ## View all current settings
+#' settings()
+#' 
+#' ## Change settings
+#' presets <- settings(control = "BootControl", grid = 10)
+#' 
+#' ## View one setting
+#' settings("control")
+#' 
+#' ## View multiple settings
+#' settings("control", "grid")
+#' 
+#' ## Restore the previous settings
+#' settings(presets)
+#' 
 settings <- function(...) {
   
   args <- list(...)

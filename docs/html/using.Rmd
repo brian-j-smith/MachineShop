@@ -32,6 +32,9 @@ source("../src/setup.R")
 ```{r child = "../src/using_strategies.Rmd"}
 ```
 
+```{r child = "../src/using_settings.Rmd"}
+```
+
 ```{r child = "../src/using_extensions.Rmd"}
 ```
 
