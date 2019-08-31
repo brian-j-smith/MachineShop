@@ -343,11 +343,22 @@ switch_class <- function(EXPR, ...) {
 }
 
 
-warn <- function(...) {
-  warning(..., call. = FALSE)
+#################### Exception Handling ####################
+
+
+DomainError <- function(value, ...) {
+  errorCondition(message = paste0(...),
+                 call = sys.call(-1),
+                 value = value,
+                 class = "DomainError")
 }
 
 
 depwarn <- function(old, new, expired = FALSE) {
   ifelse(expired, stop, warning)(old, ";\n", new, call. = FALSE)
+}
+
+
+warn <- function(...) {
+  warning(..., call. = FALSE)
 }
