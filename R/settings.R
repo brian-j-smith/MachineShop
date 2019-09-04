@@ -18,10 +18,22 @@
 #'   \item{\code{control}}{\code{\link{MLControl}} object, control function, or
 #'   character string naming a control function defining a default resampling
 #'   method [default: \code{"CVControl"}].}
+#'   \item{\code{dist.Surv}}{character string specifying distributional
+#'   approximations to estimated survival curves for predicting survival means.
+#'   Choices are \code{"empirical"} for the Kaplan-Meier estimator,
+#'   \code{"exponential"}, or \code{"weibull"} (default).}
+#'   \item{\code{dist.SurvProbs}}{character string specifying distributional
+#'   approximations to estimated survival curves for predicting survival
+#'   events/probabilities.  Choices are \code{"empirical"} (default) for the
+#'   Kaplan-Meier estimator, \code{"exponential"}, or \code{"weibull"}.}
 #'   \item{\code{grid}}{number of parameter-specific values to generate
 #'   automatically for \link[=tune]{tuning} of models that have pre-defined
 #'   grids or a \code{\link{Grid}} function, function name, or call
 #'   [default: 3].}
+#'   \item{\code{method.EmpiricalSurv}}{character string specifying the
+#'   empirical method of estimating baseline survival curves for Cox
+#'   proportional hazards-based models.  Choices are \code{"breslow"},
+#'   \code{"efron"} (default), or \code{"fleming-harrington"}.}
 #'   \item{\code{metrics.ConfusionMatrix}}{function, function name, or vector of
 #'   these with which to calculate \link{performance} \link{metrics} for
 #'   confusion matrices [default: \code{c(Accuracy = "accuracy", Kappa =
@@ -116,6 +128,16 @@ settings <- function(...) {
 #################### Settings Utility Functions ####################
 
 
+check_match <- function(choices) {
+  function(x) {
+    result <- try(match.arg(x, choices), silent = TRUE)
+    if (is(result, "try-error")) {
+      DomainError(x, "must be one of ", toString(paste0("\"", choices, "\"")))
+    } else result
+  }
+}
+
+
 check_metrics <- function(x) {
   result <- try(lapply(c(x), getMLObject, class = "MLMetric"), silent = TRUE)
   if (is(result, "try-error")) {
@@ -160,6 +182,16 @@ MachineShop_global <- as.environment(list(
       }
     ),
     
+    dist.Surv = list(
+      value = "weibull",
+      check = check_match(c("weibull", "exponential", "empirical"))
+    ),
+    
+    dist.SurvProbs = list(
+      value = "empirical",
+      check = check_match(c("empirical", "weibull", "exponential"))
+    ),
+    
     grid = list(
       value = 3,
       check = function(x) {
@@ -173,6 +205,11 @@ MachineShop_global <- as.environment(list(
                          "a Grid function, function name, or call")
         } else x
       }
+    ),
+    
+    method.EmpiricalSurv = list(
+      value = "efron",
+      check = check_match(c("efron", "breslow", "fleming-harrington"))
     ),
     
     metrics.ConfusionMatrix = list(

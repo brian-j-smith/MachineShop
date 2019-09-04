@@ -28,10 +28,22 @@ behaviors of functions in the the \pkg{MachineShop} package.
   \item{\code{control}}{\code{\link{MLControl}} object, control function, or
   character string naming a control function defining a default resampling
   method [default: \code{"CVControl"}].}
+  \item{\code{dist.Surv}}{character string specifying distributional
+  approximations to estimated survival curves for predicting survival means.
+  Choices are \code{"empirical"} for the Kaplan-Meier estimator,
+  \code{"exponential"}, or \code{"weibull"} (default).}
+  \item{\code{dist.SurvProbs}}{character string specifying distributional
+  approximations to estimated survival curves for predicting survival
+  events/probabilities.  Choices are \code{"empirical"} (default) for the
+  Kaplan-Meier estimator, \code{"exponential"}, or \code{"weibull"}.}
   \item{\code{grid}}{number of parameter-specific values to generate
   automatically for \link[=tune]{tuning} of models that have pre-defined
   grids or a \code{\link{Grid}} function, function name, or call
   [default: 3].}
+  \item{\code{method.EmpiricalSurv}}{character string specifying the
+  empirical method of estimating baseline survival curves for Cox
+  proportional hazards-based models.  Choices are \code{"breslow"},
+  \code{"efron"} (default), or \code{"fleming-harrington"}.}
   \item{\code{metrics.ConfusionMatrix}}{function, function name, or vector of
   these with which to calculate \link{performance} \link{metrics} for
   confusion matrices [default: \code{c(Accuracy = "accuracy", Kappa =

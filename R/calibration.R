@@ -224,8 +224,11 @@ setMethod(".calibration_default", c("Surv", "SurvProbs"),
 setMethod(".calibration_default", c("Surv", "numeric"),
   function(observed, predicted, breaks, dist, span, ...) {
     max_time <- surv_max(observed)
-    dist <- if (is.null(dist)) "weibull" else
+    dist <- if (is.null(dist)) {
+      MachineShop::settings("dist.Surv")
+    } else {
       match.arg(dist, c("empirical", names(survreg.distributions)))
+    }
     nparams <- if (dist %in% c("exponential", "rayleigh")) 1 else 2
     
     f_survfit <- function(observed, weights = NULL) {

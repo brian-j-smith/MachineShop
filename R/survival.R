@@ -13,7 +13,7 @@ predict.Surv <- function(object, x, ...) {
 
 .predict.Surv.list <- function(y, object, times, dist, ...) {
   if (length(times)) {
-    dist <- surv_dist(dist)
+    dist <- surv_dist_probs(dist)
     t(sapply(object, function(x) predict(dist(x), times)))
   } else {
     dist <- surv_dist_mean(dist)
@@ -26,7 +26,7 @@ predict.Surv <- function(object, x, ...) {
 .predict.Surv.matrix <- function(y, object, times, dist, ...) {
   x <- SurvProbs(object, y[, "time"])
   if (length(times)) {
-    predict(surv_dist(dist)(x), times)
+    predict(surv_dist_probs(dist)(x), times)
   } else {
     mean(surv_dist_mean(dist)(x))
   }
@@ -37,7 +37,7 @@ predict.Surv <- function(object, x, ...) {
   risk <- exp(object)
   new_risk <- exp(new_lp)
   if (length(times)) {
-    predict(surv_dist(dist)(y, risk, ...), times, new_risk)
+    predict(surv_dist_probs(dist)(y, risk, ...), times, new_risk)
   } else {
     mean(surv_dist_mean(dist)(y, risk, ...), new_risk)
   }
@@ -57,12 +57,13 @@ EmpiricalSurv.default <- function(x, ...) {
 }
 
 
-EmpiricalSurv.Surv <- function(y, risk = NULL,
-                               method = c("efron", "breslow",
-                                          "fleming-harrington"), ...) {
+EmpiricalSurv.Surv <- function(y, risk = NULL, method =
+                                 c("breslow", "efron", "fleming-harrington"),
+                               ...) {
   times <- y[, "time"]
   events <- pmin(y[, "status"], 1)
   if (is.null(risk)) risk <- rep(1, length(times))
+  if (is.null(method)) method <- MachineShop::settings("method.EmpiricalSurv")
   surv <- switch(match.arg(method),
                  "breslow" = empiricalsurv_breslow,
                  "efron" = empiricalsurv_efron,
@@ -316,15 +317,20 @@ surv_cases <- function(..., subset = TRUE) {
 surv_dist <- function(x = c("empirical", "exponential", "rayleigh",
                             "weibull")) {
   switch(match.arg(x),
+         "empirical" = EmpiricalSurv,
          "exponential" = Exponential,
          "rayleigh" = Rayleigh,
-         "weibull" = Weibull,
-         EmpiricalSurv)
+         "weibull" = Weibull)
 }
 
 
 surv_dist_mean <- function(x = NULL) {
-  if (is.null(x)) Weibull else surv_dist(x)
+  surv_dist(if (is.null(x)) MachineShop::settings("dist.Surv") else x)
+}
+
+
+surv_dist_probs <- function(x = NULL) {
+  surv_dist(if (is.null(x)) MachineShop::settings("dist.SurvProbs") else x)
 }
 
 

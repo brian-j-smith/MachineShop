@@ -94,8 +94,11 @@ setMetricMethod_Resamples("r2")
 
 setMetricMethod("r2", c("Surv", "numeric"),
   function(observed, predicted, dist, ...) {
-    dist <- if (is.null(dist)) "weibull" else
+    dist <- if (is.null(dist)) {
+      MachineShop::settings("dist.Surv")
+    } else {
       match.arg(dist, c("empirical", names(survreg.distributions)))
+    }
     nparams <- if (dist %in% c("exponential", "rayleigh")) 1 else 2
     observed_mean <- if (dist == "empirical") {
       rep(mean(survfit(observed ~ 1, se.fit = FALSE)), length(observed))
