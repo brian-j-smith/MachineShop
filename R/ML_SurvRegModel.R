@@ -4,7 +4,7 @@
 #' 
 #' @param dist assumed distribution for y variable.
 #' @param scale optional fixed value for the scale.
-#' @param parms a list of fixed parameters.
+#' @param parms list of fixed parameters.
 #' @param ... arguments passed to \code{\link[survival]{survreg.control}}.
 #' 
 #' @details

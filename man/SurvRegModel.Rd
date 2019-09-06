@@ -18,7 +18,7 @@ SurvRegStepAICModel(dist = c("weibull", "exponential", "gaussian",
 
 \item{scale}{optional fixed value for the scale.}
 
-\item{parms}{a list of fixed parameters.}
+\item{parms}{list of fixed parameters.}
 
 \item{...}{arguments passed to \code{\link[survival]{survreg.control}}.}
 
