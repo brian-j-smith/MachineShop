@@ -38,7 +38,7 @@ prediction is done via the maximum of summed kernel densities.
 Further model details can be found in the source link below.
 }
 \examples{
-fit(Species ~ ., data = iris, model = KNNModel())
+fit(Species ~ ., data = iris, model = KNNModel)
 
 }
 \seealso{

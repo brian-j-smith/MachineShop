@@ -30,7 +30,7 @@
 #' \code{\link{resample}}, \code{\link{tune}}
 #' 
 #' @examples
-#' fit(Species ~ ., data = iris, model = RPartModel())
+#' fit(Species ~ ., data = iris, model = RPartModel)
 #'
 RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
                        cp = 0.01, maxcompete = 4, maxsurrogate = 5,

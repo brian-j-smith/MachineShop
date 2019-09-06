@@ -29,7 +29,7 @@ Function to perform partial least squares regression.
 Further model details can be found in the source link below.
 }
 \examples{
-fit(sale_amount ~ ., data = ICHomes, model = PLSModel())
+fit(sale_amount ~ ., data = ICHomes, model = PLSModel)
 
 }
 \seealso{

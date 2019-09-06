@@ -34,7 +34,7 @@
 #' \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
 #' 
 #' @examples
-#' fit(Species ~ ., data = iris, model = LDAModel())
+#' fit(Species ~ ., data = iris, model = LDAModel)
 #'
 LDAModel <- function(prior = NULL, tol = 1e-4,
                      method = c("moment", "mle", "mve", "t"), nu = 5,

@@ -34,7 +34,7 @@
 #' \code{\link{resample}}, \code{\link{tune}}
 #' 
 #' @examples
-#' fit(sale_amount ~ ., data = ICHomes, model = CForestModel())
+#' fit(sale_amount ~ ., data = ICHomes, model = CForestModel)
 #'
 CForestModel <- function(teststat = c("quad", "max"),
                          testtype = c("Univariate", "Teststatistic",

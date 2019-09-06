@@ -22,7 +22,7 @@
 #' \code{\link{resample}}, \code{\link{tune}}
 #' 
 #' @examples
-#' fit(Species ~ ., data = iris, model = TreeModel())
+#' fit(Species ~ ., data = iris, model = TreeModel)
 #'
 TreeModel <- function(mincut = 5, minsize = 10, mindev = 0.01,
                       split = c("deviance", "gini")) {

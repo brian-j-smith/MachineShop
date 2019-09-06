@@ -37,7 +37,7 @@
 #' \code{\link{tune}}
 #' 
 #' @examples
-#' fit(sale_amount ~ ., data = ICHomes, model = NNetModel())
+#' fit(sale_amount ~ ., data = ICHomes, model = NNetModel)
 #' 
 NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
                       censored = FALSE, skip = FALSE, rang = 0.7, decay = 0,

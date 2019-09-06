@@ -23,7 +23,7 @@
 #' \code{\link{tune}}
 #' 
 #' @examples
-#' fit(sale_amount ~ ., data = ICHomes, model = GLMModel())
+#' fit(sale_amount ~ ., data = ICHomes, model = GLMModel)
 #' 
 GLMModel <- function(family = NULL, ...) {
   

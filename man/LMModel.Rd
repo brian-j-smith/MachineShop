@@ -20,7 +20,7 @@ Fits linear models.
 Further model details can be found in the source link below.
 }
 \examples{
-fit(sale_amount ~ ., data = ICHomes, model = LMModel())
+fit(sale_amount ~ ., data = ICHomes, model = LMModel)
 
 }
 \seealso{

@@ -29,7 +29,7 @@
 #' \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
 #' 
 #' @examples
-#' fit(Species ~ ., data = iris, model = QDAModel())
+#' fit(Species ~ ., data = iris, model = QDAModel)
 #'
 QDAModel <- function(prior = NULL, method = c("moment", "mle", "mve", "t"),
                      nu = 5,

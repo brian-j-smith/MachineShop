@@ -18,7 +18,7 @@
 #' \code{\link{resample}}, \code{\link{tune}}
 #' 
 #' @examples
-#' fit(Species ~ ., data = iris, model = NaiveBayesModel())
+#' fit(Species ~ ., data = iris, model = NaiveBayesModel)
 #'
 NaiveBayesModel <- function(laplace = 0) {
   

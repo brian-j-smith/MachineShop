@@ -15,7 +15,7 @@
 #' \code{\link{tune}}
 #' 
 #' @examples
-#' fit(sale_amount ~ ., data = ICHomes, model = LMModel())
+#' fit(sale_amount ~ ., data = ICHomes, model = LMModel)
 #'
 LMModel <- function() {
   

@@ -54,7 +54,7 @@ found in the source links below.
 \examples{
 library(MASS)
 
-fit(type ~ ., data = Pima.tr, model = GAMBoostModel())
+fit(type ~ ., data = Pima.tr, model = GAMBoostModel)
 
 }
 \seealso{

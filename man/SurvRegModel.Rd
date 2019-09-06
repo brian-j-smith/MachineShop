@@ -58,7 +58,7 @@ library(survival)
 library(MASS)
 
 fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-    data = Melanoma, model = SurvRegModel())
+    data = Melanoma, model = SurvRegModel)
 
 }
 \seealso{

@@ -48,7 +48,7 @@
 #' \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
 #' 
 #' @examples
-#' fit(Species ~ ., data = iris, model = FDAModel())
+#' fit(Species ~ ., data = iris, model = FDAModel)
 #'
 FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
                      method = .(mda::polyreg), ...) {
@@ -88,7 +88,7 @@ FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
 #' degrees of freedom.
 #' 
 #' @examples
-#' fit(Species ~ ., data = iris, model = PDAModel())
+#' fit(Species ~ ., data = iris, model = PDAModel)
 #' 
 PDAModel <- function(lambda = 1, df = NULL, ...) {
   args <- c(as.list(environment()), list(...))

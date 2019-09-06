@@ -47,7 +47,7 @@ Default values for the \code{NULL} arguments and further model details can be
 found in the source links below.
 }
 \examples{
-fit(Species ~ ., data = iris, model = LDAModel())
+fit(Species ~ ., data = iris, model = LDAModel)
 
 }
 \seealso{

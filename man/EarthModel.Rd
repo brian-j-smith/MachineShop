@@ -54,7 +54,7 @@ predictor.  Variable importance is automatically scaled to range from 0 to
 example below.
 }
 \examples{
-modelfit <- fit(Species ~ ., data = iris, model = EarthModel())
+modelfit <- fit(Species ~ ., data = iris, model = EarthModel)
 varimp(modelfit, metric = "nsubsets", scale = FALSE)
 
 }

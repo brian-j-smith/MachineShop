@@ -49,7 +49,7 @@
 #' \code{\link{tune}}
 #' 
 #' @examples
-#' modelfit <- fit(Species ~ ., data = iris, model = C50Model())
+#' modelfit <- fit(Species ~ ., data = iris, model = C50Model)
 #' varimp(modelfit, metric = "splits", scale = FALSE)
 #'
 C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,

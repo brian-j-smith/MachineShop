@@ -27,7 +27,7 @@
 #' \code{\link{tune}}
 #' 
 #' @examples
-#' fit(Species ~ ., data = iris, model = KNNModel())
+#' fit(Species ~ ., data = iris, model = KNNModel)
 #'
 KNNModel <- function(k = 7, distance = 2, scale = TRUE,
                      kernel = c("optimal", "biweight", "cos", "epanechnikov",

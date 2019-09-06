@@ -40,7 +40,7 @@
 #' \code{\link{resample}}, \code{\link{tune}}
 #' 
 #' @examples
-#' modelfit <- fit(Species ~ ., data = iris, model = EarthModel())
+#' modelfit <- fit(Species ~ ., data = iris, model = EarthModel)
 #' varimp(modelfit, metric = "nsubsets", scale = FALSE)
 #' 
 EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",

@@ -48,7 +48,7 @@ Supplied arguments are passed to \code{\link[party]{cforest_control}}.
 Further model details can be found in the source link below.
 }
 \examples{
-fit(sale_amount ~ ., data = ICHomes, model = CForestModel())
+fit(sale_amount ~ ., data = ICHomes, model = CForestModel)
 
 }
 \seealso{
