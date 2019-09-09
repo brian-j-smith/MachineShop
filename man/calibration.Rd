@@ -14,10 +14,10 @@ calibration(x, y = NULL, breaks = 10, span = 0.75, dist = NULL,
 \item{...}{named or unnamed \code{calibration} output to combine together
 with the \code{Calibration} constructor.}
 
-\item{x}{observed responses or \code{Resamples} object of observed and
-predicted responses.}
+\item{x}{\link[=response]{observed responses} or \link{resample} result
+containing observed and predicted responses.}
 
-\item{y}{predicted responses.}
+\item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
 
 \item{breaks}{value defining the response variable bins within which to
 calculate observed mean values.  May be specified as a number of bins, a
@@ -55,6 +55,5 @@ plot(cal)
 
 }
 \seealso{
-\code{\link{response}}, \code{\link{predict}},
-\code{\link{resample}}, \code{\link{plot}}
+\code{\link{plot}}
 }

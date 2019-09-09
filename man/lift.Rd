@@ -13,10 +13,10 @@ lift(x, y = NULL, na.rm = TRUE, ...)
 \item{...}{named or unnamed \code{lift} output to combine together with the
 \code{Lift} constructor.}
 
-\item{x}{observed responses or \code{Resamples} object of observed and
-predicted responses.}
+\item{x}{\link[=response]{observed responses} or \link{resample} result
+containing observed and predicted responses.}
 
-\item{y}{predicted responses.}
+\item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}
@@ -36,6 +36,5 @@ plot(lf)
 
 }
 \seealso{
-\code{\link{response}}, \code{\link{predict}},
-\code{\link{resample}}, \code{\link{plot}}
+\code{\link{plot}}, \code{\link{summary}}
 }

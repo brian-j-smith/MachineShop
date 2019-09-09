@@ -269,9 +269,9 @@ SurvMatrix <- function(object, times = NULL) {
 #' 
 #' @return Object that is of the same class as the constructor name and inherits
 #' from \code{SurvMatrix}.  Examples of these objects are the predicted survival
-#' events and probabilities returned by the \code{predict} function.
+#' events and probabilities returned by the \link{predict} function.
 #' 
-#' @seealso \code{\link{metrics}}, \code{\link{predict}}
+#' @seealso \code{\link{performance}}, \code{\link{metrics}}
 #' 
 SurvEvents <- function(object = numeric(), times = NULL) {
   object <- SurvMatrix(object, times)

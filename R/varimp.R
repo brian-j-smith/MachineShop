@@ -36,14 +36,14 @@ VarImp.numeric <- function(object, ...) {
 #' 
 #' Calculate measures of the relative importance of predictors in a model.
 #' 
-#' @param object \code{MLModelFit} object from a model fit.
+#' @param object model \link{fit} result.
 #' @param scale logical indicating whether importance measures should be scaled
 #' to range from 0 to 100.
 #' @param ... arguments passed to model-specific variable importance functions.
 #' 
 #' @return \code{VarImp} class object.
 #' 
-#' @seealso \code{\link{fit}}, \code{\link{plot}}
+#' @seealso \code{\link{plot}}
 #'
 #' @examples
 #' ## Survival response example

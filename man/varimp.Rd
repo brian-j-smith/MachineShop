@@ -7,7 +7,7 @@
 varimp(object, scale = TRUE, ...)
 }
 \arguments{
-\item{object}{\code{MLModelFit} object from a model fit.}
+\item{object}{model \link{fit} result.}
 
 \item{scale}{logical indicating whether importance measures should be scaled
 to range from 0 to 100.}
@@ -32,5 +32,5 @@ plot(vi)
 
 }
 \seealso{
-\code{\link{fit}}, \code{\link{plot}}
+\code{\link{plot}}
 }

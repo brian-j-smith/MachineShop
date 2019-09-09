@@ -10,15 +10,13 @@ PerformanceDiff <- function(object, model_names) {
 #' @name diff
 #' @rdname diff-methods
 #' 
-#' @param x object containing resampled metrics.
+#' @param x model \link{tune}, \link{performance}, or \link{resample} result. 
 #' @param ... arguments passed to other methods.
 #' 
 #' @return \code{PerformanceDiff} class object that inherits from
 #' \code{Performance}.
 #' 
-#' @seealso \code{\link{performance}}, \code{\link{resample}},
-#' \code{\link{tune}}, \code{\link{plot}}, \code{\link{summary}},
-#' \code{\link{t.test}}
+#' @seealso \code{\link{t.test}}, \code{\link{plot}}, \code{\link{summary}}
 #' 
 diff.Performance <- function(x, ...) {
   if (length(dim(x)) <= 2) stop("more than one model needed to diff")
@@ -73,7 +71,7 @@ diff.MLModelTune <- function(x, ...) {
 #' 
 #' @method t.test PerformanceDiff
 #' 
-#' @param x object containing paired differences between resampled metrics.
+#' @param x performance \link[=diff]{difference} result.
 #' @param adjust p-value adjustment for multiple statistical comparisons as
 #' implemented by \code{\link[stats]{p.adjust}}.
 #' @param ... arguments passed to other methods.
@@ -82,8 +80,6 @@ diff.MLModelTune <- function(x, ...) {
 #' \code{array}.  p-values and mean differences are contained in the lower and
 #' upper triangular portions, respectively, of the first two dimensions.  Model
 #' pairs are contined in the third dimension.
-#' 
-#' @seealso \code{\link{diff}}
 #' 
 #' @examples
 #' ## Numeric response example

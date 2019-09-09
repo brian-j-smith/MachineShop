@@ -8,7 +8,7 @@
 \method{t.test}{PerformanceDiff}(x, adjust = "holm", ...)
 }
 \arguments{
-\item{x}{object containing paired differences between resampled metrics.}
+\item{x}{performance \link[=diff]{difference} result.}
 
 \item{adjust}{p-value adjustment for multiple statistical comparisons as
 implemented by \code{\link[stats]{p.adjust}}.}
@@ -38,7 +38,4 @@ res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
 perfdiff <- diff(res)
 t.test(perfdiff)
 
-}
-\seealso{
-\code{\link{diff}}
 }

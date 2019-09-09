@@ -1,15 +1,18 @@
 #' ModelFrame Class
 #' 
-#' Class for storing data, formulas, and other attributes for fitting MLModels.
+#' Class for storing data, formulas, and other attributes for \pkg{MachineShop}
+#' model fitting.
 #' 
 #' @name ModelFrame
 #' @rdname ModelFrame-methods
 #' 
-#' @param x model \code{\link{formula}} or \code{matrix} of predictor variables.
+#' @param x model \code{\link{formula}} or \code{\link{matrix}} of predictor
+#' variables.
 #' 
 #' @return \code{ModelFrame} class object that inherits from \code{data.frame}.
 #' 
-#' @seealso \code{\link{formula}}
+#' @seealso  \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}},
+#' \code{\link{response}}
 #' 
 #' @examples
 #' mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
@@ -24,7 +27,8 @@ ModelFrame <- function(x, ...) {
 
 #' @rdname ModelFrame-methods
 #'
-#' @param data \code{data.frame} or an object that can be converted to one.
+#' @param data \link[=data.frame]{data frame} or an object that can be converted
+#' to one.
 #' @param na.rm logical indicating whether to remove cases with \code{NA} values
 #' for any of the model variables.
 #' @param weights vector of case weights [default: equal].

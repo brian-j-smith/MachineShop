@@ -2,14 +2,13 @@
 % Please edit documentation in R/modelinfo.R
 \name{modelinfo}
 \alias{modelinfo}
-\alias{models}
 \title{Display Model Information}
 \usage{
 modelinfo(...)
 }
 \arguments{
-\item{...}{\code{MLModel} objects, constructor functions, constructor
-function names, supported responses, or vector of these for which to display
+\item{...}{\link[=models]{model} functions, function names, or calls;
+\link[=response]{observed responses}; or vector of these for which to display
 information.  If none are specified, information is returned on all available
 models by default.}
 }
@@ -33,7 +32,7 @@ the model.}
 }
 }
 \description{
-Display information about models provided by the \pkg{MachineShop} package.
+Display information about models supplied by the \pkg{MachineShop} package.
 }
 \examples{
 ## All models
@@ -46,7 +45,4 @@ names(modelinfo(factor(0), numeric(0)))
 ## Model-specific information
 modelinfo(GBMModel)
 
-}
-\seealso{
-\code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
 }

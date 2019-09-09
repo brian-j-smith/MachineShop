@@ -25,9 +25,8 @@ behaviors of functions in the the \pkg{MachineShop} package.
 
 
 \describe{
-  \item{\code{control}}{\code{\link{MLControl}} object, control function, or
-  character string naming a control function defining a default resampling
-  method [default: \code{"CVControl"}].}
+  \item{\code{\link[=controls]{control}}}{function, function name, or call
+  defining a default resampling method [default: \code{"CVControl"}].}
   \item{\code{dist.Surv}}{character string specifying distributional
   approximations to estimated survival curves for predicting survival means.
   Choices are \code{"empirical"} for the Kaplan-Meier estimator,

@@ -5,7 +5,9 @@
 #' @name summary
 #' @rdname summary-methods
 #' 
-#' @param object object to summarize.
+#' @param object \link{confusion}, \link{lift}, model \link{tune},
+#' \link{performance}, \link[=performance_curve]{performance curve}, or
+#' \link{resample} result.
 #' @param stat function or character string naming a function to compute a
 #' summary statistic at each cutoff value of resampled metrics in \code{Curves},
 #' or \code{NULL} for resample-specific metrics.
@@ -17,9 +19,6 @@
 #' @return array with summmary statistics in the second dimension, metrics in
 #' the first for single models, and models and metrics in the first and third,
 #' respectively, for multiple models.
-#' 
-#' @seealso \code{\link{performance}}, \code{\link{resample}},
-#' \code{\link{diff}}, \code{\link{tune}}, \code{\link{confusion}}
 #' 
 summary.Performance <- function(object, stats =
                                   MachineShop::settings("stats.Resamples"),

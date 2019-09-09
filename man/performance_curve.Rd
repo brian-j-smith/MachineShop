@@ -21,17 +21,17 @@ performance_curve(x, ...)
 \item{...}{named or unnamed \code{performance_curve} output to combine
 together with the \code{Curves} constructor.}
 
-\item{x}{observed responses or \code{Resamples} object of observed and
-predicted responses.}
+\item{x}{\link[=response]{observed responses} or \link{resample} result
+containing observed and predicted responses.}
 
-\item{metrics}{list of two performance metrics for the analysis [default: ROC
-metrics].  Precision recall curves can be obtained with 
+\item{metrics}{list of two performance \link{metrics} for the analysis
+[default: ROC metrics].  Precision recall curves can be obtained with 
 \code{c(precision, recall)}.}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}
 
-\item{y}{predicted responses.}
+\item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
 }
 \value{
 \code{Curves} class object that inherits from \code{data.frame}.
@@ -54,7 +54,5 @@ auc(roc)
 
 }
 \seealso{
-\code{\link{response}}, \code{\link{predict}},
-\code{\link{resample}}, \code{\link{metrics}}, \code{\link{auc}},
-\code{\link{plot}}, \code{\link{summary}}
+\code{\link{auc}}, \code{\link{plot}}, \code{\link{summary}}
 }

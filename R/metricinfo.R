@@ -2,11 +2,11 @@
 #' 
 #' Display information about metrics provided by the \pkg{MachineShop} package.
 #' 
-#' @param ... \link{metrics} functions, function names, observed response,
-#' observed and predicted responses, \code{\link{ConfusionMatrix}},
-#' \code{\link{Confusion}}, \code{\link{Resamples}} object, or vector of these
-#' for which to display information.  If none are specified, information is
-#' returned on all available metrics by default.
+#' @param ... \link[=metrics]{metric} functions or function names;
+#' \link[=response]{observed responses}; \link[=response]{observed} and
+#' \link[=predict]{predicted} responses; \link{confusion} or \link{resample}
+#' results; or vector of these for which to display information.  If none are
+#' specified, information is returned on all available metrics by default.
 #' 
 #' @return List of named metric elements each containing the following
 #' components:
@@ -19,9 +19,6 @@
 #' \item{response_types}{data frame of the observed and predicted response
 #' variable types supported by the metric.}
 #' }
-#' 
-#' @seealso \code{\link{metrics}}, \code{\link{confusion}},
-#' \code{\link{resample}}
 #' 
 #' @examples
 #' ## All metrics

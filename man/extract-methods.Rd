@@ -12,7 +12,8 @@
 \method{[}{SurvMatrix}(x, i, j, drop = FALSE)
 }
 \arguments{
-\item{x}{object from which to extract elements.}
+\item{x}{\code{\link{SurvMatrix}} object or \link{resample} result from which
+to extract elements.}
 
 \item{i, j}{indices specifying elements to extract.}
 
@@ -22,9 +23,4 @@ retained as the original 2-dimensional object class otherwise.}
 }
 \description{
 Operators acting on data structures to extract parts.
-}
-\seealso{
-\code{\link{resample}}
-
-\code{\link{SurvMatrix}}
 }

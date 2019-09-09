@@ -16,12 +16,13 @@ response(object, ...)
 \method{response}{recipe}(object, newdata = NULL, ...)
 }
 \arguments{
-\item{object}{object containing the response variable definition.}
+\item{object}{model \link{fit} result, \code{\link{ModelFrame}}, or
+\code{\link[recipes]{recipe}}.}
 
 \item{...}{arguments passed to other methods.}
 
-\item{newdata}{data frame from which to extract the response
-variable values if given; otherwise, \code{object} is used.}
+\item{newdata}{\link[=data.frame]{data frame} from which to extract the
+response variable values if given; otherwise, \code{object} is used.}
 }
 \description{
 Extract the response variable from an object.
@@ -35,7 +36,4 @@ mf <- ModelFrame(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
                  data = Melanoma)
 response(mf)
 
-}
-\seealso{
-\code{\link[recipes]{recipe}}
 }

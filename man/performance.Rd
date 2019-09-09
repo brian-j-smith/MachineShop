@@ -36,20 +36,21 @@ performance(x, ...)
   metrics = MachineShop::settings("metrics.ConfusionMatrix"), ...)
 }
 \arguments{
-\item{x}{observed responses or class containing observed and predicted
-responses.}
+\item{x}{\link[=response]{observed responses}; or \link{confusion} or
+\link{resample} result containing observed and predicted responses.}
 
 \item{...}{arguments passed from the \code{Resamples} method to the response
 type-specific methods or from the method for \code{Confusion} to
 \code{ConfusionMatrix}.}
 
-\item{y}{predicted responses.}
+\item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
 
-\item{metrics}{function, function name, or vector of these with which to
-calculate performance metrics.}
+\item{metrics}{\link[=metrics]{metric} function, function name, or vector of
+these with which to calculate performance.}
 
-\item{cutoff}{threshold above which binary factor probabilities are
-classified as events and below which survival probabilities are classified.}
+\item{cutoff}{numeric (0, 1) threshold above which binary factor
+probabilities are classified as events and below which survival probabilities
+are classified.}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}
@@ -76,7 +77,5 @@ performance(obs, pred)
 
 }
 \seealso{
-\code{\link{response}}, \code{\link{predict}},
-\code{\link{resample}}, \code{\link{confusion}}, \code{\link{metrics}},
 \code{\link{plot}}, \code{\link{summary}}
 }

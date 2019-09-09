@@ -9,59 +9,8 @@
 Meta-package for statistical and machine learning with a unified interface for model fitting, prediction, performance assessment, and presentation of results.  Approaches for model fitting and prediction of numerical, categorical, or censored time-to-event outcomes include traditional regression models, regularization methods, tree-based methods, support vector machines, neural networks, ensembles, data preprocessing, filtering, and model tuning and selection.  Performance metrics are provided for model assessment and can be estimated with independent test sets, split sampling, cross-validation, or bootstrap resampling.  Resample estimation can be executed in parallel for faster processing and nested in cases of model tuning and selection.  Modeling results can be summarized with descriptive statistics; calibration curves; variable importance; partial dependence plots; confusion matrices; and ROC, lift, and other performance curves.
 }
 \details{
-\pkg{MachineShop} provides a unified interface to machine learning and
-statistical models provided by other packages.  Supported models are
-summarized in the table below according to the types of response variables
-with which each can be used.
-
-\tabular{lcccc}{
-  \strong{Model Objects} \tab \strong{Categorical} \tab \strong{Continuous}
-  \tab \strong{Survival} \cr
-  \code{\link{AdaBagModel}}         \tab f   \tab     \tab   \cr
-  \code{\link{AdaBoostModel}}       \tab f   \tab     \tab   \cr
-  \code{\link{BARTModel}}           \tab f   \tab n   \tab S \cr
-  \code{\link{BARTMachineModel}}    \tab b   \tab n   \tab   \cr
-  \code{\link{BlackBoostModel}}     \tab b   \tab n   \tab S \cr
-  \code{\link{C50Model}}            \tab f   \tab     \tab   \cr
-  \code{\link{CForestModel}}        \tab f   \tab n   \tab S \cr
-  \code{\link{CoxModel}}            \tab     \tab     \tab S \cr
-  \code{\link{EarthModel}}          \tab f   \tab n   \tab   \cr
-  \code{\link{FDAModel}}            \tab f   \tab     \tab   \cr
-  \code{\link{GAMBoostModel}}       \tab b   \tab n   \tab S \cr
-  \code{\link{GBMModel}}            \tab f   \tab n   \tab S \cr
-  \code{\link{GLMBoostModel}}       \tab b   \tab n   \tab S \cr
-  \code{\link{GLMModel}}            \tab b   \tab n   \tab   \cr
-  \code{\link{GLMNetModel}}         \tab f   \tab m,n \tab S \cr
-  \code{\link{KNNModel}}            \tab f,o \tab n   \tab   \cr
-  \code{\link{LARSModel}}           \tab     \tab n   \tab   \cr
-  \code{\link{LDAModel}}            \tab f   \tab     \tab   \cr
-  \code{\link{LMModel}}             \tab f   \tab m,n \tab   \cr
-  \code{\link{MDAModel}}            \tab f   \tab     \tab   \cr
-  \code{\link{NaiveBayesModel}}     \tab f   \tab     \tab   \cr
-  \code{\link{NNetModel}}           \tab f   \tab n   \tab   \cr
-  \code{\link{PDAModel}}            \tab f   \tab     \tab   \cr
-  \code{\link{PLSModel}}            \tab f   \tab n   \tab   \cr
-  \code{\link{POLRModel}}           \tab o   \tab     \tab   \cr
-  \code{\link{QDAModel}}            \tab f   \tab     \tab   \cr
-  \code{\link{RandomForestModel}}   \tab f   \tab n   \tab   \cr
-  \code{\link{RangerModel}}         \tab f   \tab n   \tab S \cr
-  \code{\link{RPartModel}}          \tab f   \tab n   \tab S \cr
-  \code{\link{SelectedModel}}       \tab f,o \tab m,n \tab S \cr
-  \code{\link{StackedModel}}        \tab f,o \tab m,n \tab S \cr
-  \code{\link{SuperModel}}          \tab f,o \tab m,n \tab S \cr
-  \code{\link{SurvRegModel}}        \tab     \tab     \tab S \cr
-  \code{\link{SVMModel}}            \tab f   \tab n   \tab   \cr
-  \code{\link{TreeModel}}           \tab f   \tab n   \tab   \cr
-  \code{\link{TunedModel}}          \tab f,o \tab m,n \tab S \cr
-  \code{\link{XGBModel}}            \tab f   \tab n   \tab   \cr
-}
-
-Categorical: b = binary, f = factor, o = ordered;
-Continuous: m = matrix, n = numeric;
-Survival: S = Surv
-
 The following set of model training, prediction, performance assessment, and
-tuning functions are available for the model objects.
+tuning functions are available for \pkg{MachineShop} \link{models}.
 
 Training: 
 \tabular{ll}{
@@ -83,7 +32,7 @@ Performance Assessment:
   \code{\link{dependence}} \tab Parital Dependence \cr
   \code{\link{diff}} \tab Model Performance Differences \cr
   \code{\link{lift}} \tab Lift Curves \cr
-  \code{\link{performance}} \tab Model Performance Metrics \cr
+  \code{\link{performance} \link{metrics}} \tab Model Performance Metrics \cr
   \code{\link{performance_curve}} \tab Model Performance Curves \cr
   \code{\link{varimp}} \tab Variable Importance \cr
 }

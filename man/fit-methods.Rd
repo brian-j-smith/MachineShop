@@ -20,17 +20,18 @@ fit(x, ...)
 }
 \arguments{
 \item{x}{defines a relationship between model predictor and response
-variables.  May be a \code{formula}, design matrix of predictors,
-\code{ModelFrame}, or untrained \code{recipe}.}
+variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
+predictors, \code{\link{ModelFrame}}, or untrained
+\code{\link[recipes]{recipe}}.}
 
 \item{...}{arguments passed to other methods.}
 
-\item{data}{\code{data.frame} containing observed predictors and outcomes.}
+\item{data}{\link[=data.frame]{data frame} containing observed predictors and
+outcomes.}
 
-\item{model}{\code{MLModel} object, constructor function, or character string
-naming a constructor function that returns an \code{MLModel} object.}
+\item{model}{\link[=models]{model} function, function name, or call.}
 
-\item{y}{predictor variable.}
+\item{y}{response variable.}
 }
 \value{
 \code{MLModelFit} class object.
@@ -39,9 +40,9 @@ naming a constructor function that returns an \code{MLModel} object.}
 Fit a model to estimate its parameters from a data set.
 }
 \details{
-User-specified case weights may be specified for
-\code{\link[=ModelFrame]{ModelFrames}} upon creation with the \code{weights}
-argument in its constructor.
+User-specified case weights may be specified for \code{ModelFrames} upon
+creation with the \code{\link[=ModelFrame]{weights}} argument in its
+constructor.
 
 Variables in a \code{recipe} may be used as case weights by defining a
 "case_weight" \code{\link[recipes:roles]{role}} for them.
@@ -57,7 +58,5 @@ varimp(gbmfit)
 
 }
 \seealso{
-\code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-\code{\link{models}}, \code{\link{tune}}, \code{\link{predict}},
-\code{\link{varimp}}
+\code{\link{response}}, \code{\link{predict}}, \code{\link{varimp}}
 }

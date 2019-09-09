@@ -54,9 +54,9 @@ Calibration <- function(...) {
 
 #' @rdname calibration
 #' 
-#' @param x observed responses or \code{Resamples} object of observed and
-#' predicted responses.
-#' @param y predicted responses.
+#' @param x \link[=response]{observed responses} or \link{resample} result
+#' containing observed and predicted responses.
+#' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
 #' @param breaks value defining the response variable bins within which to
 #' calculate observed mean values.  May be specified as a number of bins, a
 #' vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
@@ -74,8 +74,7 @@ Calibration <- function(...) {
 #' 
 #' @return \code{Calibration} class object that inherits from \code{data.frame}.
 #'  
-#' @seealso \code{\link{response}}, \code{\link{predict}},
-#' \code{\link{resample}}, \code{\link{plot}}
+#' @seealso \code{\link{plot}}
 #' 
 #' @examples
 #' library(survival)

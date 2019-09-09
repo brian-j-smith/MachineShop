@@ -6,8 +6,9 @@
 #' @rdname fit-methods
 #' 
 #' @param x defines a relationship between model predictor and response
-#' variables.  May be a \code{formula}, design matrix of predictors,
-#' \code{ModelFrame}, or untrained \code{recipe}.
+#' variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
+#' predictors, \code{\link{ModelFrame}}, or untrained
+#' \code{\link[recipes]{recipe}}.
 #' @param ... arguments passed to other methods.
 #' 
 fit <- function(x, ...) {
@@ -17,15 +18,13 @@ fit <- function(x, ...) {
 
 #' @rdname fit-methods
 #' 
-#' @param data \code{data.frame} containing observed predictors and outcomes.
-#' @param model \code{MLModel} object, constructor function, or character string
-#' naming a constructor function that returns an \code{MLModel} object.
+#' @param data \link[=data.frame]{data frame} containing observed predictors and
+#' outcomes.
+#' @param model \link[=models]{model} function, function name, or call.
 #' 
 #' @return \code{MLModelFit} class object.
 #' 
-#' @seealso \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-#' \code{\link{models}}, \code{\link{tune}}, \code{\link{predict}},
-#' \code{\link{varimp}}
+#' @seealso \code{\link{response}}, \code{\link{predict}}, \code{\link{varimp}}
 #' 
 #' @examples
 #' ## Survival response example
@@ -43,7 +42,7 @@ fit.formula <- function(x, data, model, ...) {
 
 #' @rdname fit-methods
 #' 
-#' @param y predictor variable.
+#' @param y response variable.
 #' 
 fit.matrix <- function(x, y, model, ...) {
   fit(ModelFrame(x, y, na.rm = FALSE), model)
@@ -53,9 +52,9 @@ fit.matrix <- function(x, y, model, ...) {
 #' @rdname fit-methods
 #' 
 #' @details
-#' User-specified case weights may be specified for
-#' \code{\link[=ModelFrame]{ModelFrames}} upon creation with the \code{weights}
-#' argument in its constructor.
+#' User-specified case weights may be specified for \code{ModelFrames} upon
+#' creation with the \code{\link[=ModelFrame]{weights}} argument in its
+#' constructor.
 #' 
 fit.ModelFrame <- function(x, model, ...) {
   .fit(getMLObject(model, "MLModel"), x)

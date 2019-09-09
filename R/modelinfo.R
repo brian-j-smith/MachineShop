@@ -1,11 +1,9 @@
 #' Display Model Information
 #' 
-#' Display information about models provided by the \pkg{MachineShop} package.
+#' Display information about models supplied by the \pkg{MachineShop} package.
 #' 
-#' @aliases models
-#' 
-#' @param ... \code{MLModel} objects, constructor functions, constructor
-#' function names, supported responses, or vector of these for which to display
+#' @param ... \link[=models]{model} functions, function names, or calls;
+#' \link[=response]{observed responses}; or vector of these for which to display
 #' information.  If none are specified, information is returned on all available
 #' models by default.
 #' 
@@ -26,8 +24,6 @@
 #' \item{varimp}{logical indicating whether variable importance is defined for
 #' the model.}
 #' }
-#' 
-#' @seealso \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
 #' 
 #' @examples
 #' ## All models

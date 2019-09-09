@@ -30,19 +30,19 @@ resample(x, ...)
 the \code{Resamples} constructor.}
 
 \item{x}{defines a relationship between model predictor and response
-variables.  May be a \code{formula}, design matrix of predictors,
-\code{ModelFrame}, or untrained \code{recipe}.}
+variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
+predictors, \code{\link{ModelFrame}}, or untrained
+\code{\link[recipes]{recipe}}.}
 
-\item{data}{\code{data.frame} containing observed predictors and outcomes.}
+\item{data}{\link[=data.frame]{data frame} containing observed predictors and
+outcomes.}
 
-\item{model}{\code{MLModel} object, constructor function, or character string
-naming a constructor function that returns an \code{MLModel} object.}
+\item{model}{\link[=models]{model} function, function name, or call.}
 
-\item{control}{\code{\link{MLControl}} object, control function, or character
-string naming a control function defining the resampling method to be
-employed.}
+\item{control}{\link[=controls]{control} function, function name, or call
+defining the resampling method to be employed.}
 
-\item{y}{predictor variable.}
+\item{y}{response variable.}
 }
 \value{
 \code{Resamples} class object.
@@ -61,7 +61,7 @@ values of the response variable; i.e. categorical levels for \code{factor},
 continuous for \code{numeric}, and event status \code{Surv}.
 
 User-specified stratification variables may be specified for
-\code{\link[=ModelFrame]{ModelFrames}} upon creation with the \code{strata}
+\code{ModelFrames} upon creation with the \code{\link[=ModelFrame]{strata}}
 argument in its constructor.  Resampling of this class is unstratified by
 default.
 
@@ -88,7 +88,6 @@ plot(res)
 
 }
 \seealso{
-\code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-\code{\link{models}}, \code{\link{MLControl}}, \code{\link{metrics}},
-\code{\link{performance}}, \code{\link{plot}}, \code{\link{summary}}
+\code{\link{performance}}, \code{\link{metrics}},
+\code{\link{plot}}, \code{\link{summary}}
 }

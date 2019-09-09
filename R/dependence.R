@@ -7,9 +7,9 @@ PartialDependence <- function(object) {
 #' 
 #' Calculate partial dependence of a response on select predictor variables.
 #' 
-#' @param object \code{MLModelFit} object.
-#' @param data \code{data.frame} containing all predictor variables.  If not
-#' specified, the training data will be used by default.
+#' @param object model \link{fit} result.
+#' @param data \link[=data.frame]{data frame} containing all predictor
+#' variables.  If not specified, the training data will be used by default.
 #' @param select expression indicating predictor variables for which to compute
 #' partial dependence (see \code{\link[base]{subset}} for syntax)
 #' [default: all].
@@ -26,7 +26,7 @@ PartialDependence <- function(object) {
 #' @return \code{PartialDependence} class object that inherits from
 #' \code{data.frame}.
 #'  
-#' @seealso \code{\link{fit}}, \code{\link{plot}}
+#' @seealso \code{\link{plot}}
 #' 
 #' @examples
 #' gbmfit <- fit(Species ~ ., data = iris, model = GBMModel)

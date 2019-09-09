@@ -5,6 +5,7 @@
 #' that are common to all resampling methods.
 #' 
 #' @rdname MLControl
+#' @aliases controls
 #' 
 #' @param times,dist,method arguments passed to \code{\link{predict}}.
 #' @param seed integer to set the seed at the start of resampling.
@@ -12,7 +13,7 @@
 #' 
 #' @return \code{MLControl} class object.
 #' 
-#' @seealso \code{\link{resample}}
+#' @seealso \code{\link{resample}}, \code{\link{tune}}
 #' 
 MLControl <- function(times = NULL, dist = NULL, method = NULL,
                       seed = sample(.Machine$integer.max, 1), ...) {

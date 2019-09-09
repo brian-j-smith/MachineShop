@@ -69,8 +69,9 @@ Resamples <- function(...) {
 #' @rdname resample-methods
 #' 
 #' @param x defines a relationship between model predictor and response
-#' variables.  May be a \code{formula}, design matrix of predictors,
-#' \code{ModelFrame}, or untrained \code{recipe}.
+#' variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
+#' predictors, \code{\link{ModelFrame}}, or untrained
+#' \code{\link[recipes]{recipe}}.
 #' 
 #' @return \code{Resamples} class object.
 #' 
@@ -81,21 +82,19 @@ resample <- function(x, ...) {
 
 #' @rdname resample-methods
 #' 
-#' @param data \code{data.frame} containing observed predictors and outcomes.
-#' @param model \code{MLModel} object, constructor function, or character string
-#' naming a constructor function that returns an \code{MLModel} object.
-#' @param control \code{\link{MLControl}} object, control function, or character
-#' string naming a control function defining the resampling method to be
-#' employed.
+#' @param data \link[=data.frame]{data frame} containing observed predictors and
+#' outcomes.
+#' @param model \link[=models]{model} function, function name, or call.
+#' @param control \link[=controls]{control} function, function name, or call
+#' defining the resampling method to be employed.
 #' 
 #' @details
 #' Stratified resampling is performed for the \code{formula} method according to
 #' values of the response variable; i.e. categorical levels for \code{factor},
 #' continuous for \code{numeric}, and event status \code{Surv}.
 #' 
-#' @seealso \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-#' \code{\link{models}}, \code{\link{MLControl}}, \code{\link{metrics}},
-#' \code{\link{performance}}, \code{\link{plot}}, \code{\link{summary}}
+#' @seealso \code{\link{performance}}, \code{\link{metrics}},
+#' \code{\link{plot}}, \code{\link{summary}}
 #' 
 #' @examples
 #' ## Factor response example
@@ -123,7 +122,7 @@ resample.formula <- function(x, data, model,
 
 #' @rdname resample-methods
 #' 
-#' @param y predictor variable.
+#' @param y response variable.
 #' 
 resample.matrix <- function(x, y, model,
                             control = MachineShop::settings("control"), ...) {
@@ -135,7 +134,7 @@ resample.matrix <- function(x, y, model,
 #' 
 #' @details
 #' User-specified stratification variables may be specified for
-#' \code{\link[=ModelFrame]{ModelFrames}} upon creation with the \code{strata}
+#' \code{ModelFrames} upon creation with the \code{\link[=ModelFrame]{strata}}
 #' argument in its constructor.  Resampling of this class is unstratified by
 #' default.
 #' 

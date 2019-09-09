@@ -5,7 +5,10 @@
 #' @name plot
 #' @rdname plot-methods
 #' 
-#' @param x object to plot.
+#' @param x \link{calibration}, \link{confusion}, \link{lift},
+#' model \link{tune}, partial \link{dependence}, \link{performance},
+#' \link[=performance_curve]{performance curve}, \link{resample}, or
+#' \link[=varimp]{variable importance} result.
 #' @param diagonal logical indicating whether to include a diagonal reference
 #' line.
 #' @param metrics vector of numeric indexes or character names of performance
@@ -17,11 +20,6 @@
 #' resample-specific metrics if \code{NULL}.
 #' @param type type of plot to construct.
 #' @param ... arguments passed to other methods.
-#' 
-#' @seealso \code{\link{performance}},  \code{\link{resample}},
-#' \code{\link{diff}}, \code{\link{tune}}, \code{\link{calibration}},
-#' \code{\link{confusion}}, \code{\link{lift}}, \code{\link{dependence}},
-#' \code{\link{varimp}}
 #' 
 plot.Performance <- function(x, metrics = NULL, stat =
                                MachineShop::settings("stat.Resamples"),

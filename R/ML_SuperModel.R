@@ -2,13 +2,13 @@
 #' 
 #' Fit a super learner model to predictions from multiple base learners.
 #' 
-#' @param ... \code{MLModel} functions, function names, objects, or lists of
-#' these to serve as base learners.
-#' @param model \code{MLModel} object, constructor function, or character string
-#' naming a constructor function to serve as the super model.
-#' @param control \code{\link{MLControl}} object, control function, or character
-#' string naming a control function defining the resampling method to be
-#' employed for the estimation of base learner weights.
+#' @param ... \link[=models]{model} functions, function names, calls, or vector
+#' of these to serve as base learners.
+#' @param model \link[=models]{model} function, function name, or call defining
+#' the super model.
+#' @param control \link[=controls]{control} function, function name, or call
+#' defining the resampling method to be employed for the estimation of base
+#' learner weights.
 #' @param all_vars logical indicating whether to include the original
 #' predictor variables in the super model.
 #' 

@@ -14,7 +14,7 @@
 \method{diff}{MLModelTune}(x, ...)
 }
 \arguments{
-\item{x}{object containing resampled metrics.}
+\item{x}{model \link{tune}, \link{performance}, or \link{resample} result.}
 
 \item{...}{arguments passed to other methods.}
 }
@@ -44,7 +44,5 @@ plot(perfdiff)
 
 }
 \seealso{
-\code{\link{performance}}, \code{\link{resample}},
-\code{\link{tune}}, \code{\link{plot}}, \code{\link{summary}},
-\code{\link{t.test}}
+\code{\link{t.test}}, \code{\link{plot}}, \code{\link{summary}}
 }

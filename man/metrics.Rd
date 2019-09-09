@@ -95,14 +95,16 @@ rmse(observed, predicted = NULL, ...)
 rmsle(observed, predicted = NULL, ...)
 }
 \arguments{
-\item{observed}{observed responses, \code{\link{Curves}} object, or
-\code{\link[=confusion]{ConfusionMatrix}} of observed and predicted
-responses.}
+\item{observed}{\link[=response]{observed responses}; or
+\link{confusion}, \link[=performance_curve]{performance curve}, or
+\link{resample} result containing observed and predicted responses.}
 
-\item{predicted}{predicted responses.}
+\item{predicted}{\link[=predict]{predicted responses} if not contained in
+\code{observed}.}
 
-\item{cutoff}{threshold above which binary factor probabilities are
-classified as events and below which survival probabilities are classified.}
+\item{cutoff}{numeric (0, 1) threshold above which binary factor
+probabilities are classified as events and below which survival probabilities
+are classified.}
 
 \item{...}{arguments passed to or from other methods.}
 
@@ -110,8 +112,8 @@ classified as events and below which survival probabilities are classified.}
 ROC metrics].}
 
 \item{stat}{function or character string naming a function to compute a
-summary statistic at each cutoff value of resampled metrics in \code{Curves},
-or \code{NULL} for resample-specific metrics.}
+summary statistic at each cutoff value of resampled metrics in performance
+curves, or \code{NULL} for resample-specific metrics.}
 
 \item{beta}{relative importance of recall to precision in the calculation of
 \code{f_score} [default: F1 score].}
@@ -134,6 +136,5 @@ Possible values are \code{"empirical"} for the Kaplan-Meier estimator,
 Compute measures of agreement between observed and predicted responses.
 }
 \seealso{
-\code{\link{metricinfo}}, \code{\link{confusion}},
-\code{\link{performance}}, \code{\link{performance_curve}}
+\code{\link{metricinfo}}, \code{\link{performance}}
 }

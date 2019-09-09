@@ -44,7 +44,10 @@
 \method{plot}{VarImp}(x, n = NULL, ...)
 }
 \arguments{
-\item{x}{object to plot.}
+\item{x}{\link{calibration}, \link{confusion}, \link{lift},
+model \link{tune}, partial \link{dependence}, \link{performance},
+\link[=performance_curve]{performance curve}, \link{resample}, or
+\link[=varimp]{variable importance} result.}
 
 \item{metrics}{vector of numeric indexes or character names of performance
 metrics to plot.}
@@ -93,10 +96,4 @@ plot(gbmres3)
 res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
 plot(res)
 
-}
-\seealso{
-\code{\link{performance}},  \code{\link{resample}},
-\code{\link{diff}}, \code{\link{tune}}, \code{\link{calibration}},
-\code{\link{confusion}}, \code{\link{lift}}, \code{\link{dependence}},
-\code{\link{varimp}}
 }

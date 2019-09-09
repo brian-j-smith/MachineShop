@@ -15,11 +15,13 @@ ModelFrame(x, ...)
   weights = NULL, strata = NULL, ...)
 }
 \arguments{
-\item{x}{model \code{\link{formula}} or \code{matrix} of predictor variables.}
+\item{x}{model \code{\link{formula}} or \code{\link{matrix}} of predictor
+variables.}
 
 \item{...}{arguments passed to other methods.}
 
-\item{data}{\code{data.frame} or an object that can be converted to one.}
+\item{data}{\link[=data.frame]{data frame} or an object that can be converted
+to one.}
 
 \item{na.rm}{logical indicating whether to remove cases with \code{NA} values
 for any of the model variables.}
@@ -34,7 +36,8 @@ for any of the model variables.}
 \code{ModelFrame} class object that inherits from \code{data.frame}.
 }
 \description{
-Class for storing data, formulas, and other attributes for fitting MLModels.
+Class for storing data, formulas, and other attributes for \pkg{MachineShop}
+model fitting.
 }
 \examples{
 mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
@@ -44,5 +47,6 @@ varimp(gbmfit)
 
 }
 \seealso{
-\code{\link{formula}}
+\code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}},
+\code{\link{response}}
 }

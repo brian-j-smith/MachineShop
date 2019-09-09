@@ -27,7 +27,9 @@
   stat = MachineShop::settings("stat.Curves"), ...)
 }
 \arguments{
-\item{object}{object to summarize.}
+\item{object}{\link{confusion}, \link{lift}, model \link{tune},
+\link{performance}, \link[=performance_curve]{performance curve}, or
+\link{resample} result.}
 
 \item{stats}{function, function name, or vector of these with which to
 compute summary statistics.}
@@ -62,8 +64,4 @@ summary(gbmres3)
 res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
 summary(res)
 
-}
-\seealso{
-\code{\link{performance}}, \code{\link{resample}},
-\code{\link{diff}}, \code{\link{tune}}, \code{\link{confusion}}
 }

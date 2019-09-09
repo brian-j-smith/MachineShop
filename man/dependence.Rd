@@ -9,10 +9,10 @@ dependence(object, data = NULL, select = NULL, interaction = FALSE,
   stats = MachineShop::settings("stats.PartialDependence"))
 }
 \arguments{
-\item{object}{\code{MLModelFit} object.}
+\item{object}{model \link{fit} result.}
 
-\item{data}{\code{data.frame} containing all predictor variables.  If not
-specified, the training data will be used by default.}
+\item{data}{\link[=data.frame]{data frame} containing all predictor
+variables.  If not specified, the training data will be used by default.}
 
 \item{select}{expression indicating predictor variables for which to compute
 partial dependence (see \code{\link[base]{subset}} for syntax)
@@ -45,5 +45,5 @@ plot(pd)
 
 }
 \seealso{
-\code{\link{fit}}, \code{\link{plot}}
+\code{\link{plot}}
 }

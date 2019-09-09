@@ -17,22 +17,21 @@ Performance <- function(...) {
 #' 
 #' @rdname performance
 #' 
-#' @param x observed responses or class containing observed and predicted
-#' responses.
-#' @param y predicted responses.
-#' @param metrics function, function name, or vector of these with which to
-#' calculate performance metrics.
-#' @param cutoff threshold above which binary factor probabilities are
-#' classified as events and below which survival probabilities are classified.
+#' @param x \link[=response]{observed responses}; or \link{confusion} or
+#' \link{resample} result containing observed and predicted responses.
+#' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
+#' @param metrics \link[=metrics]{metric} function, function name, or vector of
+#' these with which to calculate performance.
+#' @param cutoff numeric (0, 1) threshold above which binary factor
+#' probabilities are classified as events and below which survival probabilities
+#' are classified.
 #' @param na.rm logical indicating whether to remove observed or predicted
 #' responses that are \code{NA} when calculating metrics.
 #' @param ... arguments passed from the \code{Resamples} method to the response
 #' type-specific methods or from the method for \code{Confusion} to
 #' \code{ConfusionMatrix}.
 #' 
-#' @seealso \code{\link{response}}, \code{\link{predict}},
-#' \code{\link{resample}}, \code{\link{confusion}}, \code{\link{metrics}},
-#' \code{\link{plot}}, \code{\link{summary}}
+#' @seealso \code{\link{plot}}, \code{\link{summary}}
 #' 
 performance <- function(x, ...) {
   UseMethod("performance")

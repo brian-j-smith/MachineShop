@@ -5,14 +5,16 @@
 #' @name metrics
 #' @rdname metrics
 #' 
-#' @param observed observed responses, \code{\link{Curves}} object, or
-#' \code{\link[=confusion]{ConfusionMatrix}} of observed and predicted
-#' responses.
-#' @param predicted predicted responses.
+#' @param observed \link[=response]{observed responses}; or
+#' \link{confusion}, \link[=performance_curve]{performance curve}, or
+#' \link{resample} result containing observed and predicted responses.
+#' @param predicted \link[=predict]{predicted responses} if not contained in
+#' \code{observed}.
 #' @param beta relative importance of recall to precision in the calculation of
 #' \code{f_score} [default: F1 score].
-#' @param cutoff threshold above which binary factor probabilities are
-#' classified as events and below which survival probabilities are classified.
+#' @param cutoff numeric (0, 1) threshold above which binary factor
+#' probabilities are classified as events and below which survival probabilities
+#' are classified.
 #' @param dist character string specifying a distribution with which to estimate
 #' the survival mean in the total sum of square component of \code{r2}.
 #' Possible values are \code{"empirical"} for the Kaplan-Meier estimator,
@@ -27,12 +29,11 @@
 #' main diagonal in confusion matrices are raised to calculate
 #' \code{weighted_kappa2}.
 #' @param stat function or character string naming a function to compute a
-#' summary statistic at each cutoff value of resampled metrics in \code{Curves},
-#' or \code{NULL} for resample-specific metrics.
+#' summary statistic at each cutoff value of resampled metrics in performance
+#' curves, or \code{NULL} for resample-specific metrics.
 #' @param ... arguments passed to or from other methods.
 #' 
-#' @seealso \code{\link{metricinfo}}, \code{\link{confusion}},
-#' \code{\link{performance}}, \code{\link{performance_curve}}
+#' @seealso \code{\link{metricinfo}}, \code{\link{performance}}
 #' 
 accuracy <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
   call_metric_method("accuracy", environment())

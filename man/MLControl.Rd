@@ -2,6 +2,7 @@
 % Please edit documentation in R/MLControl.R
 \name{MLControl}
 \alias{MLControl}
+\alias{controls}
 \alias{BootControl}
 \alias{BootOptimismControl}
 \alias{CVControl}
@@ -115,5 +116,5 @@ Efron B (1986). How biased is the apparent error rate of a prediction rule?
 Journal of the American Statistical Association, 81 (394): 461-70.
 }
 \seealso{
-\code{\link{resample}}
+\code{\link{resample}}, \code{\link{tune}}
 }

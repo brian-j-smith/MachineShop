@@ -65,20 +65,18 @@ Curves <- function(...) {
 
 #' @rdname performance_curve
 #' 
-#' @param x observed responses or \code{Resamples} object of observed and
-#' predicted responses.
-#' @param y predicted responses.
-#' @param metrics list of two performance metrics for the analysis [default: ROC
-#' metrics].  Precision recall curves can be obtained with 
+#' @param x \link[=response]{observed responses} or \link{resample} result
+#' containing observed and predicted responses.
+#' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
+#' @param metrics list of two performance \link{metrics} for the analysis
+#' [default: ROC metrics].  Precision recall curves can be obtained with 
 #' \code{c(precision, recall)}.
 #' @param na.rm logical indicating whether to remove observed or predicted
 #' responses that are \code{NA} when calculating metrics.
 #' 
 #' @return \code{Curves} class object that inherits from \code{data.frame}.
 #'  
-#' @seealso \code{\link{response}}, \code{\link{predict}},
-#' \code{\link{resample}}, \code{\link{metrics}}, \code{\link{auc}},
-#' \code{\link{plot}}, \code{\link{summary}}
+#' @seealso \code{\link{auc}}, \code{\link{plot}}, \code{\link{summary}}
 #' 
 #' @examples
 #' library(MASS)
