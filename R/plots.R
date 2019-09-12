@@ -11,15 +11,44 @@
 #' \link[=varimp]{variable importance} result.
 #' @param diagonal logical indicating whether to include a diagonal reference
 #' line.
+#' @param find numeric true positive rate at which to display reference lines
+#' identifying the corresponding rates of positive predictions.
 #' @param metrics vector of numeric indexes or character names of performance
 #' metrics to plot.
+#' @param n number of most important variables to include in the plot
+#' [default: all].
+#' @param se logical indicating whether to include standard error bars.
 #' @param stat function or character string naming a function to compute a
 #' summary statistic on resampled metrics for \code{MLModelTune} line plots and
 #' \code{Resamples} model ordering.  For \code{Curves} and \code{Lift} classes,
 #' plots are of resampled metrics aggregated by the statistic if given or of
 #' resample-specific metrics if \code{NULL}.
+#' @param stats vector of numeric indexes or character names of partial
+#' dependence summary statistics to plot.
 #' @param type type of plot to construct.
 #' @param ... arguments passed to other methods.
+#' 
+#' @examples
+#' ## Factor response example
+#' 
+#' fo <- Species ~ .
+#' control <- CVControl()
+#' 
+#' gbmfit <- fit(fo, data = iris, model = GBMModel, control = control)
+#' plot(varimp(gbmfit))
+#' 
+#' gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+#' gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+#' gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+#' plot(gbmres3)
+#' 
+#' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
+#' plot(res)
+#' 
+NULL
+
+
+#' @rdname plot-methods
 #' 
 plot.Performance <- function(x, metrics = NULL, stat =
                                MachineShop::settings("stat.Resamples"),
@@ -69,23 +98,6 @@ plot.Performance <- function(x, metrics = NULL, stat =
 
 
 #' @rdname plot-methods
-#' 
-#' @examples
-#' ## Factor response example
-#' 
-#' fo <- Species ~ .
-#' control <- CVControl()
-#' 
-#' gbmfit <- fit(fo, data = iris, model = GBMModel, control = control)
-#' plot(varimp(gbmfit))
-#' 
-#' gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
-#' gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
-#' gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
-#' plot(gbmres3)
-#' 
-#' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
-#' plot(res)
 #' 
 plot.Resamples <- function(x, metrics = NULL, stat =
                              MachineShop::settings("stat.Resamples"),
@@ -143,8 +155,6 @@ plot.MLModelTune <- function(x, metrics = NULL,
 
 
 #' @rdname plot-methods
-#' 
-#' @param se logical indicating whether to include standard error bars.
 #' 
 plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
   type <- match.arg(type)
@@ -255,9 +265,6 @@ plot.Curves <- function(x, type = c("tradeoffs", "cutoffs"), diagonal = FALSE,
 
 #' @rdname plot-methods
 #' 
-#' @param find numeric true positive rate at which to display reference lines
-#' identifying the corresponding rates of positive predictions.
-#' 
 plot.Lift <- function(x, find = NULL, diagonal = TRUE,
                       stat = MachineShop::settings("stat.Curves"), ...) {
   x <- summary(x, stat = stat)
@@ -289,9 +296,6 @@ plot.Lift <- function(x, find = NULL, diagonal = TRUE,
 
 
 #' @rdname plot-methods
-#' 
-#' @param stats vector of numeric indexes or character names of partial
-#' dependence summary statistics to plot.
 #' 
 plot.PartialDependence <- function(x, stats = NULL, ...) {
   if (any(rowSums(!is.na(x$Predictors)) > 1)) {
@@ -325,9 +329,6 @@ plot.PartialDependence <- function(x, stats = NULL, ...) {
 
 
 #' @rdname plot-methods
-#' 
-#' @param n number of most important variables to include in the plot
-#' [default: all].
 #' 
 plot.VarImp <- function(x, n = NULL, ...) {
   if (!is.null(n)) x <- head(x, n)

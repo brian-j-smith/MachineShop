@@ -1,3 +1,42 @@
+#' Performance Metrics
+#' 
+#' Compute measures of agreement between observed and predicted responses.
+#' 
+#' @name metrics
+#' 
+#' @param observed \link[=response]{observed responses}; or
+#' \link{confusion}, \link[=performance_curve]{performance curve}, or
+#' \link{resample} result containing observed and predicted responses.
+#' @param predicted \link[=predict]{predicted responses} if not contained in
+#' \code{observed}.
+#' @param beta relative importance of recall to precision in the calculation of
+#' \code{f_score} [default: F1 score].
+#' @param cutoff numeric (0, 1) threshold above which binary factor
+#' probabilities are classified as events and below which survival probabilities
+#' are classified.
+#' @param dist character string specifying a distribution with which to estimate
+#' the survival mean in the total sum of square component of \code{r2}.
+#' Possible values are \code{"empirical"} for the Kaplan-Meier estimator,
+#' \code{"exponential"}, \code{"extreme"}, \code{"gaussian"},
+#' \code{"loggaussian"}, \code{"logistic"}, \code{"loglogistic"},
+#' \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or \code{"weibull"}
+#' (default).
+#' @param f function to calculate a desired sensitivity-specificity tradeoff.
+#' @param metrics list of two performance metrics for the calculation [default:
+#' ROC metrics].
+#' @param power power to which positional distances of off-diagonals from the
+#' main diagonal in confusion matrices are raised to calculate
+#' \code{weighted_kappa2}.
+#' @param stat function or character string naming a function to compute a
+#' summary statistic at each cutoff value of resampled metrics in performance
+#' curves, or \code{NULL} for resample-specific metrics.
+#' @param ... arguments passed to or from other methods.
+#' 
+#' @seealso \code{\link{metricinfo}}, \code{\link{performance}}
+#' 
+NULL
+
+
 #################### Metric Method Functions ####################
 
 

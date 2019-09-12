@@ -5,11 +5,38 @@
 #' @name confusion
 #' @rdname confusion
 #' 
+#' @param x factor of \link[=response]{observed responses} or \link{resample}
+#' result containing observed and predicted responses.
+#' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
+#' @param cutoff numeric (0, 1) threshold above which binary factor
+#' probabilities are classified as events and below which survival probabilities
+#' are classified.
+#' If \code{NULL}, then binary responses are summed directly over predicted
+#' class probabilities, whereas a default cutoff of 0.5 is used for
+#' survival probabilities.  Class probability summations and survival will
+#' appear as decimal numbers that can be interpreted as expected counts.
+#' @param na.rm logical indicating whether to remove observed or predicted
+#' responses that are \code{NA} when calculating metrics.
+#' @param ... named or unnamed \code{confusion} output to combine together with
+#' the \code{Confusion} constructor.
 #' @param object square matrix, or object that can be converted to one, of
 #' cross-classified predicted and observed values in the rows and columns,
 #' respectively.
 #' @param ordered logical indicating whether the confusion matrix row and
 #' columns should be regarded as ordered.
+#' 
+#' @return
+#' The return value is a \code{ConfusionMatrix} class object that inherits from
+#' \code{table} if \code{x} and \code{y} responses are specified or a
+#' \code{Confusion} object that inherits from \code{list} if \code{x} is a
+#' \code{Resamples} object.
+#'  
+#' @seealso \code{\link{plot}}, \code{\link{summary}}
+#' 
+#' @examples
+#' res <- resample(Species ~ ., data = iris, model = GBMModel)
+#' (conf <- confusion(res))
+#' plot(conf)
 #' 
 ConfusionMatrix <- function(object = numeric(), ordered = FALSE) {
   
@@ -31,9 +58,6 @@ ConfusionMatrix <- function(object = numeric(), ordered = FALSE) {
 
 
 #' @rdname confusion
-#' 
-#' @param ... named or unnamed \code{confusion} output to combine together with
-#' the \code{Confusion} constructor.
 #' 
 Confusion <- function(...) {
   args <- list(...)
@@ -59,32 +83,6 @@ Confusion <- function(...) {
 
 
 #' @rdname confusion
-#' 
-#' @param x factor of \link[=response]{observed responses} or \link{resample}
-#' result containing observed and predicted responses.
-#' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
-#' @param cutoff numeric (0, 1) threshold above which binary factor
-#' probabilities are classified as events and below which survival probabilities
-#' are classified.
-#' If \code{NULL}, then binary responses are summed directly over predicted
-#' class probabilities, whereas a default cutoff of 0.5 is used for
-#' survival probabilities.  Class probability summations and survival will
-#' appear as decimal numbers that can be interpreted as expected counts.
-#' @param na.rm logical indicating whether to remove observed or predicted
-#' responses that are \code{NA} when calculating metrics.
-#' 
-#' @return
-#' The return value is a \code{ConfusionMatrix} class object that inherits from
-#' \code{table} if \code{x} and \code{y} responses are specified or a
-#' \code{Confusion} object that inherits from \code{list} if \code{x} is a
-#' \code{Resamples} object.
-#'  
-#' @seealso \code{\link{plot}}, \code{\link{summary}}
-#' 
-#' @examples
-#' res <- resample(Species ~ ., data = iris, model = GBMModel)
-#' (conf <- confusion(res))
-#' plot(conf)
 #' 
 confusion <- function(x, y = NULL, cutoff = 0.5, na.rm = TRUE, ...) {
   if (na.rm) {

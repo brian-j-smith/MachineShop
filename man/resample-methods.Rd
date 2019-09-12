@@ -52,9 +52,9 @@ Estimation of the predictive performance of a model estimated and evaluated
 on training and test samples generated from an observed data set.
 }
 \details{
-Output being combined from more than one model with the
-\code{Resamples} constructor must have been generated with the same
-resampling \code{control} object.
+Output being combined from more than one model with the \code{Resamples}
+constructor must have been generated with the same resampling \code{control}
+object.
 
 Stratified resampling is performed for the \code{formula} method according to
 values of the response variable; i.e. categorical levels for \code{factor},

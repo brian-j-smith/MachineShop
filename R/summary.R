@@ -20,6 +20,25 @@
 #' the first for single models, and models and metrics in the first and third,
 #' respectively, for multiple models.
 #' 
+#' @examples
+#' ## Factor response example
+#' 
+#' fo <- Species ~ .
+#' control <- CVControl()
+#' 
+#' gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+#' gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+#' gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+#' summary(gbmres3)
+#' 
+#' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
+#' summary(res)
+#' 
+NULL
+
+
+#' @rdname summary-methods
+#' 
 summary.Performance <- function(object, stats =
                                   MachineShop::settings("stats.Resamples"),
                                 na.rm = TRUE, ...) {
@@ -42,20 +61,6 @@ summary.Performance <- function(object, stats =
 
 
 #' @rdname summary-methods
-#' 
-#' @examples
-#' ## Factor response example
-#' 
-#' fo <- Species ~ .
-#' control <- CVControl()
-#' 
-#' gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
-#' gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
-#' gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
-#' summary(gbmres3)
-#' 
-#' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
-#' summary(res)
 #' 
 summary.Resamples <- function(object, stats =
                                 MachineShop::settings("stats.Resamples"),

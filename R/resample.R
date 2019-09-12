@@ -6,12 +6,45 @@
 #' @name resample
 #' @rdname resample-methods
 #' 
+#' @param x defines a relationship between model predictor and response
+#' variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
+#' predictors, \code{\link{ModelFrame}}, or untrained
+#' \code{\link[recipes]{recipe}}.
+#' @param y response variable.
+#' @param data \link[=data.frame]{data frame} containing observed predictors and
+#' outcomes.
+#' @param model \link[=models]{model} function, function name, or call.
+#' @param control \link[=controls]{control} function, function name, or call
+#' defining the resampling method to be employed.
 #' @param ... named or unnamed \code{resample} output to combine together with
 #' the \code{Resamples} constructor.
 #' 
-#' @details Output being combined from more than one model with the
-#' \code{Resamples} constructor must have been generated with the same
-#' resampling \code{control} object.
+#' @details
+#' Output being combined from more than one model with the \code{Resamples}
+#' constructor must have been generated with the same resampling \code{control}
+#' object.
+#' 
+#' @return \code{Resamples} class object.
+#' 
+#' @seealso \code{\link{performance}}, \code{\link{metrics}},
+#' \code{\link{plot}}, \code{\link{summary}}
+#' 
+#' @examples
+#' ## Factor response example
+#' 
+#' fo <- Species ~ .
+#' control <- CVControl()
+#' 
+#' gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+#' gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+#' gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+#' 
+#' summary(gbmres1)
+#' plot(gbmres1)
+#' 
+#' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
+#' summary(res)
+#' plot(res)
 #' 
 Resamples <- function(...) {
   .Resamples(...)
@@ -68,13 +101,6 @@ Resamples <- function(...) {
 
 #' @rdname resample-methods
 #' 
-#' @param x defines a relationship between model predictor and response
-#' variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
-#' predictors, \code{\link{ModelFrame}}, or untrained
-#' \code{\link[recipes]{recipe}}.
-#' 
-#' @return \code{Resamples} class object.
-#' 
 resample <- function(x, ...) {
   UseMethod("resample")
 }
@@ -82,36 +108,10 @@ resample <- function(x, ...) {
 
 #' @rdname resample-methods
 #' 
-#' @param data \link[=data.frame]{data frame} containing observed predictors and
-#' outcomes.
-#' @param model \link[=models]{model} function, function name, or call.
-#' @param control \link[=controls]{control} function, function name, or call
-#' defining the resampling method to be employed.
-#' 
 #' @details
 #' Stratified resampling is performed for the \code{formula} method according to
 #' values of the response variable; i.e. categorical levels for \code{factor},
 #' continuous for \code{numeric}, and event status \code{Surv}.
-#' 
-#' @seealso \code{\link{performance}}, \code{\link{metrics}},
-#' \code{\link{plot}}, \code{\link{summary}}
-#' 
-#' @examples
-#' ## Factor response example
-#' 
-#' fo <- Species ~ .
-#' control <- CVControl()
-#' 
-#' gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
-#' gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
-#' gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
-#' 
-#' summary(gbmres1)
-#' plot(gbmres1)
-#' 
-#' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
-#' summary(res)
-#' plot(res)
 #' 
 resample.formula <- function(x, data, model,
                              control = MachineShop::settings("control"), ...) {
@@ -121,8 +121,6 @@ resample.formula <- function(x, data, model,
 
 
 #' @rdname resample-methods
-#' 
-#' @param y response variable.
 #' 
 resample.matrix <- function(x, y, model,
                             control = MachineShop::settings("control"), ...) {

@@ -16,17 +16,7 @@ MLModelTune <- function(object, tune_grid, performance, selected) {
 #' variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
 #' predictors, \code{\link{ModelFrame}}, or untrained
 #' \code{\link[recipes]{recipe}}.
-#' @param ... arguments passed to the \link{performance} functions.
-#' 
-#' @return \code{MLModelTune} class object that inherits from \code{MLModel}.
-#' 
-tune <- function(x, ...) {
-  UseMethod("tune")
-}
-
-
-#' @rdname tune-methods
-#' 
+#' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
 #' outcomes.
 #' @param models \link[=models]{model} function, function name, or call defining
@@ -47,6 +37,9 @@ tune <- function(x, ...) {
 #' based on the first calculated metric.
 #' @param stat function or character string naming a function to compute a
 #' summary statistic on resampled metric values for model tuning.
+#' @param ... arguments passed to the \link{performance} functions.
+#' 
+#' @return \code{MLModelTune} class object that inherits from \code{MLModel}.
 #' 
 #' @seealso \code{\link{fit}}, \code{\link{performance}}, \code{\link{metrics}},
 #' \code{\link{plot}}, \code{\link{summary}}
@@ -79,6 +72,13 @@ tune <- function(x, ...) {
 #' varimp(gbmfit)
 #' }
 #' 
+tune <- function(x, ...) {
+  UseMethod("tune")
+}
+
+
+#' @rdname tune-methods
+#' 
 tune.formula <- function(x, data, models, grid = MachineShop::settings("grid"),
                          fixed = NULL,
                          control = MachineShop::settings("control"),
@@ -89,8 +89,6 @@ tune.formula <- function(x, data, models, grid = MachineShop::settings("grid"),
 
 
 #' @rdname tune-methods
-#' 
-#' @param y response variable.
 #' 
 tune.matrix <- function(x, y, models, grid = MachineShop::settings("grid"),
                         fixed = NULL,

@@ -2,6 +2,8 @@
 #' 
 #' Fits the accelerated failure time family of parametric survival models.
 #' 
+#' @rdname SurvRegModel
+#' 
 #' @param dist assumed distribution for y variable.
 #' @param scale optional fixed value for the scale.
 #' @param parms list of fixed parameters.
@@ -58,7 +60,6 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
 }
 
 
-#' @name SurvRegStepAICModel
 #' @rdname SurvRegModel
 #' 
 #' @param direction mode of stepwise search, can be one of \code{"both"}

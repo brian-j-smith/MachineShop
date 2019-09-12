@@ -3,6 +3,8 @@
 #' Fits generalized linear models, specified by giving a symbolic description of
 #' the linear predictor and a description of the error distribution.
 #' 
+#' @rdname GLMModel
+#' 
 #' @param family description of the error distribution and link function to be
 #' used in the model.  Set automatically according to the class type of the
 #' response variable.
@@ -58,7 +60,6 @@ GLMModel <- function(family = NULL, ...) {
 }
 
 
-#' @name GLMStepAICModel
 #' @rdname GLMModel
 #' 
 #' @param direction mode of stepwise search, can be one of \code{"both"}

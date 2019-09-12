@@ -18,21 +18,6 @@ PerformanceDiff <- function(object, model_names) {
 #' 
 #' @seealso \code{\link{t.test}}, \code{\link{plot}}, \code{\link{summary}}
 #' 
-diff.Performance <- function(x, ...) {
-  if (length(dim(x)) <= 2) stop("more than one model needed to diff")
-  indices <- combn(dim(x)[3], 2)
-  indices1 <- indices[1,]
-  indices2 <- indices[2,]
-  xdiff <- x[, , indices1, drop = FALSE] - x[, , indices2, drop = FALSE]
-  model_names <- dimnames(x)[[3]]
-  dimnames(xdiff)[[3]] <-
-    paste(model_names[indices1], "-", model_names[indices2])
-  PerformanceDiff(xdiff, model_names = model_names)
-}
-
-
-#' @rdname diff-methods
-#' 
 #' @examples
 #' ## Survival response example
 #' library(survival)
@@ -49,6 +34,26 @@ diff.Performance <- function(x, ...) {
 #' perfdiff <- diff(res)
 #' summary(perfdiff)
 #' plot(perfdiff)
+#' 
+NULL
+
+
+#' @rdname diff-methods
+#' 
+diff.Performance <- function(x, ...) {
+  if (length(dim(x)) <= 2) stop("more than one model needed to diff")
+  indices <- combn(dim(x)[3], 2)
+  indices1 <- indices[1,]
+  indices2 <- indices[2,]
+  xdiff <- x[, , indices1, drop = FALSE] - x[, , indices2, drop = FALSE]
+  model_names <- dimnames(x)[[3]]
+  dimnames(xdiff)[[3]] <-
+    paste(model_names[indices1], "-", model_names[indices2])
+  PerformanceDiff(xdiff, model_names = model_names)
+}
+
+
+#' @rdname diff-methods
 #' 
 diff.Resamples <- function(x, ...) {
   diff(performance(x))

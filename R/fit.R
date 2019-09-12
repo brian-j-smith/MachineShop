@@ -9,18 +9,11 @@
 #' variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
 #' predictors, \code{\link{ModelFrame}}, or untrained
 #' \code{\link[recipes]{recipe}}.
-#' @param ... arguments passed to other methods.
-#' 
-fit <- function(x, ...) {
-  UseMethod("fit")
-}
-
-
-#' @rdname fit-methods
-#' 
+#' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
 #' outcomes.
 #' @param model \link[=models]{model} function, function name, or call.
+#' @param ... arguments passed to other methods.
 #' 
 #' @return \code{MLModelFit} class object.
 #' 
@@ -35,14 +28,19 @@ fit <- function(x, ...) {
 #'               data = Melanoma, model = GBMModel)
 #' varimp(gbmfit)
 #' 
+fit <- function(x, ...) {
+  UseMethod("fit")
+}
+
+
+#' @rdname fit-methods
+#' 
 fit.formula <- function(x, data, model, ...) {
   fit(ModelFrame(x, data, na.rm = FALSE), model)
 }
 
 
 #' @rdname fit-methods
-#' 
-#' @param y response variable.
 #' 
 fit.matrix <- function(x, y, model, ...) {
   fit(ModelFrame(x, y, na.rm = FALSE), model)

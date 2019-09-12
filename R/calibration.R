@@ -5,8 +5,39 @@
 #' @name calibration
 #' @rdname calibration
 #' 
+#' @param x \link[=response]{observed responses} or \link{resample} result
+#' containing observed and predicted responses.
+#' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
+#' @param breaks value defining the response variable bins within which to
+#' calculate observed mean values.  May be specified as a number of bins, a
+#' vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
+#' predicted survival probabilities and with \link[stats:loess]{loess} for
+#' others.
+#' @param span numeric parameter controlling the degree of loess smoothing.
+#' @param dist character string specifying a distribution with which to estimate
+#' observed survival means.  Possible values are \code{"empirical"} for the
+#' Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
+#' \code{"gaussian"}, \code{"loggaussian"}, \code{"logistic"},
+#' \code{"loglogistic"}, \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or
+#' \code{"weibull"} (default).
+#' @param na.rm logical indicating whether to remove observed or predicted
+#' responses that are \code{NA} when calculating metrics.
 #' @param ... named or unnamed \code{calibration} output to combine together
 #' with the \code{Calibration} constructor.
+#' 
+#' @return \code{Calibration} class object that inherits from \code{data.frame}.
+#'  
+#' @seealso \code{\link{plot}}
+#' 
+#' @examples
+#' library(survival)
+#' library(MASS)
+#' 
+#' res <- resample(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+#'                 data = Melanoma, model = GBMModel,
+#'                 control = CVControl(times = 365 * c(2, 5, 10)))
+#' cal <- calibration(res)
+#' plot(cal)
 #' 
 Calibration <- function(...) {
   .Calibration(...)
@@ -53,38 +84,6 @@ Calibration <- function(...) {
 
 
 #' @rdname calibration
-#' 
-#' @param x \link[=response]{observed responses} or \link{resample} result
-#' containing observed and predicted responses.
-#' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
-#' @param breaks value defining the response variable bins within which to
-#' calculate observed mean values.  May be specified as a number of bins, a
-#' vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
-#' predicted survival probabilities and with \link[stats:loess]{loess} for
-#' others.
-#' @param span numeric parameter controlling the degree of loess smoothing.
-#' @param dist character string specifying a distribution with which to estimate
-#' observed survival means.  Possible values are \code{"empirical"} for the
-#' Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
-#' \code{"gaussian"}, \code{"loggaussian"}, \code{"logistic"},
-#' \code{"loglogistic"}, \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or
-#' \code{"weibull"} (default).
-#' @param na.rm logical indicating whether to remove observed or predicted
-#' responses that are \code{NA} when calculating metrics.
-#' 
-#' @return \code{Calibration} class object that inherits from \code{data.frame}.
-#'  
-#' @seealso \code{\link{plot}}
-#' 
-#' @examples
-#' library(survival)
-#' library(MASS)
-#' 
-#' res <- resample(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-#'                 data = Melanoma, model = GBMModel,
-#'                 control = CVControl(times = 365 * c(2, 5, 10)))
-#' cal <- calibration(res)
-#' plot(cal)
 #' 
 calibration <- function(x, y = NULL, breaks = 10, span = 0.75, dist = NULL,
                         na.rm = TRUE, ...) {

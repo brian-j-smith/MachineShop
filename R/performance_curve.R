@@ -6,10 +6,31 @@
 #' characteristic (ROC) and precision recall.
 #' 
 #' @name performance_curve
-#' @rdname performance_curve
 #' 
+#' @param x \link[=response]{observed responses} or \link{resample} result
+#' containing observed and predicted responses.
+#' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
+#' @param metrics list of two performance \link{metrics} for the analysis
+#' [default: ROC metrics].  Precision recall curves can be obtained with 
+#' \code{c(precision, recall)}.
+#' @param na.rm logical indicating whether to remove observed or predicted
+#' responses that are \code{NA} when calculating metrics.
 #' @param ... named or unnamed \code{performance_curve} output to combine
 #' together with the \code{Curves} constructor.
+#' 
+#' @return \code{Curves} class object that inherits from \code{data.frame}.
+#'  
+#' @seealso \code{\link{auc}}, \code{\link{plot}}, \code{\link{summary}}
+#' 
+#' @examples
+#' library(MASS)
+#' 
+#' res <- resample(type ~ ., data = Pima.tr, model = GBMModel)
+#' 
+#' ## ROC curve
+#' roc <- performance_curve(res)
+#' plot(roc)
+#' auc(roc)
 #' 
 Curves <- function(...) {
   .Curves(...)
@@ -64,29 +85,6 @@ Curves <- function(...) {
 
 
 #' @rdname performance_curve
-#' 
-#' @param x \link[=response]{observed responses} or \link{resample} result
-#' containing observed and predicted responses.
-#' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
-#' @param metrics list of two performance \link{metrics} for the analysis
-#' [default: ROC metrics].  Precision recall curves can be obtained with 
-#' \code{c(precision, recall)}.
-#' @param na.rm logical indicating whether to remove observed or predicted
-#' responses that are \code{NA} when calculating metrics.
-#' 
-#' @return \code{Curves} class object that inherits from \code{data.frame}.
-#'  
-#' @seealso \code{\link{auc}}, \code{\link{plot}}, \code{\link{summary}}
-#' 
-#' @examples
-#' library(MASS)
-#' 
-#' res <- resample(type ~ ., data = Pima.tr, model = GBMModel)
-#' 
-#' ## ROC curve
-#' roc <- performance_curve(res)
-#' plot(roc)
-#' auc(roc)
 #' 
 performance_curve <- function(x, ...) {
   UseMethod("performance_curve")

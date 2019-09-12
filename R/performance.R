@@ -15,6 +15,7 @@ Performance <- function(...) {
 #' 
 #' Compute measures of model performance.
 #' 
+#' @name performance
 #' @rdname performance
 #' 
 #' @param x \link[=response]{observed responses}; or \link{confusion} or
@@ -33,18 +34,29 @@ Performance <- function(...) {
 #' 
 #' @seealso \code{\link{plot}}, \code{\link{summary}}
 #' 
+#' @examples
+#' res <- resample(Species ~ ., data = iris, model = GBMModel)
+#' (perf <- performance(res))
+#' summary(perf)
+#' plot(perf)
+#' 
+#' ## Survival response example
+#' library(survival)
+#' library(MASS)
+#' 
+#' fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
+#' gbmfit <- fit(fo, data = Melanoma, model = GBMModel)
+#' 
+#' obs <- response(gbmfit, newdata = Melanoma)
+#' pred <- predict(gbmfit, newdata = Melanoma, type = "prob")
+#' performance(obs, pred)
+#' 
 performance <- function(x, ...) {
   UseMethod("performance")
 }
 
 
 #' @rdname performance
-#' 
-#' @examples
-#' res <- resample(Species ~ ., data = iris, model = GBMModel)
-#' (perf <- performance(res))
-#' summary(perf)
-#' plot(perf)
 #' 
 performance.Resamples <- function(x, ...) {
   perf_list <- by(x, x$Model, function(resamples) {
@@ -113,18 +125,6 @@ performance.numeric <- function(x, y, metrics =
 
 
 #' @rdname performance
-#' 
-#' @examples
-#' ## Survival response example
-#' library(survival)
-#' library(MASS)
-#' 
-#' fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
-#' gbmfit <- fit(fo, data = Melanoma, model = GBMModel)
-#' 
-#' obs <- response(gbmfit, newdata = Melanoma)
-#' pred <- predict(gbmfit, newdata = Melanoma, type = "prob")
-#' performance(obs, pred)
 #' 
 performance.Surv <- function(x, y, metrics =
                                MachineShop::settings("metrics.Surv"),
