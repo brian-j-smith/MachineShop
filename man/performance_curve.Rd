@@ -2,27 +2,29 @@
 % Please edit documentation in R/performance_curve.R
 \name{performance_curve}
 \alias{performance_curve}
-\alias{Curves}
-\alias{performance_curve.Resamples}
 \alias{performance_curve.default}
+\alias{performance_curve.Resamples}
+\alias{Curves}
 \title{Performance Curves}
 \usage{
-Curves(...)
-
 performance_curve(x, ...)
+
+\method{performance_curve}{default}(x, y, metrics = c(MachineShop::tpr,
+  MachineShop::fpr), na.rm = TRUE, ...)
 
 \method{performance_curve}{Resamples}(x, metrics = c(MachineShop::tpr,
   MachineShop::fpr), na.rm = TRUE, ...)
 
-\method{performance_curve}{default}(x, y, metrics = c(MachineShop::tpr,
-  MachineShop::fpr), na.rm = TRUE, ...)
+Curves(...)
 }
 \arguments{
+\item{x}{\link[=response]{observed responses} or \link{resample} result
+containing observed and predicted responses.}
+
 \item{...}{named or unnamed \code{performance_curve} output to combine
 together with the \code{Curves} constructor.}
 
-\item{x}{\link[=response]{observed responses} or \link{resample} result
-containing observed and predicted responses.}
+\item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
 
 \item{metrics}{list of two performance \link{metrics} for the analysis
 [default: ROC metrics].  Precision recall curves can be obtained with 
@@ -30,8 +32,6 @@ containing observed and predicted responses.}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}
-
-\item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
 }
 \value{
 \code{Curves} class object that inherits from \code{data.frame}.

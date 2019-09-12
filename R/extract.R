@@ -16,6 +16,15 @@ NULL
 
 
 #' @rdname extract-methods
+#' @aliases [.SurvMatrix
+#' 
+"[.SurvMatrix" <- function(x, i, j, drop = FALSE) {
+  y <- unclass(x)[i, j, drop = drop]
+  if (drop) y else structure(y, class = class(x), times = time(x)[j])
+}
+
+
+#' @rdname extract-methods
 #' @aliases [,Resamples,ANY,ANY,ANY-method
 #' 
 setMethod("[", c(x = "Resamples", i = "ANY", j = "ANY", drop = "ANY"),
@@ -27,12 +36,3 @@ setMethod("[", c(x = "Resamples", i = "ANY", j = "ANY", drop = "ANY"),
     } else y
   }
 )
-
-
-#' @rdname extract-methods
-#' @aliases [.SurvMatrix
-#' 
-"[.SurvMatrix" <- function(x, i, j, drop = FALSE) {
-  y <- unclass(x)[i, j, drop = drop]
-  if (drop) y else structure(y, class = class(x), times = time(x)[j])
-}

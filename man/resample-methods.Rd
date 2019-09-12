@@ -2,15 +2,13 @@
 % Please edit documentation in R/resample.R
 \name{resample}
 \alias{resample}
-\alias{Resamples}
 \alias{resample.formula}
 \alias{resample.matrix}
 \alias{resample.ModelFrame}
 \alias{resample.recipe}
+\alias{Resamples}
 \title{Resample Estimation of Model Performance}
 \usage{
-Resamples(...)
-
 resample(x, ...)
 
 \method{resample}{formula}(x, data, model,
@@ -24,15 +22,17 @@ resample(x, ...)
 
 \method{resample}{recipe}(x, model,
   control = MachineShop::settings("control"), ...)
+
+Resamples(...)
 }
 \arguments{
-\item{...}{named or unnamed \code{resample} output to combine together with
-the \code{Resamples} constructor.}
-
 \item{x}{defines a relationship between model predictor and response
 variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
 predictors, \code{\link{ModelFrame}}, or untrained
 \code{\link[recipes]{recipe}}.}
+
+\item{...}{named or unnamed \code{resample} output to combine together with
+the \code{Resamples} constructor.}
 
 \item{data}{\link[=data.frame]{data frame} containing observed predictors and
 outcomes.}
@@ -52,10 +52,6 @@ Estimation of the predictive performance of a model estimated and evaluated
 on training and test samples generated from an observed data set.
 }
 \details{
-Output being combined from more than one model with the \code{Resamples}
-constructor must have been generated with the same resampling \code{control}
-object.
-
 Stratified resampling is performed for the \code{formula} method according to
 values of the response variable; i.e. categorical levels for \code{factor},
 continuous for \code{numeric}, and event status \code{Surv}.
@@ -68,6 +64,10 @@ default.
 Variables in a \code{recipe} may be used for stratification by defining a
 "case_strata" \code{\link[recipes:roles]{role}} for them.  Resampling will
 be unstratified if no variables have that role.
+
+Output being combined from more than one model with the \code{Resamples}
+constructor must have been generated with the same resampling \code{control}
+object.
 }
 \examples{
 ## Factor response example

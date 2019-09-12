@@ -2,45 +2,45 @@
 % Please edit documentation in R/summary.R
 \name{summary}
 \alias{summary}
-\alias{summary.Performance}
-\alias{summary.Resamples}
-\alias{summary.MLModelTune}
 \alias{summary.Confusion}
 \alias{summary.ConfusionMatrix}
 \alias{summary.Curves}
+\alias{summary.MLModelTune}
+\alias{summary.Performance}
+\alias{summary.Resamples}
 \title{Model Performance Summary}
 \usage{
-\method{summary}{Performance}(object,
-  stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
-
-\method{summary}{Resamples}(object,
-  stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
-
-\method{summary}{MLModelTune}(object,
-  stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
-
 \method{summary}{Confusion}(object, ...)
 
 \method{summary}{ConfusionMatrix}(object, ...)
 
 \method{summary}{Curves}(object,
   stat = MachineShop::settings("stat.Curves"), ...)
+
+\method{summary}{MLModelTune}(object,
+  stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
+
+\method{summary}{Performance}(object,
+  stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
+
+\method{summary}{Resamples}(object,
+  stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
 }
 \arguments{
-\item{object}{\link{confusion}, \link{lift}, model \link{tune},
-\link{performance}, \link[=performance_curve]{performance curve}, or
-\link{resample} result.}
-
-\item{stats}{function, function name, or vector of these with which to
-compute summary statistics.}
-
-\item{na.rm}{logical indicating whether to exclude missing values.}
+\item{object}{\link{confusion}, \link[=performance_curve]{performance curve},
+\link{lift}, model \link{tune}, \link{performance}, or \link{resample}
+result.}
 
 \item{...}{arguments passed to other methods.}
 
 \item{stat}{function or character string naming a function to compute a
 summary statistic at each cutoff value of resampled metrics in \code{Curves},
 or \code{NULL} for resample-specific metrics.}
+
+\item{stats}{function, function name, or vector of these with which to
+compute summary statistics.}
+
+\item{na.rm}{logical indicating whether to exclude missing values.}
 }
 \value{
 array with summmary statistics in the second dimension, metrics in

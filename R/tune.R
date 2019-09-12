@@ -1,9 +1,3 @@
-MLModelTune <- function(object, tune_grid, performance, selected) {
-  new("MLModelTune", object, tune_grid = tune_grid, performance = performance,
-      selected = selected)
-}
-
-
 #' Model Tuning and Selection
 #' 
 #' Predictive peformance-based tuning of a model over a grid of parameters
@@ -119,6 +113,12 @@ tune.recipe <- function(x, models, grid = MachineShop::settings("grid"),
                         metrics = NULL,
                         stat = MachineShop::settings("stat.ModelTune"), ...) {
   .tune(x, NULL, models, grid, fixed, control, metrics, stat, ...)
+}
+
+
+MLModelTune <- function(object, tune_grid, performance, selected) {
+  new("MLModelTune", object, tune_grid = tune_grid, performance = performance,
+      selected = selected)
 }
 
 

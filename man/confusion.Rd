@@ -2,27 +2,17 @@
 % Please edit documentation in R/confusion.R
 \name{confusion}
 \alias{confusion}
-\alias{ConfusionMatrix}
 \alias{Confusion}
+\alias{ConfusionMatrix}
 \title{Confusion Matrix}
 \usage{
-ConfusionMatrix(object = numeric(), ordered = FALSE)
+confusion(x, y = NULL, cutoff = 0.5, na.rm = TRUE, ...)
 
 Confusion(...)
 
-confusion(x, y = NULL, cutoff = 0.5, na.rm = TRUE, ...)
+ConfusionMatrix(object = numeric(), ordered = FALSE)
 }
 \arguments{
-\item{object}{square matrix, or object that can be converted to one, of
-cross-classified predicted and observed values in the rows and columns,
-respectively.}
-
-\item{ordered}{logical indicating whether the confusion matrix row and
-columns should be regarded as ordered.}
-
-\item{...}{named or unnamed \code{confusion} output to combine together with
-the \code{Confusion} constructor.}
-
 \item{x}{factor of \link[=response]{observed responses} or \link{resample}
 result containing observed and predicted responses.}
 
@@ -38,6 +28,16 @@ appear as decimal numbers that can be interpreted as expected counts.}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}
+
+\item{...}{named or unnamed \code{confusion} output to combine together with
+the \code{Confusion} constructor.}
+
+\item{object}{square matrix, or object that can be converted to one, of
+cross-classified predicted and observed values in the rows and columns,
+respectively.}
+
+\item{ordered}{logical indicating whether the confusion matrix row and
+columns should be regarded as ordered.}
 }
 \value{
 The return value is a \code{ConfusionMatrix} class object that inherits from

@@ -24,17 +24,17 @@
 #' lf <- lift(res)
 #' plot(lf)
 #' 
+lift <- function(x, y = NULL, na.rm = TRUE, ...) {
+  Lift(performance_curve(x, y = y, metrics = c(tpr, rpp), na.rm = na.rm))
+}
+
+
+#' @rdname lift
+#' 
 Lift <- function(...) {
   object <- as(Curves(...), "Lift")
   if (!all(mapply(identical, object@metrics, c(tpr, rpp)))) {
     stop("incorrect lift metrics")
   }
   object
-}
-
-
-#' @rdname lift
-#' 
-lift <- function(x, y = NULL, na.rm = TRUE, ...) {
-  Lift(performance_curve(x, y = y, metrics = c(tpr, rpp), na.rm = na.rm))
 }

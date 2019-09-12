@@ -2,16 +2,16 @@
 % Please edit documentation in R/diff.R
 \name{diff}
 \alias{diff}
+\alias{diff.MLModelTune}
 \alias{diff.Performance}
 \alias{diff.Resamples}
-\alias{diff.MLModelTune}
 \title{Model Performance Differences}
 \usage{
+\method{diff}{MLModelTune}(x, ...)
+
 \method{diff}{Performance}(x, ...)
 
 \method{diff}{Resamples}(x, ...)
-
-\method{diff}{MLModelTune}(x, ...)
 }
 \arguments{
 \item{x}{model \link{tune}, \link{performance}, or \link{resample} result.}

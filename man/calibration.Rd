@@ -5,15 +5,12 @@
 \alias{Calibration}
 \title{Model Calibration}
 \usage{
-Calibration(...)
-
 calibration(x, y = NULL, breaks = 10, span = 0.75, dist = NULL,
   na.rm = TRUE, ...)
+
+Calibration(...)
 }
 \arguments{
-\item{...}{named or unnamed \code{calibration} output to combine together
-with the \code{Calibration} constructor.}
-
 \item{x}{\link[=response]{observed responses} or \link{resample} result
 containing observed and predicted responses.}
 
@@ -36,6 +33,9 @@ Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}
+
+\item{...}{named or unnamed \code{calibration} output to combine together
+with the \code{Calibration} constructor.}
 }
 \value{
 \code{Calibration} class object that inherits from \code{data.frame}.

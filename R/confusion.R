@@ -38,22 +38,13 @@
 #' (conf <- confusion(res))
 #' plot(conf)
 #' 
-ConfusionMatrix <- function(object = numeric(), ordered = FALSE) {
-  
-  object <- if (length(object)) as.matrix(object) else matrix(NA_real_, 0, 0)
-  
-  n <- nrow(object)
-  if (n != ncol(object)) stop("unequal number of rows and columns")
-
-  object_dimnames <- dimnames(object)
-  if (is.null(object_dimnames)) object_dimnames <- list(NULL, NULL)
-  names(object_dimnames) <- c("Predicted", "Observed")
-  
-  object_class <- "ConfusionMatrix"
-  if (n == 2) object_class <- paste0("Binary", object_class)
-  if (ordered) object_class <- paste0("Ordered", object_class)
-
-  new(object_class, structure(object, dimnames = object_dimnames))
+confusion <- function(x, y = NULL, cutoff = 0.5, na.rm = TRUE, ...) {
+  if (na.rm) {
+    complete <- complete_subset(x = x, y = y)
+    x <- complete$x
+    y <- complete$y
+  }
+  .confusion(x, y, cutoff = cutoff)
 }
 
 
@@ -77,20 +68,29 @@ Confusion <- function(...) {
     conf_list <- c(conf_list, x)
   }
   names(conf_list) <- make.unique(names(conf_list))
-
+  
   structure(conf_list, class = c("Confusion", "listof"))
 }
 
 
 #' @rdname confusion
 #' 
-confusion <- function(x, y = NULL, cutoff = 0.5, na.rm = TRUE, ...) {
-  if (na.rm) {
-    complete <- complete_subset(x = x, y = y)
-    x <- complete$x
-    y <- complete$y
-  }
-  .confusion(x, y, cutoff = cutoff)
+ConfusionMatrix <- function(object = numeric(), ordered = FALSE) {
+  
+  object <- if (length(object)) as.matrix(object) else matrix(NA_real_, 0, 0)
+  
+  n <- nrow(object)
+  if (n != ncol(object)) stop("unequal number of rows and columns")
+  
+  object_dimnames <- dimnames(object)
+  if (is.null(object_dimnames)) object_dimnames <- list(NULL, NULL)
+  names(object_dimnames) <- c("Predicted", "Observed")
+  
+  object_class <- "ConfusionMatrix"
+  if (n == 2) object_class <- paste0("Binary", object_class)
+  if (ordered) object_class <- paste0("Ordered", object_class)
+  
+  new(object_class, structure(object, dimnames = object_dimnames))
 }
 
 

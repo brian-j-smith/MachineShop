@@ -21,18 +21,6 @@ NULL
 
 
 #' @description
-#' The base \code{MLControl} constructor initializes a set of control parameters
-#' that are common to all resampling methods.
-#' 
-#' @rdname MLControl
-#' 
-MLControl <- function(times = NULL, dist = NULL, method = NULL,
-                      seed = sample(.Machine$integer.max, 1), ...) {
-  new("MLControl", times = times, dist = dist, method = method, seed = seed)
-}
-
-
-#' @description
 #' \code{BootControl} constructs an \code{MLControl} object for simple bootstrap
 #' resampling in which models are fit with bootstrap resampled training sets and
 #' used to predict the full data set (Efron and Tibshirani 1993).
@@ -151,4 +139,16 @@ SplitControl <- function(prop = 2/3, ...) {
 #' 
 TrainControl <- function(...) {
   new("MLTrainControl", MLControl(...))
+}
+
+
+#' @description
+#' The base \code{MLControl} constructor initializes a set of control parameters
+#' that are common to all resampling methods.
+#' 
+#' @rdname MLControl
+#' 
+MLControl <- function(times = NULL, dist = NULL, method = NULL,
+                      seed = sample(.Machine$integer.max, 1), ...) {
+  new("MLControl", times = times, dist = dist, method = method, seed = seed)
 }

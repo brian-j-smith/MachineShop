@@ -32,62 +32,22 @@
 #' plot(roc)
 #' auc(roc)
 #' 
-Curves <- function(...) {
-  .Curves(...)
-}
-
-
-.Curves <- function(..., .metrics = list()) {
-  args <- list(...)
-  
-  if (length(args) == 0) stop("no performance_curve output given")
-  
-  .Data <- args[[1]]
-  if (all(mapply(is, args, "Curves"))) {
-    
-    metrics <- .Data@metrics
-    if (!all(sapply(args, function(x) identical(x@metrics, metrics)))) {
-      stop("Curves arguments have different metrics")
-    }
-
-  } else if (length(args) > 1) {
-    
-    stop("arguments to combine must be Curves objects")
-    
-  } else if (!is.data.frame(.Data)) {
-    
-    stop("Curves argument must inherit from data.frame")
-    
-  } else {
-    
-    if (!all(mapply(is, .metrics[1:2], "MLMetric"))) {
-      stop("missing performance metrics in Curves constructor")
-    }
-    metrics <- c(y = .metrics[[1]], x = .metrics[[2]])
-
-    var_names <- c("Cutoff", "x", "y")
-    is_missing <- !(var_names %in% names(.Data))
-    if (any(is_missing)) {
-      stop("missing performance curve variables: ",
-           toString(var_names[is_missing]))
-    }
-    
-    decreasing <- !xor(metrics$x@maximize, metrics$y@maximize)
-    sort_order <- order(.Data$x, .Data$y, decreasing = c(FALSE, decreasing),
-                        method = "radix")
-    args[[1]] <- .Data[sort_order, , drop = FALSE]
-
-  }
-
-  args <- make_unique_levels(args, which = "Model")
-  new("Curves", do.call(append, args), metrics = metrics)
+performance_curve <- function(x, ...) {
+  UseMethod("performance_curve")
 }
 
 
 #' @rdname performance_curve
 #' 
-performance_curve <- function(x, ...) {
-  UseMethod("performance_curve")
+performance_curve.default <- function(x, y, metrics = c(MachineShop::tpr,
+                                                        MachineShop::fpr),
+                                      na.rm = TRUE, ...) {
+  if (na.rm) {
+    complete <- complete_subset(x = x, y = y)
+    x <- complete$x
+    y <- complete$y
+  }
+  .curve(x, y, metrics = .get_curve_metrics(metrics))
 }
 
 
@@ -120,26 +80,66 @@ performance_curve.Resamples <- function(x, metrics = c(MachineShop::tpr,
 }
 
 
-#' @rdname performance_curve
-#' 
-performance_curve.default <- function(x, y, metrics = c(MachineShop::tpr,
-                                                        MachineShop::fpr),
-                                      na.rm = TRUE, ...) {
-  if (na.rm) {
-    complete <- complete_subset(x = x, y = y)
-    x <- complete$x
-    y <- complete$y
-  }
-  .curve(x, y, metrics = .get_curve_metrics(metrics))
-}
-
-
 .get_curve_metrics <- function(metrics) {
   metrics <- lapply(metrics, fget)
   if (length(metrics) != 2 || !all(mapply(is, metrics, "MLMetric"))) {
     stop("'metrics' must be a list of two performance metrics")
   }
   metrics
+}
+
+
+#' @rdname performance_curve
+#' 
+Curves <- function(...) {
+  .Curves(...)
+}
+
+
+.Curves <- function(..., .metrics = list()) {
+  args <- list(...)
+  
+  if (length(args) == 0) stop("no performance_curve output given")
+  
+  .Data <- args[[1]]
+  if (all(mapply(is, args, "Curves"))) {
+    
+    metrics <- .Data@metrics
+    if (!all(sapply(args, function(x) identical(x@metrics, metrics)))) {
+      stop("Curves arguments have different metrics")
+    }
+    
+  } else if (length(args) > 1) {
+    
+    stop("arguments to combine must be Curves objects")
+    
+  } else if (!is.data.frame(.Data)) {
+    
+    stop("Curves argument must inherit from data.frame")
+    
+  } else {
+    
+    if (!all(mapply(is, .metrics[1:2], "MLMetric"))) {
+      stop("missing performance metrics in Curves constructor")
+    }
+    metrics <- c(y = .metrics[[1]], x = .metrics[[2]])
+    
+    var_names <- c("Cutoff", "x", "y")
+    is_missing <- !(var_names %in% names(.Data))
+    if (any(is_missing)) {
+      stop("missing performance curve variables: ",
+           toString(var_names[is_missing]))
+    }
+    
+    decreasing <- !xor(metrics$x@maximize, metrics$y@maximize)
+    sort_order <- order(.Data$x, .Data$y, decreasing = c(FALSE, decreasing),
+                        method = "radix")
+    args[[1]] <- .Data[sort_order, , drop = FALSE]
+    
+  }
+  
+  args <- make_unique_levels(args, which = "Model")
+  new("Curves", do.call(append, args), metrics = metrics)
 }
 
 

@@ -3,13 +3,13 @@
 \docType{methods}
 \name{extract}
 \alias{extract}
-\alias{[,Resamples,ANY,ANY,ANY-method}
 \alias{[.SurvMatrix}
+\alias{[,Resamples,ANY,ANY,ANY-method}
 \title{Extract Parts of an Object}
 \usage{
-\S4method{[}{Resamples,ANY,ANY,ANY}(x, i, j, drop = FALSE)
-
 \method{[}{SurvMatrix}(x, i, j, drop = FALSE)
+
+\S4method{[}{Resamples,ANY,ANY,ANY}(x, i, j, drop = FALSE)
 }
 \arguments{
 \item{x}{\code{\link{SurvMatrix}} object or \link{resample} result from which

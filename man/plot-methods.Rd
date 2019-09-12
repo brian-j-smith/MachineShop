@@ -2,30 +2,18 @@
 % Please edit documentation in R/plots.R
 \name{plot}
 \alias{plot}
-\alias{plot.Performance}
-\alias{plot.Resamples}
-\alias{plot.MLModelTune}
 \alias{plot.Calibration}
 \alias{plot.Confusion}
 \alias{plot.ConfusionMatrix}
 \alias{plot.Curves}
 \alias{plot.Lift}
+\alias{plot.MLModelTune}
 \alias{plot.PartialDependence}
+\alias{plot.Performance}
+\alias{plot.Resamples}
 \alias{plot.VarImp}
 \title{Model Performance Plots}
 \usage{
-\method{plot}{Performance}(x, metrics = NULL,
-  stat = MachineShop::settings("stat.Resamples"), type = c("boxplot",
-  "density", "errorbar", "violin"), ...)
-
-\method{plot}{Resamples}(x, metrics = NULL,
-  stat = MachineShop::settings("stat.Resamples"), type = c("boxplot",
-  "density", "errorbar", "violin"), ...)
-
-\method{plot}{MLModelTune}(x, metrics = NULL,
-  stat = MachineShop::settings("stat.ModelTune"), type = c("boxplot",
-  "density", "errorbar", "line", "violin"), ...)
-
 \method{plot}{Calibration}(x, type = c("line", "point"), se = FALSE,
   ...)
 
@@ -39,18 +27,36 @@
 \method{plot}{Lift}(x, find = NULL, diagonal = TRUE,
   stat = MachineShop::settings("stat.Curves"), ...)
 
+\method{plot}{MLModelTune}(x, metrics = NULL,
+  stat = MachineShop::settings("stat.ModelTune"), type = c("boxplot",
+  "density", "errorbar", "line", "violin"), ...)
+
 \method{plot}{PartialDependence}(x, stats = NULL, ...)
+
+\method{plot}{Performance}(x, metrics = NULL,
+  stat = MachineShop::settings("stat.Resamples"), type = c("boxplot",
+  "density", "errorbar", "violin"), ...)
+
+\method{plot}{Resamples}(x, metrics = NULL,
+  stat = MachineShop::settings("stat.Resamples"), type = c("boxplot",
+  "density", "errorbar", "violin"), ...)
 
 \method{plot}{VarImp}(x, n = NULL, ...)
 }
 \arguments{
-\item{x}{\link{calibration}, \link{confusion}, \link{lift},
+\item{x}{\link{calibration}, \link{confusion},
+\link[=performance_curve]{performance curve}, \link{lift},
 model \link{tune}, partial \link{dependence}, \link{performance},
-\link[=performance_curve]{performance curve}, \link{resample}, or
-\link[=varimp]{variable importance} result.}
+\link{resample}, or \link[=varimp]{variable importance} result.}
 
-\item{metrics}{vector of numeric indexes or character names of performance
-metrics to plot.}
+\item{type}{type of plot to construct.}
+
+\item{se}{logical indicating whether to include standard error bars.}
+
+\item{...}{arguments passed to other methods.}
+
+\item{diagonal}{logical indicating whether to include a diagonal reference
+line.}
 
 \item{stat}{function or character string naming a function to compute a
 summary statistic on resampled metrics for \code{MLModelTune} line plots and
@@ -58,17 +64,11 @@ summary statistic on resampled metrics for \code{MLModelTune} line plots and
 plots are of resampled metrics aggregated by the statistic if given or of
 resample-specific metrics if \code{NULL}.}
 
-\item{type}{type of plot to construct.}
-
-\item{...}{arguments passed to other methods.}
-
-\item{se}{logical indicating whether to include standard error bars.}
-
-\item{diagonal}{logical indicating whether to include a diagonal reference
-line.}
-
 \item{find}{numeric true positive rate at which to display reference lines
 identifying the corresponding rates of positive predictions.}
+
+\item{metrics}{vector of numeric indexes or character names of performance
+metrics to plot.}
 
 \item{stats}{vector of numeric indexes or character names of partial
 dependence summary statistics to plot.}

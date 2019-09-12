@@ -39,6 +39,19 @@
 #' cal <- calibration(res)
 #' plot(cal)
 #' 
+calibration <- function(x, y = NULL, breaks = 10, span = 0.75, dist = NULL,
+                        na.rm = TRUE, ...) {
+  if (na.rm) {
+    complete <- complete_subset(x = x, y = y)
+    x <- complete$x
+    y <- complete$y
+  }
+  .calibration(x, y, breaks = breaks, span = span, dist = dist)
+}
+
+
+#' @rdname calibration
+#' 
 Calibration <- function(...) {
   .Calibration(...)
 }
@@ -56,7 +69,7 @@ Calibration <- function(...) {
     if (!all(sapply(args, function(x) identical(x@smoothed, smoothed)))) {
       stop("Calibration arguments are a mix of smoothed and binned curves")
     }
-
+    
   } else if (length(args) > 1) {
     
     stop("arguments to combine must be Calibration objects")
@@ -66,10 +79,10 @@ Calibration <- function(...) {
     stop("Calibration argument must inherit from data.frame")
     
   } else {
-
+    
     if (missing(.breaks)) stop("missing breaks in Calibration constructor")
     smoothed <- is.null(.breaks)
-
+    
     var_names <- c("Response", "Predicted", "Observed")
     is_missing <- !(var_names %in% names(.Data))
     if (any(is_missing)) {
@@ -77,22 +90,9 @@ Calibration <- function(...) {
     }
     
   }
-
+  
   args <- make_unique_levels(args, which = "Model")
   new("Calibration", do.call(append, args), smoothed = smoothed)
-}
-
-
-#' @rdname calibration
-#' 
-calibration <- function(x, y = NULL, breaks = 10, span = 0.75, dist = NULL,
-                        na.rm = TRUE, ...) {
-  if (na.rm) {
-    complete <- complete_subset(x = x, y = y)
-    x <- complete$x
-    y <- complete$y
-  }
-  .calibration(x, y, breaks = breaks, span = span, dist = dist)
 }
 
 

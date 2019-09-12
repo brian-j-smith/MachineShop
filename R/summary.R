@@ -5,9 +5,9 @@
 #' @name summary
 #' @rdname summary-methods
 #' 
-#' @param object \link{confusion}, \link{lift}, model \link{tune},
-#' \link{performance}, \link[=performance_curve]{performance curve}, or
-#' \link{resample} result.
+#' @param object \link{confusion}, \link[=performance_curve]{performance curve},
+#' \link{lift}, model \link{tune}, \link{performance}, or \link{resample}
+#' result.
 #' @param stat function or character string naming a function to compute a
 #' summary statistic at each cutoff value of resampled metrics in \code{Curves},
 #' or \code{NULL} for resample-specific metrics.
@@ -35,47 +35,6 @@
 #' summary(res)
 #' 
 NULL
-
-
-#' @rdname summary-methods
-#' 
-summary.Performance <- function(object, stats =
-                                  MachineShop::settings("stats.Resamples"),
-                                na.rm = TRUE, ...) {
-  stats <- list2function(stats)
-
-  f <- function(x) {
-    prop_na <- mean(is.na(x))
-    if (na.rm) x <- as.numeric(na.omit(x))
-    c(stats(x), "NA" = prop_na)
-  }
-  
-  margins <- 2
-  perm <- c(2, 1)
-  if (length(dim(object)) > 2) {
-    margins <- c(3, margins)
-    perm <- c(perm, 3)
-  }
-  aperm(apply(object, margins, f), perm = perm)
-}
-
-
-#' @rdname summary-methods
-#' 
-summary.Resamples <- function(object, stats =
-                                MachineShop::settings("stats.Resamples"),
-                              na.rm = TRUE, ...) {
-  summary(performance(object), stats = stats, na.rm = na.rm)
-}
-
-
-#' @rdname summary-methods
-#' 
-summary.MLModelTune <- function(object, stats =
-                                  MachineShop::settings("stats.Resamples"),
-                                na.rm = TRUE, ...) {
-  summary(object@performance, stats = stats, na.rm = na.rm, ...)
-}
 
 
 #' @rdname summary-methods
@@ -158,7 +117,47 @@ summary.Curves <- function(object, stat = MachineShop::settings("stat.Curves"),
 }
 
 
-
 summary.MLModelFit <- function(object, ...) {
   summary(unMLModelFit(object))
+}
+
+
+#' @rdname summary-methods
+#' 
+summary.MLModelTune <- function(object, stats =
+                                  MachineShop::settings("stats.Resamples"),
+                                na.rm = TRUE, ...) {
+  summary(object@performance, stats = stats, na.rm = na.rm, ...)
+}
+
+
+#' @rdname summary-methods
+#' 
+summary.Performance <- function(object, stats =
+                                  MachineShop::settings("stats.Resamples"),
+                                na.rm = TRUE, ...) {
+  stats <- list2function(stats)
+
+  f <- function(x) {
+    prop_na <- mean(is.na(x))
+    if (na.rm) x <- as.numeric(na.omit(x))
+    c(stats(x), "NA" = prop_na)
+  }
+  
+  margins <- 2
+  perm <- c(2, 1)
+  if (length(dim(object)) > 2) {
+    margins <- c(3, margins)
+    perm <- c(perm, 3)
+  }
+  aperm(apply(object, margins, f), perm = perm)
+}
+
+
+#' @rdname summary-methods
+#' 
+summary.Resamples <- function(object, stats =
+                                MachineShop::settings("stats.Resamples"),
+                              na.rm = TRUE, ...) {
+  summary(performance(object), stats = stats, na.rm = na.rm)
 }

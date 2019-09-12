@@ -1,8 +1,3 @@
-PerformanceDiff <- function(object, model_names) {
-  new("PerformanceDiff", object, model_names = model_names)
-}
-
-
 #' Model Performance Differences
 #' 
 #' Pairwise model differences in resampled performance metrics.
@@ -40,6 +35,13 @@ NULL
 
 #' @rdname diff-methods
 #' 
+diff.MLModelTune <- function(x, ...) {
+  diff(x@performance)
+}
+
+
+#' @rdname diff-methods
+#' 
 diff.Performance <- function(x, ...) {
   if (length(dim(x)) <= 2) stop("more than one model needed to diff")
   indices <- combn(dim(x)[3], 2)
@@ -60,10 +62,8 @@ diff.Resamples <- function(x, ...) {
 }
 
 
-#' @rdname diff-methods
-#' 
-diff.MLModelTune <- function(x, ...) {
-  diff(x@performance)
+PerformanceDiff <- function(object, model_names) {
+  new("PerformanceDiff", object, model_names = model_names)
 }
 
 

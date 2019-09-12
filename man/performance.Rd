@@ -2,18 +2,16 @@
 % Please edit documentation in R/performance.R
 \name{performance}
 \alias{performance}
-\alias{performance.Resamples}
 \alias{performance.factor}
 \alias{performance.matrix}
 \alias{performance.numeric}
 \alias{performance.Surv}
 \alias{performance.Confusion}
 \alias{performance.ConfusionMatrix}
+\alias{performance.Resamples}
 \title{Model Performance Metrics}
 \usage{
 performance(x, ...)
-
-\method{performance}{Resamples}(x, ...)
 
 \method{performance}{factor}(x, y,
   metrics = MachineShop::settings("metrics.factor"), cutoff = 0.5,
@@ -34,6 +32,8 @@ performance(x, ...)
 
 \method{performance}{ConfusionMatrix}(x,
   metrics = MachineShop::settings("metrics.ConfusionMatrix"), ...)
+
+\method{performance}{Resamples}(x, ...)
 }
 \arguments{
 \item{x}{\link[=response]{observed responses}; or \link{confusion} or
