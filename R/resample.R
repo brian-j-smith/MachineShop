@@ -271,7 +271,6 @@ setMethod(".resample", c("MLCVControl", "ModelRecipe"),
                        repeats = object@repeats,
                        strata = strata)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
-    fo <- formula(terms(x))
     foreach(i = seq(splits),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
       MachineShop::settings(presets)
