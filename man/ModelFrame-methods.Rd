@@ -42,8 +42,8 @@ model fitting.
 \examples{
 mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
                  data = esoph, weights = with(esoph, ncases + ncontrols))
-gbmfit <- fit(mf, model = GBMModel)
-varimp(gbmfit)
+gbm_fit <- fit(mf, model = GBMModel)
+varimp(gbm_fit)
 
 }
 \seealso{

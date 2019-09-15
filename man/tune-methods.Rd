@@ -78,26 +78,26 @@ values or selection from a set of candidate models.
 fo <- sale_amount ~ .
 
 # User-specified grid
-(gbmtune1 <- tune(fo, data = ICHomes, model = GBMModel,
-                  grid = expand.grid(n.trees = c(25, 50, 100),
-                                     interaction.depth = 1:3,
-                                     n.minobsinnode = c(5, 10)),
-                  control = CVControl(folds = 10, repeats = 5)))
+(gbm_tune1 <- tune(fo, data = ICHomes, model = GBMModel,
+                   grid = expand.grid(n.trees = c(25, 50, 100),
+                                      interaction.depth = 1:3,
+                                      n.minobsinnode = c(5, 10)),
+                   control = CVControl(folds = 10, repeats = 5)))
 
 # Automatically generated grid
-(gbmtune2 <- tune(fo, data = ICHomes, model = GBMModel, grid = 3,
-                  control = CVControl(folds = 10, repeats = 5)))
+(gbm_tune2 <- tune(fo, data = ICHomes, model = GBMModel, grid = 3,
+                   control = CVControl(folds = 10, repeats = 5)))
 
 # Randomly sampled grid points
-(gbmtune3 <- tune(fo, data = ICHomes, model = GBMModel,
-                  grid = Grid(length = 1000, random = 10),
-                  control = CVControl(folds = 10, repeats = 5)))
+(gbm_tune3 <- tune(fo, data = ICHomes, model = GBMModel,
+                   grid = Grid(length = 1000, random = 10),
+                   control = CVControl(folds = 10, repeats = 5)))
 
-summary(gbmtune1)
-plot(gbmtune1, type = "line")
+summary(gbm_tune1)
+plot(gbm_tune1, type = "line")
 
-gbmfit <- fit(fo, data = ICHomes, model = gbmtune1)
-varimp(gbmfit)
+gbm_fit <- fit(fo, data = ICHomes, model = gbm_tune1)
+varimp(gbm_fit)
 }
 
 }

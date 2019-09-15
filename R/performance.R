@@ -32,10 +32,10 @@
 #' library(MASS)
 #' 
 #' fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
-#' gbmfit <- fit(fo, data = Melanoma, model = GBMModel)
+#' gbm_fit <- fit(fo, data = Melanoma, model = GBMModel)
 #' 
-#' obs <- response(gbmfit, newdata = Melanoma)
-#' pred <- predict(gbmfit, newdata = Melanoma, type = "prob")
+#' obs <- response(gbm_fit, newdata = Melanoma)
+#' pred <- predict(gbm_fit, newdata = Melanoma, type = "prob")
 #' performance(obs, pred)
 #' 
 performance <- function(x, ...) {

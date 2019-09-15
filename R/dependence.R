@@ -29,8 +29,8 @@ PartialDependence <- function(object) {
 #' @seealso \code{\link{plot}}
 #' 
 #' @examples
-#' gbmfit <- fit(Species ~ ., data = iris, model = GBMModel)
-#' (pd <- dependence(gbmfit, select = c(Petal.Length, Petal.Width)))
+#' gbm_fit <- fit(Species ~ ., data = iris, model = GBMModel)
+#' (pd <- dependence(gbm_fit, select = c(Petal.Length, Petal.Width)))
 #' plot(pd)
 #' 
 dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,

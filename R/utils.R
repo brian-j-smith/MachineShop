@@ -23,8 +23,8 @@ utils::globalVariables(c("i", "x", "y"))
 #' 
 #' @examples
 #' ## Stepwise variable selection with BIC
-#' glmfit <- fit(sale_amount ~ ., ICHomes, GLMStepAICModel(k = .(log(nobs))))
-#' varimp(glmfit)
+#' glm_fit <- fit(sale_amount ~ ., ICHomes, GLMStepAICModel(k = .(log(nobs))))
+#' varimp(glm_fit)
 #' 
 . <- function(expr) {
   eval(substitute(quote(expr)))

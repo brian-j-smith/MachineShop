@@ -64,8 +64,8 @@ below.
 }
 \examples{
 \donttest{
-modelfit <- fit(sale_amount ~ ., data = ICHomes, model = BARTMachineModel)
-varimp(modelfit, metric = "splits", num_replicates = 20, scale = FALSE)
+model_fit <- fit(sale_amount ~ ., data = ICHomes, model = BARTMachineModel)
+varimp(model_fit, metric = "splits", num_replicates = 20, scale = FALSE)
 }
 
 }

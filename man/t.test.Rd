@@ -30,12 +30,12 @@ models.
 fo <- sale_amount ~ .
 control <- CVControl()
 
-gbmres1 <- resample(fo, ICHomes, GBMModel(n.trees = 25), control)
-gbmres2 <- resample(fo, ICHomes, GBMModel(n.trees = 50), control)
-gbmres3 <- resample(fo, ICHomes, GBMModel(n.trees = 100), control)
+gbm_res1 <- resample(fo, ICHomes, GBMModel(n.trees = 25), control)
+gbm_res2 <- resample(fo, ICHomes, GBMModel(n.trees = 50), control)
+gbm_res3 <- resample(fo, ICHomes, GBMModel(n.trees = 100), control)
 
-res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
-perfdiff <- diff(res)
-t.test(perfdiff)
+res <- Resamples(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
+res_diff <- diff(res)
+t.test(res_diff)
 
 }

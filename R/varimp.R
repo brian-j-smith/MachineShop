@@ -50,9 +50,9 @@ VarImp.numeric <- function(object, ...) {
 #' library(survival)
 #' library(MASS)
 #' 
-#' gbmfit <- fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-#'               data = Melanoma, model = GBMModel)
-#' (vi <- varimp(gbmfit))
+#' gbm_fit <- fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+#'                data = Melanoma, model = GBMModel)
+#' (vi <- varimp(gbm_fit))
 #' plot(vi)
 #'
 varimp <- function(object, scale = TRUE, ...) {

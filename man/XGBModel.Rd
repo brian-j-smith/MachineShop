@@ -94,8 +94,8 @@ the trees.  Variable importance is automatically scaled to range from 0 to
 example below.
 }
 \examples{
-modelfit <- fit(Species ~ ., data = iris, model = XGBTreeModel)
-varimp(modelfit, metric = "Frequency", scale = FALSE)
+model_fit <- fit(Species ~ ., data = iris, model = XGBTreeModel)
+varimp(model_fit, metric = "Frequency", scale = FALSE)
 
 }
 \seealso{

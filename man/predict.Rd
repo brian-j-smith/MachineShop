@@ -47,9 +47,9 @@ Predict outcomes with a fitted model.
 library(survival)
 library(MASS)
 
-gbmfit <- fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-              data = Melanoma, model = GBMModel)
-predict(gbmfit, newdata = Melanoma, times = 365 * c(2, 5, 10), type = "prob")
+gbm_fit <- fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+               data = Melanoma, model = GBMModel)
+predict(gbm_fit, newdata = Melanoma, times = 365 * c(2, 5, 10), type = "prob")
 
 }
 \seealso{

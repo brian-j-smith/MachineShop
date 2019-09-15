@@ -52,9 +52,9 @@ Variables in a \code{recipe} may be used as case weights by defining a
 library(survival)
 library(MASS)
 
-gbmfit <- fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-              data = Melanoma, model = GBMModel)
-varimp(gbmfit)
+gbm_fit <- fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+               data = Melanoma, model = GBMModel)
+varimp(gbm_fit)
 
 }
 \seealso{

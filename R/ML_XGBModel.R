@@ -56,8 +56,8 @@
 #' \code{\link{resample}}, \code{\link{tune}}
 #'
 #' @examples
-#' modelfit <- fit(Species ~ ., data = iris, model = XGBTreeModel)
-#' varimp(modelfit, metric = "Frequency", scale = FALSE)
+#' model_fit <- fit(Species ~ ., data = iris, model = XGBTreeModel)
+#' varimp(model_fit, metric = "Frequency", scale = FALSE)
 #' 
 XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
                      print_every_n = 1) {

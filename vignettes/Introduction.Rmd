@@ -953,15 +953,15 @@ Pairwise model differences for each metric can be calculated with the `diff` fun
 
 ```{r using_resample_diff}
 ## Pairwise model comparisons
-(perfdiff <- diff(res))
+(res_diff <- diff(res))
 
-summary(perfdiff)
+summary(res_diff)
 
-plot(perfdiff)
+plot(res_diff)
 ```
 
 ```{r using_resample_diff_test}
-t.test(perfdiff)
+t.test(res_diff)
 ```
 
 

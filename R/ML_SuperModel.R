@@ -30,8 +30,8 @@
 #' 
 #' @examples
 #' model <- SuperModel(GBMModel, SVMRadialModel, GLMNetModel(lambda = 0.01))
-#' modelfit <- fit(sale_amount ~ ., data = ICHomes, model = model)
-#' predict(modelfit, newdata = ICHomes)
+#' model_fit <- fit(sale_amount ~ ., data = ICHomes, model = model)
+#' predict(model_fit, newdata = ICHomes)
 #' 
 SuperModel <- function(..., model = GBMModel,
                        control = MachineShop::settings("control"),

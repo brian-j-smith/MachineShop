@@ -47,8 +47,8 @@
 #' 
 #' @examples
 #' \donttest{
-#' modelfit <- fit(sale_amount ~ ., data = ICHomes, model = BARTMachineModel)
-#' varimp(modelfit, metric = "splits", num_replicates = 20, scale = FALSE)
+#' model_fit <- fit(sale_amount ~ ., data = ICHomes, model = BARTMachineModel)
+#' varimp(model_fit, metric = "splits", num_replicates = 20, scale = FALSE)
 #' }
 #'
 BARTMachineModel <- function(num_trees = 50, num_burn = 250, num_iter = 1000,
