@@ -2,6 +2,12 @@
 
 ## Version Updates
 
+## 1.5.1
+* Implement global settings for default resampling control, performance metrics, summary statistics, and tuning grid.
+* Support vector arguments in `metricinfo()` and `modelinfo()`.
+* Update package documentation.
+
+
 ## 1.5.0
 * Implement model: `SelectedModel`.
 * Remove `maximize` argument from `tune()` and `TunedModel`.
@@ -10,7 +16,7 @@
 
 ## 1.4.2
 * Revert renaming of `expand.model()`.
-* Exclue 0 distance from `KNNModel` tuning grid.
+* Exclude 0 distance from `KNNModel` tuning grid.
 * Improve random tuning grid coverage.
 
 
