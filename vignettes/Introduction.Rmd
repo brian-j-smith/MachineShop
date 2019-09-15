@@ -797,7 +797,7 @@ BootOptimismControl
   : Optimism-corrected bootstrap resampling [@efron:1983:LLB; @harrell:1996:MPM].
 
 CVControl
-  : Repeated K-fold cross-validation [@kohavi:1995:SCB].  The full data set is repeatedly partitioned into K-folds.  For a given partitioning, prediction is performed on each of the K folds with models fit on all remaining folds.
+  : Repeated K-fold cross-validation [@kohavi:1995:SCB].  The full data set is repeatedly partitioned into K-folds.  For a given partitioning, prediction is performed on each of the K folds with models fit on all remaining folds.  10-fold cross-validation is the package default.
 
 OOBControl
   : Out-of-bootstrap resampling.  Models are fit with bootstrap resampled training sets and used to predict the unsampled cases.
@@ -953,15 +953,15 @@ Pairwise model differences for each metric can be calculated with the `diff` fun
 
 ```{r using_resample_diff}
 ## Pairwise model comparisons
-(perfdiff <- diff(res))
+(res_diff <- diff(res))
 
-summary(perfdiff)
+summary(res_diff)
 
-plot(perfdiff)
+plot(res_diff)
 ```
 
 ```{r using_resample_diff_test}
-t.test(perfdiff)
+t.test(res_diff)
 ```
 
 
@@ -1243,6 +1243,72 @@ supermodel <- SuperModel(GLMBoostModel, CForestModel, CoxModel,
                          model = GBMModel)
 res_super <- resample(surv_fo, data = surv_train, model = supermodel)
 summary(res_super)
+```
+
+
+# Global Settings
+
+Core default behaviors of functions in the package can be viewed or changed globally through the `settings` function.  The function accepts one or more character names of settings to view, `name = value` pairs giving the values of settings to change, or a vector of these, with available settings summarized below.
+
+`control`
+  : function, function name, or call defining a default resampling method [default: ``"CVControl"``].
+
+`dist.Surv`
+  : character string specifying distributional approximations to estimated survival curves for predicting survival means.  Choices are `"empirical"` for the Kaplan-Meier estimator, `"exponential"`, or `"weibull"` (default).
+
+`dist.SurvProbs`
+  : character string specifying distributional approximations to estimated survival curves for predicting survival events/probabilities.  Choices are `"empirical"` (default) for the Kaplan-Meier estimator, `"exponential"`, or `"weibull"`.
+
+`grid`
+  : number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a `Grid` function, function name, or call [default: 3].
+
+`method.EmpiricalSurv`
+  : character string specifying the empirical method of estimating baseline survival curves for Cox proportional hazards-based models.  Choices are `"breslow"`, `"efron"` (default), or `"fleming-harrington"`.
+
+`metrics.ConfusionMatrix`
+  : function, function name, or vector of these with which to calculate performance metrics for confusion matrices [default: ``c(Accuracy = "accuracy", Kappa = "kappa2", `Weighted Kappa` = "weighted_kappa2", Sensitivity = "sensitivity", Specificity = "specificity")``].
+
+`metrics.factor`
+  : function, function name, or vector of these with which to calculate performance metrics for factor responses [default: ``c(Brier = "brier", Accuracy = "accuracy", Kappa = "kappa2", `Weighted Kappa` = "weighted_kappa2", `ROC AUC` = "roc_auc", Sensitivity = "sensitivity", Specificity = "specificity")``].
+
+`metrics.matrix`
+  : function, function name, or vector of these with which to calculate performance metrics for matrix responses [default: ``c(RMSE = "rmse", R2 = "r2", MAE = "mae")``].
+
+`metrics.numeric`
+  : function, function name, or vector of these with which to calculate performance metrics for numeric responses [default: ``c(RMSE = "rmse", R2 = "r2", MAE = "mae")``].
+
+`metrics.Surv`
+  : function, function name, or vector of these with which to calculate performance metrics for survival responses [default: ``c(`C-Index` = "cindex", Brier = "brier", `ROC AUC` = "roc_auc", Accuracy = "accuracy")``].
+
+`stat.Curves`
+  : function or character string naming a function to compute one summary statistic at each cutoff value of resampled metrics in performance curves, or `NULL` for resample-specific metrics [default: ``"base::mean"``].
+
+`stat.ModelTune`
+  : function or character string naming a function to compute one summary statistic on resampled performance metrics for model tuning and selection [default: ``"base::mean"``].
+
+`stat.Resamples`
+  : function or character string naming a function to compute one summary statistic to control the ordering of models in plots [default: ``"base::mean"``].
+
+`stats.PartialDependence`
+  : function, function name, or vector of these with which to compute partial dependence summary statistics [default: ``c(Mean = "base::mean")``].
+
+`stats.Resamples`
+  : function, function name, or vector of these with which to compute summary statistics on resampled performance metrics [default: ``c(Mean = "base::mean", Median = "stats::median", SD = "stats::sd", Min = "base::min", Max = "base::max")``].
+
+A call to `settings` with no arguments will display the current values of all.  Settings may also be supplied as a single unnamed argument which is a named list.  Partial matching of setting names is supported.  The setting value is returned if only one is specified to view.  Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes.  Such a list can be passed as an argument to `settings` to restore their values.
+
+```{r using_settings}
+## Change settings
+presets <- settings(control = "BootControl", grid = 10)
+
+## View one setting
+settings("control")
+
+## View multiple settings
+settings("control", "grid")
+
+## Restore the previous settings
+settings(presets)
 ```
 
 

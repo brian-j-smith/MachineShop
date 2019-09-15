@@ -23,8 +23,8 @@ utils::globalVariables(c("i", "x", "y"))
 #' 
 #' @examples
 #' ## Stepwise variable selection with BIC
-#' glmfit <- fit(sale_amount ~ ., ICHomes, GLMStepAICModel(k = .(log(nobs))))
-#' varimp(glmfit)
+#' glm_fit <- fit(sale_amount ~ ., ICHomes, GLMStepAICModel(k = .(log(nobs))))
+#' varimp(glm_fit)
 #' 
 . <- function(expr) {
   eval(substitute(quote(expr)))
@@ -52,6 +52,23 @@ complete_subset <- function(...) {
 }
 
 
+fget <- function(x) {
+  if (is.character(x)) {
+    x_expr <- str2lang(x)
+    x_name <- x
+    x <- if (is.symbol(x_expr)) {
+      get0(x_name, mode = "function")
+    } else if (is.call(x_expr) && x_expr[[1]] == "::") {
+      get0(as.character(x_expr[[3]]),
+           envir = asNamespace(x_expr[[2]]),
+           mode = "function")
+    }
+    if (is.null(x)) stop("function '", x_name, "' not found")
+  }
+  if (!is.function(x)) stop("invalid function") else x
+}
+
+
 field <- function(object, name) {
   if (isS4(object)) slot(object, name) else object[[name]]
 }
@@ -73,11 +90,11 @@ findMethod <- function(generic, object) {
 }
 
 
-getMLObject <- function(x, class = c("MLControl", "MLModel")) {
+getMLObject <- function(x, class = c("MLControl", "MLMetric", "MLModel")) {
   class <- match.arg(class)
   
-  if (is.character(x)) x <- get(x)
-  if (is.function(x)) x <- x()
+  if (is.character(x)) x <- fget(x)
+  if (is.function(x) && class %in% c("MLControl", "MLModel")) x <- x()
   if (!is(x, class)) stop("object not of class ", class)
   
   if (class == "MLModel") {
@@ -100,7 +117,7 @@ is_response <- function(object, class2) {
 
 list2function <- function(x) {
   error_msg <- paste0("'", deparse(substitute(x)), "' must be a function, ",
-                      "one or more function names, or a list of functions")
+                      "function name, or vector of these")
   if (is(x, "MLMetric")) x <- list(x)
   if (is(x, "vector")) {
     x <- as.list(x)
@@ -108,7 +125,7 @@ list2function <- function(x) {
     for (i in seq(x)) {
       if (is(x[[i]], "character")) {
         metric_name <- x[[i]]
-        x[[i]] <- get(metric_name, mode = "function")
+        x[[i]] <- fget(metric_name)
       } else if (is(x[[i]], "MLMetric")) {
         metric_name <- x[[i]]@name
       } else if (is(x[[i]], "function")) {
@@ -326,11 +343,22 @@ switch_class <- function(EXPR, ...) {
 }
 
 
-warn <- function(...) {
-  warning(..., call. = FALSE)
+#################### Exception Handling ####################
+
+
+DomainError <- function(value, ...) {
+  errorCondition(message = paste0(...),
+                 call = sys.call(-1),
+                 value = value,
+                 class = "DomainError")
 }
 
 
 depwarn <- function(old, new, expired = FALSE) {
   ifelse(expired, stop, warning)(old, ";\n", new, call. = FALSE)
+}
+
+
+warn <- function(...) {
+  warning(..., call. = FALSE)
 }

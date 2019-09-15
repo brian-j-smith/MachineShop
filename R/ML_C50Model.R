@@ -49,8 +49,8 @@
 #' \code{\link{tune}}
 #' 
 #' @examples
-#' modelfit <- fit(Species ~ ., data = iris, model = C50Model())
-#' varimp(modelfit, metric = "splits", scale = FALSE)
+#' model_fit <- fit(Species ~ ., data = iris, model = C50Model)
+#' varimp(model_fit, metric = "splits", scale = FALSE)
 #'
 C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
                      winnow = FALSE, noGlobalPruning = FALSE, CF = 0.25,

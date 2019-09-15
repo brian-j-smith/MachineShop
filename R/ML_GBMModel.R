@@ -33,7 +33,7 @@
 #' \code{\link{tune}}
 #' 
 #' @examples
-#' fit(Species ~ ., data = iris, model = GBMModel())
+#' fit(Species ~ ., data = iris, model = GBMModel)
 #'
 GBMModel <- function(distribution = NULL, n.trees = 100,
                      interaction.depth = 1, n.minobsinnode = 10,

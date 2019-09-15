@@ -39,7 +39,7 @@
 #' @examples
 #' library(MASS)
 #' 
-#' fit(type ~ ., data = Pima.tr, model = GAMBoostModel())
+#' fit(type ~ ., data = Pima.tr, model = GAMBoostModel)
 #'
 GAMBoostModel <- function(family = NULL,
                           baselearner = c("bbs", "bols", "btree", "bss", "bns"),

@@ -10,10 +10,10 @@
   method = NULL, ...)
 }
 \arguments{
-\item{object}{\code{MLModelFit} object from a model fit.}
+\item{object}{model \link{fit} result.}
 
-\item{newdata}{optional \code{data.frame} with which to obtain predictions.
-If not specified, the training data will be used by default.}
+\item{newdata}{optional \link[=data.frame]{data frame} with which to obtain
+predictions.  If not specified, the training data will be used by default.}
 
 \item{times}{numeric vector of follow-up times at which to predict
 survival events/probabilities or \code{NULL} for predicted survival means.}
@@ -21,9 +21,10 @@ survival events/probabilities or \code{NULL} for predicted survival means.}
 \item{type}{specifies prediction on the original outcome scale
 (\code{"response"}) or on a probability distribution scale (\code{"prob"}).}
 
-\item{cutoff}{threshold above which binary factor probabilities are
-classified as events, below which survival probabilities are classified, and
-at which expected values are rounded for integer outcomes.}
+\item{cutoff}{numeric (0, 1) threshold above which binary factor
+probabilities are classified as events, below which survival probabilities
+are classified, and at which expected values are rounded for integer
+outcomes.}
 
 \item{dist}{character string specifying distributional approximations to
 estimated survival curves.  Possible values are \code{"empirical"},
@@ -46,12 +47,12 @@ Predict outcomes with a fitted model.
 library(survival)
 library(MASS)
 
-gbmfit <- fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-              data = Melanoma, model = GBMModel)
-predict(gbmfit, newdata = Melanoma, times = 365 * c(2, 5, 10), type = "prob")
+gbm_fit <- fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
+               data = Melanoma, model = GBMModel)
+predict(gbm_fit, newdata = Melanoma, times = 365 * c(2, 5, 10), type = "prob")
 
 }
 \seealso{
-\code{\link{fit}}, \code{\link{confusion}},
-\code{\link{performance}}
+\code{\link{confusion}}, \code{\link{performance}},
+\code{\link{metrics}}
 }

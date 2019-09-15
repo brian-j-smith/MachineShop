@@ -2,59 +2,55 @@
 % Please edit documentation in R/performance.R
 \name{performance}
 \alias{performance}
-\alias{performance.Resamples}
 \alias{performance.factor}
 \alias{performance.matrix}
 \alias{performance.numeric}
 \alias{performance.Surv}
 \alias{performance.Confusion}
 \alias{performance.ConfusionMatrix}
+\alias{performance.Resamples}
 \title{Model Performance Metrics}
 \usage{
 performance(x, ...)
 
-\method{performance}{Resamples}(x, ...)
+\method{performance}{factor}(x, y,
+  metrics = MachineShop::settings("metrics.factor"), cutoff = 0.5,
+  na.rm = TRUE, ...)
 
-\method{performance}{factor}(x, y, metrics = c(Brier =
-  MachineShop::brier, Accuracy = MachineShop::accuracy, Kappa =
-  MachineShop::kappa2, `Weighted Kappa` = MachineShop::weighted_kappa2,
-  ROCAUC = MachineShop::roc_auc, Sensitivity = MachineShop::sensitivity,
-  Specificity = MachineShop::specificity), cutoff = 0.5, na.rm = TRUE,
+\method{performance}{matrix}(x, y,
+  metrics = MachineShop::settings("metrics.matrix"), na.rm = TRUE, ...)
+
+\method{performance}{numeric}(x, y,
+  metrics = MachineShop::settings("metrics.numeric"), na.rm = TRUE,
   ...)
 
-\method{performance}{matrix}(x, y, metrics = c(RMSE = MachineShop::rmse,
-  R2 = MachineShop::r2, MAE = MachineShop::mae), na.rm = TRUE, ...)
-
-\method{performance}{numeric}(x, y, metrics = c(RMSE = MachineShop::rmse,
-  R2 = MachineShop::r2, MAE = MachineShop::mae), na.rm = TRUE, ...)
-
-\method{performance}{Surv}(x, y, metrics = c(CIndex =
-  MachineShop::cindex, Brier = MachineShop::brier, ROCAUC =
-  MachineShop::roc_auc, Accuracy = MachineShop::accuracy), cutoff = 0.5,
+\method{performance}{Surv}(x, y,
+  metrics = MachineShop::settings("metrics.Surv"), cutoff = 0.5,
   na.rm = TRUE, ...)
 
 \method{performance}{Confusion}(x, ...)
 
-\method{performance}{ConfusionMatrix}(x, metrics = c(Accuracy =
-  MachineShop::accuracy, Kappa = MachineShop::kappa2, `Weighted Kappa` =
-  MachineShop::weighted_kappa2, Sensitivity = MachineShop::sensitivity,
-  Specificity = MachineShop::specificity), ...)
+\method{performance}{ConfusionMatrix}(x,
+  metrics = MachineShop::settings("metrics.ConfusionMatrix"), ...)
+
+\method{performance}{Resamples}(x, ...)
 }
 \arguments{
-\item{x}{observed responses or class containing observed and predicted
-responses.}
+\item{x}{\link[=response]{observed responses}; or \link{confusion} or
+\link{resample} result containing observed and predicted responses.}
 
 \item{...}{arguments passed from the \code{Resamples} method to the response
 type-specific methods or from the method for \code{Confusion} to
 \code{ConfusionMatrix}.}
 
-\item{y}{predicted responses.}
+\item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
 
-\item{metrics}{function, one or more function names, or list of named
-functions to include in the calculation of performance metrics.}
+\item{metrics}{\link[=metrics]{metric} function, function name, or vector of
+these with which to calculate performance.}
 
-\item{cutoff}{threshold above which binary factor probabilities are
-classified as events and below which survival probabilities are classified.}
+\item{cutoff}{numeric (0, 1) threshold above which binary factor
+probabilities are classified as events and below which survival probabilities
+are classified.}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}
@@ -73,15 +69,13 @@ library(survival)
 library(MASS)
 
 fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
-gbmfit <- fit(fo, data = Melanoma, model = GBMModel)
+gbm_fit <- fit(fo, data = Melanoma, model = GBMModel)
 
-obs <- response(gbmfit, newdata = Melanoma)
-pred <- predict(gbmfit, newdata = Melanoma, type = "prob")
+obs <- response(gbm_fit, newdata = Melanoma)
+pred <- predict(gbm_fit, newdata = Melanoma, type = "prob")
 performance(obs, pred)
 
 }
 \seealso{
-\code{\link{response}}, \code{\link{predict}},
-\code{\link{resample}}, \code{\link{confusion}}, \code{\link{metrics}},
 \code{\link{plot}}, \code{\link{summary}}
 }

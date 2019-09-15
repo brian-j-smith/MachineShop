@@ -5,21 +5,21 @@
 \alias{Lift}
 \title{Model Lift}
 \usage{
-Lift(...)
-
 lift(x, y = NULL, na.rm = TRUE, ...)
+
+Lift(...)
 }
 \arguments{
-\item{...}{named or unnamed \code{lift} output to combine together with the
-\code{Lift} constructor.}
+\item{x}{\link[=response]{observed responses} or \link{resample} result
+containing observed and predicted responses.}
 
-\item{x}{observed responses or \code{Resamples} object of observed and
-predicted responses.}
-
-\item{y}{predicted responses.}
+\item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}
+
+\item{...}{named or unnamed \code{lift} output to combine together with the
+\code{Lift} constructor.}
 }
 \value{
 \code{Lift} class object that inherits from \code{Curves}.
@@ -36,6 +36,5 @@ plot(lf)
 
 }
 \seealso{
-\code{\link{response}}, \code{\link{predict}},
-\code{\link{resample}}, \code{\link{plot}}
+\code{\link{plot}}, \code{\link{summary}}
 }

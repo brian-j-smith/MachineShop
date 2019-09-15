@@ -42,7 +42,7 @@
 #' \code{\link{resample}}, \code{\link{tune}}
 #' 
 #' @examples
-#' fit(Species ~ ., data = iris, model = RangerModel())
+#' fit(Species ~ ., data = iris, model = RangerModel)
 #'
 RangerModel <- function(num.trees = 500, mtry = NULL,
                         importance = c("impurity", "impurity_corrected",

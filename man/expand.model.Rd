@@ -7,13 +7,13 @@
 expand.model(x, ...)
 }
 \arguments{
-\item{x}{\code{MLModel} function, function name, or object.}
+\item{x}{\link[=models]{model} function, function name, or call.}
 
-\item{...}{vectors, factors, or a list containing the parameter values.}
+\item{...}{vectors, factors, or list containing the parameter values over
+which to expand \code{x}.}
 }
 \value{
-A list of \code{MLModel} objects created from the parameter
-combinations.
+A list of model objects created from the parameter combinations.
 }
 \description{
 Expand a model over all combinations of a grid of tuning parameters.
@@ -25,5 +25,5 @@ expand.model(GBMModel, n.trees = c(25, 50, 100),
 
 }
 \seealso{
-\code{\link{models}}, \code{\link{tune}}
+\code{\link{tune}}
 }

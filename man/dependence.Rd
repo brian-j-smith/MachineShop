@@ -5,14 +5,14 @@
 \title{Partial Dependence}
 \usage{
 dependence(object, data = NULL, select = NULL, interaction = FALSE,
-  n = 10, intervals = c("uniform", "quantile"), stats = c(Mean =
-  base::mean))
+  n = 10, intervals = c("uniform", "quantile"),
+  stats = MachineShop::settings("stats.PartialDependence"))
 }
 \arguments{
-\item{object}{\code{MLModelFit} object.}
+\item{object}{model \link{fit} result.}
 
-\item{data}{\code{data.frame} containing all predictor variables.  If not
-specified, the training data will be used by default.}
+\item{data}{\link[=data.frame]{data frame} containing all predictor
+variables.  If not specified, the training data will be used by default.}
 
 \item{select}{expression indicating predictor variables for which to compute
 partial dependence (see \code{\link[base]{subset}} for syntax)
@@ -27,8 +27,8 @@ interacted predictors.}
 spaced uniformly (\code{"uniform"}) or according to variable quantiles
 (\code{"quantile"}).}
 
-\item{stats}{function, one or more function names, or list of named functions
-with which to aggregate the response variable over the non-selected predictor
+\item{stats}{function, function name, or vector of these with which to
+compute response variable summary statistics over non-selected predictor
 variables.}
 }
 \value{
@@ -39,11 +39,11 @@ variables.}
 Calculate partial dependence of a response on select predictor variables.
 }
 \examples{
-gbmfit <- fit(Species ~ ., data = iris, model = GBMModel)
-(pd <- dependence(gbmfit, select = c(Petal.Length, Petal.Width)))
+gbm_fit <- fit(Species ~ ., data = iris, model = GBMModel)
+(pd <- dependence(gbm_fit, select = c(Petal.Length, Petal.Width)))
 plot(pd)
 
 }
 \seealso{
-\code{\link{fit}}, \code{\link{plot}}
+\code{\link{plot}}
 }

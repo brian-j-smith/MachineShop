@@ -1,8 +1,3 @@
-PerformanceDiff <- function(object, model_names) {
-  new("PerformanceDiff", object, model_names = model_names)
-}
-
-
 #' Model Performance Differences
 #' 
 #' Pairwise model differences in resampled performance metrics.
@@ -10,15 +5,42 @@ PerformanceDiff <- function(object, model_names) {
 #' @name diff
 #' @rdname diff-methods
 #' 
-#' @param x object containing resampled metrics.
+#' @param x model \link{tune}, \link{performance}, or \link{resample} result. 
 #' @param ... arguments passed to other methods.
 #' 
 #' @return \code{PerformanceDiff} class object that inherits from
 #' \code{Performance}.
 #' 
-#' @seealso \code{\link{performance}}, \code{\link{resample}},
-#' \code{\link{tune}}, \code{\link{plot}}, \code{\link{summary}},
-#' \code{\link{t.test}}
+#' @seealso \code{\link{t.test}}, \code{\link{plot}}, \code{\link{summary}}
+#' 
+#' @examples
+#' ## Survival response example
+#' library(survival)
+#' library(MASS)
+#' 
+#' fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
+#' control <- CVControl()
+#' 
+#' gbm_res1 <- resample(fo, Melanoma, GBMModel(n.trees = 25), control)
+#' gbm_res2 <- resample(fo, Melanoma, GBMModel(n.trees = 50), control)
+#' gbm_res3 <- resample(fo, Melanoma, GBMModel(n.trees = 100), control)
+#' 
+#' res <- Resamples(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
+#' res_diff <- diff(res)
+#' summary(res_diff)
+#' plot(res_diff)
+#' 
+NULL
+
+
+#' @rdname diff-methods
+#' 
+diff.MLModelTune <- function(x, ...) {
+  diff(x@performance)
+}
+
+
+#' @rdname diff-methods
 #' 
 diff.Performance <- function(x, ...) {
   if (length(dim(x)) <= 2) stop("more than one model needed to diff")
@@ -35,32 +57,13 @@ diff.Performance <- function(x, ...) {
 
 #' @rdname diff-methods
 #' 
-#' @examples
-#' ## Survival response example
-#' library(survival)
-#' library(MASS)
-#' 
-#' fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
-#' control <- CVControl()
-#' 
-#' gbmres1 <- resample(fo, Melanoma, GBMModel(n.trees = 25), control)
-#' gbmres2 <- resample(fo, Melanoma, GBMModel(n.trees = 50), control)
-#' gbmres3 <- resample(fo, Melanoma, GBMModel(n.trees = 100), control)
-#' 
-#' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
-#' perfdiff <- diff(res)
-#' summary(perfdiff)
-#' plot(perfdiff)
-#' 
 diff.Resamples <- function(x, ...) {
   diff(performance(x))
 }
 
 
-#' @rdname diff-methods
-#' 
-diff.MLModelTune <- function(x, ...) {
-  diff(x@performance)
+PerformanceDiff <- function(object, model_names) {
+  new("PerformanceDiff", object, model_names = model_names)
 }
 
 
@@ -73,7 +76,7 @@ diff.MLModelTune <- function(x, ...) {
 #' 
 #' @method t.test PerformanceDiff
 #' 
-#' @param x object containing paired differences between resampled metrics.
+#' @param x performance \link[=diff]{difference} result.
 #' @param adjust p-value adjustment for multiple statistical comparisons as
 #' implemented by \code{\link[stats]{p.adjust}}.
 #' @param ... arguments passed to other methods.
@@ -83,20 +86,18 @@ diff.MLModelTune <- function(x, ...) {
 #' upper triangular portions, respectively, of the first two dimensions.  Model
 #' pairs are contined in the third dimension.
 #' 
-#' @seealso \code{\link{diff}}
-#' 
 #' @examples
 #' ## Numeric response example
 #' fo <- sale_amount ~ .
 #' control <- CVControl()
 #' 
-#' gbmres1 <- resample(fo, ICHomes, GBMModel(n.trees = 25), control)
-#' gbmres2 <- resample(fo, ICHomes, GBMModel(n.trees = 50), control)
-#' gbmres3 <- resample(fo, ICHomes, GBMModel(n.trees = 100), control)
+#' gbm_res1 <- resample(fo, ICHomes, GBMModel(n.trees = 25), control)
+#' gbm_res2 <- resample(fo, ICHomes, GBMModel(n.trees = 50), control)
+#' gbm_res3 <- resample(fo, ICHomes, GBMModel(n.trees = 100), control)
 #' 
-#' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
-#' perfdiff <- diff(res)
-#' t.test(perfdiff)
+#' res <- Resamples(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
+#' res_diff <- diff(res)
+#' t.test(res_diff)
 #' 
 t.test.PerformanceDiff <- function(x, adjust = "holm", ...)
 {

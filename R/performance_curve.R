@@ -6,79 +6,21 @@
 #' characteristic (ROC) and precision recall.
 #' 
 #' @name performance_curve
-#' @rdname performance_curve
 #' 
-#' @param ... named or unnamed \code{performance_curve} output to combine
-#' together with the \code{Curves} constructor.
-#' 
-Curves <- function(...) {
-  .Curves(...)
-}
-
-
-.Curves <- function(..., .metrics = list()) {
-  args <- list(...)
-  
-  if (length(args) == 0) stop("no performance_curve output given")
-  
-  .Data <- args[[1]]
-  if (all(mapply(is, args, "Curves"))) {
-    
-    metrics <- .Data@metrics
-    if (!all(sapply(args, function(x) identical(x@metrics, metrics)))) {
-      stop("Curves arguments have different metrics")
-    }
-
-  } else if (length(args) > 1) {
-    
-    stop("arguments to combine must be Curves objects")
-    
-  } else if (!is.data.frame(.Data)) {
-    
-    stop("Curves argument must inherit from data.frame")
-    
-  } else {
-    
-    if (!all(mapply(is, .metrics[1:2], "MLMetric"))) {
-      stop("missing performance metrics in Curves constructor")
-    }
-    metrics <- c(y = .metrics[[1]], x = .metrics[[2]])
-
-    var_names <- c("Cutoff", "x", "y")
-    is_missing <- !(var_names %in% names(.Data))
-    if (any(is_missing)) {
-      stop("missing performance curve variables: ",
-           toString(var_names[is_missing]))
-    }
-    
-    decreasing <- !xor(metrics$x@maximize, metrics$y@maximize)
-    sort_order <- order(.Data$x, .Data$y, decreasing = c(FALSE, decreasing),
-                        method = "radix")
-    args[[1]] <- .Data[sort_order, , drop = FALSE]
-
-  }
-
-  args <- make_unique_levels(args, which = "Model")
-  new("Curves", do.call(append, args), metrics = metrics)
-}
-
-
-#' @rdname performance_curve
-#' 
-#' @param x observed responses or \code{Resamples} object of observed and
-#' predicted responses.
-#' @param y predicted responses.
-#' @param metrics list of two performance metrics for the analysis [default: ROC
-#' metrics].  Precision recall curves can be obtained with 
+#' @param x \link[=response]{observed responses} or \link{resample} result
+#' containing observed and predicted responses.
+#' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
+#' @param metrics list of two performance \link{metrics} for the analysis
+#' [default: ROC metrics].  Precision recall curves can be obtained with 
 #' \code{c(precision, recall)}.
 #' @param na.rm logical indicating whether to remove observed or predicted
 #' responses that are \code{NA} when calculating metrics.
+#' @param ... named or unnamed \code{performance_curve} output to combine
+#' together with the \code{Curves} constructor.
 #' 
 #' @return \code{Curves} class object that inherits from \code{data.frame}.
 #'  
-#' @seealso \code{\link{response}}, \code{\link{predict}},
-#' \code{\link{resample}}, \code{\link{metrics}}, \code{\link{auc}},
-#' \code{\link{plot}}, \code{\link{summary}}
+#' @seealso \code{\link{auc}}, \code{\link{plot}}, \code{\link{summary}}
 #' 
 #' @examples
 #' library(MASS)
@@ -92,6 +34,20 @@ Curves <- function(...) {
 #' 
 performance_curve <- function(x, ...) {
   UseMethod("performance_curve")
+}
+
+
+#' @rdname performance_curve
+#' 
+performance_curve.default <- function(x, y, metrics = c(MachineShop::tpr,
+                                                        MachineShop::fpr),
+                                      na.rm = TRUE, ...) {
+  if (na.rm) {
+    complete <- complete_subset(x = x, y = y)
+    x <- complete$x
+    y <- complete$y
+  }
+  .curve(x, y, metrics = .get_curve_metrics(metrics))
 }
 
 
@@ -124,30 +80,66 @@ performance_curve.Resamples <- function(x, metrics = c(MachineShop::tpr,
 }
 
 
-#' @rdname performance_curve
-#' 
-performance_curve.default <- function(x, y, metrics = c(MachineShop::tpr,
-                                                        MachineShop::fpr),
-                                      na.rm = TRUE, ...) {
-  if (na.rm) {
-    complete <- complete_subset(x = x, y = y)
-    x <- complete$x
-    y <- complete$y
-  }
-  .curve(x, y, metrics = .get_curve_metrics(metrics))
-}
-
-
 .get_curve_metrics <- function(metrics) {
-  if (is.character(metrics)) {
-    metrics <- mget(metrics, mode = "function", inherits = TRUE)
-  }
-  
+  metrics <- lapply(metrics, fget)
   if (length(metrics) != 2 || !all(mapply(is, metrics, "MLMetric"))) {
     stop("'metrics' must be a list of two performance metrics")
   }
-  
   metrics
+}
+
+
+#' @rdname performance_curve
+#' 
+Curves <- function(...) {
+  .Curves(...)
+}
+
+
+.Curves <- function(..., .metrics = list()) {
+  args <- list(...)
+  
+  if (length(args) == 0) stop("no performance_curve output given")
+  
+  .Data <- args[[1]]
+  if (all(mapply(is, args, "Curves"))) {
+    
+    metrics <- .Data@metrics
+    if (!all(sapply(args, function(x) identical(x@metrics, metrics)))) {
+      stop("Curves arguments have different metrics")
+    }
+    
+  } else if (length(args) > 1) {
+    
+    stop("arguments to combine must be Curves objects")
+    
+  } else if (!is.data.frame(.Data)) {
+    
+    stop("Curves argument must inherit from data.frame")
+    
+  } else {
+    
+    if (!all(mapply(is, .metrics[1:2], "MLMetric"))) {
+      stop("missing performance metrics in Curves constructor")
+    }
+    metrics <- c(y = .metrics[[1]], x = .metrics[[2]])
+    
+    var_names <- c("Cutoff", "x", "y")
+    is_missing <- !(var_names %in% names(.Data))
+    if (any(is_missing)) {
+      stop("missing performance curve variables: ",
+           toString(var_names[is_missing]))
+    }
+    
+    decreasing <- !xor(metrics$x@maximize, metrics$y@maximize)
+    sort_order <- order(.Data$x, .Data$y, decreasing = c(FALSE, decreasing),
+                        method = "radix")
+    args[[1]] <- .Data[sort_order, , drop = FALSE]
+    
+  }
+  
+  args <- make_unique_levels(args, which = "Model")
+  new("Curves", do.call(append, args), metrics = metrics)
 }
 
 

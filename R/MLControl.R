@@ -1,25 +1,23 @@
 #' Resampling Controls
 #' 
-#' @description
-#' The base \code{MLControl} constructor initializes a set of control parameters
-#' that are common to all resampling methods.
-#' 
+#' @name MLControl
 #' @rdname MLControl
+#' @aliases controls
 #' 
+#' @param folds number of cross-validation folds (K).
+#' @param prop proportion of cases to include in the training set
+#' (\code{0 < prop < 1}).
+#' @param repeats number of repeats of the K-fold partitioning.
+#' @param samples number of bootstrap samples.
+#' @param seed integer to set the seed at the start of resampling.
 #' @param times,dist,method arguments passed to \code{\link{predict}}.
-#' @param seed integer to set the seed at the start of resampling.  This is set
-#' to a random integer by default (NULL).
 #' @param ...  arguments passed to \code{MLControl}.
 #' 
 #' @return \code{MLControl} class object.
 #' 
-#' @seealso \code{\link{resample}}
+#' @seealso \code{\link{resample}}, \code{\link{tune}}
 #' 
-MLControl <- function(times = NULL, dist = NULL, method = NULL, seed = NULL,
-                      ...) {
-  if (is.null(seed)) seed <- sample.int(.Machine$integer.max, 1)
-  new("MLControl", times = times, dist = dist, method = method, seed = seed)
-}
+NULL
 
 
 #' @description
@@ -28,8 +26,6 @@ MLControl <- function(times = NULL, dist = NULL, method = NULL, seed = NULL,
 #' used to predict the full data set (Efron and Tibshirani 1993).
 #' 
 #' @rdname MLControl
-#' 
-#' @param samples number of bootstrap samples.
 #' 
 #' @references
 #' Efron B and Tibshirani RJ (1993). An Introduction to the Bootstrap.
@@ -76,9 +72,6 @@ BootOptimismControl <- function(samples = 25, ...) {
 #' 
 #' @rdname MLControl
 #' 
-#' @param folds number of cross-validation folds (K).
-#' @param repeats number of repeats of the K-fold partitioning.
-#' 
 #' @references
 #' Kohavi R (1995). A Study of Cross-Validation and Bootstrap for Accuracy
 #' Estimation and Model Selection. In Proceedings of the 14th International
@@ -116,9 +109,6 @@ OOBControl <- function(samples = 25, ...) {
 #' 
 #' @rdname MLControl
 #' 
-#' @param prop proportion of cases to include in the training set
-#' (\code{0 < prop < 1}).
-#' 
 #' @references
 #' Hastie T, Tibshirani R, and Friedman J (2009). The Elements of Statistical
 #' Learning: Data Mining, Inference, and Prediction, Second Edition. Springer
@@ -149,4 +139,16 @@ SplitControl <- function(prop = 2/3, ...) {
 #' 
 TrainControl <- function(...) {
   new("MLTrainControl", MLControl(...))
+}
+
+
+#' @description
+#' The base \code{MLControl} constructor initializes a set of control parameters
+#' that are common to all resampling methods.
+#' 
+#' @rdname MLControl
+#' 
+MLControl <- function(times = NULL, dist = NULL, method = NULL,
+                      seed = sample(.Machine$integer.max, 1), ...) {
+  new("MLControl", times = times, dist = dist, method = method, seed = seed)
 }

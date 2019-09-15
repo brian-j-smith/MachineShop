@@ -31,7 +31,7 @@ df <- within(Boston,
              medv <- cut(medv,
                          breaks = c(0, 10, 15, 20, 25, 50),
                          ordered = TRUE))
-fit(medv ~ ., data = df, model = POLRModel())
+fit(medv ~ ., data = df, model = POLRModel)
 
 }
 \seealso{

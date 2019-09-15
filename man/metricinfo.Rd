@@ -7,9 +7,10 @@
 metricinfo(...)
 }
 \arguments{
-\item{...}{one or more metric functions; function names; observed response;
-observed and predicted responses; or \code{\link{ConfusionMatrix}},
-\code{\link{Confusion}}, or \code{\link{Resamples}} object.  If none are
+\item{...}{\link[=metrics]{metric} functions or function names;
+\link[=response]{observed responses}; \link[=response]{observed} and
+\link[=predict]{predicted} responses; \link{confusion} or \link{resample}
+results; or vector of these for which to display information.  If none are
 specified, information is returned on all available metrics by default.}
 }
 \value{
@@ -41,8 +42,4 @@ names(metricinfo(factor(0), numeric(0)))
 ## Metric-specific information
 metricinfo(auc)
 
-}
-\seealso{
-\code{\link{metrics}}, \code{\link{confusion}},
-\code{\link{resample}}
 }

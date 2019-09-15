@@ -2,27 +2,18 @@
 % Please edit documentation in R/plots.R
 \name{plot}
 \alias{plot}
-\alias{plot.Performance}
-\alias{plot.Resamples}
-\alias{plot.MLModelTune}
 \alias{plot.Calibration}
 \alias{plot.Confusion}
 \alias{plot.ConfusionMatrix}
 \alias{plot.Curves}
 \alias{plot.Lift}
+\alias{plot.MLModelTune}
 \alias{plot.PartialDependence}
+\alias{plot.Performance}
+\alias{plot.Resamples}
 \alias{plot.VarImp}
 \title{Model Performance Plots}
 \usage{
-\method{plot}{Performance}(x, metrics = NULL, stat = base::mean,
-  type = c("boxplot", "density", "errorbar", "violin"), ...)
-
-\method{plot}{Resamples}(x, metrics = NULL, stat = base::mean,
-  type = c("boxplot", "density", "errorbar", "violin"), ...)
-
-\method{plot}{MLModelTune}(x, metrics = NULL, stat = base::mean,
-  type = c("boxplot", "density", "errorbar", "line", "violin"), ...)
-
 \method{plot}{Calibration}(x, type = c("line", "point"), se = FALSE,
   ...)
 
@@ -31,38 +22,53 @@
 \method{plot}{ConfusionMatrix}(x, ...)
 
 \method{plot}{Curves}(x, type = c("tradeoffs", "cutoffs"),
-  diagonal = FALSE, stat = base::mean, ...)
+  diagonal = FALSE, stat = MachineShop::settings("stat.Curves"), ...)
 
 \method{plot}{Lift}(x, find = NULL, diagonal = TRUE,
-  stat = base::mean, ...)
+  stat = MachineShop::settings("stat.Curves"), ...)
+
+\method{plot}{MLModelTune}(x, metrics = NULL,
+  stat = MachineShop::settings("stat.ModelTune"), type = c("boxplot",
+  "density", "errorbar", "line", "violin"), ...)
 
 \method{plot}{PartialDependence}(x, stats = NULL, ...)
+
+\method{plot}{Performance}(x, metrics = NULL,
+  stat = MachineShop::settings("stat.Resamples"), type = c("boxplot",
+  "density", "errorbar", "violin"), ...)
+
+\method{plot}{Resamples}(x, metrics = NULL,
+  stat = MachineShop::settings("stat.Resamples"), type = c("boxplot",
+  "density", "errorbar", "violin"), ...)
 
 \method{plot}{VarImp}(x, n = NULL, ...)
 }
 \arguments{
-\item{x}{object to plot.}
-
-\item{metrics}{vector of numeric indexes or character names of performance
-metrics to plot.}
-
-\item{stat}{function to compute a summary statistic on resampled values for
-\code{MLModelTune} line plots and \code{Resamples} model sorting.  For
-\code{Curves} and \code{Lift} classes, plots are of resampled metrics
-aggregated by the statistic if given or of resample-specific metrics if
-\code{NULL}.}
+\item{x}{\link{calibration}, \link{confusion},
+\link[=performance_curve]{performance curve}, \link{lift},
+model \link{tune}, partial \link{dependence}, \link{performance},
+\link{resample}, or \link[=varimp]{variable importance} result.}
 
 \item{type}{type of plot to construct.}
 
-\item{...}{arguments passed to other methods.}
-
 \item{se}{logical indicating whether to include standard error bars.}
+
+\item{...}{arguments passed to other methods.}
 
 \item{diagonal}{logical indicating whether to include a diagonal reference
 line.}
 
+\item{stat}{function or character string naming a function to compute a
+summary statistic on resampled metrics for \code{MLModelTune} line plots and
+\code{Resamples} model ordering.  For \code{Curves} and \code{Lift} classes,
+plots are of resampled metrics aggregated by the statistic if given or of
+resample-specific metrics if \code{NULL}.}
+
 \item{find}{numeric true positive rate at which to display reference lines
 identifying the corresponding rates of positive predictions.}
+
+\item{metrics}{vector of numeric indexes or character names of performance
+metrics to plot.}
 
 \item{stats}{vector of numeric indexes or character names of partial
 dependence summary statistics to plot.}
@@ -79,21 +85,15 @@ Plot measures of model performance and predictor variable importance.
 fo <- Species ~ .
 control <- CVControl()
 
-gbmfit <- fit(fo, data = iris, model = GBMModel, control = control)
-plot(varimp(gbmfit))
+gbm_fit <- fit(fo, data = iris, model = GBMModel, control = control)
+plot(varimp(gbm_fit))
 
-gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
-gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
-gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
-plot(gbmres3)
+gbm_res1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+gbm_res2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+gbm_res3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+plot(gbm_res3)
 
-res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
+res <- Resamples(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 plot(res)
 
-}
-\seealso{
-\code{\link{performance}},  \code{\link{resample}},
-\code{\link{diff}}, \code{\link{tune}}, \code{\link{calibration}},
-\code{\link{confusion}}, \code{\link{lift}}, \code{\link{dependence}},
-\code{\link{varimp}}
 }

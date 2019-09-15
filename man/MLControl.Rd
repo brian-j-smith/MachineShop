@@ -2,6 +2,7 @@
 % Please edit documentation in R/MLControl.R
 \name{MLControl}
 \alias{MLControl}
+\alias{controls}
 \alias{BootControl}
 \alias{BootOptimismControl}
 \alias{CVControl}
@@ -10,9 +11,6 @@
 \alias{TrainControl}
 \title{Resampling Controls}
 \usage{
-MLControl(times = NULL, dist = NULL, method = NULL, seed = NULL,
-  ...)
-
 BootControl(samples = 25, ...)
 
 BootOptimismControl(samples = 25, ...)
@@ -24,16 +22,14 @@ OOBControl(samples = 25, ...)
 SplitControl(prop = 2/3, ...)
 
 TrainControl(...)
+
+MLControl(times = NULL, dist = NULL, method = NULL,
+  seed = sample(.Machine$integer.max, 1), ...)
 }
 \arguments{
-\item{times, dist, method}{arguments passed to \code{\link{predict}}.}
-
-\item{seed}{integer to set the seed at the start of resampling.  This is set
-to a random integer by default (NULL).}
+\item{samples}{number of bootstrap samples.}
 
 \item{...}{arguments passed to \code{MLControl}.}
-
-\item{samples}{number of bootstrap samples.}
 
 \item{folds}{number of cross-validation folds (K).}
 
@@ -41,14 +37,15 @@ to a random integer by default (NULL).}
 
 \item{prop}{proportion of cases to include in the training set
 (\code{0 < prop < 1}).}
+
+\item{times, dist, method}{arguments passed to \code{\link{predict}}.}
+
+\item{seed}{integer to set the seed at the start of resampling.}
 }
 \value{
 \code{MLControl} class object.
 }
 \description{
-The base \code{MLControl} constructor initializes a set of control parameters
-that are common to all resampling methods.
-
 \code{BootControl} constructs an \code{MLControl} object for simple bootstrap
 resampling in which models are fit with bootstrap resampled training sets and
 used to predict the full data set (Efron and Tibshirani 1993).
@@ -70,6 +67,9 @@ into a seperate trianing and test set (Hastie et al. 2009).
 
 \code{TrainControl} constructs an \code{MLControl} object for training and
 performance evaluation to be performed on the same training set (Efron 1986).
+
+The base \code{MLControl} constructor initializes a set of control parameters
+that are common to all resampling methods.
 }
 \examples{
 ## Bootstrapping with 100 samples
@@ -116,5 +116,5 @@ Efron B (1986). How biased is the apparent error rate of a prediction rule?
 Journal of the American Statistical Association, 81 (394): 461-70.
 }
 \seealso{
-\code{\link{resample}}
+\code{\link{resample}}, \code{\link{tune}}
 }

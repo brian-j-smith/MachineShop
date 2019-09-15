@@ -45,7 +45,7 @@
 #' \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
 #' 
 #' @examples
-#' fit(Species ~ ., data = iris, model = MDAModel())
+#' fit(Species ~ ., data = iris, model = MDAModel)
 #'
 MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
                      dimension = sum(subclasses) - 1, eps = .Machine$double.eps,

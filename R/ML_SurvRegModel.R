@@ -2,9 +2,11 @@
 #' 
 #' Fits the accelerated failure time family of parametric survival models.
 #' 
+#' @rdname SurvRegModel
+#' 
 #' @param dist assumed distribution for y variable.
 #' @param scale optional fixed value for the scale.
-#' @param parms a list of fixed parameters.
+#' @param parms list of fixed parameters.
 #' @param ... arguments passed to \code{\link[survival]{survreg.control}}.
 #' 
 #' @details
@@ -58,7 +60,6 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
 }
 
 
-#' @name SurvRegStepAICModel
 #' @rdname SurvRegModel
 #' 
 #' @param direction mode of stepwise search, can be one of \code{"both"}
@@ -82,7 +83,7 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
 #' library(MASS)
 #' 
 #' fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-#'     data = Melanoma, model = SurvRegModel())
+#'     data = Melanoma, model = SurvRegModel)
 #'
 SurvRegStepAICModel <- function(dist = c("weibull", "exponential", "gaussian",
                                          "logistic", "lognormal",

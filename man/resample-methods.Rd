@@ -2,43 +2,47 @@
 % Please edit documentation in R/resample.R
 \name{resample}
 \alias{resample}
-\alias{Resamples}
 \alias{resample.formula}
 \alias{resample.matrix}
 \alias{resample.ModelFrame}
 \alias{resample.recipe}
+\alias{Resamples}
 \title{Resample Estimation of Model Performance}
 \usage{
-Resamples(...)
-
 resample(x, ...)
 
-\method{resample}{formula}(x, data, model, control = CVControl, ...)
+\method{resample}{formula}(x, data, model,
+  control = MachineShop::settings("control"), ...)
 
-\method{resample}{matrix}(x, y, model, control = CVControl, ...)
+\method{resample}{matrix}(x, y, model,
+  control = MachineShop::settings("control"), ...)
 
-\method{resample}{ModelFrame}(x, model, control = CVControl, ...)
+\method{resample}{ModelFrame}(x, model,
+  control = MachineShop::settings("control"), ...)
 
-\method{resample}{recipe}(x, model, control = CVControl, ...)
+\method{resample}{recipe}(x, model,
+  control = MachineShop::settings("control"), ...)
+
+Resamples(...)
 }
 \arguments{
+\item{x}{defines a relationship between model predictor and response
+variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
+predictors, \code{\link{ModelFrame}}, or untrained
+\code{\link[recipes]{recipe}}.}
+
 \item{...}{named or unnamed \code{resample} output to combine together with
 the \code{Resamples} constructor.}
 
-\item{x}{defines a relationship between model predictor and response
-variables.  May be a \code{formula}, design matrix of predictors,
-\code{ModelFrame}, or untrained \code{recipe}.}
+\item{data}{\link[=data.frame]{data frame} containing observed predictors and
+outcomes.}
 
-\item{data}{\code{data.frame} containing observed predictors and outcomes.}
+\item{model}{\link[=models]{model} function, function name, or call.}
 
-\item{model}{\code{MLModel} object, constructor function, or character string
-naming a constructor function that returns an \code{MLModel} object.}
+\item{control}{\link[=controls]{control} function, function name, or call
+defining the resampling method to be employed.}
 
-\item{control}{\code{\link{MLControl}} object, control function, or character
-string naming a control function defining the resampling method to be
-employed.}
-
-\item{y}{predictor variable.}
+\item{y}{response variable.}
 }
 \value{
 \code{Resamples} class object.
@@ -48,22 +52,22 @@ Estimation of the predictive performance of a model estimated and evaluated
 on training and test samples generated from an observed data set.
 }
 \details{
-Output being combined from more than one model with the
-\code{Resamples} constructor must have been generated with the same
-resampling \code{control} object.
-
 Stratified resampling is performed for the \code{formula} method according to
 values of the response variable; i.e. categorical levels for \code{factor},
 continuous for \code{numeric}, and event status \code{Surv}.
 
 User-specified stratification variables may be specified for
-\code{\link[=ModelFrame]{ModelFrames}} upon creation with the \code{strata}
+\code{ModelFrames} upon creation with the \code{\link[=ModelFrame]{strata}}
 argument in its constructor.  Resampling of this class is unstratified by
 default.
 
 Variables in a \code{recipe} may be used for stratification by defining a
 "case_strata" \code{\link[recipes:roles]{role}} for them.  Resampling will
 be unstratified if no variables have that role.
+
+Output being combined from more than one model with the \code{Resamples}
+constructor must have been generated with the same resampling \code{control}
+object.
 }
 \examples{
 ## Factor response example
@@ -71,20 +75,19 @@ be unstratified if no variables have that role.
 fo <- Species ~ .
 control <- CVControl()
 
-gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
-gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
-gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+gbm_res1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+gbm_res2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+gbm_res3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
 
-summary(gbmres1)
-plot(gbmres1)
+summary(gbm_res1)
+plot(gbm_res1)
 
-res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
+res <- Resamples(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 summary(res)
 plot(res)
 
 }
 \seealso{
-\code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-\code{\link{models}}, \code{\link{MLControl}}, \code{\link{metrics}},
-\code{\link{performance}}, \code{\link{plot}}, \code{\link{summary}}
+\code{\link{performance}}, \code{\link{metrics}},
+\code{\link{plot}}, \code{\link{summary}}
 }

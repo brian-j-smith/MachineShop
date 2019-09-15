@@ -4,6 +4,8 @@
 #' time dependent strata, multiple events per subject, and other extensions are
 #' incorporated using the counting process formulation of Andersen and Gill.
 #' 
+#' @rdname CoxModel
+#' 
 #' @param ties character string specifying the method for tie handling.
 #' @param ... arguments passed to \code{\link[survival]{coxph.control}}.
 #' 
@@ -26,7 +28,7 @@
 #' library(MASS)
 #' 
 #' fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-#'     data = Melanoma, model = CoxModel())
+#'     data = Melanoma, model = CoxModel)
 #' 
 CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
   
@@ -61,7 +63,6 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
 }
 
 
-#' @name CoxStepAICModel
 #' @rdname CoxModel
 #' 
 #' @param direction mode of stepwise search, can be one of \code{"both"}

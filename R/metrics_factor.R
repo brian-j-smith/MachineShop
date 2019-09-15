@@ -1,38 +1,4 @@
-#' Performance Metrics
-#' 
-#' Compute measures of agreement between observed and predicted responses.
-#' 
-#' @name metrics
 #' @rdname metrics
-#' 
-#' @param observed observed responses, \code{\link{Curves}} object, or
-#' \code{\link[=confusion]{ConfusionMatrix}} of observed and predicted
-#' responses.
-#' @param predicted predicted responses.
-#' @param beta relative importance of recall to precision in the calculation of
-#' \code{f_score} [default: F1 score].
-#' @param cutoff threshold above which binary factor probabilities are
-#' classified as events and below which survival probabilities are classified.
-#' @param dist character string specifying a distribution with which to estimate
-#' the survival mean in the total sum of square component of \code{r2}.
-#' Possible values are \code{"empirical"} for the Kaplan-Meier estimator,
-#' \code{"exponential"}, \code{"extreme"}, \code{"gaussian"},
-#' \code{"loggaussian"}, \code{"logistic"}, \code{"loglogistic"},
-#' \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or \code{"weibull"}
-#' (default).
-#' @param f function to calculate a desired sensitivity-specificity tradeoff.
-#' @param metrics list of two performance metrics for the calculation [default:
-#' ROC metrics].
-#' @param power power to which positional distances of off-diagonals from the
-#' main diagonal in confusion matrices are raised to calculate
-#' \code{weighted_kappa2}.
-#' @param stat function to compute a summary statistic at each cutoff value of
-#' resampled metrics in \code{Curves}, or \code{NULL} for resample-specific
-#' metrics.
-#' @param ... arguments passed to or from other methods.
-#' 
-#' @seealso \code{\link{metricinfo}}, \code{\link{confusion}},
-#' \code{\link{performance}}, \code{\link{performance_curve}}
 #' 
 accuracy <- function(observed, predicted = NULL, cutoff = 0.5, ...) {
   call_metric_method("accuracy", environment())
@@ -52,7 +18,7 @@ setMetric_ConfusionMatrix("accuracy",
 #' 
 auc <- function(observed, predicted = NULL,
                 metrics = c(MachineShop::tpr, MachineShop::fpr),
-                stat = base::mean, ...) {
+                stat = MachineShop::settings("stat.Curves"), ...) {
   call_metric_method("auc", environment())
 }
 

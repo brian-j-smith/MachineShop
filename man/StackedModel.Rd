@@ -4,15 +4,16 @@
 \alias{StackedModel}
 \title{Stacked Regression Model}
 \usage{
-StackedModel(..., control = CVControl, weights = NULL)
+StackedModel(..., control = MachineShop::settings("control"),
+  weights = NULL)
 }
 \arguments{
-\item{...}{\code{MLModel} functions, function names, objects, or lists of
-these to serve as base learners.}
+\item{...}{\link[=models]{model} functions, function names, calls, or vector
+of these to serve as base learners.}
 
-\item{control}{\code{\link{MLControl}} object, control function, or character
-string naming a control function defining the resampling method to be
-employed for the estimation of base learner weights.}
+\item{control}{\link[=controls]{control} function, function name, or call
+defining the resampling method to be employed for the estimation of base
+learner weights.}
 
 \item{weights}{optional fixed base learner weights.}
 }
@@ -31,8 +32,8 @@ Fit a stacked regression model from multiple base learners.
 }
 \examples{
 model <- StackedModel(GBMModel, SVMRadialModel, GLMNetModel(lambda = 0.01))
-modelfit <- fit(sale_amount ~ ., data = ICHomes, model = model)
-predict(modelfit, newdata = ICHomes)
+model_fit <- fit(sale_amount ~ ., data = ICHomes, model = model)
+predict(model_fit, newdata = ICHomes)
 
 }
 \references{

@@ -1,13 +1,11 @@
 #' Display Model Information
 #' 
-#' Display information about models provided by the \pkg{MachineShop} package.
+#' Display information about models supplied by the \pkg{MachineShop} package.
 #' 
-#' @aliases models
-#' 
-#' @param ... \code{MLModel} objects, constructor functions, constructor
-#' function names, or supported responses for which to display information.  If
-#' none are specified, information is returned on all available models by
-#' default.
+#' @param ... \link[=models]{model} functions, function names, or calls;
+#' \link[=response]{observed responses}; or vector of these for which to display
+#' information.  If none are specified, information is returned on all available
+#' models by default.
 #' 
 #' @return List of named model elements each containing the following
 #' components:
@@ -27,8 +25,6 @@
 #' the model.}
 #' }
 #' 
-#' @seealso \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
-#' 
 #' @examples
 #' ## All models
 #' modelinfo()
@@ -41,8 +37,9 @@
 #' modelinfo(GBMModel)
 #' 
 modelinfo <- function(...) {
-  args <- unname(list(...))
-  if (length(args) == 0) args <- as.list(.model_names)
+  args <- list(...)
+  if (length(args) == 1 && is.vector(args[[1]])) args <- as.list(args[[1]])
+  args <- if (length(args)) unname(args) else as.list(.model_names)
   info <- do.call(.modelinfo, args)
   
   is_type <- if (length(info)) !mapply(is, info, "list") else NULL
@@ -145,7 +142,7 @@ modelinfo <- function(...) {
     label = x@label,
     packages = x@packages,
     response_types = x@response_types,
-    arguments = args(get(x@name)),
+    arguments = args(fget(x@name)),
     grid = !is.null(body(x@grid)),
     varimp = !is.null(body(fitbit(x, "varimp")))
   )), names = x@name)

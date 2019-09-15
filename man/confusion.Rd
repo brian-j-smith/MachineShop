@@ -2,33 +2,25 @@
 % Please edit documentation in R/confusion.R
 \name{confusion}
 \alias{confusion}
-\alias{ConfusionMatrix}
 \alias{Confusion}
+\alias{ConfusionMatrix}
 \title{Confusion Matrix}
 \usage{
-ConfusionMatrix(object = numeric(), ordered = FALSE)
+confusion(x, y = NULL, cutoff = 0.5, na.rm = TRUE, ...)
 
 Confusion(...)
 
-confusion(x, y = NULL, cutoff = 0.5, na.rm = TRUE, ...)
+ConfusionMatrix(object = numeric(), ordered = FALSE)
 }
 \arguments{
-\item{object}{square matrix, or object that can be converted to one, of
-predicted and observed values in the rows and columns, respectively.}
+\item{x}{factor of \link[=response]{observed responses} or \link{resample}
+result containing observed and predicted responses.}
 
-\item{ordered}{logical indicating whether the confusion matrix row and
-columns should be regarded as ordered.}
+\item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
 
-\item{...}{named or unnamed \code{confusion} output to combine together with
-the \code{Confusion} constructor.}
-
-\item{x}{factor of observed responses or \code{Resamples} object of observed
-and predicted responses.}
-
-\item{y}{predicted responses.}
-
-\item{cutoff}{threshold above which binary factor probabilities are
-classified as events and below which survival probabilities are classified.
+\item{cutoff}{numeric (0, 1) threshold above which binary factor
+probabilities are classified as events and below which survival probabilities
+are classified.
 If \code{NULL}, then binary responses are summed directly over predicted
 class probabilities, whereas a default cutoff of 0.5 is used for
 survival probabilities.  Class probability summations and survival will
@@ -36,12 +28,22 @@ appear as decimal numbers that can be interpreted as expected counts.}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}
+
+\item{...}{named or unnamed \code{confusion} output to combine together with
+the \code{Confusion} constructor.}
+
+\item{object}{square matrix, or object that can be converted to one, of
+cross-classified predicted and observed values in the rows and columns,
+respectively.}
+
+\item{ordered}{logical indicating whether the confusion matrix row and
+columns should be regarded as ordered.}
 }
 \value{
 The return value is a \code{ConfusionMatrix} class object that inherits from
 \code{table} if \code{x} and \code{y} responses are specified or a
-\code{ConfusionResamples} object that inherits from \code{list} if \code{x}
-is a \code{Resamples} object.
+\code{Confusion} object that inherits from \code{list} if \code{x} is a
+\code{Resamples} object.
 }
 \description{
 Calculate confusion matrices of predicted and observed responses.
@@ -53,6 +55,5 @@ plot(conf)
 
 }
 \seealso{
-\code{\link{response}}, \code{\link{predict}},
-\code{\link{resample}}, \code{\link{plot}}, \code{\link{summary}}
+\code{\link{plot}}, \code{\link{summary}}
 }

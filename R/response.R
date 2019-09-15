@@ -4,12 +4,11 @@
 #' 
 #' @rdname response-methods
 #' 
-#' @param object object containing the response variable definition.
-#' @param newdata data frame from which to extract the response
-#' variable values if given; otherwise, \code{object} is used.
+#' @param object model \link{fit} result, \code{\link{ModelFrame}}, or
+#' \code{\link[recipes]{recipe}}.
+#' @param newdata \link[=data.frame]{data frame} from which to extract the
+#' response variable values if given; otherwise, \code{object} is used.
 #' @param ... arguments passed to other methods.
-#' 
-#' @seealso \code{\link[recipes]{recipe}}
 #' 
 #' @examples
 #' ## Survival response example

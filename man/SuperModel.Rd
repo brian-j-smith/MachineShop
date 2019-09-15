@@ -4,19 +4,19 @@
 \alias{SuperModel}
 \title{Super Learner Model}
 \usage{
-SuperModel(..., model = GBMModel, control = CVControl,
-  all_vars = FALSE)
+SuperModel(..., model = GBMModel,
+  control = MachineShop::settings("control"), all_vars = FALSE)
 }
 \arguments{
-\item{...}{\code{MLModel} functions, function names, objects, or lists of
-these to serve as base learners.}
+\item{...}{\link[=models]{model} functions, function names, calls, or vector
+of these to serve as base learners.}
 
-\item{model}{\code{MLModel} object, constructor function, or character string
-naming a constructor function to serve as the super model.}
+\item{model}{\link[=models]{model} function, function name, or call defining
+the super model.}
 
-\item{control}{\code{\link{MLControl}} object, control function, or character
-string naming a control function defining the resampling method to be
-employed for the estimation of base learner weights.}
+\item{control}{\link[=controls]{control} function, function name, or call
+defining the resampling method to be employed for the estimation of base
+learner weights.}
 
 \item{all_vars}{logical indicating whether to include the original
 predictor variables in the super model.}
@@ -36,8 +36,8 @@ Fit a super learner model to predictions from multiple base learners.
 }
 \examples{
 model <- SuperModel(GBMModel, SVMRadialModel, GLMNetModel(lambda = 0.01))
-modelfit <- fit(sale_amount ~ ., data = ICHomes, model = model)
-predict(modelfit, newdata = ICHomes)
+model_fit <- fit(sale_amount ~ ., data = ICHomes, model = model)
+predict(model_fit, newdata = ICHomes)
 
 }
 \references{

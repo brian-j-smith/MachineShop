@@ -13,6 +13,13 @@
 #' 2 = additional information.
 #' @param print_every_n numeric value designating the fitting iterations at
 #' at which to print output when \code{verbose > 0}.
+#' @param objective character string specifying the learning task and objective.
+#' Set automatically according to the class type of the response variable.
+#' @param base_score initial numeric prediction score of all instances, global
+#' bias.
+#' @param eta,gamma,max_depth,min_child_weight,max_delta_step,subsample,colsample_bytree,colsample_bylevel,lambda,alpha,tree_method,sketch_eps,scale_pos_weight,update,refresh_leaf,process_type,grow_policy,max_leaves,max_bin,sample_type,normalize_type,rate_drop,one_drop,skip_drop,updater,feature_selector,top_k
+#' see \code{params} reference.
+#' @param ... arguments passed to \code{XGBModel}.
 #' 
 #' @details
 #' \describe{
@@ -49,8 +56,8 @@
 #' \code{\link{resample}}, \code{\link{tune}}
 #'
 #' @examples
-#' modelfit <- fit(Species ~ ., data = iris, model = XGBTreeModel())
-#' varimp(modelfit, metric = "Frequency", scale = FALSE)
+#' model_fit <- fit(Species ~ ., data = iris, model = XGBTreeModel)
+#' varimp(model_fit, metric = "Frequency", scale = FALSE)
 #' 
 XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
                      print_every_n = 1) {
@@ -112,14 +119,6 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
 
 
 #' @rdname XGBModel
-#' 
-#' @param objective character string specifying the learning task and objective.
-#' Set automatically according to the class type of the response variable.
-#' @param base_score initial numeric prediction score of all instances, global
-#' bias.
-#' @param eta,gamma,max_depth,min_child_weight,max_delta_step,subsample,colsample_bytree,colsample_bylevel,lambda,alpha,tree_method,sketch_eps,scale_pos_weight,update,refresh_leaf,process_type,grow_policy,max_leaves,max_bin,sample_type,normalize_type,rate_drop,one_drop,skip_drop,updater,feature_selector,top_k
-#' see \code{params} reference.
-#' @param ... arguments passed to \code{XGBModel}.
 #' 
 XGBDARTModel <- function(objective = NULL, base_score = 0.5,
                          eta = 0.3, gamma = 0, max_depth = 6,

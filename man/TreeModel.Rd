@@ -32,7 +32,7 @@ specified formula and choosing splits from the terms of the right-hand-side.
 Further model details can be found in the source link below.
 }
 \examples{
-fit(Species ~ ., data = iris, model = TreeModel())
+fit(Species ~ ., data = iris, model = TreeModel)
 
 }
 \seealso{

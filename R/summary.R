@@ -5,12 +5,14 @@
 #' @name summary
 #' @rdname summary-methods
 #' 
-#' @param object object to summarize.
-#' @param stat function to compute a summary statistic at each cutoff value of
-#' resampled metrics in \code{Curves}, or \code{NULL} for resample-specific
-#' metrics.
-#' @param stats function, one or more function names, or list of named functions
-#' to include in the calculation of summary statistics.
+#' @param object \link{confusion}, \link[=performance_curve]{performance curve},
+#' \link{lift}, model \link{tune}, \link{performance}, or \link{resample}
+#' result.
+#' @param stat function or character string naming a function to compute a
+#' summary statistic at each cutoff value of resampled metrics in \code{Curves},
+#' or \code{NULL} for resample-specific metrics.
+#' @param stats function, function name, or vector of these with which to
+#' compute summary statistics.
 #' @param na.rm logical indicating whether to exclude missing values.
 #' @param ... arguments passed to other methods.
 #' 
@@ -18,72 +20,21 @@
 #' the first for single models, and models and metrics in the first and third,
 #' respectively, for multiple models.
 #' 
-#' @seealso \code{\link{performance}}, \code{\link{resample}},
-#' \code{\link{diff}}, \code{\link{tune}}, \code{\link{confusion}}
-#' 
-summary.Performance <- function(object,
-                                stats = c("Mean" = base::mean,
-                                          "Median" = stats::median,
-                                          "SD" = stats::sd,
-                                          "Min" = base::min,
-                                          "Max" = base::max),
-                                na.rm = TRUE, ...) {
-  stats <- list2function(stats)
-
-  f <- function(x) {
-    prop_na <- mean(is.na(x))
-    if (na.rm) x <- as.numeric(na.omit(x))
-    c(stats(x), "NA" = prop_na)
-  }
-  
-  margins <- 2
-  perm <- c(2, 1)
-  if (length(dim(object)) > 2) {
-    margins <- c(3, margins)
-    perm <- c(perm, 3)
-  }
-  aperm(apply(object, margins, f), perm = perm)
-}
-
-
-#' @rdname summary-methods
-#' 
 #' @examples
 #' ## Factor response example
 #' 
 #' fo <- Species ~ .
 #' control <- CVControl()
 #' 
-#' gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
-#' gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
-#' gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
-#' summary(gbmres3)
+#' gbm_res1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+#' gbm_res2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+#' gbm_res3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+#' summary(gbm_res3)
 #' 
-#' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
+#' res <- Resamples(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 #' summary(res)
 #' 
-summary.Resamples <- function(object,
-                              stats = c("Mean" = base::mean,
-                                        "Median" = stats::median,
-                                        "SD" = stats::sd,
-                                        "Min" = base::min,
-                                        "Max" = base::max),
-                              na.rm = TRUE, ...) {
-  summary(performance(object), stats = stats, na.rm = na.rm)
-}
-
-
-#' @rdname summary-methods
-#' 
-summary.MLModelTune <- function(object,
-                                stats = c("Mean" = base::mean,
-                                          "Median" = stats::median,
-                                          "SD" = stats::sd,
-                                          "Min" = base::min,
-                                          "Max" = base::max),
-                                na.rm = TRUE, ...) {
-  summary(object@performance, stats = stats, na.rm = na.rm, ...)
-}
+NULL
 
 
 #' @rdname summary-methods
@@ -124,8 +75,11 @@ summary.ConfusionMatrix <- function(object, ...) {
 
 #' @rdname summary-methods
 #' 
-summary.Curves <- function(object, stat = base::mean, ...) {
+summary.Curves <- function(object, stat = MachineShop::settings("stat.Curves"),
+                           ...) {
   if (!(is.null(object$Resample) || is.null(stat))) {
+    
+    stat <- fget(stat)
     
     object_class <- class(object)
     stat_na_omit <- function(x) stat(na.omit(x))
@@ -163,7 +117,47 @@ summary.Curves <- function(object, stat = base::mean, ...) {
 }
 
 
-
 summary.MLModelFit <- function(object, ...) {
   summary(unMLModelFit(object))
+}
+
+
+#' @rdname summary-methods
+#' 
+summary.MLModelTune <- function(object, stats =
+                                  MachineShop::settings("stats.Resamples"),
+                                na.rm = TRUE, ...) {
+  summary(object@performance, stats = stats, na.rm = na.rm, ...)
+}
+
+
+#' @rdname summary-methods
+#' 
+summary.Performance <- function(object, stats =
+                                  MachineShop::settings("stats.Resamples"),
+                                na.rm = TRUE, ...) {
+  stats <- list2function(stats)
+
+  f <- function(x) {
+    prop_na <- mean(is.na(x))
+    if (na.rm) x <- as.numeric(na.omit(x))
+    c(stats(x), "NA" = prop_na)
+  }
+  
+  margins <- 2
+  perm <- c(2, 1)
+  if (length(dim(object)) > 2) {
+    margins <- c(3, margins)
+    perm <- c(perm, 3)
+  }
+  aperm(apply(object, margins, f), perm = perm)
+}
+
+
+#' @rdname summary-methods
+#' 
+summary.Resamples <- function(object, stats =
+                                MachineShop::settings("stats.Resamples"),
+                              na.rm = TRUE, ...) {
+  summary(performance(object), stats = stats, na.rm = na.rm)
 }

@@ -15,6 +15,8 @@ navbar:
           href: example_info.html
         - text: "Variable Specifications and Preprocessing"
           href: example_variables.html
+        - text: "Global Settings"
+          href: example_settings.html
         - text: "---------"
         - text: "IC Home Prices"
           href: example_ichomes.html

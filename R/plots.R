@@ -5,69 +5,28 @@
 #' @name plot
 #' @rdname plot-methods
 #' 
-#' @param x object to plot.
+#' @param x \link{calibration}, \link{confusion},
+#' \link[=performance_curve]{performance curve}, \link{lift},
+#' model \link{tune}, partial \link{dependence}, \link{performance},
+#' \link{resample}, or \link[=varimp]{variable importance} result.
 #' @param diagonal logical indicating whether to include a diagonal reference
 #' line.
+#' @param find numeric true positive rate at which to display reference lines
+#' identifying the corresponding rates of positive predictions.
 #' @param metrics vector of numeric indexes or character names of performance
 #' metrics to plot.
-#' @param stat function to compute a summary statistic on resampled values for
-#' \code{MLModelTune} line plots and \code{Resamples} model sorting.  For
-#' \code{Curves} and \code{Lift} classes, plots are of resampled metrics
-#' aggregated by the statistic if given or of resample-specific metrics if
-#' \code{NULL}.
+#' @param n number of most important variables to include in the plot
+#' [default: all].
+#' @param se logical indicating whether to include standard error bars.
+#' @param stat function or character string naming a function to compute a
+#' summary statistic on resampled metrics for \code{MLModelTune} line plots and
+#' \code{Resamples} model ordering.  For \code{Curves} and \code{Lift} classes,
+#' plots are of resampled metrics aggregated by the statistic if given or of
+#' resample-specific metrics if \code{NULL}.
+#' @param stats vector of numeric indexes or character names of partial
+#' dependence summary statistics to plot.
 #' @param type type of plot to construct.
 #' @param ... arguments passed to other methods.
-#' 
-#' @seealso \code{\link{performance}},  \code{\link{resample}},
-#' \code{\link{diff}}, \code{\link{tune}}, \code{\link{calibration}},
-#' \code{\link{confusion}}, \code{\link{lift}}, \code{\link{dependence}},
-#' \code{\link{varimp}}
-#' 
-plot.Performance <- function(x, metrics = NULL, stat = base::mean,
-                             type = c("boxplot", "density", "errorbar",
-                                      "violin"), ...) {
-  df <- as.data.frame.table(x)
-  if (length(dim(x)) <= 2) df$Var3 <- factor("Model")
-  orderednames <- match(c("Var1", "Var2", "Var3", "Freq"), names(df))
-  names(df)[orderednames] <- c("Resample", "Metric", "Model", "Value")
-  
-  metriclevels <- levels(df$Metric)
-  if (is.null(metrics)) {
-    metrics <- metriclevels
-  } else {
-    metrics <- match_indices(metrics, metriclevels)
-    df <- df[df$Metric %in% metrics, , drop = FALSE]
-  }
-  df$Metric <- factor(df$Metric, metrics)
-  
-  firstmetric <- df[df$Metric == metrics[1], , drop = FALSE]
-  sortedlevels <- tapply(firstmetric$Value, firstmetric$Model,
-                         function(x) stat(na.omit(x))) %>% sort %>% names
-  df$Model <- factor(df$Model, sortedlevels)
-  
-  p <- ggplot(df)
-  switch(match.arg(type),
-         "boxplot" = p + geom_boxplot(aes_(~ Model, ~ Value)) +
-           stat_summary(aes_(~ Model, ~ Value), fun.y = mean, geom = "point") +
-           labs(x = "") +
-           coord_flip(),
-         "density" = p + geom_density(aes_(~ Value, color = ~ Model)) +
-           labs(y = "Density", color = ""),
-         "errorbar" = p + stat_summary(aes_(~ Model, ~ Value),
-                                       fun.data = mean_se,
-                                       geom = "errorbar") +
-           stat_summary(aes_(~ Model, ~ Value), fun.y = mean, geom = "point") +
-           labs(x = "") +
-           coord_flip(),
-         "violin" = p + geom_violin(aes_(~ Model, ~ Value)) +
-           stat_summary(aes_(~ Model, ~ Value), fun.y = mean, geom = "point") +
-           labs(x = "") +
-           coord_flip()) +
-    facet_wrap(~ Metric, scales = "free")
-}
-
-
-#' @rdname plot-methods
 #' 
 #' @examples
 #' ## Factor response example
@@ -75,73 +34,21 @@ plot.Performance <- function(x, metrics = NULL, stat = base::mean,
 #' fo <- Species ~ .
 #' control <- CVControl()
 #' 
-#' gbmfit <- fit(fo, data = iris, model = GBMModel, control = control)
-#' plot(varimp(gbmfit))
+#' gbm_fit <- fit(fo, data = iris, model = GBMModel, control = control)
+#' plot(varimp(gbm_fit))
 #' 
-#' gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
-#' gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
-#' gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
-#' plot(gbmres3)
+#' gbm_res1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+#' gbm_res2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+#' gbm_res3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+#' plot(gbm_res3)
 #' 
-#' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
+#' res <- Resamples(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 #' plot(res)
 #' 
-plot.Resamples <- function(x, metrics = NULL, stat = base::mean,
-                           type = c("boxplot", "density", "errorbar", "violin"),
-                           ...) {
-  plot(performance(x), metrics = metrics, stat = stat, type = type)
-}
+NULL
 
 
 #' @rdname plot-methods
-#' 
-plot.MLModelTune <- function(x, metrics = NULL, stat = base::mean,
-                             type = c("boxplot", "density", "errorbar", "line",
-                                      "violin"), ...) {
-  perf <- x@performance
-  type <- match.arg(type)
-  if (type == "line") {
-    grid <- x@tune_grid
-    if (any(dim(grid) == 0)) stop("no tuning parameters to plot")
-    stats <- apply(perf, c(3, 2), function(x) stat(na.omit(x))) %>%
-      as.data.frame.table
-    df <- data.frame(
-      x = grid[[1]],
-      Value = stats$Freq,
-      Metric = stats$Var2
-    )
-    
-    metriclevels <- levels(df$Metric)
-    if (is.null(metrics)) {
-      metrics <- metriclevels
-    } else {
-      metrics <- match_indices(metrics, metriclevels)
-      df <- df[df$Metric %in% metrics, , drop = FALSE]
-    }
-    df$Metric <- factor(df$Metric, metrics)
-    
-    indices <- sapply(grid[-1], function(x) length(unique(x)) > 1)
-    args <- list(~ x, ~ Value)
-    if (any(indices)) {
-      df$Group <- interaction(grid[-1][indices])
-      args$color <- args$shape <- ~ Group
-    }
-    mapping <- do.call(aes_, args)
-    
-    ggplot(df, mapping) +
-      geom_line() +
-      geom_point() +
-      labs(x = names(grid)[1]) +
-      facet_wrap(~ Metric, scales = "free")
-  } else {
-    plot(perf, metrics = metrics, stat = stat, type = type, ...)
-  }
-}
-
-
-#' @rdname plot-methods
-#' 
-#' @param se logical indicating whether to include standard error bars.
 #' 
 plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
   type <- match.arg(type)
@@ -149,7 +56,7 @@ plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
   args <- list(~ Predicted, ~ Mean)
   if (nlevels(x$Response) > 1) args$color <- args$fill <- ~ Response
   mapping <- do.call(aes_, args)
-
+  
   position <- "identity"
   
   pl <- by(x, x$Model, function(cal) {
@@ -160,7 +67,7 @@ plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
       cal$Observed
     )
     Predicted_width <- diff(range(df$Predicted, na.rm = TRUE))
-  
+    
     p <- ggplot(df, mapping) +
       geom_abline(intercept = 0, slope = 1, color = "gray") +
       labs(title = cal$Model[1], x = "Predicted", y = "Observed Mean")
@@ -212,7 +119,7 @@ plot.ConfusionMatrix <- function(x, ...) {
 #' @rdname plot-methods
 #' 
 plot.Curves <- function(x, type = c("tradeoffs", "cutoffs"), diagonal = FALSE,
-                        stat = base::mean, ...) {
+                        stat = MachineShop::settings("stat.Curves"), ...) {
   x <- summary(x, stat = stat)
   
   args <- list(~ x, ~ y)
@@ -223,45 +130,43 @@ plot.Curves <- function(x, type = c("tradeoffs", "cutoffs"), diagonal = FALSE,
   labels <- c(x = x@metrics$x@label, y = x@metrics$y@label)
   
   switch(match.arg(type),
-    "tradeoffs" = {
-      x$Cutoff <- NULL
-      p <- ggplot(na.omit(x), mapping) +
-        geom_path() +
-        labs(x = labels["x"], y = labels["y"])
-
-      if (diagonal) {
-        p <- p + geom_abline(intercept = 0, slope = 1, color = "gray")
-      }
-      
-      p
-    },
-    "cutoffs" = {
-      df <- reshape(x, varying = c("x", "y"), v.names = "y",
-                    times = labels, timevar = "Metric",
-                    direction = "long")
-      names(df)[names(df) == "Cutoff"] <- "x"
-      
-      ggplot(na.omit(df), mapping) +
-        geom_line() +
-        labs(x = "Cutoff", y = "Performance") +
-        facet_wrap(~ Metric)
-    }
+         "tradeoffs" = {
+           x$Cutoff <- NULL
+           p <- ggplot(na.omit(x), mapping) +
+             geom_path() +
+             labs(x = labels["x"], y = labels["y"])
+           
+           if (diagonal) {
+             p <- p + geom_abline(intercept = 0, slope = 1, color = "gray")
+           }
+           
+           p
+         },
+         "cutoffs" = {
+           df <- reshape(x, varying = c("x", "y"), v.names = "y",
+                         times = labels, timevar = "Metric",
+                         direction = "long")
+           names(df)[names(df) == "Cutoff"] <- "x"
+           
+           ggplot(na.omit(df), mapping) +
+             geom_line() +
+             labs(x = "Cutoff", y = "Performance") +
+             facet_wrap(~ Metric)
+         }
   )
 }
 
 
 #' @rdname plot-methods
 #' 
-#' @param find numeric true positive rate at which to display reference lines
-#' identifying the corresponding rates of positive predictions.
-#' 
-plot.Lift <- function(x, find = NULL, diagonal = TRUE, stat = base::mean, ...) {
+plot.Lift <- function(x, find = NULL, diagonal = TRUE,
+                      stat = MachineShop::settings("stat.Curves"), ...) {
   x <- summary(x, stat = stat)
   p <- plot(Curves(x), diagonal = diagonal, stat = NULL)
-
+  
   if (!is.null(find)) {
     if (find < 0 || find > 1) warning("'find' rate outside of 0 to 1 range")
-
+    
     indices <- x["Model"]
     indices$Resample <- x$Resample
     tested <- by(x, indices, function(data) {
@@ -286,19 +191,63 @@ plot.Lift <- function(x, find = NULL, diagonal = TRUE, stat = base::mean, ...) {
 
 #' @rdname plot-methods
 #' 
-#' @param stats vector of numeric indexes or character names of partial
-#' dependence summary statistics to plot.
+plot.MLModelTune <- function(x, metrics = NULL,
+                             stat = MachineShop::settings("stat.ModelTune"),
+                             type = c("boxplot", "density", "errorbar", "line",
+                                      "violin"), ...) {
+  perf <- x@performance
+  type <- match.arg(type)
+  if (type == "line") {
+    grid <- x@tune_grid
+    if (any(dim(grid) == 0)) stop("no tuning parameters to plot")
+    stats <- apply(perf, c(3, 2), function(x) stat(na.omit(x))) %>%
+      as.data.frame.table
+    df <- data.frame(
+      x = grid[[1]],
+      Value = stats$Freq,
+      Metric = stats$Var2
+    )
+    
+    metriclevels <- levels(df$Metric)
+    if (is.null(metrics)) {
+      metrics <- metriclevels
+    } else {
+      metrics <- match_indices(metrics, metriclevels)
+      df <- df[df$Metric %in% metrics, , drop = FALSE]
+    }
+    df$Metric <- factor(df$Metric, metrics)
+    
+    indices <- sapply(grid[-1], function(x) length(unique(x)) > 1)
+    args <- list(~ x, ~ Value)
+    if (any(indices)) {
+      df$Group <- interaction(grid[-1][indices])
+      args$color <- args$shape <- ~ Group
+    }
+    mapping <- do.call(aes_, args)
+    
+    ggplot(df, mapping) +
+      geom_line() +
+      geom_point() +
+      labs(x = names(grid)[1]) +
+      facet_wrap(~ Metric, scales = "free")
+  } else {
+    plot(perf, metrics = metrics, stat = stat, type = type, ...)
+  }
+}
+
+
+#' @rdname plot-methods
 #' 
 plot.PartialDependence <- function(x, stats = NULL, ...) {
   if (any(rowSums(!is.na(x$Predictors)) > 1)) {
     stop("partial dependence plots not available for interaction efffects")
   }
-
+  
   if (!is.null(stats)) {
     stats <- match_indices(stats, levels(x$Statistic))
     x <- x[x$Statistic %in% stats, , drop = FALSE]
   }
-
+  
   df <- x[c("Statistic", "Response", "Value")]
   
   args <- list(~ Predictor, ~ Value)
@@ -322,8 +271,64 @@ plot.PartialDependence <- function(x, stats = NULL, ...) {
 
 #' @rdname plot-methods
 #' 
-#' @param n number of most important variables to include in the plot
-#' [default: all].
+plot.Performance <- function(x, metrics = NULL, stat =
+                               MachineShop::settings("stat.Resamples"),
+                             type = c("boxplot", "density", "errorbar",
+                                      "violin"), ...) {
+  df <- as.data.frame.table(x)
+  if (length(dim(x)) <= 2) df$Var3 <- factor("Model")
+  orderednames <- match(c("Var1", "Var2", "Var3", "Freq"), names(df))
+  names(df)[orderednames] <- c("Resample", "Metric", "Model", "Value")
+  
+  metriclevels <- levels(df$Metric)
+  if (is.null(metrics)) {
+    metrics <- metriclevels
+  } else {
+    metrics <- match_indices(metrics, metriclevels)
+    df <- df[df$Metric %in% metrics, , drop = FALSE]
+  }
+  df$Metric <- factor(df$Metric, metrics)
+  
+  stat <- fget(stat)
+  
+  firstmetric <- df[df$Metric == metrics[1], , drop = FALSE]
+  sortedlevels <- tapply(firstmetric$Value, firstmetric$Model,
+                         function(x) stat(na.omit(x))) %>% sort %>% names
+  df$Model <- factor(df$Model, sortedlevels)
+  
+  p <- ggplot(df)
+  switch(match.arg(type),
+         "boxplot" = p + geom_boxplot(aes_(~ Model, ~ Value)) +
+           stat_summary(aes_(~ Model, ~ Value), fun.y = mean, geom = "point") +
+           labs(x = "") +
+           coord_flip(),
+         "density" = p + geom_density(aes_(~ Value, color = ~ Model)) +
+           labs(y = "Density", color = ""),
+         "errorbar" = p + stat_summary(aes_(~ Model, ~ Value),
+                                       fun.data = mean_se,
+                                       geom = "errorbar") +
+           stat_summary(aes_(~ Model, ~ Value), fun.y = mean, geom = "point") +
+           labs(x = "") +
+           coord_flip(),
+         "violin" = p + geom_violin(aes_(~ Model, ~ Value)) +
+           stat_summary(aes_(~ Model, ~ Value), fun.y = mean, geom = "point") +
+           labs(x = "") +
+           coord_flip()) +
+    facet_wrap(~ Metric, scales = "free")
+}
+
+
+#' @rdname plot-methods
+#' 
+plot.Resamples <- function(x, metrics = NULL, stat =
+                             MachineShop::settings("stat.Resamples"),
+                           type = c("boxplot", "density", "errorbar", "violin"),
+                           ...) {
+  plot(performance(x), metrics = metrics, stat = stat, type = type)
+}
+
+
+#' @rdname plot-methods
 #' 
 plot.VarImp <- function(x, n = NULL, ...) {
   if (!is.null(n)) x <- head(x, n)

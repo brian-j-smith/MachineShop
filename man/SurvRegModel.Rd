@@ -18,7 +18,7 @@ SurvRegStepAICModel(dist = c("weibull", "exponential", "gaussian",
 
 \item{scale}{optional fixed value for the scale.}
 
-\item{parms}{a list of fixed parameters.}
+\item{parms}{list of fixed parameters.}
 
 \item{...}{arguments passed to \code{\link[survival]{survreg.control}}.}
 
@@ -58,7 +58,7 @@ library(survival)
 library(MASS)
 
 fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-    data = Melanoma, model = SurvRegModel())
+    data = Melanoma, model = SurvRegModel)
 
 }
 \seealso{

@@ -92,14 +92,14 @@ setMethod("convert_response", c("factor", "matrix"),
 
 
 setMethod("convert_response", c("factor", "numeric"),
-  function(object, x, cutoff = 0.5, ...) {
+  function(object, x, cutoff, ...) {
     factor(x > cutoff, levels = c(FALSE, TRUE), labels = levels(object))
   }
 )
 
 
 setMethod("convert_response", c("integer", "numeric"),
-  function(object, x, cutoff = 0.5, ...) {
+  function(object, x, cutoff, ...) {
     pm <- sign(x)
     abs_x <- abs(x)
     pm * ifelse(abs_x %% 1 > cutoff, ceiling(abs_x), floor(abs_x))
@@ -120,7 +120,7 @@ setMethod("convert_response", c("Surv", "SurvEvents"),
 
 
 setMethod("convert_response", c("Surv", "SurvProbs"),
-  function(object, x, cutoff = 0.5, ...) {
+  function(object, x, cutoff, ...) {
     events <- x <= cutoff
     mode(events) <- "integer"
     SurvEvents(events, time(x))

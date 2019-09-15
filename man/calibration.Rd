@@ -5,19 +5,16 @@
 \alias{Calibration}
 \title{Model Calibration}
 \usage{
-Calibration(...)
-
 calibration(x, y = NULL, breaks = 10, span = 0.75, dist = NULL,
   na.rm = TRUE, ...)
+
+Calibration(...)
 }
 \arguments{
-\item{...}{named or unnamed \code{calibration} output to combine together
-with the \code{Calibration} constructor.}
+\item{x}{\link[=response]{observed responses} or \link{resample} result
+containing observed and predicted responses.}
 
-\item{x}{observed responses or \code{Resamples} object of observed and
-predicted responses.}
-
-\item{y}{predicted responses.}
+\item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
 
 \item{breaks}{value defining the response variable bins within which to
 calculate observed mean values.  May be specified as a number of bins, a
@@ -36,6 +33,9 @@ Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}
+
+\item{...}{named or unnamed \code{calibration} output to combine together
+with the \code{Calibration} constructor.}
 }
 \value{
 \code{Calibration} class object that inherits from \code{data.frame}.
@@ -55,6 +55,5 @@ plot(cal)
 
 }
 \seealso{
-\code{\link{response}}, \code{\link{predict}},
-\code{\link{resample}}, \code{\link{plot}}
+\code{\link{plot}}
 }

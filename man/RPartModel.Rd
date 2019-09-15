@@ -46,7 +46,7 @@ Fit an \code{rpart} model.
 Further model details can be found in the source link below.
 }
 \examples{
-fit(Species ~ ., data = iris, model = RPartModel())
+fit(Species ~ ., data = iris, model = RPartModel)
 
 }
 \seealso{

@@ -2,9 +2,10 @@
 #' 
 #' Display information about metrics provided by the \pkg{MachineShop} package.
 #' 
-#' @param ... one or more metric functions; function names; observed response;
-#' observed and predicted responses; or \code{\link{ConfusionMatrix}},
-#' \code{\link{Confusion}}, or \code{\link{Resamples}} object.  If none are
+#' @param ... \link[=metrics]{metric} functions or function names;
+#' \link[=response]{observed responses}; \link[=response]{observed} and
+#' \link[=predict]{predicted} responses; \link{confusion} or \link{resample}
+#' results; or vector of these for which to display information.  If none are
 #' specified, information is returned on all available metrics by default.
 #' 
 #' @return List of named metric elements each containing the following
@@ -18,9 +19,6 @@
 #' \item{response_types}{data frame of the observed and predicted response
 #' variable types supported by the metric.}
 #' }
-#' 
-#' @seealso \code{\link{metrics}}, \code{\link{confusion}},
-#' \code{\link{resample}}
 #' 
 #' @examples
 #' ## All metrics
@@ -36,8 +34,9 @@
 #' metricinfo(auc)
 #' 
 metricinfo <- function(...) {
-  args <- unname(list(...))
-  if (length(args) == 0) args <- as.list(.metric_names)
+  args <- list(...)
+  if (length(args) == 1 && is.vector(args[[1]])) args <- as.list(args[[1]])
+  args <- if (length(args)) unname(args) else as.list(.metric_names)
   info <- do.call(.metricinfo, args)
   
   is_type <- if (length(info)) !mapply(is, info, "list") else NULL
@@ -95,7 +94,7 @@ metricinfo <- function(...) {
 
 
 .metricinfo.character <- function(x, ...) {
-  metric <- try(get(x, mode = "function"), silent = TRUE)
+  metric <- try(fget(x), silent = TRUE)
   if (is(metric, "try-error")) metric <- list()
   .metricinfo(metric, ...)
 }

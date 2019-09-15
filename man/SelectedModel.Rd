@@ -4,24 +4,24 @@
 \alias{SelectedModel}
 \title{Selected Model}
 \usage{
-SelectedModel(..., control = CVControl, metrics = NULL,
-  stat = base::mean, cutoff = NULL)
+SelectedModel(..., control = MachineShop::settings("control"),
+  metrics = NULL, stat = MachineShop::settings("stat.ModelTune"),
+  cutoff = NULL)
 }
 \arguments{
-\item{...}{\code{MLModel} functions, function names, objects, or lists of
-these to serve as the candidate set from which to select.}
+\item{...}{\link[=models]{model} functions, function names, calls, or vector
+of these to serve as the candidate set from which to select.}
 
-\item{control}{\code{\link{MLControl}} object, control function, or character
-string naming a control function defining the resampling method to be
-employed.}
+\item{control}{\link[=controls]{control} function, function name, or call
+defining the resampling method to be employed.}
 
-\item{metrics}{function, one or more function names, or list of named
-functions representing performance metrics to be calculated.  If not
-specified, default metrics defined in the \code{\link{performance}}
-functions are used.  Model selection is based on the first calculated metric.}
+\item{metrics}{\link[=metrics]{metric} function, function name, or vector of
+these with which to calculate performance.  If not specified, default metrics
+defined in the \link{performance} functions are used.  Model selection is
+based on the first calculated metric.}
 
-\item{stat}{function to compute a summary statistic on resampled values of
-the metric for model selection.}
+\item{stat}{function or character string naming a function to compute a
+summary statistic on resampled metric values for model selection.}
 
 \item{cutoff}{argument passed to the \code{metrics} functions.}
 }

@@ -10,32 +10,41 @@
 \usage{
 tune(x, ...)
 
-\method{tune}{formula}(x, data, models, grid = 3, fixed = NULL,
-  control = CVControl, metrics = NULL, stat = base::mean, ...)
+\method{tune}{formula}(x, data, models,
+  grid = MachineShop::settings("grid"), fixed = NULL,
+  control = MachineShop::settings("control"), metrics = NULL,
+  stat = MachineShop::settings("stat.ModelTune"), ...)
 
-\method{tune}{matrix}(x, y, models, grid = 3, fixed = NULL,
-  control = CVControl, metrics = NULL, stat = base::mean, ...)
+\method{tune}{matrix}(x, y, models, grid = MachineShop::settings("grid"),
+  fixed = NULL, control = MachineShop::settings("control"),
+  metrics = NULL, stat = MachineShop::settings("stat.ModelTune"), ...)
 
-\method{tune}{ModelFrame}(x, models, grid = 3, fixed = NULL,
-  control = CVControl, metrics = NULL, stat = base::mean, ...)
+\method{tune}{ModelFrame}(x, models,
+  grid = MachineShop::settings("grid"), fixed = NULL,
+  control = MachineShop::settings("control"), metrics = NULL,
+  stat = MachineShop::settings("stat.ModelTune"), ...)
 
-\method{tune}{recipe}(x, models, grid = 3, fixed = NULL,
-  control = CVControl, metrics = NULL, stat = base::mean, ...)
+\method{tune}{recipe}(x, models, grid = MachineShop::settings("grid"),
+  fixed = NULL, control = MachineShop::settings("control"),
+  metrics = NULL, stat = MachineShop::settings("stat.ModelTune"), ...)
 }
 \arguments{
 \item{x}{defines a relationship between model predictor and response
-variables.  May be a \code{formula}, design matrix of predictors,
-\code{ModelFrame}, or untrained \code{recipe}.}
+variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
+predictors, \code{\link{ModelFrame}}, or untrained
+\code{\link[recipes]{recipe}}.}
 
-\item{...}{arguments passed to the \code{metrics} functions.}
+\item{...}{arguments passed to the \link{performance} functions.}
 
-\item{data}{\code{data.frame} containing observed predictors and outcomes.}
+\item{data}{\link[=data.frame]{data frame} containing observed predictors and
+outcomes.}
 
-\item{models}{\code{MLModel} function, function name, or object to be tuned;
-or list of the aforementioned elements from which to select.}
+\item{models}{\link[=models]{model} function, function name, or call defining
+a model to tune; or vector of these from which to select, such as that
+returned by \code{\link{expand.model}}.}
 
-\item{grid}{\code{data.frame} containing parameter values at which to
-evaluate a single model supplied to \code{models}, the number of
+\item{grid}{\link[=data.frame]{data frame} containing parameter values at
+which to evaluate a single model supplied to \code{models}, the number of
 parameter-specific values to generate automatically if the model has a
 pre-defined grid, or a call to \code{\link{Grid}}.  Ignored in the case of a
 list of models.}
@@ -43,19 +52,18 @@ list of models.}
 \item{fixed}{list of fixed parameter values to combine with those in
 \code{grid}.}
 
-\item{control}{\code{\link{MLControl}} object, control function, or character
-string naming a control function defining the resampling method to be
-employed.}
+\item{control}{\link[=controls]{control} function, function name, or call
+defining the resampling method to be employed.}
 
-\item{metrics}{function, one or more function names, or list of named
-functions representing performance metrics to be calculated.  If not
-specified, default metrics defined in the \code{\link{performance}}
-functions are used.  Model tuning is based on the first calculated metric.}
+\item{metrics}{\link[=metrics]{metric} function, function name, or vector of
+these with which to calculate performance.  If not specified, default metrics
+defined in the \link{performance} functions are used.  Model selection is
+based on the first calculated metric.}
 
-\item{stat}{function to compute a summary statistic on resampled values of
-the metric for model selection.}
+\item{stat}{function or character string naming a function to compute a
+summary statistic on resampled metric values for model tuning.}
 
-\item{y}{predictor variable.}
+\item{y}{response variable.}
 }
 \value{
 \code{MLModelTune} class object that inherits from \code{MLModel}.
@@ -70,32 +78,30 @@ values or selection from a set of candidate models.
 fo <- sale_amount ~ .
 
 # User-specified grid
-(gbmtune1 <- tune(fo, data = ICHomes, model = GBMModel,
-                  grid = expand.grid(n.trees = c(25, 50, 100),
-                                     interaction.depth = 1:3,
-                                     n.minobsinnode = c(5, 10)),
-                  control = CVControl(folds = 10, repeats = 5)))
+(gbm_tune1 <- tune(fo, data = ICHomes, model = GBMModel,
+                   grid = expand.grid(n.trees = c(25, 50, 100),
+                                      interaction.depth = 1:3,
+                                      n.minobsinnode = c(5, 10)),
+                   control = CVControl(folds = 10, repeats = 5)))
 
 # Automatically generated grid
-(gbmtune2 <- tune(fo, data = ICHomes, model = GBMModel, grid = 3,
-                  control = CVControl(folds = 10, repeats = 5)))
+(gbm_tune2 <- tune(fo, data = ICHomes, model = GBMModel, grid = 3,
+                   control = CVControl(folds = 10, repeats = 5)))
 
 # Randomly sampled grid points
-(gbmtune3 <- tune(fo, data = ICHomes, model = GBMModel,
-                  grid = Grid(length = 1000, random = 10),
-                  control = CVControl(folds = 10, repeats = 5)))
+(gbm_tune3 <- tune(fo, data = ICHomes, model = GBMModel,
+                   grid = Grid(length = 1000, random = 10),
+                   control = CVControl(folds = 10, repeats = 5)))
 
-summary(gbmtune3)
-plot(gbmtune3, type = "line")
+summary(gbm_tune1)
+plot(gbm_tune1, type = "line")
 
-gbmfit <- fit(fo, data = ICHomes, model = gbmtune3)
-varimp(gbmfit)
+gbm_fit <- fit(fo, data = ICHomes, model = gbm_tune1)
+varimp(gbm_fit)
 }
 
 }
 \seealso{
-\code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-\code{\link{models}}, \code{\link{expand.model}}, \code{\link{Grid}},
-\code{\link{MLControl}}, \code{\link{metrics}}, \code{\link{fit}},
+\code{\link{fit}}, \code{\link{performance}}, \code{\link{metrics}},
 \code{\link{plot}}, \code{\link{summary}}
 }

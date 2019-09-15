@@ -5,58 +5,9 @@
 #' @name calibration
 #' @rdname calibration
 #' 
-#' @param ... named or unnamed \code{calibration} output to combine together
-#' with the \code{Calibration} constructor.
-#' 
-Calibration <- function(...) {
-  .Calibration(...)
-}
-
-
-.Calibration <- function(..., .breaks) {
-  args <- list(...)
-  
-  if (length(args) == 0) stop("no calibration output given")
-  
-  .Data <- args[[1]]
-  if (all(mapply(is, args, "Calibration"))) {
-    
-    smoothed <- .Data@smoothed
-    if (!all(sapply(args, function(x) identical(x@smoothed, smoothed)))) {
-      stop("Calibration arguments are a mix of smoothed and binned curves")
-    }
-
-  } else if (length(args) > 1) {
-    
-    stop("arguments to combine must be Calibration objects")
-    
-  } else if (!is.data.frame(.Data)) {
-    
-    stop("Calibration argument must inherit from data.frame")
-    
-  } else {
-
-    if (missing(.breaks)) stop("missing breaks in Calibration constructor")
-    smoothed <- is.null(.breaks)
-
-    var_names <- c("Response", "Predicted", "Observed")
-    is_missing <- !(var_names %in% names(.Data))
-    if (any(is_missing)) {
-      stop("missing calibration variables: ", toString(var_names[is_missing]))
-    }
-    
-  }
-
-  args <- make_unique_levels(args, which = "Model")
-  new("Calibration", do.call(append, args), smoothed = smoothed)
-}
-
-
-#' @rdname calibration
-#' 
-#' @param x observed responses or \code{Resamples} object of observed and
-#' predicted responses.
-#' @param y predicted responses.
+#' @param x \link[=response]{observed responses} or \link{resample} result
+#' containing observed and predicted responses.
+#' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
 #' @param breaks value defining the response variable bins within which to
 #' calculate observed mean values.  May be specified as a number of bins, a
 #' vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
@@ -71,11 +22,12 @@ Calibration <- function(...) {
 #' \code{"weibull"} (default).
 #' @param na.rm logical indicating whether to remove observed or predicted
 #' responses that are \code{NA} when calculating metrics.
+#' @param ... named or unnamed \code{calibration} output to combine together
+#' with the \code{Calibration} constructor.
 #' 
 #' @return \code{Calibration} class object that inherits from \code{data.frame}.
 #'  
-#' @seealso \code{\link{response}}, \code{\link{predict}},
-#' \code{\link{resample}}, \code{\link{plot}}
+#' @seealso \code{\link{plot}}
 #' 
 #' @examples
 #' library(survival)
@@ -95,6 +47,52 @@ calibration <- function(x, y = NULL, breaks = 10, span = 0.75, dist = NULL,
     y <- complete$y
   }
   .calibration(x, y, breaks = breaks, span = span, dist = dist)
+}
+
+
+#' @rdname calibration
+#' 
+Calibration <- function(...) {
+  .Calibration(...)
+}
+
+
+.Calibration <- function(..., .breaks) {
+  args <- list(...)
+  
+  if (length(args) == 0) stop("no calibration output given")
+  
+  .Data <- args[[1]]
+  if (all(mapply(is, args, "Calibration"))) {
+    
+    smoothed <- .Data@smoothed
+    if (!all(sapply(args, function(x) identical(x@smoothed, smoothed)))) {
+      stop("Calibration arguments are a mix of smoothed and binned curves")
+    }
+    
+  } else if (length(args) > 1) {
+    
+    stop("arguments to combine must be Calibration objects")
+    
+  } else if (!is.data.frame(.Data)) {
+    
+    stop("Calibration argument must inherit from data.frame")
+    
+  } else {
+    
+    if (missing(.breaks)) stop("missing breaks in Calibration constructor")
+    smoothed <- is.null(.breaks)
+    
+    var_names <- c("Response", "Predicted", "Observed")
+    is_missing <- !(var_names %in% names(.Data))
+    if (any(is_missing)) {
+      stop("missing calibration variables: ", toString(var_names[is_missing]))
+    }
+    
+  }
+  
+  args <- make_unique_levels(args, which = "Model")
+  new("Calibration", do.call(append, args), smoothed = smoothed)
 }
 
 
@@ -224,8 +222,11 @@ setMethod(".calibration_default", c("Surv", "SurvProbs"),
 setMethod(".calibration_default", c("Surv", "numeric"),
   function(observed, predicted, breaks, dist, span, ...) {
     max_time <- surv_max(observed)
-    dist <- if (is.null(dist)) "weibull" else
+    dist <- if (is.null(dist)) {
+      MachineShop::settings("dist.Surv")
+    } else {
       match.arg(dist, c("empirical", names(survreg.distributions)))
+    }
     nparams <- if (dist %in% c("exponential", "rayleigh")) 1 else 2
     
     f_survfit <- function(observed, weights = NULL) {

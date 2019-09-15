@@ -2,45 +2,45 @@
 % Please edit documentation in R/summary.R
 \name{summary}
 \alias{summary}
-\alias{summary.Performance}
-\alias{summary.Resamples}
-\alias{summary.MLModelTune}
 \alias{summary.Confusion}
 \alias{summary.ConfusionMatrix}
 \alias{summary.Curves}
+\alias{summary.MLModelTune}
+\alias{summary.Performance}
+\alias{summary.Resamples}
 \title{Model Performance Summary}
 \usage{
-\method{summary}{Performance}(object, stats = c(Mean = base::mean, Median
-  = stats::median, SD = stats::sd, Min = base::min, Max = base::max),
-  na.rm = TRUE, ...)
-
-\method{summary}{Resamples}(object, stats = c(Mean = base::mean, Median =
-  stats::median, SD = stats::sd, Min = base::min, Max = base::max),
-  na.rm = TRUE, ...)
-
-\method{summary}{MLModelTune}(object, stats = c(Mean = base::mean, Median
-  = stats::median, SD = stats::sd, Min = base::min, Max = base::max),
-  na.rm = TRUE, ...)
-
 \method{summary}{Confusion}(object, ...)
 
 \method{summary}{ConfusionMatrix}(object, ...)
 
-\method{summary}{Curves}(object, stat = base::mean, ...)
+\method{summary}{Curves}(object,
+  stat = MachineShop::settings("stat.Curves"), ...)
+
+\method{summary}{MLModelTune}(object,
+  stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
+
+\method{summary}{Performance}(object,
+  stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
+
+\method{summary}{Resamples}(object,
+  stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
 }
 \arguments{
-\item{object}{object to summarize.}
-
-\item{stats}{function, one or more function names, or list of named functions
-to include in the calculation of summary statistics.}
-
-\item{na.rm}{logical indicating whether to exclude missing values.}
+\item{object}{\link{confusion}, \link[=performance_curve]{performance curve},
+\link{lift}, model \link{tune}, \link{performance}, or \link{resample}
+result.}
 
 \item{...}{arguments passed to other methods.}
 
-\item{stat}{function to compute a summary statistic at each cutoff value of
-resampled metrics in \code{Curves}, or \code{NULL} for resample-specific
-metrics.}
+\item{stat}{function or character string naming a function to compute a
+summary statistic at each cutoff value of resampled metrics in \code{Curves},
+or \code{NULL} for resample-specific metrics.}
+
+\item{stats}{function, function name, or vector of these with which to
+compute summary statistics.}
+
+\item{na.rm}{logical indicating whether to exclude missing values.}
 }
 \value{
 array with summmary statistics in the second dimension, metrics in
@@ -56,16 +56,12 @@ Summary statistics for resampled model performance metrics.
 fo <- Species ~ .
 control <- CVControl()
 
-gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
-gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
-gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
-summary(gbmres3)
+gbm_res1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+gbm_res2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+gbm_res3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+summary(gbm_res3)
 
-res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
+res <- Resamples(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 summary(res)
 
-}
-\seealso{
-\code{\link{performance}}, \code{\link{resample}},
-\code{\link{diff}}, \code{\link{tune}}, \code{\link{confusion}}
 }

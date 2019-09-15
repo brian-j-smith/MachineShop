@@ -46,7 +46,7 @@
 #' @examples
 #' library(MASS)
 #' 
-#' fit(type ~ ., data = Pima.tr, model = BlackBoostModel())
+#' fit(type ~ ., data = Pima.tr, model = BlackBoostModel)
 #'
 BlackBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
                             risk = c("inbag", "oobag", "none"),

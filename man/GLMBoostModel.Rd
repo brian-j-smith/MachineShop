@@ -46,7 +46,7 @@ found in the source links below.
 \examples{
 library(MASS)
 
-fit(type ~ ., data = Pima.tr, model = GLMBoostModel())
+fit(type ~ ., data = Pima.tr, model = GLMBoostModel)
 
 }
 \seealso{

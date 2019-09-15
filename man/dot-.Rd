@@ -20,8 +20,8 @@ values that are defined in terms of \code{nobs}, \code{nvars}, or \code{y}.
 }
 \examples{
 ## Stepwise variable selection with BIC
-glmfit <- fit(sale_amount ~ ., ICHomes, GLMStepAICModel(k = .(log(nobs))))
-varimp(glmfit)
+glm_fit <- fit(sale_amount ~ ., ICHomes, GLMStepAICModel(k = .(log(nobs))))
+varimp(glm_fit)
 
 }
 \seealso{

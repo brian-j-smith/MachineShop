@@ -2,19 +2,19 @@
 % Please edit documentation in R/diff.R
 \name{diff}
 \alias{diff}
+\alias{diff.MLModelTune}
 \alias{diff.Performance}
 \alias{diff.Resamples}
-\alias{diff.MLModelTune}
 \title{Model Performance Differences}
 \usage{
+\method{diff}{MLModelTune}(x, ...)
+
 \method{diff}{Performance}(x, ...)
 
 \method{diff}{Resamples}(x, ...)
-
-\method{diff}{MLModelTune}(x, ...)
 }
 \arguments{
-\item{x}{object containing resampled metrics.}
+\item{x}{model \link{tune}, \link{performance}, or \link{resample} result.}
 
 \item{...}{arguments passed to other methods.}
 }
@@ -33,18 +33,16 @@ library(MASS)
 fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
 control <- CVControl()
 
-gbmres1 <- resample(fo, Melanoma, GBMModel(n.trees = 25), control)
-gbmres2 <- resample(fo, Melanoma, GBMModel(n.trees = 50), control)
-gbmres3 <- resample(fo, Melanoma, GBMModel(n.trees = 100), control)
+gbm_res1 <- resample(fo, Melanoma, GBMModel(n.trees = 25), control)
+gbm_res2 <- resample(fo, Melanoma, GBMModel(n.trees = 50), control)
+gbm_res3 <- resample(fo, Melanoma, GBMModel(n.trees = 100), control)
 
-res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
-perfdiff <- diff(res)
-summary(perfdiff)
-plot(perfdiff)
+res <- Resamples(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
+res_diff <- diff(res)
+summary(res_diff)
+plot(res_diff)
 
 }
 \seealso{
-\code{\link{performance}}, \code{\link{resample}},
-\code{\link{tune}}, \code{\link{plot}}, \code{\link{summary}},
-\code{\link{t.test}}
+\code{\link{t.test}}, \code{\link{plot}}, \code{\link{summary}}
 }

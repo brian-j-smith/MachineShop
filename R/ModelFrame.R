@@ -1,21 +1,32 @@
 #' ModelFrame Class
 #' 
-#' Class for storing data, formulas, and other attributes for fitting MLModels.
+#' Class for storing data, formulas, and other attributes for \pkg{MachineShop}
+#' model fitting.
 #' 
 #' @name ModelFrame
 #' @rdname ModelFrame-methods
 #' 
-#' @param x model \code{\link{formula}} or \code{matrix} of predictor variables.
+#' @param x model \code{\link{formula}} or \code{\link{matrix}} of predictor
+#' variables.
+#' @param y response variable.
+#' @param data \link[=data.frame]{data frame} or an object that can be converted
+#' to one.
+#' @param na.rm logical indicating whether to remove cases with \code{NA} values
+#' for any of the model variables.
+#' @param weights vector of case weights [default: equal].
+#' @param strata vector of resampling stratification levels [default: none].
+#' @param ... arguments passed to other methods.
 #' 
 #' @return \code{ModelFrame} class object that inherits from \code{data.frame}.
 #' 
-#' @seealso \code{\link{formula}}
+#' @seealso  \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}},
+#' \code{\link{response}}
 #' 
 #' @examples
 #' mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
 #'                  data = esoph, weights = with(esoph, ncases + ncontrols))
-#' gbmfit <- fit(mf, model = GBMModel)
-#' varimp(gbmfit)
+#' gbm_fit <- fit(mf, model = GBMModel)
+#' varimp(gbm_fit)
 #' 
 ModelFrame <- function(x, ...) {
   UseMethod("ModelFrame")
@@ -24,13 +35,6 @@ ModelFrame <- function(x, ...) {
 
 #' @rdname ModelFrame-methods
 #'
-#' @param data \code{data.frame} or an object that can be converted to one.
-#' @param na.rm logical indicating whether to remove cases with \code{NA} values
-#' for any of the model variables.
-#' @param weights vector of case weights [default: equal].
-#' @param strata vector of resampling stratification levels [default: none].
-#' @param ... arguments passed to other methods.
-#' 
 ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
                                strata = NULL, ...) {
   invalid_calls <- setdiff(inline_calls(predictors(x)), valid_predictor_calls)
@@ -55,8 +59,6 @@ ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
 
 #' @rdname ModelFrame-methods
 #' 
-#' @param y response variable.
-#'
 ModelFrame.matrix <- function(x, y = NULL, na.rm = TRUE,
                               weights = NULL, strata = NULL, ...) {
   data <- as.data.frame(x)

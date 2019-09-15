@@ -6,12 +6,102 @@
 #' @name resample
 #' @rdname resample-methods
 #' 
+#' @param x defines a relationship between model predictor and response
+#' variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
+#' predictors, \code{\link{ModelFrame}}, or untrained
+#' \code{\link[recipes]{recipe}}.
+#' @param y response variable.
+#' @param data \link[=data.frame]{data frame} containing observed predictors and
+#' outcomes.
+#' @param model \link[=models]{model} function, function name, or call.
+#' @param control \link[=controls]{control} function, function name, or call
+#' defining the resampling method to be employed.
 #' @param ... named or unnamed \code{resample} output to combine together with
 #' the \code{Resamples} constructor.
 #' 
-#' @details Output being combined from more than one model with the
-#' \code{Resamples} constructor must have been generated with the same
-#' resampling \code{control} object.
+#' @return \code{Resamples} class object.
+#' 
+#' @seealso \code{\link{performance}}, \code{\link{metrics}},
+#' \code{\link{plot}}, \code{\link{summary}}
+#' 
+#' @examples
+#' ## Factor response example
+#' 
+#' fo <- Species ~ .
+#' control <- CVControl()
+#' 
+#' gbm_res1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
+#' gbm_res2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
+#' gbm_res3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
+#' 
+#' summary(gbm_res1)
+#' plot(gbm_res1)
+#' 
+#' res <- Resamples(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
+#' summary(res)
+#' plot(res)
+#' 
+resample <- function(x, ...) {
+  UseMethod("resample")
+}
+
+
+#' @rdname resample-methods
+#' 
+#' @details
+#' Stratified resampling is performed for the \code{formula} method according to
+#' values of the response variable; i.e. categorical levels for \code{factor},
+#' continuous for \code{numeric}, and event status \code{Surv}.
+#' 
+resample.formula <- function(x, data, model,
+                             control = MachineShop::settings("control"), ...) {
+  resample(ModelFrame(x, data, na.rm = FALSE,
+                      strata = strata(response(x, data))), model, control)
+}
+
+
+#' @rdname resample-methods
+#' 
+resample.matrix <- function(x, y, model,
+                            control = MachineShop::settings("control"), ...) {
+  resample(ModelFrame(x, y, na.rm = FALSE, strata = strata(y)), model, control)
+}
+
+
+#' @rdname resample-methods
+#' 
+#' @details
+#' User-specified stratification variables may be specified for
+#' \code{ModelFrames} upon creation with the \code{\link[=ModelFrame]{strata}}
+#' argument in its constructor.  Resampling of this class is unstratified by
+#' default.
+#' 
+resample.ModelFrame <- function(x, model,
+                                control = MachineShop::settings("control"),
+                                ...) {
+  .resample(getMLObject(control, "MLControl"), x, model)
+}
+
+
+#' @rdname resample-methods
+#' 
+#' @details
+#' Variables in a \code{recipe} may be used for stratification by defining a
+#' "case_strata" \code{\link[recipes:roles]{role}} for them.  Resampling will
+#' be unstratified if no variables have that role.
+#' 
+resample.recipe <- function(x, model,
+                            control = MachineShop::settings("control"), ...) {
+  .resample(getMLObject(control, "MLControl"), ModelRecipe(x), model)
+}
+
+
+#' @rdname resample-methods
+#' 
+#' @details
+#' Output being combined from more than one model with the \code{Resamples}
+#' constructor must have been generated with the same resampling \code{control}
+#' object.
 #' 
 Resamples <- function(...) {
   .Resamples(...)
@@ -30,12 +120,12 @@ Resamples <- function(...) {
     if (!all(sapply(args, function(x) identical(x@control, control)))) {
       stop("Resamples arguments have different control structures")
     }
-
+    
     strata <- .Data@strata
     if (!all(sapply(args, function(x) identical(x@strata, strata)))) {
       stop("Resamples arguments have different strata variables")
     }
-
+    
   } else if (length(args) > 1) {
     
     stop("arguments to combine must be Resamples objects")
@@ -45,14 +135,14 @@ Resamples <- function(...) {
     stop("Resamples argument must inherit from data.frame")
     
   } else {
-
+    
     control <- .control
     if (!is(control, "MLControl")) {
       stop("missing control structure in Resamples constructor")
     }
     
     strata <- as.character(.strata)
-
+    
     var_names <- c("Resample", "Case", "Observed", "Predicted")
     is_missing <- !(var_names %in% names(.Data))
     if (any(is_missing)) {
@@ -60,97 +150,9 @@ Resamples <- function(...) {
     }
     
   }
-
+  
   args <- make_unique_levels(args, which = "Model")
   new("Resamples", do.call(append, args), control = control, strata = strata)
-}
-
-
-#' @rdname resample-methods
-#' 
-#' @param x defines a relationship between model predictor and response
-#' variables.  May be a \code{formula}, design matrix of predictors,
-#' \code{ModelFrame}, or untrained \code{recipe}.
-#' 
-#' @return \code{Resamples} class object.
-#' 
-resample <- function(x, ...) {
-  UseMethod("resample")
-}
-
-
-#' @rdname resample-methods
-#' 
-#' @param data \code{data.frame} containing observed predictors and outcomes.
-#' @param model \code{MLModel} object, constructor function, or character string
-#' naming a constructor function that returns an \code{MLModel} object.
-#' @param control \code{\link{MLControl}} object, control function, or character
-#' string naming a control function defining the resampling method to be
-#' employed.
-#' 
-#' @details
-#' Stratified resampling is performed for the \code{formula} method according to
-#' values of the response variable; i.e. categorical levels for \code{factor},
-#' continuous for \code{numeric}, and event status \code{Surv}.
-#' 
-#' @seealso \code{\link{ModelFrame}}, \code{\link[recipes]{recipe}},
-#' \code{\link{models}}, \code{\link{MLControl}}, \code{\link{metrics}},
-#' \code{\link{performance}}, \code{\link{plot}}, \code{\link{summary}}
-#' 
-#' @examples
-#' ## Factor response example
-#' 
-#' fo <- Species ~ .
-#' control <- CVControl()
-#' 
-#' gbmres1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
-#' gbmres2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
-#' gbmres3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
-#' 
-#' summary(gbmres1)
-#' plot(gbmres1)
-#' 
-#' res <- Resamples(GBM1 = gbmres1, GBM2 = gbmres2, GBM3 = gbmres3)
-#' summary(res)
-#' plot(res)
-#' 
-resample.formula <- function(x, data, model, control = CVControl, ...) {
-  resample(ModelFrame(x, data, na.rm = FALSE,
-                      strata = strata(response(x, data))), model, control)
-}
-
-
-#' @rdname resample-methods
-#' 
-#' @param y predictor variable.
-#' 
-resample.matrix <- function(x, y, model, control = CVControl, ...) {
-  resample(ModelFrame(x, y, na.rm = FALSE, strata = strata(y)), model, control)
-}
-
-
-#' @rdname resample-methods
-#' 
-#' @details
-#' User-specified stratification variables may be specified for
-#' \code{\link[=ModelFrame]{ModelFrames}} upon creation with the \code{strata}
-#' argument in its constructor.  Resampling of this class is unstratified by
-#' default.
-#' 
-resample.ModelFrame <- function(x, model, control = CVControl, ...) {
-  .resample(getMLObject(control, "MLControl"), x, model)
-}
-
-
-#' @rdname resample-methods
-#' 
-#' @details
-#' Variables in a \code{recipe} may be used for stratification by defining a
-#' "case_strata" \code{\link[recipes:roles]{role}} for them.  Resampling will
-#' be unstratified if no variables have that role.
-#' 
-resample.recipe <- function(x, model, control = CVControl, ...) {
-  .resample(getMLObject(control, "MLControl"), ModelRecipe(x), model)
 }
 
 
@@ -159,6 +161,7 @@ setGeneric(".resample", function(object, x, ...) standardGeneric(".resample"))
 
 setMethod(".resample", c("MLBootControl", "ModelFrame"),
   function(object, x, model) {
+    presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
     splits <- bootstraps(x,
@@ -174,6 +177,7 @@ setMethod(".resample", c("MLBootControl", "ModelFrame"),
     
     foreach(i = seq(index),
             .packages = c("MachineShop", "survival")) %dopar% {
+      MachineShop::settings(presets)
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
       if (is_optimism_control) {
@@ -195,6 +199,7 @@ setMethod(".resample", c("MLBootControl", "ModelFrame"),
 
 setMethod(".resample", c("MLBootControl", "ModelRecipe"),
   function(object, x, model) {
+    presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
     splits <- bootstraps(as.data.frame(x),
@@ -210,6 +215,7 @@ setMethod(".resample", c("MLBootControl", "ModelRecipe"),
     
     foreach(i = seq(splits),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
+      MachineShop::settings(presets)
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- recipe(x, analysis(split))
@@ -234,6 +240,7 @@ setMethod(".resample", c("MLBootControl", "ModelRecipe"),
 
 setMethod(".resample", c("MLCVControl", "ModelFrame"),
   function(object, x, model) {
+    presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
     splits <- vfold_cv(x,
@@ -244,6 +251,7 @@ setMethod(".resample", c("MLCVControl", "ModelFrame"),
     seeds <- sample.int(.Machine$integer.max, length(index))
     foreach(i = seq(index),
             .packages = c("MachineShop", "survival")) %dopar% {
+      MachineShop::settings(presets)
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
       test <- x[-index[[i]], , drop = FALSE]
@@ -255,6 +263,7 @@ setMethod(".resample", c("MLCVControl", "ModelFrame"),
 
 setMethod(".resample", c("MLCVControl", "ModelRecipe"),
   function(object, x, model) {
+    presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
     splits <- vfold_cv(as.data.frame(x),
@@ -262,9 +271,9 @@ setMethod(".resample", c("MLCVControl", "ModelRecipe"),
                        repeats = object@repeats,
                        strata = strata)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
-    fo <- formula(terms(x))
     foreach(i = seq(splits),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
+      MachineShop::settings(presets)
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- recipe(x, analysis(split))
@@ -277,6 +286,7 @@ setMethod(".resample", c("MLCVControl", "ModelRecipe"),
 
 setMethod(".resample", c("MLOOBControl", "ModelFrame"),
   function(object, x, model) {
+    presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
     splits <- bootstraps(x,
@@ -287,6 +297,7 @@ setMethod(".resample", c("MLOOBControl", "ModelFrame"),
     seeds <- sample.int(.Machine$integer.max, length(index))
     foreach(i = seq(index),
             .packages = c("MachineShop", "survival")) %dopar% {
+      MachineShop::settings(presets)
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
       test <- x[indexOut[[i]], , drop = FALSE]
@@ -298,6 +309,7 @@ setMethod(".resample", c("MLOOBControl", "ModelFrame"),
 
 setMethod(".resample", c("MLOOBControl", "ModelRecipe"),
   function(object, x, model) {
+    presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
     splits <- bootstraps(as.data.frame(x),
@@ -306,6 +318,7 @@ setMethod(".resample", c("MLOOBControl", "ModelRecipe"),
     seeds <- sample.int(.Machine$integer.max, length(splits))
     foreach(i = seq(splits),
             .packages = c("MachineShop", "recipes", "survival")) %dopar% {
+      MachineShop::settings(presets)
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- recipe(x, analysis(split))

@@ -67,8 +67,8 @@ to 100.  To obtain unscaled importance values, set \code{scale = FALSE}.  See
 example below.
 }
 \examples{
-modelfit <- fit(Species ~ ., data = iris, model = C50Model())
-varimp(modelfit, metric = "splits", scale = FALSE)
+model_fit <- fit(Species ~ ., data = iris, model = C50Model)
+varimp(model_fit, metric = "splits", scale = FALSE)
 
 }
 \seealso{
