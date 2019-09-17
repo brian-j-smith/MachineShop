@@ -68,7 +68,7 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
 #' This should be a list containing components \code{upper} and
 #' \code{lower}, both formulae.
 #' @param k multiple of the number of degrees of freedom used for the penalty.
-#' Only \code{k = 2} gives the genuine AIC: \code{k = log(nobs)} is sometimes
+#' Only \code{k = 2} gives the genuine AIC; \code{k = .(log(nobs))} is sometimes
 #' referred to as BIC or SBC.
 #' @param trace if positive, information is printed during the running of
 #' \code{stepAIC}. Larger values may give more information on the fitting
