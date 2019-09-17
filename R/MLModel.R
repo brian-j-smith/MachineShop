@@ -93,20 +93,6 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
   stopifnot(response_types %in% c("binary", "factor", "matrix", "numeric",
                                   "ordered", "Surv"))
   
-  args <- list(...)
-  if (!is.null(args$types)) {
-    depwarn("'types' argument to MLModel is deprecated",
-            "use 'response_types' instead",
-            expired = Sys.Date() >= "2019-09-01")
-    response_types <- args$types
-  }
-  if (!is.null(args$design)) {
-    depwarn("'design' argument to MLModel is deprecated",
-            "use 'predictor_encoding' instead",
-            expired = Sys.Date() >= "2019-09-01")
-    predictor_encoding <- args$design
-  }
-  
   new("MLModel",
       name = name,
       label = label,
