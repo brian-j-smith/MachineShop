@@ -4,8 +4,8 @@
 #' component-wise arbitrary base-learners, e.g., smoothing procedures, are
 #' utilized as additive base-learners.
 #' 
-#' @param family \code{\link[mboost]{Family}} object.  Set automatically
-#' according to the class type of the response variable.
+#' @param family optional \code{\link[mboost]{Family}} object.  Set
+#' automatically according to the class type of the response variable.
 #' @param baselearner character specifying the component-wise
 #' \code{\link[mboost:baselearners]{base learner}} to be used.
 #' @param dfbase gobal degrees of freedom for P-spline base learners

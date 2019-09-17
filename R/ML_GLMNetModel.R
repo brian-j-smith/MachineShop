@@ -2,8 +2,8 @@
 #'
 #' Fit a generalized linear model via penalized maximum likelihood.
 #'
-#' @param family response type.  Set automatically according to the class type
-#' of the response variable.
+#' @param family optional response type.  Set automatically according to the
+#' class type of the response variable.
 #' @param alpha elasticnet mixing parameter.
 #' @param lambda regularization parameter.  The default value \code{lambda = 0}
 #' performs no regularization and should be increased to avoid model fitting

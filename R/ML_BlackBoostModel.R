@@ -3,8 +3,8 @@
 #' Gradient boosting for optimizing arbitrary loss functions where regression
 #' trees are utilized as base-learners.
 #' 
-#' @param family \code{\link[mboost]{Family}} object.  Set automatically
-#' according to the class type of the response variable.
+#' @param family optional \code{\link[mboost]{Family}} object.  Set
+#' automatically according to the class type of the response variable.
 #' @param mstop number of initial boosting iterations.
 #' @param nu step size or shrinkage parameter between 0 and 1.
 #' @param risk method to use in computing the empirical risk for each boosting

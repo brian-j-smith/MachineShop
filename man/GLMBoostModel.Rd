@@ -9,8 +9,8 @@ GLMBoostModel(family = NULL, mstop = 100, nu = 0.1,
   trace = FALSE)
 }
 \arguments{
-\item{family}{\code{\link[mboost]{Family}} object.  Set automatically
-according to the class type of the response variable.}
+\item{family}{optional \code{\link[mboost]{Family}} object.  Set
+automatically according to the class type of the response variable.}
 
 \item{mstop}{number of initial boosting iterations.}
 

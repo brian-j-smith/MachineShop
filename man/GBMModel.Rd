@@ -8,8 +8,8 @@ GBMModel(distribution = NULL, n.trees = 100, interaction.depth = 1,
   n.minobsinnode = 10, shrinkage = 0.1, bag.fraction = 0.5)
 }
 \arguments{
-\item{distribution}{either a character string specifying the name of the
-distribution to use or a list with a component \code{name} specifying the
+\item{distribution}{optional character string specifying the name of the
+distribution to use or list with a component \code{name} specifying the
 distribution and any additional parameters needed.  Set automatically
 according to the class type of the response variable.}
 

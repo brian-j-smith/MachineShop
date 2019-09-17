@@ -10,8 +10,8 @@ GAMBoostModel(family = NULL, baselearner = c("bbs", "bols", "btree",
   trace = FALSE)
 }
 \arguments{
-\item{family}{\code{\link[mboost]{Family}} object.  Set automatically
-according to the class type of the response variable.}
+\item{family}{optional \code{\link[mboost]{Family}} object.  Set
+automatically according to the class type of the response variable.}
 
 \item{baselearner}{character specifying the component-wise
 \code{\link[mboost:baselearners]{base learner}} to be used.}

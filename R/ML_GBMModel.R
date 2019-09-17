@@ -2,8 +2,8 @@
 #' 
 #' Fits generalized boosted regression models.
 #'
-#' @param distribution either a character string specifying the name of the
-#' distribution to use or a list with a component \code{name} specifying the
+#' @param distribution optional character string specifying the name of the
+#' distribution to use or list with a component \code{name} specifying the
 #' distribution and any additional parameters needed.  Set automatically
 #' according to the class type of the response variable.
 #' @param n.trees total number of trees to fit.

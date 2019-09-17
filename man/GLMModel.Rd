@@ -11,8 +11,8 @@ GLMStepAICModel(family = NULL, ..., direction = c("both", "backward",
   "forward"), scope = NULL, k = 2, trace = FALSE, steps = 1000)
 }
 \arguments{
-\item{family}{description of the error distribution and link function to be
-used in the model.  Set automatically according to the class type of the
+\item{family}{optional error distribution and link function to be used in the
+model.  Set automatically according to the class type of the
 response variable.}
 
 \item{...}{arguments passed to \code{\link[stats]{glm.control}}.}

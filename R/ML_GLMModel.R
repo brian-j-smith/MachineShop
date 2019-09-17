@@ -5,8 +5,8 @@
 #' 
 #' @rdname GLMModel
 #' 
-#' @param family description of the error distribution and link function to be
-#' used in the model.  Set automatically according to the class type of the
+#' @param family optional error distribution and link function to be used in the
+#' model.  Set automatically according to the class type of the
 #' response variable.
 #' @param ... arguments passed to \code{\link[stats]{glm.control}}.
 #' 
