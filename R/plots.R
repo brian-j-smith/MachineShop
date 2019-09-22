@@ -196,6 +196,7 @@ plot.MLModelTune <- function(x, metrics = NULL,
                              type = c("boxplot", "density", "errorbar", "line",
                                       "violin"), ...) {
   perf <- x@performance
+  stat <- fget(stat)
   type <- match.arg(type)
   if (type == "line") {
     grid <- x@tune_grid
