@@ -157,7 +157,19 @@ MLModelTune <- function(object, tune_grid, performance, selected) {
   perf_list <- list()
   perf_stat <- numeric()
   for (name in names(models)) {
-    res <- resample(x, data, model = models[[name]], control = control)
+    res <- try(
+      resample(x, data, model = models[[name]], control = control),
+      silent = TRUE
+    )
+    
+    if (is(res, "try-error")) {
+      warn("tune resampling failed for ", name, " with error:\n",
+           attr(res, "condition")$message)
+      perf_list[[name]] <- NA
+      perf_stat[name] <- NA
+      next
+    }
+    
     if (is.null(metrics)) {
       method <- fget(findMethod(performance, res$Observed))
       metrics <- c(eval(formals(method)$metrics))
@@ -169,8 +181,18 @@ MLModelTune <- function(object, tune_grid, performance, selected) {
       metrics <- metrics[is_defined]
       metric <- getMLObject(metrics[[1]], "MLMetric")
     }
-    perf_list[[name]] <- performance(res, metrics = metrics, ...)
-    perf_stat[name] <- stat(na.omit(perf_list[[name]][, 1]))
+    
+    perf <- performance(res, metrics = metrics, ...)
+    perf_list[[name]] <- perf
+    perf_stat[name] <- stat(na.omit(perf[, 1]))
+  }
+  
+  failed <- is.na(perf_list)
+  if (all(failed)) {
+    stop("tune resampling failed for all models", call. = FALSE)
+  } else if (any(failed)) {
+    perf[] <- NA
+    perf_list[failed] <- list(perf)
   }
   
   perf <- do.call(Performance, perf_list)
