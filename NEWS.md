@@ -2,6 +2,11 @@
 
 ## Version Updates
 
+## 1.5.2
+* Implement exception handling of `tune()` resampling failures.
+* Remove deprecated `types` and `design` arguments from `MLModel()`.
+
+
 ## 1.5.1
 * Implement global settings for default resampling control, performance metrics, summary statistics, and tuning grid.
 * Support vector arguments in `metricinfo()` and `modelinfo()`.
