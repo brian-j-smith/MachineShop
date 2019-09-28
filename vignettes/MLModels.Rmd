@@ -48,7 +48,7 @@ knitr::opts_chunk$set(
 - Use :: or ::: to reference source package functions.
 
 
-### types Slot
+### response_types Slot
 
 - Include all response variable types (`"binary"`, `"factor"`, `"matrix"`, `"numeric"`, `"ordered"`, and/or `"Surv"`) that can be analyzed with the model.
 
