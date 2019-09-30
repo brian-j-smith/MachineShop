@@ -90,7 +90,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -366,6 +365,9 @@ div.tocify {
     </li>
     <li>
       <a href="example_variables.html">Variable Specifications and Preprocessing</a>
+    </li>
+    <li>
+      <a href="example_settings.html">Global Settings</a>
     </li>
     <li class="divider"></li>
     <li>
@@ -645,9 +647,9 @@ performance(res, c(accuracy, kappa2)) %&gt;% summary
 <h2>Model Tuning</h2>
 <pre class="r"><code>## Tune over a grid of model parameters
 tuned_model &lt;- tune(fo, data = iris, model = GBMModel,
-                    grid = expand.grid(n.trees = c(25, 50, 100),
-                                       interaction.depth = 1:3,
-                                       n.minobsinnode = c(5, 10)))
+                    grid = expand_params(n.trees = c(25, 50, 100),
+                                         interaction.depth = 1:3,
+                                         n.minobsinnode = c(5, 10)))
 
 plot(tuned_model, type = &quot;line&quot;)</code></pre>
 <p><img src="example_iris_files/figure-html/ex_iris_tune-1.png" width="672" style="display: block; margin: auto;" /></p>

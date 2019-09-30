@@ -89,7 +89,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -366,6 +365,9 @@ div.tocify {
     <li>
       <a href="example_variables.html">Variable Specifications and Preprocessing</a>
     </li>
+    <li>
+      <a href="example_settings.html">Global Settings</a>
+    </li>
     <li class="divider"></li>
     <li>
       <a href="example_ichomes.html">IC Home Prices</a>
@@ -446,9 +448,9 @@ model_fit &lt;- fit(fo, ICHomes, model = tuned_model)
 model_res &lt;- resample(fo, ICHomes, model = tuned_model)
 summary(model_res)
 #&gt;              Mean       Median           SD          Min          Max NA
-#&gt; RMSE 5.446741e+04 5.692756e+04 1.205796e+04 3.590144e+04 7.338563e+04  0
-#&gt; R2   6.247074e-01 6.484983e-01 1.169232e-01 3.861575e-01 7.703812e-01  0
-#&gt; MAE  2.926885e+04 2.803412e+04 3.756001e+03 2.533105e+04 3.538850e+04  0</code></pre>
+#&gt; RMSE 5.393849e+04 5.494142e+04 11901.106973 3.048369e+04 7.204500e+04  0
+#&gt; R2   6.406241e-01 6.453997e-01     0.114439 3.924652e-01 8.003395e-01  0
+#&gt; MAE  2.898293e+04 2.838869e+04  4628.995222 2.184885e+04 3.721708e+04  0</code></pre>
 </div>
 <div id="design-matrix" class="section level2">
 <h2>Design Matrix</h2>
@@ -461,9 +463,9 @@ model_fit &lt;- fit(x, y, model = tuned_model)
 model_res &lt;- resample(x, y, model = tuned_model)
 summary(model_res)
 #&gt;              Mean       Median           SD          Min          Max NA
-#&gt; RMSE 5.949771e+04 6.030414e+04 1.970369e+04 3.107880e+04 8.855915e+04  0
-#&gt; R2   5.700382e-01 5.638145e-01 1.413462e-01 4.078289e-01 8.323741e-01  0
-#&gt; MAE  3.407460e+04 3.467444e+04 6.327783e+03 2.267560e+04 4.483100e+04  0</code></pre>
+#&gt; RMSE 6.006494e+04 5.530396e+04 1.892298e+04 3.306872e+04 9.880400e+04  0
+#&gt; R2   5.499054e-01 5.520743e-01 8.628877e-02 3.872804e-01 6.726994e-01  0
+#&gt; MAE  3.449766e+04 3.422497e+04 6.147685e+03 2.563756e+04 4.582693e+04  0</code></pre>
 </div>
 <div id="model-frame" class="section level2">
 <h2>Model Frame</h2>
@@ -475,9 +477,9 @@ model_fit &lt;- fit(mf, model = tuned_model)
 model_res &lt;- resample(mf, model = tuned_model)
 summary(model_res)
 #&gt;              Mean       Median           SD          Min          Max NA
-#&gt; RMSE 5.416380e+04 5.302785e+04 9.561974e+03 4.257813e+04 7.283756e+04  0
-#&gt; R2   6.402258e-01 6.405792e-01 6.305773e-02 5.499315e-01 7.377533e-01  0
-#&gt; MAE  2.870328e+04 2.810383e+04 2.940990e+03 2.531644e+04 3.301788e+04  0</code></pre>
+#&gt; RMSE 5.295771e+04 5.486064e+04 1.792214e+04 3.123056e+04 7.998732e+04  0
+#&gt; R2   6.441149e-01 6.749556e-01 1.128184e-01 3.666809e-01 7.545634e-01  0
+#&gt; MAE  2.912913e+04 3.003532e+04 6.509687e+03 2.105852e+04 4.169938e+04  0</code></pre>
 </div>
 <div id="preprocessing-recipe" class="section level2">
 <h2>Preprocessing Recipe</h2>
@@ -495,9 +497,9 @@ model_fit &lt;- fit(rec, model = tuned_model)
 model_res &lt;- resample(rec, model = tuned_model)
 summary(model_res)
 #&gt;              Mean       Median           SD          Min          Max NA
-#&gt; RMSE 5.494150e+04 55145.024335 1.425161e+04 3.232088e+04 7.298636e+04  0
-#&gt; R2   6.367116e-01     0.654785 1.176179e-01 4.753078e-01 7.936387e-01  0
-#&gt; MAE  3.033933e+04 31347.645088 5.529738e+03 1.913074e+04 3.738154e+04  0</code></pre>
+#&gt; RMSE 5.549896e+04 5.388322e+04 1.449916e+04 3.538494e+04 7.730929e+04  0
+#&gt; R2   6.193385e-01 6.182196e-01 8.683659e-02 4.907569e-01 7.225741e-01  0
+#&gt; MAE  3.062101e+04 3.027683e+04 4.248714e+03 2.425736e+04 3.744345e+04  0</code></pre>
 </div>
 </div>
 

@@ -90,7 +90,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -366,6 +365,9 @@ div.tocify {
     </li>
     <li>
       <a href="example_variables.html">Variable Specifications and Preprocessing</a>
+    </li>
+    <li>
+      <a href="example_settings.html">Global Settings</a>
     </li>
     <li class="divider"></li>
     <li>
@@ -698,7 +700,7 @@ fit(surv_fo, data = surv_train, model = GBMModel(n.trees = 100, interaction.dept
 fit(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(nobs))))
 
 ## Response variable: y
-fit (surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(length(y)))))</code></pre>
+fit(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(length(y)))))</code></pre>
 </div>
 <div id="predict-function" class="section level2">
 <h2>Predict Function</h2>
@@ -1020,15 +1022,15 @@ obs &lt;- response(surv_fit, newdata = surv_test)
 ## Predicted survival means
 pred_means &lt;- predict(surv_fit, newdata = surv_test)
 performance(obs, pred_means)
-#&gt;    CIndex 
+#&gt;   C-Index 
 #&gt; 0.6127013
 
 ## Predicted survival probabilities
 pred_probs &lt;- predict(surv_fit, newdata = surv_test, times = surv_times, type = &quot;prob&quot;)
 performance(obs, pred_probs)
-#&gt;     Brier.mean    Brier.time1    Brier.time2    ROCAUC.mean   ROCAUC.time1 
+#&gt;     Brier.mean    Brier.time1    Brier.time2   ROC AUC.mean  ROC AUC.time1 
 #&gt;      0.2700376      0.2265776      0.3134975      0.5350288      0.5965768 
-#&gt;   ROCAUC.time2  Accuracy.mean Accuracy.time1 Accuracy.time2 
+#&gt;  ROC AUC.time2  Accuracy.mean Accuracy.time1 Accuracy.time2 
 #&gt;      0.4734807      0.6548227      0.7349709      0.5746745
 
 ## Predicted survival events
@@ -1435,7 +1437,7 @@ Event
 <dd>Optimism-corrected bootstrap resampling <span class="citation">(Efron and Gong 1983; Harrell, Lee, and Mark 1996)</span>.
 </dd>
 <dt>CVControl</dt>
-<dd>Repeated K-fold cross-validation <span class="citation">(Kohavi 1995)</span>. The full data set is repeatedly partitioned into K-folds. For a given partitioning, prediction is performed on each of the K folds with models fit on all remaining folds.
+<dd>Repeated K-fold cross-validation <span class="citation">(Kohavi 1995)</span>. The full data set is repeatedly partitioned into K-folds. For a given partitioning, prediction is performed on each of the K folds with models fit on all remaining folds. 10-fold cross-validation is the package default.
 </dd>
 <dt>OOBControl</dt>
 <dd>Out-of-bootstrap resampling. Models are fit with bootstrap resampled training sets and used to predict the unsampled cases.
@@ -1501,8 +1503,8 @@ registerDoParallel(cores = 2)</code></pre>
 <p>The <code>summary</code> function when applied directly to output from <code>resample</code> computes summary statistics for the default performance metrics described in the <em>Performance Function</em> section.</p>
 <pre class="r"><code>## Summary of survival means metric
 summary(res_means)
-#&gt;             Mean    Median         SD       Min       Max NA
-#&gt; CIndex 0.7610614 0.7663043 0.06966664 0.6256684 0.8924731  0
+#&gt;              Mean    Median         SD       Min       Max NA
+#&gt; C-Index 0.7610614 0.7663043 0.06966664 0.6256684 0.8924731  0
 
 ## Summary of survival probability metrics
 summary(res_probs)
@@ -1510,9 +1512,9 @@ summary(res_probs)
 #&gt; Brier.mean     0.1864575 0.1714480 0.05565866 0.12160556 0.3389423  0
 #&gt; Brier.time1    0.1686271 0.1674014 0.03595483 0.09871495 0.2322408  0
 #&gt; Brier.time2    0.2042879 0.1782289 0.08490057 0.11394700 0.4511018  0
-#&gt; ROCAUC.mean    0.7971056 0.7921197 0.06784720 0.65103433 0.9403871  0
-#&gt; ROCAUC.time1   0.8077798 0.8093603 0.07659626 0.68459040 0.9506220  0
-#&gt; ROCAUC.time2   0.7864314 0.7994861 0.06685039 0.61747827 0.9301522  0
+#&gt; ROC AUC.mean   0.7971056 0.7921197 0.06784720 0.65103433 0.9403871  0
+#&gt; ROC AUC.time1  0.8077798 0.8093603 0.07659626 0.68459040 0.9506220  0
+#&gt; ROC AUC.time2  0.7864314 0.7994861 0.06685039 0.61747827 0.9301522  0
 #&gt; Accuracy.mean  0.7162196 0.7030539 0.06184229 0.64424951 0.8497942  0
 #&gt; Accuracy.time1 0.7609229 0.7482143 0.05731050 0.66460905 0.8888889  0
 #&gt; Accuracy.time2 0.6715162 0.6652949 0.08388027 0.54285714 0.8477366  0</code></pre>
@@ -1530,13 +1532,13 @@ summary(performance(res_means, metrics = c(cindex, rmse)))
 <pre class="r"><code>## User-defined statistics function
 percentiles &lt;- function(x) quantile(x, probs = c(0.25, 0.50, 0.75))
 summary(res_means, stats = percentiles)
-#&gt;             25%       50%       75% NA
-#&gt; CIndex 0.720087 0.7663043 0.8113255  0
+#&gt;              25%       50%       75% NA
+#&gt; C-Index 0.720087 0.7663043 0.8113255  0
 
 ## User-defined list of statistics functions
 summary(res_means, stats = c(Mean = mean, Percentile = percentiles))
-#&gt;             Mean Percentile.25% Percentile.50% Percentile.75% NA
-#&gt; CIndex 0.7610614       0.720087      0.7663043      0.8113255  0</code></pre>
+#&gt;              Mean Percentile.25% Percentile.50% Percentile.75% NA
+#&gt; C-Index 0.7610614       0.720087      0.7663043      0.8113255  0</code></pre>
 </div>
 <div id="plots" class="section level2">
 <h2>Plots</h2>
@@ -1604,7 +1606,7 @@ res3 &lt;- resample(surv_fo, data = surv_train, model = GBMModel(n.trees = 100),
 #&gt; Seed: 123
 
 summary(res)
-#&gt; , , CIndex
+#&gt; , , C-Index
 #&gt; 
 #&gt;           Mean    Median         SD       Min       Max NA
 #&gt; GBM1 0.7738602 0.7743590 0.08222939 0.6096257 0.9354839  0
@@ -1615,30 +1617,30 @@ plot(res)</code></pre>
 <p><img src="using_files/figure-html/using_resample_comparisons-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Pairwise model differences for each metric can be calculated with the <code>diff</code> function applied to results from a call to <code>Resamples</code>. Resulting differences can be summarized descriptively with the <code>summary</code> and <code>plot</code> functions and assessed for statistical significance with the <code>t.test</code> function.</p>
 <pre class="r"><code>## Pairwise model comparisons
-(perfdiff &lt;- diff(res))
+(res_diff &lt;- diff(res))
 #&gt; Object of class &quot;PerformanceDiff&quot;
 #&gt; 
-#&gt; Metrics: CIndex
+#&gt; Metrics: C-Index
 #&gt; Models: GBM1 - GBM2, GBM1 - GBM3, GBM2 - GBM3
 
-summary(perfdiff)
-#&gt; , , CIndex
+summary(res_diff)
+#&gt; , , C-Index
 #&gt; 
 #&gt;                     Mean      Median         SD         Min        Max NA
 #&gt; GBM1 - GBM2 0.0008308229 0.005128205 0.01863138 -0.03482587 0.02331606  0
 #&gt; GBM1 - GBM3 0.0127988563 0.008982036 0.02271720 -0.01990050 0.05434783  0
 #&gt; GBM2 - GBM3 0.0119680334 0.010695187 0.01992512 -0.02590674 0.04891304  0
 
-plot(perfdiff)</code></pre>
+plot(res_diff)</code></pre>
 <p><img src="using_files/figure-html/using_resample_diff-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>t.test(perfdiff)
+<pre class="r"><code>t.test(res_diff)
 #&gt; Object of class &quot;PerformanceDiffTest&quot;
 #&gt; 
 #&gt; Upper diagonal: mean differences (row - column)
 #&gt; Lower diagonal: p-values
 #&gt; P-value adjustment method: holm
 #&gt; 
-#&gt; , , CIndex
+#&gt; , , C-Index
 #&gt; 
 #&gt;           GBM1         GBM2       GBM3
 #&gt; GBM1        NA 0.0008308229 0.01279886
@@ -1825,6 +1827,8 @@ plot(lf, find = 0.75)</code></pre>
 #&gt; Label: Generalized Boosted Regression
 #&gt; Packages: gbm
 #&gt; Response types: factor, numeric, Surv
+#&gt; Tuning grid: TRUE
+#&gt; Variable importance: TRUE
 #&gt; 
 #&gt; Parameters:
 #&gt; $n.trees
@@ -1842,7 +1846,7 @@ plot(lf, find = 0.75)</code></pre>
 #&gt; $bag.fraction
 #&gt; [1] 0.5
 #&gt; 
-#&gt; Grid:
+#&gt; Grid (selected = 1):
 #&gt;   n.trees interaction.depth
 #&gt; 1      50                 1
 #&gt; 2     100                 1
@@ -1859,7 +1863,8 @@ plot(lf, find = 0.75)</code></pre>
 #&gt; Metrics: CIndex, RMSE
 #&gt; Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6, GBMModel.7, GBMModel.8, GBMModel.9 
 #&gt; 
-#&gt; Selected (CIndex): GBMModel.1</code></pre>
+#&gt; Selected model: GBMModel.1 
+#&gt; CIndex value: 0.7730294</code></pre>
 <p>Grid values may also be a call to <code>Grid</code> with the grid <code>length</code> and number of grid points to sample at <code>random</code> or a user-specified data frame of grid points.</p>
 <pre class="r"><code>## Tune over randomly sampled grid points
 tune(surv_fo, data = surv_train, model = GBMModel,
@@ -1868,8 +1873,8 @@ tune(surv_fo, data = surv_train, model = GBMModel,
 
 ## Tune over user-specified grid points
 tune(surv_fo, data = surv_train, model = GBMModel,
-     grid = expand.grid(n.trees = c(25, 50, 100),
-                        interaction.depth = 1:3),
+     grid = expand_params(n.trees = c(25, 50, 100),
+                          interaction.depth = 1:3),
      control = surv_means_control)</code></pre>
 <p>Statistics summarizing the resampled performance metrics across all tuning parameter combinations can be obtained with the <code>summary</code> function.</p>
 <pre class="r"><code>summary(tuned_model)
@@ -1921,15 +1926,15 @@ surv_fit &lt;- fit(surv_fo, data = surv_train, model = tuned_model)
 res_tuned &lt;- resample(surv_fo, data = surv_train, model = tuned_model,
                       control = surv_means_control)
 summary(res_tuned)
-#&gt;             Mean    Median         SD      Min       Max NA
-#&gt; CIndex 0.7692781 0.7604167 0.06627141 0.657754 0.8924731  0</code></pre>
+#&gt;              Mean    Median         SD      Min       Max NA
+#&gt; C-Index 0.7692781 0.7604167 0.06627141 0.657754 0.8924731  0</code></pre>
 </div>
 <div id="model-selection" class="section level2">
 <h2>Model Selection</h2>
-<p>Model selection can be conducted with the <code>tune</code> or <code>SelectedModel</code> function to automatically choose from any combination of models and model parameters. Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values. Combinations of model functions, function names, or function calls can be supplied as lists to the <code>models</code> argument of <code>tune</code> or as arguments to <code>SelectedModel</code> in order to define sets of candidate models from which to select. An <code>expand.model</code> helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired. In this general form of model selection, the <code>grid</code> argument in the tuning functions is not used.</p>
+<p>Model selection can be conducted with the <code>tune</code> or <code>SelectedModel</code> function to automatically choose from any combination of models and model parameters. Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values. Combinations of model functions, function names, or function calls can be supplied as lists to the <code>models</code> argument of <code>tune</code> or as arguments to <code>SelectedModel</code> in order to define sets of candidate models from which to select. An <code>expand_model</code> helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired. In this general form of model selection, the <code>grid</code> argument in the tuning functions is not used.</p>
 <pre class="r"><code>## Model interface for model selection
 selected_model &lt;- SelectedModel(
-  expand.model(GBMModel, n.trees = c(50, 100), interaction.depth = 1:2),
+  expand_model(GBMModel, n.trees = c(50, 100), interaction.depth = 1:2),
   GLMNetModel(lambda = 0.01),
   CoxModel,
   SurvRegModel
@@ -1964,17 +1969,89 @@ fit(surv_fo, data = surv_train, model = selected_tuned_model)</code></pre>
 stackedmodel &lt;- StackedModel(GLMBoostModel, CForestModel, CoxModel)
 res_stacked &lt;- resample(surv_fo, data = surv_train, model = stackedmodel)
 summary(res_stacked)
-#&gt;             Mean    Median        SD  Min       Max NA
-#&gt; CIndex 0.7486014 0.8100414 0.1949891 0.45 0.9705882  0
+#&gt;              Mean    Median        SD  Min       Max NA
+#&gt; C-Index 0.7486014 0.8100414 0.1949891 0.45 0.9705882  0
 
 ## Super learner
 supermodel &lt;- SuperModel(GLMBoostModel, CForestModel, CoxModel,
                          model = GBMModel)
 res_super &lt;- resample(surv_fo, data = surv_train, model = supermodel)
 summary(res_super)
-#&gt;            Mean  Median        SD Min       Max NA
-#&gt; CIndex 0.737307 0.75625 0.1228742 0.5 0.9027778  0</code></pre>
+#&gt;             Mean  Median        SD Min       Max NA
+#&gt; C-Index 0.737307 0.75625 0.1228742 0.5 0.9027778  0</code></pre>
 </div>
+</div>
+<div id="global-settings" class="section level1">
+<h1>Global Settings</h1>
+<p>Core default behaviors of functions in the package can be viewed or changed globally through the <code>settings</code> function. The function accepts one or more character names of settings to view, <code>name = value</code> pairs giving the values of settings to change, or a vector of these, with available settings summarized below.</p>
+<dl>
+<dt><code>control</code></dt>
+<dd>function, function name, or call defining a default resampling method [default: <code>"CVControl"</code>].
+</dd>
+<dt><code>cutoff</code></dt>
+<dd>numeric (0, 1) threshold above which binary factor probabilities are classified as events and below which survival probabilities are classified [default: 0.5].
+</dd>
+<dt><code>dist.Surv</code></dt>
+<dd>character string specifying distributional approximations to estimated survival curves for predicting survival means. Choices are <code>"empirical"</code> for the Kaplan-Meier estimator, <code>"exponential"</code>, or <code>"weibull"</code> (default).
+</dd>
+<dt><code>dist.SurvProbs</code></dt>
+<dd>character string specifying distributional approximations to estimated survival curves for predicting survival events/probabilities. Choices are <code>"empirical"</code> (default) for the Kaplan-Meier estimator, <code>"exponential"</code>, or <code>"weibull"</code>.
+</dd>
+<dt><code>grid</code></dt>
+<dd>number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a <code>Grid</code> function, function name, or call [default: 3].
+</dd>
+<dt><code>method.EmpiricalSurv</code></dt>
+<dd>character string specifying the empirical method of estimating baseline survival curves for Cox proportional hazards-based models. Choices are <code>"breslow"</code>, <code>"efron"</code> (default), or <code>"fleming-harrington"</code>.
+</dd>
+<dt><code>metrics.ConfusionMatrix</code></dt>
+<dd>function, function name, or vector of these with which to calculate performance metrics for confusion matrices [default: <code>c(Accuracy = "accuracy", Kappa = "kappa2", `Weighted Kappa` = "weighted_kappa2", Sensitivity = "sensitivity", Specificity = "specificity")</code>].
+</dd>
+<dt><code>metrics.factor</code></dt>
+<dd>function, function name, or vector of these with which to calculate performance metrics for factor responses [default: <code>c(Brier = "brier", Accuracy = "accuracy", Kappa = "kappa2", `Weighted Kappa` = "weighted_kappa2", `ROC AUC` = "roc_auc", Sensitivity = "sensitivity", Specificity = "specificity")</code>].
+</dd>
+<dt><code>metrics.matrix</code></dt>
+<dd>function, function name, or vector of these with which to calculate performance metrics for matrix responses [default: <code>c(RMSE = "rmse", R2 = "r2", MAE = "mae")</code>].
+</dd>
+<dt><code>metrics.numeric</code></dt>
+<dd>function, function name, or vector of these with which to calculate performance metrics for numeric responses [default: <code>c(RMSE = "rmse", R2 = "r2", MAE = "mae")</code>].
+</dd>
+<dt><code>metrics.Surv</code></dt>
+<dd>function, function name, or vector of these with which to calculate performance metrics for survival responses [default: <code>c(`C-Index` = "cindex", Brier = "brier", `ROC AUC` = "roc_auc", Accuracy = "accuracy")</code>].
+</dd>
+<dt><code>stat.Curves</code></dt>
+<dd>function or character string naming a function to compute one summary statistic at each cutoff value of resampled metrics in performance curves, or <code>NULL</code> for resample-specific metrics [default: <code>"base::mean"</code>].
+</dd>
+<dt><code>stat.Resamples</code></dt>
+<dd>function or character string naming a function to compute one summary statistic to control the ordering of models in plots [default: <code>"base::mean"</code>].
+</dd>
+<dt><code>stat.Tune</code></dt>
+<dd>function or character string naming a function to compute one summary statistic on resampled performance metrics for model selection, model tuning, and recipe tuning [default: <code>"base::mean"</code>].
+</dd>
+<dt><code>stats.PartialDependence</code></dt>
+<dd>function, function name, or vector of these with which to compute partial dependence summary statistics [default: <code>c(Mean = "base::mean")</code>].
+</dd>
+<dt><code>stats.Resamples</code></dt>
+<dd>function, function name, or vector of these with which to compute summary statistics on resampled performance metrics [default: <code>c(Mean = "base::mean", Median = "stats::median", SD = "stats::sd", Min = "base::min", Max = "base::max")</code>].
+</dd>
+</dl>
+<p>A call to <code>settings</code> with <code>"reset"</code> will restore all package defaults and with no arguments will display the current values of all. Settings may also be supplied as a single unnamed argument which is a named list. Partial matching of setting names is supported. The setting value is returned if only one is specified to view. Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes. Such a list can be passed as an argument to <code>settings</code> to restore their values.</p>
+<pre class="r"><code>## Change settings
+presets &lt;- settings(control = &quot;BootControl&quot;, grid = 10)
+
+## View one setting
+settings(&quot;control&quot;)
+#&gt; [1] &quot;BootControl&quot;
+
+## View multiple settings
+settings(&quot;control&quot;, &quot;grid&quot;)
+#&gt; $control
+#&gt; [1] &quot;BootControl&quot;
+#&gt; 
+#&gt; $grid
+#&gt; [1] 10
+
+## Restore the previous settings
+settings(presets)</code></pre>
 </div>
 <div id="package-extensions" class="section level1">
 <h1>Package Extensions</h1>
@@ -2062,7 +2139,7 @@ library(MASS)
 res &lt;- resample(type ~ ., data = Pima.tr, model = LogisticModel)
 summary(performance(res, metric = f2_score))
 #&gt;               Mean    Median        SD       Min       Max NA
-#&gt; f2_score 0.5741146 0.5535714 0.1536065 0.3225806 0.8571429  0</code></pre>
+#&gt; f2_score 0.5688623 0.5213904 0.2027512 0.3225806 0.9459459  0</code></pre>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">

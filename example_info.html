@@ -89,7 +89,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -366,6 +365,9 @@ div.tocify {
     <li>
       <a href="example_variables.html">Variable Specifications and Preprocessing</a>
     </li>
+    <li>
+      <a href="example_settings.html">Global Settings</a>
+    </li>
     <li class="divider"></li>
     <li>
       <a href="example_ichomes.html">IC Home Prices</a>
@@ -543,7 +545,8 @@ metricinfo(auc, r2)
 #&gt; 
 #&gt; $auc$arguments
 #&gt; function (observed, predicted = NULL, metrics = c(MachineShop::tpr, 
-#&gt;     MachineShop::fpr), stat = base::mean, ...) 
+#&gt;     MachineShop::fpr), stat = MachineShop::settings(&quot;stat.Curves&quot;), 
+#&gt;     ...) 
 #&gt; NULL
 #&gt; 
 #&gt; $auc$response_types

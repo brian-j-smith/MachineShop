@@ -26,7 +26,6 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -403,282 +402,92 @@ div.tocify {
 </div>
 
 
-<div id="diabetes-in-pima-indian-women" class="section level1">
-<h1>Diabetes in Pima Indian Women</h1>
-<p>Characteristics of Pima Indian women tested for diabetes are used in this example to predict their disease statuses.</p>
-<table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Characteristic
-</th>
-<th style="text-align:center;">
-Value
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Number of women
-</td>
-<td style="text-align:center;">
-392
-</td>
-</tr>
-<tr grouplength="2">
-<td colspan="2" style="border-bottom: 1px solid;">
-<strong>diabetes</strong>
-</td>
-</tr>
-<tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
-pos
-</td>
-<td style="text-align:center;">
-130 (33.16%)
-</td>
-</tr>
-<tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
-neg
-</td>
-<td style="text-align:center;">
-262 (66.84%)
-</td>
-</tr>
-<tr grouplength="1">
-<td colspan="2" style="border-bottom: 1px solid;">
-<strong>pregnant</strong>
-</td>
-</tr>
-<tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
-Median (Range)
-</td>
-<td style="text-align:center;">
-2 (0, 17)
-</td>
-</tr>
-<tr grouplength="1">
-<td colspan="2" style="border-bottom: 1px solid;">
-<strong>glucose</strong>
-</td>
-</tr>
-<tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
-Median (Range)
-</td>
-<td style="text-align:center;">
-119 (56, 198)
-</td>
-</tr>
-<tr grouplength="1">
-<td colspan="2" style="border-bottom: 1px solid;">
-<strong>pressure</strong>
-</td>
-</tr>
-<tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
-Median (Range)
-</td>
-<td style="text-align:center;">
-70 (24, 110)
-</td>
-</tr>
-<tr grouplength="1">
-<td colspan="2" style="border-bottom: 1px solid;">
-<strong>triceps</strong>
-</td>
-</tr>
-<tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
-Median (Range)
-</td>
-<td style="text-align:center;">
-29 (7, 63)
-</td>
-</tr>
-<tr grouplength="1">
-<td colspan="2" style="border-bottom: 1px solid;">
-<strong>insulin</strong>
-</td>
-</tr>
-<tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
-Median (Range)
-</td>
-<td style="text-align:center;">
-125.5 (14, 846)
-</td>
-</tr>
-<tr grouplength="1">
-<td colspan="2" style="border-bottom: 1px solid;">
-<strong>mass</strong>
-</td>
-</tr>
-<tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
-Median (Range)
-</td>
-<td style="text-align:center;">
-33.2 (18.2, 67.1)
-</td>
-</tr>
-<tr grouplength="1">
-<td colspan="2" style="border-bottom: 1px solid;">
-<strong>pedigree</strong>
-</td>
-</tr>
-<tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
-Median (Range)
-</td>
-<td style="text-align:center;">
-0.4495 (0.085, 2.420)
-</td>
-</tr>
-<tr grouplength="1">
-<td colspan="2" style="border-bottom: 1px solid;">
-<strong>age</strong>
-</td>
-</tr>
-<tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
-Median (Range)
-</td>
-<td style="text-align:center;">
-27 (21, 81)
-</td>
-</tr>
-</tbody>
-</table>
-<div id="training-set-analysis" class="section level2">
-<h2>Training Set Analysis</h2>
-<pre class="r"><code>## Analysis libraries
+<div id="global-settings" class="section level1">
+<h1>Global Settings</h1>
+<p>Core default behaviors of functions in the package can be viewed or changed globally through the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.6.0/topics/settings"><code>settings</code></a> function. The function accepts one or more character names of settings to view, <code>name = value</code> pairs giving the values of settings to change, a vector of these, or <code>"reset"</code> to restore all package defaults. Calls with no arguments will display the current values of all. Settings may also be supplied as a single unnamed argument which is a named list. Partial matching of setting names is supported. The setting value is returned if only one is specified to view. Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes. Such a list can be passed as an argument to <code>settings</code> to restore their values.</p>
+<pre class="r"><code>## Package library
 library(MachineShop)
-library(mlbench)
-library(ggplot2)
 
-## Parallel processing
-library(doParallel)
-registerDoParallel(cores = 6)
-
-## Dataset
-data(PimaIndiansDiabetes2)
-Pima &lt;- na.omit(PimaIndiansDiabetes2)
-
-## Model formula
-fo &lt;- diabetes ~ .
-
-## Model selected from tuned models
-selected_model &lt;- SelectedModel(TunedModel(KNNModel, grid = 5),
-                                TunedModel(NNetModel, grid = 5),
-                                TunedModel(RandomForestModel, grid = 5))
-
-## Model fit
-model_fit &lt;- fit(fo, data = Pima, model = selected_model)
-
-## Variable importance
-vi &lt;- varimp(model_fit)
-plot(vi)</code></pre>
-<p><img src="example_pima_files/figure-html/ex_pima_fit-1.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-<div id="generalization-performance" class="section level2">
-<h2>Generalization Performance</h2>
-<pre class="r"><code>## Resample estimation with cross-validation
-res &lt;- resample(fo, data = Pima, model = selected_model, control = CVControl)
-
-## Estimated performance
-summary(performance(res))
-#&gt;                  Mean    Median         SD       Min       Max NA
-#&gt; Brier       0.1523680 0.1580050 0.03256046 0.1050739 0.2004179  0
-#&gt; Accuracy    0.7704487 0.7692308 0.06475061 0.6923077 0.8717949  0
-#&gt; Kappa       0.4639160 0.4661003 0.14431823 0.2500000 0.7058824  0
-#&gt; ROC AUC     0.8459676 0.8461538 0.06790427 0.7588757 0.9822485  0
-#&gt; Sensitivity 0.5846154 0.6153846 0.15889162 0.3846154 0.8461538  0
-#&gt; Specificity 0.8629630 0.8653846 0.10656566 0.6666667 1.0000000  0
-
-## Variable probability cutoff
-summary(performance(res, cutoff = 0.25))
-#&gt;                  Mean    Median         SD       Min       Max NA
-#&gt; Brier       0.1523680 0.1580050 0.03256046 0.1050739 0.2004179  0
-#&gt; Accuracy    0.7352564 0.7342949 0.10045735 0.5250000 0.8974359  0
-#&gt; Kappa       0.4853366 0.4750000 0.16588772 0.1914894 0.7777778  0
-#&gt; ROC AUC     0.8459676 0.8461538 0.06790427 0.7588757 0.9822485  0
-#&gt; Sensitivity 0.8846154 0.9230769 0.09065472 0.7692308 1.0000000  0
-#&gt; Specificity 0.6615385 0.6538462 0.14456830 0.3333333 0.8846154  0</code></pre>
-</div>
-<div id="roc-curve" class="section level2">
-<h2>ROC Curve</h2>
-<pre class="r"><code>## True positive and false positive rates over all probability cutoffs
-roc &lt;- performance_curve(res)
-
-## ROC curve
-plot(roc, diagonal = TRUE) + coord_fixed()</code></pre>
-<p><img src="example_pima_files/figure-html/ex_pima_roc-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>## Area under the curve
-auc(roc)
-#&gt; Model: SelectedModel
-#&gt; [1] 0.835656</code></pre>
-</div>
-<div id="confusion-matrices" class="section level2">
-<h2>Confusion Matrices</h2>
-<pre class="r"><code>(conf &lt;- confusion(res))
-#&gt; SelectedModel :
-#&gt;          Observed
-#&gt; Predicted neg pos
-#&gt;       neg 226  54
-#&gt;       pos  36  76
-
-summary(conf)
-#&gt; SelectedModel :
-#&gt; Number of responses: 392
-#&gt; Accuracy (SE): 0.7704082 (0.02124201)
-#&gt; Majority class: 0.6683673
-#&gt; Kappa: 0.4633731
+## View all current settings
+settings()
+#&gt; $control
+#&gt; [1] &quot;CVControl&quot;
 #&gt; 
-#&gt;                   neg       pos
-#&gt; Observed    0.6683673 0.3316327
-#&gt; Predicted   0.7142857 0.2857143
-#&gt; Agreement   0.5765306 0.1938776
-#&gt; Sensitivity 0.8625954 0.5846154
-#&gt; Specificity 0.5846154 0.8625954
-#&gt; PPV         0.8071429 0.6785714
-#&gt; NPV         0.6785714 0.8071429
-
-plot(conf)
-#&gt; $SelectedModel</code></pre>
-<p><img src="example_pima_files/figure-html/ex_pima_conf-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>## Variable probability cutoff
-summary(confusion(res, cutoff = 0.25))
-#&gt; SelectedModel :
-#&gt; Number of responses: 392
-#&gt; Accuracy (SE): 0.7346939 (0.02229892)
-#&gt; Majority class: 0.6683673
-#&gt; Kappa: 0.4765818
+#&gt; $cutoff
+#&gt; [1] 0.5
 #&gt; 
-#&gt;                   neg       pos
-#&gt; Observed    0.6683673 0.3316327
-#&gt; Predicted   0.4795918 0.5204082
-#&gt; Agreement   0.4413265 0.2933673
-#&gt; Sensitivity 0.6603053 0.8846154
-#&gt; Specificity 0.8846154 0.6603053
-#&gt; PPV         0.9202128 0.5637255
-#&gt; NPV         0.5637255 0.9202128</code></pre>
-</div>
-<div id="calibration-curve" class="section level2">
-<h2>Calibration Curve</h2>
-<pre class="r"><code>cal &lt;- calibration(res, breaks = NULL)
-plot(cal, se = TRUE)</code></pre>
-<p><img src="example_pima_files/figure-html/ex_pima_cal-1.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-<div id="partial-dependence-plots" class="section level2">
-<h2>Partial Dependence Plots</h2>
-<pre class="r"><code>pd &lt;- dependence(model_fit, select = c(glucose, age, insulin))
-plot(pd)</code></pre>
-<p><img src="example_pima_files/figure-html/ex_pima_pd-1.png" width="672" style="display: block; margin: auto;" /><img src="example_pima_files/figure-html/ex_pima_pd-2.png" width="672" style="display: block; margin: auto;" /><img src="example_pima_files/figure-html/ex_pima_pd-3.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
+#&gt; $dist.Surv
+#&gt; [1] &quot;weibull&quot;
+#&gt; 
+#&gt; $dist.SurvProbs
+#&gt; [1] &quot;empirical&quot;
+#&gt; 
+#&gt; $grid
+#&gt; [1] 3
+#&gt; 
+#&gt; $method.EmpiricalSurv
+#&gt; [1] &quot;efron&quot;
+#&gt; 
+#&gt; $metrics.ConfusionMatrix
+#&gt;          Accuracy             Kappa    Weighted Kappa       Sensitivity 
+#&gt;        &quot;accuracy&quot;          &quot;kappa2&quot; &quot;weighted_kappa2&quot;     &quot;sensitivity&quot; 
+#&gt;       Specificity 
+#&gt;     &quot;specificity&quot; 
+#&gt; 
+#&gt; $metrics.factor
+#&gt;             Brier          Accuracy             Kappa    Weighted Kappa 
+#&gt;           &quot;brier&quot;        &quot;accuracy&quot;          &quot;kappa2&quot; &quot;weighted_kappa2&quot; 
+#&gt;           ROC AUC       Sensitivity       Specificity 
+#&gt;         &quot;roc_auc&quot;     &quot;sensitivity&quot;     &quot;specificity&quot; 
+#&gt; 
+#&gt; $metrics.matrix
+#&gt;   RMSE     R2    MAE 
+#&gt; &quot;rmse&quot;   &quot;r2&quot;  &quot;mae&quot; 
+#&gt; 
+#&gt; $metrics.numeric
+#&gt;   RMSE     R2    MAE 
+#&gt; &quot;rmse&quot;   &quot;r2&quot;  &quot;mae&quot; 
+#&gt; 
+#&gt; $metrics.Surv
+#&gt;    C-Index      Brier    ROC AUC   Accuracy 
+#&gt;   &quot;cindex&quot;    &quot;brier&quot;  &quot;roc_auc&quot; &quot;accuracy&quot; 
+#&gt; 
+#&gt; $stat.Curves
+#&gt; [1] &quot;base::mean&quot;
+#&gt; 
+#&gt; $stat.Resamples
+#&gt; [1] &quot;base::mean&quot;
+#&gt; 
+#&gt; $stat.Tune
+#&gt; [1] &quot;base::mean&quot;
+#&gt; 
+#&gt; $stats.PartialDependence
+#&gt;         Mean 
+#&gt; &quot;base::mean&quot; 
+#&gt; 
+#&gt; $stats.Resamples
+#&gt;            Mean          Median              SD             Min 
+#&gt;    &quot;base::mean&quot; &quot;stats::median&quot;     &quot;stats::sd&quot;     &quot;base::min&quot; 
+#&gt;             Max 
+#&gt;     &quot;base::max&quot;
+
+## Change settings
+presets &lt;- settings(control = &quot;BootControl&quot;, grid = 10)
+
+## View one setting
+settings(&quot;control&quot;)
+#&gt; [1] &quot;BootControl&quot;
+
+## View multiple settings
+settings(&quot;control&quot;, &quot;grid&quot;)
+#&gt; $control
+#&gt; [1] &quot;BootControl&quot;
+#&gt; 
+#&gt; $grid
+#&gt; [1] 10
+
+## Restore the previous settings
+settings(presets)</code></pre>
 </div>
 
 
