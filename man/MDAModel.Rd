@@ -46,7 +46,7 @@ Performs mixture discriminant analysis.
 \details{
 \describe{
   \item{Response Types:}{\code{factor}}
-  \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+  \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters:}{
     \code{subclasses}
   }
 }

@@ -34,7 +34,7 @@ Fits generalized boosted regression models.
 \details{
 \describe{
   \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
-  \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+  \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters:}{
     \code{n.trees}, \code{interaction.depth}, \code{shrinkage}*,
     \code{n.minobsinnode}*
   }

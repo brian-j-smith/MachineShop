@@ -24,7 +24,7 @@
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}, \code{numeric}}
-#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters}{
+#'   \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters}{
 #'     \itemize{
 #'       \item XGBDARTModel: \code{nrounds}, \code{max_depth}, \code{eta},
 #'         \code{gamma}*, \code{min_child_weight}*, \code{subsample},

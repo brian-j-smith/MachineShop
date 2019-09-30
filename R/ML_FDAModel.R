@@ -24,7 +24,7 @@
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}}
-#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters}{
+#'   \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters}{
 #'     \itemize{
 #'       \item FDAModel: \code{nprune}, \code{degree}*
 #'       \item PDAModel: \code{lambda}

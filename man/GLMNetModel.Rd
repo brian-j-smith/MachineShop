@@ -53,7 +53,7 @@ Fit a generalized linear model via penalized maximum likelihood.
 \describe{
   \item{Response Types:}{\code{factor}, \code{matrix}, \code{numeric},
     \code{Surv}}
-  \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+  \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters:}{
     \code{lambda}, \code{alpha}
   }
 }

@@ -30,7 +30,7 @@ Cutler's original Fortran code) for classification and regression.
 \details{
 \describe{
   \item{Response Types:}{\code{factor}, \code{numeric}}
-  \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+  \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters:}{
     \code{mtry}, \code{nodesize}*
   }
 }
