@@ -58,10 +58,21 @@ NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
       )
     },
     fit = function(formula, data, weights, ...) {
-      eval_fit(data,
-               formula = nnet::nnet(formula, data = as.data.frame(data),
-                                    weights = weights, ...),
-               matrix = nnet::nnet(x, y, weights = weights, ...))
+      if (is(terms(data), "DesignTerms")) {
+        x <- model.matrix(data, intercept = FALSE)
+        y <- response(data)
+        if (is_response(y, "binary")) {
+          y <- as.numeric(y) - 1
+        } else if (is_response(y, "factor")) {
+          y <- structure(
+            model.matrix(~ y - 1),
+            dimnames = list(names(y), levels(y))
+          )
+        }
+        nnet::nnet(x, y, weights = weights, ...)
+      } else {
+        nnet::nnet(formula, data = as.data.frame(data), weights = weights, ...)
+      }
     },
     predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
