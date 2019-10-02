@@ -205,7 +205,7 @@ requireModelNamespaces <- function(packages) {
 }
 
 
-sample.grid <- function(x, size, replace = FALSE, stringsAsFactors = TRUE) {
+sample_params <- function(x, size, replace = FALSE) {
   stopifnot(is.list(x))
   
   n <- length(x)
@@ -228,7 +228,7 @@ sample.grid <- function(x, size, replace = FALSE, stringsAsFactors = TRUE) {
     iter <- iter + 1
     new_grid <- as.data.frame(
       lapply(x, sample, size = size, replace = TRUE),
-      stringsAsFactors = stringsAsFactors
+      stringsAsFactors = FALSE
     )
     grid <- rbind(grid, new_grid)
     if (!replace) grid <- unique(grid)
