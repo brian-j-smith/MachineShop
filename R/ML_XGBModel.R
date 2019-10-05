@@ -117,6 +117,8 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
   
 }
 
+MLModelFunction(XGBModel) <- NULL
+
 
 #' @rdname XGBModel
 #' 
@@ -135,6 +137,8 @@ XGBDARTModel <- function(objective = NULL, base_score = 0.5,
             "dart", environment(), ...)
 }
 
+MLModelFunction(XGBDARTModel) <- NULL
+
 
 #' @rdname XGBModel
 #' 
@@ -144,6 +148,8 @@ XGBLinearModel <- function(objective = NULL, base_score = 0.5,
   .XGBModel("XGBLinearModel", "Extreme Gradient Boosting (Linear)",
             "gblinear", environment(), ...)
 }
+
+MLModelFunction(XGBLinearModel) <- NULL
 
 
 #' @rdname XGBModel
@@ -161,6 +167,8 @@ XGBTreeModel <- function(objective = NULL, base_score = 0.5,
   .XGBModel("XGBTreeModel", "Extreme Gradient Boosting (Tree)",
             "gbtree", environment(), ...)
 }
+
+MLModelFunction(XGBTreeModel) <- NULL
 
 
 .XGBModel <- function(name, label, booster, envir, ...) {

@@ -43,3 +43,5 @@ NaiveBayesModel <- function(laplace = 0) {
   )
   
 }
+
+MLModelFunction(NaiveBayesModel) <- NULL

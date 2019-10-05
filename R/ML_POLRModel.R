@@ -54,3 +54,5 @@ POLRModel <- function(method = c("logistic", "probit", "loglog", "cloglog",
   )
   
 }
+
+MLModelFunction(POLRModel) <- NULL

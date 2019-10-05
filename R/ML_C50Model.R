@@ -92,3 +92,5 @@ C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
   )
   
 }
+
+MLModelFunction(C50Model) <- NULL

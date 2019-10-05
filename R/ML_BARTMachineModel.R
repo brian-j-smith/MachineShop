@@ -91,3 +91,5 @@ BARTMachineModel <- function(num_trees = 50, num_burn = 250, num_iter = 1000,
   )
   
 }
+
+MLModelFunction(BARTMachineModel) <- NULL

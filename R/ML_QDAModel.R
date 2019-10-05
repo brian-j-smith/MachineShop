@@ -62,3 +62,5 @@ QDAModel <- function(prior = NULL, method = c("moment", "mle", "mve", "t"),
   )
   
 }
+
+MLModelFunction(QDAModel) <- NULL

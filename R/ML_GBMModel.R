@@ -91,3 +91,5 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
   )
   
 }
+
+MLModelFunction(GBMModel) <- NULL

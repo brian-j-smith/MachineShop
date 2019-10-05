@@ -73,3 +73,5 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
   )
   
 }
+
+MLModelFunction(KNNModel) <- NULL

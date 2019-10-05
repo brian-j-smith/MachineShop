@@ -75,3 +75,5 @@ MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
   )
   
 }
+
+MLModelFunction(MDAModel) <- NULL

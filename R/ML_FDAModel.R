@@ -81,6 +81,8 @@ FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
   
 }
 
+MLModelFunction(FDAModel) <- NULL
+
 
 #' @rdname FDAModel
 #' 
@@ -104,3 +106,5 @@ PDAModel <- function(lambda = 1, df = NULL, ...) {
   }
   model
 }
+
+MLModelFunction(PDAModel) <- NULL

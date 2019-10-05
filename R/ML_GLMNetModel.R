@@ -112,3 +112,5 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
   )
   
 }
+
+MLModelFunction(GLMNetModel) <- NULL

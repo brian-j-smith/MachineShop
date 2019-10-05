@@ -47,3 +47,5 @@ TreeModel <- function(mincut = 5, minsize = 10, mindev = 0.01,
   )
   
 }
+
+MLModelFunction(TreeModel) <- NULL

@@ -59,6 +59,8 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
   
 }
 
+MLModelFunction(SurvRegModel) <- NULL
+
 
 #' @rdname SurvRegModel
 #' 
@@ -122,3 +124,5 @@ SurvRegStepAICModel <- function(dist = c("weibull", "exponential", "gaussian",
   )
   
 }
+
+MLModelFunction(SurvRegStepAICModel) <- NULL

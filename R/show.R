@@ -140,15 +140,18 @@ setMethod("show", "MLMetric",
 setMethod("show", "MLModel",
   function(object) {
     show_title(object)
+    info <- modelinfo(object)[[1]]
     cat("\n",
         "Model name: ", object@name, "\n",
-        "Label: ", object@label, "\n",
-        "Packages: ", toString(object@packages), "\n",
-        "Response types: ", toString(object@response_types), "\n\n",
+        "Label: ", info$label, "\n",
+        "Packages: ", toString(info$packages), "\n",
+        "Response types: ", toString(info$response_types), "\n",
+        "Tuning grid: ", info$grid, "\n",
+        "Variable importance: ", info$varimp, "\n\n",
         "Parameters:\n",
         sep = "")
     print(object@params)
-    if (length(object@params) == 0) cat("\n")
+    if (!length(object@params)) cat("\n")
     invisible()
   }
 )
@@ -157,6 +160,26 @@ setMethod("show", "MLModel",
 setMethod("show", "MLModelFit",
   function(object) {
     show(unMLModelFit(object))
+  }
+)
+
+
+setMethod("show", "MLModelFunction",
+  function(object) {
+    show_title(object)
+    info_list <- modelinfo(object)
+    info <- info_list[[1]]
+    cat("\n",
+        "Model name: ", names(info_list), "\n",
+        "Label: ", info$label, "\n",
+        "Packages: ", toString(info$packages), "\n",
+        "Response types: ", toString(info$response_types), "\n",
+        "Tuning grid: ", info$grid, "\n",
+        "Variable importance: ", info$varimp, "\n\n",
+        "Arguments:\n",
+        sep = "")
+    print(info$arguments)
+    cat("\n")
   }
 )
 

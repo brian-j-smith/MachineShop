@@ -102,6 +102,16 @@ setClass("SVMTanhModelFit", contain = c("MLModelFit", "ksvm"))
 setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 
 
+MLModelFunction <- setClass("MLModelFunction",
+  contains = "function"
+)
+
+
+"MLModelFunction<-" <- function(object, value) {
+  do.call(MLModelFunction, c(object, value))
+}
+
+
 setClass("Calibration",
   slots = c(smoothed = "logical"),
   contains = "data.frame"

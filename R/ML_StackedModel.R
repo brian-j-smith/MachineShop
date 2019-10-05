@@ -59,6 +59,8 @@ StackedModel <- function(..., control = MachineShop::settings("control"),
   
 }
 
+MLModelFunction(StackedModel) <- NULL
+
 
 .fit.StackedModel <- function(model, x, ...) {
   mf <- ModelFrame(x, na.rm = FALSE)

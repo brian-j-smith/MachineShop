@@ -75,3 +75,5 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
   )
   
 }
+
+MLModelFunction(RPartModel) <- NULL

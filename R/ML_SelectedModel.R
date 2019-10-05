@@ -48,6 +48,8 @@ SelectedModel <- function(..., control = MachineShop::settings("control"),
   
 }
 
+MLModelFunction(SelectedModel) <- NULL
+
 
 .fit.SelectedModel <- function(model, x, ...) {
   fit(x, model = do.call(tune, c(list(x), model@params)))

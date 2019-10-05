@@ -54,6 +54,8 @@ TunedModel <- function(model, grid = MachineShop::settings("grid"),
   
 }
 
+MLModelFunction(TunedModel) <- NULL
+
 
 .fit.TunedModel <- function(model, x, ...) {
   fit(x, model = do.call(tune, c(list(x), model@params)))

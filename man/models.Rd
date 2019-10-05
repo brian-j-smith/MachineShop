@@ -2,6 +2,7 @@
 % Please edit documentation in R/models.R
 \name{models}
 \alias{models}
+\alias{MLModelFunction}
 \title{Model Functions}
 \description{
 Model constructor functions supplied by \pkg{MachineShop} are summarized in

@@ -89,3 +89,5 @@ EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
   )
   
 }
+
+MLModelFunction(EarthModel) <- NULL

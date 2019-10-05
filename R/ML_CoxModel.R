@@ -62,6 +62,8 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
   
 }
 
+MLModelFunction(CoxModel) <- NULL
+
 
 #' @rdname CoxModel
 #' 
@@ -111,3 +113,5 @@ CoxStepAICModel <- function(ties = c("efron", "breslow", "exact"), ...,
   )
   
 }
+
+MLModelFunction(CoxStepAICModel) <- NULL

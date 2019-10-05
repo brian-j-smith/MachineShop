@@ -123,3 +123,5 @@ BARTModel <- function(K = NULL, sparse = FALSE, theta = 0, omega = 1,
   )
   
 }
+
+MLModelFunction(BARTModel) <- NULL

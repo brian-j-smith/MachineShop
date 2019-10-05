@@ -72,3 +72,5 @@ LARSModel <- function(type = c("lasso", "lar", "forward.stagewise", "stepwise"),
   )
   
 }
+
+MLModelFunction(LARSModel) <- NULL

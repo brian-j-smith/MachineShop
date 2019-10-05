@@ -80,3 +80,5 @@ CForestModel <- function(teststat = c("quad", "max"),
   )
   
 }
+
+MLModelFunction(CForestModel) <- NULL

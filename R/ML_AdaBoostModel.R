@@ -82,3 +82,5 @@ AdaBoostModel <- function(boos = TRUE, mfinal = 100,
   )
   
 }
+
+MLModelFunction(AdaBoostModel) <- NULL

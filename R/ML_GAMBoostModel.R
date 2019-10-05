@@ -102,3 +102,5 @@ GAMBoostModel <- function(family = NULL,
   )
   
 }
+
+MLModelFunction(GAMBoostModel) <- NULL

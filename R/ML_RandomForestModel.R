@@ -70,3 +70,5 @@ RandomForestModel <- function(ntree = 500,
   )
   
 }
+
+MLModelFunction(RandomForestModel) <- NULL

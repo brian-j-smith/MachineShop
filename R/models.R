@@ -68,6 +68,7 @@
 #' }
 #' 
 #' @name models
+#' @aliases MLModelFunction
 #' 
 #' @seealso \code{\link{modelinfo}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{tune}}

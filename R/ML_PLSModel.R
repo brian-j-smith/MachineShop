@@ -71,3 +71,5 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
   )
   
 }
+
+MLModelFunction(PLSModel) <- NULL

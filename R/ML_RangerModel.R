@@ -99,3 +99,5 @@ RangerModel <- function(num.trees = 500, mtry = NULL,
   )
   
 }
+
+MLModelFunction(RangerModel) <- NULL

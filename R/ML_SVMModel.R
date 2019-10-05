@@ -89,6 +89,8 @@ SVMModel <- function(scaled = TRUE, type = NULL,
   
 }
 
+MLModelFunction(SVMModel) <- NULL
+
 
 #' @rdname SVMModel
 #' 
@@ -96,6 +98,8 @@ SVMANOVAModel <- function(sigma = 1, degree = 1, ...) {
   .SVMModel("SVMANOVAModel", "Support Vector Machines (ANOVA)",
             "anovadot", environment(), ...)
 }
+
+MLModelFunction(SVMANOVAModel) <- NULL
 
 
 #' @rdname SVMModel
@@ -105,6 +109,8 @@ SVMBesselModel <- function(sigma = 1, order = 1, degree = 1, ...) {
             "besseldot", environment(), ...)
 }
 
+MLModelFunction(SVMBesselModel) <- NULL
+
 
 #' @rdname SVMModel
 #' 
@@ -112,6 +118,8 @@ SVMLaplaceModel <- function(sigma = NULL, ...) {
   .SVMModel("SVMLaplaceModel", "Support Vector Machines (Laplace)",
             "laplacedot", environment(), ...)
 }
+
+MLModelFunction(SVMLaplaceModel) <- NULL
 
 
 #' @rdname SVMModel
@@ -121,6 +129,8 @@ SVMLinearModel <- function(...) {
             "vanilladot", environment(), ...)
 }
 
+MLModelFunction(SVMLinearModel) <- NULL
+
 
 #' @rdname SVMModel
 #' 
@@ -128,6 +138,8 @@ SVMPolyModel <- function(degree = 1, scale = 1, offset = 1, ...) {
   .SVMModel("SVMPolyModel", "Support Vector Machines (Poly)",
             "polydot", environment(), ...)
 }
+
+MLModelFunction(SVMPolyModel) <- NULL
 
 
 #' @rdname SVMModel
@@ -137,6 +149,8 @@ SVMRadialModel <- function(sigma = NULL, ...) {
             "rbfdot", environment(), ...)
 }
 
+MLModelFunction(SVMRadialModel) <- NULL
+
 
 #' @rdname SVMModel
 #' 
@@ -145,6 +159,8 @@ SVMSplineModel <- function(...) {
             "splinedot", environment(), ...)
 }
 
+MLModelFunction(SVMSplineModel) <- NULL
+
 
 #' @rdname SVMModel
 #' 
@@ -152,6 +168,8 @@ SVMTanhModel <- function(scale = 1, offset = 1, ...) {
   .SVMModel("SVMTanhModel", "Support Vector Machines (Tanh)",
             "tanhdot", environment(), ...)
 }
+
+MLModelFunction(SVMTanhModel) <- NULL
 
 
 .SVMModel <- function(name, label, kernel, envir, ...) {

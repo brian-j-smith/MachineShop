@@ -71,3 +71,5 @@ LDAModel <- function(prior = NULL, tol = 1e-4,
   )
   
 }
+
+MLModelFunction(LDAModel) <- NULL

@@ -71,3 +71,5 @@ AdaBagModel <- function(mfinal = 100, minsplit = 20,
   )
   
 }
+
+MLModelFunction(AdaBagModel) <- NULL

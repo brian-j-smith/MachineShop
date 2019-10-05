@@ -63,6 +63,8 @@ SuperModel <- function(..., model = GBMModel,
 
 }
 
+MLModelFunction(SuperModel) <- NULL
+
 
 .fit.SuperModel <- function(model, x, ...) {
   mf <- ModelFrame(x, na.rm = FALSE)

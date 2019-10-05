@@ -107,3 +107,5 @@ NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
   )
   
 }
+
+MLModelFunction(NNetModel) <- NULL

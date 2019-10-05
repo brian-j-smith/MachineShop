@@ -59,6 +59,8 @@ GLMModel <- function(family = NULL, ...) {
   
 }
 
+MLModelFunction(GLMModel) <- NULL
+
 
 #' @rdname GLMModel
 #' 
@@ -114,3 +116,5 @@ GLMStepAICModel <- function(family = NULL, ...,
   )
   
 }
+
+MLModelFunction(GLMStepAICModel) <- NULL

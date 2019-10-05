@@ -88,3 +88,5 @@ GLMBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
   )
   
 }
+
+MLModelFunction(GLMBoostModel) <- NULL
