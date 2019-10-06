@@ -52,7 +52,7 @@ complete_subset <- function(...) {
 }
 
 
-fget <- function(x) {
+fget0 <- function(x) {
   if (is.character(x)) {
     x_expr <- str2lang(x)
     x_name <- x
@@ -63,9 +63,24 @@ fget <- function(x) {
            envir = asNamespace(x_expr[[2]]),
            mode = "function")
     }
-    if (is.null(x)) stop("function '", x_name, "' not found")
+  } else if (!is.function(x)) {
+    x <- NULL
   }
-  if (!is.function(x)) stop("invalid function") else x
+  x
+}
+
+
+fget <- function(x) {
+  f <- fget0(x)
+  if (is.null(f)) {
+    msg <- if (is.character(x)) {
+      paste0("function '", x, "' not found")
+    } else {
+      "invalid function"
+    }
+    stop(msg)
+  }
+  f
 }
 
 

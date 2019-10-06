@@ -142,7 +142,7 @@ modelinfo <- function(...) {
     label = x@label,
     packages = x@packages,
     response_types = x@response_types,
-    arguments = args(fget(x@name)),
+    arguments = args(fget0(x@name)),
     grid = !is.null(body(x@grid)),
     varimp = !is.null(body(fitbit(x, "varimp")))
   )), names = x@name)
