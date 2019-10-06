@@ -10,6 +10,9 @@
 #'   variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
 #'   predictors, \code{\link{ModelFrame}}, untrained
 #'   \code{\link[recipes]{recipe}}, or \code{\link{TunedRecipe}} object.
+#'   Alternatively, a \link[=models]{model} function or call may be given first
+#'   followed by objects defining the predictor and response relationship and
+#'   the \code{control} value.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
 #'   outcomes.
@@ -93,6 +96,20 @@ resample.ModelFrame <- function(x, model,
 resample.recipe <- function(x, model,
                             control = MachineShop::settings("control"), ...) {
   .resample(getMLObject(control, "MLControl"), ModelRecipe(x), model)
+}
+
+
+#' @rdname resample-methods
+#' 
+resample.MLModel <- function(x, ...) {
+  resample(..., model = x)
+}
+
+
+#' @rdname resample-methods
+#' 
+resample.MLModelFunction <- function(x, ...) {
+  resample(..., model = x)
 }
 
 

@@ -6,6 +6,8 @@
 \alias{resample.matrix}
 \alias{resample.ModelFrame}
 \alias{resample.recipe}
+\alias{resample.MLModel}
+\alias{resample.MLModelFunction}
 \alias{Resamples}
 \title{Resample Estimation of Model Performance}
 \usage{
@@ -23,13 +25,20 @@ resample(x, ...)
 \method{resample}{recipe}(x, model,
   control = MachineShop::settings("control"), ...)
 
+\method{resample}{MLModel}(x, ...)
+
+\method{resample}{MLModelFunction}(x, ...)
+
 Resamples(...)
 }
 \arguments{
 \item{x}{defines a relationship between model predictor and response
 variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
 predictors, \code{\link{ModelFrame}}, untrained
-\code{\link[recipes]{recipe}}, or \code{\link{TunedRecipe}} object.}
+\code{\link[recipes]{recipe}}, or \code{\link{TunedRecipe}} object.
+Alternatively, a \link[=models]{model} function or call may be given first
+followed by objects defining the predictor and response relationship and
+the \code{control} value.}
 
 \item{...}{named or unnamed \code{resample} output to combine together with
 the \code{Resamples} constructor.}

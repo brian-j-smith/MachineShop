@@ -6,6 +6,9 @@
 \alias{tune.matrix}
 \alias{tune.ModelFrame}
 \alias{tune.recipe}
+\alias{tune.MLModel}
+\alias{tune.MLModelFunction}
+\alias{tune.MLModelList}
 \title{Model Tuning and Selection}
 \usage{
 tune(x, ...)
@@ -27,12 +30,22 @@ tune(x, ...)
 \method{tune}{recipe}(x, models, grid = MachineShop::settings("grid"),
   fixed = NULL, control = MachineShop::settings("control"),
   metrics = NULL, stat = MachineShop::settings("stat.ModelTune"), ...)
+
+\method{tune}{MLModel}(x, ...)
+
+\method{tune}{MLModelFunction}(x, ...)
+
+\method{tune}{MLModelList}(x, ...)
 }
 \arguments{
 \item{x}{defines a relationship between model predictor and response
 variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
 predictors, \code{\link{ModelFrame}}, untrained
-\code{\link[recipes]{recipe}}, or \code{\link{TunedRecipe}} object.}
+\code{\link[recipes]{recipe}}, or \code{\link{TunedRecipe}} object.
+Alternatively, a \link[=models]{model} function, call, or
+\link[=ModelList]{list} of these may be given first followed by objects
+defining the predictor and response relationship and the other tuning
+argument values.}
 
 \item{...}{arguments passed to the \link{performance} functions.}
 

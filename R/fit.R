@@ -9,6 +9,8 @@
 #'   variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
 #'   predictors, \code{\link{ModelFrame}}, untrained
 #'   \code{\link[recipes]{recipe}}, or \code{\link{TunedRecipe}} object.
+#'   Alternatively, a \link[=models]{model} function or call may be given first
+#'   followed by objects defining the predictor and response relationship.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
 #'   outcomes.
@@ -74,6 +76,20 @@ fit.recipe <- function(x, model, ...) {
     ModelRecipe(x)
   }
   .fit(getMLObject(model, "MLModel"), prep(x))
+}
+
+
+#' @rdname fit-methods
+#' 
+fit.MLModel <- function(x, ...) {
+  fit(..., model = x)
+}
+
+
+#' @rdname fit-methods
+#' 
+fit.MLModelFunction <- function(x, ...) {
+  fit(..., model = x)
 }
 
 

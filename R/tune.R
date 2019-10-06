@@ -10,6 +10,10 @@
 #'   variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
 #'   predictors, \code{\link{ModelFrame}}, untrained
 #'   \code{\link[recipes]{recipe}}, or \code{\link{TunedRecipe}} object.
+#'   Alternatively, a \link[=models]{model} function, call, or
+#'   \link[=ModelList]{list} of these may be given first followed by objects
+#'   defining the predictor and response relationship and the other tuning
+#'   argument values.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
 #'   outcomes.
@@ -117,6 +121,27 @@ tune.recipe <- function(x, models, grid = MachineShop::settings("grid"),
                         stat = MachineShop::settings("stat.ModelTune"), ...) {
   .tune(x, data = NULL, models = models, grid = grid, fixed = fixed,
         control = control, metrics = metrics, stat = stat, ...)
+}
+
+
+#' @rdname tune-methods
+#' 
+tune.MLModel <- function(x, ...) {
+  tune(..., models = x)
+}
+
+
+#' @rdname tune-methods
+#' 
+tune.MLModelFunction <- function(x, ...) {
+  tune(..., models = x)
+}
+
+
+#' @rdname tune-methods
+#' 
+tune.MLModelList <- function(x, ...) {
+  tune(..., models = x)
 }
 
 
