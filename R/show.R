@@ -184,6 +184,17 @@ setMethod("show", "MLModelFunction",
 )
 
 
+setMethod("show", "MLModelList",
+  function(object) {
+    show_title(object)
+    cat("\n")
+    print(unclass(object))
+    if (!length(object)) cat("\n")
+    invisible()
+  }
+)
+
+
 setMethod("show", "MLModelTune",
   function(object) {
     callNextMethod(object)

@@ -6,7 +6,7 @@
 #' @param ... named vectors or factors or a list of these containing the
 #'   parameter values over which to expand \code{x}.
 #' 
-#' @return A list of model objects created from the parameter combinations.
+#' @return \code{MLModelList} class object that inherits from \code{list}.
 #' 
 #' @seealso \code{\link{tune}}
 #' 
@@ -37,7 +37,8 @@ expand_model <- function(x, ...) {
   grid <- x[[2]]
   models <- split(grid, seq(max(1, nrow(grid)))) %>%
     lapply(function(args) do.call(x[[1]], args))
-  structure(models, names = paste0(models[[1]]@name, ".", names(models)))
+  names(models) <- paste0(models[[1]]@name, ".", names(models))
+  MLModelList(models)
 }
 
 

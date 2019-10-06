@@ -123,14 +123,7 @@ tune.recipe <- function(x, models, grid = MachineShop::settings("grid"),
 .tune <- function(x, data, models, grid, fixed, control, metrics, stat, ...) {
   
   if (is.list(models)) {
-    model_names <- character()
-    for (i in seq(models)) {
-      models[[i]] <- getMLObject(models[[i]], class = "MLModel")
-      name <- names(models)[i]
-      model_names[i] <- 
-        if (!is.null(name) && nzchar(name)) name else models[[i]]@name
-    }
-    names(models) <- make.unique(model_names)
+    models <- ModelList(models)
     grid <- data.frame(row.names = seq(models))
   } else {
     model <- getMLObject(models, class = "MLModel")

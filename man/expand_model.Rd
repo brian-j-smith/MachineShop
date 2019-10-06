@@ -13,7 +13,7 @@ expand_model(x, ...)
 parameter values over which to expand \code{x}.}
 }
 \value{
-A list of model objects created from the parameter combinations.
+\code{MLModelList} class object that inherits from \code{list}.
 }
 \description{
 Expand a model over all combinations of a grid of tuning parameters.
