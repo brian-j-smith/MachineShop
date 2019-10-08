@@ -12,9 +12,8 @@
 #' @param type specifies prediction on the original outcome scale
 #' (\code{"response"}) or on a probability distribution scale (\code{"prob"}).
 #' @param cutoff numeric (0, 1) threshold above which binary factor
-#' probabilities are classified as events, below which survival probabilities
-#' are classified, and at which expected values are rounded for integer
-#' outcomes.
+#' probabilities are classified as events and below which survival probabilities
+#' are classified.
 #' @param dist character string specifying distributional approximations to
 #' estimated survival curves.  Possible values are \code{"empirical"},
 #' \code{"exponential"}, \code{"rayleigh"}, or \code{"weibull"}; with defaults

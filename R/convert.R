@@ -99,10 +99,8 @@ setMethod("convert_response", c("factor", "numeric"),
 
 
 setMethod("convert_response", c("integer", "numeric"),
-  function(object, x, cutoff, ...) {
-    pm <- sign(x)
-    abs_x <- abs(x)
-    pm * ifelse(abs_x %% 1 > cutoff, ceiling(abs_x), floor(abs_x))
+  function(object, x, ...) {
+    round(x)
   }
 )
 
