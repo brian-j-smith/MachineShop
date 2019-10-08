@@ -1,36 +1,39 @@
-#' Model Expansion Over a Grid of Tuning Parameters
+#' Model Expansion Over Tuning Parameters
 #'
 #' Expand a model over all combinations of a grid of tuning parameters.
 #' 
 #' @param x \link[=models]{model} function, function name, or call.
-#' @param ... vectors, factors, or list containing the parameter values over
-#' which to expand \code{x}.
+#' @param ... named vectors or factors or a list of these containing the
+#' parameter values over which to expand \code{x}.
 #' 
 #' @return A list of model objects created from the parameter combinations.
 #' 
 #' @seealso \code{\link{tune}}
 #' 
 #' @examples
-#' expand.model(GBMModel, n.trees = c(25, 50, 100),
-#'                        interaction.depth = 1:3,
-#'                        n.minobsinnode = c(5, 10))
+#' library(MASS)
 #' 
-expand.model <- function(x, ...) {
-  .expand.model(x, ...)
+#' models <- expand_model(GBMModel, n.trees = c(50, 100),
+#'                                  interaction.depth = 1:2)
+#' 
+#' fit(medv ~ ., data = Boston, model = SelectedModel(models))
+#' 
+expand_model <- function(x, ...) {
+  .expand_model(x, ...)
 }
 
 
-.expand.model <- function(x, ...) {
-  UseMethod(".expand.model")
+.expand_model <- function(x, ...) {
+  UseMethod(".expand_model")
 }
 
 
-.expand.model.default <- function(x, ...) {
-  expand.model(getMLObject(x, class = "MLModel"), ...)
+.expand_model.default <- function(x, ...) {
+  expand_model(getMLObject(x, class = "MLModel"), ...)
 }
 
 
-.expand.model.list <- function(x, ...) {
+.expand_model.list <- function(x, ...) {
   grid <- x[[2]]
   models <- split(grid, seq(max(1, nrow(grid)))) %>%
     lapply(function(args) do.call(x[[1]], args))
@@ -38,9 +41,9 @@ expand.model <- function(x, ...) {
 }
 
 
-.expand.model.MLModel <- function(x, ...) {
+.expand_model.MLModel <- function(x, ...) {
   grid <- expand.grid(..., KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
-  expand.model(list(fget(x@name), grid))
+  expand_model(list(fget(x@name), grid))
 }
 
 

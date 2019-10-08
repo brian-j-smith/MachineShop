@@ -15,7 +15,7 @@
 #' outcomes.
 #' @param models \link[=models]{model} function, function name, or call defining
 #' a model to tune; or vector of these from which to select, such as that
-#' returned by \code{\link{expand.model}}.
+#' returned by \code{\link{expand_model}}.
 #' @param grid \link[=data.frame]{data frame} containing parameter values at
 #' which to evaluate a single model supplied to \code{models}, the number of
 #' parameter-specific values to generate automatically if the model has a
@@ -145,7 +145,7 @@ tune.recipe <- function(x, models, grid = MachineShop::settings("grid"),
       grid <- grid(x, data, model = model, length = grid, random = random)
     }
     grid <- combine_tune_params(grid, fixed)
-    models <- expand.model(list(fget(model@name), grid))
+    models <- expand_model(list(fget(model@name), grid))
   }
   
   control <- getMLObject(control, "MLControl")

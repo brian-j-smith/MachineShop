@@ -41,7 +41,7 @@ outcomes.}
 
 \item{models}{\link[=models]{model} function, function name, or call defining
 a model to tune; or vector of these from which to select, such as that
-returned by \code{\link{expand.model}}.}
+returned by \code{\link{expand_model}}.}
 
 \item{grid}{\link[=data.frame]{data frame} containing parameter values at
 which to evaluate a single model supplied to \code{models}, the number of

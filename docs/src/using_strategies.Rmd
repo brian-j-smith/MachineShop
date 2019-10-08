@@ -65,12 +65,12 @@ summary(res_tuned)
 
 ## Model Selection
 
-Model selection can be conducted with the `tune` or `SelectedModel` function to automatically choose from any combination of models and model parameters.  Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values.  Combinations of model functions, function names, or function calls can be supplied as lists to the `models` argument of `tune` or as arguments to `SelectedModel` in order to define sets of candidate models from which to select.  An `expand.model` helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired.  In this general form of model selection, the `grid` argument in the tuning functions is not used.
+Model selection can be conducted with the `tune` or `SelectedModel` function to automatically choose from any combination of models and model parameters.  Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values.  Combinations of model functions, function names, or function calls can be supplied as lists to the `models` argument of `tune` or as arguments to `SelectedModel` in order to define sets of candidate models from which to select.  An `expand_model` helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired.  In this general form of model selection, the `grid` argument in the tuning functions is not used.
 
 ```{r using_strategies_selection, results="hide"}
 ## Model interface for model selection
 selected_model <- SelectedModel(
-  expand.model(GBMModel, n.trees = c(50, 100), interaction.depth = 1:2),
+  expand_model(GBMModel, n.trees = c(50, 100), interaction.depth = 1:2),
   GLMNetModel(lambda = 0.01),
   CoxModel,
   SurvRegModel

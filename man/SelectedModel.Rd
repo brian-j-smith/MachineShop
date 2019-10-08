@@ -9,8 +9,9 @@ SelectedModel(..., control = MachineShop::settings("control"),
   cutoff = MachineShop::settings("cutoff"))
 }
 \arguments{
-\item{...}{\link[=models]{model} functions, function names, calls, or vector
-of these to serve as the candidate set from which to select.}
+\item{...}{\link[=models]{model} functions, function names, calls, or vectors
+of these to serve as the candidate set from which to select, such as that
+returned by \code{\link{expand_model}}.}
 
 \item{control}{\link[=controls]{control} function, function name, or call
 defining the resampling method to be employed.}
