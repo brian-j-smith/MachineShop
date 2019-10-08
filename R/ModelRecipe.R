@@ -88,3 +88,16 @@ prep_recipe_data <- function(x) {
   if (is.null(x[[case_name_var]])) x[[case_name_var]] <- rownames(x)
   x
 }
+
+
+update.recipe <- function(object, ...) {
+  args <- list(...)
+  for (i in seq(object$steps)) {
+    step <- object$steps[[i]]
+    params <- args[[step$id]]
+    if (!is.null(params)) {
+      object$steps[[i]] <- do.call(update, c(list(step), params))
+    }
+  }
+  object
+}

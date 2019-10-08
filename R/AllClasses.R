@@ -1,5 +1,5 @@
 setOldClass("ModelFrame")
-setOldClass("ModelRecipe")
+setOldClass(c("ModelRecipe", "recipe"))
 setOldClass("Surv")
 setOldClass(c("SurvEvents", "SurvMatrix"))
 setOldClass(c("SurvProbs", "SurvMatrix"))
@@ -165,11 +165,17 @@ PerformanceDiffTest <- setClass("PerformanceDiffTest",
 )
 
 
-setClass("MLModelTune",
+MLModelTune <- setClass("MLModelTune",
   slots = c(tune_grid = "data.frame",
             performance = "Performance",
-            selected = "numeric"),
+            selected = "list",
+            metric = "MLMetric"),
   contains = "MLModel"
+)
+
+
+RecipeGrid <- setClass("RecipeGrid",
+  contains = "data.frame"
 )
 
 
@@ -177,6 +183,13 @@ setClass("Resamples",
   slots = c(control = "MLControl",
             strata = "character"),
   contains = "data.frame"
+)
+
+
+setClass("TunedRecipe",
+  slots = c(grid = "RecipeGrid",
+            params = "list"),
+  contains = "ModelRecipe"
 )
 
 

@@ -8,8 +8,8 @@
 #' 
 #' @param x defines a relationship between model predictor and response
 #' variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
-#' predictors, \code{\link{ModelFrame}}, or untrained
-#' \code{\link[recipes]{recipe}}.
+#' predictors, \code{\link{ModelFrame}}, untrained
+#' \code{\link[recipes]{recipe}}, or \code{\link{TunedRecipe}} object.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
 #' outcomes.
@@ -368,8 +368,7 @@ setMethod(".resample", c("MLTrainControl", "ModelFrame"),
 setMethod(".resample", c("MLTrainControl", "ModelRecipe"),
   function(object, x, model) {
     set.seed(object@seed)
-    x <- prep(x)
-    do.call(Resamples, resample_args(x, x, model, object))
+    do.call(Resamples, resample_args(x, prep(x), model, object))
   }
 )
 

@@ -7,8 +7,8 @@
 #' 
 #' @param x defines a relationship between model predictor and response
 #' variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
-#' predictors, \code{\link{ModelFrame}}, or untrained
-#' \code{\link[recipes]{recipe}}.
+#' predictors, \code{\link{ModelFrame}}, untrained
+#' \code{\link[recipes]{recipe}}, or \code{\link{TunedRecipe}} object.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
 #' outcomes.
@@ -66,7 +66,14 @@ fit.ModelFrame <- function(x, model, ...) {
 #' "case_weight" \code{\link[recipes:roles]{role}} for them.
 #' 
 fit.recipe <- function(x, model, ...) {
-  .fit(getMLObject(model, "MLModel"), prep(ModelRecipe(x)))
+  x <- if (is(x, "TunedRecipe")) {
+    params <- as(x, "list")
+    params$model <- model
+    do.call(tune_recipe, c(list(as(x, "ModelRecipe")), params))
+  } else {
+    ModelRecipe(x)
+  }
+  .fit(getMLObject(model, "MLModel"), prep(x))
 }
 
 

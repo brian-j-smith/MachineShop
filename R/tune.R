@@ -8,8 +8,8 @@
 #' 
 #' @param x defines a relationship between model predictor and response
 #' variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
-#' predictors, \code{\link{ModelFrame}}, or untrained
-#' \code{\link[recipes]{recipe}}.
+#' predictors, \code{\link{ModelFrame}}, untrained
+#' \code{\link[recipes]{recipe}}, or \code{\link{TunedRecipe}} object.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
 #' outcomes.
@@ -78,7 +78,8 @@ tune.formula <- function(x, data, models, grid = MachineShop::settings("grid"),
                          control = MachineShop::settings("control"),
                          metrics = NULL,
                          stat = MachineShop::settings("stat.ModelTune"), ...) {
-  .tune(x, data, models, grid, fixed, control, metrics, stat, ...)
+  .tune(x, data = data, models = models, grid = grid, fixed = fixed,
+        control = control, metrics = metrics, stat = stat, ...)
 }
 
 
@@ -89,7 +90,8 @@ tune.matrix <- function(x, y, models, grid = MachineShop::settings("grid"),
                         control = MachineShop::settings("control"),
                         metrics = NULL,
                         stat = MachineShop::settings("stat.ModelTune"), ...) {
-  .tune(x, y, models, grid, fixed, control, metrics, stat, ...)
+  .tune(x, data = y, models = models, grid = grid, fixed = fixed,
+        control = control, metrics = metrics, stat = stat, ...)
 }
 
 
@@ -101,7 +103,8 @@ tune.ModelFrame <- function(x, models, grid = MachineShop::settings("grid"),
                             metrics = NULL,
                             stat = MachineShop::settings("stat.ModelTune"),
                             ...) {
-  .tune(x, NULL, models, grid, fixed, control, metrics, stat, ...)
+  .tune(x, data = NULL, models = models, grid = grid, fixed = fixed,
+        control = control, metrics = metrics, stat = stat, ...)
 }
 
 
@@ -112,13 +115,8 @@ tune.recipe <- function(x, models, grid = MachineShop::settings("grid"),
                         control = MachineShop::settings("control"),
                         metrics = NULL,
                         stat = MachineShop::settings("stat.ModelTune"), ...) {
-  .tune(x, NULL, models, grid, fixed, control, metrics, stat, ...)
-}
-
-
-MLModelTune <- function(object, tune_grid, performance, selected) {
-  new("MLModelTune", object, tune_grid = tune_grid, performance = performance,
-      selected = selected)
+  .tune(x, data = NULL, models = models, grid = grid, fixed = fixed,
+        control = control, metrics = metrics, stat = stat, ...)
 }
 
 
@@ -133,7 +131,7 @@ MLModelTune <- function(object, tune_grid, performance, selected) {
         if (!is.null(name) && nzchar(name)) name else models[[i]]@name
     }
     names(models) <- make.unique(model_names)
-    grid <- data.frame()
+    grid <- data.frame(row.names = seq(models))
   } else {
     model <- getMLObject(models, class = "MLModel")
     random <- FALSE
@@ -155,7 +153,7 @@ MLModelTune <- function(object, tune_grid, performance, selected) {
   stat <- fget(stat)
   
   perf_list <- list()
-  perf_stat <- numeric()
+  perf_stats <- numeric()
   for (name in names(models)) {
     res <- try(
       resample(x, data, model = models[[name]], control = control),
@@ -166,7 +164,7 @@ MLModelTune <- function(object, tune_grid, performance, selected) {
       warn("tune resampling failed for ", name, " with error:\n",
            attr(res, "condition")$message)
       perf_list[[name]] <- NA
-      perf_stat[name] <- NA
+      perf_stats[name] <- NA
       next
     }
     
@@ -184,7 +182,7 @@ MLModelTune <- function(object, tune_grid, performance, selected) {
     
     perf <- performance(res, metrics = metrics, ...)
     perf_list[[name]] <- perf
-    perf_stat[name] <- stat(na.omit(perf[, 1]))
+    perf_stats[name] <- stat(na.omit(perf[, 1]))
   }
   
   failed <- is.na(perf_list)
@@ -196,11 +194,17 @@ MLModelTune <- function(object, tune_grid, performance, selected) {
   }
   
   perf <- do.call(Performance, perf_list)
-  selected <- ifelse(metric@maximize, which.max, which.min)(perf_stat)
+  index <- ifelse(metric@maximize, which.max, which.min)(perf_stats)
   
-  MLModelTune(models[[selected]], tune_grid = grid, performance = perf,
-              selected = structure(selected, names = colnames(perf)[1]))
-  
+  MLModelTune(models[[index]],
+              tune_grid = grid,
+              performance = perf,
+              selected = list(
+                index = index,
+                value = structure(perf_stats[index], names = colnames(perf)[1])
+              ),
+              metric = metric)
+
 }
 
 

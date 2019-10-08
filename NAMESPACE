@@ -15,7 +15,8 @@ importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
            delete.response, formula, get_all_vars, loess, lm, median,
            model.frame, model.matrix, model.matrix.default, model.response,
            model.weights, na.fail, na.omit, na.pass, p.adjust, pchisq, predict,
-           quantile, reformulate, reshape, sd, t.test, terms, time, vcov)
+           quantile, reformulate, reshape, sd, t.test, terms, time, update,
+           vcov)
 importFrom(survival, concordance, is.Surv, Surv, survfit, survreg,
            survreg.distributions)
 importFrom(utils, combn, head, methods, relist, stack, str, tail)
@@ -30,6 +31,7 @@ export(.,
        Curves,
        dependence,
        expand.model,
+       expand_steps,
        fit,
        Grid,
        lift,
@@ -46,6 +48,7 @@ export(.,
        SurvEvents,
        SurvProbs,
        tune,
+       TunedRecipe,
        varimp)
 
 export(accuracy,
