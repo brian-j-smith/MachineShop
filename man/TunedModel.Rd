@@ -14,10 +14,10 @@ TunedModel(model, grid = MachineShop::settings("grid"), fixed = NULL,
 the model to be tuned.}
 
 \item{grid}{\link[=data.frame]{data frame} containing parameter values at
-which to evaluate a single model supplied to \code{models}, the number of
-parameter-specific values to generate automatically if the model has a
-pre-defined grid, or a call to \code{\link{Grid}}.  Ignored in the case of a
-list of models.}
+which to evaluate a single model supplied to \code{models}, such as that
+returned by \code{\link{expand_params}}; the number of parameter-specific
+values to generate automatically if the model has a pre-defined grid; or a
+call to \code{\link{Grid}}.}
 
 \item{fixed}{list of fixed parameter values to combine with those in
 \code{grid}.}

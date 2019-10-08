@@ -40,7 +40,7 @@ grid.ModelFrame <- function(x, model, length = 3, random = FALSE, ...) {
   if (random) {
     sample.grid(params, random, stringsAsFactors = FALSE)
   } else {
-    expand.grid(params, stringsAsFactors = FALSE)
+    expand_params(params)
   }
 }
 

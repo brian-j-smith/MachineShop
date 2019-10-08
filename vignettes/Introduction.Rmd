@@ -1143,8 +1143,8 @@ tune(surv_fo, data = surv_train, model = GBMModel,
 
 ## Tune over user-specified grid points
 tune(surv_fo, data = surv_train, model = GBMModel,
-     grid = expand.grid(n.trees = c(25, 50, 100),
-                        interaction.depth = 1:3),
+     grid = expand_params(n.trees = c(25, 50, 100),
+                          interaction.depth = 1:3),
      control = surv_means_control)
 ```
 

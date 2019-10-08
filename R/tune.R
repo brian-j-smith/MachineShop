@@ -17,10 +17,10 @@
 #' a model to tune; or vector of these from which to select, such as that
 #' returned by \code{\link{expand_model}}.
 #' @param grid \link[=data.frame]{data frame} containing parameter values at
-#' which to evaluate a single model supplied to \code{models}, the number of
-#' parameter-specific values to generate automatically if the model has a
-#' pre-defined grid, or a call to \code{\link{Grid}}.  Ignored in the case of a
-#' list of models.
+#' which to evaluate a single model supplied to \code{models}, such as that
+#' returned by \code{\link{expand_params}}; the number of parameter-specific
+#' values to generate automatically if the model has a pre-defined grid; or a
+#' call to \code{\link{Grid}}.  Ignored in the case of a list of models.
 #' @param fixed list of fixed parameter values to combine with those in
 #' \code{grid}.
 #' @param control \link[=controls]{control} function, function name, or call
@@ -45,9 +45,9 @@
 #' 
 #' # User-specified grid
 #' (gbm_tune1 <- tune(fo, data = ICHomes, model = GBMModel,
-#'                    grid = expand.grid(n.trees = c(25, 50, 100),
-#'                                       interaction.depth = 1:3,
-#'                                       n.minobsinnode = c(5, 10)),
+#'                    grid = expand_params(n.trees = c(25, 50, 100),
+#'                                         interaction.depth = 1:3,
+#'                                         n.minobsinnode = c(5, 10)),
 #'                    control = CVControl(folds = 10, repeats = 5)))
 #' 
 #' # Automatically generated grid

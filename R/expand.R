@@ -42,8 +42,35 @@ expand_model <- function(x, ...) {
 
 
 .expand_model.MLModel <- function(x, ...) {
-  grid <- expand.grid(..., KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
+  grid <- expand_params(...)
   expand_model(list(fget(x@name), grid))
+}
+
+
+#' Model Parameters Expansion 
+#'
+#' Create a grid of parameter values from all combinations of supplied inputs.
+#' 
+#' @param ... named vectors or factors or a list of these containing the
+#' parameter values over which to create the grid.
+#' 
+#' @return A data frame containing one row for each combination of the supplied
+#' inputs.
+#' 
+#' @seealso \code{\link{tune}}, \code{\link{TunedModel}}
+#' 
+#' @examples
+#' library(MASS)
+#' 
+#' grid <- expand_params(
+#'   n.trees = c(50, 100),
+#'   interaction.depth = 1:2
+#' )
+#' 
+#' fit(medv ~ ., data = Boston, model = TunedModel(GBMModel, grid = grid))
+#' 
+expand_params <- function(...) {
+  expand.grid(..., KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
 }
 
 
@@ -103,10 +130,7 @@ expand_steps <- function(...) {
     stop("step names must be unique")
   }
   
-  grid <- expand.grid(unlist(steps, recursive = FALSE),
-                      KEEP.OUT.ATTRS = FALSE,
-                      stringsAsFactors = FALSE)
-  
+  grid <- expand_params(unlist(steps, recursive = FALSE))
   recipe_grid <- data.frame(row.names = seq_len(nrow(grid)))
   
   offset <- 0
