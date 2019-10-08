@@ -24,7 +24,7 @@
 #' 
 #' @return \code{SelectedModel} class object that inherits from \code{MLModel}.
 #' 
-#' @seealso \code{\link{tune}}, \code{\link{fit}}, \code{\link{resample}}
+#' @seealso \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
 #' 
 #' @examples
 #' fit(sale_amount ~ ., data = ICHomes,

@@ -53,5 +53,5 @@ fit(sale_amount ~ ., data = ICHomes, model = TunedModel(GLMNetModel))
 
 }
 \seealso{
-\code{\link{tune}}, \code{\link{fit}}, \code{\link{resample}}
+\code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
 }
