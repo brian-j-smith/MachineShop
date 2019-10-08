@@ -38,7 +38,8 @@
 #' predict(gbm_fit, newdata = Melanoma, times = 365 * c(2, 5, 10), type = "prob")
 #' 
 predict.MLModelFit <- function(object, newdata = NULL, times = NULL,
-                               type = c("response", "prob"), cutoff = 0.5,
+                               type = c("response", "prob"),
+                               cutoff = MachineShop::settings("cutoff"),
                                dist = NULL, method = NULL, ...) {
   newdata <- preprocess(fitbit(object, "x"), newdata)
   requireModelNamespaces(fitbit(object, "packages"))

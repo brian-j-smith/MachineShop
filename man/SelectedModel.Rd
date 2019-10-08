@@ -6,7 +6,7 @@
 \usage{
 SelectedModel(..., control = MachineShop::settings("control"),
   metrics = NULL, stat = MachineShop::settings("stat.ModelTune"),
-  cutoff = NULL)
+  cutoff = MachineShop::settings("cutoff"))
 }
 \arguments{
 \item{...}{\link[=models]{model} functions, function names, calls, or vector

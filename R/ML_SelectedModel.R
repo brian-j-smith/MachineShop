@@ -33,7 +33,7 @@
 SelectedModel <- function(..., control = MachineShop::settings("control"),
                           metrics = NULL,
                           stat = MachineShop::settings("stat.ModelTune"),
-                          cutoff = NULL) {
+                          cutoff = MachineShop::settings("cutoff")) {
   
   models <- unlist(list(...))
   control <- getMLObject(control, "MLControl")

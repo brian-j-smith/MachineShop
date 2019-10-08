@@ -14,8 +14,8 @@
 performance(x, ...)
 
 \method{performance}{factor}(x, y,
-  metrics = MachineShop::settings("metrics.factor"), cutoff = 0.5,
-  na.rm = TRUE, ...)
+  metrics = MachineShop::settings("metrics.factor"),
+  cutoff = MachineShop::settings("cutoff"), na.rm = TRUE, ...)
 
 \method{performance}{matrix}(x, y,
   metrics = MachineShop::settings("metrics.matrix"), na.rm = TRUE, ...)
@@ -25,8 +25,8 @@ performance(x, ...)
   ...)
 
 \method{performance}{Surv}(x, y,
-  metrics = MachineShop::settings("metrics.Surv"), cutoff = 0.5,
-  na.rm = TRUE, ...)
+  metrics = MachineShop::settings("metrics.Surv"),
+  cutoff = MachineShop::settings("cutoff"), na.rm = TRUE, ...)
 
 \method{performance}{Confusion}(x, ...)
 

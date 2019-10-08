@@ -47,7 +47,8 @@ performance <- function(x, ...) {
 #' 
 performance.factor <- function(x, y, metrics =
                                  MachineShop::settings("metrics.factor"),
-                               cutoff = 0.5, na.rm = TRUE, ...) {
+                               cutoff = MachineShop::settings("cutoff"),
+                               na.rm = TRUE, ...) {
   .performance(x, y, metrics, na.rm, cutoff = cutoff)
 }
 
@@ -74,7 +75,8 @@ performance.numeric <- function(x, y, metrics =
 #' 
 performance.Surv <- function(x, y, metrics =
                                MachineShop::settings("metrics.Surv"),
-                             cutoff = 0.5, na.rm = TRUE, ...) {
+                             cutoff = MachineShop::settings("cutoff"),
+                             na.rm = TRUE, ...) {
   .performance(x, y, metrics, na.rm, cutoff = cutoff)
 }
 

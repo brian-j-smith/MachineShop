@@ -1,7 +1,7 @@
 #' MachineShop Settings 
 #' 
 #' Allow the user to view or change global settings which affect default
-#' behaviors of functions in the the \pkg{MachineShop} package.
+#' behaviors of functions in the \pkg{MachineShop} package.
 #' 
 #' @param ... character names of settings to view, \code{name = value} pairs
 #' giving the values of settings to change, a vector of these, or no arguments
@@ -17,6 +17,9 @@
 #' \describe{
 #'   \item{\code{\link[=controls]{control}}}{function, function name, or call
 #'   defining a default resampling method [default: \code{"CVControl"}].}
+#'   \item{\code{cutoff}}{numeric (0, 1) threshold above which binary factor
+#'   probabilities are classified as events and below which survival
+#'   probabilities are classified [default: 0.5].}
 #'   \item{\code{dist.Surv}}{character string specifying distributional
 #'   approximations to estimated survival curves for predicting survival means.
 #'   Choices are \code{"empirical"} for the Kaplan-Meier estimator,
@@ -193,6 +196,15 @@ MachineShop_global <- as.environment(list(
         if (is(result, "try-error")) {
           DomainError(x, "must be an MLControl object, function, ",
                          "or function name")
+        } else x
+      }
+    ),
+    
+    cutoff = list(
+      value = 0.5,
+      check = function(x) {
+        if (!is.numeric(x) || length(x) != 1 || x <= 0 || x >= 1) {
+          DomainError(x, "must be a numeric value in (0, 1)")
         } else x
       }
     ),

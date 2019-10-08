@@ -40,7 +40,7 @@ TunedModel <- function(model, grid = MachineShop::settings("grid"),
                        fixed = NULL, control = MachineShop::settings("control"),
                        metrics = NULL,
                        stat = MachineShop::settings("stat.ModelTune"),
-                       cutoff = NULL) {
+                       cutoff = MachineShop::settings("cutoff")) {
   
   if (missing(model)) model <- NULL
   control <- getMLObject(control, "MLControl")
