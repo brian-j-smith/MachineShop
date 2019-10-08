@@ -46,6 +46,10 @@ MLControl(times = NULL, dist = NULL, method = NULL,
 \code{MLControl} class object.
 }
 \description{
+Structures to define and control sampling methods for estimating predictive
+performance of models in the \pkg{MachineShop} package.
+}
+\details{
 \code{BootControl} constructs an \code{MLControl} object for simple bootstrap
 resampling in which models are fit with bootstrap resampled training sets and
 used to predict the full data set (Efron and Tibshirani 1993).
