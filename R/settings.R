@@ -4,8 +4,9 @@
 #' behaviors of functions in the \pkg{MachineShop} package.
 #' 
 #' @param ... character names of settings to view, \code{name = value} pairs
-#' giving the values of settings to change, a vector of these, or no arguments
-#' to view all settings.  Partial matching of setting names is supported.
+#' giving the values of settings to change, a vector of these, \code{"reset"}
+#' to restore all package defaults, or no arguments to view all settings.
+#' Partial matching of setting names is supported.
 #' 
 #' @return The setting value if only one is specified to view.  Otherwise, a
 #' list of the values of specified settings as they existed prior to any
@@ -96,14 +97,19 @@ settings <- function(...) {
   
   args <- list(...)
   if(length(args) == 1 && is.null(names(args)) && is.vector(args[[1]])) {
-    args <- args[[1]]
+    args <- as.list(args[[1]])
   }
   
   global_settings <- MachineShop_global$settings
   global_values <- lapply(global_settings, getElement, name = "value")
   global_checks <- lapply(global_settings, getElement, name = "check")
   
-  if (!length(args)) return(global_values)
+  if (!length(args)) {
+    return(global_values)
+  } else if (identical(args, list("reset"))) {
+    settings(.global_defaults)
+    return(invisible(global_values))
+  }
   
   args_names <- names(args)
   if (is.null(args_names)) args_names <- character(length(args))
@@ -319,3 +325,6 @@ MachineShop_global <- as.environment(list(
   )
   
 ))
+
+
+.global_defaults <- settings()

@@ -8,8 +8,9 @@ settings(...)
 }
 \arguments{
 \item{...}{character names of settings to view, \code{name = value} pairs
-giving the values of settings to change, a vector of these, or no arguments
-to view all settings.  Partial matching of setting names is supported.}
+giving the values of settings to change, a vector of these, \code{"reset"}
+to restore all package defaults, or no arguments to view all settings.
+Partial matching of setting names is supported.}
 }
 \value{
 The setting value if only one is specified to view.  Otherwise, a
