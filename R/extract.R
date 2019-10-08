@@ -6,11 +6,11 @@
 #' @rdname extract-methods
 #' 
 #' @param x \code{\link{SurvMatrix}} object or \link{resample} result from which
-#' to extract elements.
+#'   to extract elements.
 #' @param i,j indices specifying elements to extract.
 #' @param drop logical indicating that the result be returned as a
-#' \code{numeric} coerced to the lowest dimension possible if \code{TRUE} or
-#' retained as the original 2-dimensional object class otherwise.
+#'   \code{numeric} coerced to the lowest dimension possible if \code{TRUE} or
+#'   retained as the original 2-dimensional object class otherwise.
 #' 
 NULL
 

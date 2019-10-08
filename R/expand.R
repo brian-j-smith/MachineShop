@@ -4,7 +4,7 @@
 #' 
 #' @param x \link[=models]{model} function, function name, or call.
 #' @param ... named vectors or factors or a list of these containing the
-#' parameter values over which to expand \code{x}.
+#'   parameter values over which to expand \code{x}.
 #' 
 #' @return A list of model objects created from the parameter combinations.
 #' 

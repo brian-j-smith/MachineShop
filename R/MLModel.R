@@ -6,27 +6,28 @@
 #' @param label optional character descriptor for the model.
 #' @param packages character vector of packages required to use the model.
 #' @param response_types character vector of response variable types to which
-#' the model can be fit.  Supported types are \code{"binary"}, \code{"factor"},
-#' \code{"matrix"}, \code{"numeric"}, \code{"ordered"}, and \code{"Surv"}.
+#'   the model can be fit.  Supported types are \code{"binary"},
+#'   \code{"factor"}, \code{"matrix"}, \code{"numeric"}, \code{"ordered"}, and
+#'   \code{"Surv"}.
 #' @param predictor_encoding character string indicating whether the model is
-#' fit with predictor variables encoded as a \code{"\link{model.matrix}"}, a
-#' data.frame containing the original \code{"terms"}, or unknown (default).
+#'   fit with predictor variables encoded as a \code{"\link{model.matrix}"}, a
+#'   data.frame containing the original \code{"terms"}, or unknown (default).
 #' @param params list of user-specified model parameters to be passed to the
-#' \code{fit} function.
+#'   \code{fit} function.
 #' @param grid tuning grid function whose first agument \code{x} is a
-#' \code{\link{ModelFrame}} of the model fit data and formula, followed by a
-#' \code{length} to use in generating sequences of parameter values, a number of
-#' grid points to sample at \code{random}, and an ellipsis (\code{...}).
+#'   \code{\link{ModelFrame}} of the model fit data and formula, followed by a
+#'   \code{length} to use in generating sequences of parameter values, a number
+#'   of grid points to sample at \code{random}, and an ellipsis (\code{...}).
 #' @param fit model fitting function whose arguments are a \code{formula}, a
-#' \code{\link{ModelFrame}} named \code{data}, case \code{weights}, and an
-#' ellipsis.
+#'   \code{\link{ModelFrame}} named \code{data}, case \code{weights}, and an
+#'   ellipsis.
 #' @param predict model prediction function whose arguments are the
-#' \code{object} returned by \code{fit}, a \code{\link{ModelFrame}} named
-#' \code{newdata} of predictor variables, optional vector of \code{times} at
-#' which to predict survival, and an ellipsis.
+#'   \code{object} returned by \code{fit}, a \code{\link{ModelFrame}} named
+#'   \code{newdata} of predictor variables, optional vector of \code{times} at
+#'   which to predict survival, and an ellipsis.
 #' @param varimp variable importance function whose arguments are the
-#' \code{object} returned by \code{fit}, optional arguments passed from calls
-#' to \code{\link{varimp}}, and an ellipsis.
+#'   \code{object} returned by \code{fit}, optional arguments passed from calls
+#'   to \code{\link{varimp}}, and an ellipsis.
 #' @param ... arguments passed from other methods.
 #' 
 #' @details
@@ -41,13 +42,14 @@
 #' Values returned by the \code{predict} functions should be formatted according
 #' to the response variable types below.
 #' \describe{
-#' \item{factor}{vector or column matrix of probabilities for the second level
-#' of binary factors or a matrix whose columns contain the probabilities for
-#' factors with more than two levels.}
-#' \item{matrix}{matrix of predicted responses.}
-#' \item{numeric}{vector or column matrix of predicted responses.}
-#' \item{Surv}{matrix whose columns contain survival probabilities at
-#' \code{times} if supplied or a vector of predicted survival means otherwise.}
+#'   \item{factor}{vector or column matrix of probabilities for the second level
+#'     of binary factors or a matrix whose columns contain the probabilities for
+#'     factors with more than two levels.}
+#'   \item{matrix}{matrix of predicted responses.}
+#'   \item{numeric}{vector or column matrix of predicted responses.}
+#'   \item{Surv}{matrix whose columns contain survival probabilities at
+#'     \code{times} if supplied or a vector of predicted survival means
+#'     otherwise.}
 #' }
 #' 
 #' The \code{varimp} function should return a vector of importance values named

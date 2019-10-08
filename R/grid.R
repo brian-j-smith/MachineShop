@@ -3,9 +3,9 @@
 #' Defines the control parameters for a tuning grid.
 #' 
 #' @param length number of values to be generated for each model parameter in
-#' the tuning grid.
+#'   the tuning grid.
 #' @param random number of points to be randomly sampled from the tuning grid or
-#' \code{FALSE} if all points are to be used.
+#'   \code{FALSE} if all points are to be used.
 #' 
 #' @seealso \code{\link{tune}}
 #' 

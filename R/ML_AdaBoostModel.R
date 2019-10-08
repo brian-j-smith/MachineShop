@@ -4,12 +4,12 @@
 #' algorithms using classification trees as single classifiers.
 #' 
 #' @param boos if \code{TRUE}, then bootstrap samples are drawn from the
-#' training set using the observation weights at each iteration.  If
-#' \code{FALSE}, then all observations are used with their weights.
+#'   training set using the observation weights at each iteration.  If
+#'   \code{FALSE}, then all observations are used with their weights.
 #' @param mfinal number of iterations for which boosting is run.
 #' @param coeflearn learning algorithm.
 #' @param minsplit minimum number of observations that must exist in a node in
-#' order for a split to be attempted.
+#'   order for a split to be attempted.
 #' @param minbucket minimum number of observations in any terminal node.
 #' @param cp complexity parameter.
 #' @param maxcompete number of competitor splits retained in the output.
@@ -18,14 +18,14 @@
 #' @param xval number of cross-validations.
 #' @param surrogatestyle controls the selection of a best surrogate.
 #' @param maxdepth maximum depth of any node of the final tree, with the root
-#' node counted as depth 0.
+#'   node counted as depth 0.
 #' 
 #' @details
 #' \describe{
-#' \item{Response Types:}{\code{factor}}
-#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-#'   \code{mfinal}, \code{maxdepth}, \code{coeflearn}*
-#' }
+#'   \item{Response Types:}{\code{factor}}
+#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'     \code{mfinal}, \code{maxdepth}, \code{coeflearn}*
+#'   }
 #' }
 #' * included only in randomly sampled grid points
 #' 

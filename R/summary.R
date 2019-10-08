@@ -6,13 +6,13 @@
 #' @rdname summary-methods
 #' 
 #' @param object \link{confusion}, \link[=performance_curve]{performance curve},
-#' \link{lift}, model \link{tune}, \link{performance}, or \link{resample}
-#' result.
+#'   \link{lift}, model \link{tune}, \link{performance}, or \link{resample}
+#'   result.
 #' @param stat function or character string naming a function to compute a
-#' summary statistic at each cutoff value of resampled metrics in \code{Curves},
-#' or \code{NULL} for resample-specific metrics.
+#'   summary statistic at each cutoff value of resampled metrics in
+#'   \code{Curves}, or \code{NULL} for resample-specific metrics.
 #' @param stats function, function name, or vector of these with which to
-#' compute summary statistics.
+#'   compute summary statistics.
 #' @param na.rm logical indicating whether to exclude missing values.
 #' @param ... arguments passed to other methods.
 #' 

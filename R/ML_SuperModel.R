@@ -3,20 +3,19 @@
 #' Fit a super learner model to predictions from multiple base learners.
 #' 
 #' @param ... \link[=models]{model} functions, function names, calls, or vector
-#' of these to serve as base learners.
+#'   of these to serve as base learners.
 #' @param model \link[=models]{model} function, function name, or call defining
-#' the super model.
+#'   the super model.
 #' @param control \link[=controls]{control} function, function name, or call
-#' defining the resampling method to be employed for the estimation of base
-#' learner weights.
+#'   defining the resampling method to be employed for the estimation of base
+#'   learner weights.
 #' @param all_vars logical indicating whether to include the original
-#' predictor variables in the super model.
+#'   predictor variables in the super model.
 #' 
 #' @details
 #' \describe{
-#' \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
-#' \code{Surv}
-#' }
+#'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
+#'     \code{Surv}}
 #' }
 #' 
 #' @return \code{SuperModel} class object that inherits from \code{MLModel}.

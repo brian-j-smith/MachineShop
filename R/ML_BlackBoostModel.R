@@ -4,34 +4,34 @@
 #' trees are utilized as base-learners.
 #' 
 #' @param family optional \code{\link[mboost]{Family}} object.  Set
-#' automatically according to the class type of the response variable.
+#'   automatically according to the class type of the response variable.
 #' @param mstop number of initial boosting iterations.
 #' @param nu step size or shrinkage parameter between 0 and 1.
 #' @param risk method to use in computing the empirical risk for each boosting
-#' iteration.
+#'   iteration.
 #' @param stopintern logical inidicating whether the boosting algorithm stops
-#' internally when the out-of-bag risk increases at a subsequent iteration.
+#'   internally when the out-of-bag risk increases at a subsequent iteration.
 #' @param trace logical indicating whether status information is printed during
-#' the fitting process.
+#'   the fitting process.
 #' @param teststat type of the test statistic to be applied for variable
-#' selection.
+#'   selection.
 #' @param testtype how to compute the distribution of the test statistic.
 #' @param mincriterion value of the test statistic or 1 - p-value that must be
-#' exceeded in order to implement a split.
+#'   exceeded in order to implement a split.
 #' @param minsplit minimum sum of weights in a node in order to be considered
-#' for splitting.
+#'   for splitting.
 #' @param minbucket minimum sum of weights in a terminal node.
 #' @param maxdepth maximum depth of the tree.
 #' @param saveinfo logical indicating whether to store information about
-#' variable selection in \code{info} slot of each \code{partynode}.
+#'   variable selection in \code{info} slot of each \code{partynode}.
 #' @param ... additional arguments to \code{\link[partykit]{ctree_control}}.
 #' 
 #' @details
 #' \describe{
-#' \item{Response Types:}{\code{binary}, \code{numeric}, \code{Surv}}
-#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-#'   \code{mstop}, \code{maxdepth}
-#' }
+#'   \item{Response Types:}{\code{binary}, \code{numeric}, \code{Surv}}
+#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'     \code{mstop}, \code{maxdepth}
+#'   }
 #' }
 #' 
 #' Default values for the \code{NULL} arguments and further model details can be

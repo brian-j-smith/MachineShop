@@ -79,7 +79,7 @@ categorical and time-to-event outcomes.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
+  \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
 }
 
 Default values for the \code{NULL} arguments and further model details can be

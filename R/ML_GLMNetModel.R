@@ -3,19 +3,19 @@
 #' Fit a generalized linear model via penalized maximum likelihood.
 #'
 #' @param family optional response type.  Set automatically according to the
-#' class type of the response variable.
+#'   class type of the response variable.
 #' @param alpha elasticnet mixing parameter.
 #' @param lambda regularization parameter.  The default value \code{lambda = 0}
-#' performs no regularization and should be increased to avoid model fitting
-#' issues if the number of predictor variables is greater than the number of
-#' observations.
+#'   performs no regularization and should be increased to avoid model fitting
+#'   issues if the number of predictor variables is greater than the number of
+#'   observations.
 #' @param standardize logical flag for predictor variable standardization, prior
-#' to model fitting.
+#'   to model fitting.
 #' @param intercept logical indicating whether to fit intercepts.
 #' @param penalty.factor vector of penalty factors to be applied to each
-#' coefficient.
+#'   coefficient.
 #' @param standardize.response logical indicating whether to standardize
-#' \code{"mgaussian"} response variables.
+#'   \code{"mgaussian"} response variables.
 #' @param thresh convergence threshold for coordinate descent.
 #' @param maxit maximum number of passes over the data for all lambda values.
 #' @param type.gaussian algorithm type for guassian models.
@@ -24,11 +24,11 @@
 #' 
 #' @details 
 #' \describe{
-#' \item{Response Types:}{\code{factor}, \code{matrix}, \code{numeric},
-#' \code{Surv}}
-#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-#'   \code{lambda}, \code{alpha}
-#' }
+#'   \item{Response Types:}{\code{factor}, \code{matrix}, \code{numeric},
+#'     \code{Surv}}
+#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'     \code{lambda}, \code{alpha}
+#'   }
 #' }
 #' 
 #' Default values for the \code{NULL} arguments and further model details can be

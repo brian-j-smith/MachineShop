@@ -8,14 +8,14 @@
 #' @param replace should sampling of cases be done with or without replacement?
 #' @param nodesize minimum size of terminal nodes.
 #' @param maxnodes maximum number of terminal nodes trees in the forest can
-#' have.
+#'   have.
 #' 
 #' @details
 #' \describe{
-#' \item{Response Types:}{\code{factor}, \code{numeric}}
-#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-#'   \code{mtry}, \code{nodesize}*
-#' }
+#'   \item{Response Types:}{\code{factor}, \code{numeric}}
+#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'     \code{mtry}, \code{nodesize}*
+#'   }
 #' }
 #' * included only in randomly sampled grid points
 #' 

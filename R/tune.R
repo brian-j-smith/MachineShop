@@ -7,30 +7,30 @@
 #' @rdname tune-methods
 #' 
 #' @param x defines a relationship between model predictor and response
-#' variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
-#' predictors, \code{\link{ModelFrame}}, untrained
-#' \code{\link[recipes]{recipe}}, or \code{\link{TunedRecipe}} object.
+#'   variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
+#'   predictors, \code{\link{ModelFrame}}, untrained
+#'   \code{\link[recipes]{recipe}}, or \code{\link{TunedRecipe}} object.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
-#' outcomes.
+#'   outcomes.
 #' @param models \link[=models]{model} function, function name, or call defining
-#' a model to tune; or vector of these from which to select, such as that
-#' returned by \code{\link{expand_model}}.
+#'   a model to tune; or vector of these from which to select, such as that
+#'   returned by \code{\link{expand_model}}.
 #' @param grid \link[=data.frame]{data frame} containing parameter values at
-#' which to evaluate a single model supplied to \code{models}, such as that
-#' returned by \code{\link{expand_params}}; the number of parameter-specific
-#' values to generate automatically if the model has a pre-defined grid; or a
-#' call to \code{\link{Grid}}.  Ignored in the case of a list of models.
+#'   which to evaluate a single model supplied to \code{models}, such as that
+#'   returned by \code{\link{expand_params}}; the number of parameter-specific
+#'   values to generate automatically if the model has a pre-defined grid; or a
+#'   call to \code{\link{Grid}}.  Ignored in the case of a list of models.
 #' @param fixed list of fixed parameter values to combine with those in
-#' \code{grid}.
+#'   \code{grid}.
 #' @param control \link[=controls]{control} function, function name, or call
-#' defining the resampling method to be employed.
+#'   defining the resampling method to be employed.
 #' @param metrics \link[=metrics]{metric} function, function name, or vector of
-#' these with which to calculate performance.  If not specified, default metrics
-#' defined in the \link{performance} functions are used.  Model selection is
-#' based on the first calculated metric.
+#'   these with which to calculate performance.  If not specified, default
+#'   metrics defined in the \link{performance} functions are used.  Model
+#'   selection is based on the first calculated metric.
 #' @param stat function or character string naming a function to compute a
-#' summary statistic on resampled metric values for model tuning.
+#'   summary statistic on resampled metric values for model tuning.
 #' @param ... arguments passed to the \link{performance} functions.
 #' 
 #' @return \code{MLModelTune} class object that inherits from \code{MLModel}.

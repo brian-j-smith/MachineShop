@@ -26,7 +26,7 @@ specified formula and choosing splits from the terms of the right-hand-side.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{factor}, \code{numeric}}
+  \item{Response Types:}{\code{factor}, \code{numeric}}
 }
 
 Further model details can be found in the source link below.

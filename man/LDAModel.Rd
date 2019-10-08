@@ -30,17 +30,17 @@ Performs linear discriminant analysis.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{factor}}
-\item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-  \code{dimen}
-}
+  \item{Response Types:}{\code{factor}}
+  \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+    \code{dimen}
+  }
 }
 
 The \code{\link{predict}} function for this model additionally accepts the
 following argument.
 \describe{
-\item{\code{prior}}{prior class membership probabilities for prediction data
-if different from the training set.}
+  \item{\code{prior}}{prior class membership probabilities for prediction
+    data if different from the training set.}
 }
 
 Default values for the \code{NULL} arguments and further model details can be

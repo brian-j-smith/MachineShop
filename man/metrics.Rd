@@ -118,8 +118,8 @@ rmsle(observed, predicted = NULL, ...)
 \code{observed}.}
 
 \item{cutoff}{numeric (0, 1) threshold above which binary factor
-probabilities are classified as events and below which survival probabilities
-are classified.}
+probabilities are classified as events and below which survival
+probabilities are classified.}
 
 \item{...}{arguments passed to or from other methods.}
 

@@ -10,26 +10,27 @@
 #' @param sample.fraction fraction of observations to sample.
 #' @param splitrule splitting rule.
 #' @param num.random.splits number of random splits to consider for each
-#' candidate splitting variable in the \code{"extratrees"} rule.
+#'   candidate splitting variable in the \code{"extratrees"} rule.
 #' @param alpha significance threshold to allow splitting in the
-#' \code{"maxstat"} rule.
+#'   \code{"maxstat"} rule.
 #' @param minprop lower quantile of covariate distribution to be considered for
-#' splitting in the \code{"maxstat"} rule.
+#'   splitting in the \code{"maxstat"} rule.
 #' @param split.select.weights numeric vector with weights between 0 and 1,
-#' representing the probability to select variables for splitting.
+#'   representing the probability to select variables for splitting.
 #' @param always.split.variables character vector with variable names to be
-#' always selected in addition to the \code{mtry} variables tried for splitting.
+#'   always selected in addition to the \code{mtry} variables tried for
+#'   splitting.
 #' @param respect.unordered.factors handling of unordered factor covariates.
 #' @param scale.permutation.importance scale permutation importance by
-#' standard error.
+#'   standard error.
 #' @param verbose show computation status and estimated runtime.
 #' 
 #' @details
 #' \describe{
-#' \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
-#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-#'   \code{mtry}, \code{min.node.size}*, \code{splitrule}*
-#' }
+#'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
+#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'     \code{mtry}, \code{min.node.size}*, \code{splitrule}*
+#'   }
 #' }
 #' * included only in randomly sampled grid points
 #' 

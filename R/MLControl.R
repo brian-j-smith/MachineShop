@@ -9,7 +9,7 @@
 #' 
 #' @param folds number of cross-validation folds (K).
 #' @param prop proportion of cases to include in the training set
-#' (\code{0 < prop < 1}).
+#'   (\code{0 < prop < 1}).
 #' @param repeats number of repeats of the K-fold partitioning.
 #' @param samples number of bootstrap samples.
 #' @param seed integer to set the seed at the start of resampling.

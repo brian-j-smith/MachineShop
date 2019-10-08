@@ -5,22 +5,22 @@
 #' 
 #' @param type model type.
 #' @param trace logical indicating whether status information is printed during
-#' the fitting process.
+#'   the fitting process.
 #' @param normalize whether to standardize each variable to have unit L2 norm. 
 #' @param intercept whether to include an intercept in the model.
 #' @param step algorithm step number to use for prediction.  May be a decimal
-#' number indicating a fractional distance between steps.  If specified, the
-#' maximum number of algorithm steps will be \code{ceiling(step)}; otherwise,
-#' \code{step} will be set equal to the source package default maximum [default:
-#' \code{max.steps}].
+#'   number indicating a fractional distance between steps.  If specified, the
+#'   maximum number of algorithm steps will be \code{ceiling(step)}; otherwise,
+#'   \code{step} will be set equal to the source package default maximum
+#'   [default: \code{max.steps}].
 #' @param use.Gram whether to precompute the Gram matrix.
 #'  
 #' @details 
 #' \describe{
-#' \item{Response Types:}{\code{numeric}}
-#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-#'   \code{step}
-#' }
+#'   \item{Response Types:}{\code{numeric}}
+#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'     \code{step}
+#'   }
 #' }
 #' 
 #' Default values for the \code{NULL} arguments and further model details can be

@@ -4,35 +4,35 @@
 #' categorical and time-to-event outcomes.
 #' 
 #' @param K if provided, then coarsen the times of survival responses per the
-#' quantiles \eqn{1/K, 2/K, ..., K/K} to reduce computational burdern.
+#'   quantiles \eqn{1/K, 2/K, ..., K/K} to reduce computational burdern.
 #' @param sparse logical indicating whether to perform variable selection based
-#' on a sparse Dirichlet prior rather than simply uniform; see Linero 2016.
+#'   on a sparse Dirichlet prior rather than simply uniform; see Linero 2016.
 #' @param theta,omega \eqn{theta} and \eqn{omega} parameters; zero means
-#' random.
+#'   random.
 #' @param a,b sparse parameters for \eqn{Beta(a, b)} prior:
-#' \eqn{0.5 <= a <= 1} where lower values induce more sparsity and typically
-#' \eqn{b = 1}.
+#'   \eqn{0.5 <= a <= 1} where lower values induce more sparsity and typically
+#'   \eqn{b = 1}.
 #' @param rho sparse parameter: typically \eqn{rho = p} where \eqn{p} is the
-#' number of covariates under consideration.
+#'   number of covariates under consideration.
 #' @param augment whether data augmentation is to be performed in sparse
-#' variable selection.
+#'   variable selection.
 #' @param xinfo optional matrix whose rows are the covariates and columns their
-#' cutpoints.
+#'   cutpoints.
 #' @param usequants whether covariate cutpoints are defined by uniform quantiles
-#' or generated uniformly.
+#'   or generated uniformly.
 #' @param sigest normal error variance prior for numeric response variables.
 #' @param sigdf degrees of freedom for error variance prior.
 #' @param sigquant quantile at which a rough estimate of the error standard
-#' deviation is placed.
+#'   deviation is placed.
 #' @param lambda scale of the prior error variance.
 #' @param k number of standard deviations \eqn{f(x)}  is away from +/-3 for
-#' categorical response variables.
+#'   categorical response variables.
 #' @param power,base power and base parameters for tree prior.
 #' @param tau.num numerator in the \eqn{tau} definition, i.e.,
-#' \eqn{tau = tau.num / (k * sqrt(ntree))}.
+#'   \eqn{tau = tau.num / (k * sqrt(ntree))}.
 #' @param offset override for the default \eqn{offset} of \eqn{F^-1(mean(y))}
-#' in the multivariate response probability
-#' \eqn{P(y[j] = 1 | x) = F(f(x)[j] + offset[j])}.
+#'   in the multivariate response probability
+#'   \eqn{P(y[j] = 1 | x) = F(f(x)[j] + offset[j])}.
 #' @param ntree number of trees in the sum.
 #' @param numcut number of possible covariate cutoff values.
 #' @param ndpost number of posterior draws returned.
@@ -42,7 +42,7 @@
 #'
 #' @details 
 #' \describe{
-#' \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
+#'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
 #' }
 #' 
 #' Default values for the \code{NULL} arguments and further model details can be

@@ -48,10 +48,10 @@ Fit single-hidden-layer neural network, possibly with skip-layer connections.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{factor}, \code{numeric}}
-\item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-  \code{size}, \code{decay}
-}
+  \item{Response Types:}{\code{factor}, \code{numeric}}
+  \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+    \code{size}, \code{decay}
+  }
 }
 
 Default values for the \code{NULL} arguments and further model details can be

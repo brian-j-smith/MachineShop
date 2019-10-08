@@ -20,10 +20,10 @@ Function to perform partial least squares regression.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{factor}, \code{numeric}}
-\item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-  \code{ncomp}
-}
+  \item{Response Types:}{\code{factor}, \code{numeric}}
+  \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+    \code{ncomp}
+  }
 }
 
 Further model details can be found in the source link below.

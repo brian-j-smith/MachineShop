@@ -5,31 +5,31 @@
 #'
 #' @param trials integer number of boosting iterations.
 #' @param rules logical indicating whether to decompose the tree into a
-#' rule-based model.
+#'   rule-based model.
 #' @param subset logical indicating whether the model should evaluate groups of
-#' discrete predictors for splits.
+#'   discrete predictors for splits.
 #' @param bands integer between 2 and 1000 specifying a number of bands into 
-#' which to group rules ordered by their affect on the error rate.
+#'   which to group rules ordered by their affect on the error rate.
 #' @param winnow logical indicating use of predictor winnowing (i.e. feature
-#' selection).
+#'   selection).
 #' @param noGlobalPruning logical indicating a final, global pruning step to
-#' simplify the tree.
+#'   simplify the tree.
 #' @param CF number in (0, 1) for the confidence factor.
 #' @param minCases integer for the smallest number of samples that must be put
-#' in at least two of the splits.
+#'   in at least two of the splits.
 #' @param fuzzyThreshold logical indicating whether to evaluate possible
-#' advanced splits of the data.
+#'   advanced splits of the data.
 #' @param sample value between (0, 0.999) that specifies the random proportion
-#' of data to use in training the model.
+#'   of data to use in training the model.
 #' @param earlyStopping logical indicating whether the internal method for
-#' stopping boosting should be used.
+#'   stopping boosting should be used.
 #'
 #' @details
 #' \describe{
-#' \item{Response Types:}{\code{factor}}
-#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-#'   \code{trials}, \code{rules}, \code{winnow}
-#' }
+#'   \item{Response Types:}{\code{factor}}
+#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'     \code{trials}, \code{rules}, \code{winnow}
+#'   }
 #' }
 #' 
 #' Latter arguments are passed to \code{\link[C50]{C5.0Control}}.

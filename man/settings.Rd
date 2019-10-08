@@ -27,63 +27,63 @@ behaviors of functions in the \pkg{MachineShop} package.
 
 \describe{
   \item{\code{\link[=controls]{control}}}{function, function name, or call
-  defining a default resampling method [default: \code{"CVControl"}].}
+    defining a default resampling method [default: \code{"CVControl"}].}
   \item{\code{cutoff}}{numeric (0, 1) threshold above which binary factor
-  probabilities are classified as events and below which survival
-  probabilities are classified [default: 0.5].}
+    probabilities are classified as events and below which survival
+    probabilities are classified [default: 0.5].}
   \item{\code{dist.Surv}}{character string specifying distributional
-  approximations to estimated survival curves for predicting survival means.
-  Choices are \code{"empirical"} for the Kaplan-Meier estimator,
-  \code{"exponential"}, or \code{"weibull"} (default).}
+    approximations to estimated survival curves for predicting survival
+    means.  Choices are \code{"empirical"} for the Kaplan-Meier estimator,
+    \code{"exponential"}, or \code{"weibull"} (default).}
   \item{\code{dist.SurvProbs}}{character string specifying distributional
-  approximations to estimated survival curves for predicting survival
-  events/probabilities.  Choices are \code{"empirical"} (default) for the
-  Kaplan-Meier estimator, \code{"exponential"}, or \code{"weibull"}.}
+    approximations to estimated survival curves for predicting survival
+    events/probabilities.  Choices are \code{"empirical"} (default) for the
+    Kaplan-Meier estimator, \code{"exponential"}, or \code{"weibull"}.}
   \item{\code{grid}}{number of parameter-specific values to generate
-  automatically for \link[=tune]{tuning} of models that have pre-defined
-  grids or a \code{\link{Grid}} function, function name, or call
-  [default: 3].}
+    automatically for \link[=tune]{tuning} of models that have pre-defined
+    grids or a \code{\link{Grid}} function, function name, or call
+    [default: 3].}
   \item{\code{method.EmpiricalSurv}}{character string specifying the
-  empirical method of estimating baseline survival curves for Cox
-  proportional hazards-based models.  Choices are \code{"breslow"},
-  \code{"efron"} (default), or \code{"fleming-harrington"}.}
+    empirical method of estimating baseline survival curves for Cox
+    proportional hazards-based models.  Choices are \code{"breslow"},
+    \code{"efron"} (default), or \code{"fleming-harrington"}.}
   \item{\code{metrics.ConfusionMatrix}}{function, function name, or vector of
-  these with which to calculate \link{performance} \link{metrics} for
-  confusion matrices [default: \code{c(Accuracy = "accuracy", Kappa =
-  "kappa2", `Weighted Kappa` = "weighted_kappa2", Sensitivity =
-  "sensitivity", Specificity = "specificity")}].}
+    these with which to calculate \link{performance} \link{metrics} for
+    confusion matrices [default: \code{c(Accuracy = "accuracy", Kappa =
+    "kappa2", `Weighted Kappa` = "weighted_kappa2", Sensitivity =
+    "sensitivity", Specificity = "specificity")}].}
   \item{\code{metrics.factor}}{function, function name, or vector of these
-  with which to calculate \link{performance} \link{metrics} for factor
-  responses [default: \code{c(Brier = "brier", Accuracy = "accuracy", Kappa =
-  "kappa2", `Weighted Kappa` = "weighted_kappa2", `ROC AUC` = "roc_auc",
-  Sensitivity = "sensitivity", Specificity = "specificity")}].}
+    with which to calculate \link{performance} \link{metrics} for factor
+    responses [default: \code{c(Brier = "brier", Accuracy = "accuracy",
+    Kappa = "kappa2", `Weighted Kappa` = "weighted_kappa2", `ROC AUC` =
+    "roc_auc", Sensitivity = "sensitivity", Specificity = "specificity")}].}
   \item{\code{metrics.matrix}}{function, function name, or vector of these
-  with which to calculate \link{performance} \link{metrics} for matrix
-  responses [default: \code{c(RMSE = "rmse", R2 = "r2", MAE = "mae")}].}
+    with which to calculate \link{performance} \link{metrics} for matrix
+    responses [default: \code{c(RMSE = "rmse", R2 = "r2", MAE = "mae")}].}
   \item{\code{metrics.numeric}}{function, function name, or vector of these
-  with which to calculate \link{performance} \link{metrics} for numeric
-  responses [default: \code{c(RMSE = "rmse", R2 = "r2", MAE = "mae")}].}
+    with which to calculate \link{performance} \link{metrics} for numeric
+    responses [default: \code{c(RMSE = "rmse", R2 = "r2", MAE = "mae")}].}
   \item{\code{metrics.Surv}}{function, function name, or vector of these with
-  which to calculate \link{performance} \link{metrics} for survival responses
-  [default: \code{c(`C-Index` = "cindex", Brier = "brier", `ROC AUC` =
-  "roc_auc", Accuracy = "accuracy")}].}
+    which to calculate \link{performance} \link{metrics} for survival
+    responses [default: \code{c(`C-Index` = "cindex", Brier = "brier",
+    `ROC AUC` = "roc_auc", Accuracy = "accuracy")}].}
   \item{\code{stat.Curves}}{function or character string naming a function
-  to compute one \link{summary} statistic at each cutoff value of resampled
-  metrics in performance curves, or \code{NULL} for resample-specific metrics
-  [default: \code{"base::mean"}].}
+    to compute one \link{summary} statistic at each cutoff value of resampled
+    metrics in performance curves, or \code{NULL} for resample-specific
+    metrics [default: \code{"base::mean"}].}
   \item{\code{stat.ModelTune}}{function or character string naming a function
-  to compute one summary statistic on resampled performance metrics for
-  \link[=tune]{model tuning and selection} [default: \code{"base::mean"}].}
+    to compute one summary statistic on resampled performance metrics for
+    \link[=tune]{model tuning and selection} [default: \code{"base::mean"}].}
   \item{\code{stat.Resamples}}{function or character string naming a function
-  to compute one summary statistic to control the ordering of models in
-  \link[=plot]{plots} [default: \code{"base::mean"}].}
+    to compute one summary statistic to control the ordering of models in
+    \link[=plot]{plots} [default: \code{"base::mean"}].}
   \item{\code{stats.PartialDependence}}{function, function name, or vector of
-  these with which to compute \link[=dependence]{partial dependence} summary
-  statistics [default: \code{c(Mean = "base::mean")}].}
+    these with which to compute \link[=dependence]{partial dependence}
+    summary statistics [default: \code{c(Mean = "base::mean")}].}
   \item{\code{stats.Resamples}}{function, function name, or vector of these
-  with which to compute \link{summary} statistics on resampled performance
-  metrics [default: \code{c(Mean = "base::mean", Median = "stats::median",
-  SD = "stats::sd", Min = "base::min", Max = "base::max")}].
+    with which to compute \link{summary} statistics on resampled performance
+    metrics [default: \code{c(Mean = "base::mean", Median = "stats::median",
+    SD = "stats::sd", Min = "base::min", Max = "base::max")}].
   }
 }
 }

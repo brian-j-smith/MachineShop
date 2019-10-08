@@ -40,7 +40,8 @@ splitting in the \code{"maxstat"} rule.}
 representing the probability to select variables for splitting.}
 
 \item{always.split.variables}{character vector with variable names to be
-always selected in addition to the \code{mtry} variables tried for splitting.}
+always selected in addition to the \code{mtry} variables tried for
+splitting.}
 
 \item{respect.unordered.factors}{handling of unordered factor covariates.}
 
@@ -57,10 +58,10 @@ Fast implementation of random forests or recursive partitioning.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
-\item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-  \code{mtry}, \code{min.node.size}*, \code{splitrule}*
-}
+  \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
+  \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+    \code{mtry}, \code{min.node.size}*, \code{splitrule}*
+  }
 }
 * included only in randomly sampled grid points
 

@@ -7,12 +7,12 @@
 #' @rdname ModelFrame-methods
 #' 
 #' @param x model \code{\link{formula}} or \code{\link{matrix}} of predictor
-#' variables.
+#'   variables.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} or an object that can be converted
-#' to one.
+#'   to one.
 #' @param na.rm logical indicating whether to remove cases with \code{NA} values
-#' for any of the model variables.
+#'   for any of the model variables.
 #' @param weights vector of case weights [default: equal].
 #' @param strata vector of resampling stratification levels [default: none].
 #' @param ... arguments passed to other methods.

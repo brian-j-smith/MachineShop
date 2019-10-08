@@ -7,17 +7,17 @@
 #' @rdname resample-methods
 #' 
 #' @param x defines a relationship between model predictor and response
-#' variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
-#' predictors, \code{\link{ModelFrame}}, untrained
-#' \code{\link[recipes]{recipe}}, or \code{\link{TunedRecipe}} object.
+#'   variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
+#'   predictors, \code{\link{ModelFrame}}, untrained
+#'   \code{\link[recipes]{recipe}}, or \code{\link{TunedRecipe}} object.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
-#' outcomes.
+#'   outcomes.
 #' @param model \link[=models]{model} function, function name, or call.
 #' @param control \link[=controls]{control} function, function name, or call
-#' defining the resampling method to be employed.
+#'   defining the resampling method to be employed.
 #' @param ... named or unnamed \code{resample} output to combine together with
-#' the \code{Resamples} constructor.
+#'   the \code{Resamples} constructor.
 #' 
 #' @return \code{Resamples} class object.
 #' 

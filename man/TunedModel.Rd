@@ -26,9 +26,9 @@ call to \code{\link{Grid}}.}
 defining the resampling method to be employed.}
 
 \item{metrics}{\link[=metrics]{metric} function, function name, or vector of
-these with which to calculate performance.  If not specified, default metrics
-defined in the \link{performance} functions are used.  Model selection is
-based on the first calculated metric.}
+these with which to calculate performance.  If not specified, default
+metrics defined in the \link{performance} functions are used.  Model
+selection is based on the first calculated metric.}
 
 \item{stat}{function or character string naming a function to compute a
 summary statistic on resampled metric values for model tuning.}
@@ -44,9 +44,8 @@ Model tuned over a grid of parameter values, as produced by the
 }
 \details{
 \describe{
-\item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
-\code{Surv}
-}
+  \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
+    \code{Surv}}
 }
 }
 \examples{

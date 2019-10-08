@@ -18,7 +18,7 @@ variable given independent predictor variables using Bayes rule.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{factor}}
+  \item{Response Types:}{\code{factor}}
 }
 
 Further model details can be found in the source link below.

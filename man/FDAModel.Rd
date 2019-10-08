@@ -26,7 +26,8 @@ linear regression is provided by \code{\link[mda]{polyreg}} from the
 \code{\link[mda]{gen.ridge}} is appropriate.  Other possibilities are
 \code{\link[mda]{mars}} for multivariate adaptive regression splines and
 \code{\link[mda]{bruto}} for adaptive backfitting of additive splines.  Use
-the \code{\link[MachineShop:dot-]{.}} operator to quote specified functions.}
+the \code{\link[MachineShop:dot-]{.}} operator to quote specified
+functions.}
 
 \item{...}{additional arguments to \code{method} for \code{FDAModel} and to
 \code{FDAModel} for \code{PDAModel}.}
@@ -44,21 +45,21 @@ Performs flexible discriminant analysis.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{factor}}
-\item{\link[=tune]{Automatic Tuning} Grid Parameters}{
-\itemize{
-  \item FDAModel: \code{nprune}, \code{degree}*
-  \item PDAModel: \code{lambda}
-}
-}
+  \item{Response Types:}{\code{factor}}
+  \item{\link[=tune]{Automatic Tuning} Grid Parameters}{
+    \itemize{
+      \item FDAModel: \code{nprune}, \code{degree}*
+      \item PDAModel: \code{lambda}
+    }
+  }
 }
 * included only in randomly sampled grid points
 
 The \code{\link{predict}} function for this model additionally accepts the
 following argument.
 \describe{
-\item{\code{prior}}{prior class membership probabilities for prediction data
-if different from the training set.}
+  \item{\code{prior}}{prior class membership probabilities for prediction
+    data if different from the training set.}
 }
 
 Default values for the \code{NULL} arguments and further model details can be

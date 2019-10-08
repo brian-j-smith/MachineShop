@@ -7,18 +7,18 @@
 #' @param trace level of execution information to display.
 #' @param degree maximum degree of interaction.
 #' @param nprune maximum number of terms (including intercept) in the pruned
-#' model.
+#'   model.
 #' @param nfold number of cross-validation folds.
 #' @param ncross number of cross-validations if \code{nfold > 1}.
 #' @param stratify logical indicating whether to stratify cross-validation
-#' samples by the response levels.
+#'   samples by the response levels.
 #' 
 #' @details
 #' \describe{
-#' \item{Response Types:}{\code{factor}, \code{numeric}}
-#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-#'   \code{nprune}, \code{degree}*
-#' }
+#'   \item{Response Types:}{\code{factor}, \code{numeric}}
+#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'     \code{nprune}, \code{degree}*
+#'   }
 #' }
 #' * included only in randomly sampled grid points
 #' 

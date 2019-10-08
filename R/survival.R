@@ -263,8 +263,8 @@ SurvMatrix <- function(object, times = NULL) {
 #' @rdname SurvMatrix
 #' 
 #' @param object matrix, or object that can be converted to one, of predicted
-#' survival events or probabilities with columns and rows representing
-#' prediction times and cases, respectively.
+#'   survival events or probabilities with columns and rows representing
+#'   prediction times and cases, respectively.
 #' @param times numeric vector of the survival prediction times.
 #' 
 #' @return Object that is of the same class as the constructor name and inherits

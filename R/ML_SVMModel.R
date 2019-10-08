@@ -11,36 +11,36 @@
 #' @param kernel kernel function used in training and predicting.
 #' @param kpar list of hyper-parameters (kernel parameters).
 #' @param C cost of constraints violation defined as the regularization term in
-#' the Lagrange formulation.
+#'   the Lagrange formulation.
 #' @param nu parameter needed for nu-svc, one-svc, and nu-svr.
 #' @param epsilon parameter in the insensitive-loss function used for eps-svr,
-#' nu-svr and eps-bsvm.
+#'   nu-svr and eps-bsvm.
 #' @param cache cache memory in MB.
 #' @param tol tolerance of termination criterion.
 #' @param shrinking whether to use the shrinking-heuristics.
 #' @param sigma inverse kernel width used by the ANOVA, Bessel, and Laplacian
-#' kernels.
+#'   kernels.
 #' @param degree degree of the ANOVA, Bessel, and polynomial kernel functions.
 #' @param order order of the Bessel function to be used as a kernel.
 #' @param scale scaling parameter of the polynomial and hyperbolic tangent
-#' kernels as a convenient way of normalizing patterns without the need to
-#' modify the data itself.
+#'   kernels as a convenient way of normalizing patterns without the need to
+#'   modify the data itself.
 #' @param offset offset used in polynomial and hyperbolic tangent kernels.
 #' @param ... arguments passed to \code{SVMModel}.
 #' 
 #' @details
 #' \describe{
-#' \item{Response Types:}{\code{factor}, \code{numeric}}
-#' \item{\link[=tune]{Automatic Tuning} Grid Parameters}{
-#' \itemize{
-#'   \item SVMANOVAModel: \code{C}, \code{degree}
-#'   \item SVMBesselModel: \code{C}, \code{order}, \code{degree}
-#'   \item SVMLaplaceModel: \code{C}, \code{sigma}
-#'   \item SVMLinearModel: \code{C}
-#'   \item SVMPolyModel: \code{C}, \code{degree}, \code{scale}
-#'   \item SVMRadialModel: \code{C}, \code{sigma}
-#' }
-#' }
+#'   \item{Response Types:}{\code{factor}, \code{numeric}}
+#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters}{
+#'     \itemize{
+#'       \item SVMANOVAModel: \code{C}, \code{degree}
+#'       \item SVMBesselModel: \code{C}, \code{order}, \code{degree}
+#'       \item SVMLaplaceModel: \code{C}, \code{sigma}
+#'       \item SVMLinearModel: \code{C}
+#'       \item SVMPolyModel: \code{C}, \code{degree}, \code{scale}
+#'       \item SVMRadialModel: \code{C}, \code{sigma}
+#'     }
+#'   }
 #' }
 #' 
 #' Arguments \code{kernel} and \code{kpar} are automatically set by the

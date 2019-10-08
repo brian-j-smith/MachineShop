@@ -4,36 +4,37 @@
 #' 
 #' @param subclasses numeric value or vector of subclasses per class.
 #' @param sub.df effective degrees of freedom of the centroids per class if
-#' subclass centroid shrinkage is performed.
+#'   subclass centroid shrinkage is performed.
 #' @param tot.df specification of the total degrees of freedom as an alternative
-#' to \code{sub.df}.
+#'   to \code{sub.df}.
 #' @param dimension dimension of the discriminant subspace to use for
-#' prediction.
+#'   prediction.
 #' @param eps numeric threshold for automatically truncating the dimension.
 #' @param iter limit on the total number of iterations.
 #' @param method regression function used in optimal scaling.  The default of
-#' linear regression is provided by \code{\link[mda]{polyreg}} from the
-#' \pkg{mda} package.  For penalized mixture discriminant models,
-#' \code{\link[mda]{gen.ridge}} is appropriate.  Other possibilities are
-#' \code{\link[mda]{mars}} for multivariate adaptive regression splines and
-#' \code{\link[mda]{bruto}} for adaptive backfitting of additive splines.  Use
-#' the \code{\link[MachineShop:dot-]{.}} operator to quote specified functions.
+#'   linear regression is provided by \code{\link[mda]{polyreg}} from the
+#'   \pkg{mda} package.  For penalized mixture discriminant models,
+#'   \code{\link[mda]{gen.ridge}} is appropriate.  Other possibilities are
+#'   \code{\link[mda]{mars}} for multivariate adaptive regression splines and
+#'   \code{\link[mda]{bruto}} for adaptive backfitting of additive splines.  Use
+#'   the \code{\link[MachineShop:dot-]{.}} operator to quote specified
+#'   functions.
 #' @param trace logical indicating whether iteration information is printed.
 #' @param ... additional arguments to \code{mda.start} and \code{method}.
 #' 
 #' @details
 #' \describe{
-#' \item{Response Types:}{\code{factor}}
-#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-#'   \code{subclasses}
-#' }
+#'   \item{Response Types:}{\code{factor}}
+#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'     \code{subclasses}
+#'   }
 #' }
 #' 
 #' The \code{\link{predict}} function for this model additionally accepts the
 #' following argument.
 #' \describe{
-#' \item{\code{prior}}{prior class membership probabilities for prediction data
-#' if different from the training set.}
+#'   \item{\code{prior}}{prior class membership probabilities for prediction data
+#'     if different from the training set.}
 #' }
 #' 
 #' Default values for the \code{NULL} arguments and further model details can be

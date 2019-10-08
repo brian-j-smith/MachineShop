@@ -49,8 +49,8 @@ type-specific methods or from the method for \code{Confusion} to
 these with which to calculate performance.}
 
 \item{cutoff}{numeric (0, 1) threshold above which binary factor
-probabilities are classified as events and below which survival probabilities
-are classified.}
+probabilities are classified as events and below which survival
+probabilities are classified.}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}

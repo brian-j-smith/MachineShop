@@ -19,7 +19,7 @@ Fit a logistic or probit regression model to an ordered factor response.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{ordered}}
+  \item{Response Types:}{\code{ordered}}
 }
 
 Further model details can be found in the source link below.

@@ -17,13 +17,13 @@ specified, information is returned on all available metrics by default.}
 List of named metric elements each containing the following
 components:
 \describe{
-\item{label}{character descriptor for the metric.}
-\item{maximize}{logical indicating whether higher values of the metric
-correspond to better predictive performance.}
-\item{arguments}{closure with the argument names and corresponding default
-values of the metric function.}
-\item{response_types}{data frame of the observed and predicted response
-variable types supported by the metric.}
+  \item{label}{character descriptor for the metric.}
+  \item{maximize}{logical indicating whether higher values of the metric
+    correspond to better predictive performance.}
+  \item{arguments}{closure with the argument names and corresponding default
+    values of the metric function.}
+  \item{response_types}{data frame of the observed and predicted response
+    variable types supported by the metric.}
 }
 }
 \description{

@@ -59,10 +59,10 @@ model \link{tune}, partial \link{dependence}, \link{performance},
 line.}
 
 \item{stat}{function or character string naming a function to compute a
-summary statistic on resampled metrics for \code{MLModelTune} line plots and
-\code{Resamples} model ordering.  For \code{Curves} and \code{Lift} classes,
-plots are of resampled metrics aggregated by the statistic if given or of
-resample-specific metrics if \code{NULL}.}
+summary statistic on resampled metrics for \code{MLModelTune} line plots
+and \code{Resamples} model ordering.  For \code{Curves} and \code{Lift}
+classes, plots are of resampled metrics aggregated by the statistic if
+given or of resample-specific metrics if \code{NULL}.}
 
 \item{find}{numeric true positive rate at which to display reference lines
 identifying the corresponding rates of positive predictions.}

@@ -34,8 +34,8 @@ result.}
 \item{...}{arguments passed to other methods.}
 
 \item{stat}{function or character string naming a function to compute a
-summary statistic at each cutoff value of resampled metrics in \code{Curves},
-or \code{NULL} for resample-specific metrics.}
+summary statistic at each cutoff value of resampled metrics in
+\code{Curves}, or \code{NULL} for resample-specific metrics.}
 
 \item{stats}{function, function name, or vector of these with which to
 compute summary statistics.}

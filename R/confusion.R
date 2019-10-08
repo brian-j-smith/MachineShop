@@ -6,24 +6,24 @@
 #' @rdname confusion
 #' 
 #' @param x factor of \link[=response]{observed responses} or \link{resample}
-#' result containing observed and predicted responses.
+#'   result containing observed and predicted responses.
 #' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
 #' @param cutoff numeric (0, 1) threshold above which binary factor
-#' probabilities are classified as events and below which survival probabilities
-#' are classified.
-#' If \code{NULL}, then binary responses are summed directly over predicted
-#' class probabilities, whereas a default cutoff of 0.5 is used for
-#' survival probabilities.  Class probability summations and survival will
-#' appear as decimal numbers that can be interpreted as expected counts.
+#'   probabilities are classified as events and below which survival
+#'   probabilities are classified.  If \code{NULL}, then binary responses are
+#'   summed directly over predicted class probabilities, whereas a default
+#'   cutoff of 0.5 is used for survival probabilities.  Class probability
+#'   summations and survival will appear as decimal numbers that can be
+#'   interpreted as expected counts.
 #' @param na.rm logical indicating whether to remove observed or predicted
-#' responses that are \code{NA} when calculating metrics.
+#'   responses that are \code{NA} when calculating metrics.
 #' @param ... named or unnamed \code{confusion} output to combine together with
-#' the \code{Confusion} constructor.
+#'   the \code{Confusion} constructor.
 #' @param object square matrix, or object that can be converted to one, of
-#' cross-classified predicted and observed values in the rows and columns,
-#' respectively.
+#'   cross-classified predicted and observed values in the rows and columns,
+#'   respectively.
 #' @param ordered logical indicating whether the confusion matrix row and
-#' columns should be regarded as ordered.
+#'   columns should be regarded as ordered.
 #' 
 #' @return
 #' The return value is a \code{ConfusionMatrix} class object that inherits from

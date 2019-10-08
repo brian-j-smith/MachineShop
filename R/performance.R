@@ -6,18 +6,18 @@
 #' @rdname performance
 #' 
 #' @param x \link[=response]{observed responses}; or \link{confusion} or
-#' \link{resample} result containing observed and predicted responses.
+#'   \link{resample} result containing observed and predicted responses.
 #' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
 #' @param metrics \link[=metrics]{metric} function, function name, or vector of
-#' these with which to calculate performance.
+#'   these with which to calculate performance.
 #' @param cutoff numeric (0, 1) threshold above which binary factor
-#' probabilities are classified as events and below which survival probabilities
-#' are classified.
+#'   probabilities are classified as events and below which survival
+#'   probabilities are classified.
 #' @param na.rm logical indicating whether to remove observed or predicted
-#' responses that are \code{NA} when calculating metrics.
+#'   responses that are \code{NA} when calculating metrics.
 #' @param ... arguments passed from the \code{Resamples} method to the response
-#' type-specific methods or from the method for \code{Confusion} to
-#' \code{ConfusionMatrix}.
+#'   type-specific methods or from the method for \code{Confusion} to
+#'   \code{ConfusionMatrix}.
 #' 
 #' @seealso \code{\link{plot}}, \code{\link{summary}}
 #' 

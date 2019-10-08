@@ -8,15 +8,15 @@
 #' @name performance_curve
 #' 
 #' @param x \link[=response]{observed responses} or \link{resample} result
-#' containing observed and predicted responses.
+#'   containing observed and predicted responses.
 #' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
 #' @param metrics list of two performance \link{metrics} for the analysis
-#' [default: ROC metrics].  Precision recall curves can be obtained with 
-#' \code{c(precision, recall)}.
+#'   [default: ROC metrics].  Precision recall curves can be obtained with 
+#'   \code{c(precision, recall)}.
 #' @param na.rm logical indicating whether to remove observed or predicted
-#' responses that are \code{NA} when calculating metrics.
+#'   responses that are \code{NA} when calculating metrics.
 #' @param ... named or unnamed \code{performance_curve} output to combine
-#' together with the \code{Curves} constructor.
+#'   together with the \code{Curves} constructor.
 #' 
 #' @return \code{Curves} class object that inherits from \code{data.frame}.
 #'  

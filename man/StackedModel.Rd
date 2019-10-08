@@ -25,9 +25,8 @@ Fit a stacked regression model from multiple base learners.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
-\code{Surv}
-}
+  \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
+    \code{Surv}}
 }
 }
 \examples{

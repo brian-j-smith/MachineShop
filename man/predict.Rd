@@ -23,8 +23,8 @@ survival events/probabilities or \code{NULL} for predicted survival means.}
 (\code{"response"}) or on a probability distribution scale (\code{"prob"}).}
 
 \item{cutoff}{numeric (0, 1) threshold above which binary factor
-probabilities are classified as events and below which survival probabilities
-are classified.}
+probabilities are classified as events and below which survival
+probabilities are classified.}
 
 \item{dist}{character string specifying distributional approximations to
 estimated survival curves.  Possible values are \code{"empirical"},

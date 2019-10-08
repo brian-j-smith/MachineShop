@@ -21,8 +21,8 @@ the fitting process.}
 \item{step}{algorithm step number to use for prediction.  May be a decimal
 number indicating a fractional distance between steps.  If specified, the
 maximum number of algorithm steps will be \code{ceiling(step)}; otherwise,
-\code{step} will be set equal to the source package default maximum [default:
-\code{max.steps}].}
+\code{step} will be set equal to the source package default maximum
+[default: \code{max.steps}].}
 
 \item{use.Gram}{whether to precompute the Gram matrix.}
 }
@@ -35,10 +35,10 @@ fits, starting from zero to the least squares fit.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{numeric}}
-\item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-  \code{step}
-}
+  \item{Response Types:}{\code{numeric}}
+  \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+    \code{step}
+  }
 }
 
 Default values for the \code{NULL} arguments and further model details can be

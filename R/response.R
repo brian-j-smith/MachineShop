@@ -5,9 +5,9 @@
 #' @rdname response-methods
 #' 
 #' @param object model \link{fit} result, \code{\link{ModelFrame}}, or
-#' \code{\link[recipes]{recipe}}.
+#'   \code{\link[recipes]{recipe}}.
 #' @param newdata \link[=data.frame]{data frame} from which to extract the
-#' response variable values if given; otherwise, \code{object} is used.
+#'   response variable values if given; otherwise, \code{object} is used.
 #' @param ... arguments passed to other methods.
 #' 
 #' @examples

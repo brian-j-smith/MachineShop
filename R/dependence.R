@@ -9,19 +9,19 @@ PartialDependence <- function(object) {
 #' 
 #' @param object model \link{fit} result.
 #' @param data \link[=data.frame]{data frame} containing all predictor
-#' variables.  If not specified, the training data will be used by default.
+#'   variables.  If not specified, the training data will be used by default.
 #' @param select expression indicating predictor variables for which to compute
-#' partial dependence (see \code{\link[base]{subset}} for syntax)
-#' [default: all].
+#'   partial dependence (see \code{\link[base]{subset}} for syntax)
+#'   [default: all].
 #' @param interaction logical indicating whether to calculate dependence on the
-#' interacted predictors.
+#'   interacted predictors.
 #' @param n number of predictor values at which to perform calculations.
 #' @param intervals character string specifying whether the \code{n} values are
-#' spaced uniformly (\code{"uniform"}) or according to variable quantiles
-#' (\code{"quantile"}).
+#'   spaced uniformly (\code{"uniform"}) or according to variable quantiles
+#'   (\code{"quantile"}).
 #' @param stats function, function name, or vector of these with which to
-#' compute response variable summary statistics over non-selected predictor
-#' variables.
+#'   compute response variable summary statistics over non-selected predictor
+#'   variables.
 #' 
 #' @return \code{PartialDependence} class object that inherits from
 #' \code{data.frame}.

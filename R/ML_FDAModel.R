@@ -5,38 +5,39 @@
 #' @rdname FDAModel
 #' 
 #' @param theta optional matrix of class scores, typically with number of
-#' columns less than one minus the number of classes.
+#'   columns less than one minus the number of classes.
 #' @param dimension dimension of the discriminant subspace, less than the number
-#' of classes, to use for prediction.
+#'   of classes, to use for prediction.
 #' @param eps numeric threshold for small singular values for excluding
-#' discriminant variables.
+#'   discriminant variables.
 #' @param method regression function used in optimal scaling.  The default of
-#' linear regression is provided by \code{\link[mda]{polyreg}} from the
-#' \pkg{mda} package.  For penalized discriminant analysis,
-#' \code{\link[mda]{gen.ridge}} is appropriate.  Other possibilities are
-#' \code{\link[mda]{mars}} for multivariate adaptive regression splines and
-#' \code{\link[mda]{bruto}} for adaptive backfitting of additive splines.  Use
-#' the \code{\link[MachineShop:dot-]{.}} operator to quote specified functions.
+#'   linear regression is provided by \code{\link[mda]{polyreg}} from the
+#'   \pkg{mda} package.  For penalized discriminant analysis,
+#'   \code{\link[mda]{gen.ridge}} is appropriate.  Other possibilities are
+#'   \code{\link[mda]{mars}} for multivariate adaptive regression splines and
+#'   \code{\link[mda]{bruto}} for adaptive backfitting of additive splines.  Use
+#'   the \code{\link[MachineShop:dot-]{.}} operator to quote specified
+#'   functions.
 #' @param ... additional arguments to \code{method} for \code{FDAModel} and to
-#' \code{FDAModel} for \code{PDAModel}.
+#'   \code{FDAModel} for \code{PDAModel}.
 #' 
 #' @details
 #' \describe{
-#' \item{Response Types:}{\code{factor}}
-#' \item{\link[=tune]{Automatic Tuning} Grid Parameters}{
-#' \itemize{
-#'   \item FDAModel: \code{nprune}, \code{degree}*
-#'   \item PDAModel: \code{lambda}
-#' }
-#' }
+#'   \item{Response Types:}{\code{factor}}
+#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters}{
+#'     \itemize{
+#'       \item FDAModel: \code{nprune}, \code{degree}*
+#'       \item PDAModel: \code{lambda}
+#'     }
+#'   }
 #' }
 #' * included only in randomly sampled grid points
 #' 
 #' The \code{\link{predict}} function for this model additionally accepts the
 #' following argument.
 #' \describe{
-#' \item{\code{prior}}{prior class membership probabilities for prediction data
-#' if different from the training set.}
+#'   \item{\code{prior}}{prior class membership probabilities for prediction
+#'     data if different from the training set.}
 #' }
 #' 
 #' Default values for the \code{NULL} arguments and further model details can be
@@ -85,7 +86,7 @@ FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
 #' 
 #' @param lambda shrinkage penalty coefficient.
 #' @param df alternative specification of \code{lambda} in terms of equivalent
-#' degrees of freedom.
+#'   degrees of freedom.
 #' 
 #' @examples
 #' fit(Species ~ ., data = iris, model = PDAModel)

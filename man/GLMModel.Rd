@@ -12,8 +12,8 @@ GLMStepAICModel(family = NULL, ..., direction = c("both", "backward",
 }
 \arguments{
 \item{family}{optional error distribution and link function to be used in the
-model.  Set automatically according to the class type of the
-response variable.}
+model.  Set automatically according to the class type of the response
+variable.}
 
 \item{...}{arguments passed to \code{\link[stats]{glm.control}}.}
 
@@ -21,12 +21,12 @@ response variable.}
 (default), \code{"backward"}, or \code{"forward"}.}
 
 \item{scope}{defines the range of models examined in the stepwise search.
-This should be a list containing components \code{upper} and
-\code{lower}, both formulae.}
+This should be a list containing components \code{upper} and \code{lower},
+both formulae.}
 
 \item{k}{multiple of the number of degrees of freedom used for the penalty.
-Only \code{k = 2} gives the genuine AIC; \code{k = .(log(nobs))} is sometimes
-referred to as BIC or SBC.}
+Only \code{k = 2} gives the genuine AIC; \code{k = .(log(nobs))} is
+sometimes referred to as BIC or SBC.}
 
 \item{trace}{if positive, information is printed during the running of
 \code{stepAIC}. Larger values may give more information on the fitting
@@ -43,7 +43,7 @@ the linear predictor and a description of the error distribution.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{binary factor}, \code{numeric}}
+  \item{Response Types:}{\code{binary factor}, \code{numeric}}
 }
 
 Default values for the \code{NULL} arguments and further model details can be

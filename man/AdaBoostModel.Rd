@@ -47,10 +47,10 @@ algorithms using classification trees as single classifiers.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{factor}}
-\item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-  \code{mfinal}, \code{maxdepth}, \code{coeflearn}*
-}
+  \item{Response Types:}{\code{factor}}
+  \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+    \code{mfinal}, \code{maxdepth}, \code{coeflearn}*
+  }
 }
 * included only in randomly sampled grid points
 

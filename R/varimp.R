@@ -38,7 +38,7 @@ VarImp.numeric <- function(object, ...) {
 #' 
 #' @param object model \link{fit} result.
 #' @param scale logical indicating whether importance measures should be scaled
-#' to range from 0 to 100.
+#'   to range from 0 to 100.
 #' @param ... arguments passed to model-specific variable importance functions.
 #' 
 #' @return \code{VarImp} class object.

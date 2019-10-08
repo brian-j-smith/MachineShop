@@ -20,12 +20,12 @@ result containing observed and predicted responses.}
 \item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
 
 \item{cutoff}{numeric (0, 1) threshold above which binary factor
-probabilities are classified as events and below which survival probabilities
-are classified.
-If \code{NULL}, then binary responses are summed directly over predicted
-class probabilities, whereas a default cutoff of 0.5 is used for
-survival probabilities.  Class probability summations and survival will
-appear as decimal numbers that can be interpreted as expected counts.}
+probabilities are classified as events and below which survival
+probabilities are classified.  If \code{NULL}, then binary responses are
+summed directly over predicted class probabilities, whereas a default
+cutoff of 0.5 is used for survival probabilities.  Class probability
+summations and survival will appear as decimal numbers that can be
+interpreted as expected counts.}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}

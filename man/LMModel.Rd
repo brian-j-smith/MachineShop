@@ -14,7 +14,7 @@ Fits linear models.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{factor}, \code{matrix}, \code{numeric}}
+  \item{Response Types:}{\code{factor}, \code{matrix}, \code{numeric}}
 }
 
 Further model details can be found in the source link below.

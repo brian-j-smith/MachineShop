@@ -4,23 +4,22 @@
 #' function.
 #' 
 #' @param ... \link[=models]{model} functions, function names, calls, or vectors
-#' of these to serve as the candidate set from which to select, such as that
-#' returned by \code{\link{expand_model}}.
+#'   of these to serve as the candidate set from which to select, such as that
+#'   returned by \code{\link{expand_model}}.
 #' @param control \link[=controls]{control} function, function name, or call
-#' defining the resampling method to be employed.
+#'   defining the resampling method to be employed.
 #' @param metrics \link[=metrics]{metric} function, function name, or vector of
-#' these with which to calculate performance.  If not specified, default metrics
-#' defined in the \link{performance} functions are used.  Model selection is
-#' based on the first calculated metric.
+#'   these with which to calculate performance.  If not specified, default
+#'   metrics defined in the \link{performance} functions are used.  Model
+#'   selection is based on the first calculated metric.
 #' @param stat function or character string naming a function to compute a
-#' summary statistic on resampled metric values for model selection.
+#'   summary statistic on resampled metric values for model selection.
 #' @param cutoff argument passed to the \code{metrics} functions.
 #' 
 #' @details
 #' \describe{
-#' \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
-#' \code{Surv}
-#' }
+#'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
+#'     \code{Surv}}
 #' }
 #' 
 #' @return \code{SelectedModel} class object that inherits from \code{MLModel}.

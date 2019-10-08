@@ -33,11 +33,11 @@ Fits generalized boosted regression models.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
-\item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-  \code{n.trees}, \code{interaction.depth}, \code{shrinkage}*,
-  \code{n.minobsinnode}*
-}
+  \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
+  \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+    \code{n.trees}, \code{interaction.depth}, \code{shrinkage}*,
+    \code{n.minobsinnode}*
+  }
 }
 * included only in randomly sampled grid points
 

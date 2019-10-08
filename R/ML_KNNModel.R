@@ -7,15 +7,15 @@
 #' @param k numer of neigbors considered.
 #' @param distance Minkowski distance parameter.
 #' @param scale logical indicating whether to scale predictors to have equal
-#' standard deviations.
+#'   standard deviations.
 #' @param kernel kernel to use.
 #'
 #' @details
 #' \describe{
-#' \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordinal}}
-#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-#'   \code{k}, \code{distance}*, \code{kernel}*
-#' }
+#'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordinal}}
+#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'     \code{k}, \code{distance}*, \code{kernel}*
+#'   }
 #' }
 #' * included only in randomly sampled grid points
 #' 

@@ -5,27 +5,27 @@
 #' @param num_trees number of trees to be grown in the sum-of-trees model.
 #' @param num_burn number of MCMC samples to be discarded as "burn-in".
 #' @param num_iter number of MCMC samples to draw from the posterior
-#' distribution.
+#'   distribution.
 #' @param alpha,beta base and power hyperparameters in tree prior for whether a
-#' node is nonterminal or not.
+#'   node is nonterminal or not.
 #' @param k regression prior probability that \eqn{E(Y|X)} is
-#' contained in the interval \eqn{(y_{min}, y_{max})}, based on a normal
-#' distribution.
+#'   contained in the interval \eqn{(y_{min}, y_{max})}, based on a normal
+#'   distribution.
 #' @param q quantile of the prior on the error variance at which the data-based
-#' estimate is placed. 
+#'   estimate is placed. 
 #' @param nu regression degrees of freedom for the inverse \eqn{X^2} prior.
 #' @param mh_prob_steps vector of prior probabilities for proposing changes to
-#' the tree structures: (GROW, PRUNE, CHANGE).
+#'   the tree structures: (GROW, PRUNE, CHANGE).
 #' @param verbose logical indicating whether to print progress information about
-#' the algorithm.
+#'   the algorithm.
 #' @param ... additional arguments to \code{\link[bartMachine]{bartMachine}}.
 #' 
 #' @details 
 #' \describe{
-#' \item{Response Types:}{\code{binary}, \code{numeric}}
-#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-#'   \code{alpha}, \code{beta}, \code{k}, \code{nu}
-#' }
+#'   \item{Response Types:}{\code{binary}, \code{numeric}}
+#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'     \code{alpha}, \code{beta}, \code{k}, \code{nu}
+#'   }
 #' }
 #' 
 #' Further model details can be found in the source link below.

@@ -57,10 +57,10 @@ trees are utilized as base-learners.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{binary}, \code{numeric}, \code{Surv}}
-\item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-  \code{mstop}, \code{maxdepth}
-}
+  \item{Response Types:}{\code{binary}, \code{numeric}, \code{Surv}}
+  \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+    \code{mstop}, \code{maxdepth}
+  }
 }
 
 Default values for the \code{NULL} arguments and further model details can be

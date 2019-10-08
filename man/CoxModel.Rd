@@ -20,12 +20,12 @@ CoxStepAICModel(ties = c("efron", "breslow", "exact"), ...,
 (default), \code{"backward"}, or \code{"forward"}.}
 
 \item{scope}{defines the range of models examined in the stepwise search.
-This should be a list containing components \code{upper} and
-\code{lower}, both formulae.}
+This should be a list containing components \code{upper} and \code{lower},
+both formulae.}
 
 \item{k}{multiple of the number of degrees of freedom used for the penalty.
-Only \code{k = 2} gives the genuine AIC; \code{k = .(log(nobs))} is sometimes
-referred to as BIC or SBC.}
+Only \code{k = 2} gives the genuine AIC; \code{k = .(log(nobs))} is
+sometimes referred to as BIC or SBC.}
 
 \item{trace}{if positive, information is printed during the running of
 \code{stepAIC}. Larger values may give more information on the fitting
@@ -43,7 +43,7 @@ incorporated using the counting process formulation of Andersen and Gill.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{Surv}}
+  \item{Response Types:}{\code{Surv}}
 }
 
 Default values for the \code{NULL} arguments and further model details can be

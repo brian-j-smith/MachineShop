@@ -20,8 +20,9 @@ MLModel(name = "MLModel", label = name, packages = character(),
 \item{packages}{character vector of packages required to use the model.}
 
 \item{response_types}{character vector of response variable types to which
-the model can be fit.  Supported types are \code{"binary"}, \code{"factor"},
-\code{"matrix"}, \code{"numeric"}, \code{"ordered"}, and \code{"Surv"}.}
+the model can be fit.  Supported types are \code{"binary"},
+\code{"factor"}, \code{"matrix"}, \code{"numeric"}, \code{"ordered"}, and
+\code{"Surv"}.}
 
 \item{predictor_encoding}{character string indicating whether the model is
 fit with predictor variables encoded as a \code{"\link{model.matrix}"}, a
@@ -32,8 +33,8 @@ data.frame containing the original \code{"terms"}, or unknown (default).}
 
 \item{grid}{tuning grid function whose first agument \code{x} is a
 \code{\link{ModelFrame}} of the model fit data and formula, followed by a
-\code{length} to use in generating sequences of parameter values, a number of
-grid points to sample at \code{random}, and an ellipsis (\code{...}).}
+\code{length} to use in generating sequences of parameter values, a number
+of grid points to sample at \code{random}, and an ellipsis (\code{...}).}
 
 \item{fit}{model fitting function whose arguments are a \code{formula}, a
 \code{\link{ModelFrame}} named \code{data}, case \code{weights}, and an
@@ -68,13 +69,14 @@ return the object resulting from the model fit.
 Values returned by the \code{predict} functions should be formatted according
 to the response variable types below.
 \describe{
-\item{factor}{vector or column matrix of probabilities for the second level
-of binary factors or a matrix whose columns contain the probabilities for
-factors with more than two levels.}
-\item{matrix}{matrix of predicted responses.}
-\item{numeric}{vector or column matrix of predicted responses.}
-\item{Surv}{matrix whose columns contain survival probabilities at
-\code{times} if supplied or a vector of predicted survival means otherwise.}
+  \item{factor}{vector or column matrix of probabilities for the second level
+    of binary factors or a matrix whose columns contain the probabilities for
+    factors with more than two levels.}
+  \item{matrix}{matrix of predicted responses.}
+  \item{numeric}{vector or column matrix of predicted responses.}
+  \item{Surv}{matrix whose columns contain survival probabilities at
+    \code{times} if supplied or a vector of predicted survival means
+    otherwise.}
 }
 
 The \code{varimp} function should return a vector of importance values named

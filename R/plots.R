@@ -6,25 +6,25 @@
 #' @rdname plot-methods
 #' 
 #' @param x \link{calibration}, \link{confusion},
-#' \link[=performance_curve]{performance curve}, \link{lift},
-#' model \link{tune}, partial \link{dependence}, \link{performance},
-#' \link{resample}, or \link[=varimp]{variable importance} result.
+#'   \link[=performance_curve]{performance curve}, \link{lift},
+#'   model \link{tune}, partial \link{dependence}, \link{performance},
+#'   \link{resample}, or \link[=varimp]{variable importance} result.
 #' @param diagonal logical indicating whether to include a diagonal reference
-#' line.
+#'   line.
 #' @param find numeric true positive rate at which to display reference lines
-#' identifying the corresponding rates of positive predictions.
+#'   identifying the corresponding rates of positive predictions.
 #' @param metrics vector of numeric indexes or character names of performance
-#' metrics to plot.
+#'   metrics to plot.
 #' @param n number of most important variables to include in the plot
-#' [default: all].
+#'   [default: all].
 #' @param se logical indicating whether to include standard error bars.
 #' @param stat function or character string naming a function to compute a
-#' summary statistic on resampled metrics for \code{MLModelTune} line plots and
-#' \code{Resamples} model ordering.  For \code{Curves} and \code{Lift} classes,
-#' plots are of resampled metrics aggregated by the statistic if given or of
-#' resample-specific metrics if \code{NULL}.
+#'   summary statistic on resampled metrics for \code{MLModelTune} line plots
+#'   and \code{Resamples} model ordering.  For \code{Curves} and \code{Lift}
+#'   classes, plots are of resampled metrics aggregated by the statistic if
+#'   given or of resample-specific metrics if \code{NULL}.
 #' @param stats vector of numeric indexes or character names of partial
-#' dependence summary statistics to plot.
+#'   dependence summary statistics to plot.
 #' @param type type of plot to construct.
 #' @param ... arguments passed to other methods.
 #' 

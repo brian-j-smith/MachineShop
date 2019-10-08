@@ -5,7 +5,7 @@
 #'  
 #' @param mfinal number of trees to use.
 #' @param minsplit minimum number of observations that must exist in a node in
-#' order for a split to be attempted.
+#'   order for a split to be attempted.
 #' @param minbucket minimum number of observations in any terminal node.
 #' @param cp complexity parameter.
 #' @param maxcompete number of competitor splits retained in the output.
@@ -14,14 +14,14 @@
 #' @param xval number of cross-validations.
 #' @param surrogatestyle controls the selection of a best surrogate.
 #' @param maxdepth maximum depth of any node of the final tree, with the root
-#' node counted as depth 0.
+#'   node counted as depth 0.
 #' 
 #' @details
 #' \describe{
-#' \item{Response Types:}{\code{factor}}
-#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-#'   \code{mfinal}, \code{maxdepth}
-#' }
+#'   \item{Response Types:}{\code{factor}}
+#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'     \code{mfinal}, \code{maxdepth}
+#'   }
 #' }
 #' 
 #' Further model details can be found in the source link below.

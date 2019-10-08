@@ -78,7 +78,7 @@ PerformanceDiff <- function(object, model_names) {
 #' 
 #' @param x performance \link[=diff]{difference} result.
 #' @param adjust p-value adjustment for multiple statistical comparisons as
-#' implemented by \code{\link[stats]{p.adjust}}.
+#'   implemented by \code{\link[stats]{p.adjust}}.
 #' @param ... arguments passed to other methods.
 #' 
 #' @return \code{PerformanceDiffTest} class object that inherits from

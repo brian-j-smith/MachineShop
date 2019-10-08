@@ -3,17 +3,16 @@
 #' Fit a stacked regression model from multiple base learners.
 #' 
 #' @param ... \link[=models]{model} functions, function names, calls, or vector
-#' of these to serve as base learners.
+#'   of these to serve as base learners.
 #' @param control \link[=controls]{control} function, function name, or call
-#' defining the resampling method to be employed for the estimation of base
-#' learner weights.
+#'   defining the resampling method to be employed for the estimation of base
+#'   learner weights.
 #' @param weights optional fixed base learner weights.
 #' 
 #' @details
 #' \describe{
-#' \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
-#' \code{Surv}
-#' }
+#'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
+#'     \code{Surv}}
 #' }
 #' 
 #' @return \code{StackedModel} class object that inherits from \code{MLModel}.

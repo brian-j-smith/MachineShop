@@ -3,24 +3,24 @@
 #' Fits generalized boosted regression models.
 #'
 #' @param distribution optional character string specifying the name of the
-#' distribution to use or list with a component \code{name} specifying the
-#' distribution and any additional parameters needed.  Set automatically
-#' according to the class type of the response variable.
+#'   distribution to use or list with a component \code{name} specifying the
+#'   distribution and any additional parameters needed.  Set automatically
+#'   according to the class type of the response variable.
 #' @param n.trees total number of trees to fit.
 #' @param interaction.depth maximum depth of variable interactions.
 #' @param n.minobsinnode minimum number of observations in the trees terminal
-#' nodes.
+#'   nodes.
 #' @param shrinkage shrinkage parameter applied to each tree in the expansion.
 #' @param bag.fraction fraction of the training set observations randomly
-#' selected to propose the next tree in the expansion.
+#'   selected to propose the next tree in the expansion.
 #' 
 #' @details
 #' \describe{
-#' \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
-#' \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-#'   \code{n.trees}, \code{interaction.depth}, \code{shrinkage}*,
-#'   \code{n.minobsinnode}*
-#' }
+#'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
+#'   \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+#'     \code{n.trees}, \code{interaction.depth}, \code{shrinkage}*,
+#'     \code{n.minobsinnode}*
+#'   }
 #' }
 #' * included only in randomly sampled grid points
 #' 

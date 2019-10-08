@@ -29,10 +29,10 @@ Cutler's original Fortran code) for classification and regression.
 }
 \details{
 \describe{
-\item{Response Types:}{\code{factor}, \code{numeric}}
-\item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
-  \code{mtry}, \code{nodesize}*
-}
+  \item{Response Types:}{\code{factor}, \code{numeric}}
+  \item{\link[=tune]{Automatic Tuning} Grid Parameters:}{
+    \code{mtry}, \code{nodesize}*
+  }
 }
 * included only in randomly sampled grid points
 
