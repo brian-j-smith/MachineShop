@@ -81,7 +81,7 @@ tune.formula <- function(x, data, models, grid = MachineShop::settings("grid"),
                          fixed = NULL,
                          control = MachineShop::settings("control"),
                          metrics = NULL,
-                         stat = MachineShop::settings("stat.ModelTune"), ...) {
+                         stat = MachineShop::settings("stat.Tune"), ...) {
   .tune(x, data = data, models = models, grid = grid, fixed = fixed,
         control = control, metrics = metrics, stat = stat, ...)
 }
@@ -93,7 +93,7 @@ tune.matrix <- function(x, y, models, grid = MachineShop::settings("grid"),
                         fixed = NULL,
                         control = MachineShop::settings("control"),
                         metrics = NULL,
-                        stat = MachineShop::settings("stat.ModelTune"), ...) {
+                        stat = MachineShop::settings("stat.Tune"), ...) {
   .tune(x, data = y, models = models, grid = grid, fixed = fixed,
         control = control, metrics = metrics, stat = stat, ...)
 }
@@ -105,7 +105,7 @@ tune.ModelFrame <- function(x, models, grid = MachineShop::settings("grid"),
                             fixed = NULL,
                             control = MachineShop::settings("control"),
                             metrics = NULL,
-                            stat = MachineShop::settings("stat.ModelTune"),
+                            stat = MachineShop::settings("stat.Tune"),
                             ...) {
   .tune(x, data = NULL, models = models, grid = grid, fixed = fixed,
         control = control, metrics = metrics, stat = stat, ...)
@@ -118,7 +118,7 @@ tune.recipe <- function(x, models, grid = MachineShop::settings("grid"),
                         fixed = NULL,
                         control = MachineShop::settings("control"),
                         metrics = NULL,
-                        stat = MachineShop::settings("stat.ModelTune"), ...) {
+                        stat = MachineShop::settings("stat.Tune"), ...) {
   .tune(x, data = NULL, models = models, grid = grid, fixed = fixed,
         control = control, metrics = metrics, stat = stat, ...)
 }

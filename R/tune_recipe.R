@@ -39,7 +39,7 @@
 tune_recipe <- function(x, grid, model,
                         control = MachineShop::settings("control"),
                         metrics = NULL,
-                        stat = MachineShop::settings("stat.ModelTune"), ...) {
+                        stat = MachineShop::settings("stat.Tune"), ...) {
   
   stopifnot(is(x, "recipe"))
   stopifnot(is(grid, "RecipeGrid"))

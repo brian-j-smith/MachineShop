@@ -38,7 +38,7 @@
 TunedModel <- function(model, grid = MachineShop::settings("grid"),
                        fixed = NULL, control = MachineShop::settings("control"),
                        metrics = NULL,
-                       stat = MachineShop::settings("stat.ModelTune"),
+                       stat = MachineShop::settings("stat.Tune"),
                        cutoff = MachineShop::settings("cutoff")) {
   
   if (missing(model)) model <- NULL

@@ -16,20 +16,20 @@ tune(x, ...)
 \method{tune}{formula}(x, data, models,
   grid = MachineShop::settings("grid"), fixed = NULL,
   control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.ModelTune"), ...)
+  stat = MachineShop::settings("stat.Tune"), ...)
 
 \method{tune}{matrix}(x, y, models, grid = MachineShop::settings("grid"),
   fixed = NULL, control = MachineShop::settings("control"),
-  metrics = NULL, stat = MachineShop::settings("stat.ModelTune"), ...)
+  metrics = NULL, stat = MachineShop::settings("stat.Tune"), ...)
 
 \method{tune}{ModelFrame}(x, models,
   grid = MachineShop::settings("grid"), fixed = NULL,
   control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.ModelTune"), ...)
+  stat = MachineShop::settings("stat.Tune"), ...)
 
 \method{tune}{recipe}(x, models, grid = MachineShop::settings("grid"),
   fixed = NULL, control = MachineShop::settings("control"),
-  metrics = NULL, stat = MachineShop::settings("stat.ModelTune"), ...)
+  metrics = NULL, stat = MachineShop::settings("stat.Tune"), ...)
 
 \method{tune}{MLModel}(x, ...)
 

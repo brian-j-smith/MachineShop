@@ -32,7 +32,7 @@
 #' 
 SelectedModel <- function(..., control = MachineShop::settings("control"),
                           metrics = NULL,
-                          stat = MachineShop::settings("stat.ModelTune"),
+                          stat = MachineShop::settings("stat.Tune"),
                           cutoff = MachineShop::settings("cutoff")) {
   
   models <- list(...)

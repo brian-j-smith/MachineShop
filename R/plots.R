@@ -192,7 +192,7 @@ plot.Lift <- function(x, find = NULL, diagonal = TRUE,
 #' @rdname plot-methods
 #' 
 plot.MLModelTune <- function(x, metrics = NULL,
-                             stat = MachineShop::settings("stat.ModelTune"),
+                             stat = MachineShop::settings("stat.Tune"),
                              type = c("boxplot", "density", "errorbar", "line",
                                       "violin"), ...) {
   perf <- x@performance

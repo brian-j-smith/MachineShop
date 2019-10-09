@@ -35,7 +35,7 @@
 TunedRecipe <- function(x, grid = expand_steps(),
                         control = MachineShop::settings("control"),
                         metrics = NULL,
-                        stat = MachineShop::settings("stat.ModelTune"),
+                        stat = MachineShop::settings("stat.Tune"),
                         cutoff = MachineShop::settings("cutoff")) {
   
   obj <- new("TunedRecipe", ModelRecipe(x), grid = grid,

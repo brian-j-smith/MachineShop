@@ -5,7 +5,7 @@
 \title{Selected Model}
 \usage{
 SelectedModel(..., control = MachineShop::settings("control"),
-  metrics = NULL, stat = MachineShop::settings("stat.ModelTune"),
+  metrics = NULL, stat = MachineShop::settings("stat.Tune"),
   cutoff = MachineShop::settings("cutoff"))
 }
 \arguments{

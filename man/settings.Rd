@@ -71,12 +71,13 @@ behaviors of functions in the \pkg{MachineShop} package.
     to compute one \link{summary} statistic at each cutoff value of resampled
     metrics in performance curves, or \code{NULL} for resample-specific
     metrics [default: \code{"base::mean"}].}
-  \item{\code{stat.ModelTune}}{function or character string naming a function
-    to compute one summary statistic on resampled performance metrics for
-    \link[=tune]{model tuning and selection} [default: \code{"base::mean"}].}
   \item{\code{stat.Resamples}}{function or character string naming a function
     to compute one summary statistic to control the ordering of models in
     \link[=plot]{plots} [default: \code{"base::mean"}].}
+  \item{\code{stat.Tune}}{function or character string naming a function
+    to compute one summary statistic on resampled performance metrics for
+    \link[=SelectedModel]{model selection}, \link[=TunedModel]{model tuning},
+    and \link[=TunedRecipe]{recipe tuning} [default: \code{"base::mean"}].}
   \item{\code{stats.PartialDependence}}{function, function name, or vector of
     these with which to compute \link[=dependence]{partial dependence}
     summary statistics [default: \code{c(Mean = "base::mean")}].}

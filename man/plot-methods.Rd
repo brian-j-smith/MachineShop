@@ -28,7 +28,7 @@
   stat = MachineShop::settings("stat.Curves"), ...)
 
 \method{plot}{MLModelTune}(x, metrics = NULL,
-  stat = MachineShop::settings("stat.ModelTune"), type = c("boxplot",
+  stat = MachineShop::settings("stat.Tune"), type = c("boxplot",
   "density", "errorbar", "line", "violin"), ...)
 
 \method{plot}{PartialDependence}(x, stats = NULL, ...)
