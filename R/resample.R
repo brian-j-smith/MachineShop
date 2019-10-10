@@ -161,9 +161,9 @@ Resamples <- function(...) {
     strata <- as.character(.strata)
     
     var_names <- c("Resample", "Case", "Observed", "Predicted")
-    is_missing <- !(var_names %in% names(.Data))
-    if (any(is_missing)) {
-      stop("missing resample variables: ", toString(var_names[is_missing]))
+    found <- var_names %in% names(.Data)
+    if (!all(found)) {
+      stop("missing resample variables: ", toString(var_names[!found]))
     }
     
   }

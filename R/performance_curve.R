@@ -125,10 +125,9 @@ Curves <- function(...) {
     metrics <- c(y = .metrics[[1]], x = .metrics[[2]])
     
     var_names <- c("Cutoff", "x", "y")
-    is_missing <- !(var_names %in% names(.Data))
-    if (any(is_missing)) {
-      stop("missing performance curve variables: ",
-           toString(var_names[is_missing]))
+    found <- var_names %in% names(.Data)
+    if (!all(found)) {
+      stop("missing performance curve variables: ", toString(var_names[!found]))
     }
     
     decreasing <- !xor(metrics$x@maximize, metrics$y@maximize)

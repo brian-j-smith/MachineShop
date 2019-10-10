@@ -84,9 +84,9 @@ Calibration <- function(...) {
     smoothed <- is.null(.breaks)
     
     var_names <- c("Response", "Predicted", "Observed")
-    is_missing <- !(var_names %in% names(.Data))
-    if (any(is_missing)) {
-      stop("missing calibration variables: ", toString(var_names[is_missing]))
+    found <- var_names %in% names(.Data)
+    if (!all(found)) {
+      stop("missing calibration variables: ", toString(var_names[!found]))
     }
     
   }
