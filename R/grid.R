@@ -37,11 +37,7 @@ grid.ModelFrame <- function(x, model, length = 3, random = FALSE, ...) {
   length <- max(as.integer(length), 1L)
   params <- lapply(model@grid(x, length = length, random = random), unique)
   params[sapply(params, length) == 0] <- NULL
-  if (random) {
-    sample_params(params, random)
-  } else {
-    expand_params(params)
-  }
+  expand_params(params, random = random)
 }
 
 

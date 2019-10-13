@@ -4,11 +4,14 @@
 \alias{expand_params}
 \title{Model Parameters Expansion}
 \usage{
-expand_params(...)
+expand_params(..., random = FALSE)
 }
 \arguments{
 \item{...}{named vectors or factors or a list of these containing the
 parameter values over which to create the grid.}
+
+\item{random}{number of points to be randomly sampled from the parameter grid
+or \code{FALSE} if all points are to be returned.}
 }
 \value{
 A data frame containing one row for each combination of the supplied

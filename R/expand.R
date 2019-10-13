@@ -5,6 +5,8 @@
 #' @param x \link[=models]{model} function, function name, or call.
 #' @param ... named vectors or factors or a list of these containing the
 #'   parameter values over which to expand \code{x}.
+#' @param random number of points to be randomly sampled from the parameter grid
+#'   or \code{FALSE} if all points are to be returned.
 #' 
 #' @return \code{MLModelList} class object that inherits from \code{list}.
 #' 
@@ -18,8 +20,8 @@
 #' 
 #' fit(medv ~ ., data = Boston, model = SelectedModel(models))
 #' 
-expand_model <- function(x, ...) {
-  .expand_model(x, ...)
+expand_model <- function(x, ..., random = FALSE) {
+  .expand_model(x, random, ...)
 }
 
 
@@ -28,8 +30,8 @@ expand_model <- function(x, ...) {
 }
 
 
-.expand_model.default <- function(x, ...) {
-  expand_model(getMLObject(x, class = "MLModel"), ...)
+.expand_model.default <- function(x, random, ...) {
+  expand_model(getMLObject(x, class = "MLModel"), ..., random = random)
 }
 
 
@@ -42,8 +44,8 @@ expand_model <- function(x, ...) {
 }
 
 
-.expand_model.MLModel <- function(x, ...) {
-  grid <- expand_params(...)
+.expand_model.MLModel <- function(x, random, ...) {
+  grid <- expand_params(..., random = random)
   expand_model(list(fget(x@name), grid))
 }
 
@@ -53,7 +55,9 @@ expand_model <- function(x, ...) {
 #' Create a grid of parameter values from all combinations of supplied inputs.
 #' 
 #' @param ... named vectors or factors or a list of these containing the
-#' parameter values over which to create the grid.
+#'   parameter values over which to create the grid.
+#' @param random number of points to be randomly sampled from the parameter grid
+#'   or \code{FALSE} if all points are to be returned.
 #' 
 #' @return A data frame containing one row for each combination of the supplied
 #' inputs.
@@ -70,8 +74,15 @@ expand_model <- function(x, ...) {
 #' 
 #' fit(medv ~ ., data = Boston, model = TunedModel(GBMModel, grid = grid))
 #' 
-expand_params <- function(...) {
-  as_tibble(expand.grid(..., KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE))
+expand_params <- function(..., random = FALSE) {
+  if (random) {
+    x <- list(...)
+    if (length(x) == 1 && is.null(names(x)) && is.list(x[[1]])) x <- x[[1]]
+    sample_params(x, size = random)
+  } else {
+    as_tibble(expand.grid(..., KEEP.OUT.ATTRS = FALSE,
+                          stringsAsFactors = FALSE))
+  }
 }
 
 
@@ -81,8 +92,10 @@ expand_params <- function(...) {
 #' steps of a preprocessing recipe.
 #' 
 #' @param ... one or more lists containing parameter values over which to create
-#' the grid.  For each list an argument name should be given as the \code{id} of
-#' the \link[recipes]{recipe} step to which it corresponds.
+#'   the grid.  For each list an argument name should be given as the \code{id}
+#'   of the \link[recipes]{recipe} step to which it corresponds.
+#' @param random number of points to be randomly sampled from the parameter grid
+#'   or \code{FALSE} if all points are to be returned.
 #' 
 #' @return \code{RecipeGrid} class object that inherits from \code{data.frame}.
 #' 
@@ -102,7 +115,7 @@ expand_params <- function(...) {
 #'   pca = list(num_comp = 1:3)
 #' )
 #' 
-expand_steps <- function(...) {
+expand_steps <- function(..., random = FALSE) {
   
   steps <- list(...)
   step_names <- names(steps)
@@ -131,7 +144,7 @@ expand_steps <- function(...) {
     stop("step names must be unique")
   }
   
-  grid <- expand_params(unlist(steps, recursive = FALSE))
+  grid <- expand_params(unlist(steps, recursive = FALSE), random = random)
   recipe_grid <- tibble(.rows = nrow(grid))
   
   offset <- 0

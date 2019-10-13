@@ -4,12 +4,15 @@
 \alias{expand_steps}
 \title{Recipe Step Parameters Expansion}
 \usage{
-expand_steps(...)
+expand_steps(..., random = FALSE)
 }
 \arguments{
 \item{...}{one or more lists containing parameter values over which to create
-the grid.  For each list an argument name should be given as the \code{id} of
-the \link[recipes]{recipe} step to which it corresponds.}
+the grid.  For each list an argument name should be given as the \code{id}
+of the \link[recipes]{recipe} step to which it corresponds.}
+
+\item{random}{number of points to be randomly sampled from the parameter grid
+or \code{FALSE} if all points are to be returned.}
 }
 \value{
 \code{RecipeGrid} class object that inherits from \code{data.frame}.
