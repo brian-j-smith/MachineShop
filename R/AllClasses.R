@@ -3,6 +3,7 @@ setOldClass(c("ModelRecipe", "recipe"))
 setOldClass("Surv")
 setOldClass(c("SurvEvents", "SurvMatrix"))
 setOldClass(c("SurvProbs", "SurvMatrix"))
+setOldClass(c("tbl_df", "tbl", "data.frame"))
 
 
 setClass("MLControl",
@@ -181,7 +182,7 @@ PerformanceDiffTest <- setClass("PerformanceDiffTest",
 
 
 MLModelTune <- setClass("MLModelTune",
-  slots = c(tune_grid = "data.frame",
+  slots = c(tune_grid = "tbl_df",
             performance = "Performance",
             selected = "list",
             metric = "MLMetric"),
@@ -190,7 +191,7 @@ MLModelTune <- setClass("MLModelTune",
 
 
 RecipeGrid <- setClass("RecipeGrid",
-  contains = "data.frame"
+  contains = "tbl_df"
 )
 
 

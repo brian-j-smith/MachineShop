@@ -1,5 +1,48 @@
+print.MLModel <- function(x, ...) {
+  show_title(x)
+  info <- modelinfo(x)[[1]]
+  cat("\n",
+      "Model name: ", x@name, "\n",
+      "Label: ", info$label, "\n",
+      "Packages: ", toString(info$packages), "\n",
+      "Response types: ", toString(info$response_types), "\n",
+      "Tuning grid: ", info$grid, "\n",
+      "Variable importance: ", info$varimp, "\n\n",
+      "Parameters:\n",
+      sep = "")
+  print(x@params)
+  if (!length(x@params)) cat("\n")
+  invisible(x)
+}
+
+
 print.MLModelFit <- function(x, ...) {
   print(unMLModelFit(x))
+}
+
+
+print.MLModelTune <- function(x, ...) {
+  NextMethod()
+  selected <- x@selected
+  if (length(x@tune_grid)) {
+    cat("Grid (selected = ", selected$index, "):\n", sep = "")
+    print(x@tune_grid, ...)
+    cat("\n")
+  }
+  print(x@performance)
+  if (!is.na(dim(x@performance)[3])) {
+    model_names <- dimnames(x@performance)[[3]]
+    cat("Selected model:", model_names[selected$index], "\n")
+  }
+  cat(names(selected$value), "value:", selected$value, "\n\n")
+  invisible(x)
+}
+
+
+print.RecipeGrid <- function(x, ...) {
+  show_title(x)
+  print(asS3(x), ...)
+  invisible(x)
 }
 
 
@@ -139,19 +182,7 @@ setMethod("show", "MLMetric",
 
 setMethod("show", "MLModel",
   function(object) {
-    show_title(object)
-    info <- modelinfo(object)[[1]]
-    cat("\n",
-        "Model name: ", object@name, "\n",
-        "Label: ", info$label, "\n",
-        "Packages: ", toString(info$packages), "\n",
-        "Response types: ", toString(info$response_types), "\n",
-        "Tuning grid: ", info$grid, "\n",
-        "Variable importance: ", info$varimp, "\n\n",
-        "Parameters:\n",
-        sep = "")
-    print(object@params)
-    if (!length(object@params)) cat("\n")
+    print(object)
     invisible()
   }
 )
@@ -197,19 +228,8 @@ setMethod("show", "MLModelList",
 
 setMethod("show", "MLModelTune",
   function(object) {
-    callNextMethod(object)
-    selected <- object@selected
-    if (length(object@tune_grid)) {
-      cat("Grid (selected = ", selected$index, "):\n", sep = "")
-      print(object@tune_grid)
-      cat("\n")
-    }
-    print(object@performance)
-    if (!is.na(dim(object@performance)[3])) {
-      model_names <- dimnames(object@performance)[[3]]
-      cat("Selected model:", model_names[selected$index], "\n")
-    }
-    cat(names(selected$value), "value:", selected$value, "\n\n")
+    print(object)
+    invisible()
   }
 )
 
@@ -278,8 +298,8 @@ setMethod("show", "PerformanceDiffTest",
 
 setMethod("show", "RecipeGrid",
   function(object) {
-    show_title(object)
-    print(as.data.frame(object))
+    print(object)
+    invisible()
   }
 )
 

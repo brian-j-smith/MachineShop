@@ -149,9 +149,10 @@ tune.MLModelList <- function(x, ...) {
   
   if (is.list(models)) {
     models <- ModelList(models)
-    grid <- data.frame(row.names = seq(models))
+    grid <- tibble(.rows = length(models))
   } else {
     model <- getMLObject(models, class = "MLModel")
+    
     random <- FALSE
     if (is(grid, "character")) grid <- fget(grid)
     if (is(grid, "function")) grid <- grid()
@@ -159,10 +160,15 @@ tune.MLModelList <- function(x, ...) {
       random <- grid$random
       grid <- grid$length
     }
-    if (is(grid, "numeric")) {
-      grid <- grid(x, data, model = model, length = grid, random = random)
-    }
-    grid <- combine_tune_params(grid, fixed)
+    grid <- if (is(grid, "numeric")) {
+      grid(x, data, model = model, length = grid, random = random)
+    } else as_tibble(grid)
+    
+    fixed <- as_tibble(fixed)
+    if (nrow(fixed) > 1) stop("only single values allowed for fixed parameters")
+    grid[names(fixed)] <- fixed
+    grid <- grid[!duplicated(grid), ]
+    
     models <- expand_model(list(fget(model@name), grid))
   }
   
@@ -223,23 +229,4 @@ tune.MLModelList <- function(x, ...) {
               ),
               metric = metric)
 
-}
-
-
-combine_tune_params <- function(grid, fixed) {
-  fixed <- as.data.frame(fixed, stringsAsFactors = FALSE)
-  if (nrow(fixed) > 1) stop("only single values allowed for fixed parameters")
-  
-  grid_params <- names(grid)
-  fixed_params <- names(fixed)
-  common_params <- intersect(grid_params, fixed_params)
-  new_params <- setdiff(fixed_params, common_params)
-  
-  grid[common_params] <- fixed[common_params]
-  grid <- grid[!duplicated(grid), , drop = FALSE]
-  rownames(grid) <- NULL
-  
-  grid[new_params] <- fixed[new_params]
-  
-  grid
 }

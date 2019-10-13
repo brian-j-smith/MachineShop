@@ -71,7 +71,7 @@ expand_model <- function(x, ...) {
 #' fit(medv ~ ., data = Boston, model = TunedModel(GBMModel, grid = grid))
 #' 
 expand_params <- function(...) {
-  expand.grid(..., KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
+  as_tibble(expand.grid(..., KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE))
 }
 
 
@@ -132,7 +132,7 @@ expand_steps <- function(...) {
   }
   
   grid <- expand_params(unlist(steps, recursive = FALSE))
-  recipe_grid <- data.frame(row.names = seq_len(nrow(grid)))
+  recipe_grid <- tibble(.rows = nrow(grid))
   
   offset <- 0
   for (name in step_names) {

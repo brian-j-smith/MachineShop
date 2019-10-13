@@ -20,6 +20,7 @@ importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
            vcov)
 importFrom(survival, concordance, is.Surv, Surv, survfit, survreg,
            survreg.distributions)
+importFrom(tibble, as_tibble, tibble)
 importFrom(utils, combn, head, methods, relist, stack, str, tail)
 
 
@@ -183,7 +184,10 @@ S3method(plot, Performance)
 S3method(plot, Resamples)
 S3method(plot, VarImp)
 S3method(predict, MLModelFit)
+S3method(print, MLModel)
 S3method(print, MLModelFit)
+S3method(print, MLModelTune)
+S3method(print, RecipeGrid)
 S3method(print, Resamples)
 S3method(print, SurvMatrix)
 S3method(resample, formula)

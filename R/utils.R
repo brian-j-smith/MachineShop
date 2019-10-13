@@ -224,7 +224,7 @@ sample_params <- function(x, size, replace = FALSE) {
   stopifnot(is.list(x))
   
   n <- length(x)
-  if (n == 0) return(data.frame())
+  if (n == 0) return(tibble())
   
   var_names <- paste0("Var", seq(x))
   x_names <- names(x)
@@ -236,19 +236,14 @@ sample_params <- function(x, size, replace = FALSE) {
 
   if (!replace) size <- min(size, prod(sapply(x, length)))
   
-  grid <- as.data.frame(matrix(nrow = 0, ncol = n))
-  names(grid) <- names(x)
+  grid <- as_tibble(matrix(nrow = 0, ncol = n, dimnames = list(NULL, names(x))))
   iter <- 0
   while (nrow(grid) < size && iter < 100) {
     iter <- iter + 1
-    new_grid <- as.data.frame(
-      lapply(x, sample, size = size, replace = TRUE),
-      stringsAsFactors = FALSE
-    )
+    new_grid <- as_tibble(lapply(x, sample, size = size, replace = TRUE))
     grid <- rbind(grid, new_grid)
     if (!replace) grid <- unique(grid)
   }
-  rownames(grid) <- NULL
   
   head(grid, size)
 }
