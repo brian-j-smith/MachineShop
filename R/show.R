@@ -18,6 +18,7 @@ print.MLModel <- function(x, ...) {
 
 print.MLModelFit <- function(x, ...) {
   print(unMLModelFit(x))
+  invisible(x)
 }
 
 
@@ -48,6 +49,7 @@ print.RecipeGrid <- function(x, ...) {
 
 print.Resamples <- function(x, ...) {
   show(x)
+  invisible(x)
 }
 
 
@@ -56,6 +58,7 @@ print.SurvMatrix <- function(x, ...) {
   print(as(x, "matrix"))
   cat("Attribute \"times\":\n")
   print(time(x))
+  invisible(x)
 }
 
 
@@ -176,6 +179,7 @@ setMethod("show", "MLMetric",
     print(info$arguments)
     cat("\nTypes:\n")
     print(info$response_types)
+    invisible()
   }
 )
 
@@ -191,6 +195,7 @@ setMethod("show", "MLModel",
 setMethod("show", "MLModelFit",
   function(object) {
     show(unMLModelFit(object))
+    invisible()
   }
 )
 
@@ -211,6 +216,7 @@ setMethod("show", "MLModelFunction",
         sep = "")
     print(info$arguments)
     cat("\n")
+    invisible()
   }
 )
 
@@ -238,6 +244,7 @@ setMethod("show", "ConfusionMatrix",
   function(object) {
     show_title(object)
     print(object@.Data)
+    invisible()
   }
 )
 
@@ -252,6 +259,7 @@ setMethod("show", "ConfusionSummary",
         "Kappa: ", object@Kappa, "\n\n",
         sep = "")
     print(object@.Data)
+    invisible()
   }
 )
 
@@ -265,6 +273,7 @@ setMethod("show", "Curves",
         "y = ", object@metrics$y@label, "\n\n",
         sep = "")
     print(as.data.frame(object))
+    invisible()
   }
 )
 
@@ -279,6 +288,7 @@ setMethod("show", "Performance",
       cat("Models:", toString(dimnames(object)[[3]]), "\n")
     }
     cat("\n")
+    invisible()
   }
 )
 
@@ -292,6 +302,7 @@ setMethod("show", "PerformanceDiffTest",
         "P-value adjustment method: ", object@adjust, "\n\n",
         sep = "")
     print(object@.Data)
+    invisible()
   }
 )
 
@@ -327,6 +338,7 @@ setMethod("show", "TunedRecipe",
     print(as(object, "ModelRecipe"))
     cat("\nGrid:\n\n")
     print(object@grid)
+    invisible()
   }
 )
 
@@ -335,6 +347,7 @@ setMethod("show", "VarImp",
   function(object) {
     show_title(object)
     print(as.data.frame(object))
+    invisible()
   }
 )
 
