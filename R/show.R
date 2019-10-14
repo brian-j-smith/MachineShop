@@ -17,7 +17,7 @@ print.MLModel <- function(x, ...) {
 
 
 print.MLModelFit <- function(x, ...) {
-  print(unMLModelFit(x))
+  print(unMLModelFit(x), ...)
   invisible(x)
 }
 
