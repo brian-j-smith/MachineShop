@@ -10,8 +10,7 @@ print.MLModel <- function(x, ...) {
       "Variable importance: ", info$varimp, "\n\n",
       "Parameters:\n",
       sep = "")
-  print(x@params)
-  if (!length(x@params)) cat("\n")
+  cat(str(x@params))
   invisible(x)
 }
 
@@ -26,16 +25,17 @@ print.MLModelTune <- function(x, ...) {
   NextMethod()
   selected <- x@selected
   if (length(x@tune_grid)) {
-    cat("Grid (selected = ", selected$index, "):\n", sep = "")
+    cat("\nGrid (selected = ", selected$index, "):\n", sep = "")
     print(x@tune_grid, ...)
     cat("\n")
   }
   print(x@performance)
+  cat("\n")
   if (!is.na(dim(x@performance)[3])) {
     model_names <- dimnames(x@performance)[[3]]
     cat("Selected model:", model_names[selected$index], "\n")
   }
-  cat(names(selected$value), "value:", selected$value, "\n\n")
+  cat(names(selected$value), "value:", selected$value, "\n")
   invisible(x)
 }
 
@@ -76,7 +76,7 @@ setMethod("show", "MLControl",
       x <- slot(object, name)
       if (length(x)) cat(labels[name], ": ", toString(x), "\n", sep = "")
     }
-    cat("Seed:", object@seed, "\n\n")
+    cat("Seed:", object@seed, "\n")
     invisible()
   }
 )
@@ -215,7 +215,6 @@ setMethod("show", "MLModelFunction",
         "Arguments:\n",
         sep = "")
     print(info$arguments)
-    cat("\n")
     invisible()
   }
 )
@@ -226,7 +225,6 @@ setMethod("show", "MLModelList",
     show_title(object)
     cat("\n")
     print(unclass(object))
-    if (!length(object)) cat("\n")
     invisible()
   }
 )
@@ -290,13 +288,13 @@ setMethod("show", "Curves",
 setMethod("show", "Performance",
   function(object) {
     show_title(object)
+    dn <- dimnames(object)
     cat("\n",
-        "Metrics: ", toString(dimnames(object)[[2]]), "\n",
+        "Metrics: ", toString(dn[[2]], width = show_width(offset = 9)), "\n",
         sep = "")
     if (length(dim(object)) > 2) {
-      cat("Models:", toString(dimnames(object)[[3]]), "\n")
+      cat("Models:", toString(dn[[3]], width = show_width(offset = 8)), "\n")
     }
-    cat("\n")
     invisible()
   }
 )
@@ -328,7 +326,8 @@ setMethod("show", "Resamples",
   function(object) {
     show_title(object)
     cat("\n",
-        "Models: ", toString(levels(object$Model)), "\n",
+        "Models: ",
+        toString(levels(object$Model), width = show_width(offset = 8)), "\n",
         sep = "")
     if (isTRUE(nzchar(object@strata))) {
       cat("Stratification variable:", object@strata, "\n")
@@ -373,4 +372,9 @@ show_title.default <- function(x, ...) {
 
 show_title.character <- function(x, ...) {
   cat("Object of class \"", x, "\"\n", sep = "")
+}
+
+
+show_width <- function(offset = 0, min = max(80 - offset, 60)) {
+  max(getOption("width") - offset, min)
 }
