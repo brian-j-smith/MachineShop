@@ -99,7 +99,7 @@ In the example below, Bayesian information criterion (BIC) based stepwise variab
 fit(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(nobs))))
 
 ## Response variable: y
-fit (surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(length(y)))))
+fit(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(length(y)))))
 ```
 
 
