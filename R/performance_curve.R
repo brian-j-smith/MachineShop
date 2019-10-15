@@ -137,8 +137,9 @@ Curves <- function(...) {
     
   }
   
-  args <- make_unique_levels(args, which = "Model")
-  new("Curves", do.call(append, args), metrics = metrics)
+  df <- do.call(append, make_unique_levels(args, which = "Model"))
+  rownames(df) <- NULL
+  new("Curves", df, metrics = metrics)
 }
 
 

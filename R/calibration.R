@@ -91,8 +91,9 @@ Calibration <- function(...) {
     
   }
   
-  args <- make_unique_levels(args, which = "Model")
-  new("Calibration", do.call(append, args), smoothed = smoothed)
+  df <- do.call(append, make_unique_levels(args, which = "Model"))
+  rownames(df) <- NULL
+  new("Calibration", df, smoothed = smoothed)
 }
 
 

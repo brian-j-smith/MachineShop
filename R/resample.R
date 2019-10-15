@@ -168,8 +168,9 @@ Resamples <- function(...) {
     
   }
   
-  args <- make_unique_levels(args, which = "Model")
-  new("Resamples", do.call(append, args), control = control, strata = strata)
+  df <- do.call(append, make_unique_levels(args, which = "Model"))
+  rownames(df) <- NULL
+  new("Resamples", df, control = control, strata = strata)
 }
 
 
