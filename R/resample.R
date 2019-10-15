@@ -177,7 +177,7 @@ Resamples <- function(...) {
 setGeneric(".resample", function(object, x, ...) standardGeneric(".resample"))
 
 
-setMethod(".resample", c("MLBootControl", "ModelFrame"),
+setMethod(".resample", c("MLBootstrapControl", "ModelFrame"),
   function(object, x, model) {
     presets <- MachineShop::settings()
     strata <- strata_var(x)
@@ -215,7 +215,7 @@ setMethod(".resample", c("MLBootControl", "ModelFrame"),
 )
 
 
-setMethod(".resample", c("MLBootControl", "ModelRecipe"),
+setMethod(".resample", c("MLBootstrapControl", "ModelRecipe"),
   function(object, x, model) {
     presets <- MachineShop::settings()
     strata <- strata_var(x)

@@ -14,14 +14,19 @@ setClass("MLControl",
 )
 
 
-setClass("MLBootControl",
+setClass("MLBootstrapControl",
   slots = c(samples = "numeric"),
   contains = "MLControl"
 )
 
 
+setClass("MLBootControl",
+  contains = "MLBootstrapControl"
+)
+
+
 setClass("MLBootOptimismControl",
-  contains = "MLBootControl"
+  contains = "MLBootstrapControl"
 )
 
 

@@ -82,15 +82,23 @@ setMethod("show", "MLControl",
 )
 
 
+setMethod("show", "MLBootstrapControl",
+  function(object) {
+    cat("Samples:", object@samples, "\n")
+    callNextMethod()
+    invisible()
+  }
+)
+
+
 setMethod("show", "MLBootControl",
   function(object) {
     show_title("MLControl")
     cat("\n",
         "Name: BootControl\n",
         "Label: Bootstrap Resampling\n",
-        "Samples: ", object@samples, "\n",
         sep = "")
-    getMethod(show, "MLControl")(object)
+    callNextMethod()
     invisible()
   }
 )
@@ -102,9 +110,8 @@ setMethod("show", "MLBootOptimismControl",
     cat("\n",
         "Name: BootOptimismControl\n",
         "Label: Optimism-Corrected Bootstrap Resampling\n",
-        "Samples: ", object@samples, "\n",
         sep = "")
-    getMethod(show, "MLControl")(object)
+    callNextMethod()
     invisible()
   }
 )
@@ -119,7 +126,7 @@ setMethod("show", "MLCVControl",
         "Folds: ", object@folds, "\n",
         "Repeats: ", object@repeats, "\n",
         sep = "")
-    getMethod(show, "MLControl")(object)
+    callNextMethod()
     invisible()
   }
 )
@@ -133,7 +140,7 @@ setMethod("show", "MLOOBControl",
         "Label: Out-Of-Bootstrap Resampling\n",
         "Samples: ", object@samples, "\n",
         sep = "")
-    getMethod(show, "MLControl")(object)
+    callNextMethod()
     invisible()
   }
 )
@@ -147,7 +154,7 @@ setMethod("show", "MLSplitControl",
         "Label: Split Training and Test Samples\n",
         "Training proportion: ", object@prop, "\n",
         sep = "")
-    getMethod(show, "MLControl")(object)
+    callNextMethod()
     invisible()
   }
 )
@@ -160,7 +167,7 @@ setMethod("show", "MLTrainControl",
         "Name: TrainControl\n",
         "Label: Training Resubstitution\n",
         sep = "")
-    getMethod(show, "MLControl")(object)
+    callNextMethod()
     invisible()
   }
 )

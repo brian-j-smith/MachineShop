@@ -63,7 +63,7 @@ BootControl <- function(samples = 25, ...) {
 #' BootOptimismControl(samples = 100)
 #' 
 BootOptimismControl <- function(samples = 25, ...) {
-  new("MLBootOptimismControl", BootControl(samples = samples, ...))
+  new("MLBootOptimismControl", MLControl(...), samples = samples)
 }
 
 
