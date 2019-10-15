@@ -119,7 +119,7 @@ expand_steps <- function(..., random = FALSE) {
   
   steps <- list(...)
   step_names <- names(steps)
-  if(length(steps) == 1 && is.null(step_names) && is.list(steps[[1]])) {
+  if (length(steps) == 1 && is.null(step_names) && is.list(steps[[1]])) {
     steps <- steps[[1]]
     step_names <- names(steps)
   }

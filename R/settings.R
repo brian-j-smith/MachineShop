@@ -97,7 +97,7 @@
 settings <- function(...) {
   
   args <- list(...)
-  if(length(args) == 1 && is.null(names(args)) && is.vector(args[[1]])) {
+  if (length(args) == 1 && is.null(names(args)) && is.vector(args[[1]])) {
     args <- as.list(args[[1]])
   }
   
