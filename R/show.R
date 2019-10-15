@@ -241,7 +241,7 @@ setMethod("show", "MLModelTune",
 setMethod("show", "Calibration",
   function(object) {
     show_title(object)
-    print(as.data.frame(object))
+    print(as(object, "data.frame"))
     invisible()
   }
 )
@@ -250,7 +250,7 @@ setMethod("show", "Calibration",
 setMethod("show", "ConfusionMatrix",
   function(object) {
     show_title(object)
-    print(object@.Data)
+    print(as(object, "table"))
     invisible()
   }
 )
@@ -265,7 +265,7 @@ setMethod("show", "ConfusionSummary",
         "Majority class: ", object@Majority, "\n",
         "Kappa: ", object@Kappa, "\n\n",
         sep = "")
-    print(object@.Data)
+    print(as(object, "matrix"))
     invisible()
   }
 )
@@ -279,7 +279,7 @@ setMethod("show", "Curves",
         "x = ", object@metrics$x@label, ", ",
         "y = ", object@metrics$y@label, "\n\n",
         sep = "")
-    print(as.data.frame(object))
+    print(as(object, "data.frame"))
     invisible()
   }
 )
@@ -308,7 +308,7 @@ setMethod("show", "PerformanceDiffTest",
         "Lower diagonal: p-values\n",
         "P-value adjustment method: ", object@adjust, "\n\n",
         sep = "")
-    print(object@.Data)
+    print(as(object, "array"))
     invisible()
   }
 )
@@ -354,7 +354,7 @@ setMethod("show", "TunedRecipe",
 setMethod("show", "VarImp",
   function(object) {
     show_title(object)
-    print(as.data.frame(object))
+    print(as(object, "data.frame"))
     invisible()
   }
 )
