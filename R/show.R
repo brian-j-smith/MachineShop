@@ -240,6 +240,15 @@ setMethod("show", "MLModelTune",
 )
 
 
+setMethod("show", "Calibration",
+  function(object) {
+    show_title(object)
+    print(as.data.frame(object))
+    invisible()
+  }
+)
+
+
 setMethod("show", "ConfusionMatrix",
   function(object) {
     show_title(object)
