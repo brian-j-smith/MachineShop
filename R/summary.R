@@ -47,8 +47,8 @@ summary.Confusion <- function(object, ...) {
 #' @rdname summary-methods
 #' 
 summary.ConfusionMatrix <- function(object, ...) {
-  n <- sum(object)
-  object <- object / n
+  total <- sum(object)
+  object <- object / total
   
   observed <- colSums(object)
   predicted <- rowSums(object)
@@ -65,10 +65,10 @@ summary.ConfusionMatrix <- function(object, ...) {
   )
   
   ConfusionSummary(perf,
-                   N = n,
-                   Accuracy = sum(agreement),
-                   Majority = max(observed),
-                   Kappa = 1 - (1 - sum(agreement)) /
+                   total = total,
+                   accuracy = sum(agreement),
+                   majority = max(observed),
+                   kappa2 = 1 - (1 - sum(agreement)) /
                      (1 - sum(observed * predicted))) 
 }
 

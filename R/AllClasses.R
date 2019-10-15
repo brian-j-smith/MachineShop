@@ -150,10 +150,10 @@ setClass("OrderedBinaryConfusionMatrix",
 
 
 ConfusionSummary <- setClass("ConfusionSummary",
-  slots = c(N = "numeric",
-            Accuracy = "numeric",
-            Majority = "numeric",
-            Kappa = "numeric"),
+  slots = c(total = "numeric",
+            accuracy = "numeric",
+            majority = "numeric",
+            kappa2 = "numeric"),
   contains = "matrix"
 )
 

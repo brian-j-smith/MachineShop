@@ -265,12 +265,12 @@ setMethod("show", "ConfusionMatrix",
 
 setMethod("show", "ConfusionSummary",
   function(object) {
-    n <- object@N
-    acc <- object@Accuracy
-    cat("Number of responses: ", n, "\n",
-        "Accuracy (SE): ", acc, " (", sqrt(acc * (1 - acc) / n), ")\n",
-        "Majority class: ", object@Majority, "\n",
-        "Kappa: ", object@Kappa, "\n\n",
+    total <- object@total
+    acc <- object@accuracy
+    cat("Number of responses: ", total, "\n",
+        "Accuracy (SE): ", acc, " (", sqrt(acc * (1 - acc) / total), ")\n",
+        "Majority class: ", object@majority, "\n",
+        "Kappa: ", object@kappa2, "\n\n",
         sep = "")
     print(as(object, "matrix"))
     invisible()
