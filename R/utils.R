@@ -220,7 +220,7 @@ requireModelNamespaces <- function(packages) {
 }
 
 
-sample_params <- function(x, size, replace = FALSE) {
+sample_params <- function(x, size = NULL, replace = FALSE) {
   stopifnot(is.list(x))
   
   n <- length(x)
@@ -233,8 +233,10 @@ sample_params <- function(x, size, replace = FALSE) {
     var_names[is_nzchar] <- x_names[is_nzchar]
   }
   names(x) <- var_names
-
-  if (!replace) size <- min(size, prod(sapply(x, length)))
+  
+  max_size <- prod(sapply(x, length))
+  if (is.null(size)) size <- max_size
+  if (!replace) size <- min(size, max_size)
   
   grid <- as_tibble(matrix(nrow = 0, ncol = n, dimnames = list(NULL, names(x))))
   iter <- 0
