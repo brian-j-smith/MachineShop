@@ -2,6 +2,12 @@
 
 ## Version Updates
 
+## 1.6.1
+* Use tibbles for parameter grids.
+* Add random sampling option to `expand_model()`, `expand_params()`, and `expand_steps()`.
+* Display information for model functions and objects more compactly.
+
+
 ## 1.6.0
 * Add global setting for default cutoff threshold value.
 * Add option to reset all global settings.
