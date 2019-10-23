@@ -30,10 +30,20 @@ setClass("MLBootOptimismControl",
 )
 
 
-setClass("MLCVControl",
+setClass("MLCrossValidationControl",
   slots = c(folds = "numeric",
             repeats = "numeric"),
   contains = "MLControl"
+)
+
+
+setClass("MLCVControl",
+  contains = "MLCrossValidationControl"
+)
+
+
+setClass("MLCVOptimismControl",
+  contains = "MLCrossValidationControl"
 )
 
 

@@ -88,6 +88,7 @@ export(accuracy,
 export(BootControl,
        BootOptimismControl,
        CVControl,
+       CVOptimismControl,
        OOBControl,
        SplitControl,
        TrainControl)

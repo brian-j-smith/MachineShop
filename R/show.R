@@ -117,14 +117,36 @@ setMethod("show", "MLBootOptimismControl",
 )
 
 
+setMethod("show", "MLCrossValidationControl",
+  function(object) {
+    cat("Folds: ", object@folds, "\n",
+        "Repeats: ", object@repeats, "\n",
+         sep = "")
+    callNextMethod()
+    invisible()
+  }
+)
+
+
 setMethod("show", "MLCVControl",
   function(object) {
     show_title("MLControl")
     cat("\n",
         "Name: CVControl\n",
         "Label: K-Fold Cross-Validation\n",
-        "Folds: ", object@folds, "\n",
-        "Repeats: ", object@repeats, "\n",
+        sep = "")
+    callNextMethod()
+    invisible()
+  }
+)
+
+
+setMethod("show", "MLCVOptimismControl",
+  function(object) {
+    show_title("MLControl")
+    cat("\n",
+        "Name: CVOptimismControl\n",
+        "Label: Optimism-Corrected K-Fold Cross-Validation\n",
         sep = "")
     callNextMethod()
     invisible()

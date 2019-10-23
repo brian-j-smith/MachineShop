@@ -93,6 +93,26 @@ CVControl <- function(folds = 10, repeats = 1, ...) {
 #' @rdname MLControl
 #' 
 #' @details
+#' \code{CVOptimismControl} constructs an \code{MLControl} object for
+#' optimism-corrected cross-validation resampling (Davison and Hinkley 1997,
+#' eq. 6.48).
+#' 
+#' @references
+#' Davison AC and Hinkley DV (1997). Bootstrap Methods and Their Application.
+#' New York, NY, USA: Cambridge University Press.
+#' 
+#' @examples
+#' ## Optimism-corrected cross-validation with 5 repeats of 10 folds
+#' CVOptimismControl(folds = 10, repeats = 5)
+#' 
+CVOptimismControl <- function(folds = 10, repeats = 1, ...) {
+  new("MLCVOptimismControl", MLControl(...), folds = folds, repeats = repeats)
+}
+
+
+#' @rdname MLControl
+#' 
+#' @details
 #' \code{OOBControl} constructs an \code{MLControl} object for out-of-bootstrap
 #' resampling in which models are fit with bootstrap resampled training sets and
 #' used to predict the unsampled cases.

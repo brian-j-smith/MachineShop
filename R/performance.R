@@ -147,6 +147,32 @@ performance.MLBootOptimismControl <- function(x, resamples, ...) {
 }
 
 
+performance.MLCVOptimismControl <- function(x, resamples, ...) {
+  vars <- c("Observed", "Predicted")
+  vars2 <- c("Resample", "Observed", "Train.Predicted",
+             paste0("CV.Predicted.", seq_len(x@folds)))
+  
+  resamples_split <- split(resamples[vars], resamples$Resample)
+  test_perf <- lapply(resamples_split, function(resample) {
+    performance(resample$Observed, resample$Predicted, ...)
+  }) %>% do.call(rbind, .)
+  
+  f <- function(p, obs, pred) p * performance(obs, pred, ...)
+  resamples_factor <- ceiling(resamples$Resample / x@folds)
+  resamples_split <- split(resamples[vars2], resamples_factor)
+  cv_perf_list <- lapply(resamples_split, function(resample) {
+    p <- prop.table(table(resample$Resample))
+    Reduce("+", Map(f, p, resample["Observed"], resample[-(1:3)]))
+  })
+  cv_perf <- do.call(rbind, rep(cv_perf_list, each = x@folds))
+  train_perf <- performance(resamples_split[[1]]$Observed,
+                            resamples_split[[1]]$Train.Predicted, ...)
+  
+  pessimism <- test_perf - cv_perf
+  sweep(pessimism, 2, train_perf, "+")
+}
+
+
 Performance <- function(...) {
   args <- list(...)
   

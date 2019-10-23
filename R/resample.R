@@ -256,7 +256,7 @@ setMethod(".resample", c("MLBootstrapControl", "ModelRecipe"),
 )
 
 
-setMethod(".resample", c("MLCVControl", "ModelFrame"),
+setMethod(".resample", c("MLCrossValidationControl", "ModelFrame"),
   function(object, x, model) {
     presets <- MachineShop::settings()
     strata <- strata_var(x)
@@ -267,19 +267,44 @@ setMethod(".resample", c("MLCVControl", "ModelFrame"),
                        strata = strata) %>% rsample2caret
     index <- splits$index
     seeds <- sample.int(.Machine$integer.max, length(index))
-    foreach(i = seq(index),
-            .packages = c("MachineShop", "survival")) %dopar% {
+    
+    is_optimism_control <- is(object, "MLCVOptimismControl")
+    
+    args_list <- foreach(i = seq(index),
+                         .packages = c("MachineShop", "survival")) %dopar% {
       MachineShop::settings(presets)
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
       test <- x[-index[[i]], , drop = FALSE]
-      resample_args(train, test, model, object, strata)
-    } %>% Resamples.list
+      if (is_optimism_control) {
+        args <- resample_args(train, list(test, x), model, object, strata)
+        args$CV.Predicted <- args[[1]][[2]]["Predicted"]
+        args[[1]] <- args[[1]][[1]]
+        args
+      } else {
+        resample_args(train, test, model, object, strata)
+      }
+    }
+    res <- Resamples.list(args_list)
+    
+    if (is_optimism_control) {
+      pred_list <- lapply(args_list, getElement, name = "CV.Predicted")
+      split_factor <- rep(seq_len(object@folds), times = object@repeats)
+      df <- split(seq(pred_list), split_factor) %>%
+        lapply(function(indices) do.call(append, pred_list[indices])) %>%
+        as.data.frame
+      names(df) <- paste0("CV.Predicted.", seq(df))
+      pred <- resample_args(x, x, model, object)[[1]]$Predicted
+      df$Train.Predicted <- do.call(append, rep(list(pred), object@repeats))
+      res[names(df)] <- df
+    }
+    
+    res
   }
 )
 
 
-setMethod(".resample", c("MLCVControl", "ModelRecipe"),
+setMethod(".resample", c("MLCrossValidationControl", "ModelRecipe"),
   function(object, x, model) {
     presets <- MachineShop::settings()
     strata <- strata_var(x)
@@ -289,15 +314,42 @@ setMethod(".resample", c("MLCVControl", "ModelRecipe"),
                        repeats = object@repeats,
                        strata = strata)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
-    foreach(i = seq(splits),
-            .packages = c("MachineShop", "recipes", "survival")) %dopar% {
+    
+    is_optimism_control <- is(object, "MLCVOptimismControl")
+    if (is_optimism_control) x_prep <- prep(x)
+    
+    args_list <- foreach(i = seq(splits),
+                         .packages =
+                           c("MachineShop", "recipes", "survival")) %dopar% {
       MachineShop::settings(presets)
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- recipe(x, analysis(split))
       test <- prep(recipe(x, assessment(split)))
-      resample_args(train, test, model, object, strata)
-    } %>% Resamples.list
+      if (is_optimism_control) {
+        args <- resample_args(train, list(test, x_prep), model, object, strata)
+        args$CV.Predicted <- args[[1]][[2]]["Predicted"]
+        args[[1]] <- args[[1]][[1]]
+        args
+      } else {
+        resample_args(train, test, model, object, strata)
+      }
+    }
+    res <- Resamples.list(args_list)
+    
+    if (is_optimism_control) {
+      pred_list <- lapply(args_list, getElement, name = "CV.Predicted")
+      split_factor <- rep(seq_len(object@folds), times = object@repeats)
+      df <- split(seq(pred_list), split_factor) %>%
+        lapply(function(indices) do.call(append, pred_list[indices])) %>%
+        as.data.frame
+      names(df) <- paste0("CV.Predicted.", seq(df))
+      pred <- resample_args(x, x_prep, model, object)[[1]]$Predicted
+      df$Train.Predicted <- do.call(append, rep(list(pred), object@repeats))
+      res[names(df)] <- df
+    }
+    
+    res
   }
 )
 

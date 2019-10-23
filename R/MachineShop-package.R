@@ -33,6 +33,7 @@
 #'   \code{\link{BootControl}} \tab Simple Bootstrap \cr
 #'   \code{\link{BootOptimismControl}} \tab Optimism-Corrected Bootstrap \cr
 #'   \code{\link{CVControl}} \tab Repeated K-Fold Cross-Validation \cr
+#'   \code{\link{CVOptimismControl}} \tab Optimism-Corrected Cross-Validation \cr
 #'   \code{\link{OOBControl}} \tab Out-of-Bootstrap \cr
 #'   \code{\link{SplitControl}} \tab Split Training-Testing \cr
 #'   \code{\link{TrainControl}} \tab Training Resubstitution \cr
