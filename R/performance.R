@@ -135,12 +135,14 @@ performance.MLBootOptimismControl <- function(x, resamples, ...) {
   resamples_split <- split(resamples[vars], resamples$Resample)
   for (name in names(resamples_split)) {
     resample <- resamples_split[[name]]
-    test_perf_list[[name]] <- performance(resample[[1]], resample[[2]], ...)
-    boot_perf_list[[name]] <- performance(resample[[3]], resample[[4]], ...)
+    test_perf_list[[name]] <- performance(resample$Observed,
+                                          resample$Predicted, ...)
+    boot_perf_list[[name]] <- performance(resample$Boot.Observed,
+                                          resample$Boot.Predicted, ...)
   }
   test_perf <- do.call(rbind, test_perf_list)
   boot_perf <- do.call(rbind, boot_perf_list)
-  train_perf <- performance(resample[[1]], resample[[5]], ...)
+  train_perf <- performance(resample$Observed, resample$Train.Predicted, ...)
   
   pessimism <- test_perf - boot_perf
   sweep(pessimism, 2, train_perf, "+")

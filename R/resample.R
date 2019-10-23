@@ -243,8 +243,8 @@ setMethod(".resample", c("MLBootstrapControl", "ModelRecipe"),
         df <- args[[1]][[1]]
         df_boot <- args[[1]][[2]]
         indices <- seq_boot(df_boot, df)
-        df$Boot.Observed <- df_boot$Observed[indices]
-        df$Boot.Predicted <- df_boot$Predicted[indices]
+        df["Boot.Observed"] <- df_boot[indices, "Observed"]
+        df["Boot.Predicted"] <- df_boot[indices, "Predicted"]
         df$Train.Predicted <- train_pred
         args[[1]] <- df
         args
