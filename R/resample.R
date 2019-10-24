@@ -225,10 +225,9 @@ setMethod(".resample", c("MLBootstrapControl", "ModelRecipe"),
                          strata = strata)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     
-    test <- prep(x)
     is_optimism_control <- is(object, "MLBootOptimismControl")
     if (is_optimism_control) {
-      train_pred <- resample_args(x, test, model, object)[[1]]$Predicted
+      train_pred <- resample_args(x, x, model, object)[[1]]$Predicted
     }
     
     foreach(i = seq(splits),
@@ -238,8 +237,7 @@ setMethod(".resample", c("MLBootstrapControl", "ModelRecipe"),
       split <- splits[[i]]
       train <- recipe(x, analysis(split))
       if (is_optimism_control) {
-        test_list <- list(test, prep(train))
-        args <- resample_args(train, test_list, model, object, strata)
+        args <- resample_args(train, list(x, train), model, object, strata)
         df <- args[[1]][[1]]
         df_boot <- args[[1]][[2]]
         indices <- seq_boot(df_boot, df)
@@ -249,7 +247,7 @@ setMethod(".resample", c("MLBootstrapControl", "ModelRecipe"),
         args[[1]] <- df
         args
       } else {
-        resample_args(train, test, model, object, strata)
+        resample_args(train, x, model, object, strata)
       }
     } %>% Resamples.list
   }
@@ -316,7 +314,6 @@ setMethod(".resample", c("MLCrossValidationControl", "ModelRecipe"),
     seeds <- sample.int(.Machine$integer.max, length(splits))
     
     is_optimism_control <- is(object, "MLCVOptimismControl")
-    if (is_optimism_control) x_prep <- prep(x)
     
     args_list <- foreach(i = seq(splits),
                          .packages =
@@ -325,9 +322,9 @@ setMethod(".resample", c("MLCrossValidationControl", "ModelRecipe"),
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- recipe(x, analysis(split))
-      test <- prep(recipe(x, assessment(split)))
+      test <- assessment(split)
       if (is_optimism_control) {
-        args <- resample_args(train, list(test, x_prep), model, object, strata)
+        args <- resample_args(train, list(test, x), model, object, strata)
         args$CV.Predicted <- args[[1]][[2]]["Predicted"]
         args[[1]] <- args[[1]][[1]]
         args
@@ -344,7 +341,7 @@ setMethod(".resample", c("MLCrossValidationControl", "ModelRecipe"),
         lapply(function(indices) do.call(append, pred_list[indices])) %>%
         as.data.frame
       names(df) <- paste0("CV.Predicted.", seq(df))
-      pred <- resample_args(x, x_prep, model, object)[[1]]$Predicted
+      pred <- resample_args(x, x, model, object)[[1]]$Predicted
       df$Train.Predicted <- do.call(append, rep(list(pred), object@repeats))
       res[names(df)] <- df
     }
@@ -392,7 +389,7 @@ setMethod(".resample", c("MLOOBControl", "ModelRecipe"),
       set.seed(seeds[i])
       split <- splits[[i]]
       train <- recipe(x, analysis(split))
-      test <- prep(recipe(x, assessment(split)))
+      test <- assessment(split)
       resample_args(train, test, model, object, strata)
     } %>% Resamples.list
   }
@@ -421,24 +418,16 @@ setMethod(".resample", c("MLSplitControl", "ModelRecipe"),
                            prop = object@prop,
                            strata = strata)
     train <- recipe(x, analysis(split))
-    test <- prep(recipe(x, testing(split)))
+    test <- testing(split)
     do.call(Resamples, resample_args(train, test, model, object, strata))
   }
 )
 
 
-setMethod(".resample", c("MLTrainControl", "ModelFrame"),
+setMethod(".resample", c("MLTrainControl", "ANY"),
   function(object, x, model) {
     set.seed(object@seed)
     do.call(Resamples, resample_args(x, x, model, object))
-  }
-)
-
-
-setMethod(".resample", c("MLTrainControl", "ModelRecipe"),
-  function(object, x, model) {
-    set.seed(object@seed)
-    do.call(Resamples, resample_args(x, prep(x), model, object))
   }
 )
 
@@ -450,6 +439,9 @@ resample_args <- function(train, test, model, control, strata = character()) {
   if (is(trainfit, "StackedModel")) control@times <- trainfit$times
   
   f <- function(test) {
+    if (is(train, "ModelRecipe")) {
+      test <- recipe(fitbit(trainfit, "x"), as.data.frame(test))
+    }
     df <- data.frame(Model = factor(model@name),
                      Resample = 1,
                      Case = as.data.frame(test, original = FALSE)$"(casenames)",
