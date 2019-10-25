@@ -15,8 +15,8 @@ setClass("MLControl",
 
 
 setClass("MLBootstrapControl",
-  slots = c(samples = "numeric"),
-  contains = "MLControl"
+  contains = "MLControl",
+  slots = c(samples = "numeric")
 )
 
 
@@ -31,9 +31,9 @@ setClass("MLBootOptimismControl",
 
 
 setClass("MLCrossValidationControl",
+  contains = "MLControl",
   slots = c(folds = "numeric",
-            repeats = "numeric"),
-  contains = "MLControl"
+            repeats = "numeric")
 )
 
 
@@ -48,14 +48,14 @@ setClass("MLCVOptimismControl",
 
 
 setClass("MLOOBControl",
-  slots = c(samples = "numeric"),
-  contains = "MLControl"
+  contains = "MLControl",
+  slots = c(samples = "numeric")
 )
 
 
 setClass("MLSplitControl",
-  slots = c(prop = "numeric"),
-  contains = "MLControl"
+  contains = "MLControl",
+  slots = c(prop = "numeric")
 )
 
 
@@ -74,10 +74,10 @@ setClass("MLFitBits",
 
 
 setClass("MLMetric",
+  contains = "function",
   slots = c(name = "character",
             label = "character",
-            maximize = "logical"),
-  contains = "function"
+            maximize = "logical")
 )
 
 
@@ -101,20 +101,20 @@ setClass("TunedModel", contains = "MLModel")
 
 
 setClass("MLModelFit",
-  slots = c(fitbits = "MLFitBits"),
-  contains = "VIRTUAL"
+  contains = "VIRTUAL",
+  slots = c(fitbits = "MLFitBits")
 )
 
 
-setClass("SVMModelFit", contain = c("MLModelFit", "ksvm"))
-setClass("SVMANOVAModelFit", contain = c("MLModelFit", "ksvm"))
-setClass("SVMBesselModelFit", contain = c("MLModelFit", "ksvm"))
-setClass("SVMLaplaceModelFit", contain = c("MLModelFit", "ksvm"))
-setClass("SVMLinearModelFit", contain = c("MLModelFit", "ksvm"))
-setClass("SVMPolyModelFit", contain = c("MLModelFit", "ksvm"))
-setClass("SVMRadialModelFit", contain = c("MLModelFit", "ksvm"))
-setClass("SVMSplineModelFit", contain = c("MLModelFit", "ksvm"))
-setClass("SVMTanhModelFit", contain = c("MLModelFit", "ksvm"))
+setClass("SVMModelFit", contains = c("MLModelFit", "ksvm"))
+setClass("SVMANOVAModelFit", contains = c("MLModelFit", "ksvm"))
+setClass("SVMBesselModelFit", contains = c("MLModelFit", "ksvm"))
+setClass("SVMLaplaceModelFit", contains = c("MLModelFit", "ksvm"))
+setClass("SVMLinearModelFit", contains = c("MLModelFit", "ksvm"))
+setClass("SVMPolyModelFit", contains = c("MLModelFit", "ksvm"))
+setClass("SVMRadialModelFit", contains = c("MLModelFit", "ksvm"))
+setClass("SVMSplineModelFit", contains = c("MLModelFit", "ksvm"))
+setClass("SVMTanhModelFit", contains = c("MLModelFit", "ksvm"))
 setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 
 
@@ -134,8 +134,8 @@ MLModelList <- setClass("MLModelList",
 
 
 setClass("Calibration",
-  slots = c(smoothed = "logical"),
-  contains = "data.frame"
+  contains = "data.frame",
+  slots = c(smoothed = "logical")
 )
 
 
@@ -160,17 +160,17 @@ setClass("OrderedBinaryConfusionMatrix",
 
 
 ConfusionSummary <- setClass("ConfusionSummary",
+  contains = "matrix",
   slots = c(total = "numeric",
             accuracy = "numeric",
             majority = "numeric",
-            kappa2 = "numeric"),
-  contains = "matrix"
+            kappa2 = "numeric")
 )
 
 
 setClass("Curves",
-  slots = c(metrics = "list"),
-  contains = "data.frame"
+  contains = "data.frame",
+  slots = c(metrics = "list")
 )
 
 
@@ -185,23 +185,23 @@ setClass("Performance",
 
 
 setClass("PerformanceDiff",
-  slots = c(model_names = "character"),
-  contains = "Performance"
+  contains = "Performance",
+  slots = c(model_names = "character")
 )
 
 
 PerformanceDiffTest <- setClass("PerformanceDiffTest",
-  slots = c(adjust = "character"),
-  contains = "array"
+  contains = "array",
+  slots = c(adjust = "character")
 )
 
 
 MLModelTune <- setClass("MLModelTune",
+  contains = "MLModel",
   slots = c(tune_grid = "tbl_df",
             performance = "Performance",
             selected = "list",
-            metric = "MLMetric"),
-  contains = "MLModel"
+            metric = "MLMetric")
 )
 
 
@@ -211,20 +211,20 @@ RecipeGrid <- setClass("RecipeGrid",
 
 
 setClass("Resamples",
+  contains = "data.frame",
   slots = c(control = "MLControl",
-            strata = "character"),
-  contains = "data.frame"
+            strata = "character")
 )
 
 
 setClass("TunedRecipe",
+  contains = "ModelRecipe",
   slots = c(grid = "RecipeGrid",
-            params = "list"),
-  contains = "ModelRecipe"
+            params = "list")
 )
 
 
 setClass("VarImp",
-  slots = c(center = "numeric", scale = "numeric"),
-  contains = "data.frame"
+  contains = "data.frame",
+  slots = c(center = "numeric", scale = "numeric")
 )
