@@ -60,11 +60,6 @@ setAs("TunedRecipe", "list",
 )
 
 
-setAs("TunedRecipe", "ModelRecipe",
-  function(from) structure(asS3(from), grid = NULL, params = NULL)
-)
-
-
 setAs("TunedRecipe", "recipe",
-  function(from) as(from, "ModelRecipe")
+  function(from) asS3(from)
 )

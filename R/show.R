@@ -40,6 +40,12 @@ print.MLModelTune <- function(x, ...) {
 }
 
 
+print.ModelRecipe <- function(x, ...) {
+  show(x)
+  invisible(x)
+}
+
+
 print.RecipeGrid <- function(x, ...) {
   show_title(x)
   print(asS3(x), ...)
@@ -259,6 +265,16 @@ setMethod("show", "MLModelList",
 )
 
 
+setMethod("show", "ModelRecipe",
+  function(object) {
+    show_title(object)
+    cat("\n")
+    print(as(object, "recipe"))
+    invisible()
+  }
+)
+
+
 setMethod("show", "MLModelTune",
   function(object) {
     print(object)
@@ -370,9 +386,7 @@ setMethod("show", "Resamples",
 
 setMethod("show", "TunedRecipe",
   function(object) {
-    show_title(object)
-    cat("\n")
-    print(as(object, "ModelRecipe"))
+    callNextMethod()
     cat("\nGrid:\n\n")
     print(object@grid)
     invisible()

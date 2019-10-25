@@ -1,5 +1,5 @@
 setOldClass("ModelFrame")
-setOldClass(c("ModelRecipe", "recipe"))
+setOldClass("recipe")
 setOldClass("Surv")
 setOldClass(c("SurvEvents", "SurvMatrix"))
 setOldClass(c("SurvProbs", "SurvMatrix"))
@@ -176,6 +176,11 @@ setClass("Curves",
 
 setClass("Lift",
   contains = "Curves"
+)
+
+
+setClass("ModelRecipe",
+  contains = "recipe"
 )
 
 

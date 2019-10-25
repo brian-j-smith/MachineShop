@@ -36,8 +36,13 @@ ModelRecipe.recipe <- function(object, ...) {
     object$steps[[i]]$terms <- c(step_terms, new_term)
   }
   
-  structure(object, class = c("ModelRecipe", "recipe"))
+  new("ModelRecipe", object)
 }
+
+
+setAs("ModelRecipe", "recipe",
+  function(from) asS3(from)
+)
 
 
 as.data.frame.ModelRecipe <- function(x, original = TRUE, ...) {
@@ -46,7 +51,7 @@ as.data.frame.ModelRecipe <- function(x, original = TRUE, ...) {
 
 
 bake.ModelRecipe <- function(object, new_data, ...) {
-  bake(structure(object, class = "recipe"), prep_recipe_data(new_data))
+  bake(as(object, "recipe"), new_data = prep_recipe_data(new_data))
 }
 
 
@@ -67,9 +72,7 @@ juice.ModelRecipe <- function(x, ...) {
 
 prep.ModelRecipe <- function(x, ...) {
   if (!fully_trained(x)) {
-    x_class <- class(x)
-    class(x) <- "recipe"
-    structure(prep(x, retain = FALSE), class = x_class)
+    new(class(x), prep(as(x, "recipe"), retain = FALSE))
   } else x
 }
 
