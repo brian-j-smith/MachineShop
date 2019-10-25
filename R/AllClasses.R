@@ -228,6 +228,13 @@ setClass("Resamples",
 )
 
 
+setClass("SelectedRecipe",
+  contains = "ModelRecipe",
+  slots = c(recipes = "list",
+            params = "list")
+)
+
+
 setClass("TunedRecipe",
   contains = "ModelRecipe",
   slots = c(grid = "RecipeGrid",

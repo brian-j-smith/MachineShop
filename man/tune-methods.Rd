@@ -41,11 +41,10 @@ tune(x, ...)
 \item{x}{defines a relationship between model predictor and response
 variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
 predictors, \code{\link{ModelFrame}}, untrained
-\code{\link[recipes]{recipe}}, or \code{\link{TunedRecipe}} object.
-Alternatively, a \link[=models]{model} function, call, or
-\link[=ModelList]{list} of these may be given first followed by objects
-defining the predictor and response relationship and the other tuning
-argument values.}
+\code{\link[recipes]{recipe}}, \code{\link{SelectedRecipe}}, or
+\code{\link{TunedRecipe}} object. Alternatively, a \link[=models]{model}
+function or call may be given first followed by objects defining the
+predictor and response relationship and the other tuning argument values.}
 
 \item{...}{arguments passed to the \link{performance} functions.}
 

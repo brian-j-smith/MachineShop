@@ -497,6 +497,17 @@ setMethod("show", "Resamples",
 )
 
 
+setMethod("show", "SelectedRecipe",
+  function(object) {
+    show_title(object)
+    cat("\n")
+    print(object@recipes)
+    show(object@params$control)
+    invisible()
+  }
+)
+
+
 setMethod("show", "TunedRecipe",
   function(object) {
     print(object)
