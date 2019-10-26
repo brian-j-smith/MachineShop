@@ -229,7 +229,7 @@ setMethod("show", "MLModel",
 
 setMethod("show", "MLModelFit",
   function(object) {
-    show(unMLModelFit(object))
+    print(object)
     invisible()
   }
 )
