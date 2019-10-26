@@ -198,8 +198,10 @@ print.SurvMatrix <- function(x, n = MachineShop::settings("max.print"), ...) {
 #' 
 print.TunedRecipe <- function(x, n = MachineShop::settings("max.print"), ...) {
   NextMethod()
-  cat("\nGrid:\n\n")
+  cat("\n")
   print_items(x@grid, n = n)
+  cat("\n")
+  show(x@params$control)
   invisible(x)
 }
 

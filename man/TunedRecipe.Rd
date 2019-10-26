@@ -32,7 +32,7 @@ summary statistic on resampled metric values for recipe tuning.}
 \code{TunedRecipe} class object that inherits from \code{recipe}.
 }
 \description{
-Recipe tuned over a grid of parameter values.
+Recipe tuning over a grid of parameter values.
 }
 \examples{
 library(recipes)

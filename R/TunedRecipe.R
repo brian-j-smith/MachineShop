@@ -1,6 +1,6 @@
 #' Tuned Recipe
 #' 
-#' Recipe tuned over a grid of parameter values.
+#' Recipe tuning over a grid of parameter values.
 #' 
 #' @param x untrained \code{\link[recipes]{recipe}}.
 #' @param grid \code{RecipeGrid} containing parameter values at which to
@@ -38,26 +38,22 @@ TunedRecipe <- function(x, grid = expand_steps(),
                         stat = MachineShop::settings("stat.Tune"),
                         cutoff = MachineShop::settings("cutoff")) {
   
-  obj <- new("TunedRecipe", ModelRecipe(x), grid = grid,
-             params = list(control = control, metrics = metrics, stat = stat,
-                           cutoff = cutoff))
+  object <- new("TunedRecipe", ModelRecipe(x),
+                grid = grid,
+                params = list(control = getMLObject(control, "MLControl"),
+                              metrics = metrics, stat = stat, cutoff = cutoff))
   
-  grid_names <- names(obj@grid)
-  step_ids <- sapply(obj$steps, getElement, name = "id")
+  grid_names <- names(object@grid)
+  step_ids <- sapply(object$steps, getElement, name = "id")
   found <- grid_names %in% step_ids
   if (!all(found)) {
     stop("grid step names ", toString(paste0("'", grid_names[!found], "'")),
          " not found in recipe step ids ", toString(paste0("'", step_ids, "'")))
   }
   
-  obj
+  object
   
 }
-
-
-setAs("TunedRecipe", "list",
-  function(from) c(list(grid = from@grid), from@params)
-)
 
 
 setAs("TunedRecipe", "recipe",
