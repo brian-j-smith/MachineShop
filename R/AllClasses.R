@@ -174,6 +174,12 @@ setClass("Curves",
 )
 
 
+setClass("Grid",
+  slots = c(length = "integer",
+            random = "ANY")
+)
+
+
 setClass("Lift",
   contains = "Curves"
 )

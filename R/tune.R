@@ -157,8 +157,8 @@ tune.MLModelList <- function(x, ...) {
     if (is(grid, "character")) grid <- fget(grid)
     if (is(grid, "function")) grid <- grid()
     if (is(grid, "Grid")) {
-      random <- grid$random
-      grid <- grid$length
+      random <- grid@random
+      grid <- grid@length
     }
     grid <- if (is(grid, "numeric")) {
       grid(x, data, model = model, length = grid, random = random)

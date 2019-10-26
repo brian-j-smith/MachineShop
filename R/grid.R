@@ -4,16 +4,29 @@
 #' 
 #' @param length number of values to be generated for each model parameter in
 #'   the tuning grid.
-#' @param random number of points to be randomly sampled from the tuning grid or
-#'   \code{FALSE} if all points are to be used.
+#' @param random number of unique grid points to sample at random, \code{Inf}
+#'   for all random points, or \code{FALSE} for all fixed points.
+#' 
+#' @return \code{Grid} class object.
 #' 
 #' @seealso \code{\link{tune}}
 #' 
 Grid <- function(length = 3, random = FALSE) {
-  structure(
-    list(length = length, random = random),
-    class = "Grid"
-  )
+  if (is(length, "numeric")) {
+    length <- as.integer(length[[1]])
+    if (length <= 0) stop("grid parameter 'length' must be >= 1")
+  } else {
+    stop ("grid parameter 'length' must be numeric")
+  }
+  
+  if (isTRUE(random) || is(random, "numeric")) {
+    random <- floor(random[[1]])
+    if (random <= 0) stop ("number of 'random' grid points must be >= 1")
+  } else if (!isFALSE(random)) {
+    stop("'random' grid value must be logical or numeric")
+  }
+  
+  new("Grid", length = length, random = random)
 }
 
 

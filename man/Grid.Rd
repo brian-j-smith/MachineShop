@@ -10,8 +10,11 @@ Grid(length = 3, random = FALSE)
 \item{length}{number of values to be generated for each model parameter in
 the tuning grid.}
 
-\item{random}{number of points to be randomly sampled from the tuning grid or
-\code{FALSE} if all points are to be used.}
+\item{random}{number of unique grid points to sample at random, \code{Inf}
+for all random points, or \code{FALSE} for all fixed points.}
+}
+\value{
+\code{Grid} class object.
 }
 \description{
 Defines the control parameters for a tuning grid.

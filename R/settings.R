@@ -231,15 +231,17 @@ MachineShop_global <- as.environment(list(
     grid = list(
       value = 3,
       check = function(x) {
-        result <- try({
-          if (is.character(x)) x <- fget(x)
-          if (is.function(x)) x <- x()
-          stopifnot((is.numeric(x) && length(x) == 1) || is(x, "Grid"))
-        }, silent = TRUE)
-        if (is(result, "try-error")) {
-          DomainError(x, "must be a numeric value or ",
-                         "a Grid function, function name, or call")
-        } else x
+        if (is(x, "Grid")) {
+          x
+        } else if (identical(x, "Grid") || identical(x, Grid)) {
+          Grid()
+        } else {
+          result <- try(Grid(x), silent = TRUE)
+          if (is(result, "try-error")) {
+            DomainError(x, "must be a positive numeric value or ",
+                           "a Grid function, function name, or call")
+          } else result
+        }
       }
     ),
     

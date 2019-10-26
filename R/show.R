@@ -444,6 +444,19 @@ setMethod("show", "Curves",
 )
 
 
+setMethod("show", "Grid",
+  function(object) {
+    show_title(object)
+    cat("\n",
+        "Length: ", object@length, "\n",
+        "Random sample: ", object@random, "\n",
+        sep = ""
+    )
+    invisible()
+  }
+)
+
+
 setMethod("show", "Performance",
   function(object) {
     print(object)
