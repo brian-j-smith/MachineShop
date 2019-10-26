@@ -4,6 +4,7 @@
 \alias{print}
 \alias{print.Calibration}
 \alias{print.Curves}
+\alias{print.MLModel}
 \alias{print.MLModelTune}
 \alias{print.Performance}
 \alias{print.RecipeGrid}
@@ -17,6 +18,8 @@
   ...)
 
 \method{print}{Curves}(x, n = MachineShop::settings("max.print"), ...)
+
+\method{print}{MLModel}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{MLModelTune}(x, n = MachineShop::settings("max.print"),
   ...)

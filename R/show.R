@@ -51,8 +51,11 @@ print.MLMetric <- function(x, ...) {
 }
 
 
-print.MLModel <- function(x, ...) {
+#' @rdname print-methods
+#' 
+print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   show_title(x)
+  x <- getMLObject(x, "MLModel")
   info <- modelinfo(x)[[1]]
   cat("\n",
       "Model name: ", x@name, "\n",
@@ -61,9 +64,30 @@ print.MLModel <- function(x, ...) {
       "Response types: ", toString(info$response_types), "\n",
       "Tuning grid: ", info$grid, "\n",
       "Variable importance: ", info$varimp, "\n\n",
-      "Parameters:\n",
       sep = "")
-  cat(str(x@params))
+  if (is(x, "SelectedModel")) {
+    cat("Selection Parameters:\n\n")
+    print_items(x@params$models, n = n)
+    show(x@params$control)
+  } else if (is(x, "TunedModel")) {
+    cat("Tuning Parameters:\n\n")
+    print(x@params$model)
+    cat("\n")
+    grid <- x@params$grid
+    if (length(dim(grid)) == 2) {
+      cat("Grid:\n")
+      print_items(grid, n = n)
+    } else if (is(grid, "numeric")) {
+      cat("Grid length:", grid, "\n")
+    } else {
+      print(grid)
+    }
+    cat("\n")
+    show(x@params$control)
+  } else {
+    cat("Parameters:\n")
+    cat(str(x@params))
+  }
   invisible(x)
 }
 
@@ -503,6 +527,18 @@ print_items.data.frame <- function(x, n, ...) {
   if (diff > 0) {
     print(head(x, n))
     cat("... with ", diff, " more row", if (diff > 1) "s", "\n", sep ="")
+  } else {
+    print(x)
+  }
+}
+
+
+print_items.list <- function(x, n, ...) {
+  diff <- length(x) - n
+  if (diff > 0) {
+    print(head(x, n))
+    cat("... with ", diff, " more element", if (diff > 1) "s", ": ",
+        toString(tail(names(x), diff)), "\n\n", sep = "")
   } else {
     print(x)
   }
