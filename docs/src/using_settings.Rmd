@@ -17,6 +17,9 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `grid`
   : number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a `Grid` function, function name, or call [default: 3].
 
+`max.print`
+  : number of models or data rows to show with print methods or `Inf` to show all [default: 10].
+
 `method.EmpiricalSurv`
   : character string specifying the empirical method of estimating baseline survival curves for Cox proportional hazards-based models.  Choices are `"breslow"`, `"efron"` (default), or `"fleming-harrington"`.
 

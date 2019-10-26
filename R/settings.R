@@ -33,6 +33,8 @@
 #'     automatically for \link[=tune]{tuning} of models that have pre-defined
 #'     grids or a \code{\link{Grid}} function, function name, or call
 #'     [default: 3].}
+#'   \item{\code{max.print}}{number of models or data rows to show with print
+#'     methods or \code{Inf} to show all [default: 10].}
 #'   \item{\code{method.EmpiricalSurv}}{character string specifying the
 #'     empirical method of estimating baseline survival curves for Cox
 #'     proportional hazards-based models.  Choices are \code{"breslow"},
@@ -238,6 +240,16 @@ MachineShop_global <- as.environment(list(
           DomainError(x, "must be a numeric value or ",
                          "a Grid function, function name, or call")
         } else x
+      }
+    ),
+    
+    max.print = list(
+      value = 10,
+      check = function(x) {
+        result <- try(floor(x[[1]]), silent = TRUE)
+        if (is(result, "try-error") || result <= 0) {
+          DomainError(x, "must be a positive number")
+        } else result
       }
     ),
     

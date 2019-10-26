@@ -43,6 +43,8 @@ behaviors of functions in the \pkg{MachineShop} package.
     automatically for \link[=tune]{tuning} of models that have pre-defined
     grids or a \code{\link{Grid}} function, function name, or call
     [default: 3].}
+  \item{\code{max.print}}{number of models or data rows to show with print
+    methods or \code{Inf} to show all [default: 10].}
   \item{\code{method.EmpiricalSurv}}{character string specifying the
     empirical method of estimating baseline survival curves for Cox
     proportional hazards-based models.  Choices are \code{"breslow"},

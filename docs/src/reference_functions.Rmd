@@ -58,6 +58,7 @@
 |                               |                                              | 
 |-------------------------------|----------------------------------------------|
 | `r rdoc_url("plot")`          | Graphical summaries                          |
+| `r rdoc_url("print")`         | Object summaries                             |
 | `r rdoc_url("summary")`       | Tabular summaries                            |
 
 &nbsp;

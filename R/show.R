@@ -1,3 +1,17 @@
+#' Print MachineShop Objects
+#' 
+#' Print methods for objects defined in the \pkg{MachineShop} package.
+#'  
+#' @name print
+#' @rdname print-methods
+#' 
+#' @param x object to print.
+#' @param n integer number of models or data frame rows to show.
+#' @param ... arguments passed to other methods.
+#' 
+NULL
+
+
 print.MLModel <- function(x, ...) {
   show_title(x)
   info <- modelinfo(x)[[1]]
@@ -21,15 +35,17 @@ print.MLModelFit <- function(x, ...) {
 }
 
 
-print.MLModelTune <- function(x, ...) {
+#' @rdname print-methods
+#' 
+print.MLModelTune <- function(x, n = MachineShop::settings("max.print"), ...) {
   NextMethod()
   selected <- x@selected
   if (length(x@tune_grid)) {
     cat("\nGrid (selected = ", selected$index, "):\n", sep = "")
-    print(x@tune_grid, ...)
+    print_items(x@tune_grid, n = n)
     cat("\n")
   }
-  print(x@performance)
+  print(x@performance, n = n)
   cat("\n")
   if (!is.na(dim(x@performance)[3])) {
     model_names <- dimnames(x@performance)[[3]]
@@ -41,29 +57,77 @@ print.MLModelTune <- function(x, ...) {
 
 
 print.ModelRecipe <- function(x, ...) {
-  show(x)
-  invisible(x)
-}
-
-
-print.RecipeGrid <- function(x, ...) {
   show_title(x)
-  print(asS3(x), ...)
+  cat("\n")
+  NextMethod()
   invisible(x)
 }
 
 
-print.Resamples <- function(x, ...) {
-  show(x)
-  invisible(x)
-}
-
-
-print.SurvMatrix <- function(x, ...) {
+#' @rdname print-methods
+#' 
+print.Performance <- function(x, n = MachineShop::settings("max.print"), ...) {
   show_title(x)
-  print(as(x, "matrix"))
+  dn <- dimnames(x)
+  cat("\nMetrics:", toString(dn[[2]]), "\n")
+  if (length(dn) > 2) {
+    cat("Models: ")
+    print_items(dn[[3]], n = n)
+  }
+  invisible(x)
+}
+
+
+#' @rdname print-methods
+#' 
+print.RecipeGrid <- function(x, n = MachineShop::settings("max.print"), ...) {
+  show_title(x)
+  print(asS3(x), n = n)
+  invisible(x)
+}
+
+
+#' @rdname print-methods
+#' 
+print.Resamples <- function(x, n = MachineShop::settings("max.print"), ...) {
+  show_title(x)
+  cat("\nModels: ")
+  print_items(levels(x$Model), n = n)
+  if (isTRUE(nzchar(x@strata))) {
+    cat("Stratification variable:", x@strata, "\n")
+  }
+  cat("\n")
+  show(x@control)
+  invisible(x)
+}
+
+
+#' @rdname print-methods
+#' 
+print.SurvMatrix <- function(x, n = MachineShop::settings("max.print"), ...) {
+  show_title(x)
+  print_items(as.data.frame(as(x, "matrix")), n = n)
   cat("Attribute \"times\":\n")
   print(time(x))
+  invisible(x)
+}
+
+
+#' @rdname print-methods
+#' 
+print.TunedRecipe <- function(x, n = MachineShop::settings("max.print"), ...) {
+  NextMethod()
+  cat("\nGrid:\n\n")
+  print_items(x@grid, n = n)
+  invisible(x)
+}
+
+
+#' @rdname print-methods
+#' 
+print.VarImp <- function(x, n = MachineShop::settings("max.print"), ...) {
+  show_title(x)
+  print_items(as(x, "data.frame"), n = n)
   invisible(x)
 }
 
@@ -267,9 +331,7 @@ setMethod("show", "MLModelList",
 
 setMethod("show", "ModelRecipe",
   function(object) {
-    show_title(object)
-    cat("\n")
-    print(as(object, "recipe"))
+    print(object)
     invisible()
   }
 )
@@ -332,14 +394,7 @@ setMethod("show", "Curves",
 
 setMethod("show", "Performance",
   function(object) {
-    show_title(object)
-    dn <- dimnames(object)
-    cat("\n",
-        "Metrics: ", toString(dn[[2]], width = show_width(offset = 9)), "\n",
-        sep = "")
-    if (length(dim(object)) > 2) {
-      cat("Models:", toString(dn[[3]], width = show_width(offset = 8)), "\n")
-    }
+    print(object)
     invisible()
   }
 )
@@ -369,16 +424,7 @@ setMethod("show", "RecipeGrid",
 
 setMethod("show", "Resamples",
   function(object) {
-    show_title(object)
-    cat("\n",
-        "Models: ",
-        toString(levels(object$Model), width = show_width(offset = 8)), "\n",
-        sep = "")
-    if (isTRUE(nzchar(object@strata))) {
-      cat("Stratification variable:", object@strata, "\n")
-    }
-    cat("\n")
-    show(object@control)
+    print(object)
     invisible()
   }
 )
@@ -386,9 +432,7 @@ setMethod("show", "Resamples",
 
 setMethod("show", "TunedRecipe",
   function(object) {
-    callNextMethod()
-    cat("\nGrid:\n\n")
-    print(object@grid)
+    print(object)
     invisible()
   }
 )
@@ -396,11 +440,50 @@ setMethod("show", "TunedRecipe",
 
 setMethod("show", "VarImp",
   function(object) {
-    show_title(object)
-    print(as(object, "data.frame"))
+    print(object)
     invisible()
   }
 )
+
+
+#################### Print Utility Functions ####################
+
+
+print_items <- function(x, ...) {
+  UseMethod("print_items")
+}
+
+
+print_items.default <- function(x, ...) {
+  print(x)
+}
+
+
+print_items.character <- function(x, n, ...) {
+  diff <- length(x) - n
+  str <- if (diff > 0) {
+    paste0(toString(head(x, n)), "... with ", diff, " more")
+  } else {
+    toString(x)
+  }
+  cat(str, "\n")
+}
+
+
+print_items.data.frame <- function(x, n, ...) {
+  diff <- nrow(x) - n
+  if (diff > 0) {
+    print(head(x, n))
+    cat("... with ", diff, " more row", if (diff > 1) "s", "\n", sep ="")
+  } else {
+    print(x)
+  }
+}
+
+
+print_items.tbl <- function(x, n, ...) {
+  print(x, n = n)
+}
 
 
 show_title <- function(x, ...) {
@@ -415,9 +498,4 @@ show_title.default <- function(x, ...) {
 
 show_title.character <- function(x, ...) {
   cat("Object of class \"", x, "\"\n", sep = "")
-}
-
-
-show_width <- function(offset = 0, min = max(80 - offset, 60)) {
-  max(getOption("width") - offset, min)
 }
