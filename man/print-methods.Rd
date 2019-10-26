@@ -2,6 +2,8 @@
 % Please edit documentation in R/show.R
 \name{print}
 \alias{print}
+\alias{print.Calibration}
+\alias{print.Curves}
 \alias{print.MLModelTune}
 \alias{print.Performance}
 \alias{print.RecipeGrid}
@@ -11,6 +13,11 @@
 \alias{print.VarImp}
 \title{Print MachineShop Objects}
 \usage{
+\method{print}{Calibration}(x, n = MachineShop::settings("max.print"),
+  ...)
+
+\method{print}{Curves}(x, n = MachineShop::settings("max.print"), ...)
+
 \method{print}{MLModelTune}(x, n = MachineShop::settings("max.print"),
   ...)
 

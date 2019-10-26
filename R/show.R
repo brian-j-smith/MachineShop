@@ -12,6 +12,45 @@
 NULL
 
 
+#' @rdname print-methods
+#' 
+print.Calibration <- function(x, n = MachineShop::settings("max.print"), ...) {
+  show_title(x)
+  print_items(as(x, "data.frame"), n = n)
+  invisible(x)
+}
+
+
+#' @rdname print-methods
+#' 
+print.Curves <- function(x, n = MachineShop::settings("max.print"), ...) {
+  show_title(x)
+  cat("\n",
+      "Metrics: ",
+      "x = ", x@metrics$x@label, ", ",
+      "y = ", x@metrics$y@label, "\n\n",
+      sep = "")
+  print_items(as(x, "data.frame"), n = n)
+  invisible(x)
+}
+
+
+print.MLMetric <- function(x, ...) {
+  show_title(x)
+  cat("\n",
+      "Metric name: ", x@name, "\n",
+      "Label: ", x@label, "\n",
+      "Maximize: ", x@maximize, "\n\n",
+      sep = "")
+  info <- metricinfo(x)[[1]]
+  cat("Arguments:\n")
+  print(info$arguments)
+  cat("\nTypes:\n")
+  print(info$response_types)
+  invisible(x)
+}
+
+
 print.MLModel <- function(x, ...) {
   show_title(x)
   info <- modelinfo(x)[[1]]
@@ -31,6 +70,24 @@ print.MLModel <- function(x, ...) {
 
 print.MLModelFit <- function(x, ...) {
   print(unMLModelFit(x), ...)
+  invisible(x)
+}
+
+
+print.MLModelFunction <- function(x, ...) {
+  show_title(x)
+  info_list <- modelinfo(x)
+  info <- info_list[[1]]
+  cat("\n",
+      "Model name: ", names(info_list), "\n",
+      "Label: ", info$label, "\n",
+      "Packages: ", toString(info$packages), "\n",
+      "Response types: ", toString(info$response_types), "\n",
+      "Tuning grid: ", info$grid, "\n",
+      "Variable importance: ", info$varimp, "\n\n",
+      "Arguments:\n",
+      sep = "")
+  print(info$arguments)
   invisible(x)
 }
 
@@ -267,17 +324,7 @@ setMethod("show", "MLTrainControl",
 
 setMethod("show", "MLMetric",
   function(object) {
-    show_title(object)
-    cat("\n",
-        "Metric name: ", object@name, "\n",
-        "Label: ", object@label, "\n",
-        "Maximize: ", object@maximize, "\n\n",
-        sep = "")
-    info <- metricinfo(object)[[1]]
-    cat("Arguments:\n")
-    print(info$arguments)
-    cat("\nTypes:\n")
-    print(info$response_types)
+    print(object)
     invisible()
   }
 )
@@ -301,19 +348,7 @@ setMethod("show", "MLModelFit",
 
 setMethod("show", "MLModelFunction",
   function(object) {
-    show_title(object)
-    info_list <- modelinfo(object)
-    info <- info_list[[1]]
-    cat("\n",
-        "Model name: ", names(info_list), "\n",
-        "Label: ", info$label, "\n",
-        "Packages: ", toString(info$packages), "\n",
-        "Response types: ", toString(info$response_types), "\n",
-        "Tuning grid: ", info$grid, "\n",
-        "Variable importance: ", info$varimp, "\n\n",
-        "Arguments:\n",
-        sep = "")
-    print(info$arguments)
+    print(object)
     invisible()
   }
 )
@@ -347,8 +382,7 @@ setMethod("show", "MLModelTune",
 
 setMethod("show", "Calibration",
   function(object) {
-    show_title(object)
-    print(as(object, "data.frame"))
+    print(object)
     invisible()
   }
 )
@@ -380,13 +414,7 @@ setMethod("show", "ConfusionSummary",
 
 setMethod("show", "Curves",
   function(object){
-    show_title(object)
-    cat("\n",
-        "Metrics: ",
-        "x = ", object@metrics$x@label, ", ",
-        "y = ", object@metrics$y@label, "\n\n",
-        sep = "")
-    print(as(object, "data.frame"))
+    print(object)
     invisible()
   }
 )
