@@ -35,8 +35,9 @@ NULL
 
 #' @rdname diff-methods
 #' 
-diff.MLModelTune <- function(x, ...) {
-  diff(x@performance)
+diff.MLModel <- function(x, ...) {
+  if (is.null(x@tune)) stop("no tuning results to diff")
+  diff(x@tune@performance)
 }
 
 

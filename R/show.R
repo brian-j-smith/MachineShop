@@ -55,11 +55,11 @@ print.MLMetric <- function(x, ...) {
 #' 
 print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   show_title(x)
-  x <- getMLObject(x, "MLModel")
   info <- modelinfo(x)[[1]]
+  is_tuned <- !is.null(x@tune)
   cat("\n",
       "Model name: ", x@name, "\n",
-      "Label: ", info$label, "\n",
+      "Label: ", if (is_tuned) "Tuned ", info$label, "\n",
       "Packages: ", toString(info$packages), "\n",
       "Response types: ", toString(info$response_types), "\n",
       "Tuning grid: ", info$grid, "\n",
@@ -85,6 +85,10 @@ print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   } else {
     cat("Parameters:\n")
     cat(str(x@params))
+  }
+  if (is_tuned) {
+    cat("\n")
+    print(x@tune, n = n)
   }
   invisible(x)
 }
@@ -116,21 +120,19 @@ print.MLModelFunction <- function(x, ...) {
 
 #' @rdname print-methods
 #' 
-print.MLModelTune <- function(x, n = MachineShop::settings("max.print"), ...) {
-  NextMethod()
-  selected <- x@selected
-  if (length(x@tune_grid)) {
-    cat("\nGrid (selected = ", selected$index, "):\n", sep = "")
-    print_items(x@tune_grid, n = n)
+print.MLTune <- function(x, n = MachineShop::settings("max.print"), ...) {
+  show_title(x)
+  if (length(x@grid)) {
+    cat("\nGrid (selected = ", x@selected, "):\n", sep = "")
+    print_items(x@grid, n = n)
     cat("\n")
   }
   print(x@performance, n = n)
   cat("\n")
-  if (!is.na(dim(x@performance)[3])) {
-    model_names <- dimnames(x@performance)[[3]]
-    cat("Selected model:", model_names[selected$index], "\n")
+  if (length(x@values) > 1) {
+    cat("Selected model:", names(x@values)[x@selected], "\n")
   }
-  cat(names(selected$value), "value:", selected$value, "\n")
+  cat(names(x@selected), "value:", x@values[x@selected], "\n")
   invisible(x)
 }
 
@@ -378,7 +380,7 @@ setMethod("show", "MLModelFunction",
 )
 
 
-setMethod("show", "ModelRecipe",
+setMethod("show", "MLTune",
   function(object) {
     print(object)
     invisible()
@@ -386,7 +388,7 @@ setMethod("show", "ModelRecipe",
 )
 
 
-setMethod("show", "MLModelTune",
+setMethod("show", "ModelRecipe",
   function(object) {
     print(object)
     invisible()

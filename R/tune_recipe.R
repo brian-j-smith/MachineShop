@@ -42,12 +42,12 @@ tune_recipe.SelectedRecipe <- function(x, model, ...) {
   perf_stats <- numeric(n)
   for (i in seq_len(n)) {
     rec <- setdata(recipes[[i]])
-    tuned_model <- tune(model, rec)
-    perf_stats[i] <- tuned_model@selected$value
+    tune <- tune(model, rec)@tune
+    perf_stats[i] <- tune@values[tune@selected]
   }
   
-  index <- ifelse(tuned_model@metric@maximize, which.max, which.min)(perf_stats)
-  setdata(recipes[[index]])
+  selected <- ifelse(tune@metric@maximize, which.max, which.min)(perf_stats)
+  setdata(recipes[[selected]])
   
 }
 
@@ -67,13 +67,13 @@ tune_recipe.TunedRecipe <- function(x, model, ...) {
   n <- nrow(grid)
   perf_stats <- numeric(n)
   for (i in seq_len(n)) {
-    x <- eval(as.call(c(update_x, grid[i, , drop = FALSE])))
-    tuned_model <- tune(model, x)
-    perf_stats[i] <- tuned_model@selected$value
+    x <- eval(as.call(c(update_x, grid[i, ])))
+    tune <- tune(model, x)@tune
+    perf_stats[i] <- tune@values[tune@selected]
   }
   
-  index <- ifelse(tuned_model@metric@maximize, which.max, which.min)(perf_stats)
-  eval(as.call(c(update_x, grid[index, , drop = FALSE])))
+  selected <- ifelse(tune@metric@maximize, which.max, which.min)(perf_stats)
+  eval(as.call(c(update_x, grid[selected, ])))
   
 }
 

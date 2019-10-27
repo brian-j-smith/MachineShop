@@ -45,7 +45,7 @@ a \code{\link{SelectedModel}} object for model selection or a
 \item{y}{response variable.}
 }
 \value{
-\code{MLModelTune} class object that inherits from \code{MLModel}.
+\code{MLModel} class object containing the tuning results.
 }
 \description{
 Predictive peformance-based tuning of a model over a grid of parameters

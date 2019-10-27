@@ -19,7 +19,7 @@
 #'   [default: all].
 #' @param se logical indicating whether to include standard error bars.
 #' @param stat function or character string naming a function to compute a
-#'   summary statistic on resampled metrics for \code{MLModelTune} line plots
+#'   summary statistic on resampled metrics for tuned \code{MLModel} line plots
 #'   and \code{Resamples} model ordering.  For \code{Curves} and \code{Lift}
 #'   classes, plots are of resampled metrics aggregated by the statistic if
 #'   given or of resample-specific metrics if \code{NULL}.
@@ -191,15 +191,17 @@ plot.Lift <- function(x, find = NULL, diagonal = TRUE,
 
 #' @rdname plot-methods
 #' 
-plot.MLModelTune <- function(x, metrics = NULL,
-                             stat = MachineShop::settings("stat.Tune"),
-                             type = c("boxplot", "density", "errorbar", "line",
-                                      "violin"), ...) {
-  perf <- x@performance
+plot.MLModel <- function(x, metrics = NULL,
+                         stat = MachineShop::settings("stat.Tune"),
+                         type = c("boxplot", "density", "errorbar", "line",
+                                  "violin"), ...) {
+  if (is.null(x@tune)) stop("no tuning results to plot")
+  
+  perf <- x@tune@performance
   stat <- fget(stat)
   type <- match.arg(type)
   if (type == "line") {
-    grid <- x@tune_grid
+    grid <- x@tune@grid
     if (any(dim(grid) == 0)) stop("no tuning parameters to plot")
     stats <- apply(perf, c(3, 2), function(x) stat(na.omit(x))) %>%
       as.data.frame.table

@@ -5,7 +5,7 @@
 \alias{summary.Confusion}
 \alias{summary.ConfusionMatrix}
 \alias{summary.Curves}
-\alias{summary.MLModelTune}
+\alias{summary.MLModel}
 \alias{summary.Performance}
 \alias{summary.Resamples}
 \title{Model Performance Summary}
@@ -17,7 +17,7 @@
 \method{summary}{Curves}(object,
   stat = MachineShop::settings("stat.Curves"), ...)
 
-\method{summary}{MLModelTune}(object,
+\method{summary}{MLModel}(object,
   stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
 
 \method{summary}{Performance}(object,

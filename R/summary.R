@@ -117,17 +117,18 @@ summary.Curves <- function(object, stat = MachineShop::settings("stat.Curves"),
 }
 
 
-summary.MLModelFit <- function(object, ...) {
-  summary(unMLModelFit(object))
+#' @rdname summary-methods
+#' 
+summary.MLModel <- function(object, stats =
+                              MachineShop::settings("stats.Resamples"),
+                            na.rm = TRUE, ...) {
+  if (is.null(object@tune)) stop("no tuning results to summarize")
+  summary(object@tune@performance, stats = stats, na.rm = na.rm, ...)
 }
 
 
-#' @rdname summary-methods
-#' 
-summary.MLModelTune <- function(object, stats =
-                                  MachineShop::settings("stats.Resamples"),
-                                na.rm = TRUE, ...) {
-  summary(object@performance, stats = stats, na.rm = na.rm, ...)
+summary.MLModelFit <- function(object, ...) {
+  summary(unMLModelFit(object))
 }
 
 

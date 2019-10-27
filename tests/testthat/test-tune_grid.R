@@ -56,9 +56,9 @@ for (model in models) {
   test_that("tune grid", {
     skip_if_not(TEST_MODEL_TUNING)
     with_parallel({
-      expect_is(test_tune_grid1(model), "MLModelTune")
-      expect_is(test_tune_grid2(model), "MLModelTune")
-      expect_is(test_tune_grid3(model), "MLModelTune")
+      expect_is(test_tune_grid1(model), "MLModel")
+      expect_is(test_tune_grid2(model), "MLModel")
+      expect_is(test_tune_grid3(model), "MLModel")
     })
   })
   

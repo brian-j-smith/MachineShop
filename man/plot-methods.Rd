@@ -7,7 +7,7 @@
 \alias{plot.ConfusionMatrix}
 \alias{plot.Curves}
 \alias{plot.Lift}
-\alias{plot.MLModelTune}
+\alias{plot.MLModel}
 \alias{plot.PartialDependence}
 \alias{plot.Performance}
 \alias{plot.Resamples}
@@ -27,7 +27,7 @@
 \method{plot}{Lift}(x, find = NULL, diagonal = TRUE,
   stat = MachineShop::settings("stat.Curves"), ...)
 
-\method{plot}{MLModelTune}(x, metrics = NULL,
+\method{plot}{MLModel}(x, metrics = NULL,
   stat = MachineShop::settings("stat.Tune"), type = c("boxplot",
   "density", "errorbar", "line", "violin"), ...)
 
@@ -59,7 +59,7 @@ model \link{tune}, partial \link{dependence}, \link{performance},
 line.}
 
 \item{stat}{function or character string naming a function to compute a
-summary statistic on resampled metrics for \code{MLModelTune} line plots
+summary statistic on resampled metrics for tuned \code{MLModel} line plots
 and \code{Resamples} model ordering.  For \code{Curves} and \code{Lift}
 classes, plots are of resampled metrics aggregated by the statistic if
 given or of resample-specific metrics if \code{NULL}.}

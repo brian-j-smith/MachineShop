@@ -21,7 +21,7 @@
 #'   \code{\link{TunedModel}} object for model tuning.
 #' @param ... arguments passed to other methods.
 #' 
-#' @return \code{MLModelTune} class object that inherits from \code{MLModel}.
+#' @return \code{MLModel} class object containing the tuning results.
 #' 
 #' @seealso \code{\link{fit}}, \code{\link{performance}}, \code{\link{metrics}},
 #' \code{\link{plot}}, \code{\link{summary}}
@@ -186,15 +186,16 @@ tune_depwarn <- function(...) {
   }
   
   perf <- do.call(Performance, perf_list)
-  index <- ifelse(metric@maximize, which.max, which.min)(perf_stats)
+  selected <- ifelse(metric@maximize, which.max, which.min)(perf_stats)
   
-  MLModelTune(models[[index]],
-              tune_grid = grid,
-              performance = perf,
-              selected = list(
-                index = index,
-                value = structure(perf_stats[index], names = colnames(perf)[1])
-              ),
-              metric = metric)
+  tuned_model <- models[[selected]]
+  tuned_model@tune <- MLTune(
+    grid = grid,
+    performance = perf,
+    selected = structure(selected, names = colnames(perf)[1]),
+    values = perf_stats,
+    metric = metric
+  )
+  tuned_model
 
 }

@@ -90,7 +90,8 @@ setClass("MLModel",
             params = "list",
             grid = "function",
             fit = "function",
-            fitbits = "MLFitBits")
+            fitbits = "MLFitBits",
+            tune = "ANY")
 )
 
 
@@ -202,11 +203,11 @@ PerformanceDiffTest <- setClass("PerformanceDiffTest",
 )
 
 
-MLModelTune <- setClass("MLModelTune",
-  contains = "MLModel",
-  slots = c(tune_grid = "tbl_df",
+MLTune <- setClass("MLTune",
+  slots = c(grid = "tbl_df",
             performance = "Performance",
-            selected = "list",
+            selected = "numeric",
+            values = "numeric",
             metric = "MLMetric")
 )
 

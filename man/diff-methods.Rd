@@ -2,12 +2,12 @@
 % Please edit documentation in R/diff.R
 \name{diff}
 \alias{diff}
-\alias{diff.MLModelTune}
+\alias{diff.MLModel}
 \alias{diff.Performance}
 \alias{diff.Resamples}
 \title{Model Performance Differences}
 \usage{
-\method{diff}{MLModelTune}(x, ...)
+\method{diff}{MLModel}(x, ...)
 
 \method{diff}{Performance}(x, ...)
 
