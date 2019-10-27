@@ -207,15 +207,27 @@ nvars <- function(x, model) {
 params <- function(envir) {
   args <- as.list(envir)
   is_missing <- sapply(args, function(x) is.symbol(x) && !nzchar(x))
-  if (any(is_missing)) stop("missing values for required argument(s) ",
-                            toString(names(args)[is_missing]))
+  if (any(is_missing)) {
+    subnames <- names(args)[is_missing]
+    stop("missing values for required argument", plural_suffix(subnames), ": ",
+         toString(subnames))
+  }
   args[!sapply(args, is.null)]
+}
+
+
+plural_suffix <- function(x) {
+  if (length(x) > 1) "s"
 }
 
 
 requireModelNamespaces <- function(packages) {
   pass <- sapply(packages, requireNamespace)
-  if (!all(pass)) stop("install required packages: ", toString(packages[!pass]))
+  if (!all(pass)) {
+    subnames <- packages[!pass]
+    stop("install required package", plural_suffix(subnames), ": ",
+         toString(subnames))
+  }
   invisible(pass)
 }
 

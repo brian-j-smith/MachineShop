@@ -38,7 +38,8 @@ response.formula <- function(object, data = NULL, template = NULL, ...) {
       template_levels <- levels(template)
       new_levels <- y_levels[is.na(match(y_levels, template_levels))]
       if (length(new_levels)) {
-        stop("response factor has new levels: ", toString(new_levels))
+        stop("response factor has new level", plural_suffix(new_levels), ": ",
+             toString(new_levels))
       }
       y <- factor(y, levels = template_levels, ordered = is.ordered(template),
                   exclude = NULL)

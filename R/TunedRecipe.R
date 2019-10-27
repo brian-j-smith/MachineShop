@@ -47,7 +47,9 @@ TunedRecipe <- function(x, grid = expand_steps(),
   step_ids <- sapply(object$steps, getElement, name = "id")
   found <- grid_names %in% step_ids
   if (!all(found)) {
-    stop("grid step names ", toString(paste0("'", grid_names[!found], "'")),
+    subnames <- grid_names[!found]
+    stop("grid step name", plural_suffix(subnames), " ",
+         toString(paste0("'", subnames, "'")),
          " not found in recipe step ids ", toString(paste0("'", step_ids, "'")))
   }
   

@@ -86,7 +86,9 @@ Calibration <- function(...) {
     var_names <- c("Response", "Predicted", "Observed")
     found <- var_names %in% names(.Data)
     if (!all(found)) {
-      stop("missing calibration variables: ", toString(var_names[!found]))
+      subnames <- var_names[!found]
+      stop("missing calibration variable", plural_suffix(subnames), ": ",
+           toString(subnames))
     }
     
   }

@@ -40,7 +40,8 @@ ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
   invalid_calls <- setdiff(inline_calls(predictors(x)), valid_predictor_calls)
   if (length(invalid_calls)) {
     stop(
-      "unsupported predictor variable functions: ", toString(invalid_calls),
+      "unsupported predictor variable function", plural_suffix(invalid_calls),
+      ": ", toString(invalid_calls),
       "; use a recipe or include transformed predictors in the data frame"
     )
   }
