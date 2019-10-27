@@ -133,13 +133,8 @@ tune_depwarn <- function(...) {
     grid <- tibble(.rows = length(models))
   } else if (is(model, "TunedModel")) {
     params <- model@params
-    grid <- params$grid
-    if (is(grid, "Grid")) {
-      grid <- grid(..., model = params$model, length = grid@length,
-                   random = grid@random)
-    }
-    grid[names(params$fixed)] <- params$fixed
-    grid <- grid[!duplicated(grid), ]
+    grid <- as.grid(params$grid, fixed = params$fixed,
+                    ..., model = params$model)
     models <- expand_model(list(params$model, grid))
   } else {
     return(tune(SelectedModel(model), ...))

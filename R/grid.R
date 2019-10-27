@@ -30,30 +30,27 @@ Grid <- function(length = 3, random = FALSE) {
 }
 
 
-grid <- function(x, ...) {
-  UseMethod("grid")
+as.grid <- function(x, ...) {
+  UseMethod("as.grid")
 }
 
 
-grid.formula <- function(x, data, ...) {
-  grid(ModelFrame(x, data, na.rm = FALSE), ...)
+as.grid.default <- function(x, ...) {
+  stop("unsupported grid object of class ", class(x)[1])
 }
 
 
-grid.matrix <- function(x, y, ...) {
-  grid(ModelFrame(x, y, na.rm = FALSE), ...)
+as.grid.tbl_df <- function(x, fixed = tibble(), ...) {
+  x[names(fixed)] <- fixed
+  x[!duplicated(x), ]
 }
 
 
-grid.ModelFrame <- function(x, model, length = 3, random = FALSE, ...) {
+as.grid.Grid <- function(x, ..., model, fixed = tibble()) {
+  mf <- ModelFrame(..., na.rm = FALSE)
   model <- getMLObject(model, "MLModel")
-  length <- max(as.integer(length), 1L)
-  params <- lapply(model@grid(x, length = length, random = random), unique)
+  params_list <- model@grid(mf, length = x@length, random = x@random)
+  params <- lapply(params_list, unique)
   params[sapply(params, length) == 0] <- NULL
-  expand_params(params, random = random)
-}
-
-
-grid.recipe <- function(x, ...) {
-  grid(ModelFrame(x, na.rm = FALSE), ...)
+  as.grid(expand_params(params, random = x@random), fixed = fixed)
 }
