@@ -55,6 +55,16 @@ bake.ModelRecipe <- function(object, new_data, ...) {
 }
 
 
+bake.SelectedRecipe <- function(object, ...) {
+  stop("cannot create a design matrix from a ", class(object))
+}
+
+
+bake.TunedRecipe <- function(object, ...) {
+  stop("cannot create a design matrix from a ", class(object))
+}
+
+
 juice <- function(x, ...) {
   UseMethod("juice")
 }
@@ -77,16 +87,26 @@ prep.ModelRecipe <- function(x, ...) {
 }
 
 
-recipe.ModelRecipe <- function(x, data, ...) {
-  stopifnot(is(data, "data.frame"))
-  x$template <- as_tibble(prep_recipe_data(data))
-  x
+prep.SelectedRecipe <- function(x, ...) {
+  stop("cannot train a ", class(x))
+}
+
+
+prep.TunedRecipe <- function(x, ...) {
+  stop("cannot train a ", class(x))
 }
 
 
 prep_recipe_data <- function(x) {
   case_name_var <- "(casenames)"
   if (is.null(x[[case_name_var]])) x[[case_name_var]] <- rownames(x)
+  x
+}
+
+
+recipe.ModelRecipe <- function(x, data, ...) {
+  stopifnot(is(data, "data.frame"))
+  x$template <- as_tibble(prep_recipe_data(data))
   x
 }
 
