@@ -1,7 +1,6 @@
 #' Tuned Model
 #' 
-#' Model tuned over a grid of parameter values, as produced by the
-#' \code{\link{tune}} function.
+#' Model tuning over a grid of parameter values.
 #' 
 #' @param model \link[=models]{model} function, function name, or call defining
 #'   the model to be tuned.
@@ -41,15 +40,34 @@ TunedModel <- function(model, grid = MachineShop::settings("grid"),
                        stat = MachineShop::settings("stat.Tune"),
                        cutoff = MachineShop::settings("cutoff")) {
   
-  if (missing(model)) model <- NULL
-  control <- getMLObject(control, "MLControl")
+  if (missing(model)) {
+    model <- NULL
+  } else {
+    model <- if (is(model, "MLModel")) fget(model@name) else fget(model)
+    stopifnot(is(model, "MLModelFunction"))
+  }
+  
+  if (is(grid, "numeric")) {
+    grid <- Grid(grid)
+  } else if (identical(grid, "Grid") || identical(grid, Grid)) {
+    grid <- Grid()
+  } else if (is(grid, "data.frame")) {
+    grid <- as_tibble(grid)
+  } else if (!is(grid, "Grid")) {
+    stop("'grid' must be a grid length, Grid object, or data frame")
+  }
+  
+  fixed <- as_tibble(fixed)
+  if (nrow(fixed) > 1) stop("only single values allowed for fixed parameters")
   
   new("TunedModel",
     name = "TunedModel",
     label = "Grid Tuned Model",
     response_types = c("factor", "matrix", "numeric", "ordered", "Surv"),
     predictor_encoding = NA_character_,
-    params = params(environment())
+    params = list(model = model, grid = grid, fixed = fixed,
+                  control = getMLObject(control, "MLControl"),
+                  metrics = metrics, stat = stat, cutoff = cutoff)
   )
   
 }
@@ -58,5 +76,5 @@ MLModelFunction(TunedModel) <- NULL
 
 
 .fit.TunedModel <- function(model, x, ...) {
-  fit(x, model = do.call(tune, c(list(x), model@params)))
+  fit(x, model = tune(model, x))
 }

@@ -32,5 +32,5 @@ fit(medv ~ ., data = Boston, model = TunedModel(GBMModel, grid = grid))
 
 }
 \seealso{
-\code{\link{tune}}, \code{\link{TunedModel}}
+\code{\link{TunedModel}}
 }

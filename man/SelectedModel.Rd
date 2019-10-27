@@ -30,8 +30,7 @@ summary statistic on resampled metric values for model selection.}
 \code{SelectedModel} class object that inherits from \code{MLModel}.
 }
 \description{
-Model selected from a candidate set, as produced by the \code{\link{tune}}
-function.
+Model selection from a candidate set.
 }
 \details{
 \describe{

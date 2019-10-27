@@ -128,11 +128,6 @@ MLModelFunction <- setClass("MLModelFunction",
 }
 
 
-MLModelList <- setClass("MLModelList",
-  contains = "list"
-)
-
-
 setClass("Calibration",
   contains = "data.frame",
   slots = c(smoothed = "logical")

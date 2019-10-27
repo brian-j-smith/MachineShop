@@ -9,7 +9,7 @@
 #' 
 #' @return \code{Grid} class object.
 #' 
-#' @seealso \code{\link{tune}}
+#' @seealso \code{\link{TunedModel}}
 #' 
 Grid <- function(length = 3, random = FALSE) {
   if (is(length, "numeric")) {

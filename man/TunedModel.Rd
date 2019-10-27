@@ -39,8 +39,7 @@ summary statistic on resampled metric values for model tuning.}
 \code{TunedModel} class object that inherits from \code{MLModel}.
 }
 \description{
-Model tuned over a grid of parameter values, as produced by the
-\code{\link{tune}} function.
+Model tuning over a grid of parameter values.
 }
 \details{
 \describe{

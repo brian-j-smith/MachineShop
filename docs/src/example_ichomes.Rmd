@@ -63,7 +63,7 @@ testset <- ICHomes[-train_indices, ]
 fo <- sale_amount ~ .
 
 ## Boosted regression model tuned with the training set
-(tuned_model <- tune(fo, data = trainset, model = GBMModel, grid = 5))
+(tuned_model <- TunedModel(GBMModel, grid = 5) %>% tune(fo, data = trainset))
 plot(tuned_model, type = "line")
 ```
 

@@ -31,11 +31,9 @@ tune_recipe.recipe <- function(x, ...) {
 #' 
 tune_recipe.SelectedRecipe <- function(x, model, ...) {
   
+  model <- do.call(SelectedModel, c(getMLObject(model, "MLModel"), x@params))
   recipes <- x@recipes
-  params <- x@params
   x <- as(x, "ModelRecipe")
-  
-  models <- list(getMLObject(model, "MLModel"))
   
   data <- as.data.frame(x)
   setdata <- function(x) recipe(x, data[unique(summary(x)$variable)])
@@ -44,9 +42,7 @@ tune_recipe.SelectedRecipe <- function(x, model, ...) {
   perf_stats <- numeric(n)
   for (i in seq_len(n)) {
     rec <- setdata(recipes[[i]])
-    tuned_model <- tune(rec, models = models, control = params$control,
-                        metrics = params$metrics, stat = params$stat,
-                        cutoff = params$cutoff)
+    tuned_model <- tune(model, rec)
     perf_stats[i] <- tuned_model@selected$value
   }
   
@@ -60,22 +56,19 @@ tune_recipe.SelectedRecipe <- function(x, model, ...) {
 #' 
 tune_recipe.TunedRecipe <- function(x, model, ...) {
   
+  model <- do.call(SelectedModel, c(getMLObject(model, "MLModel"), x@params))
   grid <- x@grid
-  params <- x@params
   x <- as(x, "ModelRecipe")
   
   if (any(dim(grid) == 0)) return(x)
   
   update_x <- list(update, x)
-  models <- list(getMLObject(model, "MLModel"))
   
   n <- nrow(grid)
   perf_stats <- numeric(n)
   for (i in seq_len(n)) {
     x <- eval(as.call(c(update_x, grid[i, , drop = FALSE])))
-    tuned_model <- tune(x, models = models, control = params$control,
-                        metrics = params$metrics, stat = params$stat,
-                        cutoff = params$cutoff)
+    tuned_model <- tune(model, x)
     perf_stats[i] <- tuned_model@selected$value
   }
   

@@ -8,9 +8,9 @@
 #' @param random number of points to be randomly sampled from the parameter grid
 #'   or \code{FALSE} if all points are to be returned.
 #' 
-#' @return \code{MLModelList} class object that inherits from \code{list}.
+#' @return \code{list} of expanded models.
 #' 
-#' @seealso \code{\link{tune}}
+#' @seealso \code{\link{SelectedModel}}
 #' 
 #' @examples
 #' library(MASS)
@@ -40,7 +40,7 @@ expand_model <- function(x, ..., random = FALSE) {
   models <- split(grid, seq(max(1, nrow(grid)))) %>%
     lapply(function(args) do.call(x[[1]], args))
   names(models) <- paste0(models[[1]]@name, ".", names(models))
-  MLModelList(models)
+  models
 }
 
 
@@ -62,7 +62,7 @@ expand_model <- function(x, ..., random = FALSE) {
 #' @return A data frame containing one row for each combination of the supplied
 #' inputs.
 #' 
-#' @seealso \code{\link{tune}}, \code{\link{TunedModel}}
+#' @seealso \code{\link{TunedModel}}
 #' 
 #' @examples
 #' library(MASS)

@@ -16,25 +16,10 @@
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
 #'   outcomes.
-#' @param models \link[=models]{model} function, function name, or call defining
-#'   a model to tune; or vector of these from which to select, such as that
-#'   returned by \code{\link{expand_model}}.
-#' @param grid \link[=data.frame]{data frame} containing parameter values at
-#'   which to evaluate a single model supplied to \code{models}, such as that
-#'   returned by \code{\link{expand_params}}; the number of parameter-specific
-#'   values to generate automatically if the model has a pre-defined grid; or a
-#'   call to \code{\link{Grid}}.  Ignored in the case of a list of models.
-#' @param fixed list of fixed parameter values to combine with those in
-#'   \code{grid}.
-#' @param control \link[=controls]{control} function, function name, or call
-#'   defining the resampling method to be employed.
-#' @param metrics \link[=metrics]{metric} function, function name, or vector of
-#'   these with which to calculate performance.  If not specified, default
-#'   metrics defined in the \link{performance} functions are used.  Model
-#'   selection is based on the first calculated metric.
-#' @param stat function or character string naming a function to compute a
-#'   summary statistic on resampled metric values for model tuning.
-#' @param ... arguments passed to the \link{performance} functions.
+#' @param model \link[=models]{model} function, function name, or call.  Supply
+#'   a \code{\link{SelectedModel}} object for model selection or a
+#'   \code{\link{TunedModel}} object for model tuning.
+#' @param ... arguments passed to other methods.
 #' 
 #' @return \code{MLModelTune} class object that inherits from \code{MLModel}.
 #' 
@@ -47,20 +32,22 @@
 #' fo <- sale_amount ~ .
 #' 
 #' # User-specified grid
-#' (gbm_tune1 <- tune(fo, data = ICHomes, model = GBMModel,
-#'                    grid = expand_params(n.trees = c(25, 50, 100),
-#'                                         interaction.depth = 1:3,
-#'                                         n.minobsinnode = c(5, 10)),
-#'                    control = CVControl(folds = 10, repeats = 5)))
+#' model1 <- TunedModel(GBMModel,
+#'                      grid = expand_params(n.trees = c(25, 50, 100),
+#'                                           interaction.depth = 1:3,
+#'                                           n.minobsinnode = c(5, 10)),
+#'                      control = CVControl(folds = 10, repeats = 5))
+#' (gbm_tune1 <- tune(fo, data = ICHomes, model = model1))
 #' 
 #' # Automatically generated grid
-#' (gbm_tune2 <- tune(fo, data = ICHomes, model = GBMModel, grid = 3,
-#'                    control = CVControl(folds = 10, repeats = 5)))
+#' model2 <- TunedModel(GBMModel, grid = 3,
+#'                      control = CVControl(folds = 10, repeats = 5))
+#' (gbm_tune2 <- tune(fo, data = ICHomes, model = model2))
 #' 
 #' # Randomly sampled grid points
-#' (gbm_tune3 <- tune(fo, data = ICHomes, model = GBMModel,
-#'                    grid = Grid(length = 1000, random = 10),
-#'                    control = CVControl(folds = 10, repeats = 5)))
+#' model3 <- TunedModel(GBMModel, grid = Grid(length = 1000, random = 10),
+#'                      control = CVControl(folds = 10, repeats = 5))
+#' (gbm_tune3 <- tune(fo, data = ICHomes, model = model3))
 #' 
 #' summary(gbm_tune1)
 #' plot(gbm_tune1, type = "line")
@@ -76,110 +63,97 @@ tune <- function(x, ...) {
 
 #' @rdname tune-methods
 #' 
-tune.formula <- function(x, data, models, grid = MachineShop::settings("grid"),
-                         fixed = NULL,
-                         control = MachineShop::settings("control"),
-                         metrics = NULL,
-                         stat = MachineShop::settings("stat.Tune"), ...) {
-  .tune(x, data = data, models = models, grid = grid, fixed = fixed,
-        control = control, metrics = metrics, stat = stat, ...)
+tune.formula <- function(x, data, model, ...) {
+  tune_depwarn(...)
+  .tune(model, x, data)
 }
 
 
 #' @rdname tune-methods
 #' 
-tune.matrix <- function(x, y, models, grid = MachineShop::settings("grid"),
-                        fixed = NULL,
-                        control = MachineShop::settings("control"),
-                        metrics = NULL,
-                        stat = MachineShop::settings("stat.Tune"), ...) {
-  .tune(x, data = y, models = models, grid = grid, fixed = fixed,
-        control = control, metrics = metrics, stat = stat, ...)
+tune.matrix <- function(x, y, model, ...) {
+  tune_depwarn(...)
+  .tune(model, x, y)
 }
 
 
 #' @rdname tune-methods
 #' 
-tune.ModelFrame <- function(x, models, grid = MachineShop::settings("grid"),
-                            fixed = NULL,
-                            control = MachineShop::settings("control"),
-                            metrics = NULL,
-                            stat = MachineShop::settings("stat.Tune"),
-                            ...) {
-  .tune(x, data = NULL, models = models, grid = grid, fixed = fixed,
-        control = control, metrics = metrics, stat = stat, ...)
+tune.ModelFrame <- function(x, model, ...) {
+  tune_depwarn(...)
+  .tune(model, x)
 }
 
 
 #' @rdname tune-methods
 #' 
-tune.recipe <- function(x, models, grid = MachineShop::settings("grid"),
-                        fixed = NULL,
-                        control = MachineShop::settings("control"),
-                        metrics = NULL,
-                        stat = MachineShop::settings("stat.Tune"), ...) {
-  .tune(x, data = NULL, models = models, grid = grid, fixed = fixed,
-        control = control, metrics = metrics, stat = stat, ...)
+tune.recipe <- function(x, model, ...) {
+  tune_depwarn(...)
+  .tune(model, x)
 }
 
 
 #' @rdname tune-methods
 #' 
 tune.MLModel <- function(x, ...) {
-  tune(..., models = x)
+  tune(..., model = x)
 }
 
 
 #' @rdname tune-methods
 #' 
 tune.MLModelFunction <- function(x, ...) {
-  tune(..., models = x)
+  tune(..., model = x)
 }
 
 
-#' @rdname tune-methods
-#' 
-tune.MLModelList <- function(x, ...) {
-  tune(..., models = x)
-}
-
-
-.tune <- function(x, data, models, grid, fixed, control, metrics, stat, ...) {
+tune_depwarn <- function(...) {
+  args <- list(...)
   
-  if (is.list(models)) {
-    models <- ModelList(models)
-    grid <- tibble(.rows = length(models))
-  } else {
-    model <- getMLObject(models, class = "MLModel")
-    
-    random <- FALSE
-    if (is(grid, "character")) grid <- fget(grid)
-    if (is(grid, "function")) grid <- grid()
-    if (is(grid, "Grid")) {
-      random <- grid@random
-      grid <- grid@length
-    }
-    grid <- if (is(grid, "numeric")) {
-      grid(x, data, model = model, length = grid, random = random)
-    } else as_tibble(grid)
-    
-    fixed <- as_tibble(fixed)
-    if (nrow(fixed) > 1) stop("only single values allowed for fixed parameters")
-    grid[names(fixed)] <- fixed
-    grid <- grid[!duplicated(grid), ]
-    
-    models <- expand_model(list(fget(model@name), grid))
+  if (!is.null(args$models)) {
+    depwarn("'models' argument to tune is deprecated",
+            "supply a SelectedModel or TunedModel to 'model' instead",
+            expired = TRUE)
   }
   
-  control <- getMLObject(control, "MLControl")
+  dep_names <- c("grid", "fixed", "control", "metrics", "stat")
+  if (any(pmatch(names(args), dep_names, nomatch = 0))) {
+    depwarn(paste("deprecated tune arguments:", toString(dep_names)),
+            "supply a SelectedModel or TunedModel instead",
+            expired = Sys.Date() >= "2020-01-15")
+  }
+}
+
+
+.tune <- function(model, ...) {
+  
+  if (is(model, "SelectedModel")) {
+    params <- model@params
+    models <- params$models
+    grid <- tibble(.rows = length(models))
+  } else if (is(model, "TunedModel")) {
+    params <- model@params
+    grid <- params$grid
+    if (is(grid, "Grid")) {
+      grid <- grid(..., model = params$model, length = grid@length,
+                   random = grid@random)
+    }
+    grid[names(params$fixed)] <- params$fixed
+    grid <- grid[!duplicated(grid), ]
+    models <- expand_model(list(params$model, grid))
+  } else {
+    return(tune(SelectedModel(model), ...))
+  }
+  
+  metrics <- params$metrics
   metric <- if (!is.null(metrics)) getMLObject(c(metrics)[[1]], "MLMetric")
-  stat <- fget(stat)
+  stat <- fget(params$stat)
   
   perf_list <- list()
   perf_stats <- numeric()
   for (name in names(models)) {
     res <- try(
-      resample(x, data, model = models[[name]], control = control),
+      resample(models[[name]], ..., control = params$control),
       silent = TRUE
     )
     
@@ -203,7 +177,7 @@ tune.MLModelList <- function(x, ...) {
       metric <- getMLObject(metrics[[1]], "MLMetric")
     }
     
-    perf <- performance(res, metrics = metrics, ...)
+    perf <- performance(res, metrics = metrics, cutoff = params$cutoff)
     perf_list[[name]] <- perf
     perf_stats[name] <- stat(na.omit(perf[, 1]))
   }

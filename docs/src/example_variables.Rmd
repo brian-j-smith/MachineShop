@@ -29,7 +29,7 @@ fo <- sale_amount ~ .
 Traditional formula calls to the fitting functions consist of a formula and dataset pair.  This specification additionally allows for crossing (`*`), interaction (`:`), and removal (`-`) of predictors in the formula; in-line functions of response variables; and some in-line functions of predictors.
 
 ```{r ex_variables_formula}
-tuned_model <- tune(fo, ICHomes, model = SVMRadialModel)
+tuned_model <- tune(fo, ICHomes, model = TunedModel(SVMRadialModel))
 model_fit <- fit(fo, ICHomes, model = tuned_model)
 model_res <- resample(fo, ICHomes, model = tuned_model)
 summary(model_res)
@@ -44,7 +44,7 @@ Support is provided for calls with a numeric design matrix and response object p
 x <- as.matrix(ICHomes[c("built", "base_size", "lot_size", "bedrooms")])
 y <- ICHomes$sale_amount
 
-tuned_model <- tune(x, y, model = SVMRadialModel)
+tuned_model <- tune(x, y, model = TunedModel(SVMRadialModel))
 model_fit <- fit(x, y, model = tuned_model)
 model_res <- resample(x, y, model = tuned_model)
 summary(model_res)
@@ -58,7 +58,7 @@ Model frames are created with the traditional formula or design matrix syntax de
 ```{r ex_variables_modelframe}
 mf <- ModelFrame(fo, data = ICHomes, strata = ICHomes$sale_amount)
 
-tuned_model <- tune(mf, model = SVMRadialModel)
+tuned_model <- tune(mf, model = TunedModel(SVMRadialModel))
 model_fit <- fit(mf, model = tuned_model)
 model_res <- resample(mf, model = tuned_model)
 summary(model_res)
@@ -78,7 +78,7 @@ rec <- recipe(fo, data = ICHomes) %>%
   step_pca(base_size, add_size, garage1_size, garage2_size, lot_size, num_comp = 2) %>%
   step_dummy(all_nominal(), -all_outcomes())
 
-tuned_model <- tune(rec, model = SVMRadialModel)
+tuned_model <- tune(rec, model = TunedModel(SVMRadialModel))
 model_fit <- fit(rec, model = tuned_model)
 model_res <- resample(rec, model = tuned_model)
 summary(model_res)

@@ -8,34 +8,21 @@
 \alias{tune.recipe}
 \alias{tune.MLModel}
 \alias{tune.MLModelFunction}
-\alias{tune.MLModelList}
 \title{Model Tuning and Selection}
 \usage{
 tune(x, ...)
 
-\method{tune}{formula}(x, data, models,
-  grid = MachineShop::settings("grid"), fixed = NULL,
-  control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.Tune"), ...)
+\method{tune}{formula}(x, data, model, ...)
 
-\method{tune}{matrix}(x, y, models, grid = MachineShop::settings("grid"),
-  fixed = NULL, control = MachineShop::settings("control"),
-  metrics = NULL, stat = MachineShop::settings("stat.Tune"), ...)
+\method{tune}{matrix}(x, y, model, ...)
 
-\method{tune}{ModelFrame}(x, models,
-  grid = MachineShop::settings("grid"), fixed = NULL,
-  control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.Tune"), ...)
+\method{tune}{ModelFrame}(x, model, ...)
 
-\method{tune}{recipe}(x, models, grid = MachineShop::settings("grid"),
-  fixed = NULL, control = MachineShop::settings("control"),
-  metrics = NULL, stat = MachineShop::settings("stat.Tune"), ...)
+\method{tune}{recipe}(x, model, ...)
 
 \method{tune}{MLModel}(x, ...)
 
 \method{tune}{MLModelFunction}(x, ...)
-
-\method{tune}{MLModelList}(x, ...)
 }
 \arguments{
 \item{x}{defines a relationship between model predictor and response
@@ -46,34 +33,14 @@ predictors, \code{\link{ModelFrame}}, untrained
 function or call may be given first followed by objects defining the
 predictor and response relationship and the other tuning argument values.}
 
-\item{...}{arguments passed to the \link{performance} functions.}
+\item{...}{arguments passed to other methods.}
 
 \item{data}{\link[=data.frame]{data frame} containing observed predictors and
 outcomes.}
 
-\item{models}{\link[=models]{model} function, function name, or call defining
-a model to tune; or vector of these from which to select, such as that
-returned by \code{\link{expand_model}}.}
-
-\item{grid}{\link[=data.frame]{data frame} containing parameter values at
-which to evaluate a single model supplied to \code{models}, such as that
-returned by \code{\link{expand_params}}; the number of parameter-specific
-values to generate automatically if the model has a pre-defined grid; or a
-call to \code{\link{Grid}}.  Ignored in the case of a list of models.}
-
-\item{fixed}{list of fixed parameter values to combine with those in
-\code{grid}.}
-
-\item{control}{\link[=controls]{control} function, function name, or call
-defining the resampling method to be employed.}
-
-\item{metrics}{\link[=metrics]{metric} function, function name, or vector of
-these with which to calculate performance.  If not specified, default
-metrics defined in the \link{performance} functions are used.  Model
-selection is based on the first calculated metric.}
-
-\item{stat}{function or character string naming a function to compute a
-summary statistic on resampled metric values for model tuning.}
+\item{model}{\link[=models]{model} function, function name, or call.  Supply
+a \code{\link{SelectedModel}} object for model selection or a
+\code{\link{TunedModel}} object for model tuning.}
 
 \item{y}{response variable.}
 }
@@ -90,20 +57,22 @@ values or selection from a set of candidate models.
 fo <- sale_amount ~ .
 
 # User-specified grid
-(gbm_tune1 <- tune(fo, data = ICHomes, model = GBMModel,
-                   grid = expand_params(n.trees = c(25, 50, 100),
-                                        interaction.depth = 1:3,
-                                        n.minobsinnode = c(5, 10)),
-                   control = CVControl(folds = 10, repeats = 5)))
+model1 <- TunedModel(GBMModel,
+                     grid = expand_params(n.trees = c(25, 50, 100),
+                                          interaction.depth = 1:3,
+                                          n.minobsinnode = c(5, 10)),
+                     control = CVControl(folds = 10, repeats = 5))
+(gbm_tune1 <- tune(fo, data = ICHomes, model = model1))
 
 # Automatically generated grid
-(gbm_tune2 <- tune(fo, data = ICHomes, model = GBMModel, grid = 3,
-                   control = CVControl(folds = 10, repeats = 5)))
+model2 <- TunedModel(GBMModel, grid = 3,
+                     control = CVControl(folds = 10, repeats = 5))
+(gbm_tune2 <- tune(fo, data = ICHomes, model = model2))
 
 # Randomly sampled grid points
-(gbm_tune3 <- tune(fo, data = ICHomes, model = GBMModel,
-                   grid = Grid(length = 1000, random = 10),
-                   control = CVControl(folds = 10, repeats = 5)))
+model3 <- TunedModel(GBMModel, grid = Grid(length = 1000, random = 10),
+                     control = CVControl(folds = 10, repeats = 5))
+(gbm_tune3 <- tune(fo, data = ICHomes, model = model3))
 
 summary(gbm_tune1)
 plot(gbm_tune1, type = "line")

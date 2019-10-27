@@ -133,5 +133,7 @@ Efron B (1986). How biased is the apparent error rate of a prediction rule?
 Journal of the American Statistical Association, 81 (394): 461-70.
 }
 \seealso{
-\code{\link{resample}}, \code{\link{tune}}
+\code{\link{resample}}, \code{\link{SelectedModel}},
+\code{\link{SelectedRecipe}}, \code{\link{TunedModel}},
+\code{\link{TunedRecipe}}
 }

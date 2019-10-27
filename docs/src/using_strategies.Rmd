@@ -3,29 +3,35 @@
 
 ## Model Tuning
 
-Many of the modeling functions have arguments, or tuning parameters, that control aspects of their model fitting algorithms.  For example, `GBMModel` parameters `n.trees` and `interaction.depth` control the number of decision trees to fit and the maximum depth of variable interactions.  The `tune` function performs model fitting over a grid of parameter values and returns the model with the most optimal values.  Optimality is determined based on the first performance metric of the `metrics` argument of `tune` if supplied or the first default metric of the `performance` function otherwise.  Argument `grid` additionally controls the construction of grid values and can be a single numeric value giving the grid length in each parameter dimension.  As shown in the output below, tuning results include the tuning parameter grid values, the names of models fit to each, all calculated metrics, the final model selected, the metric upon which its selection was based, and its tuning parameters.
+Many of the modeling functions have arguments, or tuning parameters, that control aspects of their model fitting algorithms.  For example, `GBMModel` parameters `n.trees` and `interaction.depth` control the number of decision trees to fit and the maximum depth of variable interactions.  When called with a `TunedModel`, the `tune` function performs model fitting over a grid of parameter values and returns the model with the most optimal values.  Optimality is determined based on the first performance metric of the `metrics` argument of `TunedModel` if supplied or the first default metric of the `performance` function otherwise.  Argument `grid` additionally controls the construction of grid values and can be a single numeric value giving the grid length in each parameter dimension.  As shown in the output below, tuning results include the tuning parameter grid values, the names of models fit to each, all calculated metrics, the final model selected, the metric upon which its selection was based, and its tuning parameters.
 
 ```{r using_strategies_tune}
 ## Tune over automatic grid of model parameters
-(tuned_model <- tune(surv_fo, data = surv_train, model = GBMModel,
-                     grid = 3,
-                     control = surv_means_control,
-                     metrics = c("CIndex" = cindex, "RMSE" = rmse)))
+tuned_model <- TunedModel(
+  GBMModel,
+  grid = 3,
+  control = surv_means_control,
+  metrics = c("CIndex" = cindex, "RMSE" = rmse)
+) %>% tune(surv_fo, data = surv_train) %>% print
 ```
 
 Grid values may also be a call to `Grid` with the grid `length` and number of grid points to sample at `random` or a user-specified data frame of grid points.
 
 ```{r using_strategies_tune_grid, eval=FALSE}
 ## Tune over randomly sampled grid points
-tune(surv_fo, data = surv_train, model = GBMModel,
-     grid = Grid(length = 100, random = 10),
-     control = surv_means_control)
+TunedModel(
+  GBMModel,
+  grid = Grid(length = 100, random = 10),
+  control = surv_means_control
+) %>% tune(surv_fo, data = surv_train)
 
 ## Tune over user-specified grid points
-tune(surv_fo, data = surv_train, model = GBMModel,
-     grid = expand_params(n.trees = c(25, 50, 100),
-                          interaction.depth = 1:3),
-     control = surv_means_control)
+TunedModel(
+  GBMModel,
+  grid = expand_params(n.trees = c(25, 50, 100),
+                       interaction.depth = 1:3),
+  control = surv_means_control
+) %>% tune(surv_fo, data = surv_train)
 ```
 
 Statistics summarizing the resampled performance metrics across all tuning parameter combinations can be obtained with the `summary` function.
@@ -65,7 +71,7 @@ summary(res_tuned)
 
 ## Model Selection
 
-Model selection can be conducted with the `tune` or `SelectedModel` function to automatically choose from any combination of models and model parameters.  Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values.  Combinations of model functions, function names, or function calls can be supplied as lists to the `models` argument of `tune` or as arguments to `SelectedModel` in order to define sets of candidate models from which to select.  An `expand_model` helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired.  In this general form of model selection, the `grid` argument in the tuning functions is not used.
+Model selection can be conducted by calling `tune` with a `SelectedModel` to automatically choose from any combination of models and model parameters.  Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values.  Combinations of model functions, function names, or function calls can be supplied as lists to the `models` argument of `SelectedModel` in order to define sets of candidate models from which to select.  An `expand_model` helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired.
 
 ```{r using_strategies_selection, results="hide"}
 ## Model interface for model selection

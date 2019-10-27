@@ -1,7 +1,6 @@
 #' Selected Model
 #' 
-#' Model selected from a candidate set, as produced by the \code{\link{tune}}
-#' function.
+#' Model selection from a candidate set.
 #' 
 #' @param ... \link[=models]{model} functions, function names, calls, or vectors
 #'   of these to serve as the candidate set from which to select, such as that
@@ -35,15 +34,23 @@ SelectedModel <- function(..., control = MachineShop::settings("control"),
                           stat = MachineShop::settings("stat.Tune"),
                           cutoff = MachineShop::settings("cutoff")) {
   
-  models <- list(...)
-  control <- getMLObject(control, "MLControl")
+  models <- as.list(unlist(list(...)))
+  model_names <- character()
+  for (i in seq(models)) {
+    models[[i]] <- getMLObject(models[[i]], class = "MLModel")
+    name <- names(models)[i]
+    model_names[i] <- 
+      if (!is.null(name) && nzchar(name)) name else models[[i]]@name
+  }
+  names(models) <- make.unique(model_names)
   
   new("SelectedModel",
     name = "SelectedModel",
     label = "Selected Model",
     response_types = c("factor", "matrix", "numeric", "ordered", "Surv"),
     predictor_encoding = NA_character_,
-    params = params(environment())
+    params = list(models = models, control = getMLObject(control, "MLControl"),
+                  metrics = metrics, stat = stat, cutoff = cutoff)
   )
   
 }
@@ -52,5 +59,5 @@ MLModelFunction(SelectedModel) <- NULL
 
 
 .fit.SelectedModel <- function(model, x, ...) {
-  fit(x, model = do.call(tune, c(list(x), model@params)))
+  fit(x, model = tune(model, x))
 }

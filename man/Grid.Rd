@@ -20,5 +20,5 @@ for all random points, or \code{FALSE} for all fixed points.}
 Defines the control parameters for a tuning grid.
 }
 \seealso{
-\code{\link{tune}}
+\code{\link{TunedModel}}
 }

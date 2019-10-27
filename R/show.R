@@ -77,8 +77,6 @@ print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
     if (length(dim(grid)) == 2) {
       cat("Grid:\n")
       print_items(grid, n = n)
-    } else if (is(grid, "numeric")) {
-      cat("Grid length:", grid, "\n")
     } else {
       print(grid)
     }
@@ -375,16 +373,6 @@ setMethod("show", "MLModelFit",
 setMethod("show", "MLModelFunction",
   function(object) {
     print(object)
-    invisible()
-  }
-)
-
-
-setMethod("show", "MLModelList",
-  function(object) {
-    show_title(object)
-    cat("\n")
-    print(unclass(object))
     invisible()
   }
 )

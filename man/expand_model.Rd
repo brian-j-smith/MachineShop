@@ -16,7 +16,7 @@ parameter values over which to expand \code{x}.}
 or \code{FALSE} if all points are to be returned.}
 }
 \value{
-\code{MLModelList} class object that inherits from \code{list}.
+\code{list} of expanded models.
 }
 \description{
 Expand a model over all combinations of a grid of tuning parameters.
@@ -31,5 +31,5 @@ fit(medv ~ ., data = Boston, model = SelectedModel(models))
 
 }
 \seealso{
-\code{\link{tune}}
+\code{\link{SelectedModel}}
 }
