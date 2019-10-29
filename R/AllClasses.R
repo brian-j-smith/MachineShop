@@ -185,7 +185,7 @@ setClass("Performance",
 )
 
 
-setClass("PerformanceDiff",
+PerformanceDiff <- setClass("PerformanceDiff",
   contains = "Performance",
   slots = c(model_names = "character")
 )

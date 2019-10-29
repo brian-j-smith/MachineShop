@@ -63,11 +63,6 @@ diff.Resamples <- function(x, ...) {
 }
 
 
-PerformanceDiff <- function(object, model_names) {
-  new("PerformanceDiff", object, model_names = model_names)
-}
-
-
 #' Paired t-Tests for Model Comparisons
 #' 
 #' Paired t-test comparisons of resampled performance metrics from different
