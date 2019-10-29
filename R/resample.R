@@ -442,7 +442,7 @@ resample_args <- function(train, test, model, control, strata = character()) {
   
   f <- function(test) {
     if (is(train, "ModelRecipe")) {
-      test <- recipe(fitbit(trainfit, "x"), as.data.frame(test))
+      test <- recipe(modelbits(trainfit, "x"), as.data.frame(test))
     }
     df <- data.frame(Model = factor(model@name),
                      Resample = 1,

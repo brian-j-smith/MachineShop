@@ -84,16 +84,6 @@ fget <- function(x) {
 }
 
 
-field <- function(object, name) {
-  if (isS4(object)) slot(object, name) else object[[name]]
-}
-
-
-fitbit <- function(object, name) {
-  slot(field(object, "fitbits"), name)
-}
-
-
 findMethod <- function(generic, object) {
   generic_name <- deparse(substitute(generic))
   f <- function(x, ...) UseMethod("f")

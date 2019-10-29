@@ -46,19 +46,17 @@ SuperModel <- function(..., model = GBMModel,
     response_types = c("factor", "matrix", "numeric", "ordered", "Surv"),
     predictor_encoding = NA_character_,
     params = as.list(environment()),
-    fitbits = MLFitBits(
-      predict = function(object, newdata, times, ...) {
-        learner_predictors <- lapply(object$base_fits, function(fit) {
-          predict(fit, newdata = newdata, times = object$times, type = "prob")
-        })
-        
-        df <- make_super_df(NA, learner_predictors, nrow(newdata))
-        if (object$all_vars) df <- add_super_predictors(newdata, df)
-
-        predict(object$super_fit, newdata = df, times = times, type = "prob")
-      },
-      varimp = function(object, ...) NULL
-    )
+    predict = function(object, newdata, times, ...) {
+      learner_predictors <- lapply(object$base_fits, function(fit) {
+        predict(fit, newdata = newdata, times = object$times, type = "prob")
+      })
+      
+      df <- make_super_df(NA, learner_predictors, nrow(newdata))
+      if (object$all_vars) df <- add_super_predictors(newdata, df)
+      
+      predict(object$super_fit, newdata = df, times = times, type = "prob")
+    },
+    varimp = function(object, ...) NULL
   )
 
 }

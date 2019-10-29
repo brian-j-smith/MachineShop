@@ -89,8 +89,8 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
       modelfit$x <- x
       modelfit
     },
-    predict = function(object, newdata, fitbits, times, ...) {
-      y <- response(fitbits)
+    predict = function(object, newdata, model, times, ...) {
+      y <- response(model)
       newx <- model.matrix(newdata, intercept = FALSE)
       if (is.Surv(y)) {
         lp <- predict(object, newx = object$x, type = "link")[, 1]

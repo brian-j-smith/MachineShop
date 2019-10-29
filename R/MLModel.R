@@ -104,21 +104,14 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
       params = params,
       grid = grid,
       fit = fit,
-      fitbits = MLFitBits(packages = packages,
-                          predict = predict,
-                          varimp = varimp))
-}
-
-
-MLFitBits <- function(...) {
-  new("MLFitBits", ...)
+      predict = predict,
+      varimp = varimp)
 }
 
 
 asMLModelFit <- function(object, Class, model, x, y) {
-  fitbits <- model@fitbits
-  fitbits@x <- x
-  fitbits@y <- y
+  model@x <- x
+  model@y <- y
 
   if (is(object, Class)) {
     object <- unMLModelFit(object)
@@ -129,9 +122,9 @@ asMLModelFit <- function(object, Class, model, x, y) {
   if (!is(model, "MLModel")) stop("model not of class MLModel")
   
   if (isS4(object)) {
-    object <- new(Class, object, fitbits = fitbits)
+    object <- new(Class, object, mlmodel = model)
   } else if (is.list(object)) {
-    object$fitbits <- fitbits
+    object$mlmodel <- model
     class(object) <- c(Class, "MLModelFit", class(object))
   } else {
     stop("unsupported object class")
@@ -142,14 +135,31 @@ asMLModelFit <- function(object, Class, model, x, y) {
 
 
 unMLModelFit <- function(object) {
-  if (!is(object, "MLModelFit")) return(object)
-  if (isS4(object)) {
-    classes <- extends(class(object))
-    as(object, classes[match("MLModelFit", classes) + 1])
-  } else {
-    object$fitbits <- NULL
-    classes <- class(object)
-    pos <- match("MLModelFit", classes)
-    structure(object, class = classes[-c(pos - 1, pos)])
-  }
+  if (is(object, "MLModelFit")) {
+    if (isS4(object)) {
+      classes <- extends(class(object))
+      pos <- match("MLModelFit", classes)
+      as(object, classes[pos + 1])
+    } else {
+      object$mlmodel <- NULL
+      classes <- class(object)
+      pos <- match("MLModelFit", classes)
+      structure(object, class = classes[-(1:pos)])
+    }
+  } else object
+}
+
+
+modelbits <- function(object, ...) {
+  UseMethod("modelbits")
+}
+
+
+modelbits.MLModel <- function(object, name = NULL, ...) {
+  if (is.null(name)) object else slot(object, name)
+}
+
+
+modelbits.MLModelFit <- function(object, name = NULL, ...) {
+  modelbits(if (isS4(object)) object@mlmodel else object$mlmodel, name = name)
 }

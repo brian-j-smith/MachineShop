@@ -79,10 +79,10 @@ SVMModel <- function(scaled = TRUE, type = NULL,
                                        prob.model = TRUE, ...),
                matrix = kernlab::ksvm(x, y, prob.model = TRUE, ...))
     },
-    predict = function(object, newdata, fitbits, ...) {
+    predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)
       kernlab::predict(object, newdata = newdata,
-                       type = ifelse(is.factor(response(fitbits)),
+                       type = ifelse(is.factor(response(model)),
                                      "probabilities", "response"))
     }
   )

@@ -24,11 +24,6 @@ response <- function(object, ...) {
 }
 
 
-response.MLFitBits <- function(object, newdata = NULL, ...) {
-  if (is.null(newdata)) object@y else response(object@x, newdata)
-}
-
-
 response.formula <- function(object, data = NULL, template = NULL, ...) {
   if (!is.null(data)) {
     expr <- response(object)
@@ -53,10 +48,15 @@ response.formula <- function(object, data = NULL, template = NULL, ...) {
 }
 
 
+response.MLModel <- function(object, newdata = NULL, ...) {
+  if (is.null(newdata)) object@y else response(object@x, newdata)
+}
+
+
 #' @rdname response-methods
 #' 
 response.MLModelFit <- function(object, newdata = NULL, ...) {
-  response(field(object, "fitbits"), newdata)
+  response(modelbits(object), newdata)
 }
 
 

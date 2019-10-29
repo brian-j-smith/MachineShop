@@ -62,10 +62,10 @@ CForestModel <- function(teststat = c("quad", "max"),
       party::cforest(formula, data = as.data.frame(data), weights = weights,
                      ...)
     },
-    predict = function(object, newdata, fitbits, times, ...) {
+    predict = function(object, newdata, model, times, ...) {
       newdata <- as.data.frame(newdata)
       if (object@responses@is_censored) {
-        y <- response(fitbits)
+        y <- response(model)
         fits <- predict(object, newdata = newdata, type = "prob")
         predict(y, fits, times, ...)
       } else {

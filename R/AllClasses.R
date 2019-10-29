@@ -64,15 +64,6 @@ setClass("MLTrainControl",
 )
 
 
-setClass("MLFitBits",
-  slots = c(packages = "character",
-            predict = "function",
-            varimp = "function",
-            x = "ANY",
-            y = "ANY")
-)
-
-
 setClass("MLMetric",
   contains = "function",
   slots = c(name = "character",
@@ -90,7 +81,10 @@ setClass("MLModel",
             params = "list",
             grid = "function",
             fit = "function",
-            fitbits = "MLFitBits",
+            predict = "function",
+            varimp = "function",
+            x = "ANY",
+            y = "ANY",
             tune = "ANY")
 )
 
@@ -103,7 +97,7 @@ setClass("TunedModel", contains = "MLModel")
 
 setClass("MLModelFit",
   contains = "VIRTUAL",
-  slots = c(fitbits = "MLFitBits")
+  slots = c(mlmodel = "MLModel")
 )
 
 

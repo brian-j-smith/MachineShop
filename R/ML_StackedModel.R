@@ -42,19 +42,17 @@ StackedModel <- function(..., control = MachineShop::settings("control"),
     response_types = c("factor", "matrix", "numeric", "ordered", "Surv"),
     predictor_encoding = NA_character_,
     params = as.list(environment()),
-    fitbits = MLFitBits(
-      predict = function(object, newdata, ...) {
-        predicted <- 0
-        for (i in seq(object$base_fits)) {
-          predicted <- predicted +
-            object$weights[i] * predict(object$base_fits[[i]],
-                                        newdata = newdata,
-                                        times = object$times, type = "prob")
-        }
-        predicted
-      },
-      varimp = function(object, ...) NULL
-    )
+    predict = function(object, newdata, ...) {
+      predicted <- 0
+      for (i in seq(object$base_fits)) {
+        predicted <- predicted +
+          object$weights[i] * predict(object$base_fits[[i]],
+                                      newdata = newdata,
+                                      times = object$times, type = "prob")
+      }
+      predicted
+    },
+    varimp = function(object, ...) NULL
   )
   
 }

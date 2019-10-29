@@ -38,8 +38,8 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
                          MachineShop::settings("stats.PartialDependence")) {
   
   stopifnot(is(object, "MLModelFit"))
-
-  x <- fitbit(object, "x")
+  
+  x <- modelbits(object, "x")
   if (is.null(data)) data <- x
   data <- as.data.frame(data)
   vars <- all.vars(predictors(terms(x, original = TRUE)))

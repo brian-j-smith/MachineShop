@@ -73,12 +73,12 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
                                      distribution = distribution,
                                      verbose = FALSE, ...))
     },
-    predict = function(object, newdata, fitbits, times, ...) {
+    predict = function(object, newdata, model, times, ...) {
       newdata <- as.data.frame(newdata)
       n <- object$n.trees
       if (object$distribution$name == "coxph") {
-        y <- response(fitbits)
-        data <- preprocess(fitbits@x)
+        y <- response(model)
+        data <- preprocess(model@x)
         lp <- predict(object, newdata = data, n.trees = n, type = "link")
         new_lp <- predict(object, newdata = newdata, n.trees = n, type = "link")
         predict(y, lp, times, new_lp, ...)

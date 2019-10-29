@@ -61,10 +61,10 @@ RandomForestModel <- function(ntree = 500,
                                                     ...),
                matrix = randomForest::randomForest(x, y, ...))
     },
-    predict = function(object, newdata, fitbits, ...) {
+    predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata,
-              type = ifelse(is.factor(response(fitbits)), "prob", "response"))
+              type = ifelse(is.factor(response(model)), "prob", "response"))
     },
     varimp = function(object, ...) {
       randomForest::importance(object)

@@ -58,8 +58,8 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
       rpart::rpart(formula, data = as.data.frame(data), weights = weights,
                    na.action = na.pass, method = method, ...)
     },
-    predict = function(object, newdata, fitbits, times, ...) {
-      y <- response(fitbits)
+    predict = function(object, newdata, model, times, ...) {
+      y <- response(model)
       newdata <- as.data.frame(newdata)
       if (is.Surv(y)) {
         object <- partykit::as.party(object)
