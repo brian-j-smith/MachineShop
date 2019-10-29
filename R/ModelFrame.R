@@ -122,6 +122,11 @@ as.data.frame.ModelFrame <- function(x, ...) {
 }
 
 
+setAs("ModelFrame", "data.frame",
+  function(from) as.data.frame(from)
+)
+
+
 #################### ModelFrame Formulas ####################
 
 

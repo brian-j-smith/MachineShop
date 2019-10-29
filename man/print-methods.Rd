@@ -6,6 +6,7 @@
 \alias{print.Curves}
 \alias{print.MLModel}
 \alias{print.MLTune}
+\alias{print.ModelFrame}
 \alias{print.Performance}
 \alias{print.RecipeGrid}
 \alias{print.Resamples}
@@ -22,6 +23,9 @@
 \method{print}{MLModel}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{MLTune}(x, n = MachineShop::settings("max.print"), ...)
+
+\method{print}{ModelFrame}(x, n = MachineShop::settings("max.print"),
+  ...)
 
 \method{print}{Performance}(x, n = MachineShop::settings("max.print"),
   ...)

@@ -137,6 +137,15 @@ print.MLTune <- function(x, n = MachineShop::settings("max.print"), ...) {
 }
 
 
+#' @rdname print-methods
+#' 
+print.ModelFrame <- function(x, n = MachineShop::settings("max.print"), ...) {
+  show_title(x)
+  print_items(as(x, "data.frame"), n = n)
+  invisible(x)
+}
+
+
 print.ModelRecipe <- function(x, ...) {
   show_title(x)
   cat("\n")
