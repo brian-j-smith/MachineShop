@@ -15,7 +15,7 @@ NULL
 #' @rdname print-methods
 #' 
 print.Calibration <- function(x, n = MachineShop::settings("max.print"), ...) {
-  show_title(x)
+  print_title(x)
   print_items(as(x, "data.frame"), n = n)
   invisible(x)
 }
@@ -24,7 +24,7 @@ print.Calibration <- function(x, n = MachineShop::settings("max.print"), ...) {
 #' @rdname print-methods
 #' 
 print.Curves <- function(x, n = MachineShop::settings("max.print"), ...) {
-  show_title(x)
+  print_title(x)
   cat("\n",
       "Metrics: ",
       "x = ", x@metrics$x@label, ", ",
@@ -36,7 +36,7 @@ print.Curves <- function(x, n = MachineShop::settings("max.print"), ...) {
 
 
 print.MLMetric <- function(x, ...) {
-  show_title(x)
+  print_title(x)
   cat("\n",
       "Metric name: ", x@name, "\n",
       "Label: ", x@label, "\n",
@@ -54,7 +54,7 @@ print.MLMetric <- function(x, ...) {
 #' @rdname print-methods
 #' 
 print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
-  show_title(x)
+  print_title(x)
   info <- modelinfo(x)[[1]]
   is_tuned <- !is.null(x@tune)
   cat("\n",
@@ -101,7 +101,7 @@ print.MLModelFit <- function(x, ...) {
 
 
 print.MLModelFunction <- function(x, ...) {
-  show_title(x)
+  print_title(x)
   info_list <- modelinfo(x)
   info <- info_list[[1]]
   cat("\n",
@@ -121,7 +121,7 @@ print.MLModelFunction <- function(x, ...) {
 #' @rdname print-methods
 #' 
 print.MLTune <- function(x, n = MachineShop::settings("max.print"), ...) {
-  show_title(x)
+  print_title(x)
   if (length(x@grid)) {
     cat("\nGrid (selected = ", x@selected, "):\n", sep = "")
     print_items(x@grid, n = n)
@@ -140,14 +140,14 @@ print.MLTune <- function(x, n = MachineShop::settings("max.print"), ...) {
 #' @rdname print-methods
 #' 
 print.ModelFrame <- function(x, n = MachineShop::settings("max.print"), ...) {
-  show_title(x)
+  print_title(x)
   print_items(as(x, "data.frame"), n = n)
   invisible(x)
 }
 
 
 print.ModelRecipe <- function(x, ...) {
-  show_title(x)
+  print_title(x)
   cat("\n")
   NextMethod()
   invisible(x)
@@ -157,7 +157,7 @@ print.ModelRecipe <- function(x, ...) {
 #' @rdname print-methods
 #' 
 print.Performance <- function(x, n = MachineShop::settings("max.print"), ...) {
-  show_title(x)
+  print_title(x)
   dn <- dimnames(x)
   cat("\nMetrics:", toString(dn[[2]]), "\n")
   if (length(dn) > 2) {
@@ -171,7 +171,7 @@ print.Performance <- function(x, n = MachineShop::settings("max.print"), ...) {
 #' @rdname print-methods
 #' 
 print.RecipeGrid <- function(x, n = MachineShop::settings("max.print"), ...) {
-  show_title(x)
+  print_title(x)
   print(asS3(x), n = n)
   invisible(x)
 }
@@ -180,7 +180,7 @@ print.RecipeGrid <- function(x, n = MachineShop::settings("max.print"), ...) {
 #' @rdname print-methods
 #' 
 print.Resamples <- function(x, n = MachineShop::settings("max.print"), ...) {
-  show_title(x)
+  print_title(x)
   cat("\nModels: ")
   print_items(levels(x$Model), n = n)
   if (isTRUE(nzchar(x@strata))) {
@@ -195,7 +195,7 @@ print.Resamples <- function(x, n = MachineShop::settings("max.print"), ...) {
 #' @rdname print-methods
 #' 
 print.SurvMatrix <- function(x, n = MachineShop::settings("max.print"), ...) {
-  show_title(x)
+  print_title(x)
   print_items(as.data.frame(as(x, "matrix")), n = n)
   cat("Attribute \"times\":\n")
   print(time(x))
@@ -218,7 +218,7 @@ print.TunedRecipe <- function(x, n = MachineShop::settings("max.print"), ...) {
 #' @rdname print-methods
 #' 
 print.VarImp <- function(x, n = MachineShop::settings("max.print"), ...) {
-  show_title(x)
+  print_title(x)
   print_items(as(x, "data.frame"), n = n)
   invisible(x)
 }
@@ -255,7 +255,7 @@ setMethod("show", "MLBootstrapControl",
 
 setMethod("show", "MLBootControl",
   function(object) {
-    show_title("MLControl")
+    print_title("MLControl")
     cat("\n",
         "Name: BootControl\n",
         "Label: Bootstrap Resampling\n",
@@ -268,7 +268,7 @@ setMethod("show", "MLBootControl",
 
 setMethod("show", "MLBootOptimismControl",
   function(object) {
-    show_title("MLControl")
+    print_title("MLControl")
     cat("\n",
         "Name: BootOptimismControl\n",
         "Label: Optimism-Corrected Bootstrap Resampling\n",
@@ -292,7 +292,7 @@ setMethod("show", "MLCrossValidationControl",
 
 setMethod("show", "MLCVControl",
   function(object) {
-    show_title("MLControl")
+    print_title("MLControl")
     cat("\n",
         "Name: CVControl\n",
         "Label: K-Fold Cross-Validation\n",
@@ -305,7 +305,7 @@ setMethod("show", "MLCVControl",
 
 setMethod("show", "MLCVOptimismControl",
   function(object) {
-    show_title("MLControl")
+    print_title("MLControl")
     cat("\n",
         "Name: CVOptimismControl\n",
         "Label: Optimism-Corrected K-Fold Cross-Validation\n",
@@ -318,7 +318,7 @@ setMethod("show", "MLCVOptimismControl",
 
 setMethod("show", "MLOOBControl",
   function(object) {
-    show_title("MLControl")
+    print_title("MLControl")
     cat("\n",
         "Name: OOBControl\n",
         "Label: Out-Of-Bootstrap Resampling\n",
@@ -332,7 +332,7 @@ setMethod("show", "MLOOBControl",
 
 setMethod("show", "MLSplitControl",
   function(object) {
-    show_title("MLControl")
+    print_title("MLControl")
     cat("\n",
         "Name: SplitControl\n",
         "Label: Split Training and Test Samples\n",
@@ -346,7 +346,7 @@ setMethod("show", "MLSplitControl",
 
 setMethod("show", "MLTrainControl",
   function(object) {
-    show_title("MLControl")
+    print_title("MLControl")
     cat("\n",
         "Name: TrainControl\n",
         "Label: Training Resubstitution\n",
@@ -415,7 +415,7 @@ setMethod("show", "Calibration",
 
 setMethod("show", "ConfusionMatrix",
   function(object) {
-    show_title(object)
+    print_title(object)
     print(as(object, "table"))
     invisible()
   }
@@ -447,7 +447,7 @@ setMethod("show", "Curves",
 
 setMethod("show", "Grid",
   function(object) {
-    show_title(object)
+    print_title(object)
     cat("\n",
         "Length: ", object@length, "\n",
         "Random sample: ", object@random, "\n",
@@ -468,7 +468,7 @@ setMethod("show", "Performance",
 
 setMethod("show", "PerformanceDiffTest",
   function(object) {
-    show_title(object)
+    print_title(object)
     cat("\n",
         "Upper diagonal: mean differences (row - column)\n",
         "Lower diagonal: p-values\n",
@@ -498,7 +498,7 @@ setMethod("show", "Resamples",
 
 setMethod("show", "SelectedRecipe",
   function(object) {
-    show_title(object)
+    print_title(object)
     cat("\n")
     print(object@recipes)
     show(object@params$control)
@@ -575,16 +575,16 @@ print_items.tbl <- function(x, n, ...) {
 }
 
 
-show_title <- function(x, ...) {
-  UseMethod("show_title")
+print_title <- function(x, ...) {
+  UseMethod("print_title")
 }
 
 
-show_title.default <- function(x, ...) {
-  show_title(class(x)[1])
+print_title.default <- function(x, ...) {
+  print_title(class(x)[1])
 }
 
 
-show_title.character <- function(x, ...) {
+print_title.character <- function(x, ...) {
   cat("Object of class \"", x, "\"\n", sep = "")
 }
