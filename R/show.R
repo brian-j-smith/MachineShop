@@ -68,7 +68,7 @@ print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   if (is(x, "SelectedModel")) {
     cat("Selection Parameters:\n\n")
     print_items(x@params$models, n = n)
-    show(x@params$control)
+    print(x@params$control)
   } else if (is(x, "TunedModel")) {
     cat("Tuning Parameters:\n\n")
     print(x@params$model)
@@ -81,7 +81,7 @@ print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
       print(grid)
     }
     cat("\n")
-    show(x@params$control)
+    print(x@params$control)
   } else {
     cat("Parameters:\n")
     cat(str(x@params))
@@ -187,7 +187,7 @@ print.Resamples <- function(x, n = MachineShop::settings("max.print"), ...) {
     cat("Stratification variable:", x@strata, "\n")
   }
   cat("\n")
-  show(x@control)
+  print(x@control)
   invisible(x)
 }
 
@@ -210,7 +210,7 @@ print.TunedRecipe <- function(x, n = MachineShop::settings("max.print"), ...) {
   cat("\n")
   print_items(x@grid, n = n)
   cat("\n")
-  show(x@params$control)
+  print(x@params$control)
   invisible(x)
 }
 
@@ -501,7 +501,7 @@ setMethod("show", "SelectedRecipe",
     print_title(object)
     cat("\n")
     print(object@recipes)
-    show(object@params$control)
+    print(object@params$control)
     invisible()
   }
 )
