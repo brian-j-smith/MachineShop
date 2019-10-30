@@ -234,5 +234,6 @@ setClass("TunedRecipe",
 
 setClass("VarImp",
   contains = "data.frame",
-  slots = c(center = "numeric", scale = "numeric")
+  slots = c(shift = "numeric",
+            scale = "numeric")
 )

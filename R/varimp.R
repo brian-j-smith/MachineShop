@@ -5,20 +5,20 @@ VarImp <- function(object, ...) {
 
 VarImp.default <- function(object, scale = TRUE, ...) {
   stopifnot(nrow(object) == 0 || is.character(rownames(object)))
-
+  
   idx <- order(rowSums(object), decreasing = TRUE)
   idx <- idx * (rownames(object)[idx] != "(Intercept)")
   object <- object[idx, , drop = FALSE]
   if (scale) {
-    scale_center <- min(object)
-    scale_scale <- diff(range(object)) / 100
-    object <- (object - scale_center) / scale_scale
+    object_shift <- min(object)
+    object_scale <- diff(range(object)) / 100
+    object <- (object - object_shift) / object_scale
   } else {
-    scale_center = 0
-    scale_scale = 1
+    object_shift = 0
+    object_scale = 1
   }
   
-  new("VarImp", object, center = scale_center, scale = scale_scale)
+  new("VarImp", object, shift = object_shift, scale = object_scale)
 }
 
 
