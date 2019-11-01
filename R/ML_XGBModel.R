@@ -223,7 +223,8 @@ MLModelFunction(XGBTreeModel) <- NULL
         params <- params %>%
           set_param("eta", seq(0.001, 0.6, length = length)) %>%
           set_param("gamma", seq(0, 10, length = length)) %>%
-          set_param("min_child_weight", 0:20) %>%
+          set_param("min_child_weight",
+                    seq(0, min(20, nrow(x)), length = length)) %>%
           set_param("colsample_bytree", seq(0.3, 0.8, length = length)) %>%
           set_param("rate_drop", seq(0.01, 0.50, length = length)) %>%
           set_param("skip_drop", seq(0.05, 0.95, length = length))

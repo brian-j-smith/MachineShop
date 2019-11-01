@@ -65,7 +65,10 @@ AdaBoostModel <- function(boos = TRUE, mfinal = 100,
         mfinal = round(seq_range(0, 25, c(1, 200), length + 1)),
         maxdepth = 1:min(length, 30)
       )
-      if (random) params$coeflearn <- c("Breiman", "Freund", "Zhu")
+      if (random) {
+        coeflearn <- c("Breiman", "Freund", "Zhu")
+        params$coeflearn <- head(sample(coeflearn), length)
+      }
       params
     },
     fit = function(formula, data, weights, ...) {

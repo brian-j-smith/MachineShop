@@ -53,7 +53,8 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
       )
       if (random) {
         params$shrinkage <- seq(0.001, 0.1, length = length)
-        params$n.minobsinnode <- 1:min(nrow(x), 20)
+        params$n.minobsinnode <-
+          round(seq(1, min(20, nrow(x)), length = length))
       }
       params
     },

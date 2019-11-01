@@ -63,7 +63,7 @@ EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
       params <- list(
         nprune = round(seq(2, max_terms, length = length))
       )
-      if (random) params$degree <- 1:2
+      if (random) params$degree <- head(1:2, length)
       params
     },
     fit = function(formula, data, weights, ...) {

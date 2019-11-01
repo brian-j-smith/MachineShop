@@ -70,12 +70,13 @@ RangerModel <- function(num.trees = 500, mtry = NULL,
         mtry = seq_nvars(x, RangerModel, length)
       )
       if (random) {
-        params$min.node.size <- 1:min(nrow(x), 20)
-        params$splitrule <- if (is.factor(response(x))) {
+        params$min.node.size <- round(seq(1, min(20, nrow(x)), length = length))
+        splitrule <- if (is.factor(response(x))) {
           c("gini", "extratrees")
         } else {
           c("variance", "extratrees", "maxstat")
         }
+        params$splitrule <- head(sample(splitrule), length)
       }
       params
     },

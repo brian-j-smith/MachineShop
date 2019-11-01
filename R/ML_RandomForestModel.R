@@ -48,7 +48,9 @@ RandomForestModel <- function(ntree = 500,
       params <- list(
         mtry = seq_nvars(x, RandomForestModel, length)
       )
-      if (random) params$nodesize <- 1:min(nrow(x), 20)
+      if (random) {
+        params$nodesize <- round(seq(1, min(20, nrow(x)), length = length))
+      }
       params
     },
     fit = function(formula, data, weights, ...) {
