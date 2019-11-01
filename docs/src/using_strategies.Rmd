@@ -103,7 +103,7 @@ fit(surv_fo, data = surv_train, model = selected_tuned_model)
 
 ## Ensemble Models
 
-Ensemble modelling methods combine $m = 1, \ldots, M$ base learning models as a strategy to improve predictive performance.  Two methods implemented in `Machineshop` are *stacked regression* [@breiman:1996:SR] and *super learners* [@vanderLann:2007:SL].  Stacked regression fits a linear combination of predictions from specified base learners to produce a prediction function of the form
+Ensemble modelling methods combine $m = 1, \ldots, M$ base learning models as a strategy to improve predictive performance.  Two methods implemented in `Machineshop` are *stacked regression* [@breiman:1996:SR] and *super learners* [@vanderLaan:2007:SL].  Stacked regression fits a linear combination of predictions from specified base learners to produce a prediction function of the form
 $$
 \hat{f}(x) = \sum_{m=1}^M \hat{w}_m \hat{f}_m(x).
 $$
