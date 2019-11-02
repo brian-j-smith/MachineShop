@@ -1955,7 +1955,7 @@ fit(surv_fo, data = surv_train, model = selected_tuned_model)</code></pre>
 </div>
 <div id="ensemble-models" class="section level2">
 <h2>Ensemble Models</h2>
-<p>Ensemble modelling methods combine <span class="math inline">\(m = 1, \ldots, M\)</span> base learning models as a strategy to improve predictive performance. Two methods implemented in <code>Machineshop</code> are <em>stacked regression</em> <span class="citation">(Breiman 1996)</span> and <em>super learners</em> <span class="citation">(van der Lann and Hubbard 2007)</span>. Stacked regression fits a linear combination of predictions from specified base learners to produce a prediction function of the form <span class="math display">\[
+<p>Ensemble modelling methods combine <span class="math inline">\(m = 1, \ldots, M\)</span> base learning models as a strategy to improve predictive performance. Two methods implemented in <code>Machineshop</code> are <em>stacked regression</em> <span class="citation">(Breiman 1996)</span> and <em>super learners</em> <span class="citation">(van der Laan, Polley, and Hubbard 2007)</span>. Stacked regression fits a linear combination of predictions from specified base learners to produce a prediction function of the form <span class="math display">\[
 \hat{f}(x) = \sum_{m=1}^M \hat{w}_m \hat{f}_m(x).
 \]</span> Stacking weights <span class="math inline">\(w\)</span> are estimated by (constrained) least squares regression of case responses <span class="math inline">\(y_i\)</span> on predictions <span class="math inline">\(\hat{f}^{-\kappa(i)}(x_i)\)</span> from learners fit to data subsamples <span class="math inline">\(-\kappa(i)\)</span> not containing the corresponding cases. In particular, they are obtained as the solution <span class="math display">\[
 \hat{w} = \underset{w}{\operatorname{argmin}} \sum_{i=1}^{N}\left(y_i - \sum_{m=1}^{M} w_m \hat{f}^{-\kappa(i)}(x_i) \right)^2
@@ -2214,8 +2214,8 @@ summary(performance(res, metric = f2_score))
 <div id="ref-perkins:2006:IOC">
 <p>Perkins, Neil J, and Enrique F Schisterman. 2006. “The Inconsistency of "Optimal" Cutpoints Obtained Using Two Criteria Based on the Receiver Operating Characteristic Curve.” <em>American Journal of Epidemiology</em> 163 (7): 670–75.</p>
 </div>
-<div id="ref-vanderLann:2007:SL">
-<p>van der Lann, Mark J, and Alan E Hubbard. 2007. “Super Learner.” <em>Statistical Applications in Genetics and Molecular Biology</em> 6 (1).</p>
+<div id="ref-vanderLaan:2007:SL">
+<p>van der Laan, Mark J, Eric C Polley, and Alan E Hubbard. 2007. “Super Learner.” <em>Statistical Applications in Genetics and Molecular Biology</em> 6 (1).</p>
 </div>
 <div id="ref-wickham:2016:GEG">
 <p>Wickham, Hadley. 2016. <em>ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.</p>
