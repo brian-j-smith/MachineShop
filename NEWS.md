@@ -2,6 +2,16 @@
 
 ## Version Updates
 
+## 1.6.2
+* Implement optimism-corrected cross-validation (`CVOptimismControl`).
+* Fix `BootOptimismControl` error with 2D responses.
+* Add global option `max.print` for the number of models and data frame rows to show with print methods.
+* Enable recipe selection with `SelectedRecipe()`.
+* Refactor `tune()` methods.
+* Replace `MLModelFit` element `fitbits` (`MLFitBits` object) with `mlmodel` (`MLModel` object).
+* Rename `VarImp` slot `center` to `shift`.
+
+
 ## 1.6.1
 * Use tibbles for parameter grids.
 * Add random sampling option to `expand_model()`, `expand_params()`, and `expand_steps()`.
