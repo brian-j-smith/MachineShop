@@ -24,6 +24,5 @@ fit(sale_amount ~ ., data = ICHomes, model = LMModel)
 
 }
 \seealso{
-\code{\link[stats]{lm}}, \code{\link{fit}}, \code{\link{resample}},
-\code{\link{tune}}
+\code{\link[stats]{lm}}, \code{\link{fit}}, \code{\link{resample}}
 }

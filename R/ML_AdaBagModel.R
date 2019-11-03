@@ -29,7 +29,7 @@
 #' @return \code{MLModel} class object.
 #' 
 #' @seealso \code{\link[adabag]{bagging}}, \code{\link{fit}},
-#' \code{\link{resample}}, \code{\link{tune}}
+#' \code{\link{resample}}
 #' 
 #' @examples
 #' fit(Species ~ ., data = iris, model = AdaBagModel(mfinal = 5))

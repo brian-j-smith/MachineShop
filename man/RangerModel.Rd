@@ -74,5 +74,5 @@ fit(Species ~ ., data = iris, model = RangerModel)
 }
 \seealso{
 \code{\link[ranger]{ranger}}, \code{\link{fit}},
-\code{\link{resample}}, \code{\link{tune}}
+\code{\link{resample}}
 }

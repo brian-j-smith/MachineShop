@@ -23,11 +23,13 @@
 #' 
 #' @return \code{SelectedModel} class object that inherits from \code{MLModel}.
 #' 
-#' @seealso \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
+#' @seealso \code{\link{fit}}, \code{\link{resample}}
 #' 
 #' @examples
-#' fit(sale_amount ~ ., data = ICHomes,
-#'     model = SelectedModel(GBMModel, GLMNetModel, SVMRadialModel))
+#' model_fit <- fit(sale_amount ~ ., data = ICHomes,
+#'                  model = SelectedModel(GBMModel, GLMNetModel, SVMRadialModel))
+#' (selected_model <- as.MLModel(model_fit))
+#' summary(selected_model)
 #' 
 SelectedModel <- function(..., control = MachineShop::settings("control"),
                           metrics = NULL,

@@ -14,8 +14,7 @@
 #' 
 #' @return \code{MLModel} class object.
 #' 
-#' @seealso \code{\link[MASS]{polr}}, \code{\link{fit}}, \code{\link{resample}},
-#' \code{\link{tune}}
+#' @seealso \code{\link[MASS]{polr}}, \code{\link{fit}}, \code{\link{resample}}
 #' 
 #' @examples
 #' library(MASS)

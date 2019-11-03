@@ -44,5 +44,5 @@ van der Lann, M.J., Hubbard A.E. (2007) \emph{Super Learner.} Statistical
 Applications in Genetics and Molecular Biology, 6(1).
 }
 \seealso{
-\code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
+\code{\link{fit}}, \code{\link{resample}}
 }

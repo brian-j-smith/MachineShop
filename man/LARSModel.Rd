@@ -49,6 +49,5 @@ fit(sale_amount ~ ., data = ICHomes, model = LARSModel)
 
 }
 \seealso{
-\code{\link[lars]{lars}}, \code{\link{fit}}, \code{\link{resample}},
-\code{\link{tune}}
+\code{\link[lars]{lars}}, \code{\link{fit}}, \code{\link{resample}}
 }

@@ -64,8 +64,8 @@ fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
 \seealso{
 \code{\link[rms]{psm}}, \code{\link[survival]{survreg}},
 \code{\link[survival]{survreg.control}}, \code{\link[MASS]{stepAIC}},
-\code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
+\code{\link{fit}}, \code{\link{resample}}
 
 \code{\link[MASS]{stepAIC}}, \code{\link{fit}},
-\code{\link{resample}}, \code{\link{tune}}
+\code{\link{resample}}
 }

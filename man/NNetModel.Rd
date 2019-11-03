@@ -62,6 +62,5 @@ fit(sale_amount ~ ., data = ICHomes, model = NNetModel)
 
 }
 \seealso{
-\code{\link[nnet]{nnet}}, \code{\link{fit}}, \code{\link{resample}},
-\code{\link{tune}}
+\code{\link[nnet]{nnet}}, \code{\link{fit}}, \code{\link{resample}}
 }

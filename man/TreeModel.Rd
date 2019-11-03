@@ -37,5 +37,5 @@ fit(Species ~ ., data = iris, model = TreeModel)
 }
 \seealso{
 \code{\link[tree]{tree}}, \code{\link{fit}},
-\code{\link{resample}}, \code{\link{tune}}
+\code{\link{resample}}
 }

@@ -29,5 +29,5 @@ fit(Species ~ ., data = iris, model = NaiveBayesModel)
 }
 \seealso{
 \code{\link[e1071]{naiveBayes}}, \code{\link{fit}},
-\code{\link{resample}}, \code{\link{tune}}
+\code{\link{resample}}
 }

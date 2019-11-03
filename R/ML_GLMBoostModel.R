@@ -28,7 +28,7 @@
 #' @return \code{MLModel} class object.
 #' 
 #' @seealso \code{\link[mboost]{glmboost}}, \code{\link[mboost]{Family}},
-#' \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
+#' \code{\link{fit}}, \code{\link{resample}}
 #' 
 #' @examples
 #' library(MASS)

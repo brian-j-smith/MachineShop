@@ -49,6 +49,5 @@ fit(Species ~ ., data = iris, model = GBMModel)
 
 }
 \seealso{
-\code{\link[gbm]{gbm}}, \code{\link{fit}}, \code{\link{resample}},
-\code{\link{tune}}
+\code{\link[gbm]{gbm}}, \code{\link{fit}}, \code{\link{resample}}
 }

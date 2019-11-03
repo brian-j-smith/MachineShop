@@ -93,20 +93,19 @@ performance(res, c(accuracy, kappa2)) %>% summary
 
 ```{r ex_iris_tune, fig.height = 4}
 ## Tune over a grid of model parameters
-tuned_model <- TunedModel(
+iris_fit <- TunedModel(
   GBMModel,
   grid = expand_params(n.trees = c(25, 50, 100),
                        interaction.depth = 1:3,
                        n.minobsinnode = c(5, 10))
-) %>% tune(fo, data = iris)
+) %>% fit(fo, data = iris)
 
-plot(tuned_model, type = "line")
-```
-
-```{r ex_iris_tune_fit}
-## Fit the selected model
-iris_fit <- fit(fo, data = iris, model = tuned_model)
+## Variable importance
 varimp(iris_fit)
+
+## Plot performance over the grid points
+tuned_model <- as.MLModel(iris_fit)
+plot(tuned_model, type = "line")
 ```
 
 

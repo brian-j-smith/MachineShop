@@ -41,7 +41,7 @@
 #' 
 #' @seealso \code{\link[mboost]{blackboost}}, \code{\link[mboost]{Family}},
 #' \code{\link[partykit]{ctree_control}}, \code{\link{fit}},
-#' \code{\link{resample}}, \code{\link{tune}}
+#' \code{\link{resample}}
 #' 
 #' @examples
 #' library(MASS)

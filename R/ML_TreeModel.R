@@ -19,7 +19,7 @@
 #' @return \code{MLModel} class object.
 #' 
 #' @seealso \code{\link[tree]{tree}}, \code{\link{fit}},
-#' \code{\link{resample}}, \code{\link{tune}}
+#' \code{\link{resample}}
 #' 
 #' @examples
 #' fit(Species ~ ., data = iris, model = TreeModel)

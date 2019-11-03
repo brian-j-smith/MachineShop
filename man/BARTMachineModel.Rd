@@ -71,5 +71,5 @@ varimp(model_fit, metric = "splits", num_replicates = 20, scale = FALSE)
 }
 \seealso{
 \code{\link[bartMachine]{bartMachine}}, \code{\link{fit}},
-\code{\link{resample}}, \code{\link{tune}}
+\code{\link{resample}}
 }

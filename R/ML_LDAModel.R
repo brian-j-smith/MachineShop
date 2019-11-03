@@ -31,7 +31,7 @@
 #' @return \code{MLModel} class object.
 #' 
 #' @seealso \code{\link[MASS]{lda}}, \code{\link[MASS]{predict.lda}},
-#' \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
+#' \code{\link{fit}}, \code{\link{resample}}
 #' 
 #' @examples
 #' fit(Species ~ ., data = iris, model = LDAModel)

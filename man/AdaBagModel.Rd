@@ -55,5 +55,5 @@ fit(Species ~ ., data = iris, model = AdaBagModel(mfinal = 5))
 }
 \seealso{
 \code{\link[adabag]{bagging}}, \code{\link{fit}},
-\code{\link{resample}}, \code{\link{tune}}
+\code{\link{resample}}
 }

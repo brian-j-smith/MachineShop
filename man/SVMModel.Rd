@@ -105,5 +105,5 @@ fit(sale_amount ~ ., data = ICHomes, model = SVMRadialModel)
 }
 \seealso{
 \code{\link[kernlab]{ksvm}}, \code{\link{fit}},
-\code{\link{resample}}, \code{\link{tune}}
+\code{\link{resample}}
 }

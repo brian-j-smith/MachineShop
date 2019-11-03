@@ -49,5 +49,5 @@ fit(TunedRecipe(rec, grid = grid), model = GLMModel)
 
 }
 \seealso{
-\code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
+\code{\link{fit}}, \code{\link{resample}}
 }

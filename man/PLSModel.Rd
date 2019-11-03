@@ -33,6 +33,5 @@ fit(sale_amount ~ ., data = ICHomes, model = PLSModel)
 
 }
 \seealso{
-\code{\link[pls]{mvr}}, \code{\link{fit}}, \code{\link{resample}},
-\code{\link{tune}}
+\code{\link[pls]{mvr}}, \code{\link{fit}}, \code{\link{resample}}
 }

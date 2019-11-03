@@ -14,7 +14,7 @@
 \method{diff}{Resamples}(x, ...)
 }
 \arguments{
-\item{x}{model \link{tune}, \link{performance}, or \link{resample} result.}
+\item{x}{model \link{performance} or \link{resample} result.}
 
 \item{...}{arguments passed to other methods.}
 }

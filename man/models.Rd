@@ -73,6 +73,5 @@ with the following meta-model functions:
 }
 }
 \seealso{
-\code{\link{modelinfo}}, \code{\link{fit}}, \code{\link{resample}},
-\code{\link{tune}}
+\code{\link{modelinfo}}, \code{\link{fit}}, \code{\link{resample}}
 }

@@ -51,5 +51,5 @@ fit(Species ~ ., data = iris, model = RPartModel)
 }
 \seealso{
 \code{\link[rpart]{rpart}}, \code{\link{fit}},
-\code{\link{resample}}, \code{\link{tune}}
+\code{\link{resample}}
 }

@@ -73,5 +73,5 @@ fit(Species ~ ., data = iris, model = PDAModel)
 }
 \seealso{
 \code{\link[mda]{fda}}, \code{\link[mda]{predict.fda}},
-\code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
+\code{\link{fit}}, \code{\link{resample}}
 }

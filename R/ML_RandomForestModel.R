@@ -25,7 +25,7 @@
 #' @return \code{MLModel} class object.
 #' 
 #' @seealso \code{\link[randomForest]{randomForest}}, \code{\link{fit}},
-#' \code{\link{resample}}, \code{\link{tune}}
+#' \code{\link{resample}}
 #' 
 #' @examples
 #' fit(sale_amount ~ ., data = ICHomes, model = RandomForestModel)

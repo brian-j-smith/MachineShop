@@ -60,5 +60,5 @@ varimp(model_fit, metric = "nsubsets", scale = FALSE)
 }
 \seealso{
 \code{\link[earth]{earth}}, \code{\link{fit}},
-\code{\link{resample}}, \code{\link{tune}}
+\code{\link{resample}}
 }

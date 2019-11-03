@@ -67,5 +67,5 @@ fit(sale_amount ~ ., data = ICHomes, model = GLMNetModel(lambda = 0.01))
 }
 \seealso{
 \code{\link[glmnet]{glmnet}}, \code{\link{fit}},
-\code{\link{resample}}, \code{\link{tune}}
+\code{\link{resample}}
 }

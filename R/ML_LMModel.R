@@ -11,8 +11,7 @@
 #' 
 #' @return \code{MLModel} class object.
 #' 
-#' @seealso \code{\link[stats]{lm}}, \code{\link{fit}}, \code{\link{resample}},
-#' \code{\link{tune}}
+#' @seealso \code{\link[stats]{lm}}, \code{\link{fit}}, \code{\link{resample}}
 #' 
 #' @examples
 #' fit(sale_amount ~ ., data = ICHomes, model = LMModel)

@@ -41,5 +41,5 @@ fit(SelectedRecipe(rec1, rec2), model = GLMModel)
 
 }
 \seealso{
-\code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
+\code{\link{fit}}, \code{\link{resample}}
 }

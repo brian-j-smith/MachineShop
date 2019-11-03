@@ -7,7 +7,6 @@
 |---------------------------|--------------------------------------------------|
 | `r rdoc_url("fit")`       | Model fitting                                    |
 | `r rdoc_url("resample")`  | Resample estimation of model performance         |
-| `r rdoc_url("tune")`      | Model tuning and selection                       |
 
 &nbsp;
 

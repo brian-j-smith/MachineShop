@@ -37,7 +37,7 @@
 #' @return \code{MLModel} class object.
 #' 
 #' @seealso \code{\link[earth]{earth}}, \code{\link{fit}},
-#' \code{\link{resample}}, \code{\link{tune}}
+#' \code{\link{resample}}
 #' 
 #' @examples
 #' model_fit <- fit(Species ~ ., data = iris, model = EarthModel)

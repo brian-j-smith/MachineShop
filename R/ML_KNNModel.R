@@ -23,8 +23,7 @@
 #' 
 #' @return \code{MLModel} class object.
 #' 
-#' @seealso \code{\link[kknn]{kknn}}, \code{\link{fit}}, \code{\link{resample}},
-#' \code{\link{tune}}
+#' @seealso \code{\link[kknn]{kknn}}, \code{\link{fit}}, \code{\link{resample}}
 #' 
 #' @examples
 #' fit(Species ~ ., data = iris, model = KNNModel)

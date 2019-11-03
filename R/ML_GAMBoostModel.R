@@ -34,7 +34,7 @@
 #' 
 #' @seealso \code{\link[mboost]{gamboost}}, \code{\link[mboost]{Family}},
 #' \code{\link[mboost]{baselearners}}, \code{\link{fit}},
-#' \code{\link{resample}}, \code{\link{tune}}
+#' \code{\link{resample}}
 #' 
 #' @examples
 #' library(MASS)

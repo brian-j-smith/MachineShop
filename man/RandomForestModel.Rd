@@ -45,5 +45,5 @@ fit(sale_amount ~ ., data = ICHomes, model = RandomForestModel)
 }
 \seealso{
 \code{\link[randomForest]{randomForest}}, \code{\link{fit}},
-\code{\link{resample}}, \code{\link{tune}}
+\code{\link{resample}}
 }

@@ -35,6 +35,5 @@ fit(medv ~ ., data = df, model = POLRModel)
 
 }
 \seealso{
-\code{\link[MASS]{polr}}, \code{\link{fit}}, \code{\link{resample}},
-\code{\link{tune}}
+\code{\link[MASS]{polr}}, \code{\link{fit}}, \code{\link{resample}}
 }

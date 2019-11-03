@@ -46,7 +46,7 @@
 \arguments{
 \item{x}{\link{calibration}, \link{confusion},
 \link[=performance_curve]{performance curve}, \link{lift},
-model \link{tune}, partial \link{dependence}, \link{performance},
+tuned model \link{fit}, partial \link{dependence}, \link{performance},
 \link{resample}, or \link[=varimp]{variable importance} result.}
 
 \item{type}{type of plot to construct.}

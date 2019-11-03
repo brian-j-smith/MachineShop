@@ -45,8 +45,7 @@
 #' 
 #' @return \code{MLModel} class object.
 #' 
-#' @seealso \code{\link[C50]{C5.0}}, \code{\link{fit}}, \code{\link{resample}},
-#' \code{\link{tune}}
+#' @seealso \code{\link[C50]{C5.0}}, \code{\link{fit}}, \code{\link{resample}}
 #' 
 #' @examples
 #' model_fit <- fit(Species ~ ., data = iris, model = C50Model)

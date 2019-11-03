@@ -15,7 +15,7 @@
 #' @return \code{MLModel} class object.
 #' 
 #' @seealso \code{\link[e1071]{naiveBayes}}, \code{\link{fit}},
-#' \code{\link{resample}}, \code{\link{tune}}
+#' \code{\link{resample}}
 #' 
 #' @examples
 #' fit(Species ~ ., data = iris, model = NaiveBayesModel)

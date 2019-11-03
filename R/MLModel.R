@@ -58,8 +58,7 @@
 #' 
 #' @return \code{MLModel} class object.
 #' 
-#' @seealso \code{\link{models}}, \code{\link{fit}}, \code{\link{resample}},
-#' \code{\link{tune}}
+#' @seealso \code{\link{models}}, \code{\link{fit}}, \code{\link{resample}}
 #' 
 #' @examples
 #' ## Logistic regression model

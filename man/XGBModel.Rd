@@ -100,5 +100,5 @@ varimp(model_fit, metric = "Frequency", scale = FALSE)
 }
 \seealso{
 \code{\link[xgboost:xgb.train]{xgboost}}, \code{\link{fit}},
-\code{\link{resample}}, \code{\link{tune}}
+\code{\link{resample}}
 }

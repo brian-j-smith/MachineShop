@@ -44,5 +44,5 @@ fit(Species ~ ., data = iris, model = QDAModel)
 }
 \seealso{
 \code{\link[MASS]{qda}}, \code{\link[MASS]{predict.qda}},
-\code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
+\code{\link{fit}}, \code{\link{resample}}
 }

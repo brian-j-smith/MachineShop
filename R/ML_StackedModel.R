@@ -20,7 +20,7 @@
 #' @references
 #' Breiman, L. (1996) \emph{Stacked Regression.} Machine Learning, 24, 49--64.
 #' 
-#' @seealso \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
+#' @seealso \code{\link{fit}}, \code{\link{resample}}
 #' 
 #' @examples
 #' model <- StackedModel(GBMModel, SVMRadialModel, GLMNetModel(lambda = 0.01))

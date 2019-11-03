@@ -51,7 +51,7 @@
 #' @return \code{MLModel} class object.
 #' 
 #' @seealso \code{\link[kernlab]{ksvm}}, \code{\link{fit}},
-#' \code{\link{resample}}, \code{\link{tune}}
+#' \code{\link{resample}}
 #'
 #' @examples
 #' fit(sale_amount ~ ., data = ICHomes, model = SVMRadialModel)

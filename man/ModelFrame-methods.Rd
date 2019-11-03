@@ -47,6 +47,5 @@ varimp(gbm_fit)
 
 }
 \seealso{
-\code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}},
-\code{\link{response}}
+\code{\link{fit}}, \code{\link{resample}}, \code{\link{response}}
 }

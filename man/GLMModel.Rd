@@ -55,6 +55,5 @@ fit(sale_amount ~ ., data = ICHomes, model = GLMModel)
 }
 \seealso{
 \code{\link[stats]{glm}}, \code{\link[stats]{glm.control}},
-\code{\link[MASS]{stepAIC}}, \code{\link{fit}}, \code{\link{resample}},
-\code{\link{tune}}
+\code{\link[MASS]{stepAIC}}, \code{\link{fit}}, \code{\link{resample}}
 }

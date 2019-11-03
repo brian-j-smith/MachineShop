@@ -53,5 +53,5 @@ fit(sale_amount ~ ., data = ICHomes, model = CForestModel)
 }
 \seealso{
 \code{\link[party]{cforest}}, \code{\link{fit}},
-\code{\link{resample}}, \code{\link{tune}}
+\code{\link{resample}}
 }

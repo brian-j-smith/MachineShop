@@ -63,17 +63,17 @@ testset <- ICHomes[-train_indices, ]
 fo <- sale_amount ~ .
 
 ## Boosted regression model tuned with the training set
-(tuned_model <- TunedModel(GBMModel, grid = 5) %>% tune(fo, data = trainset))
-plot(tuned_model, type = "line")
-```
-
-```{r ex_ichomes_tune_fit}
-## Tuned model fit to the training set
-model_fit <- fit(fo, data = trainset, model = tuned_model)
+model_fit <- TunedModel(GBMModel, grid = 5) %>% fit(fo, data = trainset)
 
 ## Variable importance
 vi <- varimp(model_fit)
 plot(vi)
+```
+
+```{r ex_ichomes_tune_model}
+## Performance plotted over the grid points
+(tuned_model <- as.MLModel(model_fit))
+plot(tuned_model, type = "line")
 ```
 
 

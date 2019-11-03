@@ -21,40 +21,16 @@
 #'   \code{\link{TunedModel}} object for model tuning.
 #' @param ... arguments passed to other methods.
 #' 
+#' @details
+#' The \code{tune} function is intended for internal use by the package and will
+#' be deprecated in the future.  To perform model tuning or selection, users
+#' should call the \code{\link{fit}} function with a \code{\link{TunedModel}} or
+#' \code{\link{SelectedModel}} instead.
+#' 
 #' @return \code{MLModel} class object containing the tuning results.
 #' 
-#' @seealso \code{\link{fit}}, \code{\link{performance}}, \code{\link{metrics}},
-#' \code{\link{plot}}, \code{\link{summary}}
-#' 
-#' @examples
-#' \donttest{
-#' ## Numeric response example
-#' fo <- sale_amount ~ .
-#' 
-#' # User-specified grid
-#' model1 <- TunedModel(GBMModel,
-#'                      grid = expand_params(n.trees = c(25, 50, 100),
-#'                                           interaction.depth = 1:3,
-#'                                           n.minobsinnode = c(5, 10)),
-#'                      control = CVControl(folds = 10, repeats = 5))
-#' (gbm_tune1 <- tune(fo, data = ICHomes, model = model1))
-#' 
-#' # Automatically generated grid
-#' model2 <- TunedModel(GBMModel, grid = 3,
-#'                      control = CVControl(folds = 10, repeats = 5))
-#' (gbm_tune2 <- tune(fo, data = ICHomes, model = model2))
-#' 
-#' # Randomly sampled grid points
-#' model3 <- TunedModel(GBMModel, grid = Grid(length = 1000, random = 10),
-#'                      control = CVControl(folds = 10, repeats = 5))
-#' (gbm_tune3 <- tune(fo, data = ICHomes, model = model3))
-#' 
-#' summary(gbm_tune1)
-#' plot(gbm_tune1, type = "line")
-#' 
-#' gbm_fit <- fit(fo, data = ICHomes, model = gbm_tune1)
-#' varimp(gbm_fit)
-#' }
+#' @seealso \code{\link{fit}}, \code{\link{SelectedModel}},
+#' \code{\link{TunedModel}}
 #' 
 tune <- function(x, ...) {
   UseMethod("tune")

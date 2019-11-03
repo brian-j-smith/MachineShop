@@ -42,6 +42,5 @@ fit(Species ~ ., data = iris, model = KNNModel)
 
 }
 \seealso{
-\code{\link[kknn]{kknn}}, \code{\link{fit}}, \code{\link{resample}},
-\code{\link{tune}}
+\code{\link[kknn]{kknn}}, \code{\link{fit}}, \code{\link{resample}}
 }

@@ -51,8 +51,7 @@
 #' @return \code{MLModel} class object.
 #' 
 #' @seealso \code{\link[BART]{gbart}}, \code{\link[BART]{mbart}},
-#' \code{\link[BART]{surv.bart}}, \code{\link{fit}}, \code{\link{resample}},
-#' \code{\link{tune}}
+#' \code{\link[BART]{surv.bart}}, \code{\link{fit}}, \code{\link{resample}}
 #' 
 #' @examples
 #' \donttest{

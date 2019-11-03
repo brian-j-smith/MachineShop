@@ -48,9 +48,26 @@ Model tuning over a grid of parameter values.
 }
 }
 \examples{
-fit(sale_amount ~ ., data = ICHomes, model = TunedModel(GLMNetModel))
+# Automatically generated grid
+model_fit <- fit(sale_amount ~ ., data = ICHomes,
+                 model = TunedModel(GBMModel))
+varimp(model_fit)
+(tuned_model <- as.MLModel(model_fit))
+summary(tuned_model)
+plot(tuned_model, type = "l")
+
+\donttest{# Randomly sampled grid points
+fit(sale_amount ~ ., data = ICHomes,
+    model = TunedModel(GBMModel, grid = Grid(length = 1000, random = 10)))
+
+# User-specified grid
+fit(sale_amount ~ ., data = ICHomes,
+    model = TunedModel(GBMModel,
+                       grid = expand_params(n.trees = c(25, 50, 100),
+                                            interaction.depth = 1:3,
+                                            n.minobsinnode = c(5, 10))))}
 
 }
 \seealso{
-\code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
+\code{\link{fit}}, \code{\link{resample}}
 }

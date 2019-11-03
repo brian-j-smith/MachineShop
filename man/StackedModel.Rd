@@ -39,5 +39,5 @@ predict(model_fit, newdata = ICHomes)
 Breiman, L. (1996) \emph{Stacked Regression.} Machine Learning, 24, 49--64.
 }
 \seealso{
-\code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
+\code{\link{fit}}, \code{\link{resample}}
 }

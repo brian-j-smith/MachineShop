@@ -5,7 +5,7 @@
 #' @name diff
 #' @rdname diff-methods
 #' 
-#' @param x model \link{tune}, \link{performance}, or \link{resample} result. 
+#' @param x model \link{performance} or \link{resample} result. 
 #' @param ... arguments passed to other methods.
 #' 
 #' @return \code{PerformanceDiff} class object that inherits from

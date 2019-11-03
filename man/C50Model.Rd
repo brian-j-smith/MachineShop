@@ -72,6 +72,5 @@ varimp(model_fit, metric = "splits", scale = FALSE)
 
 }
 \seealso{
-\code{\link[C50]{C5.0}}, \code{\link{fit}}, \code{\link{resample}},
-\code{\link{tune}}
+\code{\link[C50]{C5.0}}, \code{\link{fit}}, \code{\link{resample}}
 }

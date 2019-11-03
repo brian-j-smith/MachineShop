@@ -105,6 +105,5 @@ summary(res)
 
 }
 \seealso{
-\code{\link{models}}, \code{\link{fit}}, \code{\link{resample}},
-\code{\link{tune}}
+\code{\link{models}}, \code{\link{fit}}, \code{\link{resample}}
 }

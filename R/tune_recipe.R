@@ -13,7 +13,7 @@
 #' @return Tuned \code{ModelRecipe} class object that inherits from
 #' \code{recipe}.
 #' 
-#' @seealso \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
+#' @seealso \code{\link{fit}}, \code{\link{resample}}
 #' 
 #' @noRd
 #' 

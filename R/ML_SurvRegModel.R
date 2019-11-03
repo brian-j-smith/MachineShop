@@ -21,7 +21,7 @@
 #' 
 #' @seealso \code{\link[rms]{psm}}, \code{\link[survival]{survreg}},
 #' \code{\link[survival]{survreg.control}}, \code{\link[MASS]{stepAIC}},
-#' \code{\link{fit}}, \code{\link{resample}}, \code{\link{tune}}
+#' \code{\link{fit}}, \code{\link{resample}}
 #' 
 SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
                                   "logistic", "lognormal", "logloglogistic"),
@@ -78,7 +78,7 @@ MLModelFunction(SurvRegModel) <- NULL
 #' @param steps maximum number of steps to be considered.
 #' 
 #' @seealso \code{\link[MASS]{stepAIC}}, \code{\link{fit}},
-#' \code{\link{resample}}, \code{\link{tune}}
+#' \code{\link{resample}}
 #' 
 #' @examples
 #' library(survival)

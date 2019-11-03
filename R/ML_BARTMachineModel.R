@@ -43,7 +43,7 @@
 #' @return \code{MLModel} class object.
 #' 
 #' @seealso \code{\link[bartMachine]{bartMachine}}, \code{\link{fit}},
-#' \code{\link{resample}}, \code{\link{tune}}
+#' \code{\link{resample}}
 #' 
 #' @examples
 #' \donttest{

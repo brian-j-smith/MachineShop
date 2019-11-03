@@ -28,7 +28,7 @@
 }
 \arguments{
 \item{object}{\link{confusion}, \link[=performance_curve]{performance curve},
-\link{lift}, model \link{tune}, \link{performance}, or \link{resample}
+\link{lift}, tuned model \link{fit}, \link{performance}, or \link{resample}
 result.}
 
 \item{...}{arguments passed to other methods.}
