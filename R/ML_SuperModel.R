@@ -87,7 +87,7 @@ MLModelFunction(SuperModel) <- NULL
        super_fit = fit(super_mf, model = super_learner),
        all_vars = params$all_vars,
        times = control@times) %>%
-    asMLModelFit("SuperModelFit", model, x, response(mf))
+    MLModelFit("SuperModelFit", model, x, response(mf))
 }
 
 

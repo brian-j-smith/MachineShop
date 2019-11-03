@@ -93,7 +93,7 @@ MLModelFunction(StackedModel) <- NULL
                           function(learner) fit(mf, model = learner)),
        weights = weights,
        times = times) %>%
-    asMLModelFit("StackedModelFit", model, x, response(mf))
+    MLModelFit("StackedModelFit", model, x, response(mf))
 }
 
 

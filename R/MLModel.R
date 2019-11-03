@@ -109,7 +109,7 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
 }
 
 
-asMLModelFit <- function(object, Class, model, x, y) {
+MLModelFit <- function(object, Class, model, x, y) {
   model@x <- x
   model@y <- y
 
