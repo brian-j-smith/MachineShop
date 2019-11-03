@@ -134,6 +134,23 @@ MLModelFit <- function(object, Class, model, x, y) {
 }
 
 
+#' Coerce to an MLModel
+#' 
+#' Function to coerce an \code{MLModelFit} object to an \code{MLModel}.
+#' 
+#' @rdname as.MLModel
+#' 
+#' @param x model \link{fit} result.
+#' @param ... arguments passed to other methods.
+#' 
+#' @return \code{MLModel} class object.
+#' 
+as.MLModel <- function(x, ...) {
+  stopifnot(is(x, "MLModelFit"))
+  if (isS4(x)) x@mlmodel else x$mlmodel
+}
+
+
 unMLModelFit <- function(object) {
   if (is(object, "MLModelFit")) {
     if (isS4(object)) {
@@ -147,19 +164,4 @@ unMLModelFit <- function(object) {
       structure(object, class = classes[-(1:pos)])
     }
   } else object
-}
-
-
-modelbits <- function(object, ...) {
-  UseMethod("modelbits")
-}
-
-
-modelbits.MLModel <- function(object, name = NULL, ...) {
-  if (is.null(name)) object else slot(object, name)
-}
-
-
-modelbits.MLModelFit <- function(object, name = NULL, ...) {
-  modelbits(if (isS4(object)) object@mlmodel else object$mlmodel, name = name)
 }

@@ -144,7 +144,7 @@ modelinfo <- function(...) {
     response_types = x@response_types,
     arguments = args(fget0(x@name)),
     grid = !is.null(body(x@grid)),
-    varimp = !is.null(body(modelbits(x, "varimp")))
+    varimp = !is.null(body(x@varimp))
   )), names = x@name)
   if (length(list(...))) c(info, .modelinfo(...)) else info
 }

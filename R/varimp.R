@@ -57,8 +57,9 @@ VarImp.numeric <- function(object, ...) {
 #'
 varimp <- function(object, scale = TRUE, ...) {
   stopifnot(is(object, "MLModelFit"))
-  requireModelNamespaces(modelbits(object, "packages"))
-  vi <- modelbits(object, "varimp")(unMLModelFit(object), ...)
+  model <- as.MLModel(object)
+  requireModelNamespaces(model@packages)
+  vi <- model@varimp(unMLModelFit(object), ...)
   if (is.null(vi)) vi <- varimp_undef(object)
   VarImp(vi, scale = scale)
 }
@@ -81,6 +82,6 @@ varimp_wald.numeric <- function(object, var, ...) {
 
 varimp_undef <- function(object) {
   warn("variable importance not defined for ", class(object)[1])
-  varnames <- labels(terms(modelbits(object, "x")))
+  varnames <- labels(terms(as.MLModel(object)@x))
   structure(rep(NA_real_, length(varnames)), names = varnames)
 }

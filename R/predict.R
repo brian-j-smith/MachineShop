@@ -41,12 +41,12 @@ predict.MLModelFit <- function(object, newdata = NULL, times = NULL,
                                type = c("response", "prob"),
                                cutoff = MachineShop::settings("cutoff"),
                                dist = NULL, method = NULL, ...) {
-  newdata <- preprocess(modelbits(object, "x"), newdata)
-  requireModelNamespaces(modelbits(object, "packages"))
+  model <- as.MLModel(object)
+  newdata <- preprocess(model@x, newdata)
+  requireModelNamespaces(model@packages)
   obs <- response(object)
-  pred <- modelbits(object, "predict")(unMLModelFit(object), newdata,
-                                       model = modelbits(object), times = times,
-                                       dist = dist, method = method, ...)
+  pred <- model@predict(unMLModelFit(object), newdata, model = model,
+                        times = times, dist = dist, method = method, ...)
   pred <- convert_prob(obs, pred, times = times)
   if (match.arg(type) == "response") {
     pred <- convert_response(obs, pred, cutoff = cutoff)

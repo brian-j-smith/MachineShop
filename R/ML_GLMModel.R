@@ -111,8 +111,8 @@ GLMStepAICModel <- function(family = NULL, ...,
         MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,
                       trace = trace, steps = steps)
     },
-    predict = modelbits(stepmodel, "predict"),
-    varimp = modelbits(stepmodel, "varimp")
+    predict = stepmodel@predict,
+    varimp = stepmodel@varimp
   )
   
 }

@@ -20,7 +20,8 @@
 #' 
 #' @return \code{MLModelFit} class object.
 #' 
-#' @seealso \code{\link{response}}, \code{\link{predict}}, \code{\link{varimp}}
+#' @seealso \code{\link{as.MLModel}}, \code{\link{response}},
+#' \code{\link{predict}}, \code{\link{varimp}}
 #' 
 #' @examples
 #' ## Survival response example

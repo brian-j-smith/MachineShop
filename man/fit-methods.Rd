@@ -67,5 +67,6 @@ varimp(gbm_fit)
 
 }
 \seealso{
-\code{\link{response}}, \code{\link{predict}}, \code{\link{varimp}}
+\code{\link{as.MLModel}}, \code{\link{response}},
+\code{\link{predict}}, \code{\link{varimp}}
 }

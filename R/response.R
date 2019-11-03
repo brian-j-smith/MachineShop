@@ -56,7 +56,7 @@ response.MLModel <- function(object, newdata = NULL, ...) {
 #' @rdname response-methods
 #' 
 response.MLModelFit <- function(object, newdata = NULL, ...) {
-  response(modelbits(object), newdata)
+  response(as.MLModel(object), newdata)
 }
 
 

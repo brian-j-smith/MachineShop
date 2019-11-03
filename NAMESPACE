@@ -25,6 +25,7 @@ importFrom(utils, combn, head, methods, relist, stack, str, tail)
 
 
 export(.,
+       as.MLModel,
        calibration,
        Calibration,
        confusion,
