@@ -3,8 +3,7 @@
 #' Predictive peformance-based tuning of a model over a grid of parameters
 #' values or selection from a set of candidate models.
 #' 
-#' @name tune
-#' @rdname tune-methods
+#' @rdname tune_model
 #' 
 #' @param x defines a relationship between model predictor and response
 #'   variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
@@ -32,58 +31,60 @@
 #' @seealso \code{\link{fit}}, \code{\link{SelectedModel}},
 #' \code{\link{TunedModel}}
 #' 
-tune <- function(x, ...) {
-  UseMethod("tune")
-}
-
-
-#' @rdname tune-methods
+#' @noRd
 #' 
-tune.formula <- function(x, data, model, ...) {
-  tune_depwarn(...)
-  .tune(model, x, data)
+tune_model <- function(x, ...) {
+  UseMethod("tune_model")
 }
 
 
-#' @rdname tune-methods
+#' @rdname tune_model
 #' 
-tune.matrix <- function(x, y, model, ...) {
-  tune_depwarn(...)
-  .tune(model, x, y)
+tune_model.formula <- function(x, data, model, ...) {
+  tune_model_depwarn(...)
+  .tune_model(model, x, data)
 }
 
 
-#' @rdname tune-methods
+#' @rdname tune_model
 #' 
-tune.ModelFrame <- function(x, model, ...) {
-  tune_depwarn(...)
-  .tune(model, x)
+tune_model.matrix <- function(x, y, model, ...) {
+  tune_model_depwarn(...)
+  .tune_model(model, x, y)
 }
 
 
-#' @rdname tune-methods
+#' @rdname tune_model
 #' 
-tune.recipe <- function(x, model, ...) {
-  tune_depwarn(...)
-  .tune(model, x)
+tune_model.ModelFrame <- function(x, model, ...) {
+  tune_model_depwarn(...)
+  .tune_model(model, x)
 }
 
 
-#' @rdname tune-methods
+#' @rdname tune_model
 #' 
-tune.MLModel <- function(x, ...) {
-  tune(..., model = x)
+tune_model.recipe <- function(x, model, ...) {
+  tune_model_depwarn(...)
+  .tune_model(model, x)
 }
 
 
-#' @rdname tune-methods
+#' @rdname tune_model
 #' 
-tune.MLModelFunction <- function(x, ...) {
-  tune(..., model = x)
+tune_model.MLModel <- function(x, ...) {
+  tune_model(..., model = x)
 }
 
 
-tune_depwarn <- function(...) {
+#' @rdname tune_model
+#' 
+tune_model.MLModelFunction <- function(x, ...) {
+  tune_model(..., model = x)
+}
+
+
+tune_model_depwarn <- function(...) {
   args <- list(...)
   
   if (!is.null(args$models)) {
@@ -96,12 +97,12 @@ tune_depwarn <- function(...) {
   if (any(pmatch(names(args), dep_names, nomatch = 0))) {
     depwarn(paste("deprecated tune arguments:", toString(dep_names)),
             "supply a SelectedModel or TunedModel instead",
-            expired = Sys.Date() >= "2020-01-15")
+            expired = Sys.Date() >= "2020-01-01")
   }
 }
 
 
-.tune <- function(model, ...) {
+.tune_model <- function(model, ...) {
   
   if (is(model, "SelectedModel")) {
     params <- model@params
@@ -113,7 +114,7 @@ tune_depwarn <- function(...) {
                     ..., model = params$model)
     models <- expand_model(list(params$model, grid))
   } else {
-    return(tune(SelectedModel(model), ...))
+    return(tune_model(SelectedModel(model), ...))
   }
   
   metrics <- params$metrics

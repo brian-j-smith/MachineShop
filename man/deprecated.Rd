@@ -2,9 +2,12 @@
 % Please edit documentation in R/deprecated.R
 \name{expand.model}
 \alias{expand.model}
+\alias{tune}
 \title{Deprecated Functions}
 \usage{
 expand.model(...)
+
+tune(...)
 }
 \arguments{
 \item{...}{arguments passed to non-deprecated equivalent.}

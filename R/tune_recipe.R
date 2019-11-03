@@ -42,7 +42,7 @@ tune_recipe.SelectedRecipe <- function(x, model, ...) {
   perf_stats <- numeric(n)
   for (i in seq_len(n)) {
     rec <- setdata(recipes[[i]])
-    tune <- tune(model, rec)@tune
+    tune <- tune_model(model, rec)@tune
     perf_stats[i] <- tune@values[tune@selected]
   }
   
@@ -68,7 +68,7 @@ tune_recipe.TunedRecipe <- function(x, model, ...) {
   perf_stats <- numeric(n)
   for (i in seq_len(n)) {
     x <- eval(as.call(c(update_x, grid[i, ])))
-    tune <- tune(model, x)@tune
+    tune <- tune_model(model, x)@tune
     perf_stats[i] <- tune@values[tune@selected]
   }
   

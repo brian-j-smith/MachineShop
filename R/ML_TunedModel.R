@@ -93,5 +93,5 @@ MLModelFunction(TunedModel) <- NULL
 
 
 .fit.TunedModel <- function(model, x, ...) {
-  fit(x, model = tune(model, x))
+  fit(x, model = tune_model(model, x))
 }
