@@ -2,6 +2,11 @@
 
 ## Version Updates
 
+## 1.6.3
+* Add `as.MLModel()` for coercing `MLModelFit` to `MLModel`.
+* Deprecate `tune()`; call `fit()` with a `SelectedModel` or `TunedModel` instead.
+
+
 ## 1.6.2
 * Implement optimism-corrected cross-validation (`CVOptimismControl`).
 * Fix `BootOptimismControl` error with 2D responses.
