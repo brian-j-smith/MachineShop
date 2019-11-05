@@ -35,7 +35,9 @@
 #' 
 metricinfo <- function(...) {
   args <- list(...)
-  if (length(args) == 1 && is.vector(args[[1]])) args <- as.list(args[[1]])
+  if (length(args) == 1 && is.vector(args[[1]]) && length(args[[1]])) {
+    args <- as.list(args[[1]])
+  }
   args <- if (length(args)) unname(args) else as.list(.metric_names)
   info <- do.call(.metricinfo, args)
   
