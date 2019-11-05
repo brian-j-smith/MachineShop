@@ -8,7 +8,7 @@
 #'   which to evaluate a single model supplied to \code{models}, such as that
 #'   returned by \code{\link{expand_params}}; the number of parameter-specific
 #'   values to generate automatically if the model has a pre-defined grid; or a
-#'   call to \code{\link{Grid}}.
+#'   call to \code{\link{Grid}} or \code{\link{ParamSet}}.
 #' @param fixed list of fixed parameter values to combine with those in
 #'   \code{grid}.
 #' @param control \link[=controls]{control} function, function name, or call
@@ -64,14 +64,18 @@ TunedModel <- function(model, grid = MachineShop::settings("grid"),
     stopifnot(is(model, "MLModelFunction"))
   }
   
-  if (is(grid, "numeric")) {
-    grid <- Grid(grid)
+  grid <- if (is(grid, "numeric")) {
+    Grid(grid)
   } else if (identical(grid, "Grid") || identical(grid, Grid)) {
-    grid <- Grid()
+    Grid()
+  } else if (is(grid, "Grid")) {
+    grid
+  } else if (is(grid, "param_set")) {
+    ParamSet(grid)
   } else if (is(grid, "data.frame")) {
-    grid <- as_tibble(grid)
-  } else if (!is(grid, "Grid")) {
-    stop("'grid' must be a grid length, Grid object, or data frame")
+    as_tibble(grid)
+  } else {
+    stop("'grid' must be a grid length, Grid or ParamSet object, or data frame")
   }
   
   fixed <- as_tibble(fixed)

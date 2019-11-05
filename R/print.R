@@ -74,12 +74,8 @@ print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
     print(x@params$model)
     cat("\n")
     grid <- x@params$grid
-    if (length(dim(grid)) == 2) {
-      cat("Grid:\n")
-      print_items(grid, n = n)
-    } else {
-      print(grid)
-    }
+    if (!isS4(grid)) cat("Grid:\n")
+    print_items(grid, n = n)
     cat("\n")
     print(x@params$control)
   } else {
@@ -150,6 +146,19 @@ print.ModelRecipe <- function(x, ...) {
   print_title(x)
   cat("\n")
   NextMethod()
+  invisible(x)
+}
+
+
+print.ParamSet <- function(x, ...) {
+  print_title(x)
+  print(asS3(x))
+  if (x@random) {
+    cat("Random sample:", x@random, "\n")
+  } else {
+    cat("Length", plural_suffix(x@length), ": ", toString(x@length), "\n",
+        sep = "")
+  }
   invisible(x)
 }
 
@@ -453,6 +462,14 @@ setMethod("show", "Grid",
         "Random sample: ", object@random, "\n",
         sep = ""
     )
+    invisible()
+  }
+)
+
+
+setMethod("show", "ParamSet",
+  function(object) {
+    print(object)
     invisible()
   }
 )

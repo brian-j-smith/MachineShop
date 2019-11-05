@@ -5,6 +5,7 @@ importClassesFrom(kernlab, ksvm)
 importClassesFrom(party, RandomForest)
 
 importFrom(abind, abind, adrop)
+importFrom(dials, param_set)
 importFrom(foreach, "%dopar%", foreach, registerDoSEQ)
 importFrom(graphics, plot)
 importFrom(magrittr, "%>%")
@@ -44,6 +45,7 @@ export(.,
        metricinfo,
        ModelFrame,
        modelinfo,
+       ParamSet,
        performance,
        performance_curve,
        resample,
@@ -201,6 +203,7 @@ S3method(print, MLModelFunction)
 S3method(print, MLTune)
 S3method(print, ModelFrame)
 S3method(print, ModelRecipe)
+S3method(print, ParamSet)
 S3method(print, Performance)
 S3method(print, RecipeGrid)
 S3method(print, Resamples)

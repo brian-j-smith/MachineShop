@@ -111,7 +111,7 @@ tune_model_depwarn <- function(...) {
   } else if (is(model, "TunedModel")) {
     params <- model@params
     grid <- as.grid(params$grid, fixed = params$fixed,
-                    ..., model = params$model)
+                    ..., model = getMLObject(params$model, "MLModel"))
     models <- expand_model(list(params$model, grid))
   } else {
     return(tune_model(SelectedModel(model), ...))
