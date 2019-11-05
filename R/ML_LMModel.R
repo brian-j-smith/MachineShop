@@ -51,7 +51,7 @@ LMModel <- function() {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata)
     },
-    varimp = function(object, ...) varimp_wald(object)
+    varimp = function(object, ...) varimp_pval(object)
   )
   
 }

@@ -57,7 +57,7 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
       new_lp <- predict(object, newdata = newdata, type = "lp")
       predict(y, lp, times, new_lp, ...)
     },
-    varimp = function(object, ...) varimp_wald(object)
+    varimp = function(object, ...) varimp_pval(object)
   )
   
 }

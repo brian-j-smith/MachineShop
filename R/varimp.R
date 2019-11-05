@@ -65,18 +65,35 @@ varimp <- function(object, scale = TRUE, ...) {
 }
 
 
-varimp_wald <- function(object, ...) {
-  UseMethod("varimp_wald")
+varimp_pval <- function(object, ...) {
+  UseMethod("varimp_pval")
 }
 
 
-varimp_wald.default <- function(object, ...) {
-  varimp_wald(coef(object), diag(vcov(object)))
+varimp_pval.default <- function(object, ...) {
+  varimp_pval(coef(object), diag(vcov(object)))
 }
 
 
-varimp_wald.numeric <- function(object, var, ...) {
-  pchisq(object^2 / var, 1)
+varimp_pval.glm <- function(object, ...) {
+  anova <- drop1(object, test = "Chisq")
+  -log(anova[-1, "Pr(>Chi)", drop = FALSE])
+}
+
+
+varimp_pval.lm <- function(object, ...) {
+  anova <- drop1(object, test = "F")
+  -log(anova[-1, "Pr(>F)", drop = FALSE])
+}
+
+
+varimp_pval.mlm <- function(object, ...) {
+  varimp_pval.default(object)
+}
+
+
+varimp_pval.numeric <- function(object, var, ...) {
+  -pchisq(object^2 / var, 1, lower.tail = FALSE, log.p = TRUE)
 }
 
 

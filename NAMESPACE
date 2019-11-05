@@ -13,7 +13,7 @@ importFrom(recipes, bake, fully_trained, prep, recipe)
 importFrom(rsample, analysis, assessment, bootstraps, initial_split,
            rsample2caret, testing, vfold_cv)
 importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
-           delete.response, formula, get_all_vars, loess, lm, median,
+           delete.response, drop1, formula, get_all_vars, loess, lm, median,
            model.frame, model.matrix, model.matrix.default, model.response,
            model.weights, na.fail, na.omit, na.pass, p.adjust, pchisq, predict,
            quantile, reformulate, reshape, sd, t.test, terms, time, update,

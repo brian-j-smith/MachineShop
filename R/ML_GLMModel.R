@@ -53,7 +53,7 @@ GLMModel <- function(family = NULL, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, type = "response")
     },
-    varimp = function(object, ...) varimp_wald(object)
+    varimp = function(object, ...) varimp_pval(object)
   )
   
 }

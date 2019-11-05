@@ -14,7 +14,7 @@ The importance of variables in a model fit is estimated with the `varimp` functi
 plot(vi)
 ```
 
-Alternatively, importance is based on one minus predictor variable p-values for statistical models, like `CoxModel`, that produce them.  For other classes of models, variable importance is generally defined and calculated by their underlying source packages.
+Alternatively, importance is based on negative log-transformed p-values for statistical models, like `CoxModel`, that produce them.  For other classes of models, variable importance is generally defined and calculated by their underlying source packages.
 
 
 ## Calibration Curves
