@@ -72,7 +72,7 @@ setMetricMethod("auc", c("Resamples", "NULL"),
 setMetricMethod("auc", c("Surv", "SurvProbs"),
   function(observed, predicted, metrics, ...) {
     x <- unname(auc(performance_curve(observed, predicted, metrics = metrics)))
-    times <- time(predicted)
+    times <- predicted@times
     if (length(times) > 1) {
       c("mean" = surv_metric_mean(x, times), "time" = x)
     } else {
@@ -117,7 +117,7 @@ setMetricMethod_Resamples("brier")
 
 setMetricMethod("brier", c("Surv", "SurvProbs"),
   function(observed, predicted, ...) {
-    times <- time(predicted)
+    times <- predicted@times
     obs_times <- observed[, "time"]
     obs_events <- observed[, "status"]
     

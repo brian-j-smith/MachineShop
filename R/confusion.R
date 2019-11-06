@@ -169,7 +169,7 @@ setMethod(".confusion_matrix", c("Surv", "SurvProbs"),
 
 setMethod(".confusion_matrix", c("Surv", "SurvEvents"),
   function(observed, predicted, ...) {
-    times <- time(predicted)
+    times <- predicted@times
     surv <- predict(survfit(observed ~ 1, se.fit = FALSE), times)
     
     conf_tbl <- table(Predicted = 0:1, Observed = 0:1)

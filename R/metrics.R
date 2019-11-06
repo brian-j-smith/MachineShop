@@ -209,7 +209,7 @@ metric_matrix <- function(observed, predicted, FUN, ...) {
 metric_SurvMatrix <- function(observed, predicted, FUN, cutoff = NULL, ...) {
   conf <- confusion(observed, predicted, cutoff = cutoff)
   x <- sapply(conf, FUN, ...)
-  times <- time(predicted)
+  times <- predicted@times
   if (length(times) > 1) c("mean" = surv_metric_mean(x, times), x) else x[[1]]
 }
 

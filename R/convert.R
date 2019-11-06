@@ -121,6 +121,6 @@ setMethod("convert_response", c("Surv", "SurvProbs"),
   function(object, x, cutoff, ...) {
     events <- x <= cutoff
     mode(events) <- "integer"
-    SurvEvents(events, time(x))
+    SurvEvents(events, x@times)
   }
 )

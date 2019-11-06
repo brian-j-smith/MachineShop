@@ -17,8 +17,8 @@ importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
            delete.response, drop1, formula, get_all_vars, loess, lm, median,
            model.frame, model.matrix, model.matrix.default, model.response,
            model.weights, na.fail, na.omit, na.pass, offset, p.adjust, pchisq,
-           predict, quantile, reformulate, reshape, sd, t.test, terms, time,
-           update, vcov)
+           predict, quantile, reformulate, reshape, sd, t.test, terms, update,
+           vcov)
 importFrom(survival, concordance, is.Surv, Surv, survfit, survreg,
            survreg.distributions)
 importFrom(tibble, as_tibble, tibble)
@@ -154,6 +154,7 @@ export(MLControl,
        XGBTreeModel)
 
 S3method(as.data.frame, ModelFrame)
+S3method(as.data.frame, SurvMatrix)
 S3method(bake, ModelRecipe)
 S3method(bake, SelectedRecipe)
 S3method(bake, TunedRecipe)
@@ -165,6 +166,7 @@ S3method(fit, MLModel)
 S3method(fit, MLModelFunction)
 S3method(fit, ModelFrame)
 S3method(fit, recipe)
+S3method(format, SurvMatrix)
 S3method(formula, ModelFrame)
 S3method(model.matrix, DesignTerms)
 S3method(model.matrix, FormulaTerms)
@@ -219,7 +221,6 @@ S3method(resample, recipe)
 S3method(response, MLModelFit)
 S3method(response, ModelFrame)
 S3method(response, recipe)
-S3method(str, SurvMatrix)
 S3method(summary, Confusion)
 S3method(summary, ConfusionMatrix)
 S3method(summary, Curves)
@@ -229,4 +230,3 @@ S3method(summary, Performance)
 S3method(summary, Resamples)
 S3method(t.test, PerformanceDiff)
 S3method(terms, ModelFrame)
-S3method("[", SurvMatrix)

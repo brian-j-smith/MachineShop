@@ -48,10 +48,10 @@ setMethod(".append", c("Surv", "Surv"),
 
 setMethod(".append", c("SurvMatrix", "SurvMatrix"),
   function(x, y) {
-    stopifnot(identical(time(x), time(y)))
-    object_class <- class(x)
-    if (!identical(object_class, class(y))) object_class <-  "SurvMatrix"
-    structure(rbind(x, y), class = object_class, times = time(x))
+    stopifnot(identical(x@times, y@times))
+    class <- class(x)
+    if (class != class(y)) class <- "SurvMatrix"
+    new(class, rbind(x, y), times = x@times)
   }
 )
 

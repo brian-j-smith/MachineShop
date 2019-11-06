@@ -188,7 +188,7 @@ setMethod(".curve_default", c("factor", "numeric"),
 
 setMethod(".curve_default", c("Surv", "SurvProbs"),
   function(observed, predicted, metrics, ...) {
-    times <- time(predicted)
+    times <- predicted@times
     surv <- predict(survfit(observed ~ 1, se.fit = FALSE), times)
 
     conf <- ConfusionMatrix(table(Predicted = 0:1, Observed = 0:1))

@@ -201,13 +201,18 @@ print.Resamples <- function(x, n = MachineShop::settings("max.print"), ...) {
 }
 
 
+format.SurvMatrix <- function(x, ...) {
+  format(as(x, "matrix"), ...)
+}
+
+
 #' @rdname print-methods
 #' 
 print.SurvMatrix <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
-  print_items(as.data.frame(as(x, "matrix")), n = n)
-  cat("Attribute \"times\":\n")
-  print(time(x))
+  print_items(as(x, "matrix"), n = n)
+  cat("Times:\n")
+  print(x@times)
   invisible(x)
 }
 
@@ -230,12 +235,6 @@ print.VarImp <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   print_items(as(x, "data.frame"), n = n)
   invisible(x)
-}
-
-
-str.SurvMatrix <- function(object, ...) {
-  cat("'", class(object)[1], "'", sep = "")
-  str(unclass(object), ...)
 }
 
 
@@ -524,6 +523,14 @@ setMethod("show", "SelectedRecipe",
 )
 
 
+setMethod("show", "SurvMatrix",
+  function(object) {
+    print(object)
+    invisible()
+  }
+)
+
+
 setMethod("show", "TunedRecipe",
   function(object) {
     print(object)
@@ -564,14 +571,8 @@ print_items.character <- function(x, n, ...) {
 }
 
 
-print_items.data.frame <- function(x, n, ...) {
-  diff <- nrow(x) - n
-  if (diff > 0) {
-    print(head(x, n))
-    cat("... with ", diff, " more row", if (diff > 1) "s", "\n", sep ="")
-  } else {
-    print(x)
-  }
+print_items.data.frame <- function(x, ...) {
+  print_items.matrix(x, ...)
 }
 
 
@@ -581,6 +582,17 @@ print_items.list <- function(x, n, ...) {
     print(head(x, n))
     cat("... with ", diff, " more element", if (diff > 1) "s", ": ",
         toString(tail(names(x), diff)), "\n\n", sep = "")
+  } else {
+    print(x)
+  }
+}
+
+
+print_items.matrix <- function(x, n, ...) {
+  diff <- nrow(x) - n
+  if (diff > 0) {
+    print(head(x, n))
+    cat("... with ", diff, " more row", if (diff > 1) "s", "\n", sep ="")
   } else {
     print(x)
   }

@@ -195,7 +195,7 @@ Weibull.SurvProbs <- function(x, shape = NULL, ...) {
     function(df) c(mean(df$y - shape * df$x), shape)
   }
   coef <- apply(x, 1, function(surv) {
-    df <- surv_cases(x = log(time(x)), y = log(-log(surv)),
+    df <- surv_cases(x = log(x@times), y = log(-log(surv)),
                      subset = diff(c(1, surv)) < 0)
     weibullfit(df)
   })
@@ -248,9 +248,15 @@ SurvMatrix <- function(object, times = NULL) {
     stop("unequal number of survival times and predictions")
   }
   
-  dimnames(object) <- list(NULL, paste("Time", seq(ncol(object))))
+  rownames(object) <- NULL
+  colnames(object) <- if (length(times)) paste("Time", seq_along(times))
   
-  structure(object, class = "SurvMatrix", times = times)
+  new("SurvMatrix", object, times = times)
+}
+
+
+as.data.frame.SurvMatrix <- function(x, ...) {
+  as.data.frame.model.matrix(x, ...)
 }
 
 
@@ -274,31 +280,26 @@ SurvMatrix <- function(object, times = NULL) {
 #' @seealso \code{\link{performance}}, \code{\link{metrics}}
 #' 
 SurvEvents <- function(object = numeric(), times = NULL) {
-  object <- SurvMatrix(object, times)
-  structure(object, class = c("SurvEvents", class(object)))
+  new("SurvEvents", SurvMatrix(object, times))
 }
 
 
 #' @rdname SurvMatrix
 #' 
 SurvProbs <- function(object = numeric(), times = NULL) {
-  object <- SurvMatrix(object, times)
-  structure(object, class = c("SurvProbs", class(object)))
+  new("SurvProbs", SurvMatrix(object, times))
 }
 
 
 mean.SurvProbs <- function(x, ...) {
-  apply(x, 1, function(surv) surv_mean(time(x), surv))
+  apply(x, 1, function(surv) surv_mean(x@times, surv))
 }
 
 
 predict.SurvProbs <- function(object, times, ...) {
-  idx <- findInterval(times, time(object))
+  idx <- findInterval(times, object@times)
   cbind(1, object)[, idx + 1, drop = FALSE]
 }
-
-
-time.SurvMatrix <- function(x, ...) attr(x, "times")
 
 
 #################### Survival Utility Functions ####################

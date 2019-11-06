@@ -1,8 +1,6 @@
 setOldClass("ModelFrame")
 setOldClass("recipe")
 setOldClass("Surv")
-setOldClass(c("SurvEvents", "SurvMatrix"))
-setOldClass(c("SurvProbs", "SurvMatrix"))
 setOldClass(c("tbl_df", "tbl", "data.frame"))
 
 setOldClass(c("param_grid", "tbl_df"))
@@ -232,6 +230,22 @@ setClass("SelectedRecipe",
   contains = "ModelRecipe",
   slots = c(recipes = "list",
             params = "list")
+)
+
+
+setClass("SurvMatrix",
+  contains = "matrix",
+  slots = c(times = "numeric")
+)
+
+
+setClass("SurvEvents",
+  contains = "SurvMatrix"
+)
+
+
+setClass("SurvProbs",
+  contains = "SurvMatrix"
 )
 
 

@@ -3,24 +3,29 @@
 \docType{methods}
 \name{extract}
 \alias{extract}
-\alias{[.SurvMatrix}
 \alias{[,Resamples,ANY,ANY,ANY-method}
-\title{Extract Parts of an Object}
+\alias{[,Resamples,ANY,missing,ANY-method}
+\alias{[,Resamples,missing,missing,ANY-method}
+\alias{[,SurvMatrix,ANY,ANY,ANY-method}
+\title{Extract Elements of an Object}
 \usage{
-\method{[}{SurvMatrix}(x, i, j, drop = FALSE)
+\S4method{[}{Resamples,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{Resamples,ANY,ANY,ANY}(x, i, j, drop = FALSE)
+\S4method{[}{Resamples,ANY,missing,ANY}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{Resamples,missing,missing,ANY}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{SurvMatrix,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 }
 \arguments{
-\item{x}{\code{\link{SurvMatrix}} object or \link{resample} result from which
-to extract elements.}
+\item{x}{object from which to extract elements.}
 
-\item{i, j}{indices specifying elements to extract.}
+\item{i, j, ...}{indices specifying elements to extract.}
 
-\item{drop}{logical indicating that the result be returned as a
-\code{numeric} coerced to the lowest dimension possible if \code{TRUE} or
-retained as the original 2-dimensional object class otherwise.}
+\item{drop}{logical indicating that the result be returned as an object
+coerced to the lowest dimension possible if \code{TRUE} or
+with the original dimensions and class otherwise.}
 }
 \description{
-Operators acting on data structures to extract parts.
+Operators acting on data structures to extract elements.
 }

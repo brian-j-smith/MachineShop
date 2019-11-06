@@ -51,7 +51,7 @@ SuperModel <- function(..., model = GBMModel,
         predict(fit, newdata = newdata, times = object$times, type = "prob")
       })
       
-      df <- make_super_df(NA, learner_predictors, nrow(newdata))
+      df <- make_super_df(NA, learner_predictors)
       if (object$all_vars) df <- add_super_predictors(newdata, df)
       
       predict(object$super_fit, newdata = df, times = times, type = "prob")
@@ -78,7 +78,7 @@ MLModelFunction(SuperModel) <- NULL
     learner_predictors[[i]] <- response$Predicted
   }
   
-  df <- make_super_df(response$Observed, learner_predictors, nrow(response))
+  df <- make_super_df(response$Observed, learner_predictors)
   if (params$all_vars) df <- add_super_predictors(mf, df, response$Case)
   super_mf <- ModelFrame(formula(df), df)
 
@@ -91,12 +91,9 @@ MLModelFunction(SuperModel) <- NULL
 }
 
 
-make_super_df <- function(y, predictors, nrow) {
-  predictors <- do.call(cbind, predictors)
-  colnames(predictors) <- make.names(1:ncol(predictors))
-  df <- data.frame(row.names = seq_len(nrow))
-  df$y <- y
-  cbind(df, predictors)
+make_super_df <- function(y, predictors) {
+  names(predictors) <- make.names(seq(predictors))
+  data.frame(y = y, as.matrix(as.data.frame(predictors)))
 }
 
 
