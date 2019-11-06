@@ -32,7 +32,7 @@ SelectedRecipe <- function(..., control = MachineShop::settings("control"),
                            cutoff = MachineShop::settings("cutoff")) {
   
   recipes <- list(...)
-  if (length(recipes) == 1 && is(recipes, "list") && !is(recipes, "recipe")) {
+  if (is_one_element(recipes, "list") && !is(recipes, "recipe")) {
     recipes <- recipes[[1]]
   }
   recipe_names <- names(recipes)

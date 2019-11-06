@@ -64,7 +64,7 @@ Grid <- function(length = 3, random = FALSE) {
 #' 
 ParamSet <- function(..., length = 3, random = FALSE) {
   x <- list(...)
-  if (length(x) == 1 && is.list(x[[1]]) && is.null(names(x))) x <- x[[1]]
+  if (is_one_element(x, "list") && is.null(names(x))) x <- x[[1]]
   .ParamSet(x, length = length, random = random)
 }
 

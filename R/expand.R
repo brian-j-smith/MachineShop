@@ -77,7 +77,7 @@ expand_model <- function(x, ..., random = FALSE) {
 expand_params <- function(..., random = FALSE) {
   if (random) {
     x <- list(...)
-    if (length(x) == 1 && is.null(names(x)) && is.list(x[[1]])) x <- x[[1]]
+    if (is_one_element(x, "list") && is.null(names(x))) x <- x[[1]]
     sample_params(x, size = random)
   } else {
     as_tibble(expand.grid(..., KEEP.OUT.ATTRS = FALSE,
@@ -119,7 +119,7 @@ expand_steps <- function(..., random = FALSE) {
   
   steps <- list(...)
   step_names <- names(steps)
-  if (length(steps) == 1 && is.null(step_names) && is.list(steps[[1]])) {
+  if (is_one_element(steps, "list") && is.null(step_names)) {
     steps <- steps[[1]]
     step_names <- names(steps)
   }

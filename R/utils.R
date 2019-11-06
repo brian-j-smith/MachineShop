@@ -104,6 +104,11 @@ getMLObject <- function(x, class = c("MLControl", "MLMetric", "MLModel")) {
 }
 
 
+is_one_element <- function(x, class) {
+  length(x) == 1 && is(x[[1]], class)
+}
+
+
 is_response <- function(object, class2) {
   if (class2 == "binary") {
     is(object, "factor") && nlevels(object) == 2
