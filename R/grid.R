@@ -1,6 +1,6 @@
 #' Tuning Grid Control
 #' 
-#' Defines the control parameters for a tuning grid.
+#' Defines control parameters for a tuning grid.
 #' 
 #' @param length number of values to be generated for each model parameter in
 #'   the tuning grid.
@@ -11,15 +11,18 @@
 #' 
 #' @seealso \code{\link{TunedModel}}
 #' 
+#' @examples
+#' TunedModel(GBMModel, grid = Grid(10, random = 5))
+#' 
 Grid <- function(length = 3, random = FALSE) {
-  if (is(length, "numeric")) {
+  if (is.finite(length)) {
     length <- as.integer(length[[1]])
     if (length <= 0) stop("grid parameter 'length' must be >= 1")
   } else {
-    stop ("grid parameter 'length' must be numeric")
+    stop("grid parameter 'length' must be numeric")
   }
   
-  if (isTRUE(random) || is(random, "numeric")) {
+  if (isTRUE(random) || is.numeric(random)) {
     random <- floor(random[[1]])
     if (random <= 0) stop ("number of 'random' grid points must be >= 1")
   } else if (!isFALSE(random)) {

@@ -17,7 +17,11 @@ for all random points, or \code{FALSE} for all fixed points.}
 \code{Grid} class object.
 }
 \description{
-Defines the control parameters for a tuning grid.
+Defines control parameters for a tuning grid.
+}
+\examples{
+TunedModel(GBMModel, grid = Grid(10, random = 5))
+
 }
 \seealso{
 \code{\link{TunedModel}}
