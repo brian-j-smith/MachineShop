@@ -2,6 +2,12 @@
 
 ## Version Updates
 
+## 1.6.4
+* Calculate regression variable importance as negative log p-values.
+* Support empty vectors in `metricinfo()` and `modelinfo()`.
+* Add support for **dials** package parameter sets with `ParamSet()`.
+
+
 ## 1.6.3
 * Add `as.MLModel()` for coercing `MLModelFit` to `MLModel`.
 * Deprecate `tune()`; call `fit()` with a `SelectedModel` or `TunedModel` instead.
