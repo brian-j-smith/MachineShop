@@ -29,8 +29,7 @@ LMModel <- function() {
       y <- response(data)
       data <- as.data.frame(data)
       if (is.factor(y)) {
-        y_name <- deparse(response(formula))
-        formula[[2]] <- as.symbol(y_name)
+        y_name <- response(formula)
         if (nlevels(y) == 2) {
           y <- y == levels(y)[2]
           data[[y_name]] <- y

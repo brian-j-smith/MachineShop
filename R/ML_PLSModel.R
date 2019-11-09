@@ -42,11 +42,9 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
       y <- response(data)
       data <- as.data.frame(data)
       if (is.factor(y)) {
-        y_name <- deparse(response(formula))
-        formula[[2]] <- as.symbol(y_name)
         mm <- model.matrix(~ y - 1)
         colnames(mm) <- levels(y)
-        data[[y_name]] <- mm
+        data[[response(formula)]] <- mm
         
       }
       pls::plsr(formula, data = data, ...)
