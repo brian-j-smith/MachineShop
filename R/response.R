@@ -75,3 +75,62 @@ response.recipe <- function(object, newdata = NULL, ...) {
   data <- if (is.null(newdata)) juice(object) else bake(object, newdata)
   response(terms(object), data)
 }
+
+
+#################### SurvMatrix Classes ####################
+
+
+#' SurvMatrix Class Constructors
+#' 
+#' Create a matrix of survival events or probabilites.
+#' 
+#' @name SurvMatrix
+#' @rdname SurvMatrix
+#' 
+#' @param object matrix, or object that can be coerced to one, with survival
+#'   events or probabilities at points in time in the columns and cases in the
+#'   rows.
+#' @param times numeric vector of survival times for the columns.
+#' 
+#' @return Object that is of the same class as the constructor name and inherits
+#' from \code{SurvMatrix}.  Examples of these are predicted survival events and
+#' probabilities returned by the \link{predict} function.
+#' 
+#' @seealso \code{\link{performance}}, \code{\link{metrics}}
+#' 
+NULL
+
+
+SurvMatrix <- function(object, times = NULL) {
+  object <- as.matrix(object)
+  
+  if (is.null(times)) times <- rep(NA_real_, ncol(object))
+  
+  if (length(times) != ncol(object)) {
+    stop("unequal number of survival times and predictions")
+  }
+  
+  rownames(object) <- NULL
+  colnames(object) <- if (length(times)) paste("Time", seq_along(times))
+  
+  new("SurvMatrix", object, times = times)
+}
+
+
+as.data.frame.SurvMatrix <- function(x, ...) {
+  as.data.frame.model.matrix(x, ...)
+}
+
+
+#' @rdname SurvMatrix
+#' 
+SurvEvents <- function(object = numeric(), times = NULL) {
+  as(SurvMatrix(object, times), "SurvEvents")
+}
+
+
+#' @rdname SurvMatrix
+#' 
+SurvProbs <- function(object = numeric(), times = NULL) {
+  as(SurvMatrix(object, times), "SurvProbs")
+}

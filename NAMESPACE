@@ -53,8 +53,6 @@ export(.,
        response,
        SelectedRecipe,
        settings,
-       SurvEvents,
-       SurvProbs,
        tune,
        TunedRecipe,
        varimp)
@@ -88,6 +86,9 @@ export(accuracy,
        tnr,
        tpr,
        weighted_kappa2)
+
+export(SurvEvents,
+       SurvProbs)
 
 export(BootControl,
        BootOptimismControl,

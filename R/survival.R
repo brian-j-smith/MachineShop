@@ -236,59 +236,7 @@ predict.survfit <- function(object, times, ...) {
 }
 
 
-#################### SurvMatrix Constructors and Methods ####################
-
-
-SurvMatrix <- function(object, times = NULL) {
-  object <- as.matrix(object)
-  
-  if (is.null(times)) times <- rep(NA_real_, ncol(object))
-  
-  if (length(times) != ncol(object)) {
-    stop("unequal number of survival times and predictions")
-  }
-  
-  rownames(object) <- NULL
-  colnames(object) <- if (length(times)) paste("Time", seq_along(times))
-  
-  new("SurvMatrix", object, times = times)
-}
-
-
-as.data.frame.SurvMatrix <- function(x, ...) {
-  as.data.frame.model.matrix(x, ...)
-}
-
-
-#' SurvMatrix Class Constructor
-#' 
-#' Create an object of predicted survival events or probabilites for use with
-#' metrics provided by the \pkg{MachineShop} package.
-#' 
-#' @name SurvMatrix
-#' @rdname SurvMatrix
-#' 
-#' @param object matrix, or object that can be converted to one, of predicted
-#'   survival events or probabilities with columns and rows representing
-#'   prediction times and cases, respectively.
-#' @param times numeric vector of the survival prediction times.
-#' 
-#' @return Object that is of the same class as the constructor name and inherits
-#' from \code{SurvMatrix}.  Examples of these objects are the predicted survival
-#' events and probabilities returned by the \link{predict} function.
-#' 
-#' @seealso \code{\link{performance}}, \code{\link{metrics}}
-#' 
-SurvEvents <- function(object = numeric(), times = NULL) {
-  new("SurvEvents", SurvMatrix(object, times))
-}
-
-
-#' @rdname SurvMatrix
-#' 
-SurvProbs <- function(object = numeric(), times = NULL) {
-  new("SurvProbs", SurvMatrix(object, times))
-}
+#################### SurvMatrix Methods ####################
 
 
 mean.SurvProbs <- function(x, ...) {
