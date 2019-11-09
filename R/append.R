@@ -14,7 +14,7 @@ setMethod(".append", c("ANY", "missing"),
 setMethod(".append", c("data.frame", "data.frame"),
   function(x, y) {
     stopifnot(names(x) == names(y))
-    df <- data.frame(matrix(nrow = nrow(x) + nrow(y), ncol = 0))
+    df <- data.frame(row.names = seq_len(nrow(x) + nrow(y)))
     for (varname in names(x)) {
       df[[varname]] <- .append(x[[varname]], y[[varname]])
     }
@@ -35,8 +35,8 @@ setMethod(".append", c("matrix", "matrix"),
 
 setMethod(".append", c("ordered", "ordered"),
   function(x, y) {
-    xy <- unlist(list(x, y))
-    if (all(levels(x) == levels(y))) as.ordered(xy) else xy
+    z <- unlist(list(x, y))
+    if (identical(levels(x), levels(y))) as.ordered(z) else z
   }
 )
 
