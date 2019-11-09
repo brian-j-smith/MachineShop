@@ -79,7 +79,7 @@ BARTModel <- function(K = NULL, sparse = FALSE, theta = 0, omega = 1,
       x <- model.matrix(data, intercept = FALSE)
       y <- response(data)
       switch_class(y,
-                   "factor" = {
+                   factor = {
                      assert_equal_weights(weights)
                      if (nlevels(y) == 2) {
                        f <- BART::gbart
@@ -90,12 +90,12 @@ BARTModel <- function(K = NULL, sparse = FALSE, theta = 0, omega = 1,
                      }
                      f(x.train = x, y.train = y, type = "pbart", ...)
                    },
-                   "numeric" = {
+                   numeric = {
                      BART::gbart(x.train = x, y.train = y, w = weights,
                                  sigest = sigest, sigdf = sigdf,
                                  sigquant = sigquant, lambda = lambda, ...)
                    },
-                   "Surv" = {
+                   Surv = {
                     assert_equal_weights(weights)
                     BART::surv.bart(x.train = x, times = y[, "time"],
                                     delta = y[, "status"], K = K, ...)

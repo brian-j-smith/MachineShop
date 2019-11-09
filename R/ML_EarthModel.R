@@ -72,8 +72,8 @@ EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
       ), name = "earth_exports")
       
       glm <- list(family = switch_class(response(data),
-                                        "factor" = "binomial",
-                                        "numeric" = "gaussian"))
+                                        factor = "binomial",
+                                        numeric = "gaussian"))
       eval_fit(data,
                formula = earth::earth(formula, data = as.data.frame(data),
                                       weights = weights, glm = glm, ...),

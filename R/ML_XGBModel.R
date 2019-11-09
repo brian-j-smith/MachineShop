@@ -74,12 +74,12 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
       y <- response(data)
       response_levels <- levels(y)
       switch_class(y,
-                   "factor" = {
+                   factor = {
                      params$num_class <- nlevels(y)
                      y <- as.numeric(y) - 1
                      obj_choices <- c("multi:softprob", "binary.logistic")
                    },
-                   "numeric" = {
+                   numeric = {
                      obj_choices <- c("reg:linear", "reg:logistic", "reg:gamma",
                                       "reg:tweedie", "count:poisson",
                                       "rank:pairwise", "rank:ndcg", "rank:map")

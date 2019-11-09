@@ -262,9 +262,9 @@ plot.PartialDependence <- function(x, stats = NULL, ...) {
     df$Predictor <- x$Predictors[[varname]]
     p <- ggplot(na.omit(df), mapping)
     p <- switch_class(df$Predictor,
-                      "factor" = p +
+                      factor = p +
                         geom_crossbar(aes_(ymin = ~ ..y.., ymax = ~ ..y..)),
-                      "numeric" = p + geom_line() + geom_point()) +
+                      numeric = p + geom_line() + geom_point()) +
       labs(x = varname) + facet_wrap(~ Statistic, scales = "free")
     pl[[varname]] <- p
   }

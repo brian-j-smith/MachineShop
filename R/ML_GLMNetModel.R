@@ -78,11 +78,11 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
       y <- response(data)
       if (is.null(family)) {
         family <- switch_class(y,
-                               "factor" = ifelse(nlevels(y) == 2,
-                                                 "binomial", "multinomial"),
-                               "matrix" = "mgaussian",
-                               "numeric" = "gaussian",
-                               "Surv" = "cox")
+                               factor = ifelse(nlevels(y) == 2,
+                                               "binomial", "multinomial"),
+                               matrix = "mgaussian",
+                               numeric = "gaussian",
+                               Surv = "cox")
       }
       modelfit <- glmnet::glmnet(x, y, weights = weights, family = family,
                                  nlambda = nlambda, ...)

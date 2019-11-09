@@ -86,12 +86,12 @@ fget <- function(x) {
 
 findMethod <- function(generic, object) {
   generic_name <- deparse(substitute(generic))
-  f <- function(x, ...) UseMethod("f")
-  for (method in methods(generic_name)) {
-    assign(sub(generic_name, "f", method, fixed = TRUE),
-           eval(substitute(function(x, ...) method)))
+  classes <- substring(methods(generic_name), nchar(generic_name) + 2)
+  class <- match_class(object, classes)
+  if (is.na(class)) {
+    stop(generic_name, " method not found for '", class(object)[1], "' class")
   }
-  f(object)
+  paste0(generic_name, ".", class)
 }
 
 
@@ -167,6 +167,16 @@ make_unique_levels <- function(x, which) {
   for (i in seq(x)) levels(x[[i]][[which]]) <- level_names[[i]]
   
   x
+}
+
+
+match_class <- function(object, choices) {
+  f <- function(x, ...) UseMethod("f")
+  f.default <- function(x, ...) NA_character_
+  for (choice in choices) {
+    assign(paste0("f.", choice), eval(substitute(function(x, ...) choice)))
+  }
+  f(object)
 }
 
 
@@ -350,8 +360,7 @@ strata_var.recipe <- function(object, ...) {
 
 switch_class <- function(EXPR, ...) {
   blocks <- eval(substitute(alist(...)))
-  isClass <- sapply(names(blocks), function(class) is(EXPR, class))
-  eval.parent(blocks[[match(TRUE, isClass)]])
+  eval.parent(blocks[[match_class(EXPR, names(blocks))]])
 }
 
 

@@ -60,9 +60,9 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
     fit = function(formula, data, weights, distribution = NULL, ...) {
       if (is.null(distribution)) {
         distribution <- switch_class(response(data),
-                                     "factor" = "multinomial",
-                                     "numeric" = "gaussian",
-                                     "Surv" = "coxph")
+                                     factor = "multinomial",
+                                     numeric = "gaussian",
+                                     Surv = "coxph")
       }
       eval_fit(data,
                formula = gbm::gbm(formula, data = as.data.frame(data),

@@ -43,8 +43,8 @@ GLMModel <- function(family = NULL, ...) {
     fit = function(formula, data, weights, family = NULL, ...) {
       if (is.null(family)) {
         family <- switch_class(response(data),
-                               "factor" = "binomial",
-                               "numeric" = "gaussian")
+                               factor = "binomial",
+                               numeric = "gaussian")
       }
       stats::glm(formula, data = as.data.frame(data), weights = weights,
                  family = family, ...)
@@ -100,8 +100,8 @@ GLMStepAICModel <- function(family = NULL, ...,
       environment(formula) <- environment()
       if (is.null(family)) {
         family <- switch_class(response(data),
-                               "factor" = "binomial",
-                               "numeric" = "gaussian")
+                               factor = "binomial",
+                               numeric = "gaussian")
       }
       stepargs <- stepAIC_args(formula, direction, scope)
       data <- as.data.frame(data)

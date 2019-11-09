@@ -78,9 +78,9 @@ GAMBoostModel <- function(family = NULL,
       
       if (is.null(family)) {
         family <- switch_class(response(data),
-                               "factor" = mboost::Binomial(),
-                               "numeric" = mboost::Gaussian(),
-                               "Surv" = mboost::CoxPH())
+                               factor = mboost::Binomial(),
+                               numeric = mboost::Gaussian(),
+                               Surv = mboost::CoxPH())
       }
       mboost::gamboost(formula, data = as.data.frame(data), na.action = na.pass,
                        weights = weights, family = family, ...)

@@ -59,9 +59,9 @@ GLMBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
     fit = function(formula, data, weights, family = NULL, ...) {
       if (is.null(family)) {
         family <- switch_class(response(data),
-                               "factor" = mboost::Binomial(),
-                               "numeric" = mboost::Gaussian(),
-                               "Surv" = mboost::CoxPH())
+                               factor = mboost::Binomial(),
+                               numeric = mboost::Gaussian(),
+                               Surv = mboost::CoxPH())
       }
       eval_fit(data,
                formula = mboost::glmboost(formula, data = as.data.frame(data),
