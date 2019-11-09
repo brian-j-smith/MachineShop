@@ -77,6 +77,61 @@ response.recipe <- function(object, newdata = NULL, ...) {
 }
 
 
+#################### DiscreteVector Classes ####################
+
+
+#' DiscreteVector Class Constructors
+#' 
+#' Create an integer vector of binomial counts, discrete numbers, negative
+#' binomial counts, or Poisson counts.
+#' 
+#' @name DiscreteVector
+#' @rdname DiscreteVector
+#' 
+#' @param object numeric vector.
+#' @param size number of binomial trials.
+#' @param min,max minimum and maximum bounds for discrete numbers.
+#' 
+#' @return \code{DiscreteVector} object class that inherits from \code{integer}
+#' or object that is of the same class as the constructor name and inherits
+#' from \code{DiscreteVector}.
+#' 
+#' @examples
+#' BinomialVector(rbinom(25, 10, 0.5), size = 10)
+#' PoissonVector(rpois(25, 10))
+#' 
+BinomialVector <- function(object, size) {
+  as(DiscreteVector(object, min = 0, max = size), "BinomialVector")
+}
+
+
+#' @rdname DiscreteVector
+#' 
+DiscreteVector <- function(object, min = -Inf, max = Inf) {
+  object <- as.integer(object)
+  min <- floor(min)
+  max <- floor(max)
+  stopifnot(min < max)
+  stopifnot(min <= min(object))
+  stopifnot(max >= max(object))
+  new("DiscreteVector", object, min = min, max = max)
+}
+
+
+#' @rdname DiscreteVector
+#' 
+NegBinomialVector <- function(object) {
+  as(DiscreteVector(object, min = 0), "NegBinomialVector")
+}
+
+
+#' @rdname DiscreteVector
+#' 
+PoissonVector <- function(object) {
+  as(DiscreteVector(object, min = 0), "PoissonVector")
+}
+
+
 #################### SurvMatrix Classes ####################
 
 

@@ -75,6 +75,21 @@ setMethod("show", "Curves",
 )
 
 
+print.DiscreteVector <- function(x, ...) {
+  print(as(x, "numeric"))
+  cat(class(x), " range: ", x@min, ", ", x@max, "\n", sep = "")
+  invisible(x)
+}
+
+
+setMethod("show", "DiscreteVector",
+  function(object) {
+    print(object)
+    invisible()
+  }
+)
+
+
 setMethod("show", "Grid",
   function(object) {
     print_title(object)

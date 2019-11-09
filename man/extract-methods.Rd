@@ -3,12 +3,15 @@
 \docType{methods}
 \name{extract}
 \alias{extract}
+\alias{[,DiscreteVector,ANY,missing,missing-method}
 \alias{[,Resamples,ANY,ANY,ANY-method}
 \alias{[,Resamples,ANY,missing,ANY-method}
 \alias{[,Resamples,missing,missing,ANY-method}
 \alias{[,SurvMatrix,ANY,ANY,ANY-method}
 \title{Extract Elements of an Object}
 \usage{
+\S4method{[}{DiscreteVector,ANY,missing,missing}(x, i)
+
 \S4method{[}{Resamples,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 
 \S4method{[}{Resamples,ANY,missing,ANY}(x, i, j, ..., drop = FALSE)

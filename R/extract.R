@@ -15,6 +15,17 @@ NULL
 
 
 #' @rdname extract-methods
+#' @aliases [,DiscreteVector,ANY,missing,missing-method
+#' 
+setMethod("[",
+  c(x = "DiscreteVector", i = "ANY", j = "missing", drop = "missing"),
+  function(x, i) {
+    new(class(x), callNextMethod(), min = x@min, max = x@max)
+  }
+)
+
+
+#' @rdname extract-methods
 #' @aliases [,Resamples,ANY,ANY,ANY-method
 #' 
 setMethod("[", c(x = "Resamples", i = "ANY", j = "ANY", drop = "ANY"),

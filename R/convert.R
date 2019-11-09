@@ -79,6 +79,16 @@ setMethod("convert_response", c("ANY", "ANY"),
 )
 
 
+setMethod("convert_response", c("DiscreteVector", "numeric"),
+  function(object, x, ...) {
+    x <- round(x)
+    if (object@min > -Inf) x <- pmax(x, object@min)
+    if (object@max < Inf) x <- pmin(x, object@max)
+    x
+  }
+)
+
+
 setMethod("convert_response", c("factor", "factor"),
   function(object, x, ...) x
 )

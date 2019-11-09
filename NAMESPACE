@@ -87,7 +87,11 @@ export(accuracy,
        tpr,
        weighted_kappa2)
 
-export(SurvEvents,
+export(BinomialVector,
+       DiscreteVector,
+       NegBinomialVector,
+       PoissonVector,
+       SurvEvents,
        SurvProbs)
 
 export(BootControl,
@@ -159,6 +163,7 @@ S3method(as.data.frame, SurvMatrix)
 S3method(bake, ModelRecipe)
 S3method(bake, SelectedRecipe)
 S3method(bake, TunedRecipe)
+S3method(c, DiscreteVector)
 S3method(diff, MLModel)
 S3method(diff, Resamples)
 S3method(fit, formula)

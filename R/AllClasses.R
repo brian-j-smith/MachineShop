@@ -167,6 +167,28 @@ setClass("Curves",
 )
 
 
+setClass("DiscreteVector",
+  contains = "numeric",
+  slots = c(min = "numeric",
+            max = "numeric")
+)
+
+
+setClass("BinomialVector",
+  contains = "DiscreteVector"
+)
+
+
+setClass("NegBinomialVector",
+  contains = "DiscreteVector"
+)
+
+
+setClass("PoissonVector",
+  contains = "DiscreteVector"
+)
+
+
 setClass("Grid",
   slots = c(length = "integer",
             random = "ANY")
