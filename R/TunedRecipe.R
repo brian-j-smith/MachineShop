@@ -48,7 +48,7 @@ TunedRecipe <- function(x, grid = expand_steps(),
   found <- grid_names %in% step_ids
   if (!all(found)) {
     subnames <- grid_names[!found]
-    stop("grid step name", plural_suffix(subnames), " ",
+    stop(plural_suffix("grid step name", subnames), " ",
          toString(paste0("'", subnames, "'")),
          " not found in recipe step ids ", toString(paste0("'", step_ids, "'")))
   }

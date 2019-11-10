@@ -384,7 +384,7 @@ print.ParamSet <- function(x, ...) {
   if (x@random) {
     cat("Random sample:", x@random, "\n")
   } else {
-    cat("Length", plural_suffix(x@length), ": ", toString(x@length), "\n",
+    cat(plural_suffix("Length", x@length), ": ", toString(x@length), "\n",
         sep = "")
   }
   invisible(x)

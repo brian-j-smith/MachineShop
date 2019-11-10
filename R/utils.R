@@ -197,15 +197,15 @@ params <- function(envir) {
   is_missing <- sapply(args, function(x) is.symbol(x) && !nzchar(x))
   if (any(is_missing)) {
     subnames <- names(args)[is_missing]
-    stop("missing values for required argument", plural_suffix(subnames), ": ",
+    stop(plural_suffix("missing values for required argument", subnames), ": ",
          toString(subnames))
   }
   args[!sapply(args, is.null)]
 }
 
 
-plural_suffix <- function(x) {
-  if (length(x) > 1) "s"
+plural_suffix <- function(x, subject) {
+  if (length(subject) > 1) paste0(x, "s") else x
 }
 
 
@@ -213,7 +213,7 @@ requireModelNamespaces <- function(packages) {
   pass <- sapply(packages, requireNamespace)
   if (!all(pass)) {
     subnames <- packages[!pass]
-    stop("install required package", plural_suffix(subnames), ": ",
+    stop(plural_suffix("install required package", subnames), ": ",
          toString(subnames))
   }
   invisible(pass)

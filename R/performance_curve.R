@@ -128,7 +128,7 @@ Curves <- function(...) {
     found <- var_names %in% names(.Data)
     if (!all(found)) {
       subnames <- var_names[!found]
-      stop("missing performance curve variable", plural_suffix(subnames), ": ",
+      stop(plural_suffix("missing performance curve variable", subnames), ": ",
            toString(subnames))
     }
     

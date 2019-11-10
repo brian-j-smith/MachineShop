@@ -164,7 +164,7 @@ Resamples <- function(...) {
     found <- var_names %in% names(.Data)
     if (!all(found)) {
       subnames <- var_names[!found]
-      stop("missing resample variable", plural_suffix(subnames), ": ",
+      stop(plural_suffix("missing resample variable", subnames), ": ",
            toString(subnames))
     }
     
