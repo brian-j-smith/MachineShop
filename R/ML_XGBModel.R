@@ -73,17 +73,18 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
       x <- model.matrix(data, intercept = FALSE)
       y <- response(data)
       response_levels <- levels(y)
-      switch_class(y,
-                   factor = {
-                     params$num_class <- nlevels(y)
-                     y <- as.numeric(y) - 1
-                     obj_choices <- c("multi:softprob", "binary.logistic")
-                   },
-                   numeric = {
-                     obj_choices <- c("reg:linear", "reg:logistic", "reg:gamma",
-                                      "reg:tweedie", "count:poisson",
-                                      "rank:pairwise", "rank:ndcg", "rank:map")
-                   })
+      obj_choices <- switch_class(y,
+                                  factor = {
+                                    params$num_class <- nlevels(y)
+                                    y <- as.numeric(y) - 1
+                                    c("multi:softprob", "binary.logistic")
+                                  },
+                                  numeric = {
+                                    c("reg:linear", "reg:logistic", "reg:gamma",
+                                      "reg:tweedie", "rank:pairwise",
+                                      "rank:ndcg", "rank:map")
+                                  },
+                                  PoissonVector = "count:poisson")
       params$objective <- match.arg(params$objective, obj_choices)
       modelfit <- xgboost::xgboost(x, y, weight = weights, params = params, ...)
       modelfit$levels <- response_levels

@@ -62,6 +62,7 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
         distribution <- switch_class(response(data),
                                      factor = "multinomial",
                                      numeric = "gaussian",
+                                     PoissonVector = "poisson",
                                      Surv = "coxph")
       }
       eval_fit(data,

@@ -5,15 +5,19 @@
 \alias{GLMStepAICModel}
 \title{Generalized Linear Model}
 \usage{
-GLMModel(family = NULL, ...)
+GLMModel(family = NULL, quasi = FALSE, ...)
 
-GLMStepAICModel(family = NULL, ..., direction = c("both", "backward",
-  "forward"), scope = NULL, k = 2, trace = FALSE, steps = 1000)
+GLMStepAICModel(family = NULL, quasi = FALSE, ...,
+  direction = c("both", "backward", "forward"), scope = NULL, k = 2,
+  trace = FALSE, steps = 1000)
 }
 \arguments{
 \item{family}{optional error distribution and link function to be used in the
 model.  Set automatically according to the class type of the response
 variable.}
+
+\item{quasi}{logical indicator for over-dispersion of binomial and Poisson
+families; i.e., dispersion parameters not fixed at one.}
 
 \item{...}{arguments passed to \code{\link[stats]{glm.control}}.}
 

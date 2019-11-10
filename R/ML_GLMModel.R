@@ -8,6 +8,8 @@
 #' @param family optional error distribution and link function to be used in the
 #'   model.  Set automatically according to the class type of the response
 #'   variable.
+#' @param quasi logical indicator for over-dispersion of binomial and Poisson
+#'   families; i.e., dispersion parameters not fixed at one.
 #' @param ... arguments passed to \code{\link[stats]{glm.control}}.
 #' 
 #' @details
@@ -26,32 +28,51 @@
 #' @examples
 #' fit(sale_amount ~ ., data = ICHomes, model = GLMModel)
 #' 
-GLMModel <- function(family = NULL, ...) {
+GLMModel <- function(family = NULL, quasi = FALSE, ...) {
   
   args <- params(environment())
-  is_main <- names(args) %in% "family"
+  is_main <- names(args) %in% c("family", "quasi")
   params <- args[is_main]
-  params$control <- as.call(c(.(list), args[!is_main]))
+  params$control <- as.call(c(.(stats::glm.control), args[!is_main]))
   
   MLModel(
     name = "GLMModel",
     label = "Generalized Linear Models",
-    packages = "stats",
+    packages = c("MASS", "stats"),
     response_types = c("binary", "numeric"),
     predictor_encoding = "model.matrix",
     params = params,
-    fit = function(formula, data, weights, family = NULL, ...) {
+    fit = function(formula, data, weights, family = NULL, quasi = FALSE, ...) {
       if (is.null(family)) {
-        family <- switch_class(response(data),
-                               factor = "binomial",
-                               numeric = "gaussian")
+        y <- response(data)
+        quasi_prefix <- function(x) if (quasi) paste0("quasi", x) else x
+        family <- switch_class(y,
+                               BinomialVector = {
+                                 y_name <- response(formula)
+                                 data[[y_name]] <- cbind(y, y@max - y)
+                                 quasi_prefix("binomial")
+                               },
+                               factor = quasi_prefix("binomial"),
+                               NegBinomialVector = "negbin",
+                               numeric = "gaussian",
+                               PoissonVector = quasi_prefix("poisson"))
       }
-      stats::glm(formula, data = as.data.frame(data), weights = weights,
-                 family = family, ...)
+      data <- as.data.frame(data)
+      if (family == "negbin") {
+        modelfit <- MASS::glm.nb(formula, data = data, weights = weights, ...)
+        MASS::glm.convert(modelfit)
+      } else {
+        stats::glm(formula, data = data, weights = weights, family = family,
+                   ...)
+      }
     },
-    predict = function(object, newdata, ...) {
+    predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)
-      predict(object, newdata = newdata, type = "response")
+      pred <- predict(object, newdata = newdata, type = "response")
+      y <- response(model)
+      if (is(y, "BinomialVector") && is.matrix(object$model[[1]])) {
+        y@max * pred
+      } else pred
     },
     varimp = function(object, ...) varimp_pval(object)
   )
@@ -76,7 +97,7 @@ MLModelFunction(GLMModel) <- NULL
 #'   process.
 #' @param steps maximum number of steps to be considered.
 #'
-GLMStepAICModel <- function(family = NULL, ...,
+GLMStepAICModel <- function(family = NULL, quasi = FALSE, ...,
                             direction = c("both", "backward", "forward"),
                             scope = NULL, k = 2, trace = FALSE, steps = 1000) {
   
@@ -86,29 +107,50 @@ GLMStepAICModel <- function(family = NULL, ...,
   is_step <- names(args) %in% c("direction", "scope", "k", "trace", "steps")
   params <- args[is_step]
   
-  stepmodel <- GLMModel(family = family, ...)
+  stepmodel <- GLMModel(family = family, quasi = quasi, ...)
   
   MLModel(
     name = "GLMStepAICModel",
     label = "Generalized Linear Models (Stepwise)",
-    packages = c(stepmodel@packages, "MASS"),
+    packages = stepmodel@packages,
     response_types = stepmodel@response_types,
     predictor_encoding = stepmodel@predictor_encoding,
     params = c(stepmodel@params, params),
-    fit = function(formula, data, weights, family = NULL, direction = "both",
-                   scope = list(), k = 2, trace = 1, steps = 1000, ...) {
+    fit = function(formula, data, weights, family = NULL, quasi = FALSE,
+                   direction = "both", scope = list(), k = 2, trace = 1,
+                   steps = 1000, ...) {
       environment(formula) <- environment()
       if (is.null(family)) {
-        family <- switch_class(response(data),
-                               factor = "binomial",
-                               numeric = "gaussian")
+        y <- response(data)
+        quasi_prefix <- function(x) if (quasi) paste0("quasi", x) else x
+        family <- switch_class(y,
+                               BinomialVector = {
+                                 y_name <- response(formula)
+                                 data[[y_name]] <- cbind(y, y@max - y)
+                                 quasi_prefix("binomial")
+                               },
+                               factor = quasi_prefix("binomial"),
+                               NegBinomialVector = "negbin",
+                               numeric = "gaussian",
+                               PoissonVector = quasi_prefix("poisson"))
       }
       stepargs <- stepAIC_args(formula, direction, scope)
       data <- as.data.frame(data)
-      stats::glm(stepargs$formula, data = data, weights = weights,
-                 family = family, ...) %>%
-        MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,
-                      trace = trace, steps = steps)
+      if (family == "negbin") {
+        modelfit <- MASS::stepAIC(
+          MASS::glm.nb(stepargs$formula, data = data, weights = weights, ...),
+          direction = direction, scope = stepargs$scope, k = k, trace = trace,
+          steps = steps
+        )
+        MASS::glm.convert(modelfit)
+      } else {
+        MASS::stepAIC(
+          stats::glm(stepargs$formula, data = data, weights = weights,
+                     family = family, ...),
+          direction = direction, scope = stepargs$scope, k = k, trace = trace,
+          steps = steps
+        )
+      }
     },
     predict = stepmodel@predict,
     varimp = stepmodel@varimp

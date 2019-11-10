@@ -78,10 +78,15 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
       y <- response(data)
       if (is.null(family)) {
         family <- switch_class(y,
+                               BinomialVector = {
+                                 y <- cbind(y, y@max - y)
+                                 "binomial"
+                               },
                                factor = ifelse(nlevels(y) == 2,
                                                "binomial", "multinomial"),
                                matrix = "mgaussian",
                                numeric = "gaussian",
+                               PoissonVector = "poisson",
                                Surv = "cox")
       }
       modelfit <- glmnet::glmnet(x, y, weights = weights, family = family,
@@ -97,7 +102,11 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
         new_lp <- predict(object, newx = newx, type = "link")[, 1]
         predict(y, lp, times, new_lp, ...)
       } else {
-        predict(object, newx = newx, s = object$lambda[1], type = "response")
+        pred <- predict(object, newx = newx, s = object$lambda[1],
+                        type = "response")
+        if (is(y, "BinomialVector") && is(object, "lognet")) {
+          y@max * pred
+        } else pred
       }
     },
     varimp = function(object, ...) {

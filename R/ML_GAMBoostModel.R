@@ -54,7 +54,7 @@ GAMBoostModel <- function(family = NULL,
   is_main <- names(args) %in% c("family", "baselearner", "dfbase")
   params <- args[is_main]
   params$control <- as.call(c(.(mboost::boost_control), args[!is_main]))
-
+  
   MLModel(
     name = "GAMBoostModel",
     label = "Gradient Boosting with Additive Models",
@@ -76,24 +76,35 @@ GAMBoostModel <- function(family = NULL,
         bns = mboost::bns
       ), name = "mboost_exports")
       
+      y <- response(data)
       if (is.null(family)) {
-        family <- switch_class(response(data),
+        family <- switch_class(y,
+                               BinomialVector = {
+                                 y_name <- response(formula)
+                                 data[[y_name]] <- cbind(y, y@max - y)
+                                 mboost::Binomial(type = "glm")
+                               },
                                factor = mboost::Binomial(),
+                               NegBinomialVector = mboost::NBinomial(),
                                numeric = mboost::Gaussian(),
+                               PoissonVector = mboost::Poisson(),
                                Surv = mboost::CoxPH())
       }
       mboost::gamboost(formula, data = as.data.frame(data), na.action = na.pass,
                        weights = weights, family = family, ...)
     },
-    predict = function(object, newdata, times, ...) {
+    predict = function(object, newdata, model, times, ...) {
       newdata <- as.data.frame(newdata)
       if (object$family@name == "Cox Partial Likelihood") {
-        y <- object$response
         lp <- drop(predict(object, type = "link"))
         new_lp <- drop(predict(object, newdata = newdata, type = "link"))
-        predict(y, lp, times, new_lp, ...)
+        predict(object$response, lp, times, new_lp, ...)
       } else {
-        predict(object, newdata = newdata, type = "response")
+        pred <- predict(object, newdata = newdata, type = "response")
+        y <- response(model)
+        if (is(y, "BinomialVector") && is.matrix(object$response)) {
+          y@max * pred
+        } else pred
       }
     },
     varimp = function(object, ...) {
