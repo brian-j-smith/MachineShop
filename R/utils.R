@@ -366,6 +366,21 @@ switch_class <- function(EXPR, ...) {
 }
 
 
+unnest <- function(data) {
+  stopifnot(is(data, "data.frame"))
+  df <- data.frame(row.names = seq_len(nrow(data)))
+  for (name in names(data)) {
+    x <- data[[name]]
+    if (length(dim(x)) > 1) {
+      x <- if (is.data.frame(x)) unnest(x) else as.data.frame(as(x, "matrix"))
+      name <- paste0(name, ".", names(x))
+    }
+    df[name] <- x
+  }
+  df
+}
+
+
 #################### Exception Handling ####################
 
 
