@@ -75,6 +75,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
     },
     fit = function(formula, data, weights, family = NULL, nlambda = 1, ...) {
       x <- model.matrix(data, intercept = FALSE)
+      x.offset <- model.offset(data)
       y <- response(data)
       if (is.null(family)) {
         family <- switch_class(y,
@@ -89,21 +90,24 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
                                PoissonVector = "poisson",
                                Surv = "cox")
       }
-      modelfit <- glmnet::glmnet(x, y, weights = weights, family = family,
-                                 nlambda = nlambda, ...)
+      modelfit <- glmnet::glmnet(x, y, offset = x.offset, weights = weights,
+                                 family = family, nlambda = nlambda, ...)
       modelfit$x <- x
+      modelfit$x.offset <- x.offset
       modelfit
     },
     predict = function(object, newdata, model, times, ...) {
       y <- response(model)
       newx <- model.matrix(newdata, intercept = FALSE)
       if (is.Surv(y)) {
-        lp <- predict(object, newx = object$x, type = "link")[, 1]
-        new_lp <- predict(object, newx = newx, type = "link")[, 1]
+        lp <- predict(object, newx = object$x, type = "link",
+                      newoffset = object$x.offset)[, 1]
+        new_lp <- predict(object, newx = newx, type = "link",
+                          newoffset = model.offset(newdata))[, 1]
         predict(y, lp, times, new_lp, ...)
       } else {
         pred <- predict(object, newx = newx, s = object$lambda[1],
-                        type = "response")
+                        type = "response", newoffset = model.offset(newdata))
         if (is(y, "BinomialVector") && is(object, "lognet")) {
           y@max * pred
         } else pred

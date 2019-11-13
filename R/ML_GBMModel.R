@@ -69,8 +69,8 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
                formula = gbm::gbm(formula, data = as.data.frame(data),
                                   weights = weights,
                                   distribution = distribution, ...),
-               matrix = gbm::gbm.fit(x, y, w = weights,
-                                     distribution = distribution,
+               matrix = gbm::gbm.fit(x, y, offset = model.offset(data),
+                                     w = weights, distribution = distribution,
                                      verbose = FALSE, ...))
     },
     predict = function(object, newdata, model, times, ...) {

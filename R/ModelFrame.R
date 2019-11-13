@@ -13,6 +13,9 @@
 #'   to one.
 #' @param na.rm logical indicating whether to remove cases with \code{NA} values
 #'   for any of the model variables.
+#' @param offsets numeric vector, matrix, or data frame of values to be added
+#'   with a fixed coefficient of 1 to linear predictors in compatible regression
+#'   models.
 #' @param weights vector of case weights [default: equal].
 #' @param strata vector of resampling stratification levels [default: none].
 #' @param ... arguments passed to other methods.
@@ -50,7 +53,7 @@ ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
     terms(x, data = data),
     class = c("FormulaTerms", "terms", "formula")
   )
-  data[deparse(response(model_terms))] <- response(model_terms, data)
+  data[[deparse(response(model_terms))]] <- response(model_terms, data)
   
   ModelFrame(model_terms, data, na.rm = na.rm, casenames = rownames(data),
              weights = weights, strata = strata, ...)
@@ -59,12 +62,26 @@ ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
 
 #' @rdname ModelFrame-methods
 #' 
-ModelFrame.matrix <- function(x, y = NULL, na.rm = TRUE,
+ModelFrame.matrix <- function(x, y = NULL, na.rm = TRUE, offsets = NULL,
                               weights = NULL, strata = NULL, ...) {
   data <- as.data.frame(x)
   colnames(x) <- names(data)
-  model_terms <- terms(x, y)
-  data[deparse(response(model_terms))] <- y
+  if (!is.null(offsets)) {
+    offsets <- if (is.vector(offsets, "numeric")) {
+      data.frame(offset = offsets)
+    } else if (is.matrix(offsets)) {
+      if (is.null(colnames(offsets))) {
+        colnames(offsets) <- rep("offset", ncol(offsets))
+      }
+      data.frame(offsets)
+    } else if (!is.data.frame(offsets)) {
+      stop("'offsets' must be a numeric vector, matrix, or data frame")
+    }
+    data <- data.frame(data, offsets)
+    offsets <- tail(names(data), length(offsets))
+  }
+  model_terms <- terms(x, y, offsets = offsets)
+  data[[deparse(response(model_terms))]] <- y
   
   ModelFrame(model_terms, data, na.rm = na.rm, casenames = rownames(data),
              weights = weights, strata = strata, ...)
@@ -89,14 +106,14 @@ ModelFrame.recipe <- function(x, ...) {
   weights <- if (length(var_name) == 0) NULL else
     if (length(var_name) == 1) data[[var_name]] else
       stop("multiple case weights specified")
-
+  
   var_name <- info$variable[info$role == "case_strata"]
   strata <- if (length(var_name) == 0) NULL else
     if (length(var_name) == 1) data[[var_name]] else
       stop("multiple strata variables specified")
   
   model_terms <- terms(x)
-  data[deparse(response(model_terms))] <- response(model_terms, data)
+  data[[deparse(response(model_terms))]] <- response(model_terms, data)
   
   casenames <- data[["(casenames)"]]
   if (is.null(casenames)) casenames <- rownames(data)
@@ -145,7 +162,7 @@ inline_calls <- function(x) {
 model_formula <- function(x) {
   x <- formula(x)
   response <- response(x)
-  if (!is.null(response)) x[[2]] <- as.symbol(deparse(response))
+  if (!is.null(response)) x[[2]] <- as.name(deparse(response))
   x
 }
 
@@ -159,63 +176,84 @@ valid_predictor_calls <- c(
   "+", "-", "*", "/", "^", "%%", "%/%",
   "&", "|", "!",
   "==", "!=", "<", "<=", ">=", ">",
-  "%in%", "(", ".", ":", "I"
+  "%in%", "(", ".", ":", "I", "offset"
 )
 
 
 #################### ModelFrame Terms ####################
 
 
-terms.character <- function(x, y = NULL, intercept = TRUE, all_numeric = FALSE,
-                            ...) {
-  x_names <- x
-  x <- lapply(x, as.symbol)
+terms.list <- function(x, y = NULL, intercept = TRUE, all_numeric = FALSE,
+                       ...) {
+  if (is.character(y)) y <- as.name(y)
+  has_y <- 1L - is.null(y)
   
-  if (is.character(y)) y <- as.symbol(y)
-  y_indicator <- 1L - is.null(y)
+  is_names <- sapply(x, is.name)
+  name_inds <- which(is_names)
+  noname_inds <- which(!is_names)
   
-  fo <- parse(text = paste(
-    "y ~",
-    if (length(x)) {
-      paste(sapply(x, deparse, backtick = TRUE), collapse = "+")
-    } else if (intercept) "1",
-    if (!intercept) "- 1"
-  ))[[1]]
+  x_char <- character(length(x))
+  x_char[name_inds] <- as.character(x[name_inds])
+  x_char[noname_inds] <- vapply(x[noname_inds], deparse, "")
+  
+  valid_calls <- sapply(x[noname_inds], function(var) {
+    is.call(var) && var[[1]] == .("offset")
+  })
+  if (!all(valid_calls)) stop("non-offset calls in variable specifications")
+  offsets <- has_y + noname_inds
+  
+  fo <- str2lang(
+    paste(
+      "y ~",
+      if (length(x)) paste(x_char, collapse = "+") else if (intercept) "1",
+      if (!intercept) "- 1"
+    )
+  )
   fo[[2]] <- y
   
-  var_names <- c(if (y_indicator) deparse(y), x_names)
+  var_names <- c(if (has_y) deparse(y), x_char)
+  label_names <- x_char[name_inds]
   
   if (all_numeric) {
     class <- "DesignTerms"
-    factors <- cbind(rep(c(0L, 1L), c(y_indicator, length(x))))
+    factors <- cbind(as.integer(var_names %in% label_names))
     rownames(factors) <- var_names
   } else {
     class <- "FormulaTerms"
-    factors <- rbind(rep(0L, y_indicator * length(x)), diag(1L, length(x)))
-    dimnames(factors) <- list(var_names, x_names)
+    factors <- matrix(0L, length(var_names), length(label_names),
+                      dimnames = list(var_names, label_names))
+    term_match <- match(var_names, label_names, nomatch = 0L)
+    factors[cbind(var_names[term_match > 0], label_names[term_match])] <- 1L
   }
   
   structure(
     fo,
-    variables = as.call(c(quote(list), y, x)),
+    variables = as.call(c(.(list), y, x)),
+    offset = if (length(offsets)) offsets,
     factors = factors,
-    term.labels = x_names,
-    order = rep(1L, length(x)),
+    term.labels = label_names,
+    order = rep(1L, length(label_names)),
     intercept = as.integer(intercept),
-    response = y_indicator,
+    response = has_y,
     .Environment = parent.frame(),
     class = c(class, "terms", "formula")
   )
 }
 
 
-terms.matrix <- function(x, y = NULL, ...) {
+terms.matrix <- function(x, y = NULL, offsets = NULL, ...) {
   stopifnot(is.character(colnames(x)))
   stopifnot(!anyDuplicated(colnames(x)))
   
   labels <- colnames(x)
   response <- if (!is.null(y)) make.unique(c(labels, "y"))[length(labels) + 1]
-
+  labels <- lapply(labels, as.name)
+  
+  if (length(offsets)) {
+    offsets <- paste0("offset(", offsets, ")")
+    labels <- c(labels, lapply(offsets, str2lang))
+  }
+  
   terms(labels, response, all_numeric = is.numeric(x))
 }
 
@@ -237,7 +275,7 @@ terms.recipe <- function(x, original = FALSE, ...) {
   
   outcome <- NULL
   outcome_set <- get_vars("outcome")
-
+  
   surv_time <- get_vars(c("surv_time", "outcome"))
   surv_event <- get_vars(c("surv_event", "outcome"))
   numeric_outcomes <- get_vars("outcome", "numeric")  
@@ -245,13 +283,13 @@ terms.recipe <- function(x, original = FALSE, ...) {
   if (length(surv_time) > 1 || length(surv_event) > 1) {
     stop("multiple instances of outcome role 'surv_time' or 'surv_event'")
   } else if (length(surv_time)) {
-    outcome <- call("Surv", as.symbol(surv_time))
-    if (length(surv_event)) outcome[[3]] <- as.symbol(surv_event)
+    outcome <- call("Surv", as.name(surv_time))
+    if (length(surv_event)) outcome[[3]] <- as.name(surv_event)
     outcome_set <- setdiff(outcome_set, c(surv_time, surv_event))
   } else if (length(surv_event)) {
     stop("outcome role 'surv_event' specified without 'surv_time'")
   } else if (length(numeric_outcomes) > 1) {
-    outcome <- as.call(c(.(cbind), lapply(numeric_outcomes, as.symbol)))
+    outcome <- as.call(c(.(cbind), lapply(numeric_outcomes, as.name)))
     outcome_set <- setdiff(outcome_set, numeric_outcomes)
   } else if (length(outcome_set) == 1) {
     outcome <- outcome_set
@@ -262,10 +300,16 @@ terms.recipe <- function(x, original = FALSE, ...) {
     stop("recipe outcome must be a single variable, survival variables with ",
          "roles 'surv_time' and 'surv_event', or multiple numeric variables")
   }
-
+  
   is_predictor <- info$role == "predictor"
-  predictors <- info$variable[is_predictor]
+  predictors <- lapply(info$variable[is_predictor], as.name)
   all_numeric <- all(info$type[is_predictor] == "numeric")
+  
+  offsets <- get_vars("offset", "numeric")
+  if (length(offsets)) {
+    offsets <- paste0("offset(", offsets, ")")
+    predictors <- c(predictors, lapply(offsets, str2lang))
+  }
   
   terms(predictors, outcome, all_numeric = all_numeric)
 }
@@ -296,6 +340,14 @@ model.matrix.ModelFrame <- function(object, intercept = NULL, ...) {
     attr(model_terms, "intercept") <- as.integer(intercept)
   }
   model.matrix(model_terms, object, ...)
+}
+
+
+model.offset <- function(x) {
+  stopifnot(is(x, "ModelFrame"))
+  keep <- 1 + c(0, attr(terms(x), "offset"))
+  offsets <- eval(attr(terms(x), "variables")[keep], x)
+  Reduce("+", offsets)
 }
 
 

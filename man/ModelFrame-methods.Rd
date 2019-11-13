@@ -12,7 +12,7 @@ ModelFrame(x, ...)
   strata = NULL, ...)
 
 \method{ModelFrame}{matrix}(x, y = NULL, na.rm = TRUE,
-  weights = NULL, strata = NULL, ...)
+  offsets = NULL, weights = NULL, strata = NULL, ...)
 }
 \arguments{
 \item{x}{model \code{\link{formula}} or \code{\link{matrix}} of predictor
@@ -31,6 +31,10 @@ for any of the model variables.}
 \item{strata}{vector of resampling stratification levels [default: none].}
 
 \item{y}{response variable.}
+
+\item{offsets}{numeric vector, matrix, or data frame of values to be added
+with a fixed coefficient of 1 to linear predictors in compatible regression
+models.}
 }
 \value{
 \code{ModelFrame} class object that inherits from \code{data.frame}.

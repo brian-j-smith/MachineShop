@@ -133,7 +133,12 @@ as.grid.ParamSet <- function(x, ..., model, fixed = tibble()) {
     mf <- ModelFrame(..., na.rm = FALSE)
     data <- switch(model@predictor_encoding,
                    "model.matrix" = model.matrix(mf, intercept = FALSE),
-                   "terms" = predictors(mf))
+                   "terms" = {
+                     mf_terms <- attributes(terms(mf))
+                     var_list <- eval(mf_terms$variables, mf)
+                     names(var_list) <- rownames(mf_terms$factors)
+                     as.data.frame(var_list[-c(1, mf_terms$offset)])
+                    })
     final_x <- dials::finalize(x, x = data)
     if (x@random) {
       dials::grid_random(final_x, size = x@random)
