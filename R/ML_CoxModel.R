@@ -38,7 +38,7 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
   is_main <- names(args) %in% c("ties", "eps", "iter.max")
   params <- args[is_main]
   params$tol <- args$toler.chol
-
+  
   MLModel(
     name = "CoxModel",
     label = "Cox Regression",
@@ -89,7 +89,7 @@ CoxStepAICModel <- function(ties = c("efron", "breslow", "exact"), ...,
   args <- params(environment())
   is_step <- names(args) %in% c("direction", "scope", "k", "trace", "steps")
   params <- args[is_step]
-
+  
   stepmodel <- CoxModel(ties = ties, ...)
   
   MLModel(
@@ -104,9 +104,11 @@ CoxStepAICModel <- function(ties = c("efron", "breslow", "exact"), ...,
       environment(formula) <- environment()
       stepargs <- stepAIC_args(formula, direction, scope)
       data <- as.data.frame(data)
-      survival::coxph(stepargs$formula, data = data, weights = weights, ...) %>%
-        MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,
-                      trace = trace, steps = steps)
+      MASS::stepAIC(
+        survival::coxph(stepargs$formula, data = data, weights = weights, ...),
+        direction = direction, scope = stepargs$scope, k = k, trace = trace,
+        steps = steps
+      )
     },
     predict = stepmodel@predict,
     varimp = stepmodel@varimp

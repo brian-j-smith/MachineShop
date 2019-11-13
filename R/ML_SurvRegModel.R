@@ -102,7 +102,7 @@ SurvRegStepAICModel <- function(dist = c("weibull", "exponential", "gaussian",
   params <- args[is_step]
   
   stepmodel <- SurvRegModel(dist = dist, scale = scale, parms = parms, ...)
-
+  
   MLModel(
     name = "SurvRegStepAICModel",
     label = "Parametric Survival (Stepwise)",
@@ -115,9 +115,11 @@ SurvRegStepAICModel <- function(dist = c("weibull", "exponential", "gaussian",
       environment(formula) <- environment()
       stepargs <- stepAIC_args(formula, direction, scope)
       data <- as.data.frame(data)
-      rms::psm(stepargs$formula, data = data, weights = weights, ...) %>%
-        MASS::stepAIC(direction = direction, scope = stepargs$scope, k = k,
-                      trace = trace, steps = steps)
+      MASS::stepAIC(
+        rms::psm(stepargs$formula, data = data, weights = weights, ...),
+        direction = direction, scope = stepargs$scope, k = k, trace = trace,
+        steps = steps
+      )
     },
     predict = stepmodel@predict,
     varimp = stepmodel@varimp
