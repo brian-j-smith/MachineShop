@@ -11,7 +11,8 @@
 #'   \code{"Surv"}.
 #' @param predictor_encoding character string indicating whether the model is
 #'   fit with predictor variables encoded as a \code{"\link{model.matrix}"}, a
-#'   data.frame containing the original \code{"terms"}, or unknown (default).
+#'   data.frame containing the originally specified model \code{"terms"}, or
+#'   unspecified (default).
 #' @param params list of user-specified model parameters to be passed to the
 #'   \code{fit} function.
 #' @param grid tuning grid function whose first agument \code{x} is a
