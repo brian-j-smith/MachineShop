@@ -1,29 +1,31 @@
 #' Recipe Tuning and Selection
 #' 
-#' Predictive peformance-based tuning of a preprocessing recipe or selection
+#' Predictive performance-based tuning of a preprocessing recipe or selection
 #' from a candidate set.
 #' 
 #' @rdname tune_recipe
 #' 
-#' @param x,model,recipe \code{\link{SelectedRecipe}} or
-#'   \code{\link{TunedRecipe}} object or \link[=models]{model} function,
-#'   function name, or call.
+#' @param x \code{\link{SelectedRecipe}} or \code{\link{TunedRecipe}} object.
+#' @param model \link[=models]{model} function or call.
 #' @param ... arguments passed to other methods.
 #' 
-#' @return Tuned \code{ModelRecipe} class object that inherits from
-#' \code{recipe}.
+#' @return List containing the following components:
+#' \describe{
+#'   \item{recipe}{tuned \code{ModelRecipe} object.}
+#'   \item{model}{tuned \code{MLModel} object.}
+#' }
 #' 
 #' @seealso \code{\link{fit}}, \code{\link{resample}}
 #' 
 #' @noRd
 #' 
-tune_recipe <- function(x, ...) {
+tune_recipe <- function(x, model, ...) {
   UseMethod("tune_recipe")
 }
 
 
-tune_recipe.recipe <- function(x, ...) {
-  ModelRecipe(x)
+tune_recipe.recipe <- function(x, model, ...) {
+  list(recipe = prep(ModelRecipe(x)), model = model)
 }
 
 
@@ -31,23 +33,37 @@ tune_recipe.recipe <- function(x, ...) {
 #' 
 tune_recipe.SelectedRecipe <- function(x, model, ...) {
   
-  model <- do.call(SelectedModel, c(getMLObject(model, "MLModel"), x@params))
+  last_tune <- model@tune
+  if (is(model, "SelectedModel") || is(model, "TunedModel")) {
+    model@params[names(x@params)] <- x@params
+  } else {
+    model <- do.call(SelectedModel, c(model, x@params))
+  }
   recipes <- x@recipes
-  x <- as(x, "ModelRecipe")
   
   data <- as.data.frame(x)
   setdata <- function(x) recipe(x, data[unique(summary(x)$variable)])
   
-  n <- length(recipes)
-  perf_stats <- numeric(n)
-  for (i in seq_len(n)) {
+  tuned_models <- list()
+  num_models <- integer()
+  for (i in seq(recipes)) {
     rec <- setdata(recipes[[i]])
-    tune <- tune_model(model, rec)@tune
-    perf_stats[i] <- tune@values[tune@selected]
+    tuned_model <- as.MLModel(fit(model, rec))
+    num_models[i] <- nrow(tuned_model@tune@grid)
+    tuned_model@tune@grid <- tibble(
+      Model = tibble(Index = seq_len(num_models[i])),
+      Recipe = tibble(Index = rep(i, num_models[i]))
+    )
+    tuned_models[[i]] <- tuned_model
   }
   
-  selected <- ifelse(tune@metric@maximize, which.max, which.min)(perf_stats)
-  setdata(recipes[[selected]])
+  tune <- do.call(c, lapply(tuned_models, slot, name = "tune"))
+  selected <- max(which(tune@selected > c(0, cumsum(num_models))))
+  recipe <- setdata(recipes[[selected]])
+  model <- tuned_models[[selected]]
+  model@tune <- if (is.null(last_tune)) tune else last_tune
+  
+  list(recipe = recipe, model = model)
   
 }
 
@@ -56,7 +72,12 @@ tune_recipe.SelectedRecipe <- function(x, model, ...) {
 #' 
 tune_recipe.TunedRecipe <- function(x, model, ...) {
   
-  model <- do.call(SelectedModel, c(getMLObject(model, "MLModel"), x@params))
+  last_tune <- model@tune
+  if (is(model, "SelectedModel") || is(model, "TunedModel")) {
+    model@params[names(x@params)] <- x@params
+  } else {
+    model <- do.call(SelectedModel, c(model, x@params))
+  }
   grid <- x@grid
   x <- as(x, "ModelRecipe")
   
@@ -64,29 +85,25 @@ tune_recipe.TunedRecipe <- function(x, model, ...) {
   
   update_x <- list(update, x)
   
-  n <- nrow(grid)
-  perf_stats <- numeric(n)
-  for (i in seq_len(n)) {
+  tuned_models <- list()
+  grid_inds <- seq_len(nrow(grid))
+  for (i in grid_inds) {
     x <- eval(as.call(c(update_x, grid[i, ])))
-    tune <- tune_model(model, x)@tune
-    perf_stats[i] <- tune@values[tune@selected]
+    tuned_models[[i]] <- tune_model(model, x)
   }
   
-  selected <- ifelse(tune@metric@maximize, which.max, which.min)(perf_stats)
-  eval(as.call(c(update_x, grid[selected, ])))
+  tune <- do.call(c, lapply(tuned_models, slot, name = "tune"))
+  num_models <- nrow(tune@grid) / nrow(grid)
+  tune@grid <- tibble(
+    Model = tune@grid,
+    Recipe = grid[rep(grid_inds, each = num_models), ]
+  )
   
-}
-
-
-#' @rdname tune_recipe
-#' 
-tune_recipe.MLModel <- function(x, recipe, ...) {
-  tune_recipe(recipe, model = x)
-}
-
-
-#' @rdname tune_recipe
-#' 
-tune_recipe.MLModelFunction <- function(x, recipe, ...) {
-  tune_recipe(recipe, model = x)
+  selected <- ceiling(tune@selected / num_models)
+  recipe <- eval(as.call(c(update_x, grid[selected, ])))
+  model <- tuned_models[[selected]]
+  model@tune <- if (is.null(last_tune)) tune else last_tune
+  
+  list(recipe = recipe, model = model)
+  
 }

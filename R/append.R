@@ -56,6 +56,18 @@ setMethod(".append", c("SurvMatrix", "SurvMatrix"),
 )
 
 
+setMethod(".append", c("tbl_df", "tbl_df"),
+  function(x, y) {
+    stopifnot(names(x) == names(y))
+    tbl <- tibble(.rows = nrow(x) + nrow(y))
+    for (varname in names(x)) {
+      tbl[[varname]] <- .append(x[[varname]], y[[varname]])
+    }
+    tbl
+  }
+)
+
+
 setMethod(".append", c("vector", "vector"),
   function(x, y) c(x, y)
 )

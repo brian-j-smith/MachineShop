@@ -201,8 +201,7 @@ plot.MLModel <- function(x, metrics = NULL,
   stat <- fget(stat)
   type <- match.arg(type)
   if (type == "line") {
-    grid <- x@tune@grid
-    if (any(dim(grid) == 0)) stop("no tuning parameters to plot")
+    grid <- unnest(x@tune@grid)
     stats <- apply(perf, c(3, 2), function(x) stat(na.omit(x))) %>%
       as.data.frame.table
     df <- data.frame(
@@ -225,12 +224,14 @@ plot.MLModel <- function(x, metrics = NULL,
     if (any(indices)) {
       df$Group <- interaction(grid[-1][indices])
       args$color <- args$shape <- ~ Group
+    } else {
+      args$group <- 1
     }
     mapping <- do.call(aes_, args)
     
     ggplot(df, mapping) +
-      geom_line() +
-      geom_point() +
+      geom_line(stat = "summary", fun.y = mean) +
+      geom_point(stat = "summary", fun.y = mean) +
       labs(x = names(grid)[1]) +
       facet_wrap(~ Metric, scales = "free")
   } else {

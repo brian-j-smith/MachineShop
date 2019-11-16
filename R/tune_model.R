@@ -107,7 +107,7 @@ tune_model_depwarn <- function(...) {
   if (is(model, "SelectedModel")) {
     params <- model@params
     models <- params$models
-    grid <- tibble(.rows = length(models))
+    grid <- tibble(Index = seq(models))
   } else if (is(model, "TunedModel")) {
     params <- model@params
     grid <- as.grid(params$grid, fixed = params$fixed,

@@ -70,8 +70,8 @@ fit.ModelFrame <- function(x, model, ...) {
 #' "case_weight" \code{\link[recipes:roles]{role}} for them.
 #' 
 fit.recipe <- function(x, model, ...) {
-  model <- getMLObject(model, "MLModel")
-  .fit(model, prep(tune_recipe(x, model = model)))
+  tuned <- tune_recipe(x, getMLObject(model, "MLModel"))
+  (if (fully_trained(tuned$recipe)) .fit else fit)(tuned$model, tuned$recipe)
 }
 
 
