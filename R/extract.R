@@ -28,6 +28,17 @@ setMethod("[",
 #' @rdname extract-methods
 #' @aliases [,Resamples,ANY,ANY,ANY-method
 #' 
+setMethod("[", c(x = "RecipeGrid", i = "ANY", j = "ANY", drop = "ANY"),
+  function(x, i, j, ..., drop = FALSE) {
+    x <- asS3(x)
+    callNextMethod()
+  }
+)
+
+
+#' @rdname extract-methods
+#' @aliases [,Resamples,ANY,ANY,ANY-method
+#' 
 setMethod("[", c(x = "Resamples", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
     y <- asS3(x)[i, j, drop = drop]

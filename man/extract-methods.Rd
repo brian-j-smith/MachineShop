@@ -4,6 +4,7 @@
 \name{extract}
 \alias{extract}
 \alias{[,DiscreteVector,ANY,missing,missing-method}
+\alias{[,RecipeGrid,ANY,ANY,ANY-method}
 \alias{[,Resamples,ANY,ANY,ANY-method}
 \alias{[,Resamples,ANY,missing,ANY-method}
 \alias{[,Resamples,missing,missing,ANY-method}
@@ -11,6 +12,8 @@
 \title{Extract Elements of an Object}
 \usage{
 \S4method{[}{DiscreteVector,ANY,missing,missing}(x, i)
+
+\S4method{[}{RecipeGrid,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 
 \S4method{[}{Resamples,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 
