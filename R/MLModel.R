@@ -146,7 +146,7 @@ MLModelFit <- function(object, Class, model, x, y) {
 #' 
 as.MLModel <- function(x, ...) {
   stopifnot(is(x, "MLModelFit"))
-  if (isS4(x)) x@mlmodel else x$mlmodel
+  getElement(x, "mlmodel")
 }
 
 
