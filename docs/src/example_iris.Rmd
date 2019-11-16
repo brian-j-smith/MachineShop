@@ -119,7 +119,7 @@ res1 <- resample(fo, data = iris, model = GBMModel(n.tree = 50), control = contr
 res2 <- resample(fo, data = iris, model = RandomForestModel(ntree = 50), control = control)
 res3 <- resample(fo, data = iris, model = NNetModel(size = 5), control = control)
 
-res <- Resamples(GBM = res1, RF = res2, NNet = res3)
+res <- c(GBM = res1, RF = res2, NNet = res3)
 summary(res)
 
 plot(res)

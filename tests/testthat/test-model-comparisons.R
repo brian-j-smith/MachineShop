@@ -9,7 +9,7 @@ test_Resamples <- function() {
   gbmperf2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
   gbmperf3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
   
-  perf <- Resamples(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
+  perf <- c(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
   summary(perf)
   plot(perf)
   

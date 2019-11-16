@@ -1,3 +1,19 @@
+#' Combine MachineShop Objects
+#' 
+#' Combine one or more \pkg{MachineShop} objects of the same class.
+#' 
+#' @name c
+#' @aliases combine
+#' @rdname c
+#' 
+#' @param ... named or unnamed \link{resample} results.  Resamples must have
+#' been generated with the same resampling \link[=controls]{control}.
+#' 
+#' @return Object of the same class as the arguments.
+#' 
+NULL
+
+
 c.DiscreteVector <- function(...) {
   args <- list(...)
   x <- NextMethod()
@@ -46,6 +62,32 @@ c.MLTune <- function(...) {
     } else {
       args[[1]]
     }
+  } else {
+    NextMethod()
+  }
+}
+
+
+#' @rdname c
+#' 
+c.Resamples <- function(...) {
+  args <- list(...)
+  if (all(mapply(is, args, "Resamples"))) {
+    
+    control <- args[[1]]@control
+    if (!all(sapply(args, function(x) identical(x@control, control)))) {
+      stop("Resamples arguments have different control structures")
+    }
+    
+    strata <- args[[1]]@strata
+    if (!all(sapply(args, function(x) identical(x@strata, strata)))) {
+      stop("Resamples arguments have different strata variables")
+    }
+    
+    df <- do.call(append, make_unique_levels(args, which = "Model"))
+    rownames(df) <- NULL
+    Resamples(df, control = control, strata = strata)
+    
   } else {
     NextMethod()
   }

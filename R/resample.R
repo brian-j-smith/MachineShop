@@ -19,12 +19,11 @@
 #' @param model \link[=models]{model} function, function name, or call.
 #' @param control \link[=controls]{control} function, function name, or call
 #'   defining the resampling method to be employed.
-#' @param ... named or unnamed \code{resample} output to combine together with
-#'   the \code{Resamples} constructor.
+#' @param ... arguments passed to other methods.
 #' 
 #' @return \code{Resamples} class object.
 #' 
-#' @seealso \code{\link{performance}}, \code{\link{metrics}},
+#' @seealso \code{\link{c}}, \code{\link{metrics}}, \code{\link{performance}},
 #' \code{\link{plot}}, \code{\link{summary}}
 #' 
 #' @examples
@@ -40,7 +39,7 @@
 #' summary(gbm_res1)
 #' plot(gbm_res1)
 #' 
-#' res <- Resamples(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
+#' res <- c(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 #' summary(res)
 #' plot(res)
 #' 
@@ -113,66 +112,16 @@ resample.MLModelFunction <- function(x, ...) {
 }
 
 
-#' @rdname resample-methods
-#' 
-#' @details
-#' Output being combined from more than one model with the \code{Resamples}
-#' constructor must have been generated with the same resampling \code{control}
-#' object.
-#' 
-Resamples <- function(...) {
-  .Resamples(...)
-}
-
-
-.Resamples <- function(..., .control = NULL, .strata = NULL) {
-  args <- list(...)
-  
-  if (length(args) == 0) stop("no resample output given")
-  
-  .Data <- args[[1]]
-  if (all(mapply(is, args, "Resamples"))) {
-    
-    control <- .Data@control
-    if (!all(sapply(args, function(x) identical(x@control, control)))) {
-      stop("Resamples arguments have different control structures")
-    }
-    
-    strata <- .Data@strata
-    if (!all(sapply(args, function(x) identical(x@strata, strata)))) {
-      stop("Resamples arguments have different strata variables")
-    }
-    
-  } else if (length(args) > 1) {
-    
-    stop("arguments to combine must be Resamples objects")
-    
-  } else if (!is.data.frame(.Data)) {
-    
-    stop("Resamples argument must inherit from data.frame")
-    
-  } else {
-    
-    control <- .control
-    if (!is(control, "MLControl")) {
-      stop("missing control structure in Resamples constructor")
-    }
-    
-    strata <- as.character(.strata)
-    
-    var_names <- c("Resample", "Case", "Observed", "Predicted")
-    found <- var_names %in% names(.Data)
-    if (!all(found)) {
-      subnames <- var_names[!found]
-      stop(plural_suffix("missing resample variable", subnames), ": ",
-           toString(subnames))
-    }
-    
+Resamples <- function(object, strata = NULL, ...) {
+  var_names <- c("Model", "Resample", "Case", "Observed", "Predicted")
+  found <- var_names %in% names(object)
+  if (!all(found)) {
+    subnames <- var_names[!found]
+    stop(plural_suffix("missing resample variable", subnames), ": ",
+         toString(subnames))
   }
-  
-  df <- do.call(append, make_unique_levels(args, which = "Model"))
-  rownames(df) <- NULL
-  new("Resamples", df, control = control, strata = strata)
+  rownames(object) <- NULL
+  new("Resamples", object, strata = as.character(strata), ...)
 }
 
 
@@ -456,7 +405,7 @@ resample_args <- function(train, test, model, control, strata = character()) {
   }
   
   list(if (class(test)[1] == "list") lapply(test, f) else f(test),
-       .control = control, .strata = strata)
+       control = control, strata = strata)
 }
 
 
@@ -465,5 +414,5 @@ Resamples.list <- function(x) {
   resample_df <- do.call(append, resample_list)
   num_times <- sapply(resample_list, nrow)
   resample_df$Resample <- rep(seq_along(num_times), num_times)
-  Resamples(resample_df, .control = x[[1]]$.control, .strata = x[[1]]$.strata)
+  Resamples(resample_df, control = x[[1]]$control, strata = x[[1]]$strata)
 }

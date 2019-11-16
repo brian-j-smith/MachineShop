@@ -8,7 +8,6 @@
 \alias{resample.recipe}
 \alias{resample.MLModel}
 \alias{resample.MLModelFunction}
-\alias{Resamples}
 \title{Resample Estimation of Model Performance}
 \usage{
 resample(x, ...)
@@ -28,8 +27,6 @@ resample(x, ...)
 \method{resample}{MLModel}(x, ...)
 
 \method{resample}{MLModelFunction}(x, ...)
-
-Resamples(...)
 }
 \arguments{
 \item{x}{defines a relationship between model predictor and response
@@ -40,8 +37,7 @@ predictors, \code{\link{ModelFrame}}, untrained
 function or call may be given first followed by objects defining the
 predictor and response relationship and the \code{control} value.}
 
-\item{...}{named or unnamed \code{resample} output to combine together with
-the \code{Resamples} constructor.}
+\item{...}{arguments passed to other methods.}
 
 \item{data}{\link[=data.frame]{data frame} containing observed predictors and
 outcomes.}
@@ -73,10 +69,6 @@ default.
 Variables in a \code{recipe} may be used for stratification by defining a
 "case_strata" \code{\link[recipes:roles]{role}} for them.  Resampling will
 be unstratified if no variables have that role.
-
-Output being combined from more than one model with the \code{Resamples}
-constructor must have been generated with the same resampling \code{control}
-object.
 }
 \examples{
 ## Factor response example
@@ -91,12 +83,12 @@ gbm_res3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
 summary(gbm_res1)
 plot(gbm_res1)
 
-res <- Resamples(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
+res <- c(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 summary(res)
 plot(res)
 
 }
 \seealso{
-\code{\link{performance}}, \code{\link{metrics}},
+\code{\link{c}}, \code{\link{metrics}}, \code{\link{performance}},
 \code{\link{plot}}, \code{\link{summary}}
 }

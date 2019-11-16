@@ -160,7 +160,7 @@ res3 <- resample(surv_fo, data = surv_train, model = GBMModel(n.trees = 100),
                  control = surv_means_control)
 
 ## Combine resample output for comparison
-(res <- Resamples(GBM1 = res1, GBM2 = res2, GBM3 = res3))
+(res <- c(GBM1 = res1, GBM2 = res2, GBM3 = res3))
 
 summary(res)
 

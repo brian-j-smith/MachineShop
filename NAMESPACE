@@ -41,7 +41,6 @@ export(.,
        performance,
        performance_curve,
        resample,
-       Resamples,
        response,
        settings,
        varimp)
@@ -167,6 +166,7 @@ S3method(bake, ModelRecipe)
 S3method(bake, SelectedRecipe)
 S3method(bake, TunedRecipe)
 S3method(c, DiscreteVector)
+S3method(c, Resamples)
 S3method(diff, MLModel)
 S3method(diff, Resamples)
 S3method(fit, formula)

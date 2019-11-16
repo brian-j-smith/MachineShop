@@ -37,7 +37,7 @@ gbm_res1 <- resample(fo, Melanoma, GBMModel(n.trees = 25), control)
 gbm_res2 <- resample(fo, Melanoma, GBMModel(n.trees = 50), control)
 gbm_res3 <- resample(fo, Melanoma, GBMModel(n.trees = 100), control)
 
-res <- Resamples(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
+res <- c(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 res_diff <- diff(res)
 summary(res_diff)
 plot(res_diff)

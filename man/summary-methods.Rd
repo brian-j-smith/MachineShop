@@ -61,7 +61,7 @@ gbm_res2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
 gbm_res3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
 summary(gbm_res3)
 
-res <- Resamples(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
+res <- c(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 summary(res)
 
 }
