@@ -22,12 +22,11 @@
 #'   \code{"weibull"} (default).
 #' @param na.rm logical indicating whether to remove observed or predicted
 #'   responses that are \code{NA} when calculating metrics.
-#' @param ... named or unnamed \code{calibration} output to combine together
-#'   with the \code{Calibration} constructor.
+#' @param ... arguments passed to other methods.
 #' 
 #' @return \code{Calibration} class object that inherits from \code{data.frame}.
 #'  
-#' @seealso \code{\link{plot}}
+#' @seealso \code{\link{c}}, \code{\link{plot}}
 #' 
 #' @examples
 #' library(survival)
@@ -50,52 +49,17 @@ calibration <- function(x, y = NULL, breaks = 10, span = 0.75, dist = NULL,
 }
 
 
-#' @rdname calibration
-#' 
-Calibration <- function(...) {
-  .Calibration(...)
-}
-
-
-.Calibration <- function(..., .breaks) {
-  args <- list(...)
-  
-  if (length(args) == 0) stop("no calibration output given")
-  
-  .Data <- args[[1]]
-  if (all(mapply(is, args, "Calibration"))) {
-    
-    smoothed <- .Data@smoothed
-    if (!all(sapply(args, function(x) identical(x@smoothed, smoothed)))) {
-      stop("Calibration arguments are a mix of smoothed and binned curves")
-    }
-    
-  } else if (length(args) > 1) {
-    
-    stop("arguments to combine must be Calibration objects")
-    
-  } else if (!is.data.frame(.Data)) {
-    
-    stop("Calibration argument must inherit from data.frame")
-    
-  } else {
-    
-    if (missing(.breaks)) stop("missing breaks in Calibration constructor")
-    smoothed <- is.null(.breaks)
-    
-    var_names <- c("Response", "Predicted", "Observed")
-    found <- var_names %in% names(.Data)
-    if (!all(found)) {
-      subnames <- var_names[!found]
-      stop(plural_suffix("missing calibration variable", subnames), ": ",
-           toString(subnames))
-    }
-    
+Calibration <- function(object, ...) {
+  if (is.null(object$Model)) object$Model <- "Model"
+  var_names <- c("Response", "Predicted", "Observed")
+  found <- var_names %in% names(object)
+  if (!all(found)) {
+    subnames <- var_names[!found]
+    stop(plural_suffix("missing calibration variable", subnames), ": ",
+         toString(subnames))
   }
-  
-  df <- do.call(append, make_unique_levels(args, which = "Model"))
-  rownames(df) <- NULL
-  new("Calibration", df, smoothed = smoothed)
+  rownames(object) <- NULL
+  new("Calibration", object, ...)
 }
 
 
@@ -106,7 +70,7 @@ Calibration <- function(...) {
 
 .calibration.default <- function(x, y, breaks, ...) {
   Calibration(.calibration_default(x, y, breaks = breaks, ...),
-              .breaks = breaks)
+              smoothed = is.null(breaks))
 }
 
 
@@ -114,7 +78,7 @@ Calibration <- function(...) {
   cal_list <- by(x, x$Model, function(data) {
     calibration(data$Observed, data$Predicted, na.rm = FALSE, ...)
   }, simplify = FALSE)
-  do.call(Calibration, cal_list)
+  do.call(c, cal_list)
 }
 
 

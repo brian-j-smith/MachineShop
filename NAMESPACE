@@ -27,7 +27,6 @@ importFrom(utils, combn, head, methods, relist, stack, str, tail)
 
 export(.,
        calibration,
-       Calibration,
        confusion,
        Confusion,
        ConfusionMatrix,
@@ -165,6 +164,7 @@ S3method(as.data.frame, SurvMatrix)
 S3method(bake, ModelRecipe)
 S3method(bake, SelectedRecipe)
 S3method(bake, TunedRecipe)
+S3method(c, Calibration)
 S3method(c, DiscreteVector)
 S3method(c, Resamples)
 S3method(diff, MLModel)

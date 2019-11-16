@@ -3,14 +3,18 @@
 \name{c}
 \alias{c}
 \alias{combine}
+\alias{c.Calibration}
 \alias{c.Resamples}
 \title{Combine MachineShop Objects}
 \usage{
+\method{c}{Calibration}(...)
+
 \method{c}{Resamples}(...)
 }
 \arguments{
-\item{...}{named or unnamed \link{resample} results.  Resamples must have
-been generated with the same resampling \link[=controls]{control}.}
+\item{...}{named or unnamed \link{calibration} or \link{resample} results.
+Resamples must have been generated with the same resampling
+\link[=controls]{control}.}
 }
 \value{
 Object of the same class as the arguments.

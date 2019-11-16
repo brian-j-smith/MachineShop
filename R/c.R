@@ -6,12 +6,34 @@
 #' @aliases combine
 #' @rdname c
 #' 
-#' @param ... named or unnamed \link{resample} results.  Resamples must have
-#' been generated with the same resampling \link[=controls]{control}.
+#' @param ... named or unnamed \link{calibration} or \link{resample} results.
+#' Resamples must have been generated with the same resampling
+#' \link[=controls]{control}.
 #' 
 #' @return Object of the same class as the arguments.
 #' 
 NULL
+
+
+#' @rdname c
+#' 
+c.Calibration <- function(...) {
+  args <- list(...)
+  if (all(mapply(is, args, "Calibration"))) {
+    
+    smoothed <- args[[1]]@smoothed
+    if (!all(sapply(args, function(x) identical(x@smoothed, smoothed)))) {
+      stop("Calibration arguments are a mix of smoothed and binned curves")
+    }
+    
+    df <- do.call(append, make_unique_levels(args, which = "Model"))
+    rownames(df) <- NULL
+    Calibration(df, smoothed = smoothed)
+    
+  } else {
+    NextMethod()
+  }
+}
 
 
 c.DiscreteVector <- function(...) {
