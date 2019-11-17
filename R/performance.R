@@ -110,10 +110,10 @@ performance.ConfusionMatrix <-
 #' 
 performance.Resamples <- function(x, ...) {
   perf_list <- by(x, x$Model, function(resamples) {
-    performance(x@control, resamples, ...)
+    Performance(performance(x@control, resamples, ...))
   }, simplify = FALSE)
   
-  do.call(Performance, perf_list)
+  do.call(c, perf_list)
 }
 
 
@@ -172,17 +172,4 @@ performance.MLCVOptimismControl <- function(x, resamples, ...) {
   
   pessimism <- test_perf - cv_perf
   sweep(pessimism, 2, train_perf, "+")
-}
-
-
-Performance <- function(...) {
-  args <- list(...)
-  
-  perf <- if (length(args) > 1) {
-    abind(args, along = 3)
-  } else {
-    args[[1]]
-  }
-  
-  new("Performance", perf)
 }

@@ -210,7 +210,7 @@ setClass("ParamSet",
 )
 
 
-setClass("Performance",
+Performance <- setClass("Performance",
   contains = "array"
 )
 

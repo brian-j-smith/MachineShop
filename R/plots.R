@@ -279,7 +279,7 @@ plot.Performance <- function(x, metrics = NULL, stat =
                                MachineShop::settings("stat.Resamples"),
                              type = c("boxplot", "density", "errorbar",
                                       "violin"), ...) {
-  df <- as.data.frame.table(x)
+  df <- as.data.frame.table(as(x, "array"))
   if (length(dim(x)) <= 2) df$Var3 <- factor("Model")
   orderednames <- match(c("Var1", "Var2", "Var3", "Freq"), names(df))
   names(df)[orderednames] <- c("Resample", "Metric", "Model", "Value")

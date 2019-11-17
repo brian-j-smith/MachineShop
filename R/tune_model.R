@@ -162,7 +162,7 @@ tune_model_depwarn <- function(...) {
     perf_list[failed] <- list(perf)
   }
   
-  perf <- do.call(Performance, perf_list)
+  perf <- do.call(c, perf_list)
   selected <- ifelse(metric@maximize, which.max, which.min)(perf_stats)
   
   tuned_model <- models[[selected]]

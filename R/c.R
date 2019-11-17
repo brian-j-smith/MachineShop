@@ -127,8 +127,7 @@ c.MLTune <- function(...) {
       names(values) <- paste0(names(values), ".",
                               rep(seq(args), sapply(values_list, length)))
       
-      performance <- do.call(Performance,
-                             lapply(args, slot, name = "performance"))
+      performance <- do.call(c, lapply(args, slot, name = "performance"))
       dimnames(performance)[[3]] <- names(values)
       
       metric <- args[[1]]@metric
@@ -145,6 +144,27 @@ c.MLTune <- function(...) {
       
       MLTune(grid = grid, performance = performance, selected = selected,
              values = values, metric = metric)
+      
+    } else {
+      args[[1]]
+    }
+  } else {
+    NextMethod()
+  }
+}
+
+
+c.Performance <- function(...) {
+  args <- list(...)
+  if (all(mapply(is, args, "Performance"))) {
+    if (length(args) > 1) {
+      
+      names <- dimnames(args[[1]])[1:2]
+      if (!all(sapply(args, function(x) identical(dimnames(x)[1:2], names)))) {
+        stop("Performance objects have different row or column names")
+      }
+      
+      Performance(abind(args, along = 3))
       
     } else {
       args[[1]]
