@@ -103,6 +103,22 @@ setMethod("show", "Grid",
 )
 
 
+#' @rdname print-methods
+#' 
+print.ListOf <- function(x, n = MachineShop::settings("max.print"), ...) {
+  print_items(as(x, "listof"), n = n)
+  invisible(x)
+}
+
+
+setMethod("show", "ListOf",
+  function(object) {
+    print(object)
+    invisible()
+  }
+)
+
+
 setMethod("show", "MLControl",
   function(object) {
     labels <- c("times" = "Survival times", "method" = "Method",
@@ -600,6 +616,11 @@ print_items.list <- function(x, n, ...) {
   } else {
     print(x)
   }
+}
+
+
+print_items.listof <- function(x, ...) {
+  print_items.list(x, ...)
 }
 
 

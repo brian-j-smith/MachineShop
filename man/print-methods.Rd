@@ -4,6 +4,7 @@
 \alias{print}
 \alias{print.Calibration}
 \alias{print.Curves}
+\alias{print.ListOf}
 \alias{print.MLModel}
 \alias{print.MLTune}
 \alias{print.ModelFrame}
@@ -19,6 +20,8 @@
   ...)
 
 \method{print}{Curves}(x, n = MachineShop::settings("max.print"), ...)
+
+\method{print}{ListOf}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{MLModel}(x, n = MachineShop::settings("max.print"), ...)
 

@@ -10,6 +10,11 @@ setOldClass(c("grid_random", "param_grid"))
 setOldClass(c("grid_regular", "param_grid"))
 
 
+ListOf <- setClass("ListOf",
+  contains = c("listof", "list")
+)
+
+
 setClass("MLControl",
   slots = c(times = "ANY",
             dist = "ANY",
@@ -134,7 +139,7 @@ setClass("Calibration",
 
 
 ConfusionList <- setClass("ConfusionList",
-  contains = c("listof", "list")
+  contains = "ListOf"
 )
 
 

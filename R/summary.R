@@ -40,7 +40,7 @@ NULL
 #' @rdname summary-methods
 #' 
 summary.ConfusionList <- function(object, ...) {
-  structure(lapply(object, summary, ...), class = "listof")
+  ListOf(lapply(object, summary, ...))
 }
 
 

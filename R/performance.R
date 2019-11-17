@@ -94,7 +94,7 @@ performance.Surv <- function(x, y, metrics =
 #' @rdname performance
 #' 
 performance.ConfusionList <- function(x, ...) {
-  structure(lapply(x, performance, ...), class = "listof")
+  ListOf(lapply(x, performance, ...))
 }
 
 
