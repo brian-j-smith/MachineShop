@@ -4,7 +4,7 @@
 \alias{c}
 \alias{combine}
 \alias{c.Calibration}
-\alias{c.Confusion}
+\alias{c.ConfusionList}
 \alias{c.ConfusionMatrix}
 \alias{c.Curves}
 \alias{c.Lift}
@@ -13,7 +13,7 @@
 \usage{
 \method{c}{Calibration}(...)
 
-\method{c}{Confusion}(...)
+\method{c}{ConfusionList}(...)
 
 \method{c}{ConfusionMatrix}(...)
 

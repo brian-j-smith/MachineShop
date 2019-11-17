@@ -27,7 +27,7 @@
 #' @return
 #' The return value is a \code{ConfusionMatrix} class object that inherits from
 #' \code{table} if \code{x} and \code{y} responses are specified or a
-#' \code{Confusion} object that inherits from \code{list} if \code{x} is a
+#' \code{ConfusionList} object that inherits from \code{list} if \code{x} is a
 #' \code{Resamples} object.
 #'  
 #' @seealso \code{\link{c}}, \code{\link{plot}}, \code{\link{summary}}
@@ -84,7 +84,7 @@ ConfusionMatrix <- function(object = numeric(), ordered = FALSE) {
   conf_list <- by(x, list(Model = x$Model), function(data) {
    confusion(data$Observed, data$Predicted, cutoff = cutoff, na.rm = FALSE)
   }, simplify = FALSE)
-  if (all(mapply(is, conf_list, "Confusion"))) {
+  if (all(mapply(is, conf_list, "ConfusionList"))) {
     conf_list <- unlist(conf_list, recursive = FALSE)
   }
   do.call(c, conf_list)

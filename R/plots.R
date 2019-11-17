@@ -94,7 +94,7 @@ plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
 
 #' @rdname plot-methods
 #' 
-plot.Confusion <- function(x, ...) {
+plot.ConfusionList <- function(x, ...) {
   pl <- list()
   for (name in names(x)) {
     pl[[name]] <- plot(x[[name]]) + labs(title = name)

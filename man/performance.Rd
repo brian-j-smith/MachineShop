@@ -6,7 +6,7 @@
 \alias{performance.matrix}
 \alias{performance.numeric}
 \alias{performance.Surv}
-\alias{performance.Confusion}
+\alias{performance.ConfusionList}
 \alias{performance.ConfusionMatrix}
 \alias{performance.Resamples}
 \title{Model Performance Metrics}
@@ -28,7 +28,7 @@ performance(x, ...)
   metrics = MachineShop::settings("metrics.Surv"),
   cutoff = MachineShop::settings("cutoff"), na.rm = TRUE, ...)
 
-\method{performance}{Confusion}(x, ...)
+\method{performance}{ConfusionList}(x, ...)
 
 \method{performance}{ConfusionMatrix}(x,
   metrics = MachineShop::settings("metrics.ConfusionMatrix"), ...)
@@ -40,7 +40,7 @@ performance(x, ...)
 \link{resample} result containing observed and predicted responses.}
 
 \item{...}{arguments passed from the \code{Resamples} method to the response
-type-specific methods or from the method for \code{Confusion} to
+type-specific methods or from the method for \code{ConfusionList} to
 \code{ConfusionMatrix}.}
 
 \item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}

@@ -1,3 +1,4 @@
+setOldClass("listof")
 setOldClass("ModelFrame")
 setOldClass("recipe")
 setOldClass("Surv")
@@ -129,6 +130,11 @@ MLModelFunction <- setClass("MLModelFunction",
 setClass("Calibration",
   contains = "data.frame",
   slots = c(smoothed = "logical")
+)
+
+
+ConfusionList <- setClass("ConfusionList",
+  contains = c("listof", "list")
 )
 
 

@@ -40,9 +40,9 @@ c.Calibration <- function(...) {
 
 #' @rdname c
 #' 
-c.Confusion <- function(...) {
+c.ConfusionList <- function(...) {
   args <- list(...)
-  is_confusion <- function(x) is(x, "Confusion") || is(x, "ConfusionMatrix")
+  is_confusion <- function(x) is(x, "ConfusionList") || is(x, "ConfusionMatrix")
   if (all(sapply(args, is_confusion))) {
     
     conf_list <- list()
@@ -57,7 +57,7 @@ c.Confusion <- function(...) {
     }
     names(conf_list) <- make.unique(names(conf_list))
     
-    structure(conf_list, class = c("Confusion", "listof"))
+    ConfusionList(conf_list)
     
   } else {
     NextMethod()
@@ -68,7 +68,7 @@ c.Confusion <- function(...) {
 #' @rdname c
 #' 
 c.ConfusionMatrix <- function(...) {
-  c.Confusion(...)
+  c.ConfusionList(...)
 }
 
 

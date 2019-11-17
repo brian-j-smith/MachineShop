@@ -2,7 +2,7 @@
 % Please edit documentation in R/summary.R
 \name{summary}
 \alias{summary}
-\alias{summary.Confusion}
+\alias{summary.ConfusionList}
 \alias{summary.ConfusionMatrix}
 \alias{summary.Curves}
 \alias{summary.MLModel}
@@ -10,7 +10,7 @@
 \alias{summary.Resamples}
 \title{Model Performance Summary}
 \usage{
-\method{summary}{Confusion}(object, ...)
+\method{summary}{ConfusionList}(object, ...)
 
 \method{summary}{ConfusionMatrix}(object, ...)
 

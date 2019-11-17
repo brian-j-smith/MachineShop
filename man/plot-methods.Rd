@@ -3,7 +3,7 @@
 \name{plot}
 \alias{plot}
 \alias{plot.Calibration}
-\alias{plot.Confusion}
+\alias{plot.ConfusionList}
 \alias{plot.ConfusionMatrix}
 \alias{plot.Curves}
 \alias{plot.Lift}
@@ -17,7 +17,7 @@
 \method{plot}{Calibration}(x, type = c("line", "point"), se = FALSE,
   ...)
 
-\method{plot}{Confusion}(x, ...)
+\method{plot}{ConfusionList}(x, ...)
 
 \method{plot}{ConfusionMatrix}(x, ...)
 

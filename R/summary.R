@@ -39,7 +39,7 @@ NULL
 
 #' @rdname summary-methods
 #' 
-summary.Confusion <- function(object, ...) {
+summary.ConfusionList <- function(object, ...) {
   structure(lapply(object, summary, ...), class = "listof")
 }
 

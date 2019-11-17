@@ -102,7 +102,7 @@ metricinfo <- function(...) {
 }
 
 
-.metricinfo.Confusion <- function(x, ...) {
+.metricinfo.ConfusionList <- function(x, ...) {
   .metricinfo(x[[1]], ...)
 }
 

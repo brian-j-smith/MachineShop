@@ -16,7 +16,7 @@
 #' @param na.rm logical indicating whether to remove observed or predicted
 #'   responses that are \code{NA} when calculating metrics.
 #' @param ... arguments passed from the \code{Resamples} method to the response
-#'   type-specific methods or from the method for \code{Confusion} to
+#'   type-specific methods or from the method for \code{ConfusionList} to
 #'   \code{ConfusionMatrix}.
 #' 
 #' @seealso \code{\link{plot}}, \code{\link{summary}}
@@ -93,7 +93,7 @@ performance.Surv <- function(x, y, metrics =
 
 #' @rdname performance
 #' 
-performance.Confusion <- function(x, ...) {
+performance.ConfusionList <- function(x, ...) {
   structure(lapply(x, performance, ...), class = "listof")
 }
 
