@@ -6,6 +6,7 @@
 #' characteristic (ROC) and precision recall.
 #' 
 #' @name performance_curve
+#' @aliases curves
 #' 
 #' @param x \link[=response]{observed responses} or \link{resample} result
 #'   containing observed and predicted responses.

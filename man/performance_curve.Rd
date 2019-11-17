@@ -2,6 +2,7 @@
 % Please edit documentation in R/performance_curve.R
 \name{performance_curve}
 \alias{performance_curve}
+\alias{curves}
 \alias{performance_curve.default}
 \alias{performance_curve.Resamples}
 \title{Performance Curves}

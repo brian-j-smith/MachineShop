@@ -7,10 +7,9 @@
 #' @rdname c
 #' 
 #' @param ... named or unnamed \link{calibration}, \link{confusion},
-#' \link[=performance_curve]{performance curve}, \link{lift}, or \link{resample}
-#' results.  Curves must have been generated with the same performance
-#' \link{metrics} and resamples with the same resampling
-#' \link[=controls]{control}.
+#' \link[=curves]{performance curve}, \link{lift}, or \link{resample} results.
+#' Curves must have been generated with the same performance \link{metrics} and
+#' resamples with the same resampling \link[=controls]{control}.
 #' 
 #' @return Object of the same class as the arguments.
 #' 

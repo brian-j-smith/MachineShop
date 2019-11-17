@@ -27,7 +27,7 @@
   stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
 }
 \arguments{
-\item{object}{\link{confusion}, \link[=performance_curve]{performance curve},
+\item{object}{\link{confusion}, \link[=curves]{performance curve},
 \link{lift}, tuned model \link{fit}, \link{performance}, or \link{resample}
 result.}
 

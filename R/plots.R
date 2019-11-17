@@ -6,9 +6,9 @@
 #' @rdname plot-methods
 #' 
 #' @param x \link{calibration}, \link{confusion},
-#'   \link[=performance_curve]{performance curve}, \link{lift},
-#'   tuned model \link{fit}, partial \link{dependence}, \link{performance},
-#'   \link{resample}, or \link[=varimp]{variable importance} result.
+#'   \link[=curves]{performance curve}, \link{lift}, tuned model \link{fit},
+#'   partial \link{dependence}, \link{performance}, \link{resample}, or
+#'   \link[=varimp]{variable importance} result.
 #' @param diagonal logical indicating whether to include a diagonal reference
 #'   line.
 #' @param find numeric true positive rate at which to display reference lines

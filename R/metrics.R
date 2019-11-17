@@ -5,8 +5,8 @@
 #' @name metrics
 #' 
 #' @param observed \link[=response]{observed responses}; or
-#'   \link{confusion}, \link[=performance_curve]{performance curve}, or
-#'   \link{resample} result containing observed and predicted responses.
+#'   \link{confusion}, \link[=curves]{performance curve}, or \link{resample}
+#'   result containing observed and predicted responses.
 #' @param predicted \link[=predict]{predicted responses} if not contained in
 #'   \code{observed}.
 #' @param beta relative importance of recall to precision in the calculation of

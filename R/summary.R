@@ -5,7 +5,7 @@
 #' @name summary
 #' @rdname summary-methods
 #' 
-#' @param object \link{confusion}, \link[=performance_curve]{performance curve},
+#' @param object \link{confusion}, \link[=curves]{performance curve},
 #'   \link{lift}, tuned model \link{fit}, \link{performance}, or \link{resample}
 #'   result.
 #' @param stat function or character string naming a function to compute a
