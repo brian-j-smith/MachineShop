@@ -97,11 +97,11 @@ summary.Curves <- function(object, stat = MachineShop::settings("stat.Curves"),
         data.frame(Cutoff = cutoffs,
                    x = apply(x_all, 1, stat_na_omit),
                    y = apply(y_all, 1, stat_na_omit)),
-        .metrics = object@metrics
+        metrics = object@metrics
       ))
     })
     
-    object <- do.call(object_class, object_list)
+    object <- do.call(c, object_list)
   }
   
   object

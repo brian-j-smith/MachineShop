@@ -162,7 +162,7 @@ plot.Curves <- function(x, type = c("tradeoffs", "cutoffs"), diagonal = FALSE,
 plot.Lift <- function(x, find = NULL, diagonal = TRUE,
                       stat = MachineShop::settings("stat.Curves"), ...) {
   x <- summary(x, stat = stat)
-  p <- plot(Curves(x), diagonal = diagonal, stat = NULL)
+  p <- plot(as(x, "Curves"), diagonal = diagonal, stat = NULL)
   
   if (!is.null(find)) {
     if (find < 0 || find > 1) warning("'find' rate outside of 0 to 1 range")

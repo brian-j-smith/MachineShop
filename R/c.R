@@ -6,8 +6,10 @@
 #' @aliases combine
 #' @rdname c
 #' 
-#' @param ... named or unnamed \link{calibration} or \link{resample} results.
-#' Resamples must have been generated with the same resampling
+#' @param ... named or unnamed \link{calibration},
+#' \link[=performance_curve]{performance curve}, \link{lift}, or \link{resample}
+#' results.  Curves must have been generated with the same performance
+#' \link{metrics} and resamples with the same resampling
 #' \link[=controls]{control}.
 #' 
 #' @return Object of the same class as the arguments.
@@ -36,6 +38,28 @@ c.Calibration <- function(...) {
 }
 
 
+#' @rdname c
+#' 
+c.Curves <- function(...) {
+  args <- list(...)
+  class <- class(args[[1]])
+  if (all(mapply(is, args, class))) {
+    
+    metrics <- args[[1]]@metrics
+    if (!all(sapply(args, function(x) identical(x@metrics, metrics)))) {
+      stop(class, " arguments have different metrics")
+    }
+    
+    df <- do.call(append, make_unique_levels(args, which = "Model"))
+    rownames(df) <- NULL
+    do.call(class, list(df, metrics = metrics))
+    
+  } else {
+    NextMethod()
+  }
+}
+
+
 c.DiscreteVector <- function(...) {
   args <- list(...)
   x <- NextMethod()
@@ -47,6 +71,13 @@ c.DiscreteVector <- function(...) {
   } else {
     x
   }
+}
+
+
+#' @rdname c
+#' 
+c.Lift <- function(...) {
+  NextMethod()
 }
 
 

@@ -2,12 +2,9 @@
 % Please edit documentation in R/lift.R
 \name{lift}
 \alias{lift}
-\alias{Lift}
 \title{Model Lift}
 \usage{
 lift(x, y = NULL, na.rm = TRUE, ...)
-
-Lift(...)
 }
 \arguments{
 \item{x}{\link[=response]{observed responses} or \link{resample} result
@@ -18,8 +15,7 @@ containing observed and predicted responses.}
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}
 
-\item{...}{named or unnamed \code{lift} output to combine together with the
-\code{Lift} constructor.}
+\item{...}{arguments passed to other methods.}
 }
 \value{
 \code{Lift} class object that inherits from \code{Curves}.
@@ -36,5 +32,5 @@ plot(lf)
 
 }
 \seealso{
-\code{\link{plot}}, \code{\link{summary}}
+\code{\link{c}}, \code{\link{plot}}, \code{\link{summary}}
 }

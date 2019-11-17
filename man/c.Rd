@@ -4,16 +4,24 @@
 \alias{c}
 \alias{combine}
 \alias{c.Calibration}
+\alias{c.Curves}
+\alias{c.Lift}
 \alias{c.Resamples}
 \title{Combine MachineShop Objects}
 \usage{
 \method{c}{Calibration}(...)
 
+\method{c}{Curves}(...)
+
+\method{c}{Lift}(...)
+
 \method{c}{Resamples}(...)
 }
 \arguments{
-\item{...}{named or unnamed \link{calibration} or \link{resample} results.
-Resamples must have been generated with the same resampling
+\item{...}{named or unnamed \link{calibration},
+\link[=performance_curve]{performance curve}, \link{lift}, or \link{resample}
+results.  Curves must have been generated with the same performance
+\link{metrics} and resamples with the same resampling
 \link[=controls]{control}.}
 }
 \value{

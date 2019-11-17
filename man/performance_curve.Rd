@@ -4,7 +4,6 @@
 \alias{performance_curve}
 \alias{performance_curve.default}
 \alias{performance_curve.Resamples}
-\alias{Curves}
 \title{Performance Curves}
 \usage{
 performance_curve(x, ...)
@@ -14,15 +13,12 @@ performance_curve(x, ...)
 
 \method{performance_curve}{Resamples}(x, metrics = c(MachineShop::tpr,
   MachineShop::fpr), na.rm = TRUE, ...)
-
-Curves(...)
 }
 \arguments{
 \item{x}{\link[=response]{observed responses} or \link{resample} result
 containing observed and predicted responses.}
 
-\item{...}{named or unnamed \code{performance_curve} output to combine
-together with the \code{Curves} constructor.}
+\item{...}{arguments passed to other methods.}
 
 \item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
 
@@ -54,5 +50,6 @@ auc(roc)
 
 }
 \seealso{
-\code{\link{auc}}, \code{\link{plot}}, \code{\link{summary}}
+\code{\link{auc}}, \code{\link{c}}, \code{\link{plot}},
+\code{\link{summary}}
 }

@@ -10,12 +10,11 @@
 #' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
 #' @param na.rm logical indicating whether to remove observed or predicted
 #'   responses that are \code{NA} when calculating metrics.
-#' @param ... named or unnamed \code{lift} output to combine together with the
-#'   \code{Lift} constructor.
+#' @param ... arguments passed to other methods.
 #' 
 #' @return \code{Lift} class object that inherits from \code{Curves}.
 #'  
-#' @seealso \code{\link{plot}}, \code{\link{summary}}
+#' @seealso \code{\link{c}}, \code{\link{plot}}, \code{\link{summary}}
 #' 
 #' @examples
 #' library(MASS)
@@ -25,16 +24,14 @@
 #' plot(lf)
 #' 
 lift <- function(x, y = NULL, na.rm = TRUE, ...) {
-  Lift(performance_curve(x, y = y, metrics = c(tpr, rpp), na.rm = na.rm))
+  as(performance_curve(x, y = y, metrics = c(tpr, rpp), na.rm = na.rm), "Lift")
 }
 
 
-#' @rdname lift
-#' 
 Lift <- function(...) {
   object <- as(Curves(...), "Lift")
   if (!all(mapply(identical, object@metrics, c(tpr, rpp)))) {
-    stop("incorrect lift metrics")
+    stop("incorrect Lift metrics")
   }
   object
 }

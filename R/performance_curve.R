@@ -15,12 +15,13 @@
 #'   \code{c(precision, recall)}.
 #' @param na.rm logical indicating whether to remove observed or predicted
 #'   responses that are \code{NA} when calculating metrics.
-#' @param ... named or unnamed \code{performance_curve} output to combine
-#'   together with the \code{Curves} constructor.
+#' @param ... arguments passed to other methods.
 #' 
 #' @return \code{Curves} class object that inherits from \code{data.frame}.
 #'  
-#' @seealso \code{\link{auc}}, \code{\link{plot}}, \code{\link{summary}}
+#' @seealso \code{\link{auc}}, \code{\link{c}}, \code{\link{plot}},
+#' \code{\link{summary}}
+#' 
 #' 
 #' @examples
 #' library(MASS)
@@ -70,13 +71,13 @@ performance_curve.Resamples <- function(x, metrics = c(MachineShop::tpr,
       } else {
         structure(list(curve), names = model)
       }
-      curve <- do.call(Curves, curve)
+      curve <- do.call(c, curve)
       curve$Resample <- resample
       curves <- rbind(curves, curve)
     }
   }
 
-  new("Curves", curves, metrics = curve@metrics)
+  Curves(curves, metrics = curve@metrics)
 }
 
 
@@ -89,59 +90,28 @@ performance_curve.Resamples <- function(x, metrics = c(MachineShop::tpr,
 }
 
 
-#' @rdname performance_curve
-#' 
-Curves <- function(...) {
-  .Curves(...)
-}
-
-
-.Curves <- function(..., .metrics = list()) {
-  args <- list(...)
-  
-  if (length(args) == 0) stop("no performance_curve output given")
-  
-  .Data <- args[[1]]
-  if (all(mapply(is, args, "Curves"))) {
-    
-    metrics <- .Data@metrics
-    if (!all(sapply(args, function(x) identical(x@metrics, metrics)))) {
-      stop("Curves arguments have different metrics")
-    }
-    
-  } else if (length(args) > 1) {
-    
-    stop("arguments to combine must be Curves objects")
-    
-  } else if (!is.data.frame(.Data)) {
-    
-    stop("Curves argument must inherit from data.frame")
-    
-  } else {
-    
-    if (!all(mapply(is, .metrics[1:2], "MLMetric"))) {
-      stop("missing performance metrics in Curves constructor")
-    }
-    metrics <- c(y = .metrics[[1]], x = .metrics[[2]])
-    
-    var_names <- c("Cutoff", "x", "y")
-    found <- var_names %in% names(.Data)
-    if (!all(found)) {
-      subnames <- var_names[!found]
-      stop(plural_suffix("missing performance curve variable", subnames), ": ",
-           toString(subnames))
-    }
-    
-    decreasing <- !xor(metrics$x@maximize, metrics$y@maximize)
-    sort_order <- order(.Data$x, .Data$y, decreasing = c(FALSE, decreasing),
-                        method = "radix")
-    args[[1]] <- .Data[sort_order, , drop = FALSE]
-    
+Curves <- function(object, metrics) {
+  if (is.null(object$Model)) object$Model <- "Model"
+  var_names <- c("Cutoff", "x", "y")
+  found <- var_names %in% names(object)
+  if (!all(found)) {
+    subnames <- var_names[!found]
+    stop(plural_suffix("missing performance curve variable", subnames), ": ",
+         toString(subnames))
   }
   
-  df <- do.call(append, make_unique_levels(args, which = "Model"))
-  rownames(df) <- NULL
-  new("Curves", df, metrics = metrics)
+  if (!all(mapply(is, metrics[1:2], "MLMetric"))) {
+    stop("missing performance metrics in Curves constructor")
+  }
+  metrics <- c(y = metrics[[1]], x = metrics[[2]])
+  
+  decreasing <- !xor(metrics$x@maximize, metrics$y@maximize)
+  sort_order <- order(object$x, object$y, decreasing = c(FALSE, decreasing),
+                      method = "radix")
+  object <- object[sort_order, , drop = FALSE]
+  
+  rownames(object) <- NULL
+  new("Curves", object, metrics = metrics)
 }
 
 
@@ -150,13 +120,13 @@ Curves <- function(...) {
 }
 
 
-.curve.default <- function(x, y, metrics, stat, ...) {
+.curve.default <- function(x, y, metrics, ...) {
   .curve_default(x, y, metrics = metrics)
 }
 
 
-.curve.Surv <- function(x, y, metrics, stat, ...) {
-  do.call(Curves, .curve_default(x, y, metrics = metrics))
+.curve.Surv <- function(x, y, metrics, ...) {
+  do.call(c, .curve_default(x, y, metrics = metrics))
 }
 
 
@@ -181,7 +151,7 @@ setMethod(".curve_default", c("factor", "numeric"),
       x[i] <- metrics[[2]](conf)
       y[i] <- metrics[[1]](conf)
     }
-    Curves(data.frame(Cutoff = cutoffs, x = x, y = y), .metrics = metrics)
+    Curves(data.frame(Cutoff = cutoffs, x = x, y = y), metrics = metrics)
   }
 )
 
@@ -226,7 +196,7 @@ setMethod(".curve_default", c("Surv", "SurvProbs"),
           y[j] <- metrics[[1]](conf)
         }
         
-        Curves(data.frame(Cutoff = cutoffs, x = x, y = y), .metrics = metrics)
+        Curves(data.frame(Cutoff = cutoffs, x = x, y = y), metrics = metrics)
         
       }),
       class = "listof",
