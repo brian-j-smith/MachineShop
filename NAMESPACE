@@ -153,8 +153,7 @@ export(MLMetric,
        tpr,
        weighted_kappa2)
 
-export(expand.model,
-       tune)
+export(tune)
 
 S3method(as.data.frame, ModelFrame)
 S3method(as.data.frame, SurvMatrix)
