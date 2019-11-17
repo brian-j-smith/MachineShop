@@ -17,8 +17,7 @@
 #'   interpreted as expected counts.
 #' @param na.rm logical indicating whether to remove observed or predicted
 #'   responses that are \code{NA} when calculating metrics.
-#' @param ... named or unnamed \code{confusion} output to combine together with
-#'   the \code{Confusion} constructor.
+#' @param ... arguments passed to other methods.
 #' @param object square matrix, or object that can be converted to one, of
 #'   cross-classified predicted and observed values in the rows and columns,
 #'   respectively.
@@ -31,7 +30,7 @@
 #' \code{Confusion} object that inherits from \code{list} if \code{x} is a
 #' \code{Resamples} object.
 #'  
-#' @seealso \code{\link{plot}}, \code{\link{summary}}
+#' @seealso \code{\link{c}}, \code{\link{plot}}, \code{\link{summary}}
 #' 
 #' @examples
 #' res <- resample(Species ~ ., data = iris, model = GBMModel)
@@ -46,31 +45,6 @@ confusion <- function(x, y = NULL, cutoff = MachineShop::settings("cutoff"),
     y <- complete$y
   }
   .confusion(x, y, cutoff = cutoff)
-}
-
-
-#' @rdname confusion
-#' 
-Confusion <- function(...) {
-  args <- list(...)
-  
-  conf_list <- list()
-  for (i in seq(args)) {
-    x <- args[[i]]
-    if (is(x, "ConfusionMatrix")) {
-      x <- list("Model" = x)
-    } else if (!is(x, "Confusion")) {
-      stop("values to combine must be Confusion or ConfusionMatrix objects")
-    }
-    arg_name <- names(args)[i]
-    if (!is.null(arg_name) && nzchar(arg_name)) {
-      names(x) <- rep(arg_name, length(x))
-    }
-    conf_list <- c(conf_list, x)
-  }
-  names(conf_list) <- make.unique(names(conf_list))
-  
-  structure(conf_list, class = c("Confusion", "listof"))
 }
 
 
@@ -113,13 +87,13 @@ ConfusionMatrix <- function(object = numeric(), ordered = FALSE) {
   if (all(mapply(is, conf_list, "Confusion"))) {
     conf_list <- unlist(conf_list, recursive = FALSE)
   }
-  do.call(Confusion, conf_list)
+  do.call(c, conf_list)
 }
 
 
 .confusion.Surv <- function(x, y, cutoff, ...) {
   if (is.null(cutoff)) cutoff <- 0.5
-  do.call(Confusion, .confusion_matrix(x, y, cutoff = cutoff))
+  do.call(c, .confusion_matrix(x, y, cutoff = cutoff))
 }
 
 

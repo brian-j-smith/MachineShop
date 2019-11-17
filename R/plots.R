@@ -106,7 +106,7 @@ plot.Confusion <- function(x, ...) {
 #' @rdname plot-methods
 #' 
 plot.ConfusionMatrix <- function(x, ...) {
-  df <- as.data.frame(prop.table(x), responseName = "Value")
+  df <- as.data.frame(prop.table(as(x, "table")), responseName = "Value")
   df$Predicted <- with(df, factor(Predicted, rev(levels(Predicted))))
   ggplot(df, aes_(~ Observed, ~ Predicted, fill = ~ Value)) +
     geom_raster() +

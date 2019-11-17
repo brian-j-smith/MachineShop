@@ -6,7 +6,7 @@
 #' @aliases combine
 #' @rdname c
 #' 
-#' @param ... named or unnamed \link{calibration},
+#' @param ... named or unnamed \link{calibration}, \link{confusion},
 #' \link[=performance_curve]{performance curve}, \link{lift}, or \link{resample}
 #' results.  Curves must have been generated with the same performance
 #' \link{metrics} and resamples with the same resampling
@@ -35,6 +35,40 @@ c.Calibration <- function(...) {
   } else {
     NextMethod()
   }
+}
+
+
+#' @rdname c
+#' 
+c.Confusion <- function(...) {
+  args <- list(...)
+  is_confusion <- function(x) is(x, "Confusion") || is(x, "ConfusionMatrix")
+  if (all(sapply(args, is_confusion))) {
+    
+    conf_list <- list()
+    for (i in seq(args)) {
+      x <- args[[i]]
+      if (is(x, "ConfusionMatrix")) x <- list("Model" = x)
+      arg_name <- names(args)[i]
+      if (!is.null(arg_name) && nzchar(arg_name)) {
+        names(x) <- rep(arg_name, length(x))
+      }
+      conf_list <- c(conf_list, x)
+    }
+    names(conf_list) <- make.unique(names(conf_list))
+    
+    structure(conf_list, class = c("Confusion", "listof"))
+    
+  } else {
+    NextMethod()
+  }
+}
+
+
+#' @rdname c
+#' 
+c.ConfusionMatrix <- function(...) {
+  c.Confusion(...)
 }
 
 

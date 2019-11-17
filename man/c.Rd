@@ -4,12 +4,18 @@
 \alias{c}
 \alias{combine}
 \alias{c.Calibration}
+\alias{c.Confusion}
+\alias{c.ConfusionMatrix}
 \alias{c.Curves}
 \alias{c.Lift}
 \alias{c.Resamples}
 \title{Combine MachineShop Objects}
 \usage{
 \method{c}{Calibration}(...)
+
+\method{c}{Confusion}(...)
+
+\method{c}{ConfusionMatrix}(...)
 
 \method{c}{Curves}(...)
 
@@ -18,7 +24,7 @@
 \method{c}{Resamples}(...)
 }
 \arguments{
-\item{...}{named or unnamed \link{calibration},
+\item{...}{named or unnamed \link{calibration}, \link{confusion},
 \link[=performance_curve]{performance curve}, \link{lift}, or \link{resample}
 results.  Curves must have been generated with the same performance
 \link{metrics} and resamples with the same resampling

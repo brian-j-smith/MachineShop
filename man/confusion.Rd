@@ -2,14 +2,11 @@
 % Please edit documentation in R/confusion.R
 \name{confusion}
 \alias{confusion}
-\alias{Confusion}
 \alias{ConfusionMatrix}
 \title{Confusion Matrix}
 \usage{
 confusion(x, y = NULL, cutoff = MachineShop::settings("cutoff"),
   na.rm = TRUE, ...)
-
-Confusion(...)
 
 ConfusionMatrix(object = numeric(), ordered = FALSE)
 }
@@ -30,8 +27,7 @@ interpreted as expected counts.}
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}
 
-\item{...}{named or unnamed \code{confusion} output to combine together with
-the \code{Confusion} constructor.}
+\item{...}{arguments passed to other methods.}
 
 \item{object}{square matrix, or object that can be converted to one, of
 cross-classified predicted and observed values in the rows and columns,
@@ -56,5 +52,5 @@ plot(conf)
 
 }
 \seealso{
-\code{\link{plot}}, \code{\link{summary}}
+\code{\link{c}}, \code{\link{plot}}, \code{\link{summary}}
 }
