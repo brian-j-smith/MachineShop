@@ -9,6 +9,5 @@
 tune <- function(...) {
   depwarn("tune() is deprecated",
           "call fit() with a SelectedModel or TunedModel instead",
-          expired = Sys.Date() >= "2020-01-01")
-  (function(x, ...) tune_model(x, ...))(...)
+          expired = TRUE)
 }

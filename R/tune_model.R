@@ -1,30 +1,15 @@
 #' Model Tuning and Selection
 #' 
-#' Predictive peformance-based tuning of a model over a grid of parameters
+#' Predictive performance-based tuning of a model over a grid of parameters
 #' values or selection from a set of candidate models.
 #' 
 #' @rdname tune_model
 #' 
-#' @param x defines a relationship between model predictor and response
-#'   variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
-#'   predictors, \code{\link{ModelFrame}}, untrained
-#'   \code{\link[recipes]{recipe}}, \code{\link{SelectedRecipe}}, or
-#'   \code{\link{TunedRecipe}} object. Alternatively, a \link[=models]{model}
-#'   function or call may be given first followed by objects defining the
-#'   predictor and response relationship and the other tuning argument values.
-#' @param y response variable.
-#' @param data \link[=data.frame]{data frame} containing observed predictors and
-#'   outcomes.
 #' @param model \link[=models]{model} function, function name, or call.  Supply
-#'   a \code{\link{SelectedModel}} object for model selection or a
-#'   \code{\link{TunedModel}} object for model tuning.
-#' @param ... arguments passed to other methods.
-#' 
-#' @details
-#' The \code{tune} function is intended for internal use by the package and will
-#' be deprecated in the future.  To perform model tuning or selection, users
-#' should call the \code{\link{fit}} function with a \code{\link{TunedModel}} or
-#' \code{\link{SelectedModel}} instead.
+#'   a \code{\link{SelectedModel}} or \code{\link{TunedModel}} for model
+#'   selection or tuning.
+#' @param ... defined relationship between model predictor and response
+#'   variables to be passed to \code{\link{fit}} and \code{\link{resample}}.
 #' 
 #' @return \code{MLModel} class object containing the tuning results.
 #' 
@@ -33,76 +18,7 @@
 #' 
 #' @noRd
 #' 
-tune_model <- function(x, ...) {
-  UseMethod("tune_model")
-}
-
-
-#' @rdname tune_model
-#' 
-tune_model.formula <- function(x, data, model, ...) {
-  tune_model_depwarn(...)
-  .tune_model(model, x, data)
-}
-
-
-#' @rdname tune_model
-#' 
-tune_model.matrix <- function(x, y, model, ...) {
-  tune_model_depwarn(...)
-  .tune_model(model, x, y)
-}
-
-
-#' @rdname tune_model
-#' 
-tune_model.ModelFrame <- function(x, model, ...) {
-  tune_model_depwarn(...)
-  .tune_model(model, x)
-}
-
-
-#' @rdname tune_model
-#' 
-tune_model.recipe <- function(x, model, ...) {
-  tune_model_depwarn(...)
-  .tune_model(model, x)
-}
-
-
-#' @rdname tune_model
-#' 
-tune_model.MLModel <- function(x, ...) {
-  tune_model(..., model = x)
-}
-
-
-#' @rdname tune_model
-#' 
-tune_model.MLModelFunction <- function(x, ...) {
-  tune_model(..., model = x)
-}
-
-
-tune_model_depwarn <- function(...) {
-  args <- list(...)
-  
-  if (!is.null(args$models)) {
-    depwarn("'models' argument to tune is deprecated",
-            "supply a SelectedModel or TunedModel to 'model' instead",
-            expired = TRUE)
-  }
-  
-  dep_names <- c("grid", "fixed", "control", "metrics", "stat")
-  if (any(pmatch(names(args), dep_names, nomatch = 0))) {
-    depwarn(paste("deprecated tune arguments:", toString(dep_names)),
-            "supply a SelectedModel or TunedModel instead",
-            expired = Sys.Date() >= "2020-01-01")
-  }
-}
-
-
-.tune_model <- function(model, ...) {
+tune_model <- function(model, ...) {
   
   if (is(model, "SelectedModel")) {
     params <- model@params
@@ -174,5 +90,5 @@ tune_model_depwarn <- function(...) {
     metric = metric
   )
   tuned_model
-
+  
 }
