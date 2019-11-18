@@ -2,6 +2,22 @@
 
 ## Version Updates
 
+## 1.99.0
+* Implement `DiscreteVector` class and subclasses `BinomialVector`, `NegBinomialVector`, and `PoissonVector` for discrete response variables.
+* Extend model support to `DiscreteVector` classes as follows.
+  * `DiscreteVector`: all models applicable to numeric responses.
+  * `BinomialVector`/`NegBinomialVector`/`PoissonVector`: `BlackBoostModel`, `GAMBoostModel`, `GLMBoostModel`, `GLMModel`, and `GLMStepAICModel`.
+  * `BinomialVector`/`PoissonVector`: `GLMNetModel`.
+  * `PoissonVector`: `GBMModel` and `XGBModel`
+* Add support for offset terms in formulas, model matrices, and recipes.
+* Add recipe tune information to fitted `MLModel`.
+* Replace `Calibration()`, `Confusion()`, `Curves()`, `Lift()`, and `Resamples()` with `c` methods.
+* Redefine `Confusion` S3 class as `ConfusionList` S4 class.
+* Remove support for one-element list to `metricinfo()` and `modelinfo()`.
+* Remove deprecated `expand.model()`.
+* Expire deprecated `tune()`.
+
+
 ## 1.6.4
 * Calculate regression variable importance as negative log p-values.
 * Support empty vectors in `metricinfo()` and `modelinfo()`.
