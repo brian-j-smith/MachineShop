@@ -10,8 +10,8 @@ metricinfo(...)
 \item{...}{\link[=metrics]{metric} functions or function names;
 \link[=response]{observed responses}; \link[=response]{observed} and
 \link[=predict]{predicted} responses; \link{confusion} or \link{resample}
-results; or vector of these for which to display information.  If none are
-specified, information is returned on all available metrics by default.}
+results for which to display information.  If none are specified, information
+is returned on all available metrics by default.}
 }
 \value{
 List of named metric elements each containing the following

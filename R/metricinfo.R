@@ -5,8 +5,8 @@
 #' @param ... \link[=metrics]{metric} functions or function names;
 #' \link[=response]{observed responses}; \link[=response]{observed} and
 #' \link[=predict]{predicted} responses; \link{confusion} or \link{resample}
-#' results; or vector of these for which to display information.  If none are
-#' specified, information is returned on all available metrics by default.
+#' results for which to display information.  If none are specified, information
+#' is returned on all available metrics by default.
 #' 
 #' @return List of named metric elements each containing the following
 #' components:
@@ -35,9 +35,6 @@
 #' 
 metricinfo <- function(...) {
   args <- list(...)
-  if (is_one_element(args, "vector") && length(args[[1]])) {
-    args <- as.list(args[[1]])
-  }
   args <- if (length(args)) unname(args) else as.list(.metric_names)
   info <- do.call(.metricinfo, args)
   

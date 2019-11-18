@@ -3,9 +3,9 @@
 #' Display information about models supplied by the \pkg{MachineShop} package.
 #' 
 #' @param ... \link[=models]{model} functions, function names, or calls;
-#' \link[=response]{observed responses}; or vector of these for which to display
-#' information.  If none are specified, information is returned on all available
-#' models by default.
+#' \link[=response]{observed responses} for which to display information.  If
+#' none are specified, information is returned on all available models by
+#' default.
 #' 
 #' @return List of named model elements each containing the following
 #' components:
@@ -38,9 +38,6 @@
 #' 
 modelinfo <- function(...) {
   args <- list(...)
-  if (is_one_element(args, "vector") && length(args[[1]])) {
-    args <- as.list(args[[1]])
-  }
   args <- if (length(args)) unname(args) else as.list(.model_names)
   info <- do.call(.modelinfo, args)
   

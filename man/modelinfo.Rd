@@ -8,9 +8,9 @@ modelinfo(...)
 }
 \arguments{
 \item{...}{\link[=models]{model} functions, function names, or calls;
-\link[=response]{observed responses}; or vector of these for which to display
-information.  If none are specified, information is returned on all available
-models by default.}
+\link[=response]{observed responses} for which to display information.  If
+none are specified, information is returned on all available models by
+default.}
 }
 \value{
 List of named model elements each containing the following
