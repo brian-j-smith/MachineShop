@@ -3,6 +3,7 @@
 \name{print}
 \alias{print}
 \alias{print.Calibration}
+\alias{print.ConfusionList}
 \alias{print.Curves}
 \alias{print.ListOf}
 \alias{print.MLModel}
@@ -17,6 +18,9 @@
 \title{Print MachineShop Objects}
 \usage{
 \method{print}{Calibration}(x, n = MachineShop::settings("max.print"),
+  ...)
+
+\method{print}{ConfusionList}(x, n = MachineShop::settings("max.print"),
   ...)
 
 \method{print}{Curves}(x, n = MachineShop::settings("max.print"), ...)

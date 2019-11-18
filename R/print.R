@@ -29,10 +29,27 @@ setMethod("show", "Calibration",
 )
 
 
+#' @rdname print-methods
+#' 
+print.ConfusionList <- function(x, n = MachineShop::settings("max.print"),
+                                ...) {
+  print_title(x)
+  cat("\n")
+  x[] <- lapply(x, as, Class = "table")
+  NextMethod()
+}
+
+
+print.ConfusionMatrix <- function(x, ...) {
+  print_title(x)
+  print(as(x, "table"))
+  invisible(x)
+}
+
+
 setMethod("show", "ConfusionMatrix",
   function(object) {
-    print_title(object)
-    print(as(object, "table"))
+    print(object)
     invisible()
   }
 )
