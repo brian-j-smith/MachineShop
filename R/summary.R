@@ -6,8 +6,8 @@
 #' @rdname summary-methods
 #' 
 #' @param object \link{confusion}, \link[=curves]{performance curve},
-#'   \link{lift}, tuned model \link{fit}, \link{performance}, or \link{resample}
-#'   result.
+#'   \link{lift}, trained model \link{fit}, \link{performance}, or
+#'   \link{resample} result.
 #' @param stat function or character string naming a function to compute a
 #'   summary statistic at each cutoff value of resampled metrics in
 #'   \code{Curves}, or \code{NULL} for resample-specific metrics.
@@ -122,8 +122,8 @@ summary.Curves <- function(object, stat = MachineShop::settings("stat.Curves"),
 summary.MLModel <- function(object, stats =
                               MachineShop::settings("stats.Resamples"),
                             na.rm = TRUE, ...) {
-  if (is.null(object@tune)) stop("no tuning results to summarize")
-  summary(object@tune@performance, stats = stats, na.rm = na.rm, ...)
+  if (is.null(object@trainbits)) stop("no training results to summarize")
+  summary(object@trainbits@performance, stats = stats, na.rm = na.rm, ...)
 }
 
 

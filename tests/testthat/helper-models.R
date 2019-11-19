@@ -2,7 +2,7 @@ TEST_ALL <- Sys.getenv("TEST_ALL") == "true"
 TEST_MODEL_FITTING <- TEST_ALL || Sys.getenv("TEST_MODEL_FITTING") == "true"
 TEST_MODEL_COMPARISONS <-
   TEST_ALL || Sys.getenv("TEST_MODEL_COMPARISONS") == "true"
-TEST_MODEL_TUNING <- TEST_ALL || Sys.getenv("TEST_MODEL_TUNING") == "true"
+TEST_TRAINING <- TEST_ALL || Sys.getenv("TEST_MODEL_TUNING") == "true"
 
 
 data(Boston, package = "MASS", envir = environment())

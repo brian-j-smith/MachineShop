@@ -114,45 +114,6 @@ c.Lift <- function(...) {
 }
 
 
-c.MLTune <- function(...) {
-  args <- list(...)
-  if (all(mapply(is, args, "MLTune"))) {
-    if (length(args) > 1) {
-      
-      grid <- do.call(append, lapply(args, slot, name = "grid"))
-      
-      values_list <- lapply(args, slot, name = "values")
-      values <- unlist(values_list)
-      names(values) <- paste0(names(values), ".",
-                              rep(seq(args), sapply(values_list, length)))
-      
-      performance <- do.call(c, lapply(args, slot, name = "performance"))
-      dimnames(performance)[[3]] <- names(values)
-      
-      metric <- args[[1]]@metric
-      if (!all(sapply(args, function(x) identical(x@metric, metric)))) {
-        stop("MLTune objects have different metric functions")
-      }
-      
-      selected <- ifelse(metric@maximize, which.max, which.min)(values)
-      selected_names <- names(sapply(args, slot, name = "selected"))
-      if (!all(selected_names == selected_names[1])) {
-        stop("MLTune objects have difference selected metric names")
-      }
-      names(selected) <- selected_names[1]
-      
-      MLTune(grid = grid, performance = performance, selected = selected,
-             values = values, metric = metric)
-      
-    } else {
-      args[[1]]
-    }
-  } else {
-    NextMethod()
-  }
-}
-
-
 c.Performance <- function(...) {
   args <- list(...)
   if (all(mapply(is, args, "Performance"))) {
@@ -194,6 +155,45 @@ c.Resamples <- function(...) {
     rownames(df) <- NULL
     Resamples(df, control = control, strata = strata)
     
+  } else {
+    NextMethod()
+  }
+}
+
+
+c.TrainBits <- function(...) {
+  args <- list(...)
+  if (all(mapply(is, args, "TrainBits"))) {
+    if (length(args) > 1) {
+      
+      grid <- do.call(append, lapply(args, slot, name = "grid"))
+      
+      values_list <- lapply(args, slot, name = "values")
+      values <- unlist(values_list)
+      names(values) <- paste0(names(values), ".",
+                              rep(seq(args), sapply(values_list, length)))
+      
+      performance <- do.call(c, lapply(args, slot, name = "performance"))
+      dimnames(performance)[[3]] <- names(values)
+      
+      metric <- args[[1]]@metric
+      if (!all(sapply(args, function(x) identical(x@metric, metric)))) {
+        stop("TrainBits objects have different metric functions")
+      }
+      
+      selected <- ifelse(metric@maximize, which.max, which.min)(values)
+      selected_names <- names(sapply(args, slot, name = "selected"))
+      if (!all(selected_names == selected_names[1])) {
+        stop("TrainBits objects have difference selected metric names")
+      }
+      names(selected) <- selected_names[1]
+      
+      TrainBits(grid = grid, performance = performance, selected = selected,
+                values = values, metric = metric)
+      
+    } else {
+      args[[1]]
+    }
   } else {
     NextMethod()
   }

@@ -7,12 +7,12 @@
 \alias{print.Curves}
 \alias{print.ListOf}
 \alias{print.MLModel}
-\alias{print.MLTune}
 \alias{print.ModelFrame}
 \alias{print.Performance}
 \alias{print.RecipeGrid}
 \alias{print.Resamples}
 \alias{print.SurvMatrix}
+\alias{print.TrainBits}
 \alias{print.TunedRecipe}
 \alias{print.VarImp}
 \title{Print MachineShop Objects}
@@ -29,8 +29,6 @@
 
 \method{print}{MLModel}(x, n = MachineShop::settings("max.print"), ...)
 
-\method{print}{MLTune}(x, n = MachineShop::settings("max.print"), ...)
-
 \method{print}{ModelFrame}(x, n = MachineShop::settings("max.print"),
   ...)
 
@@ -44,6 +42,8 @@
 
 \method{print}{SurvMatrix}(x, n = MachineShop::settings("max.print"),
   ...)
+
+\method{print}{TrainBits}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{TunedRecipe}(x, n = MachineShop::settings("max.print"),
   ...)

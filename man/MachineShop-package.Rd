@@ -9,8 +9,8 @@
 Meta-package for statistical and machine learning with a unified interface for model fitting, prediction, performance assessment, and presentation of results.  Approaches for model fitting and prediction of numerical, categorical, or censored time-to-event outcomes include traditional regression models, regularization methods, tree-based methods, support vector machines, neural networks, ensembles, data preprocessing, filtering, and model tuning and selection.  Performance metrics are provided for model assessment and can be estimated with independent test sets, split sampling, cross-validation, or bootstrap resampling.  Resample estimation can be executed in parallel for faster processing and nested in cases of model tuning and selection.  Modeling results can be summarized with descriptive statistics; calibration curves; variable importance; partial dependence plots; confusion matrices; and ROC, lift, and other performance curves.
 }
 \details{
-The following set of model training, prediction, performance assessment, and
-tuning functions are available for \pkg{MachineShop} \link{models}.
+The following set of model fitting, prediction, and performance assessment
+functions are available for \pkg{MachineShop} \link{models}.
 
 Training: 
 \tabular{ll}{

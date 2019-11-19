@@ -292,10 +292,10 @@ setMethod("show", "MLMetric",
 print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   info <- modelinfo(x)[[1]]
-  is_tuned <- !is.null(x@tune)
+  is_trained <- !is.null(x@trainbits)
   cat("\n",
       "Model name: ", x@name, "\n",
-      "Label: ", if (is_tuned) "Tuned ", info$label, "\n",
+      "Label: ", if (is_trained) "Trained ", info$label, "\n",
       "Packages: ", toString(info$packages), "\n",
       "Response types: ", toString(info$response_types), "\n",
       "Tuning grid: ", info$grid, "\n",
@@ -318,9 +318,9 @@ print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
     cat("Parameters:\n")
     cat(str(x@params))
   }
-  if (is_tuned) {
+  if (is_trained) {
     cat("\n")
-    print(x@tune, n = n)
+    print(x@trainbits, n = n)
   }
   invisible(x)
 }
@@ -367,33 +367,6 @@ print.MLModelFunction <- function(x, ...) {
 
 
 setMethod("show", "MLModelFunction",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
-
-
-#' @rdname print-methods
-#' 
-print.MLTune <- function(x, n = MachineShop::settings("max.print"), ...) {
-  print_title(x)
-  if (length(x@grid)) {
-    cat("\nGrid (selected = ", x@selected, "):\n", sep = "")
-    print_items(x@grid, n = n)
-    cat("\n")
-  }
-  print(x@performance, n = n)
-  cat("\n")
-  if (length(x@values) > 1) {
-    cat("Selected model:", names(x@values)[x@selected], "\n")
-  }
-  cat(names(x@selected), "value:", x@values[x@selected], "\n")
-  invisible(x)
-}
-
-
-setMethod("show", "MLTune",
   function(object) {
     print(object)
     invisible()
@@ -551,6 +524,33 @@ print.SurvMatrix <- function(x, n = MachineShop::settings("max.print"), ...) {
 
 
 setMethod("show", "SurvMatrix",
+  function(object) {
+    print(object)
+    invisible()
+  }
+)
+
+
+#' @rdname print-methods
+#' 
+print.TrainBits <- function(x, n = MachineShop::settings("max.print"), ...) {
+  print_title(x)
+  if (length(x@grid)) {
+    cat("\nGrid (selected = ", x@selected, "):\n", sep = "")
+    print_items(x@grid, n = n)
+    cat("\n")
+  }
+  print(x@performance, n = n)
+  cat("\n")
+  if (length(x@values) > 1) {
+    cat("Selected model:", names(x@values)[x@selected], "\n")
+  }
+  cat(names(x@selected), "value:", x@values[x@selected], "\n")
+  invisible(x)
+}
+
+
+setMethod("show", "TrainBits",
   function(object) {
     print(object)
     invisible()

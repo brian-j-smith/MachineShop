@@ -30,9 +30,9 @@
 #'     events/probabilities.  Choices are \code{"empirical"} (default) for the
 #'     Kaplan-Meier estimator, \code{"exponential"}, or \code{"weibull"}.}
 #'   \item{\code{grid}}{number of parameter-specific values to generate
-#'     automatically for \link[=tune]{tuning} of models that have pre-defined
-#'     grids or a \code{\link{Grid}} function, function name, or call
-#'     [default: 3].}
+#'     automatically for \link[=TunedModel]{tuning} of models that have
+#'     pre-defined grids or a \code{\link{Grid}} function, function name, or
+#'     call [default: 3].}
 #'   \item{\code{max.print}}{number of models or data rows to show with print
 #'     methods or \code{Inf} to show all [default: 10].}
 #'   \item{\code{method.EmpiricalSurv}}{character string specifying the
@@ -66,7 +66,7 @@
 #'   \item{\code{stat.Resamples}}{function or character string naming a function
 #'     to compute one summary statistic to control the ordering of models in
 #'     \link[=plot]{plots} [default: \code{"base::mean"}].}
-#'   \item{\code{stat.Tune}}{function or character string naming a function
+#'   \item{\code{stat.Train}}{function or character string naming a function
 #'     to compute one summary statistic on resampled performance metrics for
 #'     \link[=SelectedModel]{model selection}, \link[=TunedModel]{model tuning},
 #'     and \link[=TunedRecipe]{recipe tuning} [default: \code{"base::mean"}].}
@@ -317,7 +317,7 @@ MachineShop_global <- as.environment(list(
       check = check_stat
     ),
     
-    stat.Tune = list(
+    stat.Train = list(
       value = "base::mean",
       check = check_stat
     ),

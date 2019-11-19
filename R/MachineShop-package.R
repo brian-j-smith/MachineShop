@@ -1,6 +1,6 @@
 #' @details
-#' The following set of model training, prediction, performance assessment, and
-#' tuning functions are available for \pkg{MachineShop} \link{models}.
+#' The following set of model fitting, prediction, and performance assessment
+#' functions are available for \pkg{MachineShop} \link{models}.
 #' 
 #' Training: 
 #' \tabular{ll}{

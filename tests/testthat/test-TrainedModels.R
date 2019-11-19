@@ -1,3 +1,6 @@
+context("Trained Models")
+
+
 models <- c(
   "AdaBagModel",
   "AdaBoostModel",
@@ -49,17 +52,15 @@ test_tune_grid3 <- function(model) {
                          control = control))
 }
 
+
 for (model in models) {
-
-  context(paste("Model Tuning:", model))
-
-  test_that("tune grid", {
-    skip_if_not(TEST_MODEL_TUNING)
+  test_that("grid tuning of models", {
+    skip_if_not(TEST_TRAINING)
+    context(paste("Tuned Model:", model))
     with_parallel({
       expect_is(test_tune_grid1(model), "MLModelFit")
       expect_is(test_tune_grid2(model), "MLModelFit")
       expect_is(test_tune_grid3(model), "MLModelFit")
     })
   })
-  
 }

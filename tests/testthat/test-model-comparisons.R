@@ -1,4 +1,4 @@
-context("HTest")
+context("Model Comparisons")
 
 
 test_Resamples <- function() {
@@ -20,7 +20,7 @@ test_Resamples <- function() {
 }
 
 
-test_tune <- function() {
+test_TunedModel <- function() {
   library(MASS)
   fo <- medv ~ .
 
@@ -42,10 +42,17 @@ test_tune <- function() {
 }
 
 
-test_that("model comparisons", {
+test_that("Resamples differences", {
   skip_if_not(TEST_MODEL_COMPARISONS)
   with_parallel({
-    expect_is(test_Resamples(), "PerformanceDiffTest")
-    expect_is(test_tune(), "PerformanceDiffTest")
+    expect_s4_class(test_Resamples(), "PerformanceDiffTest")
+  })
+})
+
+
+test_that("TunedModel differences", {
+  skip_if_not(TEST_MODEL_COMPARISONS)
+  with_parallel({
+    expect_s4_class(test_TunedModel(), "PerformanceDiffTest")
   })
 })

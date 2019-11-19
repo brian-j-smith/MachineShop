@@ -94,7 +94,7 @@ setClass("MLModel",
             varimp = "function",
             x = "ANY",
             y = "ANY",
-            tune = "ANY")
+            trainbits = "ANY")
 )
 
 
@@ -238,15 +238,6 @@ PerformanceDiffTest <- setClass("PerformanceDiffTest",
 )
 
 
-MLTune <- setClass("MLTune",
-  slots = c(grid = "tbl_df",
-            performance = "Performance",
-            selected = "numeric",
-            values = "numeric",
-            metric = "MLMetric")
-)
-
-
 RecipeGrid <- setClass("RecipeGrid",
   contains = "tbl_df"
 )
@@ -279,6 +270,15 @@ setClass("SurvEvents",
 
 setClass("SurvProbs",
   contains = "SurvMatrix"
+)
+
+
+TrainBits <- setClass("TrainBits",
+  slots = c(grid = "tbl_df",
+            performance = "Performance",
+            selected = "numeric",
+            values = "numeric",
+            metric = "MLMetric")
 )
 
 

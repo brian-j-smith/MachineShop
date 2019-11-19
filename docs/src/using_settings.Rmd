@@ -44,7 +44,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `stat.Resamples`
   : function or character string naming a function to compute one summary statistic to control the ordering of models in plots [default: ``"base::mean"``].
 
-`stat.Tune`
+`stat.Train`
   : function or character string naming a function to compute one summary statistic on resampled performance metrics for model selection, model tuning, and recipe tuning [default: ``"base::mean"``].
 
 `stats.PartialDependence`

@@ -28,7 +28,7 @@
   stat = MachineShop::settings("stat.Curves"), ...)
 
 \method{plot}{MLModel}(x, metrics = NULL,
-  stat = MachineShop::settings("stat.Tune"), type = c("boxplot",
+  stat = MachineShop::settings("stat.Train"), type = c("boxplot",
   "density", "errorbar", "line", "violin"), ...)
 
 \method{plot}{PartialDependence}(x, stats = NULL, ...)
@@ -45,7 +45,7 @@
 }
 \arguments{
 \item{x}{\link{calibration}, \link{confusion},
-\link[=curves]{performance curve}, \link{lift}, tuned model \link{fit},
+\link[=curves]{performance curve}, \link{lift}, trained model \link{fit},
 partial \link{dependence}, \link{performance}, \link{resample}, or
 \link[=varimp]{variable importance} result.}
 
@@ -59,10 +59,10 @@ partial \link{dependence}, \link{performance}, \link{resample}, or
 line.}
 
 \item{stat}{function or character string naming a function to compute a
-summary statistic on resampled metrics for tuned \code{MLModel} line plots
-and \code{Resamples} model ordering.  For \code{Curves} and \code{Lift}
-classes, plots are of resampled metrics aggregated by the statistic if
-given or of resample-specific metrics if \code{NULL}.}
+summary statistic on resampled metrics for trained \code{MLModel} line
+plots and \code{Resamples} model ordering.  For \code{Curves} and
+\code{Lift} classes, plots are of resampled metrics aggregated by the
+statistic if given or of resample-specific metrics if \code{NULL}.}
 
 \item{find}{numeric true positive rate at which to display reference lines
 identifying the corresponding rates of positive predictions.}

@@ -6,7 +6,7 @@
 #' @rdname plot-methods
 #' 
 #' @param x \link{calibration}, \link{confusion},
-#'   \link[=curves]{performance curve}, \link{lift}, tuned model \link{fit},
+#'   \link[=curves]{performance curve}, \link{lift}, trained model \link{fit},
 #'   partial \link{dependence}, \link{performance}, \link{resample}, or
 #'   \link[=varimp]{variable importance} result.
 #' @param diagonal logical indicating whether to include a diagonal reference
@@ -19,10 +19,10 @@
 #'   [default: all].
 #' @param se logical indicating whether to include standard error bars.
 #' @param stat function or character string naming a function to compute a
-#'   summary statistic on resampled metrics for tuned \code{MLModel} line plots
-#'   and \code{Resamples} model ordering.  For \code{Curves} and \code{Lift}
-#'   classes, plots are of resampled metrics aggregated by the statistic if
-#'   given or of resample-specific metrics if \code{NULL}.
+#'   summary statistic on resampled metrics for trained \code{MLModel} line
+#'   plots and \code{Resamples} model ordering.  For \code{Curves} and
+#'   \code{Lift} classes, plots are of resampled metrics aggregated by the
+#'   statistic if given or of resample-specific metrics if \code{NULL}.
 #' @param stats vector of numeric indexes or character names of partial
 #'   dependence summary statistics to plot.
 #' @param type type of plot to construct.
@@ -192,16 +192,16 @@ plot.Lift <- function(x, find = NULL, diagonal = TRUE,
 #' @rdname plot-methods
 #' 
 plot.MLModel <- function(x, metrics = NULL,
-                         stat = MachineShop::settings("stat.Tune"),
+                         stat = MachineShop::settings("stat.Train"),
                          type = c("boxplot", "density", "errorbar", "line",
                                   "violin"), ...) {
-  if (is.null(x@tune)) stop("no tuning results to plot")
+  if (is.null(x@trainbits)) stop("no training results to plot")
   
-  perf <- x@tune@performance
+  perf <- x@trainbits@performance
   stat <- fget(stat)
   type <- match.arg(type)
   if (type == "line") {
-    grid <- unnest(x@tune@grid)
+    grid <- unnest(x@trainbits@grid)
     stats <- apply(perf, c(3, 2), function(x) stat(na.omit(x))) %>%
       as.data.frame.table
     df <- data.frame(
