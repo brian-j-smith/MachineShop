@@ -41,8 +41,8 @@ c.Calibration <- function(...) {
 #' 
 c.ConfusionList <- function(...) {
   args <- list(...)
-  is_confusion <- function(x) is(x, "ConfusionList") || is(x, "ConfusionMatrix")
-  if (all(sapply(args, is_confusion))) {
+  is_valid <- function(x) is(x, "ConfusionList") || is(x, "ConfusionMatrix")
+  if (all(sapply(args, is_valid))) {
     
     conf_list <- list()
     for (i in seq(args)) {
@@ -67,7 +67,10 @@ c.ConfusionList <- function(...) {
 #' @rdname c
 #' 
 c.ConfusionMatrix <- function(...) {
-  c.ConfusionList(...)
+  args <- list(...)
+  args[[1]] <- ConfusionList(ListOf(args[1]))
+  if (is.null(names(args)[1])) names(args)[1] <- "Model"
+  do.call(c, args)
 }
 
 
@@ -111,6 +114,31 @@ c.DiscreteVector <- function(...) {
 #' 
 c.Lift <- function(...) {
   NextMethod()
+}
+
+
+#' @rdname c
+#' 
+c.ListOf <- function(...) {
+  args <- list(...)
+  class <- class(args[[1]][[1]])[1]
+  is_valid <- function(x) {
+    is(x, "ListOf") && is(x[[1]], class) && is(x[[1]], "vector")
+  }
+  if (all(sapply(args, is_valid))) {
+    x <- list()
+    for (i in seq(args)) {
+      name <- names(args)[i]
+      if (!is.null(name) && nzchar(name)) {
+        names(args[[i]]) <- rep(name, length(args[[i]]))
+      }
+      x <- c(x, args[[i]])
+    }
+    if (!is.null(names(x))) names(x) <- make.unique(names(x))
+    ListOf(x)
+  } else {
+    NextMethod()
+  }
 }
 
 

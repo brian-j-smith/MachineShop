@@ -8,6 +8,7 @@
 \alias{c.ConfusionMatrix}
 \alias{c.Curves}
 \alias{c.Lift}
+\alias{c.ListOf}
 \alias{c.Resamples}
 \title{Combine MachineShop Objects}
 \usage{
@@ -20,6 +21,8 @@
 \method{c}{Curves}(...)
 
 \method{c}{Lift}(...)
+
+\method{c}{ListOf}(...)
 
 \method{c}{Resamples}(...)
 }
