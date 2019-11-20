@@ -46,6 +46,18 @@ attach_objects <- function(what, pos = 2L,
 }
 
 
+combine_dataframes <- function(x, y = NULL) {
+  if (is.null(y)) return(x)
+  common_cols <- intersect(names(x), names(y))
+  if (!identical(x[common_cols], y[common_cols])) {
+    stop("common columns in data frames differ")
+  }
+  diff_cols <- setdiff(names(y), common_cols)
+  x[diff_cols] <- y[diff_cols]
+  x
+}
+
+
 complete_subset <- function(...) {
   is_complete <- complete.cases(...)
   lapply(list(...), function(x) subset(x, is_complete))
@@ -147,6 +159,19 @@ list2function <- function(x) {
   } else {
     stop(error_msg)
   }
+}
+
+
+make_list_names <- function(x, prefix) {
+  old_names <- names(x)
+  names(x) <- if (length(x)) {
+    if (length(x) > 1) paste0(prefix, ".", seq(x)) else prefix
+  }
+  if (!is.null(old_names)) {
+    keep <- nzchar(old_names)
+    names(x)[keep] <- old_names[keep]
+  }
+  names(x)
 }
 
 

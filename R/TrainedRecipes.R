@@ -35,12 +35,7 @@ SelectedRecipe <- function(..., control = MachineShop::settings("control"),
   if (is_one_element(recipes, "list") && !is(recipes, "recipe")) {
     recipes <- recipes[[1]]
   }
-  recipe_names <- names(recipes)
-  names(recipes) <- paste0("Recipe.", seq(recipes))
-  if (!is.null(recipe_names)) {
-    keep <- nzchar(recipe_names)
-    names(recipes)[keep] <- recipe_names[keep]
-  }
+  names(recipes) <- make_list_names(recipes, "Recipe")
   
   for (i in seq(recipes)) recipes[[i]] <- ModelRecipe(recipes[[i]])
   
@@ -58,20 +53,9 @@ SelectedRecipe <- function(..., control = MachineShop::settings("control"),
   
   if (!all(same_info)) stop("non-predictor variables in recipes differ")
   
-  combine <- function(x, y) {
-    if (is.null(x)) x <- data.frame(row.names = seq_len(nrow(y)))
-    common_vars <- intersect(names(x), names(y))
-    if (!identical(x[common_vars], y[common_vars])) {
-      stop("common variables in recipes differ")
-    }
-    diff_vars <- setdiff(names(y), common_vars)
-    x[diff_vars] <- y[diff_vars]
-    x
-  }
-  
   data <- NULL
   for (i in seq(recipes)) {
-    data <- combine(data, as.data.frame(recipes[[i]]))
+    data <- combine_dataframes(as.data.frame(recipes[[i]]), data)
     recipes[[i]] <- recipe(recipes[[i]], tibble())
   }
   
