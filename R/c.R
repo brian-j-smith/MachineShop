@@ -27,7 +27,7 @@ c.Calibration <- function(...) {
       stop("Calibration arguments are a mix of smoothed and binned curves")
     }
     
-    df <- do.call(append, make_unique_levels(args, which = "Model"))
+    df <- do.call(append, set_model_names(args))
     rownames(df) <- NULL
     Calibration(df, smoothed = smoothed)
     
@@ -86,7 +86,7 @@ c.Curves <- function(...) {
       stop(class, " arguments have different metrics")
     }
     
-    df <- do.call(append, make_unique_levels(args, which = "Model"))
+    df <- do.call(append, set_model_names(args))
     rownames(df) <- NULL
     do.call(class, list(df, metrics = metrics))
     
@@ -179,7 +179,7 @@ c.Resamples <- function(...) {
       stop("Resamples arguments have different strata variables")
     }
     
-    df <- do.call(append, make_unique_levels(args, which = "Model"))
+    df <- do.call(append, set_model_names(args))
     rownames(df) <- NULL
     Resamples(df, control = control, strata = strata)
     

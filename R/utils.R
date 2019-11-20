@@ -150,26 +150,6 @@ list2function <- function(x) {
 }
 
 
-make_unique_levels <- function(x, which) {
-  level_names <- list()
-  for (i in seq(x)) {
-    if (is.null(x[[i]][[which]])) x[[i]][[which]] <- rep(which, nrow(x[[i]]))
-    x[[i]][[which]] <- as.factor(x[[i]][[which]])
-    arg_name <- names(x)[i]
-    level_names[[i]] <- if (!is.null(arg_name) && nzchar(arg_name)) {
-      rep(arg_name, nlevels(x[[i]][[which]]))
-    } else {
-      levels(x[[i]][[which]])
-    }
-  }
-  level_names <- level_names %>% unlist %>% make.unique %>% relist(level_names)
-  
-  for (i in seq(x)) levels(x[[i]][[which]]) <- level_names[[i]]
-  
-  x
-}
-
-
 match_class <- function(object, choices) {
   f <- function(x, ...) UseMethod("f")
   f.default <- function(x, ...) NA_character_
@@ -304,6 +284,27 @@ seq_nvars <- function(x, model, length) {
     numeric()
   }
   round(vals)
+}
+
+
+set_model_names <- function(x) {
+  name <- "Model"
+  level_names <- list()
+  for (i in seq(x)) {
+    if (is.null(x[[i]][[name]])) x[[i]][[name]] <- rep(name, nrow(x[[i]]))
+    x[[i]][[name]] <- as.factor(x[[i]][[name]])
+    arg_name <- names(x)[i]
+    level_names[[i]] <- if (!is.null(arg_name) && nzchar(arg_name)) {
+      rep(arg_name, nlevels(x[[i]][[name]]))
+    } else {
+      levels(x[[i]][[name]])
+    }
+  }
+  level_names <- level_names %>% unlist %>% make.unique %>% relist(level_names)
+  
+  for (i in seq(x)) levels(x[[i]][[name]]) <- level_names[[i]]
+  
+  x
 }
 
     
