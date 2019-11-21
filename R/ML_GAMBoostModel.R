@@ -68,7 +68,7 @@ GAMBoostModel <- function(family = NULL,
       )
     },
     fit = function(formula, data, weights, family = NULL, ...) {
-      attachment(list(
+      attach_objects(list(
         bbs = mboost::bbs,
         bols = mboost::bols,
         btree = mboost::btree,

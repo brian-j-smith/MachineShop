@@ -38,8 +38,8 @@ assert_equal_weights <- function(weights) {
 }
 
 
-attachment <- function(what, pos = 2L,
-                       name = deparse(substitute(what), backtick = FALSE)) {
+attach_objects <- function(what, pos = 2L,
+                           name = deparse(substitute(what), backtick = FALSE)) {
   make_attach <- attach
   make_attach(what, pos, name, warn.conflicts = FALSE)
   do.call(on.exit, list(substitute(detach(name))), envir = parent.frame())

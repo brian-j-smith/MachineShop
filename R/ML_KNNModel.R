@@ -59,7 +59,7 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
       list(formula = formula, train = as.data.frame(data), ...)
     },
     predict = function(object, newdata, ...) {
-      attachment(list(
+      attach_objects(list(
         contr.dummy = kknn::contr.dummy,
         contr.ordinal = kknn::contr.ordinal,
         contr.metrics = kknn::contr.metric

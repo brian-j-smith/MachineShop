@@ -67,7 +67,7 @@ EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
       params
     },
     fit = function(formula, data, weights, ...) {
-      attachment(list(
+      attach_objects(list(
         contr.earth.response = earth::contr.earth.response
       ), name = "earth_exports")
       
