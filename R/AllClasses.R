@@ -250,6 +250,13 @@ setClass("Resamples",
 )
 
 
+setClass("SelectedModelFrame",
+  contains = "ModelFrame",
+  slots = c(terms = "list",
+            params = "list")
+)
+
+
 setClass("SelectedRecipe",
   contains = "ModelRecipe",
   slots = c(recipes = "list",

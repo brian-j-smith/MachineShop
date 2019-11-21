@@ -22,7 +22,8 @@
 #' 
 #' @return \code{ModelFrame} class object that inherits from \code{data.frame}.
 #' 
-#' @seealso  \code{\link{fit}}, \code{\link{resample}}, \code{\link{response}}
+#' @seealso  \code{\link{fit}}, \code{\link{resample}}, \code{\link{response}},
+#' \code{\link{SelectedModelFrame}}
 #' 
 #' @examples
 #' mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
@@ -32,6 +33,19 @@
 #' 
 ModelFrame <- function(x, ...) {
   UseMethod("ModelFrame")
+}
+
+
+ModelFrame.data.frame <- function(x, ...) {
+  casenames <- x[["(casenames)"]]
+  weights <- x[["(weights)"]]
+  strata <- x[["(strata)"]]
+  x[c("(casenames)", "(weights)", "(strata)")] <- NULL
+  model_terms <- terms(lapply(names(x)[-1], as.name), names(x)[1],
+                       all_numeric = all(sapply(x[-1], is.numeric)))
+  ModelFrame(model_terms, x, na.rm = FALSE,
+             casenames = if (is.null(casenames)) rownames(x) else casenames,
+             weights = weights, strata = strata)
 }
 
 
@@ -115,10 +129,8 @@ ModelFrame.recipe <- function(x, ...) {
   model_terms <- terms(x)
   data[[deparse(response(model_terms))]] <- response(model_terms, data)
   
-  casenames <- data[["(casenames)"]]
-  if (is.null(casenames)) casenames <- rownames(data)
-  
-  ModelFrame(model_terms, data, na.rm = FALSE, casenames = casenames,
+  ModelFrame(model_terms, data, na.rm = FALSE,
+             casenames = if (is.null(data[["(casenames)"]])) rownames(data),
              weights = weights, strata = strata)
 }
 
@@ -134,7 +146,10 @@ ModelFrame.terms <- function(x, data, ...) {
 
 
 as.data.frame.ModelFrame <- function(x, ...) {
-  structure(x, terms = NULL, class = "data.frame")
+  x <- NextMethod()
+  attributes(x) <- list(names = names(x), row.names = rownames(x),
+                        class = "data.frame")
+  x
 }
 
 
@@ -345,6 +360,11 @@ model.matrix.ModelFrame <- function(object, intercept = NULL, ...) {
     attr(model_terms, "intercept") <- as.integer(intercept)
   }
   model.matrix(model_terms, object, ...)
+}
+
+
+model.matrix.SelectedModelFrame <- function(object, ...) {
+  stop("cannot create a design matrix from a ", class(object))
 }
 
 

@@ -11,6 +11,7 @@
 \alias{print.Performance}
 \alias{print.RecipeGrid}
 \alias{print.Resamples}
+\alias{print.SelectedModelFrame}
 \alias{print.SurvMatrix}
 \alias{print.TrainBits}
 \alias{print.TunedRecipe}
@@ -34,6 +35,8 @@
 \method{print}{RecipeGrid}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{Resamples}(x, n = MachineShop::settings("max.print"), ...)
+
+\method{print}{SelectedModelFrame}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{SurvMatrix}(x, n = MachineShop::settings("max.print"), ...)
 

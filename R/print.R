@@ -496,6 +496,29 @@ setMethod("show", "Resamples",
 )
 
 
+#' @rdname print-methods
+#' 
+print.SelectedModelFrame <- function(x,
+                                     n = MachineShop::settings("max.print"),
+                                     ...) {
+  print_title(x)
+  cat("\n")
+  print_items(as(x, "data.frame"), n = n)
+  cat("\n")
+  print(ListOf(lapply(x@terms, formula)), n = n)
+  print(x@params$control)
+  invisible(x)
+}
+
+
+setMethod("show", "SelectedModelFrame",
+  function(object) {
+    print(object)
+    invisible()
+  }
+)
+
+
 setMethod("show", "SelectedRecipe",
   function(object) {
     print_title(object)

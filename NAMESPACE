@@ -55,6 +55,9 @@ export(BinomialVector,
        SurvProbs)
 
 export(ModelFrame,
+       SelectedFormula,
+       SelectedMatrix,
+       SelectedModelFrame,
        SelectedRecipe,
        TunedRecipe)
 
@@ -156,6 +159,7 @@ export(MLMetric,
 export(tune)
 
 S3method(as.data.frame, ModelFrame)
+S3method(as.data.frame, SelectedModelFrame)
 S3method(as.data.frame, SurvMatrix)
 S3method(bake, ModelRecipe)
 S3method(bake, SelectedRecipe)
@@ -221,6 +225,7 @@ S3method(print, ParamSet)
 S3method(print, Performance)
 S3method(print, RecipeGrid)
 S3method(print, Resamples)
+S3method(print, SelectedModelFrame)
 S3method(print, SurvMatrix)
 S3method(print, TrainBits)
 S3method(print, TunedRecipe)

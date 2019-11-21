@@ -114,8 +114,51 @@ train.MLModel <- function(x, ...) {
 }
 
 
+train.ModelFrame <- function(x, model, ...) {
+  list(x = x, model = model)
+}
+
+
 train.recipe <- function(x, model, ...) {
   list(x = prep(ModelRecipe(x)), model = model)
+}
+
+
+#' @rdname train
+#' 
+train.SelectedModelFrame <- function(x, model, ...) {
+  
+  last_trainbits <- model@trainbits
+  if (is(model, "SelectedModel") || is(model, "TunedModel")) {
+    model@params[names(x@params)] <- x@params
+  } else {
+    model <- do.call(SelectedModel, c(model, x@params))
+  }
+  terms <- x@terms
+  
+  mf <- as(x, "ModelFrame")
+  
+  trained_models <- list()
+  num_models <- integer()
+  for (i in seq(terms)) {
+    attr(mf, "terms") <- terms[[i]]
+    trained_model <- as.MLModel(fit(model, mf))
+    num_models[i] <- nrow(trained_model@trainbits@grid)
+    trained_model@trainbits@grid <- tibble(
+      Model = tibble(Index = seq_len(num_models[i])),
+      ModelFrame = tibble(Index = rep(i, num_models[i]))
+    )
+    trained_models[[i]] <- trained_model
+  }
+  
+  trainbits <- do.call(c, lapply(trained_models, slot, name = "trainbits"))
+  selected <- max(which(trainbits@selected > c(0, cumsum(num_models))))
+  attr(mf, "terms") <- terms[[selected]]
+  model <- trained_models[[selected]]
+  model@trainbits <- if (is.null(last_trainbits)) trainbits else last_trainbits
+  
+  list(x = mf, model = model)
+  
 }
 
 
