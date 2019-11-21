@@ -68,7 +68,7 @@ train.MLModel <- function(x, ...) {
     }
     
     if (is.null(metrics)) {
-      method <- fget(findMethod(performance, res$Observed))
+      method <- fget(findS3Method(performance, res$Observed))
       metrics <- c(eval(formals(method)$metrics))
       is_defined <- sapply(metrics, function(metric) {
         info <- metricinfo(metric)[[1]]

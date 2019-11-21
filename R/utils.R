@@ -84,8 +84,8 @@ fget <- function(x) {
 }
 
 
-findMethod <- function(generic, object) {
-  generic_name <- deparse(substitute(generic))
+findS3Method <- function(generic, object) {
+  generic_name <- as.character(substitute(generic))[1]
   classes <- substring(methods(generic_name), nchar(generic_name) + 2)
   class <- match_class(object, classes)
   if (is.na(class)) {
