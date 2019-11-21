@@ -17,11 +17,9 @@
 \alias{print.VarImp}
 \title{Print MachineShop Objects}
 \usage{
-\method{print}{Calibration}(x, n = MachineShop::settings("max.print"),
-  ...)
+\method{print}{Calibration}(x, n = MachineShop::settings("max.print"), ...)
 
-\method{print}{ConfusionList}(x, n = MachineShop::settings("max.print"),
-  ...)
+\method{print}{ConfusionList}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{Curves}(x, n = MachineShop::settings("max.print"), ...)
 
@@ -29,24 +27,19 @@
 
 \method{print}{MLModel}(x, n = MachineShop::settings("max.print"), ...)
 
-\method{print}{ModelFrame}(x, n = MachineShop::settings("max.print"),
-  ...)
+\method{print}{ModelFrame}(x, n = MachineShop::settings("max.print"), ...)
 
-\method{print}{Performance}(x, n = MachineShop::settings("max.print"),
-  ...)
+\method{print}{Performance}(x, n = MachineShop::settings("max.print"), ...)
 
-\method{print}{RecipeGrid}(x, n = MachineShop::settings("max.print"),
-  ...)
+\method{print}{RecipeGrid}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{Resamples}(x, n = MachineShop::settings("max.print"), ...)
 
-\method{print}{SurvMatrix}(x, n = MachineShop::settings("max.print"),
-  ...)
+\method{print}{SurvMatrix}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{TrainBits}(x, n = MachineShop::settings("max.print"), ...)
 
-\method{print}{TunedRecipe}(x, n = MachineShop::settings("max.print"),
-  ...)
+\method{print}{TunedRecipe}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{VarImp}(x, n = MachineShop::settings("max.print"), ...)
 }

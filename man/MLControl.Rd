@@ -26,8 +26,13 @@ SplitControl(prop = 2/3, ...)
 
 TrainControl(...)
 
-MLControl(times = NULL, dist = NULL, method = NULL,
-  seed = sample(.Machine$integer.max, 1), ...)
+MLControl(
+  times = NULL,
+  dist = NULL,
+  method = NULL,
+  seed = sample(.Machine$integer.max, 1),
+  ...
+)
 }
 \arguments{
 \item{samples}{number of bootstrap samples.}

@@ -5,8 +5,13 @@
 \alias{ConfusionMatrix}
 \title{Confusion Matrix}
 \usage{
-confusion(x, y = NULL, cutoff = MachineShop::settings("cutoff"),
-  na.rm = TRUE, ...)
+confusion(
+  x,
+  y = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  na.rm = TRUE,
+  ...
+)
 
 ConfusionMatrix(object = numeric(), ordered = FALSE)
 }

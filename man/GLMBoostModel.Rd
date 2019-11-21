@@ -4,9 +4,14 @@
 \alias{GLMBoostModel}
 \title{Gradient Boosting with Linear Models}
 \usage{
-GLMBoostModel(family = NULL, mstop = 100, nu = 0.1,
-  risk = c("inbag", "oobag", "none"), stopintern = FALSE,
-  trace = FALSE)
+GLMBoostModel(
+  family = NULL,
+  mstop = 100,
+  nu = 0.1,
+  risk = c("inbag", "oobag", "none"),
+  stopintern = FALSE,
+  trace = FALSE
+)
 }
 \arguments{
 \item{family}{optional \code{\link[mboost]{Family}} object.  Set

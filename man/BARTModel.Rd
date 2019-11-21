@@ -4,12 +4,33 @@
 \alias{BARTModel}
 \title{Bayesian Additive Regression Trees Model}
 \usage{
-BARTModel(K = NULL, sparse = FALSE, theta = 0, omega = 1,
-  a = 0.5, b = 1, rho = NULL, augment = FALSE, xinfo = NULL,
-  usequants = FALSE, sigest = NA, sigdf = 3, sigquant = 0.9,
-  lambda = NA, k = 2, power = 2, base = 0.95, tau.num = NULL,
-  offset = NULL, ntree = NULL, numcut = 100, ndpost = 1000,
-  nskip = NULL, keepevery = NULL, printevery = 1000)
+BARTModel(
+  K = NULL,
+  sparse = FALSE,
+  theta = 0,
+  omega = 1,
+  a = 0.5,
+  b = 1,
+  rho = NULL,
+  augment = FALSE,
+  xinfo = NULL,
+  usequants = FALSE,
+  sigest = NA,
+  sigdf = 3,
+  sigquant = 0.9,
+  lambda = NA,
+  k = 2,
+  power = 2,
+  base = 0.95,
+  tau.num = NULL,
+  offset = NULL,
+  ntree = NULL,
+  numcut = 100,
+  ndpost = 1000,
+  nskip = NULL,
+  keepevery = NULL,
+  printevery = 1000
+)
 }
 \arguments{
 \item{K}{if provided, then coarsen the times of survival responses per the

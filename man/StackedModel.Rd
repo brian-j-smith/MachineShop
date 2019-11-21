@@ -4,8 +4,7 @@
 \alias{StackedModel}
 \title{Stacked Regression Model}
 \usage{
-StackedModel(..., control = MachineShop::settings("control"),
-  weights = NULL)
+StackedModel(..., control = MachineShop::settings("control"), weights = NULL)
 }
 \arguments{
 \item{...}{\link[=models]{model} functions, function names, calls, or vector

@@ -4,9 +4,17 @@
 \alias{MDAModel}
 \title{Mixture Discriminant Analysis Model}
 \usage{
-MDAModel(subclasses = 3, sub.df = NULL, tot.df = NULL,
-  dimension = sum(subclasses) - 1, eps = .Machine$double.eps,
-  iter = 5, method = .(mda::polyreg), trace = FALSE, ...)
+MDAModel(
+  subclasses = 3,
+  sub.df = NULL,
+  tot.df = NULL,
+  dimension = sum(subclasses) - 1,
+  eps = .Machine$double.eps,
+  iter = 5,
+  method = .(mda::polyreg),
+  trace = FALSE,
+  ...
+)
 }
 \arguments{
 \item{subclasses}{numeric value or vector of subclasses per class.}

@@ -14,32 +14,53 @@
 \alias{plot.VarImp}
 \title{Model Performance Plots}
 \usage{
-\method{plot}{Calibration}(x, type = c("line", "point"), se = FALSE,
-  ...)
+\method{plot}{Calibration}(x, type = c("line", "point"), se = FALSE, ...)
 
 \method{plot}{ConfusionList}(x, ...)
 
 \method{plot}{ConfusionMatrix}(x, ...)
 
-\method{plot}{Curves}(x, type = c("tradeoffs", "cutoffs"),
-  diagonal = FALSE, stat = MachineShop::settings("stat.Curves"), ...)
+\method{plot}{Curves}(
+  x,
+  type = c("tradeoffs", "cutoffs"),
+  diagonal = FALSE,
+  stat = MachineShop::settings("stat.Curves"),
+  ...
+)
 
-\method{plot}{Lift}(x, find = NULL, diagonal = TRUE,
-  stat = MachineShop::settings("stat.Curves"), ...)
+\method{plot}{Lift}(
+  x,
+  find = NULL,
+  diagonal = TRUE,
+  stat = MachineShop::settings("stat.Curves"),
+  ...
+)
 
-\method{plot}{MLModel}(x, metrics = NULL,
-  stat = MachineShop::settings("stat.Train"), type = c("boxplot",
-  "density", "errorbar", "line", "violin"), ...)
+\method{plot}{MLModel}(
+  x,
+  metrics = NULL,
+  stat = MachineShop::settings("stat.Train"),
+  type = c("boxplot", "density", "errorbar", "line", "violin"),
+  ...
+)
 
 \method{plot}{PartialDependence}(x, stats = NULL, ...)
 
-\method{plot}{Performance}(x, metrics = NULL,
-  stat = MachineShop::settings("stat.Resamples"), type = c("boxplot",
-  "density", "errorbar", "violin"), ...)
+\method{plot}{Performance}(
+  x,
+  metrics = NULL,
+  stat = MachineShop::settings("stat.Resamples"),
+  type = c("boxplot", "density", "errorbar", "violin"),
+  ...
+)
 
-\method{plot}{Resamples}(x, metrics = NULL,
-  stat = MachineShop::settings("stat.Resamples"), type = c("boxplot",
-  "density", "errorbar", "violin"), ...)
+\method{plot}{Resamples}(
+  x,
+  metrics = NULL,
+  stat = MachineShop::settings("stat.Resamples"),
+  type = c("boxplot", "density", "errorbar", "violin"),
+  ...
+)
 
 \method{plot}{VarImp}(x, n = NULL, ...)
 }

@@ -4,9 +4,15 @@
 \alias{dependence}
 \title{Partial Dependence}
 \usage{
-dependence(object, data = NULL, select = NULL, interaction = FALSE,
-  n = 10, intervals = c("uniform", "quantile"),
-  stats = MachineShop::settings("stats.PartialDependence"))
+dependence(
+  object,
+  data = NULL,
+  select = NULL,
+  interaction = FALSE,
+  n = 10,
+  intervals = c("uniform", "quantile"),
+  stats = MachineShop::settings("stats.PartialDependence")
+)
 }
 \arguments{
 \item{object}{model \link{fit} result.}

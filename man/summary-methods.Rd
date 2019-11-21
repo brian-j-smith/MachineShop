@@ -14,17 +14,28 @@
 
 \method{summary}{ConfusionMatrix}(object, ...)
 
-\method{summary}{Curves}(object,
-  stat = MachineShop::settings("stat.Curves"), ...)
+\method{summary}{Curves}(object, stat = MachineShop::settings("stat.Curves"), ...)
 
-\method{summary}{MLModel}(object,
-  stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
+\method{summary}{MLModel}(
+  object,
+  stats = MachineShop::settings("stats.Resamples"),
+  na.rm = TRUE,
+  ...
+)
 
-\method{summary}{Performance}(object,
-  stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
+\method{summary}{Performance}(
+  object,
+  stats = MachineShop::settings("stats.Resamples"),
+  na.rm = TRUE,
+  ...
+)
 
-\method{summary}{Resamples}(object,
-  stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...)
+\method{summary}{Resamples}(
+  object,
+  stats = MachineShop::settings("stats.Resamples"),
+  na.rm = TRUE,
+  ...
+)
 }
 \arguments{
 \item{object}{\link{confusion}, \link[=curves]{performance curve},

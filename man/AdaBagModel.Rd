@@ -4,10 +4,18 @@
 \alias{AdaBagModel}
 \title{Bagging with Classification Trees}
 \usage{
-AdaBagModel(mfinal = 100, minsplit = 20,
-  minbucket = round(minsplit/3), cp = 0.01, maxcompete = 4,
-  maxsurrogate = 5, usesurrogate = 2, xval = 10,
-  surrogatestyle = 0, maxdepth = 30)
+AdaBagModel(
+  mfinal = 100,
+  minsplit = 20,
+  minbucket = round(minsplit/3),
+  cp = 0.01,
+  maxcompete = 4,
+  maxsurrogate = 5,
+  usesurrogate = 2,
+  xval = 10,
+  surrogatestyle = 0,
+  maxdepth = 30
+)
 }
 \arguments{
 \item{mfinal}{number of trees to use.}

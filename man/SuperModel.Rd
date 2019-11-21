@@ -4,8 +4,12 @@
 \alias{SuperModel}
 \title{Super Learner Model}
 \usage{
-SuperModel(..., model = GBMModel,
-  control = MachineShop::settings("control"), all_vars = FALSE)
+SuperModel(
+  ...,
+  model = GBMModel,
+  control = MachineShop::settings("control"),
+  all_vars = FALSE
+)
 }
 \arguments{
 \item{...}{\link[=models]{model} functions, function names, calls, or vector

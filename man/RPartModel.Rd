@@ -4,9 +4,17 @@
 \alias{RPartModel}
 \title{Recursive Partitioning and Regression Tree Models}
 \usage{
-RPartModel(minsplit = 20, minbucket = round(minsplit/3), cp = 0.01,
-  maxcompete = 4, maxsurrogate = 5, usesurrogate = 2, xval = 10,
-  surrogatestyle = 0, maxdepth = 30)
+RPartModel(
+  minsplit = 20,
+  minbucket = round(minsplit/3),
+  cp = 0.01,
+  maxcompete = 4,
+  maxsurrogate = 5,
+  usesurrogate = 2,
+  xval = 10,
+  surrogatestyle = 0,
+  maxdepth = 30
+)
 }
 \arguments{
 \item{minsplit}{minimum number of observations that must exist in a node in

@@ -4,9 +4,13 @@
 \alias{SelectedModel}
 \title{Selected Model}
 \usage{
-SelectedModel(..., control = MachineShop::settings("control"),
-  metrics = NULL, stat = MachineShop::settings("stat.Train"),
-  cutoff = MachineShop::settings("cutoff"))
+SelectedModel(
+  ...,
+  control = MachineShop::settings("control"),
+  metrics = NULL,
+  stat = MachineShop::settings("stat.Train"),
+  cutoff = MachineShop::settings("cutoff")
+)
 }
 \arguments{
 \item{...}{\link[=models]{model} functions, function names, calls, or vectors

@@ -4,10 +4,16 @@
 \alias{GAMBoostModel}
 \title{Gradient Boosting with Additive Models}
 \usage{
-GAMBoostModel(family = NULL, baselearner = c("bbs", "bols", "btree",
-  "bss", "bns"), dfbase = 4, mstop = 100, nu = 0.1,
-  risk = c("inbag", "oobag", "none"), stopintern = FALSE,
-  trace = FALSE)
+GAMBoostModel(
+  family = NULL,
+  baselearner = c("bbs", "bols", "btree", "bss", "bns"),
+  dfbase = 4,
+  mstop = 100,
+  nu = 0.1,
+  risk = c("inbag", "oobag", "none"),
+  stopintern = FALSE,
+  trace = FALSE
+)
 }
 \arguments{
 \item{family}{optional \code{\link[mboost]{Family}} object.  Set

@@ -4,8 +4,12 @@
 \alias{QDAModel}
 \title{Quadratic Discriminant Analysis Model}
 \usage{
-QDAModel(prior = NULL, method = c("moment", "mle", "mve", "t"),
-  nu = 5, use = c("plug-in", "predictive", "debiased", "looCV"))
+QDAModel(
+  prior = NULL,
+  method = c("moment", "mle", "mve", "t"),
+  nu = 5,
+  use = c("plug-in", "predictive", "debiased", "looCV")
+)
 }
 \arguments{
 \item{prior}{prior probabilities of class membership if specified or the

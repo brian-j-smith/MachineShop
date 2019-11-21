@@ -7,32 +7,73 @@
 \alias{XGBTreeModel}
 \title{Extreme Gradient Boosting Models}
 \usage{
-XGBModel(params = list(), nrounds = 1, verbose = 0,
-  print_every_n = 1)
+XGBModel(params = list(), nrounds = 1, verbose = 0, print_every_n = 1)
 
-XGBDARTModel(objective = NULL, base_score = 0.5, eta = 0.3,
-  gamma = 0, max_depth = 6, min_child_weight = 1,
-  max_delta_step = 0, subsample = 1, colsample_bytree = 1,
-  colsample_bylevel = 1, lambda = 1, alpha = 0,
-  tree_method = "auto", sketch_eps = 0.03, scale_pos_weight = 1,
-  update = "grow_colmaker,prune", refresh_leaf = 1,
-  process_type = "default", grow_policy = "depthwise",
-  max_leaves = 0, max_bin = 256, sample_type = "uniform",
-  normalize_type = "tree", rate_drop = 0, one_drop = 0,
-  skip_drop = 0, ...)
+XGBDARTModel(
+  objective = NULL,
+  base_score = 0.5,
+  eta = 0.3,
+  gamma = 0,
+  max_depth = 6,
+  min_child_weight = 1,
+  max_delta_step = 0,
+  subsample = 1,
+  colsample_bytree = 1,
+  colsample_bylevel = 1,
+  lambda = 1,
+  alpha = 0,
+  tree_method = "auto",
+  sketch_eps = 0.03,
+  scale_pos_weight = 1,
+  update = "grow_colmaker,prune",
+  refresh_leaf = 1,
+  process_type = "default",
+  grow_policy = "depthwise",
+  max_leaves = 0,
+  max_bin = 256,
+  sample_type = "uniform",
+  normalize_type = "tree",
+  rate_drop = 0,
+  one_drop = 0,
+  skip_drop = 0,
+  ...
+)
 
-XGBLinearModel(objective = NULL, base_score = 0.5, lambda = 0,
-  alpha = 0, updater = "shotgun", feature_selector = "cyclic",
-  top_k = 0, ...)
+XGBLinearModel(
+  objective = NULL,
+  base_score = 0.5,
+  lambda = 0,
+  alpha = 0,
+  updater = "shotgun",
+  feature_selector = "cyclic",
+  top_k = 0,
+  ...
+)
 
-XGBTreeModel(objective = NULL, base_score = 0.5, eta = 0.3,
-  gamma = 0, max_depth = 6, min_child_weight = 1,
-  max_delta_step = 0, subsample = 1, colsample_bytree = 1,
-  colsample_bylevel = 1, lambda = 1, alpha = 0,
-  tree_method = "auto", sketch_eps = 0.03, scale_pos_weight = 1,
-  update = "grow_colmaker,prune", refresh_leaf = 1,
-  process_type = "default", grow_policy = "depthwise",
-  max_leaves = 0, max_bin = 256, ...)
+XGBTreeModel(
+  objective = NULL,
+  base_score = 0.5,
+  eta = 0.3,
+  gamma = 0,
+  max_depth = 6,
+  min_child_weight = 1,
+  max_delta_step = 0,
+  subsample = 1,
+  colsample_bytree = 1,
+  colsample_bylevel = 1,
+  lambda = 1,
+  alpha = 0,
+  tree_method = "auto",
+  sketch_eps = 0.03,
+  scale_pos_weight = 1,
+  update = "grow_colmaker,prune",
+  refresh_leaf = 1,
+  process_type = "default",
+  grow_policy = "depthwise",
+  max_leaves = 0,
+  max_bin = 256,
+  ...
+)
 }
 \arguments{
 \item{params}{list of model parameters as described in the XBoost

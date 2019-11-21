@@ -4,9 +4,14 @@
 \alias{LDAModel}
 \title{Linear Discriminant Analysis Model}
 \usage{
-LDAModel(prior = NULL, tol = 1e-04, method = c("moment", "mle",
-  "mve", "t"), nu = 5, dimen = NULL, use = c("plug-in", "debiased",
-  "predictive"))
+LDAModel(
+  prior = NULL,
+  tol = 1e-04,
+  method = c("moment", "mle", "mve", "t"),
+  nu = 5,
+  dimen = NULL,
+  use = c("plug-in", "debiased", "predictive")
+)
 }
 \arguments{
 \item{prior}{prior probabilities of class membership if specified or the

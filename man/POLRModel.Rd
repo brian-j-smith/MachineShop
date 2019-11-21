@@ -4,8 +4,7 @@
 \alias{POLRModel}
 \title{Ordered Logistic or Probit Regression Model}
 \usage{
-POLRModel(method = c("logistic", "probit", "loglog", "cloglog",
-  "cauchit"))
+POLRModel(method = c("logistic", "probit", "loglog", "cloglog", "cauchit"))
 }
 \arguments{
 \item{method}{logistic or probit or (complementary) log-log or cauchit

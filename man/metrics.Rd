@@ -34,11 +34,20 @@
 \alias{rmsle}
 \title{Performance Metrics}
 \usage{
-accuracy(observed, predicted = NULL,
-  cutoff = MachineShop::settings("cutoff"), ...)
+accuracy(
+  observed,
+  predicted = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  ...
+)
 
-auc(observed, predicted = NULL, metrics = c(MachineShop::tpr,
-  MachineShop::fpr), stat = MachineShop::settings("stat.Curves"), ...)
+auc(
+  observed,
+  predicted = NULL,
+  metrics = c(MachineShop::tpr, MachineShop::fpr),
+  stat = MachineShop::settings("stat.Curves"),
+  ...
+)
 
 brier(observed, predicted = NULL, ...)
 
@@ -46,52 +55,74 @@ cindex(observed, predicted = NULL, ...)
 
 cross_entropy(observed, predicted = NULL, ...)
 
-f_score(observed, predicted = NULL,
-  cutoff = MachineShop::settings("cutoff"), beta = 1, ...)
+f_score(
+  observed,
+  predicted = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  beta = 1,
+  ...
+)
 
-fnr(observed, predicted = NULL,
-  cutoff = MachineShop::settings("cutoff"), ...)
+fnr(observed, predicted = NULL, cutoff = MachineShop::settings("cutoff"), ...)
 
-fpr(observed, predicted = NULL,
-  cutoff = MachineShop::settings("cutoff"), ...)
+fpr(observed, predicted = NULL, cutoff = MachineShop::settings("cutoff"), ...)
 
-kappa2(observed, predicted = NULL,
-  cutoff = MachineShop::settings("cutoff"), ...)
+kappa2(
+  observed,
+  predicted = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  ...
+)
 
-npv(observed, predicted = NULL,
-  cutoff = MachineShop::settings("cutoff"), ...)
+npv(observed, predicted = NULL, cutoff = MachineShop::settings("cutoff"), ...)
 
-ppv(observed, predicted = NULL,
-  cutoff = MachineShop::settings("cutoff"), ...)
+ppv(observed, predicted = NULL, cutoff = MachineShop::settings("cutoff"), ...)
 
 pr_auc(observed, predicted = NULL, ...)
 
-precision(observed, predicted = NULL,
-  cutoff = MachineShop::settings("cutoff"), ...)
+precision(
+  observed,
+  predicted = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  ...
+)
 
-recall(observed, predicted = NULL,
-  cutoff = MachineShop::settings("cutoff"), ...)
+recall(
+  observed,
+  predicted = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  ...
+)
 
 roc_auc(observed, predicted = NULL, ...)
 
-roc_index(observed, predicted = NULL,
-  cutoff = MachineShop::settings("cutoff"), f = function(sensitivity,
-  specificity) (sensitivity + specificity)/2, ...)
+roc_index(
+  observed,
+  predicted = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  f = function(sensitivity, specificity) (sensitivity + specificity)/2,
+  ...
+)
 
-rpp(observed, predicted = NULL,
-  cutoff = MachineShop::settings("cutoff"), ...)
+rpp(observed, predicted = NULL, cutoff = MachineShop::settings("cutoff"), ...)
 
-sensitivity(observed, predicted = NULL,
-  cutoff = MachineShop::settings("cutoff"), ...)
+sensitivity(
+  observed,
+  predicted = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  ...
+)
 
-specificity(observed, predicted = NULL,
-  cutoff = MachineShop::settings("cutoff"), ...)
+specificity(
+  observed,
+  predicted = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  ...
+)
 
-tnr(observed, predicted = NULL,
-  cutoff = MachineShop::settings("cutoff"), ...)
+tnr(observed, predicted = NULL, cutoff = MachineShop::settings("cutoff"), ...)
 
-tpr(observed, predicted = NULL,
-  cutoff = MachineShop::settings("cutoff"), ...)
+tpr(observed, predicted = NULL, cutoff = MachineShop::settings("cutoff"), ...)
 
 weighted_kappa2(observed, predicted = NULL, power = 1, ...)
 

@@ -7,9 +7,16 @@
 \usage{
 GLMModel(family = NULL, quasi = FALSE, ...)
 
-GLMStepAICModel(family = NULL, quasi = FALSE, ...,
-  direction = c("both", "backward", "forward"), scope = NULL, k = 2,
-  trace = FALSE, steps = 1000)
+GLMStepAICModel(
+  family = NULL,
+  quasi = FALSE,
+  ...,
+  direction = c("both", "backward", "forward"),
+  scope = NULL,
+  k = 2,
+  trace = FALSE,
+  steps = 1000
+)
 }
 \arguments{
 \item{family}{optional error distribution and link function to be used in the

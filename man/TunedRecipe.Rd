@@ -4,10 +4,14 @@
 \alias{TunedRecipe}
 \title{Tuned Recipe}
 \usage{
-TunedRecipe(x, grid = expand_steps(),
-  control = MachineShop::settings("control"), metrics = NULL,
+TunedRecipe(
+  x,
+  grid = expand_steps(),
+  control = MachineShop::settings("control"),
+  metrics = NULL,
   stat = MachineShop::settings("stat.Train"),
-  cutoff = MachineShop::settings("cutoff"))
+  cutoff = MachineShop::settings("cutoff")
+)
 }
 \arguments{
 \item{x}{untrained \code{\link[recipes]{recipe}}.}

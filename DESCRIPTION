@@ -20,5 +20,5 @@ Suggests: adabag, BART, bartMachine, C50, doParallel, e1071, earth, gbm, glmnet,
 License: GPL-3
 URL: https://brian-j-smith.github.io/MachineShop/
 BugReports: https://github.com/brian-j-smith/MachineShop/issues
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.1
 VignetteBuilder: knitr

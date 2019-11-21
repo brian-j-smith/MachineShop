@@ -5,8 +5,13 @@
 \alias{PDAModel}
 \title{Flexible and Penalized Discriminant Analysis Models}
 \usage{
-FDAModel(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
-  method = .(mda::polyreg), ...)
+FDAModel(
+  theta = NULL,
+  dimension = NULL,
+  eps = .Machine$double.eps,
+  method = .(mda::polyreg),
+  ...
+)
 
 PDAModel(lambda = 1, df = NULL, ...)
 }

@@ -4,13 +4,23 @@
 \alias{RangerModel}
 \title{Fast Random Forest Model}
 \usage{
-RangerModel(num.trees = 500, mtry = NULL, importance = c("impurity",
-  "impurity_corrected", "permutation"), min.node.size = NULL,
-  replace = TRUE, sample.fraction = ifelse(replace, 1, 0.632),
-  splitrule = NULL, num.random.splits = 1, alpha = 0.5,
-  minprop = 0.1, split.select.weights = NULL,
-  always.split.variables = NULL, respect.unordered.factors = NULL,
-  scale.permutation.importance = FALSE, verbose = FALSE)
+RangerModel(
+  num.trees = 500,
+  mtry = NULL,
+  importance = c("impurity", "impurity_corrected", "permutation"),
+  min.node.size = NULL,
+  replace = TRUE,
+  sample.fraction = ifelse(replace, 1, 0.632),
+  splitrule = NULL,
+  num.random.splits = 1,
+  alpha = 0.5,
+  minprop = 0.1,
+  split.select.weights = NULL,
+  always.split.variables = NULL,
+  respect.unordered.factors = NULL,
+  scale.permutation.importance = FALSE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{num.trees}{number of trees.}

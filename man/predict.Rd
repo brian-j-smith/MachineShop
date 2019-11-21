@@ -5,10 +5,16 @@
 \alias{predict.MLModelFit}
 \title{Model Prediction}
 \usage{
-\method{predict}{MLModelFit}(object, newdata = NULL, times = NULL,
+\method{predict}{MLModelFit}(
+  object,
+  newdata = NULL,
+  times = NULL,
   type = c("response", "prob"),
-  cutoff = MachineShop::settings("cutoff"), dist = NULL,
-  method = NULL, ...)
+  cutoff = MachineShop::settings("cutoff"),
+  dist = NULL,
+  method = NULL,
+  ...
+)
 }
 \arguments{
 \item{object}{model \link{fit} result.}

@@ -12,17 +12,13 @@
 \usage{
 resample(x, ...)
 
-\method{resample}{formula}(x, data, model,
-  control = MachineShop::settings("control"), ...)
+\method{resample}{formula}(x, data, model, control = MachineShop::settings("control"), ...)
 
-\method{resample}{matrix}(x, y, model,
-  control = MachineShop::settings("control"), ...)
+\method{resample}{matrix}(x, y, model, control = MachineShop::settings("control"), ...)
 
-\method{resample}{ModelFrame}(x, model,
-  control = MachineShop::settings("control"), ...)
+\method{resample}{ModelFrame}(x, model, control = MachineShop::settings("control"), ...)
 
-\method{resample}{recipe}(x, model,
-  control = MachineShop::settings("control"), ...)
+\method{resample}{recipe}(x, model, control = MachineShop::settings("control"), ...)
 
 \method{resample}{MLModel}(x, ...)
 

@@ -9,11 +9,20 @@
 \usage{
 performance_curve(x, ...)
 
-\method{performance_curve}{default}(x, y, metrics = c(MachineShop::tpr,
-  MachineShop::fpr), na.rm = TRUE, ...)
+\method{performance_curve}{default}(
+  x,
+  y,
+  metrics = c(MachineShop::tpr, MachineShop::fpr),
+  na.rm = TRUE,
+  ...
+)
 
-\method{performance_curve}{Resamples}(x, metrics = c(MachineShop::tpr,
-  MachineShop::fpr), na.rm = TRUE, ...)
+\method{performance_curve}{Resamples}(
+  x,
+  metrics = c(MachineShop::tpr, MachineShop::fpr),
+  na.rm = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{\link[=response]{observed responses} or \link{resample} result

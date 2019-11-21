@@ -4,9 +4,15 @@
 \alias{CForestModel}
 \title{Conditional Random Forest Model}
 \usage{
-CForestModel(teststat = c("quad", "max"), testtype = c("Univariate",
-  "Teststatistic", "Bonferroni", "MonteCarlo"), mincriterion = 0,
-  ntree = 500, mtry = 5, replace = TRUE, fraction = 0.632)
+CForestModel(
+  teststat = c("quad", "max"),
+  testtype = c("Univariate", "Teststatistic", "Bonferroni", "MonteCarlo"),
+  mincriterion = 0,
+  ntree = 500,
+  mtry = 5,
+  replace = TRUE,
+  fraction = 0.632
+)
 }
 \arguments{
 \item{teststat}{character specifying the type of the test statistic to be

@@ -4,12 +4,20 @@
 \alias{GLMNetModel}
 \title{GLM Lasso or Elasticnet Model}
 \usage{
-GLMNetModel(family = NULL, alpha = 1, lambda = 0,
-  standardize = TRUE, intercept = NULL, penalty.factor = .(rep(1,
-  nvars)), standardize.response = FALSE, thresh = 1e-07,
-  maxit = 1e+05, type.gaussian = .(ifelse(nvars < 500, "covariance",
-  "naive")), type.logistic = c("Newton", "modified.Newton"),
-  type.multinomial = c("ungrouped", "grouped"))
+GLMNetModel(
+  family = NULL,
+  alpha = 1,
+  lambda = 0,
+  standardize = TRUE,
+  intercept = NULL,
+  penalty.factor = .(rep(1, nvars)),
+  standardize.response = FALSE,
+  thresh = 1e-07,
+  maxit = 1e+05,
+  type.gaussian = .(ifelse(nvars < 500, "covariance", "naive")),
+  type.logistic = c("Newton", "modified.Newton"),
+  type.multinomial = c("ungrouped", "grouped")
+)
 }
 \arguments{
 \item{family}{optional response type.  Set automatically according to the

@@ -4,9 +4,13 @@
 \alias{KNNModel}
 \title{Weighted k-Nearest Neighbor Model}
 \usage{
-KNNModel(k = 7, distance = 2, scale = TRUE, kernel = c("optimal",
-  "biweight", "cos", "epanechnikov", "gaussian", "inv", "rank",
-  "rectangular", "triangular", "triweight"))
+KNNModel(
+  k = 7,
+  distance = 2,
+  scale = TRUE,
+  kernel = c("optimal", "biweight", "cos", "epanechnikov", "gaussian", "inv", "rank",
+    "rectangular", "triangular", "triweight")
+)
 }
 \arguments{
 \item{k}{numer of neigbors considered.}

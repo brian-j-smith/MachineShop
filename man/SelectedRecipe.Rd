@@ -4,9 +4,13 @@
 \alias{SelectedRecipe}
 \title{Selected Recipe}
 \usage{
-SelectedRecipe(..., control = MachineShop::settings("control"),
-  metrics = NULL, stat = MachineShop::settings("stat.Train"),
-  cutoff = MachineShop::settings("cutoff"))
+SelectedRecipe(
+  ...,
+  control = MachineShop::settings("control"),
+  metrics = NULL,
+  stat = MachineShop::settings("stat.Train"),
+  cutoff = MachineShop::settings("cutoff")
+)
 }
 \arguments{
 \item{...}{untrained \code{\link[recipes:recipe]{recipes}} or a list of them.}

@@ -4,10 +4,15 @@
 \alias{TunedModel}
 \title{Tuned Model}
 \usage{
-TunedModel(model, grid = MachineShop::settings("grid"), fixed = NULL,
-  control = MachineShop::settings("control"), metrics = NULL,
+TunedModel(
+  model,
+  grid = MachineShop::settings("grid"),
+  fixed = NULL,
+  control = MachineShop::settings("control"),
+  metrics = NULL,
   stat = MachineShop::settings("stat.Train"),
-  cutoff = MachineShop::settings("cutoff"))
+  cutoff = MachineShop::settings("cutoff")
+)
 }
 \arguments{
 \item{model}{\link[=models]{model} function, function name, or call defining

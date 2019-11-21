@@ -4,8 +4,12 @@
 \alias{TreeModel}
 \title{Classification and Regression Tree Models}
 \usage{
-TreeModel(mincut = 5, minsize = 10, mindev = 0.01,
-  split = c("deviance", "gini"))
+TreeModel(
+  mincut = 5,
+  minsize = 10,
+  mindev = 0.01,
+  split = c("deviance", "gini")
+)
 }
 \arguments{
 \item{mincut}{minimum number of observations to include in either child node.}

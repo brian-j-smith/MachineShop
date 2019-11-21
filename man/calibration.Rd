@@ -4,8 +4,15 @@
 \alias{calibration}
 \title{Model Calibration}
 \usage{
-calibration(x, y = NULL, breaks = 10, span = 0.75, dist = NULL,
-  na.rm = TRUE, ...)
+calibration(
+  x,
+  y = NULL,
+  breaks = 10,
+  span = 0.75,
+  dist = NULL,
+  na.rm = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{\link[=response]{observed responses} or \link{resample} result

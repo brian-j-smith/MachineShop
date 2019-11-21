@@ -8,11 +8,17 @@
 \usage{
 ModelFrame(x, ...)
 
-\method{ModelFrame}{formula}(x, data, na.rm = TRUE, weights = NULL,
-  strata = NULL, ...)
+\method{ModelFrame}{formula}(x, data, na.rm = TRUE, weights = NULL, strata = NULL, ...)
 
-\method{ModelFrame}{matrix}(x, y = NULL, na.rm = TRUE,
-  offsets = NULL, weights = NULL, strata = NULL, ...)
+\method{ModelFrame}{matrix}(
+  x,
+  y = NULL,
+  na.rm = TRUE,
+  offsets = NULL,
+  weights = NULL,
+  strata = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{model \code{\link{formula}} or \code{\link{matrix}} of predictor

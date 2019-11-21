@@ -4,13 +4,19 @@
 \alias{MLModel}
 \title{MLModel Class Constructor}
 \usage{
-MLModel(name = "MLModel", label = name, packages = character(),
-  response_types = character(), predictor_encoding = c(NA,
-  "model.matrix", "terms"), params = list(), grid = function(x, length,
-  random, ...) NULL, fit = function(formula, data, weights, ...)
-  stop("no fit function"), predict = function(object, newdata, times,
-  ...) stop("no predict function"), varimp = function(object, ...) NULL,
-  ...)
+MLModel(
+  name = "MLModel",
+  label = name,
+  packages = character(),
+  response_types = character(),
+  predictor_encoding = c(NA, "model.matrix", "terms"),
+  params = list(),
+  grid = function(x, length, random, ...) NULL,
+  fit = function(formula, data, weights, ...) stop("no fit function"),
+  predict = function(object, newdata, times, ...) stop("no predict function"),
+  varimp = function(object, ...) NULL,
+  ...
+)
 }
 \arguments{
 \item{name}{character name of the object to which the model is assigned.}

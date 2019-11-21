@@ -7,9 +7,15 @@
 \usage{
 CoxModel(ties = c("efron", "breslow", "exact"), ...)
 
-CoxStepAICModel(ties = c("efron", "breslow", "exact"), ...,
-  direction = c("both", "backward", "forward"), scope = NULL, k = 2,
-  trace = FALSE, steps = 1000)
+CoxStepAICModel(
+  ties = c("efron", "breslow", "exact"),
+  ...,
+  direction = c("both", "backward", "forward"),
+  scope = NULL,
+  k = 2,
+  trace = FALSE,
+  steps = 1000
+)
 }
 \arguments{
 \item{ties}{character string specifying the method for tie handling.}

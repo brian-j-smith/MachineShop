@@ -13,25 +13,43 @@
 \usage{
 performance(x, ...)
 
-\method{performance}{factor}(x, y,
+\method{performance}{factor}(
+  x,
+  y,
   metrics = MachineShop::settings("metrics.factor"),
-  cutoff = MachineShop::settings("cutoff"), na.rm = TRUE, ...)
+  cutoff = MachineShop::settings("cutoff"),
+  na.rm = TRUE,
+  ...
+)
 
-\method{performance}{matrix}(x, y,
-  metrics = MachineShop::settings("metrics.matrix"), na.rm = TRUE, ...)
+\method{performance}{matrix}(
+  x,
+  y,
+  metrics = MachineShop::settings("metrics.matrix"),
+  na.rm = TRUE,
+  ...
+)
 
-\method{performance}{numeric}(x, y,
-  metrics = MachineShop::settings("metrics.numeric"), na.rm = TRUE,
-  ...)
+\method{performance}{numeric}(
+  x,
+  y,
+  metrics = MachineShop::settings("metrics.numeric"),
+  na.rm = TRUE,
+  ...
+)
 
-\method{performance}{Surv}(x, y,
+\method{performance}{Surv}(
+  x,
+  y,
   metrics = MachineShop::settings("metrics.Surv"),
-  cutoff = MachineShop::settings("cutoff"), na.rm = TRUE, ...)
+  cutoff = MachineShop::settings("cutoff"),
+  na.rm = TRUE,
+  ...
+)
 
 \method{performance}{ConfusionList}(x, ...)
 
-\method{performance}{ConfusionMatrix}(x,
-  metrics = MachineShop::settings("metrics.ConfusionMatrix"), ...)
+\method{performance}{ConfusionMatrix}(x, metrics = MachineShop::settings("metrics.ConfusionMatrix"), ...)
 
 \method{performance}{Resamples}(x, ...)
 }

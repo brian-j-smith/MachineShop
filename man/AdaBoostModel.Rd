@@ -4,10 +4,20 @@
 \alias{AdaBoostModel}
 \title{Boosting with Classification Trees}
 \usage{
-AdaBoostModel(boos = TRUE, mfinal = 100, coeflearn = c("Breiman",
-  "Freund", "Zhu"), minsplit = 20, minbucket = round(minsplit/3),
-  cp = 0.01, maxcompete = 4, maxsurrogate = 5, usesurrogate = 2,
-  xval = 10, surrogatestyle = 0, maxdepth = 30)
+AdaBoostModel(
+  boos = TRUE,
+  mfinal = 100,
+  coeflearn = c("Breiman", "Freund", "Zhu"),
+  minsplit = 20,
+  minbucket = round(minsplit/3),
+  cp = 0.01,
+  maxcompete = 4,
+  maxsurrogate = 5,
+  usesurrogate = 2,
+  xval = 10,
+  surrogatestyle = 0,
+  maxdepth = 30
+)
 }
 \arguments{
 \item{boos}{if \code{TRUE}, then bootstrap samples are drawn from the
