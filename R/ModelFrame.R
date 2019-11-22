@@ -211,15 +211,20 @@ terms.list <- function(x, y = NULL, intercept = TRUE, all_numeric = FALSE,
   )
   fo[[2]] <- y
   
+  class <- if (all_numeric) {
+    x_char[name_inds] <- sapply(x[name_inds], as.character)
+    "DesignTerms"
+  } else {
+    "FormulaTerms"
+  }
+  
   var_names <- c(if (has_y) deparse(y), x_char)
   label_names <- x_char[name_inds]
   
-  if (all_numeric) {
-    class <- "DesignTerms"
+  if (class == "DesignTerms") {
     factors <- cbind(as.integer(var_names %in% label_names))
     rownames(factors) <- var_names
   } else {
-    class <- "FormulaTerms"
     factors <- matrix(0L, length(var_names), length(label_names),
                       dimnames = list(var_names, label_names))
     term_match <- match(var_names, label_names, nomatch = 0L)
