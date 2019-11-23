@@ -110,7 +110,9 @@ settings <- function(...) {
   if (!length(args)) {
     return(global_values)
   } else if (identical(args, list("reset"))) {
-    settings(.global_defaults)
+    for (name in names(.global_defaults)) {
+      MachineShop_global$settings[[name]]$value <- .global_defaults[[name]]
+    }
     return(invisible(global_values))
   }
   
