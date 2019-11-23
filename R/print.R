@@ -561,8 +561,8 @@ print.TrainBits <- function(x, n = MachineShop::settings("max.print"), ...) {
   if (length(x@grid)) {
     cat("\nGrid (selected = ", x@selected, "):\n", sep = "")
     print_items(x@grid, n = n)
-    cat("\n")
   }
+  cat("\n")
   print(x@performance, n = n)
   cat("\n")
   if (length(x@values) > 1) {

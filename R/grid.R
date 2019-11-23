@@ -80,21 +80,21 @@ ParamSet <- function(..., length = 3, random = FALSE) {
 
 
 .ParamSet.param_set <- function(x, length, random, ...) {
-  if (is.finite(length)) {
+  if (all(is.finite(length))) {
     length <- as.integer(length)
     if (any(length < 0)) stop("grid parameter 'length' must be >= 0")
   } else {
     stop("grid parameter 'length' must be numeric")
   }
-
-  if (isTRUE(random) || is.finite(random)) {
-    random <- as.integer(random[[1]])
-    if (random <= 0) stop ("number of 'random' grid points must be >= 1")
-  } else if (isFALSE(random)) {
+  
+  if (isFALSE(random)) {
     if (length(length) > 1) length <- rep(length, length.out = nrow(x))
     keep <- length > 0
     x <- x[keep, ]
     length <- length[keep]
+  } else if (is.finite(random)) {
+    random <- as.integer(random[[1]])
+    if (random <= 0) stop ("number of 'random' grid points must be >= 1")
   } else {
     stop("'random' grid value must be logical or numeric")
   }
@@ -115,7 +115,7 @@ as.grid.default <- function(x, ...) {
 
 as.grid.tbl_df <- function(x, fixed = tibble(), ...) {
   x[names(fixed)] <- fixed
-  x[!duplicated(x), ]
+  if (ncol(x)) x[!duplicated(x), ] else x
 }
 
 
@@ -130,20 +130,22 @@ as.grid.Grid <- function(x, ..., model, fixed = tibble()) {
 
 as.grid.ParamSet <- function(x, ..., model, fixed = tibble()) {
   grid <- if (nrow(x)) {
-    mf <- ModelFrame(..., na.rm = FALSE)
-    data <- switch(model@predictor_encoding,
-                   "model.matrix" = model.matrix(mf, intercept = FALSE),
-                   "terms" = {
-                     mf_terms <- attributes(terms(mf))
-                     var_list <- eval(mf_terms$variables, mf)
-                     names(var_list) <- rownames(mf_terms$factors)
-                     as.data.frame(var_list[-c(1, mf_terms$offset)])
-                    })
-    final_x <- dials::finalize(x, x = data)
+    if (any(sapply(x$object, dials::has_unknowns))) {
+      mf <- ModelFrame(..., na.rm = FALSE)
+      data <- switch(model@predictor_encoding,
+                     "model.matrix" = model.matrix(mf, intercept = FALSE),
+                     "terms" = {
+                       mf_terms <- attributes(terms(mf))
+                       var_list <- eval(mf_terms$variables, mf)
+                       names(var_list) <- rownames(mf_terms$factors)
+                       as.data.frame(var_list[-c(1, mf_terms$offset)])
+                     })
+      x <- dials::finalize(x, x = data)
+    }
     if (x@random) {
-      dials::grid_random(final_x, size = x@random)
+      dials::grid_random(x, size = x@random)
     } else {
-      dials::grid_regular(final_x, levels = x@length)
+      dials::grid_regular(x, levels = x@length)
     }
   } else {
     tibble(.rows = 1)
