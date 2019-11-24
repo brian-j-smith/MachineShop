@@ -48,7 +48,8 @@ GLMBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
     name = "GLMBoostModel",
     label = "Gradient Boosting with Linear Models",
     packages = "mboost",
-    response_types = c("binary", "numeric", "Surv"),
+    response_types = c("binary", "BinomialMatrix", "NegBinomialVector",
+                       "numeric", "PoissonVector", "Surv"),
     predictor_encoding = "terms",
     params = params,
     grid = function(x, length, ...) {
@@ -57,14 +58,9 @@ GLMBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
       )
     },
     fit = function(formula, data, weights, family = NULL, ...) {
-      y <- response(data)
       if (is.null(family)) {
-        family <- switch_class(y,
-                               BinomialVector = {
-                                 y_name <- response(formula)
-                                 data[[y_name]] <- cbind(y, y@max - y)
-                                 mboost::Binomial(type = "glm")
-                               },
+        family <- switch_class(response(data),
+                               BinomialMatrix = mboost::Binomial(type = "glm"),
                                factor = mboost::Binomial(),
                                NegBinomialVector = mboost::NBinomial(),
                                numeric = mboost::Gaussian(),
@@ -79,18 +75,14 @@ GLMBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
                matrix = mboost::glmboost(x, y, weights = weights,
                                          family = family, ...))
     },
-    predict = function(object, newdata, model, times, ...) {
+    predict = function(object, newdata, times, ...) {
       newdata <- as.data.frame(newdata)
       if (object$family@name == "Cox Partial Likelihood") {
         lp <- drop(predict(object, type = "link"))
         new_lp <- drop(predict(object, newdata = newdata, type = "link"))
         predict(object$response, lp, times, new_lp, ...)
       } else {
-        pred <- predict(object, newdata = newdata, type = "response")
-        y <- response(model)
-        if (is(y, "BinomialVector") && is.matrix(object$response)) {
-          y@max * pred
-        } else pred
+        predict(object, newdata = newdata, type = "response")
       }
     },
     varimp = function(object, ...) {

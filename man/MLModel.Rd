@@ -26,9 +26,10 @@ MLModel(
 \item{packages}{character vector of packages required to use the model.}
 
 \item{response_types}{character vector of response variable types to which
-the model can be fit.  Supported types are \code{"binary"},
-\code{"factor"}, \code{"matrix"}, \code{"numeric"}, \code{"ordered"}, and
-\code{"Surv"}.}
+the model can be fit.  Supported types are \code{"binary"}, =
+\code{"BinomialMatrix"}, \code{"DiscreteVector"}, \code{"factor"},
+\code{"matrix"}, \code{"NegBinomialVector"}, \code{"numeric"},
+\code{"ordered"}, \code{"PoissonVector"}, and \code{"Surv"}.}
 
 \item{predictor_encoding}{character string indicating whether the model is
 fit with predictor variables encoded as a \code{"\link{model.matrix}"}, a

@@ -90,6 +90,7 @@ setMetric_OrderedConfusionMatrix <- function(f, definition) {
 setMetric_numeric <- function(f, definition) {
   setMetricGeneric(f)
   setMetricMethod(f, c("numeric", "numeric"), definition)
+  setMetricMethod_BinomialMatrix_numeric(f)
   setMetricMethod_matrix_matrix(f)
   setMetricMethod_Resamples(f)
   setMetricMethod_Surv_numeric(f)
@@ -111,6 +112,15 @@ setMetricGeneric <- function(f) {
 setMetricMethod <- function(f, signature, definition =
                               function(observed, predicted, ...) numeric()) {
   setMethod(metric_method_name(f), signature, definition)
+}
+
+
+setMetricMethod_BinomialMatrix_numeric <- function(f) {
+  setMetricMethod(f, c("BinomialMatrix", "numeric"),
+    function(observed, predicted, ...) {
+      get(f)(as.numeric(observed), predicted, ...)
+    }
+  )
 }
 
 

@@ -16,6 +16,16 @@
 NULL
 
 
+c.BinomialMatrix <- function(...) {
+  args <- list(...)
+  if (all(mapply(is, args, "BinomialMatrix"))) {
+    structure(do.call(rbind, args), class = "BinomialMatrix")
+  } else {
+    NextMethod()
+  }
+}
+
+
 #' @rdname c
 #' 
 c.Calibration <- function(...) {

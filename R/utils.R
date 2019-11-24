@@ -357,6 +357,11 @@ strata.default <- function(object, ...) {
 }
 
 
+strata.BinomialMatrix <- function(object, ...) {
+  as.numeric(object)
+}
+
+
 strata.matrix <- function(object, ...) {
   object[, 1]
 }

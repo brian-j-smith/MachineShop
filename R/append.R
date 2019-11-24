@@ -11,6 +11,11 @@ setMethod(".append", c("ANY", "missing"),
 )
 
 
+setMethod(".append", c("BinomialMatrix", "BinomialMatrix"),
+  function(x, y) c(x, y)
+)
+
+
 setMethod(".append", c("data.frame", "data.frame"),
   function(x, y) {
     stopifnot(names(x) == names(y))

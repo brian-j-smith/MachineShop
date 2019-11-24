@@ -39,19 +39,15 @@ GLMModel <- function(family = NULL, quasi = FALSE, ...) {
     name = "GLMModel",
     label = "Generalized Linear Models",
     packages = c("MASS", "stats"),
-    response_types = c("binary", "numeric"),
+    response_types = c("binary", "BinomialMatrix", "NegBinomialVector",
+                       "numeric", "PoissonVector"),
     predictor_encoding = "model.matrix",
     params = params,
     fit = function(formula, data, weights, family = NULL, quasi = FALSE, ...) {
       if (is.null(family)) {
-        y <- response(data)
         quasi_prefix <- function(x) if (quasi) paste0("quasi", x) else x
-        family <- switch_class(y,
-                               BinomialVector = {
-                                 y_name <- response(formula)
-                                 data[[y_name]] <- cbind(y, y@max - y)
-                                 quasi_prefix("binomial")
-                               },
+        family <- switch_class(response(data),
+                               BinomialMatrix = quasi_prefix("binomial"),
                                factor = quasi_prefix("binomial"),
                                NegBinomialVector = "negbin",
                                numeric = "gaussian",
@@ -66,13 +62,9 @@ GLMModel <- function(family = NULL, quasi = FALSE, ...) {
                    ...)
       }
     },
-    predict = function(object, newdata, model, ...) {
+    predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
-      pred <- predict(object, newdata = newdata, type = "response")
-      y <- response(model)
-      if (is(y, "BinomialVector") && is.matrix(object$model[[1]])) {
-        y@max * pred
-      } else pred
+      predict(object, newdata = newdata, type = "response")
     },
     varimp = function(object, ...) varimp_pval(object)
   )
@@ -121,14 +113,9 @@ GLMStepAICModel <- function(family = NULL, quasi = FALSE, ...,
                    steps = 1000, ...) {
       environment(formula) <- environment()
       if (is.null(family)) {
-        y <- response(data)
         quasi_prefix <- function(x) if (quasi) paste0("quasi", x) else x
-        family <- switch_class(y,
-                               BinomialVector = {
-                                 y_name <- response(formula)
-                                 data[[y_name]] <- cbind(y, y@max - y)
-                                 quasi_prefix("binomial")
-                               },
+        family <- switch_class(response(data),
+                               BinomialMatrix = quasi_prefix("binomial"),
                                factor = quasi_prefix("binomial"),
                                NegBinomialVector = "negbin",
                                numeric = "gaussian",

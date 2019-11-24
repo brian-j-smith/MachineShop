@@ -12,6 +12,11 @@ setMethod("convert_prob", c("ANY", "numeric"),
 )
 
 
+setMethod("convert_prob", c("BinomialMatrix", "ANY"),
+  function(object, x, ...) unname(drop(x))
+)
+
+
 setMethod("convert_prob", c("factor", "array"),
   function(object, x, ...) {
     convert_prob(object, adrop(x, length(dim(x))))
@@ -84,7 +89,7 @@ setMethod("convert_response", c("DiscreteVector", "numeric"),
     x <- round(x)
     if (object@min > -Inf) x <- pmax(x, object@min)
     if (object@max < Inf) x <- pmin(x, object@max)
-    x
+    new(class(object), x, min = object@min, max = object@max)
   }
 )
 

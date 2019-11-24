@@ -2,37 +2,38 @@
 % Please edit documentation in R/response.R
 \name{DiscreteVector}
 \alias{DiscreteVector}
-\alias{BinomialVector}
+\alias{BinomialMatrix}
 \alias{NegBinomialVector}
 \alias{PoissonVector}
-\title{DiscreteVector Class Constructors}
+\title{Discrete Variable Constructors}
 \usage{
-BinomialVector(object, size)
+BinomialMatrix(count = integer(), size = integer())
 
-DiscreteVector(object, min = -Inf, max = Inf)
+DiscreteVector(x = integer(), min = -Inf, max = Inf)
 
-NegBinomialVector(object)
+NegBinomialVector(x = integer())
 
-PoissonVector(object)
+PoissonVector(x = integer())
 }
 \arguments{
-\item{object}{numeric vector.}
+\item{count, size}{numeric vectors of binomial counts and trials.}
 
-\item{size}{number of binomial trials.}
+\item{x}{numeric vector.}
 
 \item{min, max}{minimum and maximum bounds for discrete numbers.}
 }
 \value{
-\code{DiscreteVector} object class that inherits from \code{integer}
-or object that is of the same class as the constructor name and inherits
-from \code{DiscreteVector}.
+\code{BinomialMatrix} object class that inherits from \code{matrix},
+\code{DiscreteVector} that inherits from \code{numeric}, or object of the
+same class as the constructor name and that inherits from
+\code{DiscreteVector}.
 }
 \description{
-Create an integer vector of binomial counts, discrete numbers, negative
-binomial counts, or Poisson counts.
+Create an integer matrix of binomial counts or vector of discrete numbers,
+negative binomial counts, or Poisson counts.
 }
 \examples{
-BinomialVector(rbinom(25, 10, 0.5), size = 10)
+BinomialMatrix(rbinom(25, 10, 0.5), size = 10)
 PoissonVector(rpois(25, 10))
 
 }

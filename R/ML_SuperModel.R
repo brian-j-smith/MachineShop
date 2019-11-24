@@ -43,7 +43,7 @@ SuperModel <- function(..., model = GBMModel,
   new("SuperModel",
     name = "SuperModel",
     label = "Super Learner",
-    response_types = c("factor", "matrix", "numeric", "ordered", "Surv"),
+    response_types = .response_types,
     predictor_encoding = NA_character_,
     params = as.list(environment()),
     predict = function(object, newdata, times, ...) {

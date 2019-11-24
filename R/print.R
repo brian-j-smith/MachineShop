@@ -92,16 +92,21 @@ setMethod("show", "Curves",
 )
 
 
-print.DiscreteVector <- function(x, ...) {
-  print(as(x, "numeric"))
-  cat(class(x), " range: ", x@min, ", ", x@max, "\n", sep = "")
+#' @rdname print-methods
+#' 
+print.BinomialMatrix <- function(x, n = MachineShop::settings("max.print"),
+                                 ...) {
+  print_title(x)
+  print_items(as(x, "matrix"), n = n)
   invisible(x)
 }
 
 
 setMethod("show", "DiscreteVector",
   function(object) {
-    print(object)
+    print_title(object)
+    print(as(object, "numeric"))
+    cat("Range: ", object@min, ", ", object@max, "\n", sep = "")
     invisible()
   }
 )

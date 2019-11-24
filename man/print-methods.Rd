@@ -5,6 +5,7 @@
 \alias{print.Calibration}
 \alias{print.ConfusionList}
 \alias{print.Curves}
+\alias{print.BinomialMatrix}
 \alias{print.ListOf}
 \alias{print.MLModel}
 \alias{print.ModelFrame}
@@ -23,6 +24,8 @@
 \method{print}{ConfusionList}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{Curves}(x, n = MachineShop::settings("max.print"), ...)
+
+\method{print}{BinomialMatrix}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{ListOf}(x, n = MachineShop::settings("max.print"), ...)
 

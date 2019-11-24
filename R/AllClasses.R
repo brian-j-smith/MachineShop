@@ -1,3 +1,4 @@
+setOldClass("BinomialMatrix")
 setOldClass("listof")
 setOldClass("ModelFrame")
 setOldClass("recipe")
@@ -182,11 +183,6 @@ setClass("DiscreteVector",
   contains = "numeric",
   slots = c(min = "numeric",
             max = "numeric")
-)
-
-
-setClass("BinomialVector",
-  contains = "DiscreteVector"
 )
 
 

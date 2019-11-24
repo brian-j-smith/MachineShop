@@ -6,9 +6,10 @@
 #' @param label optional character descriptor for the model.
 #' @param packages character vector of packages required to use the model.
 #' @param response_types character vector of response variable types to which
-#'   the model can be fit.  Supported types are \code{"binary"},
-#'   \code{"factor"}, \code{"matrix"}, \code{"numeric"}, \code{"ordered"}, and
-#'   \code{"Surv"}.
+#'   the model can be fit.  Supported types are \code{"binary"}, =
+#'   \code{"BinomialMatrix"}, \code{"DiscreteVector"}, \code{"factor"},
+#'   \code{"matrix"}, \code{"NegBinomialVector"}, \code{"numeric"},
+#'   \code{"ordered"}, \code{"PoissonVector"}, and \code{"Surv"}.
 #' @param predictor_encoding character string indicating whether the model is
 #'   fit with predictor variables encoded as a \code{"\link{model.matrix}"}, a
 #'   data.frame containing the originally specified model \code{"terms"}, or
@@ -92,8 +93,7 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
                       stop("no predict function"),
                     varimp = function(object, ...) NULL, ...) {
   
-  stopifnot(response_types %in% c("binary", "factor", "matrix", "numeric",
-                                  "ordered", "Surv"))
+  stopifnot(response_types %in% .response_types)
   
   new("MLModel",
       name = name,

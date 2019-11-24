@@ -286,39 +286,48 @@ terms.ModelFrame <- function(x, ...) {
 terms.recipe <- function(x, original = FALSE, ...) {
   info <- summary(x, original = original)
   
+  first <- function(x) head(x, 1)
   get_vars <- function(roles = NULL, types = NULL) {
     is_match <- by(info, info$variable, function(split) {
-      all(roles %in% split$role) && all(types %in% split$type)
+      valid_types <- if (is.null(types)) TRUE else any(types %in% split$type)
+      all(roles %in% split$role) && valid_types
     })
     names(is_match)[is_match]
   }
   
-  outcome <- NULL
-  outcome_set <- get_vars("outcome")
+  binom <- c(
+    count = first(get_vars(c("binom_count", "outcome"), "numeric")),
+    size = first(get_vars(c("binom_size", "outcome"), "numeric"))
+  )
+  surv <- c(
+    time = first(get_vars(c("surv_time", "outcome"), "numeric")),
+    event = first(get_vars(c("surv_event", "outcome"), c("logical", "numeric")))
+  )
+  matrix <- setdiff(get_vars("outcome", "numeric"), c(binom, surv))
+  if (length(matrix) == 1) matrix <- character()
+  other <- setdiff(get_vars("outcome"), c(binom, surv, matrix))
   
-  surv_time <- get_vars(c("surv_time", "outcome"))
-  surv_event <- get_vars(c("surv_event", "outcome"))
-  numeric_outcomes <- get_vars("outcome", "numeric")  
-  
-  if (length(surv_time) > 1 || length(surv_event) > 1) {
-    stop("multiple instances of outcome role 'surv_time' or 'surv_event'")
-  } else if (length(surv_time)) {
-    outcome <- call("Surv", as.name(surv_time))
-    if (length(surv_event)) outcome[[3]] <- as.name(surv_event)
-    outcome_set <- setdiff(outcome_set, c(surv_time, surv_event))
-  } else if (length(surv_event)) {
-    stop("outcome role 'surv_event' specified without 'surv_time'")
-  } else if (length(numeric_outcomes) > 1) {
-    outcome <- as.call(c(.(cbind), lapply(numeric_outcomes, as.name)))
-    outcome_set <- setdiff(outcome_set, numeric_outcomes)
-  } else if (length(outcome_set) == 1) {
-    outcome <- outcome_set
-    outcome_set <- NULL
+  have_outcome <- as.logical(lengths(list(binom, surv, matrix, other)))
+  if (sum(have_outcome) > 1 || length(other) > 1) {
+    stop("specified outcome is not a single variable, binomila variable with ",
+         "roles 'binom_count' and 'binom_size', survival variables with ",
+         "roles 'surv_time' and 'surv_event', or multiple numeric variables")
   }
   
-  if (length(outcome_set)) {
-    stop("recipe outcome must be a single variable, survival variables with ",
-         "roles 'surv_time' and 'surv_event', or multiple numeric variables")
+  outcome <- if (length(other)) {
+    other
+  } else if (!is.na(surv["time"])) {
+    x <- call("Surv", as.name(surv["time"]))
+    if (!is.na(surv["event"])) x[[3]] <- as.name(surv["event"])
+    x
+  } else if (length(surv)) {
+    stop("survival outcome role 'surv_event' specified without 'surv_time'")
+  } else if (!any(is.na(binom[c("count", "size")]))) {
+    call("BinomialMatrix", as.name(binom["count"]), as.name(binom["size"]))
+  } else if (length(binom)) {
+    stop("binomial outcome must have 'binom_count' and 'binom_size' roles")
+  } else if (length(matrix)) {
+    as.call(c(.(cbind), lapply(matrix, as.name)))
   }
   
   is_predictor <- info$role == "predictor"

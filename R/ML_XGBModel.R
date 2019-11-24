@@ -66,7 +66,7 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
     name = "XGBModel",
     label = "Extreme Gradient Boosting",
     packages = "xgboost",
-    response_types = c("factor", "numeric"),
+    response_types = c("factor", "numeric", "PoissonVector"),
     predictor_encoding = "model.matrix",
     params = params(environment()),
     fit = function(formula, data, weights, params, ...) {

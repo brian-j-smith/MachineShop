@@ -59,7 +59,8 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
     name = "GLMNetModel",
     label = "Lasso and Elastic-Net",
     packages = "glmnet",
-    response_types = c("factor", "matrix", "numeric", "Surv"),
+    response_types = c("BinomialMatrix", "factor", "matrix", "numeric",
+                       "PoissonVector", "Surv"),
     predictor_encoding = "model.matrix",
     params = params(environment()),
     grid = function(x, length, ...) {
@@ -79,10 +80,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
       y <- response(data)
       if (is.null(family)) {
         family <- switch_class(y,
-                               BinomialVector = {
-                                 y <- cbind(y, y@max - y)
-                                 "binomial"
-                               },
+                               BinomialMatrix = "binomial",
                                factor = ifelse(nlevels(y) == 2,
                                                "binomial", "multinomial"),
                                matrix = "mgaussian",
@@ -106,11 +104,8 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
                           newoffset = model.offset(newdata))[, 1]
         predict(y, lp, times, new_lp, ...)
       } else {
-        pred <- predict(object, newx = newx, s = object$lambda[1],
-                        type = "response", newoffset = model.offset(newdata))
-        if (is(y, "BinomialVector") && is(object, "lognet")) {
-          y@max * pred
-        } else pred
+        predict(object, newx = newx, s = object$lambda[1], type = "response",
+                newoffset = model.offset(newdata))
       }
     },
     varimp = function(object, ...) {

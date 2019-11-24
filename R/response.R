@@ -77,58 +77,80 @@ response.recipe <- function(object, newdata = NULL, ...) {
 }
 
 
-#################### DiscreteVector Classes ####################
+.response_types <- c("binary", "BinomialMatrix", "DiscreteVector", "factor",
+                     "matrix", "NegBinomialVector", "numeric", "ordered",
+                     "PoissonVector", "Surv")
 
 
-#' DiscreteVector Class Constructors
+#################### Discrete Variable Classes ####################
+
+
+#' Discrete Variable Constructors
 #' 
-#' Create an integer vector of binomial counts, discrete numbers, negative
-#' binomial counts, or Poisson counts.
+#' Create an integer matrix of binomial counts or vector of discrete numbers,
+#' negative binomial counts, or Poisson counts.
 #' 
 #' @name DiscreteVector
 #' @rdname DiscreteVector
 #' 
-#' @param object numeric vector.
-#' @param size number of binomial trials.
+#' @param count,size numeric vectors of binomial counts and trials.
+#' @param x numeric vector.
 #' @param min,max minimum and maximum bounds for discrete numbers.
 #' 
-#' @return \code{DiscreteVector} object class that inherits from \code{integer}
-#' or object that is of the same class as the constructor name and inherits
-#' from \code{DiscreteVector}.
+#' @return \code{BinomialMatrix} object class that inherits from \code{matrix},
+#' \code{DiscreteVector} that inherits from \code{numeric}, or object of the
+#' same class as the constructor name and that inherits from
+#' \code{DiscreteVector}.
 #' 
 #' @examples
-#' BinomialVector(rbinom(25, 10, 0.5), size = 10)
+#' BinomialMatrix(rbinom(25, 10, 0.5), size = 10)
 #' PoissonVector(rpois(25, 10))
 #' 
-BinomialVector <- function(object, size) {
-  as(DiscreteVector(object, min = 0, max = size), "BinomialVector")
+BinomialMatrix <- function(count = integer(), size = integer()) {
+  stopifnot(is.finite(size))
+  stopifnot(length(size) <= 1 || length(size) == length(count))
+  count <- as.integer(count)
+  size <- as.integer(size)
+  stopifnot(count >= 0)
+  stopifnot(size >= count)
+  structure(cbind(Success = count, Failure = size - count),
+            class = "BinomialMatrix")
+}
+
+
+as.data.frame.BinomialMatrix <- function(x, ...) {
+  as.data.frame.model.matrix(x, ...)
+}
+
+
+as.double.BinomialMatrix <- function(x, ...) {
+  as.numeric(x[, "Success"] / (x[, "Success"] + x[, "Failure"]))
 }
 
 
 #' @rdname DiscreteVector
 #' 
-DiscreteVector <- function(object, min = -Inf, max = Inf) {
-  object <- as.integer(object)
-  min <- floor(min)
-  max <- floor(max)
-  stopifnot(min < max)
-  stopifnot(min <= min(object))
-  stopifnot(max >= max(object))
-  new("DiscreteVector", object, min = min, max = max)
+DiscreteVector <- function(x = integer(), min = -Inf, max = Inf) {
+  x <- as.integer(x)
+  min <- floor(min[[1]])
+  max <- floor(max[[1]])
+  stopifnot(min <= x)
+  stopifnot(max >= x)
+  new("DiscreteVector", x, min = min, max = max)
 }
 
 
 #' @rdname DiscreteVector
 #' 
-NegBinomialVector <- function(object) {
-  as(DiscreteVector(object, min = 0), "NegBinomialVector")
+NegBinomialVector <- function(x = integer()) {
+  as(DiscreteVector(x, min = 0), "NegBinomialVector")
 }
 
 
 #' @rdname DiscreteVector
 #' 
-PoissonVector <- function(object) {
-  as(DiscreteVector(object, min = 0), "PoissonVector")
+PoissonVector <- function(x = integer()) {
+  as(DiscreteVector(x, min = 0), "PoissonVector")
 }
 
 

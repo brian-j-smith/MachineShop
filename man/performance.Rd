@@ -2,6 +2,7 @@
 % Please edit documentation in R/performance.R
 \name{performance}
 \alias{performance}
+\alias{performance.BinomialMatrix}
 \alias{performance.factor}
 \alias{performance.matrix}
 \alias{performance.numeric}
@@ -12,6 +13,14 @@
 \title{Model Performance Metrics}
 \usage{
 performance(x, ...)
+
+\method{performance}{BinomialMatrix}(
+  x,
+  y,
+  metrics = MachineShop::settings("metrics.numeric"),
+  na.rm = TRUE,
+  ...
+)
 
 \method{performance}{factor}(
   x,
@@ -66,12 +75,12 @@ type-specific methods or from the method for \code{ConfusionList} to
 \item{metrics}{\link[=metrics]{metric} function, function name, or vector of
 these with which to calculate performance.}
 
+\item{na.rm}{logical indicating whether to remove observed or predicted
+responses that are \code{NA} when calculating metrics.}
+
 \item{cutoff}{numeric (0, 1) threshold above which binary factor
 probabilities are classified as events and below which survival
 probabilities are classified.}
-
-\item{na.rm}{logical indicating whether to remove observed or predicted
-responses that are \code{NA} when calculating metrics.}
 }
 \description{
 Compute measures of model performance.

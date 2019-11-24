@@ -45,6 +45,15 @@ performance <- function(x, ...) {
 
 #' @rdname performance
 #' 
+performance.BinomialMatrix <-
+  function(x, y, metrics = MachineShop::settings("metrics.numeric"),
+           na.rm = TRUE, ...) {
+  .performance(x, y, metrics, na.rm)
+}
+
+
+#' @rdname performance
+#' 
 performance.factor <- function(x, y, metrics =
                                  MachineShop::settings("metrics.factor"),
                                cutoff = MachineShop::settings("cutoff"),
