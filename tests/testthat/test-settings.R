@@ -74,6 +74,11 @@ test_that("settings changes and views", {
   expect_identical(settings("metrics.Surv"), new_value)
   expect_error(settings(metrics.Surv = "mean"))
   
+  old_values <- settings("require")
+  expect_type(settings(require = c("MachineShop", "stats")), "list")
+  expect_identical(settings("require"), c("stats", old_values))
+  expect_error(settings(require = 1))
+  
   new_value <- "median"
   expect_type(settings(stat.Curves = new_value), "list")
   expect_identical(settings("stat.Curves"), new_value)

@@ -59,6 +59,9 @@
 #'     which to calculate \link{performance} \link{metrics} for survival
 #'     responses [default: \code{c(`C-Index` = "cindex", Brier = "brier",
 #'     `ROC AUC` = "roc_auc", Accuracy = "accuracy")}].}
+#'   \item{\code{require}}{names of installed packages to load during parallel
+#'     execution of resampling algorithms [default: \code{c("MachineShop",
+#'     "survival", "recipes")}].}
 #'   \item{\code{stat.Curves}}{function or character string naming a function
 #'     to compute one \link{summary} statistic at each cutoff value of resampled
 #'     metrics in performance curves, or \code{NULL} for resample-specific
@@ -302,6 +305,22 @@ MachineShop_global <- as.environment(list(
                 "ROC AUC" = "roc_auc",
                 "Accuracy" = "accuracy"),
       check = check_metrics
+    ),
+    
+    require = list(
+      value = c("MachineShop", "survival", "recipes"),
+      check = function(x) {
+        x <- c(setdiff(x, .global_defaults$require), .global_defaults$require)
+        found <- sapply(x, function(pkg) {
+          length(find.package(pkg, quiet = TRUE))
+        })
+        if (!all(found)) {
+          subnames <- x[!found]
+          msg <- paste0(plural_suffix("given missing package", subnames),
+                        ": ", toString(subnames))
+          DomainError(x, msg)
+        } else x
+      }
     ),
     
     stat.Curves = list(

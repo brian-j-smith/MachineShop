@@ -145,7 +145,7 @@ setMethod(".resample", c("MLBootstrapControl", "ModelFrame"),
     }
     
     foreach(i = seq(index),
-            .packages = c("MachineShop", "survival")) %dopar% {
+            .packages = MachineShop::settings("require")) %dopar% {
       MachineShop::settings(presets)
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
@@ -182,7 +182,7 @@ setMethod(".resample", c("MLBootstrapControl", "ModelRecipe"),
     }
     
     foreach(i = seq(splits),
-            .packages = c("MachineShop", "recipes", "survival")) %dopar% {
+            .packages = MachineShop::settings("require")) %dopar% {
       MachineShop::settings(presets)
       set.seed(seeds[i])
       split <- splits[[i]]
@@ -220,7 +220,7 @@ setMethod(".resample", c("MLCrossValidationControl", "ModelFrame"),
     is_optimism_control <- is(object, "MLCVOptimismControl")
     
     args_list <- foreach(i = seq(index),
-                         .packages = c("MachineShop", "survival")) %dopar% {
+                         .packages = MachineShop::settings("require")) %dopar% {
       MachineShop::settings(presets)
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
@@ -267,8 +267,7 @@ setMethod(".resample", c("MLCrossValidationControl", "ModelRecipe"),
     is_optimism_control <- is(object, "MLCVOptimismControl")
     
     args_list <- foreach(i = seq(splits),
-                         .packages =
-                           c("MachineShop", "recipes", "survival")) %dopar% {
+                         .packages = MachineShop::settings("require")) %dopar% {
       MachineShop::settings(presets)
       set.seed(seeds[i])
       split <- splits[[i]]
@@ -314,7 +313,7 @@ setMethod(".resample", c("MLOOBControl", "ModelFrame"),
     indexOut <- splits$indexOut
     seeds <- sample.int(.Machine$integer.max, length(index))
     foreach(i = seq(index),
-            .packages = c("MachineShop", "survival")) %dopar% {
+            .packages = MachineShop::settings("require")) %dopar% {
       MachineShop::settings(presets)
       set.seed(seeds[i])
       train <- x[index[[i]], , drop = FALSE]
@@ -335,7 +334,7 @@ setMethod(".resample", c("MLOOBControl", "ModelRecipe"),
                          strata = strata)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
     foreach(i = seq(splits),
-            .packages = c("MachineShop", "recipes", "survival")) %dopar% {
+            .packages = MachineShop::settings("require")) %dopar% {
       MachineShop::settings(presets)
       set.seed(seeds[i])
       split <- splits[[i]]
