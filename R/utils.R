@@ -384,7 +384,7 @@ strata_var.ModelFrame <- function(object, ...) {
 
 strata_var.recipe <- function(object, ...) {
   info <- summary(object)
-  var_name <- info$variable[info$role == "case_strata"]
+  var_name <- info$variable[info$role == "case_stratum"]
   if (length(var_name) == 0) NULL else
     if (length(var_name) == 1) var_name else
       stop("multiple strata variables specified")

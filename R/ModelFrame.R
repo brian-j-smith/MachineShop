@@ -121,7 +121,7 @@ ModelFrame.recipe <- function(x, ...) {
     if (length(var_name) == 1) data[[var_name]] else
       stop("multiple case weights specified")
   
-  var_name <- info$variable[info$role == "case_strata"]
+  var_name <- info$variable[info$role == "case_stratum"]
   strata <- if (length(var_name) == 0) NULL else
     if (length(var_name) == 1) data[[var_name]] else
       stop("multiple strata variables specified")

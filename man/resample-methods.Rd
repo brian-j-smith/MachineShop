@@ -63,7 +63,7 @@ argument in its constructor.  Resampling of this class is unstratified by
 default.
 
 Variables in a \code{recipe} may be used for stratification by defining a
-"case_strata" \code{\link[recipes:roles]{role}} for them.  Resampling will
+"case_stratum" \code{\link[recipes:roles]{role}} for them.  Resampling will
 be unstratified if no variables have that role.
 }
 \examples{
