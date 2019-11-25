@@ -88,7 +88,7 @@ ParamSet <- function(..., length = 3, random = FALSE) {
   }
   
   if (isFALSE(random)) {
-    if (length(length) > 1) length <- rep(length, length.out = nrow(x))
+    if (length(length) > 1) length <- rep_len(length, nrow(x))
     keep <- length > 0
     x <- x[keep, ]
     length <- length[keep]
