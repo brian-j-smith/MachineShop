@@ -108,19 +108,19 @@ fit.MLModelFunction <- function(x, ...) {
   
   requireModelNamespaces(model@packages)
   
-  envir <- list2env(within(list(), {
-    formula <- formula(mf)
-    data <- mf
-    weights <- model.weights(mf)
-    y <- y
-    nobs <- nrow(mf)
-    nvars <- nvars(mf, model)
-  }), parent = globalenv())
-  environment(envir$formula) <- envir
+  params_env <- list2env(list(
+    formula = formula(mf),
+    data = mf,
+    weights = model.weights(mf),
+    y = y,
+    nobs = nrow(mf),
+    nvars = nvars(mf, model)
+  ), parent = new.env(parent = asNamespace("MachineShop")))
+  environment(params_env$formula) <- params_env
   
-  args <- c(mget(c("formula", "data", "weights"), envir), model@params)
+  args <- c(mget(c("formula", "data", "weights"), params_env), model@params)
   
-  do.call(model@fit, args, envir = envir) %>%
+  do.call(model@fit, args, envir = params_env) %>%
     MLModelFit(paste0(model@name, "Fit"), model, x, y)
 }
 

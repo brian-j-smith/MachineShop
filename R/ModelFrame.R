@@ -63,10 +63,7 @@ ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
   }
   
   data <- as.data.frame(data)
-  model_terms <- structure(
-    terms(x, data = data),
-    class = c("FormulaTerms", "terms", "formula")
-  )
+  model_terms <- terms(x, data = data)
   data[[deparse(response(model_terms))]] <- response(model_terms, data)
   
   ModelFrame(model_terms, data, na.rm = na.rm, casenames = rownames(data),
@@ -198,6 +195,15 @@ valid_predictor_calls <- c(
 #################### ModelFrame Terms ####################
 
 
+terms.formula <- function(x, ...) {
+  structure(
+    stats::terms.formula(x, ...),
+    .Environment = asNamespace("MachineShop"),
+    class = c("FormulaTerms", "terms", "formula")
+  )
+}
+
+
 terms.list <- function(x, y = NULL, intercept = TRUE, all_numeric = FALSE,
                        ...) {
   if (is.character(y)) y <- as.name(y)
@@ -255,7 +261,7 @@ terms.list <- function(x, y = NULL, intercept = TRUE, all_numeric = FALSE,
     order = rep(1L, length(label_names)),
     intercept = as.integer(intercept),
     response = has_y,
-    .Environment = parent.frame(),
+    .Environment = asNamespace("MachineShop"),
     class = c(class, "terms", "formula")
   )
 }
