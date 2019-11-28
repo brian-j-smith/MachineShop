@@ -41,8 +41,7 @@ setMethod("[",
 #' 
 setMethod("[", c(x = "RecipeGrid", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
-    x <- asS3(x)
-    callNextMethod()
+    asS3(x)[i, j, drop = drop]
   }
 )
 
