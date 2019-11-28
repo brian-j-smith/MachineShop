@@ -18,7 +18,7 @@
 #' @param na.rm logical indicating whether to remove observed or predicted
 #'   responses that are \code{NA} when calculating metrics.
 #' @param ... arguments passed to other methods.
-#' @param object square matrix, or object that can be converted to one, of
+#' @param data square matrix, or object that can be converted to one, of
 #'   cross-classified predicted and observed values in the rows and columns,
 #'   respectively.
 #' @param ordered logical indicating whether the confusion matrix row and
@@ -50,22 +50,21 @@ confusion <- function(x, y = NULL, cutoff = MachineShop::settings("cutoff"),
 
 #' @rdname confusion
 #' 
-ConfusionMatrix <- function(object = numeric(), ordered = FALSE) {
+ConfusionMatrix <- function(data = NA, ordered = FALSE) {
+  data <- as.matrix(data)
   
-  object <- if (length(object)) as.matrix(object) else matrix(NA_real_, 0, 0)
+  n <- nrow(data)
+  if (n != ncol(data)) stop("unequal number of rows and columns")
   
-  n <- nrow(object)
-  if (n != ncol(object)) stop("unequal number of rows and columns")
+  data_dimnames <- dimnames(data)
+  if (is.null(data_dimnames)) data_dimnames <- list(NULL, NULL)
+  names(data_dimnames) <- c("Predicted", "Observed")
   
-  object_dimnames <- dimnames(object)
-  if (is.null(object_dimnames)) object_dimnames <- list(NULL, NULL)
-  names(object_dimnames) <- c("Predicted", "Observed")
+  data_class <- "ConfusionMatrix"
+  if (n == 2) data_class <- paste0("Binary", data_class)
+  if (ordered) data_class <- paste0("Ordered", data_class)
   
-  object_class <- "ConfusionMatrix"
-  if (n == 2) object_class <- paste0("Binary", object_class)
-  if (ordered) object_class <- paste0("Ordered", object_class)
-  
-  new(object_class, structure(object, dimnames = object_dimnames))
+  new(data_class, structure(data, dimnames = data_dimnames))
 }
 
 

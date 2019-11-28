@@ -164,7 +164,7 @@ PoissonVector <- function(x = integer()) {
 #' @name SurvMatrix
 #' @rdname SurvMatrix
 #' 
-#' @param object matrix, or object that can be coerced to one, with survival
+#' @param data matrix, or object that can be coerced to one, with survival
 #'   events or probabilities at points in time in the columns and cases in the
 #'   rows.
 #' @param times numeric vector of survival times for the columns.
@@ -178,19 +178,19 @@ PoissonVector <- function(x = integer()) {
 NULL
 
 
-SurvMatrix <- function(object, times = NULL) {
-  object <- as.matrix(object)
+SurvMatrix <- function(data = NA, times = NULL) {
+  data <- as.matrix(data)
   
-  if (is.null(times)) times <- rep(NA_real_, ncol(object))
+  if (is.null(times)) times <- rep(NA_real_, ncol(data))
   
-  if (length(times) != ncol(object)) {
+  if (length(times) != ncol(data)) {
     stop("unequal number of survival times and predictions")
   }
   
-  rownames(object) <- NULL
-  colnames(object) <- if (length(times)) paste("Time", seq_along(times))
+  rownames(data) <- NULL
+  colnames(data) <- if (length(times)) paste("Time", seq_along(times))
   
-  new("SurvMatrix", object, times = times)
+  new("SurvMatrix", data, times = times)
 }
 
 
@@ -201,13 +201,13 @@ as.data.frame.SurvMatrix <- function(x, ...) {
 
 #' @rdname SurvMatrix
 #' 
-SurvEvents <- function(object = numeric(), times = NULL) {
-  as(SurvMatrix(object, times), "SurvEvents")
+SurvEvents <- function(data = NA, times = NULL) {
+  as(SurvMatrix(data, times), "SurvEvents")
 }
 
 
 #' @rdname SurvMatrix
 #' 
-SurvProbs <- function(object = numeric(), times = NULL) {
-  as(SurvMatrix(object, times), "SurvProbs")
+SurvProbs <- function(data = NA, times = NULL) {
+  as(SurvMatrix(data, times), "SurvProbs")
 }

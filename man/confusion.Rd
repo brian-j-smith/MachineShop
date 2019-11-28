@@ -13,7 +13,7 @@ confusion(
   ...
 )
 
-ConfusionMatrix(object = numeric(), ordered = FALSE)
+ConfusionMatrix(data = NA, ordered = FALSE)
 }
 \arguments{
 \item{x}{factor of \link[=response]{observed responses} or \link{resample}
@@ -34,7 +34,7 @@ responses that are \code{NA} when calculating metrics.}
 
 \item{...}{arguments passed to other methods.}
 
-\item{object}{square matrix, or object that can be converted to one, of
+\item{data}{square matrix, or object that can be converted to one, of
 cross-classified predicted and observed values in the rows and columns,
 respectively.}
 
