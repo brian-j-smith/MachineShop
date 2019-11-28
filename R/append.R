@@ -6,13 +6,13 @@ append <- function(...) {
 setGeneric(".append", function(x, y, ...) standardGeneric(".append"))
 
 
-setMethod(".append", c("ANY", "missing"),
-  function(x, y) x
+setMethod(".append", c("ANY", "ANY"),
+  function(x, y) c(x, y)
 )
 
 
-setMethod(".append", c("BinomialMatrix", "BinomialMatrix"),
-  function(x, y) c(x, y)
+setMethod(".append", c("ANY", "missing"),
+  function(x, y) x
 )
 
 
@@ -46,18 +46,8 @@ setMethod(".append", c("ordered", "ordered"),
 )
 
 
-setMethod(".append", c("Surv", "Surv"),
-  function(x, y) c(x, y)
-)
-
-
 setMethod(".append", c("SurvMatrix", "SurvMatrix"),
-  function(x, y) {
-    stopifnot(identical(x@times, y@times))
-    class <- class(x)
-    if (class != class(y)) class <- "SurvMatrix"
-    new(class, rbind(x, y), times = x@times)
-  }
+  function(x, y) c(x, y)
 )
 
 
@@ -70,9 +60,4 @@ setMethod(".append", c("tbl_df", "tbl_df"),
     }
     tbl
   }
-)
-
-
-setMethod(".append", c("vector", "vector"),
-  function(x, y) c(x, y)
 )

@@ -199,6 +199,21 @@ c.Resamples <- function(...) {
 }
 
 
+c.SurvMatrix <- function(...) {
+  args <- list(...)
+  class <- class(args[[1]])
+  if (all(mapply(is, args, class))) {
+    times <- args[[1]]@times
+    if (!all(sapply(args, function(x) identical(x@times, times)))) {
+      stop(class, " arguments have different times")
+    }
+    new(class, do.call(rbind, args), times = times)
+  } else {
+    NextMethod()
+  }
+}
+
+
 c.TrainBits <- function(...) {
   args <- list(...)
   if (all(mapply(is, args, "TrainBits"))) {

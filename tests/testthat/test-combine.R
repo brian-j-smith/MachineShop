@@ -101,5 +101,15 @@ test_that("object combinations", {
     expect_equal(z@min, min(x@min, y@min))
     expect_equal(z@max, max(x@max, y@max))
     
+    x <- matrix(1, 10, 2)
+    surv_events <- SurvEvents(x, times = 1:2)
+    surv_probs <- SurvProbs(x, times = 1:2)
+    expect_s4_class(c(surv_events, surv_events), "SurvEvents")
+    expect_s4_class(c(surv_probs, surv_probs), "SurvProbs")
+    expect_is(c(surv_events, surv_probs), "numeric")
+    expect_is(c(surv_probs, surv_events), "numeric")
+    expect_error(c(surv_events, SurvEvents(x, times = 2:3)))
+    expect_error(c(surv_probs, SurvProbs(x, times = 2:3)))
+    
   })
 })

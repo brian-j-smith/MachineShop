@@ -117,9 +117,9 @@ setMethod(".calibration_default", c("factor", "numeric"),
 setMethod(".calibration_default", c("matrix", "matrix"),
   function(observed, predicted, breaks, span, ...) {
     df <- data.frame(Response = rep(colnames(predicted),
-                                    each = nrow(predicted)))
+                                    each = nrow(predicted)),
+                     Predicted = as.numeric(predicted))
     if (is.null(breaks)) {
-      df$Predicted <- c(predicted)
       loessfit_list <- lapply(1:ncol(predicted), function(i) {
         y <- observed[, i]
         x <- predicted[, i]
@@ -132,7 +132,7 @@ setMethod(".calibration_default", c("matrix", "matrix"),
                            Upper = Mean + SE)
       df
     } else {
-      df$Predicted <- midpoints(c(predicted), breaks)
+      df$Predicted <- midpoints(df$Predicted, breaks)
       df$Observed <- c(observed)
       aggregate(. ~ Response + Predicted, df, function(x) {
         Mean <- mean(x)
@@ -155,9 +155,9 @@ setMethod(".calibration_default", c("Surv", "SurvProbs"),
   function(observed, predicted, breaks, ...) {
     times <- predicted@times
     df <- data.frame(Response = rep(colnames(predicted),
-                                    each = nrow(predicted)))
+                                    each = nrow(predicted)),
+                     Predicted = as.numeric(predicted))
     if (is.null(breaks)) {
-      df$Predicted <- c(predicted)
       Mean <- c(sapply(1:ncol(predicted), function(i) {
         x <- predicted[, i]
         harefit <- polspline::hare(observed[, "time"], observed[, "status"], x)
@@ -166,7 +166,7 @@ setMethod(".calibration_default", c("Surv", "SurvProbs"),
       df$Observed <- cbind(Mean = Mean, SE = NA, Lower = NA, Upper = NA)
       df
     } else {
-      df$Predicted <- midpoints(c(predicted), breaks)
+      df$Predicted <- midpoints(df$Predicted, breaks)
       df$Observed <- rep(observed, times = length(times))
       df$Time <- rep(times, each = nrow(predicted))
       by_results <- by(df, df[c("Predicted", "Response")], function(data) {
