@@ -251,7 +251,7 @@ sample_params <- function(x, size = NULL, replace = FALSE) {
   }
   names(x) <- var_names
   
-  max_size <- prod(sapply(x, length))
+  max_size <- prod(lengths(x))
   if (is.null(size)) size <- max_size
   if (!replace) size <- min(size, max_size)
   

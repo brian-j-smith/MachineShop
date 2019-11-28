@@ -91,7 +91,7 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
   data_select_grid <- if (interaction) {
     expand.grid(grid_list, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
   } else {
-    df <- data.frame(row.names = 1:sum(sapply(grid_list, length)))
+    df <- data.frame(row.names = 1:sum(lengths(grid_list)))
     pos <- 0
     for (name in names(grid_list)) {
       n <- length(grid_list[[name]])

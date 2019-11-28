@@ -123,7 +123,7 @@ as.grid.Grid <- function(x, ..., model, fixed = tibble()) {
   mf <- ModelFrame(..., na.rm = FALSE)
   params_list <- model@grid(mf, length = x@length, random = x@random)
   params <- lapply(params_list, unique)
-  params[sapply(params, length) == 0] <- NULL
+  params[lengths(params) == 0] <- NULL
   as.grid(expand_params(params, random = x@random), fixed = fixed)
 }
 

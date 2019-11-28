@@ -209,7 +209,7 @@ c.TrainBits <- function(...) {
       values_list <- lapply(args, slot, name = "values")
       values <- unlist(values_list)
       names(values) <- paste0(names(values), ".",
-                              rep(seq(args), sapply(values_list, length)))
+                              rep(seq(args), lengths(values_list)))
       
       performance <- do.call(c, lapply(args, slot, name = "performance"))
       dimnames(performance)[[3]] <- names(values)
