@@ -190,9 +190,6 @@ Times:
      0.7627531      0.9019802      0.7920187      0.6895029 
 Model: GBMModel 
 
-Message: Loading required namespace: gbm
-
-
 Predicted means (dist = emp)
 [1] 1551.727 4506.047 5051.206 3303.603 1799.007 2787.876
  C-Index 
@@ -545,9 +542,6 @@ Times:
      0.8174045      0.8971021      0.8225065      0.7824642 
 Model: SurvRegModel 
 
-Message: Loading required namespace: rms
-
-
 Predicted means (dist = emp)
 [1]  1504.553  7831.985 17839.505  6625.441  1141.152  5193.580
   C-Index 
@@ -723,15 +717,49 @@ Times:
  Accuracy.mean Accuracy.time1 Accuracy.time2 Accuracy.time3 
      0.7730848      0.9117363      0.7821271      0.7121988 
 
-> models <- c(BlackBoostModel(), GAMBoostModel(baselearner = "bols"),
+> models <- c(BARTModel(), BlackBoostModel(), GAMBoostModel(baselearner = "bols"),
 + GLMBoostModel(), GLMNetModel(lambda = 0.05), RangerModel(), RPartModel())
 > for (model in models) {
 +   test_predict_defaults(fo, df, model = model)
 + }
+Model: BARTModel 
+*****Calling gbart: type=2
+*****Data:
+data:n,p,np: 20041, 6, 0
+y1,yn: 1.000000, 0.000000
+x1,x[n*p]: 10.000000, 0.000000
+*****Number of Trees: 50
+*****Number of Cut Points: 100 ... 1
+*****burn,nd,thin: 250,10000,10
+*****Prior:beta,alpha,tau,nu,lambda,offset: 2,0.95,0.212132,3,1,-2.6928
+*****Dirichlet:sparse,theta,omega,a,b,rho,augment: 0,0,1,0.5,1,5,0
+*****printevery: 1000
+
+MCMC
+done 0 (out of 10250)
+done 1000 (out of 10250)
+done 2000 (out of 10250)
+done 3000 (out of 10250)
+done 4000 (out of 10250)
+done 5000 (out of 10250)
+done 6000 (out of 10250)
+done 7000 (out of 10250)
+done 8000 (out of 10250)
+done 9000 (out of 10250)
+done 10000 (out of 10250)
+time: 208s
+trcnt,tecnt: 1000,0
+*****In main of C++ for bart prediction
+tc (threadcount): 1
+number of bart draws: 1000
+number of trees in bart sum: 50
+number of x columns: 6
+from x,np,p: 6, 39770
+***using serial code
+[1]  2107.051 11956.711  9755.931  6088.642  1830.968  3718.821
+  C-Index 
+0.8026452 
 Model: BlackBoostModel 
-
-Message: Loading required namespace: mboost
-
 [1] 2203.122 6871.887 9510.263 3522.812 1090.879 3371.775
   C-Index 
 0.8026452 
@@ -744,20 +772,14 @@ Model: GLMBoostModel
   C-Index 
 0.7390489 
 Model: GLMNetModel 
-
-Message: Loading required namespace: glmnet
-
 [1]  2495.073  8929.825 10143.324  7531.495  2285.611  4990.461
   C-Index 
 0.7399869 
 Model: RangerModel 
-
-Message: Loading required namespace: ranger
-
-[1] 3.564896e+03 1.863711e+10 4.237908e+03 2.233680e+03 1.295195e+03
-[6] 1.310608e+03
+[1] 2.673483e+03 2.498634e+13 4.827820e+03 2.455101e+03 1.260642e+03
+[6] 1.715979e+03
   C-Index 
-0.8685864 
+0.8722446 
 Model: RPartModel 
 [1]  1269.163  4625.898  4639.688  6873.595 17077.929  1730.269
   C-Index 

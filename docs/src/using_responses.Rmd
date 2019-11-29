@@ -80,13 +80,12 @@ library(survival)
 fit(Surv(time, status) ~ ., data = surv_train, model = GBMModel)
 ```
 
-For recipes, survival responses should be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated as `"surv_time"` and `"surv_event"`.
+For recipes, survival responses should be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated with the `role_surv` function.
 
 ```{r using_responses_surv_recipe, results="hide"}
 ## Survival response recipe
 rec <- recipe(time + status ~ ., data = surv_train) %>%
-  add_role(time, new_role = "surv_time") %>%
-  add_role(status, new_role = "surv_event")
+  role_surv(time = time, event = status)
 
 fit(rec, model = GBMModel)
 ```

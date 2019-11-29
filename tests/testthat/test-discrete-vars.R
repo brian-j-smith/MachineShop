@@ -58,8 +58,8 @@ test_that("BinomialMatrix construction and model fitting", {
     expect_s4_class(resample(fo, df, model = GLMModel), "Resamples")
 
     rec <- recipe(ncases + n ~ ., data = within(df, n <- ncases + ncontrols)) %>%
-      add_role(ncases, new_role = "binom_count") %>%
-      add_role(n, new_role = "binom_size") %>%
+      role_binom(count = ncases, size = n) %>%
+      role_case(stratum = n) %>%
       step_rm(ncontrols)
     expect_true(test_fit(rec, model = BlackBoostModel(), type = "Binomial"))
     expect_true(test_fit(rec, model = GAMBoostModel(baselearner = "bols"),

@@ -74,7 +74,7 @@ rec <- recipe(medv ~ ., data = Boston)
 fit(rec, model = GBMModel)
 ```
 
-Case weights and stratified resampling are also supported for recipes via the designations of `"case_weight"` and `"case_stratum"` roles, respectively.  As an example, an initial step is included in the recipe below to update (alter) the role of variable `weights` to be case weights.  That is followed by a step to convert three ordinal factors to integer scores.
+Case weights and stratified resampling are also supported for recipes with the `role_case` function.  As an example, an initial step is included in the recipe below to replace the original role of variable `weights` with a designation of case weights.  That is followed by a step to convert three ordinal factors to integer scores.
 
 ```{r using_variables_recipe_weights, results="hide"}
 ## Recipe specification with case weights
@@ -84,7 +84,7 @@ df <- within(esoph, {
 })
 
 rec <- recipe(y ~ agegp + tobgp + alcgp + weights, data = df) %>%
-  update_role(weights, new_role = "case_weight") %>%
+  role_case(weight = weights, replace = TRUE) %>%
   step_ordinalscore(agegp, tobgp, alcgp)
 
 fit(rec, model = GBMModel)

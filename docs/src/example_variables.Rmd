@@ -73,7 +73,7 @@ Preprocessing [recipes](https://cran.r-project.org/package=recipes) provide a fl
 library(recipes)
 
 rec <- recipe(fo, data = ICHomes) %>%
-  add_role(sale_amount, new_role = "case_stratum") %>%
+  role_case(stratum = sale_amount) %>%
   step_center(base_size, add_size, garage1_size, garage2_size, lot_size) %>%
   step_pca(base_size, add_size, garage1_size, garage2_size, lot_size, num_comp = 2) %>%
   step_dummy(all_nominal(), -all_outcomes())

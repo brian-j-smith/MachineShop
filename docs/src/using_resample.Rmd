@@ -118,7 +118,7 @@ grid.arrange(p1, p2, p3, p4, nrow = 2)
 
 ## Stratified Resampling
 
-Stratification of cases for the construction of resampled training and test sets can be employed to help achieve balance across the sets.  Stratified resampling is automatically performed if variable specification is in terms of a traditional formula and will be done according to the response variable if a numeric vector or factor, the event variable if survival, and the first variable if a numeric matrix.  For model frames and recipes, stratification variables must be defined explicitly with the `strata` argument to the `ModelFrame` constructor or with the `"case_stratum"` role designation in a recipe step. 
+Stratification of cases for the construction of resampled training and test sets can be employed to help achieve balance across the sets.  Stratified resampling is automatically performed if variable specification is in terms of a traditional formula and will be done according to the response variable if a numeric vector or factor, the event variable if survival, and the first variable if a numeric matrix.  For model frames and recipes, stratification variables must be defined explicitly with the `strata` argument to the `ModelFrame` constructor or with the `role_case` function. 
 
 ```{r using_resample_strata, results="hide"}
 ## Model frame with case status stratification
@@ -128,9 +128,8 @@ resample(mf, model = GBMModel)
 
 ## Recipe with case status stratification
 rec <- recipe(time + status ~ ., data = surv_train) %>%
-  add_role(time, new_role = "surv_time") %>%
-  add_role(status, new_role = "surv_event") %>%
-  add_role(status, new_role = "case_stratum")
+  role_surv(time = time, event = status) %>%
+  role_case(stratum = status)
 
 resample(rec, model = GBMModel)
 ```

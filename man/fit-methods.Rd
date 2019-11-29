@@ -53,8 +53,8 @@ User-specified case weights may be specified for \code{ModelFrames} upon
 creation with the \code{\link[=ModelFrame]{weights}} argument in its
 constructor.
 
-Variables in a \code{recipe} may be used as case weights by defining a
-"case_weight" \code{\link[recipes:roles]{role}} for them.
+Variables in \code{recipe} specifications may be designated as case weights
+with the \code{\link{role_case}} function.
 }
 \examples{
 ## Survival response example

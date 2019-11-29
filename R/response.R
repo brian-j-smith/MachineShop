@@ -102,6 +102,8 @@ response.recipe <- function(object, newdata = NULL, ...) {
 #' same class as the constructor name and that inherits from
 #' \code{DiscreteVector}.
 #'
+#' @seealso \code{\link{role_binom}}
+#'
 #' @examples
 #' BinomialMatrix(rbinom(25, 10, 0.5), size = 10)
 #' PoissonVector(rpois(25, 10))

@@ -62,9 +62,9 @@ User-specified stratification variables may be specified for
 argument in its constructor.  Resampling of this class is unstratified by
 default.
 
-Variables in a \code{recipe} may be used for stratification by defining a
-"case_stratum" \code{\link[recipes:roles]{role}} for them.  Resampling will
-be unstratified if no variables have that role.
+Variables in \code{recipe} specifications may be designated as case strata
+with the \code{\link{role_case}} function.  Resampling will be unstratified
+otherwise.
 }
 \examples{
 ## Factor response example

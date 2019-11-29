@@ -37,3 +37,6 @@ BinomialMatrix(rbinom(25, 10, 0.5), size = 10)
 PoissonVector(rpois(25, 10))
 
 }
+\seealso{
+\code{\link{role_binom}}
+}

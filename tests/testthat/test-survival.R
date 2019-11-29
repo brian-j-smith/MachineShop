@@ -8,8 +8,8 @@ library(survival)
 df <- within(Melanoma, status <- status != 2)
 fo <- Surv(time, status) ~ sex + age + year + thickness + ulcer
 rec <- recipe(time + status ~ sex + age + year + thickness + ulcer, data = df) %>%
-  add_role(time, new_role = "surv_time") %>%
-  add_role(status, new_role = "surv_event")
+  role_surv(time = time, event = status) %>%
+  role_case(stratum = status)
 times <- 365 * c(2, 5, 10)
 
 output <- function(obs, pred) {
@@ -58,7 +58,7 @@ verify_output(test_path("test-survival.txt"), {
   for (model in c(CoxModel, GBMModel, CForestModel, SurvRegModel)) {
     test_predict_all(fo, df, model = model())
   }
-  models <- c(BlackBoostModel(),
+  models <- c(BARTModel(), BlackBoostModel(),
               GAMBoostModel(baselearner = "bols"), GLMBoostModel(),
               GLMNetModel(lambda = 0.05), RangerModel(), RPartModel())
   for (model in models) {

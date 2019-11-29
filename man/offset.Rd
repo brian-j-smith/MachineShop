@@ -7,13 +7,13 @@
 offset(object)
 }
 \arguments{
-\item{object}{offset term to include in a model formula.}
+\item{object}{numeric term to include in a model formula.}
 }
 \description{
-An offset is a term to be added to a linear predictor, such as in a
-generalized linear model, with known coefficient 1 rather than an estimated
+An offset is a numeric variable to be added to a linear predictor, such as in
+a generalized linear model, with known coefficient 1 rather than an estimated
 coefficient.
 }
 \seealso{
-\code{\link[stats:offset]{offset}}
+\code{\link[stats:offset]{offset}}, \code{\link{role_pred}}
 }

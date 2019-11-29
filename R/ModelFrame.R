@@ -340,7 +340,7 @@ terms.recipe <- function(x, original = FALSE, ...) {
   predictors <- lapply(info$variable[is_predictor], as.name)
   all_numeric <- all(info$type[is_predictor] == "numeric")
 
-  offsets <- get_vars("offset", "numeric")
+  offsets <- get_vars("pred_offset", "numeric")
   if (length(offsets)) {
     offsets <- paste0("offset(", offsets, ")")
     predictors <- c(predictors, lapply(offsets, str2lang))

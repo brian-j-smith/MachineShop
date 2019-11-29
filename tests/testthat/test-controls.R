@@ -15,8 +15,8 @@ rec2 <- recipe(fo2, data = df2)
 df3 <- within(Melanoma, status <- status != 2)
 fo3 <- Surv(time, status) ~ .
 rec3 <- recipe(time + status ~ ., data = df3) %>%
-  add_role(time, new_role = "surv_time") %>%
-  add_role(status, new_role = "surv_event")
+  role_surv(time = time, event = status) %>%
+  role_case(stratum = status)
 
 model <- GBMModel
 

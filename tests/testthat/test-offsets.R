@@ -13,7 +13,7 @@ rec_df <- within(esoph, {
   ncases <- PoissonVector(ncases)
 })
 rec <- recipe(ncases ~ agegp + alcgp + tobgp + offset, data = rec_df) %>%
-  update_role(offset, new_role = "offset")
+  role_pred(offset = offset, replace = TRUE)
 
 test_fit <- function(model) {
   has_offset <- switch(model@name,

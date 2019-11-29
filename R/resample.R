@@ -88,9 +88,9 @@ resample.ModelFrame <- function(x, model,
 #' @rdname resample-methods
 #'
 #' @details
-#' Variables in a \code{recipe} may be used for stratification by defining a
-#' "case_stratum" \code{\link[recipes:roles]{role}} for them.  Resampling will
-#' be unstratified if no variables have that role.
+#' Variables in \code{recipe} specifications may be designated as case strata
+#' with the \code{\link{role_case}} function.  Resampling will be unstratified
+#' otherwise.
 #'
 resample.recipe <- function(x, model,
                             control = MachineShop::settings("control"), ...) {

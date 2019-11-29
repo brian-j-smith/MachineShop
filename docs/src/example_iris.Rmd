@@ -186,7 +186,7 @@ plot(pd)
 library(recipes)
 
 rec <- recipe(fo, data = iris) %>%
-  add_role(Species, new_role = "case_stratum")
+  role_case(stratum = Species)
 
 iris_fit <- fit(rec, model = GBMModel)
 varimp(iris_fit)
