@@ -1,10 +1,10 @@
 #' Confusion Matrix
-#' 
+#'
 #' Calculate confusion matrices of predicted and observed responses.
-#' 
+#'
 #' @name confusion
 #' @rdname confusion
-#' 
+#'
 #' @param x factor of \link[=response]{observed responses} or \link{resample}
 #'   result containing observed and predicted responses.
 #' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
@@ -23,20 +23,20 @@
 #'   respectively.
 #' @param ordered logical indicating whether the confusion matrix row and
 #'   columns should be regarded as ordered.
-#' 
+#'
 #' @return
 #' The return value is a \code{ConfusionMatrix} class object that inherits from
 #' \code{table} if \code{x} and \code{y} responses are specified or a
 #' \code{ConfusionList} object that inherits from \code{list} if \code{x} is a
 #' \code{Resamples} object.
-#'  
+#'
 #' @seealso \code{\link{c}}, \code{\link{plot}}, \code{\link{summary}}
-#' 
+#'
 #' @examples
 #' res <- resample(Species ~ ., data = iris, model = GBMModel)
 #' (conf <- confusion(res))
 #' plot(conf)
-#' 
+#'
 confusion <- function(x, y = NULL, cutoff = MachineShop::settings("cutoff"),
                       na.rm = TRUE, ...) {
   if (na.rm) {
@@ -49,21 +49,21 @@ confusion <- function(x, y = NULL, cutoff = MachineShop::settings("cutoff"),
 
 
 #' @rdname confusion
-#' 
+#'
 ConfusionMatrix <- function(data = NA, ordered = FALSE) {
   data <- as.matrix(data)
-  
+
   n <- nrow(data)
   if (n != ncol(data)) stop("unequal number of rows and columns")
-  
+
   data_dimnames <- dimnames(data)
   if (is.null(data_dimnames)) data_dimnames <- list(NULL, NULL)
   names(data_dimnames) <- c("Predicted", "Observed")
-  
+
   data_class <- "ConfusionMatrix"
   if (n == 2) data_class <- paste0("Binary", data_class)
   if (ordered) data_class <- paste0("Ordered", data_class)
-  
+
   new(data_class, structure(data, dimnames = data_dimnames))
 }
 
@@ -144,7 +144,7 @@ setMethod(".confusion_matrix", c("Surv", "SurvEvents"),
   function(observed, predicted, ...) {
     times <- predicted@times
     surv <- predict(survfit(observed ~ 1, se.fit = FALSE), times)
-    
+
     conf_tbl <- table(Predicted = 0:1, Observed = 0:1)
 
     structure(

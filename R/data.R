@@ -1,8 +1,8 @@
 #' Iowa City Home Sales Dataset
-#' 
+#'
 #' Characteristics of homes sold in Iowa City, IA from 2005 to 2008 as reported
 #' by the county assessor's office.
-#' 
+#'
 #' @format A data frame with 753 observations of 17 variables:
 #' \describe{
 #'   \item{sale_amount}{sale amount in dollars.}
@@ -22,5 +22,5 @@
 #'   \item{attic}{presence of a finished attic (No/Yes).}
 #'   \item{lon,lat}{home longitude/latitude coordinates.}
 #' }
-#' 
+#'
 "ICHomes"

@@ -1,7 +1,7 @@
 #' MLModel Class Constructor
-#' 
+#'
 #' Create a model for use with the \pkg{MachineShop} package.
-#' 
+#'
 #' @param name character name of the object to which the model is assigned.
 #' @param label optional character descriptor for the model.
 #' @param packages character vector of packages required to use the model.
@@ -31,16 +31,16 @@
 #'   \code{object} returned by \code{fit}, optional arguments passed from calls
 #'   to \code{\link{varimp}}, and an ellipsis.
 #' @param ... arguments passed from other methods.
-#' 
+#'
 #' @details
 #' If supplied, the \code{grid} function should return a list whose elements are
 #' named after and contain values of parameters to include in a tuning grid to
 #' be constructed automatically by the package.
-#' 
+#'
 #' Argument \code{data} in the \code{fit} function may be converted to a data
 #' frame with the \code{as.data.frame} function as needed.  The function should
 #' return the object resulting from the model fit.
-#' 
+#'
 #' Values returned by the \code{predict} functions should be formatted according
 #' to the response variable types below.
 #' \describe{
@@ -53,15 +53,15 @@
 #'     \code{times} if supplied or a vector of predicted survival means
 #'     otherwise.}
 #' }
-#' 
+#'
 #' The \code{varimp} function should return a vector of importance values named
 #' after the predictor variables or a matrix or data frame whose rows are named
 #' after the predictors.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link{models}}, \code{\link{fit}}, \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' ## Logistic regression model
 #' LogisticModel <- MLModel(
@@ -77,11 +77,11 @@
 #'     pchisq(coef(object)^2 / diag(vcov(object)), 1)
 #'   }
 #' )
-#' 
+#'
 #' library(MASS)
 #' res <- resample(type ~ ., data = Pima.tr, model = LogisticModel)
 #' summary(res)
-#' 
+#'
 MLModel <- function(name = "MLModel", label = name, packages = character(),
                     response_types = character(),
                     predictor_encoding = c(NA, "model.matrix", "terms"),
@@ -92,9 +92,9 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
                     predict = function(object, newdata, times, ...)
                       stop("no predict function"),
                     varimp = function(object, ...) NULL, ...) {
-  
+
   stopifnot(response_types %in% .response_types)
-  
+
   new("MLModel",
       name = name,
       label = label,
@@ -118,9 +118,9 @@ MLModelFit <- function(object, Class, model, x, y) {
   } else if (is(object, "MLModelFit")) {
     stop("cannot change MLModelFit class")
   }
-  
+
   if (!is(model, "MLModel")) stop("model not of class MLModel")
-  
+
   if (isS4(object)) {
     object <- new(Class, object, mlmodel = model)
   } else if (is.list(object)) {
@@ -135,16 +135,16 @@ MLModelFit <- function(object, Class, model, x, y) {
 
 
 #' Coerce to an MLModel
-#' 
+#'
 #' Function to coerce an \code{MLModelFit} object to an \code{MLModel}.
-#' 
+#'
 #' @rdname as.MLModel
-#' 
+#'
 #' @param x model \link{fit} result.
 #' @param ... arguments passed to other methods.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 as.MLModel <- function(x, ...) {
   stopifnot(is(x, "MLModelFit"))
   getElement(x, "mlmodel")

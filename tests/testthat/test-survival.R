@@ -18,28 +18,28 @@ output <- function(obs, pred) {
 }
 
 test_predict_all <- function(..., model) {
-  
+
   cat("Model:", model@name, "\n")
   model_fit <- fit(..., model = model)
   obs <- response(model_fit)
-  
+
   for (dist in c("emp", "exp", "ray", "wei")) {
     cat("\nPredicted means (dist = ", dist, ")\n", sep = "")
     output(obs, predict(model_fit, dist = dist))
     cat("\nPredicted probabilities (dist = ", dist, ")\n", sep = "")
     output(obs, predict(model_fit, times = times, type = "prob", dist = dist))
   }
-  
+
   for (method in c("bre", "efr", "fle")) {
     cat("\nPredicted means (method = ", method, ")\n", sep = "")
     output(obs, predict(model_fit, method = method))
     cat("\nPredicted probabilities (method = ", method, ")\n", sep = "")
     output(obs, predict(model_fit, times = times, type = "prob", method = method))
   }
-  
+
   cat("\nPredicted events:", "\n")
   output(obs, predict(model_fit, times = times))
-  
+
 }
 
 test_predict_defaults <- function(..., model) {

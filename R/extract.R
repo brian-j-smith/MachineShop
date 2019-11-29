@@ -1,22 +1,22 @@
 #' Extract Elements of an Object
-#' 
+#'
 #' Operators acting on data structures to extract elements.
-#' 
+#'
 #' @name extract
 #' @rdname extract-methods
-#' 
+#'
 #' @param x object from which to extract elements.
 #' @param i,j,... indices specifying elements to extract.
 #' @param drop logical indicating that the result be returned as an object
 #'   coerced to the lowest dimension possible if \code{TRUE} or
 #'   with the original dimensions and class otherwise.
-#' 
+#'
 NULL
 
 
 #' @rdname extract-methods
 #' @aliases [.BinomialMatrix
-#' 
+#'
 "[.BinomialMatrix" <- function(x, i, j, ..., drop = FALSE) {
   y <- if (missing(j)) unclass(x)[i, , drop = drop] else NextMethod(drop = drop)
   if (identical(colnames(x), colnames(y))) {
@@ -27,7 +27,7 @@ NULL
 
 #' @rdname extract-methods
 #' @aliases [,DiscreteVector,ANY,missing,missing-method
-#' 
+#'
 setMethod("[",
   c(x = "DiscreteVector", i = "ANY", j = "missing", drop = "missing"),
   function(x, i) {
@@ -38,7 +38,7 @@ setMethod("[",
 
 #' @rdname extract-methods
 #' @aliases [,Resamples,ANY,ANY,ANY-method
-#' 
+#'
 setMethod("[", c(x = "RecipeGrid", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
     asS3(x)[i, j, drop = drop]
@@ -48,7 +48,7 @@ setMethod("[", c(x = "RecipeGrid", i = "ANY", j = "ANY", drop = "ANY"),
 
 #' @rdname extract-methods
 #' @aliases [,Resamples,ANY,ANY,ANY-method
-#' 
+#'
 setMethod("[", c(x = "Resamples", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
     y <- asS3(x)[i, j, drop = drop]
@@ -62,7 +62,7 @@ setMethod("[", c(x = "Resamples", i = "ANY", j = "ANY", drop = "ANY"),
 
 #' @rdname extract-methods
 #' @aliases [,Resamples,ANY,missing,ANY-method
-#' 
+#'
 setMethod("[", c(x = "Resamples", i = "ANY", j = "missing", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
     if (nargs() < 3) x[, i, drop = FALSE] else x[i, TRUE, drop = drop]
@@ -72,7 +72,7 @@ setMethod("[", c(x = "Resamples", i = "ANY", j = "missing", drop = "ANY"),
 
 #' @rdname extract-methods
 #' @aliases [,Resamples,missing,missing,ANY-method
-#' 
+#'
 setMethod("[", c(x = "Resamples", i = "missing", j = "missing", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
     x[, TRUE, drop = drop]
@@ -82,7 +82,7 @@ setMethod("[", c(x = "Resamples", i = "missing", j = "missing", drop = "ANY"),
 
 #' @rdname extract-methods
 #' @aliases [,SurvMatrix,ANY,ANY,ANY-method
-#' 
+#'
 setMethod("[", c(x = "SurvMatrix", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
     y <- asS3(x)[i, j, drop = drop]

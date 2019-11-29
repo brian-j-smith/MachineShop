@@ -1,8 +1,8 @@
 #' Multivariate Adaptive Regression Splines Model
-#' 
+#'
 #' Build a regression model using the techniques in Friedman's papers
 #' "Multivariate Adaptive Regression Splines" and "Fast MARS".
-#' 
+#'
 #' @param pmethod pruning method.
 #' @param trace level of execution information to display.
 #' @param degree maximum degree of interaction.
@@ -12,7 +12,7 @@
 #' @param ncross number of cross-validations if \code{nfold > 1}.
 #' @param stratify logical indicating whether to stratify cross-validation
 #'   samples by the response levels.
-#' 
+#'
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}, \code{numeric}}
@@ -21,10 +21,10 @@
 #'   }
 #' }
 #' * included only in randomly sampled grid points
-#' 
+#'
 #' Default values for the \code{NULL} arguments and further model details can be
 #' found in the source link below.
-#' 
+#'
 #' In calls to \code{\link{varimp}} for \code{EarthModel}, argument
 #' \code{metric} may be specified as \code{"gcv"} (default) for the generalized
 #' cross-validation decrease over all subsets that include each predictor, as
@@ -33,23 +33,23 @@
 #' predictor.  Variable importance is automatically scaled to range from 0 to
 #' 100.  To obtain unscaled importance values, set \code{scale = FALSE}.  See
 #' example below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[earth]{earth}}, \code{\link{fit}},
 #' \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' model_fit <- fit(Species ~ ., data = iris, model = EarthModel)
 #' varimp(model_fit, metric = "nsubsets", scale = FALSE)
-#' 
+#'
 EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
                                    "seqrep", "cv"),
                        trace = 0, degree = 1, nprune = NULL,
                        nfold = 0, ncross = 1, stratify = TRUE) {
-  
+
   pmethod <- match.arg(pmethod)
-  
+
   MLModel(
     name = "EarthModel",
     label = "Multivariate Adaptive Regression Splines",
@@ -70,7 +70,7 @@ EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
       attach_objects(list(
         contr.earth.response = earth::contr.earth.response
       ), name = "earth_exports")
-      
+
       glm <- list(family = switch_class(response(data),
                                         factor = "binomial",
                                         numeric = "gaussian"))
@@ -87,7 +87,7 @@ EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
       earth::evimp(object)[, match.arg(metric), drop = FALSE]
     }
   )
-  
+
 }
 
 MLModelFunction(EarthModel) <- NULL

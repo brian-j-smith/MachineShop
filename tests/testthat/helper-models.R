@@ -14,7 +14,7 @@ test_model <- function(formula, data, model, times = numeric()) {
 
   modelfit <- fit(formula, data, model)
   print(modelfit)
-  
+
   vi <- varimp(modelfit)
   print(vi)
   print(plot(vi))
@@ -27,28 +27,28 @@ test_model <- function(formula, data, model, times = numeric()) {
   pred_times <- head(predict(modelfit, data, times = times))
   print(pred_times)
   pred_times_prob <- head(predict(modelfit, data, times = times, type = "prob"))
-  print(pred_times_prob) 
-  
+  print(pred_times_prob)
+
   perf_boot <- resample(formula, data, model, BootOptimismControl)
   print(perf_boot)
   perf_cv <- resample(formula, data, model, CVControl)
   print(perf_cv)
   perf_oob <- resample(formula, data, model, OOBControl)
   print(perf_oob)
-  
+
   print(summary(perf_cv))
   print(plot(perf_cv))
-  
+
   perf_boot_times <- resample(formula, data, model, BootOptimismControl(times = times))
   print(perf_boot_times)
   perf_cv_times <- resample(formula, data, model, CVControl(times = times))
   print(perf_cv_times)
   perf_oob_times <- resample(formula, data, model, OOBControl(times = times))
   print(perf_oob_times)
-  
+
   print(summary(perf_cv_times))
   print(plot(perf_cv_times))
-  
+
 }
 
 

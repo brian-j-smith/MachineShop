@@ -1,5 +1,5 @@
 #' Conditional Random Forest Model
-#' 
+#'
 #' An implementation of the random forest and bagging ensemble algorithms
 #' utilizing conditional inference trees as base learners.
 #'
@@ -16,7 +16,7 @@
 #' @param ntree number of trees to grow in a forest.
 #' @param mtry number of input variables randomly sampled as candidates at each
 #'   node for random forest like algorithms.
-#' 
+#'
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
@@ -24,15 +24,15 @@
 #'     \code{mtry}
 #'   }
 #' }
-#' 
+#'
 #' Supplied arguments are passed to \code{\link[party]{cforest_control}}.
 #' Further model details can be found in the source link below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[party]{cforest}}, \code{\link{fit}},
 #' \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' fit(sale_amount ~ ., data = ICHomes, model = CForestModel)
 #'
@@ -41,11 +41,11 @@ CForestModel <- function(teststat = c("quad", "max"),
                                       "Bonferroni", "MonteCarlo"),
                          mincriterion = 0, ntree = 500, mtry = 5,
                          replace = TRUE, fraction = 0.632) {
-  
+
   teststat <- match.arg(teststat)
   testtype <- match.arg(testtype)
   args <- params(environment())
-  
+
   MLModel(
     name = "CForestModel",
     label = "Conditional Random Forests",
@@ -78,7 +78,7 @@ CForestModel <- function(teststat = c("quad", "max"),
       party::varimp(object, ...)
     }
   )
-  
+
 }
 
 MLModelFunction(CForestModel) <- NULL

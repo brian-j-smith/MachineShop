@@ -7,10 +7,10 @@ test_that("model fitting", {
     expect_output(test_model_binary(model))
     expect_output(test_model_factor(model))
     expect_output(test_model_numeric(model))
-    
+
     model <- SuperModel(RandomForestModel, POLRModel)
     expect_output(test_model_ordered(model))
-    
+
     model <- SuperModel(GBMModel, GLMNetModel(lambda = 0.01))
     expect_output(test_model_Surv(model))
   })

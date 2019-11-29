@@ -4,15 +4,15 @@ context("Model Comparisons")
 test_Resamples <- function() {
   fo <- factor(Species) ~ .
   control <- CVControl()
-  
+
   gbmperf1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
   gbmperf2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
   gbmperf3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
-  
+
   perf <- c(GBM1 = gbmperf1, GBM2 = gbmperf2, GBM3 = gbmperf3)
   summary(perf)
   plot(perf)
-  
+
   perfdiff <- diff(perf)
   summary(perfdiff)
   plot(perfdiff)
@@ -35,7 +35,7 @@ test_TunedModel <- function() {
   gbmtune <- as.MLModel(gbmfit)
   summary(gbmtune)
   plot(gbmtune, type = "line")
-  
+
   gbmtunediff <- diff(gbmtune)
   summary(gbmtunediff)
   t.test(gbmtunediff)

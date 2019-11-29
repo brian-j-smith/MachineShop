@@ -12,24 +12,24 @@
 #'   contained in the interval \eqn{(y_{min}, y_{max})}, based on a normal
 #'   distribution.
 #' @param q quantile of the prior on the error variance at which the data-based
-#'   estimate is placed. 
+#'   estimate is placed.
 #' @param nu regression degrees of freedom for the inverse \eqn{X^2} prior.
 #' @param mh_prob_steps vector of prior probabilities for proposing changes to
 #'   the tree structures: (GROW, PRUNE, CHANGE).
 #' @param verbose logical indicating whether to print progress information about
 #'   the algorithm.
 #' @param ... additional arguments to \code{\link[bartMachine]{bartMachine}}.
-#' 
-#' @details 
+#'
+#' @details
 #' \describe{
 #'   \item{Response Types:}{\code{binary}, \code{numeric}}
 #'   \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters:}{
 #'     \code{alpha}, \code{beta}, \code{k}, \code{nu}
 #'   }
 #' }
-#' 
+#'
 #' Further model details can be found in the source link below.
-#' 
+#'
 #' In calls to \code{\link{varimp}} for \code{BARTMachineModel}, argument
 #' \code{metric} may be spedified as \code{"splits"} (default) for the
 #' proportion of time each predictor is chosen for a splitting rule or as
@@ -39,12 +39,12 @@
 #' Variable importance is automatically scaled to range from 0 to 100.  To
 #' obtain unscaled importance values, set \code{scale = FALSE}.  See example
 #' below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[bartMachine]{bartMachine}}, \code{\link{fit}},
 #' \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' \donttest{
 #' model_fit <- fit(sale_amount ~ ., data = ICHomes, model = BARTMachineModel)
@@ -89,7 +89,7 @@ BARTMachineModel <- function(num_trees = 50, num_burn = 250, num_iter = 1000,
                                               plot = FALSE)$avg_var_props
     }
   )
-  
+
 }
 
 MLModelFunction(BARTMachineModel) <- NULL

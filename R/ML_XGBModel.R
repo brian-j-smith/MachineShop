@@ -1,10 +1,10 @@
 #' Extreme Gradient Boosting Models
-#' 
+#'
 #' Fits models within an efficient implementation of the gradient boosting
 #' framework from Chen & Guestrin.
-#' 
+#'
 #' @rdname XGBModel
-#' 
+#'
 #' @param params list of model parameters as described in the XBoost
 #'   \href{https://xgboost.readthedocs.io/en/latest/parameter.html}{documentation}.
 #' @param nrounds maximum number of boosting iterations.
@@ -20,7 +20,7 @@
 #' @param eta,gamma,max_depth,min_child_weight,max_delta_step,subsample,colsample_bytree,colsample_bylevel,lambda,alpha,tree_method,sketch_eps,scale_pos_weight,update,refresh_leaf,process_type,grow_policy,max_leaves,max_bin,sample_type,normalize_type,rate_drop,one_drop,skip_drop,updater,feature_selector,top_k
 #'   see \code{params} reference.
 #' @param ... arguments passed to \code{XGBModel}.
-#' 
+#'
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}, \code{numeric}}
@@ -37,10 +37,10 @@
 #'   }
 #' }
 #' * included only in randomly sampled grid points
-#' 
+#'
 #' Default values for the \code{NULL} arguments and further model details can be
 #' found in the source link below.
-#' 
+#'
 #' In calls to \code{\link{varimp}} for \code{XGBTreeModel}, argument
 #' \code{metric} may be spedified as \code{"Gain"} (default) for the fractional
 #' contribution of each predictor to the total gain of its splits, as
@@ -49,19 +49,19 @@
 #' the trees.  Variable importance is automatically scaled to range from 0 to
 #' 100.  To obtain unscaled importance values, set \code{scale = FALSE}.  See
 #' example below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[xgboost:xgb.train]{xgboost}}, \code{\link{fit}},
 #' \code{\link{resample}}
 #'
 #' @examples
 #' model_fit <- fit(Species ~ ., data = iris, model = XGBTreeModel)
 #' varimp(model_fit, metric = "Frequency", scale = FALSE)
-#' 
+#'
 XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
                      print_every_n = 1) {
-  
+
   MLModel(
     name = "XGBModel",
     label = "Extreme Gradient Boosting",
@@ -115,14 +115,14 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
       }
     }
   )
-  
+
 }
 
 MLModelFunction(XGBModel) <- NULL
 
 
 #' @rdname XGBModel
-#' 
+#'
 XGBDARTModel <- function(objective = NULL, base_score = 0.5,
                          eta = 0.3, gamma = 0, max_depth = 6,
                          min_child_weight = 1, max_delta_step = 0,
@@ -142,7 +142,7 @@ MLModelFunction(XGBDARTModel) <- NULL
 
 
 #' @rdname XGBModel
-#' 
+#'
 XGBLinearModel <- function(objective = NULL, base_score = 0.5,
                            lambda = 0, alpha = 0, updater = "shotgun",
                            feature_selector = "cyclic", top_k = 0, ...) {
@@ -154,7 +154,7 @@ MLModelFunction(XGBLinearModel) <- NULL
 
 
 #' @rdname XGBModel
-#' 
+#'
 XGBTreeModel <- function(objective = NULL, base_score = 0.5,
                          eta = 0.3, gamma = 0, max_depth = 6,
                          min_child_weight = 1, max_delta_step = 0,
@@ -178,7 +178,7 @@ MLModelFunction(XGBTreeModel) <- NULL
   model <- do.call(XGBModel, args, quote = TRUE)
   model@name <- name
   model@label <- label
-  
+
   params <- switch(booster,
                    "dart" = list(
                      nrounds = NULL,
@@ -205,7 +205,7 @@ MLModelFunction(XGBTreeModel) <- NULL
                      subsample = NULL,
                      colsample_bytree = NULL
                    ))
-  
+
   if (length(params)) {
     model@grid <- function(x, length, random, ...) {
       params <- params %>%
@@ -219,7 +219,7 @@ MLModelFunction(XGBTreeModel) <- NULL
         set_param("skip_drop", c(0.05, 0.95)) %>%
         set_param("lambda", c(10^-seq_inner(0, 5, length - 1), 0)) %>%
         set_param("alpha", c(10^-seq_inner(0, 5, length - 1), 0))
-      
+
       if (random) {
         params <- params %>%
           set_param("eta", seq(0.001, 0.6, length = length)) %>%
@@ -230,10 +230,10 @@ MLModelFunction(XGBTreeModel) <- NULL
           set_param("rate_drop", seq(0.01, 0.50, length = length)) %>%
           set_param("skip_drop", seq(0.05, 0.95, length = length))
       }
-      
+
       params
     }
   }
-  
+
   model
 }

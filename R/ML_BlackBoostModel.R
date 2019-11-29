@@ -1,8 +1,8 @@
 #' Gradient Boosting with Regression Trees
-#' 
+#'
 #' Gradient boosting for optimizing arbitrary loss functions where regression
 #' trees are utilized as base-learners.
-#' 
+#'
 #' @param family optional \code{\link[mboost]{Family}} object.  Set
 #'   automatically according to the class type of the response variable.
 #' @param mstop number of initial boosting iterations.
@@ -25,7 +25,7 @@
 #' @param saveinfo logical indicating whether to store information about
 #'   variable selection in \code{info} slot of each \code{partynode}.
 #' @param ... additional arguments to \code{\link[partykit]{ctree_control}}.
-#' 
+#'
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{binary}, \code{numeric}, \code{Surv}}
@@ -33,19 +33,19 @@
 #'     \code{mstop}, \code{maxdepth}
 #'   }
 #' }
-#' 
+#'
 #' Default values for the \code{NULL} arguments and further model details can be
 #' found in the source links below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[mboost]{blackboost}}, \code{\link[mboost]{Family}},
 #' \code{\link[partykit]{ctree_control}}, \code{\link{fit}},
 #' \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' library(MASS)
-#' 
+#'
 #' fit(type ~ ., data = Pima.tr, model = BlackBoostModel)
 #'
 BlackBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
@@ -56,19 +56,19 @@ BlackBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
                                          "Bonferroni", "MonteCarlo"),
                             mincriterion = 0, minsplit = 10, minbucket = 4,
                             maxdepth = 2, saveinfo = FALSE, ...) {
-  
+
   teststat <- match.arg(teststat)
   testtype <- match.arg(testtype)
-  
+
   args <- params(environment())
   is_main <- names(args) %in% "family"
   is_control <- names(args) %in% c("mstop", "nu", "risk", "stopintern", "trace")
-  
+
   params <- args[is_main]
   params$control <- as.call(c(.(mboost::boost_control), args[is_control]))
   params$tree_controls <- as.call(c(.(partykit::ctree_control),
                                     args[!(is_main | is_control)]))
-  
+
   MLModel(
     name = "BlackBoostModel",
     label = "Gradient Boosting with Regression Trees",
@@ -111,7 +111,7 @@ BlackBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
       structure(mboost::varimp(object), class = "numeric")
     }
   )
-  
+
 }
 
 MLModelFunction(BlackBoostModel) <- NULL

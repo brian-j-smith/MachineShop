@@ -2,7 +2,7 @@ models <- c("CoxModel", "CoxStepAICModel")
 
 for (model in models) {
   context(model)
-  
+
   test_that("model fitting", {
     skip_if_not(TEST_MODEL_FITTING)
     with_parallel({

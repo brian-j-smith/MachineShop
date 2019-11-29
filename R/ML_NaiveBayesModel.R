@@ -2,26 +2,26 @@
 #'
 #' Computes the conditional a-posterior probabilities of a categorical class
 #' variable given independent predictor variables using Bayes rule.
-#' 
+#'
 #' @param laplace positive numeric controlling Laplace smoothing.
-#' 
+#'
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}}
 #' }
-#' 
+#'
 #' Further model details can be found in the source link below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[e1071]{naiveBayes}}, \code{\link{fit}},
 #' \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' fit(Species ~ ., data = iris, model = NaiveBayesModel)
 #'
 NaiveBayesModel <- function(laplace = 0) {
-  
+
   MLModel(
     name = "NaiveBayesModel",
     label = "Naive Bayes Classifier",
@@ -41,7 +41,7 @@ NaiveBayesModel <- function(laplace = 0) {
       predict(object, newdata = newdata, type = "raw")
     }
   )
-  
+
 }
 
 MLModelFunction(NaiveBayesModel) <- NULL

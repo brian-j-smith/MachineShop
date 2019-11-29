@@ -1,19 +1,19 @@
 #' Tuning Grid Control
-#' 
+#'
 #' Defines control parameters for a tuning grid.
-#' 
+#'
 #' @param length number of values to be generated for each model parameter in
 #'   the tuning grid.
 #' @param random number of unique grid points to sample at random, \code{Inf}
 #'   for all random points, or \code{FALSE} for all fixed points.
-#' 
+#'
 #' @return \code{Grid} class object.
-#' 
+#'
 #' @seealso \code{\link{TunedModel}}
-#' 
+#'
 #' @examples
 #' TunedModel(GBMModel, grid = Grid(10, random = 5))
-#' 
+#'
 Grid <- function(length = 3, random = FALSE) {
   if (is.finite(length)) {
     length <- as.integer(length[[1]])
@@ -21,47 +21,47 @@ Grid <- function(length = 3, random = FALSE) {
   } else {
     stop("grid parameter 'length' must be numeric")
   }
-  
+
   if (isTRUE(random) || is.numeric(random)) {
     random <- floor(random[[1]])
     if (random <= 0) stop ("number of 'random' grid points must be >= 1")
   } else if (!isFALSE(random)) {
     stop("'random' grid value must be logical or numeric")
   }
-  
+
   new("Grid", length = length, random = random)
 }
 
 
 #' Tuning Parameter Set
-#' 
+#'
 #' Defines a tuning grid from a parameter set.
-#' 
+#'
 #' @rdname ParamSet
-#' 
+#'
 #' @param ... \code{\link[dials]{param_set}} object, named \code{param} objects
 #'   as defined in the \pkg{dials} package, or a list of these.
 #' @param length single number or vector of numbers of parameter values to use
 #'   in constructing a regular grid if \code{random = FALSE}; ignored otherwise.
 #' @param random number of unique grid points to sample at random or
 #'   \code{FALSE} for all points from a regular grid defined by \code{length}.
-#' 
+#'
 #' @return \code{ParamSet} class object that inherits from \code{param_set} and
 #' \code{Grid}.
-#' 
+#'
 #' @seealso \code{\link{TunedModel}}
-#' 
+#'
 #' @examples
 #' ## GBMModel tuning parameters
 #' library(dials)
-#' 
+#'
 #' grid <- ParamSet(
 #'   n.trees = trees(),
 #'   interaction.depth = tree_depth(),
 #'   random = 5
 #' )
 #' TunedModel(GBMModel, grid = grid)
-#' 
+#'
 ParamSet <- function(..., length = 3, random = FALSE) {
   x <- list(...)
   if (is_one_element(x, "list") && is.null(names(x))) x <- x[[1]]
@@ -86,7 +86,7 @@ ParamSet <- function(..., length = 3, random = FALSE) {
   } else {
     stop("grid parameter 'length' must be numeric")
   }
-  
+
   if (isFALSE(random)) {
     if (length(length) > 1) length <- rep_len(length, nrow(x))
     keep <- length > 0
@@ -98,7 +98,7 @@ ParamSet <- function(..., length = 3, random = FALSE) {
   } else {
     stop("'random' grid value must be logical or numeric")
   }
-  
+
   new("ParamSet", x, length = length, random = random)
 }
 

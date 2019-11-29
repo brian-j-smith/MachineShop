@@ -1,9 +1,9 @@
 #' Flexible and Penalized Discriminant Analysis Models
 #'
 #' Performs flexible discriminant analysis.
-#' 
+#'
 #' @rdname FDAModel
-#' 
+#'
 #' @param theta optional matrix of class scores, typically with number of
 #'   columns less than one minus the number of classes.
 #' @param dimension dimension of the discriminant subspace, less than the number
@@ -20,7 +20,7 @@
 #'   functions.
 #' @param ... additional arguments to \code{method} for \code{FDAModel} and to
 #'   \code{FDAModel} for \code{PDAModel}.
-#' 
+#'
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}}
@@ -32,28 +32,28 @@
 #'   }
 #' }
 #' * included only in randomly sampled grid points
-#' 
+#'
 #' The \code{\link{predict}} function for this model additionally accepts the
 #' following argument.
 #' \describe{
 #'   \item{\code{prior}}{prior class membership probabilities for prediction
 #'     data if different from the training set.}
 #' }
-#' 
+#'
 #' Default values for the \code{NULL} arguments and further model details can be
 #' found in the source links below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[mda]{fda}}, \code{\link[mda]{predict.fda}},
 #' \code{\link{fit}}, \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' fit(Species ~ ., data = iris, model = FDAModel)
 #'
 FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
                      method = .(mda::polyreg), ...) {
-  
+
   MLModel(
     name = "FDAModel",
     label = "Flexible Discriminant Analysis",
@@ -78,21 +78,21 @@ FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
       predict(object, newdata = newdata, type = "posterior", prior = prior)
     }
   )
-  
+
 }
 
 MLModelFunction(FDAModel) <- NULL
 
 
 #' @rdname FDAModel
-#' 
+#'
 #' @param lambda shrinkage penalty coefficient.
 #' @param df alternative specification of \code{lambda} in terms of equivalent
 #'   degrees of freedom.
-#' 
+#'
 #' @examples
 #' fit(Species ~ ., data = iris, model = PDAModel)
-#' 
+#'
 PDAModel <- function(lambda = 1, df = NULL, ...) {
   args <- c(as.list(environment()), list(...))
   args$method <- .(mda::gen.ridge)

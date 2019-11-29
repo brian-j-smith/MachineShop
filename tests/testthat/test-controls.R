@@ -30,7 +30,7 @@ controls <- c("BootControl",
 
 
 for (control in controls) {
-  
+
   test_that("formula resampling", {
     skip_if_not(TEST_ALL)
     context(paste0(control, ": Formula"))
@@ -40,7 +40,7 @@ for (control in controls) {
       expect_s4_class(resample(fo3, df3, model, control = control), "Resamples")
     })
   })
-  
+
   test_that("recipe resampling", {
     skip_if_not(TEST_ALL)
     context(paste0(control, ": Recipe"))
@@ -50,5 +50,5 @@ for (control in controls) {
       expect_s4_class(resample(rec3, model, control = control), "Resamples")
     })
   })
-  
+
 }

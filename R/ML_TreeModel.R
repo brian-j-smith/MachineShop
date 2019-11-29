@@ -1,34 +1,34 @@
 #' Classification and Regression Tree Models
-#' 
+#'
 #' A tree is grown by binary recursive partitioning using the response in the
 #' specified formula and choosing splits from the terms of the right-hand-side.
-#' 
+#'
 #' @param mincut minimum number of observations to include in either child node.
 #' @param minsize smallest allowed node size: a weighted quantity.
 #' @param mindev within-node deviance must be at least this times that of the
 #'   root node for the node to be split.
 #' @param split splitting criterion to use.
-#' 
+#'
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}, \code{numeric}}
 #' }
-#' 
+#'
 #' Further model details can be found in the source link below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[tree]{tree}}, \code{\link{fit}},
 #' \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' fit(Species ~ ., data = iris, model = TreeModel)
 #'
 TreeModel <- function(mincut = 5, minsize = 10, mindev = 0.01,
                       split = c("deviance", "gini")) {
-  
+
   split <- match.arg(split)
-  
+
   MLModel(
     name = "TreeModel",
     label = "Regression and Classification Trees",
@@ -45,7 +45,7 @@ TreeModel <- function(mincut = 5, minsize = 10, mindev = 0.01,
       predict(object, newdata = newdata)
     }
   )
-  
+
 }
 
 MLModelFunction(TreeModel) <- NULL

@@ -2,7 +2,7 @@
 #'
 #' Flexible nonparametric modeling of covariates for continuous, binary,
 #' categorical and time-to-event outcomes.
-#' 
+#'
 #' @param K if provided, then coarsen the times of survival responses per the
 #'   quantiles \eqn{1/K, 2/K, ..., K/K} to reduce computational burdern.
 #' @param sparse logical indicating whether to perform variable selection based
@@ -40,19 +40,19 @@
 #' @param keepevery interval at which to keep posterior draws.
 #' @param printevery interval at which to print MCMC progress.
 #'
-#' @details 
+#' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
 #' }
-#' 
+#'
 #' Default values for the \code{NULL} arguments and further model details can be
 #' found in the source links below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[BART]{gbart}}, \code{\link[BART]{mbart}},
 #' \code{\link[BART]{surv.bart}}, \code{\link{fit}}, \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' \donttest{
 #' fit(sale_amount ~ ., data = ICHomes, model = BARTModel)
@@ -66,7 +66,7 @@ BARTModel <- function(K = NULL, sparse = FALSE, theta = 0, omega = 1,
                       tau.num = NULL, offset = NULL,
                       ntree = NULL, numcut = 100, ndpost = 1000, nskip = NULL,
                       keepevery = NULL, printevery = 1000) {
-  
+
   MLModel(
     name = "BARTModel",
     label = "Bayesian Additive Regression Trees",
@@ -120,7 +120,7 @@ BARTModel <- function(K = NULL, sparse = FALSE, theta = 0, omega = 1,
       }
     }
   )
-  
+
 }
 
 MLModelFunction(BARTModel) <- NULL

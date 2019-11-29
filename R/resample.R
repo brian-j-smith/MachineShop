@@ -1,11 +1,11 @@
 #' Resample Estimation of Model Performance
-#' 
+#'
 #' Estimation of the predictive performance of a model estimated and evaluated
 #' on training and test samples generated from an observed data set.
-#' 
+#'
 #' @name resample
 #' @rdname resample-methods
-#' 
+#'
 #' @param x defines a relationship between model predictor and response
 #'   variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
 #'   predictors, \code{\link{ModelFrame}}, \code{\link{SelectedModelFrame}},
@@ -20,41 +20,41 @@
 #' @param control \link[=controls]{control} function, function name, or call
 #'   defining the resampling method to be employed.
 #' @param ... arguments passed to other methods.
-#' 
+#'
 #' @return \code{Resamples} class object.
-#' 
+#'
 #' @seealso \code{\link{c}}, \code{\link{metrics}}, \code{\link{performance}},
 #' \code{\link{plot}}, \code{\link{summary}}
-#' 
+#'
 #' @examples
 #' ## Factor response example
-#' 
+#'
 #' fo <- Species ~ .
 #' control <- CVControl()
-#' 
+#'
 #' gbm_res1 <- resample(fo, iris, GBMModel(n.trees = 25), control)
 #' gbm_res2 <- resample(fo, iris, GBMModel(n.trees = 50), control)
 #' gbm_res3 <- resample(fo, iris, GBMModel(n.trees = 100), control)
-#' 
+#'
 #' summary(gbm_res1)
 #' plot(gbm_res1)
-#' 
+#'
 #' res <- c(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 #' summary(res)
 #' plot(res)
-#' 
+#'
 resample <- function(x, ...) {
   UseMethod("resample")
 }
 
 
 #' @rdname resample-methods
-#' 
+#'
 #' @details
 #' Stratified resampling is performed for the \code{formula} method according to
 #' values of the response variable; i.e. categorical levels for \code{factor},
 #' continuous for \code{numeric}, and event status \code{Surv}.
-#' 
+#'
 resample.formula <- function(x, data, model,
                              control = MachineShop::settings("control"), ...) {
   resample(ModelFrame(x, data, na.rm = FALSE,
@@ -63,7 +63,7 @@ resample.formula <- function(x, data, model,
 
 
 #' @rdname resample-methods
-#' 
+#'
 resample.matrix <- function(x, y, model,
                             control = MachineShop::settings("control"), ...) {
   resample(ModelFrame(x, y, na.rm = FALSE, strata = strata(y)), model, control)
@@ -71,13 +71,13 @@ resample.matrix <- function(x, y, model,
 
 
 #' @rdname resample-methods
-#' 
+#'
 #' @details
 #' User-specified stratification variables may be specified for
 #' \code{ModelFrames} upon creation with the \code{\link[=ModelFrame]{strata}}
 #' argument in its constructor.  Resampling of this class is unstratified by
 #' default.
-#' 
+#'
 resample.ModelFrame <- function(x, model,
                                 control = MachineShop::settings("control"),
                                 ...) {
@@ -86,12 +86,12 @@ resample.ModelFrame <- function(x, model,
 
 
 #' @rdname resample-methods
-#' 
+#'
 #' @details
 #' Variables in a \code{recipe} may be used for stratification by defining a
 #' "case_stratum" \code{\link[recipes:roles]{role}} for them.  Resampling will
 #' be unstratified if no variables have that role.
-#' 
+#'
 resample.recipe <- function(x, model,
                             control = MachineShop::settings("control"), ...) {
   .resample(getMLObject(control, "MLControl"), ModelRecipe(x), model)
@@ -99,14 +99,14 @@ resample.recipe <- function(x, model,
 
 
 #' @rdname resample-methods
-#' 
+#'
 resample.MLModel <- function(x, ...) {
   resample(..., model = x)
 }
 
 
 #' @rdname resample-methods
-#' 
+#'
 resample.MLModelFunction <- function(x, ...) {
   resample(..., model = x)
 }
@@ -138,12 +138,12 @@ setMethod(".resample", c("MLBootstrapControl", "ModelFrame"),
                          strata = strata) %>% rsample2caret
     index <- splits$index
     seeds <- sample.int(.Machine$integer.max, length(index))
-    
+
     is_optimism_control <- is(object, "MLBootOptimismControl")
     if (is_optimism_control) {
       train_pred <- resample_args(x, x, model, object)[[1]]$Predicted
     }
-    
+
     foreach(i = seq(index),
             .packages = MachineShop::settings("require")) %dopar% {
       MachineShop::settings(presets)
@@ -175,12 +175,12 @@ setMethod(".resample", c("MLBootstrapControl", "ModelRecipe"),
                          times = object@samples,
                          strata = strata)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
-    
+
     is_optimism_control <- is(object, "MLBootOptimismControl")
     if (is_optimism_control) {
       train_pred <- resample_args(x, x, model, object)[[1]]$Predicted
     }
-    
+
     foreach(i = seq(splits),
             .packages = MachineShop::settings("require")) %dopar% {
       MachineShop::settings(presets)
@@ -216,9 +216,9 @@ setMethod(".resample", c("MLCrossValidationControl", "ModelFrame"),
                        strata = strata) %>% rsample2caret
     index <- splits$index
     seeds <- sample.int(.Machine$integer.max, length(index))
-    
+
     is_optimism_control <- is(object, "MLCVOptimismControl")
-    
+
     args_list <- foreach(i = seq(index),
                          .packages = MachineShop::settings("require")) %dopar% {
       MachineShop::settings(presets)
@@ -235,7 +235,7 @@ setMethod(".resample", c("MLCrossValidationControl", "ModelFrame"),
       }
     }
     res <- Resamples.list(args_list)
-    
+
     if (is_optimism_control) {
       pred_list <- lapply(args_list, getElement, name = "CV.Predicted")
       split_factor <- rep(seq_len(object@folds), times = object@repeats)
@@ -247,7 +247,7 @@ setMethod(".resample", c("MLCrossValidationControl", "ModelFrame"),
       df$Train.Predicted <- do.call(append, rep(list(pred), object@repeats))
       res[names(df)] <- df
     }
-    
+
     res
   }
 )
@@ -263,9 +263,9 @@ setMethod(".resample", c("MLCrossValidationControl", "ModelRecipe"),
                        repeats = object@repeats,
                        strata = strata)$splits
     seeds <- sample.int(.Machine$integer.max, length(splits))
-    
+
     is_optimism_control <- is(object, "MLCVOptimismControl")
-    
+
     args_list <- foreach(i = seq(splits),
                          .packages = MachineShop::settings("require")) %dopar% {
       MachineShop::settings(presets)
@@ -283,7 +283,7 @@ setMethod(".resample", c("MLCrossValidationControl", "ModelRecipe"),
       }
     }
     res <- Resamples.list(args_list)
-    
+
     if (is_optimism_control) {
       pred_list <- lapply(args_list, getElement, name = "CV.Predicted")
       split_factor <- rep(seq_len(object@folds), times = object@repeats)
@@ -295,7 +295,7 @@ setMethod(".resample", c("MLCrossValidationControl", "ModelRecipe"),
       df$Train.Predicted <- do.call(append, rep(list(pred), object@repeats))
       res[names(df)] <- df
     }
-    
+
     res
   }
 )
@@ -384,10 +384,10 @@ setMethod(".resample", c("MLTrainControl", "ANY"),
 
 resample_args <- function(train, test, model, control, strata = character()) {
   model <- getMLObject(model, "MLModel")
-  
+
   trainfit <- fit(train, model)
   if (is(trainfit, "StackedModel")) control@times <- trainfit$times
-  
+
   f <- function(test) {
     if (is(train, "ModelRecipe")) {
       test <- recipe(as.MLModel(trainfit)@x, as.data.frame(test))
@@ -402,7 +402,7 @@ resample_args <- function(train, test, model, control, strata = character()) {
                             dist = control@dist)
     df
   }
-  
+
   list(if (class(test)[1] == "list") lapply(test, f) else f(test),
        control = control, strata = strata)
 }

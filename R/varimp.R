@@ -5,7 +5,7 @@ VarImp <- function(object, ...) {
 
 VarImp.default <- function(object, scale = TRUE, ...) {
   stopifnot(nrow(object) == 0 || is.character(rownames(object)))
-  
+
   idx <- order(rowSums(object), decreasing = TRUE)
   idx <- idx * (rownames(object)[idx] != "(Intercept)")
   object <- object[idx, , drop = FALSE]
@@ -17,7 +17,7 @@ VarImp.default <- function(object, scale = TRUE, ...) {
     object_shift = 0
     object_scale = 1
   }
-  
+
   new("VarImp", object, shift = object_shift, scale = object_scale)
 }
 
@@ -33,23 +33,23 @@ VarImp.numeric <- function(object, ...) {
 
 
 #' Variable Importance
-#' 
+#'
 #' Calculate measures of the relative importance of predictors in a model.
-#' 
+#'
 #' @param object model \link{fit} result.
 #' @param scale logical indicating whether importance measures should be scaled
 #'   to range from 0 to 100.
 #' @param ... arguments passed to model-specific variable importance functions.
-#' 
+#'
 #' @return \code{VarImp} class object.
-#' 
+#'
 #' @seealso \code{\link{plot}}
 #'
 #' @examples
 #' ## Survival response example
 #' library(survival)
 #' library(MASS)
-#' 
+#'
 #' gbm_fit <- fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
 #'                data = Melanoma, model = GBMModel)
 #' (vi <- varimp(gbm_fit))

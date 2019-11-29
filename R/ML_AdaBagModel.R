@@ -1,8 +1,8 @@
 #' Bagging with Classification Trees
-#' 
+#'
 #' Fits the Bagging algorithm proposed by Breiman in 1996 using classification
 #' trees as single classifiers.
-#'  
+#'
 #' @param mfinal number of trees to use.
 #' @param minsplit minimum number of observations that must exist in a node in
 #'   order for a split to be attempted.
@@ -15,7 +15,7 @@
 #' @param surrogatestyle controls the selection of a best surrogate.
 #' @param maxdepth maximum depth of any node of the final tree, with the root
 #'   node counted as depth 0.
-#' 
+#'
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}}
@@ -23,27 +23,27 @@
 #'     \code{mfinal}, \code{maxdepth}
 #'   }
 #' }
-#' 
+#'
 #' Further model details can be found in the source link below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[adabag]{bagging}}, \code{\link{fit}},
 #' \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' fit(Species ~ ., data = iris, model = AdaBagModel(mfinal = 5))
 #'
 AdaBagModel <- function(mfinal = 100, minsplit = 20,
-                        minbucket = round(minsplit/3), cp = 0.01, 
+                        minbucket = round(minsplit/3), cp = 0.01,
                         maxcompete = 4, maxsurrogate = 5, usesurrogate = 2,
                         xval = 10, surrogatestyle = 0, maxdepth = 30) {
-  
+
   args <- params(environment())
   is_main <- names(args) %in% "mfinal"
   params <- args[is_main]
   params$control <- as.call(c(.(list), args[!is_main]))
-  
+
   MLModel(
     name = "AdaBagModel",
     label = "Bagging with Classification Trees",
@@ -69,7 +69,7 @@ AdaBagModel <- function(mfinal = 100, minsplit = 20,
       object$importance
     }
   )
-  
+
 }
 
 MLModelFunction(AdaBagModel) <- NULL

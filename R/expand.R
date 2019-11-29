@@ -1,25 +1,25 @@
 #' Model Expansion Over Tuning Parameters
 #'
 #' Expand a model over all combinations of a grid of tuning parameters.
-#' 
+#'
 #' @param x \link[=models]{model} function, function name, or call.
 #' @param ... named vectors or factors or a list of these containing the
 #'   parameter values over which to expand \code{x}.
 #' @param random number of points to be randomly sampled from the parameter grid
 #'   or \code{FALSE} if all points are to be returned.
-#' 
+#'
 #' @return \code{list} of expanded models.
-#' 
+#'
 #' @seealso \code{\link{SelectedModel}}
-#' 
+#'
 #' @examples
 #' library(MASS)
-#' 
+#'
 #' models <- expand_model(GBMModel, n.trees = c(50, 100),
 #'                                  interaction.depth = 1:2)
-#' 
+#'
 #' fit(medv ~ ., data = Boston, model = SelectedModel(models))
-#' 
+#'
 expand_model <- function(x, ..., random = FALSE) {
   .expand_model(x, random, ...)
 }
@@ -50,30 +50,30 @@ expand_model <- function(x, ..., random = FALSE) {
 }
 
 
-#' Model Parameters Expansion 
+#' Model Parameters Expansion
 #'
 #' Create a grid of parameter values from all combinations of supplied inputs.
-#' 
+#'
 #' @param ... named vectors or factors or a list of these containing the
 #'   parameter values over which to create the grid.
 #' @param random number of points to be randomly sampled from the parameter grid
 #'   or \code{FALSE} if all points are to be returned.
-#' 
+#'
 #' @return A data frame containing one row for each combination of the supplied
 #' inputs.
-#' 
+#'
 #' @seealso \code{\link{TunedModel}}
-#' 
+#'
 #' @examples
 #' library(MASS)
-#' 
+#'
 #' grid <- expand_params(
 #'   n.trees = c(50, 100),
 #'   interaction.depth = 1:2
 #' )
-#' 
+#'
 #' fit(medv ~ ., data = Boston, model = TunedModel(GBMModel, grid = grid))
-#' 
+#'
 expand_params <- function(..., random = FALSE) {
   if (random) {
     x <- list(...)
@@ -90,21 +90,21 @@ expand_params <- function(..., random = FALSE) {
 #'
 #' Create a grid of parameter values from all combinations of lists supplied for
 #' steps of a preprocessing recipe.
-#' 
+#'
 #' @param ... one or more lists containing parameter values over which to create
 #'   the grid.  For each list an argument name should be given as the \code{id}
 #'   of the \link[recipes]{recipe} step to which it corresponds.
 #' @param random number of points to be randomly sampled from the parameter grid
 #'   or \code{FALSE} if all points are to be returned.
-#' 
+#'
 #' @return \code{RecipeGrid} class object that inherits from \code{data.frame}.
-#' 
+#'
 #' @seealso \code{\link{TunedRecipe}}
-#' 
+#'
 #' @examples
 #' library(recipes)
 #' library(MASS)
-#' 
+#'
 #' rec <- recipe(medv ~ ., data = Boston) %>%
 #'   step_corr(all_numeric(), -all_outcomes(), id = "corr") %>%
 #'   step_pca(all_numeric(), -all_outcomes(), id = "pca")
@@ -114,18 +114,18 @@ expand_params <- function(..., random = FALSE) {
 #'               method = c("pearson", "spearman")),
 #'   pca = list(num_comp = 1:3)
 #' )
-#' 
+#'
 expand_steps <- function(..., random = FALSE) {
-  
+
   steps <- list(...)
   step_names <- names(steps)
   if (is_one_element(steps, "list") && is.null(step_names)) {
     steps <- steps[[1]]
     step_names <- names(steps)
   }
-  
+
   if (!all(sapply(steps, is.list))) stop("step arguments must be lists")
-  
+
   get_names <- function(x) {
     res <- NULL
     if (is.list(x)) {
@@ -143,10 +143,10 @@ expand_steps <- function(..., random = FALSE) {
   } else if (any(duplicated(step_names))) {
     stop("step names must be unique")
   }
-  
+
   grid <- expand_params(unlist(steps, recursive = FALSE), random = random)
   recipe_grid <- tibble(.rows = nrow(grid))
-  
+
   offset <- 0
   for (name in step_names) {
     indices <- offset + seq_len(length(steps[[name]]))
@@ -155,7 +155,7 @@ expand_steps <- function(..., random = FALSE) {
     recipe_grid[[name]] <- x
     offset <- offset + length(indices)
   }
-  
+
   RecipeGrid(recipe_grid)
-  
+
 }

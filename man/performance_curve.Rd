@@ -33,7 +33,7 @@ containing observed and predicted responses.}
 \item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
 
 \item{metrics}{list of two performance \link{metrics} for the analysis
-[default: ROC metrics].  Precision recall curves can be obtained with 
+[default: ROC metrics].  Precision recall curves can be obtained with
 \code{c(precision, recall)}.}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted

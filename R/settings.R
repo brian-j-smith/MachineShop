@@ -1,20 +1,20 @@
-#' MachineShop Settings 
-#' 
+#' MachineShop Settings
+#'
 #' Allow the user to view or change global settings which affect default
 #' behaviors of functions in the \pkg{MachineShop} package.
-#' 
+#'
 #' @param ... character names of settings to view, \code{name = value} pairs
 #' giving the values of settings to change, a vector of these, \code{"reset"}
 #' to restore all package defaults, or no arguments to view all settings.
 #' Partial matching of setting names is supported.
-#' 
+#'
 #' @return The setting value if only one is specified to view.  Otherwise, a
 #' list of the values of specified settings as they existed prior to any
 #' requested changes.  Such a list can be passed as an argument to
 #' \code{settings} to restore their values.
-#' 
+#'
 #' @section Settings:
-#' 
+#'
 #' \describe{
 #'   \item{\code{\link[=controls]{control}}}{function, function name, or call
 #'     defining a default resampling method [default: \code{"CVControl"}].}
@@ -82,34 +82,34 @@
 #'     SD = "stats::sd", Min = "base::min", Max = "base::max")}].
 #'   }
 #' }
-#' 
+#'
 #' @examples
 #' ## View all current settings
 #' settings()
-#' 
+#'
 #' ## Change settings
 #' presets <- settings(control = "BootControl", grid = 10)
-#' 
+#'
 #' ## View one setting
 #' settings("control")
-#' 
+#'
 #' ## View multiple settings
 #' settings("control", "grid")
-#' 
+#'
 #' ## Restore the previous settings
 #' settings(presets)
-#' 
+#'
 settings <- function(...) {
-  
+
   args <- list(...)
   if (length(args) == 1 && is.null(names(args)) && is.vector(args[[1]])) {
     args <- as.list(args[[1]])
   }
-  
+
   global_settings <- MachineShop_global$settings
   global_values <- lapply(global_settings, getElement, name = "value")
   global_checks <- lapply(global_settings, getElement, name = "check")
-  
+
   if (!length(args)) {
     return(global_values)
   } else if (identical(args, list("reset"))) {
@@ -118,22 +118,22 @@ settings <- function(...) {
     }
     return(invisible(global_values))
   }
-  
+
   args_names <- names(args)
   if (is.null(args_names)) args_names <- character(length(args))
   args_names_nzchar <- nzchar(args_names)
-  
+
   is_get_args <- !args_names_nzchar & sapply(args, is.character)
   args_names[is_get_args] <- unlist(args[is_get_args])
-  
+
   settings_pmatch <- pmatch(args_names, names(global_settings))
   valid_settings <- !is.na(settings_pmatch)
   for (name in args_names[!valid_settings]) {
     warning("'", name, "' is not a MachineShop setting")
   }
-  
+
   presets <- global_values[settings_pmatch[valid_settings]]
-  
+
   which_set_args <- which(args_names_nzchar & valid_settings)
   for (index in which_set_args) {
     global_name <- names(global_settings)[settings_pmatch[index]]
@@ -200,9 +200,9 @@ check_stats <- function(x) {
 
 
 MachineShop_global <- as.environment(list(
-  
+
   settings = list(
-    
+
     control = list(
       value = "CVControl",
       check = function(x) {
@@ -213,7 +213,7 @@ MachineShop_global <- as.environment(list(
         } else x
       }
     ),
-    
+
     cutoff = list(
       value = 0.5,
       check = function(x) {
@@ -222,17 +222,17 @@ MachineShop_global <- as.environment(list(
         } else x
       }
     ),
-    
+
     dist.Surv = list(
       value = "weibull",
       check = check_match(c("weibull", "exponential", "empirical"))
     ),
-    
+
     dist.SurvProbs = list(
       value = "empirical",
       check = check_match(c("empirical", "weibull", "exponential"))
     ),
-    
+
     grid = list(
       value = 3,
       check = function(x) {
@@ -249,7 +249,7 @@ MachineShop_global <- as.environment(list(
         }
       }
     ),
-    
+
     max.print = list(
       value = 10,
       check = function(x) {
@@ -259,12 +259,12 @@ MachineShop_global <- as.environment(list(
         } else result
       }
     ),
-    
+
     method.EmpiricalSurv = list(
       value = "efron",
       check = check_match(c("efron", "breslow", "fleming-harrington"))
     ),
-    
+
     metrics.ConfusionMatrix = list(
       value = c("Accuracy" = "accuracy",
                 "Kappa" = "kappa2",
@@ -273,7 +273,7 @@ MachineShop_global <- as.environment(list(
                 "Specificity" = "specificity"),
       check = check_metrics
     ),
-    
+
     metrics.factor = list(
       value = c("Brier" = "brier",
                 "Accuracy" = "accuracy",
@@ -284,21 +284,21 @@ MachineShop_global <- as.environment(list(
                 "Specificity" = "specificity"),
       check = check_metrics
     ),
-    
+
     metrics.matrix = list(
       value = c("RMSE" = "rmse",
                 "R2" = "r2",
                 "MAE" = "mae"),
       check = check_metrics
     ),
-    
+
     metrics.numeric = list(
       value = c("RMSE" = "rmse",
                 "R2" = "r2",
                 "MAE" = "mae"),
       check = check_metrics
     ),
-    
+
     metrics.Surv = list(
       value = c("C-Index" = "cindex",
                 "Brier" = "brier",
@@ -306,7 +306,7 @@ MachineShop_global <- as.environment(list(
                 "Accuracy" = "accuracy"),
       check = check_metrics
     ),
-    
+
     require = list(
       value = c("MachineShop", "survival", "recipes"),
       check = function(x) {
@@ -322,7 +322,7 @@ MachineShop_global <- as.environment(list(
         } else x
       }
     ),
-    
+
     stat.Curves = list(
       value = "base::mean",
       check = function(x) {
@@ -332,23 +332,23 @@ MachineShop_global <- as.environment(list(
         } else x
       }
     ),
-    
+
     stat.Resamples = list(
       value = "base::mean",
       check = check_stat
     ),
-    
+
     stat.Train = list(
       value = "base::mean",
       check = check_stat
     ),
-    
+
     stats.PartialDependence = list(
       value = c("Mean" = "base::mean"),
       check = check_stats
-      
+
     ),
-    
+
     stats.Resamples = list(
       value = c("Mean" = "base::mean",
                 "Median" = "stats::median",
@@ -357,9 +357,9 @@ MachineShop_global <- as.environment(list(
                 "Max" = "base::max"),
       check = check_stats
     )
-    
+
   )
-  
+
 ))
 
 

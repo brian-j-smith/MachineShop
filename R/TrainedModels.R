@@ -1,7 +1,7 @@
 #' Selected Model
-#' 
+#'
 #' Model selection from a candidate set.
-#' 
+#'
 #' @param ... \link[=models]{model} functions, function names, calls, or vectors
 #'   of these to serve as the candidate set from which to select, such as that
 #'   returned by \code{\link{expand_model}}.
@@ -14,38 +14,38 @@
 #' @param stat function or character string naming a function to compute a
 #'   summary statistic on resampled metric values for model selection.
 #' @param cutoff argument passed to the \code{metrics} functions.
-#' 
+#'
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
 #'     \code{Surv}}
 #' }
-#' 
+#'
 #' @return \code{SelectedModel} class object that inherits from \code{MLModel}.
-#' 
+#'
 #' @seealso \code{\link{fit}}, \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' model_fit <- fit(sale_amount ~ ., data = ICHomes,
 #'                  model = SelectedModel(GBMModel, GLMNetModel, SVMRadialModel))
 #' (selected_model <- as.MLModel(model_fit))
 #' summary(selected_model)
-#' 
+#'
 SelectedModel <- function(..., control = MachineShop::settings("control"),
                           metrics = NULL,
                           stat = MachineShop::settings("stat.Train"),
                           cutoff = MachineShop::settings("cutoff")) {
-  
+
   models <- as.list(unlist(list(...)))
   model_names <- character()
   for (i in seq(models)) {
     models[[i]] <- getMLObject(models[[i]], class = "MLModel")
     name <- names(models)[i]
-    model_names[i] <- 
+    model_names[i] <-
       if (!is.null(name) && nzchar(name)) name else models[[i]]@name
   }
   names(models) <- make.unique(model_names)
-  
+
   new("SelectedModel",
       name = "SelectedModel",
       label = "Selected Model",
@@ -55,7 +55,7 @@ SelectedModel <- function(..., control = MachineShop::settings("control"),
                     control = getMLObject(control, "MLControl"),
                     metrics = metrics, stat = stat, cutoff = cutoff)
   )
-  
+
 }
 
 MLModelFunction(SelectedModel) <- NULL
@@ -67,9 +67,9 @@ MLModelFunction(SelectedModel) <- NULL
 
 
 #' Tuned Model
-#' 
+#'
 #' Model tuning over a grid of parameter values.
-#' 
+#'
 #' @param model \link[=models]{model} function, function name, or call defining
 #'   the model to be tuned.
 #' @param grid \link[=data.frame]{data frame} containing parameter values at
@@ -88,17 +88,17 @@ MLModelFunction(SelectedModel) <- NULL
 #' @param stat function or character string naming a function to compute a
 #'   summary statistic on resampled metric values for model tuning.
 #' @param cutoff argument passed to the \code{metrics} functions.
-#' 
+#'
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
 #'     \code{Surv}}
 #' }
-#' 
+#'
 #' @return \code{TunedModel} class object that inherits from \code{MLModel}.
-#' 
+#'
 #' @seealso \code{\link{fit}}, \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' # Automatically generated grid
 #' model_fit <- fit(sale_amount ~ ., data = ICHomes,
@@ -107,31 +107,31 @@ MLModelFunction(SelectedModel) <- NULL
 #' (tuned_model <- as.MLModel(model_fit))
 #' summary(tuned_model)
 #' plot(tuned_model, type = "l")
-#' 
+#'
 #' \donttest{# Randomly sampled grid points
 #' fit(sale_amount ~ ., data = ICHomes,
 #'     model = TunedModel(GBMModel, grid = Grid(length = 1000, random = 10)))
-#' 
+#'
 #' # User-specified grid
 #' fit(sale_amount ~ ., data = ICHomes,
 #'     model = TunedModel(GBMModel,
 #'                        grid = expand_params(n.trees = c(25, 50, 100),
 #'                                             interaction.depth = 1:3,
 #'                                             n.minobsinnode = c(5, 10))))}
-#' 
+#'
 TunedModel <- function(model, grid = MachineShop::settings("grid"),
                        fixed = NULL, control = MachineShop::settings("control"),
                        metrics = NULL,
                        stat = MachineShop::settings("stat.Train"),
                        cutoff = MachineShop::settings("cutoff")) {
-  
+
   if (missing(model)) {
     model <- NULL
   } else {
     model <- if (is(model, "MLModel")) fget(model@name) else fget(model)
     stopifnot(is(model, "MLModelFunction"))
   }
-  
+
   grid <- if (is(grid, "numeric")) {
     Grid(grid)
   } else if (identical(grid, "Grid") || identical(grid, Grid)) {
@@ -145,10 +145,10 @@ TunedModel <- function(model, grid = MachineShop::settings("grid"),
   } else {
     stop("'grid' must be a grid length, Grid or ParamSet object, or data frame")
   }
-  
+
   fixed <- as_tibble(fixed)
   if (nrow(fixed) > 1) stop("only single values allowed for fixed parameters")
-  
+
   new("TunedModel",
       name = "TunedModel",
       label = "Grid Tuned Model",
@@ -158,7 +158,7 @@ TunedModel <- function(model, grid = MachineShop::settings("grid"),
                     control = getMLObject(control, "MLControl"),
                     metrics = metrics, stat = stat, cutoff = cutoff)
   )
-  
+
 }
 
 MLModelFunction(TunedModel) <- NULL

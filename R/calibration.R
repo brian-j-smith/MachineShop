@@ -1,10 +1,10 @@
 #' Model Calibration
-#' 
+#'
 #' Calculate calibration estimates from observed and predicted responses.
-#' 
+#'
 #' @name calibration
 #' @rdname calibration
-#' 
+#'
 #' @param x \link[=response]{observed responses} or \link{resample} result
 #'   containing observed and predicted responses.
 #' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
@@ -23,21 +23,21 @@
 #' @param na.rm logical indicating whether to remove observed or predicted
 #'   responses that are \code{NA} when calculating metrics.
 #' @param ... arguments passed to other methods.
-#' 
+#'
 #' @return \code{Calibration} class object that inherits from \code{data.frame}.
-#'  
+#'
 #' @seealso \code{\link{c}}, \code{\link{plot}}
-#' 
+#'
 #' @examples
 #' library(survival)
 #' library(MASS)
-#' 
+#'
 #' res <- resample(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
 #'                 data = Melanoma, model = GBMModel,
 #'                 control = CVControl(times = 365 * c(2, 5, 10)))
 #' cal <- calibration(res)
 #' plot(cal)
-#' 
+#'
 calibration <- function(x, y = NULL, breaks = 10, span = 0.75, dist = NULL,
                         na.rm = TRUE, ...) {
   if (na.rm) {
@@ -195,19 +195,19 @@ setMethod(".calibration_default", c("Surv", "numeric"),
       match.arg(dist, c("empirical", names(survreg.distributions)))
     }
     nparams <- if (dist %in% c("exponential", "rayleigh")) 1 else 2
-    
+
     f_survfit <- function(observed, weights = NULL) {
       km <- survfit(observed ~ 1, weights = weights, se.fit = FALSE)
       est <- survival:::survmean(km, rmean = max_time)
       list(Mean = est$matrix[["*rmean"]], SE = est$matrix[["*se(rmean)"]])
     }
-    
+
     f_survreg <- function(observed, dist, weights = NULL) {
       regfit <- survreg(observed ~ 1, weights = weights, dist = dist)
       est <- predict(regfit, data.frame(row.names = 1), se.fit = TRUE)
       list(Mean = est$fit[[1]], SE = est$se.fit[[1]])
     }
-    
+
     if (is.null(breaks)) {
       df <- data.frame(
         Response = "Mean",
@@ -264,7 +264,7 @@ midpoints <- function(x, breaks) {
     num_breaks <- max(as.integer(breaks), 1) + 1
     seq(break_range[1], break_range[2], length = num_breaks)
   } else {
-    sort(breaks) 
+    sort(breaks)
   }
   mids <- breaks[-length(breaks)] + diff(breaks) / 2
   mids[.bincode(x, breaks, include.lowest = TRUE)]

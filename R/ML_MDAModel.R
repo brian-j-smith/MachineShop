@@ -1,7 +1,7 @@
 #' Mixture Discriminant Analysis Model
 #'
 #' Performs mixture discriminant analysis.
-#' 
+#'
 #' @param subclasses numeric value or vector of subclasses per class.
 #' @param sub.df effective degrees of freedom of the centroids per class if
 #'   subclass centroid shrinkage is performed.
@@ -21,7 +21,7 @@
 #'   functions.
 #' @param trace logical indicating whether iteration information is printed.
 #' @param ... additional arguments to \code{mda.start} and \code{method}.
-#' 
+#'
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}}
@@ -29,29 +29,29 @@
 #'     \code{subclasses}
 #'   }
 #' }
-#' 
+#'
 #' The \code{\link{predict}} function for this model additionally accepts the
 #' following argument.
 #' \describe{
 #'   \item{\code{prior}}{prior class membership probabilities for prediction data
 #'     if different from the training set.}
 #' }
-#' 
+#'
 #' Default values for the \code{NULL} arguments and further model details can be
 #' found in the source links below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[mda]{mda}}, \code{\link[mda]{predict.mda}},
 #' \code{\link{fit}}, \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' fit(Species ~ ., data = iris, model = MDAModel)
 #'
 MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
                      dimension = sum(subclasses) - 1, eps = .Machine$double.eps,
                      iter = 5, method = .(mda::polyreg), trace = FALSE, ...) {
-  
+
   MLModel(
     name = "MDAModel",
     label = "Mixture Discriminant Analysis",
@@ -73,7 +73,7 @@ MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
       predict(object, newdata = newdata, type = "posterior", prior = prior)
     }
   )
-  
+
 }
 
 MLModelFunction(MDAModel) <- NULL

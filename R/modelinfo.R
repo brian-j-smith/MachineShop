@@ -1,12 +1,12 @@
 #' Display Model Information
-#' 
+#'
 #' Display information about models supplied by the \pkg{MachineShop} package.
-#' 
+#'
 #' @param ... \link[=models]{model} functions, function names, or calls;
 #' \link[=response]{observed responses} for which to display information.  If
 #' none are specified, information is returned on all available models by
 #' default.
-#' 
+#'
 #' @return List of named model elements each containing the following
 #' components:
 #' \describe{
@@ -24,23 +24,23 @@
 #'   \item{varimp}{logical indicating whether variable importance is defined for
 #'     the model.}
 #' }
-#' 
+#'
 #' @examples
 #' ## All models
 #' modelinfo()
-#' 
+#'
 #' ## Models by response types
 #' names(modelinfo(factor(0)))
 #' names(modelinfo(factor(0), numeric(0)))
-#' 
+#'
 #' ## Model-specific information
 #' modelinfo(GBMModel)
-#' 
+#'
 modelinfo <- function(...) {
   args <- list(...)
   args <- if (length(args)) unname(args) else as.list(.model_names)
   info <- do.call(.modelinfo, args)
-  
+
   is_type <- if (length(info)) !mapply(is, info, "list") else NULL
   if (any(is_type)) {
     info_models <- if (all(is_type)) modelinfo() else info[!is_type]
@@ -48,7 +48,7 @@ modelinfo <- function(...) {
     info <- c(info_models, info_types)
     info <- info[intersect(names(info_models), names(info_types))]
   }
-  
+
   info[unique(names(info))]
 }
 

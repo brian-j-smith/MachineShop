@@ -1,7 +1,7 @@
 #' Recursive Partitioning and Regression Tree Models
-#' 
+#'
 #' Fit an \code{rpart} model.
-#' 
+#'
 #' @param minsplit minimum number of observations that must exist in a node in
 #'   order for a split to be attempted.
 #' @param minbucket minimum number of observations in any terminal node.
@@ -13,7 +13,7 @@
 #' @param surrogatestyle controls the selection of a best surrogate.
 #' @param maxdepth maximum depth of any node of the final tree, with the root
 #'   node counted as depth 0.
-#' 
+#'
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
@@ -21,14 +21,14 @@
 #'     \code{cp}
 #'   }
 #' }
-#' 
+#'
 #' Further model details can be found in the source link below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[rpart]{rpart}}, \code{\link{fit}},
 #' \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' fit(Species ~ ., data = iris, model = RPartModel)
 #'
@@ -36,7 +36,7 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
                        cp = 0.01, maxcompete = 4, maxsurrogate = 5,
                        usesurrogate = 2, xval = 10, surrogatestyle = 0,
                        maxdepth = 30) {
-  
+
   MLModel(
     name = "RPartModel",
     label = "Recursive Partitioning and Regression Trees",
@@ -73,7 +73,7 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
       object$variable.importance
     }
   )
-  
+
 }
 
 MLModelFunction(RPartModel) <- NULL

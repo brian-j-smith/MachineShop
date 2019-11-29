@@ -8,24 +8,24 @@ utils::globalVariables(c("i", "x", "y"))
 
 
 #' Quote Operator
-#' 
+#'
 #' Shorthand notation for the \code{\link{quote}} function.  The quote operator
 #' simply returns its argument unevaluated and can be applied to any \R
 #' expression.  Useful for calling model constructors with quoted parameter
 #' values that are defined in terms of \code{nobs}, \code{nvars}, or \code{y}.
-#' 
+#'
 #' @param expr any syntactically valid \R expression.
-#' 
-#' @return 
+#'
+#' @return
 #' The quoted (unevaluated) expression.
-#' 
+#'
 #' @seealso \code{\link{quote}}
-#' 
+#'
 #' @examples
 #' ## Stepwise variable selection with BIC
 #' glm_fit <- fit(sale_amount ~ ., ICHomes, GLMStepAICModel(k = .(log(nobs))))
 #' varimp(glm_fit)
-#' 
+#'
 . <- function(expr) {
   eval(substitute(quote(expr)))
 }
@@ -200,7 +200,7 @@ nvars <- function(x, model) {
   stopifnot(is(x, "ModelFrame"))
   model <- getMLObject(model, "MLModel")
   switch(model@predictor_encoding,
-         "model.matrix" = 
+         "model.matrix" =
            ncol(model.matrix(x[1, , drop = FALSE], intercept = FALSE)),
          "terms" = {
            x_terms <- attributes(terms(x))
@@ -239,10 +239,10 @@ requireModelNamespaces <- function(packages) {
 
 sample_params <- function(x, size = NULL, replace = FALSE) {
   stopifnot(is.list(x))
-  
+
   n <- length(x)
   if (n == 0) return(tibble())
-  
+
   var_names <- paste0("Var", seq(x))
   x_names <- names(x)
   if (!is.null(x_names)) {
@@ -250,11 +250,11 @@ sample_params <- function(x, size = NULL, replace = FALSE) {
     var_names[is_nzchar] <- x_names[is_nzchar]
   }
   names(x) <- var_names
-  
+
   max_size <- prod(lengths(x))
   if (is.null(size)) size <- max_size
   if (!replace) size <- min(size, max_size)
-  
+
   grid <- as_tibble(matrix(nrow = 0, ncol = n, dimnames = list(NULL, names(x))))
   iter <- 0
   while (nrow(grid) < size && iter < 100) {
@@ -263,7 +263,7 @@ sample_params <- function(x, size = NULL, replace = FALSE) {
     grid <- rbind(grid, new_grid)
     if (!replace) grid <- unique(grid)
   }
-  
+
   head(grid, size)
 }
 
@@ -326,13 +326,13 @@ set_model_names <- function(x) {
     }
   }
   level_names <- level_names %>% unlist %>% make.unique %>% relist(level_names)
-  
+
   for (i in seq(x)) levels(x[[i]][[name]]) <- level_names[[i]]
-  
+
   x
 }
 
-    
+
 set_param <- function(params, name, value) {
   if (name %in% names(params)) params[[name]] <- value
   params

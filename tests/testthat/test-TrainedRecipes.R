@@ -21,7 +21,7 @@ models <- c(
 
 
 for (name in names(models)) {
-  
+
   test_that("SelectedRecipes training", {
     skip_if_not(TEST_TRAINING)
     context(paste0(name, ": Selected Recipe"))
@@ -29,7 +29,7 @@ for (name in names(models)) {
       expect_is(fit(sel_rec, model = models[[name]]), "MLModelFit")
     })
   })
-  
+
   test_that("SelectedRecipes training", {
     skip_if_not(TEST_TRAINING)
     context(paste0(name, ": Tuned Recipe"))
@@ -37,5 +37,5 @@ for (name in names(models)) {
       expect_is(fit(tun_rec, model = models[[name]]), "MLModelFit")
     })
   })
-  
+
 }

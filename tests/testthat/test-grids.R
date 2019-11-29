@@ -26,36 +26,36 @@ test_that("ParamSet construction and model fitting", {
   skip_if_not(TEST_ALL)
   context("ParamSet")
   with_parallel({
-    
+
     expect_error(ParamSet(param_list, length = -1))
     expect_error(ParamSet(param_list, random = 0))
-    
+
     grid <- expect_s4_class(ParamSet(param_list), "ParamSet")
     expect_true(test_fit(grid))
-    
+
     grid <- expect_s4_class(
       ParamSet(param_list, length = 0),
       "ParamSet"
     )
     expect_true(test_fit(grid))
-    
+
     grid <- expect_s4_class(
       ParamSet(param_list, length = 2),
       "ParamSet"
     )
     expect_true(test_fit(grid))
-    
+
     grid <- expect_s4_class(
       ParamSet(param_list, length = c(3, 0, 2)),
       "ParamSet"
     )
     expect_true(test_fit(grid))
-    
+
     grid <- expect_s4_class(
       ParamSet(param_list, length = 2, random = 5),
       "ParamSet"
     )
     expect_true(test_fit(grid))
-    
+
   })
 })

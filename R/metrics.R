@@ -1,9 +1,9 @@
 #' Performance Metrics
-#' 
+#'
 #' Compute measures of agreement between observed and predicted responses.
-#' 
+#'
 #' @name metrics
-#' 
+#'
 #' @param observed \link[=response]{observed responses}; or
 #'   \link{confusion}, \link[=curves]{performance curve}, or \link{resample}
 #'   result containing observed and predicted responses.
@@ -31,9 +31,9 @@
 #'   summary statistic at each cutoff value of resampled metrics in performance
 #'   curves, or \code{NULL} for resample-specific metrics.
 #' @param ... arguments passed to or from other methods.
-#' 
+#'
 #' @seealso \code{\link{metricinfo}}, \code{\link{performance}}
-#' 
+#'
 NULL
 
 
@@ -55,23 +55,23 @@ setMetric_auc <- function(f, metrics) {
 setMetric_BinaryConfusionMatrix <- function(f, definition) {
   setMetricGeneric(f)
   setMetricMethod(f, c("BinaryConfusionMatrix", "NULL"), definition)
-  setMetricMethod_factor_factor(f)  
+  setMetricMethod_factor_factor(f)
   setMetricMethod_factor_numeric(f)
   setMetricMethod_Resamples(f)
   setMetricMethod_Surv_SurvEvents(f)
-  setMetricMethod_Surv_SurvProbs(f)  
+  setMetricMethod_Surv_SurvProbs(f)
 }
 
 
 setMetric_ConfusionMatrix <- function(f, definition) {
   setMetricGeneric(f)
   setMetricMethod(f, c("ConfusionMatrix", "NULL"), definition)
-  setMetricMethod_factor_factor(f)  
+  setMetricMethod_factor_factor(f)
   setMetricMethod_factor_matrix(f)
   setMetricMethod_factor_numeric(f)
   setMetricMethod_Resamples(f)
   setMetricMethod_Surv_SurvEvents(f)
-  setMetricMethod_Surv_SurvProbs(f)  
+  setMetricMethod_Surv_SurvProbs(f)
 }
 
 
@@ -98,14 +98,14 @@ setMetric_numeric <- function(f, definition) {
 
 
 setMetricGeneric <- function(f) {
-  
+
   eval(substitute(
     setGeneric(name, function(observed, predicted, ...) standardGeneric(name)),
     list(name = metric_method_name(f))
   ))
-  
+
   setMetricMethod(f, c("ANY", "ANY"))
-  
+
 }
 
 

@@ -4,9 +4,9 @@ PartialDependence <- function(object) {
 
 
 #' Partial Dependence
-#' 
+#'
 #' Calculate partial dependence of a response on select predictor variables.
-#' 
+#'
 #' @param object model \link{fit} result.
 #' @param data \link[=data.frame]{data frame} containing all predictor
 #'   variables.  If not specified, the training data will be used by default.
@@ -22,35 +22,35 @@ PartialDependence <- function(object) {
 #' @param stats function, function name, or vector of these with which to
 #'   compute response variable summary statistics over non-selected predictor
 #'   variables.
-#' 
+#'
 #' @return \code{PartialDependence} class object that inherits from
 #' \code{data.frame}.
-#'  
+#'
 #' @seealso \code{\link{plot}}
-#' 
+#'
 #' @examples
 #' gbm_fit <- fit(Species ~ ., data = iris, model = GBMModel)
 #' (pd <- dependence(gbm_fit, select = c(Petal.Length, Petal.Width)))
 #' plot(pd)
-#' 
+#'
 dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
                        n = 10, intervals = c("uniform", "quantile"), stats =
                          MachineShop::settings("stats.PartialDependence")) {
-  
+
   stopifnot(is(object, "MLModelFit"))
-  
+
   x <- as.MLModel(object)@x
   if (is.null(data)) data <- x
   data <- as.data.frame(data)
   vars <- all.vars(predictors(terms(x, original = TRUE)))
-  
+
   indices <- structure(match(vars, names(data)), names = vars)
   select <- eval(substitute(select), as.list(indices), parent.frame())
   if (is.null(select)) select <- indices
   data_select <- data[, select, drop = FALSE]
-  
+
   intervals <- match.arg(intervals)
-  
+
   stats <- list2function(stats)
 
   select_values <- function(x) {
@@ -73,7 +73,7 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
       stop("unsupported variable type")
     }
   }
-  
+
   predict_stats <- function(data) {
     stats_list <- predict(object, newdata = data, type = "prob")  %>%
       as.data.frame %>%
@@ -85,9 +85,9 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
     names(dimnames(x)) <- c("Statistic", "Response")
     as.data.frame.table(x, responseName = "Value")
   }
-  
+
   grid_list <- lapply(data_select, select_values)
-  
+
   data_select_grid <- if (interaction) {
     expand.grid(grid_list, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
   } else {
@@ -111,7 +111,7 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
     df$Predictors <- data_select_grid[rep(i, nrow(df)), , drop = FALSE]
     df
   })
-  
+
   PartialDependence(do.call(rbind, dependence_list))
 
 }

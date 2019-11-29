@@ -1,9 +1,9 @@
 #' Model Prediction
-#' 
+#'
 #' Predict outcomes with a fitted model.
-#' 
+#'
 #' @name predict
-#' 
+#'
 #' @param object model \link{fit} result.
 #' @param newdata optional \link[=data.frame]{data frame} with which to obtain
 #'   predictions.  If not specified, the training data will be used by default.
@@ -24,19 +24,19 @@
 #'   Choices are \code{"breslow"}, \code{"efron"} (default), or
 #'   \code{"fleming-harrington"}.
 #' @param ... arguments passed to model-specific prediction functions.
-#' 
+#'
 #' @seealso \code{\link{confusion}}, \code{\link{performance}},
 #' \code{\link{metrics}}
-#' 
+#'
 #' @examples
 #' ## Survival response example
 #' library(survival)
 #' library(MASS)
-#' 
+#'
 #' gbm_fit <- fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
 #'                data = Melanoma, model = GBMModel)
 #' predict(gbm_fit, newdata = Melanoma, times = 365 * c(2, 5, 10), type = "prob")
-#' 
+#'
 predict.MLModelFit <- function(object, newdata = NULL, times = NULL,
                                type = c("response", "prob"),
                                cutoff = MachineShop::settings("cutoff"),

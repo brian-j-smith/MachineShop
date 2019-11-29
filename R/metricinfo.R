@@ -1,13 +1,13 @@
 #' Display Performance Metric Information
-#' 
+#'
 #' Display information about metrics provided by the \pkg{MachineShop} package.
-#' 
+#'
 #' @param ... \link[=metrics]{metric} functions or function names;
 #' \link[=response]{observed responses}; \link[=response]{observed} and
 #' \link[=predict]{predicted} responses; \link{confusion} or \link{resample}
 #' results for which to display information.  If none are specified, information
 #' is returned on all available metrics by default.
-#' 
+#'
 #' @return List of named metric elements each containing the following
 #' components:
 #' \describe{
@@ -19,25 +19,25 @@
 #'   \item{response_types}{data frame of the observed and predicted response
 #'     variable types supported by the metric.}
 #' }
-#' 
+#'
 #' @examples
 #' ## All metrics
 #' metricinfo()
-#' 
+#'
 #' ## Metrics by observed and predicted response types
 #' names(metricinfo(factor(0)))
 #' names(metricinfo(factor(0), factor(0)))
 #' names(metricinfo(factor(0), matrix(0)))
 #' names(metricinfo(factor(0), numeric(0)))
-#' 
+#'
 #' ## Metric-specific information
 #' metricinfo(auc)
-#' 
+#'
 metricinfo <- function(...) {
   args <- list(...)
   args <- if (length(args)) unname(args) else as.list(.metric_names)
   info <- do.call(.metricinfo, args)
-  
+
   is_type <- if (length(info)) !mapply(is, info, "list") else NULL
   if (any(is_type)) {
     info_metrics <- if (all(is_type)) metricinfo() else info[!is_type]
@@ -45,7 +45,7 @@ metricinfo <- function(...) {
     info <- c(info_metrics, info_types)
     info <- info[intersect(names(info_metrics), names(info_types))]
   }
-  
+
   info[unique(names(info))]
 }
 
@@ -133,14 +133,14 @@ metricinfo <- function(...) {
   } else {
     types <- NULL
   }
-  
+
   info <- structure(list(list(
     label = x@label,
     maximize = x@maximize,
     arguments = args(x),
     response_types = types
   )), names = x@name)
-  
+
   if (length(list(...))) c(info, .metricinfo(...)) else info
 }
 

@@ -12,10 +12,10 @@ ModelRecipe.recipe <- function(object, ...) {
   if (any(sapply(object$steps, function(step) isTRUE(step$trained)))) {
     stop("recipe must be untrained")
   }
-  
+
   case_name_var <- "(casenames)"
   case_name_fo <- ~ -`(casenames)`
-  
+
   if (case_name_var %in% summary(object)$variable) {
     stop("conflict with existing recipe variable: ", case_name_var)
   }
@@ -28,14 +28,14 @@ ModelRecipe.recipe <- function(object, ...) {
   object$var_info <- rbind(object$var_info, case_name_info)
   object$term_info <- rbind(object$term_info, case_name_info)
   object$template[[case_name_var]] <- rownames(object$template)
-  
+
   for (i in seq(object$steps)) {
     step_terms <- object$steps[[i]]$terms
     environment(case_name_fo) <- environment(step_terms[[1]])
     new_term <- rlang::as_quosure(case_name_fo)
     object$steps[[i]]$terms <- c(step_terms, new_term)
   }
-  
+
   new("ModelRecipe", object)
 }
 

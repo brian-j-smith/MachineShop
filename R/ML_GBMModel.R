@@ -1,5 +1,5 @@
 #' Generalized Boosted Regression Model
-#' 
+#'
 #' Fits generalized boosted regression models.
 #'
 #' @param distribution optional character string specifying the name of the
@@ -13,7 +13,7 @@
 #' @param shrinkage shrinkage parameter applied to each tree in the expansion.
 #' @param bag.fraction fraction of the training set observations randomly
 #'   selected to propose the next tree in the expansion.
-#' 
+#'
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
@@ -23,21 +23,21 @@
 #'   }
 #' }
 #' * included only in randomly sampled grid points
-#' 
+#'
 #' Default values for the \code{NULL} arguments and further model details can be
 #' found in the source link below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[gbm]{gbm}}, \code{\link{fit}}, \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' fit(Species ~ ., data = iris, model = GBMModel)
 #'
 GBMModel <- function(distribution = NULL, n.trees = 100,
                      interaction.depth = 1, n.minobsinnode = 10,
                      shrinkage = 0.1, bag.fraction = 0.5) {
-  
+
   MLModel(
     name = "GBMModel",
     label = "Generalized Boosted Regression",
@@ -90,7 +90,7 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
       gbm::relative.influence(object, n.trees = object$n.trees)
     }
   )
-  
+
 }
 
 MLModelFunction(GBMModel) <- NULL

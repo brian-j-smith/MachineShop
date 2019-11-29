@@ -1,8 +1,8 @@
 #' @details
 #' The following set of model fitting, prediction, and performance assessment
 #' functions are available for \pkg{MachineShop} \link{models}.
-#' 
-#' Training: 
+#'
+#' Training:
 #' \tabular{ll}{
 #'   \code{\link{fit}} \tab Model Fitting \cr
 #'   \code{\link{resample}} \tab Resample Estimation of Model Performance \cr
@@ -25,9 +25,9 @@
 #'   \code{\link{performance_curve}} \tab Model Performance Curves \cr
 #'   \code{\link{varimp}} \tab Variable Importance \cr
 #' }
-#' 
+#'
 #' Methods for resample estimation include
-#' 
+#'
 #' \tabular{ll}{
 #'   \code{\link{BootControl}} \tab Simple Bootstrap \cr
 #'   \code{\link{BootOptimismControl}} \tab Optimism-Corrected Bootstrap \cr
@@ -36,23 +36,23 @@
 #'   \code{\link{OOBControl}} \tab Out-of-Bootstrap \cr
 #'   \code{\link{SplitControl}} \tab Split Training-Testing \cr
 #'   \code{\link{TrainControl}} \tab Training Resubstitution \cr
-#' }  
-#' 
+#' }
+#'
 #' Graphical and tabular summaries of modeling results can be obtained with
-#' 
+#'
 #' \code{\link{plot}} \cr
 #' \code{\link{print}} \cr
 #' \code{\link{summary}}
-#' 
+#'
 #' Further information on package features is available with
-#' 
+#'
 #' \tabular{ll}{
 #'   \code{\link{metricinfo}} \tab Performance Metric Information \cr
 #'   \code{\link{modelinfo}} \tab Model Information \cr
 #'   \code{\link{settings}} \tab Global Settings \cr
 #' }
-#' 
+#'
 #' Custom metrics and models can be created with the \code{\link{MLMetric}} and
 #' \code{\link{MLModel}} constructors.
-#' 
+#'
 "_PACKAGE"

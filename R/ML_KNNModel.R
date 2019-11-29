@@ -1,5 +1,5 @@
 #' Weighted k-Nearest Neighbor Model
-#' 
+#'
 #' Fit a k-nearest neighbor model for which the k nearest training set vectors
 #' (according to Minkowski distance) are found for each row of the test set, and
 #' prediction is done via the maximum of summed kernel densities.
@@ -18,13 +18,13 @@
 #'   }
 #' }
 #' * included only in randomly sampled grid points
-#' 
+#'
 #' Further model details can be found in the source link below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[kknn]{kknn}}, \code{\link{fit}}, \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' fit(Species ~ ., data = iris, model = KNNModel)
 #'
@@ -32,9 +32,9 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
                      kernel = c("optimal", "biweight", "cos", "epanechnikov",
                                 "gaussian", "inv", "rank", "rectangular",
                                 "triangular", "triweight")) {
-  
+
   kernel <- match.arg(kernel)
-  
+
   MLModel(
     name = "KNNModel",
     label = "K-Nearest Neighbors Model",
@@ -70,7 +70,7 @@ KNNModel <- function(k = 7, distance = 2, scale = TRUE,
       if (pred$response == "continuous") pred$fitted.values else pred$prob
     }
   )
-  
+
 }
 
 MLModelFunction(KNNModel) <- NULL

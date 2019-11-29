@@ -1,5 +1,5 @@
 #' Model Functions
-#' 
+#'
 #' Model constructor functions supplied by \pkg{MachineShop} are summarized in
 #' the table below according to the types of response variables with which each
 #' can be used.
@@ -66,10 +66,10 @@
 #'   \code{\link{TunedModel}}    \tab Model Tuning over Parameter Grid \cr
 #'   \code{\link{SelectedModel}} \tab Model Selection from Candidate Set \cr
 #' }
-#' 
+#'
 #' @name models
 #' @aliases MLModelFunction
-#' 
+#'
 #' @seealso \code{\link{modelinfo}}, \code{\link{fit}}, \code{\link{resample}}
-#' 
+#'
 NULL

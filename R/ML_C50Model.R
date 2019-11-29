@@ -1,5 +1,5 @@
 #' C5.0 Decision Trees and Rule-Based Model
-#' 
+#'
 #' Fit classification tree models or rule-based models using Quinlan's C5.0
 #' algorithm.
 #'
@@ -8,7 +8,7 @@
 #'   rule-based model.
 #' @param subset logical indicating whether the model should evaluate groups of
 #'   discrete predictors for splits.
-#' @param bands integer between 2 and 1000 specifying a number of bands into 
+#' @param bands integer between 2 and 1000 specifying a number of bands into
 #'   which to group rules ordered by their affect on the error rate.
 #' @param winnow logical indicating use of predictor winnowing (i.e. feature
 #'   selection).
@@ -31,10 +31,10 @@
 #'     \code{trials}, \code{rules}, \code{winnow}
 #'   }
 #' }
-#' 
+#'
 #' Latter arguments are passed to \code{\link[C50]{C5.0Control}}.
 #' Further model details can be found in the source link below.
-#' 
+#'
 #' In calls to \code{\link{varimp}} for \code{C50Model}, argument \code{metric}
 #' may be spedified as \code{"usage"} (default) for the percentage of training
 #' set samples that fall into all terminal nodes after the split of each
@@ -42,11 +42,11 @@
 #' each predictor.  Variable importance is automatically scaled to range from 0
 #' to 100.  To obtain unscaled importance values, set \code{scale = FALSE}.  See
 #' example below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[C50]{C5.0}}, \code{\link{fit}}, \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' model_fit <- fit(Species ~ ., data = iris, model = C50Model)
 #' varimp(model_fit, metric = "splits", scale = FALSE)
@@ -55,12 +55,12 @@ C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
                      winnow = FALSE, noGlobalPruning = FALSE, CF = 0.25,
                      minCases = 2, fuzzyThreshold = FALSE, sample = 0,
                      earlyStopping = TRUE) {
-  
+
   args <- params(environment())
   is_main <- names(args) %in% c("trials", "rules")
   params <- args[is_main]
   params$control <- as.call(c(.(C50::C5.0Control), args[!is_main]))
-  
+
   MLModel(
     name = "C50Model",
     label = "C5.0 Classification",
@@ -89,7 +89,7 @@ C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
       C50::C5imp(object, metric = match.arg(metric))
     }
   )
-  
+
 }
 
 MLModelFunction(C50Model) <- NULL

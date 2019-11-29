@@ -1,24 +1,24 @@
 #' Extract Response Variable
-#' 
+#'
 #' Extract the response variable from an object.
-#' 
+#'
 #' @rdname response-methods
-#' 
+#'
 #' @param object model \link{fit} result, \code{\link{ModelFrame}}, or
 #'   \code{\link[recipes]{recipe}}.
 #' @param newdata \link[=data.frame]{data frame} from which to extract the
 #'   response variable values if given; otherwise, \code{object} is used.
 #' @param ... arguments passed to other methods.
-#' 
+#'
 #' @examples
 #' ## Survival response example
 #' library(survival)
 #' library(MASS)
-#' 
+#'
 #' mf <- ModelFrame(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
 #'                  data = Melanoma)
 #' response(mf)
-#' 
+#'
 response <- function(object, ...) {
   UseMethod("response")
 }
@@ -54,14 +54,14 @@ response.MLModel <- function(object, newdata = NULL, ...) {
 
 
 #' @rdname response-methods
-#' 
+#'
 response.MLModelFit <- function(object, newdata = NULL, ...) {
   response(as.MLModel(object), newdata)
 }
 
 
 #' @rdname response-methods
-#' 
+#'
 response.ModelFrame <- function(object, newdata = NULL, ...) {
   y <- model.response(object)
   if (is.null(newdata)) y else response(terms(object), newdata, y)
@@ -69,7 +69,7 @@ response.ModelFrame <- function(object, newdata = NULL, ...) {
 
 
 #' @rdname response-methods
-#' 
+#'
 response.recipe <- function(object, newdata = NULL, ...) {
   object <- prep(object)
   data <- if (is.null(newdata)) juice(object) else bake(object, newdata)
@@ -86,26 +86,26 @@ response.recipe <- function(object, newdata = NULL, ...) {
 
 
 #' Discrete Variable Constructors
-#' 
+#'
 #' Create an integer matrix of binomial counts or vector of discrete numbers,
 #' negative binomial counts, or Poisson counts.
-#' 
+#'
 #' @name DiscreteVector
 #' @rdname DiscreteVector
-#' 
+#'
 #' @param count,size numeric vectors of binomial counts and trials.
 #' @param x numeric vector.
 #' @param min,max minimum and maximum bounds for discrete numbers.
-#' 
+#'
 #' @return \code{BinomialMatrix} object class that inherits from \code{matrix},
 #' \code{DiscreteVector} that inherits from \code{numeric}, or object of the
 #' same class as the constructor name and that inherits from
 #' \code{DiscreteVector}.
-#' 
+#'
 #' @examples
 #' BinomialMatrix(rbinom(25, 10, 0.5), size = 10)
 #' PoissonVector(rpois(25, 10))
-#' 
+#'
 BinomialMatrix <- function(count = integer(), size = integer()) {
   stopifnot(is.finite(size))
   stopifnot(length(size) <= 1 || length(size) == length(count))
@@ -129,7 +129,7 @@ as.double.BinomialMatrix <- function(x, ...) {
 
 
 #' @rdname DiscreteVector
-#' 
+#'
 DiscreteVector <- function(x = integer(), min = -Inf, max = Inf) {
   x <- as.integer(x)
   min <- floor(min[[1]])
@@ -141,14 +141,14 @@ DiscreteVector <- function(x = integer(), min = -Inf, max = Inf) {
 
 
 #' @rdname DiscreteVector
-#' 
+#'
 NegBinomialVector <- function(x = integer()) {
   as(DiscreteVector(x, min = 0), "NegBinomialVector")
 }
 
 
 #' @rdname DiscreteVector
-#' 
+#'
 PoissonVector <- function(x = integer()) {
   as(DiscreteVector(x, min = 0), "PoissonVector")
 }
@@ -158,38 +158,38 @@ PoissonVector <- function(x = integer()) {
 
 
 #' SurvMatrix Class Constructors
-#' 
+#'
 #' Create a matrix of survival events or probabilites.
-#' 
+#'
 #' @name SurvMatrix
 #' @rdname SurvMatrix
-#' 
+#'
 #' @param data matrix, or object that can be coerced to one, with survival
 #'   events or probabilities at points in time in the columns and cases in the
 #'   rows.
 #' @param times numeric vector of survival times for the columns.
-#' 
+#'
 #' @return Object that is of the same class as the constructor name and inherits
 #' from \code{SurvMatrix}.  Examples of these are predicted survival events and
 #' probabilities returned by the \link{predict} function.
-#' 
+#'
 #' @seealso \code{\link{performance}}, \code{\link{metrics}}
-#' 
+#'
 NULL
 
 
 SurvMatrix <- function(data = NA, times = NULL) {
   data <- as.matrix(data)
-  
+
   if (is.null(times)) times <- rep(NA_real_, ncol(data))
-  
+
   if (length(times) != ncol(data)) {
     stop("unequal number of survival times and predictions")
   }
-  
+
   rownames(data) <- NULL
   colnames(data) <- if (length(times)) paste("Time", seq_along(times))
-  
+
   new("SurvMatrix", data, times = times)
 }
 
@@ -200,14 +200,14 @@ as.data.frame.SurvMatrix <- function(x, ...) {
 
 
 #' @rdname SurvMatrix
-#' 
+#'
 SurvEvents <- function(data = NA, times = NULL) {
   as(SurvMatrix(data, times), "SurvEvents")
 }
 
 
 #' @rdname SurvMatrix
-#' 
+#'
 SurvProbs <- function(data = NA, times = NULL) {
   as(SurvMatrix(data, times), "SurvProbs")
 }

@@ -27,7 +27,7 @@ test_fit <- function(model) {
   model_fit <- expect_is(fit(fo, df, model = model), "MLModelFit")
   expect_true(has_offset(model_fit))
   expect_s4_class(predict(model_fit), "PoissonVector")
-  
+
   model_fit <- expect_is(fit(rec, model = model), "MLModelFit")
   expect_true(has_offset(model_fit))
   expect_s4_class(predict(model_fit), "PoissonVector")

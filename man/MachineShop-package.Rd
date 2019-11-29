@@ -12,7 +12,7 @@ Meta-package for statistical and machine learning with a unified interface for m
 The following set of model fitting, prediction, and performance assessment
 functions are available for \pkg{MachineShop} \link{models}.
 
-Training: 
+Training:
 \tabular{ll}{
   \code{\link{fit}} \tab Model Fitting \cr
   \code{\link{resample}} \tab Resample Estimation of Model Performance \cr
@@ -46,7 +46,7 @@ Methods for resample estimation include
   \code{\link{OOBControl}} \tab Out-of-Bootstrap \cr
   \code{\link{SplitControl}} \tab Split Training-Testing \cr
   \code{\link{TrainControl}} \tab Training Resubstitution \cr
-}  
+}
 
 Graphical and tabular summaries of modeling results can be obtained with
 

@@ -1,8 +1,8 @@
 #' Boosting with Classification Trees
-#' 
+#'
 #' Fits the AdaBoost.M1 (Freund and Schapire, 1996) and SAMME (Zhu et al., 2009)
 #' algorithms using classification trees as single classifiers.
-#' 
+#'
 #' @param boos if \code{TRUE}, then bootstrap samples are drawn from the
 #'   training set using the observation weights at each iteration.  If
 #'   \code{FALSE}, then all observations are used with their weights.
@@ -19,7 +19,7 @@
 #' @param surrogatestyle controls the selection of a best surrogate.
 #' @param maxdepth maximum depth of any node of the final tree, with the root
 #'   node counted as depth 0.
-#' 
+#'
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}}
@@ -28,14 +28,14 @@
 #'   }
 #' }
 #' * included only in randomly sampled grid points
-#' 
+#'
 #' Further model details can be found in the source link below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[adabag]{boosting}}, \code{\link{fit}},
 #' \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' fit(Species ~ ., data = iris, model = AdaBoostModel(mfinal = 5))
 #'
@@ -45,14 +45,14 @@ AdaBoostModel <- function(boos = TRUE, mfinal = 100,
                           cp = 0.01, maxcompete = 4, maxsurrogate = 5,
                           usesurrogate = 2, xval = 10, surrogatestyle = 0,
                           maxdepth = 30) {
-  
+
   coeflearn <- match.arg(coeflearn)
-  
+
   args <- params(environment())
   is_main <- names(args) %in% c("boos", "mfinal", "coeflearn")
   params <- args[is_main]
   params$control <- as.call(c(.(list), args[!is_main]))
-  
+
   MLModel(
     name = "AdaBoostModel",
     label = "Boosting with Classification Trees",
@@ -83,7 +83,7 @@ AdaBoostModel <- function(boos = TRUE, mfinal = 100,
       object$importance
     }
   )
-  
+
 }
 
 MLModelFunction(AdaBoostModel) <- NULL

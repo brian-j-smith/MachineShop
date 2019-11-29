@@ -3,107 +3,107 @@ context("Global Settings")
 
 test_that("settings changes and views", {
   skip_if_not(TEST_ALL)
-  
+
   presets <- settings()
-  
+
   expect_identical(settings("control", cut = 0.25, max.print = 5),
                    presets[c("control", "cutoff", "max.print")])
   expect_identical(settings("cutoff"), 0.25)
   expect_identical(settings("max.print"), 5)
-  
+
   new_value <- "BootControl"
   expect_type(settings(control = new_value), "list")
   expect_identical(settings("control"), new_value)
   expect_error(settings(control = "MLModel"))
-  
+
   new_value <- 0.05
   expect_type(settings(cutoff = new_value), "list")
   expect_identical(settings("cutoff"), new_value)
   expect_error(settings(cutoff = Inf))
   expect_error(settings(cutoff = character()))
-  
+
   new_value <- "exponential"
   expect_type(settings(dist.Surv = substr(new_value, 1, 3)), "list")
   expect_identical(settings("dist.Surv"), new_value)
   expect_error(settings(dist.Surv = character()))
-  
+
   new_value <- "exponential"
   expect_type(settings(dist.SurvProbs = substr(new_value, 1, 3)), "list")
   expect_identical(settings("dist.SurvProbs"), new_value)
   expect_error(settings(dist.SurvProbs = character()))
-  
+
   expect_type(settings(grid = 5), "list")
   expect_s4_class(settings("grid"), "Grid")
   expect_type(settings(grid = Grid), "list")
   expect_s4_class(settings("grid"), "Grid")
   expect_error(settings(grid = character()))
-  
+
   expect_type(settings(max.print = 5), "list")
   expect_identical(settings("max.print"), 5)
   expect_type(settings(max.print = Inf), "list")
   expect_identical(settings("max.print"), Inf)
   expect_error(settings(max.print = character()))
-  
+
   new_value <- "fleming-harrington"
   expect_type(settings(method.EmpiricalSurv = substr(new_value, 1, 3)), "list")
   expect_identical(settings("method.EmpiricalSurv"), new_value)
   expect_error(settings(method.EmpiricalSurv = character()))
-  
+
   new_value <- c(mse, "mse")
   expect_type(settings(metrics.ConfusionMatrix = new_value), "list")
   expect_identical(settings("metrics.ConfusionMatrix"), new_value)
   expect_error(settings(metrics.ConfusionMatrix = "mean"))
-  
+
   new_value <- c(mse, "mse")
   expect_type(settings(metrics.factor = new_value), "list")
   expect_identical(settings("metrics.factor"), new_value)
   expect_error(settings(metrics.factor = "mean"))
-  
+
   new_value <- c(mse, "mse")
   expect_type(settings(metrics.matrix = new_value), "list")
   expect_identical(settings("metrics.matrix"), new_value)
   expect_error(settings(metrics.matrix = "mean"))
-  
+
   new_value <- c(mse, "mse")
   expect_type(settings(metrics.numeric = new_value), "list")
   expect_identical(settings("metrics.numeric"), new_value)
   expect_error(settings(metrics.numeric = "mean"))
-  
+
   new_value <- c(mse, "mse")
   expect_type(settings(metrics.Surv = new_value), "list")
   expect_identical(settings("metrics.Surv"), new_value)
   expect_error(settings(metrics.Surv = "mean"))
-  
+
   old_values <- settings("require")
   expect_type(settings(require = c("MachineShop", "stats")), "list")
   expect_identical(settings("require"), c("stats", old_values))
   expect_error(settings(require = 1))
-  
+
   new_value <- "median"
   expect_type(settings(stat.Curves = new_value), "list")
   expect_identical(settings("stat.Curves"), new_value)
   expect_error(settings(stat.Curves = "character"))
-  
+
   new_value <- "median"
   expect_type(settings(stat.Resample = new_value), "list")
   expect_identical(settings("stat.Resamples"), new_value)
   expect_error(settings(stat.Resamples = "character"))
-  
+
   new_value <- "median"
   expect_type(settings(stat.Train = new_value), "list")
   expect_identical(settings("stat.Train"), new_value)
   expect_error(settings(stat.Train = "character"))
-  
+
   new_value <- c("median", sd)
   expect_type(settings(stats.PartialDependence = new_value), "list")
   expect_identical(settings("stats.PartialDependence"), new_value)
   expect_error(settings(stats.PartialDependence = "character"))
-  
+
   new_value <- c("median", sd)
   expect_type(settings(stats.Resamples = new_value), "list")
   expect_identical(settings("stats.Resamples"), new_value)
   expect_error(settings(stats.Resamples = "character"))
-  
+
   settings("reset")
   expect_identical(settings(), presets)
 })

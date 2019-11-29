@@ -5,6 +5,6 @@ with_parallel <- function(code) {
     doParallel::registerDoParallel(cores = cores)
     on.exit(doParallel::stopImplicitCluster())
   }
-  
+
   code
 }

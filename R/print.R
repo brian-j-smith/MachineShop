@@ -1,19 +1,19 @@
 #' Print MachineShop Objects
-#' 
+#'
 #' Print methods for objects defined in the \pkg{MachineShop} package.
-#'  
+#'
 #' @name print
 #' @rdname print-methods
-#' 
+#'
 #' @param x object to print.
 #' @param n integer number of models or data frame rows to show.
 #' @param ... arguments passed to other methods.
-#' 
+#'
 NULL
 
 
 #' @rdname print-methods
-#' 
+#'
 print.Calibration <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   print_items(as(x, "data.frame"), n = n)
@@ -30,7 +30,7 @@ setMethod("show", "Calibration",
 
 
 #' @rdname print-methods
-#' 
+#'
 print.ConfusionList <- function(x, n = MachineShop::settings("max.print"),
                                 ...) {
   print_title(x)
@@ -71,7 +71,7 @@ setMethod("show", "ConfusionSummary",
 
 
 #' @rdname print-methods
-#' 
+#'
 print.Curves <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   cat("\n",
@@ -93,7 +93,7 @@ setMethod("show", "Curves",
 
 
 #' @rdname print-methods
-#' 
+#'
 print.BinomialMatrix <- function(x, n = MachineShop::settings("max.print"),
                                  ...) {
   print_title(x)
@@ -126,7 +126,7 @@ setMethod("show", "Grid",
 
 
 #' @rdname print-methods
-#' 
+#'
 print.ListOf <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_items(as(x, "listof"), n = n)
   invisible(x)
@@ -293,7 +293,7 @@ setMethod("show", "MLMetric",
 
 
 #' @rdname print-methods
-#' 
+#'
 print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   info <- modelinfo(x)[[1]]
@@ -380,7 +380,7 @@ setMethod("show", "MLModelFunction",
 
 
 #' @rdname print-methods
-#' 
+#'
 print.ModelFrame <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   print_items(as(x, "data.frame"), n = n)
@@ -426,7 +426,7 @@ setMethod("show", "ParamSet",
 
 
 #' @rdname print-methods
-#' 
+#'
 print.Performance <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   dn <- dimnames(x)
@@ -462,7 +462,7 @@ setMethod("show", "PerformanceDiffTest",
 
 
 #' @rdname print-methods
-#' 
+#'
 print.RecipeGrid <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   print_items(as(asS3(x), "tbl_df"), n = n)
@@ -479,7 +479,7 @@ setMethod("show", "RecipeGrid",
 
 
 #' @rdname print-methods
-#' 
+#'
 print.Resamples <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   cat("\nModels: ")
@@ -502,7 +502,7 @@ setMethod("show", "Resamples",
 
 
 #' @rdname print-methods
-#' 
+#'
 print.SelectedModelFrame <- function(x,
                                      n = MachineShop::settings("max.print"),
                                      ...) {
@@ -541,7 +541,7 @@ format.SurvMatrix <- function(x, ...) {
 
 
 #' @rdname print-methods
-#' 
+#'
 print.SurvMatrix <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   print_items(as(x, "matrix"), n = n)
@@ -560,7 +560,7 @@ setMethod("show", "SurvMatrix",
 
 
 #' @rdname print-methods
-#' 
+#'
 print.TrainBits <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   if (length(x@grid)) {
@@ -587,7 +587,7 @@ setMethod("show", "TrainBits",
 
 
 #' @rdname print-methods
-#' 
+#'
 print.TunedRecipe <- function(x, n = MachineShop::settings("max.print"), ...) {
   NextMethod()
   cat("\n")
@@ -607,7 +607,7 @@ setMethod("show", "TunedRecipe",
 
 
 #' @rdname print-methods
-#' 
+#'
 print.VarImp <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   print_items(as(x, "data.frame"), n = n)

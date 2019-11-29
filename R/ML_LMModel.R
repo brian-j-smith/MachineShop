@@ -1,23 +1,23 @@
 #' Linear Models
 #'
 #' Fits linear models.
-#' 
+#'
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}, \code{matrix}, \code{numeric}}
 #' }
-#' 
+#'
 #' Further model details can be found in the source link below.
-#' 
+#'
 #' @return \code{MLModel} class object.
-#' 
+#'
 #' @seealso \code{\link[stats]{lm}}, \code{\link{fit}}, \code{\link{resample}}
-#' 
+#'
 #' @examples
 #' fit(sale_amount ~ ., data = ICHomes, model = LMModel)
 #'
 LMModel <- function() {
-  
+
   MLModel(
     name = "LMModel",
     label = "Linear Model",
@@ -52,7 +52,7 @@ LMModel <- function() {
     },
     varimp = function(object, ...) varimp_pval(object)
   )
-  
+
 }
 
 MLModelFunction(LMModel) <- NULL
