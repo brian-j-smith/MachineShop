@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -238,6 +237,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -266,6 +266,12 @@ $(document).ready(function () {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -591,23 +597,25 @@ res &lt;- resample(fo, data = Pima, model = selected_model, control = CVControl)
 
 ## Estimated performance
 summary(performance(res))
-#&gt;                  Mean    Median         SD       Min       Max NA
-#&gt; Brier       0.1523680 0.1580050 0.03256046 0.1050739 0.2004179  0
-#&gt; Accuracy    0.7704487 0.7692308 0.06475061 0.6923077 0.8717949  0
-#&gt; Kappa       0.4639160 0.4661003 0.14431823 0.2500000 0.7058824  0
-#&gt; ROC AUC     0.8459676 0.8461538 0.06790427 0.7588757 0.9822485  0
-#&gt; Sensitivity 0.5846154 0.6153846 0.15889162 0.3846154 0.8461538  0
-#&gt; Specificity 0.8629630 0.8653846 0.10656566 0.6666667 1.0000000  0
+#&gt;              Statistic
+#&gt; Metric             Mean    Median         SD       Min       Max NA
+#&gt;   Brier       0.1482828 0.1560074 0.03314626 0.1068941 0.2044351  0
+#&gt;   Accuracy    0.7884615 0.8076923 0.07470753 0.6410256 0.8717949  0
+#&gt;   Kappa       0.5067195 0.5457143 0.17608439 0.1250000 0.7058824  0
+#&gt;   ROC AUC     0.8434692 0.8125685 0.07164409 0.7278107 0.9349112  0
+#&gt;   Sensitivity 0.6153846 0.6153846 0.12026707 0.3076923 0.7692308  0
+#&gt;   Specificity 0.8745014 0.9038462 0.06874259 0.7692308 0.9615385  0
 
 ## Variable probability cutoff
 summary(performance(res, cutoff = 0.25))
-#&gt;                  Mean    Median         SD       Min       Max NA
-#&gt; Brier       0.1523680 0.1580050 0.03256046 0.1050739 0.2004179  0
-#&gt; Accuracy    0.7352564 0.7342949 0.10045735 0.5250000 0.8974359  0
-#&gt; Kappa       0.4853366 0.4750000 0.16588772 0.1914894 0.7777778  0
-#&gt; ROC AUC     0.8459676 0.8461538 0.06790427 0.7588757 0.9822485  0
-#&gt; Sensitivity 0.8846154 0.9230769 0.09065472 0.7692308 1.0000000  0
-#&gt; Specificity 0.6615385 0.6538462 0.14456830 0.3333333 0.8846154  0</code></pre>
+#&gt;              Statistic
+#&gt; Metric             Mean    Median         SD       Min       Max NA
+#&gt;   Brier       0.1482828 0.1560074 0.03314626 0.1068941 0.2044351  0
+#&gt;   Accuracy    0.7451923 0.7564103 0.04425425 0.6500000 0.7948718  0
+#&gt;   Kappa       0.4894742 0.5131579 0.08904423 0.3563218 0.6000000  0
+#&gt;   ROC AUC     0.8434692 0.8125685 0.07164409 0.7278107 0.9349112  0
+#&gt;   Sensitivity 0.8692308 0.9230769 0.12587628 0.6153846 1.0000000  0
+#&gt;   Specificity 0.6839031 0.6923077 0.06708933 0.5185185 0.7692308  0</code></pre>
 </div>
 <div id="roc-curve" class="section level2">
 <h2>ROC Curve</h2>
@@ -620,32 +628,34 @@ plot(roc, diagonal = TRUE) + coord_fixed()</code></pre>
 <pre class="r"><code>## Area under the curve
 auc(roc)
 #&gt; Model: SelectedModel
-#&gt; [1] 0.835656</code></pre>
+#&gt; [1] 0.8393266</code></pre>
 </div>
 <div id="confusion-matrices" class="section level2">
 <h2>Confusion Matrices</h2>
 <pre class="r"><code>(conf &lt;- confusion(res))
+#&gt; Object of class &quot;ConfusionList&quot;
+#&gt; 
 #&gt; SelectedModel :
 #&gt;          Observed
 #&gt; Predicted neg pos
-#&gt;       neg 226  54
-#&gt;       pos  36  76
+#&gt;       neg 229  50
+#&gt;       pos  33  80
 
 summary(conf)
 #&gt; SelectedModel :
 #&gt; Number of responses: 392
-#&gt; Accuracy (SE): 0.7704082 (0.02124201)
+#&gt; Accuracy (SE): 0.7882653 (0.02063427)
 #&gt; Majority class: 0.6683673
-#&gt; Kappa: 0.4633731
+#&gt; Kappa: 0.5061024
 #&gt; 
 #&gt;                   neg       pos
 #&gt; Observed    0.6683673 0.3316327
-#&gt; Predicted   0.7142857 0.2857143
-#&gt; Agreement   0.5765306 0.1938776
-#&gt; Sensitivity 0.8625954 0.5846154
-#&gt; Specificity 0.5846154 0.8625954
-#&gt; PPV         0.8071429 0.6785714
-#&gt; NPV         0.6785714 0.8071429
+#&gt; Predicted   0.7117347 0.2882653
+#&gt; Agreement   0.5841837 0.2040816
+#&gt; Sensitivity 0.8740458 0.6153846
+#&gt; Specificity 0.6153846 0.8740458
+#&gt; PPV         0.8207885 0.7079646
+#&gt; NPV         0.7079646 0.8207885
 
 plot(conf)
 #&gt; $SelectedModel</code></pre>
@@ -654,18 +664,18 @@ plot(conf)
 summary(confusion(res, cutoff = 0.25))
 #&gt; SelectedModel :
 #&gt; Number of responses: 392
-#&gt; Accuracy (SE): 0.7346939 (0.02229892)
+#&gt; Accuracy (SE): 0.744898 (0.02201721)
 #&gt; Majority class: 0.6683673
-#&gt; Kappa: 0.4765818
+#&gt; Kappa: 0.4897959
 #&gt; 
 #&gt;                   neg       pos
 #&gt; Observed    0.6683673 0.3316327
-#&gt; Predicted   0.4795918 0.5204082
-#&gt; Agreement   0.4413265 0.2933673
-#&gt; Sensitivity 0.6603053 0.8846154
-#&gt; Specificity 0.8846154 0.6603053
-#&gt; PPV         0.9202128 0.5637255
-#&gt; NPV         0.5637255 0.9202128</code></pre>
+#&gt; Predicted   0.5000000 0.5000000
+#&gt; Agreement   0.4566327 0.2882653
+#&gt; Sensitivity 0.6832061 0.8692308
+#&gt; Specificity 0.8692308 0.6832061
+#&gt; PPV         0.9132653 0.5765306
+#&gt; NPV         0.5765306 0.9132653</code></pre>
 </div>
 <div id="calibration-curve" class="section level2">
 <h2>Calibration Curve</h2>

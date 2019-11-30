@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -237,6 +236,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -265,6 +265,12 @@ $(document).ready(function () {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -443,14 +449,15 @@ fo &lt;- sale_amount ~ .</code></pre>
 <div id="traditional-formula" class="section level2">
 <h2>Traditional Formula</h2>
 <p>Traditional formula calls to the fitting functions consist of a formula and dataset pair. This specification additionally allows for crossing (<code>*</code>), interaction (<code>:</code>), and removal (<code>-</code>) of predictors in the formula; in-line functions of response variables; and some in-line functions of predictors.</p>
-<pre class="r"><code>tuned_model &lt;- tune(fo, ICHomes, model = SVMRadialModel)
-model_fit &lt;- fit(fo, ICHomes, model = tuned_model)
+<pre class="r"><code>model_fit &lt;- fit(fo, ICHomes, model = TunedModel(SVMRadialModel))
+tuned_model &lt;- as.MLModel(model_fit)
 model_res &lt;- resample(fo, ICHomes, model = tuned_model)
 summary(model_res)
-#&gt;              Mean       Median           SD          Min          Max NA
-#&gt; RMSE 5.393849e+04 5.494142e+04 11901.106973 3.048369e+04 7.204500e+04  0
-#&gt; R2   6.406241e-01 6.453997e-01     0.114439 3.924652e-01 8.003395e-01  0
-#&gt; MAE  2.898293e+04 2.838869e+04  4628.995222 2.184885e+04 3.721708e+04  0</code></pre>
+#&gt;       Statistic
+#&gt; Metric         Mean       Median           SD          Min          Max NA
+#&gt;   RMSE 5.335037e+04 5.617796e+04 1.678178e+04 3.446627e+04 8.613058e+04  0
+#&gt;   R2   6.485471e-01 6.775076e-01 1.088852e-01 4.422665e-01 8.129234e-01  0
+#&gt;   MAE  2.904768e+04 2.724553e+04 6.581432e+03 2.223701e+04 4.203361e+04  0</code></pre>
 </div>
 <div id="design-matrix" class="section level2">
 <h2>Design Matrix</h2>
@@ -458,28 +465,30 @@ summary(model_res)
 <pre class="r"><code>x &lt;- as.matrix(ICHomes[c(&quot;built&quot;, &quot;base_size&quot;, &quot;lot_size&quot;, &quot;bedrooms&quot;)])
 y &lt;- ICHomes$sale_amount
 
-tuned_model &lt;- tune(x, y, model = SVMRadialModel)
-model_fit &lt;- fit(x, y, model = tuned_model)
+model_fit &lt;- fit(x, y, model = TunedModel(SVMRadialModel))
+tuned_model &lt;- as.MLModel(model_fit)
 model_res &lt;- resample(x, y, model = tuned_model)
 summary(model_res)
-#&gt;              Mean       Median           SD          Min          Max NA
-#&gt; RMSE 6.006494e+04 5.530396e+04 1.892298e+04 3.306872e+04 9.880400e+04  0
-#&gt; R2   5.499054e-01 5.520743e-01 8.628877e-02 3.872804e-01 6.726994e-01  0
-#&gt; MAE  3.449766e+04 3.422497e+04 6.147685e+03 2.563756e+04 4.582693e+04  0</code></pre>
+#&gt;       Statistic
+#&gt; Metric         Mean       Median           SD          Min          Max NA
+#&gt;   RMSE 6.140288e+04 6.058806e+04 1.525059e+04 4.067968e+04 8.977856e+04  0
+#&gt;   R2   5.389255e-01 5.275295e-01 8.371365e-02 3.744864e-01 6.992953e-01  0
+#&gt;   MAE  3.469589e+04 3.331992e+04 5.865394e+03 2.738499e+04 4.775968e+04  0</code></pre>
 </div>
 <div id="model-frame" class="section level2">
 <h2>Model Frame</h2>
 <p>Model frames are created with the traditional formula or design matrix syntax described above and then passed to the fitting functions. They allow for the specification of variables for stratified resampling or for weighting of cases in model fitting.</p>
 <pre class="r"><code>mf &lt;- ModelFrame(fo, data = ICHomes, strata = ICHomes$sale_amount)
 
-tuned_model &lt;- tune(mf, model = SVMRadialModel)
-model_fit &lt;- fit(mf, model = tuned_model)
+model_fit &lt;- fit(mf, model = TunedModel(SVMRadialModel))
+tuned_model &lt;- as.MLModel(model_fit)
 model_res &lt;- resample(mf, model = tuned_model)
 summary(model_res)
-#&gt;              Mean       Median           SD          Min          Max NA
-#&gt; RMSE 5.295771e+04 5.486064e+04 1.792214e+04 3.123056e+04 7.998732e+04  0
-#&gt; R2   6.441149e-01 6.749556e-01 1.128184e-01 3.666809e-01 7.545634e-01  0
-#&gt; MAE  2.912913e+04 3.003532e+04 6.509687e+03 2.105852e+04 4.169938e+04  0</code></pre>
+#&gt;       Statistic
+#&gt; Metric         Mean       Median           SD         Min          Max NA
+#&gt;   RMSE 5.368863e+04 5.699349e+04 1.310252e+04 27011.92020 7.430281e+04  0
+#&gt;   R2   6.412307e-01 6.350096e-01 1.198856e-01     0.43486 8.457219e-01  0
+#&gt;   MAE  2.903600e+04 3.010225e+04 3.289186e+03 20976.38765 3.229314e+04  0</code></pre>
 </div>
 <div id="preprocessing-recipe" class="section level2">
 <h2>Preprocessing Recipe</h2>
@@ -487,19 +496,20 @@ summary(model_res)
 <pre class="r"><code>library(recipes)
 
 rec &lt;- recipe(fo, data = ICHomes) %&gt;%
-  add_role(sale_amount, new_role = &quot;case_strata&quot;) %&gt;%
+  role_case(stratum = sale_amount) %&gt;%
   step_center(base_size, add_size, garage1_size, garage2_size, lot_size) %&gt;%
   step_pca(base_size, add_size, garage1_size, garage2_size, lot_size, num_comp = 2) %&gt;%
   step_dummy(all_nominal(), -all_outcomes())
 
-tuned_model &lt;- tune(rec, model = SVMRadialModel)
-model_fit &lt;- fit(rec, model = tuned_model)
+model_Fit &lt;- fit(rec, model = TunedModel(SVMRadialModel))
+tuned_model &lt;- as.MLModel(model_fit)
 model_res &lt;- resample(rec, model = tuned_model)
 summary(model_res)
-#&gt;              Mean       Median           SD          Min          Max NA
-#&gt; RMSE 5.549896e+04 5.388322e+04 1.449916e+04 3.538494e+04 7.730929e+04  0
-#&gt; R2   6.193385e-01 6.182196e-01 8.683659e-02 4.907569e-01 7.225741e-01  0
-#&gt; MAE  3.062101e+04 3.027683e+04 4.248714e+03 2.425736e+04 3.744345e+04  0</code></pre>
+#&gt;       Statistic
+#&gt; Metric         Mean       Median           SD          Min          Max NA
+#&gt;   RMSE 5.543035e+04 5.639039e+04 1.537285e+04 3.621138e+04 8.473589e+04  0
+#&gt;   R2   6.145692e-01 6.137847e-01 6.424820e-02 5.133338e-01 7.047485e-01  0
+#&gt;   MAE  3.075955e+04 3.124161e+04 5.068364e+03 2.414831e+04 3.763411e+04  0</code></pre>
 </div>
 </div>
 

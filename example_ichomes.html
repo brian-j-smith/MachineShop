@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -238,6 +237,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -266,6 +266,12 @@ $(document).ready(function () {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -772,76 +778,58 @@ testset &lt;- ICHomes[-train_indices, ]
 fo &lt;- sale_amount ~ .
 
 ## Boosted regression model tuned with the training set
-(tuned_model &lt;- tune(fo, data = trainset, model = GBMModel, grid = 5))
-#&gt; Object of class &quot;MLModelTune&quot;
-#&gt; 
-#&gt; Model name: GBMModel
-#&gt; Label: Generalized Boosted Regression
-#&gt; Packages: gbm
-#&gt; Response types: factor, numeric, Surv
-#&gt; Tuning grid: TRUE
-#&gt; Variable importance: TRUE
-#&gt; 
-#&gt; Parameters:
-#&gt; $n.trees
-#&gt; [1] 150
-#&gt; 
-#&gt; $interaction.depth
-#&gt; [1] 4
-#&gt; 
-#&gt; $n.minobsinnode
-#&gt; [1] 10
-#&gt; 
-#&gt; $shrinkage
-#&gt; [1] 0.1
-#&gt; 
-#&gt; $bag.fraction
-#&gt; [1] 0.5
-#&gt; 
-#&gt; Grid (selected = 18):
-#&gt;    n.trees interaction.depth
-#&gt; 1       50                 1
-#&gt; 2      100                 1
-#&gt; 3      150                 1
-#&gt; 4      200                 1
-#&gt; 5      250                 1
-#&gt; 6       50                 2
-#&gt; 7      100                 2
-#&gt; 8      150                 2
-#&gt; 9      200                 2
-#&gt; 10     250                 2
-#&gt; 11      50                 3
-#&gt; 12     100                 3
-#&gt; 13     150                 3
-#&gt; 14     200                 3
-#&gt; 15     250                 3
-#&gt; 16      50                 4
-#&gt; 17     100                 4
-#&gt; 18     150                 4
-#&gt; 19     200                 4
-#&gt; 20     250                 4
-#&gt; 21      50                 5
-#&gt; 22     100                 5
-#&gt; 23     150                 5
-#&gt; 24     200                 5
-#&gt; 25     250                 5
-#&gt; 
-#&gt; Object of class &quot;Performance&quot;
-#&gt; 
-#&gt; Metrics: RMSE, R2, MAE
-#&gt; Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6, GBMModel.7, GBMModel.8, GBMModel.9, GBMModel.10, GBMModel.11, GBMModel.12, GBMModel.13, GBMModel.14, GBMModel.15, GBMModel.16, GBMModel.17, GBMModel.18, GBMModel.19, GBMModel.20, GBMModel.21, GBMModel.22, GBMModel.23, GBMModel.24, GBMModel.25 
-#&gt; 
-#&gt; Selected model: GBMModel.18 
-#&gt; RMSE value: 47334.15
-plot(tuned_model, type = &quot;line&quot;)</code></pre>
-<p><img src="example_ichomes_files/figure-html/ex_ichomes_tune-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>## Tuned model fit to the training set
-model_fit &lt;- fit(fo, data = trainset, model = tuned_model)
+model_fit &lt;- TunedModel(GBMModel, grid = 5) %&gt;% fit(fo, data = trainset)
 
 ## Variable importance
 vi &lt;- varimp(model_fit)
 plot(vi)</code></pre>
-<p><img src="example_ichomes_files/figure-html/ex_ichomes_tune_fit-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="example_ichomes_files/figure-html/ex_ichomes_tune-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## Performance plotted over the grid points
+(tuned_model &lt;- as.MLModel(model_fit))
+#&gt; Object of class &quot;MLModel&quot;
+#&gt; 
+#&gt; Model name: GBMModel
+#&gt; Label: Trained Generalized Boosted Regression
+#&gt; Packages: gbm
+#&gt; Response types: factor, numeric, PoissonVariate, Surv
+#&gt; Tuning grid: TRUE
+#&gt; Variable importance: TRUE
+#&gt; 
+#&gt; Parameters:
+#&gt; List of 5
+#&gt;  $ n.trees          : num 150
+#&gt;  $ interaction.depth: int 5
+#&gt;  $ n.minobsinnode   : num 10
+#&gt;  $ shrinkage        : num 0.1
+#&gt;  $ bag.fraction     : num 0.5
+#&gt; 
+#&gt; Object of class &quot;TrainBits&quot;
+#&gt; 
+#&gt; Grid (selected = 23):
+#&gt; # A tibble: 25 x 2
+#&gt;    n.trees interaction.depth
+#&gt;      &lt;dbl&gt;             &lt;int&gt;
+#&gt;  1      50                 1
+#&gt;  2     100                 1
+#&gt;  3     150                 1
+#&gt;  4     200                 1
+#&gt;  5     250                 1
+#&gt;  6      50                 2
+#&gt;  7     100                 2
+#&gt;  8     150                 2
+#&gt;  9     200                 2
+#&gt; 10     250                 2
+#&gt; # ... with 15 more rows
+#&gt; 
+#&gt; Object of class &quot;Performance&quot;
+#&gt; 
+#&gt; Metrics: RMSE, R2, MAE 
+#&gt; Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6, GBMModel.7, GBMModel.8, GBMModel.9, GBMModel.10... with 15 more 
+#&gt; 
+#&gt; Selected model: GBMModel.23 
+#&gt; RMSE value: 47022.84
+plot(tuned_model, type = &quot;line&quot;)</code></pre>
+<p><img src="example_ichomes_files/figure-html/ex_ichomes_tune_model-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="generalization-performance" class="section level2">
 <h2>Generalization Performance</h2>
@@ -852,7 +840,7 @@ pred &lt;- predict(model_fit, newdata = testset)
 ## Test set performance
 performance(obs, pred)
 #&gt;         RMSE           R2          MAE 
-#&gt; 4.497960e+04 7.216102e-01 2.690248e+04</code></pre>
+#&gt; 4.548440e+04 7.153264e-01 2.698278e+04</code></pre>
 </div>
 <div id="calibration-curve" class="section level2">
 <h2>Calibration Curve</h2>

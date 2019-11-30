@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -237,6 +236,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -265,6 +265,12 @@ $(document).ready(function () {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -404,7 +410,7 @@ div.tocify {
 
 <div id="global-settings" class="section level1">
 <h1>Global Settings</h1>
-<p>Core default behaviors of functions in the package can be viewed or changed globally through the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/1.6.0/topics/settings"><code>settings</code></a> function. The function accepts one or more character names of settings to view, <code>name = value</code> pairs giving the values of settings to change, a vector of these, or <code>"reset"</code> to restore all package defaults. Calls with no arguments will display the current values of all. Settings may also be supplied as a single unnamed argument which is a named list. Partial matching of setting names is supported. The setting value is returned if only one is specified to view. Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes. Such a list can be passed as an argument to <code>settings</code> to restore their values.</p>
+<p>Core default behaviors of functions in the package can be viewed or changed globally through the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.0.0/topics/settings"><code>settings</code></a> function. The function accepts one or more character names of settings to view, <code>name = value</code> pairs giving the values of settings to change, a vector of these, or <code>"reset"</code> to restore all package defaults. Calls with no arguments will display the current values of all. Settings may also be supplied as a single unnamed argument which is a named list. Partial matching of setting names is supported. The setting value is returned if only one is specified to view. Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes. Such a list can be passed as an argument to <code>settings</code> to restore their values.</p>
 <pre class="r"><code>## Package library
 library(MachineShop)
 
@@ -423,7 +429,13 @@ settings()
 #&gt; [1] &quot;empirical&quot;
 #&gt; 
 #&gt; $grid
-#&gt; [1] 3
+#&gt; Object of class &quot;Grid&quot;
+#&gt; 
+#&gt; Length: 3
+#&gt; Random sample: FALSE
+#&gt; 
+#&gt; $max.print
+#&gt; [1] 10
 #&gt; 
 #&gt; $method.EmpiricalSurv
 #&gt; [1] &quot;efron&quot;
@@ -452,13 +464,19 @@ settings()
 #&gt;    C-Index      Brier    ROC AUC   Accuracy 
 #&gt;   &quot;cindex&quot;    &quot;brier&quot;  &quot;roc_auc&quot; &quot;accuracy&quot; 
 #&gt; 
+#&gt; $require
+#&gt; [1] &quot;MachineShop&quot; &quot;survival&quot;    &quot;recipes&quot;    
+#&gt; 
+#&gt; $reset
+#&gt; character(0)
+#&gt; 
 #&gt; $stat.Curves
 #&gt; [1] &quot;base::mean&quot;
 #&gt; 
 #&gt; $stat.Resamples
 #&gt; [1] &quot;base::mean&quot;
 #&gt; 
-#&gt; $stat.Tune
+#&gt; $stat.Train
 #&gt; [1] &quot;base::mean&quot;
 #&gt; 
 #&gt; $stats.PartialDependence
@@ -466,10 +484,8 @@ settings()
 #&gt; &quot;base::mean&quot; 
 #&gt; 
 #&gt; $stats.Resamples
-#&gt;            Mean          Median              SD             Min 
-#&gt;    &quot;base::mean&quot; &quot;stats::median&quot;     &quot;stats::sd&quot;     &quot;base::min&quot; 
-#&gt;             Max 
-#&gt;     &quot;base::max&quot;
+#&gt;            Mean          Median              SD             Min             Max 
+#&gt;    &quot;base::mean&quot; &quot;stats::median&quot;     &quot;stats::sd&quot;     &quot;base::min&quot;     &quot;base::max&quot;
 
 ## Change settings
 presets &lt;- settings(control = &quot;BootControl&quot;, grid = 10)
@@ -484,7 +500,10 @@ settings(&quot;control&quot;, &quot;grid&quot;)
 #&gt; [1] &quot;BootControl&quot;
 #&gt; 
 #&gt; $grid
-#&gt; [1] 10
+#&gt; Object of class &quot;Grid&quot;
+#&gt; 
+#&gt; Length: 10
+#&gt; Random sample: FALSE
 
 ## Restore the previous settings
 settings(presets)</code></pre>

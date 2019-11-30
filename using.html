@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -238,6 +237,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -266,6 +266,12 @@ $(document).ready(function () {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -623,7 +629,7 @@ modelinfo(GBMModel)
 #&gt; [1] &quot;gbm&quot;
 #&gt; 
 #&gt; $GBMModel$response_types
-#&gt; [1] &quot;factor&quot;  &quot;numeric&quot; &quot;Surv&quot;   
+#&gt; [1] &quot;factor&quot;         &quot;numeric&quot;        &quot;PoissonVariate&quot; &quot;Surv&quot;          
 #&gt; 
 #&gt; $GBMModel$arguments
 #&gt; function (distribution = NULL, n.trees = 100, interaction.depth = 1, 
@@ -725,7 +731,7 @@ predict(surv_fit, newdata = surv_test, times = surv_times, type = &quot;prob&quo
 #&gt; [4,] 0.3337804 0.14801706
 #&gt; [5,] 0.4439461 0.24320762
 #&gt; [6,] 0.9064022 0.84273837
-#&gt; Attribute &quot;times&quot;:
+#&gt; Times:
 #&gt; [1] 1825 3650
 
 predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.5) %&gt;% head
@@ -737,7 +743,7 @@ predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.5) %&gt;% 
 #&gt; [4,]      1      1
 #&gt; [5,]      1      1
 #&gt; [6,]      0      0
-#&gt; Attribute &quot;times&quot;:
+#&gt; Times:
 #&gt; [1] 1825 3650</code></pre>
 </div>
 </div>
@@ -794,7 +800,7 @@ library(recipes)
 rec &lt;- recipe(medv ~ ., data = Boston)
 
 fit(rec, model = GBMModel)</code></pre>
-<p>Case weights and stratified resampling are also supported for recipes via the designations of <code>"case_weight"</code> and <code>"case_strata"</code> roles, respectively. As an example, an initial step is included in the recipe below to update (alter) the role of variable <code>weights</code> to be case weights. That is followed by a step to convert three ordinal factors to integer scores.</p>
+<p>Case weights and stratified resampling are also supported for recipes with the <code>role_case</code> function. As an example, an initial step is included in the recipe below to replace the original role of variable <code>weights</code> with a designation of case weights. That is followed by a step to convert three ordinal factors to integer scores.</p>
 <pre class="r"><code>## Recipe specification with case weights
 df &lt;- within(esoph, {
   y &lt;- ncases / (ncases + ncontrols)
@@ -802,7 +808,7 @@ df &lt;- within(esoph, {
 })
 
 rec &lt;- recipe(y ~ agegp + tobgp + alcgp + weights, data = df) %&gt;%
-  update_role(weights, new_role = &quot;case_weight&quot;) %&gt;%
+  role_case(weight = weights, replace = TRUE) %&gt;%
   step_ordinalscore(agegp, tobgp, alcgp)
 
 fit(rec, model = GBMModel)</code></pre>
@@ -999,11 +1005,10 @@ fit(rec, model = LMModel)</code></pre>
 library(survival)
 
 fit(Surv(time, status) ~ ., data = surv_train, model = GBMModel)</code></pre>
-<p>For recipes, survival responses should be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated as <code>"surv_time"</code> and <code>"surv_event"</code>.</p>
+<p>For recipes, survival responses should be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated with the <code>role_surv</code> function.</p>
 <pre class="r"><code>## Survival response recipe
 rec &lt;- recipe(time + status ~ ., data = surv_train) %&gt;%
-  add_role(time, new_role = &quot;surv_time&quot;) %&gt;%
-  add_role(status, new_role = &quot;surv_event&quot;)
+  role_surv(time = time, event = status)
 
 fit(rec, model = GBMModel)</code></pre>
 </div>
@@ -1142,16 +1147,14 @@ specificity(obs, pred_probs)
 <p>Function <code>metricinfo</code> may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.</p>
 <pre class="r"><code>## All available metrics
 metricinfo() %&gt;% names
-#&gt;  [1] &quot;accuracy&quot;        &quot;auc&quot;             &quot;brier&quot;          
-#&gt;  [4] &quot;cindex&quot;          &quot;cross_entropy&quot;   &quot;f_score&quot;        
-#&gt;  [7] &quot;fnr&quot;             &quot;fpr&quot;             &quot;gini&quot;           
-#&gt; [10] &quot;kappa2&quot;          &quot;mae&quot;             &quot;mse&quot;            
-#&gt; [13] &quot;msle&quot;            &quot;npv&quot;             &quot;ppv&quot;            
-#&gt; [16] &quot;pr_auc&quot;          &quot;precision&quot;       &quot;r2&quot;             
-#&gt; [19] &quot;recall&quot;          &quot;rmse&quot;            &quot;rmsle&quot;          
-#&gt; [22] &quot;roc_auc&quot;         &quot;roc_index&quot;       &quot;rpp&quot;            
-#&gt; [25] &quot;sensitivity&quot;     &quot;specificity&quot;     &quot;tnr&quot;            
-#&gt; [28] &quot;tpr&quot;             &quot;weighted_kappa2&quot;
+#&gt;  [1] &quot;accuracy&quot;        &quot;auc&quot;             &quot;brier&quot;           &quot;cindex&quot;         
+#&gt;  [5] &quot;cross_entropy&quot;   &quot;f_score&quot;         &quot;fnr&quot;             &quot;fpr&quot;            
+#&gt;  [9] &quot;gini&quot;            &quot;kappa2&quot;          &quot;mae&quot;             &quot;mse&quot;            
+#&gt; [13] &quot;msle&quot;            &quot;npv&quot;             &quot;ppv&quot;             &quot;pr_auc&quot;         
+#&gt; [17] &quot;precision&quot;       &quot;r2&quot;              &quot;recall&quot;          &quot;rmse&quot;           
+#&gt; [21] &quot;rmsle&quot;           &quot;roc_auc&quot;         &quot;roc_index&quot;       &quot;rpp&quot;            
+#&gt; [25] &quot;sensitivity&quot;     &quot;specificity&quot;     &quot;tnr&quot;             &quot;tpr&quot;            
+#&gt; [29] &quot;weighted_kappa2&quot;
 
 ## Metric-specific information
 metricinfo(cindex)
@@ -1439,6 +1442,9 @@ Event
 <dt>CVControl</dt>
 <dd>Repeated K-fold cross-validation <span class="citation">(Kohavi 1995)</span>. The full data set is repeatedly partitioned into K-folds. For a given partitioning, prediction is performed on each of the K folds with models fit on all remaining folds. 10-fold cross-validation is the package default.
 </dd>
+<dt>CVOptimismControl</dt>
+<dd>Optimism-corrected cross-validation <span class="citation">(Davison and Hinkley 1997, eq. 6.48)</span>.
+</dd>
 <dt>OOBControl</dt>
 <dd>Out-of-bootstrap resampling. Models are fit with bootstrap resampled training sets and used to predict the unsampled cases.
 </dd>
@@ -1472,7 +1478,7 @@ registerDoParallel(cores = 2)</code></pre>
 (res_means &lt;- resample(surv_fo, data = surv_train, model = GBMModel, control = surv_means_control))
 #&gt; Object of class &quot;Resamples&quot;
 #&gt; 
-#&gt; Models: GBMModel
+#&gt; Models: GBMModel 
 #&gt; Stratification variable: (strata) 
 #&gt; 
 #&gt; Object of class &quot;MLControl&quot;
@@ -1486,7 +1492,7 @@ registerDoParallel(cores = 2)</code></pre>
 (res_probs &lt;- resample(surv_fo, data = surv_train, model = GBMModel, control = surv_probs_control))
 #&gt; Object of class &quot;Resamples&quot;
 #&gt; 
-#&gt; Models: GBMModel
+#&gt; Models: GBMModel 
 #&gt; Stratification variable: (strata) 
 #&gt; 
 #&gt; Object of class &quot;MLControl&quot;
@@ -1503,21 +1509,23 @@ registerDoParallel(cores = 2)</code></pre>
 <p>The <code>summary</code> function when applied directly to output from <code>resample</code> computes summary statistics for the default performance metrics described in the <em>Performance Function</em> section.</p>
 <pre class="r"><code>## Summary of survival means metric
 summary(res_means)
-#&gt;              Mean    Median         SD       Min       Max NA
-#&gt; C-Index 0.7610614 0.7663043 0.06966664 0.6256684 0.8924731  0
+#&gt;          Statistic
+#&gt; Metric         Mean    Median         SD       Min       Max NA
+#&gt;   C-Index 0.7610614 0.7663043 0.06966664 0.6256684 0.8924731  0
 
 ## Summary of survival probability metrics
 summary(res_probs)
-#&gt;                     Mean    Median         SD        Min       Max NA
-#&gt; Brier.mean     0.1864575 0.1714480 0.05565866 0.12160556 0.3389423  0
-#&gt; Brier.time1    0.1686271 0.1674014 0.03595483 0.09871495 0.2322408  0
-#&gt; Brier.time2    0.2042879 0.1782289 0.08490057 0.11394700 0.4511018  0
-#&gt; ROC AUC.mean   0.7971056 0.7921197 0.06784720 0.65103433 0.9403871  0
-#&gt; ROC AUC.time1  0.8077798 0.8093603 0.07659626 0.68459040 0.9506220  0
-#&gt; ROC AUC.time2  0.7864314 0.7994861 0.06685039 0.61747827 0.9301522  0
-#&gt; Accuracy.mean  0.7162196 0.7030539 0.06184229 0.64424951 0.8497942  0
-#&gt; Accuracy.time1 0.7609229 0.7482143 0.05731050 0.66460905 0.8888889  0
-#&gt; Accuracy.time2 0.6715162 0.6652949 0.08388027 0.54285714 0.8477366  0</code></pre>
+#&gt;                 Statistic
+#&gt; Metric                Mean    Median         SD        Min       Max NA
+#&gt;   Brier.mean     0.1864575 0.1714480 0.05565866 0.12160556 0.3389423  0
+#&gt;   Brier.time1    0.1686271 0.1674014 0.03595483 0.09871495 0.2322408  0
+#&gt;   Brier.time2    0.2042879 0.1782289 0.08490057 0.11394700 0.4511018  0
+#&gt;   ROC AUC.mean   0.7971056 0.7921197 0.06784720 0.65103433 0.9403871  0
+#&gt;   ROC AUC.time1  0.8077798 0.8093603 0.07659626 0.68459040 0.9506220  0
+#&gt;   ROC AUC.time2  0.7864314 0.7994861 0.06685039 0.61747827 0.9301522  0
+#&gt;   Accuracy.mean  0.7162196 0.7030539 0.06184229 0.64424951 0.8497942  0
+#&gt;   Accuracy.time1 0.7609229 0.7482143 0.05731050 0.66460905 0.8888889  0
+#&gt;   Accuracy.time2 0.6715162 0.6652949 0.08388027 0.54285714 0.8477366  0</code></pre>
 <p>Other relevant metrics can be identified and summarized with the <code>metricinfo</code> and <code>performance</code> functions.</p>
 <pre class="r"><code>## Resample-specific metrics
 metricinfo(res_means) %&gt;% names
@@ -1525,20 +1533,23 @@ metricinfo(res_means) %&gt;% names
 
 ## User-specified survival means metrics
 summary(performance(res_means, metrics = c(cindex, rmse)))
-#&gt;                Mean       Median           SD          Min          Max NA
-#&gt; cindex    0.7610614    0.7663043 6.966664e-02    0.6256684    0.8924731  0
-#&gt; rmse   4016.4176835 3642.1226845 1.586513e+03 1792.6746614 8511.1333117  0</code></pre>
+#&gt;         Statistic
+#&gt; Metric           Mean       Median           SD          Min          Max NA
+#&gt;   cindex    0.7610614    0.7663043 6.966664e-02    0.6256684    0.8924731  0
+#&gt;   rmse   4016.4176835 3642.1226845 1.586513e+03 1792.6746614 8511.1333117  0</code></pre>
 <p>Futhermore, summaries can be customized with a user-defined statistics function or list of statistics functions passed to the <code>stats</code> argument of <code>summary</code>.</p>
 <pre class="r"><code>## User-defined statistics function
 percentiles &lt;- function(x) quantile(x, probs = c(0.25, 0.50, 0.75))
 summary(res_means, stats = percentiles)
-#&gt;              25%       50%       75% NA
-#&gt; C-Index 0.720087 0.7663043 0.8113255  0
+#&gt;          Statistic
+#&gt; Metric         25%       50%       75% NA
+#&gt;   C-Index 0.720087 0.7663043 0.8113255  0
 
 ## User-defined list of statistics functions
 summary(res_means, stats = c(Mean = mean, Percentile = percentiles))
-#&gt;              Mean Percentile.25% Percentile.50% Percentile.75% NA
-#&gt; C-Index 0.7610614       0.720087      0.7663043      0.8113255  0</code></pre>
+#&gt;          Statistic
+#&gt; Metric         Mean Percentile.25% Percentile.50% Percentile.75% NA
+#&gt;   C-Index 0.7610614       0.720087      0.7663043      0.8113255  0</code></pre>
 </div>
 <div id="plots" class="section level2">
 <h2>Plots</h2>
@@ -1559,7 +1570,7 @@ grid.arrange(p1, p2, p3, p4, nrow = 2)</code></pre>
 </div>
 <div id="stratified-resampling" class="section level2">
 <h2>Stratified Resampling</h2>
-<p>Stratification of cases for the construction of resampled training and test sets can be employed to help achieve balance across the sets. Stratified resampling is automatically performed if variable specification is in terms of a traditional formula and will be done according to the response variable if a numeric vector or factor, the event variable if survival, and the first variable if a numeric matrix. For model frames and recipes, stratification variables must be defined explicitly with the <code>strata</code> argument to the <code>ModelFrame</code> constructor or with the <code>"case_strata"</code> role designation in a recipe step.</p>
+<p>Stratification of cases for the construction of resampled training and test sets can be employed to help achieve balance across the sets. Stratified resampling is automatically performed if variable specification is in terms of a traditional formula and will be done according to the response variable if a numeric vector or factor, the event variable if survival, and the first variable if a numeric matrix. For model frames and recipes, stratification variables must be defined explicitly with the <code>strata</code> argument to the <code>ModelFrame</code> constructor or with the <code>role_case</code> function.</p>
 <pre class="r"><code>## Model frame with case status stratification
 mf &lt;- ModelFrame(surv_fo, data = surv_train, strata = surv_train$status)
 
@@ -1567,9 +1578,8 @@ resample(mf, model = GBMModel)
 
 ## Recipe with case status stratification
 rec &lt;- recipe(time + status ~ ., data = surv_train) %&gt;%
-  add_role(time, new_role = &quot;surv_time&quot;) %&gt;%
-  add_role(status, new_role = &quot;surv_event&quot;) %&gt;%
-  add_role(status, new_role = &quot;case_strata&quot;)
+  role_surv(time = time, event = status) %&gt;%
+  role_case(stratum = status)
 
 resample(rec, model = GBMModel)</code></pre>
 </div>
@@ -1591,10 +1601,10 @@ res3 &lt;- resample(surv_fo, data = surv_train, model = GBMModel(n.trees = 100),
                  control = surv_means_control)
 
 ## Combine resample output for comparison
-(res &lt;- Resamples(GBM1 = res1, GBM2 = res2, GBM3 = res3))
+(res &lt;- c(GBM1 = res1, GBM2 = res2, GBM3 = res3))
 #&gt; Object of class &quot;Resamples&quot;
 #&gt; 
-#&gt; Models: GBM1, GBM2, GBM3
+#&gt; Models: GBM1, GBM2, GBM3 
 #&gt; Stratification variable: (strata) 
 #&gt; 
 #&gt; Object of class &quot;MLControl&quot;
@@ -1606,12 +1616,13 @@ res3 &lt;- resample(surv_fo, data = surv_train, model = GBMModel(n.trees = 100),
 #&gt; Seed: 123
 
 summary(res)
-#&gt; , , C-Index
+#&gt; , , Metric = C-Index
 #&gt; 
-#&gt;           Mean    Median         SD       Min       Max NA
-#&gt; GBM1 0.7738602 0.7743590 0.08222939 0.6096257 0.9354839  0
-#&gt; GBM2 0.7730294 0.7692308 0.07206580 0.6363636 0.9354839  0
-#&gt; GBM3 0.7610614 0.7663043 0.06966664 0.6256684 0.8924731  0
+#&gt;       Statistic
+#&gt; Model       Mean    Median         SD       Min       Max NA
+#&gt;   GBM1 0.7738602 0.7743590 0.08222939 0.6096257 0.9354839  0
+#&gt;   GBM2 0.7730294 0.7692308 0.07206580 0.6363636 0.9354839  0
+#&gt;   GBM3 0.7610614 0.7663043 0.06966664 0.6256684 0.8924731  0
 
 plot(res)</code></pre>
 <p><img src="using_files/figure-html/using_resample_comparisons-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -1620,32 +1631,34 @@ plot(res)</code></pre>
 (res_diff &lt;- diff(res))
 #&gt; Object of class &quot;PerformanceDiff&quot;
 #&gt; 
-#&gt; Metrics: C-Index
+#&gt; Metrics: C-Index 
 #&gt; Models: GBM1 - GBM2, GBM1 - GBM3, GBM2 - GBM3
 
 summary(res_diff)
-#&gt; , , C-Index
+#&gt; , , Metric = C-Index
 #&gt; 
-#&gt;                     Mean      Median         SD         Min        Max NA
-#&gt; GBM1 - GBM2 0.0008308229 0.005128205 0.01863138 -0.03482587 0.02331606  0
-#&gt; GBM1 - GBM3 0.0127988563 0.008982036 0.02271720 -0.01990050 0.05434783  0
-#&gt; GBM2 - GBM3 0.0119680334 0.010695187 0.01992512 -0.02590674 0.04891304  0
+#&gt;              Statistic
+#&gt; Model                 Mean      Median         SD         Min        Max NA
+#&gt;   GBM1 - GBM2 0.0008308229 0.005128205 0.01863138 -0.03482587 0.02331606  0
+#&gt;   GBM1 - GBM3 0.0127988563 0.008982036 0.02271720 -0.01990050 0.05434783  0
+#&gt;   GBM2 - GBM3 0.0119680334 0.010695187 0.01992512 -0.02590674 0.04891304  0
 
 plot(res_diff)</code></pre>
 <p><img src="using_files/figure-html/using_resample_diff-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>t.test(res_diff)
 #&gt; Object of class &quot;PerformanceDiffTest&quot;
 #&gt; 
-#&gt; Upper diagonal: mean differences (row - column)
+#&gt; Upper diagonal: mean differences (Model1 - Model2)
 #&gt; Lower diagonal: p-values
 #&gt; P-value adjustment method: holm
 #&gt; 
-#&gt; , , C-Index
+#&gt; , , Metric = C-Index
 #&gt; 
-#&gt;           GBM1         GBM2       GBM3
-#&gt; GBM1        NA 0.0008308229 0.01279886
-#&gt; GBM2 0.8653540           NA 0.01196803
-#&gt; GBM3 0.1065908 0.1065908159         NA</code></pre>
+#&gt;       Model2
+#&gt; Model1      GBM1         GBM2       GBM3
+#&gt;   GBM1        NA 0.0008308229 0.01279886
+#&gt;   GBM2 0.8653540           NA 0.01196803
+#&gt;   GBM3 0.1065908 0.1065908159         NA</code></pre>
 </div>
 </div>
 <div id="performance-analyses" class="section level1">
@@ -1656,6 +1669,7 @@ plot(res_diff)</code></pre>
 <p>The importance of variables in a model fit is estimated with the <code>varimp</code> function and plotted with <code>plot</code>. Variable importance is a relative measure of the contributions of model predictors and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most. Classes of models can differ with respect to how variable importance is defined. In the case of a <code>GBMModel</code>, importance of each predictor is based on the sum of squared empirical improvements over all internal tree nodes created by splitting on that variable <span class="citation">(Greenwell et al. 2019)</span>.</p>
 <pre class="r"><code>## Predictor variable importance
 (vi &lt;- varimp(surv_fit))
+#&gt; Object of class &quot;VarImp&quot;
 #&gt;             Overall
 #&gt; age       100.00000
 #&gt; thickness  96.67023
@@ -1665,7 +1679,7 @@ plot(res_diff)</code></pre>
 
 plot(vi)</code></pre>
 <p><img src="using_files/figure-html/using_analyses_vi-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Alternatively, importance is based on one minus predictor variable p-values for statistical models, like <code>CoxModel</code>, that produce them. For other classes of models, variable importance is generally defined and calculated by their underlying source packages.</p>
+<p>Alternatively, importance is based on negative log-transformed p-values for statistical models, like <code>CoxModel</code>, that produce them. For other classes of models, variable importance is generally defined and calculated by their underlying source packages.</p>
 </div>
 <div id="calibration-curves" class="section level2">
 <h2>Calibration Curves</h2>
@@ -1686,6 +1700,8 @@ plot(cal)</code></pre>
 <p>Confusion matrices of cross-classified observed and predicted categorical responses are available with the <code>confusion</code> function. They can be constructed with predicted class membership or with predicted class probabilities. In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors (default: <code>cutoff = 0.5</code>) and according to the class with highest probability for factors with more than two levels.</p>
 <pre class="r"><code>## Confusion matrices
 (conf &lt;- confusion(res_probs, cutoff = 0.5))
+#&gt; Object of class &quot;ConfusionList&quot;
+#&gt; 
 #&gt; GBMModel.time1 :
 #&gt;          Observed
 #&gt; Predicted         0         1
@@ -1783,7 +1799,7 @@ plot(roc, diagonal = TRUE)</code></pre>
 <pre class="r"><code>auc(roc)
 #&gt; Model: GBMModel.time1
 #&gt; [1] 0.7937907
-#&gt; -------------------------------------------------------- 
+#&gt; ------------------------------------------------------------ 
 #&gt; Model: GBMModel.time2
 #&gt; [1] 0.7760905</code></pre>
 </div>
@@ -1797,7 +1813,7 @@ plot(pr)</code></pre>
 <pre class="r"><code>auc(pr)
 #&gt; Model: GBMModel.time1
 #&gt; [1] 0.5525249
-#&gt; -------------------------------------------------------- 
+#&gt; ------------------------------------------------------------ 
 #&gt; Model: GBMModel.time2
 #&gt; [1] 0.6405763</code></pre>
 </div>
@@ -1815,39 +1831,38 @@ plot(lf, find = 0.75)</code></pre>
 <h1>Modeling Strategies</h1>
 <div id="model-tuning" class="section level2">
 <h2>Model Tuning</h2>
-<p>Many of the modeling functions have arguments, or tuning parameters, that control aspects of their model fitting algorithms. For example, <code>GBMModel</code> parameters <code>n.trees</code> and <code>interaction.depth</code> control the number of decision trees to fit and the maximum depth of variable interactions. The <code>tune</code> function performs model fitting over a grid of parameter values and returns the model with the most optimal values. Optimality is determined based on the first performance metric of the <code>metrics</code> argument of <code>tune</code> if supplied or the first default metric of the <code>performance</code> function otherwise. Argument <code>grid</code> additionally controls the construction of grid values and can be a single numeric value giving the grid length in each parameter dimension. As shown in the output below, tuning results include the tuning parameter grid values, the names of models fit to each, all calculated metrics, the final model selected, the metric upon which its selection was based, and its tuning parameters.</p>
+<p>Many of the modeling functions have arguments, or tuning parameters, that control aspects of their model fitting algorithms. For example, <code>GBMModel</code> parameters <code>n.trees</code> and <code>interaction.depth</code> control the number of decision trees to fit and the maximum depth of variable interactions. When called with a <code>TunedModel</code>, the <code>fit</code> function performs model fitting over a grid of parameter values and returns the model with the most optimal values. Optimality is determined based on the first performance metric of the <code>metrics</code> argument of <code>TunedModel</code> if supplied or the first default metric of the <code>performance</code> function otherwise. Argument <code>grid</code> additionally controls the construction of grid values and can be a single numeric value giving the grid length in each parameter dimension. As shown in the output below, <code>as.MLModel</code> will extract a tuned model from fit results for viewing of the tuning parameter grid values, the names of models fit to each, all calculated metrics, the final model selected, the metric upon which its selection was based, and its tuning parameters.</p>
 <pre class="r"><code>## Tune over automatic grid of model parameters
-(tuned_model &lt;- tune(surv_fo, data = surv_train, model = GBMModel,
-                     grid = 3,
-                     control = surv_means_control,
-                     metrics = c(&quot;CIndex&quot; = cindex, &quot;RMSE&quot; = rmse)))
-#&gt; Object of class &quot;MLModelTune&quot;
+surv_fit &lt;- TunedModel(
+  GBMModel,
+  grid = 3,
+  control = surv_means_control,
+  metrics = c(&quot;CIndex&quot; = cindex, &quot;RMSE&quot; = rmse)
+) %&gt;% fit(surv_fo, data = surv_train)
+(tuned_model &lt;- as.MLModel(surv_fit))
+#&gt; Object of class &quot;MLModel&quot;
 #&gt; 
 #&gt; Model name: GBMModel
-#&gt; Label: Generalized Boosted Regression
+#&gt; Label: Trained Generalized Boosted Regression
 #&gt; Packages: gbm
-#&gt; Response types: factor, numeric, Surv
+#&gt; Response types: factor, numeric, PoissonVariate, Surv
 #&gt; Tuning grid: TRUE
 #&gt; Variable importance: TRUE
 #&gt; 
 #&gt; Parameters:
-#&gt; $n.trees
-#&gt; [1] 50
+#&gt; List of 5
+#&gt;  $ n.trees          : num 50
+#&gt;  $ interaction.depth: int 1
+#&gt;  $ n.minobsinnode   : num 10
+#&gt;  $ shrinkage        : num 0.1
+#&gt;  $ bag.fraction     : num 0.5
 #&gt; 
-#&gt; $interaction.depth
-#&gt; [1] 1
-#&gt; 
-#&gt; $n.minobsinnode
-#&gt; [1] 10
-#&gt; 
-#&gt; $shrinkage
-#&gt; [1] 0.1
-#&gt; 
-#&gt; $bag.fraction
-#&gt; [1] 0.5
+#&gt; Object of class &quot;TrainBits&quot;
 #&gt; 
 #&gt; Grid (selected = 1):
+#&gt; # A tibble: 9 x 2
 #&gt;   n.trees interaction.depth
+#&gt;     &lt;dbl&gt;             &lt;int&gt;
 #&gt; 1      50                 1
 #&gt; 2     100                 1
 #&gt; 3     150                 1
@@ -1860,78 +1875,62 @@ plot(lf, find = 0.75)</code></pre>
 #&gt; 
 #&gt; Object of class &quot;Performance&quot;
 #&gt; 
-#&gt; Metrics: CIndex, RMSE
+#&gt; Metrics: CIndex, RMSE 
 #&gt; Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6, GBMModel.7, GBMModel.8, GBMModel.9 
 #&gt; 
 #&gt; Selected model: GBMModel.1 
-#&gt; CIndex value: 0.7730294</code></pre>
+#&gt; CIndex value: 0.7516431</code></pre>
 <p>Grid values may also be a call to <code>Grid</code> with the grid <code>length</code> and number of grid points to sample at <code>random</code> or a user-specified data frame of grid points.</p>
 <pre class="r"><code>## Tune over randomly sampled grid points
-tune(surv_fo, data = surv_train, model = GBMModel,
-     grid = Grid(length = 100, random = 10),
-     control = surv_means_control)
+TunedModel(
+  GBMModel,
+  grid = Grid(length = 100, random = 10),
+  control = surv_means_control
+) %&gt;% fit(surv_fo, data = surv_train)
 
 ## Tune over user-specified grid points
-tune(surv_fo, data = surv_train, model = GBMModel,
-     grid = expand_params(n.trees = c(25, 50, 100),
-                          interaction.depth = 1:3),
-     control = surv_means_control)</code></pre>
+TunedModel(
+  GBMModel,
+  grid = expand_params(n.trees = c(25, 50, 100),
+                       interaction.depth = 1:3),
+  control = surv_means_control
+) %&gt;% fit(surv_fo, data = surv_train)</code></pre>
 <p>Statistics summarizing the resampled performance metrics across all tuning parameter combinations can be obtained with the <code>summary</code> function.</p>
 <pre class="r"><code>summary(tuned_model)
-#&gt; , , CIndex
+#&gt; , , Metric = CIndex
 #&gt; 
-#&gt;                 Mean    Median         SD       Min       Max NA
-#&gt; GBMModel.1 0.7730294 0.7692308 0.07206580 0.6363636 0.9354839  0
-#&gt; GBMModel.2 0.7610614 0.7663043 0.06966664 0.6256684 0.8924731  0
-#&gt; GBMModel.3 0.7564966 0.7647059 0.06743686 0.6480447 0.8870968  0
-#&gt; GBMModel.4 0.7687377 0.7616580 0.08218605 0.6256983 0.9301075  0
-#&gt; GBMModel.5 0.7629211 0.7616580 0.07106607 0.6592179 0.9032258  0
-#&gt; GBMModel.6 0.7562730 0.7409326 0.07500287 0.5865922 0.8602151  0
-#&gt; GBMModel.7 0.7608822 0.7487685 0.07981747 0.5989305 0.8978495  0
-#&gt; GBMModel.8 0.7514888 0.7700535 0.06886940 0.6201117 0.8494624  0
-#&gt; GBMModel.9 0.7443015 0.7564767 0.06410204 0.6312849 0.8324324  0
+#&gt;             Statistic
+#&gt; Model             Mean    Median         SD       Min       Max NA
+#&gt;   GBMModel.1 0.7516431 0.7378378 0.04489129 0.6940000 0.8225806  0
+#&gt;   GBMModel.2 0.7439561 0.7267442 0.04446001 0.6936170 0.8448276  0
+#&gt;   GBMModel.3 0.7375729 0.7383721 0.04915820 0.6720000 0.8448276  0
+#&gt;   GBMModel.4 0.7401779 0.7186147 0.05729130 0.6717949 0.8387097  0
+#&gt;   GBMModel.5 0.7355460 0.7179487 0.06151909 0.6615385 0.8620690  0
+#&gt;   GBMModel.6 0.7310442 0.7020202 0.07284111 0.6205128 0.8706897  0
+#&gt;   GBMModel.7 0.7426595 0.7222222 0.06483710 0.6410256 0.8629032  0
+#&gt;   GBMModel.8 0.7287966 0.7067308 0.06367674 0.6512821 0.8548387  0
+#&gt;   GBMModel.9 0.7206787 0.7020202 0.07103179 0.6256410 0.8548387  0
 #&gt; 
-#&gt; , , RMSE
+#&gt; , , Metric = RMSE
 #&gt; 
-#&gt;                 Mean   Median       SD      Min       Max NA
-#&gt; GBMModel.1  3818.182 3835.515 1251.954 1992.999  5953.100  0
-#&gt; GBMModel.2  4016.418 3642.123 1586.513 1792.675  8511.133  0
-#&gt; GBMModel.3  4226.311 3790.948 1873.500 1342.394  8857.896  0
-#&gt; GBMModel.4  5614.160 4428.054 3009.006 1912.743 11666.415  0
-#&gt; GBMModel.5  5407.976 3893.101 3288.373 1419.643 14090.833  0
-#&gt; GBMModel.6  5450.541 5941.670 2733.285 1535.649 10480.901  0
-#&gt; GBMModel.7  7922.834 6177.645 4506.633 2941.312 16243.705  0
-#&gt; GBMModel.8 10728.876 7384.484 7889.461 2564.302 26325.938  0
-#&gt; GBMModel.9 11470.890 9691.195 7191.709 1999.900 26402.048  0</code></pre>
+#&gt;             Statistic
+#&gt; Model             Mean    Median         SD      Min       Max NA
+#&gt;   GBMModel.1  3636.835  3367.249   950.6866 2177.188  5488.763  0
+#&gt;   GBMModel.2  4304.607  3210.656  2022.7115 2230.195  9147.039  0
+#&gt;   GBMModel.3  5218.173  4490.581  2703.1517 2534.116 12448.425  0
+#&gt;   GBMModel.4  5273.863  4739.970  2417.5411 2228.158 11689.465  0
+#&gt;   GBMModel.5  5735.141  5384.190  2965.7118 1821.038 12198.512  0
+#&gt;   GBMModel.6  6184.465  6056.447  2989.7590 1787.895 11711.988  0
+#&gt;   GBMModel.7  7418.928  6599.132  2918.8420 2715.394 12931.253  0
+#&gt;   GBMModel.8 11383.052  9574.898  6874.1221 2347.388 23134.675  0
+#&gt;   GBMModel.9 16408.099 12031.200 11141.6853 2661.137 38722.358  0</code></pre>
 <p>Line plots of tuning results display the resampled metric means, or another statistic specified with the <code>stat</code> argument, versus the first tuning parameter values and with lines grouped according to the remaining parameters, if any.</p>
 <pre class="r"><code>plot(tuned_model, type = &quot;line&quot;)</code></pre>
 <p><img src="using_files/figure-html/using_strategies_tune_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>The return value of <code>tune</code> is a model object with the optimal tuning parameters and not a model fit object. The returned model can be fit subsequently to a set of data with the <code>fit</code> function. Having the final model allows for fitting to the same dataset on which tuning was performed or to datasets from other case populations.</p>
-<pre class="r"><code>## Fit the tuned model
-surv_fit &lt;- fit(surv_fo, data = surv_train, model = tuned_model)</code></pre>
-<p>As illustrated in the examples above, the <code>tune</code> function allows for comparisons of all models fit to the parameter grid points and returns the optimal model for subsequent fitting. For applications in which fitting, performance assessment, and prediction with the optimal model are of primary interest, the <code>TunedModel</code> function is provided as a model interface to the <code>tune</code> function. The model interface has the advantage of enabling predictive performance estimation, with the <code>resample</code> function, that accounts for the full tuning grid process.</p>
-<pre class="r"><code>## Model interface for grid tuning
-tuned_model &lt;- TunedModel(GBMModel, grid = 3, control = surv_means_control,
-                          metrics = c(&quot;CIndex&quot; = cindex, &quot;RMSE&quot; = rmse))
-surv_fit &lt;- fit(surv_fo, data = surv_train, model = tuned_model)
-(vi &lt;- varimp(surv_fit))
-#&gt;             Overall
-#&gt; thickness 100.00000
-#&gt; age        83.50962
-#&gt; year       39.81938
-#&gt; ulcer      29.61630
-#&gt; sex         0.00000
-
-## Predictive performance of the tuning process
-res_tuned &lt;- resample(surv_fo, data = surv_train, model = tuned_model,
-                      control = surv_means_control)
-summary(res_tuned)
-#&gt;              Mean    Median         SD      Min       Max NA
-#&gt; C-Index 0.7692781 0.7604167 0.06627141 0.657754 0.8924731  0</code></pre>
 </div>
 <div id="model-selection" class="section level2">
 <h2>Model Selection</h2>
-<p>Model selection can be conducted with the <code>tune</code> or <code>SelectedModel</code> function to automatically choose from any combination of models and model parameters. Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values. Combinations of model functions, function names, or function calls can be supplied as lists to the <code>models</code> argument of <code>tune</code> or as arguments to <code>SelectedModel</code> in order to define sets of candidate models from which to select. An <code>expand_model</code> helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired. In this general form of model selection, the <code>grid</code> argument in the tuning functions is not used.</p>
+<p>Model selection can be conducted by calling <code>fit</code> with a <code>SelectedModel</code> to automatically choose from any combination of models and model parameters. Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values. Combinations of model functions, function names, or function calls can be supplied as lists to the <code>models</code> argument of <code>SelectedModel</code> in order to define sets of candidate models from which to select. An <code>expand_model</code> helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired.</p>
 <pre class="r"><code>## Model interface for model selection
 selected_model &lt;- SelectedModel(
   expand_model(GBMModel, n.trees = c(50, 100), interaction.depth = 1:2),
@@ -1969,16 +1968,18 @@ fit(surv_fo, data = surv_train, model = selected_tuned_model)</code></pre>
 stackedmodel &lt;- StackedModel(GLMBoostModel, CForestModel, CoxModel)
 res_stacked &lt;- resample(surv_fo, data = surv_train, model = stackedmodel)
 summary(res_stacked)
-#&gt;              Mean    Median        SD  Min       Max NA
-#&gt; C-Index 0.7486014 0.8100414 0.1949891 0.45 0.9705882  0
+#&gt;          Statistic
+#&gt; Metric         Mean    Median        SD  Min       Max NA
+#&gt;   C-Index 0.7486014 0.8100414 0.1949891 0.45 0.9705882  0
 
 ## Super learner
 supermodel &lt;- SuperModel(GLMBoostModel, CForestModel, CoxModel,
                          model = GBMModel)
 res_super &lt;- resample(surv_fo, data = surv_train, model = supermodel)
 summary(res_super)
-#&gt;             Mean  Median        SD Min       Max NA
-#&gt; C-Index 0.737307 0.75625 0.1228742 0.5 0.9027778  0</code></pre>
+#&gt;          Statistic
+#&gt; Metric        Mean  Median        SD Min       Max NA
+#&gt;   C-Index 0.737307 0.75625 0.1228742 0.5 0.9027778  0</code></pre>
 </div>
 </div>
 <div id="global-settings" class="section level1">
@@ -2000,6 +2001,9 @@ summary(res_super)
 <dt><code>grid</code></dt>
 <dd>number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a <code>Grid</code> function, function name, or call [default: 3].
 </dd>
+<dt><code>max.print</code></dt>
+<dd>number of models or data rows to show with print methods or <code>Inf</code> to show all [default: 10].
+</dd>
 <dt><code>method.EmpiricalSurv</code></dt>
 <dd>character string specifying the empirical method of estimating baseline survival curves for Cox proportional hazards-based models. Choices are <code>"breslow"</code>, <code>"efron"</code> (default), or <code>"fleming-harrington"</code>.
 </dd>
@@ -2018,13 +2022,19 @@ summary(res_super)
 <dt><code>metrics.Surv</code></dt>
 <dd>function, function name, or vector of these with which to calculate performance metrics for survival responses [default: <code>c(`C-Index` = "cindex", Brier = "brier", `ROC AUC` = "roc_auc", Accuracy = "accuracy")</code>].
 </dd>
+<dt><code>require</code></dt>
+<dd>names of installed packages to load during parallel execution of resampling algorithms [default: <code>c("MachineShop", "survival", "recipes")</code>].
+</dd>
+<dt><code>reset</code></dt>
+<dd>character names of settings to reset to their default values.
+</dd>
 <dt><code>stat.Curves</code></dt>
 <dd>function or character string naming a function to compute one summary statistic at each cutoff value of resampled metrics in performance curves, or <code>NULL</code> for resample-specific metrics [default: <code>"base::mean"</code>].
 </dd>
 <dt><code>stat.Resamples</code></dt>
 <dd>function or character string naming a function to compute one summary statistic to control the ordering of models in plots [default: <code>"base::mean"</code>].
 </dd>
-<dt><code>stat.Tune</code></dt>
+<dt><code>stat.Train</code></dt>
 <dd>function or character string naming a function to compute one summary statistic on resampled performance metrics for model selection, model tuning, and recipe tuning [default: <code>"base::mean"</code>].
 </dd>
 <dt><code>stats.PartialDependence</code></dt>
@@ -2048,7 +2058,10 @@ settings(&quot;control&quot;, &quot;grid&quot;)
 #&gt; [1] &quot;BootControl&quot;
 #&gt; 
 #&gt; $grid
-#&gt; [1] 10
+#&gt; Object of class &quot;Grid&quot;
+#&gt; 
+#&gt; Length: 10
+#&gt; Random sample: FALSE
 
 ## Restore the previous settings
 settings(presets)</code></pre>
@@ -2138,8 +2151,9 @@ f2_score &lt;- MLMetric(
 library(MASS)
 res &lt;- resample(type ~ ., data = Pima.tr, model = LogisticModel)
 summary(performance(res, metric = f2_score))
-#&gt;               Mean    Median        SD       Min       Max NA
-#&gt; f2_score 0.5688623 0.5213904 0.2027512 0.3225806 0.9459459  0</code></pre>
+#&gt;           Statistic
+#&gt; Metric          Mean    Median        SD       Min       Max NA
+#&gt;   f2_score 0.5688623 0.5213904 0.2027512 0.3225806 0.9459459  0</code></pre>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">
@@ -2159,6 +2173,9 @@ summary(performance(res, metric = f2_score))
 </div>
 <div id="ref-davis:2006:RPR">
 <p>Davis, Jesse, and Mark Goadrich. 2006. “The Relationship Between Precision-Recall and ROC Curves.” In <em>Proceedings of the 23rd International Conference on Machine Learning</em>, 233–40. ICML ’06. New York, NY, USA: ACM.</p>
+</div>
+<div id="ref-davison:1997:BMA">
+<p>Davison, Anthony C, and David V Hinkley. 1997. <em>Bootstrap Methods and Their Application</em>. New York, NY, USA: Cambridge University Press.</p>
 </div>
 <div id="ref-efron:1967:PFB">
 <p>Efron, Bradley. 1967. “The Two Sample Problem with Censored Data.” In <em>Proceedings of the Fifth Berkeley Symposium on Mathematical Statistics and Probability, Volume 4: Biology and Problems of Health</em>, 831–53. Berkeley, California: University of California Press.</p>

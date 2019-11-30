@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -237,6 +236,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -265,6 +265,12 @@ $(document).ready(function () {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -523,16 +529,14 @@ library(magrittr)
 
 ## All availble metrics
 metricinfo() %&gt;% names
-#&gt;  [1] &quot;accuracy&quot;        &quot;auc&quot;             &quot;brier&quot;          
-#&gt;  [4] &quot;cindex&quot;          &quot;cross_entropy&quot;   &quot;f_score&quot;        
-#&gt;  [7] &quot;fnr&quot;             &quot;fpr&quot;             &quot;gini&quot;           
-#&gt; [10] &quot;kappa2&quot;          &quot;mae&quot;             &quot;mse&quot;            
-#&gt; [13] &quot;msle&quot;            &quot;npv&quot;             &quot;ppv&quot;            
-#&gt; [16] &quot;pr_auc&quot;          &quot;precision&quot;       &quot;r2&quot;             
-#&gt; [19] &quot;recall&quot;          &quot;rmse&quot;            &quot;rmsle&quot;          
-#&gt; [22] &quot;roc_auc&quot;         &quot;roc_index&quot;       &quot;rpp&quot;            
-#&gt; [25] &quot;sensitivity&quot;     &quot;specificity&quot;     &quot;tnr&quot;            
-#&gt; [28] &quot;tpr&quot;             &quot;weighted_kappa2&quot;
+#&gt;  [1] &quot;accuracy&quot;        &quot;auc&quot;             &quot;brier&quot;           &quot;cindex&quot;         
+#&gt;  [5] &quot;cross_entropy&quot;   &quot;f_score&quot;         &quot;fnr&quot;             &quot;fpr&quot;            
+#&gt;  [9] &quot;gini&quot;            &quot;kappa2&quot;          &quot;mae&quot;             &quot;mse&quot;            
+#&gt; [13] &quot;msle&quot;            &quot;npv&quot;             &quot;ppv&quot;             &quot;pr_auc&quot;         
+#&gt; [17] &quot;precision&quot;       &quot;r2&quot;              &quot;recall&quot;          &quot;rmse&quot;           
+#&gt; [21] &quot;rmsle&quot;           &quot;roc_auc&quot;         &quot;roc_index&quot;       &quot;rpp&quot;            
+#&gt; [25] &quot;sensitivity&quot;     &quot;specificity&quot;     &quot;tnr&quot;             &quot;tpr&quot;            
+#&gt; [29] &quot;weighted_kappa2&quot;
 
 ## Metric-specific information
 metricinfo(auc, r2)
@@ -569,11 +573,12 @@ metricinfo(auc, r2)
 #&gt; NULL
 #&gt; 
 #&gt; $r2$response_types
-#&gt;    observed predicted
-#&gt; 1    matrix    matrix
-#&gt; 2   numeric   numeric
-#&gt; 3 Resamples      NULL
-#&gt; 4      Surv   numeric</code></pre>
+#&gt;          observed predicted
+#&gt; 1 BinomialVariate   numeric
+#&gt; 2          matrix    matrix
+#&gt; 3         numeric   numeric
+#&gt; 4       Resamples      NULL
+#&gt; 5            Surv   numeric</code></pre>
 <div id="type-specific-1" class="section level2">
 <h2>Type-Specific</h2>
 <pre class="r"><code>## Metrics for observed and predicted response variable types
