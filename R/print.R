@@ -404,7 +404,7 @@ setMethod("show", "ModelRecipe",
 )
 
 
-print.ParamSet <- function(x, ...) {
+print.ParameterGrid <- function(x, ...) {
   print_title(x)
   print(as(asS3(x), "tbl_df"))
   if (x@random) {
@@ -417,7 +417,7 @@ print.ParamSet <- function(x, ...) {
 }
 
 
-setMethod("show", "ParamSet",
+setMethod("show", "ParameterGrid",
   function(object) {
     print(object)
     invisible()

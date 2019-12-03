@@ -5,7 +5,7 @@ importClassesFrom(kernlab, ksvm)
 importClassesFrom(party, RandomForest)
 
 importFrom(abind, abind, adrop)
-importFrom(dials, param_set)
+importFrom(dials, parameters)
 importFrom(foreach, "%dopar%", foreach, registerDoSEQ)
 importFrom(graphics, plot)
 importFrom(magrittr, "%>%")
@@ -49,7 +49,7 @@ export(expand_model,
        expand_params,
        expand_steps,
        Grid,
-       ParamSet)
+       ParameterGrid)
 
 export(BinomialMatrix,
        DiscreteVector,
@@ -231,7 +231,7 @@ S3method(print, MLModelFit)
 S3method(print, MLModelFunction)
 S3method(print, ModelFrame)
 S3method(print, ModelRecipe)
-S3method(print, ParamSet)
+S3method(print, ParameterGrid)
 S3method(print, Performance)
 S3method(print, RecipeGrid)
 S3method(print, Resamples)

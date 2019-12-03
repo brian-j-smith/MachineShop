@@ -22,7 +22,7 @@ the model to be tuned.}
 which to evaluate a single model supplied to \code{models}, such as that
 returned by \code{\link{expand_params}}; the number of parameter-specific
 values to generate automatically if the model has a pre-defined grid; or a
-call to \code{\link{Grid}} or \code{\link{ParamSet}}.}
+call to \code{\link{Grid}} or \code{\link{ParameterGrid}}.}
 
 \item{fixed}{list of fixed parameter values to combine with those in
 \code{grid}.}

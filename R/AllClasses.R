@@ -5,8 +5,8 @@ setOldClass("recipe")
 setOldClass("Surv")
 setOldClass(c("tbl_df", "tbl", "data.frame"))
 
+setOldClass(c("parameters", "tbl_df"))
 setOldClass(c("param_grid", "tbl_df"))
-setOldClass(c("param_set", "tbl_df"))
 setOldClass(c("grid_random", "param_grid"))
 setOldClass(c("grid_regular", "param_grid"))
 
@@ -212,8 +212,8 @@ setClass("ModelRecipe",
 )
 
 
-setClass("ParamSet",
-  contains = c("Grid", "param_set")
+setClass("ParameterGrid",
+  contains = c("Grid", "parameters")
 )
 
 

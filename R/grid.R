@@ -33,21 +33,21 @@ Grid <- function(length = 3, random = FALSE) {
 }
 
 
-#' Tuning Parameter Set
+#' Tuning Parameters Grid
 #'
-#' Defines a tuning grid from a parameter set.
+#' Defines a tuning grid from a set of parameters.
 #'
-#' @rdname ParamSet
+#' @rdname ParameterGrid
 #'
-#' @param ... \code{\link[dials]{param_set}} object, named \code{param} objects
+#' @param ... \code{\link[dials]{parameters}} object, named \code{param} objects
 #'   as defined in the \pkg{dials} package, or a list of these.
 #' @param length single number or vector of numbers of parameter values to use
 #'   in constructing a regular grid if \code{random = FALSE}; ignored otherwise.
 #' @param random number of unique grid points to sample at random or
 #'   \code{FALSE} for all points from a regular grid defined by \code{length}.
 #'
-#' @return \code{ParamSet} class object that inherits from \code{param_set} and
-#' \code{Grid}.
+#' @return \code{ParameterGrid} class object that inherits from
+#' \code{parameters} and \code{Grid}.
 #'
 #' @seealso \code{\link{TunedModel}}
 #'
@@ -55,31 +55,31 @@ Grid <- function(length = 3, random = FALSE) {
 #' ## GBMModel tuning parameters
 #' library(dials)
 #'
-#' grid <- ParamSet(
+#' grid <- ParameterGrid(
 #'   n.trees = trees(),
 #'   interaction.depth = tree_depth(),
 #'   random = 5
 #' )
 #' TunedModel(GBMModel, grid = grid)
 #'
-ParamSet <- function(..., length = 3, random = FALSE) {
+ParameterGrid <- function(..., length = 3, random = FALSE) {
   x <- list(...)
   if (is_one_element(x, "list") && is.null(names(x))) x <- x[[1]]
-  .ParamSet(x, length = length, random = random)
+  .ParameterGrid(x, length = length, random = random)
 }
 
 
-.ParamSet <- function(x, ...) {
-  UseMethod(".ParamSet")
+.ParameterGrid <- function(x, ...) {
+  UseMethod(".ParameterGrid")
 }
 
 
-.ParamSet.list <- function(x, ...) {
-  .ParamSet(param_set(x), ...)
+.ParameterGrid.list <- function(x, ...) {
+  .ParameterGrid(parameters(x), ...)
 }
 
 
-.ParamSet.param_set <- function(x, length, random, ...) {
+.ParameterGrid.parameters <- function(x, length, random, ...) {
   if (all(is.finite(length))) {
     length <- as.integer(length)
     if (any(length < 0)) stop("grid parameter 'length' must be >= 0")
@@ -99,7 +99,7 @@ ParamSet <- function(..., length = 3, random = FALSE) {
     stop("'random' grid value must be logical or numeric")
   }
 
-  new("ParamSet", x, length = length, random = random)
+  new("ParameterGrid", x, length = length, random = random)
 }
 
 
@@ -128,7 +128,7 @@ as.grid.Grid <- function(x, ..., model, fixed = tibble()) {
 }
 
 
-as.grid.ParamSet <- function(x, ..., model, fixed = tibble()) {
+as.grid.ParameterGrid <- function(x, ..., model, fixed = tibble()) {
   grid <- if (nrow(x)) {
     if (any(sapply(x$object, dials::has_unknowns))) {
       mf <- ModelFrame(..., na.rm = FALSE)

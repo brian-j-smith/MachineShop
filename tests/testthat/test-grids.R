@@ -22,38 +22,38 @@ test_fit <- function(grid) {
 }
 
 
-test_that("ParamSet construction and model fitting", {
+test_that("ParameterGrid construction and model fitting", {
   skip_if_not(TEST_ALL)
-  context("ParamSet")
+  context("ParameterGrid")
   with_parallel({
 
-    expect_error(ParamSet(param_list, length = -1))
-    expect_error(ParamSet(param_list, random = 0))
+    expect_error(ParameterGrid(param_list, length = -1))
+    expect_error(ParameterGrid(param_list, random = 0))
 
-    grid <- expect_s4_class(ParamSet(param_list), "ParamSet")
+    grid <- expect_s4_class(ParameterGrid(param_list), "ParameterGrid")
     expect_true(test_fit(grid))
 
     grid <- expect_s4_class(
-      ParamSet(param_list, length = 0),
-      "ParamSet"
+      ParameterGrid(param_list, length = 0),
+      "ParameterGrid"
     )
     expect_true(test_fit(grid))
 
     grid <- expect_s4_class(
-      ParamSet(param_list, length = 2),
-      "ParamSet"
+      ParameterGrid(param_list, length = 2),
+      "ParameterGrid"
     )
     expect_true(test_fit(grid))
 
     grid <- expect_s4_class(
-      ParamSet(param_list, length = c(3, 0, 2)),
-      "ParamSet"
+      ParameterGrid(param_list, length = c(3, 0, 2)),
+      "ParameterGrid"
     )
     expect_true(test_fit(grid))
 
     grid <- expect_s4_class(
-      ParamSet(param_list, length = 2, random = 5),
-      "ParamSet"
+      ParameterGrid(param_list, length = 2, random = 5),
+      "ParameterGrid"
     )
     expect_true(test_fit(grid))
 
