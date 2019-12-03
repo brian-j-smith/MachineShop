@@ -71,29 +71,29 @@ varimp_pval <- function(object, ...) {
 
 
 varimp_pval.default <- function(object, ...) {
-  varimp_pval(coef(object), diag(vcov(object)))
+  varimp_pval(coef(object), diag(vcov(object)), ...)
 }
 
 
-varimp_pval.glm <- function(object, ...) {
+varimp_pval.glm <- function(object, base = exp(1), ...) {
   anova <- drop1(object, test = "Chisq")
-  -log(anova[-1, "Pr(>Chi)", drop = FALSE])
+  -log(anova[-1, "Pr(>Chi)", drop = FALSE], base = base)
 }
 
 
-varimp_pval.lm <- function(object, ...) {
+varimp_pval.lm <- function(object, base = exp(1), ...) {
   anova <- drop1(object, test = "F")
-  -log(anova[-1, "Pr(>F)", drop = FALSE])
+  -log(anova[-1, "Pr(>F)", drop = FALSE], base = base)
 }
 
 
 varimp_pval.mlm <- function(object, ...) {
-  varimp_pval.default(object)
+  varimp_pval.default(object, ...)
 }
 
 
-varimp_pval.numeric <- function(object, var, ...) {
-  -pchisq(object^2 / var, 1, lower.tail = FALSE, log.p = TRUE)
+varimp_pval.numeric <- function(object, var, base = exp(1), ...) {
+  -log(pchisq(object^2 / var, 1, lower.tail = FALSE), base = base)
 }
 
 

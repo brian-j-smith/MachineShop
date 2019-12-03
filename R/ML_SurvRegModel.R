@@ -54,7 +54,9 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
         Hmisc::Mean(object)(predict(object, newdata = newdata, type = "lp"))
       }
     },
-    varimp = function(object, ...) varimp_pval(object)
+    varimp = function(object, base = exp(1), ...) {
+      varimp_pval(object, base = base)
+    }
   )
 
 }

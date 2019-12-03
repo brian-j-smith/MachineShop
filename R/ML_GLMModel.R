@@ -20,6 +20,13 @@
 #' Default values for the \code{NULL} arguments and further model details can be
 #' found in the source link below.
 #'
+#' In calls to \code{\link{varimp}} for \code{GLMModel} and
+#' \code{GLMStepAICModel}, numeric argument \code{base} may be specified for the
+#' (negative) logarithmic transformation of p-values [defaul: \code{exp(1)}].
+#' Transformed p-values are automatically scaled in the calculation of variable
+#' importance to range from 0 to 100.  To obtain unscaled importance values, set
+#' \code{scale = FALSE}.
+#'
 #' @return \code{MLModel} class object.
 #'
 #' @seealso \code{\link[stats]{glm}}, \code{\link[stats]{glm.control}},
@@ -66,7 +73,9 @@ GLMModel <- function(family = NULL, quasi = FALSE, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, type = "response")
     },
-    varimp = function(object, ...) varimp_pval(object)
+    varimp = function(object, base = exp(1), ...) {
+      varimp_pval(object, base = base)
+    }
   )
 
 }

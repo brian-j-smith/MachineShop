@@ -12,6 +12,12 @@
 #'
 #' Further model details can be found in the source link below.
 #'
+#' In calls to \code{\link{varimp}} for \code{POLRModel}, numeric argument
+#' \code{base} may be specified for the (negative) logarithmic transformation of
+#' p-values [defaul: \code{exp(1)}].  Transformed p-values are automatically
+#' scaled in the calculation of variable importance to range from 0 to 100.  To
+#' obtain unscaled importance values, set \code{scale = FALSE}.
+#'
 #' @return \code{MLModel} class object.
 #'
 #' @seealso \code{\link[MASS]{polr}}, \code{\link{fit}}, \code{\link{resample}}
@@ -45,10 +51,10 @@ POLRModel <- function(method = c("logistic", "probit", "loglog", "cloglog",
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, type = "probs")
     },
-    varimp = function(object, ...) {
+    varimp = function(object, base = exp(1), ...) {
       beta_est <- coef(object)
       beta_var <- diag(vcov(object))[seq_along(beta_est)]
-      varimp_pval(beta_est, beta_var)
+      varimp_pval(beta_est, beta_var, base = base)
     }
   )
 

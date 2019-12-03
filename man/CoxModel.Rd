@@ -39,9 +39,6 @@ process.}
 
 \item{steps}{maximum number of steps to be considered.}
 }
-\value{
-\code{MLModel} class object.
-}
 \description{
 Fits a Cox proportional hazards regression model. Time dependent variables,
 time dependent strata, multiple events per subject, and other extensions are
@@ -54,6 +51,15 @@ incorporated using the counting process formulation of Andersen and Gill.
 
 Default values for the \code{NULL} arguments and further model details can be
 found in the source link below.
+
+In calls to \code{\link{varimp}} for \code{CoxModel} and
+\code{CoxStepAICModel}, numeric argument \code{base} may be specified for the
+(negative) logarithmic transformation of p-values [defaul: \code{exp(1)}].
+Transformed p-values are automatically scaled in the calculation of variable
+importance to range from 0 to 100.  To obtain unscaled importance values, set
+\code{scale = FALSE}.
+
+#' @return \code{MLModel} class object.
 }
 \examples{
 library(survival)

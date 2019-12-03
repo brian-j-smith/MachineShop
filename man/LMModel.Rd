@@ -18,6 +18,12 @@ Fits linear models.
 }
 
 Further model details can be found in the source link below.
+
+In calls to \code{\link{varimp}} for \code{LModel}, numeric argument
+\code{base} may be specified for the (negative) logarithmic transformation of
+p-values [defaul: \code{exp(1)}].  Transformed p-values are automatically
+scaled in the calculation of variable importance to range from 0 to 100.  To
+obtain unscaled importance values, set \code{scale = FALSE}.
 }
 \examples{
 fit(sale_amount ~ ., data = ICHomes, model = LMModel)
