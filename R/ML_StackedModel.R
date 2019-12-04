@@ -43,14 +43,13 @@ StackedModel <- function(..., control = MachineShop::settings("control"),
     predictor_encoding = NA_character_,
     params = as.list(environment()),
     predict = function(object, newdata, ...) {
-      predicted <- 0
+      pred <- 0
       for (i in seq(object$base_fits)) {
-        predicted <- predicted +
-          object$weights[i] * predict(object$base_fits[[i]],
-                                      newdata = newdata,
-                                      times = object$times, type = "prob")
+        base_pred <- predict(object$base_fits[[i]], newdata = newdata,
+                             times = object$times, type = "prob")
+        pred <- pred + object$weights[i] * base_pred
       }
-      predicted
+      pred
     },
     varimp = function(object, ...) NULL
   )
@@ -66,24 +65,19 @@ MLModelFunction(StackedModel) <- NULL
   base_learners <- model@params$base_learners
   weights <- model@params$weights
   control <-  model@params$control
-  times <- control@times
   
   if (is.null(weights)) {
     num_learners <- length(base_learners)
     stack <- list()
-    complete_responses <- TRUE
+    complete_cases <- TRUE
     for (i in 1:num_learners) {
       stack[[i]] <- resample(x, model = base_learners[[i]], control = control)
-      complete_responses <-
-        complete_responses & complete.cases(stack[[i]])
+      complete_cases <- complete_cases & complete.cases(stack[[i]])
     }
+    stack <- lapply(stack, function(res) res[complete_cases, ])
     
-    stack <- lapply(stack, function(response) {
-      response[complete_responses, , drop = FALSE]
-    })
-
     weights <- Rsolnp::solnp(rep(1 / num_learners, num_learners),
-                             function(x) eval_stack_loss(x, stack, times),
+                             function(weights) mean_stack_list(stack, weights),
                              eqfun = function(x) sum(x), eqB = 1,
                              LB = rep(0, num_learners),
                              control = list(trace = FALSE))$pars
@@ -92,66 +86,39 @@ MLModelFunction(StackedModel) <- NULL
   list(base_fits = lapply(base_learners,
                           function(learner) fit(mf, model = learner)),
        weights = weights,
-       times = times) %>%
+       times = control@times) %>%
     MLModelFit("StackedModelFit", model, x, response(mf))
 }
 
 
-eval_stack_loss <- function(weights, responses, times) {
-  predicted <- 0
-  for (i in seq(responses)) {
-    predicted <- predicted + weights[i] * responses[[i]]$Predicted
-  }
-  df <- responses[[1]]["Observed"]
-  df$Predicted <- predicted
-  by(df, responses[[1]]$Resample, function(x) {
-    stack_loss(x$Observed, x$Predicted, times = times)
-  }) %>% mean(na.rm = TRUE)
+mean_stack_list <- function(x, weights) {
+  pred <- 0
+  for (i in seq(x)) pred <- pred + weights[i] * x[[i]]$Predicted
+  res <- x[[1]]
+  res$Predicted <- pred
+  mean(stack_loss(res$Observed, res$Predicted, res), na.rm = TRUE)
 }
 
 
 setGeneric("stack_loss",
-           function(observed, predicted, ...) standardGeneric("stack_loss"))
+           function(observed, predicted, x, ...) standardGeneric("stack_loss"))
 
 
-setMethod("stack_loss", c("factor", "matrix"),
-  function(observed, predicted, ...) {
-    stack_loss(model.matrix(~ observed - 1), predicted)
-  }
+setMethod("stack_loss", c("ANY", "ANY", "Resamples"),
+  function(observed, predicted, x, ...) mse(x)
 )
 
 
-setMethod("stack_loss", c("factor", "numeric"),
-  function(observed, predicted, ...) {
-    stack_loss(observed, cbind(1 - predicted, predicted))
-  }
+setMethod("stack_loss", c("factor", "ANY", "Resamples"),
+  function(observed, predicted, x, ...) brier(x)
 )
 
 
-setMethod("stack_loss", c("matrix", "matrix"),
-  function(observed, predicted, ...) {
-    stopifnot(ncol(observed) == ncol(predicted))
-    sum((observed - predicted)^2) / nrow(observed)
-  }
+setMethod("stack_loss", c("Surv", "numeric", "Resamples"),
+  function(observed, predicted, x, ...) -cindex(x)
 )
 
 
-setMethod("stack_loss", c("numeric", "numeric"),
-  function(observed, predicted, ...) {
-    stack_loss(as.matrix(observed), as.matrix(predicted))
-  }
-)
-
-
-setMethod("stack_loss", c("Surv", "matrix"),
-  function(observed, predicted, times, ...) {
-    brier(observed, predicted, times)[1]
-  }
-)
-
-
-setMethod("stack_loss", c("Surv", "numeric"),
-  function(observed, predicted, ...) {
-    -cindex(observed, predicted)
-  }
+setMethod("stack_loss", c("Surv", "SurvProbs", "Resamples"),
+  function(observed, predicted, x, ...) brier(x)[, 1]
 )

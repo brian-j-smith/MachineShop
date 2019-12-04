@@ -8,6 +8,7 @@
 \alias{[,Resamples,ANY,missing,ANY-method}
 \alias{[,Resamples,missing,missing,ANY-method}
 \alias{[,SurvMatrix,ANY,ANY,ANY-method}
+\alias{+,SurvMatrix,SurvMatrix-method}
 \title{Extract Elements of an Object}
 \usage{
 \S4method{[}{DiscreteVector,ANY,missing,missing}(x, i)
@@ -21,6 +22,8 @@
 \S4method{[}{Resamples,missing,missing,ANY}(x, i, j, ..., drop = FALSE)
 
 \S4method{[}{SurvMatrix,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
+
+\S4method{+}{SurvMatrix,SurvMatrix}(e1, e2)
 }
 \arguments{
 \item{x}{object from which to extract elements.}
@@ -30,6 +33,8 @@
 \item{drop}{logical indicating that the result be returned as an object
 coerced to the lowest dimension possible if \code{TRUE} or
 with the original dimensions and class otherwise.}
+
+\item{e1, e2}{objects.}
 }
 \description{
 Operators acting on data structures to extract elements.
