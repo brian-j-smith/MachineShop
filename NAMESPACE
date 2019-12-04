@@ -51,10 +51,10 @@ export(expand_model,
        Grid,
        ParameterGrid)
 
-export(BinomialMatrix,
-       DiscreteVector,
-       NegBinomialVector,
-       PoissonVector,
+export(BinomialVariate,
+       DiscreteVariate,
+       NegBinomialVariate,
+       PoissonVariate,
        SurvEvents,
        SurvProbs)
 
@@ -162,20 +162,20 @@ export(MLMetric,
 
 export(tune)
 
-S3method(as.data.frame, BinomialMatrix)
+S3method(as.data.frame, BinomialVariate)
 S3method(as.data.frame, ModelFrame)
 S3method(as.data.frame, SelectedModelFrame)
 S3method(as.data.frame, SurvMatrix)
-S3method(as.double, BinomialMatrix)
+S3method(as.double, BinomialVariate)
 S3method(bake, ModelRecipe)
 S3method(bake, SelectedRecipe)
 S3method(bake, TunedRecipe)
-S3method(c, BinomialMatrix)
+S3method(c, BinomialVariate)
 S3method(c, Calibration)
 S3method(c, ConfusionList)
 S3method(c, ConfusionMatrix)
 S3method(c, Curves)
-S3method(c, DiscreteVector)
+S3method(c, DiscreteVariate)
 S3method(c, Lift)
 S3method(c, ListOf)
 S3method(c, Resamples)
@@ -195,7 +195,7 @@ S3method(model.matrix, FormulaTerms)
 S3method(model.matrix, ModelFrame)
 S3method(ModelFrame, formula)
 S3method(ModelFrame, matrix)
-S3method(performance, BinomialMatrix)
+S3method(performance, BinomialVariate)
 S3method(performance, ConfusionList)
 S3method(performance, ConfusionMatrix)
 S3method(performance, factor)
@@ -219,7 +219,7 @@ S3method(predict, MLModelFit)
 S3method(prep, ModelRecipe)
 S3method(prep, SelectedRecipe)
 S3method(prep, TunedRecipe)
-S3method(print, BinomialMatrix)
+S3method(print, BinomialVariate)
 S3method(print, Calibration)
 S3method(print, ConfusionList)
 S3method(print, ConfusionMatrix)
@@ -258,4 +258,4 @@ S3method(summary, Performance)
 S3method(summary, Resamples)
 S3method(t.test, PerformanceDiff)
 S3method(terms, ModelFrame)
-S3method("[", BinomialMatrix)
+S3method("[", BinomialVariate)

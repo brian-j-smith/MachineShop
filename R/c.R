@@ -16,10 +16,10 @@
 NULL
 
 
-c.BinomialMatrix <- function(...) {
+c.BinomialVariate <- function(...) {
   args <- list(...)
-  if (all(mapply(is, args, "BinomialMatrix"))) {
-    structure(do.call(rbind, args), class = "BinomialMatrix")
+  if (all(mapply(is, args, "BinomialVariate"))) {
+    structure(do.call(rbind, args), class = "BinomialVariate")
   } else {
     NextMethod()
   }
@@ -106,7 +106,7 @@ c.Curves <- function(...) {
 }
 
 
-c.DiscreteVector <- function(...) {
+c.DiscreteVariate <- function(...) {
   args <- list(...)
   x <- NextMethod()
   class <- class(args[[1]])

@@ -94,15 +94,15 @@ setMethod("show", "Curves",
 
 #' @rdname print-methods
 #'
-print.BinomialMatrix <- function(x, n = MachineShop::settings("max.print"),
-                                 ...) {
+print.BinomialVariate <- function(x, n = MachineShop::settings("max.print"),
+                                  ...) {
   print_title(x)
   print_items(as(x, "matrix"), n = n)
   invisible(x)
 }
 
 
-setMethod("show", "DiscreteVector",
+setMethod("show", "DiscreteVariate",
   function(object) {
     print_title(object)
     print(as(object, "numeric"))

@@ -8,7 +8,7 @@
 \alias{role_surv}
 \title{Set Recipe Roles}
 \usage{
-role_binom(recipe, count, size)
+role_binom(recipe, x, size)
 
 role_case(recipe, stratum, weight, replace = FALSE)
 
@@ -19,8 +19,8 @@ role_surv(recipe, time, event)
 \arguments{
 \item{recipe}{existing \link[recipes]{recipe} object.}
 
-\item{count, size}{number of counts and trials for the specification of a
-\code{\link{BinomialMatrix}} outcome.}
+\item{x, size}{number of counts and trials for the specification of a
+\code{\link{BinomialVariate}} outcome.}
 
 \item{stratum}{variable for stratified \link[=resample]{resampling} of cases.}
 

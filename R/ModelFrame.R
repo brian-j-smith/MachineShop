@@ -302,7 +302,7 @@ terms.recipe <- function(x, original = FALSE, ...) {
   }
 
   binom <- c(
-    count = first(get_vars(c("binom_count", "outcome"), "numeric")),
+    count = first(get_vars(c("binom_x", "outcome"), "numeric")),
     size = first(get_vars(c("binom_size", "outcome"), "numeric"))
   )
   surv <- c(
@@ -316,7 +316,7 @@ terms.recipe <- function(x, original = FALSE, ...) {
   have_outcome <- as.logical(lengths(list(binom, surv, matrix, other)))
   if (sum(have_outcome) > 1 || length(other) > 1) {
     stop("specified outcome is not a single variable, binomila variable with ",
-         "roles 'binom_count' and 'binom_size', survival variables with ",
+         "roles 'binom_x' and 'binom_size', survival variables with ",
          "roles 'surv_time' and 'surv_event', or multiple numeric variables")
   }
 
@@ -329,9 +329,9 @@ terms.recipe <- function(x, original = FALSE, ...) {
   } else if (length(surv)) {
     stop("survival outcome role 'surv_event' specified without 'surv_time'")
   } else if (!any(is.na(binom[c("count", "size")]))) {
-    call("BinomialMatrix", as.name(binom["count"]), as.name(binom["size"]))
+    call("BinomialVariate", as.name(binom["count"]), as.name(binom["size"]))
   } else if (length(binom)) {
-    stop("binomial outcome must have 'binom_count' and 'binom_size' roles")
+    stop("binomial outcome must have 'binom_x' and 'binom_size' roles")
   } else if (length(matrix)) {
     as.call(c(.(cbind), lapply(matrix, as.name)))
   }

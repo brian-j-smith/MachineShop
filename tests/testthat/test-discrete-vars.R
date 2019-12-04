@@ -22,7 +22,7 @@ test_fit <- function(..., model, type) {
   metrics <- c(mae, mse, msle, r2, rmse, rmsle)
   perf <- performance(obs, pred, metrics = metrics)
 
-  if (is(obs, "BinomialMatrix")) {
+  if (is(obs, "BinomialVariate")) {
     class <- "numeric"
     perf_mse <- mean((obs[, 1] / (obs[, 1] + obs[, 2]) - pred)^2)
   } else {
@@ -34,21 +34,21 @@ test_fit <- function(..., model, type) {
 }
 
 
-test_that("BinomialMatrix construction and model fitting", {
+test_that("BinomialVariate construction and model fitting", {
   skip_if_not(TEST_ALL)
-  context("BinomialMatrix")
+  context("BinomialVariate")
   with_parallel({
 
-    expect_s3_class(BinomialMatrix(), "BinomialMatrix")
-    expect_s3_class(BinomialMatrix(1:10, 10), "BinomialMatrix")
-    expect_s3_class(BinomialMatrix(1:10, 1:10), "BinomialMatrix")
-    expect_error(BinomialMatrix(-1:10, 10))
-    expect_error(BinomialMatrix(1:10, Inf))
-    expect_error(BinomialMatrix(1:10, 1:5))
-    expect_error(BinomialMatrix(1:10, 10:1))
+    expect_s3_class(BinomialVariate(), "BinomialVariate")
+    expect_s3_class(BinomialVariate(1:10, 10), "BinomialVariate")
+    expect_s3_class(BinomialVariate(1:10, 1:10), "BinomialVariate")
+    expect_error(BinomialVariate(-1:10, 10))
+    expect_error(BinomialVariate(1:10, Inf))
+    expect_error(BinomialVariate(1:10, 1:5))
+    expect_error(BinomialVariate(1:10, 10:1))
 
     df <- esoph
-    fo <- BinomialMatrix(ncases, size = ncases + ncontrols) ~ .
+    fo <- BinomialVariate(ncases, size = ncases + ncontrols) ~ .
     expect_true(test_fit(fo, df, model = BlackBoostModel(), type = "Binomial"))
     expect_true(test_fit(fo, df, model = GAMBoostModel(baselearner = "bols"),
                          type = "Binomial"))
@@ -58,7 +58,7 @@ test_that("BinomialMatrix construction and model fitting", {
     expect_s4_class(resample(fo, df, model = GLMModel), "Resamples")
 
     rec <- recipe(ncases + n ~ ., data = within(df, n <- ncases + ncontrols)) %>%
-      role_binom(count = ncases, size = n) %>%
+      role_binom(x = ncases, size = n) %>%
       role_case(stratum = n) %>%
       step_rm(ncontrols)
     expect_true(test_fit(rec, model = BlackBoostModel(), type = "Binomial"))
@@ -73,25 +73,25 @@ test_that("BinomialMatrix construction and model fitting", {
 })
 
 
-test_that("DiscreteVector construction and model fitting", {
+test_that("DiscreteVariate construction and model fitting", {
   skip_if_not(TEST_ALL)
-  context("DiscreteVector")
+  context("DiscreteVariate")
   with_parallel({
 
-    expect_s4_class(DiscreteVector(), "DiscreteVector")
-    expect_s4_class(DiscreteVector(1:10), "DiscreteVector")
-    expect_s4_class(DiscreteVector(1:10, 1, 10), "DiscreteVector")
-    expect_error(DiscreteVector(1:10, 5, 10))
-    expect_error(DiscreteVector(1:10, 1, 5))
+    expect_s4_class(DiscreteVariate(), "DiscreteVariate")
+    expect_s4_class(DiscreteVariate(1:10), "DiscreteVariate")
+    expect_s4_class(DiscreteVariate(1:10, 1, 10), "DiscreteVariate")
+    expect_error(DiscreteVariate(1:10, 5, 10))
+    expect_error(DiscreteVariate(1:10, 1, 5))
 
     df <- ICHomes
-    fo <- DiscreteVector(sale_amount, min = 0) ~ .
+    fo <- DiscreteVariate(sale_amount, min = 0) ~ .
     expect_true(test_fit(fo, df, model = GLMModel(), type = "gaussian"))
     expect_s4_class(resample(fo, df, model = GLMModel), "Resamples")
 
     rec <- recipe(
       sale_amount ~ .,
-      data = within(df, sale_amount <- DiscreteVector(sale_amount, min = 0))
+      data = within(df, sale_amount <- DiscreteVariate(sale_amount, min = 0))
     )
     expect_true(test_fit(rec, model = GLMModel(), type = "gaussian"))
     expect_s4_class(resample(rec, model = GLMModel), "Resamples")
@@ -100,16 +100,16 @@ test_that("DiscreteVector construction and model fitting", {
 })
 
 
-test_that("NegBinomialVector construction and model fitting", {
+test_that("NegBinomialVariate construction and model fitting", {
   skip_if_not(TEST_ALL)
-  context("NegBinomialVector")
+  context("NegBinomialVariate")
   with_parallel({
 
-    expect_s4_class(NegBinomialVector(), "NegBinomialVector")
-    expect_s4_class(NegBinomialVector(0:10), "NegBinomialVector")
+    expect_s4_class(NegBinomialVariate(), "NegBinomialVariate")
+    expect_s4_class(NegBinomialVariate(0:10), "NegBinomialVariate")
 
     df <- quine
-    fo <- NegBinomialVector(Days) ~ .
+    fo <- NegBinomialVariate(Days) ~ .
     expect_true(test_fit(fo, df, model = BlackBoostModel(), type = "Negative"))
     expect_true(test_fit(fo, df, model = GAMBoostModel(baselearner = "bols"),
                          type = "Negative"))
@@ -120,7 +120,7 @@ test_that("NegBinomialVector construction and model fitting", {
 
     rec <- recipe(
       Days ~ .,
-      data = within(df, Days <- NegBinomialVector(Days))
+      data = within(df, Days <- NegBinomialVariate(Days))
     )
     expect_true(test_fit(rec, model = BlackBoostModel(), type = "Negative"))
     expect_true(test_fit(rec, model = GAMBoostModel(baselearner = "bols"),
@@ -133,16 +133,16 @@ test_that("NegBinomialVector construction and model fitting", {
 })
 
 
-test_that("PoissonVector construction and model fitting", {
+test_that("PoissonVariate construction and model fitting", {
   skip_if_not(TEST_ALL)
-  context("PoissonVector")
+  context("PoissonVariate")
   with_parallel({
 
-    expect_s4_class(PoissonVector(), "PoissonVector")
-    expect_s4_class(PoissonVector(0:10), "PoissonVector")
+    expect_s4_class(PoissonVariate(), "PoissonVariate")
+    expect_s4_class(PoissonVariate(0:10), "PoissonVariate")
 
     df <- quine
-    fo <- PoissonVector(Days) ~ .
+    fo <- PoissonVariate(Days) ~ .
     expect_true(test_fit(fo, df, model = BlackBoostModel(), type = "Poisson"))
     expect_true(test_fit(fo, df, model = GAMBoostModel(baselearner = "bols"),
                          type = "Poisson"))
@@ -155,7 +155,7 @@ test_that("PoissonVector construction and model fitting", {
 
     rec <- recipe(
       Days ~ .,
-      data = within(df, Days <- PoissonVector(Days))
+      data = within(df, Days <- PoissonVariate(Days))
     )
     expect_true(test_fit(rec, model = BlackBoostModel(), type = "Poisson"))
     expect_true(test_fit(rec, model = GAMBoostModel(baselearner = "bols"),

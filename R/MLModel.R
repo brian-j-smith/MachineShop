@@ -7,9 +7,9 @@
 #' @param packages character vector of packages required to use the model.
 #' @param response_types character vector of response variable types to which
 #'   the model can be fit.  Supported types are \code{"binary"}, =
-#'   \code{"BinomialMatrix"}, \code{"DiscreteVector"}, \code{"factor"},
-#'   \code{"matrix"}, \code{"NegBinomialVector"}, \code{"numeric"},
-#'   \code{"ordered"}, \code{"PoissonVector"}, and \code{"Surv"}.
+#'   \code{"BinomialVariate"}, \code{"DiscreteVariate"}, \code{"factor"},
+#'   \code{"matrix"}, \code{"NegBinomialVariate"}, \code{"numeric"},
+#'   \code{"ordered"}, \code{"PoissonVariate"}, and \code{"Surv"}.
 #' @param predictor_encoding character string indicating whether the model is
 #'   fit with predictor variables encoded as a \code{"\link{model.matrix}"}, a
 #'   data.frame containing the originally specified model \code{"terms"}, or

@@ -15,21 +15,21 @@ NULL
 
 
 #' @rdname extract-methods
-#' @aliases [.BinomialMatrix
+#' @aliases [.BinomialVariate
 #'
-"[.BinomialMatrix" <- function(x, i, j, ..., drop = FALSE) {
+"[.BinomialVariate" <- function(x, i, j, ..., drop = FALSE) {
   y <- if (missing(j)) unclass(x)[i, , drop = drop] else NextMethod(drop = drop)
   if (identical(colnames(x), colnames(y))) {
-    structure(y, class = "BinomialMatrix")
+    structure(y, class = "BinomialVariate")
   } else y
 }
 
 
 #' @rdname extract-methods
-#' @aliases [,DiscreteVector,ANY,missing,missing-method
+#' @aliases [,DiscreteVariate,ANY,missing,missing-method
 #'
 setMethod("[",
-  c(x = "DiscreteVector", i = "ANY", j = "missing", drop = "missing"),
+  c(x = "DiscreteVariate", i = "ANY", j = "missing", drop = "missing"),
   function(x, i) {
     new(class(x), asS3(x)[i], min = x@min, max = x@max)
   }

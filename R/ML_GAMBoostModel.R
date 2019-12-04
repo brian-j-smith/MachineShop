@@ -59,8 +59,8 @@ GAMBoostModel <- function(family = NULL,
     name = "GAMBoostModel",
     label = "Gradient Boosting with Additive Models",
     packages = "mboost",
-    response_types = c("binary", "BinomialMatrix", "NegBinomialVector",
-                       "numeric", "PoissonVector", "Surv"),
+    response_types = c("binary", "BinomialVariate", "NegBinomialVariate",
+                       "numeric", "PoissonVariate", "Surv"),
     predictor_encoding = "terms",
     params = params,
     grid = function(x, length, ...) {
@@ -79,11 +79,11 @@ GAMBoostModel <- function(family = NULL,
 
       if (is.null(family)) {
         family <- switch_class(response(data),
-                               BinomialMatrix = mboost::Binomial(type = "glm"),
+                               BinomialVariate = mboost::Binomial(type = "glm"),
                                factor = mboost::Binomial(),
-                               NegBinomialVector = mboost::NBinomial(),
+                               NegBinomialVariate = mboost::NBinomial(),
                                numeric = mboost::Gaussian(),
-                               PoissonVector = mboost::Poisson(),
+                               PoissonVariate = mboost::Poisson(),
                                Surv = mboost::CoxPH())
       }
       mboost::gamboost(formula, data = as.data.frame(data), na.action = na.pass,

@@ -42,7 +42,7 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
     name = "GBMModel",
     label = "Generalized Boosted Regression",
     packages = "gbm",
-    response_types = c("factor", "numeric", "PoissonVector", "Surv"),
+    response_types = c("factor", "numeric", "PoissonVariate", "Surv"),
     predictor_encoding = "terms",
     params = params(environment()),
     grid = function(x, length, random, ...) {
@@ -62,7 +62,7 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
         distribution <- switch_class(response(data),
                                      factor = "multinomial",
                                      numeric = "gaussian",
-                                     PoissonVector = "poisson",
+                                     PoissonVariate = "poisson",
                                      Surv = "coxph")
       }
       eval_fit(data,

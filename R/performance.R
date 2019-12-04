@@ -45,7 +45,7 @@ performance <- function(x, ...) {
 
 #' @rdname performance
 #'
-performance.BinomialMatrix <-
+performance.BinomialVariate <-
   function(x, y, metrics = MachineShop::settings("metrics.numeric"),
            na.rm = TRUE, ...) {
   .performance(x, y, metrics, na.rm)

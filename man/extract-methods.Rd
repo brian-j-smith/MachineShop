@@ -2,8 +2,8 @@
 % Please edit documentation in R/extract.R
 \name{extract}
 \alias{extract}
-\alias{[.BinomialMatrix}
-\alias{[,DiscreteVector,ANY,missing,missing-method}
+\alias{[.BinomialVariate}
+\alias{[,DiscreteVariate,ANY,missing,missing-method}
 \alias{[,RecipeGrid,ANY,ANY,ANY-method}
 \alias{[,Resamples,ANY,ANY,ANY-method}
 \alias{[,Resamples,ANY,missing,ANY-method}
@@ -12,9 +12,9 @@
 \alias{+,SurvMatrix,SurvMatrix-method}
 \title{Extract Elements of an Object}
 \usage{
-\method{[}{BinomialMatrix}(x, i, j, ..., drop = FALSE)
+\method{[}{BinomialVariate}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{DiscreteVector,ANY,missing,missing}(x, i)
+\S4method{[}{DiscreteVariate,ANY,missing,missing}(x, i)
 
 \S4method{[}{RecipeGrid,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 

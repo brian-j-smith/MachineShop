@@ -46,19 +46,19 @@ GLMModel <- function(family = NULL, quasi = FALSE, ...) {
     name = "GLMModel",
     label = "Generalized Linear Models",
     packages = c("MASS", "stats"),
-    response_types = c("binary", "BinomialMatrix", "NegBinomialVector",
-                       "numeric", "PoissonVector"),
+    response_types = c("binary", "BinomialVariate", "NegBinomialVariate",
+                       "numeric", "PoissonVariate"),
     predictor_encoding = "model.matrix",
     params = params,
     fit = function(formula, data, weights, family = NULL, quasi = FALSE, ...) {
       if (is.null(family)) {
         quasi_prefix <- function(x) if (quasi) paste0("quasi", x) else x
         family <- switch_class(response(data),
-                               BinomialMatrix = quasi_prefix("binomial"),
+                               BinomialVariate = quasi_prefix("binomial"),
                                factor = quasi_prefix("binomial"),
-                               NegBinomialVector = "negbin",
+                               NegBinomialVariate = "negbin",
                                numeric = "gaussian",
-                               PoissonVector = quasi_prefix("poisson"))
+                               PoissonVariate = quasi_prefix("poisson"))
       }
       data <- as.data.frame(data)
       if (family == "negbin") {
@@ -124,11 +124,11 @@ GLMStepAICModel <- function(family = NULL, quasi = FALSE, ...,
       if (is.null(family)) {
         quasi_prefix <- function(x) if (quasi) paste0("quasi", x) else x
         family <- switch_class(response(data),
-                               BinomialMatrix = quasi_prefix("binomial"),
+                               BinomialVariate = quasi_prefix("binomial"),
                                factor = quasi_prefix("binomial"),
-                               NegBinomialVector = "negbin",
+                               NegBinomialVariate = "negbin",
                                numeric = "gaussian",
-                               PoissonVector = quasi_prefix("poisson"))
+                               PoissonVariate = quasi_prefix("poisson"))
       }
       stepargs <- stepAIC_args(formula, direction, scope)
       data <- as.data.frame(data)

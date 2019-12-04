@@ -116,7 +116,7 @@ setMetricMethod <- function(f, signature, definition =
 
 
 setMetricMethod_BinomialMatrix_numeric <- function(f) {
-  setMetricMethod(f, c("BinomialMatrix", "numeric"),
+  setMetricMethod(f, c("BinomialVariate", "numeric"),
     function(observed, predicted, ...) {
       get(f)(as.numeric(observed), predicted, ...)
     }

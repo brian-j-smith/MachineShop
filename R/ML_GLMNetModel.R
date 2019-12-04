@@ -59,8 +59,8 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
     name = "GLMNetModel",
     label = "Lasso and Elastic-Net",
     packages = "glmnet",
-    response_types = c("BinomialMatrix", "factor", "matrix", "numeric",
-                       "PoissonVector", "Surv"),
+    response_types = c("BinomialVariate", "factor", "matrix", "numeric",
+                       "PoissonVariate", "Surv"),
     predictor_encoding = "model.matrix",
     params = params(environment()),
     grid = function(x, length, ...) {
@@ -80,12 +80,12 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
       y <- response(data)
       if (is.null(family)) {
         family <- switch_class(y,
-                               BinomialMatrix = "binomial",
+                               BinomialVariate = "binomial",
                                factor = ifelse(nlevels(y) == 2,
                                                "binomial", "multinomial"),
                                matrix = "mgaussian",
                                numeric = "gaussian",
-                               PoissonVector = "poisson",
+                               PoissonVariate = "poisson",
                                Surv = "cox")
       }
       modelfit <- glmnet::glmnet(x, y, offset = x.offset, weights = weights,

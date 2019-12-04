@@ -73,8 +73,8 @@ BlackBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
     name = "BlackBoostModel",
     label = "Gradient Boosting with Regression Trees",
     packages = c("mboost", "partykit"),
-    response_types = c("binary", "BinomialMatrix", "NegBinomialVector",
-                       "numeric", "PoissonVector", "Surv"),
+    response_types = c("binary", "BinomialVariate", "NegBinomialVariate",
+                       "numeric", "PoissonVariate", "Surv"),
     predictor_encoding = "terms",
     params = params,
     grid = function(x, length, ...) {
@@ -86,11 +86,11 @@ BlackBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
     fit = function(formula, data, weights, family = NULL, ...) {
       if (is.null(family)) {
         family <- switch_class(response(data),
-                               BinomialMatrix = mboost::Binomial(type = "glm"),
+                               BinomialVariate = mboost::Binomial(type = "glm"),
                                factor = mboost::Binomial(),
-                               NegBinomialVector = mboost::NBinomial(),
+                               NegBinomialVariate = mboost::NBinomial(),
                                numeric = mboost::Gaussian(),
-                               PoissonVector = mboost::Poisson(),
+                               PoissonVariate = mboost::Poisson(),
                                Surv = mboost::CoxPH())
       }
       mboost::blackboost(formula, data = as.data.frame(data),

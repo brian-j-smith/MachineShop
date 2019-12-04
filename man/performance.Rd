@@ -2,7 +2,7 @@
 % Please edit documentation in R/performance.R
 \name{performance}
 \alias{performance}
-\alias{performance.BinomialMatrix}
+\alias{performance.BinomialVariate}
 \alias{performance.factor}
 \alias{performance.matrix}
 \alias{performance.numeric}
@@ -14,7 +14,7 @@
 \usage{
 performance(x, ...)
 
-\method{performance}{BinomialMatrix}(
+\method{performance}{BinomialVariate}(
   x,
   y,
   metrics = MachineShop::settings("metrics.numeric"),

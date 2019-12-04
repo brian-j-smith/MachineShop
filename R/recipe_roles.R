@@ -6,8 +6,8 @@
 #' @rdname recipe_roles
 #'
 #' @param recipe existing \link[recipes]{recipe} object.
-#' @param count,size number of counts and trials for the specification of a
-#'   \code{\link{BinomialMatrix}} outcome.
+#' @param x,size number of counts and trials for the specification of a
+#'   \code{\link{BinomialVariate}} outcome.
 #' @param stratum variable for stratified \link[=resample]{resampling} of cases.
 #' @param weight numeric variable of case weights for model
 #'   \link[=fit]{fitting}.
@@ -40,14 +40,14 @@ NULL
 
 #' @rdname recipe_roles
 #'
-role_binom <- function(recipe, count, size) {
-  count <- as.character(substitute(count))
+role_binom <- function(recipe, x, size) {
+  x <- as.character(substitute(x))
   size <- as.character(substitute(size))
-  if (nzchar(count) && nzchar(size)) {
-    add_role(recipe, count, new_role = "binom_count") %>%
+  if (nzchar(x) && nzchar(size)) {
+    add_role(recipe, x, new_role = "binom_x") %>%
       add_role(size, new_role = "binom_size")
   } else {
-    stop("binomial 'count' and 'size' variables must be specified")
+    stop("binomial 'x' and 'size' variables must be specified")
   }
 }
 

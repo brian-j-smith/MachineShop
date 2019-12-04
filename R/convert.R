@@ -12,7 +12,7 @@ setMethod("convert_prob", c("ANY", "numeric"),
 )
 
 
-setMethod("convert_prob", c("BinomialMatrix", "ANY"),
+setMethod("convert_prob", c("BinomialVariate", "ANY"),
   function(object, x, ...) unname(drop(x))
 )
 
@@ -84,7 +84,7 @@ setMethod("convert_response", c("ANY", "ANY"),
 )
 
 
-setMethod("convert_response", c("DiscreteVector", "numeric"),
+setMethod("convert_response", c("DiscreteVariate", "numeric"),
   function(object, x, ...) {
     x <- round(x)
     if (object@min > -Inf) x <- pmax(x, object@min)

@@ -1,4 +1,4 @@
-setOldClass("BinomialMatrix")
+setOldClass("BinomialVariate")
 setOldClass("listof")
 setOldClass("ModelFrame")
 setOldClass("recipe")
@@ -179,20 +179,20 @@ setClass("Curves",
 )
 
 
-setClass("DiscreteVector",
+setClass("DiscreteVariate",
   contains = "numeric",
   slots = c(min = "numeric",
             max = "numeric")
 )
 
 
-setClass("NegBinomialVector",
-  contains = "DiscreteVector"
+setClass("NegBinomialVariate",
+  contains = "DiscreteVariate"
 )
 
 
-setClass("PoissonVector",
-  contains = "DiscreteVector"
+setClass("PoissonVariate",
+  contains = "DiscreteVariate"
 )
 
 

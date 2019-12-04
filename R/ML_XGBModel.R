@@ -66,7 +66,7 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
     name = "XGBModel",
     label = "Extreme Gradient Boosting",
     packages = "xgboost",
-    response_types = c("factor", "numeric", "PoissonVector"),
+    response_types = c("factor", "numeric", "PoissonVariate"),
     predictor_encoding = "model.matrix",
     params = params(environment()),
     fit = function(formula, data, weights, params, ...) {
@@ -84,7 +84,7 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
                                       "reg:tweedie", "rank:pairwise",
                                       "rank:ndcg", "rank:map")
                                   },
-                                  PoissonVector = "count:poisson")
+                                  PoissonVariate = "count:poisson")
       params$objective <- match.arg(params$objective, obj_choices)
       modelfit <- xgboost::xgboost(x, y, weight = weights, params = params, ...)
       modelfit$levels <- response_levels

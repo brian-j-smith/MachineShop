@@ -5,12 +5,12 @@ library(dials)
 library(recipes)
 
 df <- esoph
-fo <- PoissonVector(ncases) ~ agegp + alcgp + tobgp +
+fo <- PoissonVariate(ncases) ~ agegp + alcgp + tobgp +
   offset(log(ncases + ncontrols))
 
 rec_df <- within(esoph, {
   offset <- log(ncases + ncontrols)
-  ncases <- PoissonVector(ncases)
+  ncases <- PoissonVariate(ncases)
 })
 rec <- recipe(ncases ~ agegp + alcgp + tobgp + offset, data = rec_df) %>%
   role_pred(offset = offset, replace = TRUE)
@@ -26,11 +26,11 @@ test_fit <- function(model) {
 
   model_fit <- expect_is(fit(fo, df, model = model), "MLModelFit")
   expect_true(has_offset(model_fit))
-  expect_s4_class(predict(model_fit), "PoissonVector")
+  expect_s4_class(predict(model_fit), "PoissonVariate")
 
   model_fit <- expect_is(fit(rec, model = model), "MLModelFit")
   expect_true(has_offset(model_fit))
-  expect_s4_class(predict(model_fit), "PoissonVector")
+  expect_s4_class(predict(model_fit), "PoissonVariate")
 }
 
 
