@@ -88,7 +88,7 @@ setMethod("[", c(x = "SurvMatrix", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
     y <- asS3(x)[i, j, drop = drop]
     if (is.matrix(y)) {
-      new(class(x), y, times = x@times[colnames(x) %in% colnames(y)])
+      new(class(x), y, times = x@times[match(colnames(y), colnames(x))])
     } else y
   }
 )
