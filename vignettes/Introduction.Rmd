@@ -1275,6 +1275,9 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `require`
   : names of installed packages to load during parallel execution of resampling algorithms [default: ``c("MachineShop", "survival", "recipes")``].
 
+`reset`
+  : character names of settings to reset to their default values.
+
 `stat.Curves`
   : function or character string naming a function to compute one summary statistic at each cutoff value of resampled metrics in performance curves, or `NULL` for resample-specific metrics [default: ``"base::mean"``].
 

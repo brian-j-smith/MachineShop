@@ -79,6 +79,14 @@ test_that("settings changes and views", {
   expect_identical(settings("require"), c("stats", old_values))
   expect_error(settings(require = 1))
 
+  settings("reset")
+  values <- c("cut", "grid")
+  old_values <- settings(values)
+  settings(control = "BootControl", cutoff = 0.1, grid = 10)
+  settings(reset = values)
+  expect_identical(settings("control"), "BootControl")
+  expect_identical(settings(values), old_values)
+
   new_value <- "median"
   expect_type(settings(stat.Curves = new_value), "list")
   expect_identical(settings("stat.Curves"), new_value)

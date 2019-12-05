@@ -72,6 +72,8 @@ behaviors of functions in the \pkg{MachineShop} package.
   \item{\code{require}}{names of installed packages to load during parallel
     execution of resampling algorithms [default: \code{c("MachineShop",
     "survival", "recipes")}].}
+  \item{\code{reset}}{character names of settings to reset to their default
+    values.}
   \item{\code{stat.Curves}}{function or character string naming a function
     to compute one \link{summary} statistic at each cutoff value of resampled
     metrics in performance curves, or \code{NULL} for resample-specific

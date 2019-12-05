@@ -62,6 +62,8 @@
 #'   \item{\code{require}}{names of installed packages to load during parallel
 #'     execution of resampling algorithms [default: \code{c("MachineShop",
 #'     "survival", "recipes")}].}
+#'   \item{\code{reset}}{character names of settings to reset to their default
+#'     values.}
 #'   \item{\code{stat.Curves}}{function or character string naming a function
 #'     to compute one \link{summary} statistic at each cutoff value of resampled
 #'     metrics in performance curves, or \code{NULL} for resample-specific
@@ -113,9 +115,7 @@ settings <- function(...) {
   if (!length(args)) {
     return(global_values)
   } else if (identical(args, list("reset"))) {
-    for (name in names(.global_defaults)) {
-      MachineShop_global$settings[[name]]$value <- .global_defaults[[name]]
-    }
+    settings(reset = names(.global_defaults))
     return(invisible(global_values))
   }
 
@@ -320,6 +320,23 @@ MachineShop_global <- as.environment(list(
                         ": ", toString(subnames))
           DomainError(x, msg)
         } else x
+      }
+    ),
+
+    reset = list(
+      value = character(),
+      check = function(x) {
+        if (is.character(x)) {
+          setting_names <- names(.global_defaults)
+          reset_names <- setting_names[charmatch(x, setting_names, nomatch = 0)]
+          for (name in reset_names) {
+            value <- .global_defaults[[name]]
+            MachineShop_global$settings[[name]]$value <- value
+          }
+          if ("reset" %in% reset_names) .global_defaults$reset else reset_names
+        } else {
+          DomainError(x, "must be a character value or vector")
+        }
       }
     ),
 
