@@ -47,11 +47,11 @@ SuperModel <- function(..., model = GBMModel,
     predictor_encoding = NA_character_,
     params = as.list(environment()),
     predict = function(object, newdata, times, ...) {
-      learner_predictors <- lapply(object$base_fits, function(fit) {
+      predictors <- lapply(object$base_fits, function(fit) {
         predict(fit, newdata = newdata, times = object$times, type = "prob")
       })
 
-      df <- super_df(NA, learner_predictors, newdata[["(casenames)"]],
+      df <- super_df(NA, predictors, newdata[["(casenames)"]],
                      if (object$all_vars) newdata)
 
       predict(object$super_fit, newdata = df, times = times, type = "prob")
@@ -72,14 +72,13 @@ MLModelFunction(SuperModel) <- NULL
   super_learner <- params$model
   control <- params$control
 
-  learner_predictors <- list()
+  predictors <- list()
   for (i in seq(base_learners)) {
-    response <- resample(x, model = base_learners[[i]], control = control)
-    learner_predictors[[i]] <- response$Predicted
+    res <- resample(x, model = base_learners[[i]], control = control)
+    predictors[[i]] <- res$Predicted
   }
 
-  df <- super_df(response$Observed, learner_predictors, response$Case,
-                 if (params$all_vars) mf)
+  df <- super_df(res$Observed, predictors, res$Case, if (params$all_vars) mf)
   super_mf <- ModelFrame(formula(df), df)
 
   list(base_fits = lapply(base_learners,
