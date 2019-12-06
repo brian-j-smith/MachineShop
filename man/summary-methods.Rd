@@ -8,7 +8,7 @@
 \alias{summary.MLModel}
 \alias{summary.Performance}
 \alias{summary.Resamples}
-\title{Model Performance Summary}
+\title{Model Performance Summaries}
 \usage{
 \method{summary}{ConfusionList}(object, ...)
 
@@ -54,9 +54,7 @@ compute summary statistics.}
 \item{na.rm}{logical indicating whether to exclude missing values.}
 }
 \value{
-array with summmary statistics in the second dimension, metrics in
-the first for single models, and models and metrics in the first and third,
-respectively, for multiple models.
+An object of summmary statistics.
 }
 \description{
 Summary statistics for resampled model performance metrics.

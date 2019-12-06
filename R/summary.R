@@ -1,4 +1,4 @@
-#' Model Performance Summary
+#' Model Performance Summaries
 #'
 #' Summary statistics for resampled model performance metrics.
 #'
@@ -16,9 +16,7 @@
 #' @param na.rm logical indicating whether to exclude missing values.
 #' @param ... arguments passed to other methods.
 #'
-#' @return array with summmary statistics in the second dimension, metrics in
-#' the first for single models, and models and metrics in the first and third,
-#' respectively, for multiple models.
+#' @return An object of summmary statistics.
 #'
 #' @examples
 #' ## Factor response example

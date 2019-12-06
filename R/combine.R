@@ -2,14 +2,15 @@
 #'
 #' Combine one or more \pkg{MachineShop} objects of the same class.
 #'
-#' @name c
-#' @aliases combine
-#' @rdname c
+#' @name combine
+#' @rdname combine-methods
 #'
 #' @param ... named or unnamed \link{calibration}, \link{confusion},
-#' \link[=curves]{performance curve}, \link{lift}, or \link{resample} results.
-#' Curves must have been generated with the same performance \link{metrics} and
-#' resamples with the same resampling \link[=controls]{control}.
+#'   \link[=curves]{performance curve}, \link{lift}, \link{summary}, or
+#'   \link{resample} results.  Curves must have been generated with the same
+#'   performance \link{metrics} and resamples with the same resampling
+#'   \link[=controls]{control}.
+#' @param e1,e2 objects.
 #'
 #' @return Object of the same class as the arguments.
 #'
@@ -26,7 +27,7 @@ c.BinomialVariate <- function(...) {
 }
 
 
-#' @rdname c
+#' @rdname combine-methods
 #'
 c.Calibration <- function(...) {
   args <- list(...)
@@ -47,7 +48,7 @@ c.Calibration <- function(...) {
 }
 
 
-#' @rdname c
+#' @rdname combine-methods
 #'
 c.ConfusionList <- function(...) {
   args <- list(...)
@@ -74,7 +75,7 @@ c.ConfusionList <- function(...) {
 }
 
 
-#' @rdname c
+#' @rdname combine-methods
 #'
 c.ConfusionMatrix <- function(...) {
   args <- list(...)
@@ -84,7 +85,7 @@ c.ConfusionMatrix <- function(...) {
 }
 
 
-#' @rdname c
+#' @rdname combine-methods
 #'
 c.Curves <- function(...) {
   args <- list(...)
@@ -120,14 +121,14 @@ c.DiscreteVariate <- function(...) {
 }
 
 
-#' @rdname c
+#' @rdname combine-methods
 #'
 c.Lift <- function(...) {
   NextMethod()
 }
 
 
-#' @rdname c
+#' @rdname combine-methods
 #'
 c.ListOf <- function(...) {
   args <- list(...)
@@ -173,7 +174,7 @@ c.Performance <- function(...) {
 }
 
 
-#' @rdname c
+#' @rdname combine-methods
 #'
 c.Resamples <- function(...) {
   args <- list(...)
@@ -251,3 +252,16 @@ c.TrainBits <- function(...) {
     NextMethod()
   }
 }
+
+
+#' @rdname combine-methods
+#'
+setMethod("+", c("SurvMatrix", "SurvMatrix"),
+  function(e1, e2) {
+    x <- callNextMethod()
+    class <- class(e1)
+    if (class(e2) == class && all(e1@times == e2@times)) {
+      new(class, x, times = e1@times)
+    } else x
+  }
+)

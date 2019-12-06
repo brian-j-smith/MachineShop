@@ -91,18 +91,3 @@ setMethod("[", c(x = "SurvMatrix", i = "ANY", j = "ANY", drop = "ANY"),
     } else y
   }
 )
-
-
-#' @rdname extract-methods
-#'
-#' @param e1,e2 objects.
-#'
-setMethod("+", c("SurvMatrix", "SurvMatrix"),
-  function(e1, e2) {
-    x <- callNextMethod()
-    class <- class(e1)
-    if (class(e2) == class && all(e1@times == e2@times)) {
-      new(class, x, times = e1@times)
-    } else x
-  }
-)
