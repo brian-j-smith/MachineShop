@@ -21,6 +21,11 @@ as.data.frame.ModelRecipe <- function(x, original = TRUE, ...) {
 }
 
 
+as.data.frame.Resamples <- function(x, ...) {
+  asS3(as(x, "data.frame"))
+}
+
+
 as.data.frame.SelectedModelFrame <- function(x, ...) {
   as.data.frame(as(x, "ModelFrame"))
 }
