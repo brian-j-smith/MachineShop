@@ -203,11 +203,12 @@ plot.MLModel <- function(x, metrics = NULL,
   if (type == "line") {
     grid <- unnest(x@trainbits@grid)
     stats <- apply(perf, c(3, 2), function(x) stat(na.omit(x))) %>%
-      as.data.frame.table
+      TabularArray %>%
+      as.data.frame
     df <- data.frame(
       x = grid[[1]],
-      Value = stats$Freq,
-      Metric = stats$Var2
+      Value = stats$Value,
+      Metric = stats$Metric
     )
 
     metriclevels <- levels(df$Metric)
@@ -279,10 +280,8 @@ plot.Performance <- function(x, metrics = NULL, stat =
                                MachineShop::settings("stat.Resamples"),
                              type = c("boxplot", "density", "errorbar",
                                       "violin"), ...) {
-  df <- as.data.frame.table(as(x, "array"))
-  if (length(dim(x)) <= 2) df$Var3 <- factor("Model")
-  orderednames <- match(c("Var1", "Var2", "Var3", "Freq"), names(df))
-  names(df)[orderednames] <- c("Resample", "Metric", "Model", "Value")
+  df <- as.data.frame(x)
+  if (is.null(df$Model)) df$Model <- factor("Model")
 
   metriclevels <- levels(df$Metric)
   if (is.null(metrics)) {

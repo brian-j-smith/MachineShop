@@ -145,11 +145,15 @@ summary.Performance <- function(object, stats =
 
   margins <- 2
   perm <- c(2, 1)
-  if (length(dim(object)) > 2) {
+  names <- c("Metric", "Statistic")
+  if (length(dim(object)) == 3) {
     margins <- c(3, margins)
     perm <- c(perm, 3)
+    names <- c("Model", "Statistic", "Metric")
   }
-  aperm(apply(object, margins, f), perm = perm)
+  object_summary <- aperm(apply(object, margins, f), perm = perm)
+  names(dimnames(object_summary)) <- names
+  TabularArray(object_summary)
 }
 
 

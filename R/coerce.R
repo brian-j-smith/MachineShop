@@ -31,6 +31,11 @@ as.data.frame.SurvMatrix <- function(x, ...) {
 }
 
 
+as.data.frame.TabularArray <- function(x, ...) {
+  as.data.frame.table(as(x, "array"), responseName = "Value")
+}
+
+
 as.double.BinomialVariate <- function(x, ...) {
   as.numeric(x[, "Success"] / (x[, "Success"] + x[, "Failure"]))
 }

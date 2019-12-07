@@ -83,7 +83,7 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
     if (is.null(rownames(x))) rownames(x) <- make.unique(rep("stat", nrow(x)))
     if (is.null(colnames(x))) colnames(x) <- make.unique(rep("y", ncol(x)))
     names(dimnames(x)) <- c("Statistic", "Response")
-    as.data.frame.table(x, responseName = "Value")
+    as.data.frame(TabularArray(x))
   }
 
   grid_list <- lapply(data_select, select_values)

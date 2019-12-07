@@ -559,6 +559,14 @@ setMethod("show", "SurvMatrix",
 )
 
 
+setMethod("show", "TabularArray",
+  function(object) {
+    print(as(object, "array"))
+    invisible()
+  }
+)
+
+
 #' @rdname print-methods
 #'
 print.TrainBits <- function(x, n = MachineShop::settings("max.print"), ...) {

@@ -182,3 +182,12 @@ performance.MLCVOptimismControl <- function(x, resamples, ...) {
   pessimism <- test_perf - cv_perf
   sweep(pessimism, 2, train_perf, "+")
 }
+
+
+Performance <- function(...) {
+  object <- new("Performance", ...)
+  names <- c("Resample", "Metric")
+  if (length(dim(object)) == 3) names <- c(names, "Model")
+  names(dimnames(object)) <- names
+  object
+}

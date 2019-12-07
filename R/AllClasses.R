@@ -16,6 +16,11 @@ ListOf <- setClass("ListOf",
 )
 
 
+TabularArray <- setClass("TabularArray",
+  contains = "array"
+)
+
+
 setClass("MLControl",
   slots = c(times = "ANY",
             dist = "ANY",
@@ -218,7 +223,7 @@ setClass("ParameterGrid",
 
 
 Performance <- setClass("Performance",
-  contains = "array"
+  contains = "TabularArray"
 )
 
 
