@@ -139,22 +139,6 @@ ModelFrame.terms <- function(x, data, ...) {
 }
 
 
-#################### ModelFrame Conversion ####################
-
-
-as.data.frame.ModelFrame <- function(x, ...) {
-  x <- NextMethod()
-  attributes(x) <- list(names = names(x), row.names = rownames(x),
-                        class = "data.frame")
-  x
-}
-
-
-setAs("ModelFrame", "data.frame",
-  function(from) as.data.frame(from)
-)
-
-
 #################### ModelFrame Formulas ####################
 
 

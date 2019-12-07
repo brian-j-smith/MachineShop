@@ -134,23 +134,6 @@ MLModelFit <- function(object, Class, model, x, y) {
 }
 
 
-#' Coerce to an MLModel
-#'
-#' Function to coerce an \code{MLModelFit} object to an \code{MLModel}.
-#'
-#' @rdname as.MLModel
-#'
-#' @param x model \link{fit} result.
-#' @param ... arguments passed to other methods.
-#'
-#' @return \code{MLModel} class object.
-#'
-as.MLModel <- function(x, ...) {
-  stopifnot(is(x, "MLModelFit"))
-  getElement(x, "mlmodel")
-}
-
-
 unMLModelFit <- function(object) {
   if (is(object, "MLModelFit")) {
     if (isS4(object)) {

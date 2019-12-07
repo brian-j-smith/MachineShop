@@ -119,16 +119,6 @@ BinomialVariate <- function(x = integer(), size = integer()) {
 }
 
 
-as.data.frame.BinomialVariate <- function(x, ...) {
-  as.data.frame.model.matrix(x, ...)
-}
-
-
-as.double.BinomialVariate <- function(x, ...) {
-  as.numeric(x[, "Success"] / (x[, "Success"] + x[, "Failure"]))
-}
-
-
 #' @rdname DiscreteVariate
 #'
 DiscreteVariate <- function(x = integer(), min = -Inf, max = Inf) {
@@ -192,11 +182,6 @@ SurvMatrix <- function(data = NA, times = NULL) {
   colnames(data) <- if (length(times)) paste("Time", seq_along(times))
 
   new("SurvMatrix", data, times = times)
-}
-
-
-as.data.frame.SurvMatrix <- function(x, ...) {
-  as.data.frame.model.matrix(x, ...)
 }
 
 

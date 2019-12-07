@@ -40,16 +40,6 @@ ModelRecipe.recipe <- function(object, ...) {
 }
 
 
-setAs("ModelRecipe", "recipe",
-  function(from) asS3(from)
-)
-
-
-as.data.frame.ModelRecipe <- function(x, original = TRUE, ...) {
-  as.data.frame(if (original) x$template else juice(prep(x)))
-}
-
-
 bake.ModelRecipe <- function(object, new_data, ...) {
   bake(as(object, "recipe"), new_data = prep_recipe_data(new_data))
 }

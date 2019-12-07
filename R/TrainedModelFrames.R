@@ -103,13 +103,3 @@ SelectedModelFrame <- function(..., control = MachineShop::settings("control"),
                     metrics = metrics, stat = stat, cutoff = cutoff))
 
 }
-
-
-as.data.frame.SelectedModelFrame <- function(x, ...) {
-  as.data.frame(as(x, "ModelFrame"))
-}
-
-
-setAs("SelectedModelFrame", "ModelFrame",
-  function(from) asS3(from)
-)

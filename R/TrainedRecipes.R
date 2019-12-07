@@ -127,8 +127,3 @@ TunedRecipe <- function(x, grid = expand_steps(),
   object
 
 }
-
-
-setAs("TunedRecipe", "recipe",
-  function(from) asS3(from)
-)
