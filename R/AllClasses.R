@@ -234,7 +234,7 @@ PerformanceDiff <- setClass("PerformanceDiff",
 
 
 PerformanceDiffTest <- setClass("PerformanceDiffTest",
-  contains = "array",
+  contains = "TabularArray",
   slots = c(adjust = "character")
 )
 

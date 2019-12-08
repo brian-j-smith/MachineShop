@@ -451,7 +451,7 @@ setMethod("show", "PerformanceDiffTest",
   function(object) {
     print_title(object)
     cat("\n",
-        "Upper diagonal: mean differences (row - column)\n",
+        "Upper diagonal: mean differences (Model1 - Model2)\n",
         "Lower diagonal: p-values\n",
         "P-value adjustment method: ", object@adjust, "\n\n",
         sep = "")

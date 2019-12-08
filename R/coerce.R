@@ -21,6 +21,25 @@ as.data.frame.ModelRecipe <- function(x, original = TRUE, ...) {
 }
 
 
+as.data.frame.PerformanceDiffTest <- function(x, ...) {
+  stat_names <- matrix(NA_character_, dim(x)[1], dim(x)[2])
+  stat_names[upper.tri(stat_names)] <- "Mean"
+  stat_names[lower.tri(stat_names)] <- "P-Value"
+  df_stat_names <- as.data.frame(TabularArray(stat_names))
+
+  x <- cbind(NextMethod(), Statistic = df_stat_names$Value)
+  x <- x[!is.na(x$Statistic), ]
+  is_pval <- x$Statistic == "P-Value"
+  x[is_pval, c("Model1", "Model2")] <- x[is_pval, c("Model2", "Model1")]
+  x$Model <- paste(x$Model1, "-", x$Model2)
+
+  ind <- order(x$Statistic, x$Metric, x$Model)
+  x <- x[ind, c("Statistic", "Metric", "Model", "Value")]
+  rownames(x) <- NULL
+  x
+}
+
+
 as.data.frame.Resamples <- function(x, ...) {
   asS3(as(x, "data.frame"))
 }

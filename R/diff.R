@@ -105,7 +105,9 @@ t.test.PerformanceDiff <- function(x, adjust = "holm", ...)
   model_names <- x@model_names
   num_models <- length(model_names)
   results <- array(NA, dim = c(num_models, num_models, dim(x)[2]),
-                   dimnames = list(model_names, model_names, dimnames(x)[[2]]))
+                   dimnames = list(Model2 = model_names,
+                                   Model1 = model_names,
+                                   Metric = dimnames(x)[[2]]))
   indices <- lower.tri(results[, , 1])
   results[indices] <- meandiffs
   results <- aperm(results, perm = c(2, 1, 3))

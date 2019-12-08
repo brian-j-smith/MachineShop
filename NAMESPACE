@@ -164,6 +164,7 @@ export(tune)
 
 S3method(as.data.frame, BinomialVariate)
 S3method(as.data.frame, ModelFrame)
+S3method(as.data.frame, PerformanceDiffTest)
 S3method(as.data.frame, Resamples)
 S3method(as.data.frame, SelectedModelFrame)
 S3method(as.data.frame, SurvMatrix)
