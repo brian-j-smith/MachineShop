@@ -113,10 +113,10 @@ resample.MLModelFunction <- function(x, ...) {
 
 
 Resamples <- function(object, strata = NULL, ...) {
-  var_names <- c("Model", "Resample", "Case", "Observed", "Predicted")
-  found <- var_names %in% names(object)
+  varnames <- c("Model", "Resample", "Case", "Observed", "Predicted")
+  found <- varnames %in% names(object)
   if (!all(found)) {
-    subnames <- var_names[!found]
+    subnames <- varnames[!found]
     stop(plural_suffix("missing resample variable", subnames), ": ",
          toString(subnames))
   }

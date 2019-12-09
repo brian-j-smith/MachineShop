@@ -51,10 +51,10 @@ calibration <- function(x, y = NULL, breaks = 10, span = 0.75, dist = NULL,
 
 Calibration <- function(object, ...) {
   if (is.null(object$Model)) object$Model <- "Model"
-  var_names <- c("Response", "Predicted", "Observed")
-  found <- var_names %in% names(object)
+  varnames <- c("Response", "Predicted", "Observed")
+  found <- varnames %in% names(object)
   if (!all(found)) {
-    subnames <- var_names[!found]
+    subnames <- varnames[!found]
     stop(plural_suffix("missing calibration variable", subnames), ": ",
          toString(subnames))
   }

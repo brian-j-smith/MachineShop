@@ -132,10 +132,10 @@ performance_curve.Resamples <- function(x, metrics = c(MachineShop::tpr,
 
 Curves <- function(object, metrics) {
   if (is.null(object$Model)) object$Model <- "Model"
-  var_names <- c("Cutoff", "x", "y")
-  found <- var_names %in% names(object)
+  varnames <- c("Cutoff", "x", "y")
+  found <- varnames %in% names(object)
   if (!all(found)) {
-    subnames <- var_names[!found]
+    subnames <- varnames[!found]
     stop(plural_suffix("missing performance curve variable", subnames), ": ",
          toString(subnames))
   }
