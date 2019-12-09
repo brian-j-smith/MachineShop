@@ -2,6 +2,21 @@
 
 ## Version Updates
 
+## 2.0.0
+* Rename global setting `stat.Tune` to `stat.Train`.
+* Enable selection of formulas, design matrices, and model frames with `SelectedFormula()`, `SelectedMatrix()`, and `SelectedModelFrame()`.
+* Rename discrete variable classes: `BinomialMatrix` &rarr; `BinomialVariate`, `DiscreteVector` &rarr; `DiscreteVariate`, `NegBinomialVector` &rarr; `NegBinomialVariate`, and `PoissonVector` &rarr; `PoissonVariate`.
+* Add global setting `require` for user-specified packages to load during parallel execution of resampling algorithms.
+* Rename recipe role `case_strata` to `case_stratum`.
+* Rename `object` argument to `data` in `ConfusionMatrix()`, `SurvEvents()`, and `SurvProbs()`.
+* Add `c` methods for `BinomialVariate`, `DiscreteVariate`, `ListOf`, and `SurvMatrix`.
+* Add `role_binom()`, `role_case()`, `role_surv()`, and `role_term()` to set recipe roles.
+* Support `base` argument to `varimp()` for log-transformed p-values.
+* Rename `ParamSet` to `ParameterGrid`.
+* Add option to `reset` global settings individually.
+* Add `as.data.frame` methods for `Performance`, `Performance` summary, `PerformanceDiff`, `PerformanceDiffTest`, and `Resamples`.
+
+
 ## 1.99.0
 * Implement `DiscreteVector` class and subclasses `BinomialVector`, `NegBinomialVector`, and `PoissonVector` for discrete response variables.
 * Extend model support to `DiscreteVector` classes as follows.
