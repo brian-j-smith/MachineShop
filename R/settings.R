@@ -315,9 +315,9 @@ MachineShop_global <- as.environment(list(
           length(find.package(pkg, quiet = TRUE))
         })
         if (!all(found)) {
-          subnames <- x[!found]
-          msg <- paste0(plural_suffix("given missing package", subnames),
-                        ": ", toString(subnames))
+          missing <- x[!found]
+          msg <- paste0(plural_suffix("given missing package", missing),
+                        ": ", toString(missing))
           DomainError(x, msg)
         } else x
       }

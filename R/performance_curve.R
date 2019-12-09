@@ -135,9 +135,9 @@ Curves <- function(object, metrics) {
   varnames <- c("Cutoff", "x", "y")
   found <- varnames %in% names(object)
   if (!all(found)) {
-    subnames <- varnames[!found]
-    stop(plural_suffix("missing performance curve variable", subnames), ": ",
-         toString(subnames))
+    missing <- varnames[!found]
+    stop(plural_suffix("missing performance curve variable", missing), ": ",
+         toString(missing))
   }
 
   if (!all(mapply(is, metrics[1:2], "MLMetric"))) {

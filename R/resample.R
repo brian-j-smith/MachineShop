@@ -116,9 +116,9 @@ Resamples <- function(object, strata = NULL, ...) {
   varnames <- c("Model", "Resample", "Case", "Observed", "Predicted")
   found <- varnames %in% names(object)
   if (!all(found)) {
-    subnames <- varnames[!found]
-    stop(plural_suffix("missing resample variable", subnames), ": ",
-         toString(subnames))
+    missing <- varnames[!found]
+    stop(plural_suffix("missing resample variable", missing), ": ",
+         toString(missing))
   }
   rownames(object) <- NULL
   new("Resamples", object, strata = as.character(strata), ...)
