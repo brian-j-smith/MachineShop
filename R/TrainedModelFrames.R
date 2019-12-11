@@ -44,7 +44,7 @@ NULL
 SelectedFormula <- function(..., data,
                             control = MachineShop::settings("control"),
                             metrics = NULL,
-                            stat = MachineShop::settings("stat.Train"),
+                            stat = MachineShop::settings("stat.train"),
                             cutoff = MachineShop::settings("cutoff")) {
   args <- list(...)
   if (is_one_element(args, "list")) args <- args[[1]]
@@ -61,7 +61,7 @@ SelectedFormula <- function(..., data,
 SelectedMatrix <- function(..., y,
                             control = MachineShop::settings("control"),
                             metrics = NULL,
-                            stat = MachineShop::settings("stat.Train"),
+                            stat = MachineShop::settings("stat.train"),
                             cutoff = MachineShop::settings("cutoff")) {
   args <- list(...)
   if (is_one_element(args, "list")) args <- args[[1]]
@@ -77,7 +77,7 @@ SelectedMatrix <- function(..., y,
 #'
 SelectedModelFrame <- function(..., control = MachineShop::settings("control"),
                                metrics = NULL,
-                               stat = MachineShop::settings("stat.Train"),
+                               stat = MachineShop::settings("stat.train"),
                                cutoff = MachineShop::settings("cutoff")) {
 
   args <- list(...)

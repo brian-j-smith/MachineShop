@@ -81,7 +81,7 @@ behaviors of functions in the \pkg{MachineShop} package.
   \item{\code{stat.Resamples}}{function or character string naming a function
     to compute one summary statistic to control the ordering of models in
     \link[=plot]{plots} [default: \code{"base::mean"}].}
-  \item{\code{stat.Train}}{function or character string naming a function
+  \item{\code{stat.train}}{function or character string naming a function
     to compute one summary statistic on resampled performance metrics for
     \link[=SelectedModel]{model selection}, \link[=TunedModel]{model tuning},
     and \link[=TunedRecipe]{recipe tuning} [default: \code{"base::mean"}].}

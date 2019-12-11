@@ -192,7 +192,7 @@ plot.Lift <- function(x, find = NULL, diagonal = TRUE,
 #' @rdname plot-methods
 #'
 plot.MLModel <- function(x, metrics = NULL,
-                         stat = MachineShop::settings("stat.Train"),
+                         stat = MachineShop::settings("stat.train"),
                          type = c("boxplot", "density", "errorbar", "line",
                                   "violin"), ...) {
   if (is.null(x@trainbits)) stop("no training results to plot")

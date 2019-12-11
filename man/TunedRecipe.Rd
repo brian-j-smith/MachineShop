@@ -9,7 +9,7 @@ TunedRecipe(
   grid = expand_steps(),
   control = MachineShop::settings("control"),
   metrics = NULL,
-  stat = MachineShop::settings("stat.Train"),
+  stat = MachineShop::settings("stat.train"),
   cutoff = MachineShop::settings("cutoff")
 )
 }

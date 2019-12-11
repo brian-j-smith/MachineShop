@@ -33,7 +33,7 @@
 #'
 SelectedModel <- function(..., control = MachineShop::settings("control"),
                           metrics = NULL,
-                          stat = MachineShop::settings("stat.Train"),
+                          stat = MachineShop::settings("stat.train"),
                           cutoff = MachineShop::settings("cutoff")) {
 
   models <- as.list(unlist(list(...)))
@@ -122,7 +122,7 @@ MLModelFunction(SelectedModel) <- NULL
 TunedModel <- function(model, grid = MachineShop::settings("grid"),
                        fixed = NULL, control = MachineShop::settings("control"),
                        metrics = NULL,
-                       stat = MachineShop::settings("stat.Train"),
+                       stat = MachineShop::settings("stat.train"),
                        cutoff = MachineShop::settings("cutoff")) {
 
   if (missing(model)) {

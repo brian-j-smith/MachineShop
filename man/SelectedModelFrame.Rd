@@ -11,7 +11,7 @@ SelectedFormula(
   data,
   control = MachineShop::settings("control"),
   metrics = NULL,
-  stat = MachineShop::settings("stat.Train"),
+  stat = MachineShop::settings("stat.train"),
   cutoff = MachineShop::settings("cutoff")
 )
 
@@ -20,7 +20,7 @@ SelectedMatrix(
   y,
   control = MachineShop::settings("control"),
   metrics = NULL,
-  stat = MachineShop::settings("stat.Train"),
+  stat = MachineShop::settings("stat.train"),
   cutoff = MachineShop::settings("cutoff")
 )
 
@@ -28,7 +28,7 @@ SelectedModelFrame(
   ...,
   control = MachineShop::settings("control"),
   metrics = NULL,
-  stat = MachineShop::settings("stat.Train"),
+  stat = MachineShop::settings("stat.train"),
   cutoff = MachineShop::settings("cutoff")
 )
 }

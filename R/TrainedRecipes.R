@@ -28,7 +28,7 @@
 #'
 SelectedRecipe <- function(..., control = MachineShop::settings("control"),
                            metrics = NULL,
-                           stat = MachineShop::settings("stat.Train"),
+                           stat = MachineShop::settings("stat.train"),
                            cutoff = MachineShop::settings("cutoff")) {
 
   recipes <- list(...)
@@ -106,7 +106,7 @@ SelectedRecipe <- function(..., control = MachineShop::settings("control"),
 TunedRecipe <- function(x, grid = expand_steps(),
                         control = MachineShop::settings("control"),
                         metrics = NULL,
-                        stat = MachineShop::settings("stat.Train"),
+                        stat = MachineShop::settings("stat.train"),
                         cutoff = MachineShop::settings("cutoff")) {
 
   object <- new("TunedRecipe", ModelRecipe(x),
