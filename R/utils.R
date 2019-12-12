@@ -227,13 +227,13 @@ plural_suffix <- function(x, subject) {
 
 
 requireModelNamespaces <- function(packages) {
-  pass <- sapply(packages, requireNamespace)
-  if (!all(pass)) {
-    missing <- packages[!pass]
-    stop(plural_suffix("install required package", missing), ": ",
-         toString(missing))
+  available <- vapply(packages, requireNamespace, logical(1), quietly = TRUE)
+  if (!all(available)) {
+    missing <- packages[!available]
+    stop(plural_suffix("model requires the installation of package", missing),
+         ": ", toString(missing), call. = FALSE)
   }
-  invisible(pass)
+  invisible(available)
 }
 
 
