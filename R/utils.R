@@ -116,6 +116,13 @@ getMLObject <- function(x, class = c("MLControl", "MLMetric", "MLModel")) {
 }
 
 
+identical_elements <- function(x, transform = identity, ...) {
+  target <- transform(x[[1]])
+  compare <- function(current) identical(transform(current), target, ...)
+  all(vapply(x[-1], compare, logical(1)))
+}
+
+
 is_one_element <- function(x, class) {
   length(x) == 1 && is(x[[1]], class)
 }
