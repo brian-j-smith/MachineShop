@@ -310,16 +310,14 @@ MachineShop_global <- as.environment(list(
     require = list(
       value = c("MachineShop", "survival", "recipes"),
       check = function(x) {
-        x <- c(setdiff(x, .global_defaults$require), .global_defaults$require)
-        found <- sapply(x, function(pkg) {
-          length(find.package(pkg, quiet = TRUE))
-        })
-        if (!all(found)) {
-          missing <- x[!found]
-          msg <- paste0(plural_suffix("given missing package", missing),
+        x <- setdiff(x, .global_defaults$require)
+        available <- vapply(x, requireNamespace, logical(1), quietly = TRUE)
+        if (!all(available)) {
+          missing <- x[!available]
+          msg <- paste0(plural_suffix("given unavailable package", missing),
                         ": ", toString(missing))
           DomainError(x, msg)
-        } else x
+        } else c(x, .global_defaults$require)
       }
     ),
 
