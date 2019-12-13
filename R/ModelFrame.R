@@ -199,7 +199,7 @@ terms.list <- function(x, y = NULL, intercept = TRUE, all_numeric = FALSE,
 
   x_char <- character(length(x))
   x_char[name_inds] <- as.character(x[name_inds])
-  x_char[noname_inds] <- vapply(x[noname_inds], deparse, "")
+  x_char[noname_inds] <- vapply(x[noname_inds], deparse, character(1))
 
   valid_calls <- sapply(x[noname_inds], function(var) {
     is.call(var) && var[[1]] == .("offset")
