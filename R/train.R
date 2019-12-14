@@ -95,8 +95,8 @@ train.MLModel <- function(x, ...) {
   perf <- do.call(c, perf_list)
   selected <- ifelse(metric@maximize, which.max, which.min)(perf_stats)
 
-  trained_model <- models[[selected]]
-  trained_model@trainbits <- TrainBits(
+  model <- models[[selected]]
+  model@trainbits <- TrainBits(
     grid = grid,
     performance = perf,
     selected = structure(selected, names = colnames(perf)[1]),
@@ -109,7 +109,7 @@ train.MLModel <- function(x, ...) {
   inputs.formula <- function(x, data, ...) list(x = x, data = data)
   inputs.matrix <- function(x, y, ...) list(x = x, y = y)
 
-  c(inputs(...), model = trained_model)
+  c(inputs(...), model = model)
 
 }
 
