@@ -39,8 +39,9 @@ Grid <- function(length = 3, random = FALSE) {
 #'
 #' @rdname ParameterGrid
 #'
-#' @param ... \code{\link[dials]{parameters}} object, named \code{param} objects
-#'   as defined in the \pkg{dials} package, or a list of these.
+#' @param ... named \code{param} objects as defined in the \pkg{dials} package.
+#' @param x list of named \code{param} objects or a
+#'   \code{\link[dials]{parameters}} object.
 #' @param length single number or vector of numbers of parameter values to use
 #'   in constructing a regular grid if \code{random = FALSE}; ignored otherwise.
 #' @param random number of unique grid points to sample at random or
@@ -62,24 +63,28 @@ Grid <- function(length = 3, random = FALSE) {
 #' )
 #' TunedModel(GBMModel, grid = grid)
 #'
-ParameterGrid <- function(..., length = 3, random = FALSE) {
-  x <- list(...)
-  if (is_one_element(x, "list") && is.null(names(x))) x <- x[[1]]
-  .ParameterGrid(x, length = length, random = random)
+ParameterGrid <- function(...) {
+  UseMethod("ParameterGrid")
 }
 
 
-.ParameterGrid <- function(x, ...) {
-  UseMethod(".ParameterGrid")
+#' @rdname ParameterGrid
+#'
+ParameterGrid.param <- function(..., length = 3, random = FALSE) {
+  ParameterGrid(list(...), length = length, random = random)
 }
 
 
-.ParameterGrid.list <- function(x, ...) {
-  .ParameterGrid(parameters(x), ...)
+#' @rdname ParameterGrid
+#'
+ParameterGrid.list <- function(x, length = 3, random = FALSE, ...) {
+  ParameterGrid(parameters(x), length = length, random = random)
 }
 
 
-.ParameterGrid.parameters <- function(x, length, random, ...) {
+#' @rdname ParameterGrid
+#'
+ParameterGrid.parameters <- function(x, length = 3, random = FALSE, ...) {
   if (all(is.finite(length))) {
     length <- as.integer(length)
     if (any(length < 0)) stop("grid parameter 'length' must be >= 0")

@@ -2,19 +2,30 @@
 % Please edit documentation in R/grid.R
 \name{ParameterGrid}
 \alias{ParameterGrid}
+\alias{ParameterGrid.param}
+\alias{ParameterGrid.list}
+\alias{ParameterGrid.parameters}
 \title{Tuning Parameters Grid}
 \usage{
-ParameterGrid(..., length = 3, random = FALSE)
+ParameterGrid(...)
+
+\method{ParameterGrid}{param}(..., length = 3, random = FALSE)
+
+\method{ParameterGrid}{list}(x, length = 3, random = FALSE, ...)
+
+\method{ParameterGrid}{parameters}(x, length = 3, random = FALSE, ...)
 }
 \arguments{
-\item{...}{\code{\link[dials]{parameters}} object, named \code{param} objects
-as defined in the \pkg{dials} package, or a list of these.}
+\item{...}{named \code{param} objects as defined in the \pkg{dials} package.}
 
 \item{length}{single number or vector of numbers of parameter values to use
 in constructing a regular grid if \code{random = FALSE}; ignored otherwise.}
 
 \item{random}{number of unique grid points to sample at random or
 \code{FALSE} for all points from a regular grid defined by \code{length}.}
+
+\item{x}{list of named \code{param} objects or a
+\code{\link[dials]{parameters}} object.}
 }
 \value{
 \code{ParameterGrid} class object that inherits from
