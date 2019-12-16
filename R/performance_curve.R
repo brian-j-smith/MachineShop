@@ -130,29 +130,29 @@ performance_curve.Resamples <- function(x, metrics = c(MachineShop::tpr,
 }
 
 
-Curves <- function(object, metrics) {
-  if (is.null(object$Model)) object$Model <- "Model"
-  varnames <- c("Cutoff", "x", "y")
-  found <- varnames %in% names(object)
-  if (!all(found)) {
-    missing <- varnames[!found]
-    stop(plural_suffix("missing performance curve variable", missing), ": ",
-         toString(missing))
-  }
+Curves <- function(object, ..., metrics, .check = TRUE) {
+  if (.check) {
+    if (is.null(object$Model)) object$Model <- factor("Model")
+    missing <- missing_names(c("Cutoff", "x", "y"), object)
+    if (length(missing)) {
+      stop(plural_suffix("missing performance curve variable", missing), ": ",
+           toString(missing))
+    }
 
-  if (!all(mapply(is, metrics[1:2], "MLMetric"))) {
-    stop("missing performance metrics in Curves constructor")
-  }
-  metrics <- c(y = metrics[[1]], x = metrics[[2]])
+    if (!all(mapply(is, metrics[1:2], "MLMetric"))) {
+      stop("missing performance metrics in Curves constructor")
+    }
+    metrics <- c(y = metrics[[1]], x = metrics[[2]])
 
-  decreasing <- !xor(metrics$x@maximize, metrics$y@maximize)
-  sort_order <- order(object$Model, object$x, object$y,
-                      decreasing = c(FALSE, FALSE, decreasing),
-                      method = "radix")
-  object <- object[sort_order, , drop = FALSE]
+    decreasing <- !xor(metrics$x@maximize, metrics$y@maximize)
+    sort_order <- order(object$Model, object$x, object$y,
+                        decreasing = c(FALSE, FALSE, decreasing),
+                        method = "radix")
+    object <- object[sort_order, , drop = FALSE]
+  }
 
   rownames(object) <- NULL
-  new("Curves", object, metrics = metrics)
+  new("Curves", object, metrics = metrics, ...)
 }
 
 

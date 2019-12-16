@@ -38,8 +38,7 @@ c.Calibration <- function(...) {
     }
 
     df <- do.call(append, set_model_names(args))
-    rownames(df) <- NULL
-    Calibration(df, smoothed = args[[1]]@smoothed)
+    Calibration(df, smoothed = args[[1]]@smoothed, .check = FALSE)
 
   } else {
     NextMethod()
@@ -96,8 +95,7 @@ c.Curves <- function(...) {
     }
 
     df <- do.call(append, set_model_names(args))
-    rownames(df) <- NULL
-    do.call(class, list(df, metrics = args[[1]]@metrics))
+    do.call(class, list(df, metrics = args[[1]]@metrics, .check = FALSE))
 
   } else {
     NextMethod()
@@ -186,8 +184,8 @@ c.Resamples <- function(...) {
     }
 
     df <- do.call(append, set_model_names(args))
-    rownames(df) <- NULL
-    Resamples(df, control = args[[1]]@control, strata = args[[1]]@strata)
+    Resamples(df, control = args[[1]]@control, strata = args[[1]]@strata,
+              .check = FALSE)
 
   } else {
     NextMethod()

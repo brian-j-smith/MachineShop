@@ -203,6 +203,11 @@ match_indices <- function(indices, choices) {
 }
 
 
+missing_names <- function(x, data) {
+  x[!(x %in% names(data))]
+}
+
+
 nvars <- function(x, model) {
   stopifnot(is(x, "ModelFrame"))
   model <- getMLObject(model, "MLModel")

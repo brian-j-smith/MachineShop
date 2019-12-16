@@ -49,14 +49,14 @@ calibration <- function(x, y = NULL, breaks = 10, span = 0.75, dist = NULL,
 }
 
 
-Calibration <- function(object, ...) {
-  if (is.null(object$Model)) object$Model <- "Model"
-  varnames <- c("Response", "Predicted", "Observed")
-  found <- varnames %in% names(object)
-  if (!all(found)) {
-    missing <- varnames[!found]
-    stop(plural_suffix("missing calibration variable", missing), ": ",
-         toString(missing))
+Calibration <- function(object, ..., .check = TRUE) {
+  if (.check) {
+    if (is.null(object$Model)) object$Model <- factor("Model")
+    missing <- missing_names(c("Response", "Predicted", "Observed"), object)
+    if (length(missing)) {
+      stop(plural_suffix("missing calibration variable", missing), ": ",
+           toString(missing))
+    }
   }
   rownames(object) <- NULL
   new("Calibration", object, ...)
