@@ -54,7 +54,7 @@ setMethod("[", c(x = "Resamples", i = "ANY", j = "ANY", drop = "ANY"),
     y <- asS3(x)[i, j, drop = drop]
     if (identical(colnames(x), colnames(y))) {
       y$Model <- droplevels(y$Model)
-      new("Resamples", y, control = x@control, strata = x@strata)
+      Resamples(y, control = x@control, strata = x@strata)
     } else y
   }
 )
