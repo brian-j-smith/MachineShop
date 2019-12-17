@@ -122,8 +122,7 @@ Resamples.data.frame <- function(object, ..., strata = NULL, .check = TRUE) {
     varnames <- c("Model", "Resample", "Case", "Observed", "Predicted")
     missing <- missing_names(varnames, object)
     if (length(missing)) {
-      stop(plural_suffix("missing resample variable", missing), ": ",
-           toString(missing))
+      stop(label_items("missing resample variable", missing))
     }
   }
   rownames(object) <- NULL

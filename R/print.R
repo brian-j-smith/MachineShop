@@ -410,8 +410,7 @@ print.ParameterGrid <- function(x, ...) {
   if (x@random) {
     cat("Random sample:", x@random, "\n")
   } else {
-    cat(plural_suffix("Length", x@length), ": ", toString(x@length), "\n",
-        sep = "")
+    cat(label_items("Length", x@length), "\n")
   }
   invisible(x)
 }

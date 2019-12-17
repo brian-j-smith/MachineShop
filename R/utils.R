@@ -137,6 +137,11 @@ is_response <- function(object, class2) {
 }
 
 
+label_items <- function(label, x) {
+  paste0(label, if (length(x) > 1) "s", ": ", toString(x))
+}
+
+
 list2function <- function(x) {
   error_msg <- paste0("'", deparse(substitute(x)), "' must be a function, ",
                       "function name, or vector of these")
@@ -226,15 +231,9 @@ params <- function(envir) {
   is_missing <- sapply(args, function(x) is.symbol(x) && !nzchar(x))
   if (any(is_missing)) {
     missing <- names(args)[is_missing]
-    stop(plural_suffix("missing values for required argument", missing), ": ",
-         toString(missing))
+    stop(label_items("missing values for required argument", missing))
   }
   args[!sapply(args, is.null)]
-}
-
-
-plural_suffix <- function(x, subject) {
-  if (length(subject) > 1) paste0(x, "s") else x
 }
 
 
@@ -242,8 +241,8 @@ requireModelNamespaces <- function(packages) {
   available <- vapply(packages, requireNamespace, logical(1), quietly = TRUE)
   if (!all(available)) {
     missing <- packages[!available]
-    stop(plural_suffix("model requires the installation of package", missing),
-         ": ", toString(missing), call. = FALSE)
+    stop(label_items("model requires the installation of package", missing),
+         call. = FALSE)
   }
   invisible(available)
 }

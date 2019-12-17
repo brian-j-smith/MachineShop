@@ -314,9 +314,7 @@ MachineShop_global <- as.environment(list(
         available <- vapply(x, requireNamespace, logical(1), quietly = TRUE)
         if (!all(available)) {
           missing <- x[!available]
-          msg <- paste0(plural_suffix("given unavailable package", missing),
-                        ": ", toString(missing))
-          DomainError(x, msg)
+          DomainError(x, label_items("given unavailable package", missing))
         } else c(x, .global_defaults$require)
       }
     ),

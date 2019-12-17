@@ -119,9 +119,8 @@ TunedRecipe <- function(x, grid = expand_steps(),
   found <- grid_names %in% step_ids
   if (!all(found)) {
     missing <- grid_names[!found]
-    stop(plural_suffix("grid step name", missing), " ",
-         toString(paste0("'", missing, "'")),
-         " not found in recipe step ids ", toString(paste0("'", step_ids, "'")))
+    stop(label_items("grid step name", missing),
+         label_items("; not found in recipe step id", step_ids))
   }
 
   object
