@@ -146,7 +146,8 @@ Curves <- function(object, metrics) {
   metrics <- c(y = metrics[[1]], x = metrics[[2]])
 
   decreasing <- !xor(metrics$x@maximize, metrics$y@maximize)
-  sort_order <- order(object$x, object$y, decreasing = c(FALSE, decreasing),
+  sort_order <- order(object$Model, object$x, object$y,
+                      decreasing = c(FALSE, FALSE, decreasing),
                       method = "radix")
   object <- object[sort_order, , drop = FALSE]
 
