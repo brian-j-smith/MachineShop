@@ -23,13 +23,13 @@ Description: Meta-package for statistical and machine learning with a unified
     dependence plots; confusion matrices; and ROC, lift, and other performance
     curves.
 Depends: R (>= 3.6.0)
-Imports: abind, dials (>= 0.0.4), foreach, ggplot2, kernlab, magrittr, methods,
-         party, polspline, recipes (>= 0.1.4), rlang, rsample, Rsolnp, survival,
-         tibble, utils
-Suggests: adabag, BART, bartMachine, C50, doParallel, e1071, earth, gbm, glmnet,
-          gridExtra, Hmisc, kableExtra, kknn, knitr, lars, mda, MASS, mboost,
-          nnet, partykit, pls, randomForest, ranger, rmarkdown, rms, rpart,
-          testthat, tree, xgboost
+Imports: abind, dials (>= 0.0.4), foreach, ggplot2, kernlab, magrittr, Matrix,
+         methods, party, polspline, recipes (>= 0.1.4), rlang, rsample, Rsolnp,
+         survival, tibble, utils
+Suggests: adabag, BART, bartMachine, C50, cluster, doParallel, e1071, earth,
+          gbm, glmnet, gridExtra, Hmisc, kableExtra, kknn, knitr, lars, MASS,
+          mboost, mda, nnet, partykit, pls, randomForest, ranger, rmarkdown,
+          rms, rpart, testthat, tree, xgboost
 LazyData: true
 License: GPL-3
 URL: https://brian-j-smith.github.io/MachineShop/
