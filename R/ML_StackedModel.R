@@ -39,7 +39,9 @@ StackedModel <- function(..., control = MachineShop::settings("control"),
   new("StackedModel",
     name = "StackedModel",
     label = "Stacked Regression",
-    response_types = .response_types,
+    response_types =
+      Reduce(intersect, lapply(base_learners, slot, name = "response_types"),
+             init = .response_types),
     predictor_encoding = NA_character_,
     params = as.list(environment()),
     predict = function(object, newdata, ...) {
