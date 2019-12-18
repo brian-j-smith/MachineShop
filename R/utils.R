@@ -64,26 +64,8 @@ complete_subset <- function(...) {
 }
 
 
-fget0 <- function(x) {
-  if (is.character(x)) {
-    x_expr <- str2lang(x)
-    x_name <- x
-    x <- if (is.symbol(x_expr)) {
-      get0(x_name, mode = "function")
-    } else if (is.call(x_expr) && x_expr[[1]] == "::") {
-      get0(as.character(x_expr[[3]]),
-           envir = asNamespace(x_expr[[2]]),
-           mode = "function")
-    }
-  } else if (!is.function(x)) {
-    x <- NULL
-  }
-  x
-}
-
-
 fget <- function(x) {
-  f <- fget0(x)
+  f <- get0(x, mode = "function")
   if (is.null(f)) {
     msg <- if (is.character(x)) {
       paste0("function '", x, "' not found")
@@ -107,9 +89,26 @@ findS3Method <- function(generic, object) {
 }
 
 
+get0 <- function(x, mode = "any") {
+  if (is.character(x)) {
+    x_expr <- str2lang(x)
+    x_name <- x
+    if (is.symbol(x_expr)) {
+      base::get0(x_name, mode = mode)
+    } else if (is.call(x_expr) && x_expr[[1]] == "::") {
+      base::get0(as.character(x_expr[[3]]),
+                 envir = asNamespace(x_expr[[2]]),
+                 mode = mode)
+    }
+  } else if (mode %in% c("any", mode(x))) {
+    x
+  }
+}
+
+
 getMLObject <- function(x, class = c("MLControl", "MLMetric", "MLModel")) {
   class <- match.arg(class)
-  if (is.character(x)) x <- fget(x)
+  x <- get0(x)
   if (is.function(x) && class %in% c("MLControl", "MLModel")) x <- x()
   if (!is(x, class)) stop("object not of class ", class)
   x
