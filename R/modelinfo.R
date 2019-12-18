@@ -141,7 +141,7 @@ modelinfo <- function(...) {
     label = x@label,
     packages = x@packages,
     response_types = x@response_types,
-    arguments = args(fget0(x@name)),
+    arguments = args(get0(x@name, mode = "function")),
     grid = !is.null(body(x@grid)),
     varimp = !is.null(body(x@varimp))
   )), names = x@name)
