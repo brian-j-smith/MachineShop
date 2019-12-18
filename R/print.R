@@ -296,34 +296,10 @@ setMethod("show", "MLMetric",
 #'
 print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
-  info <- modelinfo(x)[[1]]
-  is_trained <- !is.null(x@trainbits)
-  cat("\n",
-      "Model name: ", x@name, "\n",
-      "Label: ", if (is_trained) "Trained ", info$label, "\n",
-      "Packages: ", toString(info$packages), "\n",
-      "Response types: ", toString(info$response_types), "\n",
-      "Tuning grid: ", info$grid, "\n",
-      "Variable importance: ", info$varimp, "\n\n",
-      sep = "")
-  if (is(x, "SelectedModel")) {
-    cat("Selection Parameters:\n\n")
-    print_items(x@params$models, n = n)
-    print(x@params$control)
-  } else if (is(x, "TunedModel")) {
-    cat("Tuning Parameters:\n\n")
-    print(x@params$model)
-    cat("\n")
-    grid <- x@params$grid
-    if (!isS4(grid)) cat("Grid:\n")
-    print_items(grid, n = n)
-    cat("\n")
-    print(x@params$control)
-  } else {
-    cat("Parameters:\n")
-    cat(str(x@params))
-  }
-  if (is_trained) {
+  print_modelinfo(x)
+  cat("\nParameters:\n")
+  cat(str(x@params))
+  if (!is.null(x@trainbits)) {
     cat("\n")
     print(x@trainbits, n = n)
   }
@@ -355,18 +331,9 @@ setMethod("show", "MLModelFit",
 
 print.MLModelFunction <- function(x, ...) {
   print_title(x)
-  info_list <- modelinfo(x)
-  info <- info_list[[1]]
-  cat("\n",
-      "Model name: ", names(info_list), "\n",
-      "Label: ", info$label, "\n",
-      "Packages: ", toString(info$packages), "\n",
-      "Response types: ", toString(info$response_types), "\n",
-      "Tuning grid: ", info$grid, "\n",
-      "Variable importance: ", info$varimp, "\n\n",
-      "Arguments:\n",
-      sep = "")
-  print(info$arguments)
+  print_modelinfo(x)
+  cat("\nArguments:\n")
+  print(args(x))
   invisible(x)
 }
 
@@ -502,6 +469,23 @@ setMethod("show", "Resamples",
 
 #' @rdname print-methods
 #'
+print.SelectedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
+  print_title(x)
+  trained <- !is.null(x@trainbits)
+  print_modelinfo(x, trained = trained)
+  cat("\nSelection parameters:\n\n")
+  print_items(x@params$models, n = n)
+  print(x@params$control)
+  if (trained) {
+    cat("\n")
+    print(x@trainbits, n = n)
+  }
+  invisible(x)
+}
+
+
+#' @rdname print-methods
+#'
 print.SelectedModelFrame <- function(x,
                                      n = MachineShop::settings("max.print"),
                                      ...) {
@@ -532,6 +516,37 @@ setMethod("show", "SelectedRecipe",
     invisible()
   }
 )
+
+
+#' @rdname print-methods
+#'
+print.StackedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
+  print_title(x)
+  print_modelinfo(x)
+  cat("\nParameters:\n")
+  cat(str(x@params[setdiff(names(x@params), c("base_learners", "control"))]))
+  cat("\nBase learners:\n\n")
+  print_items(x@params$base_learners, n = n)
+  print(x@params$control)
+  invisible(x)
+}
+
+
+#' @rdname print-methods
+#'
+print.SuperModel <- function(x, n = MachineShop::settings("max.print"), ...) {
+  print_title(x)
+  print_modelinfo(x)
+  cat("\nParameters:\n")
+  subset <- !(names(x@params) %in% c("base_learners", "control", "model"))
+  cat(str(x@params[subset]))
+  cat("\nSuper learner:\n\n")
+  print(x@params$model)
+  cat("\nBase learners:\n\n")
+  print_items(x@params$base_learners, n = n)
+  print(x@params$control)
+  invisible(x)
+}
 
 
 format.SurvMatrix <- function(x, ...) {
@@ -591,6 +606,28 @@ setMethod("show", "TrainBits",
     invisible()
   }
 )
+
+
+#' @rdname print-methods
+#'
+print.TunedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
+  print_title(x)
+  trained <- !is.null(x@trainbits)
+  print_modelinfo(x, trained = trained)
+  cat("\nTuning parameters:\n\n")
+  print(x@params$model)
+  cat("\n")
+  grid <- x@params$grid
+  if (!isS4(grid)) cat("Grid:\n")
+  print_items(grid, n = n)
+  cat("\n")
+  print(x@params$control)
+  if (trained) {
+    cat("\n")
+    print(x@trainbits, n = n)
+  }
+  invisible(x)
+}
 
 
 #' @rdname print-methods
@@ -690,6 +727,20 @@ print_items.matrix <- function(x, n, ...) {
 
 print_items.tbl <- function(x, n, ...) {
   print(x, n = n)
+}
+
+
+print_modelinfo <- function(x, trained = FALSE) {
+  info_list <- modelinfo(x)
+  info <- info_list[[1]]
+  cat("\n",
+      "Model name: ", names(info_list), "\n",
+      "Label: ", if (trained) "Trained ", info$label, "\n",
+      label_items("Package", info$packages), "\n",
+      label_items("Response type", info$response_types), "\n",
+      "Tuning grid: ", info$grid, "\n",
+      "Variable importance: ", info$varimp, "\n",
+      sep = "")
 }
 
 

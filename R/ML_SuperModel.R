@@ -37,6 +37,8 @@ SuperModel <- function(..., model = GBMModel,
                        all_vars = FALSE) {
 
   base_learners <- lapply(unlist(list(...)), getMLObject, class = "MLModel")
+  names(base_learners) <- paste0(if (length(base_learners)) "Learner",
+                                 seq(base_learners))
 
   control <- getMLObject(control, "MLControl")
 

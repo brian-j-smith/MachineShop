@@ -31,6 +31,8 @@ StackedModel <- function(..., control = MachineShop::settings("control"),
                          weights = NULL) {
 
   base_learners <- lapply(unlist(list(...)), getMLObject, class = "MLModel")
+  names(base_learners) <- paste0(if (length(base_learners)) "Learner",
+                                 seq(base_learners))
 
   control <- getMLObject(control, "MLControl")
 

@@ -12,9 +12,13 @@
 \alias{print.Performance}
 \alias{print.RecipeGrid}
 \alias{print.Resamples}
+\alias{print.SelectedModel}
 \alias{print.SelectedModelFrame}
+\alias{print.StackedModel}
+\alias{print.SuperModel}
 \alias{print.SurvMatrix}
 \alias{print.TrainBits}
+\alias{print.TunedModel}
 \alias{print.TunedRecipe}
 \alias{print.VarImp}
 \title{Print MachineShop Objects}
@@ -39,11 +43,19 @@
 
 \method{print}{Resamples}(x, n = MachineShop::settings("max.print"), ...)
 
+\method{print}{SelectedModel}(x, n = MachineShop::settings("max.print"), ...)
+
 \method{print}{SelectedModelFrame}(x, n = MachineShop::settings("max.print"), ...)
+
+\method{print}{StackedModel}(x, n = MachineShop::settings("max.print"), ...)
+
+\method{print}{SuperModel}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{SurvMatrix}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{TrainBits}(x, n = MachineShop::settings("max.print"), ...)
+
+\method{print}{TunedModel}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{TunedRecipe}(x, n = MachineShop::settings("max.print"), ...)
 
