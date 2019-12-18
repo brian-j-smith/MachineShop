@@ -662,11 +662,11 @@ print_items.data.frame <- function(x, ...) {
 print_items.list <- function(x, n, ...) {
   diff <- length(x) - n
   if (diff > 0) {
-    print(head(x, n))
+    print(head(x, n), max = n)
     cat("... with ", diff, " more element", if (diff > 1) "s", ": ",
         toString(tail(names(x), diff)), "\n\n", sep = "")
   } else {
-    print(x)
+    print(x, max = n)
   }
 }
 
@@ -678,11 +678,12 @@ print_items.listof <- function(x, ...) {
 
 print_items.matrix <- function(x, n, ...) {
   diff <- nrow(x) - n
+  max_items <- n * ncol(x)
   if (diff > 0) {
-    print(head(x, n))
+    print(head(x, n), max = max_items)
     cat("... with ", diff, " more row", if (diff > 1) "s", "\n", sep ="")
   } else {
-    print(x)
+    print(x, max = max_items)
   }
 }
 
