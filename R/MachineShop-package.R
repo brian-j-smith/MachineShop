@@ -40,9 +40,11 @@
 #'
 #' Graphical and tabular summaries of modeling results can be obtained with
 #'
-#' \code{\link{plot}} \cr
-#' \code{\link{print}} \cr
-#' \code{\link{summary}}
+#'\tabular{l}{
+#'   \code{\link{plot}} \cr
+#'   \code{\link{print}} \cr
+#'   \code{\link{summary}} \cr
+#'}
 #'
 #' Further information on package features is available with
 #'
