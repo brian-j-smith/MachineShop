@@ -1,16 +1,3 @@
-#' Model Formula Offset
-#'
-#' An offset is a numeric variable to be added to a linear predictor, such as in
-#' a generalized linear model, with known coefficient 1 rather than an estimated
-#' coefficient.
-#'
-#' @param object numeric term to include in a model formula.
-#'
-#' @seealso \code{\link[stats:offset]{offset}}, \code{\link{role_pred}}
-#'
-offset <- stats::offset
-
-
 predictors <- function(object, ...) {
   UseMethod("predictors")
 }

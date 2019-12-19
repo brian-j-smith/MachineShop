@@ -16,8 +16,9 @@ importFrom(rsample, analysis, assessment, bootstraps, initial_split,
 importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
            delete.response, drop1, formula, get_all_vars, loess, lm, median,
            model.frame, model.matrix, model.matrix.default, model.response,
-           model.weights, na.fail, na.omit, na.pass, p.adjust, pchisq, predict,
-           quantile, reformulate, reshape, sd, t.test, terms, update, vcov)
+           model.weights, na.fail, na.omit, na.pass, offset, p.adjust, pchisq,
+           predict, quantile, reformulate, reshape, sd, t.test, terms, update,
+           vcov)
 importFrom(survival, concordance, is.Surv, Surv, survfit, survreg,
            survreg.distributions)
 importFrom(tibble, as_tibble, tibble)
@@ -33,7 +34,6 @@ export(.,
        lift,
        metricinfo,
        modelinfo,
-       offset,
        performance,
        performance_curve,
        resample,
