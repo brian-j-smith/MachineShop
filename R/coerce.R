@@ -55,8 +55,8 @@ as.data.frame.SurvMatrix <- function(x, ...) {
 }
 
 
-as.data.frame.TabularArray <- function(x, ...) {
-  as.data.frame.table(as(x, "array"), responseName = "Value")
+as.data.frame.TabularArray <- function(x, ..., responseName = "Value") {
+  as.data.frame.table(as(x, "array"), responseName = responseName, ...)
 }
 
 
