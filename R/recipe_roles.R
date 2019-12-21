@@ -44,8 +44,8 @@ role_binom <- function(recipe, x, size) {
   x <- as.character(substitute(x))
   size <- as.character(substitute(size))
   if (nzchar(x) && nzchar(size)) {
-    add_role(recipe, x, new_role = "binom_x") %>%
-      add_role(size, new_role = "binom_size")
+    recipes::add_role(recipe, x, new_role = "binom_x") %>%
+      recipes::add_role(size, new_role = "binom_size")
   } else {
     stop("binomial 'x' and 'size' variables must be specified")
   }
@@ -57,7 +57,7 @@ role_binom <- function(recipe, x, size) {
 role_case <- function(recipe, stratum, weight, replace = FALSE) {
   stratum <- as.character(substitute(stratum))
   weight <- as.character(substitute(weight))
-  f <- if (replace) update_role else add_role
+  f <- if (replace) recipes::update_role else recipes::add_role
   if (nzchar(stratum)) recipe <- f(recipe, stratum, new_role = "case_stratum")
   if (nzchar(weight)) recipe <- f(recipe, weight, new_role = "case_weight")
   recipe
@@ -68,7 +68,7 @@ role_case <- function(recipe, stratum, weight, replace = FALSE) {
 #'
 role_pred <- function(recipe, offset, replace = FALSE) {
   offset <- as.character(substitute(offset))
-  f <- if (replace) update_role else add_role
+  f <- if (replace) recipes::update_role else recipes::add_role
   if (nzchar(offset)) f(recipe, offset, new_role = "pred_offset") else recipe
 }
 
@@ -78,10 +78,10 @@ role_pred <- function(recipe, offset, replace = FALSE) {
 role_surv <- function(recipe, time, event) {
   time <- as.character(substitute(time))
   if (nzchar(time)) {
-    recipe <- add_role(recipe, time, new_role = "surv_time")
+    recipe <- recipes::add_role(recipe, time, new_role = "surv_time")
     event <- as.character(substitute(event))
     if (nzchar(event)) {
-      recipe <- add_role(recipe, event, new_role = "surv_event")
+      recipe <- recipes::add_role(recipe, event, new_role = "surv_event")
     }
     recipe
   } else {
