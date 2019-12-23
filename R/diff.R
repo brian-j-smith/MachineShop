@@ -36,8 +36,8 @@ NULL
 #' @rdname diff-methods
 #'
 diff.MLModel <- function(x, ...) {
-  if (is.null(x@trainbits)) stop("no training results to diff")
-  diff(x@trainbits@performance)
+  if (!is.trained(x)) stop("no training results to diff")
+  lapply(x@trainbits, function(trainbits) diff(trainbits@performance))
 }
 
 

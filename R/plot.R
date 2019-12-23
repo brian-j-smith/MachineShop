@@ -195,49 +195,52 @@ plot.MLModel <- function(x, metrics = NULL,
                          stat = MachineShop::settings("stat.train"),
                          type = c("boxplot", "density", "errorbar", "line",
                                   "violin"), ...) {
-  if (is.null(x@trainbits)) stop("no training results to plot")
+  if (!is.trained(x)) stop("no training results to plot")
 
-  perf <- x@trainbits@performance
   stat <- fget(stat)
   type <- match.arg(type)
-  if (type == "line") {
-    grid <- unnest(x@trainbits@grid)
-    stats <- apply(perf, c(3, 2), function(x) stat(na.omit(x))) %>%
-      TabularArray %>%
-      as.data.frame
-    df <- data.frame(
-      x = grid[[1]],
-      Value = stats$Value,
-      Metric = stats$Metric
-    )
 
-    metriclevels <- levels(df$Metric)
-    if (is.null(metrics)) {
-      metrics <- metriclevels
+  lapply(x@trainbits, function(trainbits) {
+    perf <- trainbits@performance
+    if (type == "line") {
+      grid <- unnest(trainbits@grid)
+      stats <- apply(perf, c(3, 2), function(x) stat(na.omit(x))) %>%
+        TabularArray %>%
+        as.data.frame
+      df <- data.frame(
+        x = grid[[1]],
+        Value = stats$Value,
+        Metric = stats$Metric
+      )
+
+      metriclevels <- levels(df$Metric)
+      if (is.null(metrics)) {
+        metrics <- metriclevels
+      } else {
+        metrics <- match_indices(metrics, metriclevels)
+        df <- df[df$Metric %in% metrics, , drop = FALSE]
+      }
+      df$Metric <- factor(df$Metric, metrics)
+
+      indices <- sapply(grid[-1], function(x) length(unique(x)) > 1)
+      args <- list(~ x, ~ Value)
+      if (any(indices)) {
+        df$Group <- interaction(grid[-1][indices])
+        args$color <- args$shape <- ~ Group
+      } else {
+        args$group <- 1
+      }
+      mapping <- do.call(aes_, args)
+
+      ggplot(df, mapping) +
+        geom_line(stat = "summary", fun.y = mean) +
+        geom_point(stat = "summary", fun.y = mean) +
+        labs(x = names(grid)[1]) +
+        facet_wrap(~ Metric, scales = "free")
     } else {
-      metrics <- match_indices(metrics, metriclevels)
-      df <- df[df$Metric %in% metrics, , drop = FALSE]
+      plot(perf, metrics = metrics, stat = stat, type = type, ...)
     }
-    df$Metric <- factor(df$Metric, metrics)
-
-    indices <- sapply(grid[-1], function(x) length(unique(x)) > 1)
-    args <- list(~ x, ~ Value)
-    if (any(indices)) {
-      df$Group <- interaction(grid[-1][indices])
-      args$color <- args$shape <- ~ Group
-    } else {
-      args$group <- 1
-    }
-    mapping <- do.call(aes_, args)
-
-    ggplot(df, mapping) +
-      geom_line(stat = "summary", fun.y = mean) +
-      geom_point(stat = "summary", fun.y = mean) +
-      labs(x = names(grid)[1]) +
-      facet_wrap(~ Metric, scales = "free")
-  } else {
-    plot(perf, metrics = metrics, stat = stat, type = type, ...)
-  }
+  })
 }
 
 

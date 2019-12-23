@@ -38,7 +38,7 @@ test_TunedModel <- function() {
 
   gbmtunediff <- diff(gbmtune)
   summary(gbmtunediff)
-  t.test(gbmtunediff)
+  t.test(gbmtunediff[[1]])
 }
 
 

@@ -411,3 +411,60 @@ subsample <- function(train, test, model, control, id = 1) {
 
   if (class(test)[1] == "list") lapply(test, f) else f(test)
 }
+
+
+resample_selection <- function(x, transform, params, ...) {
+
+  metrics <- params$metrics
+  stat <- fget(params$stat)
+
+  perf_list <- list()
+  perf_stats <- numeric()
+  for (name in names(x)) {
+    res <- try(
+      resample(transform(x[[name]]), ..., control = params$control),
+      silent = TRUE
+    )
+
+    if (is(res, "try-error")) {
+      warn("resampling failed for ", name, " with error:\n",
+           attr(res, "condition")$message)
+      perf_list[[name]] <- NA
+      perf_stats[name] <- NA
+      next
+    }
+
+    if (is.null(metrics)) {
+      method <- fget(findS3Method(performance, res$Observed))
+      metrics <- c(eval(formals(method)$metrics))
+      is_defined <- sapply(metrics, function(metric) {
+        info <- metricinfo(metric)[[1]]
+        any(mapply(is, list(res$Observed), info$response_types$observed) &
+              mapply(is, list(res$Predicted), info$response_types$predicted))
+      })
+      metrics <- metrics[is_defined]
+    }
+
+    perf <- performance(res, metrics = metrics, cutoff = params$cutoff)
+    perf_list[[name]] <- perf
+    perf_stats[name] <- stat(na.omit(perf[, 1]))
+  }
+
+  failed <- is.na(perf_list)
+  if (all(failed)) {
+    stop("resampling failed for all models", call. = FALSE)
+  } else if (any(failed)) {
+    perf[] <- NA
+    perf_list[failed] <- list(perf)
+  }
+
+  perf <- do.call(c, perf_list)
+  metric <- getMLObject(c(metrics)[[1]], "MLMetric")
+  selected <- ifelse(metric@maximize, which.max, which.min)(perf_stats)
+
+  list(performance = perf,
+       selected = structure(selected, names = colnames(perf)[1]),
+       values = perf_stats,
+       metric = metric)
+
+}

@@ -16,8 +16,7 @@ test_fit <- function(grid) {
         model = TunedModel(RangerModel, grid = grid)),
     "MLModelFit"
   )
-  grid_lengths <- rep(grid@length, length.out = nrow(grid))
-  model_grid <- as.MLModel(model_fit)@trainbits@grid
+  model_grid <- as.MLModel(model_fit)@trainbits[[1]]@grid$Model
   nrow(model_grid) && ncol(model_grid) == nrow(grid)
 }
 

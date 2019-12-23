@@ -103,3 +103,14 @@ SelectedModelFrame <- function(..., control = MachineShop::settings("control"),
                     metrics = metrics, stat = stat, cutoff = cutoff))
 
 }
+
+
+.fit.SelectedModelFrame <- function(x, model, ...) {
+  terms <- x@terms
+  mf <- as(x, "ModelFrame")
+  set_terms <- function(x) structure(mf, terms = x)
+  trainbits <- resample_selection(terms, set_terms, x@params, model)
+  trainbits$grid <- tibble(ModelFrame = tibble(Index = seq(terms)))
+  mf <- structure(mf, terms = terms[[trainbits$selected]])
+  push(do.call(TrainBits, trainbits), fit(mf, model = model))
+}

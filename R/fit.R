@@ -59,9 +59,7 @@ fit.matrix <- function(x, y, model, ...) {
 #' constructor.
 #'
 fit.ModelFrame <- function(x, model, ...) {
-  trained <- train(x, getMLObject(model, "MLModel"))
-  is_fully_trained <- !is(trained$x, "SelectedModelFrame")
-  (if (is_fully_trained) .fit else fit)(trained$model, trained$x)
+  .fit(x, getMLObject(model, "MLModel"))
 }
 
 
@@ -72,9 +70,7 @@ fit.ModelFrame <- function(x, model, ...) {
 #' with the \code{\link{role_case}} function.
 #'
 fit.recipe <- function(x, model, ...) {
-  trained <- train(x, getMLObject(model, "MLModel"))
-  is_fully_trained <- fully_trained(trained$x)
-  (if (is_fully_trained) .fit else fit)(trained$model, trained$x)
+  .fit(x, getMLObject(model, "MLModel"))
 }
 
 
@@ -92,21 +88,21 @@ fit.MLModelFunction <- function(x, ...) {
 }
 
 
-.fit <- function(model, x, ...) {
+.fit <- function(x, ...) {
   UseMethod(".fit")
 }
 
 
-.fit.MLModel <- function(model, x, ...) {
-  mf <- ModelFrame(x, na.rm = FALSE)
+.fit.MLModel <- function(x, inputs, ...) {
+  mf <- ModelFrame(inputs, na.rm = FALSE)
   if (is.null(mf[["(weights)"]])) mf[["(weights)"]] <- 1
 
   y <- response(mf)
-  if (!any(sapply(model@response_types, function(type) is_response(y, type)))) {
-    stop("invalid response type '", class(y)[1], "' for ", model@name)
+  if (!any(sapply(x@response_types, function(type) is_response(y, type)))) {
+    stop("invalid response type '", class(y)[1], "' for ", x@name)
   }
 
-  requireModelNamespaces(model@packages)
+  requireModelNamespaces(x@packages)
 
   params_env <- list2env(list(
     formula = formula(mf),
@@ -114,14 +110,24 @@ fit.MLModelFunction <- function(x, ...) {
     weights = model.weights(mf),
     y = y,
     nobs = nrow(mf),
-    nvars = nvars(mf, model)
+    nvars = nvars(mf, x)
   ), parent = new.env(parent = asNamespace("MachineShop")))
   environment(params_env$formula) <- params_env
 
-  args <- c(mget(c("formula", "data", "weights"), params_env), model@params)
+  args <- c(mget(c("formula", "data", "weights"), params_env), x@params)
 
-  do.call(model@fit, args, envir = params_env) %>%
-    MLModelFit(paste0(model@name, "Fit"), model, x, y)
+  do.call(x@fit, args, envir = params_env) %>%
+    MLModelFit(paste0(x@name, "Fit"), model = x, x = inputs, y = y)
+}
+
+
+.fit.ModelFrame <- function(x, model, ...) {
+  .fit(model, x)
+}
+
+
+.fit.recipe <- function(x, model, ...) {
+  .fit(model, prep(ModelRecipe(x)))
 }
 
 

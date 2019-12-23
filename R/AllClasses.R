@@ -100,7 +100,7 @@ setClass("MLModel",
             varimp = "function",
             x = "ANY",
             y = "ANY",
-            trainbits = "ANY")
+            trainbits = "list")
 )
 
 

@@ -63,8 +63,12 @@ SelectedModel <- function(..., control = MachineShop::settings("control"),
 MLModelFunction(SelectedModel) <- NULL
 
 
-.fit.SelectedModel <- function(model, x, ...) {
-  fit(x, model = train(model, x)$model)
+.fit.SelectedModel <- function(x, inputs, ...) {
+  models <- x@params$models
+  trainbits <- resample_selection(models, identity, x@params, inputs)
+  trainbits$grid <- tibble(Model = tibble(Index = seq(models)))
+  model <- models[[trainbits$selected]]
+  push(do.call(TrainBits, trainbits), fit(inputs, model = model))
 }
 
 
@@ -168,6 +172,13 @@ TunedModel <- function(model, grid = MachineShop::settings("grid"),
 MLModelFunction(TunedModel) <- NULL
 
 
-.fit.TunedModel <- function(model, x, ...) {
-  fit(x, model = train(model, x)$model)
+.fit.TunedModel <- function(x, inputs, ...) {
+  params <- x@params
+  grid <- as.grid(params$grid, fixed = params$fixed,
+                  inputs, model = getMLObject(params$model, "MLModel"))
+  models <- expand_model(list(params$model, grid))
+  trainbits <- resample_selection(models, identity, params, inputs)
+  trainbits$grid <- tibble(Model = grid)
+  model <- models[[trainbits$selected]]
+  push(do.call(TrainBits, trainbits), fit(inputs, model = model))
 }

@@ -299,9 +299,9 @@ print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_modelinfo(x)
   cat("\nParameters:\n")
   cat(str(x@params))
-  if (!is.null(x@trainbits)) {
+  if (is.trained(x)) {
     cat("\n")
-    print(x@trainbits, n = n)
+    print_items(x@trainbits, n = n)
   }
   invisible(x)
 }
@@ -471,14 +471,14 @@ setMethod("show", "Resamples",
 #'
 print.SelectedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
-  trained <- !is.null(x@trainbits)
+  trained <- is.trained(x)
   print_modelinfo(x, trained = trained)
   cat("\nSelection parameters:\n\n")
   print_items(x@params$models, n = n)
   print(x@params$control)
   if (trained) {
     cat("\n")
-    print(x@trainbits, n = n)
+    print_items(x@trainbits, n = n)
   }
   invisible(x)
 }
@@ -612,7 +612,7 @@ setMethod("show", "TrainBits",
 #'
 print.TunedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
-  trained <- !is.null(x@trainbits)
+  trained <- is.trained(x)
   print_modelinfo(x, trained = trained)
   cat("\nTuning parameters:\n\n")
   print(x@params$model)
@@ -624,7 +624,7 @@ print.TunedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print(x@params$control)
   if (trained) {
     cat("\n")
-    print(x@trainbits, n = n)
+    print_items(x@trainbits, n = n)
   }
   invisible(x)
 }

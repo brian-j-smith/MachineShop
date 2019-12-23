@@ -122,6 +122,16 @@ identical_elements <- function(x, transform = identity, ...) {
 }
 
 
+is.trained <- function(x, ...) {
+  UseMethod("is.trained")
+}
+
+
+is.trained.MLModel <- function(x, ...) {
+  length(x@trainbits) > 0
+}
+
+
 is_one_element <- function(x, class) {
   length(x) == 1 && is(x[[1]], class)
 }
@@ -233,6 +243,25 @@ params <- function(envir) {
     stop(label_items("missing values for required argument", missing))
   }
   args[!sapply(args, is.null)]
+}
+
+
+push <- function(x, object, ...) {
+  UseMethod("push")
+}
+
+
+push.TrainBits <- function(x, object, ...) {
+  stopifnot(is(object, "MLModelFit"))
+  obj_bits <- (if (isS4(object)) object@mlmodel else object$mlmodel)@trainbits
+  trainbits <- c(x, obj_bits)
+  names(trainbits) <- paste0("TrainStep", seq(trainbits))
+  if (isS4(object)) {
+    object@mlmodel@trainbits <- trainbits
+  } else {
+    object$mlmodel@trainbits <- trainbits
+  }
+  object
 }
 
 

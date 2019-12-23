@@ -63,19 +63,19 @@ StackedModel <- function(..., control = MachineShop::settings("control"),
 MLModelFunction(StackedModel) <- NULL
 
 
-.fit.StackedModel <- function(model, x, ...) {
-  mf <- ModelFrame(x, na.rm = FALSE)
+.fit.StackedModel <- function(x, inputs, ...) {
+  mf <- ModelFrame(inputs, na.rm = FALSE)
 
-  base_learners <- model@params$base_learners
-  weights <- model@params$weights
-  control <-  model@params$control
+  base_learners <- x@params$base_learners
+  weights <- x@params$weights
+  control <-  x@params$control
 
   if (is.null(weights)) {
     num_learners <- length(base_learners)
     stack <- list()
     complete_cases <- TRUE
     for (i in 1:num_learners) {
-      stack[[i]] <- resample(x, model = base_learners[[i]], control = control)
+      stack[[i]] <- resample(inputs, model = base_learners[[i]], control = control)
       complete_cases <- complete_cases & complete.cases(stack[[i]])
     }
     stack <- lapply(stack, function(res) res[complete_cases, ])
@@ -91,7 +91,7 @@ MLModelFunction(StackedModel) <- NULL
                           function(learner) fit(mf, model = learner)),
        weights = weights,
        times = control@times) %>%
-    MLModelFit("StackedModelFit", model, x, response(mf))
+    MLModelFit("StackedModelFit", model = x, x = inputs, y = response(mf))
 }
 
 

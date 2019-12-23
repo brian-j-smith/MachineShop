@@ -69,6 +69,17 @@ SelectedRecipe <- function(..., control = MachineShop::settings("control"),
 }
 
 
+.fit.SelectedRecipe <- function(x, model, ...) {
+  recipes <- x@recipes
+  data <- as.data.frame(x)
+  set_data <- function(x) recipe(x, data[unique(summary(x)$variable)])
+  trainbits <- resample_selection(recipes, set_data, x@params, model)
+  trainbits$grid <- tibble(Recipe = tibble(Index = seq(recipes)))
+  recipe <- set_data(recipes[[trainbits$selected]])
+  push(do.call(TrainBits, trainbits), fit(recipe, model = model))
+}
+
+
 #' Tuned Recipe
 #'
 #' Recipe tuning over a grid of parameter values.
@@ -125,4 +136,20 @@ TunedRecipe <- function(x, grid = expand_steps(),
 
   object
 
+}
+
+
+.fit.TunedRecipe <- function(x, model, ...) {
+  grid <- x@grid
+  recipe <- as(x, "ModelRecipe")
+  if (all(dim(grid) != 0)) {
+    grid_split <- split(grid, 1:nrow(grid))
+    set_steps <- function(x) update(recipe, x)
+    trainbits <- resample_selection(grid_split, set_steps, x@params, model)
+    trainbits$grid <- tibble(Recipe = grid)
+    recipe <- set_steps(grid_split[[trainbits$selected]])
+    push(do.call(TrainBits, trainbits), fit(recipe, model = model))
+  } else {
+    fit(recipe, model = model)
+  }
 }

@@ -207,45 +207,6 @@ c.SurvMatrix <- function(...) {
 }
 
 
-c.TrainBits <- function(...) {
-  args <- list(...)
-  if (all(mapply(is, args, "TrainBits"))) {
-    if (length(args) > 1) {
-
-      grid <- do.call(append, lapply(args, slot, name = "grid"))
-
-      values_list <- lapply(args, slot, name = "values")
-      values <- unlist(values_list)
-      names(values) <- paste0(names(values), ".",
-                              rep(seq(args), lengths(values_list)))
-
-      performance <- do.call(c, lapply(args, slot, name = "performance"))
-      dimnames(performance)[[3]] <- names(values)
-
-      if (!identical_elements(args, function(x) x@metric)) {
-        stop("TrainBits objects have different metric functions")
-      }
-      metric <- args[[1]]@metric
-
-      selected <- ifelse(metric@maximize, which.max, which.min)(values)
-      selected_names <- names(sapply(args, slot, name = "selected"))
-      if (!identical_elements(selected_names)) {
-        stop("TrainBits objects have difference selected metric names")
-      }
-      names(selected) <- selected_names[1]
-
-      TrainBits(grid = grid, performance = performance, selected = selected,
-                values = values, metric = metric)
-
-    } else {
-      args[[1]]
-    }
-  } else {
-    NextMethod()
-  }
-}
-
-
 #' @rdname combine-methods
 #'
 setMethod("+", c("SurvMatrix", "SurvMatrix"),

@@ -120,8 +120,10 @@ summary.Curves <- function(object, stat = MachineShop::settings("stat.Curves"),
 summary.MLModel <- function(object, stats =
                               MachineShop::settings("stats.Resamples"),
                             na.rm = TRUE, ...) {
-  if (is.null(object@trainbits)) stop("no training results to summarize")
-  summary(object@trainbits@performance, stats = stats, na.rm = na.rm, ...)
+  if (!is.trained(object)) stop("no training results to summarize")
+  lapply(object@trainbits, function(trainbits) {
+    summary(trainbits@performance, stats = stats, na.rm = na.rm, ...)
+  })
 }
 
 

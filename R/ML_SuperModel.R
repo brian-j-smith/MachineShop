@@ -68,17 +68,17 @@ SuperModel <- function(..., model = GBMModel,
 MLModelFunction(SuperModel) <- NULL
 
 
-.fit.SuperModel <- function(model, x, ...) {
-  mf <- ModelFrame(x, na.rm = FALSE)
+.fit.SuperModel <- function(x, inputs, ...) {
+  mf <- ModelFrame(inputs, na.rm = FALSE)
 
-  params <- model@params
+  params <- x@params
   base_learners <- params$base_learners
   super_learner <- params$model
   control <- params$control
 
   predictors <- list()
   for (i in seq(base_learners)) {
-    res <- resample(x, model = base_learners[[i]], control = control)
+    res <- resample(inputs, model = base_learners[[i]], control = control)
     predictors[[i]] <- res$Predicted
   }
 
@@ -90,7 +90,7 @@ MLModelFunction(SuperModel) <- NULL
        super_fit = fit(super_mf, model = super_learner),
        all_vars = params$all_vars,
        times = control@times) %>%
-    MLModelFit("SuperModelFit", model, x, response(mf))
+    MLModelFit("SuperModelFit", model = x, x = inputs, y = response(mf))
 }
 
 
