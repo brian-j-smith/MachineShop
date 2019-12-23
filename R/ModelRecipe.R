@@ -71,7 +71,7 @@ juice.ModelRecipe <- function(x, ...) {
 
 
 prep.ModelRecipe <- function(x, ...) {
-  if (!fully_trained(x)) {
+  if (!recipes::fully_trained(x)) {
     new(class(x), prep(as(x, "recipe"), retain = FALSE))
   } else x
 }

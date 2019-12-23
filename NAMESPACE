@@ -10,7 +10,7 @@ importFrom(foreach, "%dopar%", foreach, registerDoSEQ)
 importFrom(graphics, plot)
 importFrom(magrittr, "%>%")
 importFrom(polspline, hare, phare)
-importFrom(recipes, bake, fully_trained, prep, recipe)
+importFrom(recipes, bake, prep, recipe)
 importFrom(rsample, analysis, assessment, bootstraps, initial_split,
            rsample2caret, testing, vfold_cv)
 importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
