@@ -132,6 +132,10 @@ is.trained.MLModel <- function(x, ...) {
 }
 
 
+is.trained.step <- function(x, ...) {
+  recipes::is_trained(x)
+}
+
 is_one_element <- function(x, class) {
   length(x) == 1 && is(x[[1]], class)
 }
