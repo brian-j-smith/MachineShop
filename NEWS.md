@@ -2,6 +2,13 @@
 
 ## Version Updates
 
+## 2.0.1
+* Rename global setting `stat.Train` to `stat.train`.
+* Add print methods for `SelectedModel`, `StackedModel`, `SuperModel`, and `TunedModel`.
+* Revise training methods to ensure nested resampling of `SelectedRecipe` and `TunedRecipe`.
+* Return list of all training steps in `MLModel` `trainbits` slot.
+
+
 ## 2.0.0
 * Rename global setting `stat.Tune` to `stat.Train`.
 * Enable selection of formulas, design matrices, and model frames with `SelectedFormula()`, `SelectedMatrix()`, and `SelectedModelFrame()`.
