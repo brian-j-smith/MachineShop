@@ -84,7 +84,7 @@ fit.MLModel <- function(x, ...) {
 #' @rdname fit-methods
 #'
 fit.MLModelFunction <- function(x, ...) {
-  fit(..., model = x)
+  fit(x(), ...)
 }
 
 

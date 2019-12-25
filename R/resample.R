@@ -108,7 +108,7 @@ resample.MLModel <- function(x, ...) {
 #' @rdname resample-methods
 #'
 resample.MLModelFunction <- function(x, ...) {
-  resample(..., model = x)
+  resample(x(), ...)
 }
 
 
