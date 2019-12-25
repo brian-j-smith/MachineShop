@@ -25,25 +25,16 @@ importFrom(tibble, as_tibble, tibble)
 importFrom(utils, combn, head, methods, relist, stack, str, tail)
 
 
-export(.,
-       calibration,
-       confusion,
-       ConfusionMatrix,
-       dependence,
-       fit,
-       lift,
-       metricinfo,
-       modelinfo,
-       performance,
-       performance_curve,
-       resample,
-       response,
+export(BinomialVariate,
+       DiscreteVariate,
+       NegBinomialVariate,
+       PoissonVariate,
        role_binom,
        role_case,
        role_pred,
        role_surv,
-       settings,
-       varimp)
+       SurvEvents,
+       SurvProbs)
 
 export(expand_model,
        expand_params,
@@ -51,22 +42,7 @@ export(expand_model,
        Grid,
        ParameterGrid)
 
-export(BinomialVariate,
-       DiscreteVariate,
-       NegBinomialVariate,
-       PoissonVariate,
-       SurvEvents,
-       SurvProbs)
-
-export(ModelFrame,
-       SelectedFormula,
-       SelectedMatrix,
-       SelectedModelFrame,
-       SelectedRecipe,
-       TunedRecipe)
-
-export(as.MLModel,
-       MLModel,
+export(MLModel,
        AdaBagModel,
        AdaBoostModel,
        BARTModel,
@@ -119,6 +95,13 @@ export(as.MLModel,
        XGBLinearModel,
        XGBTreeModel)
 
+export(ModelFrame,
+       SelectedFormula,
+       SelectedMatrix,
+       SelectedModelFrame,
+       SelectedRecipe,
+       TunedRecipe)
+
 export(MLControl,
        BootControl,
        BootOptimismControl,
@@ -159,6 +142,23 @@ export(MLMetric,
        tnr,
        tpr,
        weighted_kappa2)
+
+export(.,
+       as.MLModel,
+       calibration,
+       confusion,
+       ConfusionMatrix,
+       dependence,
+       fit,
+       lift,
+       metricinfo,
+       modelinfo,
+       performance,
+       performance_curve,
+       resample,
+       response,
+       settings,
+       varimp)
 
 export(tune)
 
