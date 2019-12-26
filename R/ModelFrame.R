@@ -23,7 +23,7 @@
 #' @return \code{ModelFrame} class object that inherits from \code{data.frame}.
 #'
 #' @seealso  \code{\link{fit}}, \code{\link{resample}}, \code{\link{response}},
-#' \code{\link{SelectedModelFrame}}
+#' \code{\link{SelectedInput}}
 #'
 #' @examples
 #' mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
@@ -182,7 +182,7 @@ terms.formula <- function(x, ...) {
   structure(
     stats::terms.formula(x, ...),
     .Environment = asNamespace("MachineShop"),
-    class = c("FormulaTerms", "terms", "formula")
+    class = c("FormulaTerms", "Terms", "terms", "formula")
   )
 }
 
@@ -245,7 +245,7 @@ terms.list <- function(x, y = NULL, intercept = TRUE, all_numeric = FALSE,
     intercept = as.integer(intercept),
     response = has_y,
     .Environment = asNamespace("MachineShop"),
-    class = c(class, "terms", "formula")
+    class = c(class, "Terms", "terms", "formula")
   )
 }
 
@@ -361,7 +361,7 @@ model.matrix.ModelFrame <- function(object, intercept = NULL, ...) {
 }
 
 
-model.matrix.SelectedModelFrame <- function(object, ...) {
+model.matrix.SelectedInput <- function(object, ...) {
   stop("cannot create a design matrix from a ", class(object))
 }
 

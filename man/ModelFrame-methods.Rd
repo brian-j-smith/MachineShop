@@ -58,5 +58,5 @@ varimp(gbm_fit)
 }
 \seealso{
 \code{\link{fit}}, \code{\link{resample}}, \code{\link{response}},
-\code{\link{SelectedModelFrame}}
+\code{\link{SelectedInput}}
 }

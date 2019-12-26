@@ -37,5 +37,5 @@ expand_steps(
 
 }
 \seealso{
-\code{\link{TunedRecipe}}
+\code{\link{TunedInput}}
 }

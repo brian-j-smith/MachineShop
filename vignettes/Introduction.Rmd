@@ -1285,7 +1285,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
   : function or character string naming a function to compute one summary statistic to control the ordering of models in plots [default: ``"base::mean"``].
 
 `stat.train`
-  : function or character string naming a function to compute one summary statistic on resampled performance metrics for model selection, model tuning, and recipe tuning [default: ``"base::mean"``].
+  : function or character string naming a function to compute one summary statistic on resampled performance metrics for input selection or tuning or for model selection or tuning [default: ``"base::mean"``].
 
 `stats.PartialDependence`
   : function, function name, or vector of these with which to compute partial dependence summary statistics [default: ``c(Mean = "base::mean")``].

@@ -66,7 +66,7 @@ MLModelFunction(SelectedModel) <- NULL
 .fit.SelectedModel <- function(x, inputs, ...) {
   models <- x@params$models
   trainbits <- resample_selection(models, identity, x@params, inputs)
-  trainbits$grid <- tibble(Model = tibble(Index = seq(models)))
+  trainbits$grid <- tibble(Model = factor(seq(models)))
   model <- models[[trainbits$selected]]
   push(do.call(TrainBits, trainbits), fit(inputs, model = model))
 }

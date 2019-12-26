@@ -45,12 +45,12 @@ bake.ModelRecipe <- function(object, new_data, ...) {
 }
 
 
-bake.SelectedRecipe <- function(object, ...) {
+bake.SelectedInput <- function(object, ...) {
   stop("cannot create a design matrix from a ", class(object))
 }
 
 
-bake.TunedRecipe <- function(object, ...) {
+bake.TunedInput <- function(object, ...) {
   stop("cannot create a design matrix from a ", class(object))
 }
 
@@ -77,12 +77,12 @@ prep.ModelRecipe <- function(x, ...) {
 }
 
 
-prep.SelectedRecipe <- function(x, ...) {
+prep.SelectedInput <- function(x, ...) {
   stop("cannot train a ", class(x))
 }
 
 
-prep.TunedRecipe <- function(x, ...) {
+prep.TunedInput <- function(x, ...) {
   stop("cannot train a ", class(x))
 }
 

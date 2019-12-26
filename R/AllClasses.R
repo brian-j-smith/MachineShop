@@ -128,24 +128,33 @@ setClass("ModelRecipe",
 )
 
 
-setClass("SelectedModelFrame",
-  contains = "ModelFrame",
-  slots = c(terms = "list",
+setClass("SelectedInput",
+  contains = "VIRTUAL",
+  slots = c(inputs = "list",
             params = "list")
 )
 
 
+setClass("SelectedModelFrame",
+  contains = c("SelectedInput", "ModelFrame")
+)
+
+
 setClass("SelectedRecipe",
-  contains = "ModelRecipe",
-  slots = c(recipes = "list",
+  contains = c("SelectedInput", "ModelRecipe")
+)
+
+
+setClass("TunedInput",
+  contains = "VIRTUAL",
+  slots = c(grid = "ANY",
             params = "list")
 )
 
 
 setClass("TunedRecipe",
-  contains = "ModelRecipe",
-  slots = c(grid = "RecipeGrid",
-            params = "list")
+  contains = c("TunedInput", "ModelRecipe"),
+  slots = c(grid = "RecipeGrid")
 )
 
 

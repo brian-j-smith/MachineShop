@@ -27,11 +27,11 @@ resample(x, ...)
 \arguments{
 \item{x}{defines a relationship between model predictor and response
 variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
-predictors, \code{\link{ModelFrame}}, \code{\link{SelectedModelFrame}},
-untrained \code{\link[recipes]{recipe}}, \code{\link{SelectedRecipe}}, or
-\code{\link{TunedRecipe}} object.  Alternatively, a \link[=models]{model}
-function or call may be given first followed by objects defining the
-predictor and response relationship and the \code{control} value.}
+predictors, \code{\link{ModelFrame}}, untrained
+\code{\link[recipes]{recipe}}, \code{\link{SelectedInput}}, or
+\code{\link{TunedInput}}.  Alternatively, a \link[=models]{model} function
+or call may be given first followed by objects defining the predictor and
+response relationship and the \code{control} value.}
 
 \item{...}{arguments passed to other methods.}
 

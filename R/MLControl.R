@@ -18,9 +18,9 @@
 #'
 #' @return \code{MLControl} class object.
 #'
-#' @seealso \code{\link{resample}}, \code{\link{SelectedModel}},
-#' \code{\link{SelectedModelFrame}}, \code{\link{SelectedRecipe}},
-#' \code{\link{TunedModel}}, \code{\link{TunedRecipe}}
+#' @seealso \code{\link{resample}}, \code{\link{SelectedInput}},
+#' \code{\link{SelectedModel}}, \code{\link{TunedInput}},
+#' \code{\link{TunedModel}}
 #'
 NULL
 

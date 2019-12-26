@@ -37,6 +37,17 @@ setMethod("[",
 
 
 #' @rdname extract-methods
+#' @aliases [,ModelFrame,ANY,ANY,ANY-method
+#'
+setMethod("[", c(x = "ModelFrame", i = "ANY", j = "ANY", drop = "ANY"),
+  function(x, i, j, ..., drop = TRUE) {
+    y <- asS3(x)[i, j, drop = drop]
+    if (identical(names(x), names(y))) new(class(x), y) else y
+  }
+)
+
+
+#' @rdname extract-methods
 #' @aliases [,Resamples,ANY,ANY,ANY-method
 #'
 setMethod("[", c(x = "RecipeGrid", i = "ANY", j = "ANY", drop = "ANY"),

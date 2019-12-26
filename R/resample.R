@@ -8,11 +8,11 @@
 #'
 #' @param x defines a relationship between model predictor and response
 #'   variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
-#'   predictors, \code{\link{ModelFrame}}, \code{\link{SelectedModelFrame}},
-#'   untrained \code{\link[recipes]{recipe}}, \code{\link{SelectedRecipe}}, or
-#'   \code{\link{TunedRecipe}} object.  Alternatively, a \link[=models]{model}
-#'   function or call may be given first followed by objects defining the
-#'   predictor and response relationship and the \code{control} value.
+#'   predictors, \code{\link{ModelFrame}}, untrained
+#'   \code{\link[recipes]{recipe}}, \code{\link{SelectedInput}}, or
+#'   \code{\link{TunedInput}}.  Alternatively, a \link[=models]{model} function
+#'   or call may be given first followed by objects defining the predictor and
+#'   response relationship and the \code{control} value.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
 #'   outcomes.
@@ -143,7 +143,7 @@ setMethod(".resample", c("MLBootstrapControl", "ModelFrame"),
     presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
-    splits <- bootstraps(x,
+    splits <- bootstraps(as.data.frame(x),
                          times = object@samples,
                          strata = strata) %>% rsample2caret
     index <- splits$index
@@ -218,7 +218,7 @@ setMethod(".resample", c("MLCrossValidationControl", "ModelFrame"),
     presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
-    splits <- vfold_cv(x,
+    splits <- vfold_cv(as.data.frame(x),
                        v = object@folds,
                        repeats = object@repeats,
                        strata = strata) %>% rsample2caret
@@ -310,7 +310,7 @@ setMethod(".resample", c("MLOOBControl", "ModelFrame"),
     presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
-    splits <- bootstraps(x,
+    splits <- bootstraps(as.data.frame(x),
                          times = object@samples,
                          strata = strata) %>% rsample2caret
     index <- splits$index
@@ -354,7 +354,7 @@ setMethod(".resample", c("MLSplitControl", "ModelFrame"),
   function(object, x, model) {
     strata <- strata_var(x)
     set.seed(object@seed)
-    split <- initial_split(x,
+    split <- initial_split(as.data.frame(x),
                            prop = object@prop,
                            strata = strata)
     train <- x[split$in_id, , drop = FALSE]

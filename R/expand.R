@@ -99,7 +99,7 @@ expand_params <- function(..., random = FALSE) {
 #'
 #' @return \code{RecipeGrid} class object that inherits from \code{data.frame}.
 #'
-#' @seealso \code{\link{TunedRecipe}}
+#' @seealso \code{\link{TunedInput}}
 #'
 #' @examples
 #' library(recipes)

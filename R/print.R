@@ -355,6 +355,14 @@ print.ModelFrame <- function(x, n = MachineShop::settings("max.print"), ...) {
 }
 
 
+setMethod("show", "ModelFrame",
+  function(object) {
+    print(object)
+    invisible()
+  }
+)
+
+
 print.ModelRecipe <- function(x, ...) {
   print_title(x)
   cat("\n")
@@ -469,6 +477,18 @@ setMethod("show", "Resamples",
 
 #' @rdname print-methods
 #'
+print.SelectedInput <- function(x, n = MachineShop::settings("max.print"),
+                                ...) {
+  NextMethod()
+  cat("\nModel inputs:\n\n")
+  print_items(x@inputs, n = n)
+  print(x@params$control)
+  invisible(x)
+}
+
+
+#' @rdname print-methods
+#'
 print.SelectedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   trained <- is.trained(x)
@@ -482,40 +502,6 @@ print.SelectedModel <- function(x, n = MachineShop::settings("max.print"), ...) 
   }
   invisible(x)
 }
-
-
-#' @rdname print-methods
-#'
-print.SelectedModelFrame <- function(x,
-                                     n = MachineShop::settings("max.print"),
-                                     ...) {
-  print_title(x)
-  cat("\n")
-  print_items(as(x, "data.frame"), n = n)
-  cat("\n")
-  print(ListOf(lapply(x@terms, formula)), n = n)
-  print(x@params$control)
-  invisible(x)
-}
-
-
-setMethod("show", "SelectedModelFrame",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
-
-
-setMethod("show", "SelectedRecipe",
-  function(object) {
-    print_title(object)
-    cat("\n")
-    print(object@recipes)
-    print(object@params$control)
-    invisible()
-  }
-)
 
 
 #' @rdname print-methods
@@ -581,6 +567,11 @@ setMethod("show", "TabularArray",
 )
 
 
+print.Terms <- function(x, ...) {
+  print(formula(x))
+}
+
+
 #' @rdname print-methods
 #'
 print.TrainBits <- function(x, n = MachineShop::settings("max.print"), ...) {
@@ -610,6 +601,18 @@ setMethod("show", "TrainBits",
 
 #' @rdname print-methods
 #'
+print.TunedInput <- function(x, n = MachineShop::settings("max.print"), ...) {
+  NextMethod()
+  cat("\n")
+  print_items(x@grid, n = n)
+  cat("\n")
+  print(x@params$control)
+  invisible(x)
+}
+
+
+#' @rdname print-methods
+#'
 print.TunedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   trained <- is.trained(x)
@@ -628,26 +631,6 @@ print.TunedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   }
   invisible(x)
 }
-
-
-#' @rdname print-methods
-#'
-print.TunedRecipe <- function(x, n = MachineShop::settings("max.print"), ...) {
-  NextMethod()
-  cat("\n")
-  print_items(x@grid, n = n)
-  cat("\n")
-  print(x@params$control)
-  invisible(x)
-}
-
-
-setMethod("show", "TunedRecipe",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
 
 
 #' @rdname print-methods

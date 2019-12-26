@@ -4,7 +4,9 @@ as.data.frame.BinomialVariate <- function(x, ...) {
 
 
 as.data.frame.ModelFrame <- function(x, ...) {
-  x <- NextMethod()
+  x <- as(x, "ModelFrame")
+  class(x) <- class(x)[-1]
+  x <- as.data.frame(x)
   attributes(x) <- list(names = names(x), row.names = rownames(x),
                         class = "data.frame")
   x
@@ -12,6 +14,11 @@ as.data.frame.ModelFrame <- function(x, ...) {
 
 
 setAs("ModelFrame", "data.frame",
+  function(from) as.data.frame(from)
+)
+
+
+setAs("SelectedModelFrame", "data.frame",
   function(from) as.data.frame(from)
 )
 
@@ -42,11 +49,6 @@ as.data.frame.PerformanceDiffTest <- function(x, ...) {
 
 as.data.frame.Resamples <- function(x, ...) {
   asS3(as(x, "data.frame"))
-}
-
-
-as.data.frame.SelectedModelFrame <- function(x, ...) {
-  as.data.frame(as(x, "ModelFrame"))
 }
 
 
@@ -89,15 +91,20 @@ as.MLModel.MLModelFit <- function(x, ...) {
 
 
 setAs("SelectedModelFrame", "ModelFrame",
-  function(from) asS3(from)
+  function(from) asS3(S3Part(from))
 )
 
 
 setAs("ModelRecipe", "recipe",
-  function(from) asS3(from)
+  function(from) asS3(S3Part(from))
+)
+
+
+setAs("SelectedRecipe", "recipe",
+  function(from) asS3(S3Part(from))
 )
 
 
 setAs("TunedRecipe", "recipe",
-  function(from) asS3(from)
+  function(from) asS3(S3Part(from))
 )
