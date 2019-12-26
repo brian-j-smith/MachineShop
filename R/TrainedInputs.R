@@ -21,8 +21,9 @@
 #'   summary statistic on resampled metric values for recipe selection.
 #' @param cutoff argument passed to the \code{metrics} functions.
 #'
-#' @return \code{SelectedModelFrame} or \code{SelectedRecipe} class object that
-#' inherits from \code{SelectedInput} and \code{ModelFrame} or \code{recipe}.
+#' @return \code{SelectedModelFrame} or \code{SelectedModelRecipe} class object
+#' that inherits from \code{SelectedInput} and \code{ModelFrame} or
+#' \code{recipe}.
 #'
 #' @seealso \code{\link{fit}}, \code{\link{resample}}
 #'
@@ -147,7 +148,7 @@ SelectedInput.recipe <- function(...,
 
   outcome_vars <- info$variable[info$role == "outcome"]
   fo <- reformulate(".", paste(outcome_vars, collapse = "+"))
-  new("SelectedRecipe", new("ModelRecipe", recipe(fo, data = data)),
+  new("SelectedModelRecipe", new("ModelRecipe", recipe(fo, data = data)),
       inputs = inputs,
       params = list(control = getMLObject(control, "MLControl"),
                     metrics = metrics, stat = stat, cutoff = cutoff))
@@ -170,7 +171,7 @@ SelectedInput.list <- function(x, ...) {
       object <- as(x, "ModelFrame")
       set_input <- function(x) structure(object, terms = x)
     },
-    SelectedRecipe = {
+    SelectedModelRecipe = {
       input_class <- "ModelRecipe"
       object <- as.data.frame(x)
       set_input <- function(x) recipe(x, object[unique(summary(x)$variable)])
@@ -204,8 +205,8 @@ SelectedInput.list <- function(x, ...) {
 #' @param cutoff argument passed to the \code{metrics} functions.
 #' @param ... arguments passed to other methods.
 #'
-#' @return \code{TunedRecipe} class object that inherits from \code{TunedInput}
-#' and \code{recipe}.
+#' @return \code{TunedModelRecipe} class object that inherits from
+#' \code{TunedInput} and \code{recipe}.
 #'
 #' @seealso \code{\link{fit}}, \code{\link{resample}}
 #'
@@ -235,7 +236,7 @@ TunedInput.recipe <- function(x, grid = expand_steps(),
                               stat = MachineShop::settings("stat.train"),
                               cutoff = MachineShop::settings("cutoff"), ...) {
 
-  object <- new("TunedRecipe", ModelRecipe(x),
+  object <- new("TunedModelRecipe", ModelRecipe(x),
                 grid = grid,
                 params = list(control = getMLObject(control, "MLControl"),
                               metrics = metrics, stat = stat, cutoff = cutoff))
@@ -254,14 +255,14 @@ TunedInput.recipe <- function(x, grid = expand_steps(),
 }
 
 
-.fit.TunedRecipe <- function(x, model, ...) {
+.fit.TunedModelRecipe <- function(x, model, ...) {
   grid <- x@grid
   recipe <- as(x, "ModelRecipe")
   if (all(dim(grid) != 0)) {
     grid_split <- split(grid, 1:nrow(grid))
     set_input <- function(x) update(recipe, x)
     trainbits <- resample_selection(grid_split, set_input, x@params, model)
-    trainbits$grid <- tibble(Recipe = grid)
+    trainbits$grid <- tibble(ModelRecipe = grid)
     input <- set_input(grid_split[[trainbits$selected]])
     push(do.call(TrainBits, trainbits), fit(input, model = model))
   } else {

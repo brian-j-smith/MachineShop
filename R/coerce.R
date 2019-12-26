@@ -100,11 +100,11 @@ setAs("ModelRecipe", "recipe",
 )
 
 
-setAs("SelectedRecipe", "recipe",
+setAs("SelectedModelRecipe", "recipe",
   function(from) asS3(S3Part(from))
 )
 
 
-setAs("TunedRecipe", "recipe",
+setAs("TunedModelRecipe", "recipe",
   function(from) asS3(S3Part(from))
 )

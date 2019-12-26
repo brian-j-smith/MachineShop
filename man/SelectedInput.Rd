@@ -71,8 +71,9 @@ summary statistic on resampled metric values for recipe selection.}
 objects, or a list of one of these types.}
 }
 \value{
-\code{SelectedModelFrame} or \code{SelectedRecipe} class object that
-inherits from \code{SelectedInput} and \code{ModelFrame} or \code{recipe}.
+\code{SelectedModelFrame} or \code{SelectedModelRecipe} class object
+that inherits from \code{SelectedInput} and \code{ModelFrame} or
+\code{recipe}.
 }
 \description{
 Formula, design matrix, model frame, or recipe selection from a candidate

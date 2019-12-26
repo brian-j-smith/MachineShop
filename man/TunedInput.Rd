@@ -39,8 +39,8 @@ summary statistic on resampled metric values for recipe tuning.}
 \item{cutoff}{argument passed to the \code{metrics} functions.}
 }
 \value{
-\code{TunedRecipe} class object that inherits from \code{TunedInput}
-and \code{recipe}.
+\code{TunedModelRecipe} class object that inherits from
+\code{TunedInput} and \code{recipe}.
 }
 \description{
 Recipe tuning over a grid of parameter values.

@@ -140,7 +140,7 @@ setClass("SelectedModelFrame",
 )
 
 
-setClass("SelectedRecipe",
+setClass("SelectedModelRecipe",
   contains = c("SelectedInput", "ModelRecipe")
 )
 
@@ -152,7 +152,7 @@ setClass("TunedInput",
 )
 
 
-setClass("TunedRecipe",
+setClass("TunedModelRecipe",
   contains = c("TunedInput", "ModelRecipe"),
   slots = c(grid = "RecipeGrid")
 )
