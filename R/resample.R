@@ -9,14 +9,16 @@
 #' @param x defines a relationship between model predictor and response
 #'   variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
 #'   predictors, \code{\link{ModelFrame}}, untrained
-#'   \code{\link[recipes]{recipe}}, \code{\link{SelectedInput}}, or
-#'   \code{\link{TunedInput}}.  Alternatively, a \link[=models]{model} function
-#'   or call may be given first followed by objects defining the predictor and
-#'   response relationship and the \code{control} value.
+#'   \code{\link[recipes]{recipe}}, \code{\link{ModeledInput}},
+#'   \code{\link{SelectedInput}}, or \code{\link{TunedInput}}.  Alternatively,
+#'   a \link[=models]{model} function or call may be given first followed by
+#'   objects defining the predictor and response relationship and the
+#'   \code{control} value.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
 #'   outcomes.
-#' @param model \link[=models]{model} function, function name, or call.
+#' @param model \link[=models]{model} function, function name, or call; ignored
+#'   and can be omitted when resampling \link[=ModeledInput]{modeled inputs}.
 #' @param control \link[=controls]{control} function, function name, or call
 #'   defining the resampling method to be employed.
 #' @param ... arguments passed to other methods.
@@ -81,6 +83,7 @@ resample.matrix <- function(x, y, model,
 resample.ModelFrame <- function(x, model,
                                 control = MachineShop::settings("control"),
                                 ...) {
+  if (missing(model)) model <- NullModel
   .resample(getMLObject(control, "MLControl"), x, model)
 }
 
@@ -94,6 +97,7 @@ resample.ModelFrame <- function(x, model,
 #'
 resample.recipe <- function(x, model,
                             control = MachineShop::settings("control"), ...) {
+  if (missing(model)) model <- NullModel
   .resample(getMLObject(control, "MLControl"), ModelRecipe(x), model)
 }
 
@@ -136,6 +140,20 @@ Resamples.list <- function(object, ...) {
 
 
 setGeneric(".resample", function(object, x, ...) standardGeneric(".resample"))
+
+
+setMethod(".resample", c("ModeledFrame", "ANY"),
+  function(object, x, ...) {
+    resample(as(object, "ModelFrame"), model = object@model, control = x)
+  }
+)
+
+
+setMethod(".resample", c("ModeledRecipe", "ANY"),
+  function(object, x, ...) {
+    resample(as(object, "ModelRecipe"), model = object@model, control = x)
+  }
+)
 
 
 setMethod(".resample", c("MLBootstrapControl", "ModelFrame"),

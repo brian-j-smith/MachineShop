@@ -8,14 +8,15 @@
 #' @param x defines a relationship between model predictor and response
 #'   variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
 #'   predictors, \code{\link{ModelFrame}}, untrained
-#'   \code{\link[recipes]{recipe}}, \code{\link{SelectedInput}}, or
-#'   \code{\link{TunedInput}}.  Alternatively, a \link[=models]{model} function
-#'   or call may be given first followed by objects defining the predictor and
-#'   response relationship.
+#'   \code{\link[recipes]{recipe}}, \code{\link{ModeledInput}},
+#'   \code{\link{SelectedInput}}, or \code{\link{TunedInput}}.  Alternatively,
+#'   a \link[=models]{model} function or call may be given first followed by
+#'   objects defining the predictor and response relationship.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
 #'   outcomes.
-#' @param model \link[=models]{model} function, function name, or call.
+#' @param model \link[=models]{model} function, function name, or call; ignored
+#'   and can be omitted when fitting \link[=ModeledInput]{modeled inputs}.
 #' @param ... arguments passed to other methods.
 #'
 #' @return \code{MLModelFit} class object.
@@ -59,7 +60,8 @@ fit.matrix <- function(x, y, model, ...) {
 #' constructor.
 #'
 fit.ModelFrame <- function(x, model, ...) {
-  .fit(x, getMLObject(model, "MLModel"))
+  model <- if (missing(model)) NullModel else getMLObject(model, "MLModel")
+  .fit(x, model)
 }
 
 
@@ -70,7 +72,8 @@ fit.ModelFrame <- function(x, model, ...) {
 #' with the \code{\link{role_case}} function.
 #'
 fit.recipe <- function(x, model, ...) {
-  .fit(x, getMLObject(model, "MLModel"))
+  model <- if (missing(model)) NullModel else getMLObject(model, "MLModel")
+  .fit(x, model)
 }
 
 
@@ -123,6 +126,16 @@ fit.MLModelFunction <- function(x, ...) {
 
 .fit.ModelFrame <- function(x, model, ...) {
   .fit(model, x)
+}
+
+
+.fit.ModeledFrame <- function(x, ...) {
+  fit(as(x, "ModelFrame"), model = x@model)
+}
+
+
+.fit.ModeledRecipe <- function(x, ...) {
+  fit(as(x, "ModelRecipe"), model = x@model)
 }
 
 

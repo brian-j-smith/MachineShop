@@ -128,6 +128,22 @@ setClass("ModelRecipe",
 )
 
 
+setClass("ModeledInput",
+  contains = "VIRTUAL",
+  slots = c(model = "MLModel")
+)
+
+
+setClass("ModeledFrame",
+  contains = c("ModeledInput", "ModelFrame")
+)
+
+
+setClass("ModeledRecipe",
+  contains = c("ModeledInput", "ModelRecipe")
+)
+
+
 setClass("SelectedInput",
   contains = "VIRTUAL",
   slots = c(inputs = "list",
@@ -140,7 +156,17 @@ setClass("SelectedModelFrame",
 )
 
 
+setClass("SelectedModeledFrame",
+  contains = c("SelectedInput", "ModelFrame")
+)
+
+
 setClass("SelectedModelRecipe",
+  contains = c("SelectedInput", "ModelRecipe")
+)
+
+
+setClass("SelectedModeledRecipe",
   contains = c("SelectedInput", "ModelRecipe")
 )
 

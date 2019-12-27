@@ -18,7 +18,17 @@ setAs("ModelFrame", "data.frame",
 )
 
 
+setAs("ModeledFrame", "data.frame",
+  function(from) as.data.frame(from)
+)
+
+
 setAs("SelectedModelFrame", "data.frame",
+  function(from) as.data.frame(from)
+)
+
+
+setAs("SelectedModeledFrame", "data.frame",
   function(from) as.data.frame(from)
 )
 
@@ -90,7 +100,17 @@ as.MLModel.MLModelFit <- function(x, ...) {
 }
 
 
+setAs("ModeledFrame", "ModelFrame",
+  function(from) asS3(S3Part(from))
+)
+
+
 setAs("SelectedModelFrame", "ModelFrame",
+  function(from) asS3(S3Part(from))
+)
+
+
+setAs("SelectedModeledFrame", "ModelFrame",
   function(from) asS3(S3Part(from))
 )
 
@@ -100,7 +120,17 @@ setAs("ModelRecipe", "recipe",
 )
 
 
+setAs("ModeledRecipe", "recipe",
+  function(from) asS3(S3Part(from))
+)
+
+
 setAs("SelectedModelRecipe", "recipe",
+  function(from) asS3(S3Part(from))
+)
+
+
+setAs("SelectedModeledRecipe", "recipe",
   function(from) asS3(S3Part(from))
 )
 

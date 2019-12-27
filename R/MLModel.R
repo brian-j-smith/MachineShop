@@ -109,6 +109,11 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
 }
 
 
+.response_types <- c("binary", "BinomialVariate", "DiscreteVariate", "factor",
+                     "matrix", "NegBinomialVariate", "numeric", "ordered",
+                     "PoissonVariate", "Surv")
+
+
 MLModelFit <- function(object, Class, model, x, y) {
   model@x <- x
   model@y <- y

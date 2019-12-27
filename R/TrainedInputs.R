@@ -3,11 +3,13 @@
 #' Formula, design matrix, model frame, or recipe selection from a candidate
 #' set.
 #'
+#' @aliases SelectedModeledFrame
+#' @aliases SelectedModeledRecipe
 #' @rdname SelectedInput
 #'
 #' @param x,... \code{\link{formula}}, design \code{\link{matrix}} of predictors,
-#'   \code{\link{ModelFrame}}, untrained \code{\link[recipes]{recipe}}
-#'   objects, or a list of one of these types.
+#'   \code{\link{ModelFrame}}, \code{\link{ModeledInput}}, untrained
+#'   \code{\link[recipes]{recipe}} objects, or a list of one of these types.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} or an object that can be converted
 #'   to one.
@@ -21,7 +23,8 @@
 #'   summary statistic on resampled metric values for recipe selection.
 #' @param cutoff argument passed to the \code{metrics} functions.
 #'
-#' @return \code{SelectedModelFrame} or \code{SelectedModelRecipe} class object
+#' @return \code{SelectedModelFrame}, \code{SelectedModelRecipe},
+#' \code{SelectedModeledFrame}, or \code{SelectedModeledRecipe} class object
 #' that inherits from \code{SelectedInput} and \code{ModelFrame} or
 #' \code{recipe}.
 #'
@@ -158,12 +161,56 @@ SelectedInput.recipe <- function(...,
 
 #' @rdname SelectedInput
 #'
+SelectedInput.ModeledInput <-
+  function(...,
+           control = MachineShop::settings("control"),
+           metrics = NULL,
+           stat = MachineShop::settings("stat.train"),
+           cutoff = MachineShop::settings("cutoff")) {
+
+    inputs <- list(...)
+
+    if (!all(mapply(is, inputs, "ModeledInput"))) {
+      stop("inputs must be ModelInputs")
+    }
+
+    if (!identical_elements(inputs, function(x) class(x))) {
+      stop("inputs are of different ModeledInput types")
+    }
+
+    models <- Map(slot, inputs, "model")
+    input_class <- class(inputs[[1]])
+    switch(input_class,
+           ModeledFrame = {
+             to_class <- "ModelFrame"
+             object_class <- "SelectedModeledFrame"
+           },
+           ModeledRecipe = {
+             to_class <- "ModelRecipe"
+             object_class <- "SelectedModeledRecipe"
+           })
+    inputs <- Map(as, inputs, to_class)
+    names(inputs) <- make_list_names(inputs, input_class)
+
+    args <- c(inputs, control = control, metrics = metrics, stat = stat,
+              cutoff = cutoff)
+    object <- do.call(SelectedInput, args)
+
+    new(object_class, as(object, to_class),
+        inputs = Map(list, input = object@inputs, model = models),
+        params = object@params)
+
+  }
+
+
+#' @rdname SelectedInput
+#'
 SelectedInput.list <- function(x, ...) {
   do.call(SelectedInput, c(x, list(...)))
 }
 
 
-.fit.SelectedInput <- function(x, model, ...) {
+.fit.SelectedInput <- function(x, ...) {
   inputs <- x@inputs
   switch(class(x),
     SelectedModelFrame = {
@@ -171,17 +218,32 @@ SelectedInput.list <- function(x, ...) {
       object <- as(x, "ModelFrame")
       set_input <- function(x) structure(object, terms = x)
     },
+    SelectedModeledFrame = {
+      input_class <- "ModeledFrame"
+      object <- as(x, "ModelFrame")
+      set_input <- function(x) {
+        ModeledInput(structure(object, terms = x$input), model = x$model)
+      }
+    },
     SelectedModelRecipe = {
       input_class <- "ModelRecipe"
       object <- as.data.frame(x)
       set_input <- function(x) recipe(x, object[unique(summary(x)$variable)])
+    },
+    SelectedModeledRecipe = {
+      input_class <- "ModeledRecipe"
+      object <- as.data.frame(x)
+      set_input <- function(x) {
+        ModeledInput(recipe(x$input, object[unique(summary(x$input)$variable)]),
+                     model = x$model)
+      }
     }
   )
-  trainbits <- resample_selection(inputs, set_input, x@params, model)
+  trainbits <- resample_selection(inputs, set_input, x@params, ...)
   trainbits$grid <- tibble(Input = factor(seq(inputs)))
   names(trainbits$grid) <- input_class
   input <- set_input(inputs[[trainbits$selected]])
-  push(do.call(TrainBits, trainbits), fit(input, model = model))
+  push(do.call(TrainBits, trainbits), fit(input, ...))
 }
 
 

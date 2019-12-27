@@ -2,10 +2,13 @@
 % Please edit documentation in R/TrainedInputs.R
 \name{SelectedInput}
 \alias{SelectedInput}
+\alias{SelectedModeledFrame}
+\alias{SelectedModeledRecipe}
 \alias{SelectedInput.formula}
 \alias{SelectedInput.matrix}
 \alias{SelectedInput.ModelFrame}
 \alias{SelectedInput.recipe}
+\alias{SelectedInput.ModeledInput}
 \alias{SelectedInput.list}
 \title{Selected Model Inputs}
 \usage{
@@ -45,6 +48,14 @@ SelectedInput(...)
   cutoff = MachineShop::settings("cutoff")
 )
 
+\method{SelectedInput}{ModeledInput}(
+  ...,
+  control = MachineShop::settings("control"),
+  metrics = NULL,
+  stat = MachineShop::settings("stat.train"),
+  cutoff = MachineShop::settings("cutoff")
+)
+
 \method{SelectedInput}{list}(x, ...)
 }
 \arguments{
@@ -67,11 +78,12 @@ summary statistic on resampled metric values for recipe selection.}
 \item{y}{response variable.}
 
 \item{x, ...}{\code{\link{formula}}, design \code{\link{matrix}} of predictors,
-\code{\link{ModelFrame}}, untrained \code{\link[recipes]{recipe}}
-objects, or a list of one of these types.}
+\code{\link{ModelFrame}}, \code{\link{ModeledInput}}, untrained
+\code{\link[recipes]{recipe}} objects, or a list of one of these types.}
 }
 \value{
-\code{SelectedModelFrame} or \code{SelectedModelRecipe} class object
+\code{SelectedModelFrame}, \code{SelectedModelRecipe},
+\code{SelectedModeledFrame}, or \code{SelectedModeledRecipe} class object
 that inherits from \code{SelectedInput} and \code{ModelFrame} or
 \code{recipe}.
 }

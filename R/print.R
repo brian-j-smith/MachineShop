@@ -377,6 +377,16 @@ setMethod("show", "ModelRecipe",
 )
 
 
+#' @rdname print-methods
+#'
+print.ModeledInput <- function(x, n = MachineShop::settings("max.print"), ...) {
+  NextMethod()
+  cat("\n")
+  print(x@model, n = n)
+  invisible(x)
+}
+
+
 print.ParameterGrid <- function(x, ...) {
   print_title(x)
   print(as(asS3(x), "tbl_df"))

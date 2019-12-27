@@ -23,7 +23,15 @@ sel_mf <- SelectedInput(
   ModelFrame(fo1, data = df),
   ModelFrame(fo2, data = df)
 )
+sel_mo_mf <- SelectedInput(
+  ModeledInput(fo1, data = df, model = GLMModel),
+  ModeledInput(fo2, data = df, model = GBMModel)
+)
 sel_rec <- SelectedInput(rec1, rec2)
+sel_mo_rec <- SelectedInput(
+  ModeledInput(rec1, model = GLMModel),
+  ModeledInput(rec2, model = GBMModel)
+)
 tun_rec <- TunedInput(rec2, grid = expand_steps(pca = list(num_comp = 1:3)))
 
 
@@ -67,13 +75,26 @@ for (name in names(models)) {
 }
 
 
+test_that("model fitting of selected inputs", {
+  skip_if_not(TEST_TRAINING)
+  context("SelectedModeledInput Fitting")
+  with_parallel({
+    model <- models[[1]]
+    expect_is(fit(sel_mo_mf), "MLModelFit")
+    expect_is(fit(sel_mo_rec), "MLModelFit")
+  })
+})
+
+
 test_that("resampling of selected inputs", {
   skip_if_not(TEST_TRAINING)
   context("SelectedInput Resampling")
   with_parallel({
     model <- models[[1]]
     expect_is(resample(sel_mf, model = model), "Resamples")
+    expect_is(resample(sel_mo_mf), "Resamples")
     expect_is(resample(sel_rec, model = model), "Resamples")
+    expect_is(resample(sel_mo_rec), "Resamples")
   })
 })
 

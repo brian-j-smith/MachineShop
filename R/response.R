@@ -76,11 +76,6 @@ response.recipe <- function(object, newdata = NULL, ...) {
 }
 
 
-.response_types <- c("binary", "BinomialVariate", "DiscreteVariate", "factor",
-                     "matrix", "NegBinomialVariate", "numeric", "ordered",
-                     "PoissonVariate", "Surv")
-
-
 #################### Discrete Variate Classes ####################
 
 
