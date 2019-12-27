@@ -14,6 +14,16 @@ NULL
 
 #' @rdname print-methods
 #'
+print.BinomialVariate <- function(x, n = MachineShop::settings("max.print"),
+                                  ...) {
+  print_title(x)
+  print_items(as(x, "matrix"), n = n)
+  invisible(x)
+}
+
+
+#' @rdname print-methods
+#'
 print.Calibration <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   print_items(as(x, "data.frame"), n = n)
@@ -29,8 +39,6 @@ setMethod("show", "Calibration",
 )
 
 
-#' @rdname print-methods
-#'
 print.ConfusionList <- function(x, n = MachineShop::settings("max.print"),
                                 ...) {
   print_title(x)
@@ -90,16 +98,6 @@ setMethod("show", "Curves",
     invisible()
   }
 )
-
-
-#' @rdname print-methods
-#'
-print.BinomialVariate <- function(x, n = MachineShop::settings("max.print"),
-                                  ...) {
-  print_title(x)
-  print_items(as(x, "matrix"), n = n)
-  invisible(x)
-}
 
 
 setMethod("show", "DiscreteVariate",
@@ -487,8 +485,6 @@ print.SelectedInput <- function(x, n = MachineShop::settings("max.print"),
 }
 
 
-#' @rdname print-methods
-#'
 print.SelectedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   trained <- is.trained(x)
@@ -504,8 +500,6 @@ print.SelectedModel <- function(x, n = MachineShop::settings("max.print"), ...) 
 }
 
 
-#' @rdname print-methods
-#'
 print.StackedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   print_modelinfo(x)
@@ -518,8 +512,6 @@ print.StackedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
 }
 
 
-#' @rdname print-methods
-#'
 print.SuperModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   print_modelinfo(x)
@@ -611,8 +603,6 @@ print.TunedInput <- function(x, n = MachineShop::settings("max.print"), ...) {
 }
 
 
-#' @rdname print-methods
-#'
 print.TunedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   trained <- is.trained(x)

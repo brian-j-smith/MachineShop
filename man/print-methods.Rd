@@ -2,10 +2,9 @@
 % Please edit documentation in R/print.R
 \name{print}
 \alias{print}
-\alias{print.Calibration}
-\alias{print.ConfusionList}
-\alias{print.Curves}
 \alias{print.BinomialVariate}
+\alias{print.Calibration}
+\alias{print.Curves}
 \alias{print.ListOf}
 \alias{print.MLModel}
 \alias{print.ModelFrame}
@@ -13,23 +12,17 @@
 \alias{print.RecipeGrid}
 \alias{print.Resamples}
 \alias{print.SelectedInput}
-\alias{print.SelectedModel}
-\alias{print.StackedModel}
-\alias{print.SuperModel}
 \alias{print.SurvMatrix}
 \alias{print.TrainBits}
 \alias{print.TunedInput}
-\alias{print.TunedModel}
 \alias{print.VarImp}
 \title{Print MachineShop Objects}
 \usage{
+\method{print}{BinomialVariate}(x, n = MachineShop::settings("max.print"), ...)
+
 \method{print}{Calibration}(x, n = MachineShop::settings("max.print"), ...)
 
-\method{print}{ConfusionList}(x, n = MachineShop::settings("max.print"), ...)
-
 \method{print}{Curves}(x, n = MachineShop::settings("max.print"), ...)
-
-\method{print}{BinomialVariate}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{ListOf}(x, n = MachineShop::settings("max.print"), ...)
 
@@ -45,19 +38,11 @@
 
 \method{print}{SelectedInput}(x, n = MachineShop::settings("max.print"), ...)
 
-\method{print}{SelectedModel}(x, n = MachineShop::settings("max.print"), ...)
-
-\method{print}{StackedModel}(x, n = MachineShop::settings("max.print"), ...)
-
-\method{print}{SuperModel}(x, n = MachineShop::settings("max.print"), ...)
-
 \method{print}{SurvMatrix}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{TrainBits}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{TunedInput}(x, n = MachineShop::settings("max.print"), ...)
-
-\method{print}{TunedModel}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{VarImp}(x, n = MachineShop::settings("max.print"), ...)
 }
