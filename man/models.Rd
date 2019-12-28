@@ -3,7 +3,7 @@
 \name{models}
 \alias{models}
 \alias{MLModelFunction}
-\title{Model Functions}
+\title{Models}
 \description{
 Model constructor functions supplied by \pkg{MachineShop} are summarized in
 the table below according to the types of response variables with which each
@@ -63,13 +63,13 @@ Categorical: b = binary, f = factor, o = ordered\cr
 Continuous: m = matrix, n = numeric\cr
 Survival: S = Surv\cr
 \cr
-Automated combinations, tuning, or selection of these models can be defined
-with the following meta-model functions:
+Models may be combined, tuned, or selected with the following meta-model
+functions.
 \tabular{ll}{
-  \code{\link{StackedModel}}  \tab Stacked Regression \cr
-  \code{\link{SuperModel}}    \tab Super Learner \cr
-  \code{\link{TunedModel}}    \tab Model Tuning over Parameter Grid \cr
-  \code{\link{SelectedModel}} \tab Model Selection from Candidate Set \cr
+  \code{\link{StackedModel}}  \tab Stacked regression \cr
+  \code{\link{SuperModel}}    \tab Super learner \cr
+  \code{\link{SelectedModel}} \tab Model selection from a candidate set \cr
+  \code{\link{TunedModel}}    \tab Model tuning over a parameter grid \cr
 }
 }
 \seealso{

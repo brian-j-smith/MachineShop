@@ -59,6 +59,9 @@ SelectedInput(...)
 \method{SelectedInput}{list}(x, ...)
 }
 \arguments{
+\item{...}{\link{inputs} specifying relationships between model predictor and
+response variables.}
+
 \item{data}{\link[=data.frame]{data frame} or an object that can be converted
 to one.}
 
@@ -77,9 +80,7 @@ summary statistic on resampled metric values for recipe selection.}
 
 \item{y}{response variable.}
 
-\item{x, ...}{\code{\link{formula}}, design \code{\link{matrix}} of predictors,
-\code{\link{ModelFrame}}, \code{\link{ModeledInput}}, untrained
-\code{\link[recipes]{recipe}} objects, or a list of one of these types.}
+\item{x}{list of inputs.}
 }
 \value{
 \code{SelectedModelFrame}, \code{SelectedModelRecipe},

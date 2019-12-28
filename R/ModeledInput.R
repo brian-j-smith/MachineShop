@@ -8,9 +8,8 @@
 #' @aliases ModeledRecipe
 #' @rdname ModeledInput-methods
 #'
-#' @param x input specified as a \code{\link{formula}}, design
-#'   \code{\link{matrix}} of predictors, \code{\link{ModelFrame}}, or untrained
-#'   \code{\link[recipes]{recipe}}.  Alternatively, a \link[=models]{model}
+#' @param x \link[=inputs]{input} specifying a relationship between model
+#'   predictor and response variables.  Alternatively, a \link[=models]{model}
 #'   function or call may be given first followed by the input specification.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} or an object that can be converted

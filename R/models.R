@@ -1,4 +1,4 @@
-#' Model Functions
+#' Models
 #'
 #' Model constructor functions supplied by \pkg{MachineShop} are summarized in
 #' the table below according to the types of response variables with which each
@@ -58,18 +58,63 @@
 #' Continuous: m = matrix, n = numeric\cr
 #' Survival: S = Surv\cr
 #' \cr
-#' Automated combinations, tuning, or selection of these models can be defined
-#' with the following meta-model functions:
+#' Models may be combined, tuned, or selected with the following meta-model
+#' functions.
 #' \tabular{ll}{
-#'   \code{\link{StackedModel}}  \tab Stacked Regression \cr
-#'   \code{\link{SuperModel}}    \tab Super Learner \cr
-#'   \code{\link{TunedModel}}    \tab Model Tuning over Parameter Grid \cr
-#'   \code{\link{SelectedModel}} \tab Model Selection from Candidate Set \cr
+#'   \code{\link{StackedModel}}  \tab Stacked regression \cr
+#'   \code{\link{SuperModel}}    \tab Super learner \cr
+#'   \code{\link{SelectedModel}} \tab Model selection from a candidate set \cr
+#'   \code{\link{TunedModel}}    \tab Model tuning over a parameter grid \cr
 #' }
 #'
 #' @name models
 #' @aliases MLModelFunction
 #'
 #' @seealso \code{\link{modelinfo}}, \code{\link{fit}}, \code{\link{resample}}
+#'
+NULL
+
+
+#' Model Inputs
+#'
+#' Model inputs are the predictor and response variables whose relationship is
+#' determined by a model fit.  Input specifications supported by
+#' \pkg{MachineShop} are summarized in the table below.
+#' \tabular{ll}{
+#'   \code{\link{formula}}         \tab Traditional model formula \cr
+#'   \code{\link{matrix}}          \tab Design matrix of predictors \cr
+#'   \code{\link{ModelFrame}}      \tab Model frame \cr
+#'   \code{\link[recipes]{recipe}} \tab Preprocessing recipe roles and steps \cr
+#' }
+#' \cr
+#' Response variable types in the input specifications are defined by the user
+#' with the functions and recipe roles:
+#' \tabular{ll}{
+#'   \strong{Response Functions}
+#'     \tab \code{\link{BinomialVariate}} \cr
+#'     \tab \code{\link{DiscreteVariate}} \cr
+#'     \tab \code{\link{factor}} \cr
+#'     \tab \code{\link{matrix}} \cr
+#'     \tab \code{\link{NegBinomialVariate}} \cr
+#'     \tab \code{\link{numeric}} \cr
+#'     \tab \code{\link{ordered}} \cr
+#'     \tab \code{\link{PoissonVariate}} \cr
+#'     \tab \code{\link[survival]{Surv}} \cr
+#'   \strong{Recipe Roles}
+#'     \tab \code{\link{role_binom}} \cr
+#'     \tab \code{\link{role_surv}} \cr
+#' }
+#' \cr
+#' Inputs may be combined, selected, or tuned with the following meta-input
+#' functions.
+#' \tabular{ll}{
+#'   \code{\link{ModeledInput}}  \tab Input with a prespecified model \cr
+#'   \code{\link{SelectedInput}} \tab Input selection from a candidate set \cr
+#'   \code{\link{TunedInput}}    \tab Input tuning over a parameter grid \cr
+#' }
+#'
+#' @name inputs
+#'
+#' @seealso \code{\link{fit}}, \code{\link{resample}}
 #'
 NULL

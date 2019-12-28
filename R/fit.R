@@ -5,13 +5,9 @@
 #' @name fit
 #' @rdname fit-methods
 #'
-#' @param x defines a relationship between model predictor and response
-#'   variables.  May be a \code{\link{formula}}, design \code{\link{matrix}} of
-#'   predictors, \code{\link{ModelFrame}}, untrained
-#'   \code{\link[recipes]{recipe}}, \code{\link{ModeledInput}},
-#'   \code{\link{SelectedInput}}, or \code{\link{TunedInput}}.  Alternatively,
-#'   a \link[=models]{model} function or call may be given first followed by
-#'   objects defining the predictor and response relationship.
+#' @param x \link[=inputs]{input} specifying a relationship between model
+#'   predictor and response variables.  Alternatively, a \link[=models]{model}
+#'   function or call may be given first followed by the input specification.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
 #'   outcomes.

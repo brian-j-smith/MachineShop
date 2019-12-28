@@ -7,9 +7,9 @@
 #' @aliases SelectedModeledRecipe
 #' @rdname SelectedInput
 #'
-#' @param x,... \code{\link{formula}}, design \code{\link{matrix}} of predictors,
-#'   \code{\link{ModelFrame}}, \code{\link{ModeledInput}}, untrained
-#'   \code{\link[recipes]{recipe}} objects, or a list of one of these types.
+#' @param ... \link{inputs} specifying relationships between model predictor and
+#'   response variables.
+#' @param x list of inputs.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} or an object that can be converted
 #'   to one.

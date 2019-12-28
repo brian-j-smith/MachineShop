@@ -4,8 +4,8 @@
 #'
 #' Training:
 #' \tabular{ll}{
-#'   \code{\link{fit}} \tab Model Fitting \cr
-#'   \code{\link{resample}} \tab Resample Estimation of Model Performance \cr
+#'   \code{\link{fit}} \tab Model fitting \cr
+#'   \code{\link{resample}} \tab Resample estimation of model performance \cr
 #' }
 #'
 #' Response Values:
@@ -16,26 +16,26 @@
 #'
 #' Performance Assessment:
 #' \tabular{ll}{
-#'   \code{\link{calibration}} \tab Model Calibration \cr
-#'   \code{\link{confusion}} \tab Confusion Matrix \cr
-#'   \code{\link{dependence}} \tab Parital Dependence \cr
-#'   \code{\link{diff}} \tab Model Performance Differences \cr
-#'   \code{\link{lift}} \tab Lift Curves \cr
-#'   \code{\link{performance} \link{metrics}} \tab Model Performance Metrics \cr
-#'   \code{\link{performance_curve}} \tab Model Performance Curves \cr
-#'   \code{\link{varimp}} \tab Variable Importance \cr
+#'   \code{\link{calibration}} \tab Model calibration \cr
+#'   \code{\link{confusion}} \tab Confusion matrix \cr
+#'   \code{\link{dependence}} \tab Parital dependence \cr
+#'   \code{\link{diff}} \tab Model performance differences \cr
+#'   \code{\link{lift}} \tab Lift curves \cr
+#'   \code{\link{performance} \link{metrics}} \tab Model performance metrics \cr
+#'   \code{\link{performance_curve}} \tab Model performance curves \cr
+#'   \code{\link{varimp}} \tab Variable importance \cr
 #' }
 #'
 #' Methods for resample estimation include
 #'
 #' \tabular{ll}{
-#'   \code{\link{BootControl}} \tab Simple Bootstrap \cr
-#'   \code{\link{BootOptimismControl}} \tab Optimism-Corrected Bootstrap \cr
-#'   \code{\link{CVControl}} \tab Repeated K-Fold Cross-Validation \cr
-#'   \code{\link{CVOptimismControl}} \tab Optimism-Corrected Cross-Validation \cr
-#'   \code{\link{OOBControl}} \tab Out-of-Bootstrap \cr
-#'   \code{\link{SplitControl}} \tab Split Training-Testing \cr
-#'   \code{\link{TrainControl}} \tab Training Resubstitution \cr
+#'   \code{\link{BootControl}} \tab Simple bootstrap \cr
+#'   \code{\link{BootOptimismControl}} \tab Optimism-corrected bootstrap \cr
+#'   \code{\link{CVControl}} \tab Repeated K-fold cross-validation \cr
+#'   \code{\link{CVOptimismControl}} \tab Optimism-corrected cross-validation \cr
+#'   \code{\link{OOBControl}} \tab Out-of-bootstrap \cr
+#'   \code{\link{SplitControl}} \tab Split training-testing \cr
+#'   \code{\link{TrainControl}} \tab Training resubstitution \cr
 #' }
 #'
 #' Graphical and tabular summaries of modeling results can be obtained with
@@ -49,9 +49,9 @@
 #' Further information on package features is available with
 #'
 #' \tabular{ll}{
-#'   \code{\link{metricinfo}} \tab Performance Metric Information \cr
-#'   \code{\link{modelinfo}} \tab Model Information \cr
-#'   \code{\link{settings}} \tab Global Settings \cr
+#'   \code{\link{metricinfo}} \tab Performance metric information \cr
+#'   \code{\link{modelinfo}} \tab Model information \cr
+#'   \code{\link{settings}} \tab Global settings \cr
 #' }
 #'
 #' Custom metrics and models can be created with the \code{\link{MLMetric}} and

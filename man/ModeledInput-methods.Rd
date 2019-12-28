@@ -27,9 +27,8 @@ ModeledInput(x, ...)
 \method{ModeledInput}{MLModelFunction}(x, ...)
 }
 \arguments{
-\item{x}{input specified as a \code{\link{formula}}, design
-\code{\link{matrix}} of predictors, \code{\link{ModelFrame}}, or untrained
-\code{\link[recipes]{recipe}}.  Alternatively, a \link[=models]{model}
+\item{x}{\link[=inputs]{input} specifying a relationship between model
+predictor and response variables.  Alternatively, a \link[=models]{model}
 function or call may be given first followed by the input specification.}
 
 \item{...}{arguments passed to other methods.}

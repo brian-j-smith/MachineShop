@@ -22,7 +22,7 @@
 #'
 #' @return \code{ModelFrame} class object that inherits from \code{data.frame}.
 #'
-#' @seealso  \code{\link{fit}}, \code{\link{resample}}, \code{\link{response}},
+#' @seealso \code{\link{fit}}, \code{\link{resample}}, \code{\link{response}},
 #' \code{\link{SelectedInput}}
 #'
 #' @examples
