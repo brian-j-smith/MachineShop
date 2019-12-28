@@ -161,7 +161,6 @@ export(SelectedFormula,
        SelectedMatrix,
        SelectedModelFrame,
        SelectedRecipe,
-       tune,
        TunedRecipe)
 
 S3method(as.data.frame, BinomialVariate)

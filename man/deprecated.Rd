@@ -6,7 +6,6 @@
 \alias{SelectedMatrix}
 \alias{SelectedModelFrame}
 \alias{SelectedRecipe}
-\alias{tune}
 \alias{TunedRecipe}
 \title{Deprecated Functions}
 \usage{
@@ -17,8 +16,6 @@ SelectedMatrix(...)
 SelectedModelFrame(...)
 
 SelectedRecipe(...)
-
-tune(...)
 
 TunedRecipe(...)
 }

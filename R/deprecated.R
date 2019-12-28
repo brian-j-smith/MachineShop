@@ -64,15 +64,6 @@ SelectedRecipe <- function(...) {
 
 #' @rdname deprecated
 #'
-tune <- function(...) {
-  depwarn("tune() is deprecated",
-          "call fit() with a SelectedModel or TunedModel instead",
-          expired = TRUE)
-}
-
-
-#' @rdname deprecated
-#'
 #' @details
 #' Use \code{\link[=TunedInput]{TunedInput()}} instead of \code{TunedRecipe()}.
 #'
