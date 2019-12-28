@@ -196,6 +196,39 @@ make_list_names <- function(x, prefix) {
 }
 
 
+map <- function(f, ...) {
+  all_args <- all(lengths(list(...)))
+  if (all_args) mapply(FUN = f, ..., SIMPLIFY = FALSE) else list()
+}
+
+
+map_chr <- function(f, ...) {
+  res <- map_simplify(f, ...)
+  storage.mode(res) <- "character"
+  res
+}
+
+
+map_logi <- function(f, ...) {
+  res <- map_simplify(f, ...)
+  storage.mode(res) <- "logical"
+  res
+}
+
+
+map_num <- function(f, ...) {
+  res <- map_simplify(f, ...)
+  storage.mode(res) <- "numeric"
+  res
+}
+
+
+map_simplify <- function(f, ...) {
+  res <- map(f, ...)
+  if (length(res)) simplify2array(res, higher = TRUE) else res
+}
+
+
 match_class <- function(object, choices) {
   f <- function(x, ...) UseMethod("f")
   f.default <- function(x, ...) NA_character_
