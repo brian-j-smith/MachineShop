@@ -135,7 +135,7 @@ setMethod("convert_response", c("Surv", "SurvEvents"),
 setMethod("convert_response", c("Surv", "SurvProbs"),
   function(object, x, cutoff, ...) {
     events <- x <= cutoff
-    mode(events) <- "integer"
+    storage.mode(events) <- "integer"
     SurvEvents(events, x@times)
   }
 )
