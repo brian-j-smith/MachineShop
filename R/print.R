@@ -43,7 +43,7 @@ print.ConfusionList <- function(x, n = MachineShop::settings("max.print"),
                                 ...) {
   print_title(x)
   cat("\n")
-  x[] <- lapply(x, as, Class = "table")
+  x[] <- map(as, x, "table")
   NextMethod()
 }
 

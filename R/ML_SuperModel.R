@@ -36,7 +36,7 @@ SuperModel <- function(..., model = GBMModel,
                        control = MachineShop::settings("control"),
                        all_vars = FALSE) {
 
-  base_learners <- lapply(unlist(list(...)), getMLObject, class = "MLModel")
+  base_learners <- map(getMLObject, unlist(list(...)), "MLModel")
   names(base_learners) <- paste0(if (length(base_learners)) "Learner",
                                  seq(base_learners))
 
@@ -46,14 +46,14 @@ SuperModel <- function(..., model = GBMModel,
     name = "SuperModel",
     label = "Super Learner",
     response_types =
-      Reduce(intersect, lapply(base_learners, slot, name = "response_types"),
+      Reduce(intersect, map(slot, base_learners, "response_types"),
              init = getMLObject(model, "MLModel")@response_types),
     predictor_encoding = NA_character_,
     params = as.list(environment()),
     predict = function(object, newdata, times, ...) {
-      predictors <- lapply(object$base_fits, function(fit) {
+      predictors <- map(function(fit) {
         predict(fit, newdata = newdata, times = object$times, type = "prob")
-      })
+      }, object$base_fits)
 
       df <- super_df(NA, predictors, newdata[["(casenames)"]],
                      if (object$all_vars) newdata)
@@ -85,8 +85,8 @@ MLModelFunction(SuperModel) <- NULL
   df <- super_df(res$Observed, predictors, res$Case, if (params$all_vars) mf)
   super_mf <- ModelFrame(formula(df), df)
 
-  list(base_fits = lapply(base_learners,
-                          function(learner) fit(mf, model = learner)),
+  list(base_fits = map(function(learner) fit(mf, model = learner),
+                       base_learners),
        super_fit = fit(super_mf, model = super_learner),
        all_vars = params$all_vars,
        times = control@times) %>%

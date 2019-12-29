@@ -97,7 +97,7 @@ fit.MLModelFunction <- function(x, ...) {
   if (is.null(mf[["(weights)"]])) mf[["(weights)"]] <- 1
 
   y <- response(mf)
-  if (!any(sapply(x@response_types, function(type) is_response(y, type)))) {
+  if (!any(map_logi(function(type) is_response(y, type), x@response_types))) {
     stop("invalid response type '", class(y)[1], "' for ", x@name)
   }
 

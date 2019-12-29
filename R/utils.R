@@ -60,7 +60,7 @@ combine_dataframes <- function(x, y = NULL) {
 
 complete_subset <- function(...) {
   is_complete <- complete.cases(...)
-  lapply(list(...), function(x) subset(x, is_complete))
+  map(function(x) subset(x, is_complete), list(...))
 }
 
 
@@ -118,7 +118,7 @@ getMLObject <- function(x, class = c("MLControl", "MLMetric", "MLModel")) {
 identical_elements <- function(x, transform = identity, ...) {
   target <- transform(x[[1]])
   compare <- function(current) identical(transform(current), target, ...)
-  all(vapply(x[-1], compare, logical(1)))
+  all(map_logi(compare, x[-1]))
 }
 
 
@@ -174,7 +174,7 @@ list2function <- function(x) {
         if (is.null(name) || !nzchar(name)) metric_name else name
     }
     names(x) <- make.unique(metric_names)
-    eval(bquote(function(...) unlist(lapply(.(x), function(x) x(...)))))
+    eval(bquote(function(...) unlist(map(function(x) x(...), .(x)))))
   } else if (is(x, "function")) {
     x
   } else {
@@ -270,12 +270,12 @@ nvars <- function(x, model) {
 
 params <- function(envir) {
   args <- as.list(envir)
-  is_missing <- sapply(args, function(x) is.symbol(x) && !nzchar(x))
+  is_missing <- map_logi(function(x) is.symbol(x) && !nzchar(x), args)
   if (any(is_missing)) {
     missing <- names(args)[is_missing]
     stop(label_items("missing values for required argument", missing))
   }
-  args[!sapply(args, is.null)]
+  args[!map_logi(is.null, args)]
 }
 
 
@@ -299,7 +299,7 @@ push.TrainBits <- function(x, object, ...) {
 
 
 requireModelNamespaces <- function(packages) {
-  available <- vapply(packages, requireNamespace, logical(1), quietly = TRUE)
+  available <- map_logi(requireNamespace, packages, quietly = TRUE)
   if (!all(available)) {
     missing <- packages[!available]
     stop(label_items("model requires the installation of package", missing),
@@ -331,7 +331,7 @@ sample_params <- function(x, size = NULL, replace = FALSE) {
   iter <- 0
   while (nrow(grid) < size && iter < 100) {
     iter <- iter + 1
-    new_grid <- as_tibble(lapply(x, sample, size = size, replace = TRUE))
+    new_grid <- as_tibble(map(sample, x, size = size, replace = TRUE))
     grid <- rbind(grid, new_grid)
     if (!replace) grid <- unique(grid)
   }

@@ -78,7 +78,7 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
     stats_list <- predict(object, newdata = data, type = "prob")  %>%
       as.data.frame %>%
       as.list %>%
-      lapply(stats)
+      map(stats, .)
     x <- do.call(cbind, stats_list)
     if (is.null(rownames(x))) rownames(x) <- make.unique(rep("stat", nrow(x)))
     if (is.null(colnames(x))) colnames(x) <- make.unique(rep("y", ncol(x)))
@@ -86,7 +86,7 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
     as.data.frame(TabularArray(x))
   }
 
-  grid_list <- lapply(data_select, select_values)
+  grid_list <- map(select_values, data_select)
 
   data_select_grid <- if (interaction) {
     expand.grid(grid_list, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
@@ -102,7 +102,7 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
     df
   }
 
-  dependence_list <- lapply(seq_len(nrow(data_select_grid)), function(i) {
+  dependence_list <- map(function(i) {
     for (varname in names(data_select_grid)) {
       x <- data_select_grid[i, varname]
       if (!is.na(x)) data[[varname]] <- x
@@ -110,7 +110,7 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
     df <- predict_stats(data)
     df$Predictors <- data_select_grid[rep(i, nrow(df)), , drop = FALSE]
     df
-  })
+  }, seq_len(nrow(data_select_grid)))
 
   PartialDependence(do.call(rbind, dependence_list))
 

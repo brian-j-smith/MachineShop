@@ -58,9 +58,9 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
       beta <- coef(object, comps = 1:object$ncomp)
       perf <- quote(MSEP.mvr(x)$val[1, , , drop = FALSE]) %>%
         eval(list(x = object), asNamespace("pls"))
-      vi <- sapply(1:dim(beta)[2], function(i) {
-        as.matrix(abs(beta[, i, ])) %*% prop.table(-diff(perf[, i, ]))
-      })
+      vi <- map_num(function(i) {
+        drop(as.matrix(abs(beta[, i, ])) %*% prop.table(-diff(perf[, i, ])))
+      }, 1:dim(beta)[2])
       dimnames(vi) <- dimnames(beta)[1:2]
       if (ncol(vi) <= 2) vi <- vi[, 1]
       vi

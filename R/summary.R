@@ -38,7 +38,7 @@ NULL
 #' @rdname summary-methods
 #'
 summary.ConfusionList <- function(object, ...) {
-  ListOf(lapply(object, summary, ...))
+  ListOf(map(function(conf) summary(conf, ...), object))
 }
 
 
@@ -121,9 +121,9 @@ summary.MLModel <- function(object, stats =
                               MachineShop::settings("stats.Resamples"),
                             na.rm = TRUE, ...) {
   if (!is.trained(object)) stop("no training results to summarize")
-  lapply(object@trainbits, function(trainbits) {
+  map(function(trainbits) {
     summary(trainbits@performance, stats = stats, na.rm = na.rm, ...)
-  })
+  }, object@trainbits)
 }
 
 

@@ -103,7 +103,7 @@ performance.Surv <- function(x, y, metrics =
 #' @rdname performance
 #'
 performance.ConfusionList <- function(x, ...) {
-  ListOf(lapply(x, performance, ...))
+  ListOf(map(function(conf) performance(conf, ...), x))
 }
 
 
@@ -164,17 +164,17 @@ performance.MLCVOptimismControl <- function(x, resamples, ...) {
              paste0("CV.Predicted.", seq_len(x@folds)))
 
   resamples_split <- split(resamples[vars], resamples$Resample)
-  test_perf <- lapply(resamples_split, function(resample) {
+  test_perf <- map(function(resample) {
     performance(resample$Observed, resample$Predicted, ...)
-  }) %>% do.call(rbind, .)
+  }, resamples_split) %>% do.call(rbind, .)
 
   f <- function(p, obs, pred) p * performance(obs, pred, ...)
   resamples_factor <- ceiling(resamples$Resample / x@folds)
   resamples_split <- split(resamples[vars2], resamples_factor)
-  cv_perf_list <- lapply(resamples_split, function(resample) {
+  cv_perf_list <- map(function(resample) {
     p <- prop.table(table(resample$Resample))
-    Reduce("+", Map(f, p, resample["Observed"], resample[-(1:3)]))
-  })
+    Reduce("+", map(f, p, resample["Observed"], resample[-(1:3)]))
+  }, resamples_split)
   cv_perf <- do.call(rbind, rep(cv_perf_list, each = x@folds))
   train_perf <- performance(resamples_split[[1]]$Observed,
                             resamples_split[[1]]$Train.Predicted, ...)

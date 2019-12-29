@@ -38,7 +38,7 @@ metricinfo <- function(...) {
   args <- if (length(args)) unname(args) else as.list(.metric_names)
   info <- do.call(.metricinfo, args)
 
-  is_type <- if (length(info)) !mapply(is, info, "list") else NULL
+  is_type <- if (length(info)) !map_logi(is, info, "list") else NULL
   if (any(is_type)) {
     info_metrics <- if (all(is_type)) metricinfo() else info[!is_type]
     info_types <- do.call(.metricinfo_types, info[is_type])
@@ -124,9 +124,9 @@ metricinfo <- function(...) {
   if (!isGeneric(generic_name)) generic_name <- paste0(".", x@name)
   if (isGeneric(generic_name)) {
     methods <- findMethods(generic_name)
-    is_defined <- sapply(methods, function(method) {
+    is_defined <- map_logi(function(method) {
       body(method) != quote(numeric())
-    })
+    }, methods)
     types <- as.data.frame(do.call(rbind, methods@signatures[is_defined]),
                            stringsAsFactors = FALSE)
     names(types) <- methods@arguments
@@ -153,12 +153,13 @@ metricinfo <- function(...) {
 .metricinfo_types <- function(x, y, ...) {
   not_missing_y <- !missing(y)
   info <- metricinfo()
-  is_supported <- sapply(info, function(this) {
-    is_types <- mapply(is, list(x), this$response_types$observed)
+  is_supported <- map_logi(function(this) {
+    types <- this$response_types
+    is_types <- map_logi(is, list(x), types$observed)
     if (not_missing_y) {
-      is_types <- is_types & mapply(is, list(y), this$response_types$predicted)
+      is_types <- is_types & map_logi(is, list(y), types$predicted)
     }
     any(is_types)
-  })
+  }, info)
   info[is_supported]
 }

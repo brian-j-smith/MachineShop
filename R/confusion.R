@@ -83,7 +83,7 @@ ConfusionMatrix <- function(data = NA, ordered = FALSE) {
   conf_list <- by(x, list(Model = x$Model), function(data) {
    confusion(data$Observed, data$Predicted, cutoff = cutoff, na.rm = FALSE)
   }, simplify = FALSE)
-  if (all(mapply(is, conf_list, "ConfusionList"))) {
+  if (all(map_logi(is, conf_list, "ConfusionList"))) {
     conf_list <- unlist(conf_list, recursive = FALSE)
   }
   do.call(c, conf_list)
@@ -148,7 +148,7 @@ setMethod(".confusion_matrix", c("Surv", "SurvEvents"),
     conf_tbl <- table(Predicted = 0:1, Observed = 0:1)
 
     structure(
-      lapply(1:length(times), function(i) {
+      map(function(i) {
         surv_positives <- 1
         positives <- predicted[, i, drop = TRUE] == 1
         p <- mean(positives)
@@ -169,7 +169,7 @@ setMethod(".confusion_matrix", c("Surv", "SurvEvents"),
         conf_tbl[2, 2] <- p - surv_positives * p
 
         ConfusionMatrix(length(observed) * conf_tbl)
-      }),
+      }, 1:length(times)),
       names = paste0("time", seq_along(times))
     )
   }

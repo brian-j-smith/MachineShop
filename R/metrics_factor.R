@@ -123,13 +123,13 @@ setMetricMethod("brier", c("Surv", "SurvProbs"),
 
     cens_fit <- survfit(Surv(obs_times, 1 - obs_events) ~ 1, se.fit = FALSE)
 
-    x <- sapply(seq_along(times), function(i) {
+    x <- map_num(function(i) {
       time <- times[i]
       obs_after_time <- obs_times > time
       cens <- predict(cens_fit, pmin(obs_times, time))
       weights <- ifelse(obs_events == 1 | obs_after_time, 1 / cens, 0)
       mean(weights * (obs_after_time - predicted[, i, drop = TRUE])^2)
-    })
+    }, seq_along(times))
 
     if (length(times) > 1) {
       c("mean" = surv_metric_mean(x, times), "time" = x)

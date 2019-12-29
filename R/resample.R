@@ -257,10 +257,10 @@ setMethod(".resample", c("MLCrossValidationControl", "ModelFrame"),
     res <- Resamples(df_list, control = object, strata = strata)
 
     if (is_optimism_control) {
-      pred_list <- lapply(df_list, attr, which = "CV.Predicted")
+      pred_list <- map(attr, df_list, "CV.Predicted")
       split_factor <- rep(seq_len(object@folds), times = object@repeats)
       df <- split(seq(pred_list), split_factor) %>%
-        lapply(function(indices) do.call(append, pred_list[indices])) %>%
+        map(function(indices) do.call(append, pred_list[indices]), .) %>%
         as.data.frame
       names(df) <- paste0("CV.Predicted.", seq(df))
       pred <- subsample(x, x, model, object)$Predicted
@@ -303,10 +303,10 @@ setMethod(".resample", c("MLCrossValidationControl", "ModelRecipe"),
     res <- Resamples(df_list, control = object, strata = strata)
 
     if (is_optimism_control) {
-      pred_list <- lapply(df_list, attr, which = "CV.Predicted")
+      pred_list <- map(attr, df_list, "CV.Predicted")
       split_factor <- rep(seq_len(object@folds), times = object@repeats)
       df <- split(seq(pred_list), split_factor) %>%
-        lapply(function(indices) do.call(append, pred_list[indices])) %>%
+        map(function(indices) do.call(append, pred_list[indices]), .) %>%
         as.data.frame
       names(df) <- paste0("CV.Predicted.", seq(df))
       pred <- subsample(x, x, model, object)$Predicted
@@ -423,7 +423,7 @@ subsample <- function(train, test, model, control, id = 1) {
     df
   }
 
-  if (class(test)[1] == "list") lapply(test, f) else f(test)
+  if (class(test)[1] == "list") map(f, test) else f(test)
 }
 
 
@@ -451,11 +451,11 @@ resample_selection <- function(x, transform, params, ...) {
     if (is.null(metrics)) {
       method <- fget(findS3Method(performance, res$Observed))
       metrics <- c(eval(formals(method)$metrics))
-      is_defined <- sapply(metrics, function(metric) {
-        info <- metricinfo(metric)[[1]]
-        any(mapply(is, list(res$Observed), info$response_types$observed) &
-              mapply(is, list(res$Predicted), info$response_types$predicted))
-      })
+      is_defined <- map_logi(function(metric) {
+        types <- metricinfo(metric)[[1]]$response_types
+        any(map_logi(is, list(res$Observed), types$observed) &
+              map_logi(is, list(res$Predicted), types$predicted))
+      }, metrics)
       metrics <- metrics[is_defined]
     }
 

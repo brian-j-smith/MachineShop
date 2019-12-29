@@ -124,7 +124,7 @@ settings <- function(...) {
   if (is.null(args_names)) args_names <- character(length(args))
   args_names_nzchar <- nzchar(args_names)
 
-  is_get_args <- !args_names_nzchar & sapply(args, is.character)
+  is_get_args <- !args_names_nzchar & vapply(args, is.character, logical(1))
   args_names[is_get_args] <- unlist(args[is_get_args])
 
   settings_pmatch <- pmatch(args_names, names(global_settings))

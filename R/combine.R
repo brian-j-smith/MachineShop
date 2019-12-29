@@ -19,7 +19,7 @@ NULL
 
 c.BinomialVariate <- function(...) {
   args <- list(...)
-  if (all(mapply(is, args, "BinomialVariate"))) {
+  if (all(map_logi(is, args, "BinomialVariate"))) {
     structure(do.call(rbind, args), class = "BinomialVariate")
   } else {
     NextMethod()
@@ -31,7 +31,7 @@ c.BinomialVariate <- function(...) {
 #'
 c.Calibration <- function(...) {
   args <- list(...)
-  if (all(mapply(is, args, "Calibration"))) {
+  if (all(map_logi(is, args, "Calibration"))) {
 
     if (!identical_elements(args, function(x) x@smoothed)) {
       stop("Calibration arguments are a mix of smoothed and binned curves")
@@ -51,7 +51,7 @@ c.Calibration <- function(...) {
 c.ConfusionList <- function(...) {
   args <- list(...)
   is_valid <- function(x) is(x, "ConfusionList") || is(x, "ConfusionMatrix")
-  if (all(sapply(args, is_valid))) {
+  if (all(map_logi(is_valid, args))) {
 
     conf_list <- list()
     for (i in seq(args)) {
@@ -88,7 +88,7 @@ c.ConfusionMatrix <- function(...) {
 c.Curves <- function(...) {
   args <- list(...)
   class <- class(args[[1]])
-  if (all(mapply(is, args, class))) {
+  if (all(map_logi(is, args, class))) {
 
     if (!identical_elements(args, function(x) x@metrics)) {
       stop(class, " arguments have different metrics")
@@ -107,10 +107,10 @@ c.DiscreteVariate <- function(...) {
   args <- list(...)
   x <- NextMethod()
   class <- class(args[[1]])
-  if (all(mapply(is, args, class))) {
+  if (all(map_logi(is, args, class))) {
     new(class, x,
-        min = min(sapply(args, slot, name = "min")),
-        max = max(sapply(args, slot, name = "max")))
+        min = min(map_num(slot, args, "min")),
+        max = max(map_num(slot, args, "max")))
   } else {
     x
   }
@@ -132,7 +132,7 @@ c.ListOf <- function(...) {
   is_valid <- function(x) {
     is(x, "ListOf") && is(x[[1]], class) && is(x[[1]], "vector")
   }
-  if (all(sapply(args, is_valid))) {
+  if (all(map_logi(is_valid, args))) {
     x <- list()
     for (i in seq(args)) {
       name <- names(args)[i]
@@ -151,7 +151,7 @@ c.ListOf <- function(...) {
 
 c.Performance <- function(...) {
   args <- list(...)
-  if (all(mapply(is, args, "Performance"))) {
+  if (all(map_logi(is, args, "Performance"))) {
     if (length(args) > 1) {
 
       if (!identical_elements(args, function(x) dimnames(x)[1:2])) {
@@ -173,7 +173,7 @@ c.Performance <- function(...) {
 #'
 c.Resamples <- function(...) {
   args <- list(...)
-  if (all(mapply(is, args, "Resamples"))) {
+  if (all(map_logi(is, args, "Resamples"))) {
 
     if (!identical_elements(args, function(x) x@control)) {
       stop("Resamples arguments have different control structures")
@@ -196,7 +196,7 @@ c.Resamples <- function(...) {
 c.SurvMatrix <- function(...) {
   args <- list(...)
   class <- class(args[[1]])
-  if (all(mapply(is, args, class))) {
+  if (all(map_logi(is, args, class))) {
     if (!identical_elements(args, function(x) x@times)) {
       stop(class, " arguments have different times")
     }

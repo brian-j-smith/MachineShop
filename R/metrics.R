@@ -210,15 +210,15 @@ metric_method_name <- function(f) {
 
 
 metric_matrix <- function(observed, predicted, FUN, ...) {
-  mean(sapply(1:ncol(observed), function(i) {
+  mean(map_num(function(i) {
     FUN(observed[, i], predicted[, i], ...)
-  }))
+  }, 1:ncol(observed)))
 }
 
 
 metric_SurvMatrix <- function(observed, predicted, FUN, cutoff = NULL, ...) {
-  conf <- confusion(observed, predicted, cutoff = cutoff)
-  x <- sapply(conf, FUN, ...)
+  conf_list <- confusion(observed, predicted, cutoff = cutoff)
+  x <- map_num(function(conf) FUN(conf, ...), conf_list)
   times <- predicted@times
   if (length(times) > 1) c("mean" = surv_metric_mean(x, times), x) else x[[1]]
 }

@@ -112,7 +112,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
       convert <- function(x) abs(drop(as.matrix(x)))
       beta <- object$beta
       if (is.list(beta)) {
-        as.data.frame(lapply(beta, convert), check.names = FALSE)
+        as.data.frame(map(convert, beta), check.names = FALSE)
       } else {
         convert(beta)
       }

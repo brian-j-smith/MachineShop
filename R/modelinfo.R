@@ -41,7 +41,7 @@ modelinfo <- function(...) {
   args <- if (length(args)) unname(args) else as.list(.model_names)
   info <- do.call(.modelinfo, args)
 
-  is_type <- if (length(info)) !mapply(is, info, "list") else NULL
+  is_type <- if (length(info)) !map_logi(is, info, "list") else NULL
   if (any(is_type)) {
     info_models <- if (all(is_type)) modelinfo() else info[!is_type]
     info_types <- do.call(.modelinfo_types, info[is_type])
@@ -151,10 +151,10 @@ modelinfo <- function(...) {
 
 .modelinfo_types <- function(...) {
   info <- modelinfo()
-  is_supported <- sapply(info, function(this) {
-    all(sapply(list(...), function(object) {
-      any(mapply(is_response, list(object), this$response_types))
-    }))
-  })
+  is_supported <- map_logi(function(this) {
+    all(map_logi(function(object) {
+      any(map_logi(is_response, list(object), this$response_types))
+    }, list(...)))
+  }, info)
   info[is_supported]
 }

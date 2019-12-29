@@ -30,7 +30,7 @@ lift <- function(x, y = NULL, na.rm = TRUE, ...) {
 
 Lift <- function(...) {
   object <- as(Curves(...), "Lift")
-  if (!all(mapply(identical, object@metrics, c(tpr, rpp)))) {
+  if (!all(map_logi(identical, object@metrics, c(tpr, rpp)))) {
     stop("incorrect Lift metrics")
   }
   object
@@ -122,8 +122,8 @@ performance_curve.Resamples <- function(x, metrics = c(MachineShop::tpr,
 
 
 .get_curve_metrics <- function(metrics) {
-  metrics <- lapply(metrics, fget)
-  if (length(metrics) != 2 || !all(mapply(is, metrics, "MLMetric"))) {
+  metrics <- map(fget, metrics)
+  if (length(metrics) != 2 || !all(map_logi(is, metrics, "MLMetric"))) {
     stop("'metrics' must be a list of two performance metrics")
   }
   metrics
@@ -138,7 +138,7 @@ Curves <- function(object, ..., metrics, .check = TRUE) {
       stop(label_items("missing performance curve variable", missing))
     }
 
-    if (!all(mapply(is, metrics[1:2], "MLMetric"))) {
+    if (!all(map_logi(is, metrics[1:2], "MLMetric"))) {
       stop("missing performance metrics in Curves constructor")
     }
     metrics <- c(y = metrics[[1]], x = metrics[[2]])
@@ -204,7 +204,7 @@ setMethod(".curve_default", c("Surv", "SurvProbs"),
     conf <- ConfusionMatrix(table(Predicted = 0:1, Observed = 0:1))
 
     structure(
-      lapply(1:length(times), function(i) {
+      map(function(i) {
 
         time <- times[i]
         surv_all <- surv[i]
@@ -238,7 +238,7 @@ setMethod(".curve_default", c("Surv", "SurvProbs"),
 
         Curves(data.frame(Cutoff = cutoffs, x = x, y = y), metrics = metrics)
 
-      }),
+      }, 1:length(times)),
       class = "listof",
       names = paste0("time", seq_along(times))
     )

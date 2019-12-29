@@ -94,12 +94,12 @@ NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
       labels <- paste0("h", idx$hidden, "->o", idx$output)
       h2o <- matrix(beta[match(labels, nms)], size, nresp)
 
-      vi <- sapply(1:nresp, function(output) {
+      vi <- map_num(function(output) {
         100 * ((i2h * h2o[, output]) %>%
           prop.table(margin = 1) %>%
           colSums %>%
           prop.table)
-      })
+      }, 1:nresp)
       dimnames(vi) <- list(object$coefnames, colnames(object$residuals))
       drop(vi)
     }

@@ -37,8 +37,8 @@ expand_model <- function(x, ..., random = FALSE) {
 
 .expand_model.list <- function(x, ...) {
   grid <- x[[2]]
-  models <- split(grid, seq(max(1, nrow(grid)))) %>%
-    lapply(function(args) do.call(x[[1]], args))
+  models <- map(function(args) do.call(x[[1]], args),
+                split(grid, seq(max(1, nrow(grid)))))
   names(models) <- paste0(models[[1]]@name, ".", names(models))
   models
 }
@@ -124,7 +124,7 @@ expand_steps <- function(..., random = FALSE) {
     step_names <- names(steps)
   }
 
-  if (!all(sapply(steps, is.list))) stop("step arguments must be lists")
+  if (!all(map_logi(is.list, steps))) stop("step arguments must be lists")
 
   get_names <- function(x) {
     res <- NULL

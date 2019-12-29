@@ -63,9 +63,9 @@ SelectedInput.formula <- function(..., data,
                                   stat = MachineShop::settings("stat.train"),
                                   cutoff = MachineShop::settings("cutoff")) {
   inputs <- list(...)
-  if (!all(mapply(is, inputs, "formula"))) stop("inputs must be formulas")
-  SelectedInput(mapply(ModelFrame, inputs, list(data),
-                       MoreArgs = list(na.rm = FALSE), SIMPLIFY = FALSE),
+  if (!all(map_logi(is, inputs, "formula"))) stop("inputs must be formulas")
+  SelectedInput(map(ModelFrame, inputs, list(data),
+                    MoreArgs = list(na.rm = FALSE)),
                 control = control, metrics = metrics, stat = stat,
                 cutoff = cutoff)
 }
@@ -79,9 +79,9 @@ SelectedInput.matrix <- function(..., y,
                                  stat = MachineShop::settings("stat.train"),
                                  cutoff = MachineShop::settings("cutoff")) {
   inputs <- list(...)
-  if (!all(mapply(is, inputs, "matrix"))) stop("inputs must be matrices")
-  SelectedInput(mapply(ModelFrame, inputs, list(y),
-                       MoreArgs = list(na.rm = FALSE), SIMPLIFY = FALSE),
+  if (!all(map_logi(is, inputs, "matrix"))) stop("inputs must be matrices")
+  SelectedInput(map(ModelFrame, inputs, list(y),
+                    MoreArgs = list(na.rm = FALSE)),
                 control = control, metrics = metrics, stat = stat,
                 cutoff = cutoff)
 }
@@ -97,7 +97,7 @@ SelectedInput.ModelFrame <- function(...,
 
   inputs <- list(...)
 
-  if (!all(mapply(is, inputs, "ModelFrame"))) {
+  if (!all(map_logi(is, inputs, "ModelFrame"))) {
     stop("inputs must be ModelFrames")
   }
 
@@ -112,7 +112,7 @@ SelectedInput.ModelFrame <- function(...,
   }
 
   new("SelectedModelFrame", ModelFrame(data),
-      inputs = Map(attr, inputs, "terms"),
+      inputs = map(attr, inputs, "terms"),
       params = list(control = getMLObject(control, "MLControl"),
                     metrics = metrics, stat = stat, cutoff = cutoff))
 
@@ -170,7 +170,7 @@ SelectedInput.ModeledInput <-
 
     inputs <- list(...)
 
-    if (!all(mapply(is, inputs, "ModeledInput"))) {
+    if (!all(map_logi(is, inputs, "ModeledInput"))) {
       stop("inputs must be ModelInputs")
     }
 
@@ -178,7 +178,7 @@ SelectedInput.ModeledInput <-
       stop("inputs are of different ModeledInput types")
     }
 
-    models <- Map(slot, inputs, "model")
+    models <- map(slot, inputs, "model")
     input_class <- class(inputs[[1]])
     switch(input_class,
            ModeledFrame = {
@@ -189,7 +189,7 @@ SelectedInput.ModeledInput <-
              to_class <- "ModelRecipe"
              object_class <- "SelectedModeledRecipe"
            })
-    inputs <- Map(as, inputs, to_class)
+    inputs <- map(as, inputs, to_class)
     names(inputs) <- make_list_names(inputs, input_class)
 
     args <- c(inputs, control = control, metrics = metrics, stat = stat,
@@ -197,7 +197,7 @@ SelectedInput.ModeledInput <-
     object <- do.call(SelectedInput, args)
 
     new(object_class, as(object, to_class),
-        inputs = Map(list, input = object@inputs, model = models),
+        inputs = map(list, input = object@inputs, model = models),
         params = object@params)
 
   }
@@ -304,7 +304,7 @@ TunedInput.recipe <- function(x, grid = expand_steps(),
                               metrics = metrics, stat = stat, cutoff = cutoff))
 
   grid_names <- names(object@grid)
-  step_ids <- sapply(object$steps, getElement, name = "id")
+  step_ids <- map_chr(getElement, object$steps, "id")
   found <- grid_names %in% step_ids
   if (!all(found)) {
     missing <- grid_names[!found]

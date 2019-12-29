@@ -200,7 +200,7 @@ plot.MLModel <- function(x, metrics = NULL,
   stat <- fget(stat)
   type <- match.arg(type)
 
-  lapply(x@trainbits, function(trainbits) {
+  map(function(trainbits) {
     perf <- trainbits@performance
     if (type == "line") {
       grid <- unnest(trainbits@grid)
@@ -222,7 +222,7 @@ plot.MLModel <- function(x, metrics = NULL,
       }
       df$Metric <- factor(df$Metric, metrics)
 
-      indices <- sapply(grid[-1], function(x) length(unique(x)) > 1)
+      indices <- map_logi(function(x) length(unique(x)), grid[-1])
       args <- list(~ x, ~ Value)
       if (any(indices)) {
         df$Group <- interaction(grid[-1][indices])
@@ -240,7 +240,7 @@ plot.MLModel <- function(x, metrics = NULL,
     } else {
       plot(perf, metrics = metrics, stat = stat, type = type, ...)
     }
-  })
+  }, x@trainbits)
 }
 
 

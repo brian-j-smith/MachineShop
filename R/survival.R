@@ -14,11 +14,11 @@ predict.Surv <- function(object, x, ...) {
 .predict.Surv.list <- function(y, object, times, dist, ...) {
   if (length(times)) {
     dist <- surv_dist_probs(dist)
-    t(sapply(object, function(x) predict(dist(x), times)))
+    t(map_num(function(x) drop(predict(dist(x), times)), object))
   } else {
     dist <- surv_dist_mean(dist)
     max_time <- surv_max(y)
-    sapply(object, function(x) mean(dist(x), max_time = max_time))
+    map_num(function(x) mean(dist(x), max_time = max_time), object)
   }
 }
 
@@ -114,7 +114,7 @@ empiricalsurv_function <- function(times, events, risk, f) {
   n.event <- n[, 2]
   n.risk_all <- cumsum_risk(n[, 3])
   n.risk_events <- cumsum_risk(n[, 4])
-  hazard <- mapply(f, n.event, n.risk_all, n.risk_events)
+  hazard <- map_num(f, n.event, n.risk_all, n.risk_events)
   list(n.total = n[, 1], n.event = n.event, n.risk = n.risk_all,
        surv = exp(-cumsum(hazard)))
 }
@@ -128,7 +128,7 @@ mean.EmpiricalSurv <- function(x, new_risk = NULL, ...) {
 
 predict.EmpiricalSurv <- function(object, times, new_risk = NULL, ...) {
   surv <- NextMethod()
-  rbind(if (is.null(new_risk)) surv else sapply(surv, function(x) x^new_risk))
+  rbind(if (is.null(new_risk)) surv else map_num(function(x) x^new_risk, surv))
 }
 
 
@@ -215,7 +215,7 @@ predict.Weibull <- function(object, times, new_risk = NULL, ...) {
   times_shape <- if (length(shape) == 1) {
     matrix(times^shape, length(new_risk), length(times), byrow = TRUE)
   } else {
-    sapply(times, function(time) time^shape)
+    map_num(function(time) time^shape, times)
   }
   exp((new_risk * -object$scale) * times_shape)
 }
@@ -258,7 +258,7 @@ cumsum_risk <- function(x) rev(cumsum(rev(x)))
 
 surv_cases <- function(..., subset = TRUE) {
   df <- data.frame(...)
-  is_finite <- Reduce("&", lapply(df, is.finite))
+  is_finite <- Reduce("&", map(is.finite, df))
   df[subset & is_finite, , drop = FALSE]
 }
 

@@ -41,8 +41,8 @@ ModelFrame.data.frame <- function(x, ...) {
   weights <- x[["(weights)"]]
   strata <- x[["(strata)"]]
   x[c("(casenames)", "(weights)", "(strata)")] <- NULL
-  model_terms <- terms(lapply(names(x)[-1], as.name), names(x)[1],
-                       all_numeric = all(sapply(x[-1], is.numeric)))
+  model_terms <- terms(map(as.name, names(x)[-1]), names(x)[1],
+                       all_numeric = all(map_logi(is.numeric, x[-1])))
   ModelFrame(model_terms, x, na.rm = FALSE,
              casenames = if (is.null(casenames)) rownames(x) else casenames,
              weights = weights, strata = strata)
@@ -100,7 +100,7 @@ ModelFrame.matrix <- function(x, y = NULL, na.rm = TRUE, offsets = NULL,
 
 ModelFrame.ModelFrame <- function(x, na.rm = TRUE, ...) {
   vars <- as.data.frame(Filter(length, list(...)), stringsAsFactors = FALSE)
-  names(vars) <- sapply(names(vars), function(x) paste0("(", x, ")"))
+  names(vars) <- map_chr(function(x) paste0("(", x, ")"), names(vars))
   x[names(vars)] <- vars
   if (na.rm) na.omit(x) else x
 }
@@ -149,7 +149,7 @@ formula.ModelFrame <- function(x, ...) {
 inline_calls <- function(x) {
   if (is.call(x)) {
     call_name <- as.character(x[[1]])
-    unique(c(call_name, unlist(lapply(x[-1], inline_calls))))
+    unique(c(call_name, unlist(map(inline_calls, x[-1]))))
   }
 }
 
@@ -192,17 +192,17 @@ terms.list <- function(x, y = NULL, intercept = TRUE, all_numeric = FALSE,
   if (is.character(y)) y <- as.name(y)
   has_y <- 1L - is.null(y)
 
-  is_names <- sapply(x, is.name)
+  is_names <- map_logi(is.name, x)
   name_inds <- which(is_names)
   noname_inds <- which(!is_names)
 
   x_char <- character(length(x))
   x_char[name_inds] <- as.character(x[name_inds])
-  x_char[noname_inds] <- vapply(x[noname_inds], deparse, character(1))
+  x_char[noname_inds] <- map_chr(deparse, x[noname_inds])
 
-  valid_calls <- sapply(x[noname_inds], function(var) {
+  valid_calls <- map_logi(function(var) {
     is.call(var) && var[[1]] == .("offset")
-  })
+  }, x[noname_inds])
   if (!all(valid_calls)) stop("non-offset calls in variable specifications")
   offsets <- has_y + noname_inds
 
@@ -216,7 +216,7 @@ terms.list <- function(x, y = NULL, intercept = TRUE, all_numeric = FALSE,
   fo[[2]] <- y
 
   class <- if (all_numeric) {
-    x_char[name_inds] <- sapply(x[name_inds], as.character)
+    x_char[name_inds] <- map_chr(as.character, x[name_inds])
     "DesignTerms"
   } else {
     "FormulaTerms"
@@ -256,11 +256,11 @@ terms.matrix <- function(x, y = NULL, offsets = NULL, ...) {
 
   labels <- colnames(x)
   response <- if (!is.null(y)) make.unique(c(labels, "y"))[length(labels) + 1]
-  labels <- lapply(labels, as.name)
+  labels <- map(as.name, labels)
 
   if (length(offsets)) {
     offsets <- paste0("offset(", offsets, ")")
-    labels <- c(labels, lapply(offsets, str2lang))
+    labels <- c(labels, map(str2lang, offsets))
   }
 
   terms(labels, response, all_numeric = is.numeric(x))
@@ -316,17 +316,17 @@ terms.recipe <- function(x, original = FALSE, ...) {
   } else if (length(binom)) {
     stop("binomial outcome must have 'binom_x' and 'binom_size' roles")
   } else if (length(matrix)) {
-    as.call(c(.(cbind), lapply(matrix, as.name)))
+    as.call(c(.(cbind), map(as.name, matrix)))
   }
 
   is_predictor <- info$role == "predictor"
-  predictors <- lapply(info$variable[is_predictor], as.name)
+  predictors <- map(as.name, info$variable[is_predictor])
   all_numeric <- all(info$type[is_predictor] == "numeric")
 
   offsets <- get_vars("pred_offset", "numeric")
   if (length(offsets)) {
     offsets <- paste0("offset(", offsets, ")")
-    predictors <- c(predictors, lapply(offsets, str2lang))
+    predictors <- c(predictors, map(str2lang, offsets))
   }
 
   terms(predictors, outcome, all_numeric = all_numeric)

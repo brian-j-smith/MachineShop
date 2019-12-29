@@ -127,7 +127,7 @@ as.grid.tbl_df <- function(x, fixed = tibble(), ...) {
 as.grid.Grid <- function(x, ..., model, fixed = tibble()) {
   mf <- ModelFrame(..., na.rm = FALSE)
   params_list <- model@grid(mf, length = x@length, random = x@random)
-  params <- lapply(params_list, unique)
+  params <- map(unique, params_list)
   params[lengths(params) == 0] <- NULL
   as.grid(expand_params(params, random = x@random), fixed = fixed)
 }
@@ -135,7 +135,7 @@ as.grid.Grid <- function(x, ..., model, fixed = tibble()) {
 
 as.grid.ParameterGrid <- function(x, ..., model, fixed = tibble()) {
   grid <- if (nrow(x)) {
-    if (any(sapply(x$object, dials::has_unknowns))) {
+    if (any(map_logi(dials::has_unknowns, x$object))) {
       mf <- ModelFrame(..., na.rm = FALSE)
       data <- switch(model@predictor_encoding,
                      "model.matrix" = model.matrix(mf, intercept = FALSE),
