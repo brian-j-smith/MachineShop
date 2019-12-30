@@ -14,7 +14,7 @@
 \alias{print.Resamples}
 \alias{print.SelectedInput}
 \alias{print.SurvMatrix}
-\alias{print.TrainBits}
+\alias{print.TrainBit}
 \alias{print.TunedInput}
 \alias{print.VarImp}
 \title{Print MachineShop Objects}
@@ -43,7 +43,7 @@
 
 \method{print}{SurvMatrix}(x, n = MachineShop::settings("max.print"), ...)
 
-\method{print}{TrainBits}(x, n = MachineShop::settings("max.print"), ...)
+\method{print}{TrainBit}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{TunedInput}(x, n = MachineShop::settings("max.print"), ...)
 

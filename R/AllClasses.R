@@ -352,7 +352,7 @@ setClass("Resamples",
 )
 
 
-TrainBits <- setClass("TrainBits",
+TrainBit <- setClass("TrainBit",
   slots = c(grid = "tbl_df",
             performance = "Performance",
             selected = "numeric",

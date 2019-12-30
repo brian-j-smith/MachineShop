@@ -37,7 +37,7 @@ NULL
 #'
 diff.MLModel <- function(x, ...) {
   if (!is.trained(x)) stop("no training results to diff")
-  map(function(trainbits) diff(trainbits@performance), x@trainbits)
+  map(function(trainbit) diff(trainbit@performance), x@trainbits)
 }
 
 

@@ -239,11 +239,11 @@ SelectedInput.list <- function(x, ...) {
       }
     }
   )
-  trainbits <- resample_selection(inputs, set_input, x@params, ...)
-  trainbits$grid <- tibble(Input = factor(seq(inputs)))
-  names(trainbits$grid) <- input_class
-  input <- set_input(inputs[[trainbits$selected]])
-  push(do.call(TrainBits, trainbits), fit(input, ...))
+  trainbit <- resample_selection(inputs, set_input, x@params, ...)
+  trainbit$grid <- tibble(Input = factor(seq(inputs)))
+  names(trainbit$grid) <- input_class
+  input <- set_input(inputs[[trainbit$selected]])
+  push(do.call(TrainBit, trainbit), fit(input, ...))
 }
 
 
@@ -323,10 +323,10 @@ TunedInput.recipe <- function(x, grid = expand_steps(),
   if (all(dim(grid) != 0)) {
     grid_split <- split(grid, 1:nrow(grid))
     set_input <- function(x) update(recipe, x)
-    trainbits <- resample_selection(grid_split, set_input, x@params, model)
-    trainbits$grid <- tibble(ModelRecipe = grid)
-    input <- set_input(grid_split[[trainbits$selected]])
-    push(do.call(TrainBits, trainbits), fit(input, model = model))
+    trainbit <- resample_selection(grid_split, set_input, x@params, model)
+    trainbit$grid <- tibble(ModelRecipe = grid)
+    input <- set_input(grid_split[[trainbit$selected]])
+    push(do.call(TrainBit, trainbit), fit(input, model = model))
   } else {
     fit(recipe, model = model)
   }

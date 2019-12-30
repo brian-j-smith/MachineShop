@@ -577,7 +577,7 @@ print.Terms <- function(x, ...) {
 
 #' @rdname print-methods
 #'
-print.TrainBits <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.TrainBit <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   if (length(x@grid)) {
     cat("\nGrid (selected = ", x@selected, "):\n", sep = "")
@@ -594,7 +594,7 @@ print.TrainBits <- function(x, n = MachineShop::settings("max.print"), ...) {
 }
 
 
-setMethod("show", "TrainBits",
+setMethod("show", "TrainBit",
   function(object) {
     print(object)
     invisible()

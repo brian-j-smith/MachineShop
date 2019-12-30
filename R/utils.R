@@ -284,7 +284,7 @@ push <- function(x, object, ...) {
 }
 
 
-push.TrainBits <- function(x, object, ...) {
+push.TrainBit <- function(x, object, ...) {
   stopifnot(is(object, "MLModelFit"))
   obj_bits <- (if (isS4(object)) object@mlmodel else object$mlmodel)@trainbits
   trainbits <- c(x, obj_bits)
