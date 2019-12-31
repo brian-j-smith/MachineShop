@@ -294,10 +294,11 @@ setMethod("show", "MLMetric",
 #'
 print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
-  print_modelinfo(x)
+  trained <- is.trained(x)
+  print_modelinfo(x, trained = trained)
   cat("\nParameters:\n")
   cat(str(x@params))
-  if (is.trained(x)) {
+  if (trained) {
     cat("\n")
     print_items(x@trainbits, n = n)
   }
