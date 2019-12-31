@@ -53,7 +53,7 @@ SelectedModel <- function(..., control = MachineShop::settings("control"),
                               map(slot, models, "response_types"),
                               init = .response_types),
       predictor_encoding = NA_character_,
-      params = list(models = models,
+      params = list(models = ListOf(models),
                     control = getMLObject(control, "MLControl"),
                     metrics = metrics, stat = stat, cutoff = cutoff)
   )

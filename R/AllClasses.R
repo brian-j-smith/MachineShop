@@ -96,7 +96,7 @@ setClass("MLModel",
             varimp = "function",
             x = "ANY",
             y = "ANY",
-            trainbits = "list")
+            trainbits = "ListOf")
 )
 
 
@@ -146,7 +146,7 @@ setClass("ModeledRecipe",
 
 setClass("SelectedInput",
   contains = "VIRTUAL",
-  slots = c(inputs = "list",
+  slots = c(inputs = "ListOf",
             params = "list")
 )
 

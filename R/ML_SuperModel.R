@@ -36,7 +36,7 @@ SuperModel <- function(..., model = GBMModel,
                        control = MachineShop::settings("control"),
                        all_vars = FALSE) {
 
-  base_learners <- map(getMLObject, unlist(list(...)), "MLModel")
+  base_learners <- ListOf(map(getMLObject, unlist(list(...)), "MLModel"))
   names(base_learners) <- paste0(if (length(base_learners)) "Learner",
                                  seq(base_learners))
 

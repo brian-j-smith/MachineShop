@@ -112,7 +112,7 @@ SelectedInput.ModelFrame <- function(...,
   }
 
   new("SelectedModelFrame", ModelFrame(data),
-      inputs = map(attr, inputs, "terms"),
+      inputs = ListOf(map(attr, inputs, "terms")),
       params = list(control = getMLObject(control, "MLControl"),
                     metrics = metrics, stat = stat, cutoff = cutoff))
 
@@ -152,7 +152,7 @@ SelectedInput.recipe <- function(...,
   outcome_vars <- info$variable[info$role == "outcome"]
   fo <- reformulate(".", paste(outcome_vars, collapse = "+"))
   new("SelectedModelRecipe", new("ModelRecipe", recipe(fo, data = data)),
-      inputs = inputs,
+      inputs = ListOf(inputs),
       params = list(control = getMLObject(control, "MLControl"),
                     metrics = metrics, stat = stat, cutoff = cutoff))
 
@@ -197,7 +197,7 @@ SelectedInput.ModeledInput <-
     object <- do.call(SelectedInput, args)
 
     new(object_class, as(object, to_class),
-        inputs = map(list, input = object@inputs, model = models),
+        inputs = ListOf(map(list, input = object@inputs, model = models)),
         params = object@params)
 
   }

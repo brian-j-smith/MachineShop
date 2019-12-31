@@ -305,7 +305,7 @@ print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   cat(str(x@params))
   if (trained) {
     cat("\n")
-    print_items(x@trainbits, n = n)
+    print(x@trainbits, n = n)
   }
   invisible(x)
 }
@@ -495,7 +495,7 @@ print.SelectedInput <- function(x, n = MachineShop::settings("max.print"),
                                 ...) {
   NextMethod()
   cat("\nModel inputs:\n\n")
-  print_items(x@inputs, n = n)
+  print(x@inputs, n = n)
   print(x@params$control)
   invisible(x)
 }
@@ -506,11 +506,11 @@ print.SelectedModel <- function(x, n = MachineShop::settings("max.print"), ...) 
   trained <- is.trained(x)
   print_modelinfo(x, trained = trained)
   cat("\nSelection parameters:\n\n")
-  print_items(x@params$models, n = n)
+  print(x@params$models, n = n)
   print(x@params$control)
   if (trained) {
     cat("\n")
-    print_items(x@trainbits, n = n)
+    print(x@trainbits, n = n)
   }
   invisible(x)
 }
@@ -522,7 +522,7 @@ print.StackedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   cat("\nParameters:\n")
   cat(str(x@params[setdiff(names(x@params), c("base_learners", "control"))]))
   cat("\nBase learners:\n\n")
-  print_items(x@params$base_learners, n = n)
+  print(x@params$base_learners, n = n)
   print(x@params$control)
   invisible(x)
 }
@@ -537,7 +537,7 @@ print.SuperModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   cat("\nSuper learner:\n\n")
   print(x@params$model)
   cat("\nBase learners:\n\n")
-  print_items(x@params$base_learners, n = n)
+  print(x@params$base_learners, n = n)
   print(x@params$control)
   invisible(x)
 }
@@ -633,7 +633,7 @@ print.TunedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print(x@params$control)
   if (trained) {
     cat("\n")
-    print_items(x@trainbits, n = n)
+    print(x@trainbits, n = n)
   }
   invisible(x)
 }
