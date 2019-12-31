@@ -47,7 +47,8 @@ print.ConfusionList <- function(x, n = MachineShop::settings("max.print"),
 }
 
 
-print.ConfusionMatrix <- function(x, ...) {
+print.ConfusionMatrix <- function(x, n = MachineShop::settings("max.print"),
+                                  ...) {
   print_title(x)
   print(as(x, "table"))
   invisible(x)
@@ -62,7 +63,8 @@ setMethod("show", "ConfusionMatrix",
 )
 
 
-print.ConfusionSummary <- function(x, ...) {
+print.ConfusionSummary <- function(x, n = MachineShop::settings("max.print"),
+                                   ...) {
   total <- x@total
   acc <- x@accuracy
   cat("Number of responses: ", total, "\n",
@@ -105,24 +107,37 @@ setMethod("show", "Curves",
 )
 
 
+print.DiscreteVariate <- function(x, n = MachineShop::settings("max.print"),
+                                  ...) {
+  print_title(x)
+  print(as(x, "numeric"))
+  cat("Range: ", x@min, ", ", x@max, "\n", sep = "")
+  invisible(x)
+}
+
+
 setMethod("show", "DiscreteVariate",
   function(object) {
-    print_title(object)
-    print(as(object, "numeric"))
-    cat("Range: ", object@min, ", ", object@max, "\n", sep = "")
+    print(object)
     invisible()
   }
 )
 
 
+print.Grid <- function(x, n = MachineShop::settings("max.print"), ...) {
+  print_title(x)
+  cat("\n",
+      "Length: ", x@length, "\n",
+      "Random sample: ", x@random, "\n",
+      sep = ""
+  )
+  invisible()
+}
+
+
 setMethod("show", "Grid",
   function(object) {
-    print_title(object)
-    cat("\n",
-        "Length: ", object@length, "\n",
-        "Random sample: ", object@random, "\n",
-        sep = ""
-    )
+    print(object)
     invisible()
   }
 )
@@ -142,6 +157,12 @@ setMethod("show", "ListOf",
     invisible()
   }
 )
+
+
+print.MLControl <- function(x, n = MachineShop::settings("max.print"), ...) {
+  show(x)
+  invisible(x)
+}
 
 
 setMethod("show", "MLControl",
@@ -271,7 +292,7 @@ setMethod("show", "MLTrainControl",
 )
 
 
-print.MLMetric <- function(x, ...) {
+print.MLMetric <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   cat("\n",
       "Metric name: ", x@name, "\n",
@@ -333,7 +354,8 @@ setMethod("show", "MLModelFit",
 )
 
 
-print.MLModelFunction <- function(x, ...) {
+print.MLModelFunction <- function(x, n = MachineShop::settings("max.print"),
+                                  ...) {
   print_title(x)
   print_modelinfo(x)
   cat("\nArguments:\n")
@@ -367,7 +389,7 @@ setMethod("show", "ModelFrame",
 )
 
 
-print.ModelRecipe <- function(x, ...) {
+print.ModelRecipe <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   cat("\n")
   NextMethod()
@@ -393,7 +415,8 @@ print.ModeledInput <- function(x, n = MachineShop::settings("max.print"), ...) {
 }
 
 
-print.ParameterGrid <- function(x, ...) {
+print.ParameterGrid <- function(x, n = MachineShop::settings("max.print"),
+                                ...) {
   print_title(x)
   print(asS3(x))
   if (x@random) {
@@ -427,26 +450,17 @@ print.Performance <- function(x, n = MachineShop::settings("max.print"), ...) {
 }
 
 
-setMethod("show", "Performance",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
-
-
-setMethod("show", "PerformanceDiffTest",
-  function(object) {
-    print_title(object)
-    cat("\n",
-        "Upper diagonal: mean differences (Model1 - Model2)\n",
-        "Lower diagonal: p-values\n",
-        "P-value adjustment method: ", object@adjust, "\n\n",
-        sep = "")
-    print(as(object, "array"))
-    invisible()
-  }
-)
+print.PerformanceDiffTest <- function(x, n = MachineShop::settings("max.print"),
+                                      ...) {
+  print_title(x)
+  cat("\n",
+      "Upper diagonal: mean differences (Model1 - Model2)\n",
+      "Lower diagonal: p-values\n",
+      "P-value adjustment method: ", x@adjust, "\n\n",
+      sep = "")
+  print(as(x, "array"))
+  invisible(x)
+}
 
 
 #' @rdname print-methods
@@ -567,15 +581,21 @@ setMethod("show", "SurvMatrix",
 )
 
 
+print.TabularArray <- function(x, n = MachineShop::settings("max.print"), ...) {
+  print(as(x, "array"))
+  invisible(x)
+}
+
+
 setMethod("show", "TabularArray",
   function(object) {
-    print(as(object, "array"))
+    print(object)
     invisible()
   }
 )
 
 
-print.Terms <- function(x, ...) {
+print.Terms <- function(x, n = MachineShop::settings("max.print"), ...) {
   print(formula(x))
 }
 
