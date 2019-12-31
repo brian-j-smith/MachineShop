@@ -64,7 +64,7 @@
 #'     "survival", "recipes")}].}
 #'   \item{\code{reset}}{character names of settings to reset to their default
 #'     values.}
-#'   \item{\code{stat.Curves}}{function or character string naming a function
+#'   \item{\code{stat.Curve}}{function or character string naming a function
 #'     to compute one \link{summary} statistic at each cutoff value of resampled
 #'     metrics in performance curves, or \code{NULL} for resample-specific
 #'     metrics [default: \code{"base::mean"}].}
@@ -337,7 +337,7 @@ MachineShop_global <- as.environment(list(
       }
     ),
 
-    stat.Curves = list(
+    stat.Curve = list(
       value = "base::mean",
       check = function(x) {
         if (!is.null(x) && is(check_stat(x), "error")) {

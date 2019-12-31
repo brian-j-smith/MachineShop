@@ -309,17 +309,6 @@ ConfusionSummary <- setClass("ConfusionSummary",
 )
 
 
-setClass("Curves",
-  contains = "data.frame",
-  slots = c(metrics = "list")
-)
-
-
-setClass("Lift",
-  contains = "Curves"
-)
-
-
 setClass("MLMetric",
   contains = "function",
   slots = c(name = "character",
@@ -342,6 +331,17 @@ PerformanceDiff <- setClass("PerformanceDiff",
 PerformanceDiffTest <- setClass("PerformanceDiffTest",
   contains = "TabularArray",
   slots = c(adjust = "character")
+)
+
+
+setClass("PerformanceCurve",
+  contains = "data.frame",
+  slots = c(metrics = "list")
+)
+
+
+setClass("LiftCurve",
+  contains = "PerformanceCurve"
 )
 
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/performance_curve.R
 \name{lift}
 \alias{lift}
-\title{Model Lift}
+\title{Model Lift Curves}
 \usage{
 lift(x, y = NULL, na.rm = TRUE, ...)
 }
@@ -18,10 +18,11 @@ responses that are \code{NA} when calculating metrics.}
 \item{...}{arguments passed to other methods.}
 }
 \value{
-\code{Lift} class object that inherits from \code{Curves}.
+\code{LiftCurve} class object that inherits from
+\code{PerformanceCurve}.
 }
 \description{
-Calculate lift estimates from observed and predicted responses.
+Calculate lift curves from observed and predicted responses.
 }
 \examples{
 library(MASS)

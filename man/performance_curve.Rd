@@ -5,7 +5,7 @@
 \alias{curves}
 \alias{performance_curve.default}
 \alias{performance_curve.Resamples}
-\title{Performance Curves}
+\title{Model Performance Curves}
 \usage{
 performance_curve(x, ...)
 
@@ -40,10 +40,11 @@ containing observed and predicted responses.}
 responses that are \code{NA} when calculating metrics.}
 }
 \value{
-\code{Curves} class object that inherits from \code{data.frame}.
+\code{PerformanceCurve} class object that inherits from
+\code{data.frame}.
 }
 \description{
-Curves for the analysis of tradeoffs between metrics for assessing
+Calculate curves for the analysis of tradeoffs between metrics for assessing
 performance in classifying binary outcomes over the range of possible
 cutoff probabilities.  Available curves include receiver operating
 characteristic (ROC) and precision recall.

@@ -85,28 +85,6 @@ setMethod("show", "ConfusionSummary",
 )
 
 
-#' @rdname print-methods
-#'
-print.Curves <- function(x, n = MachineShop::settings("max.print"), ...) {
-  print_title(x)
-  cat("\n",
-      "Metrics: ",
-      "x = ", x@metrics$x@label, ", ",
-      "y = ", x@metrics$y@label, "\n\n",
-      sep = "")
-  print_items(as(x, "data.frame"), n = n)
-  invisible(x)
-}
-
-
-setMethod("show", "Curves",
-  function(object){
-    print(object)
-    invisible()
-  }
-)
-
-
 print.DiscreteVariate <- function(x, n = MachineShop::settings("max.print"),
                                   ...) {
   print_title(x)
@@ -448,6 +426,29 @@ print.Performance <- function(x, n = MachineShop::settings("max.print"), ...) {
   }
   invisible(x)
 }
+
+
+#' @rdname print-methods
+#'
+print.PerformanceCurve <- function(x, n = MachineShop::settings("max.print"),
+                                   ...) {
+  print_title(x)
+  cat("\n",
+      "Metrics: ",
+      "x = ", x@metrics$x@label, ", ",
+      "y = ", x@metrics$y@label, "\n\n",
+      sep = "")
+  print_items(as(x, "data.frame"), n = n)
+  invisible(x)
+}
+
+
+setMethod("show", "PerformanceCurve",
+  function(object){
+    print(object)
+    invisible()
+  }
+)
 
 
 print.PerformanceDiffTest <- function(x, n = MachineShop::settings("max.print"),

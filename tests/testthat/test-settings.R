@@ -88,9 +88,9 @@ test_that("settings changes and views", {
   expect_identical(settings(values), old_values)
 
   new_value <- "median"
-  expect_type(settings(stat.Curves = new_value), "list")
-  expect_identical(settings("stat.Curves"), new_value)
-  expect_error(settings(stat.Curves = "character"))
+  expect_type(settings(stat.Curve = new_value), "list")
+  expect_identical(settings("stat.Curve"), new_value)
+  expect_error(settings(stat.Curve = "character"))
 
   new_value <- "median"
   expect_type(settings(stat.Resample = new_value), "list")

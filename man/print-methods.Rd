@@ -4,12 +4,12 @@
 \alias{print}
 \alias{print.BinomialVariate}
 \alias{print.Calibration}
-\alias{print.Curves}
 \alias{print.ListOf}
 \alias{print.MLModel}
 \alias{print.ModelFrame}
 \alias{print.ModeledInput}
 \alias{print.Performance}
+\alias{print.PerformanceCurve}
 \alias{print.RecipeGrid}
 \alias{print.Resamples}
 \alias{print.SelectedInput}
@@ -23,8 +23,6 @@
 
 \method{print}{Calibration}(x, n = MachineShop::settings("max.print"), ...)
 
-\method{print}{Curves}(x, n = MachineShop::settings("max.print"), ...)
-
 \method{print}{ListOf}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{MLModel}(x, n = MachineShop::settings("max.print"), ...)
@@ -34,6 +32,8 @@
 \method{print}{ModeledInput}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{Performance}(x, n = MachineShop::settings("max.print"), ...)
+
+\method{print}{PerformanceCurve}(x, n = MachineShop::settings("max.print"), ...)
 
 \method{print}{RecipeGrid}(x, n = MachineShop::settings("max.print"), ...)
 

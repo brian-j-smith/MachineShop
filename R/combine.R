@@ -6,7 +6,7 @@
 #' @rdname combine-methods
 #'
 #' @param ... named or unnamed \link{calibration}, \link{confusion},
-#'   \link[=curves]{performance curve}, \link{lift}, \link{summary}, or
+#'   \link{lift}, \link[=curves]{performance curve}, \link{summary}, or
 #'   \link{resample} results.  Curves must have been generated with the same
 #'   performance \link{metrics} and resamples with the same resampling
 #'   \link[=controls]{control}.
@@ -83,26 +83,6 @@ c.ConfusionMatrix <- function(...) {
 }
 
 
-#' @rdname combine-methods
-#'
-c.Curves <- function(...) {
-  args <- list(...)
-  class <- class(args[[1]])
-  if (all(map_logi(is, args, class))) {
-
-    if (!identical_elements(args, function(x) x@metrics)) {
-      stop(class, " arguments have different metrics")
-    }
-
-    df <- do.call(append, set_model_names(args))
-    do.call(class, list(df, metrics = args[[1]]@metrics, .check = FALSE))
-
-  } else {
-    NextMethod()
-  }
-}
-
-
 c.DiscreteVariate <- function(...) {
   args <- list(...)
   x <- NextMethod()
@@ -119,7 +99,7 @@ c.DiscreteVariate <- function(...) {
 
 #' @rdname combine-methods
 #'
-c.Lift <- function(...) {
+c.LiftCurve <- function(...) {
   NextMethod()
 }
 
@@ -163,6 +143,26 @@ c.Performance <- function(...) {
     } else {
       args[[1]]
     }
+  } else {
+    NextMethod()
+  }
+}
+
+
+#' @rdname combine-methods
+#'
+c.PerformanceCurve <- function(...) {
+  args <- list(...)
+  class <- class(args[[1]])
+  if (all(map_logi(is, args, class))) {
+
+    if (!identical_elements(args, function(x) x@metrics)) {
+      stop(class, " arguments have different metrics")
+    }
+
+    df <- do.call(append, set_model_names(args))
+    do.call(class, list(df, metrics = args[[1]]@metrics, .check = FALSE))
+
   } else {
     NextMethod()
   }

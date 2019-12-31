@@ -5,12 +5,12 @@
 #' @name summary
 #' @rdname summary-methods
 #'
-#' @param object \link{confusion}, \link[=curves]{performance curve},
-#'   \link{lift}, trained model \link{fit}, \link{performance}, or
-#'   \link{resample} result.
+#' @param object \link{confusion}, \link{lift}, trained model \link{fit},
+#'   \link{performance}, \link[=curves]{performance curve}, or \link{resample}
+#'   result.
 #' @param stat function or character string naming a function to compute a
 #'   summary statistic at each cutoff value of resampled metrics in
-#'   \code{Curves}, or \code{NULL} for resample-specific metrics.
+#'   \code{PerformanceCurve}, or \code{NULL} for resample-specific metrics.
 #' @param stats function, function name, or vector of these with which to
 #'   compute summary statistics.
 #' @param na.rm logical indicating whether to exclude missing values.
@@ -73,50 +73,6 @@ summary.ConfusionMatrix <- function(object, ...) {
 
 #' @rdname summary-methods
 #'
-summary.Curves <- function(object, stat = MachineShop::settings("stat.Curves"),
-                           ...) {
-  if (!(is.null(object$Resample) || is.null(stat))) {
-
-    stat <- fget(stat)
-
-    object_class <- class(object)
-    stat_na_omit <- function(x) stat(na.omit(x))
-
-    object_list <- by(object, object$Model, function(curves) {
-      cutoffs <- unique(curves$Cutoff)
-      curves_split <- split(curves, curves$Resample)
-      x_all <- y_all <- matrix(NA, length(cutoffs), length(curves_split))
-      for (j in seq(curves_split)) {
-        curve <- curves_split[[j]]
-        x_all[, j] <- .curve_approx(curve$Cutoff, curve$x, cutoffs)
-        y_all[, j] <- .curve_approx(curve$Cutoff, curve$y, cutoffs)
-      }
-      do.call(object_class, list(
-        data.frame(Cutoff = cutoffs,
-                   x = apply(x_all, 1, stat_na_omit),
-                   y = apply(y_all, 1, stat_na_omit)),
-        metrics = object@metrics
-      ))
-    })
-
-    object <- do.call(c, object_list)
-  }
-
-  object
-}
-
-
-.curve_approx <- function(...) {
-  values <- try(
-    approx(..., method = "constant", rule = 2, f = 0.5),
-    silent = TRUE
-  )
-  if (is(values, "try-error")) NA else values$y
-}
-
-
-#' @rdname summary-methods
-#'
 summary.MLModel <- function(object, stats =
                               MachineShop::settings("stats.Resamples"),
                             na.rm = TRUE, ...) {
@@ -156,6 +112,51 @@ summary.Performance <- function(object, stats =
   object_summary <- aperm(apply(object, margins, f), perm = perm)
   names(dimnames(object_summary)) <- names
   TabularArray(object_summary)
+}
+
+
+#' @rdname summary-methods
+#'
+summary.PerformanceCurve <- function(object,
+                                     stat = MachineShop::settings("stat.Curve"),
+                                     ...) {
+  if (!(is.null(object$Resample) || is.null(stat))) {
+
+    stat <- fget(stat)
+
+    object_class <- class(object)
+    stat_na_omit <- function(x) stat(na.omit(x))
+
+    object_list <- by(object, object$Model, function(curves) {
+      cutoffs <- unique(curves$Cutoff)
+      curves_split <- split(curves, curves$Resample)
+      x_all <- y_all <- matrix(NA, length(cutoffs), length(curves_split))
+      for (j in seq(curves_split)) {
+        curve <- curves_split[[j]]
+        x_all[, j] <- .curve_approx(curve$Cutoff, curve$x, cutoffs)
+        y_all[, j] <- .curve_approx(curve$Cutoff, curve$y, cutoffs)
+      }
+      do.call(object_class, list(
+        data.frame(Cutoff = cutoffs,
+                   x = apply(x_all, 1, stat_na_omit),
+                   y = apply(y_all, 1, stat_na_omit)),
+        metrics = object@metrics
+      ))
+    })
+
+    object <- do.call(c, object_list)
+  }
+
+  object
+}
+
+
+.curve_approx <- function(...) {
+  values <- try(
+    approx(..., method = "constant", rule = 2, f = 0.5),
+    silent = TRUE
+  )
+  if (is(values, "try-error")) NA else values$y
 }
 
 

@@ -45,7 +45,7 @@ auc(
   observed,
   predicted = NULL,
   metrics = c(MachineShop::tpr, MachineShop::fpr),
-  stat = MachineShop::settings("stat.Curves"),
+  stat = MachineShop::settings("stat.Curve"),
   ...
 )
 

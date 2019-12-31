@@ -4,17 +4,15 @@
 \alias{summary}
 \alias{summary.ConfusionList}
 \alias{summary.ConfusionMatrix}
-\alias{summary.Curves}
 \alias{summary.MLModel}
 \alias{summary.Performance}
+\alias{summary.PerformanceCurve}
 \alias{summary.Resamples}
 \title{Model Performance Summaries}
 \usage{
 \method{summary}{ConfusionList}(object, ...)
 
 \method{summary}{ConfusionMatrix}(object, ...)
-
-\method{summary}{Curves}(object, stat = MachineShop::settings("stat.Curves"), ...)
 
 \method{summary}{MLModel}(
   object,
@@ -30,6 +28,8 @@
   ...
 )
 
+\method{summary}{PerformanceCurve}(object, stat = MachineShop::settings("stat.Curve"), ...)
+
 \method{summary}{Resamples}(
   object,
   stats = MachineShop::settings("stats.Resamples"),
@@ -38,20 +38,20 @@
 )
 }
 \arguments{
-\item{object}{\link{confusion}, \link[=curves]{performance curve},
-\link{lift}, trained model \link{fit}, \link{performance}, or
-\link{resample} result.}
+\item{object}{\link{confusion}, \link{lift}, trained model \link{fit},
+\link{performance}, \link[=curves]{performance curve}, or \link{resample}
+result.}
 
 \item{...}{arguments passed to other methods.}
-
-\item{stat}{function or character string naming a function to compute a
-summary statistic at each cutoff value of resampled metrics in
-\code{Curves}, or \code{NULL} for resample-specific metrics.}
 
 \item{stats}{function, function name, or vector of these with which to
 compute summary statistics.}
 
 \item{na.rm}{logical indicating whether to exclude missing values.}
+
+\item{stat}{function or character string naming a function to compute a
+summary statistic at each cutoff value of resampled metrics in
+\code{PerformanceCurve}, or \code{NULL} for resample-specific metrics.}
 }
 \value{
 An object of summmary statistics.

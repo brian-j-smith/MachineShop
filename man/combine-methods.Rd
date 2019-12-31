@@ -5,9 +5,9 @@
 \alias{c.Calibration}
 \alias{c.ConfusionList}
 \alias{c.ConfusionMatrix}
-\alias{c.Curves}
-\alias{c.Lift}
+\alias{c.LiftCurve}
 \alias{c.ListOf}
+\alias{c.PerformanceCurve}
 \alias{c.Resamples}
 \alias{+,SurvMatrix,SurvMatrix-method}
 \title{Combine MachineShop Objects}
@@ -18,11 +18,11 @@
 
 \method{c}{ConfusionMatrix}(...)
 
-\method{c}{Curves}(...)
-
-\method{c}{Lift}(...)
+\method{c}{LiftCurve}(...)
 
 \method{c}{ListOf}(...)
+
+\method{c}{PerformanceCurve}(...)
 
 \method{c}{Resamples}(...)
 
@@ -30,7 +30,7 @@
 }
 \arguments{
 \item{...}{named or unnamed \link{calibration}, \link{confusion},
-\link[=curves]{performance curve}, \link{lift}, \link{summary}, or
+\link{lift}, \link[=curves]{performance curve}, \link{summary}, or
 \link{resample} results.  Curves must have been generated with the same
 performance \link{metrics} and resamples with the same resampling
 \link[=controls]{control}.}

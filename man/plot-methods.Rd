@@ -5,11 +5,11 @@
 \alias{plot.Calibration}
 \alias{plot.ConfusionList}
 \alias{plot.ConfusionMatrix}
-\alias{plot.Curves}
-\alias{plot.Lift}
+\alias{plot.LiftCurve}
 \alias{plot.MLModel}
 \alias{plot.PartialDependence}
 \alias{plot.Performance}
+\alias{plot.PerformanceCurve}
 \alias{plot.Resamples}
 \alias{plot.VarImp}
 \title{Model Performance Plots}
@@ -20,19 +20,11 @@
 
 \method{plot}{ConfusionMatrix}(x, ...)
 
-\method{plot}{Curves}(
-  x,
-  type = c("tradeoffs", "cutoffs"),
-  diagonal = FALSE,
-  stat = MachineShop::settings("stat.Curves"),
-  ...
-)
-
-\method{plot}{Lift}(
+\method{plot}{LiftCurve}(
   x,
   find = NULL,
   diagonal = TRUE,
-  stat = MachineShop::settings("stat.Curves"),
+  stat = MachineShop::settings("stat.Curve"),
   ...
 )
 
@@ -54,6 +46,14 @@
   ...
 )
 
+\method{plot}{PerformanceCurve}(
+  x,
+  type = c("tradeoffs", "cutoffs"),
+  diagonal = FALSE,
+  stat = MachineShop::settings("stat.Curve"),
+  ...
+)
+
 \method{plot}{Resamples}(
   x,
   metrics = NULL,
@@ -65,9 +65,9 @@
 \method{plot}{VarImp}(x, n = NULL, ...)
 }
 \arguments{
-\item{x}{\link{calibration}, \link{confusion},
-\link[=curves]{performance curve}, \link{lift}, trained model \link{fit},
-partial \link{dependence}, \link{performance}, \link{resample}, or
+\item{x}{\link{calibration}, \link{confusion}, \link{lift},
+trained model \link{fit}, partial \link{dependence}, \link{performance},
+\link[=curves]{performance curve}, \link{resample}, or
 \link[=varimp]{variable importance} result.}
 
 \item{type}{type of plot to construct.}
@@ -76,17 +76,17 @@ partial \link{dependence}, \link{performance}, \link{resample}, or
 
 \item{...}{arguments passed to other methods.}
 
+\item{find}{numeric true positive rate at which to display reference lines
+identifying the corresponding rates of positive predictions.}
+
 \item{diagonal}{logical indicating whether to include a diagonal reference
 line.}
 
 \item{stat}{function or character string naming a function to compute a
 summary statistic on resampled metrics for trained \code{MLModel} line
-plots and \code{Resamples} model ordering.  For \code{Curves} and
-\code{Lift} classes, plots are of resampled metrics aggregated by the
-statistic if given or of resample-specific metrics if \code{NULL}.}
-
-\item{find}{numeric true positive rate at which to display reference lines
-identifying the corresponding rates of positive predictions.}
+plots and \code{Resamples} model ordering.  For \code{LiftCurve} and
+\code{PerformanceCurve} classes, plots are of resampled metrics aggregated
+by the statistic if given or of resample-specific metrics if \code{NULL}.}
 
 \item{metrics}{vector of numeric indexes or character names of performance
 metrics to plot.}

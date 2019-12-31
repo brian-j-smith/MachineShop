@@ -36,14 +36,6 @@ test_that("object combinations", {
     expect_s4_class(c(conf[[1]], conf), "ConfusionList")
     expect_type(c(conf[[1]], res), "list")
 
-    expect_s4_class(c(curve), "Curves")
-    expect_s4_class(c(curve, curve), "Curves")
-    expect_type(c(curve, res), "list")
-    expect_error(c(curve, lift_curve))
-    expect_s4_class(c(lift_curve), "Curves")
-    expect_s4_class(c(lift_curve, lift_curve), "Curves")
-    expect_type(c(lift_curve, curve), "list")
-
     expect_s4_class(c(conf_summary), "ListOf")
     expect_s4_class(c(conf_summary, conf_summary), "ListOf")
     expect_type(c(conf_summary, conf_perf), "list")
@@ -52,6 +44,14 @@ test_that("object combinations", {
     expect_s4_class(c(conf_perf, conf_perf), "ListOf")
     expect_type(c(conf_perf, conf_summary), "list")
     expect_type(c(conf_perf, res), "list")
+
+    expect_s4_class(c(curve), "PerformanceCurve")
+    expect_s4_class(c(curve, curve), "PerformanceCurve")
+    expect_type(c(curve, res), "list")
+    expect_error(c(curve, lift_curve))
+    expect_s4_class(c(lift_curve), "PerformanceCurve")
+    expect_s4_class(c(lift_curve, lift_curve), "PerformanceCurve")
+    expect_type(c(lift_curve, curve), "list")
 
     expect_s4_class(c(res), "Resamples")
     expect_s4_class(c(res, res), "Resamples")

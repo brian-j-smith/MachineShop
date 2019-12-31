@@ -1,6 +1,6 @@
-#' Model Lift
+#' Model Lift Curves
 #'
-#' Calculate lift estimates from observed and predicted responses.
+#' Calculate lift curves from observed and predicted responses.
 #'
 #' @name lift
 #' @rdname lift
@@ -12,7 +12,8 @@
 #'   responses that are \code{NA} when calculating metrics.
 #' @param ... arguments passed to other methods.
 #'
-#' @return \code{Lift} class object that inherits from \code{Curves}.
+#' @return \code{LiftCurve} class object that inherits from
+#' \code{PerformanceCurve}.
 #'
 #' @seealso \code{\link{c}}, \code{\link{plot}}, \code{\link{summary}}
 #'
@@ -24,22 +25,23 @@
 #' plot(lf)
 #'
 lift <- function(x, y = NULL, na.rm = TRUE, ...) {
-  as(performance_curve(x, y = y, metrics = c(tpr, rpp), na.rm = na.rm), "Lift")
+  as(performance_curve(x, y = y, metrics = c(tpr, rpp), na.rm = na.rm),
+     "LiftCurve")
 }
 
 
-Lift <- function(...) {
-  object <- as(Curves(...), "Lift")
+LiftCurve <- function(...) {
+  object <- as(PerformanceCurve(...), "LiftCurve")
   if (!all(map_logi(identical, object@metrics, c(tpr, rpp)))) {
-    stop("incorrect Lift metrics")
+    stop("incorrect LiftCurve metrics")
   }
   object
 }
 
 
-#' Performance Curves
+#' Model Performance Curves
 #'
-#' Curves for the analysis of tradeoffs between metrics for assessing
+#' Calculate curves for the analysis of tradeoffs between metrics for assessing
 #' performance in classifying binary outcomes over the range of possible
 #' cutoff probabilities.  Available curves include receiver operating
 #' characteristic (ROC) and precision recall.
@@ -57,7 +59,8 @@ Lift <- function(...) {
 #'   responses that are \code{NA} when calculating metrics.
 #' @param ... arguments passed to other methods.
 #'
-#' @return \code{Curves} class object that inherits from \code{data.frame}.
+#' @return \code{PerformanceCurve} class object that inherits from
+#' \code{data.frame}.
 #'
 #' @seealso \code{\link{auc}}, \code{\link{c}}, \code{\link{plot}},
 #' \code{\link{summary}}
@@ -117,7 +120,7 @@ performance_curve.Resamples <- function(x, metrics = c(MachineShop::tpr,
     }
   }
 
-  Curves(curves, metrics = curve@metrics)
+  PerformanceCurve(curves, metrics = curve@metrics)
 }
 
 
@@ -130,7 +133,7 @@ performance_curve.Resamples <- function(x, metrics = c(MachineShop::tpr,
 }
 
 
-Curves <- function(object, ..., metrics, .check = TRUE) {
+PerformanceCurve <- function(object, ..., metrics, .check = TRUE) {
   if (.check) {
     if (is.null(object$Model)) object$Model <- factor("Model")
     missing <- missing_names(c("Cutoff", "x", "y"), object)
@@ -139,7 +142,7 @@ Curves <- function(object, ..., metrics, .check = TRUE) {
     }
 
     if (!all(map_logi(is, metrics[1:2], "MLMetric"))) {
-      stop("missing performance metrics in Curves constructor")
+      stop("missing performance metrics in PerformanceCurve constructor")
     }
     metrics <- c(y = metrics[[1]], x = metrics[[2]])
 
@@ -151,7 +154,7 @@ Curves <- function(object, ..., metrics, .check = TRUE) {
   }
 
   rownames(object) <- NULL
-  new("Curves", object, metrics = metrics, ...)
+  new("PerformanceCurve", object, metrics = metrics, ...)
 }
 
 
@@ -191,7 +194,8 @@ setMethod(".curve_default", c("factor", "numeric"),
       x[i] <- metrics[[2]](conf)
       y[i] <- metrics[[1]](conf)
     }
-    Curves(data.frame(Cutoff = cutoffs, x = x, y = y), metrics = metrics)
+    PerformanceCurve(data.frame(Cutoff = cutoffs, x = x, y = y),
+                     metrics = metrics)
   }
 )
 
@@ -236,7 +240,8 @@ setMethod(".curve_default", c("Surv", "SurvProbs"),
           y[j] <- metrics[[1]](conf)
         }
 
-        Curves(data.frame(Cutoff = cutoffs, x = x, y = y), metrics = metrics)
+        PerformanceCurve(data.frame(Cutoff = cutoffs, x = x, y = y),
+                         metrics = metrics)
 
       }, 1:length(times)),
       class = "listof",

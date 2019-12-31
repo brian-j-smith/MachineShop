@@ -74,7 +74,7 @@ behaviors of functions in the \pkg{MachineShop} package.
     "survival", "recipes")}].}
   \item{\code{reset}}{character names of settings to reset to their default
     values.}
-  \item{\code{stat.Curves}}{function or character string naming a function
+  \item{\code{stat.Curve}}{function or character string naming a function
     to compute one \link{summary} statistic at each cutoff value of resampled
     metrics in performance curves, or \code{NULL} for resample-specific
     metrics [default: \code{"base::mean"}].}
