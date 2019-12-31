@@ -395,7 +395,7 @@ print.ModeledInput <- function(x, n = MachineShop::settings("max.print"), ...) {
 
 print.ParameterGrid <- function(x, ...) {
   print_title(x)
-  print(as(asS3(x), "tbl_df"))
+  print(asS3(x))
   if (x@random) {
     cat("Random sample:", x@random, "\n")
   } else {
@@ -453,7 +453,7 @@ setMethod("show", "PerformanceDiffTest",
 #'
 print.RecipeGrid <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
-  print_items(as(asS3(x), "tbl_df"), n = n)
+  print_items(asS3(x), n = n)
   invisible(x)
 }
 
