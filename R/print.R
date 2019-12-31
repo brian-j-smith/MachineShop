@@ -43,7 +43,6 @@ print.ConfusionList <- function(x, n = MachineShop::settings("max.print"),
                                 ...) {
   print_title(x)
   cat("\n")
-  x[] <- map(as, x, "table")
   NextMethod()
 }
 
@@ -63,16 +62,22 @@ setMethod("show", "ConfusionMatrix",
 )
 
 
+print.ConfusionSummary <- function(x, ...) {
+  total <- x@total
+  acc <- x@accuracy
+  cat("Number of responses: ", total, "\n",
+      "Accuracy (SE): ", acc, " (", sqrt(acc * (1 - acc) / total), ")\n",
+      "Majority class: ", x@majority, "\n",
+      "Kappa: ", x@kappa2, "\n\n",
+      sep = "")
+  print(as(x, "matrix"))
+  invisible(x)
+}
+
+
 setMethod("show", "ConfusionSummary",
   function(object) {
-    total <- object@total
-    acc <- object@accuracy
-    cat("Number of responses: ", total, "\n",
-        "Accuracy (SE): ", acc, " (", sqrt(acc * (1 - acc) / total), ")\n",
-        "Majority class: ", object@majority, "\n",
-        "Kappa: ", object@kappa2, "\n\n",
-        sep = "")
-    print(as(object, "matrix"))
+    print(object)
     invisible()
   }
 )
@@ -126,7 +131,7 @@ setMethod("show", "Grid",
 #' @rdname print-methods
 #'
 print.ListOf <- function(x, n = MachineShop::settings("max.print"), ...) {
-  print_items(as(x, "listof"), n = n)
+  print_items(asS3(x), n = n)
   invisible(x)
 }
 
@@ -684,16 +689,23 @@ print_items.list <- function(x, n, ...) {
   diff <- length(x) - n
   if (diff > 0) {
     print(head(x, n), max = n)
-    cat("... with ", diff, " more element", if (diff > 1) "s", ": ",
-        toString(tail(names(x), diff)), "\n\n", sep = "")
+    more <- tail(names(x), diff)
+    cat(label_items(paste("... with", diff, "more element"), more), "\n\n")
   } else {
     print(x, max = n)
   }
 }
 
 
-print_items.listof <- function(x, ...) {
-  print_items.list(x, ...)
+print_items.listof <- function(x, n, ...) {
+  diff <- length(x) - n
+  if (diff > 0) {
+    print(head(x, n), n = n, na.print = NULL)
+    more <- tail(names(x), diff)
+    cat(label_items(paste("... with", diff, "more element"), more), "\n\n")
+  } else {
+    print(x, n = n, na.print = NULL)
+  }
 }
 
 
