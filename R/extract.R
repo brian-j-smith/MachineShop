@@ -15,7 +15,6 @@ NULL
 
 
 #' @rdname extract-methods
-#' @aliases [.BinomialVariate
 #'
 "[.BinomialVariate" <- function(x, i, j, ..., drop = FALSE) {
   y <- if (missing(j)) unclass(x)[i, , drop = drop] else NextMethod(drop = drop)
@@ -26,7 +25,6 @@ NULL
 
 
 #' @rdname extract-methods
-#' @aliases [,DiscreteVariate,ANY,missing,missing-method
 #'
 setMethod("[",
   c(x = "DiscreteVariate", i = "ANY", j = "missing", drop = "missing"),
@@ -37,7 +35,6 @@ setMethod("[",
 
 
 #' @rdname extract-methods
-#' @aliases [,ModelFrame,ANY,ANY,ANY-method
 #'
 setMethod("[", c(x = "ModelFrame", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = TRUE) {
@@ -48,7 +45,6 @@ setMethod("[", c(x = "ModelFrame", i = "ANY", j = "ANY", drop = "ANY"),
 
 
 #' @rdname extract-methods
-#' @aliases [,Resamples,ANY,ANY,ANY-method
 #'
 setMethod("[", c(x = "RecipeGrid", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
@@ -58,7 +54,6 @@ setMethod("[", c(x = "RecipeGrid", i = "ANY", j = "ANY", drop = "ANY"),
 
 
 #' @rdname extract-methods
-#' @aliases [,Resamples,ANY,ANY,ANY-method
 #'
 setMethod("[", c(x = "Resamples", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
@@ -72,7 +67,6 @@ setMethod("[", c(x = "Resamples", i = "ANY", j = "ANY", drop = "ANY"),
 
 
 #' @rdname extract-methods
-#' @aliases [,Resamples,ANY,missing,ANY-method
 #'
 setMethod("[", c(x = "Resamples", i = "ANY", j = "missing", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
@@ -82,7 +76,6 @@ setMethod("[", c(x = "Resamples", i = "ANY", j = "missing", drop = "ANY"),
 
 
 #' @rdname extract-methods
-#' @aliases [,Resamples,missing,missing,ANY-method
 #'
 setMethod("[", c(x = "Resamples", i = "missing", j = "missing", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
@@ -92,7 +85,6 @@ setMethod("[", c(x = "Resamples", i = "missing", j = "missing", drop = "ANY"),
 
 
 #' @rdname extract-methods
-#' @aliases [,SurvMatrix,ANY,ANY,ANY-method
 #'
 setMethod("[", c(x = "SurvMatrix", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
