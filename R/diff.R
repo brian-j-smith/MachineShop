@@ -46,8 +46,8 @@ diff.MLModel <- function(x, ...) {
 diff.Performance <- function(x, ...) {
   if (length(dim(x)) <= 2) stop("more than one model needed to diff")
   indices <- combn(dim(x)[3], 2)
-  indices1 <- indices[1,]
-  indices2 <- indices[2,]
+  indices1 <- indices[1, ]
+  indices2 <- indices[2, ]
   xdiff <- x[, , indices1, drop = FALSE] - x[, , indices2, drop = FALSE]
   model_names <- dimnames(x)[[3]]
   dimnames(xdiff)[[3]] <-
