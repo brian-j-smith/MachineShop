@@ -723,32 +723,6 @@ Times:
 +   test_predict_defaults(fo, df, model = model)
 + }
 Model: BARTModel 
-*****Calling gbart: type=2
-*****Data:
-data:n,p,np: 20041, 6, 0
-y1,yn: 1.000000, 0.000000
-x1,x[n*p]: 10.000000, 0.000000
-*****Number of Trees: 50
-*****Number of Cut Points: 100 ... 1
-*****burn,nd,thin: 250,10000,10
-*****Prior:beta,alpha,tau,nu,lambda,offset: 2,0.95,0.212132,3,1,-2.6928
-*****Dirichlet:sparse,theta,omega,a,b,rho,augment: 0,0,1,0.5,1,5,0
-*****printevery: 1000
-
-MCMC
-done 0 (out of 10250)
-done 1000 (out of 10250)
-done 2000 (out of 10250)
-done 3000 (out of 10250)
-done 4000 (out of 10250)
-done 5000 (out of 10250)
-done 6000 (out of 10250)
-done 7000 (out of 10250)
-done 8000 (out of 10250)
-done 9000 (out of 10250)
-done 10000 (out of 10250)
-time: 208s
-trcnt,tecnt: 1000,0
 *****In main of C++ for bart prediction
 tc (threadcount): 1
 number of bart draws: 1000

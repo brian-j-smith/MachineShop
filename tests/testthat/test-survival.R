@@ -20,7 +20,7 @@ output <- function(obs, pred) {
 test_predict_all <- function(..., model) {
 
   cat("Model:", model@name, "\n")
-  model_fit <- fit(..., model = model)
+  invisible(capture.output(model_fit <- fit(..., model = model)))
   obs <- response(model_fit)
 
   for (dist in c("emp", "exp", "ray", "wei")) {
@@ -44,7 +44,7 @@ test_predict_all <- function(..., model) {
 
 test_predict_defaults <- function(..., model) {
   cat("Model:", model@name, "\n")
-  model_fit <- fit(..., model = model)
+  invisible(capture.output(model_fit <- fit(..., model = model)))
   output(response(model_fit), predict(model_fit))
 }
 
