@@ -157,7 +157,7 @@ setMethod(".resample", c("MLBootstrapControl", "ModelFrame"),
     presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
-    splits <- bootstraps(as.data.frame(x),
+    splits <- bootstraps(as.data.frame(x[strata]),
                          times = object@samples,
                          strata = strata) %>% rsample2caret
     index <- splits$index
@@ -172,7 +172,7 @@ setMethod(".resample", c("MLBootstrapControl", "ModelFrame"),
             .packages = MachineShop::settings("require")) %dopar% {
       MachineShop::settings(presets)
       set.seed(seeds[i])
-      train <- x[index[[i]], , drop = FALSE]
+      train <- x[index[[i]], ]
       if (is_optimism_control) {
         subs <- subsample(train, list(x, train), model, object, i)
         df <- subs[[1]]
@@ -232,7 +232,7 @@ setMethod(".resample", c("MLCrossValidationControl", "ModelFrame"),
     presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
-    splits <- vfold_cv(as.data.frame(x),
+    splits <- vfold_cv(as.data.frame(x[strata]),
                        v = object@folds,
                        repeats = object@repeats,
                        strata = strata) %>% rsample2caret
@@ -245,8 +245,8 @@ setMethod(".resample", c("MLCrossValidationControl", "ModelFrame"),
                        .packages = MachineShop::settings("require")) %dopar% {
       MachineShop::settings(presets)
       set.seed(seeds[i])
-      train <- x[index[[i]], , drop = FALSE]
-      test <- x[-index[[i]], , drop = FALSE]
+      train <- x[index[[i]], ]
+      test <- x[-index[[i]], ]
       if (is_optimism_control) {
         subs <- subsample(train, list(test, x), model, object, i)
         structure(subs[[1]], CV.Predicted = subs[[2]]["Predicted"])
@@ -324,7 +324,7 @@ setMethod(".resample", c("MLOOBControl", "ModelFrame"),
     presets <- MachineShop::settings()
     strata <- strata_var(x)
     set.seed(object@seed)
-    splits <- bootstraps(as.data.frame(x),
+    splits <- bootstraps(as.data.frame(x[strata]),
                          times = object@samples,
                          strata = strata) %>% rsample2caret
     index <- splits$index
@@ -334,8 +334,8 @@ setMethod(".resample", c("MLOOBControl", "ModelFrame"),
             .packages = MachineShop::settings("require")) %dopar% {
       MachineShop::settings(presets)
       set.seed(seeds[i])
-      train <- x[index[[i]], , drop = FALSE]
-      test <- x[indexOut[[i]], , drop = FALSE]
+      train <- x[index[[i]], ]
+      test <- x[indexOut[[i]], ]
       subsample(train, test, model, object, i)
     } %>% Resamples(control = object, strata = strata)
   }
@@ -368,11 +368,11 @@ setMethod(".resample", c("MLSplitControl", "ModelFrame"),
   function(object, x, model) {
     strata <- strata_var(x)
     set.seed(object@seed)
-    split <- initial_split(as.data.frame(x),
+    split <- initial_split(as.data.frame(x[strata]),
                            prop = object@prop,
                            strata = strata)
-    train <- x[split$in_id, , drop = FALSE]
-    test <- x[-split$in_id, , drop = FALSE]
+    train <- x[split$in_id, ]
+    test <- x[-split$in_id, ]
     subsample(train, test, model, object) %>%
       Resamples(control = object, strata = strata)
   }
