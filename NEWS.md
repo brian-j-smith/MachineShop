@@ -2,6 +2,13 @@
 
 ## Version Updates
 
+## 2.0.2
+* Implement `ModeledInput`, `SelectedInput` and `TunedInput` classes and methods.
+* Deprecate `SelectedFormula()`, `SelectedMatrix()`, `SelectedModelFrame()`, `SelectedRecipe()`, and `TunedRecipe()`.
+* Remove deprecated `tune()`.
+* Rename global settine `stat.Curves` to `stat.Curve`.
+
+
 ## 2.0.1
 * Rename global setting `stat.Train` to `stat.train`.
 * Add print methods for `SelectedModel`, `StackedModel`, `SuperModel`, and `TunedModel`.
