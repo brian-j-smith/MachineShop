@@ -411,8 +411,8 @@ div.tocify {
 
 <div id="melanoma-example" class="section level1">
 <h1>Melanoma Example</h1>
-<p>The package is illustrated in the following sections with an overall survival analysis example in which the response variable is a time to event outcome. Since survival outcomes are a combination of numerical (time to event) and categorical (event) variables, package features for both variable types are illustrated in the example. Outcomes other than survival, including nominal and ordinal factors as well as numeric vectors and matrices, are supported by <code>MachineShop</code> and will be discussed.</p>
-<p>Survival analysis is performed with the <code>Melanoma</code> dataset from the <code>MASS</code> package <span class="citation">(Andersen et al. 1993)</span>. The dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas. Also provided are potential predictors of the survival outcomes. The analysis begins by loading required packages <code>MachineShop</code>, <code>survival</code>, and <code>MASS</code> as well as <code>magrittr</code> <span class="citation">(Bache and Wickham 2014)</span> for its pipe (<code>%&gt;%</code>) operator to simplify some of the code syntax. For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one.</p>
+<p>The package is illustrated in the following sections with an overall survival analysis example in which the response variable is a time to event outcome. Since survival outcomes are a combination of numerical (time to event) and categorical (event) variables, package features for both variable types are illustrated in the example. Outcomes other than survival, including nominal and ordinal factors as well as numeric vectors and matrices, are supported by <strong>MachineShop</strong> and will be discussed.</p>
+<p>Survival analysis is performed with the <code>Melanoma</code> dataset from the <strong>MASS</strong> package <span class="citation">(Andersen et al. 1993)</span>. The dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas. Also provided are potential predictors of the survival outcomes. The analysis begins by loading required packages <strong>MachineShop</strong>, <strong>survival</strong> <span class="citation">(Therneau 2019)</span>, and <strong>MASS</strong> as well as <strong>magrittr</strong> <span class="citation">(Bache and Wickham 2014)</span> for its pipe (<code>%&gt;%</code>) operator to simplify some of the code syntax. For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one.</p>
 <pre class="r"><code>## Analysis libraries
 library(MachineShop)
 library(survival)
@@ -577,7 +577,7 @@ surv_fo &lt;- Surv(time, status) ~ sex + age + year + thickness + ulcer</code></
 <h1>Model Fit and Prediction</h1>
 <div id="model-information" class="section level2">
 <h2>Model Information</h2>
-<p>Model fitting requires user specification of a <code>MachineShop</code> compatible model. A named list of package-supplied models can be obtained interactively with the <code>modelinfo</code> function, and includes the following components for each.</p>
+<p>Model fitting requires user specification of a <strong>MachineShop</strong> compatible model. A named list of package-supplied models can be obtained interactively with the <code>modelinfo</code> function, and includes the following components for each.</p>
 <dl>
 <dt><code>label</code></dt>
 <dd>Character descriptor for the model.
@@ -793,7 +793,7 @@ fit(mf, model = GBMModel)</code></pre>
 </div>
 <div id="preprocessing-recipe" class="section level2">
 <h2>Preprocessing Recipe</h2>
-<p>The <code>recipes</code> package <span class="citation">(Kuhn and Wickham 2018)</span> provides a flexible framework for defining predictor and response variables as well as preprocessing steps to be applied to them prior to model fitting. Using recipes helps ensure that estimation of predictive performance accounts for all modeling step. They are also a convenient way of consistently applying preprocessing to new data. A basic recipe is given below in terms of the formula and data frame ingredients needed for the analysis.</p>
+<p>The <strong>recipes</strong> package <span class="citation">(Kuhn and Wickham 2020)</span> provides a flexible framework for defining predictor and response variables as well as preprocessing steps to be applied to them prior to model fitting. Using recipes helps ensure that estimation of predictive performance accounts for all modeling step. They are also a convenient way of consistently applying preprocessing to new data. A basic recipe is given below in terms of the formula and data frame ingredients needed for the analysis.</p>
 <pre class="r"><code>## Recipe specification
 library(recipes)
 
@@ -1431,7 +1431,7 @@ Event
 <h1>Resample Performance Estimation</h1>
 <div id="algorithms" class="section level2">
 <h2>Algorithms</h2>
-<p>Model performance can be estimated with resampling methods that simulate repeated training and test set fits and predictions. With these methods, performance metrics are computed on each resample to produce an empirical distribution for inference. Resampling is controlled in the <code>MachineShop</code> with the functions:</p>
+<p>Model performance can be estimated with resampling methods that simulate repeated training and test set fits and predictions. With these methods, performance metrics are computed on each resample to produce an empirical distribution for inference. Resampling is controlled in the <strong>MachineShop</strong> with the functions:</p>
 <dl>
 <dt>BootControl</dt>
 <dd>Simple bootstrap resampling <span class="citation">(Efron and Tibshirani 1993)</span>. Models are repeatedly fit with bootstrap resampled training sets and used to predict the full data set.
@@ -1466,7 +1466,7 @@ surv_probs_control &lt;- CVControl(folds = 5, repeats = 3, times = surv_times, s
 </div>
 <div id="parallel-processing" class="section level2">
 <h2>Parallel Processing</h2>
-<p>Resampling is implemented with the <code>foreach</code> package <span class="citation">(Microsoft and Weston 2017)</span> and will run in parallel if a compatible backend is loaded, such as that provided by the <code>doParallel</code> package <span class="citation">(Microsoft and Weston 2018)</span>.</p>
+<p>Resampling is implemented with the <strong>foreach</strong> package <span class="citation">(Microsoft and Weston 2019b)</span> and will run in parallel if a compatible backend is loaded, such as that provided by the <strong>doParallel</strong> package <span class="citation">(Microsoft and Weston 2019a)</span>.</p>
 <pre class="r"><code>## Register multiple cores for parallel computations
 library(doParallel)
 registerDoParallel(cores = 2)</code></pre>
@@ -1553,7 +1553,7 @@ summary(res_means, stats = c(Mean = mean, Percentile = percentiles))
 </div>
 <div id="plots" class="section level2">
 <h2>Plots</h2>
-<p>Summary plots of resample output can be obtained with the <code>plot</code> function. Boxplots are the default plot type; but density, errorbar, and violin plots are also available. Plots are generated with the <code>ggplot2</code> package <span class="citation">(Wickham 2016)</span> and returned as <code>ggplot</code> objects. As such, annotation and formatting defined for ggplots can be applied to the returned plots.</p>
+<p>Summary plots of resample output can be obtained with the <code>plot</code> function. Boxplots are the default plot type; but density, errorbar, and violin plots are also available. Plots are generated with the <strong>ggplot2</strong> package <span class="citation">(Wickham 2016)</span> and returned as <code>ggplot</code> objects. As such, annotation and formatting defined for ggplots can be applied to the returned plots.</p>
 <pre class="r"><code>## Libraries for plot annotation and fomatting
 library(ggplot2)
 library(gridExtra)
@@ -1703,12 +1703,14 @@ plot(cal)</code></pre>
 #&gt; Object of class &quot;ConfusionList&quot;
 #&gt; 
 #&gt; GBMModel.time1 :
+#&gt; Object of class &quot;BinaryConfusionMatrix&quot;
 #&gt;          Observed
 #&gt; Predicted         0         1
 #&gt;         0 262.94463  64.05537
 #&gt;         1  32.57143  48.42857
 #&gt; 
 #&gt; GBMModel.time2 :
+#&gt; Object of class &quot;BinaryConfusionMatrix&quot;
 #&gt;          Observed
 #&gt; Predicted         0         1
 #&gt;         0 201.49597  82.50403
@@ -1829,22 +1831,186 @@ plot(lf, find = 0.75)</code></pre>
 </div>
 <div id="modeling-strategies" class="section level1">
 <h1>Modeling Strategies</h1>
-<div id="model-tuning" class="section level2">
-<h2>Model Tuning</h2>
-<p>Many of the modeling functions have arguments, or tuning parameters, that control aspects of their model fitting algorithms. For example, <code>GBMModel</code> parameters <code>n.trees</code> and <code>interaction.depth</code> control the number of decision trees to fit and the maximum depth of variable interactions. When called with a <code>TunedModel</code>, the <code>fit</code> function performs model fitting over a grid of parameter values and returns the model with the most optimal values. Optimality is determined based on the first performance metric of the <code>metrics</code> argument of <code>TunedModel</code> if supplied or the first default metric of the <code>performance</code> function otherwise. Argument <code>grid</code> additionally controls the construction of grid values and can be a single numeric value giving the grid length in each parameter dimension. As shown in the output below, <code>as.MLModel</code> will extract a tuned model from fit results for viewing of the tuning parameter grid values, the names of models fit to each, all calculated metrics, the final model selected, the metric upon which its selection was based, and its tuning parameters.</p>
-<pre class="r"><code>## Tune over automatic grid of model parameters
-surv_fit &lt;- TunedModel(
-  GBMModel,
-  grid = 3,
-  control = surv_means_control,
-  metrics = c(&quot;CIndex&quot; = cindex, &quot;RMSE&quot; = rmse)
-) %&gt;% fit(surv_fo, data = surv_train)
-(tuned_model &lt;- as.MLModel(surv_fit))
+<p>Model development often involves the comparison of multiple models from a candidate set for the purpose of selecting a final one. Models in the candidate set may differ with respect to their predictor variables, preprocessing steps and parameters, and model types and parameters. Complex model selection strategies for sets that involve one or more of these differences can be implemented with the <strong>MachineShop</strong> package. Implementation is achieved with a straightforward syntax based on the meta-input and meta-model functions listed in the table below and with resampling, including nested resampling, conducted automatically for model selection and predictive performance evaluation.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Parameter Grid Tuning</th>
+<th>Candidate Set Selection</th>
+<th>Ensemble Learning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>TunedInput</code></td>
+<td><code>SelectedInput</code></td>
+<td><code>StackedModel</code></td>
+</tr>
+<tr class="even">
+<td><code>TunedModel</code></td>
+<td><code>SelectedModel</code></td>
+<td><code>SuperModel</code></td>
+</tr>
+</tbody>
+</table>
+<p>These meta-functions fall into three main categories: 1) tuning of a given input or model over a grid of parameter values, 2) selection from an arbitrary set of different inputs or models, or 3) combining multiple models into an ensemble learner. In the context of these strategies, an input may be a formula, design matrix, model frame, or preprocessing recipe. The meta-input and meta-model functions themselves return input and model class objects, respectively. Combinations and multiple levels of nesting of meta-functions, inputs, and models are allowed. For example, <code>StackedModel</code> and <code>SuperModel</code> may consist of <code>TunedModel</code> and other model objects. <code>SelectedModel</code> can select among mixes of <code>TunedModel</code>, ensemble model, and other model objects. Likewise, <code>TunedInput</code> objects, along with other inputs, may be nested within <code>SelectedInput</code>. Furthermore, selection and tuning of both inputs and models can be performed simultaneously. These and other possibilities are illustrated in the following sections.</p>
+<div id="inputs" class="section level2">
+<h2>Inputs</h2>
+<p>Inputs to model fitting functions define the predictor and response variables and the dataset containing their values. These can be specified with traditional formula and dataset pairs, design matrix and response variable pairs, model frames, and preprocessing recipes. The package supports (1) tuning of an input over a grid of parameter values and (2) selection of inputs from candidate sets that differ with respect to their predictors or their preprocessing steps and parameters.</p>
+<div id="input-tuning" class="section level3">
+<h3>Input Tuning</h3>
+<p>Preprocessing recipes may have step with parameters that affect predictive performance. Steps can be tuned over a grid of parameter values with <code>TunedInput</code> to select the best performing values. Calls to <code>TunedInput</code> return an input object that may be trained on data with the <code>fit</code> function or evaluated for predictive performance with <code>resample</code>. As an example, a principal components analysis (PCA) step could be included in a preprocessing recipe for tuning over the number of components to retain in the final model. Such a recipe is shown below accompanied by a call to <code>expand_steps</code> to construct a tuning grid. The grid parameter <code>num_comp</code> and name <code>PCA</code> correspond to the argument and id of the <code>step_pca</code> function to which the values <code>1:3</code> apply.</p>
+<pre class="r"><code>## Preprocessing recipe with PCA steps
+pca_rec &lt;- recipe(time + status ~ ., data = surv_train) %&gt;%
+  role_surv(time = time, event = status) %&gt;%
+  step_center(all_predictors()) %&gt;%
+  step_scale(all_predictors()) %&gt;%
+  step_pca(all_predictors(), id = &quot;PCA&quot;)
+
+## Tuning grid of number of PCA components
+pca_grid &lt;- expand_steps(
+  PCA = list(num_comp = 1:3)
+)
+
+## Tuning specification
+tun_rec &lt;- TunedInput(pca_rec, grid = pca_grid)</code></pre>
+<p>The recipe and grid may then be passed <code>TunedInput</code> to fit the model. From the fit, the resulting model can be extracted with <code>as.MLModel</code>. The output shows that one principal component was selected. Resample estimation of predictive performance is employed by <code>TunedInput</code> for the selection. The default resampling method is cross-validation. Other methods, performance metrics, and selection statistics can be specified with the arguments to <code>TunedInput</code>.</p>
+<pre class="r"><code>## Input-tuned model fit and final trained model
+model_fit &lt;- fit(tun_rec, model = GBMModel)
+as.MLModel(model_fit)
 #&gt; Object of class &quot;MLModel&quot;
 #&gt; 
 #&gt; Model name: GBMModel
 #&gt; Label: Trained Generalized Boosted Regression
-#&gt; Packages: gbm
+#&gt; Package: gbm
+#&gt; Response types: factor, numeric, PoissonVariate, Surv
+#&gt; Tuning grid: TRUE
+#&gt; Variable importance: TRUE
+#&gt; 
+#&gt; Parameters:
+#&gt; List of 5
+#&gt;  $ n.trees          : num 100
+#&gt;  $ interaction.depth: num 1
+#&gt;  $ n.minobsinnode   : num 10
+#&gt;  $ shrinkage        : num 0.1
+#&gt;  $ bag.fraction     : num 0.5
+#&gt; 
+#&gt; TrainStep1 :
+#&gt; Object of class &quot;TrainBit&quot;
+#&gt; 
+#&gt; Grid (selected = 1):
+#&gt; # A tibble: 3 x 1
+#&gt;   ModelRecipe$PCA$num_comp
+#&gt;                      &lt;int&gt;
+#&gt; 1                        1
+#&gt; 2                        2
+#&gt; 3                        3
+#&gt; 
+#&gt; Object of class &quot;Performance&quot;
+#&gt; 
+#&gt; Metrics: C-Index 
+#&gt; Models: 1, 2, 3 
+#&gt; 
+#&gt; Selected model: 1 
+#&gt; C-Index value: 0.7149047</code></pre>
+</div>
+<div id="input-selection" class="section level3">
+<h3>Input Selection</h3>
+<p>Selection of recipes with different steps or predictors can be conducted with <code>SelectedInput</code>.</p>
+<pre class="r"><code>## Preprocessing recipe without PCA steps
+rec1 &lt;- recipe(time + status ~ sex + age + year + thickness + ulcer, data = surv_train) %&gt;%
+  role_surv(time = time, event = status)
+rec2 &lt;- recipe(time + status ~ sex + age + year, data = surv_train) %&gt;%
+  role_surv(time = time, event = status)
+
+## Selection among recipes with and without PCA steps
+sel_rec &lt;- SelectedInput(
+  rec1,
+  rec2,
+  TunedInput(pca_rec, grid = pca_grid)
+)</code></pre>
+<p>In this case, the first recipe with all original predictors and no PCA steps is selected.</p>
+<pre class="r"><code>## Input-selected model fit and model
+model_fit &lt;- fit(sel_rec, model = GBMModel)
+as.MLModel(model_fit)
+#&gt; Object of class &quot;MLModel&quot;
+#&gt; 
+#&gt; Model name: GBMModel
+#&gt; Label: Trained Generalized Boosted Regression
+#&gt; Package: gbm
+#&gt; Response types: factor, numeric, PoissonVariate, Surv
+#&gt; Tuning grid: TRUE
+#&gt; Variable importance: TRUE
+#&gt; 
+#&gt; Parameters:
+#&gt; List of 5
+#&gt;  $ n.trees          : num 100
+#&gt;  $ interaction.depth: num 1
+#&gt;  $ n.minobsinnode   : num 10
+#&gt;  $ shrinkage        : num 0.1
+#&gt;  $ bag.fraction     : num 0.5
+#&gt; 
+#&gt; TrainStep1 :
+#&gt; Object of class &quot;TrainBit&quot;
+#&gt; 
+#&gt; Grid (selected = 1):
+#&gt; # A tibble: 3 x 1
+#&gt;   ModelRecipe
+#&gt;   &lt;fct&gt;      
+#&gt; 1 1          
+#&gt; 2 2          
+#&gt; 3 3          
+#&gt; 
+#&gt; Object of class &quot;Performance&quot;
+#&gt; 
+#&gt; Metrics: C-Index 
+#&gt; Models: Recipe.1, Recipe.2, Recipe.3 
+#&gt; 
+#&gt; Selected model: Recipe.1 
+#&gt; C-Index value: 0.7311282</code></pre>
+<p>Selection can also be performed among traditional formulas, design matrices, or model frames.</p>
+<pre class="r"><code>## Traditional formulas
+fo1 &lt;- Surv(time, status) ~ sex + age + year + thickness + ulcer
+fo2 &lt;- Surv(time, status) ~ sex + age + year
+
+## Selection among formulas
+sel_fo &lt;- SelectedInput(fo1, fo2, data = surv_train)
+
+## Input-selected model fit and final trained model
+model_fit &lt;- fit(sel_fo, model = GBMModel)
+as.MLModel(model_fit)</code></pre>
+<p>In the previous examples, selection of different inputs was performed with the same model (<code>GBMModel</code>). Selection among different combinations of inputs and models is supported with the <code>ModeledInput</code> specification.</p>
+<pre class="r"><code>## Different combinations of inputs and models
+sel_mfo &lt;- SelectedInput(
+  ModeledInput(fo1, data = surv_train, model = CoxModel),
+  ModeledInput(fo2, data = surv_train, model = GBMModel)
+)
+
+## Input-selected model fit and final trained model
+model_fit &lt;- fit(sel_mfo)
+as.MLModel(model_fit)</code></pre>
+</div>
+</div>
+<div id="models" class="section level2">
+<h2>Models</h2>
+<p>Models define the functional relationships between predictor and response variables from a given set of inputs.</p>
+<div id="model-tuning" class="section level3">
+<h3>Model Tuning</h3>
+<p>Many of the package-supplied modeling functions have arguments, or tuning parameters, that control aspects of their model fitting algorithms. For example, <code>GBMModel</code> parameters <code>n.trees</code> and <code>interaction.depth</code> control the number of decision trees to fit and the maximum depth of variable interactions. When called with a <code>TunedModel</code>, the <code>fit</code> function performs model fitting over a grid of parameter values and returns the model with the most optimal values. Optimality is determined based on the first performance metric of the <code>metrics</code> argument of <code>TunedModel</code> if supplied or the first default metric of the <code>performance</code> function otherwise. Argument <code>grid</code> additionally controls the construction of grid values and can be a single numeric value giving the grid length in each parameter dimension. As shown in the output below, <code>as.MLModel</code> will extract a tuned model from fit results for viewing of the tuning parameter grid values, the names of models fit to each, all calculated metrics, the final model selected, the metric upon which its selection was based, and its tuning parameters.</p>
+<pre class="r"><code>## Tune over automatic grid of model parameters
+model_fit &lt;- fit(surv_fo, data = surv_train,
+                 model = TunedModel(
+                   GBMModel,
+                   grid = 3,
+                   control = surv_means_control,
+                   metrics = c(&quot;CIndex&quot; = cindex, &quot;RMSE&quot; = rmse)
+                 ))
+(trained_model &lt;- as.MLModel(model_fit))
+#&gt; Object of class &quot;MLModel&quot;
+#&gt; 
+#&gt; Model name: GBMModel
+#&gt; Label: Trained Generalized Boosted Regression
+#&gt; Package: gbm
 #&gt; Response types: factor, numeric, PoissonVariate, Surv
 #&gt; Tuning grid: TRUE
 #&gt; Variable importance: TRUE
@@ -1857,21 +2023,22 @@ surv_fit &lt;- TunedModel(
 #&gt;  $ shrinkage        : num 0.1
 #&gt;  $ bag.fraction     : num 0.5
 #&gt; 
-#&gt; Object of class &quot;TrainBits&quot;
+#&gt; TrainStep1 :
+#&gt; Object of class &quot;TrainBit&quot;
 #&gt; 
 #&gt; Grid (selected = 1):
-#&gt; # A tibble: 9 x 2
-#&gt;   n.trees interaction.depth
-#&gt;     &lt;dbl&gt;             &lt;int&gt;
-#&gt; 1      50                 1
-#&gt; 2     100                 1
-#&gt; 3     150                 1
-#&gt; 4      50                 2
-#&gt; 5     100                 2
-#&gt; 6     150                 2
-#&gt; 7      50                 3
-#&gt; 8     100                 3
-#&gt; 9     150                 3
+#&gt; # A tibble: 9 x 1
+#&gt;   Model$n.trees $interaction.depth
+#&gt;           &lt;dbl&gt;              &lt;int&gt;
+#&gt; 1            50                  1
+#&gt; 2           100                  1
+#&gt; 3           150                  1
+#&gt; 4            50                  2
+#&gt; 5           100                  2
+#&gt; 6           150                  2
+#&gt; 7            50                  3
+#&gt; 8           100                  3
+#&gt; 9           150                  3
 #&gt; 
 #&gt; Object of class &quot;Performance&quot;
 #&gt; 
@@ -1882,21 +2049,24 @@ surv_fit &lt;- TunedModel(
 #&gt; CIndex value: 0.7516431</code></pre>
 <p>Grid values may also be a call to <code>Grid</code> with the grid <code>length</code> and number of grid points to sample at <code>random</code> or a user-specified data frame of grid points.</p>
 <pre class="r"><code>## Tune over randomly sampled grid points
-TunedModel(
-  GBMModel,
-  grid = Grid(length = 100, random = 10),
-  control = surv_means_control
-) %&gt;% fit(surv_fo, data = surv_train)
+fit(surv_fo, data = surv_train,
+    model = TunedModel(
+      GBMModel,
+      grid = Grid(length = 100, random = 10),
+      control = surv_means_control
+    ))
 
 ## Tune over user-specified grid points
-TunedModel(
-  GBMModel,
-  grid = expand_params(n.trees = c(25, 50, 100),
-                       interaction.depth = 1:3),
-  control = surv_means_control
-) %&gt;% fit(surv_fo, data = surv_train)</code></pre>
+fit(surv_fo, data = surv_train,
+    model = TunedModel(
+      GBMModel,
+      grid = expand_params(n.trees = c(25, 50, 100),
+                           interaction.depth = 1:3),
+      control = surv_means_control
+    ))</code></pre>
 <p>Statistics summarizing the resampled performance metrics across all tuning parameter combinations can be obtained with the <code>summary</code> function.</p>
-<pre class="r"><code>summary(tuned_model)
+<pre class="r"><code>summary(trained_model)
+#&gt; $TrainStep1
 #&gt; , , Metric = CIndex
 #&gt; 
 #&gt;             Statistic
@@ -1925,14 +2095,15 @@ TunedModel(
 #&gt;   GBMModel.8 11383.052  9574.898  6874.1221 2347.388 23134.675  0
 #&gt;   GBMModel.9 16408.099 12031.200 11141.6853 2661.137 38722.358  0</code></pre>
 <p>Line plots of tuning results display the resampled metric means, or another statistic specified with the <code>stat</code> argument, versus the first tuning parameter values and with lines grouped according to the remaining parameters, if any.</p>
-<pre class="r"><code>plot(tuned_model, type = &quot;line&quot;)</code></pre>
+<pre class="r"><code>plot(trained_model, type = &quot;line&quot;)
+#&gt; $TrainStep1</code></pre>
 <p><img src="using_files/figure-html/using_strategies_tune_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="model-selection" class="section level2">
-<h2>Model Selection</h2>
-<p>Model selection can be conducted by calling <code>fit</code> with a <code>SelectedModel</code> to automatically choose from any combination of models and model parameters. Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values. Combinations of model functions, function names, or function calls can be supplied as lists to the <code>models</code> argument of <code>SelectedModel</code> in order to define sets of candidate models from which to select. An <code>expand_model</code> helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired.</p>
+<div id="model-selection" class="section level3">
+<h3>Model Selection</h3>
+<p>Model selection can be conducted by calling <code>fit</code> with a <code>SelectedModel</code> to automatically choose from any combination of models and model parameters. Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values. Combinations of model functions, function names, or function calls can be supplied to <code>SelectedModel</code> in order to define sets of candidate models from which to select. An <code>expand_model</code> helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired.</p>
 <pre class="r"><code>## Model interface for model selection
-selected_model &lt;- SelectedModel(
+sel_model &lt;- SelectedModel(
   expand_model(GBMModel, n.trees = c(50, 100), interaction.depth = 1:2),
   GLMNetModel(lambda = 0.01),
   CoxModel,
@@ -1940,21 +2111,22 @@ selected_model &lt;- SelectedModel(
 )
 
 ## Fit the selected model
-fit(surv_fo, data = surv_train, model = selected_model)</code></pre>
+fit(surv_fo, data = surv_train, model = sel_model)</code></pre>
 <p>Selection may also be performed over candidate sets that include tuned models. For instance, the <code>SelectedModel</code> function is applicable to sets containing different classes of models each individually tuned over a grid of parameters.</p>
 <pre class="r"><code>## Model interface for selection among tuned models
-selected_tuned_model &lt;- SelectedModel(
+sel_tun_model &lt;- SelectedModel(
   TunedModel(GBMModel, control = surv_means_control),
   TunedModel(GLMNetModel, control = surv_means_control),
   TunedModel(CoxModel, control = surv_means_control)
 )
 
 ## Fit the selected tuned model
-fit(surv_fo, data = surv_train, model = selected_tuned_model)</code></pre>
+fit(surv_fo, data = surv_train, model = sel_tun_model)</code></pre>
 </div>
-<div id="ensemble-models" class="section level2">
-<h2>Ensemble Models</h2>
-<p>Ensemble modelling methods combine <span class="math inline">\(m = 1, \ldots, M\)</span> base learning models as a strategy to improve predictive performance. Two methods implemented in <code>Machineshop</code> are <em>stacked regression</em> <span class="citation">(Breiman 1996)</span> and <em>super learners</em> <span class="citation">(van der Laan, Polley, and Hubbard 2007)</span>. Stacked regression fits a linear combination of predictions from specified base learners to produce a prediction function of the form <span class="math display">\[
+</div>
+<div id="ensemble-learning" class="section level2">
+<h2>Ensemble Learning</h2>
+<p>Ensemble learning models combine <span class="math inline">\(m = 1, \ldots, M\)</span> base learning models as a strategy to improve predictive performance. Two methods implemented in <code>Machineshop</code> are <em>stacked regression</em> <span class="citation">(Breiman 1996)</span> and <em>super learners</em> <span class="citation">(van der Laan, Polley, and Hubbard 2007)</span>. Stacked regression fits a linear combination of predictions from specified base learners to produce a prediction function of the form <span class="math display">\[
 \hat{f}(x) = \sum_{m=1}^M \hat{w}_m \hat{f}_m(x).
 \]</span> Stacking weights <span class="math inline">\(w\)</span> are estimated by (constrained) least squares regression of case responses <span class="math inline">\(y_i\)</span> on predictions <span class="math inline">\(\hat{f}^{-\kappa(i)}(x_i)\)</span> from learners fit to data subsamples <span class="math inline">\(-\kappa(i)\)</span> not containing the corresponding cases. In particular, they are obtained as the solution <span class="math display">\[
 \hat{w} = \underset{w}{\operatorname{argmin}} \sum_{i=1}^{N}\left(y_i - \sum_{m=1}^{M} w_m \hat{f}^{-\kappa(i)}(x_i) \right)^2
@@ -1980,6 +2152,131 @@ summary(res_super)
 #&gt;          Statistic
 #&gt; Metric        Mean  Median        SD Min       Max NA
 #&gt;   C-Index 0.737307 0.75625 0.1228742 0.5 0.9027778  0</code></pre>
+</div>
+<div id="methodology" class="section level2">
+<h2>Methodology</h2>
+<p>Combinations and multiple levels of nested meta-functions, inputs, and models are allowed. If model fitting involves a single meta-function, performances of the inputs or models under consideration are estimated with standard resampling, and the best performing model is returned. Nestings of meta-functions are trained with nested resampling. Consider the example below in which training involves input tuning and model selection. In particular, a preprocessing recipe is tuned over the number of predictor-derived principal components and model selection is of an untuned <code>GBMModel</code>, a tuned <code>GBMModel</code>, and a <code>SuperModel</code>.</p>
+<pre class="r"><code>## Preprocessing recipe with PCA steps
+pca_rec &lt;- recipe(time + status ~ ., data = surv_train) %&gt;%
+  role_surv(time = time, event = status) %&gt;%
+  step_center(all_predictors()) %&gt;%
+  step_scale(all_predictors()) %&gt;%
+  step_pca(all_predictors(), id = &quot;PCA&quot;)
+
+## Tuning grid of number of PCA components
+pca_grid &lt;- expand_steps(
+  PCA = list(num_comp = 1:3)
+)
+
+## Input specification
+tun_rec &lt;- TunedInput(pca_rec, grid = pca_grid)
+
+## Model specification
+sel_model &lt;- SelectedModel(
+  GBMModel,
+  TunedModel(GBMModel),
+  SuperModel(CoxModel, TunedModel(CForestModel), TunedModel(GLMBoostModel))
+)
+
+## Model fit and final trained model
+model_fit &lt;- fit(tun_rec, model = sel_model)
+as.MLModel(model_fit)</code></pre>
+<p>Model fitting proceeds with instances of the specified model selection nested within each of the input tuning grid parameter values. Tuning of <code>GBMModel</code> and construction of <code>SuperModel</code> are further nested within the model selection, with tuning of <code>CForestModel</code> and <code>GLMBoostModel</code> nested within <code>SuperModel</code>. Altogether, there are four levels of meta-input and meta-model functions in the hierarchy.</p>
+<p><img src="img/FigModelDAG.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Each meta-function is fit based on resample estimation (default: cross-validation) of predictive performance. When one meta-function is nested within another, nested resampling is employed, as illustrated in the figure below.</p>
+<p><img src="img/FigNestedCV.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Nesting of resampling routines is repeated recursively when a fit involves multiple levels of nested meta-functions. For example, predictive performance estimation for the training of <code>TunedInput(pca_rec, grid = pca_grid)</code> involves up to three nested meta functions: <code>TunedInput</code> → <code>SelectedModel</code> → <code>SuperModel</code> → <code>TunedModel(CForestModel)</code>. For this relationship, an outer and three nested inner resampling loops are executed as follows. First, <code>CForestModel</code> is tuned at the third inner resampling loop. Second, the tuned model is passed to the second inner loop for construction of <code>SuperModel</code>. Third, the constructed model is passed to the first inner loop for model selection from the candidate set. Finally, the selected model is passed to the outer loop for tuning of the preprocessing recipe. Based on resample performance estimation of the entire input/model specification, one principal component is selected.</p>
+<pre><code>#&gt; TrainStep1 :
+#&gt; Object of class &quot;TrainBit&quot;
+#&gt; 
+#&gt; Grid (selected = 1):
+#&gt; # A tibble: 3 x 1
+#&gt;   ModelRecipe$PCA$num_comp
+#&gt;                      &lt;int&gt;
+#&gt; 1                        1
+#&gt; 2                        2
+#&gt; 3                        3
+#&gt; 
+#&gt; Object of class &quot;Performance&quot;
+#&gt; 
+#&gt; Metrics: C-Index 
+#&gt; Models: 1, 2, 3 
+#&gt; 
+#&gt; Selected model: 1 
+#&gt; C-Index value: 0.7327563</code></pre>
+<p>In order to identify and return a final model fitted to the entire input data, the hierarchy is traversed from top to bottom along the path determined by the choice at each node. Steps along the path are labelled <code>TrainStep1</code>, <code>TrainStep2</code>, and <code>TrainStep3</code> in the output. As seen above in <code>TrainStep1</code>, one principal component is first selected for the tuned input. Using an input recipe with one principal component, the entire dataset is refit at <code>TrainStep2</code> to select <code>TunedModel(GBMModel)</code>.</p>
+<pre><code>#&gt; TrainStep2 :
+#&gt; Object of class &quot;TrainBit&quot;
+#&gt; 
+#&gt; Grid (selected = 2):
+#&gt; # A tibble: 3 x 1
+#&gt;   Model
+#&gt;   &lt;fct&gt;
+#&gt; 1 1    
+#&gt; 2 2    
+#&gt; 3 3    
+#&gt; 
+#&gt; Object of class &quot;Performance&quot;
+#&gt; 
+#&gt; Metrics: C-Index 
+#&gt; Models: GBMModel, TunedModel, SuperModel 
+#&gt; 
+#&gt; Selected model: TunedModel 
+#&gt; C-Index value: 0.742369</code></pre>
+<p>Finally, the entire dataset is refit in <code>TrainStep3</code> to selects 50 trees and an interaction depth of 1 in the tuning of <code>GBMModel</code>.</p>
+<pre><code>#&gt; TrainStep3 :
+#&gt; Object of class &quot;TrainBit&quot;
+#&gt; 
+#&gt; Grid (selected = 1):
+#&gt; # A tibble: 9 x 1
+#&gt;   Model$n.trees $interaction.depth
+#&gt;           &lt;dbl&gt;              &lt;int&gt;
+#&gt; 1            50                  1
+#&gt; 2           100                  1
+#&gt; 3           150                  1
+#&gt; 4            50                  2
+#&gt; 5           100                  2
+#&gt; 6           150                  2
+#&gt; 7            50                  3
+#&gt; 8           100                  3
+#&gt; 9           150                  3
+#&gt; 
+#&gt; Object of class &quot;Performance&quot;
+#&gt; 
+#&gt; Metrics: C-Index 
+#&gt; Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6, GBMModel.7, GBMModel.8, GBMModel.9 
+#&gt; 
+#&gt; Selected model: GBMModel.1 
+#&gt; C-Index value: 0.7419883</code></pre>
+<p>After the series of training steps reaches the bottom of its hierarchy, the final model is fitted to the entire dataset and returned.</p>
+<pre><code>#&gt; Object of class &quot;MLModel&quot;
+#&gt; 
+#&gt; Model name: GBMModel
+#&gt; Label: Trained Generalized Boosted Regression
+#&gt; Package: gbm
+#&gt; Response types: factor, numeric, PoissonVariate, Surv
+#&gt; Tuning grid: TRUE
+#&gt; Variable importance: TRUE
+#&gt; 
+#&gt; Parameters:
+#&gt; List of 5
+#&gt;  $ n.trees          : num 50
+#&gt;  $ interaction.depth: int 1
+#&gt;  $ n.minobsinnode   : num 10
+#&gt;  $ shrinkage        : num 0.1
+#&gt;  $ bag.fraction     : num 0.5</code></pre>
+<p>Generalization performance of the entire process can be estimated with a call to <code>resample</code>.</p>
+<pre class="r"><code>## Generalization performance of the modeling strategy
+resample(tun_rec, model = sel_model)</code></pre>
+<p>There is no conceptual limit to the number of nested inputs and models that can be specified with the package. However, there are some practical issues to consider.</p>
+<dl>
+<dt>Computational expense</dt>
+<dd>Computational expense of nested resampling increases exponentially. For instance, execution of <em>r</em> levels of a nested 10-fold cross-validation alogirthm is an O(10<sup><em>r</em></sup>) operation. Runtimes can be decreased by allocating multiple cores to run the resampling algorithms in parallel. However, the exponential increase in computational complexity often outpaces the number of available cores.
+</dd>
+<dt>Data reduction</dt>
+<dd>Training data is reduced at each subsequent resampling level. For 10-fold cross-validation and a training set of <em>N</em> total cases there will be 0.9<sup><em>r</em></sup> cases available at each fold of the <em>r</em><sup>th</sup> resampling algorithm. Bootstrapping could be used, as an alternative to cross-validation, to ensure <em>N</em> cases at each resampling level. However, the number of unique cases at level <em>r</em> will be decreased to approximately <em>N</em>(2/3)<sup><em>r</em></sup>.
+</dd>
+</dl>
 </div>
 </div>
 <div id="global-settings" class="section level1">
@@ -2028,14 +2325,14 @@ summary(res_super)
 <dt><code>reset</code></dt>
 <dd>character names of settings to reset to their default values.
 </dd>
-<dt><code>stat.Curves</code></dt>
+<dt><code>stat.Curve</code></dt>
 <dd>function or character string naming a function to compute one summary statistic at each cutoff value of resampled metrics in performance curves, or <code>NULL</code> for resample-specific metrics [default: <code>"base::mean"</code>].
 </dd>
 <dt><code>stat.Resamples</code></dt>
 <dd>function or character string naming a function to compute one summary statistic to control the ordering of models in plots [default: <code>"base::mean"</code>].
 </dd>
-<dt><code>stat.Train</code></dt>
-<dd>function or character string naming a function to compute one summary statistic on resampled performance metrics for model selection, model tuning, and recipe tuning [default: <code>"base::mean"</code>].
+<dt><code>stat.train</code></dt>
+<dd>function or character string naming a function to compute one summary statistic on resampled performance metrics for input selection or tuning or for model selection or tuning [default: <code>"base::mean"</code>].
 </dd>
 <dt><code>stats.PartialDependence</code></dt>
 <dd>function, function name, or vector of these with which to compute partial dependence summary statistics [default: <code>c(Mean = "base::mean")</code>].
@@ -2219,17 +2516,20 @@ summary(performance(res, metric = f2_score))
 <div id="ref-kohavi:1995:SCB">
 <p>Kohavi, Ron. 1995. “A Study of Cross-Validation and Bootstrap for Accuracy Estimation and Model Selection.” In <em>Proceedings of the 14th International Joint Conference on Artificial Intelligence - Volume 2</em>, 1137–43. IJCAI’95. San Francisco, CA, USA: Morgan Kaufmann Publishers Inc.</p>
 </div>
-<div id="ref-kuhn:2018:RPT">
-<p>Kuhn, Max, and Hadley Wickham. 2018. <em>recipes: Preprocessing Tools to Create Design Matrices</em>. <a href="https://CRAN.R-project.org/package=recipes">https://CRAN.R-project.org/package=recipes</a>.</p>
+<div id="ref-kuhn:2020:RPT">
+<p>Kuhn, Max, and Hadley Wickham. 2020. <em>recipes: Preprocessing Tools to Create Design Matrices</em>. <a href="https://CRAN.R-project.org/package=recipes">https://CRAN.R-project.org/package=recipes</a>.</p>
 </div>
-<div id="ref-microsoft:2017:FPF">
-<p>Microsoft, and Steve Weston. 2017. <em>foreach: Provides Foreach Looping Construct for R</em>. <a href="https://CRAN.R-project.org/package=foreach">https://CRAN.R-project.org/package=foreach</a>.</p>
+<div id="ref-microsoft:2019:DFP">
+<p>Microsoft, and Steve Weston. 2019a. <em>doParallel: Foreach Parallel Adaptor for the ’Parallel’ Package</em>. <a href="https://CRAN.R-project.org/package=doParallel">https://CRAN.R-project.org/package=doParallel</a>.</p>
 </div>
-<div id="ref-microsoft:2017:DFP">
-<p>———. 2018. <em>doParallel: Foreach Parallel Adaptor for the ’Parallel’ Package</em>. <a href="https://CRAN.R-project.org/package=doParallel">https://CRAN.R-project.org/package=doParallel</a>.</p>
+<div id="ref-microsoft:2019:FPF">
+<p>———. 2019b. <em>foreach: Provides Foreach Looping Construct for R</em>. <a href="https://CRAN.R-project.org/package=foreach">https://CRAN.R-project.org/package=foreach</a>.</p>
 </div>
 <div id="ref-perkins:2006:IOC">
 <p>Perkins, Neil J, and Enrique F Schisterman. 2006. “The Inconsistency of "Optimal" Cutpoints Obtained Using Two Criteria Based on the Receiver Operating Characteristic Curve.” <em>American Journal of Epidemiology</em> 163 (7): 670–75.</p>
+</div>
+<div id="ref-therneau:2019:SA">
+<p>Therneau, Terry M. 2019. <em>Survival Analysis</em>. <a href="https://CRAN.R-project.org/package=survival">https://CRAN.R-project.org/package=survival</a>.</p>
 </div>
 <div id="ref-vanderLaan:2007:SL">
 <p>van der Laan, Mark J, Eric C Polley, and Alan E Hubbard. 2007. “Super Learner.” <em>Statistical Applications in Genetics and Molecular Biology</em> 6 (1).</p>

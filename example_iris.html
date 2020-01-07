@@ -674,7 +674,8 @@ varimp(iris_fit)
 
 ## Plot performance over the grid points
 tuned_model &lt;- as.MLModel(iris_fit)
-plot(tuned_model, type = &quot;line&quot;)</code></pre>
+plot(tuned_model, type = &quot;line&quot;)
+#&gt; $TrainStep1</code></pre>
 <p><img src="example_iris_files/figure-html/ex_iris_tune-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="model-comparisons" class="section level2">
@@ -809,6 +810,7 @@ plot(cal, se = TRUE)</code></pre>
 #&gt; Object of class &quot;ConfusionList&quot;
 #&gt; 
 #&gt; GBMModel :
+#&gt; Object of class &quot;ConfusionMatrix&quot;
 #&gt;             Observed
 #&gt; Predicted          setosa   versicolor    virginica
 #&gt;   setosa     249.28127905   0.24856765   0.09476780
