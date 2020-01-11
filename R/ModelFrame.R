@@ -37,14 +37,14 @@ ModelFrame <- function(x, ...) {
 
 
 ModelFrame.data.frame <- function(x, ...) {
-  casenames <- x[["(casenames)"]]
+  casenames <- x[["(names)"]]
   weights <- x[["(weights)"]]
   strata <- x[["(strata)"]]
-  x[c("(casenames)", "(weights)", "(strata)")] <- NULL
+  x[c("(names)", "(weights)", "(strata)")] <- NULL
   model_terms <- terms(map(as.name, names(x)[-1]), names(x)[1],
                        all_numeric = all(map_logi(is.numeric, x[-1])))
   ModelFrame(model_terms, x, na.rm = FALSE,
-             casenames = if (is.null(casenames)) rownames(x) else casenames,
+             names = if (is.null(casenames)) rownames(x) else casenames,
              weights = weights, strata = strata)
 }
 
@@ -65,7 +65,7 @@ ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
   model_terms <- terms(x, data = data)
   data[[deparse(response(model_terms))]] <- response(model_terms, data)
 
-  ModelFrame(model_terms, data, na.rm = na.rm, casenames = rownames(data),
+  ModelFrame(model_terms, data, na.rm = na.rm, names = rownames(data),
              weights = weights, strata = strata, ...)
 }
 
@@ -93,7 +93,7 @@ ModelFrame.matrix <- function(x, y = NULL, na.rm = TRUE, offsets = NULL,
   model_terms <- terms(x, y, offsets = offsets)
   data[[deparse(response(model_terms))]] <- y
 
-  ModelFrame(model_terms, data, na.rm = na.rm, casenames = rownames(data),
+  ModelFrame(model_terms, data, na.rm = na.rm, names = rownames(data),
              weights = weights, strata = strata, ...)
 }
 
@@ -126,7 +126,7 @@ ModelFrame.recipe <- function(x, ...) {
   data[[deparse(response(model_terms))]] <- response(model_terms, data)
 
   ModelFrame(model_terms, data, na.rm = FALSE,
-             casenames = if (is.null(data[["(casenames)"]])) rownames(data),
+             names = if (is.null(data[["(names)"]])) rownames(data),
              weights = weights, strata = strata)
 }
 

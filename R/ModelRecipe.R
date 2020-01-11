@@ -13,8 +13,8 @@ ModelRecipe.recipe <- function(object, ...) {
     stop("recipe must be untrained")
   }
 
-  case_name_var <- "(casenames)"
-  case_name_fo <- ~ -`(casenames)`
+  case_name_var <- "(names)"
+  case_name_fo <- ~ -`(names)`
 
   if (case_name_var %in% summary(object)$variable) {
     stop("conflict with existing recipe variable: ", case_name_var)
@@ -88,7 +88,7 @@ prep.TunedInput <- function(x, ...) {
 
 
 prep_recipe_data <- function(x) {
-  case_name_var <- "(casenames)"
+  case_name_var <- "(names)"
   if (is.null(x[[case_name_var]])) x[[case_name_var]] <- rownames(x)
   x
 }

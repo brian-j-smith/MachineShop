@@ -414,7 +414,7 @@ subsample <- function(train, test, model, control, id = 1) {
     }
     df <- data.frame(Model = factor(model@name),
                      Resample = as.integer(id),
-                     Case = as.data.frame(test, original = FALSE)$"(casenames)",
+                     Case = as.data.frame(test, original = FALSE)[["(names)"]],
                      stringsAsFactors = FALSE)
     df$Observed <- response(test)
     df$Predicted <- predict(trainfit, as.data.frame(test), type = "prob",

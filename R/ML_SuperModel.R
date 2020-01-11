@@ -55,7 +55,7 @@ SuperModel <- function(..., model = GBMModel,
         predict(fit, newdata = newdata, times = object$times, type = "prob")
       }, object$base_fits)
 
-      df <- super_df(NA, predictors, newdata[["(casenames)"]],
+      df <- super_df(NA, predictors, newdata[["(names)"]],
                      if (object$all_vars) newdata)
 
       predict(object$super_fit, newdata = df, times = times, type = "prob")
@@ -99,14 +99,14 @@ super_df <- function(y, predictors, casenames, data = NULL) {
   df <- data.frame(y = y, unnest(as.data.frame(predictors)))
 
   if (!is.null(data)) {
-    df[["(casenames)"]] <- casenames
+    df[["(names)"]] <- casenames
 
     data_predictors <- predictors(data)
     unique_names <- make.unique(c(names(df), names(data_predictors)))
     names(data_predictors) <- tail(unique_names, length(data_predictors))
-    data_predictors[["(casenames)"]] <- data[["(casenames)"]]
+    data_predictors[["(names)"]] <- data[["(names)"]]
 
-    merge(df, data_predictors, by = "(casenames)", sort = FALSE)[-1]
+    merge(df, data_predictors, by = "(names)", sort = FALSE)[-1]
   } else {
     df
   }
