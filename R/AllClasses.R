@@ -118,7 +118,7 @@ MLModelFunction <- setClass("MLModelFunction",
 #################### Model Inputs ####################
 
 
-setOldClass("ModelFrame")
+setOldClass(c("ModelFrame", "data.frame"))
 setOldClass("recipe")
 
 

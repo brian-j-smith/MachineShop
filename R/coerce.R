@@ -4,12 +4,7 @@ as.data.frame.BinomialVariate <- function(x, ...) {
 
 
 as.data.frame.ModelFrame <- function(x, ...) {
-  x <- as(x, "ModelFrame")
-  class(x) <- class(x)[-1]
-  x <- as.data.frame(x)
-  attributes(x) <- list(names = names(x), row.names = rownames(x),
-                        class = "data.frame")
-  x
+  structure(as(x, "ModelFrame"), terms = NULL, class = "data.frame")
 }
 
 

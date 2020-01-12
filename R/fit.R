@@ -94,7 +94,9 @@ fit.MLModelFunction <- function(x, ...) {
 
 .fit.MLModel <- function(x, inputs, ...) {
   mf <- ModelFrame(inputs, na.rm = FALSE)
-  if (is.null(mf[["(weights)"]])) mf[["(weights)"]] <- 1
+  if (is.null(model.weights(mf))) {
+    mf <- ModelFrame(mf, weights = 1, na.rm = FALSE)
+  }
 
   y <- response(mf)
   if (!any(map_logi(function(type) is_response(y, type), x@response_types))) {

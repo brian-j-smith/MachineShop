@@ -64,6 +64,7 @@ ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
   data <- as.data.frame(data)
   model_terms <- terms(x, data = data)
   data[[deparse(response(model_terms))]] <- response(model_terms, data)
+  data <- data[all.vars(model_formula(model_terms))]
 
   ModelFrame(model_terms, data, na.rm = na.rm, names = rownames(data),
              weights = weights, strata = strata, ...)
@@ -92,6 +93,8 @@ ModelFrame.matrix <- function(x, y = NULL, na.rm = TRUE, offsets = NULL,
   }
   model_terms <- terms(x, y, offsets = offsets)
   data[[deparse(response(model_terms))]] <- y
+  end <- length(data)
+  data <- data[c(end, seq_len(end - 1))]
 
   ModelFrame(model_terms, data, na.rm = na.rm, names = rownames(data),
              weights = weights, strata = strata, ...)
@@ -99,9 +102,11 @@ ModelFrame.matrix <- function(x, y = NULL, na.rm = TRUE, offsets = NULL,
 
 
 ModelFrame.ModelFrame <- function(x, na.rm = TRUE, ...) {
-  vars <- as.data.frame(Filter(length, list(...)), stringsAsFactors = FALSE)
-  names(vars) <- map_chr(function(x) paste0("(", x, ")"), names(vars))
-  x[names(vars)] <- vars
+  extras <- as.data.frame(Filter(length, list(...)), stringsAsFactors = FALSE)
+  if (length(extras)) {
+    names(extras) <- paste0("(", names(extras), ")")
+    x[names(extras)] <- extras
+  }
   if (na.rm) na.omit(x) else x
 }
 
@@ -124,6 +129,7 @@ ModelFrame.recipe <- function(x, ...) {
 
   model_terms <- terms(x)
   data[[deparse(response(model_terms))]] <- response(model_terms, data)
+  data <- data[all.vars(model_formula(model_terms))]
 
   ModelFrame(model_terms, data, na.rm = FALSE,
              names = if (is.null(data[["(names)"]])) rownames(data),
@@ -131,10 +137,10 @@ ModelFrame.recipe <- function(x, ...) {
 }
 
 
-ModelFrame.terms <- function(x, data, ...) {
-  data[all.vars(model_formula(x))] %>%
-    structure(terms = x, class = c("ModelFrame", class(data))) %>%
-    ModelFrame(...)
+ModelFrame.Terms <- function(x, data, ...) {
+  ModelFrame(structure(
+    as.data.frame(data), terms = x, class = c("ModelFrame", "data.frame")
+  ), ...)
 }
 
 

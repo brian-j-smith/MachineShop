@@ -39,13 +39,12 @@ setMethod("[",
 "[.ModelFrame" <- function(x, i, j, ..., drop = FALSE) {
   ninds <- nargs() - 1 - !missing(drop)
   if (ninds > 1) {
-    class(x) <- class(x)[-1]
-    y <- NextMethod(drop = drop)
-    if (identical(colnames(x), colnames(y))) {
-      structure(y, terms = attr(x, "terms"), class = c("ModelFrame", class(x)))
-    } else {
-      structure(y, terms = NULL)
-    }
+    if (!missing(j) || drop) {
+      y <- as.data.frame(x)[i, j, drop = drop]
+      if (identical(colnames(x), colnames(y))) {
+        ModelFrame(terms(x), y, na.rm = FALSE)
+      } else y
+    } else NextMethod(drop = FALSE)
   } else x[, i, drop = FALSE]
 }
 
@@ -70,7 +69,11 @@ setMethod("[", c(x = "ModelFrame", i = "ANY", j = "ANY", drop = "ANY"),
 setMethod("[", c(x = "ModelFrame", i = "ANY", j = "missing", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
     ninds <- nargs() - 1 - !missing(drop)
-    if (ninds > 1) x[i, TRUE, drop = drop] else x[, i, drop = FALSE]
+    if (ninds > 1) {
+      if (!drop) {
+        as(asS3(x)[i, , drop = FALSE], class(x))
+      } else x[i, TRUE, drop = TRUE]
+    } else x[, i, drop = FALSE]
   }
 )
 
@@ -79,7 +82,7 @@ setMethod("[", c(x = "ModelFrame", i = "ANY", j = "missing", drop = "ANY"),
 #'
 setMethod("[", c(x = "ModelFrame", i = "missing", j = "missing", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
-    x[, TRUE, drop = drop]
+    x[TRUE, , drop = drop]
   }
 )
 
