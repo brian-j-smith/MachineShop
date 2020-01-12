@@ -116,7 +116,7 @@ fit.MLModelFunction <- function(x, ...) {
   args <- c(mget(c("formula", "data", "weights"), params_env), x@params)
 
   do.call(x@fit, args, envir = params_env) %>%
-    MLModelFit(paste0(x@name, "Fit"), model = x, x = inputs, y = y)
+    MLModelFit(paste0(x@name, "Fit"), model = x, x = inputs)
 }
 
 

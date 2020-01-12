@@ -48,7 +48,7 @@ response.formula <- function(object, data = NULL, template = NULL, ...) {
 
 
 response.MLModel <- function(object, newdata = NULL, ...) {
-  if (is.null(newdata)) object@y else response(object@x, newdata)
+  response(object@x, newdata)
 }
 
 

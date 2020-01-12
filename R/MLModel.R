@@ -114,9 +114,8 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
                      "PoissonVariate", "Surv")
 
 
-MLModelFit <- function(object, Class, model, x, y) {
+MLModelFit <- function(object, Class, model, x) {
   model@x <- x
-  model@y <- y
 
   if (is(object, Class)) {
     object <- unMLModelFit(object)
