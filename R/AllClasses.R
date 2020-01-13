@@ -120,6 +120,22 @@ MLModelFunction <- setClass("MLModelFunction",
 
 setOldClass(c("ModelFrame", "data.frame"))
 setOldClass("recipe")
+setOldClass(c("terms", "formula"))
+
+
+setClass("Terms",
+  contains = "terms"
+)
+
+
+DesignTerms <- setClass("DesignTerms",
+  contains = "Terms"
+)
+
+
+FormulaTerms <- setClass("FormulaTerms",
+  contains = "Terms"
+)
 
 
 setClass("ModelRecipe",

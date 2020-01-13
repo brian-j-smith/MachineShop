@@ -152,6 +152,11 @@ formula.ModelFrame <- function(x, ...) {
 }
 
 
+formula.Terms <- function(x, ...) {
+  formula(asS3(x))
+}
+
+
 inline_calls <- function(x) {
   if (is.call(x)) {
     call_name <- as.character(x[[1]])
@@ -185,11 +190,10 @@ valid_predictor_calls <- c(
 
 
 terms.formula <- function(x, ...) {
-  structure(
+  FormulaTerms(structure(
     stats::terms.formula(x, ...),
-    .Environment = asNamespace("MachineShop"),
-    class = c("FormulaTerms", "Terms", "terms", "formula")
-  )
+    .Environment = asNamespace("MachineShop")
+  ))
 }
 
 
@@ -241,7 +245,7 @@ terms.list <- function(x, y = NULL, intercept = TRUE, all_numeric = FALSE,
     factors[cbind(var_names[term_match > 0], label_names[term_match])] <- 1L
   }
 
-  structure(
+  new(class, structure(
     fo,
     variables = as.call(c(.(list), y, x)),
     offset = if (length(offsets)) offsets,
@@ -251,8 +255,8 @@ terms.list <- function(x, y = NULL, intercept = TRUE, all_numeric = FALSE,
     intercept = as.integer(intercept),
     response = has_y,
     .Environment = asNamespace("MachineShop"),
-    class = c(class, "Terms", "terms", "formula")
-  )
+    class = c("terms", "formula")
+  ))
 }
 
 
