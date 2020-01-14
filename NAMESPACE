@@ -11,8 +11,7 @@ importFrom(graphics, plot)
 importFrom(magrittr, "%>%")
 importFrom(polspline, hare, phare)
 importFrom(recipes, bake, prep, recipe)
-importFrom(rsample, analysis, assessment, bootstraps, initial_split,
-           rsample2caret, testing, vfold_cv)
+importFrom(rsample, bootstraps, initial_split, vfold_cv)
 importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
            delete.response, drop1, formula, get_all_vars, loess, lm, median,
            model.frame, model.matrix, model.matrix.default, model.response,
