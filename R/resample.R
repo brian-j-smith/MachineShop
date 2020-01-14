@@ -124,6 +124,7 @@ Resamples.data.frame <- function(object, ..., strata = NULL, .check = TRUE) {
     if (length(missing)) {
       stop(label_items("missing resample variable", missing))
     }
+    object$Model <- droplevels(object$Model)
   }
   rownames(object) <- NULL
   new("Resamples", object, strata = as.character(strata), ...)

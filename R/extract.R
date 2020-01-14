@@ -100,9 +100,8 @@ setMethod("[", c(x = "RecipeGrid", i = "ANY", j = "ANY", drop = "ANY"),
 #'
 setMethod("[", c(x = "Resamples", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
-    y <- asS3(x)[i, j, drop = drop]
+    y <- as.data.frame(x)[i, j, drop = drop]
     if (identical(colnames(x), colnames(y))) {
-      y$Model <- droplevels(y$Model)
       Resamples(y, control = x@control, strata = x@strata)
     } else y
   }
