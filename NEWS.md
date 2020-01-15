@@ -2,11 +2,19 @@
 
 ## Version Updates
 
+## 2.0.3
+* Internal changes:
+  * Remove `MLModel` slot `y`.
+  * Rename `ModelFrame` and `ModelRecipe` columns `(casenames)` to `(names)`.
+  * Register `ModelFrame` inheritance from `data.frame`.
+  * Define `Terms` S4 classes for `ModelFrame` slot `terms`.
+
+
 ## 2.0.2
 * Implement `ModeledInput`, `SelectedInput` and `TunedInput` classes and methods.
 * Deprecate `SelectedFormula()`, `SelectedMatrix()`, `SelectedModelFrame()`, `SelectedRecipe()`, and `TunedRecipe()`.
 * Remove deprecated `tune()`.
-* Rename global settine `stat.Curves` to `stat.Curve`.
+* Rename global setting `stat.Curves` to `stat.Curve`.
 
 
 ## 2.0.1
