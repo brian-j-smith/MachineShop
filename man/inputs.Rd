@@ -13,7 +13,6 @@ determined by a model fit.  Input specifications supported by
   \code{\link{ModelFrame}}      \tab Model frame \cr
   \code{\link[recipes]{recipe}} \tab Preprocessing recipe roles and steps \cr
 }
-\cr
 Response variable types in the input specifications are defined by the user
 with the functions and recipe roles:
 \tabular{ll}{
@@ -31,7 +30,6 @@ with the functions and recipe roles:
     \tab \code{\link{role_binom}} \cr
     \tab \code{\link{role_surv}} \cr
 }
-\cr
 Inputs may be combined, selected, or tuned with the following meta-input
 functions.
 \tabular{ll}{
