@@ -680,6 +680,9 @@ setMethod("show", "VarImp",
 #################### Print Utility Functions ####################
 
 
+format_len <- function(x) format(x, big.mark = ",")
+
+
 print_items <- function(x, ...) {
   UseMethod("print_items")
 }
@@ -693,7 +696,7 @@ print_items.default <- function(x, ...) {
 print_items.character <- function(x, n, ...) {
   diff <- length(x) - n
   str <- if (diff > 0) {
-    paste0(toString(head(x, n)), "... with ", diff, " more")
+    paste0(toString(head(x, n)), "... with ", format_len(diff), " more")
   } else {
     toString(x)
   }
@@ -711,7 +714,8 @@ print_items.list <- function(x, n, ...) {
   if (diff > 0) {
     print(head(x, n), max = n)
     more <- tail(names(x), diff)
-    cat(label_items(paste("... with", diff, "more element"), more), "\n\n")
+    cat(label_items(paste("... with", format_len(diff), "more element"), more))
+    cat("\n\n")
   } else {
     print(x, max = n)
   }
@@ -723,7 +727,8 @@ print_items.listof <- function(x, n, ...) {
   if (diff > 0) {
     print(head(x, n), n = n, na.print = NULL)
     more <- tail(names(x), diff)
-    cat(label_items(paste("... with", diff, "more element"), more), "\n\n")
+    cat(label_items(paste("... with", format_len(diff), "more element"), more))
+    cat("\n\n")
   } else {
     print(x, n = n, na.print = NULL)
   }
@@ -731,13 +736,27 @@ print_items.listof <- function(x, n, ...) {
 
 
 print_items.matrix <- function(x, n, ...) {
-  diff <- nrow(x) - n
-  max_items <- n * ncol(x)
-  if (diff > 0) {
-    print(head(x, n), max = max_items)
-    cat("... with ", diff, " more row", if (diff > 1) "s", "\n", sep ="")
+  row_inds <- head(seq_len(nrow(x)), n)
+  col_inds <- head(seq_len(ncol(x)), n)
+  num_items <- length(row_inds) * length(col_inds)
+  if (num_items) {
+    print(x[row_inds, col_inds, drop = FALSE], max = num_items)
   } else {
-    print(x, max = max_items)
+    cat("<", format_len(nrow(x)), " x ", format_len(ncol(x)), " ", class(x)[1],
+        ">\n", sep = "")
+  }
+  diff_rows <- nrow(x) - length(row_inds)
+  diff_cols <- ncol(x) - length(col_inds)
+  cols <- tail(colnames(x), diff_cols)
+  if (diff_rows) {
+    cat("... with", format_len(diff_rows), "more row", if (diff_rows > 1) "\bs")
+    if (diff_cols) {
+      cat(" and", format_len(diff_cols), label_items("column", cols))
+    }
+    cat("\n")
+  } else if (diff_cols) {
+    cat("... with", format_len(diff_cols), label_items("more column", cols))
+    cat("\n")
   }
 }
 
