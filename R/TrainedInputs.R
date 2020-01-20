@@ -174,7 +174,7 @@ SelectedInput.ModeledInput <-
     inputs <- if (missing(x)) list(...) else list(x, ...)
 
     if (!all(map_logi(is, inputs, "ModeledInput"))) {
-      stop("inputs must be ModelInputs")
+      stop("inputs must be ModeledInputs")
     }
 
     if (!identical_elements(inputs, function(x) class(x))) {
