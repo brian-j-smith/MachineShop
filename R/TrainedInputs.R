@@ -7,9 +7,8 @@
 #' @aliases SelectedModeledRecipe
 #' @rdname SelectedInput
 #'
-#' @param ... \link{inputs} specifying relationships between model predictor and
-#'   response variables.
-#' @param x list of inputs.
+#' @param x,... \link{inputs} specifying relationships between model predictor
+#'   and response variables, or a list of these.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} or an object that can be converted
 #'   to one.
@@ -50,19 +49,23 @@
 #'
 #' fit(sel_rec, model = GLMModel)
 #'
-SelectedInput <- function(...) {
-  UseMethod("SelectedInput")
+SelectedInput <- function(x, ...) {
+  if (missing(x) && !missing(..1)) {
+    UseMethod("SelectedInput", ..1)
+  } else {
+    UseMethod("SelectedInput")
+  }
 }
 
 
 #' @rdname SelectedInput
 #'
-SelectedInput.formula <- function(..., data,
+SelectedInput.formula <- function(x, ..., data,
                                   control = MachineShop::settings("control"),
                                   metrics = NULL,
                                   stat = MachineShop::settings("stat.train"),
                                   cutoff = MachineShop::settings("cutoff")) {
-  inputs <- list(...)
+  inputs <- if (missing(x)) list(...) else list(x, ...)
   if (!all(map_logi(is, inputs, "formula"))) stop("inputs must be formulas")
   SelectedInput(map(ModelFrame, inputs, list(data),
                     MoreArgs = list(na.rm = FALSE)),
@@ -73,12 +76,12 @@ SelectedInput.formula <- function(..., data,
 
 #' @rdname SelectedInput
 #'
-SelectedInput.matrix <- function(..., y,
+SelectedInput.matrix <- function(x, ..., y,
                                  control = MachineShop::settings("control"),
                                  metrics = NULL,
                                  stat = MachineShop::settings("stat.train"),
                                  cutoff = MachineShop::settings("cutoff")) {
-  inputs <- list(...)
+  inputs <- if (missing(x)) list(...) else list(x, ...)
   if (!all(map_logi(is, inputs, "matrix"))) stop("inputs must be matrices")
   SelectedInput(map(ModelFrame, inputs, list(y),
                     MoreArgs = list(na.rm = FALSE)),
@@ -89,13 +92,13 @@ SelectedInput.matrix <- function(..., y,
 
 #' @rdname SelectedInput
 #'
-SelectedInput.ModelFrame <- function(...,
+SelectedInput.ModelFrame <- function(x, ...,
                                      control = MachineShop::settings("control"),
                                      metrics = NULL,
                                      stat = MachineShop::settings("stat.train"),
                                      cutoff = MachineShop::settings("cutoff")) {
 
-  inputs <- list(...)
+  inputs <- if (missing(x)) list(...) else list(x, ...)
 
   if (!all(map_logi(is, inputs, "ModelFrame"))) {
     stop("inputs must be ModelFrames")
@@ -121,13 +124,13 @@ SelectedInput.ModelFrame <- function(...,
 
 #' @rdname SelectedInput
 #'
-SelectedInput.recipe <- function(...,
+SelectedInput.recipe <- function(x, ...,
                                  control = MachineShop::settings("control"),
                                  metrics = NULL,
                                  stat = MachineShop::settings("stat.train"),
                                  cutoff = MachineShop::settings("cutoff")) {
 
-  inputs <- list(...)
+  inputs <- if (missing(x)) list(...) else list(x, ...)
 
   for (i in seq(inputs)) inputs[[i]] <- ModelRecipe(inputs[[i]])
 
@@ -162,13 +165,13 @@ SelectedInput.recipe <- function(...,
 #' @rdname SelectedInput
 #'
 SelectedInput.ModeledInput <-
-  function(...,
+  function(x, ...,
            control = MachineShop::settings("control"),
            metrics = NULL,
            stat = MachineShop::settings("stat.train"),
            cutoff = MachineShop::settings("cutoff")) {
 
-    inputs <- list(...)
+    inputs <- if (missing(x)) list(...) else list(x, ...)
 
     if (!all(map_logi(is, inputs, "ModeledInput"))) {
       stop("inputs must be ModelInputs")

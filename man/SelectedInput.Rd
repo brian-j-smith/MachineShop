@@ -12,9 +12,10 @@
 \alias{SelectedInput.list}
 \title{Selected Model Inputs}
 \usage{
-SelectedInput(...)
+SelectedInput(x, ...)
 
 \method{SelectedInput}{formula}(
+  x,
   ...,
   data,
   control = MachineShop::settings("control"),
@@ -24,6 +25,7 @@ SelectedInput(...)
 )
 
 \method{SelectedInput}{matrix}(
+  x,
   ...,
   y,
   control = MachineShop::settings("control"),
@@ -33,6 +35,7 @@ SelectedInput(...)
 )
 
 \method{SelectedInput}{ModelFrame}(
+  x,
   ...,
   control = MachineShop::settings("control"),
   metrics = NULL,
@@ -41,6 +44,7 @@ SelectedInput(...)
 )
 
 \method{SelectedInput}{recipe}(
+  x,
   ...,
   control = MachineShop::settings("control"),
   metrics = NULL,
@@ -49,6 +53,7 @@ SelectedInput(...)
 )
 
 \method{SelectedInput}{ModeledInput}(
+  x,
   ...,
   control = MachineShop::settings("control"),
   metrics = NULL,
@@ -59,8 +64,8 @@ SelectedInput(...)
 \method{SelectedInput}{list}(x, ...)
 }
 \arguments{
-\item{...}{\link{inputs} specifying relationships between model predictor and
-response variables.}
+\item{x, ...}{\link{inputs} specifying relationships between model predictor
+and response variables, or a list of these.}
 
 \item{data}{\link[=data.frame]{data frame} or an object that can be converted
 to one.}
@@ -79,8 +84,6 @@ summary statistic on resampled metric values for recipe selection.}
 \item{cutoff}{argument passed to the \code{metrics} functions.}
 
 \item{y}{response variable.}
-
-\item{x}{list of inputs.}
 }
 \value{
 \code{SelectedModelFrame}, \code{SelectedModelRecipe},
