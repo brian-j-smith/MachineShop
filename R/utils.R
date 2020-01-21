@@ -146,8 +146,10 @@ is_response <- function(object, class2) {
 }
 
 
-label_items <- function(label, x) {
-  paste0(label, if (length(x) > 1) "s", ": ", toString(x))
+label_items <- function(label, x, n = Inf) {
+  item_len <- length(x)
+  items <- if (n < item_len) paste(toString(head(x, n)), "...") else toString(x)
+  paste0(label, if (item_len > 1) "s", ": ", items)
 }
 
 

@@ -709,33 +709,31 @@ print_items.data.frame <- function(x, ...) {
 }
 
 
-print_items.list <- function(x, n, ...) {
+print_items.list <- function(x, n, n_extra = 10 * n, ...) {
   diff <- length(x) - n
   if (diff > 0) {
     print(head(x, n), max = n)
-    more <- tail(names(x), diff)
-    cat(label_items(paste("... with", format_len(diff), "more element"), more))
-    cat("\n\n")
+    label <- paste("... with", format_len(diff), "more element")
+    cat(label_items(label, tail(names(x), diff), n_extra), "\n\n")
   } else {
     print(x, max = n)
   }
 }
 
 
-print_items.listof <- function(x, n, ...) {
+print_items.listof <- function(x, n, n_extra = 10 * n, ...) {
   diff <- length(x) - n
   if (diff > 0) {
     print(head(x, n), n = n, na.print = NULL)
-    more <- tail(names(x), diff)
-    cat(label_items(paste("... with", format_len(diff), "more element"), more))
-    cat("\n\n")
+    label <- paste("... with", format_len(diff), "more element")
+    cat(label_items(label, tail(names(x), diff), n_extra), "\n\n")
   } else {
     print(x, n = n, na.print = NULL)
   }
 }
 
 
-print_items.matrix <- function(x, n, ...) {
+print_items.matrix <- function(x, n, n_extra = 10 * n, ...) {
   row_inds <- head(seq_len(nrow(x)), n)
   col_inds <- head(seq_len(ncol(x)), n)
   num_items <- length(row_inds) * length(col_inds)
@@ -751,18 +749,18 @@ print_items.matrix <- function(x, n, ...) {
   if (diff_rows) {
     cat("... with", format_len(diff_rows), "more row", if (diff_rows > 1) "\bs")
     if (diff_cols) {
-      cat(" and", format_len(diff_cols), label_items("column", cols))
+      cat(" and", format_len(diff_cols), label_items("column", cols, n_extra))
     }
     cat("\n")
   } else if (diff_cols) {
-    cat("... with", format_len(diff_cols), label_items("more column", cols))
-    cat("\n")
+    label <- paste("... with", format_len(diff_cols), "more column")
+    cat(label_items(label, cols, n_extra), "\n")
   }
 }
 
 
-print_items.tbl <- function(x, n, ...) {
-  print(x, n = n)
+print_items.tbl <- function(x, n, n_extra = 10 * n, ...) {
+  print(x, n = n, n_extra = n_extra)
 }
 
 
