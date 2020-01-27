@@ -7,8 +7,11 @@
 #' @aliases SelectedModeledRecipe
 #' @rdname SelectedInput
 #'
-#' @param x,... \link{inputs} specifying relationships between model predictor
-#'   and response variables, or a list of these.
+#' @param ... \link{inputs} specifying relationships between model predictor
+#'   and response variables.  Supplied inputs must all be of the same type and
+#'   may be named or unnamed.
+#' @param x list of inputs followed by arguments passed to their method
+#'   function.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} or an object that can be converted
 #'   to one.
@@ -49,23 +52,19 @@
 #'
 #' fit(sel_rec, model = GLMModel)
 #'
-SelectedInput <- function(x, ...) {
-  if (missing(x) && !missing(..1)) {
-    UseMethod("SelectedInput", ..1)
-  } else {
-    UseMethod("SelectedInput")
-  }
+SelectedInput <- function(...) {
+  UseMethod("SelectedInput")
 }
 
 
 #' @rdname SelectedInput
 #'
-SelectedInput.formula <- function(x, ..., data,
+SelectedInput.formula <- function(..., data,
                                   control = MachineShop::settings("control"),
                                   metrics = NULL,
                                   stat = MachineShop::settings("stat.train"),
                                   cutoff = MachineShop::settings("cutoff")) {
-  inputs <- if (missing(x)) list(...) else list(x, ...)
+  inputs <- list(...)
   if (!all(map_logi(is, inputs, "formula"))) stop("inputs must be formulas")
   SelectedInput(map(ModelFrame, inputs, list(data),
                     MoreArgs = list(na.rm = FALSE)),
@@ -76,12 +75,12 @@ SelectedInput.formula <- function(x, ..., data,
 
 #' @rdname SelectedInput
 #'
-SelectedInput.matrix <- function(x, ..., y,
+SelectedInput.matrix <- function(..., y,
                                  control = MachineShop::settings("control"),
                                  metrics = NULL,
                                  stat = MachineShop::settings("stat.train"),
                                  cutoff = MachineShop::settings("cutoff")) {
-  inputs <- if (missing(x)) list(...) else list(x, ...)
+  inputs <- list(...)
   if (!all(map_logi(is, inputs, "matrix"))) stop("inputs must be matrices")
   SelectedInput(map(ModelFrame, inputs, list(y),
                     MoreArgs = list(na.rm = FALSE)),
@@ -92,13 +91,13 @@ SelectedInput.matrix <- function(x, ..., y,
 
 #' @rdname SelectedInput
 #'
-SelectedInput.ModelFrame <- function(x, ...,
+SelectedInput.ModelFrame <- function(...,
                                      control = MachineShop::settings("control"),
                                      metrics = NULL,
                                      stat = MachineShop::settings("stat.train"),
                                      cutoff = MachineShop::settings("cutoff")) {
 
-  inputs <- if (missing(x)) list(...) else list(x, ...)
+  inputs <- list(...)
 
   if (!all(map_logi(is, inputs, "ModelFrame"))) {
     stop("inputs must be ModelFrames")
@@ -124,13 +123,13 @@ SelectedInput.ModelFrame <- function(x, ...,
 
 #' @rdname SelectedInput
 #'
-SelectedInput.recipe <- function(x, ...,
+SelectedInput.recipe <- function(...,
                                  control = MachineShop::settings("control"),
                                  metrics = NULL,
                                  stat = MachineShop::settings("stat.train"),
                                  cutoff = MachineShop::settings("cutoff")) {
 
-  inputs <- if (missing(x)) list(...) else list(x, ...)
+  inputs <- list(...)
 
   for (i in seq(inputs)) inputs[[i]] <- ModelRecipe(inputs[[i]])
 
@@ -165,13 +164,13 @@ SelectedInput.recipe <- function(x, ...,
 #' @rdname SelectedInput
 #'
 SelectedInput.ModeledInput <-
-  function(x, ...,
+  function(...,
            control = MachineShop::settings("control"),
            metrics = NULL,
            stat = MachineShop::settings("stat.train"),
            cutoff = MachineShop::settings("cutoff")) {
 
-    inputs <- if (missing(x)) list(...) else list(x, ...)
+    inputs <- list(...)
 
     if (!all(map_logi(is, inputs, "ModeledInput"))) {
       stop("inputs must be ModeledInputs")
