@@ -2,6 +2,11 @@
 
 ## Version Updates
 
+## 2.0.4
+* Extend `print()` argument `n` to data frame and matrix columns for more concise display of large data structures.
+* Add preprocessing recipe functions `step_kmeans()`, `step_kmedoids()`, and `step_spca()`.
+
+
 ## 2.0.3
 * Internal changes:
   * Remove `MLModel` slot `y`.
