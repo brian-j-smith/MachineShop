@@ -1,13 +1,13 @@
 dest <- "vignettes"
 
-out <- file(file.path(dest, "Introduction.Rmd"), "w")
+out <- file(file.path(dest, "UsersGuide.Rmd"), "w")
 
 sourceLines <- function(file) {
   c(readLines(file.path("docs", "src", file)), "\n")
 }
 
 files <- c(
-  "Introduction.Rmd",
+  "UsersGuide.Rmd",
   "overview.Rmd",
   "using_example.Rmd",
   "using_fit.Rmd",
@@ -32,5 +32,7 @@ writeLines("# References", out)
 close(out)
 
 file.copy("docs/src/setup.R", file.path(dest, "setup.R"), overwrite = TRUE)
+file.copy("docs/src/img/FigModelDAG.png", file.path(dest, "img/FigModelDAG.png"), overwrite = TRUE)
+file.copy("docs/src/img/FigNestedCV.png", file.path(dest, "img/FigNestedCV.png"), overwrite = TRUE)
 file.copy("docs/src/bibliography.bib", file.path(dest, "bibliography.bib"),
           overwrite = TRUE)

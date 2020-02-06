@@ -1,0 +1,22 @@
+digraph model {
+  edge [fontname = Helvetica]
+  
+  node [fontname = Helvetica, fillcolor = gray95, style = filled]
+
+  Input [label = "TunedInput(pca_rec, pca_grid)"]
+  Grid [label = "num_comp", shape = box]
+  Model1a [label = "model = SelectedModel(GBMModel, ...)"]
+  Model1b [label = "model"]
+  Model1c [label = "model"]
+  Model2b [label = "TunedModel(GBMModel)"]
+  Model2c [label = "SuperModel(CoxModel, ...)"]
+  Model3b [label = "TunedModel(CForestModel)"]
+  Model3c [label = "TunedModel(GLMBoostModel)"]
+
+  Input -> Grid [arrowhead = none]
+  Grid -> Model1a [label = "1"]
+  Grid -> Model1b [label = "2"]
+  Grid -> Model1c [label = "3"]
+  Model1a -> {Model2b Model2c}
+  Model2c -> {Model3b Model3c}
+}
