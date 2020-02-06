@@ -123,7 +123,7 @@ bake.step_kmedoids <- function(object, new_data, ...) {
   var_names <- names(res$clustering)
   if (object$replace) {
     names_drop <- var_names[-res$id.med]
-    new_data[setdiff(names(new_data), names_drop)]
+    new_data[!(names(new_data) %in% names_drop)]
   } else {
     cluster_medoids <- new_data[var_names[res$id.med]]
     names(cluster_medoids) <- names(res$id.med)
