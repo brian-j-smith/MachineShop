@@ -3,7 +3,7 @@
 
 ## Algorithms
 
-Model performance can be estimated with resampling methods that simulate repeated training and test set fits and predictions.  With these methods, performance metrics are computed on each resample to produce an empirical distribution for inference.  Resampling is controlled in the `MachineShop` with the functions:
+Model performance can be estimated with resampling methods that simulate repeated training and test set fits and predictions.  With these methods, performance metrics are computed on each resample to produce an empirical distribution for inference.  Resampling is controlled in the **MachineShop** with the functions:
 
 BootControl
   : Simple bootstrap resampling [@efron:1993:IB].  Models are repeatedly fit with bootstrap resampled training sets and used to predict the full data set.
@@ -41,7 +41,7 @@ surv_probs_control <- CVControl(folds = 5, repeats = 3, times = surv_times, seed
 
 ## Parallel Processing
 
-Resampling is implemented with the `foreach` package [@microsoft:2017:FPF] and will run in parallel if a compatible backend is loaded, such as that provided by the `doParallel` package [@microsoft:2017:DFP].
+Resampling is implemented with the **foreach** package [@microsoft:2017:FPF] and will run in parallel if a compatible backend is loaded, such as that provided by the **doParallel** package [@microsoft:2017:DFP].
 
 ```{r using_resample_parallel}
 ## Register multiple cores for parallel computations
@@ -98,7 +98,7 @@ summary(res_means, stats = c(Mean = mean, Percentile = percentiles))
 
 ## Plots
 
-Summary plots of resample output can be obtained with the `plot` function.  Boxplots are the default plot type; but density, errorbar, and violin plots are also available.  Plots are generated with the `ggplot2` package [@wickham:2016:GEG] and returned as `ggplot` objects.  As such, annotation and formatting defined for ggplots can be applied to the returned plots.
+Summary plots of resample output can be obtained with the `plot` function.  Boxplots are the default plot type; but density, errorbar, and violin plots are also available.  Plots are generated with the **ggplot2** package [@wickham:2016:GEG] and returned as `ggplot` objects.  As such, annotation and formatting defined for ggplots can be applied to the returned plots.
 
 ```{r using_resample_plots}
 ## Libraries for plot annotation and fomatting

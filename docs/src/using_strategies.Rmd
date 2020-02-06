@@ -1,6 +1,6 @@
 # Modeling Strategies
 
-Model development often involves the comparison of multiple models from a candidate set for the purpose of selecting a final one.  Models in the candidate set may differ with respect to their predictor variables, preprocessing steps and parameters, and model types and parameters.  Complex model selection strategies for sets that involve one or more of these differences can be implemented with the `MachineShop` package.  Implementation is achieved with a straightforward syntax based on the meta-input and meta-model functions listed in the table below and with resampling, including nested resampling, conducted automatically for model selection and predictive performance evaluation.
+Model development often involves the comparison of multiple models from a candidate set for the purpose of selecting a final one.  Models in the candidate set may differ with respect to their predictor variables, preprocessing steps and parameters, and model types and parameters.  Complex model selection strategies for sets that involve one or more of these differences can be implemented with the **MachineShop** package.  Implementation is achieved with a straightforward syntax based on the meta-input and meta-model functions listed in the table below and with resampling, including nested resampling, conducted automatically for model selection and predictive performance evaluation.
 
 Parameter Grid Tuning | Candidate Set Selection | Ensemble Learning
 ----------------------|-------------------------|------------------

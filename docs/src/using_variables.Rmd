@@ -63,7 +63,7 @@ A third, which will be illustrated later, is user-specification of a variable fo
 
 ## Preprocessing Recipe
 
-The `recipes` package [@kuhn:2018:RPT] provides a flexible framework for defining predictor and response variables as well as preprocessing steps to be applied to them prior to model fitting.  Using recipes helps ensure that estimation of predictive performance accounts for all modeling step.  They are also a convenient way of consistently applying preprocessing to new data.  A basic recipe is given below in terms of the formula and data frame ingredients needed for the analysis.
+The **recipes** package [@kuhn:2018:RPT] provides a flexible framework for defining predictor and response variables as well as preprocessing steps to be applied to them prior to model fitting.  Using recipes helps ensure that estimation of predictive performance accounts for all modeling step.  They are also a convenient way of consistently applying preprocessing to new data.  A basic recipe is given below in terms of the formula and data frame ingredients needed for the analysis.
 
 ```{r using_variables_recipe, results="hide"}
 ## Recipe specification

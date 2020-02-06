@@ -3,7 +3,7 @@
 
 ## Model Information
 
-Model fitting requires user specification of a `MachineShop` compatible model.  A named list of package-supplied models can be obtained interactively with the `modelinfo` function, and includes the following components for each.
+Model fitting requires user specification of a **MachineShop** compatible model.  A named list of package-supplied models can be obtained interactively with the `modelinfo` function, and includes the following components for each.
 
 `label`
   : Character descriptor for the model.

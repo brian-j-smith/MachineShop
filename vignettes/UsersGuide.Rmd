@@ -26,7 +26,7 @@ rdoc_url <- function(name) name
 
 # Description
 
-`MachineShop` is a meta-package for statistical and machine learning with a unified interface for model fitting, prediction, performance assessment, and presentation of results.  Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes and for resample (bootstrap, cross-validation, and split training-test sets) estimation of model performance.  This vignette introduces the package interface with a survival data analysis example, followed by supported methods of variable specification; applications to other response variable types; available performance metrics, resampling techniques, and graphical and tabular summaries; and modeling strategies.
+**MachineShop** is a meta-package for statistical and machine learning with a unified interface for model fitting, prediction, performance assessment, and presentation of results.  Support is provided for predictive modeling of numerical, categorical, and censored time-to-event outcomes and for resample (bootstrap, cross-validation, and split training-test sets) estimation of model performance.  This vignette introduces the package interface with a survival data analysis example, followed by supported methods of variable specification; applications to other response variable types; available performance metrics, resampling techniques, and graphical and tabular summaries; and modeling strategies.
 
 
 # Features
@@ -86,9 +86,9 @@ RShowDoc("Introduction", package = "MachineShop")
 
 # Melanoma Example
 
-The package is illustrated in the following sections with an overall survival analysis example in which the response variable is a time to event outcome.  Since survival outcomes are a combination of numerical (time to event) and categorical (event) variables, package features for both variable types are illustrated in the example.  Outcomes other than survival, including nominal and ordinal factors as well as numeric vectors and matrices, are supported by `MachineShop` and will be discussed.
+The package is illustrated in the following sections with an overall survival analysis example in which the response variable is a time to event outcome.  Since survival outcomes are a combination of numerical (time to event) and categorical (event) variables, package features for both variable types are illustrated in the example.  Outcomes other than survival, including nominal and ordinal factors as well as numeric vectors and matrices, are supported by **MachineShop** and will be discussed.
 
-Survival analysis is performed with the `Melanoma` dataset from the `MASS` package [@andersen:1993:SMB].  The dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas.  Also provided are potential predictors of the survival outcomes.  The analysis begins by loading required packages `MachineShop`, `survival`, and `MASS` as well as `magrittr` [@bache:2014:MFP] for its pipe (`%>%`) operator to simplify some of the code syntax.  For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one. 
+Survival analysis is performed with the `Melanoma` dataset from the **MASS** package [@andersen:1993:SMB].  The dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas.  Also provided are potential predictors of the survival outcomes.  The analysis begins by loading required packages **MachineShop**, **survival**, and **MASS** as well as **magrittr** [@bache:2014:MFP] for its pipe (`%>%`) operator to simplify some of the code syntax.  For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one. 
 
 ```{r using_example_melanoma}
 ## Analysis libraries
@@ -159,7 +159,7 @@ surv_fo <- Surv(time, status) ~ sex + age + year + thickness + ulcer
 
 ## Model Information
 
-Model fitting requires user specification of a `MachineShop` compatible model.  A named list of package-supplied models can be obtained interactively with the `modelinfo` function, and includes the following components for each.
+Model fitting requires user specification of a **MachineShop** compatible model.  A named list of package-supplied models can be obtained interactively with the `modelinfo` function, and includes the following components for each.
 
 `label`
   : Character descriptor for the model.
@@ -348,7 +348,7 @@ A third, which will be illustrated later, is user-specification of a variable fo
 
 ## Preprocessing Recipe
 
-The `recipes` package [@kuhn:2018:RPT] provides a flexible framework for defining predictor and response variables as well as preprocessing steps to be applied to them prior to model fitting.  Using recipes helps ensure that estimation of predictive performance accounts for all modeling step.  They are also a convenient way of consistently applying preprocessing to new data.  A basic recipe is given below in terms of the formula and data frame ingredients needed for the analysis.
+The **recipes** package [@kuhn:2018:RPT] provides a flexible framework for defining predictor and response variables as well as preprocessing steps to be applied to them prior to model fitting.  Using recipes helps ensure that estimation of predictive performance accounts for all modeling step.  They are also a convenient way of consistently applying preprocessing to new data.  A basic recipe is given below in terms of the formula and data frame ingredients needed for the analysis.
 
 ```{r using_variables_recipe, results="hide"}
 ## Recipe specification
@@ -787,7 +787,7 @@ In addition, all of the metrics described for numeric vector responses are appli
 
 ## Algorithms
 
-Model performance can be estimated with resampling methods that simulate repeated training and test set fits and predictions.  With these methods, performance metrics are computed on each resample to produce an empirical distribution for inference.  Resampling is controlled in the `MachineShop` with the functions:
+Model performance can be estimated with resampling methods that simulate repeated training and test set fits and predictions.  With these methods, performance metrics are computed on each resample to produce an empirical distribution for inference.  Resampling is controlled in the **MachineShop** with the functions:
 
 BootControl
   : Simple bootstrap resampling [@efron:1993:IB].  Models are repeatedly fit with bootstrap resampled training sets and used to predict the full data set.
@@ -825,7 +825,7 @@ surv_probs_control <- CVControl(folds = 5, repeats = 3, times = surv_times, seed
 
 ## Parallel Processing
 
-Resampling is implemented with the `foreach` package [@microsoft:2017:FPF] and will run in parallel if a compatible backend is loaded, such as that provided by the `doParallel` package [@microsoft:2017:DFP].
+Resampling is implemented with the **foreach** package [@microsoft:2017:FPF] and will run in parallel if a compatible backend is loaded, such as that provided by the **doParallel** package [@microsoft:2017:DFP].
 
 ```{r using_resample_parallel}
 ## Register multiple cores for parallel computations
@@ -882,7 +882,7 @@ summary(res_means, stats = c(Mean = mean, Percentile = percentiles))
 
 ## Plots
 
-Summary plots of resample output can be obtained with the `plot` function.  Boxplots are the default plot type; but density, errorbar, and violin plots are also available.  Plots are generated with the `ggplot2` package [@wickham:2016:GEG] and returned as `ggplot` objects.  As such, annotation and formatting defined for ggplots can be applied to the returned plots.
+Summary plots of resample output can be obtained with the `plot` function.  Boxplots are the default plot type; but density, errorbar, and violin plots are also available.  Plots are generated with the **ggplot2** package [@wickham:2016:GEG] and returned as `ggplot` objects.  As such, annotation and formatting defined for ggplots can be applied to the returned plots.
 
 ```{r using_resample_plots}
 ## Libraries for plot annotation and fomatting
@@ -1121,7 +1121,7 @@ plot(lf, find = 0.75)
 
 # Modeling Strategies
 
-Model development often involves the comparison of multiple models from a candidate set for the purpose of selecting a final one.  Models in the candidate set may differ with respect to their predictor variables, preprocessing steps and parameters, and model types and parameters.  Complex model selection strategies for sets that involve one or more of these differences can be implemented with the `MachineShop` package.  Implementation is achieved with a straightforward syntax based on the meta-input and meta-model functions listed in the table below and with resampling, including nested resampling, conducted automatically for model selection and predictive performance evaluation.
+Model development often involves the comparison of multiple models from a candidate set for the purpose of selecting a final one.  Models in the candidate set may differ with respect to their predictor variables, preprocessing steps and parameters, and model types and parameters.  Complex model selection strategies for sets that involve one or more of these differences can be implemented with the **MachineShop** package.  Implementation is achieved with a straightforward syntax based on the meta-input and meta-model functions listed in the table below and with resampling, including nested resampling, conducted automatically for model selection and predictive performance evaluation.
 
 Parameter Grid Tuning | Candidate Set Selection | Ensemble Learning
 ----------------------|-------------------------|------------------
