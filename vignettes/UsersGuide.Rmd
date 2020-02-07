@@ -88,7 +88,7 @@ RShowDoc("Introduction", package = "MachineShop")
 
 The package is illustrated in the following sections with an overall survival analysis example in which the response variable is a time to event outcome.  Since survival outcomes are a combination of numerical (time to event) and categorical (event) variables, package features for both variable types are illustrated in the example.  Outcomes other than survival, including nominal and ordinal factors as well as numeric vectors and matrices, are supported by **MachineShop** and will be discussed.
 
-Survival analysis is performed with the `Melanoma` dataset from the **MASS** package [@andersen:1993:SMB].  The dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas.  Also provided are potential predictors of the survival outcomes.  The analysis begins by loading required packages **MachineShop**, **survival**, and **MASS** as well as **magrittr** [@bache:2014:MFP] for its pipe (`%>%`) operator to simplify some of the code syntax.  For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one. 
+Survival analysis is performed with the `Melanoma` dataset from the **MASS** package [@andersen:1993:SMB].  The dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas.  Also provided are potential predictors of the survival outcomes.  The analysis begins by loading required packages **MachineShop**, **survival** [@therneau:2019:SA], and **MASS** as well as **magrittr** [@bache:2014:MFP] for its pipe (`%>%`) operator to simplify some of the code syntax.  For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one. 
 
 ```{r using_example_melanoma}
 ## Analysis libraries
@@ -348,7 +348,7 @@ A third, which will be illustrated later, is user-specification of a variable fo
 
 ## Preprocessing Recipe
 
-The **recipes** package [@kuhn:2018:RPT] provides a flexible framework for defining predictor and response variables as well as preprocessing steps to be applied to them prior to model fitting.  Using recipes helps ensure that estimation of predictive performance accounts for all modeling step.  They are also a convenient way of consistently applying preprocessing to new data.  A basic recipe is given below in terms of the formula and data frame ingredients needed for the analysis.
+The **recipes** package [@kuhn:2020:RPT] provides a flexible framework for defining predictor and response variables as well as preprocessing steps to be applied to them prior to model fitting.  Using recipes helps ensure that estimation of predictive performance accounts for all modeling step.  They are also a convenient way of consistently applying preprocessing to new data.  A basic recipe is given below in terms of the formula and data frame ingredients needed for the analysis.
 
 ```{r using_variables_recipe, results="hide"}
 ## Recipe specification
@@ -825,7 +825,7 @@ surv_probs_control <- CVControl(folds = 5, repeats = 3, times = surv_times, seed
 
 ## Parallel Processing
 
-Resampling is implemented with the **foreach** package [@microsoft:2017:FPF] and will run in parallel if a compatible backend is loaded, such as that provided by the **doParallel** package [@microsoft:2017:DFP].
+Resampling is implemented with the **foreach** package [@microsoft:2019:FPF] and will run in parallel if a compatible backend is loaded, such as that provided by the **doParallel** package [@microsoft:2019:DFP].
 
 ```{r using_resample_parallel}
 ## Register multiple cores for parallel computations
