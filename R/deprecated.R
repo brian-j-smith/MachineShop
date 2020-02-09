@@ -18,7 +18,7 @@ NULL
 #'
 SelectedFormula <- function(...) {
   depwarn("SelectedFormula() is deprecated", "use SelectedInput() instead",
-          expired = Sys.Date() > "2020-02-15")
+          expired = Sys.Date() >= "2020-03-01")
   SelectedInput(...)
 }
 
@@ -31,7 +31,7 @@ SelectedFormula <- function(...) {
 #'
 SelectedMatrix <- function(...) {
   depwarn("SelectedMatrix() is deprecated", "use SelectedInput() instead",
-          expired = Sys.Date() > "2020-02-15")
+          expired = Sys.Date() >= "2020-03-01")
   SelectedInput(...)
 }
 
@@ -44,7 +44,7 @@ SelectedMatrix <- function(...) {
 #'
 SelectedModelFrame <- function(...) {
   depwarn("SelectedModelFrame() is deprecated", "use SelectedInput() instead",
-          expired = Sys.Date() > "2020-02-15")
+          expired = Sys.Date() >= "2020-03-01")
   SelectedInput(...)
 }
 
@@ -57,7 +57,7 @@ SelectedModelFrame <- function(...) {
 #'
 SelectedRecipe <- function(...) {
   depwarn("SelectedRecipe() is deprecated", "use SelectedInput() instead",
-          expired = Sys.Date() > "2020-02-15")
+          expired = Sys.Date() >= "2020-03-01")
   SelectedInput(...)
 }
 
@@ -69,6 +69,6 @@ SelectedRecipe <- function(...) {
 #'
 TunedRecipe <- function(...) {
   depwarn("TunedRecipe() is deprecated", "use TunedInput() instead",
-          expired = Sys.Date() > "2020-02-15")
+          expired = Sys.Date() >= "2020-03-01")
   TunedInput(...)
 }
