@@ -152,6 +152,10 @@ metricinfo <- function(...) {
 
 .metricinfo_types <- function(x, y, ...) {
   not_missing_y <- !missing(y)
+  if (not_missing_y && is.factor(x) && is.factor(y)) {
+    x <- ConfusionMatrix(table(x, x), ordered = is.ordered(x))
+    y <- NULL
+  }
   info <- metricinfo()
   is_supported <- map_logi(function(this) {
     types <- this$response_types
