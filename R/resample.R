@@ -244,7 +244,7 @@ Resamples.list <- function(object, ...) {
   split <- initial_split(rsample_data(x),
                          prop = object@prop,
                          strata = strata)
-  train <- analysis(split, x)
+  train <- training(split, x)
   test <- testing(split, x)
   subsample(train, test, model, object) %>%
     Resamples(control = object, strata = strata)
@@ -295,6 +295,17 @@ testing.ModelFrame <- function(x, object, ...) {
 
 testing.ModelRecipe <- function(x, object, ...) {
   recipe(object, rsample::testing(x))
+}
+
+
+training <- function(x, object, ...) UseMethod("training", object)
+
+training.ModelFrame <- function(x, object, ...) {
+  as(rsample::training(x), class(object)[1])
+}
+
+training.ModelRecipe <- function(x, object, ...) {
+  recipe(object, rsample::training(x))
 }
 
 
