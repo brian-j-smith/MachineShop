@@ -798,7 +798,7 @@ plot(vi)</code></pre>
 #&gt; Parameters:
 #&gt; List of 5
 #&gt;  $ n.trees          : num 150
-#&gt;  $ interaction.depth: int 5
+#&gt;  $ interaction.depth: int 4
 #&gt;  $ n.minobsinnode   : num 10
 #&gt;  $ shrinkage        : num 0.1
 #&gt;  $ bag.fraction     : num 0.5
@@ -806,7 +806,7 @@ plot(vi)</code></pre>
 #&gt; TrainStep1 :
 #&gt; Object of class &quot;TrainBit&quot;
 #&gt; 
-#&gt; Grid (selected = 23):
+#&gt; Grid (selected = 18):
 #&gt; # A tibble: 25 x 1
 #&gt;    Model$n.trees $interaction.depth
 #&gt;            &lt;dbl&gt;              &lt;int&gt;
@@ -827,8 +827,8 @@ plot(vi)</code></pre>
 #&gt; Metrics: RMSE, R2, MAE 
 #&gt; Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6, GBMModel.7, GBMModel.8, GBMModel.9, GBMModel.10... with 15 more 
 #&gt; 
-#&gt; Selected model: GBMModel.23 
-#&gt; RMSE value: 47022.84
+#&gt; Selected model: GBMModel.18 
+#&gt; RMSE value: 47334.15
 plot(tuned_model, type = &quot;line&quot;)
 #&gt; $TrainStep1</code></pre>
 <p><img src="example_ichomes_files/figure-html/ex_ichomes_tune_model-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -842,7 +842,7 @@ pred &lt;- predict(model_fit, newdata = testset)
 ## Test set performance
 performance(obs, pred)
 #&gt;         RMSE           R2          MAE 
-#&gt; 4.548440e+04 7.153264e-01 2.698278e+04</code></pre>
+#&gt; 4.497960e+04 7.216102e-01 2.690248e+04</code></pre>
 </div>
 <div id="calibration-curve" class="section level2">
 <h2>Calibration Curve</h2>

@@ -485,17 +485,18 @@ modelinfo(C50Model, CoxModel)
 modelinfo(factor(0)) %&gt;% names
 #&gt;  [1] &quot;AdaBagModel&quot;       &quot;AdaBoostModel&quot;     &quot;BARTModel&quot;        
 #&gt;  [4] &quot;C50Model&quot;          &quot;CForestModel&quot;      &quot;EarthModel&quot;       
-#&gt;  [7] &quot;FDAModel&quot;          &quot;GBMModel&quot;          &quot;GLMNetModel&quot;      
-#&gt; [10] &quot;KNNModel&quot;          &quot;LDAModel&quot;          &quot;LMModel&quot;          
-#&gt; [13] &quot;MDAModel&quot;          &quot;NaiveBayesModel&quot;   &quot;NNetModel&quot;        
-#&gt; [16] &quot;PDAModel&quot;          &quot;PLSModel&quot;          &quot;QDAModel&quot;         
-#&gt; [19] &quot;RandomForestModel&quot; &quot;RangerModel&quot;       &quot;RPartModel&quot;       
-#&gt; [22] &quot;SelectedModel&quot;     &quot;StackedModel&quot;      &quot;SuperModel&quot;       
-#&gt; [25] &quot;SVMModel&quot;          &quot;SVMANOVAModel&quot;     &quot;SVMBesselModel&quot;   
-#&gt; [28] &quot;SVMLaplaceModel&quot;   &quot;SVMLinearModel&quot;    &quot;SVMPolyModel&quot;     
-#&gt; [31] &quot;SVMRadialModel&quot;    &quot;SVMSplineModel&quot;    &quot;SVMTanhModel&quot;     
-#&gt; [34] &quot;TreeModel&quot;         &quot;TunedModel&quot;        &quot;XGBModel&quot;         
-#&gt; [37] &quot;XGBDARTModel&quot;      &quot;XGBLinearModel&quot;    &quot;XGBTreeModel&quot;
+#&gt;  [7] &quot;FDAModel&quot;          &quot;GBMModel&quot;          &quot;GLMModel&quot;         
+#&gt; [10] &quot;GLMNetModel&quot;       &quot;KNNModel&quot;          &quot;LDAModel&quot;         
+#&gt; [13] &quot;LMModel&quot;           &quot;MDAModel&quot;          &quot;NaiveBayesModel&quot;  
+#&gt; [16] &quot;NNetModel&quot;         &quot;PDAModel&quot;          &quot;PLSModel&quot;         
+#&gt; [19] &quot;QDAModel&quot;          &quot;RandomForestModel&quot; &quot;RangerModel&quot;      
+#&gt; [22] &quot;RPartModel&quot;        &quot;SelectedModel&quot;     &quot;StackedModel&quot;     
+#&gt; [25] &quot;SuperModel&quot;        &quot;SVMModel&quot;          &quot;SVMANOVAModel&quot;    
+#&gt; [28] &quot;SVMBesselModel&quot;    &quot;SVMLaplaceModel&quot;   &quot;SVMLinearModel&quot;   
+#&gt; [31] &quot;SVMPolyModel&quot;      &quot;SVMRadialModel&quot;    &quot;SVMSplineModel&quot;   
+#&gt; [34] &quot;SVMTanhModel&quot;      &quot;TreeModel&quot;         &quot;TunedModel&quot;       
+#&gt; [37] &quot;XGBModel&quot;          &quot;XGBDARTModel&quot;      &quot;XGBLinearModel&quot;   
+#&gt; [40] &quot;XGBTreeModel&quot;
 
 ## Identify factor response-specific models
 modelinfo(factor(0), AdaBagModel, C50Model, CoxModel) %&gt;% names
@@ -507,17 +508,18 @@ modelinfo(factor(0), AdaBagModel, C50Model, CoxModel) %&gt;% names
 modelinfo(iris$Species) %&gt;% names
 #&gt;  [1] &quot;AdaBagModel&quot;       &quot;AdaBoostModel&quot;     &quot;BARTModel&quot;        
 #&gt;  [4] &quot;C50Model&quot;          &quot;CForestModel&quot;      &quot;EarthModel&quot;       
-#&gt;  [7] &quot;FDAModel&quot;          &quot;GBMModel&quot;          &quot;GLMNetModel&quot;      
-#&gt; [10] &quot;KNNModel&quot;          &quot;LDAModel&quot;          &quot;LMModel&quot;          
-#&gt; [13] &quot;MDAModel&quot;          &quot;NaiveBayesModel&quot;   &quot;NNetModel&quot;        
-#&gt; [16] &quot;PDAModel&quot;          &quot;PLSModel&quot;          &quot;QDAModel&quot;         
-#&gt; [19] &quot;RandomForestModel&quot; &quot;RangerModel&quot;       &quot;RPartModel&quot;       
-#&gt; [22] &quot;SelectedModel&quot;     &quot;StackedModel&quot;      &quot;SuperModel&quot;       
-#&gt; [25] &quot;SVMModel&quot;          &quot;SVMANOVAModel&quot;     &quot;SVMBesselModel&quot;   
-#&gt; [28] &quot;SVMLaplaceModel&quot;   &quot;SVMLinearModel&quot;    &quot;SVMPolyModel&quot;     
-#&gt; [31] &quot;SVMRadialModel&quot;    &quot;SVMSplineModel&quot;    &quot;SVMTanhModel&quot;     
-#&gt; [34] &quot;TreeModel&quot;         &quot;TunedModel&quot;        &quot;XGBModel&quot;         
-#&gt; [37] &quot;XGBDARTModel&quot;      &quot;XGBLinearModel&quot;    &quot;XGBTreeModel&quot;</code></pre>
+#&gt;  [7] &quot;FDAModel&quot;          &quot;GBMModel&quot;          &quot;GLMModel&quot;         
+#&gt; [10] &quot;GLMNetModel&quot;       &quot;KNNModel&quot;          &quot;LDAModel&quot;         
+#&gt; [13] &quot;LMModel&quot;           &quot;MDAModel&quot;          &quot;NaiveBayesModel&quot;  
+#&gt; [16] &quot;NNetModel&quot;         &quot;PDAModel&quot;          &quot;PLSModel&quot;         
+#&gt; [19] &quot;QDAModel&quot;          &quot;RandomForestModel&quot; &quot;RangerModel&quot;      
+#&gt; [22] &quot;RPartModel&quot;        &quot;SelectedModel&quot;     &quot;StackedModel&quot;     
+#&gt; [25] &quot;SuperModel&quot;        &quot;SVMModel&quot;          &quot;SVMANOVAModel&quot;    
+#&gt; [28] &quot;SVMBesselModel&quot;    &quot;SVMLaplaceModel&quot;   &quot;SVMLinearModel&quot;   
+#&gt; [31] &quot;SVMPolyModel&quot;      &quot;SVMRadialModel&quot;    &quot;SVMSplineModel&quot;   
+#&gt; [34] &quot;SVMTanhModel&quot;      &quot;TreeModel&quot;         &quot;TunedModel&quot;       
+#&gt; [37] &quot;XGBModel&quot;          &quot;XGBDARTModel&quot;      &quot;XGBLinearModel&quot;   
+#&gt; [40] &quot;XGBTreeModel&quot;</code></pre>
 </div>
 </div>
 <div id="metric-information" class="section level1">
@@ -591,9 +593,7 @@ metricinfo(factor(0)) %&gt;% names
 #&gt; [21] &quot;tpr&quot;
 
 metricinfo(factor(0), factor(0)) %&gt;% names
-#&gt;  [1] &quot;accuracy&quot;    &quot;f_score&quot;     &quot;fnr&quot;         &quot;fpr&quot;         &quot;kappa2&quot;     
-#&gt;  [6] &quot;npv&quot;         &quot;ppv&quot;         &quot;precision&quot;   &quot;recall&quot;      &quot;roc_index&quot;  
-#&gt; [11] &quot;rpp&quot;         &quot;sensitivity&quot; &quot;specificity&quot; &quot;tnr&quot;         &quot;tpr&quot;
+#&gt; [1] &quot;accuracy&quot; &quot;kappa2&quot;
 
 metricinfo(factor(0), matrix(0)) %&gt;% names
 #&gt; [1] &quot;accuracy&quot;      &quot;brier&quot;         &quot;cross_entropy&quot; &quot;kappa2&quot;
