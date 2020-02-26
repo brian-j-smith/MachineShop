@@ -37,14 +37,16 @@ fit <- function(x, ...) {
 #' @rdname fit-methods
 #'
 fit.formula <- function(x, data, model, ...) {
-  fit(ModelFrame(x, data, na.rm = FALSE), model)
+  mf <- ModelFrame(x, data, na.rm = FALSE, strata = strata(response(x, data)))
+  fit(mf, model)
 }
 
 
 #' @rdname fit-methods
 #'
 fit.matrix <- function(x, y, model, ...) {
-  fit(ModelFrame(x, y, na.rm = FALSE), model)
+  mf <- ModelFrame(x, y, na.rm = FALSE, strata = strata(y))
+  fit(mf, model)
 }
 
 
