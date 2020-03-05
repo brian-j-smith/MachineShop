@@ -2,6 +2,17 @@
 
 ## Version Updates
 
+## 2.1.2
+* Compatibility fix for tibble 3.0.0.
+* Include missing values in model matrices created internally from formulas.
+
+
+## 2.1.1
+* Improve specificity of `metricinfo()` results for factor responses.
+* Correct `SplitControl()` to train on the split sample instead of the full dataset.
+* Perform stratified resampling automatically when `fit()` formula and matrix methods are called with meta-models.
+
+
 ## 2.1.0
 * CRAN release.
 
