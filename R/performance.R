@@ -29,13 +29,11 @@
 #'
 #' ## Survival response example
 #' library(survival)
-#' library(MASS)
 #'
-#' fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
-#' gbm_fit <- fit(fo, data = Melanoma, model = GBMModel)
+#' gbm_fit <- fit(Surv(time, status) ~ ., data = veteran, model = GBMModel)
 #'
-#' obs <- response(gbm_fit, newdata = Melanoma)
-#' pred <- predict(gbm_fit, newdata = Melanoma, type = "prob")
+#' obs <- response(gbm_fit, newdata = veteran)
+#' pred <- predict(gbm_fit, newdata = veteran, type = "prob")
 #' performance(obs, pred)
 #'
 performance <- function(x, ...) {

@@ -28,14 +28,13 @@ Pairwise model differences in resampled performance metrics.
 \examples{
 ## Survival response example
 library(survival)
-library(MASS)
 
-fo <- Surv(time, status != 2) ~ sex + age + year + thickness + ulcer
+fo <- Surv(time, status) ~ .
 control <- CVControl()
 
-gbm_res1 <- resample(fo, Melanoma, GBMModel(n.trees = 25), control)
-gbm_res2 <- resample(fo, Melanoma, GBMModel(n.trees = 50), control)
-gbm_res3 <- resample(fo, Melanoma, GBMModel(n.trees = 100), control)
+gbm_res1 <- resample(fo, data = veteran, GBMModel(n.trees = 25), control)
+gbm_res2 <- resample(fo, data = veteran, GBMModel(n.trees = 50), control)
+gbm_res3 <- resample(fo, data = veteran, GBMModel(n.trees = 100), control)
 
 res <- c(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 res_diff <- diff(res)

@@ -13,10 +13,8 @@
 #' @examples
 #' ## Survival response example
 #' library(survival)
-#' library(MASS)
 #'
-#' mf <- ModelFrame(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-#'                  data = Melanoma)
+#' mf <- ModelFrame(Surv(time, status) ~ ., data = veteran)
 #' response(mf)
 #'
 response <- function(object, ...) {

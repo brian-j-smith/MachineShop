@@ -44,11 +44,10 @@ An updated recipe object.
 Add to or replace the roles of variables in a preprocessing recipe.
 }
 \examples{
-library(MASS)
+library(survival)
 library(recipes)
 
-rec <- recipe(time + status ~ sex + age + year + thickness + ulcer,
-              data = within(Melanoma, status <- status != 2)) \%>\%
+rec <- recipe(time + status ~ ., data = veteran) \%>\%
   role_surv(time = time, event = status) \%>\%
   role_case(stratum = status)
 

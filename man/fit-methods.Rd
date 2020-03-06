@@ -56,10 +56,8 @@ with the \code{\link{role_case}} function.
 \examples{
 ## Survival response example
 library(survival)
-library(MASS)
 
-gbm_fit <- fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-               data = Melanoma, model = GBMModel)
+gbm_fit <- fit(Surv(time, status) ~ ., data = veteran, model = GBMModel)
 varimp(gbm_fit)
 
 }

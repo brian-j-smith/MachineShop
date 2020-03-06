@@ -84,10 +84,8 @@ MLModelFunction(SurvRegModel) <- NULL
 #'
 #' @examples
 #' library(survival)
-#' library(MASS)
 #'
-#' fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-#'     data = Melanoma, model = SurvRegModel)
+#' fit(Surv(time, status) ~ ., data = veteran, model = SurvRegModel)
 #'
 SurvRegStepAICModel <- function(dist = c("weibull", "exponential", "gaussian",
                                          "logistic", "lognormal",

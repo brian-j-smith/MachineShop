@@ -63,10 +63,8 @@ importance to range from 0 to 100.  To obtain unscaled importance values, set
 }
 \examples{
 library(survival)
-library(MASS)
 
-fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-    data = Melanoma, model = CoxModel)
+fit(Surv(time, status) ~ ., data = veteran, model = CoxModel)
 
 }
 \seealso{

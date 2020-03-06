@@ -30,11 +30,9 @@
 #'
 #' @examples
 #' library(survival)
-#' library(MASS)
 #'
-#' res <- resample(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-#'                 data = Melanoma, model = GBMModel,
-#'                 control = CVControl(times = 365 * c(2, 5, 10)))
+#' res <- resample(Surv(time, status) ~ ., data = veteran, model = GBMModel,
+#'                 control = CVControl(times = c(90, 180, 360)))
 #' cal <- calibration(res)
 #' plot(cal)
 #'

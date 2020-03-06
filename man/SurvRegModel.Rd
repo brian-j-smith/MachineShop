@@ -68,10 +68,8 @@ found in the source link below.
 }
 \examples{
 library(survival)
-library(MASS)
 
-fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-    data = Melanoma, model = SurvRegModel)
+fit(Surv(time, status) ~ ., data = veteran, model = SurvRegModel)
 
 }
 \seealso{

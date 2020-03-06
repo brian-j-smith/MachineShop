@@ -31,11 +31,9 @@
 #' @examples
 #' ## Survival response example
 #' library(survival)
-#' library(MASS)
 #'
-#' gbm_fit <- fit(Surv(time, status != 2) ~ sex + age + year + thickness + ulcer,
-#'                data = Melanoma, model = GBMModel)
-#' predict(gbm_fit, newdata = Melanoma, times = 365 * c(2, 5, 10), type = "prob")
+#' gbm_fit <- fit(Surv(time, status) ~ ., data = veteran, model = GBMModel)
+#' predict(gbm_fit, newdata = veteran, times = c(90, 180, 360), type = "prob")
 #'
 predict.MLModelFit <- function(object, newdata = NULL, times = NULL,
                                type = c("response", "prob"),
