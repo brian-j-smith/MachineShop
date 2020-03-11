@@ -14,7 +14,10 @@
 #'
 #' @details
 #' \describe{
-#'   \item{Response Types:}{\code{binary factor}, \code{numeric}}
+#'   \item{\code{GLMModel} Response Types:}{\code{factor}, \code{matrix},
+#'     \code{numeric}}
+#'   \item{\code{GLMStepAICModel} Response Types:}{\code{binary factor},
+#'     \code{numeric}}
 #' }
 #'
 #' Default values for the \code{NULL} arguments and further model details can be
@@ -37,41 +40,55 @@
 #'
 GLMModel <- function(family = NULL, quasi = FALSE, ...) {
 
-  args <- params(environment())
-  is_main <- names(args) %in% c("family", "quasi")
-  params <- args[is_main]
-  params$control <- as.call(c(.(stats::glm.control), args[!is_main]))
+  params <- params(environment())
+  params$control <- as.call(c(.(stats::glm.control), list(...)))
 
   MLModel(
     name = "GLMModel",
     label = "Generalized Linear Models",
-    packages = c("MASS", "stats"),
-    response_types = c("binary", "BinomialVariate", "NegBinomialVariate",
-                       "numeric", "PoissonVariate"),
+    packages = c("MASS", "nnet", "stats"),
+    response_types = c("BinomialVariate", "factor", "matrix",
+                       "NegBinomialVariate", "numeric", "PoissonVariate"),
     predictor_encoding = "model.matrix",
     params = params,
-    fit = function(formula, data, weights, family = NULL, quasi = FALSE, ...) {
+    fit = function(formula, data, weights, family = NULL, quasi = FALSE,
+                   control = stats::glm.control(), ...) {
       if (is.null(family)) {
         quasi_prefix <- function(x) if (quasi) paste0("quasi", x) else x
-        family <- switch_class(response(data),
+        y <- response(data)
+        family <- switch_class(y,
                                BinomialVariate = quasi_prefix("binomial"),
-                               factor = quasi_prefix("binomial"),
+                               factor = if (nlevels(y) <= 2) {
+                                 quasi_prefix("binomial")
+                               } else {
+                                 "multinom"
+                               },
+                               matrix = "mgaussian",
                                NegBinomialVariate = "negbin",
                                numeric = "gaussian",
                                PoissonVariate = quasi_prefix("poisson"))
       }
       data <- as.data.frame(data)
-      if (family == "negbin") {
-        modelfit <- MASS::glm.nb(formula, data = data, weights = weights, ...)
+      if (identical(family, "mgaussian")) {
+        assert_equal_weights(weights)
+        stats::lm(formula, data = data)
+      } else if (identical(family, "multinom")) {
+        nnet::multinom(formula, data = data, weights = weights,
+                       maxit = 4 * control$maxit, trace = control$trace,
+                       reltol = control$epsilon)
+      } else if (identical(family, "negbin")) {
+        modelfit <- MASS::glm.nb(formula, data = data, weights = weights,
+                                 control = control)
         MASS::glm.convert(modelfit)
       } else {
         stats::glm(formula, data = data, weights = weights, family = family,
-                   ...)
+                   control = control)
       }
     },
     predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
-      predict(object, newdata = newdata, type = "response")
+      predict(object, newdata = newdata,
+              type = if (is(object, "multinom")) "probs" else "response")
     },
     varimp = function(object, base = exp(1), ...) {
       varimp_pval(object, base = base)
@@ -114,7 +131,8 @@ GLMStepAICModel <- function(family = NULL, quasi = FALSE, ...,
     name = "GLMStepAICModel",
     label = "Generalized Linear Models (Stepwise)",
     packages = stepmodel@packages,
-    response_types = stepmodel@response_types,
+    response_types = c("binary", "BinomialVariate","NegBinomialVariate",
+                       "numeric", "PoissonVariate"),
     predictor_encoding = stepmodel@predictor_encoding,
     params = c(stepmodel@params, params),
     fit = function(formula, data, weights, family = NULL, quasi = FALSE,

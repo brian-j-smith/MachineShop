@@ -54,7 +54,10 @@ the linear predictor and a description of the error distribution.
 }
 \details{
 \describe{
-  \item{Response Types:}{\code{binary factor}, \code{numeric}}
+  \item{\code{GLMModel} Response Types:}{\code{factor}, \code{matrix},
+    \code{numeric}}
+  \item{\code{GLMStepAICModel} Response Types:}{\code{binary factor},
+    \code{numeric}}
 }
 
 Default values for the \code{NULL} arguments and further model details can be

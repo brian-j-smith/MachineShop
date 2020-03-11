@@ -25,7 +25,7 @@ can be used.
   \code{\link{GAMBoostModel}}       \tab b   \tab n   \tab S \cr
   \code{\link{GBMModel}}            \tab f   \tab n   \tab S \cr
   \code{\link{GLMBoostModel}}       \tab b   \tab n   \tab S \cr
-  \code{\link{GLMModel}}            \tab b   \tab n   \tab   \cr
+  \code{\link{GLMModel}}            \tab f   \tab m,n \tab   \cr
   \code{\link{GLMStepAICModel}}     \tab b   \tab n   \tab   \cr
   \code{\link{GLMNetModel}}         \tab f   \tab m,n \tab S \cr
   \code{\link{KNNModel}}            \tab f,o \tab n   \tab   \cr

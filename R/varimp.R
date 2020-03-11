@@ -90,6 +90,11 @@ varimp_pval.mlm <- function(object, ...) {
 }
 
 
+varimp_pval.multinom <- function(object, ...) {
+  varimp_pval(t(coef(object)), diag(vcov(object)), ...)
+}
+
+
 varimp_pval.numeric <- function(object, var, base = exp(1), ...) {
   -log(pchisq(object^2 / var, 1, lower.tail = FALSE), base = base)
 }
