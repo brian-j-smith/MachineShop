@@ -192,8 +192,8 @@ plot.MLModel <- function(x, metrics = NULL,
       mapping <- do.call(aes_, args)
 
       ggplot(df, mapping) +
-        geom_line(stat = "summary", fun.y = mean) +
-        geom_point(stat = "summary", fun.y = mean) +
+        geom_line(stat = "summary", fun = mean) +
+        geom_point(stat = "summary", fun = mean) +
         labs(x = names(grid)[1]) +
         facet_wrap(~ Metric, scales = "free")
     } else {
@@ -264,7 +264,7 @@ plot.Performance <- function(x, metrics = NULL, stat =
   p <- ggplot(df)
   switch(match.arg(type),
          "boxplot" = p + geom_boxplot(aes_(~ Model, ~ Value)) +
-           stat_summary(aes_(~ Model, ~ Value), fun.y = mean, geom = "point") +
+           stat_summary(aes_(~ Model, ~ Value), fun = mean, geom = "point") +
            labs(x = "") +
            coord_flip(),
          "density" = p + geom_density(aes_(~ Value, color = ~ Model)) +
@@ -272,11 +272,11 @@ plot.Performance <- function(x, metrics = NULL, stat =
          "errorbar" = p + stat_summary(aes_(~ Model, ~ Value),
                                        fun.data = mean_se,
                                        geom = "errorbar") +
-           stat_summary(aes_(~ Model, ~ Value), fun.y = mean, geom = "point") +
+           stat_summary(aes_(~ Model, ~ Value), fun = mean, geom = "point") +
            labs(x = "") +
            coord_flip(),
          "violin" = p + geom_violin(aes_(~ Model, ~ Value)) +
-           stat_summary(aes_(~ Model, ~ Value), fun.y = mean, geom = "point") +
+           stat_summary(aes_(~ Model, ~ Value), fun = mean, geom = "point") +
            labs(x = "") +
            coord_flip()) +
     facet_wrap(~ Metric, scales = "free")
