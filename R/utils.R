@@ -274,14 +274,14 @@ nvars <- function(x, model) {
 }
 
 
-params <- function(envir) {
+params <- function(envir, ...) {
   args <- as.list(envir)
   is_missing <- map_logi(function(x) is.symbol(x) && !nzchar(x), args)
   if (any(is_missing)) {
     missing <- names(args)[is_missing]
     stop(label_items("missing values for required argument", missing))
   }
-  args[!map_logi(is.null, args)]
+  c(args[!map_logi(is.null, args)], list(...))
 }
 
 

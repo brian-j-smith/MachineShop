@@ -62,7 +62,7 @@ BARTMachineModel <- function(num_trees = 50, num_burn = 250, num_iter = 1000,
     packages = "bartMachine",
     response_types = c("binary", "numeric"),
     predictor_encoding = "model.matrix",
-    params = params(environment()),
+    params = params(environment(), ...),
     grid = function(x, length, ...) {
       list(
         alpha = seq(0.9, 0.99, length = length),

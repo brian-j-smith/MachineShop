@@ -58,7 +58,7 @@ MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
     packages = "mda",
     response_types = "factor",
     predictor_encoding = "model.matrix",
-    params = params(environment()),
+    params = params(environment(), ...),
     grid = function(x, length, ...) {
       list(
         subclasses = 1:min(length, 10) + 1

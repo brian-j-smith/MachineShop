@@ -60,7 +60,7 @@ FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
     packages = "mda",
     response_types = "factor",
     predictor_encoding = "model.matrix",
-    params = params(environment()),
+    params = params(environment(), ...),
     grid = function(x, length, random, ...) {
       modelfit <- fit(x, model = EarthModel(pmethod = "none"))
       max_terms <- min(2 + 0.75 * nrow(modelfit$dirs), 200)
@@ -94,7 +94,7 @@ MLModelFunction(FDAModel) <- NULL
 #' fit(Species ~ ., data = iris, model = PDAModel)
 #'
 PDAModel <- function(lambda = 1, df = NULL, ...) {
-  args <- c(as.list(environment()), list(...))
+  args <- params(environment(), ...)
   args$method <- .(mda::gen.ridge)
   model <- do.call(FDAModel, args, quote = TRUE)
   model@name <- "PDAModel"

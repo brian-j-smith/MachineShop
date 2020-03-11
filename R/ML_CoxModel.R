@@ -39,7 +39,7 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
 
   ties <- match.arg(ties)
 
-  args <- params(environment())
+  args <- params(environment(), ...)
   is_main <- names(args) %in% c("ties", "eps", "iter.max")
   params <- args[is_main]
   params$tol <- args$toler.chol

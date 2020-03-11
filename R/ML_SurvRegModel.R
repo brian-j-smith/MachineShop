@@ -29,7 +29,7 @@ SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
 
   dist <- match.arg(dist)
 
-  args <- params(environment())
+  args <- params(environment(), ...)
   is_main <- names(args) %in% c("dist", "scale", "parms")
   params <- args[is_main]
   params$control <- as.call(c(.(survival::survreg.control), args[!is_main]))
