@@ -69,7 +69,8 @@ MLModelFunction(SuperModel) <- NULL
 
 
 .fit.SuperModel <- function(x, inputs, ...) {
-  mf <- ModelFrame(inputs, na.rm = FALSE)
+  inputs_prep <- prep(inputs)
+  mf <- ModelFrame(inputs_prep, na.rm = FALSE)
 
   params <- x@params
   base_learners <- params$base_learners
@@ -85,12 +86,12 @@ MLModelFunction(SuperModel) <- NULL
   df <- super_df(res$Observed, predictors, res$Case, if (params$all_vars) mf)
   super_mf <- ModelFrame(formula(df), df)
 
-  list(base_fits = map(function(learner) fit(mf, model = learner),
+  list(base_fits = map(function(learner) fit(inputs, model = learner),
                        base_learners),
        super_fit = fit(super_mf, model = super_learner),
        all_vars = params$all_vars,
        times = control@times) %>%
-    MLModelFit("SuperModelFit", model = x, x = inputs)
+    MLModelFit("SuperModelFit", model = x, x = inputs_prep)
 }
 
 

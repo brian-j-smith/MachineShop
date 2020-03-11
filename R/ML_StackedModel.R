@@ -64,8 +64,6 @@ MLModelFunction(StackedModel) <- NULL
 
 
 .fit.StackedModel <- function(x, inputs, ...) {
-  mf <- ModelFrame(inputs, na.rm = FALSE)
-
   base_learners <- x@params$base_learners
   weights <- x@params$weights
   control <-  x@params$control
@@ -87,11 +85,11 @@ MLModelFunction(StackedModel) <- NULL
                              control = list(trace = FALSE))$pars
   }
 
-  list(base_fits = map(function(learner) fit(mf, model = learner),
+  list(base_fits = map(function(learner) fit(inputs, model = learner),
                        base_learners),
        weights = weights,
        times = control@times) %>%
-    MLModelFit("StackedModelFit", model = x, x = inputs)
+    MLModelFit("StackedModelFit", model = x, x = prep(inputs))
 }
 
 

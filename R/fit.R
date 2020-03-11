@@ -93,7 +93,8 @@ fit.MLModelFunction <- function(x, ...) {
 
 
 .fit.MLModel <- function(x, inputs, ...) {
-  mf <- ModelFrame(inputs, na.rm = FALSE)
+  inputs_prep <- prep(inputs)
+  mf <- ModelFrame(inputs_prep, na.rm = FALSE)
   if (is.null(model.weights(mf))) {
     mf <- ModelFrame(mf, weights = 1, na.rm = FALSE)
   }
@@ -118,7 +119,7 @@ fit.MLModelFunction <- function(x, ...) {
   args <- c(mget(c("formula", "data", "weights"), params_env), x@params)
 
   do.call(x@fit, args, envir = params_env) %>%
-    MLModelFit(paste0(x@name, "Fit"), model = x, x = inputs)
+    MLModelFit(paste0(x@name, "Fit"), model = x, x = inputs_prep)
 }
 
 
@@ -138,7 +139,7 @@ fit.MLModelFunction <- function(x, ...) {
 
 
 .fit.recipe <- function(x, model, ...) {
-  .fit(model, prep(ModelRecipe(x)))
+  .fit(model, ModelRecipe(x))
 }
 
 
