@@ -8,7 +8,10 @@ TreeModel(
   mincut = 5,
   minsize = 10,
   mindev = 0.01,
-  split = c("deviance", "gini")
+  split = c("deviance", "gini"),
+  k = NULL,
+  best = NULL,
+  method = c("deviance", "misclass")
 )
 }
 \arguments{
@@ -20,6 +23,14 @@ TreeModel(
 root node for the node to be split.}
 
 \item{split}{splitting criterion to use.}
+
+\item{k}{scalar cost-complexity parameter defining a subtree to return.}
+
+\item{best}{integer alternative to \code{k} requesting the number of terminal
+nodes of a subtree in the cost-complexity sequence to return.}
+
+\item{method}{character string denoting the measure of node heterogeneity
+used to guide cost-complexity pruning.}
 }
 \value{
 \code{MLModel} class object.
@@ -40,6 +51,6 @@ fit(Species ~ ., data = iris, model = TreeModel)
 
 }
 \seealso{
-\code{\link[tree]{tree}}, \code{\link{fit}},
-\code{\link{resample}}
+\code{\link[tree]{tree}}, \code{\link[tree]{prune.tree}},
+\code{\link{fit}}, \code{\link{resample}}
 }
