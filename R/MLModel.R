@@ -115,7 +115,7 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
 
 
 MLModelFit <- function(object, Class, model, x) {
-  model@x <- x
+  model@x <- prep(x)
 
   if (is(object, Class)) {
     object <- unMLModelFit(object)
