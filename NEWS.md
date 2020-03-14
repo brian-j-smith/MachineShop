@@ -2,6 +2,11 @@
 
 ## Version Updates
 
+## 2.1.4
+* Add cost-complexity pruning parameters to `TreeModel`.
+* Perform stratified resampling automatically for `ModeledInput()` and `SelectedInput()` objects constructed with formulas and matrices.
+
+
 ## 2.1.3
 * Revisions needed to some `fit()` methods to ensure that unprepped recipes are passed to models, like `TunedModed`, `StackedModel`, `SelectedModel` and `SuperModel`, needing to replicate preprocessing steps in their resampling routines.
 * Extend `GLMModel` to factor and matrix responses.
