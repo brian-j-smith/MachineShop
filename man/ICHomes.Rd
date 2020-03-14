@@ -4,7 +4,8 @@
 \name{ICHomes}
 \alias{ICHomes}
 \title{Iowa City Home Sales Dataset}
-\format{A data frame with 753 observations of 17 variables:
+\format{
+A data frame with 753 observations of 17 variables:
 \describe{
   \item{sale_amount}{sale amount in dollars.}
   \item{sale_year}{sale year.}
@@ -22,7 +23,8 @@
   \item{ac}{presence of central air conditioning (No/Yes).}
   \item{attic}{presence of a finished attic (No/Yes).}
   \item{lon,lat}{home longitude/latitude coordinates.}
-}}
+}
+}
 \usage{
 ICHomes
 }
