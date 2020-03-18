@@ -2,6 +2,10 @@
 
 ## Version Updates
 
+## 2.2.0
+* CRAN release.
+
+
 ## 2.1.4
 * Add cost-complexity pruning parameters to `TreeModel`.
 * Perform stratified resampling automatically for `ModeledInput()` and `SelectedInput()` objects constructed with formulas and matrices.
