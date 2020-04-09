@@ -389,9 +389,6 @@ model.offset <- function(x) {
 #################### ModelFrame Preprocessing ####################
 
 
-prep.ModelFrame <- function(x, ...) x
-
-
 preprocess <- function(x, newdata = NULL) {
   ModelFrame(delete.response(terms(x)), predictors(x, newdata), na.rm = FALSE)
 }
