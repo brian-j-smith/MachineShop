@@ -2,6 +2,11 @@
 
 ## Version Updates
 
+## 2.2.1
+* Print `StackedModel` and `SuperModel` training information.
+* Fix missing case names when resampling with recipes.
+
+
 ## 2.2.0
 * CRAN release.
 
