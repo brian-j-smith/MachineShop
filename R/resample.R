@@ -283,7 +283,7 @@ assessment.ModelFrame <- function(x, object, ...) {
 }
 
 assessment.ModelRecipe <- function(x, object, ...) {
-  rsample::assessment(x)
+  recipe(object, rsample::assessment(x))
 }
 
 
