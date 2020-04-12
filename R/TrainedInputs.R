@@ -329,7 +329,7 @@ TunedInput.recipe <- function(x, grid = expand_steps(),
   recipe <- as(x, "ModelRecipe")
   if (all(dim(grid) != 0)) {
     grid_split <- split(grid, 1:nrow(grid))
-    set_input <- function(x) update(recipe, x)
+    set_input <- function(x) do.call(update, c(list(recipe), x))
     trainbit <- resample_selection(grid_split, set_input, x@params, model)
     trainbit$grid <- tibble(ModelRecipe = asS3(grid))
     input <- set_input(grid_split[[trainbit$selected]])
