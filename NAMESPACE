@@ -163,12 +163,6 @@ export(.,
        tunable.step_spca,
        varimp)
 
-export(SelectedFormula,
-       SelectedMatrix,
-       SelectedModelFrame,
-       SelectedRecipe,
-       TunedRecipe)
-
 S3method(as.data.frame, BinomialVariate)
 S3method(as.data.frame, ModelFrame)
 S3method(as.data.frame, PerformanceDiffTest)

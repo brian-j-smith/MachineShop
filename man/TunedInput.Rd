@@ -2,6 +2,7 @@
 % Please edit documentation in R/TrainedInputs.R
 \name{TunedInput}
 \alias{TunedInput}
+\alias{TunedModelRecipe}
 \alias{TunedInput.recipe}
 \title{Tuned Model Inputs}
 \usage{

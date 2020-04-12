@@ -2,6 +2,8 @@
 % Please edit documentation in R/TrainedInputs.R
 \name{SelectedInput}
 \alias{SelectedInput}
+\alias{SelectedModelFrame}
+\alias{SelectedModelRecipe}
 \alias{SelectedModeledFrame}
 \alias{SelectedModeledRecipe}
 \alias{SelectedInput.formula}

@@ -3,6 +3,8 @@
 #' Formula, design matrix, model frame, or recipe selection from a candidate
 #' set.
 #'
+#' @aliases SelectedModelFrame
+#' @aliases SelectedModelRecipe
 #' @aliases SelectedModeledFrame
 #' @aliases SelectedModeledRecipe
 #' @rdname SelectedInput
@@ -253,6 +255,8 @@ SelectedInput.list <- function(x, ...) {
 #' Tuned Model Inputs
 #'
 #' Recipe tuning over a grid of parameter values.
+#'
+#' @aliases TunedModelRecipe
 #'
 #' @rdname TunedInput
 #'
