@@ -284,7 +284,7 @@ Metrics: C-Index
 Models: 1, 2, 3 
 
 Selected model: 1 
-C-Index value: 0.7327563')
+C-Index value: 0.7806223')
 ```
 
 In order to identify and return a final model fitted to the entire input data, the hierarchy is traversed from top to bottom along the path determined by the choice at each node.  Steps along the path are labelled `TrainStep1`, `TrainStep2`, and `TrainStep3` in the output.  As seen above in `TrainStep1`, one principal component is first selected for the tuned input.  Using an input recipe with one principal component, the entire dataset is refit at `TrainStep2` to select `TunedModel(GBMModel)`.
@@ -307,7 +307,7 @@ Metrics: C-Index
 Models: GBMModel, TunedModel, SuperModel 
 
 Selected model: TunedModel 
-C-Index value: 0.742369')
+C-Index value: 0.7533878')
 ```
 
 Finally, the entire dataset is refit in `TrainStep3` to selects 50 trees and an interaction depth of 1 in the tuning of `GBMModel`.
@@ -336,7 +336,7 @@ Metrics: C-Index
 Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6, GBMModel.7, GBMModel.8, GBMModel.9 
 
 Selected model: GBMModel.1 
-C-Index value: 0.7419883')
+C-Index value: 0.7137925')
 ```
 
 After the series of training steps reaches the bottom of its hierarchy, the final model is fitted to the entire dataset and returned.
