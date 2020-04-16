@@ -398,6 +398,14 @@ print.ModeledInput <- function(x, n = MachineShop::settings("max.print"), ...) {
 }
 
 
+print.ModeledTerms <- function(x, n = MachineShop::settings("max.print"), ...) {
+  print(formula(x))
+  cat("\n")
+  print(x@model, n)
+  invisible(x)
+}
+
+
 print.ParameterGrid <- function(x, n = MachineShop::settings("max.print"),
                                 ...) {
   print_title(x)

@@ -149,6 +149,21 @@ setClass("ModeledInput",
 )
 
 
+setClass("ModeledTerms",
+  contains = c("ModeledInput", "ModelTerms")
+)
+
+
+setClass("ModeledDesignTerms",
+  contains = c("ModeledTerms", "ModelDesignTerms")
+)
+
+
+setClass("ModeledFormulaTerms",
+  contains = c("ModeledTerms", "ModelFormulaTerms")
+)
+
+
 setClass("ModeledFrame",
   contains = c("ModeledInput", "ModelFrame")
 )
@@ -171,17 +186,7 @@ setClass("SelectedModelFrame",
 )
 
 
-setClass("SelectedModeledFrame",
-  contains = c("SelectedInput", "ModelFrame")
-)
-
-
 setClass("SelectedModelRecipe",
-  contains = c("SelectedInput", "ModelRecipe")
-)
-
-
-setClass("SelectedModeledRecipe",
   contains = c("SelectedInput", "ModelRecipe")
 )
 

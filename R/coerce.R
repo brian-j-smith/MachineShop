@@ -18,12 +18,12 @@ setAs("ModeledFrame", "data.frame",
 )
 
 
-setAs("SelectedModelFrame", "data.frame",
-  function(from) as.data.frame(from)
+setAs("recipe", "ModelRecipe",
+  function(from) ModelRecipe(from)
 )
 
 
-setAs("SelectedModeledFrame", "data.frame",
+setAs("SelectedModelFrame", "data.frame",
   function(from) as.data.frame(from)
 )
 
@@ -105,11 +105,6 @@ setAs("SelectedModelFrame", "ModelFrame",
 )
 
 
-setAs("SelectedModeledFrame", "ModelFrame",
-  function(from) asS3(S3Part(from))
-)
-
-
 setAs("ModelRecipe", "recipe",
   function(from) asS3(S3Part(from))
 )
@@ -121,11 +116,6 @@ setAs("ModeledRecipe", "recipe",
 
 
 setAs("SelectedModelRecipe", "recipe",
-  function(from) asS3(S3Part(from))
-)
-
-
-setAs("SelectedModeledRecipe", "recipe",
   function(from) asS3(S3Part(from))
 )
 

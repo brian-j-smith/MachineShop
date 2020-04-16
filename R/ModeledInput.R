@@ -44,7 +44,7 @@ ModeledInput <- function(x, ...) {
 #'
 ModeledInput.formula <- function(x, data, model, ...) {
   mf <- ModelFrame(x, data, na.rm = FALSE, strata = strata(response(x, data)))
-  ModeledFrame(mf, model = model)
+  ModeledInput(mf, model = model)
 }
 
 
@@ -52,21 +52,55 @@ ModeledInput.formula <- function(x, data, model, ...) {
 #'
 ModeledInput.matrix <- function(x, y, model, ...) {
   mf <- ModelFrame(x, y, na.rm = FALSE, strata = strata(y))
-  ModeledFrame(mf, model = model)
+  ModeledInput(mf, model = model)
 }
 
 
 #' @rdname ModeledInput-methods
 #'
 ModeledInput.ModelFrame <- function(x, model, ...) {
-  ModeledFrame(x, model = model)
+  model <- getMLObject(model, "MLModel")
+  switch_class(x,
+               SelectedModelFrame = {
+                 inputs <- map(ModeledInput, x@inputs, model = list(model))
+                 x@inputs <- ListOf(inputs)
+                 x
+               },
+               default = {
+                 new("ModeledFrame", as(x, "ModelFrame"), model = model)
+               })
+}
+
+
+ModeledInput.ModelDesignTerms <- function(x, model, ...) {
+  new("ModeledDesignTerms", x, model = model)
+}
+
+
+ModeledInput.ModelFormulaTerms <- function(x, model, ...) {
+  new("ModeledFormulaTerms", x, model = model)
+}
+
+
+ModeledInput.ModeledTerms <- function(x, model, ...) {
+  x@model <- model
+  x
 }
 
 
 #' @rdname ModeledInput-methods
 #'
 ModeledInput.recipe <- function(x, model, ...) {
-  ModeledRecipe(ModelRecipe(x), model = model)
+  model <- getMLObject(model, "MLModel")
+  switch_class(x,
+               SelectedModelRecipe = {
+                 inputs <- map(ModeledInput, x@inputs, model = list(model))
+                 x@inputs <- ListOf(inputs)
+                 x
+               },
+               default = {
+                 new("ModeledRecipe", as(x, "ModelRecipe"), model = model)
+               })
 }
 
 
@@ -81,14 +115,4 @@ ModeledInput.MLModel <- function(x, ...) {
 #'
 ModeledInput.MLModelFunction <- function(x, ...) {
   ModeledInput(x(), ...)
-}
-
-
-ModeledFrame <- function(object, ..., model) {
-  new("ModeledFrame", object, model = getMLObject(model, "MLModel"))
-}
-
-
-ModeledRecipe <- function(object, ..., model) {
-  new("ModeledRecipe", object, model = getMLObject(model, "MLModel"))
 }
