@@ -265,7 +265,9 @@ TunedInput.recipe <- function(x, grid = expand_steps(),
          label_items("; not found in recipe step id", step_ids))
   }
 
-  object
+  if (is(x, "ModeledRecipe")) {
+    new("TunedModeledRecipe", object, model = x@model)
+  } else object
 
 }
 

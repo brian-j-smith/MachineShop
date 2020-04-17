@@ -143,6 +143,11 @@ fit.MLModelFunction <- function(x, ...) {
 }
 
 
+.fit.TunedModeledRecipe <- function(x, ...) {
+  fit(as(x, "TunedModelRecipe"), model = x@model)
+}
+
+
 eval_fit <- function(data, formula, matrix) {
   use_model_matrix <- if (missing(formula)) TRUE else
     if (missing(matrix)) FALSE else

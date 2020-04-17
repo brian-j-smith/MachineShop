@@ -98,6 +98,7 @@ ModeledInput.recipe <- function(x, model, ...) {
                  x@inputs <- ListOf(inputs)
                  x
                },
+               TunedModelRecipe = new("TunedModeledRecipe", x, model = model),
                default = {
                  new("ModeledRecipe", as(x, "ModelRecipe"), model = model)
                })
