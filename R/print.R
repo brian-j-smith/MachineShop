@@ -383,6 +383,11 @@ setMethod("show", "ModelRecipe",
 )
 
 
+print.ModelTerms <- function(x, n = MachineShop::settings("max.print"), ...) {
+  print(formula(x))
+}
+
+
 #' @rdname print-methods
 #'
 print.ModeledInput <- function(x, n = MachineShop::settings("max.print"), ...) {
@@ -604,11 +609,6 @@ setMethod("show", "TabularArray",
     invisible()
   }
 )
-
-
-print.Terms <- function(x, n = MachineShop::settings("max.print"), ...) {
-  print(formula(x))
-}
 
 
 #' @rdname print-methods

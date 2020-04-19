@@ -123,18 +123,18 @@ setOldClass("recipe")
 setOldClass(c("terms", "formula"))
 
 
-setClass("Terms",
+setClass("ModelTerms",
   contains = "terms"
 )
 
 
-DesignTerms <- setClass("DesignTerms",
-  contains = "Terms"
+ModelDesignTerms <- setClass("ModelDesignTerms",
+  contains = "ModelTerms"
 )
 
 
-FormulaTerms <- setClass("FormulaTerms",
-  contains = "Terms"
+ModelFormulaTerms <- setClass("ModelFormulaTerms",
+  contains = "ModelTerms"
 )
 
 

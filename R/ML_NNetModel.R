@@ -57,7 +57,7 @@ NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
       )
     },
     fit = function(formula, data, weights, ...) {
-      if (is(terms(data), "DesignTerms")) {
+      if (is(terms(data), "ModelDesignTerms")) {
         x <- model.matrix(data, intercept = FALSE)
         y <- response(data)
         if (is_response(y, "binary")) {

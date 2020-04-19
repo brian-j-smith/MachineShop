@@ -146,7 +146,7 @@ fit.MLModelFunction <- function(x, ...) {
 eval_fit <- function(data, formula, matrix) {
   use_model_matrix <- if (missing(formula)) TRUE else
     if (missing(matrix)) FALSE else
-      is(terms(data), "DesignTerms")
+      is(terms(data), "ModelDesignTerms")
 
   if (use_model_matrix) {
     envir <- list(

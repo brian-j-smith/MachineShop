@@ -111,6 +111,13 @@ ModelFrame.ModelFrame <- function(x, na.rm = TRUE, ...) {
 }
 
 
+ModelFrame.ModelTerms <- function(x, data, ...) {
+  ModelFrame(structure(
+    as.data.frame(data), terms = x, class = c("ModelFrame", "data.frame")
+  ), ...)
+}
+
+
 ModelFrame.recipe <- function(x, ...) {
   x <- prep(x)
   data <- juice(x)
@@ -137,13 +144,6 @@ ModelFrame.recipe <- function(x, ...) {
 }
 
 
-ModelFrame.Terms <- function(x, data, ...) {
-  ModelFrame(structure(
-    as.data.frame(data), terms = x, class = c("ModelFrame", "data.frame")
-  ), ...)
-}
-
-
 #################### ModelFrame Formulas ####################
 
 
@@ -152,7 +152,7 @@ formula.ModelFrame <- function(x, ...) {
 }
 
 
-formula.Terms <- function(x, ...) {
+formula.ModelTerms <- function(x, ...) {
   formula(asS3(x))
 }
 
@@ -190,7 +190,7 @@ valid_predictor_calls <- c(
 
 
 terms.formula <- function(x, ...) {
-  FormulaTerms(structure(
+  ModelFormulaTerms(structure(
     stats::terms.formula(x, ...),
     .Environment = asNamespace("MachineShop")
   ))
@@ -227,15 +227,15 @@ terms.list <- function(x, y = NULL, intercept = TRUE, all_numeric = FALSE,
 
   class <- if (all_numeric) {
     x_char[name_inds] <- map_chr(as.character, x[name_inds])
-    "DesignTerms"
+    "ModelDesignTerms"
   } else {
-    "FormulaTerms"
+    "ModelFormulaTerms"
   }
 
   var_names <- c(if (has_y) deparse(y), x_char)
   label_names <- x_char[name_inds]
 
-  if (class == "DesignTerms") {
+  if (class == "ModelDesignTerms") {
     factors <- cbind(as.integer(var_names %in% label_names))
     rownames(factors) <- var_names
   } else {
@@ -346,7 +346,7 @@ terms.recipe <- function(x, original = FALSE, ...) {
 #################### ModelFrame Design Matrices ####################
 
 
-model.matrix.DesignTerms <- function(object, data, ...) {
+model.matrix.ModelDesignTerms <- function(object, data, ...) {
   data <- data[labels(object)]
   assign <- seq_len(ncol(data))
   if (attr(object, "intercept")) {
@@ -357,7 +357,7 @@ model.matrix.DesignTerms <- function(object, data, ...) {
 }
 
 
-model.matrix.FormulaTerms <- function(object, data, ...) {
+model.matrix.ModelFormulaTerms <- function(object, data, ...) {
   fo <- delete.response(object)
   mf <- model.frame(fo, data, na.action = na.pass)
   model.matrix.default(fo, mf, ...)
