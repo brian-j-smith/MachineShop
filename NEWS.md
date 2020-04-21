@@ -2,6 +2,10 @@
 
 ## Version Updates
 
+## 2.2.3
+* Extend `ModeledInput()` to `SelectedModelFrame`, `SelectedModelRecipe`, and `TunedModelRecipe`.
+
+
 ## 2.2.2
 * Fix updating of recipe parameters in `TunedInput()`.
 
