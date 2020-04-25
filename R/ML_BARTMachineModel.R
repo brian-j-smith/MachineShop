@@ -13,7 +13,7 @@
 #'   distribution.
 #' @param q quantile of the prior on the error variance at which the data-based
 #'   estimate is placed.
-#' @param nu regression degrees of freedom for the inverse \eqn{X^2} prior.
+#' @param nu regression degrees of freedom for the inverse \eqn{sigma^2} prior.
 #' @param mh_prob_steps vector of prior probabilities for proposing changes to
 #'   the tree structures: (GROW, PRUNE, CHANGE).
 #' @param verbose logical indicating whether to print progress information about
@@ -64,12 +64,13 @@ BARTMachineModel <- function(num_trees = 50, num_burn = 250, num_iter = 1000,
     predictor_encoding = "model.matrix",
     params = params(environment(), ...),
     grid = function(x, length, ...) {
-      list(
+      params <- list(
         alpha = seq(0.9, 0.99, length = length),
         beta = seq(1, 3, length = length),
-        k = 1:min(length, 10) + 1,
-        nu = 1:min(length, 10) + 1
+        k = 1:min(length, 10) + 1
       )
+      if (is.numeric(response(x))) params$nu <- 1:min(length, 10) + 1
+      params
     },
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)

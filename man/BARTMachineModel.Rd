@@ -36,7 +36,7 @@ distribution.}
 \item{q}{quantile of the prior on the error variance at which the data-based
 estimate is placed.}
 
-\item{nu}{regression degrees of freedom for the inverse \eqn{X^2} prior.}
+\item{nu}{regression degrees of freedom for the inverse \eqn{sigma^2} prior.}
 
 \item{mh_prob_steps}{vector of prior probabilities for proposing changes to
 the tree structures: (GROW, PRUNE, CHANGE).}
