@@ -75,6 +75,7 @@ BARTMachineModel <- function(num_trees = 50, num_burn = 250, num_iter = 1000,
       assert_equal_weights(weights)
       x <- model.matrix(data, intercept = FALSE)
       y <- response(data)
+      if (is_response(y, "binary")) y <- factor(y, levels = rev(levels(y)))
       bartMachine::bartMachine(as.data.frame(x), y, ...)
     },
     predict = function(object, newdata, ...) {
