@@ -2,6 +2,11 @@
 
 ## Version Updates
 
+## 2.2.4
+* Fix `BARTMachineModel` to predict highest binary response level.
+* Grid tune `BARTMachineModel` `nu` parameter for numeric responses only.
+
+
 ## 2.2.3
 * Extend `ModeledInput()` to `SelectedModelFrame`, `SelectedModelRecipe`, and `TunedModelRecipe`.
 
