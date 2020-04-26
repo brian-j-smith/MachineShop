@@ -69,6 +69,9 @@ behaviors of functions in the \pkg{MachineShop} package.
     which to calculate \link{performance} \link{metrics} for survival
     responses [default: \code{c(`C-Index` = "cindex", Brier = "brier",
     `ROC AUC` = "roc_auc", Accuracy = "accuracy")}].}
+  \item{\code{progress.resample}}{logical indicating whether to display a
+    progress bar during resampling [default: \code{TRUE}].  Displayed only
+    if a computing cluster is registered with the \pkg{doSNOW} package.}
   \item{\code{require}}{names of installed packages to load during parallel
     execution of resampling algorithms [default: \code{c("MachineShop",
     "survival", "recipes")}].}
@@ -92,8 +95,9 @@ behaviors of functions in the \pkg{MachineShop} package.
   \item{\code{stats.Resamples}}{function, function name, or vector of these
     with which to compute \link{summary} statistics on resampled performance
     metrics [default: \code{c(Mean = "base::mean", Median = "stats::median",
-    SD = "stats::sd", Min = "base::min", Max = "base::max")}].
-  }
+    SD = "stats::sd", Min = "base::min", Max = "base::max")}].}
+  \item{\code{verbose.resample}}{logical indicating whether to enable verbose
+    messages when resampling [default: \code{FALSE}].}
 }
 }
 

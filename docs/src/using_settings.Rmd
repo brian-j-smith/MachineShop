@@ -38,6 +38,9 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `metrics.Surv`
   : function, function name, or vector of these with which to calculate performance metrics for survival responses [default: ``c(`C-Index` = "cindex", Brier = "brier", `ROC AUC` = "roc_auc", Accuracy = "accuracy")``].
 
+`progress.foreach`
+  : logical indicating whether to display a progress bar during resampling [default: ``TRUE``].  Displayed only if a computing cluster is registered with the **doSNOW** package.
+
 `require`
   : names of installed packages to load during parallel execution of resampling algorithms [default: ``c("MachineShop", "survival", "recipes")``].
 
@@ -58,6 +61,9 @@ Core default behaviors of functions in the package can be viewed or changed glob
 
 `stats.Resamples`
   : function, function name, or vector of these with which to compute summary statistics on resampled performance metrics [default: ``c(Mean = "base::mean", Median = "stats::median", SD = "stats::sd", Min = "base::min", Max = "base::max")``].
+
+`verbose.resample`
+  : logical indicating whether to enable verbose messages when resampling [default: ``FALSE``].
 
 A call to `settings` with `"reset"` will restore all package defaults and with no arguments will display the current values of all.  Settings may also be supplied as a single unnamed argument which is a named list.  Partial matching of setting names is supported.  The setting value is returned if only one is specified to view.  Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes.  Such a list can be passed as an argument to `settings` to restore their values.
 

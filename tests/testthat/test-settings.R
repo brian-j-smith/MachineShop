@@ -74,6 +74,12 @@ test_that("settings changes and views", {
   expect_identical(settings("metrics.Surv"), new_value)
   expect_error(settings(metrics.Surv = "mean"))
 
+  expect_type(settings(progress.resample = 0), "list")
+  expect_identical(settings("progress.resample"), FALSE)
+  expect_type(settings(progress.resample = 1), "list")
+  expect_identical(settings("progress.resample"), TRUE)
+  expect_error(settings(progress.resample = character()))
+
   old_values <- settings("require")
   expect_type(settings(require = c("MachineShop", "stats")), "list")
   expect_identical(settings("require"), c("stats", old_values))
@@ -111,6 +117,12 @@ test_that("settings changes and views", {
   expect_type(settings(stats.Resamples = new_value), "list")
   expect_identical(settings("stats.Resamples"), new_value)
   expect_error(settings(stats.Resamples = "character"))
+
+  expect_type(settings(verbose.resample = 0), "list")
+  expect_identical(settings("verbose.resample"), FALSE)
+  expect_type(settings(verbose.resample = 1), "list")
+  expect_identical(settings("verbose.resample"), TRUE)
+  expect_error(settings(verbose.resample = character()))
 
   settings("reset")
   expect_identical(settings(), presets)

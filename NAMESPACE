@@ -6,10 +6,11 @@ importClassesFrom(party, RandomForest)
 
 importFrom(abind, abind, adrop)
 importFrom(dials, parameters)
-importFrom(foreach, "%dopar%", foreach, registerDoSEQ)
+importFrom(foreach, "%dopar%", foreach, getDoParName, registerDoSEQ)
 importFrom(graphics, plot)
 importFrom(magrittr, "%>%")
 importFrom(polspline, hare, phare)
+importFrom(progress, progress_bar)
 importFrom(recipes, bake, prep, recipe, tidy)
 importFrom(rsample, bootstraps, initial_split, vfold_cv)
 importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,

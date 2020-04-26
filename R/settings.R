@@ -59,6 +59,9 @@
 #'     which to calculate \link{performance} \link{metrics} for survival
 #'     responses [default: \code{c(`C-Index` = "cindex", Brier = "brier",
 #'     `ROC AUC` = "roc_auc", Accuracy = "accuracy")}].}
+#'   \item{\code{progress.resample}}{logical indicating whether to display a
+#'     progress bar during resampling [default: \code{TRUE}].  Displayed only
+#'     if a computing cluster is registered with the \pkg{doSNOW} package.}
 #'   \item{\code{require}}{names of installed packages to load during parallel
 #'     execution of resampling algorithms [default: \code{c("MachineShop",
 #'     "survival", "recipes")}].}
@@ -82,8 +85,9 @@
 #'   \item{\code{stats.Resamples}}{function, function name, or vector of these
 #'     with which to compute \link{summary} statistics on resampled performance
 #'     metrics [default: \code{c(Mean = "base::mean", Median = "stats::median",
-#'     SD = "stats::sd", Min = "base::min", Max = "base::max")}].
-#'   }
+#'     SD = "stats::sd", Min = "base::min", Max = "base::max")}].}
+#'   \item{\code{verbose.resample}}{logical indicating whether to enable verbose
+#'     messages when resampling [default: \code{FALSE}].}
 #' }
 #'
 #' @examples
@@ -159,6 +163,14 @@ settings <- function(...) {
 
 
 #################### Settings Utility Functions ####################
+
+
+check_logical <- function(x) {
+  result <- as.logical(x)[[1]]
+  if (!(isTRUE(result) || isFALSE(result))) {
+    DomainError(x, "must be a logical value")
+  } else result
+}
 
 
 check_match <- function(choices) {
@@ -308,6 +320,11 @@ MachineShop_global <- as.environment(list(
       check = check_metrics
     ),
 
+    progress.resample = list(
+      value = TRUE,
+      check = check_logical
+    ),
+
     require = list(
       value = c("MachineShop", "survival", "recipes"),
       check = function(x) {
@@ -370,6 +387,11 @@ MachineShop_global <- as.environment(list(
                 "Min" = "base::min",
                 "Max" = "base::max"),
       check = check_stats
+    ),
+
+    verbose.resample = list(
+      value = FALSE,
+      check = check_logical
     )
 
   )

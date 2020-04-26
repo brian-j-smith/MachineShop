@@ -78,8 +78,11 @@ MLModelFunction(SuperModel) <- NULL
   control <- params$control
 
   predictors <- list()
-  for (i in seq(base_learners)) {
-    res <- resample(inputs, model = base_learners[[i]], control = control)
+  i <- structure(0, max = length(base_learners), names = class(x))
+  while (i < attr(i, "max")) {
+    i <- i + 1
+    res <- resample(inputs, model = base_learners[[i]], control = control,
+                    progress_index = i)
     predictors[[i]] <- res$Predicted
   }
 

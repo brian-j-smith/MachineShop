@@ -24,8 +24,8 @@ Description: Meta-package for statistical and machine learning with a unified
     curves.
 Depends: R (>= 3.6.0)
 Imports: abind, dials (>= 0.0.4), foreach, ggplot2 (>= 3.3.0), kernlab,
-         magrittr, Matrix, methods, nnet, party, polspline, recipes (>= 0.1.4),
-         rlang, rsample, Rsolnp, survival, tibble, utils
+         magrittr, Matrix, methods, nnet, party, polspline, progress,
+         recipes (>= 0.1.4), rlang, rsample, Rsolnp, survival, tibble, utils
 Suggests: adabag, BART, bartMachine, C50, cluster, doParallel, e1071, earth,
           elasticnet, gbm, glmnet, gridExtra, Hmisc, kableExtra, kknn, knitr,
           lars, MASS, mboost, mda, partykit, pls, randomForest, ranger,
