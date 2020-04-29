@@ -125,7 +125,7 @@ summary.PerformanceCurve <- function(object,
     stat <- fget(stat)
 
     object_class <- class(object)
-    stat_na_omit <- function(x) stat(na.omit(x))
+    stat_na_omit <- function(x) stat(x[is.finite(x)])
 
     object_list <- by(object, object$Model, function(curves) {
       cutoffs <- unique(curves$Cutoff)
