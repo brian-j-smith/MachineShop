@@ -33,8 +33,9 @@ library(mlbench)
 library(ggplot2)
 
 ## Parallel processing
-library(doParallel)
-registerDoParallel(cores = 6)
+library(doSNOW)
+cl <- makeCluster(6)
+registerDoSNOW(cl)
 
 ## Dataset
 data(PimaIndiansDiabetes2)

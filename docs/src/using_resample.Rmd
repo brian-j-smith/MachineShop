@@ -45,8 +45,9 @@ Resampling is implemented with the **foreach** package [@microsoft:2019:FPF] and
 
 ```{r using_resample_parallel}
 ## Register multiple cores for parallel computations
-library(doParallel)
-registerDoParallel(cores = 2)
+library(doSNOW)
+cl <- makeCluster(2)
+registerDoSNOW(cl)
 ```
 
 
