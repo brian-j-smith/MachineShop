@@ -1,77 +1,86 @@
 # Response Variable Types
 
-The **R** class types of response variables play a central role in their analysis with the package.  They determine, for example, the specific models that can be fit, fitting algorithms employed, predicted values produced, and applicable performance metrics and analyses.  As described below, factors, ordered factors, numeric vectors and matrices, and survival responses are supported by the package.
+The **R** class types of response variables play a central role in their analysis with the package.  They determine, for example, the specific models that can be fit, fitting algorithms employed, predicted values produced, and applicable performance metrics and analyses.  As described in the following sections, factors, ordered factors, numeric vectors and matrices, and survival objects are supported by the package.
 
 
-## Factors
+## Factor
 
-Categorical responses with two or more levels should be coded as `factor` variables for analysis.
+Categorical responses with two or more levels should be coded as a `factor` variable for analysis.  Prediction is of factor levels by default and of level-specific probabilities if `type = "prob"`.
 
-```{r using_responses_factor, results="hide"}
+```{r using_responses_factor}
 ## Iris flowers species (3-level factor)
-fit(Species ~ ., data = iris, model = GBMModel)
+model_fit <- fit(Species ~ ., data = iris, model = GBMModel)
+predict(model_fit) %>% head
+predict(model_fit, type = "prob") %>% head
 ```
 
-```{r using_responses_factor_binary, results="hide"}
+In the case of a binary factor, the second factor level is treated as the event and the level for which predicted probabilities are computed. 
+
+```{r using_responses_factor_binary}
 ## Pima Indians diabetes statuses (binary factor)
 library(MASS)
 
-fit(type ~ ., data = Pima.tr, model = GBMModel)
+model_fit <- fit(type ~ ., data = Pima.tr, model = GBMModel)
+predict(model_fit, newdata = Pima.te) %>% head
+predict(model_fit, newdata = Pima.te, type = "prob") %>% head
 ```
 
 
-## Ordered Factors
+## Ordered Factor
 
-Categorical responses can be designated as having ordered levels by storing them as `ordered` factor variables.  For categorical vectors, this can be accomplished with the `factor` function and its argument `ordered = TRUE` or more simply with the `ordered` function.  Numeric vectors can be converted to ordered factors with the `cut` function.
+Categorical responses can be designated as having ordered levels by storing them as an `ordered` factor variable.  For categorical vectors, this can be accomplished with the `factor()` function and its argument `ordered = TRUE` or more simply with the `ordered()` function.  Numeric vectors can be converted to ordered factors with the `cut()` function.
 
-```{r using_responses_ordered, results="hide"}
-## Boston housing prices (ordered factor)
-library(MASS)
+```{r using_responses_ordered}
+## Iowa City housing prices (ordered factor)
+df <- within(ICHomes,
+  sale_amount <- cut(sale_amount, breaks = 3,
+                     labels = c("Low", "Medium", "High"),
+                     ordered_result = TRUE)
+)
 
-df <- within(Boston, {
-  medv <- cut(medv, breaks = 3, ordered_result = TRUE)
-})
-
-fit(medv ~ ., data = df, model = GBMModel)
+model_fit <- fit(sale_amount ~ ., data = df, model = GBMModel)
+predict(model_fit) %>% head
+predict(model_fit, type = "prob") %>% head
 ```
 
 
-## Numeric Vectors
+## Numeric Vector
 
-Code univariate numerical responses as `numeric` variables.
+Code univariate numerical responses as a `numeric` variable.  Predicted numeric values are of the original storage mode (integer or double) by default, and doubles if `type = "prob"`.
 
-```{r using_responses_numeric, results="hide"}
-## Boston housing prices
-library(MASS)
-
-fit(medv ~ ., data = Boston, model = GBMModel)
+```{r using_responses_numeric}
+## Iowa City housing prices
+model_fit <- fit(sale_amount ~ ., data = ICHomes, model = GBMModel)
+predict(model_fit) %>% head
+predict(model_fit, type = "prob") %>% head
 ```
 
 
-## Numeric Matrices
+## Numeric Matrix
 
-Store multivariate numerical responses as numeric `matrix` variables for model fitting with traditional formulas or model frames.
+Store multivariate numerical responses as a numeric `matrix` variable for model fitting with traditional formulas and model frames.
 
-```{r using_responses_matrix, results="hide"}
+```{r using_responses_matrix}
 ## Anscombe's multiple regression models dataset
 
 ## Numeric matrix response formula
-fit(cbind(y1, y2, y3) ~ x1, data = anscombe, model = LMModel)
+model_fit <- fit(cbind(y1, y2, y3) ~ x1, data = anscombe, model = LMModel)
+predict(model_fit) %>% head
 ```
 
 For recipes, include the multiple response variables on the left hand side of the formula specification.
 
-```{r using_responses_matrix_recipe, results="hide"}
+```{r using_responses_matrix_recipe}
 ## Numeric matrix response recipe
 rec <- recipe(y1 + y2 + y3 ~ x1, data = anscombe)
-
-fit(rec, model = LMModel)
+modelfit <- fit(rec, model = LMModel)
+predict(model_fit) %>% head
 ```
 
 
 ## Survival Objects
 
-Censored time-to-event survival responses should be stored as `Surv` variables for model fitting with traditional formulas or model frames.
+Censored time-to-event survival responses should be stored as a `Surv` variable for model fitting with traditional formulas and model frames.
 
 ```{r using_responses_surv, results="hide"}
 ## Survival response formula
@@ -80,12 +89,11 @@ library(survival)
 fit(Surv(time, status) ~ ., data = surv_train, model = GBMModel)
 ```
 
-For recipes, survival responses should be specified with the individual survival time and event variables given on the left hand side of the formula and with their roles designated with the `role_surv` function.
+For recipes, survival responses should be specified with the individual survival time and event variables given on the left hand side of the formula, and their roles designated with the `role_surv()` function.
 
 ```{r using_responses_surv_recipe, results="hide"}
 ## Survival response recipe
 rec <- recipe(time + status ~ ., data = surv_train) %>%
   role_surv(time = time, event = status)
-
 fit(rec, model = GBMModel)
 ```

@@ -3,13 +3,13 @@
 
 ## Model Information
 
-Model fitting requires user specification of a **MachineShop** compatible model.  A named list of package-supplied models can be obtained interactively with the `modelinfo` function, and includes the following components for each.
+Model fitting requires user specification of a **MachineShop** compatible model.  A named list of package-supplied models can be obtained interactively with the `modelinfo()` function, and includes the following components for each.
 
 `label`
   : Character descriptor for the model.
   
 `packages`
-  : Character vector of source packages required to use the model.  These need only be installed with the `install.packages` function or by equivalent means; but need not be loaded with, for example, the `library` function.
+  : Character vector of source packages required to use the model.  These need only be installed with the `install.packages()` function or by equivalent means; but need not be loaded with, for example, the `library()` function.
   
 `response_types`
   : Character vector of response variable types supported by the model.
@@ -23,22 +23,30 @@ Model fitting requires user specification of a **MachineShop** compatible model.
 `varimp`
   : Logical indicating whether variable importance is defined for the model.
 
-Function `modelinfo` may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.
+Function `modelinfo()` may be called without arguments, with one or more model functions, observed response variables, or vectors representing response variable types; and will return information on all matching models.
 
 ```{r using_fit_modelinfo}
 ## All available models
 modelinfo() %>% names
+```
 
+Information is displayed below for the `GBMModel()` function corresponding to a generalized boosted regression model, which is applicable to survival outcomes.
+
+```{r using_fit_modelinfo_gbmmodel}
 ## Model-specific information
 modelinfo(GBMModel)
 ```
 
-Information is displayed above for the `GBMModel` function --- a generalized boosted regression model that can be applied to survival outcomes.
+Submitting the model function at the console will result in similar information being displayed as formatted text.
+
+```{r using_fit_gbmmodel}
+GBMModel
+```
 
 
-### Type-Specific
+### Type-Specific Models
 
-When data objects are supplied as arguments, information is returned on all models applicable to response variables of the same data types.  If model functions are additionally supplied as arguments, information on the subset matching the data types is returned. 
+When data objects are supplied as arguments to `modelinfo()`, information is returned on all models applicable to response variables of the same data types.  If model functions are additionally supplied as arguments, information on the subset matching the data types is returned. 
 
 ```{r using_fit_modelinfo_type}
 ## All survival response-specific models
@@ -49,7 +57,7 @@ modelinfo(Surv(0), CoxModel, GBMModel, SVMModel) %>% names
 ```
 
 
-### Response Variable-Specific
+### Response Variable-Specific Models
 
 As a special case of type-specific arguments, existing response variables to be used in analyses may be given as arguments to identify applicable models.
 
@@ -61,7 +69,7 @@ modelinfo(Surv(surv_df$time, surv_df$status)) %>% names
 
 ## Fit Function
 
-Package models, like `GBMModel`, can be specified in the `model` argument of the `fit` function to estimate a relationship (`surv_fo`) between predictors and an outcome based on a set of data (`surv_train`).  Argument specifications may be in terms of the model function, function name, or a function call.
+Package models, such as `GBMModel`, can be specified in the `model` argument of the `fit()` function to estimate a relationship (`surv_fo`) between predictors and an outcome based on a set of data (`surv_train`).  Argument specifications may be in terms of the model function, function name, or a function call.
 
 ```{r using_fit_function, results="hide"}
 ## Generalized boosted regression fit
@@ -76,10 +84,12 @@ fit(surv_fo, data = surv_train, model = "GBMModel")
 fit(surv_fo, data = surv_train, model = GBMModel(n.trees = 100, interaction.depth = 1))
 ```
 
+Model function arguments will assume their default values unless otherwise changed in a function call.
+
 
 ## Dynamic Model Parameters
 
-*Dynamic model parameters* are model function arguments defined as expressions to be evaluated at the time of model fitting.  As such, their values can change based on the number of observations in the dataset supplied to the fit function.  Expressions to dynamic parameters are specified within the package-supplied quote operator `.()` and can include the following objects:
+*Dynamic model parameters* are model function arguments defined as expressions to be evaluated at the time of model fitting.  As such, their values can change based on characteristics of the analytic dataset, including the number of observations or predictor variables.  Expressions to dynamic parameters are specified within the package-supplied quote operator `.()` and can include the following objects:
 
 `nobs`
   : number of observations in `data`.
@@ -105,7 +115,7 @@ fit(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(length(y)))))
 
 ## Predict Function
 
-A `predict` function is supplied for application to model fit results to obtain predicted values on a dataset specified with its `newdata` argument or on the original dataset if not specified.  Survival means are predicted for survival outcomes by default.  Estimates of the associated survival distributions are needed to calculate the means.  For models, like `GBMModel`, that perform semi- or non-parametric survival analysis, Weibull approximations to the survival distributions are the default for mean estimation.  Other choices of distributional approximations are exponential, Rayleigh, and empirical.  Empirical distributions are applicable to Cox proportional hazards-based models and can be calculated with the method of Breslow [-@breslow:1972:DPC], Efron [-@efron:1977:ECL, default], or Fleming and Harrington [-@fleming:1984:NES].  Note, however, that empirical survival means are undefined mathematically if an event does not occur at the longest follow-up time.  In such situations, a restricted survival mean is calculated by changing the longest follow-up time to an event, as suggested by Efron [-@efron:1967:PFB], which will be negatively biased.  
+A `predict()` function is supplied for application to model fit results to obtain predicted values on a dataset specified with its `newdata` argument or on the original dataset if not specified.  Survival means are predicted for survival outcomes by default.  Estimates of the associated survival distributions are needed to calculate the means.  For models, like `GBMModel`, that perform semi- or non-parametric survival analysis, Weibull approximations to the survival distributions are the default for mean estimation.  Other choices of distributional approximations are exponential, Rayleigh, and empirical.  Empirical distributions are applicable to Cox proportional hazards-based models and can be calculated with the method of Breslow [-@breslow:1972:DPC], Efron [-@efron:1977:ECL, default], or Fleming and Harrington [-@fleming:1984:NES].  Note, however, that empirical survival means are undefined mathematically if an event does not occur at the longest follow-up time.  In such situations, a restricted survival mean is calculated by changing the longest follow-up time to an event, as suggested by Efron [-@efron:1967:PFB], which will be negatively biased.  
 
 ```{r using_predict_function}
 ## Predicted survival means (default: Weibull distribution)
@@ -123,5 +133,9 @@ surv_times <- 365 * c(5, 10)
 
 predict(surv_fit, newdata = surv_test, times = surv_times, type = "prob") %>% head
 
-predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.5) %>% head
+predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.7) %>% head
 ```
+
+Prediction of other outcome types is more straightforward.  Predicted numeric and factor responses are of the same class as the observed values at the default `type = "response"`; whereas, double (decimal) numeric values and factor level probabilities result when `type = "prob"`.
+
+

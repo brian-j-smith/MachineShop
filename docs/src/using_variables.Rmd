@@ -1,18 +1,19 @@
 # Variable Specifications
 
-Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Four main types of specifications are supported by the `fit`, `resample`, and `tune` functions: traditional formula, design matrix, model frame, and recipe.
+Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Four main types of specifications are supported by the package's `fit()`, `resample()`, and `tune()` functions: traditional formula, design matrix, model frame, and recipe.
 
 
 ## Traditional Formula
 
 Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example.  This specification allows for allows for crossing (`*`), interaction (`:`), and removal (`-`) of predictors in the formula; `.` substitution of variables not already appearing in the formula; in-line functions of response variables; and in-lining of base **R** operators and math functions of predictors.
 
-```{r using_variables_formula, results="hide"}
+```{r using_variables_formula}
 ## Dataset library
 library(MASS)
 
 ## Formula specification
-fit(medv ~ ., data = Boston, model = GBMModel)
+model_fit <- fit(type ~ ., data = Pima.tr, model = GBMModel)
+predict(model_fit, newdata = Pima.te) %>% head
 ```
 
 
@@ -20,32 +21,33 @@ fit(medv ~ ., data = Boston, model = GBMModel)
 
 Variables stored separately in a design matrix of predictors and object of responses can be supplied to the fit functions directly.  Fitting with design matrices has less computational overhead than traditional formulas and allows for greater numbers of predictor variables in some models, including `GBMModel`, `GLMNetModel`, and `RandomForestModel`.
 
-```{r using_variables_matrix, results="hide"}
+```{r using_variables_matrix}
 ## Example design matrix and response object
-x <- model.matrix(medv ~ . - 1, data = Boston)
-y <- Boston$medv
+x <- model.matrix(type ~ . - 1, data = Pima.tr)
+y <- Pima.tr$type
 
 ## Design matrix specification
-fit(x, y, model = GBMModel)
+model_fit <- fit(x, y, model = GBMModel)
+predict(model_fit, newdata = Pima.te) %>% head
 ```
 
 
 ## Model Frame
 
-A `ModelFrame` class is provided by the package for specification of predictor and response variables along with other attributes to control model fitting.  Model frames can be specified in calls to the `ModelFrame` constructor function with a syntax similar to the traditional formula or design matrix.
+A `ModelFrame` class is defined by the package for specification of predictor and response variables along with other attributes to control model fitting.  Model frames can be created with calls to the `ModelFrame()` constructor function using a syntax similar to the traditional formula or design matrix.
 
-```{r using_variables_modelframe, results="hide"}
+```{r using_variables_modelframe}
 ## Model frame specification
 
 ## Formula
-mf <- ModelFrame(medv ~ ., data = Boston)
-
-fit(mf, model = GBMModel)
+mf <- ModelFrame(type ~ ., data = Pima.tr)
+model_fit <- fit(mf, model = GBMModel)
+predict(model_fit, newdata = Pima.te) %>% head
 
 ## Design matrix
 mf <- ModelFrame(x, y)
-
-fit(mf, model = GBMModel)
+model_fit <- fit(mf, model = GBMModel)
+predict(model_fit, newdata = Pima.te) %>% head
 ```
 
 The model frame approach has a few advantages over model fitting directly with a traditional formula.  One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default.  This is often desirable for models that do not handle missing values.  Conversely, missing values can be retained in the model frame by setting its argument `na.rm = FALSE` for models, like `GBMModel`, that do handle them.  A second advantage is that case weights can be included in the model frame to be passed on to the model fitting functions.
@@ -54,7 +56,6 @@ The model frame approach has a few advantages over model fitting directly with a
 ## Model frame specification with case weights
 mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp, data = esoph,
                  weights = with(esoph, ncases + ncontrols))
-
 fit(mf, model = GBMModel)
 ```
 
@@ -65,16 +66,16 @@ A third, which will be illustrated later, is user-specification of a variable fo
 
 The **recipes** package [@kuhn:2020:RPT] provides a flexible framework for defining predictor and response variables as well as preprocessing steps to be applied to them prior to model fitting.  Using recipes helps ensure that estimation of predictive performance accounts for all modeling step.  They are also a convenient way of consistently applying preprocessing to new data.  A basic recipe is given below in terms of the formula and data frame ingredients needed for the analysis.
 
-```{r using_variables_recipe, results="hide"}
+```{r using_variables_recipe}
 ## Recipe specification
 library(recipes)
 
-rec <- recipe(medv ~ ., data = Boston)
-
-fit(rec, model = GBMModel)
+rec <- recipe(type ~ ., data = Pima.tr)
+model_fit <- fit(rec, model = GBMModel)
+predict(model_fit, newdata = Pima.te) %>% head
 ```
 
-Case weights and stratified resampling are also supported for recipes with the `role_case` function.  As an example, an initial step is included in the recipe below to replace the original role of variable `weights` with a designation of case weights.  That is followed by a step to convert three ordinal factors to integer scores.
+As shown, prediction on new data with a model fit to a recipe is done on an unprocessed dataset.  Recipe case weights and stratified resampling are supported with the `role_case()` function.  As an example, an initial step is included in the recipe below to replace the original role of variable `weights` with a designation of case weights.  That is followed by a step to convert three ordinal factors to integer scores.
 
 ```{r using_variables_recipe_weights, results="hide"}
 ## Recipe specification with case weights
@@ -86,14 +87,13 @@ df <- within(esoph, {
 rec <- recipe(y ~ agegp + tobgp + alcgp + weights, data = df) %>%
   role_case(weight = weights, replace = TRUE) %>%
   step_ordinalscore(agegp, tobgp, alcgp)
-
 fit(rec, model = GBMModel)
 ```
 
 
 ## Summary
 
-The variable specification approaches differ with respect to support for preprocessing, in-line functions, case weights, resampling strata, and computational overhead, as summarized in the table below.  Only recipes apply preprocessing steps automatically during model fitting and should be used when it is important to account for such steps in the estimation of model predictive performance.  Preprocessing would have to be done manually and separately otherwise.  Design matrices have the lowest computational overhead and can enable analyses involving larger numbers of predictors than the other approaches.  Both recipes and model frames allow for user-defined case weights (default: equal) and resampling strata (default: none).  The remaining approaches default to equal weights and to strata defined by the response variable.  Syntax ranges from simplest to most complex for design matrices, traditional formulas, model frames, and recipes, respectively.  The relative strengths of each approach should be considered within the context of a given analysis when deciding upon which one to use.
+The variable specification approaches differ with respect to support for preprocessing, in-line functions, case weights, resampling strata, and computational overhead, as summarized in the table below.  Only recipes apply preprocessing steps automatically during model fitting and should be used when it is important to account for such steps in the estimation of model predictive performance.  Preprocessing would need to be done manually and separately otherwise.  Design matrices have the lowest computational overhead and can enable analyses involving larger numbers of predictors than the other approaches.  Both recipes and model frames allow for user-defined case weights (default: equal) and resampling strata (default: none).  The remaining approaches are fixed to have equal weights and strata defined by the response variable.  Syntax ranges from simplest to most complex for design matrices, traditional formulas, model frames, and recipes, respectively.  The relative strengths of each approach should be considered within the context of a given analysis when deciding upon which one to use.
 
 ```{r using_variables_summary, echo=FALSE}
 df <- data.frame(

@@ -1,11 +1,11 @@
 # Model Performance Metrics
 
-Performance metrics quantify associations between observed and predicted responses and provide a means of assessing and comparing the predictive performances of models.
+Performance metrics quantify associations between observed and predicted responses and provide a means of evaluating the predictive performances of models.
 
 
 ## Performance Function
 
-Metrics can be computed with the `performance` function applied to observed responses and responses predicted with the `predict` function.  In the case of observed versus predicted survival probabilities or events, metrics will be calculated at each survival time and returned along with their time-integrated mean.
+Metrics can be computed with the `performance()` function applied to observed responses and responses predicted with the `predict()` function.  In the case of observed versus predicted survival probabilities or events, metrics will be calculated at user-specified survival times and returned along with their time-integrated mean.
 
 ```{r using_performance_function}
 ## Survival performance metrics
@@ -26,7 +26,7 @@ pred_events <- predict(surv_fit, newdata = surv_test, times = surv_times)
 performance(obs, pred_events)
 ```
 
-Function `performance` computes a default set of metrics according to the observed and predicted response types, as indicated and in the order given in the table below.
+Function `performance()` computes a default set of metrics according to the observed and predicted response types, as indicated and in the order given in the table below.
 
 
 Table 3. Default performance metrics by response types.
@@ -37,11 +37,11 @@ Factor                   | Brier Score, Accuracy, Cohen's Kappa
 Binary Factor            | Brier Score, Accuracy, Cohen's Kappa, Area Under ROC Curve, Sensitivity, Specificity
 Numeric Vector or Matrix | Root Mean Squared Error, R^2^, Mean Absolute Error
 Survival Means           | Concordance Index
-Survival Probabilities   | Area Under ROC Curve, Brier Score, Accuracy
+Survival Probabilities   | Brier Score, Area Under ROC Curve, Accuracy
 Survival Events          | Accuracy
 
 
-These defaults may be changed by specifying one or more package-supplied metric functions to the `metrics` argument of `performance`.  Specification of the `metrics` argument can be in terms of a single metric function, function name, or list of metric functions.  List names, if specified, will be displayed as metric labels in graphical and tabular summaries; otherwise, the function names will be used as labels for unnamed lists.
+These defaults may be changed by specifying one or more package-supplied metric functions to the `metrics` argument of `performance()`.  Specification of the `metrics` argument can be in terms of a single metric function, function name, or list of metric functions.  List names, if specified, will be displayed as metric labels in graphical and tabular summaries; otherwise, the function names will be used as labels for unnamed lists.
 
 ```{r using_performance_function_metrics, eval=FALSE}
 ## Single metric function
@@ -63,13 +63,13 @@ Metrics based on classification of two-level class probabilities, like sensitivi
 
 ```{r using_performance_function_cutoff}
 ## User-specified survival probability metrics
-performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.5)
+performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.7)
 ```
 
 
 ## Metric Functions
 
-Whereas multiple package-supplied metrics can be calculated simultaneously with the `performance` function, each exists as a stand-alone function that can be called individually.
+Whereas multiple package-supplied metrics can be calculated simultaneously with the `performance()` function, each exists as a stand-alone function that can be called individually.
 
 ```{r using_metrics_functions}
 ## Metric functions for survival means
@@ -88,7 +88,7 @@ specificity(obs, pred_probs)
 
 ## Metric Information
 
-A named list of available metrics can be obtained interactively with the `metricinfo` function, and includes the following components for each one.
+A named list of available metrics can be obtained interactively with the `metricinfo()` function, and includes the following components for each one.
 
 `label`
   : Character descriptor for the metric.
@@ -103,20 +103,30 @@ A named list of available metrics can be obtained interactively with the `metric
   : Data frame of the observed and predicted response variable types supported by the metric.
 
 
-Function `metricinfo` may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.
+Function `metricinfo()` may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.
 
 ```{r using_metrics_metricinfo}
 ## All available metrics
 metricinfo() %>% names
+```
 
+Information is displayed below for the `cindex()` function corresponding to a concordance index, which is applicable to observed survival and predicted means.
+
+```{r using_metrics_metricinfo_cindex}
 ## Metric-specific information
 metricinfo(cindex)
 ```
 
+Submitting the metric function at the console will result in similar information being displayed as formatted text.
 
-### Type-Specific
+```{r using_metrics_cindex}
+cindex
+```
 
-When data objects are supplied as arguments, information is returned on all metrics applicable to response variables of the same data types.  Observed response variable type is inferred from the first data argument and predicted type from the second, if given.  For survival responses, predicted types may be `numeric` for survival means, `SurvEvents` for 0-1 survival events at specified follow-up times, or `SurvProbs` for follow-up time survival probabilities.  If model functions are additionally supplied as arguments, information on the subset matching the data types is returned. 
+
+### Type-Specific Metrics
+
+When data objects are supplied as arguments to `metricinfo()`, information is returned on all metrics applicable to response variables of the same data types.  Observed response variable type is inferred from the first data argument and predicted type from the second, if given.  For survival responses, predicted types may be `numeric` for survival means, `SurvEvents` for 0-1 survival events at specified follow-up times, or `SurvProbs` for follow-up time survival probabilities.  If model functions are additionally supplied as arguments, information on the subset matching the data types is returned. 
 
 ```{r using_metrics_metricinfo_type}
 ## Metrics for observed and predicted response variable types
@@ -133,9 +143,9 @@ metricinfo(Surv(0), auc, cross_entropy, cindex) %>% names
 ```
 
 
-### Response Variable-Specific
+### Response Variable-Specific Metrics
 
-Existing response variables observed and those obtained from the `predict` function may be given as arguments to identify metrics that are applicable to them.
+Existing response variables observed and those obtained from the `predict()` function may be given as arguments to identify metrics that are applicable to them.
 
 ```{r using_metrics_metricinfo_response}
 ## Metrics for observed and predicted responses from model fits
@@ -149,20 +159,20 @@ metricinfo(obs, pred_probs) %>% names
 
 Metrics applicable to multi-level factor response variables are summarized below.
 
-`accuracy`
+`accuracy()`
   : Proportion of correctly classified responses.
 
-`brier`
+`brier()`
   : [Brier score](https://en.wikipedia.org/wiki/Brier_score).
   
-`cross_entropy`
+`cross_entropy()`
   : [Cross entropy](https://en.wikipedia.org/wiki/Cross_entropy) loss averaged over the number of cases.
   
-`kappa2`
+`kappa2()`
   : [Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa) statistic measuring relative agreement between observed and predicted classifications.
 
-`weighted_kappa2`
-  : [Weighted Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa#Weighted_kappa).  This metric is only available for ordered factor responses.
+`weighted_kappa2()`
+  : [Weighted Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa#Weighted_kappa) for ordered factor responses only.
   
 Brier score and cross entropy loss are computed directly on predicted class probabilities.  The other metrics are computed on predicted class membership, defined as the factor level with the highest predicted probability.
 
@@ -171,16 +181,16 @@ Brier score and cross entropy loss are computed directly on predicted class prob
 
 Metrics for binary factors include those given for multi-level factors as well as the following.
 
-`auc`
+`auc()`
   : Area under a performance curve.
 
-`cindex`
+`cindex()`
   : Concordance index computed as rank order agreement between predicted probabilities for paired event and non-event cases.  This metric can be interpreted as the probability that a randomly selected event case will have a higher predicted value than a randomly selected non-event case, and is the same as area under the ROC curve.
 
-`f_score`
+`f_score()`
   : [F score](https://en.wikipedia.org/wiki/Precision_and_recall#F-measure), $F_\beta = (1 + \beta^2) \frac{\text{precision} \times \text{recall}}{\beta^2 \times \text{precision} + \text{recall}}$.  F1 score $(\beta = 1)$ is the package default.
 
-`fnr`
+`fnr()`
   : False negative rate, $FNR = \frac{FN}{TP + FN} = 1 - TPR$.
 
 ```{r using_metrics_conf, echo=FALSE}
@@ -196,31 +206,31 @@ kable(conf,
   add_header_above(c("Predicted Response" = 1, "Observed Response" = 2))
 ```
 
-`fpr`
+`fpr()`
   : False positive rate, $FPR = \frac{FP}{TN + FP} = 1 - TNR$.
 
-`npv`
+`npv()`
   : Negative predictive value, $NPV = \frac{TN}{TN + FN}$.
 
-`ppv`, `precision`
+`ppv()`, `precision()`
   : Positive predictive value, $PPV = \frac{TP}{TP + FP}$.
 
-`pr_auc`, `auc`
+`pr_auc()`, `auc()`
   : Area under a precision recall curve.
   
-`roc_auc`, `auc`
+`roc_auc()`, `auc()`
   : [Area under an ROC curve](https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve).
 
-`roc_index`
+`roc_index()`
   : A tradeoff function of sensitivity and specificity as defined by the `f` argument in this function (default: sensitivity + specificity).  The function allows for specification of tradeoffs [@perkins:2006:IOC] other than the default of Youden's J statistic [@youden:1950:IRD].
   
-`rpp`
+`rpp()`
   : Rate of positive prediction, $RPP = \frac{TP + FP}{TP + FP + TN + FN}$.
   
-`sensitivity`, `recall`, `tpr`
+`sensitivity()`, `recall()`, `tpr()`
   : True positive rate, $TPR =\frac{TP}{TP + FN} = 1 - FNR$.
   
-`specificity`, `tnr`
+`specificity()`, `tnr()`
   : True negative rate, $TNR = \frac{TN}{TN + FP} = 1 - FPR$.
 
 Area under the ROC and precision-recall curves as well as the concordance index are computed directly on predicted class probabilities.  The other metrics are computed on predicted class membership.  Memberships are defined to be in the second factor level if predicted probabilities are greater than the function default or user-specified cutoff value.
@@ -230,25 +240,25 @@ Area under the ROC and precision-recall curves as well as the concordance index 
 
 Performance metrics are defined below for numeric vector responses.  If applied to a numeric matrix response, the metrics are computed separately for each column and then averaged to produce a single value.
 
-`gini`
+`gini()`
   : [Gini coefficient](https://en.wikipedia.org/wiki/Gini_coefficient).
   
-`mae`
-  : Mean absolute error, $MAE = \frac{1}{n}\sum_{i=1}^n|y_i - \hat{y}_i|$, where $y_i$ and $\hat{y}_i$ are the $n$ observed and predicted responses.
+`mae()`
+  : Mean absolute error, $MAE = \frac{1}{N}\sum_{i=1}^N|y_i - \hat{y}_i|$, where $y_i$ and $\hat{y}_i$ are the $N$ observed and predicted responses.
 
-`mse`
-  : Mean squared error, $MSE = \frac{1}{n}\sum_{i=1}^n(y_i - \hat{y}_i)^2$.
+`mse()`
+  : Mean squared error, $MSE = \frac{1}{N}\sum_{i=1}^N(y_i - \hat{y}_i)^2$.
 
-`msle`
-  : Mean squared log error, $MSLE = \frac{1}{n}\sum_{i=1}^n(log(1 + y_i) - log(1 + \hat{y}_i))^2$.
+`msle()`
+  : Mean squared log error, $MSLE = \frac{1}{N}\sum_{i=1}^N(log(1 + y_i) - log(1 + \hat{y}_i))^2$.
 
-`r2`
-  : One minus residual divided by total sums of squares, $R^2 = 1 - \sum_{i=1}^n(y_i - \hat{y}_i)^2 / \sum_{i=1}^n(y_i - \bar{y})^2$.
+`r2()`
+  : One minus residual divided by total sums of squares, $R^2 = 1 - \sum_{i=1}^N(y_i - \hat{y}_i)^2 / \sum_{i=1}^N(y_i - \bar{y})^2$.
 
-`rmse`
+`rmse()`
   : Square root of mean squared error.
 
-`rmsle`
+`rmsle()`
   : Square root of mean squared log error.
 
 

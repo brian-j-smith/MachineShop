@@ -1,29 +1,29 @@
-# Resample Performance Estimation
+# Resampled Performance
 
 
 ## Algorithms
 
 Model performance can be estimated with resampling methods that simulate repeated training and test set fits and predictions.  With these methods, performance metrics are computed on each resample to produce an empirical distribution for inference.  Resampling is controlled in the **MachineShop** with the functions:
 
-BootControl
-  : Simple bootstrap resampling [@efron:1993:IB].  Models are repeatedly fit with bootstrap resampled training sets and used to predict the full data set.
+`BootControl()`
+  : Simple bootstrap resampling [@efron:1993:IB].  Models are repeatedly fit with bootstrap resampled training sets and used to predict the full dataset.
 
-BootOptimismControl
+`BootOptimismControl()`
   : Optimism-corrected bootstrap resampling [@efron:1983:LLB; @harrell:1996:MPM].
 
-CVControl
-  : Repeated K-fold cross-validation [@kohavi:1995:SCB].  The full data set is repeatedly partitioned into K-folds.  For a given partitioning, prediction is performed on each of the K folds with models fit on all remaining folds.  10-fold cross-validation is the package default.
+`CVControl()`
+  : Repeated K-fold cross-validation [@kohavi:1995:SCB].  The full dataset is repeatedly partitioned into K-folds.  For a given partitioning, prediction is performed on each of the K folds with models fit on all remaining folds.  10-fold cross-validation is the package default.
 
-CVOptimismControl
+`CVOptimismControl()`
   :  Optimism-corrected cross-validation [@davison:1997:BMA, eq. 6.48].
 
-OOBControl
+`OOBControl()`
   : Out-of-bootstrap resampling.  Models are fit with bootstrap resampled training sets and used to predict the unsampled cases.
   
-SplitControl
+`SplitControl()`
   : Split training and test sets [@hastie:2009:ESL7].  The data are randomly partitioned into a training and test set.
   
-TrainControl
+`TrainControl()`
   : Training resubstitution.  A model is fit on and used to predict the full training set in order to estimate training, or apparent, error [@efron:1986:HBA].
   
 For the survival example, repeated cross-validation control structures are defined to estimate model performance in predicting survival means and 5 and 10-year survival probabilities.  In addition to arguments controlling the resampling algorithms, a `seed` can be set to ensure reproducibility of resampling results obtained with the structures.
@@ -41,7 +41,7 @@ surv_probs_control <- CVControl(folds = 5, repeats = 3, times = surv_times, seed
 
 ## Parallel Processing
 
-Resampling is implemented with the **foreach** package [@microsoft:2019:FPF] and will run in parallel if a compatible backend is loaded, such as that provided by the **doParallel** [@microsoft:2019:DFP] or ***doSNOW** package [@microsoft:2019:DFS].
+Resampling is implemented with the **foreach** package [@microsoft:2019:FPF] and will run in parallel if a compatible backend is loaded, such as that provided by the **doParallel** [@microsoft:2019:DFP] or **doSNOW** package [@microsoft:2019:DFS].
 
 ```{r using_resample_parallel}
 ## Register multiple cores for parallel computations
@@ -53,7 +53,7 @@ registerDoSNOW(cl)
 
 ## Resample Function
 
-Resampling is performed by calling the `resample` function with a variable specification, model, and control structure.  Like the `fit` function, variables may be specified in terms of a traditional formula, design matrix, model frame, or recipe.
+Resampling is performed by calling the `resample()` function with a variable specification, model, and control structure.  Like the `fit()` function, variables may be specified in terms of a traditional formula, design matrix, model frame, or recipe.
 
 ```{r using_resample_function}
 ## Resample estimation for survival means and probabilities
@@ -65,7 +65,7 @@ Resampling is performed by calling the `resample` function with a variable speci
 
 ## Summary Statistics
 
-The `summary` function when applied directly to output from `resample` computes summary statistics for the default performance metrics described in the *Performance Function* section.
+The `summary()` function when applied directly to output from `resample()` computes summary statistics for the default performance metrics described in the *Performance Function* section.
 
 ```{r using_resample_summary}
 ## Summary of survival means metric
@@ -75,7 +75,7 @@ summary(res_means)
 summary(res_probs)
 ```
 
-Other relevant metrics can be identified and summarized with the `metricinfo` and `performance` functions.
+Other relevant metrics can be identified with `metricinfo()` and summarized with `performance()`.
 
 ```{r using_resample_summary_performance}
 ## Resample-specific metrics
@@ -85,7 +85,7 @@ metricinfo(res_means) %>% names
 summary(performance(res_means, metrics = c(cindex, rmse)))
 ```
 
-Futhermore, summaries can be customized with a user-defined statistics function or list of statistics functions passed to the `stats` argument of `summary`.
+Futhermore, summaries can be customized with a user-defined statistics function or list of statistics functions passed to the `stats` argument of `summary()`.
 
 ```{r using_resample_summary_stats}
 ## User-defined statistics function
@@ -99,7 +99,7 @@ summary(res_means, stats = c(Mean = mean, Percentile = percentiles))
 
 ## Plots
 
-Summary plots of resample output can be obtained with the `plot` function.  Boxplots are the default plot type; but density, errorbar, and violin plots are also available.  Plots are generated with the **ggplot2** package [@wickham:2016:GEG] and returned as `ggplot` objects.  As such, annotation and formatting defined for ggplots can be applied to the returned plots.
+Summary plots of resample output can be obtained with the `plot()` function.  Boxplots are the default plot type; but density, errorbar, and violin plots are also available.  Plots are generated with the **ggplot2** package [@wickham:2016:GEG] and returned as `ggplot` objects.  As such, annotation and formatting defined for ggplots can be applied to the returned plots.
 
 ```{r using_resample_plots}
 ## Libraries for plot annotation and fomatting
@@ -119,19 +119,17 @@ grid.arrange(p1, p2, p3, p4, nrow = 2)
 
 ## Stratified Resampling
 
-Stratification of cases for the construction of resampled training and test sets can be employed to help achieve balance across the sets.  Stratified resampling is automatically performed if variable specification is in terms of a traditional formula and will be done according to the response variable if a numeric vector or factor, the event variable if survival, and the first variable if a numeric matrix.  For model frames and recipes, stratification variables must be defined explicitly with the `strata` argument to the `ModelFrame` constructor or with the `role_case` function. 
+Stratification of cases for the construction of resampled training and test sets can be employed to help achieve balance across the sets.  Stratified resampling is automatically performed if variable specification is in terms of a traditional formula and will be done according to the response variable if a numeric vector or factor, the event variable if survival, and the first variable if a numeric matrix.  For model frames and recipes, stratification variables must be defined explicitly with the `strata` argument to the `ModelFrame()` constructor or with the `role_case()` function. 
 
 ```{r using_resample_strata, results="hide"}
 ## Model frame with case status stratification
 mf <- ModelFrame(surv_fo, data = surv_train, strata = surv_train$status)
-
 resample(mf, model = GBMModel)
 
 ## Recipe with case status stratification
 rec <- recipe(time + status ~ ., data = surv_train) %>%
   role_surv(time = time, event = status) %>%
   role_case(stratum = status)
-
 resample(rec, model = GBMModel)
 ```
 
@@ -148,7 +146,7 @@ resample(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(nobs))))
 
 ## Model Comparisons
 
-Resampled metrics from different models can be combined for comparison with the `Resamples` function.  Optional names given on the left hand side of equal operators within calls to `Resamples` will be used as labels in output from the `summary` and `plot` functions.  For comparisons of resampled output, the same control structure must be used in all associated calls to `resample` to ensure that resulting model metrics are computed on the same resampled training and test sets.  The combined resample output can be summarized and plotted as usual.
+Resampled metrics from different models can be combined for comparison with the `c()` function.  Optional names given on the left hand side of equal operators within `c()` calls will be used as labels in output from the `summary()` and `plot()` functions.  For comparisons of resampled output, the same control structure must be used in all associated calls to `resample()` to ensure that resulting model metrics are computed on the same resampled training and test sets.  The combined resample output can be summarized and plotted as usual.
 
 ```{r using_resample_comparisons}
 ## Resample estimation
@@ -167,7 +165,7 @@ summary(res)
 plot(res)
 ```
 
-Pairwise model differences for each metric can be calculated with the `diff` function applied to results from a call to `Resamples`.  Resulting differences can be summarized descriptively with the `summary` and `plot` functions and assessed for statistical significance with the `t.test` function.
+Pairwise model differences for each metric can be calculated with the `diff()` function applied to results from a call to `c()`.  Resulting differences can be summarized descriptively with the `summary()` and `plot()` functions and assessed for statistical significance with pairwise t-test performed by the `t.test()` function.
 
 ```{r using_resample_diff}
 ## Pairwise model comparisons

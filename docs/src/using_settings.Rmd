@@ -1,6 +1,6 @@
 # Global Settings
 
-Core default behaviors of functions in the package can be viewed or changed globally through the `settings` function.  The function accepts one or more character names of settings to view, `name = value` pairs giving the values of settings to change, or a vector of these, with available settings summarized below.
+Core default behaviors of functions in the package can be viewed or changed globally through the `settings()` function.  The function accepts one or more character names of settings to view, `name = value` pairs giving the values of settings to change, or a vector of these, with available settings summarized below.
 
 `control`
   : function, function name, or call defining a default resampling method [default: ``"CVControl"``].
@@ -15,7 +15,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
   : character string specifying distributional approximations to estimated survival curves for predicting survival events/probabilities.  Choices are `"empirical"` (default) for the Kaplan-Meier estimator, `"exponential"`, or `"weibull"`.
 
 `grid`
-  : number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a `Grid` function, function name, or call [default: 3].
+  : number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a `Grid()` function, function name, or call [default: 3].
 
 `max.print`
   : number of models or data rows to show with print methods or `Inf` to show all [default: 10].
@@ -38,7 +38,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `metrics.Surv`
   : function, function name, or vector of these with which to calculate performance metrics for survival responses [default: ``c(`C-Index` = "cindex", Brier = "brier", `ROC AUC` = "roc_auc", Accuracy = "accuracy")``].
 
-`progress.foreach`
+`progress.resample`
   : logical indicating whether to display a progress bar during resampling [default: ``TRUE``].  Displayed only if a computing cluster is registered with the **doSNOW** package.
 
 `require`
@@ -65,7 +65,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `verbose.resample`
   : logical indicating whether to enable verbose messages when resampling [default: ``FALSE``].
 
-A call to `settings` with `"reset"` will restore all package defaults and with no arguments will display the current values of all.  Settings may also be supplied as a single unnamed argument which is a named list.  Partial matching of setting names is supported.  The setting value is returned if only one is specified to view.  Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes.  Such a list can be passed as an argument to `settings` to restore their values.
+A call to `settings()` with `"reset"` will restore all package defaults and with no arguments will display the current values of all.  Settings may also be supplied as a single unnamed argument which is a named list.  Partial matching of setting names is supported.  The setting value is returned if only one is specified to view.  Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes.  Such a list can be passed as an argument to `settings()` to restore their values.
 
 ```{r using_settings}
 ## Change settings

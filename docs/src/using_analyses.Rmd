@@ -1,11 +1,11 @@
-# Performance Analyses
+# Model Effects and Diagnostics
 
-Calculation of performance metrics on test sets or by resampling, as discussed previously, is one method of assessing model performance.  Others available include measures of predictor variable importance, calibration curves comparing observed and predicted response values, partial dependence plots, and receiver operating characteristic analysis.
+Calculation of performance metrics on test sets or by resampling, as discussed previously, is one method of assessing model performance.  Others available include measures of predictor variable importance, partial dependence plots, calibration curves comparing observed and predicted response values, and receiver operating characteristic analysis.
 
 
 ## Variable Importance
 
-The importance of variables in a model fit is estimated with the `varimp` function and plotted with `plot`.  Variable importance is a relative measure of the contributions of model predictors and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most.  Classes of models can differ with respect to how variable importance is defined.  In the case of a `GBMModel`, importance of each predictor is based on the sum of squared empirical improvements over all internal tree nodes created by splitting on that variable [@greenwell:2019:GBM].
+The importance of predictor variables in a model fit is estimated with the `varimp()` function and displayed graphically with `plot()`.  Variable importance is a relative measure of the contributions of model predictors and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most.  Classes of models can differ with respect to how variable importance is defined.  In the case of a `GBMModel`, importance of each predictor is based on the sum of squared empirical improvements over all internal tree nodes created by splitting on that variable [@greenwell:2019:GBM].
 
 ```{r using_analyses_vi}
 ## Predictor variable importance
@@ -14,12 +14,43 @@ The importance of variables in a model fit is estimated with the `varimp` functi
 plot(vi)
 ```
 
-Alternatively, importance is based on negative log-transformed p-values for statistical models, like `CoxModel`, that produce them.  For other classes of models, variable importance is generally defined and calculated by their underlying source packages.
+Alternatively, importance is based on negative log-transformed p-values for statistical models, like `CoxModel`, that produce them.  For other models, variable importance may be defined and calculated by their underlying source packages or not defined at all, as is the case for `SVMModel`.  Logical indicators of the availability of variable importance are available in the printed model constructor information or from `modelinfo()`.
+
+```{r using_analysis_vi_info}
+SVMModel
+
+modelinfo(SVMModel)[[1]]$varimp
+```
+
+
+## Partial Dependence Plots
+
+Partial dependence plots show the marginal effects of predictors on a response variable.  Dependence for a select set of one or more predictor variables $X_S$ is computed as
+$$
+\bar{f}_S(X_S) = \frac{1}{N}\sum_{i=1}^N f(X_S, x_{iS'}),
+$$
+where $f$ is a fitted prediction function and $x_{iS'}$ are values of the remaining predictors in a dataset of $N$ cases.  The response scale displayed in dependence plots will depend on the response variable type: probability for predicted factors and survival probabilities, original scale for numerics, and survival time for predicted survival means.  By default, dependence is computed for each selected predictor individually over a grid of 10 approximately evenly spaced values and averaged over the dataset on which the prediction function was fit.
+
+```{r using_analyses_pd, results = "hide"}
+## Partial dependence plots
+pd <- dependence(surv_fit, select = c(thickness, age))
+plot(pd)
+```
+
+Estimated predictor effects are marginal in that they are averaged over the remaining variables, whose distribution depends on the population represented by the dataset.  Consequently, partial dependence plots for a given model can vary across datasets and populations.  The package allows averaging over different datasets to estimate marginal effects in other case populations, over different numbers of predictor values, and over quantile spacing of the values.
+
+```{r using_analyses_pd_data, results = "hide"}
+pd <- dependence(surv_fit, data = surv_test, select = thickness, n = 20,
+                 intervals = "quantile")
+plot(pd)
+```
+
+In addition, dependence may be computed for combinations of multiple predictors to examine interaction effects and for summary statistics other than the mean.
 
 
 ## Calibration Curves
 
-Agreement between model-predicted and observed values can be visualized with calibration curves.  In the construction of these curves, cases are partitioned into equally spaced bins according to their (resampled) predicted responses.  Mean observed responses are then calculated within each of the bins and plotted on the vertical axis against the bin midpoints on the horizontal axis. 
+Agreement between model-predicted and observed values can be visualized with calibration curves.  Calibration curves supplement individual performance metrics with information on model fit in different regions of predicted values.  They also provide more direct assessment of agreement than some performance metrics, like ROC AUC, that do not account for scale and location differences.  In the construction of binned calibration curves, cases are partitioned into equal-width intervals according to their (resampled) predicted responses.  Mean observed responses are then calculated within each of the bins and plotted on the vertical axis against the bin midpoints on the horizontal axis. 
 
 ```{r using_analyses_cal, results="hide"}
 ## Binned calibration curves
@@ -27,7 +58,7 @@ cal <- calibration(res_probs, breaks = 10)
 plot(cal, se = TRUE)
 ```
 
-As an alternative to discrete bins, curves can be smoothed over the individual predicted values by setting `breaks = NULL`.
+As an alternative to discrete bins, curves can be smoothed by setting `breaks = NULL` to compute weighted averages of observed values.  Smoothing has the advantage of producing more precise curves by including more observed values in the calculation at each predicted value.
 
 ```{r using_analyses_cal_smoothed, results="hide"}
 ## Smoothed calibration curves
@@ -35,31 +66,31 @@ cal <- calibration(res_probs, breaks = NULL)
 plot(cal)
 ```
 
-Calibration curves that are close to the 45$^\circ$ line indicate close agreement between observed and predicted responses and a model that is said to be well calibrated.
+Calibration curves close to the 45$^\circ$ line represent agreement between observed and predicted responses and a model that is said to be well calibrated.
 
 
 ## Confusion Matrices
 
-Confusion matrices of cross-classified observed and predicted categorical responses are available with the `confusion` function.  They can be constructed with predicted class membership or with predicted class probabilities.  In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors (default: `cutoff = 0.5`) and according to the class with highest probability for factors with more than two levels.
+Confusion matrices of cross-classified observed and predicted categorical responses are available with the `confusion()` function.  They can be constructed with predicted class membership or with predicted class probabilities.  In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors (default: `cutoff = 0.5`) and according to the class with highest probability for factors with more than two levels.
 
 
 ```{r using_analyses_conf}
 ## Confusion matrices
-(conf <- confusion(res_probs, cutoff = 0.5))
+(conf <- confusion(res_probs, cutoff = 0.7))
 ```
 
 ```{r using_analyses_conf_plot, results="hide"}
 plot(conf)
 ```
 
-Confusion matrices are the data structure upon which many of the performance metrics described earlier for factor predictor variables are based.  Metrics commonly reported for confusion matrices are generated by the `summary` function.
+Confusion matrices are the data structure upon which many of the performance metrics described earlier for factor predictor variables are based.  Metrics commonly reported for confusion matrices are generated by the `summary()` function.
 
 ```{r using_analyses_conf_summary}
 ## Summary performance metrics
 summary(conf)
 ```
 
-Summaries can also be obtained with `performance` function but for select metrics specified by the user.
+Summaries can also be obtained with the `performance()` function for default or use-specified metrics.
 
 ```{r using_analyses_conf_performance}
 ## Confusion matrix-specific metrics
@@ -72,39 +103,21 @@ performance(conf, metrics = c("Accuracy" = accuracy,
 ```
 
 
-## Partial Dependence Plots
-
-Partial dependence plots display the marginal effects of predictors on a response variable.  Dependence for a select set of one or more predictor variables $X_S$ is computed as
-$$
-\bar{f}_S(X_S) = \frac{1}{N}\sum_{i=1}^N f(X_S, x_{iS'}),
-$$
-where $f$ is a fitted prediction function and $x_{iS'}$ are values of the remaining predictors in a dataset of $N$ cases.  The response scale displayed in dependence plots will depend on the response variable type: probability for predicted factors and survival probabilities, original scale for numerics, and survival time for predicted survival means.  By default, dependence is computed for each select predictor individually over a grid of 10 approximately evenly spaced values and averaged over the dataset on which the prediction function was fit.
-
-```{r using_analyses_pd, results = "hide"}
-## Partial dependence plots
-pd <- dependence(surv_fit, select = c(thickness, age))
-plot(pd)
-```
-
-Averaging may be performed over different datasets to estimate marginal effects in other populations of cases, over different numbers of predictor values, and over quantile spacing of the values.
-
-```{r using_analyses_pd_data, results = "hide"}
-pd <- dependence(surv_fit, data = surv_test, select = thickness, n = 20,
-                 intervals = "quantile")
-plot(pd)
-```
-
-In addition, dependence may be computed for combinations of multiple predictors to examine interaction effects and for summary statistics other than the mean.
-
-
 ## Performance Curves
 
-Tradeoffs between correct and incorrect classifications of binary outcomes, across the range of possible cutoff probabilities, can be studied with performance curves.
+Tradeoffs between correct and incorrect classifications of binary responses, across the range of possible cutoff probabilities, can be studied with performance curves.  In general, any two binary response metrics may be specified for the construction of a performance curve.
 
 
-### ROC
+### ROC Curves
 
-Receiver operating characteristic (ROC) curves are one example in which true positive rates (sensitivity) are plotted against false positive rates (1 - specificity) [@fawcett:2006:IRA].  Higher ROC curves are indicative of better predictive performance.
+Receiver operating characteristic (ROC) curves are one example in which true positive rates (sensitivity) are plotted against false positive rates (1 - specificity) [@fawcett:2006:IRA].  True positive rate (TPR) and false positive rate (FPR) are defined as
+$$
+\begin{align*}
+ TPR &= \text{sensitivity} = \Pr(\hat{p} > c \mid D^+) \\
+ FPR &= 1 - \text{specificity} = \Pr(\hat{p} > c \mid D^-),
+\end{align*}
+$$
+where $\hat{p}$ is the model-predicted probability of being positive, $0 \le c \le 1$ is a probability cutoff value for classification as positive or negative, and $D^+/D^-$ is positive/negative case status.  ROC curves show tradeoffs between the two rates over the range of possible cutoff values.  Higher curves are indicative of better predictive performance.
 
 ```{r using_analyses_roc}
 ## ROC curves
@@ -112,22 +125,29 @@ roc <- performance_curve(res_probs)
 plot(roc, diagonal = TRUE)
 ```
 
-ROC curves show the relation between the two rates being plotted but not their relationships with specific cutoff values.  The latter may be helpful for the selection of a cutoff value to apply in practice.  Accordingly, separate plots of each rate versus the range of possible cutoff values are available with the `type = "cutoffs"` option.
+ROC curves show the relation between the two rates being plotted but not their relationships with specific cutoff values.  The latter may be helpful for the selection of a cutoff to apply in practice.  Accordingly, separate plots of each rate versus the range of possible cutoffs are available with the `type = "cutoffs"` option.
 
 ```{r using_analyses_roc_cutoffs}
 plot(roc, type = "cutoffs")
 ```
 
-Area under resulting ROC curves can be computed as an overall measure of model predictive performance and interpreted as the probability that a randomly selected event case will have a higher predicted value than a randomly selected non-event case.
+Area under the ROC curve (ROC AUC) is an overall measure of model predictive performance.  It is interpreted as the probability that a randomly selected positive case will have a higher predicted value than a randomly selected negative case.  AUC values of 0.5 and 1.0 indicate chance and perfect *concordance* between predicted probabilities and observed responses.
 
 ```{r using_analyses_roc_auc}
 auc(roc)
 ```
 
 
-### Precision Recall
+### Precision Recall Curves
 
-In general, any two binary response metrics may be specified for the construction of a performance curve.  Precision recall curves are another example [@davis:2006:RPR].
+Precision recall curves plot precision (positive predictive value) against recall (sensitivity) [@davis:2006:RPR], where
+$$
+\begin{align*}
+  \text{precision} &= PPV = \Pr(D^+ \mid \hat{p} > c) \\
+  \text{recall} &= \text{sensitivity} = \Pr(\hat{p} > c \mid D^+).
+\end{align*}
+$$
+These curves tend to be used when primary interest lies in detecting positive cases and such cases are rare.
 
 ```{r using_analyses_pr}
 ## Precision recall curves
@@ -140,9 +160,16 @@ auc(pr)
 ```
 
 
-### Lift
+### Lift Curves
 
-Lift curves depict the rate at which observed binary responses are identifiable from (resampled) predicted response probabilities.  In particular, they plot the true positive findings (sensitivity) against the positive test rates for all possible classification probability cutoffs.  Accordingly, a lift curve can be interpreted as the rate at which positive responses are found as a function of the positive test rate among cases.
+Lift curves depict the rate at which positive cases are found as a function of the proportion predicted to be positive in the population.  In particular, they plot true positive rate (sensitivity) against positive prediction rate (PPR) for all possible classification probability cutoffs, where
+$$
+\begin{align*}
+  TPR &= \Pr(\hat{p} > c \mid D^+) \\
+  PPR & = \Pr(\hat{p} > c).
+\end{align*}
+$$
+Models more efficient (lower cost) at identifying positive cases find them at a higher proportion ($TPR$) while predicting fewer in the overall population to be positive ($PPR$).  In other words, higher lift curves are signs of model efficiency.
 
 ```{r using_analyses_lift}
 ## Lift curves

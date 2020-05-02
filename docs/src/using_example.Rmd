@@ -1,8 +1,8 @@
 # Melanoma Example
 
-The package is illustrated in the following sections with an overall survival analysis example in which the response variable is a time to event outcome.  Since survival outcomes are a combination of numerical (time to event) and categorical (event) variables, package features for both variable types are illustrated in the example.  Outcomes other than survival, including nominal and ordinal factors as well as numeric vectors and matrices, are supported by **MachineShop** and will be discussed.
+Use of the **MachineShop** package is demonstrated with a survival analysis example in which the response variable is a censored time to event outcome.  Since survival outcomes are a combination of numerical (time to event) and categorical (event) variables, package features for both variable types are illustrated with the example.  Support for outcomes other than survival, including nominal and ordinal factors as well as numeric vectors and matrices, is also discussed.
 
-Survival analysis is performed with the `Melanoma` dataset from the **MASS** package [@andersen:1993:SMB].  The dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at end of study, or (3) death from other causes for 205 Denmark patients with malignant melanomas.  Also provided are potential predictors of the survival outcomes.  The analysis begins by loading required packages **MachineShop**, **survival** [@therneau:2019:SA], and **MASS** as well as **magrittr** [@bache:2014:MFP] for its pipe (`%>%`) operator to simplify some of the code syntax.  For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one. 
+Survival analysis is performed with the `Melanoma` dataset from the **MASS** package [@andersen:1993:SMB].  This dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at study termination, or (3) death from other causes for 205 Denmark patients with malignant melanomas.  Also provided are potential predictors of the survival outcomes.  The analysis begins by loading required packages **MachineShop**, **survival** [@therneau:2020:SA], and **MASS** as well as **magrittr** [@bache:2014:MFP] for its pipe (`%>%`) operator to simplify some of the code syntax.  For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one. 
 
 ```{r using_example_melanoma}
 ## Analysis libraries
@@ -54,7 +54,7 @@ survfit(Surv(time, status) ~ 1, data = surv_df) %>%
        title = "Kaplan-Meier survival plot")
 ```
 
-For the analyses, the dataset is split into a training set on which a survival model will be fit and a test set on which predictions will be made and performance evaluated.  A global formula `surv_fo` is defined to relate the predictors on the right hand side to the overall survival outcome on the left and will be used for all subsequent survival models.
+For the analyses, the dataset is split into a training set on which survival models will be fit and a test set on which predictions will be made and performance evaluated.  A global formula `surv_fo` is defined to relate the predictors on the right hand side to the overall survival outcome on the left and will be used for all subsequent survival models.
 
 ```{r using_example_datasets}
 ## Training and test sets
