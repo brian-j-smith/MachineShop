@@ -202,39 +202,26 @@ setMethod(".curve_default", c("factor", "numeric"),
 
 setMethod(".curve_default", c("Surv", "SurvProbs"),
   function(observed, predicted, metrics, ...) {
-    times <- predicted@times
-    surv <- predict(survfit(observed ~ 1, se.fit = FALSE), times)
 
+    times <- predicted@times
     conf <- ConfusionMatrix(table(Predicted = 0:1, Observed = 0:1))
 
     structure(
       map(function(i) {
-
         time <- times[i]
-        surv_all <- surv[i]
         pred <- predicted[, i, drop = TRUE]
-
         cutoffs <- c(-Inf, unique(pred))
         x <- y <- numeric(length(cutoffs))
-        for (j in 1:length(cutoffs)) {
-          surv_positives <- 1
-          positives <- pred <= cutoffs[j]
-          p <- mean(positives)
-          if (p > 0) {
-            obs <- observed[positives]
-            valid_events <- obs[, "status"] == 1 & obs[, "time"] <= time
-            event_times <- sort(unique(obs[valid_events, "time"]))
-            for (event_time in event_times) {
-              d <- sum(obs[, "time"] == event_time & obs[, "status"] == 1)
-              n <- sum(obs[, "time"] >= event_time)
-              surv_positives <- surv_positives * (1 - d / n)
-            }
-          }
 
-          conf[1, 1] <- surv_all - surv_positives * p
-          conf[2, 1] <- surv_positives * p
-          conf[1, 2] <- 1 - p - conf[1, 1]
-          conf[2, 2] <- p - surv_positives * p
+        for (j in 1:length(cutoffs)) {
+          pos <- pred <= cutoffs[j]
+          pos_pred <- surv_subset(observed, pos, time)
+          neg_pred <- surv_subset(observed, !pos, time)
+
+          conf[1, 1] <- neg_pred$surv * neg_pred$p
+          conf[2, 1] <- pos_pred$surv * pos_pred$p
+          conf[1, 2] <- (1 - neg_pred$surv) * neg_pred$p
+          conf[2, 2] <- (1 - pos_pred$surv) * pos_pred$p
 
           x[j] <- metrics[[2]](conf)
           y[j] <- metrics[[1]](conf)
@@ -242,10 +229,10 @@ setMethod(".curve_default", c("Surv", "SurvProbs"),
 
         PerformanceCurve(data.frame(Cutoff = cutoffs, x = x, y = y),
                          metrics = metrics)
-
       }, 1:length(times)),
       class = "listof",
       names = paste0("time", seq_along(times))
     )
+
   }
 )

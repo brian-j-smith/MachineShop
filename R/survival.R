@@ -302,6 +302,23 @@ surv_metric_mean <- function(x, times) {
 }
 
 
+surv_subset <- function(x, keep, time) {
+  surv <- 1
+  p <- mean(keep)
+  if (p > 0) {
+    x <- x[keep]
+    valid_events <- x[, "status"] == 1 & x[, "time"] <= time
+    event_times <- sort(unique(x[valid_events, "time"]))
+    for (event_time in event_times) {
+      d <- sum(x[, "time"] == event_time & x[, "status"] == 1)
+      n <- sum(x[, "time"] >= event_time)
+      surv <- surv * (1 - d / n)
+    }
+  }
+  list(surv = surv, p = p)
+}
+
+
 surv_times <- function(y) {
   sort(unique(y[y[, "status"] != 0, "time"]))
 }

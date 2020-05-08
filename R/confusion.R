@@ -142,35 +142,25 @@ setMethod(".confusion_matrix", c("Surv", "SurvProbs"),
 
 setMethod(".confusion_matrix", c("Surv", "SurvEvents"),
   function(observed, predicted, ...) {
-    times <- predicted@times
-    surv <- predict(survfit(observed ~ 1, se.fit = FALSE), times)
 
+    times <- predicted@times
     conf_tbl <- table(Predicted = 0:1, Observed = 0:1)
 
     structure(
       map(function(i) {
-        surv_positives <- 1
-        positives <- predicted[, i, drop = TRUE] == 1
-        p <- mean(positives)
-        if (p > 0) {
-          obs <- observed[positives]
-          valid_events <- obs[, "status"] == 1 & obs[, "time"] <= times[i]
-          event_times <- sort(unique(obs[valid_events, "time"]))
-          for (event_time in event_times) {
-            d <- sum(obs[, "time"] == event_time & obs[, "status"] == 1)
-            n <- sum(obs[, "time"] >= event_time)
-            surv_positives <- surv_positives * (1 - d / n)
-          }
-        }
+        pos <- predicted[, i, drop = TRUE] == 1
+        pos_pred <- surv_subset(observed, pos, times[i])
+        neg_pred <- surv_subset(observed, !pos, times[i])
 
-        conf_tbl[1, 1] <- surv[i] - surv_positives * p
-        conf_tbl[2, 1] <- surv_positives * p
-        conf_tbl[1, 2] <- 1 - p - conf_tbl[1, 1]
-        conf_tbl[2, 2] <- p - surv_positives * p
+        conf_tbl[1, 1] <- neg_pred$surv * neg_pred$p
+        conf_tbl[2, 1] <- pos_pred$surv * pos_pred$p
+        conf_tbl[1, 2] <- (1 - neg_pred$surv) * neg_pred$p
+        conf_tbl[2, 2] <- (1 - pos_pred$surv) * pos_pred$p
 
         ConfusionMatrix(length(observed) * conf_tbl)
       }, 1:length(times)),
       names = paste0("time", seq_along(times))
     )
+
   }
 )
