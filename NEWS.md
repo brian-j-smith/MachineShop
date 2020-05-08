@@ -2,6 +2,15 @@
 
 ## Version Updates
 
+## 2.2.5
+* Show all error messages when resample selection stops.
+* Preserve predictor names in `NNetModel` `fit()` method.
+* Fix aggregation of performance curves with infinite values.
+* Add progress bar and verbose output options for `resample()` methods.
+* Get non-negative probabilities for survival confusion matrix.
+* Update Using webpages and vignette.
+
+
 ## 2.2.4
 * Fix `BARTMachineModel` to predict highest binary response level.
 * Grid tune `BARTMachineModel` `nu` parameter for numeric responses only.
