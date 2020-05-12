@@ -158,13 +158,14 @@ Resamples.list <- function(object, ...) {
   }
 
   snow_opts <- list()
-  if (getDoParName() == "doSNOW") {
-    if (MachineShop::settings("progress.resample")) {
-      pb <- new_progress_bar(length(splits), input = x, model = model,
-                             index = progress_index)
+  if (MachineShop::settings("progress.resample") && getDoParRegistered()) {
+    total <- if (getDoParName() == "doSNOW") {
       snow_opts$progress <- function(n) pb$tick()
-      on.exit(pb$terminate())
-    }
+      length(splits)
+    } else 0
+    pb <- new_progress_bar(total, input = x, model = model,
+                           index = progress_index)
+    on.exit(pb$terminate())
   }
 
   foreach(i = seq(splits),
@@ -204,13 +205,14 @@ Resamples.list <- function(object, ...) {
   is_optimism_control <- is(object, "MLCVOptimismControl")
 
   snow_opts <- list()
-  if (getDoParName() == "doSNOW") {
-    if (MachineShop::settings("progress.resample")) {
-      pb <- new_progress_bar(length(splits), input = x, model = model,
-                             index = progress_index)
+  if (MachineShop::settings("progress.resample") && getDoParRegistered()) {
+    total <- if (getDoParName() == "doSNOW") {
       snow_opts$progress <- function(n) pb$tick()
-      on.exit(pb$terminate())
-    }
+      length(splits)
+    } else 0
+    pb <- new_progress_bar(total, input = x, model = model,
+                           index = progress_index)
+    on.exit(pb$terminate())
   }
 
   df_list <- foreach(i = seq(splits),
@@ -256,13 +258,14 @@ Resamples.list <- function(object, ...) {
   seeds <- sample.int(.Machine$integer.max, length(splits))
 
   snow_opts <- list()
-  if (getDoParName() == "doSNOW") {
-    if (MachineShop::settings("progress.resample")) {
-      pb <- new_progress_bar(length(splits), input = x, model = model,
-                             index = progress_index)
+  if (MachineShop::settings("progress.resample") && getDoParRegistered()) {
+    total <- if (getDoParName() == "doSNOW") {
       snow_opts$progress <- function(n) pb$tick()
-      on.exit(pb$terminate())
-    }
+      length(splits)
+    } else 0
+    pb <- new_progress_bar(total, input = x, model = model,
+                           index = progress_index)
+    on.exit(pb$terminate())
   }
 
   foreach(i = seq(splits),

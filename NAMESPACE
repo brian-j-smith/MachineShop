@@ -6,7 +6,8 @@ importClassesFrom(party, RandomForest)
 
 importFrom(abind, abind, adrop)
 importFrom(dials, parameters)
-importFrom(foreach, "%dopar%", foreach, getDoParName, registerDoSEQ)
+importFrom(foreach, "%dopar%", foreach, getDoParName, getDoParRegistered,
+           registerDoSEQ)
 importFrom(graphics, plot)
 importFrom(magrittr, "%>%")
 importFrom(polspline, hare, phare)

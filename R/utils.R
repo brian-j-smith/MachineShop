@@ -267,11 +267,12 @@ new_progress_bar <- function(total, input = NULL, model = NULL, index = 0) {
   if (!is.null(model)) {
     model <- substr(getMLObject(model, "MLModel")@name, 1, width)
   }
-  label <- paste(c(input, model), collapse = " | ")
-  if (index > 0) label <- paste0(index, ": ", label)
+  format <- paste(input, "|", model)
+  if (index > 0) format <- paste0(index, ": ", format)
+  if (total > 0) format <- paste(format, "[:bar] :percent | :elapsed")
   pb <- progress_bar$new(
-    format = paste(c(label, "[:bar] :percent | :elapsed"), collapse = " "),
-    total = total,
+    format = format,
+    total = max(total, 1),
     clear = TRUE,
     show_after = 0
   )
