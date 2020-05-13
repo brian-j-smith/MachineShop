@@ -2,6 +2,10 @@
 
 ## Version Updates
 
+## 2.3.0
+* Display progress messages for any foreach parallel backend.
+
+
 ## 2.2.5
 * Show all error messages when resample selection stops.
 * Preserve predictor names in `NNetModel` `fit()` method.
