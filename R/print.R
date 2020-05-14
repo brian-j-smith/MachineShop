@@ -723,7 +723,7 @@ print_items.character <- function(x, n, ...) {
 
 
 print_items.data.frame <- function(x, ...) {
-  print_items.matrix(x, ...)
+  print_items.matrix(format(x), ...)
 }
 
 
