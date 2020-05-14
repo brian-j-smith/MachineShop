@@ -113,7 +113,7 @@ setMethod(".calibration_default", c("factor", "numeric"),
 
 setMethod(".calibration_default", c("matrix", "matrix"),
   function(observed, predicted, breaks, span, ...) {
-    df <- data.frame(Response = rep(colnames(predicted),
+    df <- data.frame(Response = rep(factor(colnames(predicted)),
                                     each = nrow(predicted)),
                      Predicted = as.numeric(predicted))
     if (is.null(breaks)) {
@@ -151,7 +151,7 @@ setMethod(".calibration_default", c("numeric", "numeric"),
 setMethod(".calibration_default", c("Surv", "SurvProbs"),
   function(observed, predicted, breaks, ...) {
     times <- predicted@times
-    df <- data.frame(Response = rep(colnames(predicted),
+    df <- data.frame(Response = rep(factor(colnames(predicted)),
                                     each = nrow(predicted)),
                      Predicted = as.numeric(predicted))
     if (is.null(breaks)) {
@@ -207,7 +207,7 @@ setMethod(".calibration_default", c("Surv", "numeric"),
 
     if (is.null(breaks)) {
       df <- data.frame(
-        Response = "Mean",
+        Response = factor("Mean"),
         Predicted = unique(predicted)
       )
       tricubic <- function(x, span = 1, min_weight = 0) {
@@ -230,7 +230,7 @@ setMethod(".calibration_default", c("Surv", "numeric"),
       df
     } else {
       df <- data.frame(
-        Response = "Mean",
+        Response = factor("Mean"),
         Predicted = midpoints(predicted, breaks),
         Observed = observed
       )
