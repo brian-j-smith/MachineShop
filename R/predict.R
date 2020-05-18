@@ -40,14 +40,23 @@ predict.MLModelFit <- function(object, newdata = NULL, times = NULL,
                                cutoff = MachineShop::settings("cutoff"),
                                dist = NULL, method = NULL, ...) {
   model <- as.MLModel(object)
-  newdata <- preprocess(model@x, newdata)
   requireModelNamespaces(model@packages)
   obs <- response(object)
-  pred <- model@predict(unMLModelFit(object), newdata, model = model,
-                        times = times, dist = dist, method = method, ...)
+  pred <- .predict(model, object, newdata, times = times, dist = dist,
+                   method = method, ...)
   pred <- convert_prob(obs, pred, times = times)
   if (match.arg(type) == "response") {
-    pred <- convert_response(obs, pred, cutoff = cutoff)
-  }
-  pred
+    convert_response(obs, pred, cutoff = cutoff)
+  } else pred
+}
+
+
+.predict <- function(x, ...) {
+  UseMethod(".predict")
+}
+
+
+.predict.MLModel <- function(x, object, newdata, ...) {
+  newdata <- preprocess(x@x, newdata)
+  x@predict(unMLModelFit(object), newdata, model = x, ...)
 }
