@@ -46,15 +46,6 @@ StackedModel <- function(..., control = MachineShop::settings("control"),
              init = .response_types),
     predictor_encoding = NA_character_,
     params = as.list(environment()),
-    predict = function(object, newdata, ...) {
-      pred <- 0
-      for (i in seq(object$base_fits)) {
-        base_pred <- predict(object$base_fits[[i]], newdata = newdata,
-                             times = object$times, type = "prob")
-        pred <- pred + object$weights[i] * base_pred
-      }
-      pred
-    },
     varimp = function(object, ...) NULL
   )
 
@@ -93,6 +84,17 @@ MLModelFunction(StackedModel) <- NULL
        weights = weights,
        times = control@times) %>%
     MLModelFit("StackedModelFit", model = x, x = inputs)
+}
+
+
+.predict.StackedModel <- function(x, object, newdata, ...) {
+  pred <- 0
+  for (i in seq(object$base_fits)) {
+    base_pred <- predict(object$base_fits[[i]], newdata = newdata,
+                         times = object$times, type = "prob")
+    pred <- pred + object$weights[i] * base_pred
+  }
+  pred
 }
 
 

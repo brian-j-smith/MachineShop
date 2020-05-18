@@ -50,16 +50,6 @@ SuperModel <- function(..., model = GBMModel,
              init = getMLObject(model, "MLModel")@response_types),
     predictor_encoding = NA_character_,
     params = as.list(environment()),
-    predict = function(object, newdata, times, ...) {
-      predictors <- map(function(fit) {
-        predict(fit, newdata = newdata, times = object$times, type = "prob")
-      }, object$base_fits)
-
-      df <- super_df(NA, predictors, newdata[["(names)"]],
-                     if (object$all_vars) newdata)
-
-      predict(object$super_fit, newdata = df, times = times, type = "prob")
-    },
     varimp = function(object, ...) NULL
   )
 
@@ -98,7 +88,24 @@ MLModelFunction(SuperModel) <- NULL
 }
 
 
-super_df <- function(y, predictors, casenames, data = NULL) {
+.predict.SuperModel <- function(x, object, newdata, times, ...) {
+  predictors <- map(function(fit) {
+    predict(fit, newdata = newdata, times = object$times, type = "prob")
+  }, object$base_fits)
+
+  df <- if (object$all_vars) {
+    newdata <- preprocess(x@x, newdata)
+    newdata[["(names)"]] <- rownames(newdata)
+    super_df(NA, predictors, newdata[["(names)"]], newdata)
+  } else {
+    super_df(NA, predictors)
+  }
+
+  predict(object$super_fit, newdata = df, times = times, type = "prob")
+}
+
+
+super_df <- function(y, predictors, casenames = NULL, data = NULL) {
   names(predictors) <- make.names(seq(predictors))
   df <- data.frame(y = y, unnest(as.data.frame(predictors)))
 
