@@ -2,9 +2,12 @@
 
 ## Version Updates
 
+## 2.3.1
+* R 4.0 data.frame compatibility updates for calibration curves.
+* Fix recipe prediction with StackedModel and SuperModel
+
 ## 2.3.0
 * Display progress messages for any foreach parallel backend.
-
 
 ## 2.2.5
 * Show all error messages when resample selection stops.
@@ -14,33 +17,26 @@
 * Get non-negative probabilities for survival confusion matrix.
 * Update Using webpages and vignette.
 
-
 ## 2.2.4
 * Fix `BARTMachineModel` to predict highest binary response level.
 * Grid tune `BARTMachineModel` `nu` parameter for numeric responses only.
 
-
 ## 2.2.3
 * Extend `ModeledInput()` to `SelectedModelFrame`, `SelectedModelRecipe`, and `TunedModelRecipe`.
 
-
 ## 2.2.2
 * Fix updating of recipe parameters in `TunedInput()`.
-
 
 ## 2.2.1
 * Print `StackedModel` and `SuperModel` training information.
 * Fix missing case names when resampling with recipes.
 
-
 ## 2.2.0
 * CRAN release.
-
 
 ## 2.1.4
 * Add cost-complexity pruning parameters to `TreeModel`.
 * Perform stratified resampling automatically for `ModeledInput()` and `SelectedInput()` objects constructed with formulas and matrices.
-
 
 ## 2.1.3
 * Revisions needed to some `fit()` methods to ensure that unprepped recipes are passed to models, like `TunedModed`, `StackedModel`, `SelectedModel` and `SuperModel`, needing to replicate preprocessing steps in their resampling routines.
@@ -48,26 +44,21 @@
 * Use `fun` instead of deprecated `fun.y` in ggplot2 functions.
 * Capture user-supplied parameters passed in to the ellipsis of model constructor functions that have them.
 
-
 ## 2.1.2
 * Compatibility fix for tibble 3.0.0.
 * Include missing values in model matrices created internally from formulas.
-
 
 ## 2.1.1
 * Improve specificity of `metricinfo()` results for factor responses.
 * Correct `SplitControl()` to train on the split sample instead of the full dataset.
 * Perform stratified resampling automatically when `fit()` formula and matrix methods are called with meta-models.
 
-
 ## 2.1.0
 * CRAN release.
-
 
 ## 2.0.4
 * Extend `print()` argument `n` to data frame and matrix columns for more concise display of large data structures.
 * Add preprocessing recipe functions `step_kmeans()`, `step_kmedoids()`, and `step_spca()`.
-
 
 ## 2.0.3
 * Internal changes:
@@ -76,20 +67,17 @@
   * Register `ModelFrame` inheritance from `data.frame`.
   * Define `Terms` S4 classes for `ModelFrame` slot `terms`.
 
-
 ## 2.0.2
 * Implement `ModeledInput`, `SelectedInput` and `TunedInput` classes and methods.
 * Deprecate `SelectedFormula()`, `SelectedMatrix()`, `SelectedModelFrame()`, `SelectedRecipe()`, and `TunedRecipe()`.
 * Remove deprecated `tune()`.
 * Rename global setting `stat.Curves` to `stat.Curve`.
 
-
 ## 2.0.1
 * Rename global setting `stat.Train` to `stat.train`.
 * Add print methods for `SelectedModel`, `StackedModel`, `SuperModel`, and `TunedModel`.
 * Revise training methods to ensure nested resampling of `SelectedRecipe` and `TunedRecipe`.
 * Return list of all training steps in `MLModel` `trainbits` slot.
-
 
 ## 2.0.0
 * Rename global setting `stat.Tune` to `stat.Train`.
@@ -104,7 +92,6 @@
 * Rename `ParamSet` to `ParameterGrid`.
 * Add option to `reset` global settings individually.
 * Add `as.data.frame` methods for `Performance`, `Performance` summary, `PerformanceDiff`, `PerformanceDiffTest`, and `Resamples`.
-
 
 ## 1.99.0
 * Implement `DiscreteVector` class and subclasses `BinomialVector`, `NegBinomialVector`, and `PoissonVector` for discrete response variables.
@@ -121,17 +108,14 @@
 * Remove deprecated `expand.model()`.
 * Expire deprecated `tune()`.
 
-
 ## 1.6.4
 * Calculate regression variable importance as negative log p-values.
 * Support empty vectors in `metricinfo()` and `modelinfo()`.
 * Add support for **dials** package parameter sets with `ParamSet()`.
 
-
 ## 1.6.3
 * Add `as.MLModel()` for coercing `MLModelFit` to `MLModel`.
 * Deprecate `tune()`; call `fit()` with a `SelectedModel` or `TunedModel` instead.
-
 
 ## 1.6.2
 * Implement optimism-corrected cross-validation (`CVOptimismControl`).
@@ -142,12 +126,10 @@
 * Replace `MLModelFit` element `fitbits` (`MLFitBits` object) with `mlmodel` (`MLModel` object).
 * Rename `VarImp` slot `center` to `shift`.
 
-
 ## 1.6.1
 * Use tibbles for parameter grids.
 * Add random sampling option to `expand_model()`, `expand_params()`, and `expand_steps()`.
 * Display information for model functions and objects more compactly.
-
 
 ## 1.6.0
 * Add global setting for default cutoff threshold value.
@@ -161,29 +143,24 @@
 * Fix `NNetModel` fit error with binary and factor responses.
 * Fix `modelinfo()` function not found error.
 
-
 ## 1.5.2
 * Implement exception handling of `tune()` resampling failures.
 * Remove deprecated `types` and `design` arguments from `MLModel()`.
-
 
 ## 1.5.1
 * Implement global settings for default resampling control, performance metrics, summary statistics, and tuning grid.
 * Support vector arguments in `metricinfo()` and `modelinfo()`.
 * Update package documentation.
 
-
 ## 1.5.0
 * Implement model: `SelectedModel`.
 * Remove `maximize` argument from `tune()` and `TunedModel`.
 * Support lists as arguments to `StackedModel()` and `SuperModel`.
 
-
 ## 1.4.2
 * Revert renaming of `expand.model()`.
 * Exclude 0 distance from `KNNModel` tuning grid.
 * Improve random tuning grid coverage.
-
 
 ## 1.4.1
 * Implement model: `TunedModel`.
@@ -192,15 +169,12 @@
 * Rename `MLModel()` argument `design` to `predictor_encoding`.
 * Rename `expand.model()` to `expand_model()`.
 
-
 ## 1.4.0
 * CRAN release.
-
 
 ## 1.3.3
 * Implement optimism-corrected bootstrap resampling (`BootOptimismControl`).
 * Store case names in `ModelFrame` and `ModelRecipe` and save to `Resamples`.
-
 
 ## 1.3.2
 * Add `BinaryConfusionMatrix` and `OrderedConfusionMatrix` classes.
@@ -208,17 +182,14 @@
 * Extend `metricinfo()` to confusion matrices.
 * Refactor performance metrics methods code.
 
-
 ## 1.3.1
 * Check and convert ordered factors in response methods.
 * Check consistency of extracted variables in response methods.
 * Add metrics methods for `Resamples`.
 
-
 ## 1.3.0
 * Improve compatibility with preprocessing recipes.
 * Allow base math functions and operators in `ModelFrame` formulas.
-
 
 ## 1.2.5
 * Save `ModelFrame` response in first column.
@@ -226,17 +197,14 @@
 * Add `ICHomes` dataset.
 * Add `center` and `scale` slot to `VarImp`.
 
-
 ## 1.2.4
 * Prohibit in-line functions in `ModelFrame` formulas.
 * Rename `response` function argument from `data` to `newdata`.
-
 
 ## 1.2.3
 * Add `fit`, `resample`, and `tune` methods for design matrices.
 * Reduce computational overhead for design matrices and recipes.
 * Rename `ModelFrame()` argument `na.action` to `na.rm`.
-
 
 ## 1.2.2
 * Implement parametric (``"exponential"``, ``"rayleigh"``, ``"weibull"``) estimation of baseline survival functions.
@@ -246,14 +214,12 @@
 * Add loess ``span`` argument to ``calibration()``.
 * Change ``SurvMatrix`` from S4 to S3 class.
 
-
 ## 1.2.1
 * Add ``method`` option to ``predict()`` for Breslow, Efron (default), or Fleming-Harrington estimation of survival curves for Cox proportional hazards-based models.
 * Add ``dist`` option to ``predict()`` for exponential or Weibull approximation to estimated survival curves.
 * Add ``dist`` option to ``calibration()`` for distributional estimation of observed mean survival.
 * Add ``dist`` option to ``r2()`` for distributional estimation of the total sum of squares mean.
 * Handle unnamed arguments in ``metricinfo()`` and ``modelinfo()``.
-
 
 ## 1.2.0
 * Implement metrics: ``auc``, ``fnr``, ``fpr``, ``rpp``, ``tnr``, ``tpr``.
@@ -267,7 +233,6 @@
 * Launch package [website](https://brian-j-smith.github.io/MachineShop/).
 * Bring Introduction vignette up to date with package features.
 
-
 ## 1.1.0
 * Implement model: ``BARTModel``.
 * Implement model tuning over automatically generated grids of parameter values and random sampling of grid points.
@@ -278,9 +243,7 @@
 * Standardize predict functions to return mean survival when times are not specified.
 * Replace ``MLModel`` slot and constructor argument ``nvars`` with ``design``.
 
-
 ## 1.0.0
-
 * Implement models: ``BARTMachineModel``, ``LARSModel``.
 * Implement performance metrics: ``gini``, multi-class ``pr_auc`` and ``roc_auc``, multivariate ``rmse``, ``msle``, ``rmsle``.
 * Implement smooth calibration curves.
@@ -293,7 +256,6 @@
 * Rename ``modelmetrics`` function to ``performance``.
 * Rename ``ModelMetrics/Diff`` classes to ``Performance/Diff``.
 * Change ``MLModelTune`` slot ``resamples`` to ``performance``.
-
 
 ## 0.4.0
 * Implement models: ``AdaBagModel``, ``AdaBoostModel``, ``BlackBoostModel``, ``EarthModel``, ``FDAModel``, ``GAMBoostModel``, ``GLMBoostModel``, ``MDAModel``, ``NaiveBayesModel``, ``PDAModel``, ``RangerModel``, ``RPartModel``, ``TreeModel``
@@ -318,7 +280,6 @@
 * Change ``tune`` function argument ``metrics`` to be defined in terms of a user-specified metric or metrics.
 * Deprecate MLControl arguments ``cutoff``, ``cutoff_index``, ``na.rm``, and ``summary``.
 
-
 ## 0.3.0
 * Implement linear models (``LMModel``), linear discriminant analysis (``LDAModel``), and quadratic discriminant analysis (``QDAModel``).
 * Implement confusion matrices.
@@ -329,7 +290,6 @@
 * Update the importing of ``prepper`` due to its relocation from ``rsample`` to ``recipes``.
 
 ## 0.2.0
-
 * Implement partial dependence, calibration, and lift estimation and plotting.
 * Implement k-nearest neighbors model (``KNNModel``), stacked regression models (``StackedModel``), super learner models (``SuperModel``), and extreme gradient boosting (``XGBModel``).
 * Implement resampling constructors for training resubstitution (``TrainControl``) and split training and test sets (``SplitControl``).
@@ -343,5 +303,4 @@
 * Removed ``na.rm`` argument from ``modelmetrics()``.
 
 ## 0.1
-
 * Initial public release
