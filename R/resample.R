@@ -158,20 +158,21 @@ Resamples.list <- function(object, ...) {
   }
 
   snow_opts <- list()
-  if (MachineShop::settings("progress.resample") && getDoParRegistered()) {
-    total <- if (getDoParName() == "doSNOW") {
-      snow_opts$progress <- function(n) pb$tick()
-      length(splits)
-    } else 0
-    pb <- new_progress_bar(total, input = x, model = model,
+  progress <- function(n) NULL
+  if (MachineShop::settings("progress.resample")) {
+    pb <- new_progress_bar(length(splits), input = x, model = model,
                            index = progress_index)
     on.exit(pb$terminate())
+    switch(getDoParName(),
+           "doSEQ"  = progress <- function(n) pb$tick(),
+           "doSNOW" = snow_opts$progress <- function(n) pb$tick())
   }
 
   foreach(i = seq(splits),
           .packages = MachineShop::settings("require"),
           .verbose = MachineShop::settings("verbose.resample"),
           .options.snow = snow_opts) %dopar% {
+    progress(i)
     MachineShop::settings(presets)
     set.seed(seeds[i])
     train <- analysis(splits[[i]], x)
@@ -205,20 +206,21 @@ Resamples.list <- function(object, ...) {
   is_optimism_control <- is(object, "MLCVOptimismControl")
 
   snow_opts <- list()
-  if (MachineShop::settings("progress.resample") && getDoParRegistered()) {
-    total <- if (getDoParName() == "doSNOW") {
-      snow_opts$progress <- function(n) pb$tick()
-      length(splits)
-    } else 0
-    pb <- new_progress_bar(total, input = x, model = model,
+  progress <- function(n) NULL
+  if (MachineShop::settings("progress.resample")) {
+    pb <- new_progress_bar(length(splits), input = x, model = model,
                            index = progress_index)
     on.exit(pb$terminate())
+    switch(getDoParName(),
+           "doSEQ"  = progress <- function(n) pb$tick(),
+           "doSNOW" = snow_opts$progress <- function(n) pb$tick())
   }
 
   df_list <- foreach(i = seq(splits),
                      .packages = MachineShop::settings("require"),
                      .verbose = MachineShop::settings("verbose.resample"),
                      .options.snow = snow_opts) %dopar% {
+    progress(i)
     MachineShop::settings(presets)
     set.seed(seeds[i])
     train <- analysis(splits[[i]], x)
@@ -258,20 +260,21 @@ Resamples.list <- function(object, ...) {
   seeds <- sample.int(.Machine$integer.max, length(splits))
 
   snow_opts <- list()
-  if (MachineShop::settings("progress.resample") && getDoParRegistered()) {
-    total <- if (getDoParName() == "doSNOW") {
-      snow_opts$progress <- function(n) pb$tick()
-      length(splits)
-    } else 0
-    pb <- new_progress_bar(total, input = x, model = model,
+  progress <- function(n) NULL
+  if (MachineShop::settings("progress.resample")) {
+    pb <- new_progress_bar(length(splits), input = x, model = model,
                            index = progress_index)
     on.exit(pb$terminate())
+    switch(getDoParName(),
+           "doSEQ"  = progress <- function(n) pb$tick(),
+           "doSNOW" = snow_opts$progress <- function(n) pb$tick())
   }
 
   foreach(i = seq(splits),
           .packages = MachineShop::settings("require"),
           .verbose = MachineShop::settings("verbose.resample"),
           .options.snow = snow_opts) %dopar% {
+    progress(i)
     MachineShop::settings(presets)
     set.seed(seeds[i])
     train <- analysis(splits[[i]], x)

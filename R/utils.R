@@ -262,6 +262,7 @@ missing_names <- function(x, data) {
 
 
 new_progress_bar <- function(total, input = NULL, model = NULL, index = 0) {
+  if (getDoParName() == "doSEQ") index <- as.numeric(index)
   width <- max(10, round(0.25 * getOption("width")))
   if (!is.null(input)) input <- substr(class(input)[1], 1, width)
   if (!is.null(model)) {
@@ -269,10 +270,12 @@ new_progress_bar <- function(total, input = NULL, model = NULL, index = 0) {
   }
   format <- paste(input, "|", model)
   if (index > 0) format <- paste0(index, ": ", format)
-  if (total > 0) format <- paste(format, "[:bar] :percent | :elapsed")
+  if (getDoParName() %in% c("doSEQ", "doSNOW")) {
+    format <- paste(format, "[:bar] :percent | :elapsed")
+  }
   pb <- progress_bar$new(
     format = format,
-    total = max(total, 1),
+    total = total,
     clear = TRUE,
     show_after = 0
   )
