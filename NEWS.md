@@ -2,6 +2,9 @@
 
 ## Version Updates
 
+## 2.3.2
+* Display progress bars for sequential resampling iterations.
+
 ## 2.3.1
 * R 4.0 data.frame compatibility updates for calibration curves.
 * Fix recipe prediction with StackedModel and SuperModel
