@@ -410,7 +410,7 @@ div.tocify {
 
 <div id="global-settings" class="section level1">
 <h1>Global Settings</h1>
-<p>Core default behaviors of functions in the package can be viewed or changed globally through the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.3.0/topics/settings"><code>settings</code></a> function. The function accepts one or more character names of settings to view, <code>name = value</code> pairs giving the values of settings to change, a vector of these, or <code>"reset"</code> to restore all package defaults. Calls with no arguments will display the current values of all. Settings may also be supplied as a single unnamed argument which is a named list. Partial matching of setting names is supported. The setting value is returned if only one is specified to view. Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes. Such a list can be passed as an argument to <code>settings</code> to restore their values.</p>
+<p>Core default behaviors of functions in the package can be viewed or changed globally through the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.4.0/topics/settings"><code>settings</code></a> function. The function accepts one or more character names of settings to view, <code>name = value</code> pairs giving the values of settings to change, a vector of these, or <code>"reset"</code> to restore all package defaults. Calls with no arguments will display the current values of all. Settings may also be supplied as a single unnamed argument which is a named list. Partial matching of setting names is supported. The setting value is returned if only one is specified to view. Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes. Such a list can be passed as an argument to <code>settings</code> to restore their values.</p>
 <pre class="r"><code>## Package library
 library(MachineShop)
 
@@ -565,7 +565,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
