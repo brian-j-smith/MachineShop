@@ -112,10 +112,10 @@ Tradeoffs between correct and incorrect classifications of binary responses, acr
 
 Receiver operating characteristic (ROC) curves are one example in which true positive rates (sensitivity) are plotted against false positive rates (1 - specificity) [@fawcett:2006:IRA].  True positive rate (TPR) and false positive rate (FPR) are defined as
 $$
-\begin{align*}
+\begin{aligned}
  TPR &= \text{sensitivity} = \Pr(\hat{p} > c \mid D^+) \\
  FPR &= 1 - \text{specificity} = \Pr(\hat{p} > c \mid D^-),
-\end{align*}
+\end{aligned}
 $$
 where $\hat{p}$ is the model-predicted probability of being positive, $0 \le c \le 1$ is a probability cutoff value for classification as positive or negative, and $D^+/D^-$ is positive/negative case status.  ROC curves show tradeoffs between the two rates over the range of possible cutoff values.  Higher curves are indicative of better predictive performance.
 
@@ -142,10 +142,10 @@ auc(roc)
 
 Precision recall curves plot precision (positive predictive value) against recall (sensitivity) [@davis:2006:RPR], where
 $$
-\begin{align*}
+\begin{aligned}
   \text{precision} &= PPV = \Pr(D^+ \mid \hat{p} > c) \\
   \text{recall} &= \text{sensitivity} = \Pr(\hat{p} > c \mid D^+).
-\end{align*}
+\end{aligned}
 $$
 These curves tend to be used when primary interest lies in detecting positive cases and such cases are rare.
 
@@ -164,10 +164,10 @@ auc(pr)
 
 Lift curves depict the rate at which positive cases are found as a function of the proportion predicted to be positive in the population.  In particular, they plot true positive rate (sensitivity) against positive prediction rate (PPR) for all possible classification probability cutoffs, where
 $$
-\begin{align*}
+\begin{aligned}
   TPR &= \Pr(\hat{p} > c \mid D^+) \\
-  PPR & = \Pr(\hat{p} > c).
-\end{align*}
+  PPR &= \Pr(\hat{p} > c).
+\end{aligned}
 $$
 Models more efficient (lower cost) at identifying positive cases find them at a higher proportion ($TPR$) while predicting fewer in the overall population to be positive ($PPR$).  In other words, higher lift curves are signs of model efficiency.
 
