@@ -54,7 +54,7 @@ rec <- recipe(medv ~ ., data = Boston) \%>\%
   step_pca(all_numeric(), -all_outcomes(), id = "pca")
 
 grid <- expand_steps(
-  pca = list(num_comp = 1:3)
+  pca = list(num_comp = 1:2)
 )
 
 fit(TunedInput(rec, grid = grid), model = GLMModel)
