@@ -2,6 +2,9 @@
 
 ## Version Updates
 
+## 2.4.0
+* CRAN release.
+
 ## 2.3.2
 * Display progress bars for sequential resampling iterations.
 
