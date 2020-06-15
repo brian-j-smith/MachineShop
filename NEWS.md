@@ -2,6 +2,9 @@
 
 ## Version Updates
 
+## 2.4.1
+* Set `NNetModel` `linout` argument automatically according to the response variable type (numeric: `TRUE`, other: `FALSE`).  Previously, `linout` had a default value of `FALSE` as defined in the `nnet` package.
+
 ## 2.4.0
 * CRAN release.
 
