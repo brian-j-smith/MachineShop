@@ -6,7 +6,7 @@
 \usage{
 NNetModel(
   size = 1,
-  linout = FALSE,
+  linout = NULL,
   entropy = NULL,
   softmax = NULL,
   censored = FALSE,
@@ -23,7 +23,9 @@ NNetModel(
 \arguments{
 \item{size}{number of units in the hidden layer.}
 
-\item{linout}{switch for linear output units.}
+\item{linout}{switch for linear output units.  Set automatically according to
+the class type of the response variable [numeric: \code{TRUE}, other:
+\code{FALSE}].}
 
 \item{entropy}{switch for entropy (= maximum conditional likelihood) fitting.}
 

@@ -3,7 +3,9 @@
 #' Fit single-hidden-layer neural network, possibly with skip-layer connections.
 #'
 #' @param size number of units in the hidden layer.
-#' @param linout switch for linear output units.
+#' @param linout switch for linear output units.  Set automatically according to
+#'   the class type of the response variable [numeric: \code{TRUE}, other:
+#'   \code{FALSE}].
 #' @param entropy switch for entropy (= maximum conditional likelihood) fitting.
 #' @param softmax switch for softmax (log-linear model) and maximum conditional
 #'   likelihood fitting.
@@ -38,7 +40,7 @@
 #' @examples
 #' fit(sale_amount ~ ., data = ICHomes, model = NNetModel)
 #'
-NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
+NNetModel <- function(size = 1, linout = NULL, entropy = NULL, softmax = NULL,
                       censored = FALSE, skip = FALSE, rang = 0.7, decay = 0,
                       maxit = 100, trace = FALSE, MaxNWts = 1000, abstol = 1e-4,
                       reltol = 1e-8) {
@@ -56,10 +58,11 @@ NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
         decay = c(0, 10^seq_inner(-5, 1, length - 1))
       )
     },
-    fit = function(formula, data, weights, ...) {
+    fit = function(formula, data, weights, linout = NULL, ...) {
+      y <- response(data)
+      if (is.null(linout)) linout <- is_response(y, "numeric")
       if (is(terms(data), "ModelDesignTerms")) {
         x <- model.matrix(data, intercept = FALSE)
-        y <- response(data)
         if (is_response(y, "binary")) {
           y <- as.numeric(y) - 1
         } else if (is_response(y, "factor")) {
@@ -68,13 +71,14 @@ NNetModel <- function(size = 1, linout = FALSE, entropy = NULL, softmax = NULL,
             dimnames = list(names(y), levels(y))
           )
         }
-        modelfit <- nnet::nnet(x, y, weights = weights, ...)
+        modelfit <- nnet::nnet(x, y, weights = weights, linout = linout, ...)
         modelfit$terms <- terms(data)
         modelfit$coefnames <- colnames(x)
         modelfit$xlevels <- list()
         modelfit
       } else {
-        nnet::nnet(formula, data = as.data.frame(data), weights = weights, ...)
+        nnet::nnet(formula, data = as.data.frame(data), weights = weights,
+                   linout = linout, ...)
       }
     },
     predict = function(object, newdata, ...) {
