@@ -410,7 +410,7 @@ div.tocify {
 
 <div id="global-settings" class="section level1">
 <h1>Global Settings</h1>
-<p>Core default behaviors of functions in the package can be viewed or changed globally through the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.4.0/topics/settings"><code>settings</code></a> function. The function accepts one or more character names of settings to view, <code>name = value</code> pairs giving the values of settings to change, a vector of these, or <code>"reset"</code> to restore all package defaults. Calls with no arguments will display the current values of all. Settings may also be supplied as a single unnamed argument which is a named list. Partial matching of setting names is supported. The setting value is returned if only one is specified to view. Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes. Such a list can be passed as an argument to <code>settings</code> to restore their values.</p>
+<p>Core default behaviors of functions in the package can be viewed or changed globally through the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.5.0/topics/settings"><code>settings</code></a> function. The function accepts one or more character names of settings to view, <code>name = value</code> pairs giving the values of settings to change, a vector of these, or <code>"reset"</code> to restore all package defaults. Calls with no arguments will display the current values of all. Settings may also be supplied as a single unnamed argument which is a named list. Partial matching of setting names is supported. The setting value is returned if only one is specified to view. Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes. Such a list can be passed as an argument to <code>settings</code> to restore their values.</p>
 <pre class="r"><code>## Package library
 library(MachineShop)
 
@@ -472,6 +472,17 @@ settings()
 #&gt; 
 #&gt; $reset
 #&gt; character(0)
+#&gt; 
+#&gt; $RHS.formula
+#&gt;  [1] &quot;!&quot;        &quot;!=&quot;       &quot;%%&quot;       &quot;%/%&quot;      &quot;%in%&quot;     &quot;&amp;&quot;       
+#&gt;  [7] &quot;(&quot;        &quot;*&quot;        &quot;+&quot;        &quot;-&quot;        &quot;.&quot;        &quot;/&quot;       
+#&gt; [13] &quot;:&quot;        &quot;&lt;&quot;        &quot;&lt;=&quot;       &quot;==&quot;       &quot;&gt;&quot;        &quot;&gt;=&quot;      
+#&gt; [19] &quot;I&quot;        &quot;^&quot;        &quot;abs&quot;      &quot;acos&quot;     &quot;acosh&quot;    &quot;asin&quot;    
+#&gt; [25] &quot;asinh&quot;    &quot;atan&quot;     &quot;atanh&quot;    &quot;ceiling&quot;  &quot;cos&quot;      &quot;cosh&quot;    
+#&gt; [31] &quot;cospi&quot;    &quot;digamma&quot;  &quot;exp&quot;      &quot;expm1&quot;    &quot;floor&quot;    &quot;gamma&quot;   
+#&gt; [37] &quot;lgamma&quot;   &quot;log&quot;      &quot;log1p&quot;    &quot;offset&quot;   &quot;round&quot;    &quot;sign&quot;    
+#&gt; [43] &quot;signif&quot;   &quot;sin&quot;      &quot;sinh&quot;     &quot;sinpi&quot;    &quot;sqrt&quot;     &quot;tan&quot;     
+#&gt; [49] &quot;tanh&quot;     &quot;tanpi&quot;    &quot;trigamma&quot; &quot;trunc&quot;    &quot;|&quot;       
 #&gt; 
 #&gt; $stat.Curve
 #&gt; [1] &quot;base::mean&quot;

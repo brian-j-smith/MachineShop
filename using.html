@@ -666,7 +666,8 @@ modelinfo(Surv(0)) %&gt;% names
 #&gt;  [7] &quot;GBMModel&quot;            &quot;GLMBoostModel&quot;       &quot;GLMNetModel&quot;        
 #&gt; [10] &quot;RangerModel&quot;         &quot;RPartModel&quot;          &quot;SelectedModel&quot;      
 #&gt; [13] &quot;StackedModel&quot;        &quot;SuperModel&quot;          &quot;SurvRegModel&quot;       
-#&gt; [16] &quot;SurvRegStepAICModel&quot; &quot;TunedModel&quot;
+#&gt; [16] &quot;SurvRegStepAICModel&quot; &quot;TunedModel&quot;          &quot;XGBModel&quot;           
+#&gt; [19] &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;      &quot;XGBTreeModel&quot;
 
 ## Identify survival response-specific models
 modelinfo(Surv(0), CoxModel, GBMModel, SVMModel) %&gt;% names
@@ -682,7 +683,8 @@ modelinfo(Surv(surv_df$time, surv_df$status)) %&gt;% names
 #&gt;  [7] &quot;GBMModel&quot;            &quot;GLMBoostModel&quot;       &quot;GLMNetModel&quot;        
 #&gt; [10] &quot;RangerModel&quot;         &quot;RPartModel&quot;          &quot;SelectedModel&quot;      
 #&gt; [13] &quot;StackedModel&quot;        &quot;SuperModel&quot;          &quot;SurvRegModel&quot;       
-#&gt; [16] &quot;SurvRegStepAICModel&quot; &quot;TunedModel&quot;</code></pre>
+#&gt; [16] &quot;SurvRegStepAICModel&quot; &quot;TunedModel&quot;          &quot;XGBModel&quot;           
+#&gt; [19] &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;      &quot;XGBTreeModel&quot;</code></pre>
 </div>
 </div>
 <div id="fit-function" class="section level2">
@@ -765,18 +767,30 @@ predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.7) %&gt;% 
 </div>
 <div id="variable-specifications" class="section level1">
 <h1>Variable Specifications</h1>
-<p>Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship. Four main types of specifications are supported by the package’s <code>fit()</code>, <code>resample()</code>, and <code>tune()</code> functions: traditional formula, design matrix, model frame, and recipe.</p>
+<p>Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship. Four main types of specifications are supported by the package’s <code>fit()</code> and <code>resample()</code> functions: traditional formula, design matrix, model frame, and recipe.</p>
 <div id="traditional-formula" class="section level2">
 <h2>Traditional Formula</h2>
-<p>Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example. This specification allows for allows for crossing (<code>*</code>), interaction (<code>:</code>), and removal (<code>-</code>) of predictors in the formula; <code>.</code> substitution of variables not already appearing in the formula; in-line functions of response variables; and in-lining of base <strong>R</strong> operators and math functions of predictors.</p>
+<p>Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example. This specification allows for crossing (<code>*</code>), interaction (<code>:</code>), and removal (<code>-</code>) of predictors in the formula; <code>.</code> substitution of variables not already appearing in the formula; in-line functions of response variables; and in-lining of operators and functions of predictors.</p>
 <pre class="r"><code>## Dataset library
 library(MASS)
 
 ## Formula specification
 model_fit &lt;- fit(type ~ ., data = Pima.tr, model = GBMModel)
 predict(model_fit, newdata = Pima.te) %&gt;% head
-#&gt; [1] Yes No  No  No  No  Yes
+#&gt; [1] Yes No  No  No  Yes Yes
 #&gt; Levels: No Yes</code></pre>
+<p>The syntax for traditional formulas is detailed in the <strong>R</strong> help documentation on the <code>formula()</code> function. However, some constraints are placed on the syntax by the <strong>MachineShop</strong> package. Specifically, in-lining on the right-hand side of formulas is limited to the operators and functions listed in the <code>"RHS.formula"</code> package setting.</p>
+<pre class="r"><code>settings(&quot;RHS.formula&quot;)
+#&gt;  [1] &quot;!&quot;        &quot;!=&quot;       &quot;%%&quot;       &quot;%/%&quot;      &quot;%in%&quot;     &quot;&amp;&quot;       
+#&gt;  [7] &quot;(&quot;        &quot;*&quot;        &quot;+&quot;        &quot;-&quot;        &quot;.&quot;        &quot;/&quot;       
+#&gt; [13] &quot;:&quot;        &quot;&lt;&quot;        &quot;&lt;=&quot;       &quot;==&quot;       &quot;&gt;&quot;        &quot;&gt;=&quot;      
+#&gt; [19] &quot;I&quot;        &quot;^&quot;        &quot;abs&quot;      &quot;acos&quot;     &quot;acosh&quot;    &quot;asin&quot;    
+#&gt; [25] &quot;asinh&quot;    &quot;atan&quot;     &quot;atanh&quot;    &quot;ceiling&quot;  &quot;cos&quot;      &quot;cosh&quot;    
+#&gt; [31] &quot;cospi&quot;    &quot;digamma&quot;  &quot;exp&quot;      &quot;expm1&quot;    &quot;floor&quot;    &quot;gamma&quot;   
+#&gt; [37] &quot;lgamma&quot;   &quot;log&quot;      &quot;log1p&quot;    &quot;offset&quot;   &quot;round&quot;    &quot;sign&quot;    
+#&gt; [43] &quot;signif&quot;   &quot;sin&quot;      &quot;sinh&quot;     &quot;sinpi&quot;    &quot;sqrt&quot;     &quot;tan&quot;     
+#&gt; [49] &quot;tanh&quot;     &quot;tanpi&quot;    &quot;trigamma&quot; &quot;trunc&quot;    &quot;|&quot;</code></pre>
+<p>This setting is intended to help avoid the definition of predictor variable encodings that involve dataset-specific parameter calculations. Such parameters would be calculated separated on training and test sets, and could lead to failed calculations or improper estimates of predictive performance. For example, the <code>factor()</code> function is not allowed because consistency of its (default) encoding requires that all levels be present in every dataset. Resampled datasets subset the original cases and are thus prone to missing factor levels. For users wishing to apply factor encodings or other encodings not available with traditional formulas, a more flexible preprocessing recipe syntax is supported, as described later.</p>
 </div>
 <div id="design-matrix" class="section level2">
 <h2>Design Matrix</h2>
@@ -1003,10 +1017,10 @@ library(MASS)
 
 model_fit &lt;- fit(type ~ ., data = Pima.tr, model = GBMModel)
 predict(model_fit, newdata = Pima.te) %&gt;% head
-#&gt; [1] Yes No  No  No  No  Yes
+#&gt; [1] Yes No  No  No  Yes Yes
 #&gt; Levels: No Yes
 predict(model_fit, newdata = Pima.te, type = &quot;prob&quot;) %&gt;% head
-#&gt; [1] 0.94458774 0.05385417 0.01387933 0.03846531 0.31774861 0.74680430</code></pre>
+#&gt; [1] 0.90724668 0.07228020 0.01806732 0.03284889 0.62654894 0.82684946</code></pre>
 </div>
 <div id="ordered-factor" class="section level2">
 <h2>Ordered Factor</h2>
@@ -1565,7 +1579,7 @@ registerDoParallel(cores = 2)</code></pre>
 (res_means &lt;- resample(surv_fo, data = surv_train, model = GBMModel, control = surv_means_control))
 #&gt; Object of class &quot;Resamples&quot;
 #&gt; 
-#&gt; Models: GBMModel 
+#&gt; Models: GBMModel
 #&gt; Stratification variable: (strata) 
 #&gt; 
 #&gt; Object of class &quot;MLControl&quot;
@@ -1579,7 +1593,7 @@ registerDoParallel(cores = 2)</code></pre>
 (res_probs &lt;- resample(surv_fo, data = surv_train, model = GBMModel, control = surv_probs_control))
 #&gt; Object of class &quot;Resamples&quot;
 #&gt; 
-#&gt; Models: GBMModel 
+#&gt; Models: GBMModel
 #&gt; Stratification variable: (strata) 
 #&gt; 
 #&gt; Object of class &quot;MLControl&quot;
@@ -1689,7 +1703,7 @@ res3 &lt;- resample(surv_fo, data = surv_train, model = GBMModel(n.trees = 100),
 (res &lt;- c(GBM1 = res1, GBM2 = res2, GBM3 = res3))
 #&gt; Object of class &quot;Resamples&quot;
 #&gt; 
-#&gt; Models: GBM1, GBM2, GBM3 
+#&gt; Models: GBM1, GBM2, GBM3
 #&gt; Stratification variable: (strata) 
 #&gt; 
 #&gt; Object of class &quot;MLControl&quot;
@@ -1746,8 +1760,8 @@ plot(res_diff)</code></pre>
 #&gt;   GBM3 0.1065908 0.1065908159         NA</code></pre>
 </div>
 </div>
-<div id="model-effects-and-diagnostics" class="section level1">
-<h1>Model Effects and Diagnostics</h1>
+<div id="model-predictor-effects-and-diagnostics" class="section level1">
+<h1>Model Predictor Effects and Diagnostics</h1>
 <p>Calculation of performance metrics on test sets or by resampling, as discussed previously, is one method of assessing model performance. Others available include measures of predictor variable importance, partial dependence plots, calibration curves comparing observed and predicted response values, and receiver operating characteristic analysis.</p>
 <div id="variable-importance" class="section level2">
 <h2>Variable Importance</h2>
@@ -1828,7 +1842,7 @@ plot(cal)</code></pre>
 #&gt; Predicted         0         1
 #&gt;         0 234.22792  38.77208
 #&gt;         1  61.45833  73.54167
-#&gt; 
+#&gt; ------------------------------------------------------------ 
 #&gt; GBMModel.time2 :
 #&gt; Object of class &quot;BinaryConfusionMatrix&quot;
 #&gt;          Observed
@@ -1854,7 +1868,7 @@ summary(conf)
 #&gt; Specificity 0.6547878 0.7921502
 #&gt; PPV         0.8579777 0.5447531
 #&gt; NPV         0.5447531 0.8579777
-#&gt; 
+#&gt; ------------------------------------------------------------ 
 #&gt; GBMModel.time2 :
 #&gt; Number of responses: 408
 #&gt; Accuracy (SE): 0.7010348 (0.0226647)
@@ -1883,7 +1897,7 @@ performance(conf, metrics = c(&quot;Accuracy&quot; = accuracy,
 #&gt; GBMModel.time1 :
 #&gt;    Accuracy Sensitivity Specificity 
 #&gt;   0.7543372   0.6547878   0.7921502 
-#&gt; 
+#&gt; ------------------------------------------------------------ 
 #&gt; GBMModel.time2 :
 #&gt;    Accuracy Sensitivity Specificity 
 #&gt;   0.7010348   0.7450981   0.6734376</code></pre>
@@ -2028,7 +2042,7 @@ as.MLModel(model_fit)
 #&gt; Object of class &quot;Performance&quot;
 #&gt; 
 #&gt; Metrics: C-Index 
-#&gt; Models: 1, 2, 3 
+#&gt; Models: 1, 2, 3
 #&gt; 
 #&gt; Selected model: 3 
 #&gt; C-Index value: 0.7241954</code></pre>
@@ -2083,7 +2097,7 @@ as.MLModel(model_fit)
 #&gt; Object of class &quot;Performance&quot;
 #&gt; 
 #&gt; Metrics: C-Index 
-#&gt; Models: Recipe.1, Recipe.2, Recipe.3 
+#&gt; Models: Recipe.1, Recipe.2, Recipe.3
 #&gt; 
 #&gt; Selected model: Recipe.1 
 #&gt; C-Index value: 0.7311282</code></pre>
@@ -2162,7 +2176,8 @@ model_fit &lt;- fit(surv_fo, data = surv_train,
 #&gt; Object of class &quot;Performance&quot;
 #&gt; 
 #&gt; Metrics: CIndex, RMSE 
-#&gt; Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6, GBMModel.7, GBMModel.8, GBMModel.9 
+#&gt; Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6,
+#&gt;   GBMModel.7, GBMModel.8, GBMModel.9
 #&gt; 
 #&gt; Selected model: GBMModel.1 
 #&gt; CIndex value: 0.7730294</code></pre>
@@ -2363,7 +2378,8 @@ as.MLModel(model_fit)</code></pre>
 #&gt; Object of class &quot;Performance&quot;
 #&gt; 
 #&gt; Metrics: C-Index 
-#&gt; Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6, GBMModel.7, GBMModel.8, GBMModel.9 
+#&gt; Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6,
+#&gt;   GBMModel.7, GBMModel.8, GBMModel.9 
 #&gt; 
 #&gt; Selected model: GBMModel.1 
 #&gt; C-Index value: 0.7137925</code></pre>
@@ -2439,13 +2455,16 @@ resample(tun_rec, model = sel_model)</code></pre>
 <dd>function, function name, or vector of these with which to calculate performance metrics for survival responses [default: <code>c(`C-Index` = "cindex", Brier = "brier", `ROC AUC` = "roc_auc", Accuracy = "accuracy")</code>].
 </dd>
 <dt><code>progress.resample</code></dt>
-<dd>logical indicating whether to display a progress bar during resampling [default: <code>TRUE</code>]. Displayed only if a computing cluster is registered with the <strong>doSNOW</strong> package.
+<dd>logical indicating whether to display a progress bar during resampling [default: <code>TRUE</code>]. Displayed only if a computing cluster is not registered or is registered with the <strong>doSNOW</strong> package.
 </dd>
 <dt><code>require</code></dt>
 <dd>names of installed packages to load during parallel execution of resampling algorithms [default: <code>c("MachineShop", "survival", "recipes")</code>].
 </dd>
 <dt><code>reset</code></dt>
 <dd>character names of settings to reset to their default values.
+</dd>
+<dt><code>RHS.formula</code></dt>
+<dd>non-modifiable character vector of operators and functions allowed in traditional formula specifications.
 </dd>
 <dt><code>stat.Curve</code></dt>
 <dd>function or character string naming a function to compute one summary statistic at each cutoff value of resampled metrics in performance curves, or <code>NULL</code> for resample-specific metrics [default: <code>"base::mean"</code>].
