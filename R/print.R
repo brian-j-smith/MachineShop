@@ -434,8 +434,7 @@ print.Performance <- function(x, n = MachineShop::settings("max.print"), ...) {
   dn <- dimnames(x)
   cat("\nMetrics:", toString(dn[[2]]), "\n")
   if (length(dn) > 2) {
-    cat("Models: ")
-    print_items(dn[[3]], n = n)
+    print_items(dn[[3]], n = n, prefix = "Models: ", exdent = 2)
   }
   invisible(x)
 }
@@ -498,8 +497,7 @@ setMethod("show", "RecipeGrid",
 #'
 print.Resamples <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
-  cat("\nModels: ")
-  print_items(levels(x$Model), n = n)
+  print_items(levels(x$Model), n = n, prefix = "\nModels: ", exdent = 2)
   if (isTRUE(nzchar(x@strata))) {
     cat("Stratification variable:", x@strata, "\n")
   }
@@ -711,14 +709,15 @@ print_items.default <- function(x, ...) {
 }
 
 
-print_items.character <- function(x, n, ...) {
+print_items.character <- function(x, n = Inf, prefix = "", exdent = 0, ...) {
   diff <- length(x) - n
   str <- if (diff > 0) {
     paste0(toString(head(x, n)), "... with ", format_len(diff), " more")
   } else {
     toString(x)
   }
-  cat(str, "\n")
+  writeLines(strwrap(str, initial = prefix, width = getOption("width"),
+                     exdent = exdent))
 }
 
 
@@ -727,31 +726,33 @@ print_items.data.frame <- function(x, ...) {
 }
 
 
-print_items.list <- function(x, n, n_extra = 10 * n, ...) {
+print_items.list <- function(x, n = Inf, n_extra = 10 * n, ...) {
   diff <- length(x) - n
   if (diff > 0) {
     print(head(x, n), max = n)
     label <- paste("... with", format_len(diff), "more element")
-    cat(label_items(label, tail(names(x), diff), n_extra), "\n\n")
+    print_items(label_items(label, tail(names(x), diff), n_extra))
+    cat("\n")
   } else {
     print(x, max = n)
   }
 }
 
 
-print_items.listof <- function(x, n, n_extra = 10 * n, ...) {
+print_items.listof <- function(x, n = Inf, n_extra = 10 * n, ...) {
   diff <- length(x) - n
   if (diff > 0) {
     print(head(x, n), n = n, na.print = NULL)
     label <- paste("... with", format_len(diff), "more element")
-    cat(label_items(label, tail(names(x), diff), n_extra), "\n\n")
+    print_items(label_items(label, tail(names(x), diff), n_extra))
+    cat("\n")
   } else {
     print(x, n = n, na.print = NULL)
   }
 }
 
 
-print_items.matrix <- function(x, n, n_extra = 10 * n, ...) {
+print_items.matrix <- function(x, n = Inf, n_extra = 10 * n, ...) {
   row_inds <- head(seq_len(nrow(x)), n)
   col_inds <- head(seq_len(ncol(x)), n)
   num_items <- length(row_inds) * length(col_inds)
@@ -765,19 +766,21 @@ print_items.matrix <- function(x, n, n_extra = 10 * n, ...) {
   diff_cols <- ncol(x) - length(col_inds)
   cols <- tail(colnames(x), diff_cols)
   if (diff_rows) {
-    cat("... with", format_len(diff_rows), "more row", if (diff_rows > 1) "\bs")
+    str <- paste("... with", format_len(diff_rows), "more row",
+                 if (diff_rows > 1) "\bs")
     if (diff_cols) {
-      cat(" and", format_len(diff_cols), label_items("column", cols, n_extra))
+      str <- paste(str, "and", format_len(diff_cols),
+                   label_items("column", cols, n_extra))
     }
-    cat("\n")
+    print_items(str)
   } else if (diff_cols) {
     label <- paste("... with", format_len(diff_cols), "more column")
-    cat(label_items(label, cols, n_extra), "\n")
+    print_items(label_items(label, cols, n_extra))
   }
 }
 
 
-print_items.tbl <- function(x, n, n_extra = 10 * n, ...) {
+print_items.tbl <- function(x, n = Inf, n_extra = 10 * n, ...) {
   print(x, n = n, n_extra = n_extra)
 }
 
@@ -788,9 +791,10 @@ print_modelinfo <- function(x, trained = FALSE) {
   cat("\n",
       "Model name: ", names(info_list), "\n",
       "Label: ", if (trained) "Trained ", info$label, "\n",
-      label_items("Package", info$packages), "\n",
-      label_items("Response type", info$response_types), "\n",
-      "Tuning grid: ", info$grid, "\n",
+      sep = "")
+  print_items(label_items("Package", info$packages), exdent = 2)
+  print_items(label_items("Response type", info$response_types), exdent = 2)
+  cat("Tuning grid: ", info$grid, "\n",
       "Variable importance: ", info$varimp, "\n",
       sep = "")
 }

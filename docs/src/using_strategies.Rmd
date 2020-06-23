@@ -333,7 +333,8 @@ Grid (selected = 1):
 Object of class "Performance"
 
 Metrics: C-Index 
-Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6, GBMModel.7, GBMModel.8, GBMModel.9 
+Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6,
+  GBMModel.7, GBMModel.8, GBMModel.9 
 
 Selected model: GBMModel.1 
 C-Index value: 0.7137925')
