@@ -1604,7 +1604,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
   : function, function name, or vector of these with which to calculate performance metrics for survival responses [default: ``c(`C-Index` = "cindex", Brier = "brier", `ROC AUC` = "roc_auc", Accuracy = "accuracy")``].
 
 `progress.resample`
-  : logical indicating whether to display a progress bar during resampling [default: ``TRUE``].  Displayed only if a computing cluster is registered with the **doSNOW** package.
+  : logical indicating whether to display a progress bar during resampling [default: ``TRUE``].  Displayed only if a computing cluster is not registered or is registered with the **doSNOW** package.
 
 `require`
   : names of installed packages to load during parallel execution of resampling algorithms [default: ``c("MachineShop", "survival", "recipes")``].
