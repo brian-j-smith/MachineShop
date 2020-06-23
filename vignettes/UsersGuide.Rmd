@@ -304,7 +304,7 @@ Variable specification defines the relationship between response and predictor v
 
 ## Traditional Formula
 
-Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example.  This specification allows for allows for crossing (`*`), interaction (`:`), and removal (`-`) of predictors in the formula; `.` substitution of variables not already appearing in the formula; in-line functions of response variables; and in-lining of base **R** operators and math functions of predictors.
+Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example.  This specification allows for crossing (`*`), interaction (`:`), and removal (`-`) of predictors in the formula; `.` substitution of variables not already appearing in the formula; in-line functions of response variables; and in-lining of operators and functions of predictors.
 
 ```{r using_variables_formula}
 ## Dataset library
@@ -314,6 +314,14 @@ library(MASS)
 model_fit <- fit(type ~ ., data = Pima.tr, model = GBMModel)
 predict(model_fit, newdata = Pima.te) %>% head
 ```
+
+The syntax for traditional formulas is detailed in the **R** help documentation on the `formula()` function.  However, some constraints are placed on the syntax by the **MachineShop** package.  Specifically, in-lining on the right-hand side of formulas is limited to the operators and functions listed in the `"RHS.formula"` package setting.
+
+```{r using_variables_formula_RHS}
+settings("RHS.formula")
+```
+
+This setting is intended to help avoid the definition of predictor variable encodings that involve dataset-specific parameter calculations.  Such parameters would be calculated separated on training and test sets, and could lead to failed calculations or improper estimates of predictive performance.  For example, the `factor()` function is not allowed because consistency of its (default) encoding requires that all levels be present in every dataset.  Resampled datasets subset the original cases and are thus prone to missing factor levels.  For users wishing to apply factor encodings or other encodings not available with traditional formulas, a more flexible preprocessing recipe syntax is supported, as described later.
 
 
 ## Design Matrix
@@ -1603,6 +1611,9 @@ Core default behaviors of functions in the package can be viewed or changed glob
 
 `reset`
   : character names of settings to reset to their default values.
+
+`RHS.formula`
+  : non-modifiable character vector of operators and functions allowed in traditional formula specifications.
 
 `stat.Curve`
   : function or character string naming a function to compute one summary statistic at each cutoff value of resampled metrics in performance curves, or `NULL` for resample-specific metrics [default: ``"base::mean"``].

@@ -77,6 +77,8 @@ behaviors of functions in the \pkg{MachineShop} package.
     "survival", "recipes")}].}
   \item{\code{reset}}{character names of settings to reset to their default
     values.}
+  \item{\code{RHS.formula}}{non-modifiable character vector of operators and
+    functions allowed in traditional formula specifications.}
   \item{\code{stat.Curve}}{function or character string naming a function
     to compute one \link{summary} statistic at each cutoff value of resampled
     metrics in performance curves, or \code{NULL} for resample-specific

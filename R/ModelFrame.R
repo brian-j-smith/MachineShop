@@ -53,7 +53,7 @@ ModelFrame.data.frame <- function(x, ...) {
 #'
 ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
                                strata = NULL, ...) {
-  invalid_calls <- setdiff(inline_calls(predictors(x)), valid_predictor_calls)
+  invalid_calls <- setdiff(inline_calls(predictors(x)), settings("RHS.formula"))
   if (length(invalid_calls)) {
     stop(
       label_items("unsupported predictor variable function", invalid_calls),
@@ -171,19 +171,6 @@ model_formula <- function(x) {
   if (!is.null(response)) x[[2]] <- as.name(deparse(response))
   x
 }
-
-
-valid_predictor_calls <- c(
-  "abs", "sign", "sqrt", "floor", "ceiling", "trunc", "round", "signif",
-  "exp", "log", "expm1", "log1p", "cos", "sin", "tan", "cospi", "sinpi",
-  "tanpi", "acos", "asin", "atan",
-  "cosh", "sinh", "tanh", "acosh", "asinh", "atanh",
-  "lgamma", "gamma", "digamma", "trigamma",
-  "+", "-", "*", "/", "^", "%%", "%/%",
-  "&", "|", "!",
-  "==", "!=", "<", "<=", ">=", ">",
-  "%in%", "(", ".", ":", "I", "offset"
-)
 
 
 #################### ModelFrame Terms ####################
