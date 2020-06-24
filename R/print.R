@@ -740,14 +740,20 @@ print_items.list <- function(x, n = Inf, n_extra = 10 * n, ...) {
 
 
 print_items.listof <- function(x, n = Inf, n_extra = 10 * n, ...) {
-  diff <- length(x) - n
-  if (diff > 0) {
-    print(head(x, n), n = n, na.print = NULL)
-    label <- paste("... with", format_len(diff), "more element")
-    print_items(label_items(label, tail(names(x), diff), n_extra))
+  inds <- head(seq(x), n)
+  x_names <- names(x)
+  if (is.null(x_names)) x_names <- paste("Component", seq(x))
+  vsep <- strrep("-", 0.75 * getOption("width"))
+  for (i in inds) {
+    cat(x_names[i], ":\n")
+    print(x[[i]], n = n, na.print = NULL)
+    if (i != length(x)) cat(vsep, "\n") else cat("\n")
+  }
+  n_more <- max(length(x) - n, 0)
+  if (n_more) {
+    label <- paste("... with", format_len(n_more), "more element")
+    print_items(label_items(label, tail(x_names, n_more), n_extra))
     cat("\n")
-  } else {
-    print(x, n = n, na.print = NULL)
   }
 }
 
