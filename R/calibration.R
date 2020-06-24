@@ -187,7 +187,7 @@ setMethod(".calibration_default", c("Surv", "numeric"),
   function(observed, predicted, breaks, dist, span, ...) {
     max_time <- surv_max(observed)
     dist <- if (is.null(dist)) {
-      MachineShop::settings("dist.Surv")
+      settings("dist.Surv")
     } else {
       match.arg(dist, c("empirical", names(survreg.distributions)))
     }

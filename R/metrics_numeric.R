@@ -98,7 +98,7 @@ setMetricMethod_Resamples("r2")
 setMetricMethod("r2", c("Surv", "numeric"),
   function(observed, predicted, dist, ...) {
     dist <- if (is.null(dist)) {
-      MachineShop::settings("dist.Surv")
+      settings("dist.Surv")
     } else {
       match.arg(dist, c("empirical", names(survreg.distributions)))
     }

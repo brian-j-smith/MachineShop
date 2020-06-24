@@ -144,7 +144,7 @@ Resamples.list <- function(object, ...) {
 
 .resample.MLBootstrapControl <- function(object, x, model, progress_index = 0,
                                          ...) {
-  presets <- MachineShop::settings()
+  presets <- settings()
   strata <- strata_var(x)
   set.seed(object@seed)
   splits <- bootstraps(rsample_data(x),
@@ -159,7 +159,7 @@ Resamples.list <- function(object, ...) {
 
   snow_opts <- list()
   progress <- function(n) NULL
-  if (MachineShop::settings("progress.resample")) {
+  if (settings("progress.resample")) {
     pb <- new_progress_bar(length(splits), input = x, model = model,
                            index = progress_index)
     on.exit(pb$terminate())
@@ -169,11 +169,11 @@ Resamples.list <- function(object, ...) {
   }
 
   foreach(i = seq(splits),
-          .packages = MachineShop::settings("require"),
-          .verbose = MachineShop::settings("verbose.resample"),
+          .packages = settings("require"),
+          .verbose = settings("verbose.resample"),
           .options.snow = snow_opts) %dopar% {
     progress(i)
-    MachineShop::settings(presets)
+    settings(presets)
     set.seed(seeds[i])
     train <- analysis(splits[[i]], x)
     if (is_optimism_control) {
@@ -194,7 +194,7 @@ Resamples.list <- function(object, ...) {
 
 .resample.MLCrossValidationControl <- function(object, x, model,
                                                progress_index = 0, ...) {
-  presets <- MachineShop::settings()
+  presets <- settings()
   strata <- strata_var(x)
   set.seed(object@seed)
   splits <- vfold_cv(rsample_data(x),
@@ -207,7 +207,7 @@ Resamples.list <- function(object, ...) {
 
   snow_opts <- list()
   progress <- function(n) NULL
-  if (MachineShop::settings("progress.resample")) {
+  if (settings("progress.resample")) {
     pb <- new_progress_bar(length(splits), input = x, model = model,
                            index = progress_index)
     on.exit(pb$terminate())
@@ -217,11 +217,11 @@ Resamples.list <- function(object, ...) {
   }
 
   df_list <- foreach(i = seq(splits),
-                     .packages = MachineShop::settings("require"),
-                     .verbose = MachineShop::settings("verbose.resample"),
+                     .packages = settings("require"),
+                     .verbose = settings("verbose.resample"),
                      .options.snow = snow_opts) %dopar% {
     progress(i)
-    MachineShop::settings(presets)
+    settings(presets)
     set.seed(seeds[i])
     train <- analysis(splits[[i]], x)
     test <- assessment(splits[[i]], x)
@@ -251,7 +251,7 @@ Resamples.list <- function(object, ...) {
 
 
 .resample.MLOOBControl <- function(object, x, model, progress_index = 0, ...) {
-  presets <- MachineShop::settings()
+  presets <- settings()
   strata <- strata_var(x)
   set.seed(object@seed)
   splits <- bootstraps(rsample_data(x),
@@ -261,7 +261,7 @@ Resamples.list <- function(object, ...) {
 
   snow_opts <- list()
   progress <- function(n) NULL
-  if (MachineShop::settings("progress.resample")) {
+  if (settings("progress.resample")) {
     pb <- new_progress_bar(length(splits), input = x, model = model,
                            index = progress_index)
     on.exit(pb$terminate())
@@ -271,11 +271,11 @@ Resamples.list <- function(object, ...) {
   }
 
   foreach(i = seq(splits),
-          .packages = MachineShop::settings("require"),
-          .verbose = MachineShop::settings("verbose.resample"),
+          .packages = settings("require"),
+          .verbose = settings("verbose.resample"),
           .options.snow = snow_opts) %dopar% {
     progress(i)
-    MachineShop::settings(presets)
+    settings(presets)
     set.seed(seeds[i])
     train <- analysis(splits[[i]], x)
     test <- assessment(splits[[i]], x)

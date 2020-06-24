@@ -63,7 +63,7 @@ EmpiricalSurv.Surv <- function(y, risk = NULL, method =
   times <- y[, "time"]
   events <- pmin(y[, "status"], 1)
   if (is.null(risk)) risk <- rep(1, length(times))
-  if (is.null(method)) method <- MachineShop::settings("method.EmpiricalSurv")
+  if (is.null(method)) method <- settings("method.EmpiricalSurv")
   surv <- switch(match.arg(method),
                  "breslow" = empiricalsurv_breslow,
                  "efron" = empiricalsurv_efron,
@@ -274,12 +274,12 @@ surv_dist <- function(x = c("empirical", "exponential", "rayleigh",
 
 
 surv_dist_mean <- function(x = NULL) {
-  surv_dist(if (is.null(x)) MachineShop::settings("dist.Surv") else x)
+  surv_dist(if (is.null(x)) settings("dist.Surv") else x)
 }
 
 
 surv_dist_probs <- function(x = NULL) {
-  surv_dist(if (is.null(x)) MachineShop::settings("dist.SurvProbs") else x)
+  surv_dist(if (is.null(x)) settings("dist.SurvProbs") else x)
 }
 
 
