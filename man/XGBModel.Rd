@@ -11,26 +11,29 @@ XGBModel(params = list(), nrounds = 1, verbose = 0, print_every_n = 1)
 
 XGBDARTModel(
   objective = NULL,
+  aft_loss_distribution = "normal",
+  aft_loss_distribution_scale = 1,
   base_score = 0.5,
   eta = 0.3,
   gamma = 0,
   max_depth = 6,
   min_child_weight = 1,
-  max_delta_step = 0,
+  max_delta_step = .(0.7 * is(y, "PoissonVariate")),
   subsample = 1,
   colsample_bytree = 1,
   colsample_bylevel = 1,
+  colsample_bynode = 1,
   lambda = 1,
   alpha = 0,
   tree_method = "auto",
   sketch_eps = 0.03,
   scale_pos_weight = 1,
-  update = "grow_colmaker,prune",
   refresh_leaf = 1,
   process_type = "default",
   grow_policy = "depthwise",
   max_leaves = 0,
   max_bin = 256,
+  num_parallel_tree = 1,
   sample_type = "uniform",
   normalize_type = "tree",
   rate_drop = 0,
@@ -41,6 +44,8 @@ XGBDARTModel(
 
 XGBLinearModel(
   objective = NULL,
+  aft_loss_distribution = "normal",
+  aft_loss_distribution_scale = 1,
   base_score = 0.5,
   lambda = 0,
   alpha = 0,
@@ -52,31 +57,34 @@ XGBLinearModel(
 
 XGBTreeModel(
   objective = NULL,
+  aft_loss_distribution = "normal",
+  aft_loss_distribution_scale = 1,
   base_score = 0.5,
   eta = 0.3,
   gamma = 0,
   max_depth = 6,
   min_child_weight = 1,
-  max_delta_step = 0,
+  max_delta_step = .(0.7 * is(y, "PoissonVariate")),
   subsample = 1,
   colsample_bytree = 1,
   colsample_bylevel = 1,
+  colsample_bynode = 1,
   lambda = 1,
   alpha = 0,
   tree_method = "auto",
   sketch_eps = 0.03,
   scale_pos_weight = 1,
-  update = "grow_colmaker,prune",
   refresh_leaf = 1,
   process_type = "default",
   grow_policy = "depthwise",
   max_leaves = 0,
   max_bin = 256,
+  num_parallel_tree = 1,
   ...
 )
 }
 \arguments{
-\item{params}{list of model parameters as described in the XBoost
+\item{params}{list of model parameters as described in the XGBoost
 \href{https://xgboost.readthedocs.io/en/latest/parameter.html}{documentation}.}
 
 \item{nrounds}{maximum number of boosting iterations.}
@@ -89,12 +97,30 @@ during model fitting, such that 0 = none, 1 = performance information, and
 at which to print output when \code{verbose > 0}.}
 
 \item{objective}{character string specifying the learning task and objective.
-Set automatically according to the class type of the response variable.}
+Possible values for supported response variable types are as follows.
+\describe{
+  \item{\code{factor}:}{\code{"multi:softprob"}, \code{"binary:logistic"}
+    (2 levels only)}
+  \item{\code{numeric}:}{\code{"reg:squarederror"}, \code{"reg:logistic"},
+    \code{"reg:gamma"}, \code{"reg:tweedie"}, \code{"rank:pairwise"},
+    \code{"rank:ndcg"}, \code{"rank:map"}}
+  \item{\code{PoissonVariate}:}{\code{"count:poisson"}}
+  \item{\code{Surv}:}{\code{"survival:cox"}, \code{"survival:aft"}}
+}
+The first values listed are the defaults for the corresponding response
+types.}
+
+\item{aft_loss_distribution}{character string specifying the distribution for
+the accelerated failure time objective (\code{"survival:aft"}) as
+\code{"normal"}, \code{"logistic"}, or \code{"extreme"}.}
+
+\item{aft_loss_distribution_scale}{numeric scaling parameter for the
+accelerated failure time distribution.}
 
 \item{base_score}{initial numeric prediction score of all instances, global
 bias.}
 
-\item{eta, gamma, max_depth, min_child_weight, max_delta_step, subsample, colsample_bytree, colsample_bylevel, lambda, alpha, tree_method, sketch_eps, scale_pos_weight, update, refresh_leaf, process_type, grow_policy, max_leaves, max_bin, sample_type, normalize_type, rate_drop, one_drop, skip_drop, updater, feature_selector, top_k}{see \code{params} reference.}
+\item{eta, gamma, max_depth, min_child_weight, max_delta_step, subsample, colsample_bytree, colsample_bylevel, colsample_bynode, lambda, alpha, tree_method, sketch_eps, scale_pos_weight, refresh_leaf, process_type, grow_policy, max_leaves, max_bin, num_parallel_tree, sample_type, normalize_type, rate_drop, one_drop, skip_drop, updater, feature_selector, top_k}{see \code{params} reference.}
 
 \item{...}{arguments passed to \code{XGBModel}.}
 }
@@ -107,7 +133,8 @@ framework from Chen & Guestrin.
 }
 \details{
 \describe{
-  \item{Response Types:}{\code{factor}, \code{numeric}}
+  \item{Response Types:}{\code{factor}, \code{numeric},
+    \code{PoissonVariate}, \code{Surv}}
   \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters}{
     \itemize{
       \item XGBDARTModel: \code{nrounds}, \code{max_depth}, \code{eta},

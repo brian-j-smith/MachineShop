@@ -55,8 +55,11 @@ verify_output(test_path("test-survival.txt"), {
   cat("Recipe Specification", "\n")
   test_predict_all(rec, model = "CoxModel")
   cat("Formula Specification", "\n")
-  for (model in c(CoxModel, GBMModel, CForestModel, SurvRegModel)) {
-    test_predict_all(fo, df, model = model())
+  models <- c(CoxModel(), GBMModel(), CForestModel(), SurvRegModel(),
+              XGBDARTModel(), XGBLinearModel(updater = "coord_descent"),
+              XGBTreeModel())
+  for (model in models) {
+    test_predict_all(fo, df, model = model)
   }
   models <- c(BARTModel(), BlackBoostModel(),
               GAMBoostModel(baselearner = "bols"), GLMBoostModel(),

@@ -5,7 +5,7 @@
 #'
 #' @rdname XGBModel
 #'
-#' @param params list of model parameters as described in the XBoost
+#' @param params list of model parameters as described in the XGBoost
 #'   \href{https://xgboost.readthedocs.io/en/latest/parameter.html}{documentation}.
 #' @param nrounds maximum number of boosting iterations.
 #' @param verbose numeric value controlling the amount of output printed
@@ -14,16 +14,33 @@
 #' @param print_every_n numeric value designating the fitting iterations at
 #'   at which to print output when \code{verbose > 0}.
 #' @param objective character string specifying the learning task and objective.
-#'   Set automatically according to the class type of the response variable.
+#'   Possible values for supported response variable types are as follows.
+#'   \describe{
+#'     \item{\code{factor}:}{\code{"multi:softprob"}, \code{"binary:logistic"}
+#'       (2 levels only)}
+#'     \item{\code{numeric}:}{\code{"reg:squarederror"}, \code{"reg:logistic"},
+#'       \code{"reg:gamma"}, \code{"reg:tweedie"}, \code{"rank:pairwise"},
+#'       \code{"rank:ndcg"}, \code{"rank:map"}}
+#'     \item{\code{PoissonVariate}:}{\code{"count:poisson"}}
+#'     \item{\code{Surv}:}{\code{"survival:cox"}, \code{"survival:aft"}}
+#'   }
+#'   The first values listed are the defaults for the corresponding response
+#'   types.
+#' @param aft_loss_distribution character string specifying the distribution for
+#'   the accelerated failure time objective (\code{"survival:aft"}) as
+#'   \code{"normal"}, \code{"logistic"}, or \code{"extreme"}.
+#' @param aft_loss_distribution_scale numeric scaling parameter for the
+#'   accelerated failure time distribution.
 #' @param base_score initial numeric prediction score of all instances, global
 #'   bias.
-#' @param eta,gamma,max_depth,min_child_weight,max_delta_step,subsample,colsample_bytree,colsample_bylevel,lambda,alpha,tree_method,sketch_eps,scale_pos_weight,update,refresh_leaf,process_type,grow_policy,max_leaves,max_bin,sample_type,normalize_type,rate_drop,one_drop,skip_drop,updater,feature_selector,top_k
+#' @param eta,gamma,max_depth,min_child_weight,max_delta_step,subsample,colsample_bytree,colsample_bylevel,colsample_bynode,lambda,alpha,tree_method,sketch_eps,scale_pos_weight,refresh_leaf,process_type,grow_policy,max_leaves,max_bin,num_parallel_tree,sample_type,normalize_type,rate_drop,one_drop,skip_drop,updater,feature_selector,top_k
 #'   see \code{params} reference.
 #' @param ... arguments passed to \code{XGBModel}.
 #'
 #' @details
 #' \describe{
-#'   \item{Response Types:}{\code{factor}, \code{numeric}}
+#'   \item{Response Types:}{\code{factor}, \code{numeric},
+#'     \code{PoissonVariate}, \code{Surv}}
 #'   \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters}{
 #'     \itemize{
 #'       \item XGBDARTModel: \code{nrounds}, \code{max_depth}, \code{eta},
@@ -66,37 +83,79 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
     name = "XGBModel",
     label = "Extreme Gradient Boosting",
     packages = "xgboost",
-    response_types = c("factor", "numeric", "PoissonVariate"),
+    response_types = c("factor", "numeric", "PoissonVariate", "Surv"),
     predictor_encoding = "model.matrix",
     params = params(environment()),
     fit = function(formula, data, weights, params, ...) {
       x <- model.matrix(data, intercept = FALSE)
       y <- response(data)
       response_levels <- levels(y)
-      obj_choices <- switch_class(y,
-                                  factor = {
-                                    params$num_class <- nlevels(y)
-                                    y <- as.numeric(y) - 1
-                                    c("multi:softprob", "binary.logistic")
-                                  },
-                                  numeric = {
-                                    c("reg:linear", "reg:logistic", "reg:gamma",
-                                      "reg:tweedie", "rank:pairwise",
-                                      "rank:ndcg", "rank:map")
-                                  },
-                                  PoissonVariate = "count:poisson")
+
+      obj_choices <-
+        switch_class(y,
+                     factor = {
+                       y <- as.numeric(y) - 1
+                       c("multi:softprob",
+                         if (length(response_levels) == 2) "binary:logistic")
+                     },
+                     numeric = c("reg:squarederror", "reg:logistic",
+                                 "reg:gamma", "reg:tweedie",
+                                 "rank:pairwise", "rank:ndcg", "rank:map"),
+                     PoissonVariate = "count:poisson",
+                     Surv = {
+                       y_time <- y[, "time"]
+                       y_event <- y[, "status"] != 0
+                       c("survival:cox", "survival:aft")
+                     })
       params$objective <- match.arg(params$objective, obj_choices)
-      modelfit <- xgboost::xgboost(x, y, weight = weights, params = params, ...)
+
+      dmat <- xgboost::xgb.DMatrix(x)
+      if (params$objective == "survival:aft") {
+        y_lower <- y_upper <- y_time
+        y_upper[!y_event] <- Inf
+        xgboost::setinfo(dmat, "label_lower_bound", y_lower)
+        xgboost::setinfo(dmat, "label_upper_bound", y_upper)
+      } else {
+        params$aft_loss_distribution <- NULL
+        params$aft_loss_distribution_scale <- NULL
+        if (params$objective == "survival:cox") y <- y_time * (2 * y_event - 1)
+        xgboost::setinfo(dmat, "label", y)
+      }
+
+      params$num_class <- if (params$objective == "multi:softprob") {
+        length(response_levels)
+      }
+      if (!(params$objective %in% c("binary:logistic",
+                                    "reg:logistic",
+                                    "reg:squarederror"))) {
+        params$scale_pos_weight <- NULL
+      }
+      if (!isTRUE(params$feature_selector %in% c("greedy", "thrifty"))) {
+        params$top_k <- NULL
+      }
+
+      modelfit <- xgboost::xgboost(dmat, weight = weights, params = params, ...)
       modelfit$levels <- response_levels
       modelfit
     },
-    predict = function(object, newdata, ...) {
+    predict = function(object, newdata, model, times, ...) {
       newx <- model.matrix(newdata, intercept = FALSE)
       pred <- predict(object, newdata = newx)
-      if (object$params$objective == "multi:softprob") {
-        pred <- matrix(pred, nrow = nrow(newx), byrow = TRUE)
-      }
-      pred
+      switch(object$params$objective,
+             "multi:softprob" = {
+               matrix(pred, nrow = nrow(newx), byrow = TRUE)
+             },
+             "survival:aft" = if (is.null(times)) pred else {
+               stop("time-specific prediction not available for XGBModel",
+                    " survival:aft")
+             },
+             "survival:cox" = {
+               x <- model.matrix(predictor_frame(model), intercept = FALSE)
+               lp <- log(predict(object, newdata = x))
+               new_lp <- log(pred)
+               predict(response(model), lp, times, new_lp, ...)
+             },
+             pred)
     },
     varimp = function(object, metric = c("Gain", "Cover", "Frequency"), ...) {
       vi <- xgboost::xgb.importance(model = object, ...)
@@ -123,15 +182,18 @@ MLModelFunction(XGBModel) <- NULL
 
 #' @rdname XGBModel
 #'
-XGBDARTModel <- function(objective = NULL, base_score = 0.5,
+XGBDARTModel <- function(objective = NULL, aft_loss_distribution = "normal",
+                         aft_loss_distribution_scale = 1, base_score = 0.5,
                          eta = 0.3, gamma = 0, max_depth = 6,
-                         min_child_weight = 1, max_delta_step = 0,
+                         min_child_weight = 1,
+                         max_delta_step = .(0.7 * is(y, "PoissonVariate")),
                          subsample = 1, colsample_bytree = 1,
-                         colsample_bylevel = 1, lambda = 1, alpha = 0,
-                         tree_method = "auto", sketch_eps = 0.03,
-                         scale_pos_weight = 1, update = "grow_colmaker,prune",
+                         colsample_bylevel = 1, colsample_bynode = 1,
+                         lambda = 1, alpha = 0, tree_method = "auto",
+                         sketch_eps = 0.03, scale_pos_weight = 1,
                          refresh_leaf = 1, process_type = "default",
-                         grow_policy="depthwise", max_leaves = 0, max_bin = 256,
+                         grow_policy = "depthwise", max_leaves = 0,
+                         max_bin = 256, num_parallel_tree = 1,
                          sample_type = "uniform", normalize_type = "tree",
                          rate_drop = 0, one_drop = 0, skip_drop = 0, ...) {
   .XGBModel("XGBDARTModel", "Extreme Gradient Boosting (DART)",
@@ -143,7 +205,8 @@ MLModelFunction(XGBDARTModel) <- NULL
 
 #' @rdname XGBModel
 #'
-XGBLinearModel <- function(objective = NULL, base_score = 0.5,
+XGBLinearModel <- function(objective = NULL, aft_loss_distribution = "normal",
+                           aft_loss_distribution_scale = 1, base_score = 0.5,
                            lambda = 0, alpha = 0, updater = "shotgun",
                            feature_selector = "cyclic", top_k = 0, ...) {
   .XGBModel("XGBLinearModel", "Extreme Gradient Boosting (Linear)",
@@ -155,16 +218,18 @@ MLModelFunction(XGBLinearModel) <- NULL
 
 #' @rdname XGBModel
 #'
-XGBTreeModel <- function(objective = NULL, base_score = 0.5,
+XGBTreeModel <- function(objective = NULL, aft_loss_distribution = "normal",
+                         aft_loss_distribution_scale = 1, base_score = 0.5,
                          eta = 0.3, gamma = 0, max_depth = 6,
-                         min_child_weight = 1, max_delta_step = 0,
+                         min_child_weight = 1,
+                         max_delta_step = .(0.7 * is(y, "PoissonVariate")),
                          subsample = 1, colsample_bytree = 1,
-                         colsample_bylevel = 1, lambda = 1, alpha = 0,
-                         tree_method = "auto", sketch_eps = 0.03,
-                         scale_pos_weight = 1, update = "grow_colmaker,prune",
+                         colsample_bylevel = 1, colsample_bynode = 1,
+                         lambda = 1, alpha = 0, tree_method = "auto",
+                         sketch_eps = 0.03, scale_pos_weight = 1,
                          refresh_leaf = 1, process_type = "default",
-                         grow_policy="depthwise", max_leaves = 0, max_bin = 256,
-                         ...) {
+                         grow_policy = "depthwise", max_leaves = 0,
+                         max_bin = 256, num_parallel_tree = 1, ...) {
   .XGBModel("XGBTreeModel", "Extreme Gradient Boosting (Tree)",
             "gbtree", environment(), ...)
 }
