@@ -7,14 +7,21 @@
 #' @param k number of k-medoids clusterings of the variables.  The value of
 #'   \code{k} is constrained to be between 1 and one less than the number of
 #'   original variables.
-#' @param metric character string specifying the distance metric for calculating
-#'   dissimilarities between observations.
 #' @param center,scale logicals indicating whether to mean center and median
 #'   absolute deviation scale the original variables prior to cluster
 #'   partitioning; not applied to selected variables.
+#' @param method character string specifying one of the clustering methods
+#'   provided by the \pkg{cluster} package.  The \code{clara} (clustering
+#'   large applications) method is an extension of \code{pam} (partitioning
+#'   around medoids) designed to handle large datasets.
+#' @param metric character string specifying the distance metric for calculating
+#'   dissimilarities between observations as \code{"euclidean"},
+#'   \code{"manhattan"}, or \code{"jaccard"} (\code{clara} only).
 #' @param optimize logical indicator or 0:5 integer level specifying
-#'   optimization for the clustering algorithm.  See the \code{pamonce} argument
-#'   of \code{\link[cluster]{pam}} for details.
+#'   optimization for the \code{\link[cluster]{pam}} clustering method.
+#' @param num_samp number of sub-datasets to sample for the
+#'   \code{\link[cluster]{clara}} clustering method.
+#' @param samp_size number of cases to include in each sub-dataset.
 #' @param prefix if the original variables are not replaced, a character string
 #'   prefix added to a sequence of zero-padded integers to generate names for
 #'   the resulting new variables; otherwise, the original variable names are
@@ -34,12 +41,16 @@
 #' minimized.  Cluster medoids are then returned as a set of k variables.
 #'
 #' @references
+#' Kaufman L and Rousseeuw PJ (1990). Finding Groups in Data: An Introduction to
+#' Cluster Analysis. Wiley: New York.
+#'
 #' Reynolds A, Richards G, de la Iglesia B and Rayward-Smith V (1992).
 #' Clustering rules: a comparison of partitioning and hierarchical clustering
 #' algorithms. Journal of Mathematical Modelling and Algorithms 5, 475--504.
 #'
-#' @seealso \code{\link[cluster]{pam}}, \code{\link[recipes]{recipe}},
-#' \code{\link[recipes]{prep}}, \code{\link[recipes]{bake}}
+#' @seealso \code{\link[cluster]{pam}}, \code{\link[cluster]{clara}},
+#' \code{\link[recipes]{recipe}}, \code{\link[recipes]{prep}},
+#' \code{\link[recipes]{bake}}
 #'
 #' @examples
 #' library(recipes)
@@ -56,21 +67,22 @@
 #' tidy(kmedoids_prep, number = 1)
 #'
 step_kmedoids <- function(recipe, ..., k = 5, center = TRUE, scale = TRUE,
-                          metric = c("euclidean", "manhattan"),
-                          optimize = FALSE, replace = TRUE, prefix = "KMedoids",
+                          method = c("pam", "clara"),
+                          metric = "euclidean", optimize = FALSE,
+                          num_samp = 50, samp_size = 40 + 2 * k,
+                          replace = TRUE, prefix = "KMedoids",
                           role = "predictor", skip = FALSE,
                           id = recipes::rand_id("kmedoids")) {
 
   requireModelNamespaces("cluster")
 
-  recipes::add_step(recipe, recipes::step(
+  step <- recipes::step(
     subclass = "kmedoids",
     terms = recipes::ellipse_check(...),
     k = k,
     center = if (isTRUE(center)) base::mean else FALSE,
     scale = if (isTRUE(scale)) stats::mad else FALSE,
-    metric = match.arg(metric),
-    optimize = optimize,
+    method = match.arg(method),
     res = list(),
     trained = FALSE,
     replace = replace,
@@ -78,7 +90,19 @@ step_kmedoids <- function(recipe, ..., k = 5, center = TRUE, scale = TRUE,
     role = role,
     skip = skip,
     id = id
-  ))
+  )
+  switch(step$method,
+         "pam" = {
+           step$metric <- match.arg(metric, c("euclidean", "manhattan"))
+           step$optimize <- optimize
+         },
+         "clara" = {
+           step$metric <- match.arg(metric,
+                                    c("euclidean", "manhattan", "jaccard"))
+           step$num_samp <- num_samp
+           step$samp_size <- samp_size
+         })
+  recipes::add_step(recipe, step)
 
 }
 
@@ -99,19 +123,32 @@ prep.step_kmedoids <- function(x, training, info = NULL, ...) {
 
   if (is.function(x$center)) x$center <- apply(training, 2, x$center)
   if (is.function(x$scale)) x$scale <- apply(training, 2, x$scale)
-  training <- scale(training, center = x$center, scale = x$scale)
+  training <- t(scale(training, center = x$center, scale = x$scale))
 
-  res <- cluster::pam(t(training), k = x$k, metric = x$metric,
-                      pamonce = x$optimize, keep.diss = FALSE,
-                      keep.data = FALSE)
+  res <- switch(x$method,
+                "pam" = {
+                  keep <- c("id.med", "clustering", "sil_width")
+                  cluster::pam(training, k = x$k, metric = x$metric,
+                               pamonce = x$optimize, keep.diss = FALSE,
+                               keep.data = FALSE)[keep]
+                },
+                "clara" = {
+                  x$samp_size <- min(x$samp_size, nrow(training))
+                  keep <- c("i.med", "clustering", "sil_width")
+                  cluster::clara(training, k = x$k, metric = x$metric,
+                                 samples = x$num_samp, sampsize = x$samp_size,
+                                 medoids.x = FALSE, rngR = TRUE)[keep]
+                })
+  names(res) <- c("id.med", "clustering", "sil_width")
+
   names(res$id.med) <- if (x$replace) {
     names(res$clustering)[res$id.med]
   } else {
     recipes::names0(length(res$id.med), x$prefix)
   }
 
-  x$res <- c(res[c("clustering", "id.med")],
-             list(silhouette = res$silinfo$widths[, "sil_width"]))
+  x$res <- res[c("id.med", "clustering")]
+  x$silhoutte <- res$silinfo$widths[, "sil_width"]
   x$trained <- TRUE
   x
 

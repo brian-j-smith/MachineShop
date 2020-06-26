@@ -12,8 +12,11 @@ step_kmedoids(
   k = 5,
   center = TRUE,
   scale = TRUE,
-  metric = c("euclidean", "manhattan"),
+  method = c("pam", "clara"),
+  metric = "euclidean",
   optimize = FALSE,
+  num_samp = 50,
+  samp_size = 40 + 2 * k,
   replace = TRUE,
   prefix = "KMedoids",
   role = "predictor",
@@ -40,12 +43,22 @@ original variables.}
 absolute deviation scale the original variables prior to cluster
 partitioning; not applied to selected variables.}
 
+\item{method}{character string specifying one of the clustering methods
+provided by the \pkg{cluster} package.  The \code{clara} (clustering
+large applications) method is an extension of \code{pam} (partitioning
+around medoids) designed to handle large datasets.}
+
 \item{metric}{character string specifying the distance metric for calculating
-dissimilarities between observations.}
+dissimilarities between observations as \code{"euclidean"},
+\code{"manhattan"}, or \code{"jaccard"} (\code{clara} only).}
 
 \item{optimize}{logical indicator or 0:5 integer level specifying
-optimization for the clustering algorithm.  See the \code{pamonce} argument
-of \code{\link[cluster]{pam}} for details.}
+optimization for the \code{\link[cluster]{pam}} clustering method.}
+
+\item{num_samp}{number of sub-datasets to sample for the
+\code{\link[cluster]{clara}} clustering method.}
+
+\item{samp_size}{number of cases to include in each sub-dataset.}
 
 \item{replace}{logical indicating whether to replace the original variables.}
 
@@ -100,11 +113,15 @@ tidy(kmedoids_prep, number = 1)
 
 }
 \references{
+Kaufman L and Rousseeuw PJ (1990). Finding Groups in Data: An Introduction to
+Cluster Analysis. Wiley: New York.
+
 Reynolds A, Richards G, de la Iglesia B and Rayward-Smith V (1992).
 Clustering rules: a comparison of partitioning and hierarchical clustering
 algorithms. Journal of Mathematical Modelling and Algorithms 5, 475--504.
 }
 \seealso{
-\code{\link[cluster]{pam}}, \code{\link[recipes]{recipe}},
-\code{\link[recipes]{prep}}, \code{\link[recipes]{bake}}
+\code{\link[cluster]{pam}}, \code{\link[cluster]{clara}},
+\code{\link[recipes]{recipe}}, \code{\link[recipes]{prep}},
+\code{\link[recipes]{bake}}
 }
