@@ -25,3 +25,10 @@ predictors.recipe <- function(object, newdata = NULL, ...) {
   vars <- info$variable[info$role %in% c("predictor", "pred_offset")]
   data[, vars, drop = FALSE]
 }
+
+
+predictor_frame <- function(model, newdata = NULL) {
+  stopifnot(is(model, "MLModel") && !is.null(model@x))
+  x <- model@x
+  ModelFrame(delete.response(terms(x)), predictors(x, newdata), na.rm = FALSE)
+}

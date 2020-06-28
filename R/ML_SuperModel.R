@@ -94,7 +94,7 @@ MLModelFunction(SuperModel) <- NULL
   }, object$base_fits)
 
   df <- if (object$all_vars) {
-    newdata <- preprocess(x@x, newdata)
+    newdata <- predictor_frame(x, newdata)
     newdata[["(names)"]] <- rownames(newdata)
     super_df(NA, predictors, newdata[["(names)"]], newdata)
   } else {

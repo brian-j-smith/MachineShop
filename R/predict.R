@@ -57,6 +57,6 @@ predict.MLModelFit <- function(object, newdata = NULL, times = NULL,
 
 
 .predict.MLModel <- function(x, object, newdata, ...) {
-  newdata <- preprocess(x@x, newdata)
+  newdata <- predictor_frame(x, newdata)
   x@predict(unMLModelFit(object), newdata, model = x, ...)
 }

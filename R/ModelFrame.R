@@ -391,11 +391,3 @@ model.offset <- function(x) {
   offsets <- eval(attr(terms(x), "variables")[keep], x)
   Reduce("+", offsets)
 }
-
-
-#################### ModelFrame Preprocessing ####################
-
-
-preprocess <- function(x, newdata = NULL) {
-  ModelFrame(delete.response(terms(x)), predictors(x, newdata), na.rm = FALSE)
-}
