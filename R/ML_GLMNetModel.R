@@ -76,7 +76,7 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
     },
     fit = function(formula, data, weights, family = NULL, nlambda = 1, ...) {
       x <- model.matrix(data, intercept = FALSE)
-      x.offset <- model.offset(data)
+      offset <- model.offset(data)
       y <- response(data)
       if (is.null(family)) {
         family <- switch_class(y,
@@ -88,24 +88,25 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
                                PoissonVariate = "poisson",
                                Surv = "cox")
       }
-      modelfit <- glmnet::glmnet(x, y, offset = x.offset, weights = weights,
-                                 family = family, nlambda = nlambda, ...)
-      modelfit$x <- x
-      modelfit$x.offset <- x.offset
-      modelfit
+      glmnet::glmnet(x, y, offset = offset, weights = weights,
+                     family = family, nlambda = nlambda, ...)
     },
     predict = function(object, newdata, model, times, ...) {
-      y <- response(model)
       newx <- model.matrix(newdata, intercept = FALSE)
+      newoffset <- model.offset(newdata)
+      y <- response(model)
       if (is.Surv(y)) {
-        lp <- predict(object, newx = object$x, type = "link",
-                      newoffset = object$x.offset)[, 1]
-        new_lp <- predict(object, newx = newx, type = "link",
-                          newoffset = model.offset(newdata))[, 1]
+        data <- predictor_frame(model)
+        lp <- predict(object,
+                      newx = model.matrix(data, intercept = FALSE),
+                      newoffset = model.offset(data),
+                      type = "link")[, 1]
+        new_lp <- predict(object, newx = newx, newoffset = newoffset,
+                          type = "link")[, 1]
         predict(y, lp, times, new_lp, ...)
       } else {
-        predict(object, newx = newx, s = object$lambda[1], type = "response",
-                newoffset = model.offset(newdata))
+        predict(object, newx = newx, newoffset = newoffset,
+                s = object$lambda[1], type = "response")
       }
     },
     varimp = function(object, ...) {
