@@ -89,10 +89,9 @@ response.recipe <- function(object, newdata = NULL, ...) {
 #' @param size number or numeric vector of binomial trials.
 #' @param min,max minimum and maximum bounds for discrete numbers.
 #'
-#' @return \code{BinomialVariate} object class that inherits from \code{matrix},
-#' \code{DiscreteVariate} that inherits from \code{numeric}, or object of the
-#' same class as the constructor name and that inherits from
-#' \code{DiscreteVariate}.
+#' @return \code{BinomialVariate} object class, \code{DiscreteVariate} that
+#' inherits from \code{numeric}, or \code{NegBinomialVariate} or
+#' \code{PoissonVariate} that inherit from \code{DiscreteVariate}.
 #'
 #' @seealso \code{\link{role_binom}}
 #'

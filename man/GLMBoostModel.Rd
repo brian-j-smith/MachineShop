@@ -39,7 +39,9 @@ component-wise linear models are utilized as base-learners.
 }
 \details{
 \describe{
-  \item{Response Types:}{\code{binary}, \code{numeric}, \code{Surv}}
+  \item{Response Types:}{\code{binary factor}, \code{BinomialVariate},
+    \code{NegBinomialVariate}, \code{numeric}, \code{PoissonVariate},
+    \code{Surv}}
   \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters:}{
     \code{mstop}
   }

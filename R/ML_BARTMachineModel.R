@@ -22,7 +22,7 @@
 #'
 #' @details
 #' \describe{
-#'   \item{Response Types:}{\code{binary}, \code{numeric}}
+#'   \item{Response Types:}{\code{binary factor}, \code{numeric}}
 #'   \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters:}{
 #'     \code{alpha}, \code{beta}, \code{k}, \code{nu}
 #'   }

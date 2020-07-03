@@ -23,10 +23,9 @@ PoissonVariate(x = integer())
 \item{min, max}{minimum and maximum bounds for discrete numbers.}
 }
 \value{
-\code{BinomialVariate} object class that inherits from \code{matrix},
-\code{DiscreteVariate} that inherits from \code{numeric}, or object of the
-same class as the constructor name and that inherits from
-\code{DiscreteVariate}.
+\code{BinomialVariate} object class, \code{DiscreteVariate} that
+inherits from \code{numeric}, or \code{NegBinomialVariate} or
+\code{PoissonVariate} that inherit from \code{DiscreteVariate}.
 }
 \description{
 Create a variate of binomial counts, discrete numbers, negative binomial

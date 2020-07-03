@@ -24,8 +24,8 @@
 #'
 #' @details
 #' \describe{
-#'   \item{Response Types:}{\code{factor}, \code{matrix}, \code{numeric},
-#'     \code{Surv}}
+#'   \item{Response Types:}{\code{BinomialVariate}, \code{factor},
+#'     \code{matrix}, \code{numeric}, \code{PoissonVariate}, \code{Surv}}
 #'   \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters:}{
 #'     \code{lambda}, \code{alpha}
 #'   }

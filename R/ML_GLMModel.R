@@ -14,10 +14,12 @@
 #'
 #' @details
 #' \describe{
-#'   \item{\code{GLMModel} Response Types:}{\code{factor}, \code{matrix},
-#'     \code{numeric}}
+#'   \item{\code{GLMModel} Response Types:}{\code{BinomialVariate},
+#'     \code{factor}, \code{matrix}, \code{NegBinomialVariate},
+#'     \code{numeric}, \code{PoissonVariate}}
 #'   \item{\code{GLMStepAICModel} Response Types:}{\code{binary factor},
-#'     \code{numeric}}
+#'     \code{BinomialVariate}, \code{NegBinomialVariate}, \code{numeric},
+#'     \code{PoissonVariate}}
 #' }
 #'
 #' Default values for the \code{NULL} arguments and further model details can be
