@@ -38,9 +38,10 @@ summary_kbl <- function(x, data) {
   vals <- sapply(unlist(unname(x), recursive = FALSE), function(el) {
     eval(el[[2]], envir = data)
   })
-  
+
   kbl <- data.frame(Characteristic = names(vals), Value = vals) %>%
-    kable(align = c("l", "c")) %>%
+    kable(row.names = FALSE,
+          align = c("l", "c")) %>%
     kable_styling(c("striped", "condensed"), full_width = FALSE,
                   position = "center")
 
@@ -54,6 +55,6 @@ summary_kbl <- function(x, data) {
     }
     start_row <- start_row + group_length
   }
-  
+
   kbl
 }
