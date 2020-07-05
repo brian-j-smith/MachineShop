@@ -1,6 +1,6 @@
 # Variable Specifications
 
-Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Four main types of specifications are supported by the package's `fit()`, `resample()`, and `tune()` functions: traditional formula, design matrix, model frame, and recipe.
+Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Four main types of specifications are supported by the package's `fit()` and `resample()` functions: traditional formula, design matrix, model frame, and recipe.
 
 
 ## Traditional Formula

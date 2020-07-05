@@ -7,7 +7,7 @@ badge](https://img.shields.io/badge/docs-online-green.svg)](https://brian-j-smit
 
 # Description
 
-`MachineShop` is a meta-package for statistical and machine learning
+**MachineShop** is a meta-package for statistical and machine learning
 with a unified interface for model fitting, prediction, performance
 assessment, and presentation of results. Support is provided for
 predictive modeling of numerical, categorical, and censored

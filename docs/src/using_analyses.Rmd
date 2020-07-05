@@ -1,4 +1,4 @@
-# Model Effects and Diagnostics
+# Model Predictor Effects and Diagnostics
 
 Calculation of performance metrics on test sets or by resampling, as discussed previously, is one method of assessing model performance.  Others available include measures of predictor variable importance, partial dependence plots, calibration curves comparing observed and predicted response values, and receiver operating characteristic analysis.
 

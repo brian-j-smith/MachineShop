@@ -1,6 +1,6 @@
 # Variable Specifications and Preprocessing
 
-Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Four main types of specifications are supported by the `fit`, `resample`, and `tune` functions: traditional formula, design matrix, model frame, and preprocessing recipe.
+Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Four main types of specifications are supported by the `fit` and `resample` functions: traditional formula, design matrix, model frame, and preprocessing recipe.
 
 
 ## Analysis Dataset

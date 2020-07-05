@@ -299,7 +299,7 @@ Prediction of other outcome types is more straightforward.  Predicted numeric an
 
 # Variable Specifications
 
-Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Four main types of specifications are supported by the package's `fit()`, `resample()`, and `tune()` functions: traditional formula, design matrix, model frame, and recipe.
+Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Four main types of specifications are supported by the package's `fit()` and `resample()` functions: traditional formula, design matrix, model frame, and recipe.
 
 
 ## Traditional Formula
@@ -1004,7 +1004,7 @@ t.test(res_diff)
 ```
 
 
-# Model Effects and Diagnostics
+# Model Predictor Effects and Diagnostics
 
 Calculation of performance metrics on test sets or by resampling, as discussed previously, is one method of assessing model performance.  Others available include measures of predictor variable importance, partial dependence plots, calibration curves comparing observed and predicted response values, and receiver operating characteristic analysis.
 
