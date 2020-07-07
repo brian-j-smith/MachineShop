@@ -2,6 +2,11 @@
 
 ## Version Updates
 
+## 2.4.2
+* Add global setting `RHS.formula` for listing of operators and functions allowed on right-hand side of traditional formulas.
+* Add clara clustering method to `step_kmedoids()`.
+* Support Cox and accelerated failure time regression for survival responses in `XGBModel`, `XGBDARTModel`, `XGBLinearModel`, and `XGBTreeModel`.
+
 ## 2.4.1
 * Set `NNetModel` `linout` argument automatically according to the response variable type (numeric: `TRUE`, other: `FALSE`).  Previously, `linout` had a default value of `FALSE` as defined in the `nnet` package.
 
