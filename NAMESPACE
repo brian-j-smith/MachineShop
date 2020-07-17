@@ -159,6 +159,7 @@ export(.,
        settings,
        step_kmeans,
        step_kmedoids,
+       step_sbf,
        step_spca,
        tunable.step_kmeans,
        tunable.step_kmedoids,
@@ -175,6 +176,7 @@ S3method(as.double, BinomialVariate)
 S3method(as.MLModel, MLModelFit)
 S3method(bake, step_kmeans)
 S3method(bake, step_kmedoids)
+S3method(bake, step_sbf)
 S3method(bake, step_spca)
 S3method(bake, ModelRecipe)
 S3method(bake, SelectedInput)
@@ -236,6 +238,7 @@ S3method(plot, VarImp)
 S3method(predict, MLModelFit)
 S3method(prep, step_kmeans)
 S3method(prep, step_kmedoids)
+S3method(prep, step_sbf)
 S3method(prep, step_spca)
 S3method(prep, ModelRecipe)
 S3method(prep, SelectedInput)
@@ -269,6 +272,7 @@ S3method(print, SelectedModel)
 S3method(print, StackedModel)
 S3method(print, step_kmeans)
 S3method(print, step_kmedoids)
+S3method(print, step_sbf)
 S3method(print, step_spca)
 S3method(print, SuperModel)
 S3method(print, SurvMatrix)
@@ -302,6 +306,7 @@ S3method(terms, ModelFrame)
 S3method(terms, ModeledFrame)
 S3method(tidy, step_kmeans)
 S3method(tidy, step_kmedoids)
+S3method(tidy, step_sbf)
 S3method(tidy, step_spca)
 S3method(TunedInput, recipe)
 S3method("[", BinomialVariate)
