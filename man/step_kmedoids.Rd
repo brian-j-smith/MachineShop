@@ -2,7 +2,6 @@
 % Please edit documentation in R/step_kmedoids.R
 \name{step_kmedoids}
 \alias{step_kmedoids}
-\alias{tidy.step_kmedoids}
 \alias{tunable.step_kmedoids}
 \title{K-Medoids Clustering Variable Selection}
 \usage{
@@ -24,8 +23,6 @@ step_kmedoids(
   id = recipes::rand_id("kmedoids")
 )
 
-\method{tidy}{step_kmedoids}(x, ...)
-
 tunable.step_kmedoids(x, ...)
 }
 \arguments{
@@ -41,7 +38,8 @@ original variables.}
 
 \item{center, scale}{logicals indicating whether to mean center and median
 absolute deviation scale the original variables prior to cluster
-partitioning; not applied to selected variables.}
+partitioning, or functions or names of functions for the centering and
+scaling; not applied to selected variables.}
 
 \item{method}{character string specifying one of the clustering methods
 provided by the \pkg{cluster} package.  The \code{clara} (clustering
@@ -62,10 +60,9 @@ optimization for the \code{\link[cluster]{pam}} clustering method.}
 
 \item{replace}{logical indicating whether to replace the original variables.}
 
-\item{prefix}{if the original variables are not replaced, a character string
-prefix added to a sequence of zero-padded integers to generate names for
-the resulting new variables; otherwise, the original variable names are
-retained.}
+\item{prefix}{if the original variables are not replaced, the selected
+variables are added to the dataset with the character string prefix added
+to their names; otherwise, the original variable names are retained.}
 
 \item{role}{analysis role that added step variables should be assigned.  By
 default, they are designated as model predictors.}
@@ -81,12 +78,14 @@ it may affect the computations for subsequent operations.}
 \item{x}{\code{step_kmedoids} object.}
 }
 \value{
-An updated version of \code{recipe} with the new step added to the
-sequence of existing steps (if any).  For the \code{tidy} method, a tibble
-with columns \code{terms} (selectors or variables selected), \code{cluster}
-assignments, \code{medoid} (logical indicator of cluster medoids),
-\code{silhouette} (silhouette values), and \code{names} for the new
-variables.
+Function \code{step_kmedoids} creates a new step whose class is of
+the same name and inherits from \code{\link{step_sbf}}, adds it to the
+sequence of existing steps (if any) in the recipe, and returns the updated
+recipe.  For the \code{tidy} method, a tibble with columns \code{terms}
+(selectors or variables selected), \code{cluster} assignments,
+\code{selected} (logical indicator of selected cluster medoids),
+\code{silhouette} (silhouette values), and \code{name} of the selected
+variable names.
 }
 \description{
 Creates a \emph{specification} of a recipe step that will partition numeric
