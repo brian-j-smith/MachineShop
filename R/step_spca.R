@@ -131,13 +131,13 @@ bake.step_spca <- function(object, new_data, ...) {
 
   spca_data <- scale(new_data[is_spca_var],
                      center = object$center, scale = object$scale)
-  pc_data <- as_tibble(spca_data %*% loadings)
-  names(pc_data) <- colnames(loadings)
+  spc <- as_tibble(spca_data %*% loadings)
 
   if (object$replace) new_data <- new_data[!is_spca_var]
-  pc_data <- recipes::check_name(pc_data, new_data, object)
+  spc <- recipes::check_name(spc, new_data, object,
+                             newname = colnames(loadings))
 
-  as_tibble(c(new_data, pc_data))
+  as_tibble(c(new_data, spc))
 
 }
 

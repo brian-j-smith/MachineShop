@@ -145,10 +145,10 @@ bake.step_kmeans <- function(object, new_data, ...) {
                         center = object$center, scale = object$scale)
   cluster_weights <- Matrix::t(Matrix::fac2sparse(res$cluster) / res$size[nz])
   cluster_means <- as_tibble(as.matrix(cluster_data %*% cluster_weights))
-  names(cluster_means) <- names(res$size)[nz]
 
   if (object$replace) new_data <- new_data[!is_cluster_var]
-  cluster_means <- recipes::check_name(cluster_means, new_data, object)
+  cluster_means <- recipes::check_name(cluster_means, new_data, object,
+                                       newname = names(res$size)[nz])
 
   as_tibble(c(new_data, cluster_means))
 

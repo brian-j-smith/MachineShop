@@ -162,9 +162,10 @@ bake.step_kmedoids <- function(object, new_data, ...) {
     names_drop <- var_names[-res$id.med]
     new_data[!(names(new_data) %in% names_drop)]
   } else {
-    cluster_medoids <- new_data[var_names[res$id.med]]
-    names(cluster_medoids) <- names(res$id.med)
-    cluster_medoids <- recipes::check_name(cluster_medoids, new_data, object)
+    cluster_medoids <- recipes::check_name(
+      new_data[var_names[res$id.med]], new_data, object,
+      newname = names(res$id.med)
+    )
     as_tibble(c(new_data, cluster_medoids))
   }
 }
