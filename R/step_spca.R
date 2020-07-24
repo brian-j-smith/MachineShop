@@ -3,12 +3,7 @@
 #' Creates a \emph{specification} of a recipe step that will derive sparse
 #' principal components from one or more numeric variables.
 #'
-#' @rdname step_spca
-#'
-#' @inheritParams step_kmeans
-#' @param num_comp number of principal components to derive.  The value of
-#'   \code{num_comp} is constrained to be between 1 and the number of original
-#'   variables.
+#' @inheritParams step_lincomp
 #' @param sparsity,num_var sparsity (L1 norm) penalty for each component or
 #'   number of variables with non-zero component loadings.  Larger sparsity
 #'   values produce more zero loadings.  Argument \code{sparsity} is ignored if
@@ -18,14 +13,18 @@
 #'   improve conditioning; larger values produce more shrinkage of component
 #'   loadings toward zero.
 #' @param center,scale logicals indicating whether to mean center and standard
-#'   deviation scale variables prior to deriving components.
+#'   deviation scale the original variables prior to deriving components, or
+#'   functions or names of functions for the centering and scaling.
+#' @param max_iter maximum number of algorithm iterations allowed.
 #' @param tol numeric tolerance for the convergence criterion.
 #' @param x \code{step_spca} object.
 #'
-#' @return An updated version of \code{recipe} with the new step added to the
-#' sequence of existing steps (if any).  For the \code{tidy} method, a tibble
-#' with columns \code{terms} (selectors or variables selected), loading
-#' \code{value}, and \code{component} names of the new variables; and with
+#' @return Function \code{step_spca} creates a new step whose class is of
+#' the same name and inherits from \code{\link{step_lincomp}}, adds it to the
+#' sequence of existing steps (if any) in the recipe, and returns the updated
+#' recipe.  For the \code{tidy} method, a tibble with columns \code{terms}
+#' (selectors or variables selected), \code{weight} of each variable loading in
+#' the components, and \code{name} of the new variable names; and with
 #' attribute \code{pev} containing the proportions of explained variation.
 #'
 #' @details
@@ -60,21 +59,16 @@ step_spca <- function(recipe, ..., num_comp = 5, sparsity = 0, num_var = NULL,
                       prefix = "SPCA", role = "predictor", skip = FALSE,
                       id = recipes::rand_id("spca")) {
 
-  requireModelNamespaces("elasticnet")
-
-  recipes::add_step(recipe, recipes::step(
-    subclass = "spca",
+  recipes::add_step(recipe, new_step_spca(
     terms = recipes::ellipse_check(...),
     num_comp = num_comp,
-    sparsity = if (is.null(num_var)) sparsity,
+    sparsity = sparsity,
     num_var = num_var,
     shrinkage = shrinkage,
-    center = if (isTRUE(center)) base::mean else FALSE,
-    scale = if (isTRUE(scale)) stats::sd else FALSE,
+    center = center,
+    scale = scale,
     max_iter = max_iter,
     tol = tol,
-    res = list(pev = NA_real_),
-    trained = FALSE,
     replace = replace,
     prefix = prefix,
     role = role,
@@ -85,88 +79,42 @@ step_spca <- function(recipe, ..., num_comp = 5, sparsity = 0, num_var = NULL,
 }
 
 
-prep.step_spca <- function(x, training, info = NULL, ...) {
+new_step_spca <- function(..., sparsity, num_var, shrinkage, max_iter,
+                          tol) {
 
   requireModelNamespaces("elasticnet")
 
-  col_names <- recipes::terms_select(terms = x$terms, info = info)
-  training <- training[col_names]
-  recipes::check_type(training)
+  transform <- function(x, step) {
 
-  x$num_comp <- max(min(x$num_comp, length(col_names)), 1)
-  if (is.null(x$num_var)) {
-    x$sparsity <- rep(x$sparsity, length.out = x$num_comp)
-    para <- x$sparsity
-    sparse <- "penalty"
-  } else {
-    x$num_var <- rep(x$num_var, length.out = x$num_comp)
-    para <- x$num_var
-    sparse <- "varnum"
+    requireModelNamespaces("elasticnet")
+
+    num_comp <- min(step$num_comp, nrow(x))
+    if (is.null(step$num_var)) {
+      para <- step$sparsity
+      sparse <- "penalty"
+    } else {
+      para <- step$num_var
+      sparse <- "varnum"
+    }
+    res <- elasticnet::spca(x, K = num_comp,
+                            para = rep(para, length.out = num_comp),
+                            sparse = sparse, lambda = step$shrinkage,
+                            max.iter = step$max_iter, eps.conv = step$tol)
+
+    list(weights = res$loadings, pev = res$pev)
+
   }
 
-  if (is.function(x$center)) x$center <- apply(training, 2, x$center)
-  if (is.function(x$scale)) x$scale <- apply(training, 2, x$scale)
-  training <- scale(training, center = x$center, scale = x$scale)
+  object <- new_step_lincomp(..., transform = transform)
 
-  res <- elasticnet::spca(training, K = x$num_comp, para = para,
-                          sparse = sparse, lambda = x$shrinkage,
-                          max.iter = x$max_iter, eps.conv = x$tol)
-  dimnames(res$loadings) <- list(
-    terms = colnames(training),
-    component = recipes::names0(ncol(res$loadings), x$prefix)
-  )
-  names(res$pev) <- colnames(res$loadings)
+  object$sparsity <- sparsity
+  object$num_var <- num_var
+  object$shrinkage <- shrinkage
+  object$max_iter <- max_iter
+  object$tol <- tol
 
-  x$res <- res[c("loadings", "pev")]
-  x$trained <- TRUE
-  x
+  structure(object, class = c("step_spca", class(object)))
 
-}
-
-
-bake.step_spca <- function(object, new_data, ...) {
-
-  loadings <- object$res$loadings
-  is_spca_var <- names(new_data) %in% rownames(loadings)
-
-  spca_data <- scale(new_data[is_spca_var],
-                     center = object$center, scale = object$scale)
-  spc <- as_tibble(spca_data %*% loadings)
-
-  if (object$replace) new_data <- new_data[!is_spca_var]
-  spc <- recipes::check_name(spc, new_data, object,
-                             newname = colnames(loadings))
-
-  as_tibble(c(new_data, spc))
-
-}
-
-
-print.step_spca <- function(x, width = max(20, options()$width - 26), ...) {
-  cat("Sparse PCA extraction for ")
-  recipes::printer(rownames(x$res$loadings), x$terms, x$trained, width = width)
-  invisible(x)
-}
-
-
-#' @rdname step_spca
-#'
-tidy.step_spca <- function(x, ...) {
-  if (is.trained(x)) {
-    res <- as.data.frame(as.table(x$res$loadings),
-                         responseName = "value",
-                         stringsAsFactors = FALSE)
-    res <- as_tibble(res[c("terms", "value", "component")])
-  } else {
-    res <- tibble(
-      terms = recipes::sel2char(x$terms),
-      value = NA_real_,
-      component = NA_character_
-    )
-  }
-  res$id <- x$id
-  attr(res, "pev") <- x$res$pev
-  res
 }
 
 

@@ -2,7 +2,6 @@
 % Please edit documentation in R/step_spca.R
 \name{step_spca}
 \alias{step_spca}
-\alias{tidy.step_spca}
 \alias{tunable.step_spca}
 \title{Sparse Principal Components Analysis Variable Reduction}
 \usage{
@@ -24,8 +23,6 @@ step_spca(
   id = recipes::rand_id("spca")
 )
 
-\method{tidy}{step_spca}(x, ...)
-
 tunable.step_spca(x, ...)
 }
 \arguments{
@@ -35,9 +32,9 @@ tunable.step_spca(x, ...)
 used to compute the components.  See \code{\link[recipes]{selections}} for
 more details.  These are not currently used by the \code{tidy} method.}
 
-\item{num_comp}{number of principal components to derive.  The value of
-\code{num_comp} is constrained to be between 1 and the number of original
-variables.}
+\item{num_comp}{number of components to derive.  The value of \code{num_comp}
+will be constrained to a minimum of 1 and maximum of the number of original
+variables when \code{\link[recipes]{prep}} is run.}
 
 \item{sparsity, num_var}{sparsity (L1 norm) penalty for each component or
 number of variables with non-zero component loadings.  Larger sparsity
@@ -50,7 +47,8 @@ improve conditioning; larger values produce more shrinkage of component
 loadings toward zero.}
 
 \item{center, scale}{logicals indicating whether to mean center and standard
-deviation scale variables prior to deriving components.}
+deviation scale the original variables prior to deriving components, or
+functions or names of functions for the centering and scaling.}
 
 \item{max_iter}{maximum number of algorithm iterations allowed.}
 
@@ -75,10 +73,12 @@ it may affect the computations for subsequent operations.}
 \item{x}{\code{step_spca} object.}
 }
 \value{
-An updated version of \code{recipe} with the new step added to the
-sequence of existing steps (if any).  For the \code{tidy} method, a tibble
-with columns \code{terms} (selectors or variables selected), loading
-\code{value}, and \code{component} names of the new variables; and with
+Function \code{step_spca} creates a new step whose class is of
+the same name and inherits from \code{\link{step_lincomp}}, adds it to the
+sequence of existing steps (if any) in the recipe, and returns the updated
+recipe.  For the \code{tidy} method, a tibble with columns \code{terms}
+(selectors or variables selected), \code{weight} of each variable loading in
+the components, and \code{name} of the new variable names; and with
 attribute \code{pev} containing the proportions of explained variation.
 }
 \description{
