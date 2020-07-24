@@ -38,7 +38,8 @@ more details.  These are not currently used by the \code{tidy} method.}
 original variables.}
 
 \item{center, scale}{logicals indicating whether to mean center and standard
-deviation scale variables prior to clustering and averaging.}
+deviation scale the original variables prior to deriving components, or
+functions or names of functions for the centering and scaling.}
 
 \item{algorithm}{character string specifying the clustering algorithm to use.}
 
@@ -66,11 +67,13 @@ it may affect the computations for subsequent operations.}
 \item{x}{\code{step_kmeans} object.}
 }
 \value{
-An updated version of \code{recipe} with the new step added to the
-sequence of existing steps (if any).  For the \code{tidy} method, a tibble
-with columns \code{terms} (selectors or variables selected), \code{cluster}
-assignments, \code{sqdist} (squared distance from cluster centers), and
-\code{names} of the new variables.
+Function \code{step_kmeans} creates a new step whose class is of
+the same name and inherits from \code{\link{step_lincomp}}, adds it to the
+sequence of existing steps (if any) in the recipe, and returns the updated
+recipe.  For the \code{tidy} method, a tibble with columns \code{terms}
+(selectors or variables selected), \code{cluster} assignments, \code{sqdist}
+(squared distance from cluster centers), and \code{name} of the new variable
+names.
 }
 \description{
 Creates a \emph{specification} of a recipe step that will convert numeric

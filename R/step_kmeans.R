@@ -3,39 +3,26 @@
 #' Creates a \emph{specification} of a recipe step that will convert numeric
 #' variables into one or more by averaging within k-means clusters.
 #'
-#' @rdname step_kmeans
-#'
-#' @param recipe \link[recipes]{recipe} object to which the step will be added.
-#' @param ... one or more selector functions to choose which variables will be
-#'   used to compute the components.  See \code{\link[recipes]{selections}} for
-#'   more details.  These are not currently used by the \code{tidy} method.
+#' @inheritParams step_lincomp
 #' @param k number of k-means clusterings of the variables.  The value of
 #'   \code{k} is constrained to be between 1 and one less than the number of
 #'   original variables.
 #' @param center,scale logicals indicating whether to mean center and standard
-#'   deviation scale variables prior to clustering and averaging.
+#'   deviation scale the original variables prior to deriving components, or
+#'   functions or names of functions for the centering and scaling.
 #' @param algorithm character string specifying the clustering algorithm to use.
 #' @param max_iter maximum number of algorithm iterations allowed.
 #' @param num_start number of random cluster centers generated for starting the
 #'   Hartigan-Wong algorithm.
-#' @param replace logical indicating whether to replace the original variables.
-#' @param prefix character string prefix added to a sequence of zero-padded
-#'   integers to generate names for the resulting new variables.
-#' @param role analysis role that added step variables should be assigned.  By
-#'   default, they are designated as model predictors.
-#' @param skip logical indicating whether to skip the step when the recipe is
-#'   baked.  While all operations are baked when \code{\link[recipes]{prep}} is
-#'   run, some operations may not be applicable to new data (e.g. processing
-#'   outcome variables).  Care should be taken when using \code{skip = TRUE} as
-#'   it may affect the computations for subsequent operations.
-#' @param id unique character string to identify the step.
 #' @param x \code{step_kmeans} object.
 #'
-#' @return An updated version of \code{recipe} with the new step added to the
-#' sequence of existing steps (if any).  For the \code{tidy} method, a tibble
-#' with columns \code{terms} (selectors or variables selected), \code{cluster}
-#' assignments, \code{sqdist} (squared distance from cluster centers), and
-#' \code{names} of the new variables.
+#' @return Function \code{step_kmeans} creates a new step whose class is of
+#' the same name and inherits from \code{\link{step_lincomp}}, adds it to the
+#' sequence of existing steps (if any) in the recipe, and returns the updated
+#' recipe.  For the \code{tidy} method, a tibble with columns \code{terms}
+#' (selectors or variables selected), \code{cluster} assignments, \code{sqdist}
+#' (squared distance from cluster centers), and \code{name} of the new variable
+#' names.
 #'
 #' @details
 #' K-means clustering partitions variables into k groups such that the sum of
@@ -83,17 +70,14 @@ step_kmeans <- function(recipe, ..., k = 5, center = TRUE, scale = TRUE,
                         prefix = "KMeans", role = "predictor", skip = FALSE,
                         id = recipes::rand_id("kmeans")) {
 
-  recipes::add_step(recipe, recipes::step(
-    subclass = "kmeans",
+  recipes::add_step(recipe, new_step_kmeans(
     terms = recipes::ellipse_check(...),
     k = k,
-    center = if (isTRUE(center)) base::mean else FALSE,
-    scale = if (isTRUE(scale)) stats::sd else FALSE,
+    center = center,
+    scale = scale,
     algorithm = match.arg(algorithm),
     max_iter = max_iter,
     num_start = num_start,
-    res = list(),
-    trained = FALSE,
     replace = replace,
     prefix = prefix,
     role = role,
@@ -104,81 +88,56 @@ step_kmeans <- function(recipe, ..., k = 5, center = TRUE, scale = TRUE,
 }
 
 
-prep.step_kmeans <- function(x, training, info = NULL, ...) {
+new_step_kmeans <- function(..., k, algorithm, max_iter, num_start) {
 
-  col_names <- recipes::terms_select(terms = x$terms, info = info)
-  training <- training[col_names]
-  recipes::check_type(training)
+  transform <- function(x, step) {
 
-  x$k <- max(min(x$k, length(col_names) - 1), 1)
+    res <- stats::kmeans(t(x), centers = max(min(step$k, ncol(x) - 1), 1),
+                         iter.max = step$max_iter, nstart = step$num_start,
+                         algorithm = step$algorithm)
 
-  if (is.function(x$center)) x$center <- apply(training, 2, x$center)
-  if (is.function(x$scale)) x$scale <- apply(training, 2, x$scale)
-  training <- scale(training, center = x$center, scale = x$scale)
+    cluster <- res$cluster
+    weights <- Matrix::t(Matrix::fac2sparse(cluster) / res$size[res$size > 0])
+    sqdist <- numeric(length(cluster))
+    for (i in unique(cluster)) {
+      in_cluster <- cluster == i
+      x_centered <- x[, in_cluster, drop = FALSE] - res$centers[i, ]
+      sqdist[in_cluster] <- colSums(x_centered^2)
+    }
 
-  res <- stats::kmeans(t(training), centers = x$k, iter.max = x$max_iter,
-                       nstart = x$num_start, algorithm = x$algorithm)
-  names(res$size) <- recipes::names0(length(res$size), x$prefix)
+    list(weights = weights, cluster = cluster, sqdist = sqdist)
 
-  res$sqdist <- numeric(length(res$cluster))
-  for (i in unique(res$cluster)) {
-    in_cluster <- res$cluster == i
-    res$sqdist[in_cluster] <-
-      colSums((training[, in_cluster, drop = FALSE] - res$centers[i, ])^2)
   }
 
-  x$res <- res[c("cluster", "size", "sqdist")]
-  x$trained <- TRUE
-  x
+  object <- new_step_lincomp(..., transform = transform, num_comp = NULL)
 
-}
+  object$k <- k
+  object$algorithm <- algorithm
+  object$max_iter <- max_iter
+  object$num_start <- num_start
+  object$res <- tibble(
+    terms = recipes::sel2char(object$terms),
+    cluster = NA_integer_,
+    sqdist = NA_real_,
+    name = NA_character_
+  )
 
+  structure(object, class = c("step_kmeans", class(object)))
 
-bake.step_kmeans <- function(object, new_data, ...) {
-
-  res <- object$res
-
-  is_cluster_var <- names(new_data) %in% names(res$cluster)
-
-  nz <- res$size > 0
-  cluster_data <- scale(new_data[is_cluster_var],
-                        center = object$center, scale = object$scale)
-  cluster_weights <- Matrix::t(Matrix::fac2sparse(res$cluster) / res$size[nz])
-  cluster_means <- as_tibble(as.matrix(cluster_data %*% cluster_weights))
-
-  if (object$replace) new_data <- new_data[!is_cluster_var]
-  cluster_means <- recipes::check_name(cluster_means, new_data, object,
-                                       newname = names(res$size)[nz])
-
-  as_tibble(c(new_data, cluster_means))
-
-}
-
-
-print.step_kmeans <- function(x, width = max(20, options()$width - 31), ...) {
-  cat("K-means cluster extraction for ")
-  recipes::printer(names(x$res$cluster), x$terms, x$trained, width = width)
-  invisible(x)
 }
 
 
 #' @rdname step_kmeans
 #'
 tidy.step_kmeans <- function(x, ...) {
-  res <- if (is.trained(x)) {
+  res <- x$res
+  if (is.trained(x)) {
     cluster <- x$res$cluster
-    tibble(
-      terms = names(cluster),
+    res <- tibble(
+      terms = rownames(x$res$weights),
       cluster = cluster,
       sqdist = x$res$sqdist,
-      names = names(x$res$size)[cluster]
-    )
-  } else {
-    tibble(
-      terms = recipes::sel2char(x$terms),
-      cluster = NA_integer_,
-      sqdist = NA_real_,
-      names = NA_character_
+      name = colnames(x$res$weights)[cluster]
     )
   }
   res$id <- x$id
