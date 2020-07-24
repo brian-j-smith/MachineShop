@@ -3,7 +3,7 @@
 #' Creates a \emph{specification} of a recipe step that will select variables
 #' from a candidate set according to a user-specified filtering function.
 #'
-#' @inheritParams step_kmeans
+#' @inheritParams step_lincomp
 #' @param filter function whose first argument \code{x} is a univariate vector
 #'   or a \code{multivariate} data frame of candidate variables from which to
 #'   select, second argument \code{y} is the response variable as

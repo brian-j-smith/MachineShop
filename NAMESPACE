@@ -159,10 +159,12 @@ export(.,
        settings,
        step_kmeans,
        step_kmedoids,
+       step_lincomp,
        step_sbf,
        step_spca,
        tunable.step_kmeans,
        tunable.step_kmedoids,
+       tunable.step_lincomp,
        tunable.step_spca,
        varimp)
 
@@ -175,6 +177,7 @@ S3method(as.data.frame, TabularArray)
 S3method(as.double, BinomialVariate)
 S3method(as.MLModel, MLModelFit)
 S3method(bake, step_kmeans)
+S3method(bake, step_lincomp)
 S3method(bake, step_sbf)
 S3method(bake, step_spca)
 S3method(bake, ModelRecipe)
@@ -236,6 +239,7 @@ S3method(plot, Resamples)
 S3method(plot, VarImp)
 S3method(predict, MLModelFit)
 S3method(prep, step_kmeans)
+S3method(prep, step_lincomp)
 S3method(prep, step_sbf)
 S3method(prep, step_spca)
 S3method(prep, ModelRecipe)
@@ -269,6 +273,7 @@ S3method(print, SelectedInput)
 S3method(print, SelectedModel)
 S3method(print, StackedModel)
 S3method(print, step_kmeans)
+S3method(print, step_lincomp)
 S3method(print, step_sbf)
 S3method(print, step_spca)
 S3method(print, SuperModel)
@@ -302,6 +307,7 @@ S3method(t.test, PerformanceDiff)
 S3method(terms, ModelFrame)
 S3method(terms, ModeledFrame)
 S3method(tidy, step_kmeans)
+S3method(tidy, step_lincomp)
 S3method(tidy, step_sbf)
 S3method(tidy, step_spca)
 S3method(TunedInput, recipe)
