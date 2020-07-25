@@ -37,8 +37,7 @@ LMModel <- function() {
       if (is.factor(y)) {
         y_name <- response(formula)
         if (nlevels(y) == 2) {
-          y <- y == levels(y)[2]
-          data[[y_name]] <- y
+          data[[y_name]] <- as.numeric(y) - 1
         } else {
           mm <- model.matrix(~ y - 1)
           colnames(mm) <- levels(y)
