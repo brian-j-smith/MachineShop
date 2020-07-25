@@ -60,8 +60,13 @@ GBMModel <- function(distribution = NULL, n.trees = 100,
     },
     fit = function(formula, data, weights, distribution = NULL, ...) {
       if (is.null(distribution)) {
-        distribution <- switch_class(response(data),
-                                     factor = "multinomial",
+        y <- response(data)
+        distribution <- switch_class(y,
+                                     factor = if (nlevels(y) == 2) {
+                                       y_name <- response(formula)
+                                       data[[y_name]] <- as.numeric(y) - 1
+                                       "bernoulli"
+                                     } else "multinomial",
                                      numeric = "gaussian",
                                      PoissonVariate = "poisson",
                                      Surv = "coxph")
