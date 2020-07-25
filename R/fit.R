@@ -104,7 +104,7 @@ fit.MLModelFunction <- function(x, ...) {
     stop("invalid response type '", class(y)[1], "' for ", x@name)
   }
 
-  requireModelNamespaces(x@packages)
+  require_namespaces(x@packages)
 
   params_env <- list2env(list(
     formula = formula(mf),

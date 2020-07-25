@@ -95,11 +95,11 @@ step_kmedoids <- function(recipe, ..., k = 5, center = TRUE, scale = TRUE,
 new_step_kmedoids <- function(..., k, center, scale, method, metric, optimize,
                               num_samp, samp_size) {
 
-  requireModelNamespaces("cluster")
+  require_namespaces("cluster")
 
   filter <- function(x, y, step) {
 
-    requireModelNamespaces("cluster")
+    require_namespaces("cluster")
 
     if (ncol(x) < 2) {
       stop("step_kmedoids requires 2 or more variables", call. = FALSE)

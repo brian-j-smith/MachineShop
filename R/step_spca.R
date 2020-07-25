@@ -82,11 +82,11 @@ step_spca <- function(recipe, ..., num_comp = 5, sparsity = 0, num_var = NULL,
 new_step_spca <- function(..., sparsity, num_var, shrinkage, max_iter,
                           tol) {
 
-  requireModelNamespaces("elasticnet")
+  require_namespaces("elasticnet")
 
   transform <- function(x, step) {
 
-    requireModelNamespaces("elasticnet")
+    require_namespaces("elasticnet")
 
     num_comp <- min(step$num_comp, nrow(x))
     if (is.null(step$num_var)) {

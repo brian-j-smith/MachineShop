@@ -56,7 +56,7 @@ VarImp.numeric <- function(object, ...) {
 varimp <- function(object, scale = TRUE, ...) {
   stopifnot(is(object, "MLModelFit"))
   model <- as.MLModel(object)
-  requireModelNamespaces(model@packages)
+  require_namespaces(model@packages)
   vi <- model@varimp(unMLModelFit(object), ...)
   if (is.null(vi)) vi <- varimp_undef(object)
   VarImp(vi, scale = scale)

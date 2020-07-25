@@ -333,11 +333,11 @@ push.TrainBit <- function(x, object, ...) {
 }
 
 
-requireModelNamespaces <- function(packages) {
+require_namespaces <- function(packages) {
   available <- map_logi(requireNamespace, packages, quietly = TRUE)
   if (!all(available)) {
     missing <- packages[!available]
-    stop(label_items("model requires the installation of package", missing),
+    stop(label_items("call requires the installation of package", missing),
          call. = FALSE)
   }
   invisible(available)
