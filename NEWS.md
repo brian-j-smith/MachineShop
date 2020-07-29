@@ -2,6 +2,24 @@
 
 ## Version Updates
 
+## 2.4.3
+* Add recipe `step_sbf()` function for variable selection by filtering.
+* Inherit `step_kmedoids` objects from `step_sbf`, and refactor methods.
+  * Support user-specified center and scale functions.
+  * Append prefix to selected variable names.
+  * Rename `tidy()` column `medoids` to `selected`.
+  * Rename `tidy()` column `names` to `name`.
+  * Set `tidy()` non-selected variable names to `NA`.
+* Add recipe `step_lincomp()` function for linear components variable reduction.
+* Inherit `step_kmeans` objects from `step_lincomp`, and refactor methods.
+  * Support user-specified center and scale functions.
+  * Rename `tidy()` column `names` to `name`.
+* Inherit `step_spca` objects from `step_lincomp`, and refactor methods.
+  * Support user-specified center and scale functions.
+  * Rename `tidy()` column `value` to `weight`.
+  * Rename `tidy()` column `component` to `name`.
+* Set `GBMModel` distribution to bernoulli, instead of multinomial, for binary responses.
+
 ## 2.4.2
 * Add global setting `RHS.formula` for listing of operators and functions allowed on right-hand side of traditional formulas.
 * Add clara clustering method to `step_kmedoids()`.
