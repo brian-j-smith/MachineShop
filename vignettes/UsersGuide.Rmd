@@ -71,7 +71,7 @@ devtools::install_github("brian-j-smith/MachineShop", build_vignettes = TRUE)
 
 ## Documentation
 
-Once installed, the following **R** commands will load the package and display its help system documentation.  Online documentation and examples are available at the [MachineShop website](https://brian-j-smith.github.io/MachineShop).
+Once installed, the following **R** commands will load the package and display its help system documentation.  Online documentation and examples are available at the [MachineShop website](https://brian-j-smith.github.io/MachineShop/).
 
 ```{r overview_docs, eval = FALSE, message = FALSE}
 library(MachineShop)
