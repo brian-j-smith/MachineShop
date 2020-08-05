@@ -109,12 +109,15 @@ new_step_kmeans <- function(..., k, algorithm, max_iter, num_start) {
 
   }
 
-  object <- new_step_lincomp(..., transform = transform, num_comp = NULL)
+  options <- list(
+    k = k,
+    algorithm = algorithm,
+    max_iter = max_iter,
+    num_start = num_start
+  )
 
-  object$k <- k
-  object$algorithm <- algorithm
-  object$max_iter <- max_iter
-  object$num_start <- num_start
+  object <- new_step_lincomp(..., transform = transform, num_comp = NULL,
+                             options = options)
   object$res <- tibble(
     terms = recipes::sel2char(object$terms),
     cluster = NA_integer_,

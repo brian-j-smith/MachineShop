@@ -105,13 +105,15 @@ new_step_spca <- function(..., sparsity, num_var, shrinkage, max_iter,
 
   }
 
-  object <- new_step_lincomp(..., transform = transform)
+  options <- list(
+    sparsity = sparsity,
+    num_var = num_var,
+    shrinkage = shrinkage,
+    max_iter = max_iter,
+    tol = tol
+  )
 
-  object$sparsity <- sparsity
-  object$num_var <- num_var
-  object$shrinkage <- shrinkage
-  object$max_iter <- max_iter
-  object$tol <- tol
+  object <- new_step_lincomp(..., transform = transform, options = options)
 
   structure(object, class = c("step_spca", class(object)))
 

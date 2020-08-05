@@ -11,6 +11,7 @@ step_lincomp(
   ...,
   transform,
   num_comp = 5,
+  options = list(),
   center = TRUE,
   scale = TRUE,
   replace = TRUE,
@@ -43,6 +44,9 @@ method.}
 \item{num_comp}{number of components to derive.  The value of \code{num_comp}
 will be constrained to a minimum of 1 and maximum of the number of original
 variables when \code{\link[recipes]{prep}} is run.}
+
+\item{options}{list of elements to be added to the step object for use in the
+\code{transform} function.}
 
 \item{center, scale}{logicals indicating whether to mean center and standard
 deviation scale the original variables prior to deriving components, or
@@ -88,7 +92,7 @@ pca_mat <- function(x, step) {
 rec <- recipe(rating ~ ., data = attitude)
 lincomp_rec <- rec \%>\%
   step_lincomp(all_numeric(), -all_outcomes(),
-               transform = pca_mat, num_comp = 3)
+               transform = pca_mat, num_comp = 3, prefix = "PCA")
 
 lincomp_prep <- prep(lincomp_rec, training = attitude)
 lincomp_data <- bake(lincomp_prep, attitude)

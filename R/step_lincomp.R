@@ -19,6 +19,8 @@
 #' @param num_comp number of components to derive.  The value of \code{num_comp}
 #'   will be constrained to a minimum of 1 and maximum of the number of original
 #'   variables when \code{\link[recipes]{prep}} is run.
+#' @param options list of elements to be added to the step object for use in the
+#'   \code{transform} function.
 #' @param center,scale logicals indicating whether to mean center and standard
 #'   deviation scale the original variables prior to deriving components, or
 #'   functions or names of functions for the centering and scaling.
@@ -54,7 +56,7 @@
 #' rec <- recipe(rating ~ ., data = attitude)
 #' lincomp_rec <- rec %>%
 #'   step_lincomp(all_numeric(), -all_outcomes(),
-#'                transform = pca_mat, num_comp = 3)
+#'                transform = pca_mat, num_comp = 3, prefix = "PCA")
 #'
 #' lincomp_prep <- prep(lincomp_rec, training = attitude)
 #' lincomp_data <- bake(lincomp_prep, attitude)
@@ -64,7 +66,7 @@
 #' tidy(lincomp_rec, number = 1)
 #' tidy(lincomp_prep, number = 1)
 #'
-step_lincomp <- function(recipe, ..., transform, num_comp = 5,
+step_lincomp <- function(recipe, ..., transform, num_comp = 5, options = list(),
                          center = TRUE, scale = TRUE, replace = TRUE,
                          prefix = "LinComp", role = "predictor", skip = FALSE,
                          id = recipes::rand_id("lincomp")) {
@@ -73,6 +75,7 @@ step_lincomp <- function(recipe, ..., transform, num_comp = 5,
     terms = recipes::ellipse_check(...),
     transform = transform,
     num_comp = num_comp,
+    options = options,
     center = center,
     scale = scale,
     replace = replace,
@@ -85,10 +88,11 @@ step_lincomp <- function(recipe, ..., transform, num_comp = 5,
 }
 
 
-new_step_lincomp <- function(terms, transform, num_comp, center, scale, replace,
-                             prefix, role, skip, id) {
+new_step_lincomp <- function(terms, transform, num_comp, options, center, scale,
+                             replace, prefix, role, skip, id) {
   stopifnot(is.function(transform))
-  recipes::step(
+  stopifnot(is.list(options))
+  step_args <- list(
     subclass = "lincomp",
     terms = terms,
     transform = transform,
@@ -109,6 +113,11 @@ new_step_lincomp <- function(terms, transform, num_comp, center, scale, replace,
     skip = skip,
     id = id
   )
+  invalid_names <- intersect(names(options), names(step_args))
+  if (length(invalid_names)) {
+    stop(label_items("options list contains reserved step name", invalid_names))
+  }
+  do.call(recipes::step, c(step_args, options))
 }
 
 
