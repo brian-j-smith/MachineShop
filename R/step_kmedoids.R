@@ -135,27 +135,31 @@ new_step_kmedoids <- function(..., k, center, scale, method, metric, optimize,
 
   }
 
-  object <- new_step_sbf(..., filter = filter, multivariate = TRUE)
-
-  object$k <- k
-  object$center <- if (!is.logical(center)) fget(center) else
-    if (center) base::mean else FALSE
-  object$scale <- if (!is.logical(scale)) fget(scale) else
-    if (scale) stats::mad else FALSE
-  object$method <- method
+  options <- list(
+    k = k,
+    center = if (!is.logical(center)) fget(center) else
+      if (center) base::mean else FALSE,
+    scale = if (!is.logical(scale)) fget(scale) else
+      if (scale) stats::mad else FALSE,
+    method = method
+  )
   switch(
-    object$method,
+    options$method,
     "pam" = {
-      object$metric <- match.arg(metric, c("euclidean", "manhattan"))
-      object$optimize <- optimize
+      options$metric <- match.arg(metric, c("euclidean", "manhattan"))
+      options$optimize <- optimize
     },
     "clara" = {
-      object$metric <- match.arg(metric, c("euclidean", "manhattan", "jaccard"))
-      object$num_samp <- num_samp
-      object$samp_size <- samp_size
+      options$metric <- match.arg(metric,
+                                  c("euclidean", "manhattan", "jaccard"))
+      options$num_samp <- num_samp
+      options$samp_size <- samp_size
     },
     stop("'method' should be \"pam\" or \"clara\"")
   )
+
+  object <- new_step_sbf(..., filter = filter, multivariate = TRUE,
+                         options = options)
   object$res <- tibble(
     terms = recipes::sel2char(object$terms),
     cluster = NA_integer_,

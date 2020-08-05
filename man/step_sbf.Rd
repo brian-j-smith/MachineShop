@@ -10,6 +10,7 @@ step_sbf(
   ...,
   filter,
   multivariate = FALSE,
+  options = list(),
   replace = TRUE,
   prefix = "SBF",
   role = "predictor",
@@ -41,6 +42,9 @@ method.}
 the \code{x} argument of the \code{filter} function separately as
 univariate vectors if \code{FALSE}, or altogether in one multivariate data
 frame if \code{TRUE}.}
+
+\item{options}{list of elements to be added to the step object for use in the
+\code{filter} function.}
 
 \item{replace}{logical indicating whether to replace the original variables.}
 
@@ -78,12 +82,13 @@ library(recipes)
 glm_filter <- function(x, y, step) {
   model_fit <- glm(y ~ ., data = data.frame(y, x))
   p_value <- drop1(model_fit, test = "F")[-1, "Pr(>F)"]
-  p_value < 0.05
+  p_value < step$threshold
 }
 
 rec <- recipe(rating ~ ., data = attitude)
 sbf_rec <- rec \%>\%
-  step_sbf(all_numeric(), -all_outcomes(), filter = glm_filter)
+  step_sbf(all_numeric(), -all_outcomes(),
+           filter = glm_filter, options = list(threshold = 0.05))
 
 sbf_prep <- prep(sbf_rec, training = attitude)
 sbf_data <- bake(sbf_prep, attitude)

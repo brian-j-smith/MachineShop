@@ -18,6 +18,8 @@
 #'   the \code{x} argument of the \code{filter} function separately as
 #'   univariate vectors if \code{FALSE}, or altogether in one multivariate data
 #'   frame if \code{TRUE}.
+#' @param options list of elements to be added to the step object for use in the
+#'   \code{filter} function.
 #' @param prefix if the original variables are not replaced, the selected
 #'   variables are added to the dataset with the character string prefix added
 #'   to their names; otherwise, the original variable names are retained.
@@ -38,12 +40,13 @@
 #' glm_filter <- function(x, y, step) {
 #'   model_fit <- glm(y ~ ., data = data.frame(y, x))
 #'   p_value <- drop1(model_fit, test = "F")[-1, "Pr(>F)"]
-#'   p_value < 0.05
+#'   p_value < step$threshold
 #' }
 #'
 #' rec <- recipe(rating ~ ., data = attitude)
 #' sbf_rec <- rec %>%
-#'   step_sbf(all_numeric(), -all_outcomes(), filter = glm_filter)
+#'   step_sbf(all_numeric(), -all_outcomes(),
+#'            filter = glm_filter, options = list(threshold = 0.05))
 #'
 #' sbf_prep <- prep(sbf_rec, training = attitude)
 #' sbf_data <- bake(sbf_prep, attitude)
@@ -53,14 +56,16 @@
 #' tidy(sbf_rec, number = 1)
 #' tidy(sbf_prep, number = 1)
 #'
-step_sbf <- function(recipe, ..., filter, multivariate = FALSE, replace = TRUE,
-                     prefix = "SBF", role = "predictor", skip = FALSE,
+step_sbf <- function(recipe, ..., filter, multivariate = FALSE,
+                     options = list(), replace = TRUE, prefix = "SBF",
+                     role = "predictor", skip = FALSE,
                      id = recipes::rand_id("sbf")) {
 
   recipes::add_step(recipe, new_step_sbf(
     terms = recipes::ellipse_check(...),
     filter = filter,
     multivariate = multivariate,
+    options = options,
     replace = replace,
     prefix = prefix,
     role = role,
@@ -71,10 +76,11 @@ step_sbf <- function(recipe, ..., filter, multivariate = FALSE, replace = TRUE,
 }
 
 
-new_step_sbf <- function(terms, filter, multivariate, replace, prefix, role,
-                         skip, id) {
+new_step_sbf <- function(terms, filter, multivariate, options, replace, prefix,
+                         role, skip, id) {
   stopifnot(is.function(filter))
-  recipes::step(
+  stopifnot(is.list(options))
+  step_args <- list(
     subclass = "sbf",
     terms = terms,
     filter = filter,
@@ -91,6 +97,11 @@ new_step_sbf <- function(terms, filter, multivariate, replace, prefix, role,
     skip = skip,
     id = id
   )
+  invalid_names <- intersect(names(options), names(step_args))
+  if (length(invalid_names)) {
+    stop(label_items("options list contains reserved step name", invalid_names))
+  }
+  do.call(recipes::step, c(step_args, options))
 }
 
 
