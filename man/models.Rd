@@ -54,10 +54,10 @@ can be used.
   \code{\link{SVMSplineModel}}      \tab f   \tab n   \tab   \cr
   \code{\link{SVMTanhModel}}        \tab f   \tab n   \tab   \cr
   \code{\link{TreeModel}}           \tab f   \tab n   \tab   \cr
-  \code{\link{XGBModel}}            \tab f   \tab n   \tab   \cr
-  \code{\link{XGBDARTModel}}        \tab f   \tab n   \tab   \cr
-  \code{\link{XGBLinearModel}}      \tab f   \tab n   \tab   \cr
-  \code{\link{XGBTreeModel}}        \tab f   \tab n   \tab   \cr
+  \code{\link{XGBModel}}            \tab f   \tab n   \tab S \cr
+  \code{\link{XGBDARTModel}}        \tab f   \tab n   \tab S \cr
+  \code{\link{XGBLinearModel}}      \tab f   \tab n   \tab S \cr
+  \code{\link{XGBTreeModel}}        \tab f   \tab n   \tab S \cr
 }
 Categorical: b = binary, f = factor, o = ordered\cr
 Continuous: m = matrix, n = numeric\cr
