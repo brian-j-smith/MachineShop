@@ -2,6 +2,10 @@
 
 ## Version Updates
 
+## 2.5.0
+* Add `options` argument to `step_lincomp()` and `step_sbf()`.
+* CRAN release.
+
 ## 2.4.3
 * Add recipe `step_sbf()` function for variable selection by filtering.
 * Inherit `step_kmedoids` objects from `step_sbf`, and refactor methods.
