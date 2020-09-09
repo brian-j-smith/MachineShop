@@ -80,13 +80,13 @@ GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
       y <- response(data)
       if (is.null(family)) {
         family <- switch_class(y,
-                               BinomialVariate = "binomial",
-                               factor = ifelse(nlevels(y) == 2,
-                                               "binomial", "multinomial"),
-                               matrix = "mgaussian",
-                               numeric = "gaussian",
-                               PoissonVariate = "poisson",
-                               Surv = "cox")
+          "BinomialVariate" = "binomial",
+          "factor" = if (nlevels(y) <= 2) "binomial" else "multinomial",
+          "matrix" = "mgaussian",
+          "numeric" = "gaussian",
+          "PoissonVariate" = "poisson",
+          "Surv" = "cox"
+        )
       }
       glmnet::glmnet(x, y, offset = offset, weights = weights,
                      family = family, nlambda = nlambda, ...)

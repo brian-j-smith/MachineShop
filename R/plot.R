@@ -83,8 +83,9 @@ plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
     }
 
     switch(type,
-           "line" = p + geom_line(position = position, na.rm = TRUE),
-           "point" = p + geom_point(position = position, na.rm = TRUE))
+      "line" = p + geom_line(position = position, na.rm = TRUE),
+      "point" = p + geom_point(position = position, na.rm = TRUE)
+    )
 
   }, simplify = FALSE)
 
@@ -226,10 +227,9 @@ plot.PartialDependence <- function(x, stats = NULL, ...) {
     df$Predictor <- x$Predictors[[varname]]
     p <- ggplot(na.omit(df), mapping)
     p <- switch_class(df$Predictor,
-                      factor = p +
-                        geom_crossbar(aes_(ymin = ~ ..y.., ymax = ~ ..y..)),
-                      numeric = p + geom_line() + geom_point()) +
-      labs(x = varname) + facet_wrap(~ Statistic, scales = "free")
+      "factor" = p + geom_crossbar(aes_(ymin = ~ ..y.., ymax = ~ ..y..)),
+      "numeric" = p + geom_line() + geom_point()
+    ) + labs(x = varname) + facet_wrap(~ Statistic, scales = "free")
     pl[[varname]] <- p
   }
   pl
@@ -263,23 +263,23 @@ plot.Performance <- function(x, metrics = NULL, stat =
 
   p <- ggplot(df)
   switch(match.arg(type),
-         "boxplot" = p + geom_boxplot(aes_(~ Model, ~ Value)) +
-           stat_summary(aes_(~ Model, ~ Value), fun = mean, geom = "point") +
-           labs(x = "") +
-           coord_flip(),
-         "density" = p + geom_density(aes_(~ Value, color = ~ Model)) +
-           labs(y = "Density", color = ""),
-         "errorbar" = p + stat_summary(aes_(~ Model, ~ Value),
-                                       fun.data = mean_se,
-                                       geom = "errorbar") +
-           stat_summary(aes_(~ Model, ~ Value), fun = mean, geom = "point") +
-           labs(x = "") +
-           coord_flip(),
-         "violin" = p + geom_violin(aes_(~ Model, ~ Value)) +
-           stat_summary(aes_(~ Model, ~ Value), fun = mean, geom = "point") +
-           labs(x = "") +
-           coord_flip()) +
-    facet_wrap(~ Metric, scales = "free")
+    "boxplot" = p + geom_boxplot(aes_(~ Model, ~ Value)) +
+      stat_summary(aes_(~ Model, ~ Value), fun = mean, geom = "point") +
+      labs(x = "") +
+      coord_flip(),
+    "density" = p + geom_density(aes_(~ Value, color = ~ Model)) +
+      labs(y = "Density", color = ""),
+    "errorbar" = p + stat_summary(aes_(~ Model, ~ Value),
+                                  fun.data = mean_se,
+                                  geom = "errorbar") +
+      stat_summary(aes_(~ Model, ~ Value), fun = mean, geom = "point") +
+      labs(x = "") +
+      coord_flip(),
+    "violin" = p + geom_violin(aes_(~ Model, ~ Value)) +
+      stat_summary(aes_(~ Model, ~ Value), fun = mean, geom = "point") +
+      labs(x = "") +
+      coord_flip()
+  ) + facet_wrap(~ Metric, scales = "free")
 }
 
 
@@ -299,29 +299,28 @@ plot.PerformanceCurve <- function(x, type = c("tradeoffs", "cutoffs"),
   labels <- c(x = x@metrics$x@label, y = x@metrics$y@label)
 
   switch(match.arg(type),
-         "tradeoffs" = {
-           x$Cutoff <- NULL
-           p <- ggplot(na.omit(x), mapping) +
-             geom_path() +
-             labs(x = labels["x"], y = labels["y"])
+    "tradeoffs" = {
+      x$Cutoff <- NULL
+      p <- ggplot(na.omit(x), mapping) +
+        geom_path() +
+        labs(x = labels["x"], y = labels["y"])
 
-           if (diagonal) {
-             p <- p + geom_abline(intercept = 0, slope = 1, color = "gray")
-           }
+      if (diagonal) {
+        p <- p + geom_abline(intercept = 0, slope = 1, color = "gray")
+      }
 
-           p
-         },
-         "cutoffs" = {
-           df <- reshape(x, varying = c("x", "y"), v.names = "y",
-                         times = labels, timevar = "Metric",
-                         direction = "long")
-           names(df)[names(df) == "Cutoff"] <- "x"
+      p
+    },
+    "cutoffs" = {
+      df <- reshape(x, varying = c("x", "y"), v.names = "y", times = labels,
+                    timevar = "Metric", direction = "long")
+      names(df)[names(df) == "Cutoff"] <- "x"
 
-           ggplot(na.omit(df), mapping) +
-             geom_line() +
-             labs(x = "Cutoff", y = "Performance") +
-             facet_wrap(~ Metric)
-         }
+      ggplot(na.omit(df), mapping) +
+        geom_line() +
+        labs(x = "Cutoff", y = "Performance") +
+        facet_wrap(~ Metric)
+    }
   )
 }
 

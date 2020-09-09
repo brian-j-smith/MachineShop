@@ -138,13 +138,14 @@ as.grid.ParameterGrid <- function(x, ..., model, fixed = tibble()) {
     if (any(map_logi(dials::has_unknowns, x$object))) {
       mf <- ModelFrame(..., na.rm = FALSE)
       data <- switch(model@predictor_encoding,
-                     "model.matrix" = model.matrix(mf, intercept = FALSE),
-                     "terms" = {
-                       mf_terms <- attributes(terms(mf))
-                       var_list <- eval(mf_terms$variables, mf)
-                       names(var_list) <- rownames(mf_terms$factors)
-                       as.data.frame(var_list[-c(1, mf_terms$offset)])
-                     })
+        "model.matrix" = model.matrix(mf, intercept = FALSE),
+        "terms" = {
+          mf_terms <- attributes(terms(mf))
+          var_list <- eval(mf_terms$variables, mf)
+          names(var_list) <- rownames(mf_terms$factors)
+          as.data.frame(var_list[-c(1, mf_terms$offset)])
+        }
+      )
       x <- dials::finalize(x, x = data)
     }
     if (x@random) {

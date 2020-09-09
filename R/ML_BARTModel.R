@@ -79,27 +79,27 @@ BARTModel <- function(K = NULL, sparse = FALSE, theta = 0, omega = 1,
       x <- model.matrix(data, intercept = FALSE)
       y <- response(data)
       switch_class(y,
-                   factor = {
-                     assert_equal_weights(weights)
-                     if (nlevels(y) == 2) {
-                       f <- BART::gbart
-                       y <- as.numeric(y) - 1
-                     } else {
-                       f <- BART::mbart
-                       y <- as.numeric(y)
-                     }
-                     f(x.train = x, y.train = y, type = "pbart", ...)
-                   },
-                   numeric = {
-                     BART::gbart(x.train = x, y.train = y, w = weights,
-                                 sigest = sigest, sigdf = sigdf,
-                                 sigquant = sigquant, lambda = lambda, ...)
-                   },
-                   Surv = {
-                    assert_equal_weights(weights)
-                    BART::surv.bart(x.train = x, times = y[, "time"],
-                                    delta = y[, "status"], K = K, ...)
-                   })
+        "factor" = {
+          assert_equal_weights(weights)
+          if (nlevels(y) <= 2) {
+            f <- BART::gbart
+            y <- as.numeric(y) - 1
+          } else {
+            f <- BART::mbart
+            y <- as.numeric(y)
+          }
+          f(x.train = x, y.train = y, type = "pbart", ...)
+        },
+        "numeric" = {
+          BART::gbart(x.train = x, y.train = y, w = weights, sigest = sigest,
+                      sigdf = sigdf, sigquant = sigquant, lambda = lambda, ...)
+        },
+        "Surv" = {
+          assert_equal_weights(weights)
+          BART::surv.bart(x.train = x, times = y[, "time"],
+                          delta = y[, "status"], K = K, ...)
+        }
+      )
     },
     predict = function(object, newdata, times, ...) {
       newx <- model.matrix(newdata, intercept = FALSE)

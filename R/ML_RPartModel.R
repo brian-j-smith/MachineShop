@@ -52,9 +52,10 @@ RPartModel <- function(minsplit = 20, minbucket = round(minsplit / 3),
     },
     fit = function(formula, data, weights, ...) {
       method <- switch_class(response(data),
-                             factor = "class",
-                             numeric = "anova",
-                             Surv = "exp")
+        "factor" = "class",
+        "numeric" = "anova",
+        "Surv" = "exp"
+      )
       rpart::rpart(formula, data = as.data.frame(data), weights = weights,
                    na.action = na.pass, method = method, ...)
     },

@@ -173,7 +173,7 @@ SelectedInput.list <- function(x, ...) {
   inputs <- x@inputs
   input_class <- class(x)
   switch(input_class,
-    SelectedModelFrame = {
+    "SelectedModelFrame" = {
       grid_name <- "ModelFrame"
       object <- as(x, "ModelFrame")
       set_input <- function(x) {
@@ -183,7 +183,7 @@ SelectedInput.list <- function(x, ...) {
         } else input
       }
     },
-    SelectedModelRecipe = {
+    "SelectedModelRecipe" = {
       grid_name <- "ModelRecipe"
       object <- as.data.frame(x)
       set_input <- function(x) recipe(x, object[unique(summary(x)$variable)])

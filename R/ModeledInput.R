@@ -61,14 +61,13 @@ ModeledInput.matrix <- function(x, y, model, ...) {
 ModeledInput.ModelFrame <- function(x, model, ...) {
   model <- getMLObject(model, "MLModel")
   switch_class(x,
-               SelectedModelFrame = {
-                 inputs <- map(ModeledInput, x@inputs, model = list(model))
-                 x@inputs <- ListOf(inputs)
-                 x
-               },
-               default = {
-                 new("ModeledFrame", as(x, "ModelFrame"), model = model)
-               })
+    "SelectedModelFrame" = {
+      inputs <- map(ModeledInput, x@inputs, model = list(model))
+      x@inputs <- ListOf(inputs)
+      x
+    },
+    "default" = new("ModeledFrame", as(x, "ModelFrame"), model = model)
+  )
 }
 
 
@@ -93,15 +92,14 @@ ModeledInput.ModeledTerms <- function(x, model, ...) {
 ModeledInput.recipe <- function(x, model, ...) {
   model <- getMLObject(model, "MLModel")
   switch_class(x,
-               SelectedModelRecipe = {
-                 inputs <- map(ModeledInput, x@inputs, model = list(model))
-                 x@inputs <- ListOf(inputs)
-                 x
-               },
-               TunedModelRecipe = new("TunedModeledRecipe", x, model = model),
-               default = {
-                 new("ModeledRecipe", as(x, "ModelRecipe"), model = model)
-               })
+    "SelectedModelRecipe" = {
+      inputs <- map(ModeledInput, x@inputs, model = list(model))
+      x@inputs <- ListOf(inputs)
+      x
+    },
+    "TunedModelRecipe" = new("TunedModeledRecipe", x, model = model),
+    "default" = new("ModeledRecipe", as(x, "ModelRecipe"), model = model)
+  )
 }
 
 

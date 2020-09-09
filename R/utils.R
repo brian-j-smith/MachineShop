@@ -294,12 +294,13 @@ nvars <- function(x, model) {
   stopifnot(is(x, "ModelFrame"))
   model <- getMLObject(model, "MLModel")
   switch(model@predictor_encoding,
-         "model.matrix" =
-           ncol(model.matrix(x[1, , drop = FALSE], intercept = FALSE)),
-         "terms" = {
-           x_terms <- attributes(terms(x))
-           nrow(x_terms$factors) - x_terms$response - length(x_terms$offset)
-         })
+    "model.matrix" =
+      ncol(model.matrix(x[1, , drop = FALSE], intercept = FALSE)),
+    "terms" = {
+      x_terms <- attributes(terms(x))
+      nrow(x_terms$factors) - x_terms$response - length(x_terms$offset)
+    }
+  )
 }
 
 

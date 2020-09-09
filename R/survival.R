@@ -65,9 +65,10 @@ EmpiricalSurv.Surv <- function(y, risk = NULL, method =
   if (is.null(risk)) risk <- rep(1, length(times))
   if (is.null(method)) method <- settings("method.EmpiricalSurv")
   surv <- switch(match.arg(method),
-                 "breslow" = empiricalsurv_breslow,
-                 "efron" = empiricalsurv_efron,
-                 "fleming-harrington" = empiricalsurv_fh)
+    "breslow" = empiricalsurv_breslow,
+    "efron" = empiricalsurv_efron,
+    "fleming-harrington" = empiricalsurv_fh
+  )
   fit <- surv(times, events, risk)
   structure(
     list(n = length(y), time = sort(unique(times)),
@@ -266,10 +267,11 @@ surv_cases <- function(..., subset = TRUE) {
 surv_dist <- function(x = c("empirical", "exponential", "rayleigh",
                             "weibull")) {
   switch(match.arg(x),
-         "empirical" = EmpiricalSurv,
-         "exponential" = Exponential,
-         "rayleigh" = Rayleigh,
-         "weibull" = Weibull)
+    "empirical" = EmpiricalSurv,
+    "exponential" = Exponential,
+    "rayleigh" = Rayleigh,
+    "weibull" = Weibull
+  )
 }
 
 

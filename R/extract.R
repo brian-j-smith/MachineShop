@@ -56,8 +56,8 @@ setMethod("[", c(x = "ModelFrame", i = "ANY", j = "ANY", drop = "ANY"),
     y <- as(x, "ModelFrame")[i, j, drop = drop]
     if (is(y, "ModelFrame")) {
       switch_class(x,
-        ModeledInput = new(class(x), y, model = x@model),
-        SelectedInput = new(class(x), y, inputs = x@inputs, params = x@params)
+        "ModeledInput" = new(class(x), y, model = x@model),
+        "SelectedInput" = new(class(x), y, inputs = x@inputs, params = x@params)
       )
     } else y
   }

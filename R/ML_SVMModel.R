@@ -189,13 +189,13 @@ MLModelFunction(SVMTanhModel) <- NULL
   if (!is.logical(scaled)) scaled <- TRUE
 
   params <- switch(kernel,
-                   "anovadot" = list(C = NULL, degree = NULL),
-                   "besseldot" = list(C = NULL, order = NULL,
-                                      degree = NULL),
-                   "laplacedot" = list(C = NULL, sigma = NULL),
-                   "polydot" = list(C = NULL, degree = NULL, scale = NULL),
-                   "rbfdot" = list(C = NULL, sigma = NULL),
-                   "vanilladot" = list(C = NULL))
+    "anovadot" = list(C = NULL, degree = NULL),
+    "besseldot" = list(C = NULL, order = NULL, degree = NULL),
+    "laplacedot" = list(C = NULL, sigma = NULL),
+    "polydot" = list(C = NULL, degree = NULL, scale = NULL),
+    "rbfdot" = list(C = NULL, sigma = NULL),
+    "vanilladot" = list(C = NULL)
+  )
 
   if (length(params)) {
     model@grid <- function(x, length, ...) {

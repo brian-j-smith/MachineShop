@@ -111,8 +111,7 @@ new_step_kmedoids <- function(..., k, center, scale, method, metric, optimize,
     }, step[c("center", "scale")])
     x <- t(base::scale(x, center = stats$center, scale = stats$scale))
     k <- max(min(step$k, nrow(x) - 1), 1)
-    switch(
-      step$method,
+    switch(step$method,
       "pam" = {
         res <- cluster::pam(x, k, metric = step$metric, pamonce = step$optimize,
                             keep.diss = FALSE, keep.data = FALSE)
@@ -143,8 +142,7 @@ new_step_kmedoids <- function(..., k, center, scale, method, metric, optimize,
       if (scale) stats::mad else FALSE,
     method = method
   )
-  switch(
-    options$method,
+  switch(options$method,
     "pam" = {
       options$metric <- match.arg(metric, c("euclidean", "manhattan"))
       options$optimize <- optimize

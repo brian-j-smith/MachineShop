@@ -60,14 +60,14 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
       x <- sort(x)
       n <- min(n, length(x))
       switch(intervals,
-             "quantile" = x[round(seq(1, length(x), length = n))],
-             "uniform" = {
-               y <- seq(x[1], x[length(x)], length = n)
-               indices <- findInterval(y, x, all.inside = TRUE)
-               x_lower <- x[indices]
-               x_upper <- x[indices + 1]
-               unique(ifelse(y - x_lower < x_upper - y, x_lower, x_upper))
-             }
+        "quantile" = x[round(seq(1, length(x), length = n))],
+        "uniform" = {
+          y <- seq(x[1], x[length(x)], length = n)
+          indices <- findInterval(y, x, all.inside = TRUE)
+          x_lower <- x[indices]
+          x_upper <- x[indices + 1]
+          unique(ifelse(y - x_lower < x_upper - y, x_lower, x_upper))
+        }
       )
     } else {
       stop("unsupported variable type")

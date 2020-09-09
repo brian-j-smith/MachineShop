@@ -91,22 +91,21 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
       y <- response(data)
       response_levels <- levels(y)
 
-      obj_choices <-
-        switch_class(y,
-                     factor = {
-                       y <- as.numeric(y) - 1
-                       c("multi:softprob",
-                         if (length(response_levels) == 2) "binary:logistic")
-                     },
-                     numeric = c("reg:squarederror", "reg:logistic",
-                                 "reg:gamma", "reg:tweedie",
-                                 "rank:pairwise", "rank:ndcg", "rank:map"),
-                     PoissonVariate = "count:poisson",
-                     Surv = {
-                       y_time <- y[, "time"]
-                       y_event <- y[, "status"] != 0
-                       c("survival:cox", "survival:aft")
-                     })
+      obj_choices <- switch_class(y,
+        "factor" = {
+          y <- as.numeric(y) - 1
+          c("multi:softprob",
+            if (length(response_levels) <= 2) "binary:logistic")
+        },
+        "numeric" = c("reg:squarederror", "reg:logistic", "reg:gamma",
+                      "reg:tweedie", "rank:pairwise", "rank:ndcg", "rank:map"),
+        "PoissonVariate" = "count:poisson",
+        "Surv" = {
+          y_time <- y[, "time"]
+          y_event <- y[, "status"] != 0
+          c("survival:cox", "survival:aft")
+        }
+      )
       params$objective <- match.arg(params$objective, obj_choices)
 
       dmat <- xgboost::xgb.DMatrix(x)
@@ -142,20 +141,21 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
       newx <- model.matrix(newdata, intercept = FALSE)
       pred <- predict(object, newdata = newx)
       switch(object$params$objective,
-             "multi:softprob" = {
-               matrix(pred, nrow = nrow(newx), byrow = TRUE)
-             },
-             "survival:aft" = if (is.null(times)) pred else {
-               stop("time-specific prediction not available for XGBModel",
-                    " survival:aft")
-             },
-             "survival:cox" = {
-               x <- model.matrix(predictor_frame(model), intercept = FALSE)
-               lp <- log(predict(object, newdata = x))
-               new_lp <- log(pred)
-               predict(response(model), lp, times, new_lp, ...)
-             },
-             pred)
+        "multi:softprob" = matrix(pred, nrow = nrow(newx), byrow = TRUE),
+        "survival:aft" = if (is.null(times)) {
+          pred
+        } else {
+          stop("time-specific prediction not available for XGBModel",
+               " survival:aft")
+        },
+        "survival:cox" = {
+          x <- model.matrix(predictor_frame(model), intercept = FALSE)
+          lp <- log(predict(object, newdata = x))
+          new_lp <- log(pred)
+          predict(response(model), lp, times, new_lp, ...)
+        },
+        pred
+      )
     },
     varimp = function(object, metric = c("Gain", "Cover", "Frequency"), ...) {
       vi <- xgboost::xgb.importance(model = object, ...)
@@ -245,31 +245,32 @@ MLModelFunction(XGBTreeModel) <- NULL
   model@label <- label
 
   params <- switch(booster,
-                   "dart" = list(
-                     nrounds = NULL,
-                     max_depth = NULL,
-                     eta = NULL,
-                     gamma = NULL,
-                     min_child_weight = NULL,
-                     subsample = NULL,
-                     colsample_bytree = NULL,
-                     rate_drop = NULL,
-                     skip_drop = NULL
-                   ),
-                   "gblinear" = list(
-                     nrounds = NULL,
-                     lambda = NULL,
-                     alpha = NULL
-                   ),
-                   "gbtree" = list(
-                     nrounds = NULL,
-                     max_depth = NULL,
-                     eta = NULL,
-                     gamma = NULL,
-                     min_child_weight = NULL,
-                     subsample = NULL,
-                     colsample_bytree = NULL
-                   ))
+    "dart" = list(
+      nrounds = NULL,
+      max_depth = NULL,
+      eta = NULL,
+      gamma = NULL,
+      min_child_weight = NULL,
+      subsample = NULL,
+      colsample_bytree = NULL,
+      rate_drop = NULL,
+      skip_drop = NULL
+    ),
+    "gblinear" = list(
+      nrounds = NULL,
+      lambda = NULL,
+      alpha = NULL
+    ),
+    "gbtree" = list(
+      nrounds = NULL,
+      max_depth = NULL,
+      eta = NULL,
+      gamma = NULL,
+      min_child_weight = NULL,
+      subsample = NULL,
+      colsample_bytree = NULL
+    )
+  )
 
   if (length(params)) {
     model@grid <- function(x, length, random, ...) {

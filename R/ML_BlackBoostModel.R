@@ -88,12 +88,13 @@ BlackBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
     fit = function(formula, data, weights, family = NULL, ...) {
       if (is.null(family)) {
         family <- switch_class(response(data),
-                               BinomialVariate = mboost::Binomial(type = "glm"),
-                               factor = mboost::Binomial(),
-                               NegBinomialVariate = mboost::NBinomial(),
-                               numeric = mboost::Gaussian(),
-                               PoissonVariate = mboost::Poisson(),
-                               Surv = mboost::CoxPH())
+          "BinomialVariate" = mboost::Binomial(type = "glm"),
+          "factor" = mboost::Binomial(),
+          "NegBinomialVariate" = mboost::NBinomial(),
+          "numeric" = mboost::Gaussian(),
+          "PoissonVariate" = mboost::Poisson(),
+          "Surv" = mboost::CoxPH()
+        )
       }
       mboost::blackboost(formula, data = as.data.frame(data),
                          na.action = na.pass, weights = weights,
