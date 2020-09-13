@@ -59,7 +59,7 @@
 #' found in the source link below.
 #'
 #' In calls to \code{\link{varimp}} for \code{XGBTreeModel}, argument
-#' \code{metric} may be spedified as \code{"Gain"} (default) for the fractional
+#' \code{metric} may be specified as \code{"Gain"} (default) for the fractional
 #' contribution of each predictor to the total gain of its splits, as
 #' \code{"Cover"} for the number of observations related to each predictor, or
 #' as \code{"Frequency"} for the percentage of times each predictor is used in
