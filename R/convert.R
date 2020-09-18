@@ -55,7 +55,9 @@ setMethod("convert_prob", c("matrix", "matrix"),
 
 setMethod("convert_prob", c("numeric", "array"),
   function(object, x, ...) {
-    convert_prob(object, adrop(x, length(dim(x))))
+    num_dim <- length(dim(x))
+    x <- if (num_dim == 1) c(x) else adrop(x, num_dim)
+    convert_prob(object, x)
   }
 )
 
