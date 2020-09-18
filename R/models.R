@@ -36,6 +36,8 @@
 #'   \code{\link{QDAModel}}            \tab f   \tab     \tab   \cr
 #'   \code{\link{RandomForestModel}}   \tab f   \tab n   \tab   \cr
 #'   \code{\link{RangerModel}}         \tab f   \tab n   \tab S \cr
+#'   \code{\link{RFSRCModel}}          \tab f   \tab m,n \tab S \cr
+#'   \code{\link{RFSRCFastModel}}      \tab f   \tab m,n \tab S \cr
 #'   \code{\link{RPartModel}}          \tab f   \tab n   \tab S \cr
 #'   \code{\link{SurvRegModel}}        \tab     \tab     \tab S \cr
 #'   \code{\link{SurvRegStepAICModel}} \tab     \tab     \tab S \cr
