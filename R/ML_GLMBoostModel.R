@@ -37,9 +37,10 @@
 #'
 #' fit(type ~ ., data = Pima.tr, model = GLMBoostModel)
 #'
-GLMBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
-                          risk = c("inbag", "oobag", "none"),
-                          stopintern = FALSE, trace = FALSE) {
+GLMBoostModel <- function(
+  family = NULL, mstop = 100, nu = 0.1, risk = c("inbag", "oobag", "none"),
+  stopintern = FALSE, trace = FALSE
+) {
 
   args <- params(environment())
   is_main <- names(args) %in% "family"

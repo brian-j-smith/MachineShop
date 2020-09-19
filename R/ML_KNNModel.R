@@ -28,10 +28,11 @@
 #' @examples
 #' fit(Species ~ ., data = iris, model = KNNModel)
 #'
-KNNModel <- function(k = 7, distance = 2, scale = TRUE,
-                     kernel = c("optimal", "biweight", "cos", "epanechnikov",
-                                "gaussian", "inv", "rank", "rectangular",
-                                "triangular", "triweight")) {
+KNNModel <- function(
+  k = 7, distance = 2, scale = TRUE,
+  kernel = c("optimal", "biweight", "cos", "epanechnikov", "gaussian", "inv",
+             "rank", "rectangular", "triangular", "triweight")
+) {
 
   kernel <- match.arg(kernel)
 

@@ -51,8 +51,10 @@
 #' @examples
 #' fit(Species ~ ., data = iris, model = FDAModel)
 #'
-FDAModel <- function(theta = NULL, dimension = NULL, eps = .Machine$double.eps,
-                     method = .(mda::polyreg), ...) {
+FDAModel <- function(
+  theta = NULL, dimension = NULL, eps = .Machine$double.eps,
+  method = .(mda::polyreg), ...
+) {
 
   MLModel(
     name = "FDAModel",

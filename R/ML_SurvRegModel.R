@@ -23,9 +23,11 @@
 #' \code{\link[survival]{survreg.control}}, \code{\link[MASS]{stepAIC}},
 #' \code{\link{fit}}, \code{\link{resample}}
 #'
-SurvRegModel <- function(dist = c("weibull", "exponential", "gaussian",
-                                  "logistic", "lognormal", "logloglogistic"),
-                         scale = NULL, parms = NULL, ...) {
+SurvRegModel <- function(
+  dist = c("weibull", "exponential", "gaussian", "logistic", "lognormal",
+           "logloglogistic"),
+  scale = NULL, parms = NULL, ...
+) {
 
   dist <- match.arg(dist)
 
@@ -87,13 +89,13 @@ MLModelFunction(SurvRegModel) <- NULL
 #'
 #' fit(Surv(time, status) ~ ., data = veteran, model = SurvRegModel)
 #'
-SurvRegStepAICModel <- function(dist = c("weibull", "exponential", "gaussian",
-                                         "logistic", "lognormal",
-                                         "logloglogistic"),
-                                scale = NULL, parms = NULL, ...,
-                                direction = c("both", "backward", "forward"),
-                                scope = NULL, k = 2, trace = FALSE,
-                                steps = 1000) {
+SurvRegStepAICModel <- function(
+  dist = c("weibull", "exponential", "gaussian", "logistic", "lognormal",
+           "logloglogistic"),
+  scale = NULL, parms = NULL, ...,
+  direction = c("both", "backward", "forward"), scope = NULL, k = 2,
+  trace = FALSE, steps = 1000
+) {
 
   direction <- match.arg(direction)
 

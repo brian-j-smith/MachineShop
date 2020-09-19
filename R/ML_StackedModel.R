@@ -27,8 +27,9 @@
 #' model_fit <- fit(sale_amount ~ ., data = ICHomes, model = model)
 #' predict(model_fit, newdata = ICHomes)
 #'
-StackedModel <- function(..., control = MachineShop::settings("control"),
-                         weights = NULL) {
+StackedModel <- function(
+  ..., control = MachineShop::settings("control"), weights = NULL
+) {
 
   base_learners <- ListOf(map(getMLObject, unlist(list(...)), "MLModel"))
   names(base_learners) <- paste0(if (length(base_learners)) "Learner",

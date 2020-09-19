@@ -50,14 +50,13 @@
 #'
 #' fit(type ~ ., data = Pima.tr, model = BlackBoostModel)
 #'
-BlackBoostModel <- function(family = NULL, mstop = 100, nu = 0.1,
-                            risk = c("inbag", "oobag", "none"),
-                            stopintern = FALSE, trace = FALSE,
-                            teststat = c("quadratic", "maximum"),
-                            testtype = c("Teststatistic", "Univariate",
-                                         "Bonferroni", "MonteCarlo"),
-                            mincriterion = 0, minsplit = 10, minbucket = 4,
-                            maxdepth = 2, saveinfo = FALSE, ...) {
+BlackBoostModel <- function(
+  family = NULL, mstop = 100, nu = 0.1, risk = c("inbag", "oobag", "none"),
+  stopintern = FALSE, trace = FALSE, teststat = c("quadratic", "maximum"),
+  testtype = c("Teststatistic", "Univariate", "Bonferroni", "MonteCarlo"),
+  mincriterion = 0, minsplit = 10, minbucket = 4, maxdepth = 2,
+  saveinfo = FALSE, ...
+) {
 
   teststat <- match.arg(teststat)
   testtype <- match.arg(testtype)

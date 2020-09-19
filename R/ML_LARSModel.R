@@ -33,9 +33,10 @@
 #' @examples
 #' fit(sale_amount ~ ., data = ICHomes, model = LARSModel)
 #'
-LARSModel <- function(type = c("lasso", "lar", "forward.stagewise", "stepwise"),
-                      trace = FALSE, normalize = TRUE, intercept = TRUE,
-                      step = NULL, use.Gram = TRUE) {
+LARSModel <- function(
+  type = c("lasso", "lar", "forward.stagewise", "stepwise"), trace = FALSE,
+  normalize = TRUE, intercept = TRUE, step = NULL, use.Gram = TRUE
+) {
 
   type <- match.arg(type)
 

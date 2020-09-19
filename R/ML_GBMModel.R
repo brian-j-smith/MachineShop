@@ -35,9 +35,10 @@
 #' @examples
 #' fit(Species ~ ., data = iris, model = GBMModel)
 #'
-GBMModel <- function(distribution = NULL, n.trees = 100,
-                     interaction.depth = 1, n.minobsinnode = 10,
-                     shrinkage = 0.1, bag.fraction = 0.5) {
+GBMModel <- function(
+  distribution = NULL, n.trees = 100, interaction.depth = 1,
+  n.minobsinnode = 10, shrinkage = 0.1, bag.fraction = 0.5
+) {
 
   MLModel(
     name = "GBMModel",

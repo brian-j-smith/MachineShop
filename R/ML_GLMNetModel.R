@@ -42,15 +42,14 @@
 #' @examples
 #' fit(sale_amount ~ ., data = ICHomes, model = GLMNetModel(lambda = 0.01))
 #'
-GLMNetModel <- function(family = NULL, alpha = 1, lambda = 0,
-                        standardize = TRUE, intercept = NULL,
-                        penalty.factor = .(rep(1, nvars)),
-                        standardize.response = FALSE,
-                        thresh = 1e-7, maxit = 100000,
-                        type.gaussian =
-                          .(ifelse(nvars < 500, "covariance", "naive")),
-                        type.logistic = c("Newton", "modified.Newton"),
-                        type.multinomial = c("ungrouped", "grouped")) {
+GLMNetModel <- function(
+  family = NULL, alpha = 1, lambda = 0, standardize = TRUE, intercept = NULL,
+  penalty.factor = .(rep(1, nvars)), standardize.response = FALSE,
+  thresh = 1e-7, maxit = 100000,
+  type.gaussian = .(ifelse(nvars < 500, "covariance", "naive")),
+  type.logistic = c("Newton", "modified.Newton"),
+  type.multinomial = c("ungrouped", "grouped")
+) {
 
   type.logistic <- match.arg(type.logistic)
   type.multinomial <- match.arg(type.multinomial)

@@ -43,11 +43,11 @@
 #'
 #' fit(type ~ ., data = Pima.tr, model = GAMBoostModel)
 #'
-GAMBoostModel <- function(family = NULL,
-                          baselearner = c("bbs", "bols", "btree", "bss", "bns"),
-                          dfbase = 4, mstop = 100, nu = 0.1,
-                          risk = c("inbag", "oobag", "none"),
-                          stopintern = FALSE, trace = FALSE) {
+GAMBoostModel <- function(
+  family = NULL, baselearner = c("bbs", "bols", "btree", "bss", "bns"),
+  dfbase = 4, mstop = 100, nu = 0.1, risk = c("inbag", "oobag", "none"),
+  stopintern = FALSE, trace = FALSE
+) {
 
   baselearner <- match.arg(baselearner)
   risk <- match.arg(risk)

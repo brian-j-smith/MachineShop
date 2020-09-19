@@ -87,9 +87,11 @@ MLModelFunction(CoxModel) <- NULL
 #'   process.
 #' @param steps maximum number of steps to be considered.
 #'
-CoxStepAICModel <- function(ties = c("efron", "breslow", "exact"), ...,
-                            direction = c("both", "backward", "forward"),
-                            scope = NULL, k = 2, trace = FALSE, steps = 1000) {
+CoxStepAICModel <- function(
+  ties = c("efron", "breslow", "exact"), ...,
+  direction = c("both", "backward", "forward"), scope = NULL, k = 2,
+  trace = FALSE, steps = 1000
+) {
 
   direction <- match.arg(direction)
 

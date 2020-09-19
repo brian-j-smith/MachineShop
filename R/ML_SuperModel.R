@@ -32,9 +32,10 @@
 #' model_fit <- fit(sale_amount ~ ., data = ICHomes, model = model)
 #' predict(model_fit, newdata = ICHomes)
 #'
-SuperModel <- function(..., model = GBMModel,
-                       control = MachineShop::settings("control"),
-                       all_vars = FALSE) {
+SuperModel <- function(
+  ..., model = GBMModel, control = MachineShop::settings("control"),
+  all_vars = FALSE
+) {
 
   base_learners <- ListOf(map(getMLObject, unlist(list(...)), "MLModel"))
   names(base_learners) <- paste0(if (length(base_learners)) "Learner",

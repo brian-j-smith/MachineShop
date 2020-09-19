@@ -43,10 +43,10 @@
 #' model_fit <- fit(Species ~ ., data = iris, model = EarthModel)
 #' varimp(model_fit, metric = "nsubsets", scale = FALSE)
 #'
-EarthModel <- function(pmethod = c("backward", "none", "exhaustive", "forward",
-                                   "seqrep", "cv"),
-                       trace = 0, degree = 1, nprune = NULL,
-                       nfold = 0, ncross = 1, stratify = TRUE) {
+EarthModel <- function(
+  pmethod = c("backward", "none", "exhaustive", "forward", "seqrep", "cv"),
+  trace = 0, degree = 1, nprune = NULL, nfold = 0, ncross = 1, stratify = TRUE
+) {
 
   pmethod <- match.arg(pmethod)
 

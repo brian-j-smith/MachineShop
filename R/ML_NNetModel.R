@@ -40,10 +40,11 @@
 #' @examples
 #' fit(sale_amount ~ ., data = ICHomes, model = NNetModel)
 #'
-NNetModel <- function(size = 1, linout = NULL, entropy = NULL, softmax = NULL,
-                      censored = FALSE, skip = FALSE, rang = 0.7, decay = 0,
-                      maxit = 100, trace = FALSE, MaxNWts = 1000, abstol = 1e-4,
-                      reltol = 1e-8) {
+NNetModel <- function(
+  size = 1, linout = NULL, entropy = NULL, softmax = NULL, censored = FALSE,
+  skip = FALSE, rang = 0.7, decay = 0, maxit = 100, trace = FALSE,
+  MaxNWts = 1000, abstol = 1e-4, reltol = 1e-8
+) {
 
   MLModel(
     name = "NNetModel",

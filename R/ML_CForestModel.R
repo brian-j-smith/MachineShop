@@ -36,11 +36,11 @@
 #' @examples
 #' fit(sale_amount ~ ., data = ICHomes, model = CForestModel)
 #'
-CForestModel <- function(teststat = c("quad", "max"),
-                         testtype = c("Univariate", "Teststatistic",
-                                      "Bonferroni", "MonteCarlo"),
-                         mincriterion = 0, ntree = 500, mtry = 5,
-                         replace = TRUE, fraction = 0.632) {
+CForestModel <- function(
+  teststat = c("quad", "max"),
+  testtype = c("Univariate", "Teststatistic", "Bonferroni", "MonteCarlo"),
+  mincriterion = 0, ntree = 500, mtry = 5, replace = TRUE, fraction = 0.632
+) {
 
   teststat <- match.arg(teststat)
   testtype <- match.arg(testtype)

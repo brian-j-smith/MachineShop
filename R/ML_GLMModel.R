@@ -118,9 +118,11 @@ MLModelFunction(GLMModel) <- NULL
 #'   process.
 #' @param steps maximum number of steps to be considered.
 #'
-GLMStepAICModel <- function(family = NULL, quasi = FALSE, ...,
-                            direction = c("both", "backward", "forward"),
-                            scope = NULL, k = 2, trace = FALSE, steps = 1000) {
+GLMStepAICModel <- function(
+  family = NULL, quasi = FALSE, ...,
+  direction = c("both", "backward", "forward"), scope = NULL, k = 2,
+  trace = FALSE, steps = 1000
+) {
 
   direction <- match.arg(direction)
 

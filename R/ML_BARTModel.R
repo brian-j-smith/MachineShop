@@ -58,14 +58,13 @@
 #' fit(sale_amount ~ ., data = ICHomes, model = BARTModel)
 #' }
 #'
-BARTModel <- function(K = NULL, sparse = FALSE, theta = 0, omega = 1,
-                      a = 0.5, b = 1, rho = NULL, augment = FALSE,
-                      xinfo = NULL, usequants = FALSE,
-                      sigest = NA, sigdf = 3, sigquant = 0.90, lambda = NA,
-                      k = 2, power = 2, base = 0.95,
-                      tau.num = NULL, offset = NULL,
-                      ntree = NULL, numcut = 100, ndpost = 1000, nskip = NULL,
-                      keepevery = NULL, printevery = 1000) {
+BARTModel <- function(
+  K = NULL, sparse = FALSE, theta = 0, omega = 1, a = 0.5, b = 1, rho = NULL,
+  augment = FALSE, xinfo = NULL, usequants = FALSE, sigest = NA, sigdf = 3,
+  sigquant = 0.90, lambda = NA, k = 2, power = 2, base = 0.95, tau.num = NULL,
+  offset = NULL, ntree = NULL, numcut = 100, ndpost = 1000, nskip = NULL,
+  keepevery = NULL, printevery = 1000
+) {
 
   MLModel(
     name = "BARTModel",

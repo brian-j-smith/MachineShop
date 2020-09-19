@@ -31,8 +31,9 @@
 #'                          ordered = TRUE))
 #' fit(medv ~ ., data = df, model = POLRModel)
 #'
-POLRModel <- function(method = c("logistic", "probit", "loglog", "cloglog",
-                                 "cauchit")) {
+POLRModel <- function(
+  method = c("logistic", "probit", "loglog", "cloglog", "cauchit")
+) {
 
   method <- match.arg(method)
 

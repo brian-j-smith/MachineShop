@@ -31,9 +31,10 @@
 #' @examples
 #' fit(Species ~ ., data = iris, model = QDAModel)
 #'
-QDAModel <- function(prior = NULL, method = c("moment", "mle", "mve", "t"),
-                     nu = 5,
-                     use = c("plug-in", "predictive", "debiased", "looCV")) {
+QDAModel <- function(
+  prior = NULL, method = c("moment", "mle", "mve", "t"), nu = 5,
+  use = c("plug-in", "predictive", "debiased", "looCV")
+) {
 
   method <- match.arg(method)
   use <- match.arg(use)
