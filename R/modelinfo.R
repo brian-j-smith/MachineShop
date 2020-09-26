@@ -83,6 +83,7 @@ modelinfo <- function(...) {
                   "QDAModel",
                   "RandomForestModel",
                   "RangerModel",
+                  "RFSRCModel",
                   "RPartModel",
                   "SelectedModel",
                   "StackedModel",
