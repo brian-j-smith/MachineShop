@@ -168,6 +168,7 @@ export(.,
        tunable.step_kmedoids,
        tunable.step_lincomp,
        tunable.step_spca,
+       unMLModelFit,
        varimp)
 
 S3method(as.data.frame, BinomialVariate)

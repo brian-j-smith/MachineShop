@@ -138,6 +138,15 @@ MLModelFit <- function(object, Class, model, x) {
 }
 
 
+#' Revert an MLModelFit Object
+#'
+#' Function to revert an \code{MLModelFit} object to its original class.
+#'
+#' @param object model \link{fit} result.
+#'
+#' @return The supplied object with its \code{MLModelFit} classes and fields
+#' removed.
+#'
 unMLModelFit <- function(object) {
   if (is(object, "MLModelFit")) {
     if (isS4(object)) {
