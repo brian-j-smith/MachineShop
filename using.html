@@ -26,8 +26,18 @@
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -73,6 +83,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 
 
@@ -391,7 +402,7 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/brian-j-smith/MachineShop">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -451,7 +462,7 @@ Number of subjects
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 Median (Range)
 </td>
 <td style="text-align:center;">
@@ -464,7 +475,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 1 = Dead
 </td>
 <td style="text-align:center;">
@@ -472,7 +483,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 0 = Alive
 </td>
 <td style="text-align:center;">
@@ -485,7 +496,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 1 = Male
 </td>
 <td style="text-align:center;">
@@ -493,7 +504,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 0 = Female
 </td>
 <td style="text-align:center;">
@@ -506,7 +517,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 Median (Range)
 </td>
 <td style="text-align:center;">
@@ -519,7 +530,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 Median (Range)
 </td>
 <td style="text-align:center;">
@@ -532,7 +543,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 Median (Range)
 </td>
 <td style="text-align:center;">
@@ -545,7 +556,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 1 = Presence
 </td>
 <td style="text-align:center;">
@@ -553,7 +564,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 0 = Absence
 </td>
 <td style="text-align:center;">
@@ -611,13 +622,14 @@ modelinfo() %&gt;% names
 #&gt; [22] &quot;MDAModel&quot;            &quot;NaiveBayesModel&quot;     &quot;NNetModel&quot;          
 #&gt; [25] &quot;PDAModel&quot;            &quot;PLSModel&quot;            &quot;POLRModel&quot;          
 #&gt; [28] &quot;QDAModel&quot;            &quot;RandomForestModel&quot;   &quot;RangerModel&quot;        
-#&gt; [31] &quot;RPartModel&quot;          &quot;SelectedModel&quot;       &quot;StackedModel&quot;       
-#&gt; [34] &quot;SuperModel&quot;          &quot;SurvRegModel&quot;        &quot;SurvRegStepAICModel&quot;
-#&gt; [37] &quot;SVMModel&quot;            &quot;SVMANOVAModel&quot;       &quot;SVMBesselModel&quot;     
-#&gt; [40] &quot;SVMLaplaceModel&quot;     &quot;SVMLinearModel&quot;      &quot;SVMPolyModel&quot;       
-#&gt; [43] &quot;SVMRadialModel&quot;      &quot;SVMSplineModel&quot;      &quot;SVMTanhModel&quot;       
-#&gt; [46] &quot;TreeModel&quot;           &quot;TunedModel&quot;          &quot;XGBModel&quot;           
-#&gt; [49] &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;      &quot;XGBTreeModel&quot;</code></pre>
+#&gt; [31] &quot;RFSRCModel&quot;          &quot;RPartModel&quot;          &quot;SelectedModel&quot;      
+#&gt; [34] &quot;StackedModel&quot;        &quot;SuperModel&quot;          &quot;SurvRegModel&quot;       
+#&gt; [37] &quot;SurvRegStepAICModel&quot; &quot;SVMModel&quot;            &quot;SVMANOVAModel&quot;      
+#&gt; [40] &quot;SVMBesselModel&quot;      &quot;SVMLaplaceModel&quot;     &quot;SVMLinearModel&quot;     
+#&gt; [43] &quot;SVMPolyModel&quot;        &quot;SVMRadialModel&quot;      &quot;SVMSplineModel&quot;     
+#&gt; [46] &quot;SVMTanhModel&quot;        &quot;TreeModel&quot;           &quot;TunedModel&quot;         
+#&gt; [49] &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;     
+#&gt; [52] &quot;XGBTreeModel&quot;</code></pre>
 <p>Information is displayed below for the <code>GBMModel()</code> function corresponding to a generalized boosted regression model, which is applicable to survival outcomes.</p>
 <pre class="r"><code>## Model-specific information
 modelinfo(GBMModel)
@@ -664,10 +676,11 @@ modelinfo(Surv(0)) %&gt;% names
 #&gt;  [1] &quot;BARTModel&quot;           &quot;BlackBoostModel&quot;     &quot;CForestModel&quot;       
 #&gt;  [4] &quot;CoxModel&quot;            &quot;CoxStepAICModel&quot;     &quot;GAMBoostModel&quot;      
 #&gt;  [7] &quot;GBMModel&quot;            &quot;GLMBoostModel&quot;       &quot;GLMNetModel&quot;        
-#&gt; [10] &quot;RangerModel&quot;         &quot;RPartModel&quot;          &quot;SelectedModel&quot;      
-#&gt; [13] &quot;StackedModel&quot;        &quot;SuperModel&quot;          &quot;SurvRegModel&quot;       
-#&gt; [16] &quot;SurvRegStepAICModel&quot; &quot;TunedModel&quot;          &quot;XGBModel&quot;           
-#&gt; [19] &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;      &quot;XGBTreeModel&quot;
+#&gt; [10] &quot;RangerModel&quot;         &quot;RFSRCModel&quot;          &quot;RPartModel&quot;         
+#&gt; [13] &quot;SelectedModel&quot;       &quot;StackedModel&quot;        &quot;SuperModel&quot;         
+#&gt; [16] &quot;SurvRegModel&quot;        &quot;SurvRegStepAICModel&quot; &quot;TunedModel&quot;         
+#&gt; [19] &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;     
+#&gt; [22] &quot;XGBTreeModel&quot;
 
 ## Identify survival response-specific models
 modelinfo(Surv(0), CoxModel, GBMModel, SVMModel) %&gt;% names
@@ -681,10 +694,11 @@ modelinfo(Surv(surv_df$time, surv_df$status)) %&gt;% names
 #&gt;  [1] &quot;BARTModel&quot;           &quot;BlackBoostModel&quot;     &quot;CForestModel&quot;       
 #&gt;  [4] &quot;CoxModel&quot;            &quot;CoxStepAICModel&quot;     &quot;GAMBoostModel&quot;      
 #&gt;  [7] &quot;GBMModel&quot;            &quot;GLMBoostModel&quot;       &quot;GLMNetModel&quot;        
-#&gt; [10] &quot;RangerModel&quot;         &quot;RPartModel&quot;          &quot;SelectedModel&quot;      
-#&gt; [13] &quot;StackedModel&quot;        &quot;SuperModel&quot;          &quot;SurvRegModel&quot;       
-#&gt; [16] &quot;SurvRegStepAICModel&quot; &quot;TunedModel&quot;          &quot;XGBModel&quot;           
-#&gt; [19] &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;      &quot;XGBTreeModel&quot;</code></pre>
+#&gt; [10] &quot;RangerModel&quot;         &quot;RFSRCModel&quot;          &quot;RPartModel&quot;         
+#&gt; [13] &quot;SelectedModel&quot;       &quot;StackedModel&quot;        &quot;SuperModel&quot;         
+#&gt; [16] &quot;SurvRegModel&quot;        &quot;SurvRegStepAICModel&quot; &quot;TunedModel&quot;         
+#&gt; [19] &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;     
+#&gt; [22] &quot;XGBTreeModel&quot;</code></pre>
 </div>
 </div>
 <div id="fit-function" class="section level2">
@@ -929,7 +943,7 @@ Design Matrix
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left;font-weight: bold; padding-left:  2em;" indentlevel="1">
 Traditional Formula
 </td>
 <td style="text-align:center;">
@@ -949,7 +963,7 @@ Traditional Formula
 </td>
 </tr>
 <tr>
-<td style="text-align:left;font-weight: bold; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left;font-weight: bold; padding-left:  2em;" indentlevel="1">
 Design Matrix
 </td>
 <td style="text-align:center;">
@@ -1070,10 +1084,15 @@ predict(model_fit) %&gt;% head
 #&gt; [4,]  7.500909  7.500909 7.500000
 #&gt; [5,]  8.501091  8.500909 8.499455
 #&gt; [6,] 10.001364 10.000909 9.998636</code></pre>
-<p>For recipes, include the multiple response variables on the left hand side of the formula specification.</p>
+<p>For recipes, the multiple response may be defined as a single variable in a data frame or on the left hand side of a recipe formula.</p>
 <pre class="r"><code>## Numeric matrix response recipe
+## Defined in a data frame
+df &lt;- within(anscombe, y &lt;- cbind(y1, y2, y3))
+rec &lt;- recipe(y ~ x1, data = df)
+
+## Defined in a recipe formula
 rec &lt;- recipe(y1 + y2 + y3 ~ x1, data = anscombe)
-modelfit &lt;- fit(rec, model = LMModel)
+model_fit &lt;- fit(rec, model = LMModel)
 predict(model_fit) %&gt;% head
 #&gt;             y1        y2       y3
 #&gt; [1,]  8.001000  8.000909 7.999727
@@ -1090,9 +1109,17 @@ predict(model_fit) %&gt;% head
 library(survival)
 
 fit(Surv(time, status) ~ ., data = surv_train, model = GBMModel)</code></pre>
-<p>For recipes, survival responses should be specified with the individual survival time and event variables given on the left hand side of the formula, and their roles designated with the <code>role_surv()</code> function.</p>
+<p>For recipes, survival responses may be defined as a single <code>Surv</code> variable in a data frame or with the individual survival time and event variables given on the left hand side of a recipe formula and their roles designated with the <code>role_surv()</code> function.</p>
 <pre class="r"><code>## Survival response recipe
-rec &lt;- recipe(time + status ~ ., data = surv_train) %&gt;%
+## Defined in a data frame
+df &lt;- within(veteran, {
+  y &lt;- Surv(time, status)
+  remove(time, status)
+})
+rec &lt;- recipe(y ~ ., data = df)
+
+## Defined in a recipe formula
+rec &lt;- recipe(time + status ~ ., data = veteran) %&gt;%
   role_surv(time = time, event = status)
 fit(rec, model = GBMModel)</code></pre>
 </div>
@@ -1364,12 +1391,12 @@ Table 4. Confusion matrix of observed and predicted response classifications.
 </caption>
 <thead>
 <tr>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1">
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1">
 <div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
 Predicted Response
 </div>
 </th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
 <div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
 Observed Response
 </div>
@@ -1478,12 +1505,12 @@ Table 5. Confusion matrix of observed and predicted survival response classifica
 </caption>
 <thead>
 <tr>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1">
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1">
 <div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
 Predicted Response
 </div>
 </th>
-<th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
 <div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
 Observed Response
 </div>
@@ -2231,7 +2258,7 @@ fit(surv_fo, data = surv_train,
 <p>Line plots of tuning results display the resampled metric means, or another statistic specified with the <code>stat</code> argument, versus the first tuning parameter values and with lines grouped according to the remaining parameters, if any.</p>
 <pre class="r"><code>plot(trained_model, type = &quot;line&quot;)
 #&gt; $TrainStep1</code></pre>
-<p><img src="using_files/figure-html/using_strategies_tune_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="img/using_strategies_tune_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="model-selection" class="section level3">
 <h3>Model Selection</h3>
@@ -2594,7 +2621,7 @@ res &lt;- resample(type ~ ., data = Pima.tr, model = LogisticModel)
 summary(performance(res, metric = f2_score))
 #&gt;           Statistic
 #&gt; Metric          Mean    Median        SD       Min       Max NA
-#&gt;   f2_score 0.5782071 0.6060606 0.1459617 0.3571429 0.7352941  0</code></pre>
+#&gt;   f2_score 0.6090287 0.6155303 0.1707673 0.3030303 0.8571429  0</code></pre>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">
@@ -2701,7 +2728,7 @@ summary(performance(res, metric = f2_score))
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

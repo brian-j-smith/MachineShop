@@ -26,8 +26,18 @@
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -73,6 +83,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 
 
@@ -391,7 +402,7 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/brian-j-smith/MachineShop">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -438,7 +449,7 @@ Number of flowers
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 setosa
 </td>
 <td style="text-align:center;">
@@ -446,7 +457,7 @@ setosa
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 versicolor
 </td>
 <td style="text-align:center;">
@@ -454,7 +465,7 @@ versicolor
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 virginica
 </td>
 <td style="text-align:center;">
@@ -467,7 +478,7 @@ virginica
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 Median (Range)
 </td>
 <td style="text-align:center;">
@@ -480,7 +491,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 Median (Range)
 </td>
 <td style="text-align:center;">
@@ -493,7 +504,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 Median (Range)
 </td>
 <td style="text-align:center;">
@@ -506,7 +517,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 Median (Range)
 </td>
 <td style="text-align:center;">
@@ -539,13 +550,13 @@ modelinfo(factor(0)) %&gt;% names
 #&gt; [13] &quot;LMModel&quot;           &quot;MDAModel&quot;          &quot;NaiveBayesModel&quot;  
 #&gt; [16] &quot;NNetModel&quot;         &quot;PDAModel&quot;          &quot;PLSModel&quot;         
 #&gt; [19] &quot;QDAModel&quot;          &quot;RandomForestModel&quot; &quot;RangerModel&quot;      
-#&gt; [22] &quot;RPartModel&quot;        &quot;SelectedModel&quot;     &quot;StackedModel&quot;     
-#&gt; [25] &quot;SuperModel&quot;        &quot;SVMModel&quot;          &quot;SVMANOVAModel&quot;    
-#&gt; [28] &quot;SVMBesselModel&quot;    &quot;SVMLaplaceModel&quot;   &quot;SVMLinearModel&quot;   
-#&gt; [31] &quot;SVMPolyModel&quot;      &quot;SVMRadialModel&quot;    &quot;SVMSplineModel&quot;   
-#&gt; [34] &quot;SVMTanhModel&quot;      &quot;TreeModel&quot;         &quot;TunedModel&quot;       
-#&gt; [37] &quot;XGBModel&quot;          &quot;XGBDARTModel&quot;      &quot;XGBLinearModel&quot;   
-#&gt; [40] &quot;XGBTreeModel&quot;
+#&gt; [22] &quot;RFSRCModel&quot;        &quot;RPartModel&quot;        &quot;SelectedModel&quot;    
+#&gt; [25] &quot;StackedModel&quot;      &quot;SuperModel&quot;        &quot;SVMModel&quot;         
+#&gt; [28] &quot;SVMANOVAModel&quot;     &quot;SVMBesselModel&quot;    &quot;SVMLaplaceModel&quot;  
+#&gt; [31] &quot;SVMLinearModel&quot;    &quot;SVMPolyModel&quot;      &quot;SVMRadialModel&quot;   
+#&gt; [34] &quot;SVMSplineModel&quot;    &quot;SVMTanhModel&quot;      &quot;TreeModel&quot;        
+#&gt; [37] &quot;TunedModel&quot;        &quot;XGBModel&quot;          &quot;XGBDARTModel&quot;     
+#&gt; [40] &quot;XGBLinearModel&quot;    &quot;XGBTreeModel&quot;
 
 ## Model-specific information
 modelinfo(GBMModel)
@@ -879,7 +890,7 @@ summary(res)
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

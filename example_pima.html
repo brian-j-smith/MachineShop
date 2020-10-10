@@ -26,8 +26,18 @@
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -73,6 +83,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 
 
@@ -391,7 +402,7 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/brian-j-smith/MachineShop">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -438,7 +449,7 @@ Number of women
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 pos
 </td>
 <td style="text-align:center;">
@@ -446,7 +457,7 @@ pos
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 neg
 </td>
 <td style="text-align:center;">
@@ -459,7 +470,7 @@ neg
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 Median (Range)
 </td>
 <td style="text-align:center;">
@@ -472,7 +483,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 Median (Range)
 </td>
 <td style="text-align:center;">
@@ -485,7 +496,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 Median (Range)
 </td>
 <td style="text-align:center;">
@@ -498,7 +509,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 Median (Range)
 </td>
 <td style="text-align:center;">
@@ -511,7 +522,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 Median (Range)
 </td>
 <td style="text-align:center;">
@@ -524,7 +535,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 Median (Range)
 </td>
 <td style="text-align:center;">
@@ -537,7 +548,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 Median (Range)
 </td>
 <td style="text-align:center;">
@@ -550,7 +561,7 @@ Median (Range)
 </td>
 </tr>
 <tr>
-<td style="text-align:left; padding-left: 2em;" indentlevel="1">
+<td style="text-align:left; padding-left:  2em;" indentlevel="1">
 Median (Range)
 </td>
 <td style="text-align:center;">
@@ -703,7 +714,7 @@ plot(pd)</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

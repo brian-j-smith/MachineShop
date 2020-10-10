@@ -28,6 +28,15 @@
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
   pre:not([class]) {
@@ -72,6 +81,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 
 
@@ -390,7 +400,7 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/brian-j-smith/MachineShop">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -417,7 +427,7 @@ div.tocify {
 <h1>Features</h1>
 <ul>
 <li>Unified and concise interface for model fitting, prediction, and performance assessment.</li>
-<li>Current support for 51 established models from 26 <strong>R</strong> packages.</li>
+<li>Current support for 52 established models from 27 <strong>R</strong> packages.</li>
 <li>Dynamic model parameters.</li>
 <li>Ensemble modeling with stacked regression and super learners.</li>
 <li>Modeling of response variables types: binary factors, multi-class nominal and ordinal factors, numeric vectors and matrices, and censored time-to-event survival.</li>
@@ -469,7 +479,7 @@ RShowDoc(&quot;Introduction&quot;, package = &quot;MachineShop&quot;)</code></pr
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

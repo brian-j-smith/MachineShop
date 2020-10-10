@@ -28,6 +28,15 @@
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
   pre:not([class]) {
@@ -72,6 +81,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 
 
@@ -390,7 +400,7 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/brian-j-smith/MachineShop">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -410,7 +420,7 @@ div.tocify {
 
 <div id="global-settings" class="section level1">
 <h1>Global Settings</h1>
-<p>Core default behaviors of functions in the package can be viewed or changed globally through the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.5.0/topics/settings"><code>settings</code></a> function. The function accepts one or more character names of settings to view, <code>name = value</code> pairs giving the values of settings to change, a vector of these, or <code>"reset"</code> to restore all package defaults. Calls with no arguments will display the current values of all. Settings may also be supplied as a single unnamed argument which is a named list. Partial matching of setting names is supported. The setting value is returned if only one is specified to view. Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes. Such a list can be passed as an argument to <code>settings</code> to restore their values.</p>
+<p>Core default behaviors of functions in the package can be viewed or changed globally through the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.6.0/topics/settings"><code>settings</code></a> function. The function accepts one or more character names of settings to view, <code>name = value</code> pairs giving the values of settings to change, a vector of these, or <code>"reset"</code> to restore all package defaults. Calls with no arguments will display the current values of all. Settings may also be supplied as a single unnamed argument which is a named list. Partial matching of setting names is supported. The setting value is returned if only one is specified to view. Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes. Such a list can be passed as an argument to <code>settings</code> to restore their values.</p>
 <pre class="r"><code>## Package library
 library(MachineShop)
 
@@ -537,7 +547,7 @@ settings(presets)</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

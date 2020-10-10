@@ -28,6 +28,15 @@
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
   pre:not([class]) {
@@ -72,6 +81,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 
 
@@ -390,7 +400,7 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/brian-j-smith/MachineShop">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -427,13 +437,14 @@ modelinfo() %&gt;% names
 #&gt; [22] &quot;MDAModel&quot;            &quot;NaiveBayesModel&quot;     &quot;NNetModel&quot;          
 #&gt; [25] &quot;PDAModel&quot;            &quot;PLSModel&quot;            &quot;POLRModel&quot;          
 #&gt; [28] &quot;QDAModel&quot;            &quot;RandomForestModel&quot;   &quot;RangerModel&quot;        
-#&gt; [31] &quot;RPartModel&quot;          &quot;SelectedModel&quot;       &quot;StackedModel&quot;       
-#&gt; [34] &quot;SuperModel&quot;          &quot;SurvRegModel&quot;        &quot;SurvRegStepAICModel&quot;
-#&gt; [37] &quot;SVMModel&quot;            &quot;SVMANOVAModel&quot;       &quot;SVMBesselModel&quot;     
-#&gt; [40] &quot;SVMLaplaceModel&quot;     &quot;SVMLinearModel&quot;      &quot;SVMPolyModel&quot;       
-#&gt; [43] &quot;SVMRadialModel&quot;      &quot;SVMSplineModel&quot;      &quot;SVMTanhModel&quot;       
-#&gt; [46] &quot;TreeModel&quot;           &quot;TunedModel&quot;          &quot;XGBModel&quot;           
-#&gt; [49] &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;      &quot;XGBTreeModel&quot;
+#&gt; [31] &quot;RFSRCModel&quot;          &quot;RPartModel&quot;          &quot;SelectedModel&quot;      
+#&gt; [34] &quot;StackedModel&quot;        &quot;SuperModel&quot;          &quot;SurvRegModel&quot;       
+#&gt; [37] &quot;SurvRegStepAICModel&quot; &quot;SVMModel&quot;            &quot;SVMANOVAModel&quot;      
+#&gt; [40] &quot;SVMBesselModel&quot;      &quot;SVMLaplaceModel&quot;     &quot;SVMLinearModel&quot;     
+#&gt; [43] &quot;SVMPolyModel&quot;        &quot;SVMRadialModel&quot;      &quot;SVMSplineModel&quot;     
+#&gt; [46] &quot;SVMTanhModel&quot;        &quot;TreeModel&quot;           &quot;TunedModel&quot;         
+#&gt; [49] &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;     
+#&gt; [52] &quot;XGBTreeModel&quot;
 
 ## Model-specific information
 modelinfo(C50Model, CoxModel)
@@ -490,13 +501,13 @@ modelinfo(factor(0)) %&gt;% names
 #&gt; [13] &quot;LMModel&quot;           &quot;MDAModel&quot;          &quot;NaiveBayesModel&quot;  
 #&gt; [16] &quot;NNetModel&quot;         &quot;PDAModel&quot;          &quot;PLSModel&quot;         
 #&gt; [19] &quot;QDAModel&quot;          &quot;RandomForestModel&quot; &quot;RangerModel&quot;      
-#&gt; [22] &quot;RPartModel&quot;        &quot;SelectedModel&quot;     &quot;StackedModel&quot;     
-#&gt; [25] &quot;SuperModel&quot;        &quot;SVMModel&quot;          &quot;SVMANOVAModel&quot;    
-#&gt; [28] &quot;SVMBesselModel&quot;    &quot;SVMLaplaceModel&quot;   &quot;SVMLinearModel&quot;   
-#&gt; [31] &quot;SVMPolyModel&quot;      &quot;SVMRadialModel&quot;    &quot;SVMSplineModel&quot;   
-#&gt; [34] &quot;SVMTanhModel&quot;      &quot;TreeModel&quot;         &quot;TunedModel&quot;       
-#&gt; [37] &quot;XGBModel&quot;          &quot;XGBDARTModel&quot;      &quot;XGBLinearModel&quot;   
-#&gt; [40] &quot;XGBTreeModel&quot;
+#&gt; [22] &quot;RFSRCModel&quot;        &quot;RPartModel&quot;        &quot;SelectedModel&quot;    
+#&gt; [25] &quot;StackedModel&quot;      &quot;SuperModel&quot;        &quot;SVMModel&quot;         
+#&gt; [28] &quot;SVMANOVAModel&quot;     &quot;SVMBesselModel&quot;    &quot;SVMLaplaceModel&quot;  
+#&gt; [31] &quot;SVMLinearModel&quot;    &quot;SVMPolyModel&quot;      &quot;SVMRadialModel&quot;   
+#&gt; [34] &quot;SVMSplineModel&quot;    &quot;SVMTanhModel&quot;      &quot;TreeModel&quot;        
+#&gt; [37] &quot;TunedModel&quot;        &quot;XGBModel&quot;          &quot;XGBDARTModel&quot;     
+#&gt; [40] &quot;XGBLinearModel&quot;    &quot;XGBTreeModel&quot;
 
 ## Identify factor response-specific models
 modelinfo(factor(0), AdaBagModel, C50Model, CoxModel) %&gt;% names
@@ -513,13 +524,13 @@ modelinfo(iris$Species) %&gt;% names
 #&gt; [13] &quot;LMModel&quot;           &quot;MDAModel&quot;          &quot;NaiveBayesModel&quot;  
 #&gt; [16] &quot;NNetModel&quot;         &quot;PDAModel&quot;          &quot;PLSModel&quot;         
 #&gt; [19] &quot;QDAModel&quot;          &quot;RandomForestModel&quot; &quot;RangerModel&quot;      
-#&gt; [22] &quot;RPartModel&quot;        &quot;SelectedModel&quot;     &quot;StackedModel&quot;     
-#&gt; [25] &quot;SuperModel&quot;        &quot;SVMModel&quot;          &quot;SVMANOVAModel&quot;    
-#&gt; [28] &quot;SVMBesselModel&quot;    &quot;SVMLaplaceModel&quot;   &quot;SVMLinearModel&quot;   
-#&gt; [31] &quot;SVMPolyModel&quot;      &quot;SVMRadialModel&quot;    &quot;SVMSplineModel&quot;   
-#&gt; [34] &quot;SVMTanhModel&quot;      &quot;TreeModel&quot;         &quot;TunedModel&quot;       
-#&gt; [37] &quot;XGBModel&quot;          &quot;XGBDARTModel&quot;      &quot;XGBLinearModel&quot;   
-#&gt; [40] &quot;XGBTreeModel&quot;</code></pre>
+#&gt; [22] &quot;RFSRCModel&quot;        &quot;RPartModel&quot;        &quot;SelectedModel&quot;    
+#&gt; [25] &quot;StackedModel&quot;      &quot;SuperModel&quot;        &quot;SVMModel&quot;         
+#&gt; [28] &quot;SVMANOVAModel&quot;     &quot;SVMBesselModel&quot;    &quot;SVMLaplaceModel&quot;  
+#&gt; [31] &quot;SVMLinearModel&quot;    &quot;SVMPolyModel&quot;      &quot;SVMRadialModel&quot;   
+#&gt; [34] &quot;SVMSplineModel&quot;    &quot;SVMTanhModel&quot;      &quot;TreeModel&quot;        
+#&gt; [37] &quot;TunedModel&quot;        &quot;XGBModel&quot;          &quot;XGBDARTModel&quot;     
+#&gt; [40] &quot;XGBLinearModel&quot;    &quot;XGBTreeModel&quot;</code></pre>
 </div>
 </div>
 <div id="metric-information" class="section level1">
@@ -631,7 +642,7 @@ metricinfo(model_res) %&gt;% names
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
