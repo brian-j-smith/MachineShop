@@ -2,6 +2,10 @@
 
 ## Version Updates
 
+## 2.5.1
+* Implement fast random forest model `RFSRCModel`.
+* Export `unMLModelFit()` function to revert an `MLModelFit` object to its original class.
+
 ## 2.5.0
 * Add `options` argument to `step_lincomp()` and `step_sbf()`.
 * CRAN release.
