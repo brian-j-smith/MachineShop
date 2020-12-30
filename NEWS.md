@@ -2,6 +2,9 @@
 
 ## Version Updates
 
+## 2.5.2
+* Export `Performance` `diff()` method.
+
 ## 2.5.1
 * Implement fast random forest model `RFSRCModel`.
 * Export `unMLModelFit()` function to revert an `MLModelFit` object to its original class.
