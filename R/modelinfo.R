@@ -144,7 +144,7 @@ modelinfo <- function(...) {
     response_types = x@response_types,
     arguments = args(get0(x@name, mode = "function")),
     grid = has_grid(x),
-    varimp = !is.null(body(x@varimp))
+    varimp = has_varimp(x)
   )), names = x@name)
   if (length(list(...))) c(info, .modelinfo(...)) else info
 }

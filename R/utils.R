@@ -120,6 +120,11 @@ has_grid <- function(object) {
 }
 
 
+has_varimp <- function(object) {
+  !is.null(body(object@varimp))
+}
+
+
 identical_elements <- function(x, transform = identity, ...) {
   target <- transform(x[[1]])
   compare <- function(current) identical(transform(current), target, ...)
