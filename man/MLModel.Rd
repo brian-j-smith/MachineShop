@@ -39,10 +39,13 @@ unspecified (default).}
 \item{params}{list of user-specified model parameters to be passed to the
 \code{fit} function.}
 
-\item{grid}{tuning grid function whose first agument \code{x} is a
-\code{\link{ModelFrame}} of the model fit data and formula, followed by a
-\code{length} to use in generating sequences of parameter values, a number
-of grid points to sample at \code{random}, and an ellipsis (\code{...}).}
+\item{grid}{tuning grid function of three optional arguments and a required
+ellipsis (\code{...}).  The optional arguments are a
+\code{\link{ModelFrame}} \code{x} of the model fit data and formula, a
+\code{length} to use in generating sequences of parameter values, and a
+number of grid points to sample at \code{random}.  If argument \code{x} is
+included, then any preprocessing steps specified for the data will be
+applied prior to package calls to the function.}
 
 \item{fit}{model fitting function whose arguments are a \code{formula}, a
 \code{\link{ModelFrame}} named \code{data}, case \code{weights}, and an

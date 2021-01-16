@@ -143,7 +143,7 @@ modelinfo <- function(...) {
     packages = x@packages,
     response_types = x@response_types,
     arguments = args(get0(x@name, mode = "function")),
-    grid = !is.null(body(x@grid)),
+    grid = has_grid(x),
     varimp = !is.null(body(x@varimp))
   )), names = x@name)
   if (length(list(...))) c(info, .modelinfo(...)) else info

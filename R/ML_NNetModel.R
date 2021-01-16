@@ -53,7 +53,7 @@ NNetModel <- function(
     response_types = c("factor", "numeric"),
     predictor_encoding = "model.matrix",
     params = params(environment()),
-    grid = function(x, length, ...) {
+    grid = function(length, ...) {
       list(
         size = round(seq_range(1, 2, c(1, 20), length = length)),
         decay = c(0, 10^seq_inner(-5, 1, length - 1))

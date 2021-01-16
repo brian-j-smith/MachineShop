@@ -78,7 +78,7 @@ BlackBoostModel <- function(
                        "numeric", "PoissonVariate", "Surv"),
     predictor_encoding = "terms",
     params = params,
-    grid = function(x, length, ...) {
+    grid = function(length, ...) {
       list(
         mstop = round(seq_range(0, 50, c(1, 1000), length + 1)),
         maxdepth = 1:min(length, 10)

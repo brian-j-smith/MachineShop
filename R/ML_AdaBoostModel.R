@@ -60,7 +60,7 @@ AdaBoostModel <- function(
     response_types = "factor",
     predictor_encoding = "terms",
     params = params,
-    grid = function(x, length, random, ...) {
+    grid = function(length, random, ...) {
       params <- list(
         mfinal = round(seq_range(0, 25, c(1, 200), length + 1)),
         maxdepth = 1:min(length, 30)
