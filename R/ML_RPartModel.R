@@ -46,9 +46,10 @@ RPartModel <- function(
     predictor_encoding = "terms",
     params = list(control = as.call(c(.(list), params(environment())))),
     grid = function(x, length, ...) {
-      cptable <- fit(x, model = RPartModel(cp = 0))$cptable[, "CP"]
+      cptable <- fit(x, model = RPartModel(cp = 0))$cptable
+      xerror_order <- order(cptable[, "xerror"] + cptable[, "xstd"])
       list(
-        cp = seq(min(cptable), max(cptable), length = length)
+        cp = sort(head(cptable[xerror_order, "CP"], length))
       )
     },
     fit = function(formula, data, weights, ...) {
