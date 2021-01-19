@@ -31,8 +31,18 @@ writeLines("# References", out)
 
 close(out)
 
-file.copy("docs/src/setup.R", file.path(dest, "setup.R"), overwrite = TRUE)
-file.copy("docs/src/img/FigModelDAG.png", file.path(dest, "img/FigModelDAG.png"), overwrite = TRUE)
-file.copy("docs/src/img/FigNestedCV.png", file.path(dest, "img/FigNestedCV.png"), overwrite = TRUE)
-file.copy("docs/src/bibliography.bib", file.path(dest, "bibliography.bib"),
+file.copy("docs/src/setup.R",
+          file.path(dest, "setup.R"),
+          overwrite = TRUE)
+file.copy("docs/src/img/using_strategies_tune_plot-1.png",
+          file.path(dest, "img/using_strategies_tune_plot-1.png"),
+          overwrite = TRUE)
+file.copy("docs/src/img/FigModelDAG.png",
+          file.path(dest, "img/FigModelDAG.png"),
+          overwrite = TRUE)
+file.copy("docs/src/img/FigNestedCV.png",
+          file.path(dest, "img/FigNestedCV.png"),
+          overwrite = TRUE)
+file.copy("docs/src/bibliography.bib",
+          file.path(dest, "bibliography.bib"),
           overwrite = TRUE)

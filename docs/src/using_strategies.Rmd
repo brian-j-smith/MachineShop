@@ -19,7 +19,7 @@ Inputs to model fitting functions define the predictor and response variables an
 
 Preprocessing recipes may have step with parameters that affect predictive performance.  Steps can be tuned over a grid of parameter values with `TunedInput()` to select the best performing values.  Calls to `TunedInput()` return an input object that may be trained on data with the `fit()` function or evaluated for predictive performance with `resample()`.  As an example, a principal components analysis (PCA) step could be included in a preprocessing recipe for tuning over the number of components to retain in the final model.  Such a recipe is shown below accompanied by a call to `expand_steps()` to construct a tuning grid.  The grid parameter `num_comp` and name `PCA` correspond to the argument and id of the `step_pca()` function to which the values `1:3` apply.  The recipe and grid may then be passed to `TunedInput()` for model fitting.
 
-```{r using_stategies_TunedInput1}
+```{r using_stategies_TunedInput1, eval=FALSE}
 ## Preprocessing recipe with PCA steps
 pca_rec <- recipe(time + status ~ ., data = surv_train) %>%
   role_surv(time = time, event = status) %>%
@@ -38,10 +38,45 @@ tun_rec <- TunedInput(pca_rec, grid = pca_grid)
 
 From the fit, the resulting model can be extracted with `as.MLModel()`.  The output shows that one principal component was selected.  Resample estimation of predictive performance is applied to a `TunedInput` specification for the selection.  The default resampling method is cross-validation.  Other methods, performance metrics, and selection statistics can be supplied to the `TunedInput()` arguments.
 
-```{r using_stategies_TunedInput2}
+```{r using_stategies_TunedInput2, eval=FALSE}
 ## Input-tuned model fit and final trained model
 model_fit <- fit(tun_rec, model = GBMModel)
 as.MLModel(model_fit)
+#> Object of class "MLModel"
+#> 
+#> Model name: GBMModel
+#> Label: Trained Generalized Boosted Regression
+#> Package: gbm
+#> Response types: factor, numeric, PoissonVariate, Surv
+#> Tuning grid: TRUE
+#> Variable importance: TRUE
+#> 
+#> Parameters:
+#> List of 5
+#>  $ n.trees          : num 100
+#>  $ interaction.depth: num 1
+#>  $ n.minobsinnode   : num 10
+#>  $ shrinkage        : num 0.1
+#>  $ bag.fraction     : num 0.5
+#> 
+#> TrainStep1 :
+#> Object of class "TrainBit"
+#> 
+#> Grid (selected = 3):
+#> # A tibble: 3 x 1
+#>   ModelRecipe$PCA$num_comp
+#>                      <int>
+#> 1                        1
+#> 2                        2
+#> 3                        3
+#> 
+#> Object of class "Performance"
+#> 
+#> Metrics: C-Index 
+#> Models: 1, 2, 3
+#> 
+#> Selected model: 3 
+#> C-Index value: 0.7241954
 ```
 
 
@@ -49,7 +84,7 @@ as.MLModel(model_fit)
 
 Selection of recipes with different steps or predictors can be conducted with `SelectedInput()`.
 
-```{r using_strategies_SelectedInput1}
+```{r using_strategies_SelectedInput1, eval=FALSE}
 ## Preprocessing recipe without PCA steps
 rec1 <- recipe(time + status ~ sex + age + year + thickness + ulcer, data = surv_train) %>%
   role_surv(time = time, event = status)
@@ -66,10 +101,45 @@ sel_rec <- SelectedInput(
 
 In this case, the first recipe with all original predictors and no PCA steps is selected.
 
-```{r using_strategies_SelectedInput2}
+```{r using_strategies_SelectedInput2, eval=FALSE}
 ## Input-selected model fit and model
 model_fit <- fit(sel_rec, model = GBMModel)
 as.MLModel(model_fit)
+#> Object of class "MLModel"
+#> 
+#> Model name: GBMModel
+#> Label: Trained Generalized Boosted Regression
+#> Package: gbm
+#> Response types: factor, numeric, PoissonVariate, Surv
+#> Tuning grid: TRUE
+#> Variable importance: TRUE
+#> 
+#> Parameters:
+#> List of 5
+#>  $ n.trees          : num 100
+#>  $ interaction.depth: num 1
+#>  $ n.minobsinnode   : num 10
+#>  $ shrinkage        : num 0.1
+#>  $ bag.fraction     : num 0.5
+#> 
+#> TrainStep1 :
+#> Object of class "TrainBit"
+#> 
+#> Grid (selected = 1):
+#> # A tibble: 3 x 1
+#>   ModelRecipe
+#>   <fct>      
+#> 1 1          
+#> 2 2          
+#> 3 3          
+#> 
+#> Object of class "Performance"
+#> 
+#> Metrics: C-Index 
+#> Models: Recipe.1, Recipe.2, Recipe.3
+#> 
+#> Selected model: Recipe.1 
+#> C-Index value: 0.7311282
 ```
 
 Selection can also be performed among traditional formulas, design matrices, or model frames.
@@ -111,7 +181,7 @@ Models define the functional relationships between predictor and response variab
 
 Many of the package-supplied modeling functions have arguments, or tuning parameters, that control aspects of their model fitting algorithms.  For example, `GBMModel` parameters `n.trees` and `interaction.depth` control the number of decision trees to fit and the maximum tree depths.  When called with a `TunedModel`, the `fit()` function performs model fitting over a grid of parameter values and returns the model with the most optimal values.  Optimality is determined based on the first performance metric of the `metrics` argument to `TunedModel()` if given or the first default metric of the `performance()` function otherwise.  Argument `grid` additionally controls the construction of grid values and can be a single numeric value giving the grid length in each parameter dimension.  As shown in the output below, `as.MLModel()` will extract a tuned model from fit results for viewing of the tuning parameter grid values, the names of models fit to each, all calculated metrics, the final model selected, the metric upon which its selection was based, and its tuning parameters.
 
-```{r using_strategies_tune}
+```{r using_strategies_tune, eval=FALSE}
 ## Tune over automatic grid of model parameters
 model_fit <- fit(surv_fo, data = surv_train,
                  model = TunedModel(
@@ -121,6 +191,48 @@ model_fit <- fit(surv_fo, data = surv_train,
                    metrics = c("CIndex" = cindex, "RMSE" = rmse)
                  ))
 (trained_model <- as.MLModel(model_fit))
+#> Object of class "MLModel"
+#> 
+#> Model name: GBMModel
+#> Label: Trained Generalized Boosted Regression
+#> Package: gbm
+#> Response types: factor, numeric, PoissonVariate, Surv
+#> Tuning grid: TRUE
+#> Variable importance: TRUE
+#> 
+#> Parameters:
+#> List of 5
+#>  $ n.trees          : num 50
+#>  $ interaction.depth: int 1
+#>  $ n.minobsinnode   : num 10
+#>  $ shrinkage        : num 0.1
+#>  $ bag.fraction     : num 0.5
+#> 
+#> TrainStep1 :
+#> Object of class "TrainBit"
+#> 
+#> Grid (selected = 1):
+#> # A tibble: 9 x 1
+#>   Model$n.trees $interaction.depth
+#>           <dbl>              <int>
+#> 1            50                  1
+#> 2           100                  1
+#> 3           150                  1
+#> 4            50                  2
+#> 5           100                  2
+#> 6           150                  2
+#> 7            50                  3
+#> 8           100                  3
+#> 9           150                  3
+#> 
+#> Object of class "Performance"
+#> 
+#> Metrics: CIndex, RMSE 
+#> Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6,
+#>   GBMModel.7, GBMModel.8, GBMModel.9
+#> 
+#> Selected model: GBMModel.1 
+#> CIndex value: 0.7730294
 ```
 
 Grid values may also be a call to `Grid()` with the grid `length` and number of grid points to sample at `random`, a user-defined grid of points specified with the `expand_params()` function, or a data frame of grid points (not shown).
@@ -146,14 +258,47 @@ fit(surv_fo, data = surv_train,
 
 Statistics summarizing the resampled performance metrics across all tuning parameter combinations can be obtained with the `summary()` function.
   
-```{r using_strategies_tune_summary}
+```{r using_strategies_tune_summary, eval=FALSE}
 summary(trained_model)
+#> $TrainStep1
+#> , , Metric = CIndex
+#> 
+#>             Statistic
+#> Model             Mean    Median         SD       Min       Max NA
+#>   GBMModel.1 0.7730294 0.7692308 0.07206580 0.6363636 0.9354839  0
+#>   GBMModel.2 0.7610614 0.7663043 0.06966664 0.6256684 0.8924731  0
+#>   GBMModel.3 0.7564966 0.7647059 0.06743686 0.6480447 0.8870968  0
+#>   GBMModel.4 0.7687377 0.7616580 0.08218605 0.6256983 0.9301075  0
+#>   GBMModel.5 0.7629211 0.7616580 0.07106607 0.6592179 0.9032258  0
+#>   GBMModel.6 0.7562730 0.7409326 0.07500287 0.5865922 0.8602151  0
+#>   GBMModel.7 0.7608822 0.7487685 0.07981747 0.5989305 0.8978495  0
+#>   GBMModel.8 0.7514888 0.7700535 0.06886940 0.6201117 0.8494624  0
+#>   GBMModel.9 0.7443015 0.7564767 0.06410204 0.6312849 0.8324324  0
+#> 
+#> , , Metric = RMSE
+#> 
+#>             Statistic
+#> Model             Mean   Median       SD      Min       Max NA
+#>   GBMModel.1  3818.182 3835.515 1251.954 1992.999  5953.100  0
+#>   GBMModel.2  4016.418 3642.123 1586.513 1792.675  8511.133  0
+#>   GBMModel.3  4226.311 3790.948 1873.500 1342.394  8857.896  0
+#>   GBMModel.4  5614.160 4428.054 3009.006 1912.743 11666.415  0
+#>   GBMModel.5  5407.976 3893.101 3288.373 1419.643 14090.833  0
+#>   GBMModel.6  5450.541 5941.670 2733.285 1535.649 10480.901  0
+#>   GBMModel.7  7922.834 6177.645 4506.633 2941.312 16243.705  0
+#>   GBMModel.8 10728.876 7384.484 7889.461 2564.302 26325.938  0
+#>   GBMModel.9 11470.890 9691.195 7191.709 1999.900 26402.048  0
 ```
 
 Line plots of tuning results display the resampled metric means, or another statistic specified with the `stat` argument, versus the first tuning parameter values and with lines grouped according to the remaining parameters, if any.
 
-```{r using_strategies_tune_plot}
+```{r using_strategies_tune_plot, eval=FALSE}
 plot(trained_model, type = "line")
+#> $TrainStep1
+```
+
+```{r using_strategies_tune_png, echo = FALSE}
+knitr::include_graphics("img/using_strategies_tune_plot-1.png")
 ```
 
 
@@ -161,7 +306,7 @@ plot(trained_model, type = "line")
 
 Model selection can be conducted by calling `fit()` with a `SelectedModel` to automatically choose from any combination of models and model parameters.  Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values.  Combinations of model functions, function names, or function calls can be supplied to `SelectedModel()` in order to define sets of candidate models from which to select.  An `expand_model()` helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired.
 
-```{r using_strategies_select, results="hide"}
+```{r using_strategies_select, results="hide", eval=FALSE}
 ## Model interface for model selection
 sel_model <- SelectedModel(
   expand_model(GBMModel, n.trees = c(50, 100), interaction.depth = 1:2),
@@ -176,7 +321,7 @@ fit(surv_fo, data = surv_train, model = sel_model)
 
 Selection may also be performed over candidate sets that include tuned models.  For instance, the `SelectedModel()` function is applicable to sets containing different classes of models each individually tuned over a grid of parameters.
 
-```{r using_strategies_select_tune, results="hide"}
+```{r using_strategies_select_tune, results="hide", eval=FALSE}
 ## Model interface for selection among tuned models
 sel_tun_model <- SelectedModel(
   TunedModel(GBMModel, control = surv_means_control),
@@ -206,17 +351,23 @@ subject to the constraints that all $w_m \ge 0$ and $\sum_m w_m = 1$.  K-fold cr
 
 Super learners are a generalization of stacked regression that fit a specified model, such as `GBMModel`, to case responses $y_i$, base learner predictions $\hat{f}^{-\kappa(i)}(x_i)$, and optionally also to the original predictor variables $x_i$.  Given below are examples of a stacked regression and super learner each fit with gradient boosted, random forest, and Cox regression base learners.  A separate gradient boosted model is used as the super learner in the latter.
 
-```{r using_strategies_ensembles}
+```{r using_strategies_ensembles, eval=FALSE}
 ## Stacked regression
 stackedmodel <- StackedModel(GLMBoostModel, CForestModel, CoxModel)
 res_stacked <- resample(surv_fo, data = surv_train, model = stackedmodel)
 summary(res_stacked)
+#>          Statistic
+#> Metric         Mean    Median        SD Min    Max NA
+#>   C-Index 0.7560737 0.7467949 0.1341055 0.5 0.9375  0
 
 ## Super learner
 supermodel <- SuperModel(GLMBoostModel, CForestModel, CoxModel,
                          model = GBMModel)
 res_super <- resample(surv_fo, data = surv_train, model = supermodel)
 summary(res_super)
+#>          Statistic
+#> Metric         Mean    Median         SD  Min       Max NA
+#>   C-Index 0.7146186 0.7440476 0.09896758 0.52 0.8536585  0
 ```
 
 
