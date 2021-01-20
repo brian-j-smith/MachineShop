@@ -1,8 +1,8 @@
 Package: MachineShop
 Type: Package
 Title: Machine Learning Models and Tools
-Version: 2.5.2
-Date: 2020-12-30
+Version: 2.6.0
+Date: 2021-01-19
 Authors@R: person(c("Brian", "J"), "Smith",
                   email = "brian-j-smith@uiowa.edu",
                   role = c("aut", "cre"))
