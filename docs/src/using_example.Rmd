@@ -5,11 +5,11 @@ Use of the **MachineShop** package is demonstrated with a survival analysis exam
 Survival analysis is performed with the `Melanoma` dataset from the **MASS** package [@andersen:1993:SMB].  This dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at study termination, or (3) death from other causes for 205 Denmark patients with malignant melanomas.  Also provided are potential predictors of the survival outcomes.  The analysis begins by loading required packages **MachineShop**, **survival** [@therneau:2020:SA], and **MASS** as well as **magrittr** [@bache:2014:MFP] for its pipe (`%>%`) operator to simplify some of the code syntax.  For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one. 
 
 ```{r using_example_melanoma}
-## Analysis libraries
+## Analysis libraries and dataset
 library(MachineShop)
 library(survival)
-library(MASS)
 library(magrittr)
+data(Melanoma, package = "MASS")
 
 ## Malignant melanoma analysis dataset
 surv_df <- within(Melanoma, status <- as.numeric(status != 2))

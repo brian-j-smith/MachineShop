@@ -39,7 +39,7 @@
 #' \code{\link{resample}}
 #'
 #' @examples
-#' library(MASS)
+#' data(Pima.tr, package = "MASS")
 #'
 #' fit(type ~ ., data = Pima.tr, model = GAMBoostModel)
 #'

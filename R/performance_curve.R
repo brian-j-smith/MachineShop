@@ -18,7 +18,7 @@
 #' @seealso \code{\link{c}}, \code{\link{plot}}, \code{\link{summary}}
 #'
 #' @examples
-#' library(MASS)
+#' data(Pima.tr, package = "MASS")
 #'
 #' res <- resample(type ~ ., data = Pima.tr, model = GBMModel)
 #' lf <- lift(res)
@@ -67,7 +67,7 @@ LiftCurve <- function(...) {
 #'
 #'
 #' @examples
-#' library(MASS)
+#' data(Pima.tr, package = "MASS")
 #'
 #' res <- resample(type ~ ., data = Pima.tr, model = GBMModel)
 #'

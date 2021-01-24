@@ -30,7 +30,7 @@ scaled in the calculation of variable importance to range from 0 to 100.  To
 obtain unscaled importance values, set \code{scale = FALSE}.
 }
 \examples{
-library(MASS)
+data(Boston, package = "MASS")
 
 df <- within(Boston,
              medv <- cut(medv,

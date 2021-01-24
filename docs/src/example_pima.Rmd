@@ -27,10 +27,10 @@ summary_kbl(stats, na.omit(PimaIndiansDiabetes2))
 ## Training Set Analysis
 
 ```{r ex_pima_fit}
-## Analysis libraries
+## Analysis libraries and dataset
 library(MachineShop)
-library(mlbench)
 library(ggplot2)
+data(Pima, package = "mlbench")
 
 ## Parallel processing
 library(doParallel)

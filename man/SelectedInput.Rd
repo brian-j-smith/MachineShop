@@ -96,7 +96,7 @@ fit(sel_mf, model = GLMModel)
 
 ## Selected recipe
 library(recipes)
-library(MASS)
+data(Boston, package = "MASS")
 
 rec1 <- recipe(medv ~ crim + zn + indus + chas + nox + rm, data = Boston)
 rec2 <- recipe(medv ~ chas + nox + rm + age + dis + rad + tax, data = Boston)

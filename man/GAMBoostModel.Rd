@@ -60,7 +60,7 @@ Default values for the \code{NULL} arguments and further model details can be
 found in the source links below.
 }
 \examples{
-library(MASS)
+data(Pima.tr, package = "MASS")
 
 fit(type ~ ., data = Pima.tr, model = GAMBoostModel)
 

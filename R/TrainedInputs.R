@@ -43,7 +43,7 @@
 #'
 #' ## Selected recipe
 #' library(recipes)
-#' library(MASS)
+#' data(Boston, package = "MASS")
 #'
 #' rec1 <- recipe(medv ~ crim + zn + indus + chas + nox + rm, data = Boston)
 #' rec2 <- recipe(medv ~ chas + nox + rm + age + dis + rad + tax, data = Boston)
@@ -228,7 +228,7 @@ SelectedInput.list <- function(x, ...) {
 #'
 #' @examples
 #' library(recipes)
-#' library(MASS)
+#' data(Boston, package = "MASS")
 #'
 #' rec <- recipe(medv ~ ., data = Boston) %>%
 #'   step_pca(all_numeric(), -all_outcomes(), id = "pca")

@@ -48,7 +48,7 @@ Recipe tuning over a grid of parameter values.
 }
 \examples{
 library(recipes)
-library(MASS)
+data(Boston, package = "MASS")
 
 rec <- recipe(medv ~ ., data = Boston) \%>\%
   step_pca(all_numeric(), -all_outcomes(), id = "pca")

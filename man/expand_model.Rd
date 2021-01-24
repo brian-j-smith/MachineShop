@@ -22,7 +22,7 @@ or \code{FALSE} if all points are to be returned.}
 Expand a model over all combinations of a grid of tuning parameters.
 }
 \examples{
-library(MASS)
+data(Boston, package = "MASS")
 
 models <- expand_model(GBMModel, n.trees = c(50, 100),
                                  interaction.depth = 1:2)

@@ -8,8 +8,9 @@ Variable specification defines the relationship between response and predictor v
 Variables may be specified with a traditional formula and data frame pair, as was done at the start of the survival example.  This specification allows for crossing (`*`), interaction (`:`), and removal (`-`) of predictors in the formula; `.` substitution of variables not already appearing in the formula; in-line functions of response variables; and in-lining of operators and functions of predictors.
 
 ```{r using_variables_formula}
-## Dataset library
-library(MASS)
+## Datasets
+data(Pima.te, package = "MASS")
+data(Pima.tr, package = "MASS")
 
 ## Formula specification
 model_fit <- fit(type ~ ., data = Pima.tr, model = GBMModel)

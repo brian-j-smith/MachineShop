@@ -18,7 +18,8 @@ In the case of a binary factor, the second factor level is treated as the event 
 
 ```{r using_responses_factor_binary}
 ## Pima Indians diabetes statuses (binary factor)
-library(MASS)
+data(Pima.te, package = "MASS")
+data(Pima.tr, package = "MASS")
 
 model_fit <- fit(type ~ ., data = Pima.tr, model = GBMModel)
 predict(model_fit, newdata = Pima.te) %>% head

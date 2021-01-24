@@ -85,7 +85,7 @@ Once created, model and metric extensions can be used with the package-supplied 
 
 ```{r using_extensions_usage}
 ## Logistic regression analysis
-library(MASS)
+data(Pima.tr, package = "MASS")
 res <- resample(type ~ ., data = Pima.tr, model = LogisticModel)
 summary(performance(res, metric = f2_score))
 ```

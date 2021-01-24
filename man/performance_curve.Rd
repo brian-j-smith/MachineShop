@@ -50,7 +50,7 @@ cutoff probabilities.  Available curves include receiver operating
 characteristic (ROC) and precision recall.
 }
 \examples{
-library(MASS)
+data(Pima.tr, package = "MASS")
 
 res <- resample(type ~ ., data = Pima.tr, model = GBMModel)
 

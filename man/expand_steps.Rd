@@ -23,7 +23,7 @@ steps of a preprocessing recipe.
 }
 \examples{
 library(recipes)
-library(MASS)
+data(Boston, package = "MASS")
 
 rec <- recipe(medv ~ ., data = Boston) \%>\%
   step_corr(all_numeric(), -all_outcomes(), id = "corr") \%>\%

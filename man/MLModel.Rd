@@ -110,7 +110,7 @@ LogisticModel <- MLModel(
   }
 )
 
-library(MASS)
+data(Pima.tr, package = "MASS")
 res <- resample(type ~ ., data = Pima.tr, model = LogisticModel)
 summary(res)
 

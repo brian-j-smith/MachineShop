@@ -23,7 +23,7 @@
 #' @seealso \code{\link[MASS]{polr}}, \code{\link{fit}}, \code{\link{resample}}
 #'
 #' @examples
-#' library(MASS)
+#' data(Boston, package = "MASS")
 #'
 #' df <- within(Boston,
 #'              medv <- cut(medv,
