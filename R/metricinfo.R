@@ -35,7 +35,7 @@
 #'
 metricinfo <- function(...) {
   args <- list(...)
-  args <- if (length(args)) unname(args) else as.list(.metric_names)
+  args <- if (length(args)) unname(args) else as.list(settings("metrics"))
   info <- do.call(.metricinfo, args)
 
   is_type <- if (length(info)) !map_logi(is, info, "list") else NULL
@@ -48,37 +48,6 @@ metricinfo <- function(...) {
 
   info[unique(names(info))]
 }
-
-
-.metric_names = c("accuracy",
-                  "auc",
-                  "brier",
-                  "cindex",
-                  "cross_entropy",
-                  "f_score",
-                  "fnr",
-                  "fpr",
-                  "gini",
-                  "kappa2",
-                  "mae",
-                  "mse",
-                  "msle",
-                  "npv",
-                  "ppv",
-                  "pr_auc",
-                  "precision",
-                  "r2",
-                  "recall",
-                  "rmse",
-                  "rmsle",
-                  "roc_auc",
-                  "roc_index",
-                  "rpp",
-                  "sensitivity",
-                  "specificity",
-                  "tnr",
-                  "tpr",
-                  "weighted_kappa2")
 
 
 .metricinfo <- function(x, ...) {

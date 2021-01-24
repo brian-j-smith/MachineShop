@@ -38,7 +38,7 @@
 #'
 modelinfo <- function(...) {
   args <- list(...)
-  args <- if (length(args)) unname(args) else as.list(.model_names)
+  args <- if (length(args)) unname(args) else as.list(settings("models"))
   info <- do.call(.modelinfo, args)
 
   is_type <- if (length(info)) !map_logi(is, info, "list") else NULL
@@ -51,60 +51,6 @@ modelinfo <- function(...) {
 
   info[unique(names(info))]
 }
-
-
-.model_names <- c("AdaBagModel",
-                  "AdaBoostModel",
-                  "BARTModel",
-                  "BARTMachineModel",
-                  "BlackBoostModel",
-                  "C50Model",
-                  "CForestModel",
-                  "CoxModel",
-                  "CoxStepAICModel",
-                  "EarthModel",
-                  "FDAModel",
-                  "GAMBoostModel",
-                  "GBMModel",
-                  "GLMBoostModel",
-                  "GLMModel",
-                  "GLMStepAICModel",
-                  "GLMNetModel",
-                  "KNNModel",
-                  "LARSModel",
-                  "LDAModel",
-                  "LMModel",
-                  "MDAModel",
-                  "NaiveBayesModel",
-                  "NNetModel",
-                  "PDAModel",
-                  "PLSModel",
-                  "POLRModel",
-                  "QDAModel",
-                  "RandomForestModel",
-                  "RangerModel",
-                  "RFSRCModel",
-                  "RPartModel",
-                  "SelectedModel",
-                  "StackedModel",
-                  "SuperModel",
-                  "SurvRegModel",
-                  "SurvRegStepAICModel",
-                  "SVMModel",
-                  "SVMANOVAModel",
-                  "SVMBesselModel",
-                  "SVMLaplaceModel",
-                  "SVMLinearModel",
-                  "SVMPolyModel",
-                  "SVMRadialModel",
-                  "SVMSplineModel",
-                  "SVMTanhModel",
-                  "TreeModel",
-                  "TunedModel",
-                  "XGBModel",
-                  "XGBDARTModel",
-                  "XGBLinearModel",
-                  "XGBTreeModel")
 
 
 .modelinfo <- function(x, ...) {

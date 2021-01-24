@@ -168,6 +168,14 @@ settings <- function(...) {
 #################### Settings Utility Functions ####################
 
 
+check_const <- function(x, name) {
+  if (!identical(x, x <- .global_defaults[[name]])) {
+    warn("MachineShop '", name, "' setting cannot be changed")
+  }
+  x
+}
+
+
 check_logical <- function(x) {
   result <- as.logical(x)[[1]]
   if (!(isTRUE(result) || isFALSE(result))) {
@@ -281,6 +289,41 @@ MachineShop_global <- as.environment(list(
       check = check_match(c("efron", "breslow", "fleming-harrington"))
     ),
 
+    metrics = list(
+      value = c(
+        "accuracy",
+        "auc",
+        "brier",
+        "cindex",
+        "cross_entropy",
+        "f_score",
+        "fnr",
+        "fpr",
+        "gini",
+        "kappa2",
+        "mae",
+        "mse",
+        "msle",
+        "npv",
+        "ppv",
+        "pr_auc",
+        "precision",
+        "r2",
+        "recall",
+        "rmse",
+        "rmsle",
+        "roc_auc",
+        "roc_index",
+        "rpp",
+        "sensitivity",
+        "specificity",
+        "tnr",
+        "tpr",
+        "weighted_kappa2"
+      ),
+      check = function(x) check_const(x, "metrics")
+    ),
+
     metrics.ConfusionMatrix = list(
       value = c("Accuracy" = "accuracy",
                 "Kappa" = "kappa2",
@@ -321,6 +364,64 @@ MachineShop_global <- as.environment(list(
                 "ROC AUC" = "roc_auc",
                 "Accuracy" = "accuracy"),
       check = check_metrics
+    ),
+
+    models = list(
+      value = c(
+        "AdaBagModel",
+        "AdaBoostModel",
+        "BARTMachineModel",
+        "BARTModel",
+        "BlackBoostModel",
+        "C50Model",
+        "CForestModel",
+        "CoxModel",
+        "CoxStepAICModel",
+        "EarthModel",
+        "FDAModel",
+        "GAMBoostModel",
+        "GBMModel",
+        "GLMBoostModel",
+        "GLMModel",
+        "GLMStepAICModel",
+        "GLMNetModel",
+        "KNNModel",
+        "LARSModel",
+        "LDAModel",
+        "LMModel",
+        "MDAModel",
+        "NaiveBayesModel",
+        "NNetModel",
+        "PDAModel",
+        "PLSModel",
+        "POLRModel",
+        "QDAModel",
+        "RandomForestModel",
+        "RangerModel",
+        "RFSRCModel",
+        "RPartModel",
+        "SelectedModel",
+        "StackedModel",
+        "SuperModel",
+        "SurvRegModel",
+        "SurvRegStepAICModel",
+        "SVMModel",
+        "SVMANOVAModel",
+        "SVMBesselModel",
+        "SVMLaplaceModel",
+        "SVMLinearModel",
+        "SVMPolyModel",
+        "SVMRadialModel",
+        "SVMSplineModel",
+        "SVMTanhModel",
+        "TreeModel",
+        "TunedModel",
+        "XGBModel",
+        "XGBDARTModel",
+        "XGBLinearModel",
+        "XGBTreeModel"
+      ),
+      check = function(x) check_const(x, "models")
     ),
 
     progress.resample = list(
@@ -369,12 +470,7 @@ MachineShop_global <- as.environment(list(
         "cosh", "sinh", "tanh", "acosh", "asinh", "atanh",
         "lgamma", "gamma", "digamma", "trigamma"
       )),
-      check = function(x) {
-        if (!identical(x, x <- .global_defaults$RHS.formula)) {
-          warn("MachineShop 'RHS.formula' setting cannot be changed")
-        }
-        x
-      }
+      check = function(x) check_const(x, "RHS.formula")
     ),
 
     stat.Curve = list(
