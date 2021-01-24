@@ -21,7 +21,11 @@
 #' @seealso \code{\link[pls]{mvr}}, \code{\link{fit}}, \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package pls to run
+#'
 #' fit(sale_amount ~ ., data = ICHomes, model = PLSModel)
+#' }
 #'
 PLSModel <- function(ncomp = 1, scale = FALSE) {
 

@@ -25,11 +25,15 @@ responses that are \code{NA} when calculating metrics.}
 Calculate lift curves from observed and predicted responses.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package gbm to run
+
 data(Pima.tr, package = "MASS")
 
 res <- resample(type ~ ., data = Pima.tr, model = GBMModel)
 lf <- lift(res)
 plot(lf)
+}
 
 }
 \seealso{

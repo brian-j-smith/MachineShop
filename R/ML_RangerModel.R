@@ -43,7 +43,11 @@
 #' \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package ranger to run
+#'
 #' fit(Species ~ ., data = iris, model = RangerModel)
+#' }
 #'
 RangerModel <- function(
   num.trees = 500, mtry = NULL,

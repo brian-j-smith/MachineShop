@@ -30,7 +30,11 @@
 #' \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested packages rpart and partykit to run
+#'
 #' fit(Species ~ ., data = iris, model = RPartModel)
+#' }
 #'
 RPartModel <- function(
   minsplit = 20, minbucket = round(minsplit / 3), cp = 0.01, maxcompete = 4,

@@ -123,8 +123,12 @@ from 0 to 100.  To obtain unscaled importance values, set
 \code{scale = FALSE}.  See example below.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package randomForestSRC to run
+
 model_fit <- fit(sale_amount ~ ., data = ICHomes, model = RFSRCModel)
 varimp(model_fit, metric = "random", scale = TRUE)
+}
 
 }
 \seealso{

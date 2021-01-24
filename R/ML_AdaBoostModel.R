@@ -37,7 +37,11 @@
 #' \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package adabag to run
+#'
 #' fit(Species ~ ., data = iris, model = AdaBoostModel(mfinal = 5))
+#' }
 #'
 AdaBoostModel <- function(
   boos = TRUE, mfinal = 100, coeflearn = c("Breiman", "Freund", "Zhu"),

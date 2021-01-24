@@ -51,9 +51,13 @@ The return value is a \code{ConfusionMatrix} class object that inherits from
 Calculate confusion matrices of predicted and observed responses.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package gbm to run
+
 res <- resample(Species ~ ., data = iris, model = GBMModel)
 (conf <- confusion(res))
 plot(conf)
+}
 
 }
 \seealso{

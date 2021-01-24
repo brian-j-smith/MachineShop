@@ -28,7 +28,11 @@
 #' \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package randomForest to run
+#'
 #' fit(sale_amount ~ ., data = ICHomes, model = RandomForestModel)
+#' }
 #'
 RandomForestModel <- function(
   ntree = 500,

@@ -24,7 +24,11 @@ variable given independent predictor variables using Bayes rule.
 Further model details can be found in the source link below.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package e1071 to run
+
 fit(Species ~ ., data = iris, model = NaiveBayesModel)
+}
 
 }
 \seealso{

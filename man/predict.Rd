@@ -49,11 +49,15 @@ Choices are \code{"breslow"}, \code{"efron"} (default), or
 Predict outcomes with a fitted model.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package gbm to run
+
 ## Survival response example
 library(survival)
 
 gbm_fit <- fit(Surv(time, status) ~ ., data = veteran, model = GBMModel)
 predict(gbm_fit, newdata = veteran, times = c(90, 180, 360), type = "prob")
+}
 
 }
 \seealso{

@@ -23,9 +23,13 @@
 #' @seealso \code{\link{fit}}, \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested packages gbm and glmnet to run
+#'
 #' model <- StackedModel(GBMModel, SVMRadialModel, GLMNetModel(lambda = 0.01))
 #' model_fit <- fit(sale_amount ~ ., data = ICHomes, model = model)
 #' predict(model_fit, newdata = ICHomes)
+#' }
 #'
 StackedModel <- function(
   ..., control = MachineShop::settings("control"), weights = NULL

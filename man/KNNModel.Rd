@@ -42,7 +42,11 @@ prediction is done via the maximum of summed kernel densities.
 Further model details can be found in the source link below.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package kknn to run
+
 fit(Species ~ ., data = iris, model = KNNModel)
+}
 
 }
 \seealso{

@@ -33,9 +33,13 @@
 #' @seealso \code{\link{c}}, \code{\link{plot}}, \code{\link{summary}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package gbm to run
+#'
 #' res <- resample(Species ~ ., data = iris, model = GBMModel)
 #' (conf <- confusion(res))
 #' plot(conf)
+#' }
 #'
 confusion <- function(x, y = NULL, cutoff = MachineShop::settings("cutoff"),
                       na.rm = TRUE, ...) {

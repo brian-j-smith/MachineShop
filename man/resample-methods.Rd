@@ -65,6 +65,9 @@ with the \code{\link{role_case}} function.  Resampling will be unstratified
 otherwise.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package gbm to run
+
 ## Factor response example
 
 fo <- Species ~ .
@@ -80,6 +83,7 @@ plot(gbm_res1)
 res <- c(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 summary(res)
 plot(res)
+}
 
 }
 \seealso{

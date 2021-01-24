@@ -26,7 +26,11 @@
 #' @seealso \code{\link[kknn]{kknn}}, \code{\link{fit}}, \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package kknn to run
+#'
 #' fit(Species ~ ., data = iris, model = KNNModel)
+#' }
 #'
 KNNModel <- function(
   k = 7, distance = 2, scale = TRUE,

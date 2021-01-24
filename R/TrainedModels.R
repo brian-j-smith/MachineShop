@@ -26,10 +26,14 @@
 #' @seealso \code{\link{fit}}, \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package gbm and glmnet to run
+#'
 #' model_fit <- fit(sale_amount ~ ., data = ICHomes,
 #'                  model = SelectedModel(GBMModel, GLMNetModel, SVMRadialModel))
 #' (selected_model <- as.MLModel(model_fit))
 #' summary(selected_model)
+#' }
 #'
 SelectedModel <- function(..., control = MachineShop::settings("control"),
                           metrics = NULL,
@@ -107,7 +111,11 @@ MLModelFunction(SelectedModel) <- NULL
 #' @seealso \code{\link{fit}}, \code{\link{resample}}
 #'
 #' @examples
-#' \donttest{# Automatically generated grid
+#' \donttest{
+#' ## Requires prior installation of suggested package gbm to run
+#' ## May require a long runtime
+#'
+#' # Automatically generated grid
 #' model_fit <- fit(sale_amount ~ ., data = ICHomes,
 #'                  model = TunedModel(GBMModel))
 #' varimp(model_fit)
@@ -124,7 +132,8 @@ MLModelFunction(SelectedModel) <- NULL
 #'     model = TunedModel(GBMModel,
 #'                        grid = expand_params(n.trees = c(50, 100),
 #'                                             interaction.depth = 1:2,
-#'                                             n.minobsinnode = c(5, 10))))}
+#'                                             n.minobsinnode = c(5, 10))))
+#' }
 #'
 TunedModel <- function(model, grid = MachineShop::settings("grid"),
                        fixed = NULL, control = MachineShop::settings("control"),

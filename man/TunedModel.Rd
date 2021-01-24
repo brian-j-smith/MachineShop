@@ -53,7 +53,11 @@ Model tuning over a grid of parameter values.
 }
 }
 \examples{
-\donttest{# Automatically generated grid
+\donttest{
+## Requires prior installation of suggested package gbm to run
+## May require a long runtime
+
+# Automatically generated grid
 model_fit <- fit(sale_amount ~ ., data = ICHomes,
                  model = TunedModel(GBMModel))
 varimp(model_fit)
@@ -70,7 +74,8 @@ fit(sale_amount ~ ., data = ICHomes,
     model = TunedModel(GBMModel,
                        grid = expand_params(n.trees = c(50, 100),
                                             interaction.depth = 1:2,
-                                            n.minobsinnode = c(5, 10))))}
+                                            n.minobsinnode = c(5, 10))))
+}
 
 }
 \seealso{

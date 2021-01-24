@@ -85,9 +85,13 @@ MLModelFunction(SurvRegModel) <- NULL
 #' \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested packages rms and Hmisc to run
+#'
 #' library(survival)
 #'
 #' fit(Surv(time, status) ~ ., data = veteran, model = SurvRegModel)
+#' }
 #'
 SurvRegStepAICModel <- function(
   dist = c("weibull", "exponential", "gaussian", "logistic", "lognormal",

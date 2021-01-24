@@ -25,6 +25,9 @@
 #' \code{\link{plot}}, \code{\link{summary}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package gbm to run
+#'
 #' ## Factor response example
 #'
 #' fo <- Species ~ .
@@ -40,6 +43,7 @@
 #' res <- c(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 #' summary(res)
 #' plot(res)
+#' }
 #'
 resample <- function(x, ...) {
   UseMethod("resample")

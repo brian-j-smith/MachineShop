@@ -47,12 +47,16 @@ responses that are \code{NA} when calculating metrics.}
 Calculate calibration estimates from observed and predicted responses.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package gbm to run
+
 library(survival)
 
 res <- resample(Surv(time, status) ~ ., data = veteran, model = GBMModel,
                 control = CVControl(times = c(90, 180, 360)))
 cal <- calibration(res)
 plot(cal)
+}
 
 }
 \seealso{

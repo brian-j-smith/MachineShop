@@ -26,6 +26,9 @@ Paired t-test comparisons of resampled performance metrics from different
 models.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package gbm to run
+
 ## Numeric response example
 fo <- sale_amount ~ .
 control <- CVControl()
@@ -37,5 +40,6 @@ gbm_res3 <- resample(fo, ICHomes, GBMModel(n.trees = 100), control)
 res <- c(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 res_diff <- diff(res)
 t.test(res_diff)
+}
 
 }

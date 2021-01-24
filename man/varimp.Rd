@@ -21,12 +21,16 @@ to range from 0 to 100.}
 Calculate measures of the relative importance of predictors in a model.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package gbm to run
+
 ## Survival response example
 library(survival)
 
 gbm_fit <- fit(Surv(time, status) ~ ., data = veteran, model = GBMModel)
 (vi <- varimp(gbm_fit))
 plot(vi)
+}
 
 }
 \seealso{

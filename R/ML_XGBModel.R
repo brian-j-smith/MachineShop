@@ -73,8 +73,12 @@
 #' \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package xgboost to run
+#'
 #' model_fit <- fit(Species ~ ., data = iris, model = XGBTreeModel)
 #' varimp(model_fit, metric = "Frequency", scale = FALSE)
+#' }
 #'
 XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
                      print_every_n = 1) {

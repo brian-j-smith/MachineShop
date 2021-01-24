@@ -46,12 +46,16 @@ VarImp.numeric <- function(object, ...) {
 #' @seealso \code{\link{plot}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package gbm to run
+#'
 #' ## Survival response example
 #' library(survival)
 #'
 #' gbm_fit <- fit(Surv(time, status) ~ ., data = veteran, model = GBMModel)
 #' (vi <- varimp(gbm_fit))
 #' plot(vi)
+#' }
 #'
 varimp <- function(object, scale = TRUE, ...) {
   stopifnot(is(object, "MLModelFit"))

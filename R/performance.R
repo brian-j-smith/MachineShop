@@ -22,6 +22,9 @@
 #' @seealso \code{\link{plot}}, \code{\link{summary}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package gbm to run
+#'
 #' res <- resample(Species ~ ., data = iris, model = GBMModel)
 #' (perf <- performance(res))
 #' summary(perf)
@@ -35,6 +38,7 @@
 #' obs <- response(gbm_fit, newdata = veteran)
 #' pred <- predict(gbm_fit, newdata = veteran, type = "prob")
 #' performance(obs, pred)
+#' }
 #'
 performance <- function(x, ...) {
   UseMethod("performance")

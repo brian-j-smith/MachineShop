@@ -26,6 +26,9 @@
 Pairwise model differences in resampled performance metrics.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package gbm to run
+
 ## Survival response example
 library(survival)
 
@@ -40,6 +43,7 @@ res <- c(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 res_diff <- diff(res)
 summary(res_diff)
 plot(res_diff)
+}
 
 }
 \seealso{

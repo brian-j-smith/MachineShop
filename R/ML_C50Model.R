@@ -48,8 +48,12 @@
 #' @seealso \code{\link[C50]{C5.0}}, \code{\link{fit}}, \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package C50 to run
+#'
 #' model_fit <- fit(Species ~ ., data = iris, model = C50Model)
 #' varimp(model_fit, metric = "splits", scale = FALSE)
+#' }
 #'
 C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
                      winnow = FALSE, noGlobalPruning = FALSE, CF = 0.25,

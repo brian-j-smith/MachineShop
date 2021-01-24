@@ -79,9 +79,13 @@ Default values for the \code{NULL} arguments and further model details can be
 found in the source links below.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested packages mboost and partykit to run
+
 data(Pima.tr, package = "MASS")
 
 fit(type ~ ., data = Pima.tr, model = BlackBoostModel)
+}
 
 }
 \seealso{

@@ -70,7 +70,11 @@ Default values for the \code{NULL} arguments and further model details can be
 found in the source link below.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package glmnet to run
+
 fit(sale_amount ~ ., data = ICHomes, model = GLMNetModel(lambda = 0.01))
+}
 
 }
 \seealso{

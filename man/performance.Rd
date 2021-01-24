@@ -86,6 +86,9 @@ probabilities are classified.}
 Compute measures of model performance.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package gbm to run
+
 res <- resample(Species ~ ., data = iris, model = GBMModel)
 (perf <- performance(res))
 summary(perf)
@@ -99,6 +102,7 @@ gbm_fit <- fit(Surv(time, status) ~ ., data = veteran, model = GBMModel)
 obs <- response(gbm_fit, newdata = veteran)
 pred <- predict(gbm_fit, newdata = veteran, type = "prob")
 performance(obs, pred)
+}
 
 }
 \seealso{

@@ -74,6 +74,8 @@ below.
 }
 \examples{
 \donttest{
+## Requires prior installation of suggested package bartMachine to run
+
 model_fit <- fit(sale_amount ~ ., data = ICHomes, model = BARTMachineModel)
 varimp(model_fit, metric = "splits", num_replicates = 20, scale = FALSE)
 }

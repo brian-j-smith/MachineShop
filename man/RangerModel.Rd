@@ -79,7 +79,11 @@ Default values for the \code{NULL} arguments and further model details can be
 found in the source link below.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package ranger to run
+
 fit(Species ~ ., data = iris, model = RangerModel)
+}
 
 }
 \seealso{

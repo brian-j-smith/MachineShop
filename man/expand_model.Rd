@@ -22,12 +22,16 @@ or \code{FALSE} if all points are to be returned.}
 Expand a model over all combinations of a grid of tuning parameters.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package gbm to run
+
 data(Boston, package = "MASS")
 
 models <- expand_model(GBMModel, n.trees = c(50, 100),
                                  interaction.depth = 1:2)
 
 fit(medv ~ ., data = Boston, model = SelectedModel(models))
+}
 
 }
 \seealso{

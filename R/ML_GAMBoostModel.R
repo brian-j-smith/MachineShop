@@ -39,9 +39,13 @@
 #' \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package mboost to run
+#'
 #' data(Pima.tr, package = "MASS")
 #'
 #' fit(type ~ ., data = Pima.tr, model = GAMBoostModel)
+#' }
 #'
 GAMBoostModel <- function(
   family = NULL, baselearner = c("bbs", "bols", "btree", "bss", "bns"),

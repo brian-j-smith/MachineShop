@@ -55,6 +55,8 @@
 #'
 #' @examples
 #' \donttest{
+#' ## Requires prior installation of suggested package BART to run
+#'
 #' fit(sale_amount ~ ., data = ICHomes, model = BARTModel)
 #' }
 #'

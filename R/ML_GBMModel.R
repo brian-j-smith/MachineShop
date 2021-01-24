@@ -33,7 +33,11 @@
 #' @seealso \code{\link[gbm]{gbm}}, \code{\link{fit}}, \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package gbm to run
+#'
 #' fit(Species ~ ., data = iris, model = GBMModel)
+#' }
 #'
 GBMModel <- function(
   distribution = NULL, n.trees = 100, interaction.depth = 1,

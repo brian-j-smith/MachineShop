@@ -47,7 +47,11 @@ specified formula and choosing splits from the terms of the right-hand-side.
 Further model details can be found in the source link below.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package tree to run
+
 fit(Species ~ ., data = iris, model = TreeModel)
+}
 
 }
 \seealso{

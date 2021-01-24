@@ -60,8 +60,12 @@ predictor.  Variable importance is automatically scaled to range from 0 to
 example below.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package earth to run
+
 model_fit <- fit(Species ~ ., data = iris, model = EarthModel)
 varimp(model_fit, metric = "nsubsets", scale = FALSE)
+}
 
 }
 \seealso{

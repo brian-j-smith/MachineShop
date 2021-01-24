@@ -32,7 +32,11 @@
 #' \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package adabag to run
+#'
 #' fit(Species ~ ., data = iris, model = AdaBagModel(mfinal = 5))
+#' }
 #'
 AdaBagModel <- function(
   mfinal = 100, minsplit = 20, minbucket = round(minsplit/3), cp = 0.01,

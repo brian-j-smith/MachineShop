@@ -49,7 +49,11 @@
 #' \code{\link{fit}}, \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package mda to run
+#'
 #' fit(Species ~ ., data = iris, model = FDAModel)
+#' }
 #'
 FDAModel <- function(
   theta = NULL, dimension = NULL, eps = .Machine$double.eps,
@@ -93,7 +97,11 @@ MLModelFunction(FDAModel) <- NULL
 #'   degrees of freedom.
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package mda to run
+#'
 #' fit(Species ~ ., data = iris, model = PDAModel)
+#' }
 #'
 PDAModel <- function(lambda = 1, df = NULL, ...) {
   args <- params(environment(), ...)

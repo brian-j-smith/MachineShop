@@ -13,12 +13,16 @@
 #' @seealso \code{\link{SelectedModel}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package gbm to run
+#'
 #' data(Boston, package = "MASS")
 #'
 #' models <- expand_model(GBMModel, n.trees = c(50, 100),
 #'                                  interaction.depth = 1:2)
 #'
 #' fit(medv ~ ., data = Boston, model = SelectedModel(models))
+#' }
 #'
 expand_model <- function(x, ..., random = FALSE) {
   .expand_model(x, random, ...)
@@ -65,6 +69,9 @@ expand_model <- function(x, ..., random = FALSE) {
 #' @seealso \code{\link{TunedModel}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package gbm to run
+#'
 #' data(Boston, package = "MASS")
 #'
 #' grid <- expand_params(
@@ -73,6 +80,7 @@ expand_model <- function(x, ..., random = FALSE) {
 #' )
 #'
 #' fit(medv ~ ., data = Boston, model = TunedModel(GBMModel, grid = grid))
+#' }
 #'
 expand_params <- function(..., random = FALSE) {
   if (random) {

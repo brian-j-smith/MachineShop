@@ -27,7 +27,11 @@
 #' \code{\link{fit}}, \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package tree to run
+#'
 #' fit(Species ~ ., data = iris, model = TreeModel)
+#' }
 #'
 TreeModel <- function(
   mincut = 5, minsize = 10, mindev = 0.01, split = c("deviance", "gini"),

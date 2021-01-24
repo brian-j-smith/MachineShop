@@ -40,8 +40,12 @@
 #' \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package earth to run
+#'
 #' model_fit <- fit(Species ~ ., data = iris, model = EarthModel)
 #' varimp(model_fit, metric = "nsubsets", scale = FALSE)
+#' }
 #'
 EarthModel <- function(
   pmethod = c("backward", "none", "exhaustive", "forward", "seqrep", "cv"),

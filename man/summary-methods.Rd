@@ -60,6 +60,9 @@ An object of summmary statistics.
 Summary statistics for resampled model performance metrics.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package gbm to run
+
 ## Factor response example
 
 fo <- Species ~ .
@@ -72,5 +75,6 @@ summary(gbm_res3)
 
 res <- c(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 summary(res)
+}
 
 }

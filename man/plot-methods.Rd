@@ -101,6 +101,9 @@ dependence summary statistics to plot.}
 Plot measures of model performance and predictor variable importance.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package gbm to run
+
 ## Factor response example
 
 fo <- Species ~ .
@@ -116,5 +119,6 @@ plot(gbm_res3)
 
 res <- c(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 plot(res)
+}
 
 }

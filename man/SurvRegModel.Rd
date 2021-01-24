@@ -67,9 +67,13 @@ Default values for the \code{NULL} arguments and further model details can be
 found in the source link below.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested packages rms and Hmisc to run
+
 library(survival)
 
 fit(Surv(time, status) ~ ., data = veteran, model = SurvRegModel)
+}
 
 }
 \seealso{

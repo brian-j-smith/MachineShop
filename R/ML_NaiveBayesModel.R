@@ -18,7 +18,11 @@
 #' \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package e1071 to run
+#'
 #' fit(Species ~ ., data = iris, model = NaiveBayesModel)
+#' }
 #'
 NaiveBayesModel <- function(laplace = 0) {
 

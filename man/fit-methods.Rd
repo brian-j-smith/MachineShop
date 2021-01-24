@@ -54,11 +54,15 @@ Variables in \code{recipe} specifications may be designated as case weights
 with the \code{\link{role_case}} function.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package gbm to run
+
 ## Survival response example
 library(survival)
 
 gbm_fit <- fit(Surv(time, status) ~ ., data = veteran, model = GBMModel)
 varimp(gbm_fit)
+}
 
 }
 \seealso{

@@ -43,10 +43,14 @@ Model selection from a candidate set.
 }
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package gbm and glmnet to run
+
 model_fit <- fit(sale_amount ~ ., data = ICHomes,
                  model = SelectedModel(GBMModel, GLMNetModel, SVMRadialModel))
 (selected_model <- as.MLModel(model_fit))
 summary(selected_model)
+}
 
 }
 \seealso{

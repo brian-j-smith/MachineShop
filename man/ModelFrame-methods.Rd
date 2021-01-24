@@ -50,10 +50,14 @@ Class for storing data, formulas, and other attributes for \pkg{MachineShop}
 model fitting.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package gbm to run
+
 mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
                  data = esoph, weights = with(esoph, ncases + ncontrols))
 gbm_fit <- fit(mf, model = GBMModel)
 varimp(gbm_fit)
+}
 
 }
 \seealso{

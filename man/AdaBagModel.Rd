@@ -58,7 +58,11 @@ trees as single classifiers.
 Further model details can be found in the source link below.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package adabag to run
+
 fit(Species ~ ., data = iris, model = AdaBagModel(mfinal = 5))
+}
 
 }
 \seealso{

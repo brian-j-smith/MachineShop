@@ -71,9 +71,17 @@ Default values for the \code{NULL} arguments and further model details can be
 found in the source links below.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package mda to run
+
 fit(Species ~ ., data = iris, model = FDAModel)
+}
+
+\donttest{
+## Requires prior installation of suggested package mda to run
 
 fit(Species ~ ., data = iris, model = PDAModel)
+}
 
 }
 \seealso{

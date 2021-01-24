@@ -40,7 +40,11 @@
 #' \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package glmnet to run
+#'
 #' fit(sale_amount ~ ., data = ICHomes, model = GLMNetModel(lambda = 0.01))
+#' }
 #'
 GLMNetModel <- function(
   family = NULL, alpha = 1, lambda = 0, standardize = TRUE, intercept = NULL,

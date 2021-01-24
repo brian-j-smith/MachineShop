@@ -54,7 +54,11 @@ Fit an \code{rpart} model.
 Further model details can be found in the source link below.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested packages rpart and partykit to run
+
 fit(Species ~ ., data = iris, model = RPartModel)
+}
 
 }
 \seealso{

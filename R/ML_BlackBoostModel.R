@@ -46,9 +46,13 @@
 #' \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested packages mboost and partykit to run
+#'
 #' data(Pima.tr, package = "MASS")
 #'
 #' fit(type ~ ., data = Pima.tr, model = BlackBoostModel)
+#' }
 #'
 BlackBoostModel <- function(
   family = NULL, mstop = 100, nu = 0.1, risk = c("inbag", "oobag", "none"),

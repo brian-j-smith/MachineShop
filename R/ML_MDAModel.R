@@ -46,7 +46,11 @@
 #' \code{\link{fit}}, \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package mda to run
+#'
 #' fit(Species ~ ., data = iris, model = MDAModel)
+#' }
 #'
 MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
                      dimension = sum(subclasses) - 1, eps = .Machine$double.eps,

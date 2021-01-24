@@ -31,7 +31,11 @@
 #' @seealso \code{\link[lars]{lars}}, \code{\link{fit}}, \code{\link{resample}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package lars to run
+#'
 #' fit(sale_amount ~ ., data = ICHomes, model = LARSModel)
+#' }
 #'
 LARSModel <- function(
   type = c("lasso", "lar", "forward.stagewise", "stepwise"), trace = FALSE,

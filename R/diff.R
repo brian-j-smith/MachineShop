@@ -14,6 +14,9 @@
 #' @seealso \code{\link{t.test}}, \code{\link{plot}}, \code{\link{summary}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package gbm to run
+#'
 #' ## Survival response example
 #' library(survival)
 #'
@@ -28,6 +31,7 @@
 #' res_diff <- diff(res)
 #' summary(res_diff)
 #' plot(res_diff)
+#' }
 #'
 NULL
 
@@ -82,6 +86,9 @@ diff.Resamples <- function(x, ...) {
 #' pairs are contined in the third dimension.
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package gbm to run
+#'
 #' ## Numeric response example
 #' fo <- sale_amount ~ .
 #' control <- CVControl()
@@ -93,6 +100,7 @@ diff.Resamples <- function(x, ...) {
 #' res <- c(GBM1 = gbm_res1, GBM2 = gbm_res2, GBM3 = gbm_res3)
 #' res_diff <- diff(res)
 #' t.test(res_diff)
+#' }
 #'
 t.test.PerformanceDiff <- function(x, adjust = "holm", ...)
 {

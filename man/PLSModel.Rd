@@ -29,7 +29,11 @@ Function to perform partial least squares regression.
 Further model details can be found in the source link below.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package pls to run
+
 fit(sale_amount ~ ., data = ICHomes, model = PLSModel)
+}
 
 }
 \seealso{
