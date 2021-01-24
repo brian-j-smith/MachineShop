@@ -54,11 +54,9 @@ Grid <- function(length = 3, random = FALSE) {
 #'
 #' @examples
 #' ## GBMModel tuning parameters
-#' library(dials)
-#'
 #' grid <- ParameterGrid(
-#'   n.trees = trees(),
-#'   interaction.depth = tree_depth(),
+#'   n.trees = dials::trees(),
+#'   interaction.depth = dials::tree_depth(),
 #'   random = 5
 #' )
 #' TunedModel(GBMModel, grid = grid)
