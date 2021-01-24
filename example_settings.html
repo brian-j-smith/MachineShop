@@ -13,6 +13,7 @@
 
 <title>Example</title>
 
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -450,6 +451,16 @@ settings()
 #&gt; $method.EmpiricalSurv
 #&gt; [1] &quot;efron&quot;
 #&gt; 
+#&gt; $metrics
+#&gt;  [1] &quot;accuracy&quot;        &quot;auc&quot;             &quot;brier&quot;           &quot;cindex&quot;         
+#&gt;  [5] &quot;cross_entropy&quot;   &quot;f_score&quot;         &quot;fnr&quot;             &quot;fpr&quot;            
+#&gt;  [9] &quot;gini&quot;            &quot;kappa2&quot;          &quot;mae&quot;             &quot;mse&quot;            
+#&gt; [13] &quot;msle&quot;            &quot;npv&quot;             &quot;ppv&quot;             &quot;pr_auc&quot;         
+#&gt; [17] &quot;precision&quot;       &quot;r2&quot;              &quot;recall&quot;          &quot;rmse&quot;           
+#&gt; [21] &quot;rmsle&quot;           &quot;roc_auc&quot;         &quot;roc_index&quot;       &quot;rpp&quot;            
+#&gt; [25] &quot;sensitivity&quot;     &quot;specificity&quot;     &quot;tnr&quot;             &quot;tpr&quot;            
+#&gt; [29] &quot;weighted_kappa2&quot;
+#&gt; 
 #&gt; $metrics.ConfusionMatrix
 #&gt;          Accuracy             Kappa    Weighted Kappa       Sensitivity 
 #&gt;        &quot;accuracy&quot;          &quot;kappa2&quot; &quot;weighted_kappa2&quot;     &quot;sensitivity&quot; 
@@ -473,6 +484,26 @@ settings()
 #&gt; $metrics.Surv
 #&gt;    C-Index      Brier    ROC AUC   Accuracy 
 #&gt;   &quot;cindex&quot;    &quot;brier&quot;  &quot;roc_auc&quot; &quot;accuracy&quot; 
+#&gt; 
+#&gt; $models
+#&gt;  [1] &quot;AdaBagModel&quot;         &quot;AdaBoostModel&quot;       &quot;BARTMachineModel&quot;   
+#&gt;  [4] &quot;BARTModel&quot;           &quot;BlackBoostModel&quot;     &quot;C50Model&quot;           
+#&gt;  [7] &quot;CForestModel&quot;        &quot;CoxModel&quot;            &quot;CoxStepAICModel&quot;    
+#&gt; [10] &quot;EarthModel&quot;          &quot;FDAModel&quot;            &quot;GAMBoostModel&quot;      
+#&gt; [13] &quot;GBMModel&quot;            &quot;GLMBoostModel&quot;       &quot;GLMModel&quot;           
+#&gt; [16] &quot;GLMStepAICModel&quot;     &quot;GLMNetModel&quot;         &quot;KNNModel&quot;           
+#&gt; [19] &quot;LARSModel&quot;           &quot;LDAModel&quot;            &quot;LMModel&quot;            
+#&gt; [22] &quot;MDAModel&quot;            &quot;NaiveBayesModel&quot;     &quot;NNetModel&quot;          
+#&gt; [25] &quot;PDAModel&quot;            &quot;PLSModel&quot;            &quot;POLRModel&quot;          
+#&gt; [28] &quot;QDAModel&quot;            &quot;RandomForestModel&quot;   &quot;RangerModel&quot;        
+#&gt; [31] &quot;RFSRCModel&quot;          &quot;RPartModel&quot;          &quot;SelectedModel&quot;      
+#&gt; [34] &quot;StackedModel&quot;        &quot;SuperModel&quot;          &quot;SurvRegModel&quot;       
+#&gt; [37] &quot;SurvRegStepAICModel&quot; &quot;SVMModel&quot;            &quot;SVMANOVAModel&quot;      
+#&gt; [40] &quot;SVMBesselModel&quot;      &quot;SVMLaplaceModel&quot;     &quot;SVMLinearModel&quot;     
+#&gt; [43] &quot;SVMPolyModel&quot;        &quot;SVMRadialModel&quot;      &quot;SVMSplineModel&quot;     
+#&gt; [46] &quot;SVMTanhModel&quot;        &quot;TreeModel&quot;           &quot;TunedModel&quot;         
+#&gt; [49] &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;     
+#&gt; [52] &quot;XGBTreeModel&quot;       
 #&gt; 
 #&gt; $progress.resample
 #&gt; [1] TRUE
