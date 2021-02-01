@@ -2,6 +2,10 @@
 
 ## Version Updates
 
+## 2.6.1
+* Doc edits: do not test examples requiring suggested packages.
+* CRAN release.
+
 ## 2.6.0
 * Preprocess data for automated grid construction only when needed.
 * Select `RPartModel` `cp` grid points from `cptable` according to smallest cross-validation error (mean plus one standard deviation).
