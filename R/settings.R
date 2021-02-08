@@ -325,44 +325,54 @@ MachineShop_global <- as.environment(list(
     ),
 
     metrics.ConfusionMatrix = list(
-      value = c("Accuracy" = "accuracy",
-                "Kappa" = "kappa2",
-                "Weighted Kappa" = "weighted_kappa2",
-                "Sensitivity" = "sensitivity",
-                "Specificity" = "specificity"),
+      value = c(
+        "Accuracy" = "accuracy",
+        "Kappa" = "kappa2",
+        "Weighted Kappa" = "weighted_kappa2",
+        "Sensitivity" = "sensitivity",
+        "Specificity" = "specificity"
+      ),
       check = check_metrics
     ),
 
     metrics.factor = list(
-      value = c("Brier" = "brier",
-                "Accuracy" = "accuracy",
-                "Kappa" = "kappa2",
-                "Weighted Kappa" = "weighted_kappa2",
-                "ROC AUC" = "roc_auc",
-                "Sensitivity" = "sensitivity",
-                "Specificity" = "specificity"),
+      value = c(
+        "Brier" = "brier",
+        "Accuracy" = "accuracy",
+        "Kappa" = "kappa2",
+        "Weighted Kappa" = "weighted_kappa2",
+        "ROC AUC" = "roc_auc",
+        "Sensitivity" = "sensitivity",
+        "Specificity" = "specificity"
+      ),
       check = check_metrics
     ),
 
     metrics.matrix = list(
-      value = c("RMSE" = "rmse",
-                "R2" = "r2",
-                "MAE" = "mae"),
+      value = c(
+        "RMSE" = "rmse",
+        "R2" = "r2",
+        "MAE" = "mae"
+      ),
       check = check_metrics
     ),
 
     metrics.numeric = list(
-      value = c("RMSE" = "rmse",
-                "R2" = "r2",
-                "MAE" = "mae"),
+      value = c(
+        "RMSE" = "rmse",
+        "R2" = "r2",
+        "MAE" = "mae"
+      ),
       check = check_metrics
     ),
 
     metrics.Surv = list(
-      value = c("C-Index" = "cindex",
-                "Brier" = "brier",
-                "ROC AUC" = "roc_auc",
-                "Accuracy" = "accuracy"),
+      value = c(
+        "C-Index" = "cindex",
+        "Brier" = "brier",
+        "ROC AUC" = "roc_auc",
+        "Accuracy" = "accuracy"
+      ),
       check = check_metrics
     ),
 
@@ -500,11 +510,13 @@ MachineShop_global <- as.environment(list(
     ),
 
     stats.Resamples = list(
-      value = c("Mean" = "base::mean",
-                "Median" = "stats::median",
-                "SD" = "stats::sd",
-                "Min" = "base::min",
-                "Max" = "base::max"),
+      value = c(
+        "Mean" = "base::mean",
+        "Median" = "stats::median",
+        "SD" = "stats::sd",
+        "Min" = "base::min",
+        "Max" = "base::max"
+      ),
       check = check_stats
     ),
 
