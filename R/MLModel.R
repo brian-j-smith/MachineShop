@@ -96,7 +96,7 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
                       stop("no predict function"),
                     varimp = function(object, ...) NULL, ...) {
 
-  stopifnot(response_types %in% .response_types)
+  stopifnot(response_types %in% settings("response_types"))
 
   new("MLModel",
       name = name,
@@ -110,11 +110,6 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
       predict = predict,
       varimp = varimp)
 }
-
-
-.response_types <- c("binary", "BinomialVariate", "DiscreteVariate", "factor",
-                     "matrix", "NegBinomialVariate", "numeric", "ordered",
-                     "PoissonVariate", "Surv")
 
 
 MLModelFit <- function(object, Class, model, x) {

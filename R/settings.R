@@ -468,6 +468,14 @@ MachineShop_global <- as.environment(list(
       }
     ),
 
+    response_types = list(
+      value = c(
+        "binary", "BinomialVariate", "DiscreteVariate", "factor", "matrix",
+        "NegBinomialVariate", "numeric", "ordered", "PoissonVariate", "Surv"
+      ),
+      check = function(x) check_const(x, "response_types")
+    ),
+
     RHS.formula = list(
       value = sort(c(
         ".", "(", ":", "%in%", "I", "offset",

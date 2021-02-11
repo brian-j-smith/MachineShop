@@ -48,7 +48,7 @@ StackedModel <- function(
     label = "Stacked Regression",
     response_types =
       Reduce(intersect, map(slot, base_learners, "response_types"),
-             init = .response_types),
+             init = settings("response_types")),
     predictor_encoding = NA_character_,
     params = as.list(environment()),
     varimp = function(object, ...) NULL
