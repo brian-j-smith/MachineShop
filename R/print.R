@@ -413,7 +413,7 @@ print.ParameterGrid <- function(x, n = MachineShop::settings("max.print"),
   if (x@random) {
     cat("Random sample:", x@random, "\n")
   } else {
-    cat(label_items("Size", x@size), "\n")
+    cat(label_items("Size", x@size, add_names = TRUE), "\n")
   }
   invisible(x)
 }

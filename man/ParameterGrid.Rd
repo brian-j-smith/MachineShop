@@ -18,8 +18,9 @@ ParameterGrid(...)
 \arguments{
 \item{...}{named \code{param} objects as defined in the \pkg{dials} package.}
 
-\item{size}{single number or vector of numbers of parameter values to use
-in constructing a regular grid if \code{random = FALSE}; ignored otherwise.}
+\item{size}{single integer or vector of integers whose positions or names
+match the given parameters and which specify the number of values to use in
+constructing a regular grid if \code{random = FALSE}; ignored otherwise.}
 
 \item{random}{number of unique grid points to sample at random or
 \code{FALSE} for all points from a regular grid defined by \code{size}.}
