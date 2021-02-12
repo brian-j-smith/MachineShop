@@ -4,14 +4,16 @@
 \alias{Grid}
 \title{Tuning Grid Control}
 \usage{
-Grid(length = 3, random = FALSE)
+Grid(size = 3, random = FALSE, length = NULL)
 }
 \arguments{
-\item{length}{number of values to be generated for each model parameter in
+\item{size}{number of values to be generated for each model parameter in
 the tuning grid.}
 
 \item{random}{number of unique grid points to sample at random, \code{Inf}
 for all random points, or \code{FALSE} for all fixed points.}
+
+\item{length}{deprecated argument; use \code{size} instead.}
 }
 \value{
 \code{Grid} class object.

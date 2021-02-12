@@ -242,7 +242,7 @@ Grid values may also be a call to `Grid()` with the grid `length` and number of 
 fit(surv_fo, data = surv_train,
     model = TunedModel(
       GBMModel,
-      grid = Grid(length = 100, random = 10),
+      grid = Grid(size = 100, random = 10),
       control = surv_means_control
     ))
 

@@ -67,7 +67,7 @@ plot(tuned_model, type = "l")
 
 # Randomly sampled grid points
 fit(sale_amount ~ ., data = ICHomes,
-    model = TunedModel(GBMModel, grid = Grid(length = 1000, random = 5)))
+    model = TunedModel(GBMModel, grid = Grid(size = 1000, random = 5)))
 
 # User-specified grid
 fit(sale_amount ~ ., data = ICHomes,

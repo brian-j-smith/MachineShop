@@ -9,20 +9,22 @@
 \usage{
 ParameterGrid(...)
 
-\method{ParameterGrid}{param}(..., length = 3, random = FALSE)
+\method{ParameterGrid}{param}(..., size = 3, random = FALSE, length = NULL)
 
-\method{ParameterGrid}{list}(x, length = 3, random = FALSE, ...)
+\method{ParameterGrid}{list}(x, size = 3, random = FALSE, length = NULL, ...)
 
-\method{ParameterGrid}{parameters}(x, length = 3, random = FALSE, ...)
+\method{ParameterGrid}{parameters}(x, size = 3, random = FALSE, length = NULL, ...)
 }
 \arguments{
 \item{...}{named \code{param} objects as defined in the \pkg{dials} package.}
 
-\item{length}{single number or vector of numbers of parameter values to use
+\item{size}{single number or vector of numbers of parameter values to use
 in constructing a regular grid if \code{random = FALSE}; ignored otherwise.}
 
 \item{random}{number of unique grid points to sample at random or
-\code{FALSE} for all points from a regular grid defined by \code{length}.}
+\code{FALSE} for all points from a regular grid defined by \code{size}.}
+
+\item{length}{deprecated argument; use \code{size} instead.}
 
 \item{x}{list of named \code{param} objects or a
 \code{\link[dials]{parameters}} object.}

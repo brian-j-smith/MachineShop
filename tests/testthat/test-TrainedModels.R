@@ -49,7 +49,7 @@ test_tune_grid2 <- function(model) {
 
 test_tune_grid3 <- function(model) {
   fit(type ~ ., data = Pima.tr,
-      model = TunedModel(model, grid = Grid(length = 100, random = 25),
+      model = TunedModel(model, grid = Grid(size = 100, random = 25),
                          control = control))
 }
 

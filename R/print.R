@@ -105,7 +105,7 @@ setMethod("show", "DiscreteVariate",
 print.Grid <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   cat("\n",
-      "Length: ", x@length, "\n",
+      "Size: ", x@size, "\n",
       "Random sample: ", x@random, "\n",
       sep = ""
   )
@@ -413,7 +413,7 @@ print.ParameterGrid <- function(x, n = MachineShop::settings("max.print"),
   if (x@random) {
     cat("Random sample:", x@random, "\n")
   } else {
-    cat(label_items("Length", x@length), "\n")
+    cat(label_items("Size", x@size), "\n")
   }
   invisible(x)
 }

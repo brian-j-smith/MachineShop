@@ -65,7 +65,7 @@ setOldClass(c("grid_regular", "param_grid"))
 
 
 setClass("Grid",
-  slots = c(length = "integer",
+  slots = c(size = "integer",
             random = "ANY")
 )
 
