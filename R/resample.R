@@ -84,7 +84,7 @@ resample.matrix <- function(x, y, model,
 resample.ModelFrame <- function(x, model,
                                 control = MachineShop::settings("control"),
                                 ...) {
-  if (missing(model)) model <- NullModel
+  if (missing(model)) model <- NullModel()
   .resample(getMLObject(control, "MLControl"), x, model, ...)
 }
 
@@ -98,7 +98,7 @@ resample.ModelFrame <- function(x, model,
 #'
 resample.recipe <- function(x, model,
                             control = MachineShop::settings("control"), ...) {
-  if (missing(model)) model <- NullModel
+  if (missing(model)) model <- NullModel()
   .resample(getMLObject(control, "MLControl"), ModelRecipe(x), model, ...)
 }
 

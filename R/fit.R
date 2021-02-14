@@ -60,7 +60,7 @@ fit.matrix <- function(x, y, model, ...) {
 #' constructor.
 #'
 fit.ModelFrame <- function(x, model, ...) {
-  model <- if (missing(model)) NullModel else getMLObject(model, "MLModel")
+  model <- if (missing(model)) NullModel() else getMLObject(model, "MLModel")
   .fit(x, model)
 }
 
@@ -72,7 +72,7 @@ fit.ModelFrame <- function(x, model, ...) {
 #' with the \code{\link{role_case}} function.
 #'
 fit.recipe <- function(x, model, ...) {
-  model <- if (missing(model)) NullModel else getMLObject(model, "MLModel")
+  model <- if (missing(model)) NullModel() else getMLObject(model, "MLModel")
   .fit(x, model)
 }
 

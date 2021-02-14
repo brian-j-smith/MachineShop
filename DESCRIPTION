@@ -39,7 +39,6 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 Collate: 
     'classes.R'
-    'settings.R'
     'MLControl.R'
     'MLMetric.R'
     'MLModel.R'
@@ -113,6 +112,7 @@ Collate:
     'recipe_roles.R'
     'resample.R'
     'response.R'
+    'settings.R'
     'step_kmeans.R'
     'step_kmedoids.R'
     'step_lincomp.R'
