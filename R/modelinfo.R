@@ -98,10 +98,8 @@ modelinfo <- function(...) {
 
 .modelinfo_types <- function(...) {
   info <- modelinfo()
-  is_supported <- map_logi(function(this) {
-    all(map_logi(function(object) {
-      any(map_logi(is_response, list(object), this$response_types))
-    }, list(...)))
-  }, info)
-  info[is_supported]
+  check_model <- function(model) {
+    all(map_logi(is_valid_response, list(...), list(model)))
+  }
+  info[map_logi(check_model, info)]
 }

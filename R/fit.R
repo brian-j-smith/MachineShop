@@ -104,7 +104,7 @@ fit.MLModelFunction <- function(x, ...) {
   }
 
   y <- response(mf)
-  if (!any(map_logi(function(type) is_response(y, type), x@response_types))) {
+  if (!is_valid_response(y, x)) {
     stop("invalid response type '", class(y)[1], "' for ", x@name)
   }
 

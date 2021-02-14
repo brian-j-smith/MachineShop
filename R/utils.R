@@ -151,12 +151,22 @@ is_one_element <- function(x, class) {
 }
 
 
-is_response <- function(object, class2) {
+is_response <- function(y, class2) {
   if (class2 == "binary") {
-    is(object, "factor") && nlevels(object) == 2
+    is(y, "factor") && nlevels(y) == 2
   } else {
-    is(object, class2)
+    is(y, class2)
   }
+}
+
+
+is_valid_response <- function(y, object) {
+  response_types <- if (is(object, "MLModel")) {
+    object@response_types
+  } else if (is.list(object)) {
+    object$response_types
+  }
+  any(map_logi(is_response, list(y), response_types))
 }
 
 
