@@ -16,13 +16,15 @@
 #'   unspecified (default).
 #' @param params list of user-specified model parameters to be passed to the
 #'   \code{fit} function.
-#' @param grid tuning grid function of three optional arguments and a required
-#'   ellipsis (\code{...}).  The optional arguments are a
-#'   \code{\link{ModelFrame}} \code{x} of the model fit data and formula, a
-#'   \code{length} to use in generating sequences of parameter values, and a
-#'   number of grid points to sample at \code{random}.  If argument \code{x} is
-#'   included, then any preprocessing steps specified for the data will be
-#'   applied prior to package calls to the function.
+#' @param gridinfo tibble of information for construction of tuning grids
+#'   consisting of a character column \code{param} with the names of parameters
+#'   in the grid, a list column \code{values} with functions to generate grid
+#'   points for the corresponding parameters, and an optional logical column
+#'   \code{regular} indicating which parameters to include by default in regular
+#'   grids.  Values functions may optionally include arguments \code{n} and
+#'   \code{data} for the number of grid points to generate and a
+#'   \code{\link{ModelFrame}} of the model fit data and formula, respectively;
+#'   and must include an ellipsis (\code{...}).
 #' @param fit model fitting function whose arguments are a \code{formula}, a
 #'   \code{\link{ModelFrame}} named \code{data}, case \code{weights}, and an
 #'   ellipsis.
@@ -89,7 +91,9 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
                     response_types = character(),
                     predictor_encoding = c(NA, "model.matrix", "terms"),
                     params = list(),
-                    grid = function(x, length, random, ...) NULL,
+                    gridinfo = tibble::tibble(
+                      param = character(), values = list(), regular = logical()
+                    ),
                     fit = function(formula, data, weights, ...)
                       stop("no fit function"),
                     predict = function(object, newdata, times, ...)
@@ -98,6 +102,13 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
 
   stopifnot(response_types %in% settings("response_types"))
 
+  if (is.function(gridinfo)) {
+    depwarn("'grid' argument to MLModel() is deprecated",
+            "use 'gridinfo' argument with a tibble instead",
+            expired = Sys.Date() >= "2021-04-01")
+    gridinfo <- new_gridinfo()
+  }
+
   new("MLModel",
       name = name,
       label = label,
@@ -105,11 +116,25 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
       response_types = response_types,
       predictor_encoding = match.arg(predictor_encoding),
       params = params,
-      grid = grid,
+      gridinfo = gridinfo,
       fit = fit,
       predict = predict,
       varimp = varimp)
 }
+
+
+setMethod("initialize", "MLModel",
+  function(.Object, ..., gridinfo = new_gridinfo()) {
+    stopifnot(is_tibble(gridinfo))
+    .Object@gridinfo <- new_gridinfo(
+      param = gridinfo[["param"]],
+      values = gridinfo[["values"]],
+      regular = gridinfo[["regular"]]
+    )
+    .Object <- callNextMethod(.Object, ...)
+    .Object
+  }
+)
 
 
 MLModelFit <- function(object, Class, model, x) {

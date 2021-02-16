@@ -47,18 +47,21 @@ KNNModel <- function(
     response_types = c("factor", "numeric", "ordered"),
     predictor_encoding = "model.matrix",
     params = params(environment()),
-    grid = function(x, length, random, ...) {
-      params <- list(
-        k = round(seq_range(0, 5, c(1, nrow(x) / 3), length + 1))
-      )
-      if (random) {
-        params$distance <- seq_inner(0, 4, length = length)
-        kernel <- c("optimal", "biweight", "cos", "epanechnikov", "gaussian",
-                    "inv", "rank", "rectangular", "triangular", "triweight")
-        params$kernel <- head(sample(kernel), length)
-      }
-      params
-    },
+    gridinfo = new_gridinfo(
+      param = c("k", "distance", "kernel"),
+      values = c(
+        function(n, data, ...) {
+          round(seq_range(0, 5, c(1, nrow(data) / 3), n + 1))
+        },
+        function(n, ...) seq_inner(0, 4, length = n),
+        function(n, ...) {
+          kernel <- c("optimal", "biweight", "cos", "epanechnikov", "gaussian",
+                      "inv", "rank", "rectangular", "triangular", "triweight")
+          head(sample(kernel), n)
+        }
+      ),
+      regular = c(TRUE, FALSE, FALSE)
+    ),
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       list(formula = formula, train = as.data.frame(data), ...)

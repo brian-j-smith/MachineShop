@@ -51,11 +51,12 @@ LARSModel <- function(
     response_types = "numeric",
     predictor_encoding = "model.matrix",
     params = params(environment()),
-    grid = function(x, length, ...) {
-      list(
-        step = seq_nvars(x, LARSModel, length)
+    gridinfo = new_gridinfo(
+      param = "step",
+      values = c(
+        function(n, data, ...) seq_nvars(data, LARSModel, n)
       )
-    },
+    ),
     fit = function(formula, data, weights, step = NULL, ...) {
       assert_equal_weights(weights)
       x <- model.matrix(data, intercept = FALSE)

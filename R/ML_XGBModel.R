@@ -248,62 +248,37 @@ MLModelFunction(XGBTreeModel) <- NULL
   model@name <- name
   model@label <- label
 
-  params <- switch(booster,
-    "dart" = list(
-      nrounds = NULL,
-      max_depth = NULL,
-      eta = NULL,
-      gamma = NULL,
-      min_child_weight = NULL,
-      subsample = NULL,
-      colsample_bytree = NULL,
-      rate_drop = NULL,
-      skip_drop = NULL
+  gridinfo <- new_gridinfo(
+    param = c("nrounds", "max_depth", "eta", "subsample", "colsample_bytree",
+              "rate_drop", "skip_drop", "lambda", "alpha", "eta", "gamma",
+              "min_child_weight", "colsample_bytree", "rate_drop", "skip_drop"),
+    values = c(
+      function(n, ...) round(seq_range(0, 50, c(1, 1000), n + 1)),
+      function(n, ...) 1:min(n, 10),
+      function(...) c(0.3, 0.4),
+      function(n, ...) seq(0.25, 1, length = n),
+      function(...) c(0.6, 0.8),
+      function(...) c(0.01, 0.50),
+      function(...) c(0.05, 0.95),
+      function(n, ...) c(10^-seq_inner(0, 5, n - 1), 0),
+      function(n, ...) c(10^-seq_inner(0, 5, n - 1), 0),
+      function(n, ...) seq(0.001, 0.6, length = n),
+      function(n, ...) seq(0, 10, length = n),
+      function(n, data, ...) seq(0, min(20, nrow(data)), length = n),
+      function(n, ...) seq(0.3, 0.8, length = n),
+      function(n, ...) seq(0.01, 0.50, length = n),
+      function(n, ...) seq(0.05, 0.95, length = n)
     ),
-    "gblinear" = list(
-      nrounds = NULL,
-      lambda = NULL,
-      alpha = NULL
-    ),
-    "gbtree" = list(
-      nrounds = NULL,
-      max_depth = NULL,
-      eta = NULL,
-      gamma = NULL,
-      min_child_weight = NULL,
-      subsample = NULL,
-      colsample_bytree = NULL
-    )
+    regular = c(rep(TRUE, 9), rep(FALSE, 6))
   )
-
-  if (length(params)) {
-    model@grid <- function(x, length, random, ...) {
-      params <- params %>%
-        set_param("nrounds",
-                  round(seq_range(0, 50, c(1, 1000), length + 1))) %>%
-        set_param("max_depth", 1:min(length, 10)) %>%
-        set_param("eta", c(0.3, 0.4)) %>%
-        set_param("subsample", seq(0.25, 1, length = length)) %>%
-        set_param("colsample_bytree", c(0.6, 0.8)) %>%
-        set_param("rate_drop", c(0.01, 0.50)) %>%
-        set_param("skip_drop", c(0.05, 0.95)) %>%
-        set_param("lambda", c(10^-seq_inner(0, 5, length - 1), 0)) %>%
-        set_param("alpha", c(10^-seq_inner(0, 5, length - 1), 0))
-
-      if (random) {
-        params <- params %>%
-          set_param("eta", seq(0.001, 0.6, length = length)) %>%
-          set_param("gamma", seq(0, 10, length = length)) %>%
-          set_param("min_child_weight",
-                    seq(0, min(20, nrow(x)), length = length)) %>%
-          set_param("colsample_bytree", seq(0.3, 0.8, length = length)) %>%
-          set_param("rate_drop", seq(0.01, 0.50, length = length)) %>%
-          set_param("skip_drop", seq(0.05, 0.95, length = length))
-      }
-
-      params
-    }
-  }
+  params <- switch(booster,
+    "dart" = c("nrounds", "max_depth", "eta", "gamma", "min_child_weight",
+               "subsample", "colsample_bytree", "rate_drop", "skip_drop"),
+    "gblinear" = c("nrounds", "lambda", "alpha"),
+    "gbtree" = c("nrounds", "max_depth", "eta", "gamma", "min_child_weight",
+                 "subsample", "colsample_bytree")
+  )
+  model@gridinfo <- gridinfo[gridinfo$param %in% params, ]
 
   model
 }

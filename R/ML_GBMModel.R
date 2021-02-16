@@ -51,18 +51,16 @@ GBMModel <- function(
     response_types = c("factor", "numeric", "PoissonVariate", "Surv"),
     predictor_encoding = "terms",
     params = params(environment()),
-    grid = function(x, length, random, ...) {
-      params <- list(
-        n.trees = round(seq_range(0, 50, c(1, 1000), length + 1)),
-        interaction.depth = 1:min(length, 10)
-      )
-      if (random) {
-        params$shrinkage <- seq(0.001, 0.1, length = length)
-        params$n.minobsinnode <-
-          round(seq(1, min(20, nrow(x)), length = length))
-      }
-      params
-    },
+    gridinfo = new_gridinfo(
+      param = c("n.trees", "interaction.depth", "shrinkage", "n.minobsinnode"),
+      values = c(
+        function(n, ...) round(seq_range(0, 50, c(1, 1000), n + 1)),
+        function(n, ...) 1:min(n, 10),
+        function(n, ...) seq(0.001, 0.1, length = n),
+        function(n, data, ...) round(seq(1, min(20, nrow(data)), length = n))
+      ),
+      regular = c(TRUE, TRUE, FALSE, FALSE)
+    ),
     fit = function(formula, data, weights, distribution = NULL, ...) {
       if (is.null(distribution)) {
         y <- response(data)

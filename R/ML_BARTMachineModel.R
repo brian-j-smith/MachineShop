@@ -65,15 +65,17 @@ BARTMachineModel <- function(num_trees = 50, num_burn = 250, num_iter = 1000,
     response_types = c("binary", "numeric"),
     predictor_encoding = "model.matrix",
     params = params(environment(), ...),
-    grid = function(x, length, ...) {
-      params <- list(
-        alpha = seq(0.9, 0.99, length = length),
-        beta = seq(1, 3, length = length),
-        k = 1:min(length, 10) + 1
+    gridinfo = new_gridinfo(
+      param = c("alpha", "beta", "k", "nu"),
+      values = c(
+        function(n, ...) seq(0.9, 0.99, length = n),
+        function(n, ...) seq(1, 3, length = n),
+        function(n, ...) 1:min(n, 10) + 1,
+        function(n, data, ...) {
+          if (is.numeric(response(data))) 1:min(n, 10) + 1
+        }
       )
-      if (is.numeric(response(x))) params$nu <- 1:min(length, 10) + 1
-      params
-    },
+    ),
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       x <- model.matrix(data, intercept = FALSE)

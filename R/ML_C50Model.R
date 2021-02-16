@@ -72,13 +72,14 @@ C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
     response_types = "factor",
     predictor_encoding = "terms",
     params = params,
-    grid = function(length, ...) {
-      list(
-        trials = c(1, round(seq_range(0, 10, c(2, 100), length))),
-        rules = c(FALSE, TRUE),
-        winnow = c(FALSE, TRUE)
+    gridinfo = new_gridinfo(
+      param = c("trials", "rules", "winnow"),
+      values = c(
+        function(n, ...) c(1, round(seq_range(0, 10, c(2, 100), n))),
+        function(...) c(FALSE, TRUE),
+        function(...) c(FALSE, TRUE)
       )
-    },
+    ),
     fit = function(formula, data, weights, ...) {
       eval_fit(data,
                formula = C50::C5.0(formula, data = as.data.frame(data),

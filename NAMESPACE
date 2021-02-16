@@ -22,7 +22,7 @@ importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
            vcov)
 importFrom(survival, concordance, is.Surv, Surv, survfit, survreg,
            survreg.distributions)
-importFrom(tibble, as_tibble, tibble)
+importFrom(tibble, as_tibble, is_tibble, tibble)
 importFrom(utils, combn, head, methods, relist, stack, str, tail)
 
 
@@ -151,6 +151,7 @@ export(.,
        ConfusionMatrix,
        dependence,
        fit,
+       get_grid,
        lift,
        metricinfo,
        modelinfo,
@@ -205,6 +206,13 @@ S3method(fit, ModelFrame)
 S3method(fit, recipe)
 S3method(format, SurvMatrix)
 S3method(formula, ModelFrame)
+S3method(get_grid, default)
+S3method(get_grid, formula)
+S3method(get_grid, matrix)
+S3method(get_grid, MLModel)
+S3method(get_grid, MLModelFunction)
+S3method(get_grid, ModelFrame)
+S3method(get_grid, recipe)
 S3method(model.matrix, ModelDesignTerms)
 S3method(model.matrix, ModelFormulaTerms)
 S3method(model.matrix, ModelFrame)

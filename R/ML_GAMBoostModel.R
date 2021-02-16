@@ -69,11 +69,12 @@ GAMBoostModel <- function(
                        "numeric", "PoissonVariate", "Surv"),
     predictor_encoding = "terms",
     params = params,
-    grid = function(length, ...) {
-      list(
-        mstop = round(seq_range(0, 50, c(1, 1000), length + 1))
+    gridinfo = new_gridinfo(
+      param = "mstop",
+      values = c(
+        function(n, ...) round(seq_range(0, 50, c(1, 1000), n + 1))
       )
-    },
+    ),
     fit = function(formula, data, weights, family = NULL, ...) {
       attach_objects(list(
         bbs = mboost::bbs,

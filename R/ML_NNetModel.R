@@ -53,12 +53,13 @@ NNetModel <- function(
     response_types = c("factor", "numeric"),
     predictor_encoding = "model.matrix",
     params = params(environment()),
-    grid = function(length, ...) {
-      list(
-        size = round(seq_range(1, 2, c(1, 20), length = length)),
-        decay = c(0, 10^seq_inner(-5, 1, length - 1))
+    gridinfo = new_gridinfo(
+      param = c("size", "decay"),
+      values = c(
+        function(n, ...) round(seq_range(1, 2, c(1, 20), length = n)),
+        function(n, ...) c(0, 10^seq_inner(-5, 1, n - 1))
       )
-    },
+    ),
     fit = function(formula, data, weights, linout = NULL, ...) {
       y <- response(data)
       if (is.null(linout)) linout <- is_response(y, "numeric")

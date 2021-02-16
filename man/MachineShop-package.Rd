@@ -31,6 +31,14 @@ Training:
   \code{\link{resample}} \tab Resample estimation of model performance \cr
 }
 
+Tuning Grids:
+\tabular{ll}{
+  \code{\link{expand_model}} \tab Model expansion over tuning parameters \cr
+  \code{\link{expand_params}} \tab Model parameters expansion \cr
+  \code{\link{expand_steps}} \tab Recipe step parameters expansion \cr
+  \code{\link{get_grid}} \tab Model tuning grid \cr
+}
+
 Response Values:
 \tabular{ll}{
   \code{\link{response}} \tab Observed \cr

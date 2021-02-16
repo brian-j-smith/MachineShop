@@ -47,15 +47,14 @@ RandomForestModel <- function(
     response_types = c("factor", "numeric"),
     predictor_encoding = "terms",
     params = params(environment()),
-    grid = function(x, length, random, ...) {
-      params <- list(
-        mtry = seq_nvars(x, RandomForestModel, length)
-      )
-      if (random) {
-        params$nodesize <- round(seq(1, min(20, nrow(x)), length = length))
-      }
-      params
-    },
+    gridinfo = new_gridinfo(
+      param = c("mtry", "nodesize"),
+      values = c(
+        function(n, data, ...) seq_nvars(data, RandomForestModel, n),
+        function(n, data, ...) round(seq(1, min(20, nrow(data)), length = n))
+      ),
+      regular = c(TRUE, FALSE)
+    ),
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       eval_fit(data,

@@ -7,8 +7,9 @@
 Grid(size = 3, random = FALSE, length = NULL)
 }
 \arguments{
-\item{size}{number of values to be generated for each model parameter in
-the tuning grid.}
+\item{size}{single integer or vector of integers whose positions or names
+match the parameters in a model's tuning grid and which specify the number
+of values to use in constructing the grid.}
 
 \item{random}{number of unique grid points to sample at random, \code{Inf}
 for all random points, or \code{FALSE} for all fixed points.}
@@ -21,10 +22,16 @@ for all random points, or \code{FALSE} for all fixed points.}
 \description{
 Defines control parameters for a tuning grid.
 }
+\details{
+Returned \code{Grid} objects may be supplied to
+\code{\link{TunedModel}} for automated construction of model tuning grids.
+These grids can be extracted manually and viewed with the
+\code{\link{get_grid}} function.
+}
 \examples{
 TunedModel(GBMModel, grid = Grid(10, random = 5))
 
 }
 \seealso{
-\code{\link{TunedModel}}
+\code{\link{TunedModel}}, \code{\link{get_grid}}
 }

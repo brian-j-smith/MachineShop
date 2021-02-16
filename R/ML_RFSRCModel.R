@@ -104,12 +104,13 @@ RFSRCModel <- function(
     response_types = c("factor", "matrix", "numeric", "Surv"),
     predictor_encoding = "terms",
     params = params(environment()),
-    grid = function(x, length, ...) {
-      list(
-        mtry = seq_nvars(x, RFSRCModel, length),
-        nodesize = round(seq(1, min(20, nrow(x)), length = length))
+    gridinfo = new_gridinfo(
+      param = c("mtry", "nodesize"),
+      values = c(
+        function(n, data, ...) seq_nvars(data, RFSRCModel, n),
+        function(n, data, ...) round(seq(1, min(20, nrow(data)), length = n))
       )
-    },
+    ),
     fit = function(formula, data, weights, ...) {
       y <- response(data)
       data <- as.data.frame(data)

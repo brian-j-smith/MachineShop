@@ -69,21 +69,22 @@ RangerModel <- function(
     response_types = c("factor", "numeric", "Surv"),
     predictor_encoding = "terms",
     params = params(environment()),
-    grid = function(x, length, random, ...) {
-      params <- list(
-        mtry = seq_nvars(x, RangerModel, length)
-      )
-      if (random) {
-        params$min.node.size <- round(seq(1, min(20, nrow(x)), length = length))
-        splitrule <- if (is.factor(response(x))) {
-          c("gini", "extratrees")
-        } else {
-          c("variance", "extratrees", "maxstat")
+    gridinfo = new_gridinfo(
+      param = c("mtry", "min.node.size", "splitrule"),
+      values = c(
+        function(n, data, ...) seq_nvars(data, RangerModel, n),
+        function(n, data, ...) round(seq(1, min(20, nrow(data)), length = n)),
+        function(n, data, ...) {
+          methods <- if (is.factor(response(data))) {
+            c("gini", "extratrees")
+          } else {
+            c("variance", "extratrees", "maxstat")
+          }
+          head(sample(methods), n)
         }
-        params$splitrule <- head(sample(splitrule), length)
-      }
-      params
-    },
+      ),
+      regular = c(TRUE, FALSE, FALSE)
+    ),
     fit = function(formula, data, weights, ...) {
       ranger::ranger(formula, data = as.data.frame(data),
                      case.weights = weights,

@@ -49,13 +49,16 @@ RPartModel <- function(
     response_types = c("factor", "numeric", "Surv"),
     predictor_encoding = "terms",
     params = list(control = as.call(c(.(list), params(environment())))),
-    grid = function(x, length, ...) {
-      cptable <- fit(x, model = RPartModel(cp = 0))$cptable
-      xerror_order <- order(cptable[, "xerror"] + cptable[, "xstd"])
-      list(
-        cp = sort(head(cptable[xerror_order, "CP"], length))
+    gridinfo = new_gridinfo(
+      param = "cp",
+      values = c(
+        function(n, data, ...) {
+          cptable <- fit(data, model = RPartModel(cp = 0))$cptable
+          xerror_order <- order(cptable[, "xerror"] + cptable[, "xstd"])
+          sort(head(cptable[xerror_order, "CP"], n))
+        }
       )
-    },
+    ),
     fit = function(formula, data, weights, ...) {
       method <- switch_class(response(data),
         "factor" = "class",

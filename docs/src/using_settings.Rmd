@@ -15,7 +15,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
   : character string specifying distributional approximations to estimated survival curves for predicting survival events/probabilities.  Choices are `"empirical"` (default) for the Kaplan-Meier estimator, `"exponential"`, or `"weibull"`.
 
 `grid`
-  : number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a `Grid()` function, function name, or call [default: 3].
+  : `size` argument to `Grid()` indicating the number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a `Grid()` function, function name, or call [default: 3].
 
 `max.print`
   : number of models or data rows to show with print methods or `Inf` to show all [default: 10].

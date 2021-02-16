@@ -189,29 +189,29 @@ MLModelFunction(SVMTanhModel) <- NULL
   scaled <- model@params$scaled
   if (!is.logical(scaled)) scaled <- TRUE
 
-  params <- switch(kernel,
-    "anovadot" = list(C = NULL, degree = NULL),
-    "besseldot" = list(C = NULL, order = NULL, degree = NULL),
-    "laplacedot" = list(C = NULL, sigma = NULL),
-    "polydot" = list(C = NULL, degree = NULL, scale = NULL),
-    "rbfdot" = list(C = NULL, sigma = NULL),
-    "vanilladot" = list(C = NULL)
+  gridinfo <- new_gridinfo(
+    param = c("C", "degree", "order", "scale", "sigma"),
+    values = c(
+      function(n, ...) 2^seq_range(-4, 2, c(-4, 10), n),
+      function(n, ...) 1:min(n, 3),
+      function(n, ...) 1:min(n, 3),
+      function(n, ...) 10^seq_range(-4, 2, c(-4, log10(2)), n),
+      function(n, data, ...) {
+        sigmas <- kernlab::sigest(model.matrix(data, intercept = FALSE),
+                                  scaled = scaled)
+        exp(seq(log(min(sigmas)), log(max(sigmas)), length = n))
+      }
+    )
   )
-
-  if (length(params)) {
-    model@grid <- function(x, length, ...) {
-      params %>%
-        set_param("C", 2^seq_range(-4, 2, c(-4, 10), length)) %>%
-        set_param("degree", 1:min(length, 3)) %>%
-        set_param("order", 1:min(length, 3)) %>%
-        set_param("scale", 10^seq_range(-4, 2, c(-4, log10(2)), length)) %>%
-        set_param("sigma", {
-          sigmas <- kernlab::sigest(model.matrix(x, intercept = FALSE),
-                                    scaled = scaled)
-          exp(seq(log(min(sigmas)), log(max(sigmas)), length = length))
-        })
-    }
-  }
+  params <- switch(kernel,
+    "anovadot" = c("C", "degree"),
+    "besseldot" = c("C", "order", "degree"),
+    "laplacedot" = c("C", "sigma"),
+    "polydot" = c("C", "degree", "scale"),
+    "rbfdot" = c("C", "sigma"),
+    "vanilladot" = "C"
+  )
+  model@gridinfo <- gridinfo[gridinfo$param %in% params, ]
 
   model
 }

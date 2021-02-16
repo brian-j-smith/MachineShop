@@ -63,11 +63,12 @@ MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
     response_types = "factor",
     predictor_encoding = "model.matrix",
     params = params(environment(), ...),
-    grid = function(length, ...) {
-      list(
-        subclasses = 1:min(length, 10) + 1
+    gridinfo = new_gridinfo(
+      param = "subclasses",
+      values = c(
+        function(n, ...) 1:min(n, 10) + 1
       )
-    },
+    ),
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       mda::mda(formula, data = as.data.frame(data), ...)

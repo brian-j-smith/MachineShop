@@ -66,17 +66,20 @@ GLMNetModel <- function(
                        "PoissonVariate", "Surv"),
     predictor_encoding = "model.matrix",
     params = params(environment()),
-    grid = function(x, length, ...) {
-      model <- GLMNetModel(lambda = NULL)
-      model@params$nlambda <- 3
-      modelfit <- fit(x, model = model)
-      list(
-        lambda = exp(seq(log(min(modelfit$lambda)),
-                         log(max(modelfit$lambda)),
-                         length = length)),
-        alpha = seq(0.1, 1, length = length)
+    gridinfo = new_gridinfo(
+      param = c("lambda", "alpha"),
+      values = c(
+        function(n, data, ...) {
+          model <- GLMNetModel(lambda = NULL)
+          model@params$nlambda <- 3
+          modelfit <- fit(data, model = model)
+          exp(seq(log(min(modelfit$lambda)),
+                  log(max(modelfit$lambda)),
+                  length = n))
+        },
+        function(n, ...) seq(0.1, 1, length = n)
       )
-    },
+    ),
     fit = function(formula, data, weights, family = NULL, nlambda = 1, ...) {
       x <- model.matrix(data, intercept = FALSE)
       offset <- model.offset(data)

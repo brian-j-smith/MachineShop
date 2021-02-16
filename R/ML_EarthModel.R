@@ -61,15 +61,18 @@ EarthModel <- function(
     response_types = c("factor", "numeric"),
     predictor_encoding = "model.matrix",
     params = params(environment()),
-    grid = function(x, length, random, ...) {
-      modelfit <- fit(x, model = EarthModel(pmethod = "none"))
-      max_terms <- min(2 + 0.75 * nrow(modelfit$dirs), 200)
-      params <- list(
-        nprune = round(seq(2, max_terms, length = length))
-      )
-      if (random) params$degree <- head(1:2, length)
-      params
-    },
+    gridinfo = new_gridinfo(
+      param = c("nprune", "degree"),
+      values = c(
+        function(n, data, ...) {
+          modelfit <- fit(data, model = EarthModel(pmethod = "none"))
+          max_terms <- min(2 + 0.75 * nrow(modelfit$dirs), 200)
+          round(seq(2, max_terms, length = n))
+        },
+        function(n, ...) head(1:2, n)
+      ),
+      regular = c(TRUE, FALSE)
+    ),
     fit = function(formula, data, weights, ...) {
       attach_objects(list(
         contr.earth.response = earth::contr.earth.response

@@ -116,7 +116,7 @@ getMLObject <- function(x, class = c("MLControl", "MLMetric", "MLModel")) {
 
 
 has_grid <- function(object) {
-  !is.null(body(object@grid))
+  nrow(object@gridinfo) > 0
 }
 
 
@@ -460,12 +460,6 @@ set_model_names <- function(x) {
   for (i in seq(x)) levels(x[[i]][[name]]) <- level_names[[i]]
 
   x
-}
-
-
-set_param <- function(params, name, value) {
-  if (name %in% names(params)) params[[name]] <- value
-  params
 }
 
 

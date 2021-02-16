@@ -67,15 +67,18 @@ FDAModel <- function(
     response_types = "factor",
     predictor_encoding = "model.matrix",
     params = params(environment(), ...),
-    grid = function(x, length, random, ...) {
-      modelfit <- fit(x, model = EarthModel(pmethod = "none"))
-      max_terms <- min(2 + 0.75 * nrow(modelfit$dirs), 200)
-      params <- list(
-        nprune = round(seq(2, max_terms, length = length))
-      )
-      if (random) params$degree <- head(1:2, length)
-      params
-    },
+    gridinfo = new_gridinfo(
+      param = c("nprune", "degree"),
+      values = c(
+        function(n, data, ...) {
+          modelfit <- fit(data, model = EarthModel(pmethod = "none"))
+          max_terms <- min(2 + 0.75 * nrow(modelfit$dirs), 200)
+          round(seq(2, max_terms, length = n))
+        },
+        function(n, ...) head(1:2, n)
+      ),
+      regular = c(TRUE, FALSE)
+    ),
     fit = function(formula, data, weights, ...) {
       mda::fda(formula, data = as.data.frame(data), weights = weights, ...)
     },
@@ -109,11 +112,12 @@ PDAModel <- function(lambda = 1, df = NULL, ...) {
   model <- do.call(FDAModel, args, quote = TRUE)
   model@name <- "PDAModel"
   model@label <- "Penalized Discriminant Analysis"
-  model@grid <- function(x, length, ...) {
-    list(
-      lambda = c(0, 10^seq_inner(-5, 1, length - 1))
+  model@gridinfo <- new_gridinfo(
+    param = "lambda",
+    values = c(
+      function(n, ...) c(0, 10^seq_inner(-5, 1, n - 1))
     )
-  }
+  )
   model
 }
 

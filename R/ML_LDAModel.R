@@ -51,11 +51,14 @@ LDAModel <- function(
     response_types = "factor",
     predictor_encoding = "model.matrix",
     params = params(environment()),
-    grid = function(x, length, ...) {
-      list(
-        dimen = 1:min(nlevels(response(x)) - 1, nvars(x, LDAModel), length)
+    gridinfo = new_gridinfo(
+      param = "dimen",
+      values = c(
+        function(n, data, ...) {
+          1:min(nlevels(response(data)) - 1, nvars(data, LDAModel), n)
+        }
       )
-    },
+    ),
     fit = function(formula, data, weights, dimen, use, ...) {
       assert_equal_weights(weights)
       modelfit <- MASS::lda(formula, data = as.data.frame(data), ...)

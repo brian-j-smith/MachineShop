@@ -53,11 +53,12 @@ CForestModel <- function(
     response_types = c("factor", "numeric", "Surv"),
     predictor_encoding = "terms",
     params = list(controls = as.call(c(.(party::cforest_control), args))),
-    grid = function(x, length, ...) {
-      list(
-        mtry = seq_nvars(x, CForestModel, length)
+    gridinfo = new_gridinfo(
+      param = "mtry",
+      values = c(
+        function(n, data, ...) seq_nvars(data, CForestModel, n)
       )
-    },
+    ),
     fit = function(formula, data, weights, ...) {
       party::cforest(formula, data = as.data.frame(data), weights = weights,
                      ...)

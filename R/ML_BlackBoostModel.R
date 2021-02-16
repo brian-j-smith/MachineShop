@@ -82,12 +82,13 @@ BlackBoostModel <- function(
                        "numeric", "PoissonVariate", "Surv"),
     predictor_encoding = "terms",
     params = params,
-    grid = function(length, ...) {
-      list(
-        mstop = round(seq_range(0, 50, c(1, 1000), length + 1)),
-        maxdepth = 1:min(length, 10)
+    gridinfo = new_gridinfo(
+      param = c("mstop", "maxdepth"),
+      values = c(
+        function(n, ...) round(seq_range(0, 50, c(1, 1000), n + 1)),
+        function(n, ...) 1:min(n, 10)
       )
-    },
+    ),
     fit = function(formula, data, weights, family = NULL, ...) {
       if (is.null(family)) {
         family <- switch_class(response(data),

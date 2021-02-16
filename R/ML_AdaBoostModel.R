@@ -64,17 +64,15 @@ AdaBoostModel <- function(
     response_types = "factor",
     predictor_encoding = "terms",
     params = params,
-    grid = function(length, random, ...) {
-      params <- list(
-        mfinal = round(seq_range(0, 25, c(1, 200), length + 1)),
-        maxdepth = 1:min(length, 30)
-      )
-      if (random) {
-        coeflearn <- c("Breiman", "Freund", "Zhu")
-        params$coeflearn <- head(sample(coeflearn), length)
-      }
-      params
-    },
+    gridinfo = new_gridinfo(
+      param = c("mfinal", "maxdepth", "coeflearn"),
+      values = c(
+        function(n, ...) round(seq_range(0, 25, c(1, 200), n + 1)),
+        function(n, ...) 1:min(n, 30),
+        function(n, ...) head(sample(c("Breiman", "Freund", "Zhu")), n)
+      ),
+      regular = c(TRUE, TRUE, FALSE)
+    ),
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       adabag::boosting(formula, data = as.data.frame(data), ...)

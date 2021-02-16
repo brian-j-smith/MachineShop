@@ -56,12 +56,13 @@ AdaBagModel <- function(
     response_types = "factor",
     predictor_encoding = "terms",
     params = params,
-    grid = function(length, ...) {
-      list(
-        mfinal = round(seq_range(0, 25, c(1, 200), length + 1)),
-        maxdepth = 1:min(length, 30)
+    gridinfo = new_gridinfo(
+      param = c("mfinal", "maxdepth"),
+      values = c(
+        function(n, ...) round(seq_range(0, 25, c(1, 200), n + 1)),
+        function(n, ...) 1:min(n, 30)
       )
-    },
+    ),
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
       adabag::bagging(formula, data = as.data.frame(data), ...)

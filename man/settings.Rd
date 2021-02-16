@@ -39,10 +39,10 @@ behaviors of functions in the \pkg{MachineShop} package.
     approximations to estimated survival curves for predicting survival
     events/probabilities.  Choices are \code{"empirical"} (default) for the
     Kaplan-Meier estimator, \code{"exponential"}, or \code{"weibull"}.}
-  \item{\code{grid}}{number of parameter-specific values to generate
-    automatically for \link[=TunedModel]{tuning} of models that have
-    pre-defined grids or a \code{\link{Grid}} function, function name, or
-    call [default: 3].}
+  \item{\code{grid}}{\code{size} argument to \code{\link{Grid}} indicating
+    the number of parameter-specific values to generate automatically for
+    \link[=TunedModel]{tuning} of models that have pre-defined grids or a
+    \code{\link{Grid}} function, function name, or call [default: 3].}
   \item{\code{max.print}}{number of models or data rows to show with print
     methods or \code{Inf} to show all [default: 10].}
   \item{\code{method.EmpiricalSurv}}{character string specifying the
