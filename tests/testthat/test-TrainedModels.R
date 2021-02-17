@@ -21,6 +21,7 @@ models <- c(
   "PLSModel",
   "RandomForestModel",
   "RangerModel",
+  "RFSRCModel",
   "RPartModel",
   "SVMANOVAModel",
   "SVMBesselModel",
