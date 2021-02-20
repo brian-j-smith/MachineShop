@@ -95,7 +95,7 @@ setClass("MLModel",
             predict = "function",
             varimp = "function",
             x = "ANY",
-            trainbits = "ListOf")
+            traininfo = "ListOf")
 )
 
 

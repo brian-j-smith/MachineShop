@@ -304,7 +304,7 @@ print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   cat(str(x@params))
   if (trained) {
     cat("\n")
-    print(x@trainbits, n = n)
+    print(x@traininfo, n = n)
   }
   invisible(x)
 }
@@ -536,7 +536,7 @@ print.SelectedModel <- function(x, n = MachineShop::settings("max.print"), ...) 
   print(x@params$control)
   if (trained) {
     cat("\n")
-    print(x@trainbits, n = n)
+    print(x@traininfo, n = n)
   }
   invisible(x)
 }
@@ -553,7 +553,7 @@ print.StackedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print(x@params$control)
   if (trained) {
     cat("\n")
-    print(x@trainbits, n = n)
+    print(x@traininfo, n = n)
   }
   invisible(x)
 }
@@ -573,7 +573,7 @@ print.SuperModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print(x@params$control)
   if (trained) {
     cat("\n")
-    print(x@trainbits, n = n)
+    print(x@traininfo, n = n)
   }
   invisible(x)
 }
@@ -670,7 +670,7 @@ print.TunedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print(x@params$control)
   if (trained) {
     cat("\n")
-    print(x@trainbits, n = n)
+    print(x@traininfo, n = n)
   }
   invisible(x)
 }

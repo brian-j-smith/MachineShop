@@ -138,7 +138,7 @@ is.trained <- function(x, ...) {
 
 
 is.trained.MLModel <- function(x, ...) {
-  length(x@trainbits) > 0
+  length(x@traininfo) > 0
 }
 
 
@@ -344,13 +344,13 @@ push <- function(x, object, ...) {
 
 push.TrainBit <- function(x, object, ...) {
   stopifnot(is(object, "MLModelFit"))
-  obj_bits <- (if (isS4(object)) object@mlmodel else object$mlmodel)@trainbits
-  trainbits <- ListOf(c(x, obj_bits))
-  names(trainbits) <- paste0("TrainStep", seq(trainbits))
+  obj_bits <- (if (isS4(object)) object@mlmodel else object$mlmodel)@traininfo
+  traininfo <- ListOf(c(x, obj_bits))
+  names(traininfo) <- paste0("TrainStep", seq(traininfo))
   if (isS4(object)) {
-    object@mlmodel@trainbits <- trainbits
+    object@mlmodel@traininfo <- traininfo
   } else {
-    object$mlmodel@trainbits <- trainbits
+    object$mlmodel@traininfo <- traininfo
   }
   object
 }

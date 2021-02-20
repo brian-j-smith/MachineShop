@@ -204,7 +204,7 @@ plot.MLModel <- function(x, metrics = NULL,
     } else {
       plot(perf, metrics = metrics, stat = stat, type = type, ...)
     }
-  }, x@trainbits)
+  }, x@traininfo)
 }
 
 

@@ -83,7 +83,7 @@ summary.MLModel <- function(object, stats =
   if (!is.trained(object)) stop("no training results to summarize")
   map(function(trainbit) {
     summary(trainbit@performance, stats = stats, na.rm = na.rm, ...)
-  }, object@trainbits)
+  }, object@traininfo)
 }
 
 
