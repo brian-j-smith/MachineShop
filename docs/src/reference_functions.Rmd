@@ -35,16 +35,16 @@
 
 ## Performance Assessment
 
-|                              |                                               | 
-|------------------------------|-----------------------------------------------|
-| `r rdoc_url("calibration")`  | Model calibration                             |
-| `r rdoc_url("confusion")`    | Confusion matrices                            |
-| `r rdoc_url("dependence")`   | Partial dependence                            |
-| `r rdoc_url("diff")`         | Model performance differences                 |
-| `r rdoc_url("lift")`         | Lift curves                                   |
-| `r rdoc_url("performance")`  | Model performance metrics                     |
-| `r rdoc_url("performance_curve")`  | Model performance curves                |
-| `r rdoc_url("varimp")`       | Variable importance                           |
+|                                   |                                          | 
+|-----------------------------------|------------------------------------------|
+| `r rdoc_url("calibration")`       | Model calibration                        |
+| `r rdoc_url("confusion")`         | Confusion matrices                       |
+| `r rdoc_url("dependence")`        | Partial dependence                       |
+| `r rdoc_url("diff")`              | Model performance differences            |
+| `r rdoc_url("lift")`              | Lift curves                              |
+| `r rdoc_url("performance")`       | Model performance metrics                |
+| `r rdoc_url("performance_curve")` | Model performance curves                 |
+| `r rdoc_url("varimp")`            | Variable importance                      |
 
 &nbsp;
 
