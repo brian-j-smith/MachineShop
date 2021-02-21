@@ -2,6 +2,15 @@
 
 ## Version Updates
 
+## 2.6.2
+* Rename `length` argument to `size` in `Grid()` and `ParameterGrid()`.
+* Add support for named sizes in `ParameterGrid()`.
+* Revise model tuning grids.
+  * Replace `grid` slot with `gridinfo` in `MLModel` classes.
+  * Add support for size vectors in `Grid()`.
+  * Add `get_grid()` function to extract model-defined tuning grids.
+* Rename `trainbits` slot to `traininfo` in `MLModel` classes.
+
 ## 2.6.1
 * Doc edits: do not test examples requiring suggested packages.
 * CRAN release.
