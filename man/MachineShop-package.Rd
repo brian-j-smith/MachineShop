@@ -36,7 +36,7 @@ Tuning Grids:
   \code{\link{expand_model}} \tab Model expansion over tuning parameters \cr
   \code{\link{expand_params}} \tab Model parameters expansion \cr
   \code{\link{expand_steps}} \tab Recipe step parameters expansion \cr
-  \code{\link{get_grid}} \tab Model tuning grid \cr
+  \code{\link{get_grid}} \tab Model tuning grid extraction \cr
 }
 
 Response Values:

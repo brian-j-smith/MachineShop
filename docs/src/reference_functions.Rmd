@@ -11,6 +11,18 @@
 &nbsp;
 
 
+## Tuning Grids
+
+|                               |                                              | 
+|-------------------------------|----------------------------------------------|
+| `r rdoc_url("expand_model")`  | Model expansion over tuning parameters       |
+| `r rdoc_url("expand_params")` | Model parameters expansion                   |
+| `r rdoc_url("expand_steps")`  | Recipe step parameters expansion             |
+| `r rdoc_url("get_grid")`      | Model tuning grid extraction                 |
+
+&nbsp;
+
+
 ## Response Values
 
 |                           |                                                  | 
