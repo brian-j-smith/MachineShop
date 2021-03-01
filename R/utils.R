@@ -394,7 +394,18 @@ sample_params <- function(x, size = NULL, replace = FALSE) {
     if (!replace) grid <- unique(grid)
   }
 
-  head(grid, size)
+  grid <- head(grid, size)
+  sortable_types <- c("character", "complex", "Date", "factor", "logical",
+                      "numeric")
+  is_sortable <- map_logi(function(column) {
+    any(map_logi(is, list(column), sortable_types))
+  }, grid)
+  if (any(is_sortable)) {
+    sort_order <- do.call(order, rev(grid[is_sortable]))
+    grid <- grid[sort_order, ]
+  }
+
+  grid
 }
 
 
