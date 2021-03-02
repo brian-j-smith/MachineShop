@@ -188,7 +188,7 @@ new_gridinfo <- function(param = character(), values = list(), regular = NULL) {
 Grid <- function(size = 3, random = FALSE, length = NULL) {
   if (!is.null(length)) {
     depwarn("'length' argument to Grid is deprecated",
-            "use 'size' argument instead", expired = Sys.Date() >= "2021-04-01")
+            "use 'size' argument instead", expired = Sys.Date() >= "2021-04-15")
     size <- length
   }
 
@@ -264,7 +264,7 @@ ParameterGrid.list <- function(x, size = 3, random = FALSE, length = NULL, ...) 
 ParameterGrid.parameters <- function(x, size = 3, random = FALSE, length = NULL, ...) {
   if (!is.null(length)) {
     depwarn("'length' argument to ParameterGrid is deprecated",
-            "use 'size' argument instead", expired = Sys.Date() >= "2021-04-01")
+            "use 'size' argument instead", expired = Sys.Date() >= "2021-04-15")
     size <- length
   }
 

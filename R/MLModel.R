@@ -105,7 +105,7 @@ MLModel <- function(name = "MLModel", label = name, packages = character(),
   if (is.function(gridinfo)) {
     depwarn("'grid' argument to MLModel() is deprecated",
             "use 'gridinfo' argument with a tibble instead",
-            expired = Sys.Date() >= "2021-04-01")
+            expired = Sys.Date() >= "2021-04-15")
     gridinfo <- new_gridinfo()
   }
 
