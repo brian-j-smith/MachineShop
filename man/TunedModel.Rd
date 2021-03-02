@@ -7,7 +7,7 @@
 TunedModel(
   model,
   grid = MachineShop::settings("grid"),
-  fixed = NULL,
+  fixed = list(),
   control = MachineShop::settings("control"),
   metrics = NULL,
   stat = MachineShop::settings("stat.train"),

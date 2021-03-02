@@ -136,7 +136,8 @@ MLModelFunction(SelectedModel) <- NULL
 #' }
 #'
 TunedModel <- function(model, grid = MachineShop::settings("grid"),
-                       fixed = NULL, control = MachineShop::settings("control"),
+                       fixed = list(),
+                       control = MachineShop::settings("control"),
                        metrics = NULL,
                        stat = MachineShop::settings("stat.train"),
                        cutoff = MachineShop::settings("cutoff")) {
