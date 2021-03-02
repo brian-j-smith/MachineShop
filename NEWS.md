@@ -2,6 +2,11 @@
 
 ## Version Updates
 
+## 2.7.0
+* Sort randomly sampled grid points.
+* Change `fixed` argument default `NULL` to `list()` in `TunedModel()`.
+* CRAN release.
+
 ## 2.6.2
 * Rename `length` argument to `size` in `Grid()` and `ParameterGrid()`.
 * Add support for named sizes in `ParameterGrid()`.
