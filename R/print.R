@@ -304,7 +304,7 @@ print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   cat(str(x@params))
   if (trained) {
     cat("\n")
-    print(x@traininfo, n = n)
+    print(x@train_steps, n = n)
   }
   invisible(x)
 }
@@ -536,7 +536,7 @@ print.SelectedModel <- function(x, n = MachineShop::settings("max.print"), ...) 
   print(x@params$control)
   if (trained) {
     cat("\n")
-    print(x@traininfo, n = n)
+    print(x@train_steps, n = n)
   }
   invisible(x)
 }
@@ -553,7 +553,7 @@ print.StackedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print(x@params$control)
   if (trained) {
     cat("\n")
-    print(x@traininfo, n = n)
+    print(x@train_steps, n = n)
   }
   invisible(x)
 }
@@ -573,7 +573,7 @@ print.SuperModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print(x@params$control)
   if (trained) {
     cat("\n")
-    print(x@traininfo, n = n)
+    print(x@train_steps, n = n)
   }
   invisible(x)
 }
@@ -619,7 +619,7 @@ setMethod("show", "TabularArray",
 
 #' @rdname print-methods
 #'
-print.TrainBit <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.TrainStep <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   if (length(x@grid)) {
     cat("\nGrid (selected = ", x@selected, "):\n", sep = "")
@@ -636,7 +636,7 @@ print.TrainBit <- function(x, n = MachineShop::settings("max.print"), ...) {
 }
 
 
-setMethod("show", "TrainBit",
+setMethod("show", "TrainStep",
   function(object) {
     print(object)
     invisible()
@@ -670,7 +670,7 @@ print.TunedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print(x@params$control)
   if (trained) {
     cat("\n")
-    print(x@traininfo, n = n)
+    print(x@train_steps, n = n)
   }
   invisible(x)
 }

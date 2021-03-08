@@ -95,7 +95,7 @@ setClass("MLModel",
             predict = "function",
             varimp = "function",
             x = "ANY",
-            traininfo = "ListOf")
+            train_steps = "ListOf")
 )
 
 
@@ -377,7 +377,7 @@ setClass("Resamples",
 )
 
 
-TrainBit <- setClass("TrainBit",
+TrainStep <- setClass("TrainStep",
   slots = c(grid = "tbl_df",
             performance = "Performance",
             selected = "numeric",

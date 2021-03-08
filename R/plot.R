@@ -164,10 +164,10 @@ plot.MLModel <- function(x, metrics = NULL,
   stat <- fget(stat)
   type <- match.arg(type)
 
-  map(function(trainbit) {
-    perf <- trainbit@performance
+  map(function(train_step) {
+    perf <- train_step@performance
     if (type == "line") {
-      grid <- unnest(trainbit@grid)
+      grid <- unnest(train_step@grid)
       stats <- apply(perf, c(3, 2), function(x) stat(na.omit(x))) %>%
         TabularArray %>%
         as.data.frame
@@ -204,7 +204,7 @@ plot.MLModel <- function(x, metrics = NULL,
     } else {
       plot(perf, metrics = metrics, stat = stat, type = type, ...)
     }
-  }, x@traininfo)
+  }, x@train_steps)
 }
 
 

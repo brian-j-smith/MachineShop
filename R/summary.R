@@ -81,9 +81,9 @@ summary.MLModel <- function(object, stats =
                               MachineShop::settings("stats.Resamples"),
                             na.rm = TRUE, ...) {
   if (!is.trained(object)) stop("no training results to summarize")
-  map(function(trainbit) {
-    summary(trainbit@performance, stats = stats, na.rm = na.rm, ...)
-  }, object@traininfo)
+  map(function(train_step) {
+    summary(train_step@performance, stats = stats, na.rm = na.rm, ...)
+  }, object@train_steps)
 }
 
 

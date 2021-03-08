@@ -190,12 +190,12 @@ SelectedInput.list <- function(x, ...) {
     },
     stop("unsupported input object of class ", input_class)
   )
-  trainbit <- resample_selection(inputs, set_input, x@params, ...,
-                                 class = "SelectedInput")
-  trainbit$grid <- tibble(Input = factor(seq(inputs)))
-  names(trainbit$grid) <- grid_name
-  input <- set_input(inputs[[trainbit$selected]])
-  push(do.call(TrainBit, trainbit), fit(input, ...))
+  train_step <- resample_selection(inputs, set_input, x@params, ...,
+                                   class = "SelectedInput")
+  train_step$grid <- tibble(Input = factor(seq(inputs)))
+  names(train_step$grid) <- grid_name
+  input <- set_input(inputs[[train_step$selected]])
+  push(do.call(TrainStep, train_step), fit(input, ...))
 }
 
 
@@ -279,11 +279,11 @@ TunedInput.recipe <- function(x, grid = expand_steps(),
   if (all(dim(grid) != 0)) {
     grid_split <- split(grid, 1:nrow(grid))
     set_input <- function(x) do.call(update, c(list(recipe), x))
-    trainbit <- resample_selection(grid_split, set_input, x@params, model,
-                                   class = "TunedInput")
-    trainbit$grid <- tibble(ModelRecipe = asS3(grid))
-    input <- set_input(grid_split[[trainbit$selected]])
-    push(do.call(TrainBit, trainbit), fit(input, model = model))
+    train_step <- resample_selection(grid_split, set_input, x@params, model,
+                                     class = "TunedInput")
+    train_step$grid <- tibble(ModelRecipe = asS3(grid))
+    input <- set_input(grid_split[[train_step$selected]])
+    push(do.call(TrainStep, train_step), fit(input, model = model))
   } else {
     fit(recipe, model = model)
   }

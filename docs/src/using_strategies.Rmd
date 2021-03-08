@@ -60,7 +60,7 @@ as.MLModel(model_fit)
 #>  $ bag.fraction     : num 0.5
 #> 
 #> TrainStep1 :
-#> Object of class "TrainBit"
+#> Object of class "TrainStep"
 #> 
 #> Grid (selected = 3):
 #> # A tibble: 3 x 1
@@ -123,7 +123,7 @@ as.MLModel(model_fit)
 #>  $ bag.fraction     : num 0.5
 #> 
 #> TrainStep1 :
-#> Object of class "TrainBit"
+#> Object of class "TrainStep"
 #> 
 #> Grid (selected = 1):
 #> # A tibble: 3 x 1
@@ -209,7 +209,7 @@ model_fit <- fit(surv_fo, data = surv_train,
 #>  $ bag.fraction     : num 0.5
 #> 
 #> TrainStep1 :
-#> Object of class "TrainBit"
+#> Object of class "TrainStep"
 #> 
 #> Grid (selected = 1):
 #> # A tibble: 9 x 1
@@ -419,7 +419,7 @@ Nesting of resampling routines is repeated recursively when a fit involves multi
 
 ```{r using_strategies_methods1, echo=FALSE}
 cat('TrainStep1 :
-Object of class "TrainBit"
+Object of class "TrainStep"
 
 Grid (selected = 1):
 # A tibble: 3 x 1
@@ -442,7 +442,7 @@ In order to identify and return a final model fitted to the entire input data, t
 
 ```{r using_strategies_methods2, echo=FALSE}
 cat('TrainStep2 :
-Object of class "TrainBit"
+Object of class "TrainStep"
 
 Grid (selected = 2):
 # A tibble: 3 x 1
@@ -465,7 +465,7 @@ Finally, the entire dataset is refit in `TrainStep3` to select 50 trees and an i
 
 ```{r using_strategies_methods3, echo=FALSE}
 cat('TrainStep3 :
-Object of class "TrainBit"
+Object of class "TrainStep"
 
 Grid (selected = 1):
 # A tibble: 9 x 1
