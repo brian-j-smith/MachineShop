@@ -127,22 +127,22 @@ settings <- function(...) {
     return(invisible(global_values))
   }
 
-  args_names <- names(args)
-  if (is.null(args_names)) args_names <- character(length(args))
-  args_names_nzchar <- nzchar(args_names)
+  arg_names <- names(args)
+  if (is.null(arg_names)) arg_names <- character(length(args))
+  arg_names_nzchar <- nzchar(arg_names)
 
-  is_get_args <- !args_names_nzchar & vapply(args, is.character, logical(1))
-  args_names[is_get_args] <- unlist(args[is_get_args])
+  is_get_args <- !arg_names_nzchar & vapply(args, is.character, logical(1))
+  arg_names[is_get_args] <- unlist(args[is_get_args])
 
-  settings_pmatch <- pmatch(args_names, names(global_settings))
+  settings_pmatch <- pmatch(arg_names, names(global_settings))
   valid_settings <- !is.na(settings_pmatch)
-  for (name in args_names[!valid_settings]) {
+  for (name in arg_names[!valid_settings]) {
     warning("'", name, "' is not a MachineShop setting")
   }
 
   presets <- global_values[settings_pmatch[valid_settings]]
 
-  which_set_args <- which(args_names_nzchar & valid_settings)
+  which_set_args <- which(arg_names_nzchar & valid_settings)
   for (index in which_set_args) {
     global_name <- names(global_settings)[settings_pmatch[index]]
     value <- global_checks[[global_name]](args[[index]])
@@ -152,7 +152,7 @@ settings <- function(...) {
     MachineShop_global$settings[[global_name]]$value <- value
   }
 
-  if (any(args_names_nzchar)) {
+  if (any(arg_names_nzchar)) {
     invisible(presets)
   } else if (length(args) > 1) {
     presets
