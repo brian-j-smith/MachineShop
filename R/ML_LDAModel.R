@@ -61,10 +61,10 @@ LDAModel <- function(
     ),
     fit = function(formula, data, weights, dimen, use, ...) {
       assert_equal_weights(weights)
-      modelfit <- MASS::lda(formula, data = as.data.frame(data), ...)
-      modelfit$dimen <- if (missing(dimen)) length(modelfit$svd) else dimen
-      modelfit$use <- use
-      modelfit
+      model_fit <- MASS::lda(formula, data = as.data.frame(data), ...)
+      model_fit$dimen <- if (missing(dimen)) length(model_fit$svd) else dimen
+      model_fit$use <- use
+      model_fit
     },
     predict = function(object, newdata, prior = object$prior, ...) {
       newdata <- as.data.frame(newdata)

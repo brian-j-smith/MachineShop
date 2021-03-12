@@ -73,11 +73,11 @@ NNetModel <- function(
             dimnames = list(names(y), levels(y))
           )
         }
-        modelfit <- nnet::nnet(x, y, weights = weights, linout = linout, ...)
-        modelfit$terms <- terms(data)
-        modelfit$coefnames <- colnames(x)
-        modelfit$xlevels <- list()
-        modelfit
+        model_fit <- nnet::nnet(x, y, weights = weights, linout = linout, ...)
+        model_fit$terms <- terms(data)
+        model_fit$coefnames <- colnames(x)
+        model_fit$xlevels <- list()
+        model_fit
       } else {
         nnet::nnet(formula, data = as.data.frame(data), weights = weights,
                    linout = linout, ...)

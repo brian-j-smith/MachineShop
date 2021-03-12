@@ -343,8 +343,8 @@ plot.Resamples <- function(x, metrics = NULL, stat =
 #'
 plot.VarImp <- function(x, n = NULL, ...) {
   if (!is.null(n)) x <- head(x, n)
-  varnames <- rownames(x)
-  df <- cbind(stack(x), variables = factor(varnames, rev(varnames)))
+  var_names <- rownames(x)
+  df <- cbind(stack(x), variables = factor(var_names, rev(var_names)))
   p <- ggplot(df, aes_(~ variables, ~ values)) +
     geom_bar(stat = "identity") +
     labs(x = "Variable", y = "Importance") +

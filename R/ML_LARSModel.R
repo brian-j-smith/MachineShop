@@ -62,13 +62,13 @@ LARSModel <- function(
       x <- model.matrix(data, intercept = FALSE)
       y <- response(data)
       if (is.null(step)) {
-        modelfit <- lars::lars(x, y, ...)
-        modelfit$step <- length(modelfit$df)
+        model_fit <- lars::lars(x, y, ...)
+        model_fit$step <- length(model_fit$df)
       } else {
-        modelfit <- lars::lars(x, y, max.steps = ceiling(step), ...)
-        modelfit$step <- step
+        model_fit <- lars::lars(x, y, max.steps = ceiling(step), ...)
+        model_fit$step <- step
       }
-      modelfit
+      model_fit
     },
     predict = function(object, newdata, ...) {
       newx <- model.matrix(newdata, intercept = FALSE)

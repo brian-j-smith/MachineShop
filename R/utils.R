@@ -373,13 +373,13 @@ sample_params <- function(x, size = NULL, replace = FALSE) {
   n <- length(x)
   if (n == 0) return(tibble())
 
-  varnames <- paste0("Var", seq(x))
+  var_names <- paste0("Var", seq(x))
   x_names <- names(x)
   if (!is.null(x_names)) {
     is_nzchar <- nzchar(x_names)
-    varnames[is_nzchar] <- x_names[is_nzchar]
+    var_names[is_nzchar] <- x_names[is_nzchar]
   }
-  names(x) <- varnames
+  names(x) <- var_names
 
   max_size <- prod(lengths(x))
   if (is.null(size)) size <- max_size

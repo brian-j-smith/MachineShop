@@ -72,9 +72,9 @@ GLMNetModel <- function(
         function(n, data, ...) {
           model <- GLMNetModel(lambda = NULL)
           model@params$nlambda <- 3
-          modelfit <- fit(data, model = model)
-          exp(seq(log(min(modelfit$lambda)),
-                  log(max(modelfit$lambda)),
+          model_fit <- fit(data, model = model)
+          exp(seq(log(min(model_fit$lambda)),
+                  log(max(model_fit$lambda)),
                   length = n))
         },
         function(n, ...) seq(0.1, 1, length = n)

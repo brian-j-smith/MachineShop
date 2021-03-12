@@ -41,14 +41,14 @@ ModelFrame <- function(x, ...) {
 
 
 ModelFrame.data.frame <- function(x, ...) {
-  casenames <- x[["(names)"]]
+  case_names <- x[["(names)"]]
   weights <- x[["(weights)"]]
   strata <- x[["(strata)"]]
   x[c("(names)", "(weights)", "(strata)")] <- NULL
   model_terms <- terms(map(as.name, names(x)[-1]), names(x)[1],
                        all_numeric = all(map_logi(is.numeric, x[-1])))
   ModelFrame(model_terms, x, na.rm = FALSE,
-             names = if (is.null(casenames)) rownames(x) else casenames,
+             names = if (is.null(case_names)) rownames(x) else case_names,
              weights = weights, strata = strata)
 }
 

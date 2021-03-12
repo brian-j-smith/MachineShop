@@ -124,8 +124,8 @@ Resamples <- function(object, ...) {
 
 Resamples.data.frame <- function(object, ..., strata = NULL, .check = TRUE) {
   if (.check) {
-    varnames <- c("Model", "Resample", "Case", "Observed", "Predicted")
-    missing <- missing_names(varnames, object)
+    var_names <- c("Model", "Resample", "Case", "Observed", "Predicted")
+    missing <- missing_names(var_names, object)
     if (length(missing)) {
       stop(label_items("missing resample variable", missing))
     }
@@ -365,19 +365,19 @@ training.ModelRecipe <- function(x, object, ...) {
 subsample <- function(train, test, model, control, id = 1) {
   model <- getMLObject(model, "MLModel")
 
-  trainfit <- fit(train, model)
-  if (is(trainfit, "StackedModel")) control@times <- trainfit$times
+  model_fit <- fit(train, model)
+  if (is(model_fit, "StackedModel")) control@times <- model_fit$times
 
   f <- function(test) {
     if (is(train, "ModelRecipe")) {
-      test <- recipe(as.MLModel(trainfit)@x, as.data.frame(test))
+      test <- recipe(as.MLModel(model_fit)@x, as.data.frame(test))
     }
     df <- data.frame(Model = factor(model@name),
                      Resample = as.integer(id),
                      Case = as.data.frame(test, original = FALSE)[["(names)"]],
                      stringsAsFactors = FALSE)
     df$Observed <- response(test)
-    df$Predicted <- predict(trainfit, as.data.frame(test), type = "prob",
+    df$Predicted <- predict(model_fit, as.data.frame(test), type = "prob",
                             times = control@times, method = control@method,
                             dist = control@dist)
     df

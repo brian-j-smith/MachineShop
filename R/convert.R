@@ -45,10 +45,10 @@ setMethod("convert_prob", c("matrix", "array"),
 setMethod("convert_prob", c("matrix", "matrix"),
   function(object, x, ...) {
     stopifnot(ncol(object) == ncol(x))
-    varnames <- colnames(x)
-    if (is.null(varnames)) varnames <- colnames(object)
-    if (is.null(varnames)) varnames <- paste0("y", seq(ncol(x)))
-    structure(x, dimnames = list(NULL, varnames))
+    var_names <- colnames(x)
+    if (is.null(var_names)) var_names <- colnames(object)
+    if (is.null(var_names)) var_names <- paste0("y", seq(ncol(x)))
+    structure(x, dimnames = list(NULL, var_names))
   }
 )
 

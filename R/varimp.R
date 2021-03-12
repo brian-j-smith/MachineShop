@@ -106,6 +106,6 @@ varimp_pval.numeric <- function(object, var, base = exp(1), ...) {
 
 varimp_undef <- function(object) {
   warn("variable importance not defined for ", class(object)[1])
-  varnames <- labels(terms(as.MLModel(object)@x))
-  structure(rep(NA_real_, length(varnames)), names = varnames)
+  var_names <- labels(terms(as.MLModel(object)@x))
+  structure(rep(NA_real_, length(var_names)), names = var_names)
 }

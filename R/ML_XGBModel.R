@@ -137,9 +137,10 @@ XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
         params$top_k <- NULL
       }
 
-      modelfit <- xgboost::xgboost(dmat, weight = weights, params = params, ...)
-      modelfit$levels <- response_levels
-      modelfit
+      model_fit <- xgboost::xgboost(dmat, weight = weights, params = params,
+                                    ...)
+      model_fit$levels <- response_levels
+      model_fit
     },
     predict = function(object, newdata, model, times, ...) {
       newx <- model.matrix(newdata, intercept = FALSE)

@@ -110,12 +110,12 @@ MLModelFunction(SuperModel) <- NULL
 }
 
 
-super_df <- function(y, predictors, casenames = NULL, data = NULL) {
+super_df <- function(y, predictors, case_names = NULL, data = NULL) {
   names(predictors) <- make.names(seq(predictors))
   df <- data.frame(y = y, unnest(as.data.frame(predictors)))
 
   if (!is.null(data)) {
-    df[["(names)"]] <- casenames
+    df[["(names)"]] <- case_names
 
     data_predictors <- predictors(data)
     unique_names <- make.unique(c(names(df), names(data_predictors)))
