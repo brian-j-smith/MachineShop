@@ -414,7 +414,7 @@ resample_selection <- function(x, transform, params, ..., class) {
     }
 
     if (is.null(metrics)) {
-      method <- fget(findS3Method(performance, res$Observed))
+      method <- get_S3method(performance, res$Observed)
       metrics <- c(eval(formals(method)$metrics))
       is_defined <- map_logi(function(metric) {
         types <- metricinfo(metric)[[1]]$response_types

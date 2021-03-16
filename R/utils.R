@@ -78,17 +78,6 @@ fget <- function(x) {
 }
 
 
-findS3Method <- function(generic, object) {
-  generic_name <- as.character(substitute(generic))[1]
-  classes <- substring(methods(generic_name), nchar(generic_name) + 2)
-  class <- match_class(object, classes)
-  if (is.na(class)) {
-    stop(generic_name, " method not found for '", class(object)[1], "' class")
-  }
-  paste0(generic_name, ".", class)
-}
-
-
 get0 <- function(x, mode = "any") {
   if (is.character(x)) {
     x_expr <- str2lang(x)
@@ -112,6 +101,17 @@ get_MLObject <- function(x, class = c("MLControl", "MLMetric", "MLModel")) {
   if (is.function(x) && class %in% c("MLControl", "MLModel")) x <- x()
   if (!is(x, class)) stop("object not of class ", class)
   x
+}
+
+
+get_S3method <- function(generic, object) {
+  generic_name <- as.character(substitute(generic))[1]
+  classes <- substring(methods(generic_name), nchar(generic_name) + 2)
+  class <- match_class(object, classes)
+  if (is.na(class)) {
+    stop(generic_name, " method not found for '", class(object)[1], "' class")
+  }
+  fget(paste0(generic_name, ".", class))
 }
 
 
