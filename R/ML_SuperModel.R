@@ -41,18 +41,18 @@ SuperModel <- function(
   all_vars = FALSE
 ) {
 
-  base_learners <- ListOf(map(getMLObject, unlist(list(...)), "MLModel"))
+  base_learners <- ListOf(map(get_MLObject, unlist(list(...)), "MLModel"))
   names(base_learners) <- paste0(if (length(base_learners)) "Learner",
                                  seq(base_learners))
 
-  control <- getMLObject(control, "MLControl")
+  control <- get_MLObject(control, "MLControl")
 
   new("SuperModel",
     name = "SuperModel",
     label = "Super Learner",
     response_types =
       Reduce(intersect, map(slot, base_learners, "response_types"),
-             init = getMLObject(model, "MLModel")@response_types),
+             init = get_MLObject(model, "MLModel")@response_types),
     predictor_encoding = NA_character_,
     params = as.list(environment()),
     varimp = function(object, ...) NULL

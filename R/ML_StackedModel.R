@@ -35,11 +35,11 @@ StackedModel <- function(
   ..., control = MachineShop::settings("control"), weights = NULL
 ) {
 
-  base_learners <- ListOf(map(getMLObject, unlist(list(...)), "MLModel"))
+  base_learners <- ListOf(map(get_MLObject, unlist(list(...)), "MLModel"))
   names(base_learners) <- paste0(if (length(base_learners)) "Learner",
                                  seq(base_learners))
 
-  control <- getMLObject(control, "MLControl")
+  control <- get_MLObject(control, "MLControl")
 
   if (!is.null(weights)) stopifnot(length(weights) == length(base_learners))
 

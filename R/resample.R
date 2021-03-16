@@ -85,7 +85,7 @@ resample.ModelFrame <- function(x, model,
                                 control = MachineShop::settings("control"),
                                 ...) {
   if (missing(model)) model <- NullModel()
-  .resample(getMLObject(control, "MLControl"), x, model, ...)
+  .resample(get_MLObject(control, "MLControl"), x, model, ...)
 }
 
 
@@ -99,7 +99,7 @@ resample.ModelFrame <- function(x, model,
 resample.recipe <- function(x, model,
                             control = MachineShop::settings("control"), ...) {
   if (missing(model)) model <- NullModel()
-  .resample(getMLObject(control, "MLControl"), ModelRecipe(x), model, ...)
+  .resample(get_MLObject(control, "MLControl"), ModelRecipe(x), model, ...)
 }
 
 
@@ -363,7 +363,7 @@ training.ModelRecipe <- function(x, object, ...) {
 
 
 subsample <- function(train, test, model, control, id = 1) {
-  model <- getMLObject(model, "MLModel")
+  model <- get_MLObject(model, "MLModel")
 
   model_fit <- fit(train, model)
   if (is(model_fit, "StackedModel")) control@times <- model_fit$times
@@ -440,7 +440,7 @@ resample_selection <- function(x, transform, params, ..., class) {
   }
 
   perf <- do.call(c, perf_list)
-  metric <- getMLObject(c(metrics)[[1]], "MLMetric")
+  metric <- get_MLObject(c(metrics)[[1]], "MLMetric")
   selected <- ifelse(metric@maximize, which.max, which.min)(perf_stats)
 
   list(performance = perf,

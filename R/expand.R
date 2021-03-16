@@ -35,7 +35,7 @@ expand_model <- function(x, ..., random = FALSE) {
 
 
 .expand_model.default <- function(x, random, ...) {
-  expand_model(getMLObject(x, class = "MLModel"), ..., random = random)
+  expand_model(get_MLObject(x, class = "MLModel"), ..., random = random)
 }
 
 

@@ -46,7 +46,7 @@ get_grid <- function(x, ...) {
 #'
 get_grid.default <- function(x, ..., model, size = 3, random = FALSE,
                              info = FALSE) {
-  model <- getMLObject(model, "MLModel")
+  model <- get_MLObject(model, "MLModel")
   gridinfo <- model@gridinfo
   mf <- NULL
 

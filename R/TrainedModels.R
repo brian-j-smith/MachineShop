@@ -43,7 +43,7 @@ SelectedModel <- function(..., control = MachineShop::settings("control"),
   models <- as.list(unlist(list(...)))
   model_names <- character()
   for (i in seq(models)) {
-    models[[i]] <- getMLObject(models[[i]], class = "MLModel")
+    models[[i]] <- get_MLObject(models[[i]], class = "MLModel")
     name <- names(models)[i]
     model_names[i] <-
       if (!is.null(name) && nzchar(name)) name else models[[i]]@name
@@ -58,7 +58,7 @@ SelectedModel <- function(..., control = MachineShop::settings("control"),
                               init = settings("response_types")),
       predictor_encoding = NA_character_,
       params = list(models = ListOf(models),
-                    control = getMLObject(control, "MLControl"),
+                    control = get_MLObject(control, "MLControl"),
                     metrics = metrics, stat = stat, cutoff = cutoff)
   )
 
@@ -177,7 +177,7 @@ TunedModel <- function(model, grid = MachineShop::settings("grid"),
       },
       predictor_encoding = NA_character_,
       params = list(model = model, grid = grid, fixed = fixed,
-                    control = getMLObject(control, "MLControl"),
+                    control = get_MLObject(control, "MLControl"),
                     metrics = metrics, stat = stat, cutoff = cutoff)
   )
 
@@ -189,7 +189,7 @@ MLModelFunction(TunedModel) <- NULL
 .fit.TunedModel <- function(x, inputs, ...) {
   params <- x@params
   grid <- as.grid(params$grid, fixed = params$fixed,
-                  inputs, model = getMLObject(params$model, "MLModel"))
+                  inputs, model = get_MLObject(params$model, "MLModel"))
   models <- expand_model(list(params$model, grid))
   train_step <- resample_selection(models, identity, params, inputs,
                                    class = "TunedModel")

@@ -106,7 +106,7 @@ get0 <- function(x, mode = "any") {
 }
 
 
-getMLObject <- function(x, class = c("MLControl", "MLMetric", "MLModel")) {
+get_MLObject <- function(x, class = c("MLControl", "MLMetric", "MLModel")) {
   class <- match.arg(class)
   x <- get0(x)
   if (is.function(x) && class %in% c("MLControl", "MLModel")) x <- x()
@@ -288,7 +288,7 @@ new_progress_bar <- function(total, input = NULL, model = NULL, index = 0) {
   width <- max(10, round(0.25 * getOption("width")))
   if (!is.null(input)) input <- substr(class(input)[1], 1, width)
   if (!is.null(model)) {
-    model <- substr(getMLObject(model, "MLModel")@name, 1, width)
+    model <- substr(get_MLObject(model, "MLModel")@name, 1, width)
   }
   format <- paste(input, "|", model)
   if (index > 0) format <- paste0(index, ": ", format)
@@ -314,7 +314,7 @@ new_progress_bar <- function(total, input = NULL, model = NULL, index = 0) {
 
 nvars <- function(x, model) {
   stopifnot(is(x, "ModelFrame"))
-  model <- getMLObject(model, "MLModel")
+  model <- get_MLObject(model, "MLModel")
   switch(model@predictor_encoding,
     "model.matrix" =
       ncol(model.matrix(x[1, , drop = FALSE], intercept = FALSE)),

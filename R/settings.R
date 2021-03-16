@@ -195,7 +195,7 @@ check_match <- function(choices) {
 
 
 check_metrics <- function(x) {
-  result <- try(lapply(c(x), getMLObject, class = "MLMetric"), silent = TRUE)
+  result <- try(lapply(c(x), get_MLObject, class = "MLMetric"), silent = TRUE)
   if (is(result, "try-error")) {
     DomainError(x, "must be a metrics function, function name, ",
                    "or vector of these")
@@ -230,7 +230,7 @@ MachineShop_global <- as.environment(list(
     control = list(
       value = "CVControl",
       check = function(x) {
-        result <- try(getMLObject(x, "MLControl"), silent = TRUE)
+        result <- try(get_MLObject(x, "MLControl"), silent = TRUE)
         if (is(result, "try-error")) {
           DomainError(x, "must be an MLControl object, function, ",
                          "or function name")
