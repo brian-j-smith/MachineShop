@@ -134,7 +134,7 @@ new_step_kmeans <- function(..., k, algorithm, max_iter, num_start) {
 #'
 tidy.step_kmeans <- function(x, ...) {
   res <- x$res
-  if (is.trained(x)) {
+  if (is_trained(x)) {
     cluster <- x$res$cluster
     res <- tibble(
       terms = rownames(x$res$weights),

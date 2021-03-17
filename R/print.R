@@ -298,7 +298,7 @@ setMethod("show", "MLMetric",
 #'
 print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
-  trained <- is.trained(x)
+  trained <- is_trained(x)
   print_modelinfo(x, trained = trained)
   cat("\nParameters:\n")
   cat(str(x@params))
@@ -529,7 +529,7 @@ print.SelectedInput <- function(x, n = MachineShop::settings("max.print"),
 
 print.SelectedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
-  trained <- is.trained(x)
+  trained <- is_trained(x)
   print_modelinfo(x, trained = trained)
   cat("\nSelection parameters:\n\n")
   print(x@params$models, n = n)
@@ -544,7 +544,7 @@ print.SelectedModel <- function(x, n = MachineShop::settings("max.print"), ...) 
 
 print.StackedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
-  trained <- is.trained(x)
+  trained <- is_trained(x)
   print_modelinfo(x, trained = trained)
   cat("\nParameters:\n")
   cat(str(x@params[setdiff(names(x@params), c("base_learners", "control"))]))
@@ -561,7 +561,7 @@ print.StackedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
 
 print.SuperModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
-  trained <- is.trained(x)
+  trained <- is_trained(x)
   print_modelinfo(x, trained = trained)
   cat("\nParameters:\n")
   subset <- !(names(x@params) %in% c("base_learners", "control", "model"))
@@ -658,7 +658,7 @@ print.TunedInput <- function(x, n = MachineShop::settings("max.print"), ...) {
 
 print.TunedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
-  trained <- is.trained(x)
+  trained <- is_trained(x)
   print_modelinfo(x, trained = trained)
   cat("\nTuning parameters:\n\n")
   print(x@params$model)

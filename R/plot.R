@@ -159,7 +159,7 @@ plot.MLModel <- function(x, metrics = NULL,
                          stat = MachineShop::settings("stat.train"),
                          type = c("boxplot", "density", "errorbar", "line",
                                   "violin"), ...) {
-  if (!is.trained(x)) stop("no training results to plot")
+  if (!is_trained(x)) stop("no training results to plot")
 
   stat <- fget(stat)
   type <- match.arg(type)

@@ -183,7 +183,7 @@ print.step_lincomp <- function(x, width = getOption("width"), ...) {
 #'
 tidy.step_lincomp <- function(x, ...) {
   res <- x$res
-  if (is.trained(x)) {
+  if (is_trained(x)) {
     res_attrs <- res[names(res) != "weights"]
     res <- res$weights %>% as.matrix %>% as.table %>%
       as.data.frame(responseName = "weight", stringsAsFactors = FALSE)

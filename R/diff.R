@@ -39,7 +39,7 @@ NULL
 #' @rdname diff-methods
 #'
 diff.MLModel <- function(x, ...) {
-  if (!is.trained(x)) stop("no training results to diff")
+  if (!is_trained(x)) stop("no training results to diff")
   map(function(train_step) diff(train_step@performance), x@train_steps)
 }
 

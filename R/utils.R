@@ -132,20 +132,6 @@ identical_elements <- function(x, transform = identity, ...) {
 }
 
 
-is.trained <- function(x, ...) {
-  UseMethod("is.trained")
-}
-
-
-is.trained.MLModel <- function(x, ...) {
-  length(x@train_steps) > 0
-}
-
-
-is.trained.step <- function(x, ...) {
-  recipes::is_trained(x)
-}
-
 is_one_element <- function(x, class) {
   length(x) == 1 && is(x[[1]], class)
 }
@@ -157,6 +143,21 @@ is_response <- function(y, class2) {
   } else {
     is(y, class2)
   }
+}
+
+
+is_trained <- function(x, ...) {
+  UseMethod("is_trained")
+}
+
+
+is_trained.MLModel <- function(x, ...) {
+  length(x@train_steps) > 0
+}
+
+
+is_trained.step <- function(x, ...) {
+  recipes::is_trained(x)
 }
 
 
