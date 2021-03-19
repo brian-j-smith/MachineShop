@@ -53,10 +53,11 @@
 #' varimp(model_fit, metric = "splits", num_replicates = 20, scale = FALSE)
 #' }
 #'
-BARTMachineModel <- function(num_trees = 50, num_burn = 250, num_iter = 1000,
-                             alpha = 0.95, beta = 2, k = 2, q = 0.9, nu = 3,
-                             mh_prob_steps = c(2.5, 2.5, 4) / 9,
-                             verbose = FALSE, ...) {
+BARTMachineModel <- function(
+  num_trees = 50, num_burn = 250, num_iter = 1000, alpha = 0.95, beta = 2,
+  k = 2, q = 0.9, nu = 3, mh_prob_steps = c(2.5, 2.5, 4) / 9, verbose = FALSE,
+  ...
+) {
 
   MLModel(
     name = "BARTMachineModel",

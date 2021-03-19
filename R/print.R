@@ -14,8 +14,9 @@ NULL
 
 #' @rdname print-methods
 #'
-print.BinomialVariate <- function(x, n = MachineShop::settings("max.print"),
-                                  ...) {
+print.BinomialVariate <- function(
+  x, n = MachineShop::settings("max.print"), ...
+) {
   print_title(x)
   print_items(as(x, "matrix"), n = n)
   invisible(x)
@@ -39,16 +40,18 @@ setMethod("show", "Calibration",
 )
 
 
-print.ConfusionList <- function(x, n = MachineShop::settings("max.print"),
-                                ...) {
+print.ConfusionList <- function(
+  x, n = MachineShop::settings("max.print"), ...
+) {
   print_title(x)
   cat("\n")
   NextMethod()
 }
 
 
-print.ConfusionMatrix <- function(x, n = MachineShop::settings("max.print"),
-                                  ...) {
+print.ConfusionMatrix <- function(
+  x, n = MachineShop::settings("max.print"), ...
+) {
   print_title(x)
   print(as(x, "table"))
   invisible(x)
@@ -63,8 +66,9 @@ setMethod("show", "ConfusionMatrix",
 )
 
 
-print.ConfusionSummary <- function(x, n = MachineShop::settings("max.print"),
-                                   ...) {
+print.ConfusionSummary <- function(
+  x, n = MachineShop::settings("max.print"), ...
+) {
   total <- x@total
   acc <- x@accuracy
   cat("Number of responses: ", total, "\n",
@@ -85,8 +89,9 @@ setMethod("show", "ConfusionSummary",
 )
 
 
-print.DiscreteVariate <- function(x, n = MachineShop::settings("max.print"),
-                                  ...) {
+print.DiscreteVariate <- function(
+  x, n = MachineShop::settings("max.print"), ...
+) {
   print_title(x)
   print(as(x, "numeric"))
   cat("Range: ", x@min, ", ", x@max, "\n", sep = "")
@@ -332,8 +337,9 @@ setMethod("show", "MLModelFit",
 )
 
 
-print.MLModelFunction <- function(x, n = MachineShop::settings("max.print"),
-                                  ...) {
+print.MLModelFunction <- function(
+  x, n = MachineShop::settings("max.print"), ...
+) {
   print_title(x)
   print_modelinfo(x)
   cat("\nArguments:\n")
@@ -406,8 +412,9 @@ print.ModeledTerms <- function(x, n = MachineShop::settings("max.print"), ...) {
 }
 
 
-print.ParameterGrid <- function(x, n = MachineShop::settings("max.print"),
-                                ...) {
+print.ParameterGrid <- function(
+  x, n = MachineShop::settings("max.print"), ...
+) {
   print_title(x)
   print(asS3(x))
   if (x@random) {
@@ -442,8 +449,9 @@ print.Performance <- function(x, n = MachineShop::settings("max.print"), ...) {
 
 #' @rdname print-methods
 #'
-print.PerformanceCurve <- function(x, n = MachineShop::settings("max.print"),
-                                   ...) {
+print.PerformanceCurve <- function(
+  x, n = MachineShop::settings("max.print"), ...
+) {
   print_title(x)
   cat("\n",
       "Metrics: ",
@@ -463,8 +471,9 @@ setMethod("show", "PerformanceCurve",
 )
 
 
-print.PerformanceDiffTest <- function(x, n = MachineShop::settings("max.print"),
-                                      ...) {
+print.PerformanceDiffTest <- function(
+  x, n = MachineShop::settings("max.print"), ...
+) {
   print_title(x)
   cat("\n",
       "Upper diagonal: mean differences (Model1 - Model2)\n",
@@ -517,8 +526,9 @@ setMethod("show", "Resamples",
 
 #' @rdname print-methods
 #'
-print.SelectedInput <- function(x, n = MachineShop::settings("max.print"),
-                                ...) {
+print.SelectedInput <- function(
+  x, n = MachineShop::settings("max.print"), ...
+) {
   NextMethod()
   cat("\nModel inputs:\n\n")
   print(x@inputs, n = n)
@@ -527,7 +537,9 @@ print.SelectedInput <- function(x, n = MachineShop::settings("max.print"),
 }
 
 
-print.SelectedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.SelectedModel <- function(
+  x, n = MachineShop::settings("max.print"), ...
+) {
   print_title(x)
   trained <- is_trained(x)
   print_modelinfo(x, trained = trained)

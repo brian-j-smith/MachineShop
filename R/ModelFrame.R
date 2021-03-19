@@ -55,8 +55,9 @@ ModelFrame.data.frame <- function(x, ...) {
 
 #' @rdname ModelFrame-methods
 #'
-ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
-                               strata = NULL, ...) {
+ModelFrame.formula <- function(
+  x, data, na.rm = TRUE, weights = NULL, strata = NULL, ...
+) {
   invalid_calls <- setdiff(inline_calls(predictors(x)), settings("RHS.formula"))
   if (length(invalid_calls)) {
     stop(
@@ -77,8 +78,9 @@ ModelFrame.formula <- function(x, data, na.rm = TRUE, weights = NULL,
 
 #' @rdname ModelFrame-methods
 #'
-ModelFrame.matrix <- function(x, y = NULL, na.rm = TRUE, offsets = NULL,
-                              weights = NULL, strata = NULL, ...) {
+ModelFrame.matrix <- function(
+  x, y = NULL, na.rm = TRUE, offsets = NULL, weights = NULL, strata = NULL, ...
+) {
   data <- as.data.frame(x)
   colnames(x) <- names(data)
   if (!is.null(offsets)) {
@@ -188,8 +190,9 @@ terms.formula <- function(x, ...) {
 }
 
 
-terms.list <- function(x, y = NULL, intercept = TRUE, all_numeric = FALSE,
-                       ...) {
+terms.list <- function(
+  x, y = NULL, intercept = TRUE, all_numeric = FALSE, ...
+) {
   if (is.character(y)) y <- as.name(y)
   has_y <- 1L - is.null(y)
 

@@ -123,8 +123,10 @@ plot.ConfusionMatrix <- function(x, ...) {
 
 #' @rdname plot-methods
 #'
-plot.LiftCurve <- function(x, find = NULL, diagonal = TRUE,
-                      stat = MachineShop::settings("stat.Curve"), ...) {
+plot.LiftCurve <- function(
+  x, find = NULL, diagonal = TRUE, stat = MachineShop::settings("stat.Curve"),
+  ...
+) {
   x <- summary(x, stat = stat)
   p <- plot(as(x, "PerformanceCurve"), diagonal = diagonal, stat = NULL)
 
@@ -155,10 +157,10 @@ plot.LiftCurve <- function(x, find = NULL, diagonal = TRUE,
 
 #' @rdname plot-methods
 #'
-plot.MLModel <- function(x, metrics = NULL,
-                         stat = MachineShop::settings("stat.train"),
-                         type = c("boxplot", "density", "errorbar", "line",
-                                  "violin"), ...) {
+plot.MLModel <- function(
+  x, metrics = NULL, stat = MachineShop::settings("stat.train"),
+  type = c("boxplot", "density", "errorbar", "line", "violin"), ...
+) {
   if (!is_trained(x)) stop("no training results to plot")
 
   stat <- fget(stat)
@@ -242,10 +244,10 @@ plot.PartialDependence <- function(x, stats = NULL, ...) {
 
 #' @rdname plot-methods
 #'
-plot.Performance <- function(x, metrics = NULL, stat =
-                               MachineShop::settings("stat.Resamples"),
-                             type = c("boxplot", "density", "errorbar",
-                                      "violin"), ...) {
+plot.Performance <- function(
+  x, metrics = NULL, stat = MachineShop::settings("stat.Resamples"),
+  type = c("boxplot", "density", "errorbar", "violin"), ...
+) {
   df <- as.data.frame(x)
   if (is.null(df$Model)) df$Model <- factor("Model")
 
@@ -289,10 +291,10 @@ plot.Performance <- function(x, metrics = NULL, stat =
 
 #' @rdname plot-methods
 #'
-plot.PerformanceCurve <- function(x, type = c("tradeoffs", "cutoffs"),
-                                  diagonal = FALSE,
-                                  stat = MachineShop::settings("stat.Curve"),
-                                  ...) {
+plot.PerformanceCurve <- function(
+  x, type = c("tradeoffs", "cutoffs"), diagonal = FALSE,
+  stat = MachineShop::settings("stat.Curve"), ...
+) {
   x <- summary(x, stat = stat)
 
   args <- list(~ x, ~ y)
@@ -331,10 +333,10 @@ plot.PerformanceCurve <- function(x, type = c("tradeoffs", "cutoffs"),
 
 #' @rdname plot-methods
 #'
-plot.Resamples <- function(x, metrics = NULL, stat =
-                             MachineShop::settings("stat.Resamples"),
-                           type = c("boxplot", "density", "errorbar", "violin"),
-                           ...) {
+plot.Resamples <- function(
+  x, metrics = NULL, stat = MachineShop::settings("stat.Resamples"),
+  type = c("boxplot", "density", "errorbar", "violin"), ...
+) {
   plot(performance(x), metrics = metrics, stat = stat, type = type)
 }
 

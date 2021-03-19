@@ -40,8 +40,9 @@
 #' plot(cal)
 #' }
 #'
-calibration <- function(x, y = NULL, breaks = 10, span = 0.75, dist = NULL,
-                        na.rm = TRUE, ...) {
+calibration <- function(
+  x, y = NULL, breaks = 10, span = 0.75, dist = NULL, na.rm = TRUE, ...
+) {
   if (na.rm) {
     complete <- complete_subset(x = x, y = y)
     x <- complete$x

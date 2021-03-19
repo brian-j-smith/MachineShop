@@ -55,10 +55,11 @@
 #' varimp(model_fit, metric = "splits", scale = FALSE)
 #' }
 #'
-C50Model <- function(trials = 1, rules = FALSE, subset = TRUE, bands = 0,
-                     winnow = FALSE, noGlobalPruning = FALSE, CF = 0.25,
-                     minCases = 2, fuzzyThreshold = FALSE, sample = 0,
-                     earlyStopping = TRUE) {
+C50Model <- function(
+  trials = 1, rules = FALSE, subset = TRUE, bands = 0, winnow = FALSE,
+  noGlobalPruning = FALSE, CF = 0.25, minCases = 2, fuzzyThreshold = FALSE,
+  sample = 0, earlyStopping = TRUE
+) {
 
   args <- params(environment())
   is_main <- names(args) %in% c("trials", "rules")

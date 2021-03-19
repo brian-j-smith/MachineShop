@@ -56,10 +56,10 @@
 #' tidy(sbf_rec, number = 1)
 #' tidy(sbf_prep, number = 1)
 #'
-step_sbf <- function(recipe, ..., filter, multivariate = FALSE,
-                     options = list(), replace = TRUE, prefix = "SBF",
-                     role = "predictor", skip = FALSE,
-                     id = recipes::rand_id("sbf")) {
+step_sbf <- function(
+  recipe, ..., filter, multivariate = FALSE, options = list(), replace = TRUE,
+  prefix = "SBF", role = "predictor", skip = FALSE, id = recipes::rand_id("sbf")
+) {
 
   recipes::add_step(recipe, new_step_sbf(
     terms = recipes::ellipse_check(...),
@@ -76,8 +76,9 @@ step_sbf <- function(recipe, ..., filter, multivariate = FALSE,
 }
 
 
-new_step_sbf <- function(terms, filter, multivariate, options, replace, prefix,
-                         role, skip, id) {
+new_step_sbf <- function(
+  terms, filter, multivariate, options, replace, prefix, role, skip, id
+) {
   stopifnot(is.function(filter))
   stopifnot(is.list(options))
   step_args <- list(

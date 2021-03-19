@@ -65,12 +65,12 @@
 #' tidy(kmedoids_rec, number = 1)
 #' tidy(kmedoids_prep, number = 1)
 #'
-step_kmedoids <- function(recipe, ..., k = 5, center = TRUE, scale = TRUE,
-                          method = c("pam", "clara"), metric = "euclidean",
-                          optimize = FALSE, num_samp = 50,
-                          samp_size = 40 + 2 * k, replace = TRUE,
-                          prefix = "KMedoids", role = "predictor",
-                          skip = FALSE, id = recipes::rand_id("kmedoids")) {
+step_kmedoids <- function(
+  recipe, ..., k = 5, center = TRUE, scale = TRUE, method = c("pam", "clara"),
+  metric = "euclidean", optimize = FALSE, num_samp = 50, samp_size = 40 + 2 * k,
+  replace = TRUE, prefix = "KMedoids", role = "predictor", skip = FALSE,
+  id = recipes::rand_id("kmedoids")
+) {
 
   recipes::add_step(recipe, new_step_kmedoids(
     terms = recipes::ellipse_check(...),
@@ -92,8 +92,9 @@ step_kmedoids <- function(recipe, ..., k = 5, center = TRUE, scale = TRUE,
 }
 
 
-new_step_kmedoids <- function(..., k, center, scale, method, metric, optimize,
-                              num_samp, samp_size) {
+new_step_kmedoids <- function(
+  ..., k, center, scale, method, metric, optimize, num_samp, samp_size
+) {
 
   require_namespaces("cluster")
 

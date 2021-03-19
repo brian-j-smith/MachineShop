@@ -66,10 +66,11 @@
 #' tidy(lincomp_rec, number = 1)
 #' tidy(lincomp_prep, number = 1)
 #'
-step_lincomp <- function(recipe, ..., transform, num_comp = 5, options = list(),
-                         center = TRUE, scale = TRUE, replace = TRUE,
-                         prefix = "LinComp", role = "predictor", skip = FALSE,
-                         id = recipes::rand_id("lincomp")) {
+step_lincomp <- function(
+  recipe, ..., transform, num_comp = 5, options = list(), center = TRUE,
+  scale = TRUE, replace = TRUE, prefix = "LinComp", role = "predictor",
+  skip = FALSE, id = recipes::rand_id("lincomp")
+) {
 
   recipes::add_step(recipe, new_step_lincomp(
     terms = recipes::ellipse_check(...),
@@ -88,8 +89,10 @@ step_lincomp <- function(recipe, ..., transform, num_comp = 5, options = list(),
 }
 
 
-new_step_lincomp <- function(terms, transform, num_comp, options, center, scale,
-                             replace, prefix, role, skip, id) {
+new_step_lincomp <- function(
+  terms, transform, num_comp, options, center, scale, replace, prefix, role,
+  skip, id
+) {
   stopifnot(is.function(transform))
   stopifnot(is.list(options))
   step_args <- list(

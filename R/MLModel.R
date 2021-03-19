@@ -87,18 +87,17 @@
 #' res <- resample(type ~ ., data = Pima.tr, model = LogisticModel)
 #' summary(res)
 #'
-MLModel <- function(name = "MLModel", label = name, packages = character(),
-                    response_types = character(),
-                    predictor_encoding = c(NA, "model.matrix", "terms"),
-                    params = list(),
-                    gridinfo = tibble::tibble(
-                      param = character(), values = list(), regular = logical()
-                    ),
-                    fit = function(formula, data, weights, ...)
-                      stop("no fit function"),
-                    predict = function(object, newdata, times, ...)
-                      stop("no predict function"),
-                    varimp = function(object, ...) NULL, ...) {
+MLModel <- function(
+  name = "MLModel", label = name, packages = character(),
+  response_types = character(),
+  predictor_encoding = c(NA, "model.matrix", "terms"), params = list(),
+  gridinfo = tibble::tibble(
+    param = character(), values = list(), regular = logical()
+  ),
+  fit = function(formula, data, weights, ...) stop("no fit function"),
+  predict = function(object, newdata, times, ...) stop("no predict function"),
+  varimp = function(object, ...) NULL, ...
+) {
 
   stopifnot(response_types %in% settings("response_types"))
 

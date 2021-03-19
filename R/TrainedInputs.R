@@ -58,11 +58,11 @@ SelectedInput <- function(...) {
 
 #' @rdname SelectedInput
 #'
-SelectedInput.formula <- function(..., data,
-                                  control = MachineShop::settings("control"),
-                                  metrics = NULL,
-                                  stat = MachineShop::settings("stat.train"),
-                                  cutoff = MachineShop::settings("cutoff")) {
+SelectedInput.formula <- function(
+  ..., data, control = MachineShop::settings("control"), metrics = NULL,
+  stat = MachineShop::settings("stat.train"),
+  cutoff = MachineShop::settings("cutoff")
+) {
   inputs <- list(...)
   if (!all(map_logi(is, inputs, "formula"))) stop("inputs must be formulas")
   mf_list <- map(function(x) {
@@ -75,11 +75,11 @@ SelectedInput.formula <- function(..., data,
 
 #' @rdname SelectedInput
 #'
-SelectedInput.matrix <- function(..., y,
-                                 control = MachineShop::settings("control"),
-                                 metrics = NULL,
-                                 stat = MachineShop::settings("stat.train"),
-                                 cutoff = MachineShop::settings("cutoff")) {
+SelectedInput.matrix <- function(
+  ..., y, control = MachineShop::settings("control"), metrics = NULL,
+  stat = MachineShop::settings("stat.train"),
+  cutoff = MachineShop::settings("cutoff")
+) {
   inputs <- list(...)
   if (!all(map_logi(is, inputs, "matrix"))) stop("inputs must be matrices")
   mf_list <- map(ModelFrame,
@@ -91,11 +91,11 @@ SelectedInput.matrix <- function(..., y,
 
 #' @rdname SelectedInput
 #'
-SelectedInput.ModelFrame <- function(...,
-                                     control = MachineShop::settings("control"),
-                                     metrics = NULL,
-                                     stat = MachineShop::settings("stat.train"),
-                                     cutoff = MachineShop::settings("cutoff")) {
+SelectedInput.ModelFrame <- function(
+  ..., control = MachineShop::settings("control"), metrics = NULL,
+  stat = MachineShop::settings("stat.train"),
+  cutoff = MachineShop::settings("cutoff")
+) {
 
   inputs <- list(...)
 
@@ -124,11 +124,11 @@ SelectedInput.ModelFrame <- function(...,
 
 #' @rdname SelectedInput
 #'
-SelectedInput.recipe <- function(...,
-                                 control = MachineShop::settings("control"),
-                                 metrics = NULL,
-                                 stat = MachineShop::settings("stat.train"),
-                                 cutoff = MachineShop::settings("cutoff")) {
+SelectedInput.recipe <- function(
+  ..., control = MachineShop::settings("control"), metrics = NULL,
+  stat = MachineShop::settings("stat.train"),
+  cutoff = MachineShop::settings("cutoff")
+) {
 
   inputs <- list(...)
 
@@ -246,11 +246,11 @@ TunedInput <- function(x, ...) {
 
 #' @rdname TunedInput
 #'
-TunedInput.recipe <- function(x, grid = expand_steps(),
-                              control = MachineShop::settings("control"),
-                              metrics = NULL,
-                              stat = MachineShop::settings("stat.train"),
-                              cutoff = MachineShop::settings("cutoff"), ...) {
+TunedInput.recipe <- function(
+  x, grid = expand_steps(), control = MachineShop::settings("control"),
+  metrics = NULL, stat = MachineShop::settings("stat.train"),
+  cutoff = MachineShop::settings("cutoff"), ...
+) {
 
   object <- new("TunedModelRecipe", ModelRecipe(x),
                 grid = grid,

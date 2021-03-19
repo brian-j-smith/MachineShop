@@ -53,11 +53,12 @@
 #' tidy(spca_rec, number = 1)
 #' tidy(spca_prep, number = 1)
 #'
-step_spca <- function(recipe, ..., num_comp = 5, sparsity = 0, num_var = NULL,
-                      shrinkage = 1e-6, center = TRUE, scale = TRUE,
-                      max_iter = 200, tol = 1e-3, replace = TRUE,
-                      prefix = "SPCA", role = "predictor", skip = FALSE,
-                      id = recipes::rand_id("spca")) {
+step_spca <- function(
+  recipe, ..., num_comp = 5, sparsity = 0, num_var = NULL, shrinkage = 1e-6,
+  center = TRUE, scale = TRUE, max_iter = 200, tol = 1e-3, replace = TRUE,
+  prefix = "SPCA", role = "predictor", skip = FALSE,
+  id = recipes::rand_id("spca")
+) {
 
   recipes::add_step(recipe, new_step_spca(
     terms = recipes::ellipse_check(...),

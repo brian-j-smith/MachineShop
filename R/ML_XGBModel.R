@@ -80,8 +80,9 @@
 #' varimp(model_fit, metric = "Frequency", scale = FALSE)
 #' }
 #'
-XGBModel <- function(params = list(), nrounds = 1, verbose = 0,
-                     print_every_n = 1) {
+XGBModel <- function(
+  params = list(), nrounds = 1, verbose = 0, print_every_n = 1
+) {
 
   MLModel(
     name = "XGBModel",
@@ -187,20 +188,19 @@ MLModelFunction(XGBModel) <- NULL
 
 #' @rdname XGBModel
 #'
-XGBDARTModel <- function(objective = NULL, aft_loss_distribution = "normal",
-                         aft_loss_distribution_scale = 1, base_score = 0.5,
-                         eta = 0.3, gamma = 0, max_depth = 6,
-                         min_child_weight = 1,
-                         max_delta_step = .(0.7 * is(y, "PoissonVariate")),
-                         subsample = 1, colsample_bytree = 1,
-                         colsample_bylevel = 1, colsample_bynode = 1,
-                         lambda = 1, alpha = 0, tree_method = "auto",
-                         sketch_eps = 0.03, scale_pos_weight = 1,
-                         refresh_leaf = 1, process_type = "default",
-                         grow_policy = "depthwise", max_leaves = 0,
-                         max_bin = 256, num_parallel_tree = 1,
-                         sample_type = "uniform", normalize_type = "tree",
-                         rate_drop = 0, one_drop = 0, skip_drop = 0, ...) {
+XGBDARTModel <- function(
+  objective = NULL, aft_loss_distribution = "normal",
+  aft_loss_distribution_scale = 1, base_score = 0.5,
+  eta = 0.3, gamma = 0, max_depth = 6, min_child_weight = 1,
+  max_delta_step = .(0.7 * is(y, "PoissonVariate")), subsample = 1,
+  colsample_bytree = 1, colsample_bylevel = 1, colsample_bynode = 1,
+  lambda = 1, alpha = 0,
+  tree_method = "auto", sketch_eps = 0.03, scale_pos_weight = 1,
+  refresh_leaf = 1, process_type = "default", grow_policy = "depthwise",
+  max_leaves = 0, max_bin = 256, num_parallel_tree = 1,
+  sample_type = "uniform", normalize_type = "tree", rate_drop = 0, one_drop = 0,
+  skip_drop = 0, ...
+) {
   .XGBModel("XGBDARTModel", "Extreme Gradient Boosting (DART)",
             "dart", environment(), ...)
 }
@@ -210,10 +210,12 @@ MLModelFunction(XGBDARTModel) <- NULL
 
 #' @rdname XGBModel
 #'
-XGBLinearModel <- function(objective = NULL, aft_loss_distribution = "normal",
-                           aft_loss_distribution_scale = 1, base_score = 0.5,
-                           lambda = 0, alpha = 0, updater = "shotgun",
-                           feature_selector = "cyclic", top_k = 0, ...) {
+XGBLinearModel <- function(
+  objective = NULL, aft_loss_distribution = "normal",
+  aft_loss_distribution_scale = 1, base_score = 0.5,
+  lambda = 0, alpha = 0,
+  updater = "shotgun", feature_selector = "cyclic", top_k = 0, ...
+) {
   .XGBModel("XGBLinearModel", "Extreme Gradient Boosting (Linear)",
             "gblinear", environment(), ...)
 }
@@ -223,18 +225,17 @@ MLModelFunction(XGBLinearModel) <- NULL
 
 #' @rdname XGBModel
 #'
-XGBTreeModel <- function(objective = NULL, aft_loss_distribution = "normal",
-                         aft_loss_distribution_scale = 1, base_score = 0.5,
-                         eta = 0.3, gamma = 0, max_depth = 6,
-                         min_child_weight = 1,
-                         max_delta_step = .(0.7 * is(y, "PoissonVariate")),
-                         subsample = 1, colsample_bytree = 1,
-                         colsample_bylevel = 1, colsample_bynode = 1,
-                         lambda = 1, alpha = 0, tree_method = "auto",
-                         sketch_eps = 0.03, scale_pos_weight = 1,
-                         refresh_leaf = 1, process_type = "default",
-                         grow_policy = "depthwise", max_leaves = 0,
-                         max_bin = 256, num_parallel_tree = 1, ...) {
+XGBTreeModel <- function(
+  objective = NULL, aft_loss_distribution = "normal",
+  aft_loss_distribution_scale = 1, base_score = 0.5,
+  eta = 0.3, gamma = 0, max_depth = 6, min_child_weight = 1,
+  max_delta_step = .(0.7 * is(y, "PoissonVariate")), subsample = 1,
+  colsample_bytree = 1, colsample_bylevel = 1, colsample_bynode = 1,
+  lambda = 1, alpha = 0,
+  tree_method = "auto", sketch_eps = 0.03, scale_pos_weight = 1,
+  refresh_leaf = 1, process_type = "default", grow_policy = "depthwise",
+  max_leaves = 0, max_bin = 256, num_parallel_tree = 1, ...
+) {
   .XGBModel("XGBTreeModel", "Extreme Gradient Boosting (Tree)",
             "gbtree", environment(), ...)
 }

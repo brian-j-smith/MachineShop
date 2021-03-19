@@ -37,9 +37,11 @@ PartialDependence <- function(object) {
 #' plot(pd)
 #' }
 #'
-dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
-                       n = 10, intervals = c("uniform", "quantile"), stats =
-                         MachineShop::settings("stats.PartialDependence")) {
+dependence <- function(
+  object, data = NULL, select = NULL, interaction = FALSE, n = 10,
+  intervals = c("uniform", "quantile"),
+  stats = MachineShop::settings("stats.PartialDependence")
+) {
 
   stopifnot(is(object, "MLModelFit"))
 

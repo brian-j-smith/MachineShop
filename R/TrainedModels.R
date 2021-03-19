@@ -35,10 +35,11 @@
 #' summary(selected_model)
 #' }
 #'
-SelectedModel <- function(..., control = MachineShop::settings("control"),
-                          metrics = NULL,
-                          stat = MachineShop::settings("stat.train"),
-                          cutoff = MachineShop::settings("cutoff")) {
+SelectedModel <- function(
+  ..., control = MachineShop::settings("control"), metrics = NULL,
+  stat = MachineShop::settings("stat.train"),
+  cutoff = MachineShop::settings("cutoff")
+) {
 
   models <- as.list(unlist(list(...)))
   model_names <- character()
@@ -135,12 +136,12 @@ MLModelFunction(SelectedModel) <- NULL
 #'                                             n.minobsinnode = c(5, 10))))
 #' }
 #'
-TunedModel <- function(model, grid = MachineShop::settings("grid"),
-                       fixed = list(),
-                       control = MachineShop::settings("control"),
-                       metrics = NULL,
-                       stat = MachineShop::settings("stat.train"),
-                       cutoff = MachineShop::settings("cutoff")) {
+TunedModel <- function(
+  model, grid = MachineShop::settings("grid"), fixed = list(),
+  control = MachineShop::settings("control"), metrics = NULL,
+  stat = MachineShop::settings("stat.train"),
+  cutoff = MachineShop::settings("cutoff")
+) {
 
   if (missing(model)) {
     model <- NULL

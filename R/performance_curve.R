@@ -91,9 +91,9 @@ performance_curve <- function(x, ...) {
 
 #' @rdname performance_curve
 #'
-performance_curve.default <- function(x, y, metrics = c(MachineShop::tpr,
-                                                        MachineShop::fpr),
-                                      na.rm = TRUE, ...) {
+performance_curve.default <- function(
+  x, y, metrics = c(MachineShop::tpr, MachineShop::fpr), na.rm = TRUE, ...
+) {
   if (na.rm) {
     complete <- complete_subset(x = x, y = y)
     x <- complete$x
@@ -105,9 +105,9 @@ performance_curve.default <- function(x, y, metrics = c(MachineShop::tpr,
 
 #' @rdname performance_curve
 #'
-performance_curve.Resamples <- function(x, metrics = c(MachineShop::tpr,
-                                                       MachineShop::fpr),
-                                        na.rm = TRUE, ...) {
+performance_curve.Resamples <- function(
+  x, metrics = c(MachineShop::tpr, MachineShop::fpr), na.rm = TRUE, ...
+) {
   metrics <- .get_curve_metrics(metrics)
 
   if (na.rm) x <- na.omit(x)

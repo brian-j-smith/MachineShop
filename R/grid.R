@@ -44,8 +44,9 @@ get_grid <- function(x, ...) {
 
 #' @rdname get_grid-methods
 #'
-get_grid.default <- function(x, ..., model, size = 3, random = FALSE,
-                             info = FALSE) {
+get_grid.default <- function(
+  x, ..., model, size = 3, random = FALSE, info = FALSE
+) {
   model <- get_MLObject(model, "MLModel")
   gridinfo <- model@gridinfo
   mf <- NULL
@@ -254,14 +255,18 @@ ParameterGrid.param <- function(..., size = 3, random = FALSE, length = NULL) {
 
 #' @rdname ParameterGrid
 #'
-ParameterGrid.list <- function(x, size = 3, random = FALSE, length = NULL, ...) {
+ParameterGrid.list <- function(
+  x, size = 3, random = FALSE, length = NULL, ...
+) {
   ParameterGrid(parameters(x), size = size, random = random, length = length)
 }
 
 
 #' @rdname ParameterGrid
 #'
-ParameterGrid.parameters <- function(x, size = 3, random = FALSE, length = NULL, ...) {
+ParameterGrid.parameters <- function(
+  x, size = 3, random = FALSE, length = NULL, ...
+) {
   if (!is.null(length)) {
     depwarn("'length' argument to ParameterGrid is deprecated",
             "use 'size' argument instead", expired = Sys.Date() >= "2021-04-15")

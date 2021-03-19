@@ -109,8 +109,9 @@ setMetricGeneric <- function(f) {
 }
 
 
-setMetricMethod <- function(f, signature, definition =
-                              function(observed, predicted, ...) numeric()) {
+setMetricMethod <- function(
+  f, signature, definition = function(observed, predicted, ...) numeric()
+) {
   setMethod(metric_method_name(f), signature, definition)
 }
 

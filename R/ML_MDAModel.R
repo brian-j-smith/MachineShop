@@ -52,9 +52,11 @@
 #' fit(Species ~ ., data = iris, model = MDAModel)
 #' }
 #'
-MDAModel <- function(subclasses = 3, sub.df = NULL, tot.df = NULL,
-                     dimension = sum(subclasses) - 1, eps = .Machine$double.eps,
-                     iter = 5, method = .(mda::polyreg), trace = FALSE, ...) {
+MDAModel <- function(
+  subclasses = 3, sub.df = NULL, tot.df = NULL, dimension = sum(subclasses) - 1,
+  eps = .Machine$double.eps, iter = 5, method = .(mda::polyreg), trace = FALSE,
+  ...
+) {
 
   MLModel(
     name = "MDAModel",

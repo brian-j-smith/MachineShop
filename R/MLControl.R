@@ -173,7 +173,9 @@ TrainControl <- function(...) {
 #' The base \code{MLControl} constructor initializes a set of control parameters
 #' that are common to all resampling methods.
 #'
-MLControl <- function(times = NULL, dist = NULL, method = NULL,
-                      seed = sample(.Machine$integer.max, 1), ...) {
+MLControl <- function(
+  times = NULL, dist = NULL, method = NULL,
+  seed = sample(.Machine$integer.max, 1), ...
+) {
   new("MLControl", times = times, dist = dist, method = method, seed = seed)
 }

@@ -57,8 +57,9 @@ resample <- function(x, ...) {
 #' values of the response variable; i.e. categorical levels for \code{factor},
 #' continuous for \code{numeric}, and event status \code{Surv}.
 #'
-resample.formula <- function(x, data, model,
-                             control = MachineShop::settings("control"), ...) {
+resample.formula <- function(
+  x, data, model, control = MachineShop::settings("control"), ...
+) {
   mf <- ModelFrame(x, data, na.rm = FALSE, strata = strata(response(x, data)))
   resample(mf, model, control, ...)
 }
@@ -66,8 +67,9 @@ resample.formula <- function(x, data, model,
 
 #' @rdname resample-methods
 #'
-resample.matrix <- function(x, y, model,
-                            control = MachineShop::settings("control"), ...) {
+resample.matrix <- function(
+  x, y, model, control = MachineShop::settings("control"), ...
+) {
   mf <- ModelFrame(x, y, na.rm = FALSE, strata = strata(y))
   resample(mf, model, control, ...)
 }
@@ -81,9 +83,9 @@ resample.matrix <- function(x, y, model,
 #' argument in its constructor.  Resampling of this class is unstratified by
 #' default.
 #'
-resample.ModelFrame <- function(x, model,
-                                control = MachineShop::settings("control"),
-                                ...) {
+resample.ModelFrame <- function(
+  x, model, control = MachineShop::settings("control"), ...
+) {
   if (missing(model)) model <- NullModel()
   .resample(get_MLObject(control, "MLControl"), x, model, ...)
 }
@@ -96,8 +98,9 @@ resample.ModelFrame <- function(x, model,
 #' with the \code{\link{role_case}} function.  Resampling will be unstratified
 #' otherwise.
 #'
-resample.recipe <- function(x, model,
-                            control = MachineShop::settings("control"), ...) {
+resample.recipe <- function(
+  x, model, control = MachineShop::settings("control"), ...
+) {
   if (missing(model)) model <- NullModel()
   .resample(get_MLObject(control, "MLControl"), ModelRecipe(x), model, ...)
 }
@@ -146,8 +149,9 @@ Resamples.list <- function(object, ...) {
 }
 
 
-.resample.MLBootstrapControl <- function(object, x, model, progress_index = 0,
-                                         ...) {
+.resample.MLBootstrapControl <- function(
+  object, x, model, progress_index = 0, ...
+) {
   presets <- settings()
   strata <- strata_var(x)
   set.seed(object@seed)
@@ -197,8 +201,9 @@ Resamples.list <- function(object, ...) {
 }
 
 
-.resample.MLCrossValidationControl <- function(object, x, model,
-                                               progress_index = 0, ...) {
+.resample.MLCrossValidationControl <- function(
+  object, x, model, progress_index = 0, ...
+) {
   presets <- settings()
   strata <- strata_var(x)
   set.seed(object@seed)

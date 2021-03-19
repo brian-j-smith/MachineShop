@@ -63,12 +63,12 @@
 #' tidy(kmeans_rec, number = 1)
 #' tidy(kmeans_prep, number = 1)
 #'
-step_kmeans <- function(recipe, ..., k = 5, center = TRUE, scale = TRUE,
-                        algorithm =
-                          c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen"),
-                        max_iter = 10, num_start = 1, replace = TRUE,
-                        prefix = "KMeans", role = "predictor", skip = FALSE,
-                        id = recipes::rand_id("kmeans")) {
+step_kmeans <- function(
+  recipe, ..., k = 5, center = TRUE, scale = TRUE,
+  algorithm = c("Hartigan-Wong", "Lloyd", "Forgy", "MacQueen"), max_iter = 10,
+  num_start = 1, replace = TRUE, prefix = "KMeans", role = "predictor",
+  skip = FALSE, id = recipes::rand_id("kmeans")
+) {
 
   recipes::add_step(recipe, new_step_kmeans(
     terms = recipes::ellipse_check(...),

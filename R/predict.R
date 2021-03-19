@@ -39,10 +39,10 @@
 #' predict(gbm_fit, newdata = veteran, times = c(90, 180, 360), type = "prob")
 #' }
 #'
-predict.MLModelFit <- function(object, newdata = NULL, times = NULL,
-                               type = c("response", "prob"),
-                               cutoff = MachineShop::settings("cutoff"),
-                               dist = NULL, method = NULL, ...) {
+predict.MLModelFit <- function(
+  object, newdata = NULL, times = NULL, type = c("response", "prob"),
+  cutoff = MachineShop::settings("cutoff"), dist = NULL, method = NULL, ...
+) {
   model <- as.MLModel(object)
   require_namespaces(model@packages)
   obs <- response(object)

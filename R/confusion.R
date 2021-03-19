@@ -41,8 +41,9 @@
 #' plot(conf)
 #' }
 #'
-confusion <- function(x, y = NULL, cutoff = MachineShop::settings("cutoff"),
-                      na.rm = TRUE, ...) {
+confusion <- function(
+  x, y = NULL, cutoff = MachineShop::settings("cutoff"), na.rm = TRUE, ...
+) {
   if (na.rm) {
     complete <- complete_subset(x = x, y = y)
     x <- complete$x
