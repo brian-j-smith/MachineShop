@@ -55,7 +55,7 @@ dependence <- function(object, data = NULL, select = NULL, interaction = FALSE,
 
   intervals <- match.arg(intervals)
 
-  stats <- list2function(stats)
+  stats <- list_to_function(stats)
 
   select_values <- function(x) {
     if (is.factor(x)) {

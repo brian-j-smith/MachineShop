@@ -180,7 +180,7 @@ label_items <- function(label, x, n = Inf, add_names = FALSE) {
 }
 
 
-list2function <- function(x) {
+list_to_function <- function(x) {
   error_msg <- paste0("'", deparse(substitute(x)), "' must be a function, ",
                       "function name, or vector of these")
   if (is(x, "MLMetric")) x <- list(x)

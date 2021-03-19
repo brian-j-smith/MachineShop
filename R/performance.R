@@ -98,7 +98,7 @@ performance.Surv <- function(x, y, metrics =
     x <- complete$x
     y <- complete$y
   }
-  if (length(x)) list2function(metrics)(x, y, ...) else NA_real_
+  if (length(x)) list_to_function(metrics)(x, y, ...) else NA_real_
 }
 
 
@@ -113,7 +113,7 @@ performance.ConfusionList <- function(x, ...) {
 #'
 performance.ConfusionMatrix <-
   function(x, metrics = MachineShop::settings("metrics.ConfusionMatrix"), ...) {
-  list2function(metrics)(x)
+  list_to_function(metrics)(x)
 }
 
 

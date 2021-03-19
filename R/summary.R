@@ -97,7 +97,7 @@ summary.MLModelFit <- function(object, ...) {
 summary.Performance <- function(object, stats =
                                   MachineShop::settings("stats.Resamples"),
                                 na.rm = TRUE, ...) {
-  stats <- list2function(stats)
+  stats <- list_to_function(stats)
 
   f <- function(x) {
     prop_na <- mean(is.na(x))
