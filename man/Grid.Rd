@@ -23,15 +23,14 @@ for all random points, or \code{FALSE} for all fixed points.}
 Defines control parameters for a tuning grid.
 }
 \details{
-Returned \code{Grid} objects may be supplied to
-\code{\link{TunedModel}} for automated construction of model tuning grids.
-These grids can be extracted manually and viewed with the
-\code{\link{get_grid}} function.
+Returned \code{Grid} objects may be supplied to \code{\link{TunedModel}} for
+automated construction of model tuning grids.  These grids can be extracted
+manually and viewed with the \code{\link{expand_modelgrid}} function.
 }
 \examples{
 TunedModel(GBMModel, grid = Grid(10, random = 5))
 
 }
 \seealso{
-\code{\link{TunedModel}}, \code{\link{get_grid}}
+\code{\link{TunedModel}}, \code{\link{expand_modelgrid}}
 }

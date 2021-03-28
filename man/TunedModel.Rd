@@ -18,11 +18,13 @@ TunedModel(
 \item{model}{\link[=models]{model} function, function name, or call defining
 the model to be tuned.}
 
-\item{grid}{\link[=data.frame]{data frame} containing parameter values at
-which to evaluate a single model supplied to \code{models}, such as that
-returned by \code{\link{expand_params}}; the number of parameter-specific
-values to generate automatically if the model has a pre-defined grid; or a
-call to \code{\link{Grid}} or \code{\link{ParameterGrid}}.}
+\item{grid}{single integer or vector of integers whose positions or names
+match the parameters in the model's pre-defined tuning grid if one exists
+and which specify the number of values used to construct the grid;
+\code{\link{Grid}} function, function call, or object;
+\code{\link{ParameterGrid}} object; or \link[=data.frame]{data frame}
+containing parameter values at which to evaluate the model, such as that
+returned by \code{\link{expand_params}}.}
 
 \item{fixed}{list of fixed parameter values to combine with those in
 \code{grid}.}
@@ -47,6 +49,9 @@ summary statistic on resampled metric values for model tuning.}
 Model tuning over a grid of parameter values.
 }
 \details{
+The \code{\link{expand_modelgrid}} function enables manual extraction and
+viewing of grids created automatically when a \code{TunedModel} is fit.
+
 \describe{
   \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
     \code{Surv}}

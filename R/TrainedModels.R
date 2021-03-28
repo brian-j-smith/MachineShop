@@ -84,11 +84,13 @@ MLModelFunction(SelectedModel) <- NULL
 #'
 #' @param model \link[=models]{model} function, function name, or call defining
 #'   the model to be tuned.
-#' @param grid \link[=data.frame]{data frame} containing parameter values at
-#'   which to evaluate a single model supplied to \code{models}, such as that
-#'   returned by \code{\link{expand_params}}; the number of parameter-specific
-#'   values to generate automatically if the model has a pre-defined grid; or a
-#'   call to \code{\link{Grid}} or \code{\link{ParameterGrid}}.
+#' @param grid single integer or vector of integers whose positions or names
+#'   match the parameters in the model's pre-defined tuning grid if one exists
+#'   and which specify the number of values used to construct the grid;
+#'   \code{\link{Grid}} function, function call, or object;
+#'   \code{\link{ParameterGrid}} object; or \link[=data.frame]{data frame}
+#'   containing parameter values at which to evaluate the model, such as that
+#'   returned by \code{\link{expand_params}}.
 #' @param fixed list of fixed parameter values to combine with those in
 #'   \code{grid}.
 #' @param control \link[=controls]{control} function, function name, or call
@@ -102,6 +104,9 @@ MLModelFunction(SelectedModel) <- NULL
 #' @param cutoff argument passed to the \code{metrics} functions.
 #'
 #' @details
+#' The \code{\link{expand_modelgrid}} function enables manual extraction and
+#' viewing of grids created automatically when a \code{TunedModel} is fit.
+#'
 #' \describe{
 #'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
 #'     \code{Surv}}
@@ -150,19 +155,15 @@ TunedModel <- function(
     stopifnot(is(model, "MLModelFunction"))
   }
 
-  grid <- if (is(grid, "numeric")) {
-    Grid(grid)
-  } else if (identical(grid, "Grid") || identical(grid, Grid)) {
-    Grid()
-  } else if (is(grid, "Grid")) {
-    grid
-  } else if (is(grid, "parameters")) {
-    ParameterGrid(grid)
-  } else if (is(grid, "data.frame")) {
-    as_tibble(grid)
-  } else {
-    stop("'grid' must be a grid length, Grid or ParameterGrid object, ",
-         "or data frame")
+  grid <- check_grid(grid)
+  if (is(grid, "DomainError")) {
+    value <- grid$value
+    if (is(value, "data.frame")) {
+      grid <- as_tibble(value)
+    } else {
+      stop("'grid' value ", grid$message,
+           "; a ParameterGrid object; or a data frame")
+    }
   }
 
   fixed <- as_tibble(fixed)
@@ -189,8 +190,7 @@ MLModelFunction(TunedModel) <- NULL
 
 .fit.TunedModel <- function(x, inputs, ...) {
   params <- x@params
-  grid <- as.grid(params$grid, fixed = params$fixed,
-                  inputs, model = get_MLObject(params$model, "MLModel"))
+  grid <- expand_modelgrid(x, inputs)
   models <- expand_model(list(params$model, grid))
   train_step <- resample_selection(models, identity, params, inputs,
                                    class = "TunedModel")

@@ -54,6 +54,206 @@ expand_model <- function(x, ..., random = FALSE) {
 }
 
 
+#' Model Tuning Grid Expansion
+#'
+#' Expand a model grid of tuning parameter values.
+#'
+#' @name expand_modelgrid
+#' @rdname expand_modelgrid-methods
+#'
+#' @param x \link[=inputs]{input} specifying a relationship between model
+#'   predictor and response variables.  Alternatively, a
+#'   \code{\link{TunedModel}} object may be given first followed optionally by
+#'   an input specification.
+#' @param y response variable.
+#' @param data \link[=data.frame]{data frame} containing observed predictors and
+#'   outcomes.
+#' @param model \code{\link{TunedModel}} object.
+#' @param info logical indicating whether to return model-defined grid
+#'   construction information rather than the grid values.
+#' @param ... arguments passed to other methods.
+#'
+#' @details
+#' The \code{expand_modelgrid} function enables manual extraction and viewing of
+#' grids created automatically when a \code{\link{TunedModel}} is fit.
+#'
+#' @return A data frame of parameter values or \code{NULL} if data are required
+#' for construction of the grid but not supplied.
+#'
+#' @seealso \code{\link{TunedModel}}
+#'
+#' @examples
+#' expand_modelgrid(TunedModel(GBMModel, grid = 5))
+#'
+#' expand_modelgrid(TunedModel(GLMNetModel, grid = c(alpha = 5, lambda = 10)),
+#'                  sale_amount ~ ., data = ICHomes)
+#'
+#' gbm_grid <- ParameterGrid(
+#'   n.trees = dials::trees(),
+#'   interaction.depth = dials::tree_depth(),
+#'   size = 5
+#' )
+#' expand_modelgrid(TunedModel(GBMModel, grid = gbm_grid))
+#'
+#' rf_grid <- ParameterGrid(
+#'   mtry = dials::mtry(),
+#'   nodesize = dials::max_nodes(),
+#'   size = c(3, 5)
+#' )
+#' expand_modelgrid(TunedModel(RandomForestModel, grid = rf_grid),
+#'                  sale_amount ~ ., data = ICHomes)
+#'
+expand_modelgrid <- function(x, ...) {
+  UseMethod("expand_modelgrid")
+}
+
+
+#' @rdname expand_modelgrid-methods
+#'
+expand_modelgrid.formula <- function(x, data, model, info = FALSE, ...) {
+  expand_modelgrid(model, x, data, info = info)
+}
+
+
+#' @rdname expand_modelgrid-methods
+#'
+expand_modelgrid.matrix <- function(x, y, model, info = FALSE, ...) {
+  expand_modelgrid(model, x, y, info = info)
+}
+
+
+#' @rdname expand_modelgrid-methods
+#'
+expand_modelgrid.ModelFrame <- function(x, model, info = FALSE, ...) {
+  expand_modelgrid(model, x, info = info)
+}
+
+
+#' @rdname expand_modelgrid-methods
+#'
+expand_modelgrid.recipe <- function(x, model, info = FALSE, ...) {
+  expand_modelgrid(model, x, info = info)
+}
+
+
+#' @rdname expand_modelgrid-methods
+#'
+expand_modelgrid.TunedModel <- function(x, ..., info = FALSE) {
+  params <- x@params
+  model <- params$model()
+  if (info) {
+    model@gridinfo
+  } else {
+    .expand_modelgrid(params$grid, ..., model = model, fixed = params$fixed)
+  }
+}
+
+
+.expand_modelgrid <- function(grid, ...) {
+  UseMethod(".expand_modelgrid")
+}
+
+
+.expand_modelgrid.Grid <- function(grid, x, ..., model, fixed) {
+  gridinfo <- model@gridinfo
+  size <- grid@size
+  random <- grid@random
+  mf <- NULL
+
+  not_dup <- function(x) !duplicated(x, fromLast = TRUE)
+  if (!is.null(names(size))) {
+    if (!all(names(size) %in% gridinfo$param)) {
+      warn("Unmatched model parameter names in expand_modelgrid() argument",
+           " 'size'.\n",
+           "x Existing ", model@name, " has ",
+           label_items("parameter", gridinfo$param), ".\n",
+           "x Assigned data has ", label_items("name", names(size)), ".")
+    }
+    size <- size[gridinfo$param] * not_dup(gridinfo$param)
+    size[is.na(size)] <- 0L
+  } else if (length(size) == 1) {
+    if (!random) gridinfo <- gridinfo[gridinfo$regular, ]
+    size <- size * not_dup(gridinfo$param)
+  } else if (length(size) != nrow(gridinfo)) {
+    stop("Length of expand_modelgrid() argument 'size' must equal 1",
+         " or the number of model parameters.\n",
+         "x Existing ", model@name, " has ", nrow(gridinfo), " ",
+         label_items("parameter", gridinfo$param), ".\n",
+         "x Assigned data has ", length(size), " ",
+         label_items("size", size), ".",
+         call. = FALSE)
+  }
+  gridinfo$size <- size
+  gridinfo <- gridinfo[gridinfo$size >= 1, ]
+
+  has_data_arg <- function(fun) "data" %in% names(formals(fun))
+  needs_data <- any(map_logi(has_data_arg, gridinfo$values))
+  if (needs_data && has_grid(model)) {
+    if (!missing(x)) mf <- ModelFrame(x, ..., na.rm = FALSE)
+    if (is.null(mf)) {
+      return(NULL)
+    } else if (!is_valid_response(y <- response(mf), model)) {
+      warn("Invalid model response type in expand_modelgrid().\n",
+           "x Exising ", model@name, " supports ",
+           label_items("type", model@response_types), ".\n",
+           "x Supplied response is of ",
+           label_items("type", class(y)), ".")
+      return(NULL)
+    }
+  }
+
+  param_names <- unique(gridinfo$param)
+  params <- map(function(fun, n) unique(fun(n = n, data = mf)),
+                gridinfo$values, gridinfo$size)
+  params <- map(function(name) {
+    unlist(params[gridinfo$param == name], use.names = FALSE)
+  }, param_names)
+  names(params) <- param_names
+  params[lengths(params) == 0] <- NULL
+  grid <- expand_params(params, random = random)
+
+  .expand_modelgrid(grid, fixed = fixed)
+}
+
+
+.expand_modelgrid.ParameterGrid <- function(grid, x, ..., model, fixed) {
+  grid <- if (nrow(grid)) {
+    needs_data <- any(dials::has_unknowns(grid$object))
+    if (needs_data) {
+      if (missing(x)) return(NULL)
+      mf <- ModelFrame(x, ..., na.rm = FALSE)
+      model <- get_MLObject(model, "MLModel")
+      data <- switch(model@predictor_encoding,
+                     "model.matrix" = model.matrix(mf, intercept = FALSE),
+                     "terms" = {
+                       mf_terms <- attributes(terms(mf))
+                       var_list <- eval(mf_terms$variables, mf)
+                       names(var_list) <- rownames(mf_terms$factors)
+                       as.data.frame(var_list[-c(1, mf_terms$offset)])
+                     }
+      )
+      grid <- dials::finalize(grid, x = data)
+    }
+    if (grid@random) {
+      dials::grid_random(grid, size = grid@random)
+    } else {
+      dials::grid_regular(grid, levels = grid@size)
+    }
+  } else {
+    tibble()
+  }
+
+  .expand_modelgrid(grid, fixed = fixed)
+}
+
+
+.expand_modelgrid.tbl_df <- function(grid, fixed, ...) {
+  if (!nrow(grid)) grid <- tibble(.rows = 1)
+  grid[names(fixed)] <- fixed
+  if (ncol(grid)) grid[!duplicated(grid), ] else grid
+}
+
+
 #' Model Parameters Expansion
 #'
 #' Create a grid of parameter values from all combinations of supplied inputs.

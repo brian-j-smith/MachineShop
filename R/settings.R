@@ -176,6 +176,20 @@ check_const <- function(x, name) {
 }
 
 
+check_grid <- function(x) {
+  if (is(x, "numeric")) {
+    Grid(x)
+  } else if (identical(x, "Grid") || identical(x, Grid)) {
+    Grid()
+  } else if (is(x, "Grid")) {
+    x
+  } else {
+    DomainError(x, "must be a positive integer value(s) or ",
+                "a Grid function, function name, or object")
+  }
+}
+
+
 check_logical <- function(x) {
   result <- as.logical(x)[[1]]
   if (!(isTRUE(result) || isFALSE(result))) {
@@ -259,19 +273,7 @@ MachineShop_global <- as.environment(list(
 
     grid = list(
       value = 3,
-      check = function(x) {
-        if (is(x, "Grid")) {
-          x
-        } else if (identical(x, "Grid") || identical(x, Grid)) {
-          Grid()
-        } else {
-          result <- try(Grid(x), silent = TRUE)
-          if (is(result, "try-error")) {
-            DomainError(x, "must be a positive integer value(s) or ",
-                           "a Grid function, function name, or call")
-          } else result
-        }
-      }
+      check = check_grid
     ),
 
     max.print = list(
