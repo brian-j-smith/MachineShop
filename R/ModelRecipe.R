@@ -75,9 +75,10 @@ prep.ModelFrame <- function(x, ...) x
 
 prep.ModelRecipe <- function(x, ...) {
   if (!recipes::fully_trained(x)) {
-    x <- new(class(x), prep(as(x, "recipe"), retain = FALSE))
     case_name_var <- "(names)"
-    x$template[[case_name_var]] <- as.character(x$template[[case_name_var]])
+    template <- x$template
+    x <- new(class(x), prep(as(x, "recipe"), retain = FALSE))
+    x$template <- template
     x$orig_lvls[[case_name_var]] <- list(values = NA, ordered = NA)
     x$levels[[case_name_var]] <- x$orig_lvls[[case_name_var]]
   }
