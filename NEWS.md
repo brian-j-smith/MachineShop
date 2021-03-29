@@ -2,6 +2,10 @@
 
 ## Version Updates
 
+## 2.7.1
+* Rename `traininfo` slot to `train_steps` in `MLModel` classes.
+* Issue #4: compatibility fix for **recipes** package change in behavior of the `retain` argument in `prep()`.
+
 ## 2.7.0
 * Sort randomly sampled grid points.
 * Change `fixed` argument default `NULL` to `list()` in `TunedModel()`.
