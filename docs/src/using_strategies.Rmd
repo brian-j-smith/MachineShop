@@ -179,7 +179,7 @@ Models define the functional relationships between predictor and response variab
 
 ### Model Tuning
 
-Many of the package-supplied modeling functions have arguments, or tuning parameters, that control aspects of their model fitting algorithms.  For example, `GBMModel` parameters `n.trees` and `interaction.depth` control the number of decision trees to fit and the maximum tree depths.  When called with a `TunedModel`, the `fit()` function performs model fitting over a grid of parameter values and returns the model with the most optimal values.  Optimality is determined based on the first performance metric of the `metrics` argument to `TunedModel()` if given or the first default metric of the `performance()` function otherwise.  Argument `grid` additionally controls the construction of grid values and can be a single numeric value giving the grid length in each parameter dimension.  As shown in the output below, `as.MLModel()` will extract a tuned model from fit results for viewing of the tuning parameter grid values, the names of models fit to each, all calculated metrics, the final model selected, the metric upon which its selection was based, and its tuning parameters.
+Many of the package-supplied modeling functions have arguments, or tuning parameters, that control aspects of their model fitting algorithms.  For example, `GBMModel` parameters `n.trees` and `interaction.depth` control the number of decision trees to fit and the maximum tree depths.  When called with a `TunedModel`, the `fit()` function performs model fitting over a grid of parameter values and returns the model with the optimal values.  Optimality is determined based on the first performance metric of the `metrics` argument to `TunedModel()` if given or the first default metric of the `performance()` function otherwise.  Argument `grid` additionally controls the construction of grid values and can be a single integer or vector of integers whose positions or names match the parameters in a model's pre-defined tuning grid if one exists and which specify the number of values used to construct the grid.  Pre-defined `TunedModel` grids can be extract and viewed apart from model fitting with `expand_modelgrid()`.  As shown in the output below, `as.MLModel()` will extract a tuned model from fit results for viewing of the tuning parameter grid values, the names of models fit to each, all calculated metrics, the final model selected, the metric upon which its selection was based, and its parameters.
 
 ```{r using_strategies_tune, eval=FALSE}
 ## Tune over automatic grid of model parameters
@@ -235,7 +235,7 @@ model_fit <- fit(surv_fo, data = surv_train,
 #> CIndex value: 0.7730294
 ```
 
-Grid values may also be a call to `Grid()` with the grid `length` and number of grid points to sample at `random`, a user-defined grid of points specified with the `expand_params()` function, or a data frame of grid points (not shown).
+Grid values may also be given as a `Grid` function, function call, or object; `ParameterGrid` object; or data frame containing parameter values at which to evaluate the model, such as that returned by `expand_params()`.
 
 ```{r using_strategies_tune_grid, eval=FALSE}
 ## Tune over randomly sampled grid points
@@ -357,8 +357,8 @@ stackedmodel <- StackedModel(GLMBoostModel, CForestModel, CoxModel)
 res_stacked <- resample(surv_fo, data = surv_train, model = stackedmodel)
 summary(res_stacked)
 #>          Statistic
-#> Metric         Mean    Median        SD Min    Max NA
-#>   C-Index 0.7560737 0.7467949 0.1341055 0.5 0.9375  0
+#> Metric        Mean    Median        SD       Min    Max NA
+#>   C-Index 0.758157 0.7467949 0.1297774 0.5208333 0.9375  0
 
 ## Super learner
 supermodel <- SuperModel(GLMBoostModel, CForestModel, CoxModel,
@@ -366,8 +366,8 @@ supermodel <- SuperModel(GLMBoostModel, CForestModel, CoxModel,
 res_super <- resample(surv_fo, data = surv_train, model = supermodel)
 summary(res_super)
 #>          Statistic
-#> Metric         Mean    Median         SD  Min       Max NA
-#>   C-Index 0.7146186 0.7440476 0.09896758 0.52 0.8536585  0
+#> Metric         Mean Median        SD  Min       Max NA
+#>   C-Index 0.7262053   0.75 0.1021023 0.52 0.8780488  0
 ```
 
 
