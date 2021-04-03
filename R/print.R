@@ -129,7 +129,7 @@ setMethod("show", "Grid",
 #' @rdname print-methods
 #'
 print.ListOf <- function(x, n = MachineShop::settings("max.print"), ...) {
-  print_items(asS3(x), n = n)
+  print_items(as(x, "listof"), n = n)
   invisible(x)
 }
 
@@ -416,7 +416,7 @@ print.ParameterGrid <- function(
   x, n = MachineShop::settings("max.print"), ...
 ) {
   print_title(x)
-  print(asS3(x))
+  print(as(x, "parameters"))
   if (x@random) {
     cat("Random sample:", x@random, "\n")
   } else {
@@ -489,7 +489,7 @@ print.PerformanceDiffTest <- function(
 #'
 print.RecipeGrid <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
-  print_items(asS3(x), n = n)
+  print_items(as(x, "tbl_df"), n = n)
   invisible(x)
 }
 

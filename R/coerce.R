@@ -11,6 +11,9 @@ as.data.frame.BinomialVariate <- function(x, ...) {
 }
 
 
+setAs("ListOf", "listof", asS3Part)
+
+
 as.data.frame.ModelFrame <- function(x, ...) {
   structure(as(x, "ModelFrame"), terms = NULL, class = "data.frame")
 }
@@ -26,9 +29,15 @@ setAs("ModeledFrame", "data.frame",
 )
 
 
+setAs("ParameterGrid", "parameters", asS3Part)
+
+
 setAs("recipe", "ModelRecipe",
   function(from) ModelRecipe(from)
 )
+
+
+setAs("RecipeGrid", "tbl_df", asS3Part)
 
 
 setAs("SelectedModelFrame", "data.frame",
