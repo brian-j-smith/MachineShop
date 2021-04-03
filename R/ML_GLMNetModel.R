@@ -70,12 +70,21 @@ GLMNetModel <- function(
       param = c("lambda", "alpha"),
       values = c(
         function(n, data, ...) {
+          lambda <- numeric()
           model <- GLMNetModel(lambda = NULL)
-          model@params$nlambda <- 3
-          model_fit <- fit(data, model = model)
-          exp(seq(log(min(model_fit$lambda)),
-                  log(max(model_fit$lambda)),
-                  length = n))
+          nlambda <- 0
+          while ((length(lambda) < 2) && (nlambda < 100)) {
+            nlambda <- nlambda + 10
+            model@params$nlambda <- nlambda
+            lambda <- suppressWarnings(fit(data, model = model)$lambda)
+          }
+          if (length(lambda) >= 2) {
+            exp(seq(log(min(lambda)), log(max(lambda)), length = n))
+          } else {
+            warn("GLMNetModel grid values for lambda could not be generated",
+                 " automatically")
+            numeric()
+          }
         },
         function(n, ...) seq(0.1, 1, length = n)
       )
