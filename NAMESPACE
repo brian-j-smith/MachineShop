@@ -23,7 +23,8 @@ importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
 importFrom(survival, concordance, is.Surv, Surv, survfit, survreg,
            survreg.distributions)
 importFrom(tibble, as_tibble, is_tibble, tibble)
-importFrom(utils, combn, head, methods, relist, stack, str, tail)
+importFrom(utils, combn, head, methods, packageVersion, relist, stack, str,
+           tail)
 
 
 export(BinomialVariate,

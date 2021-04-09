@@ -23,7 +23,11 @@ MLModel(
 
 \item{label}{optional character descriptor for the model.}
 
-\item{packages}{character vector of packages required to use the model.}
+\item{packages}{character vector of package names upon which the model
+depends.  Each name may be optionally followed by a comment in
+parentheses specifying a version requirement.  The comment should contain
+a comparison operator, whitespace and a valid version number, e.g.
+\code{"xgboost (>= 1.3.0)"}.}
 
 \item{response_types}{character vector of response variable types to which
 the model can be fit.  Supported types are \code{"binary"}, =

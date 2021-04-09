@@ -87,7 +87,7 @@ XGBModel <- function(
   MLModel(
     name = "XGBModel",
     label = "Extreme Gradient Boosting",
-    packages = "xgboost",
+    packages = "xgboost (>= 1.3.0)",
     response_types = c("factor", "numeric", "PoissonVariate", "Surv"),
     predictor_encoding = "model.matrix",
     params = params(environment()),

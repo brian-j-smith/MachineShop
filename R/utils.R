@@ -359,13 +359,39 @@ push.TrainStep <- function(x, object, ...) {
 
 
 require_namespaces <- function(packages) {
-  available <- map_logi(requireNamespace, packages, quietly = TRUE)
-  if (!all(available)) {
-    missing <- packages[!available]
-    stop(label_items("call requires the installation of package", missing),
-         call. = FALSE)
+  paren_pos <- regexpr("\\(([^)]*)\\)", packages)
+  paren_len <- attr(paren_pos, "match.length")
+
+  end_pos <- ifelse(paren_pos > 0, paren_pos - 1, nchar(packages))
+  package_names <- trimws(substr(packages, 1, end_pos))
+
+  package_errors <- function(x, msg, fix) {
+    if (any(x)) {
+      items <- packages[x]
+      item_names <- package_names[x]
+      stop(label_items(msg, items), ".\n",
+           "To address this issue, try running ", fix, "(", deparse(item_names),
+           ").", call. = FALSE)
+    }
   }
-  invisible(available)
+
+  installed <- map_logi(requireNamespace, package_names, quietly = TRUE)
+  package_errors(!installed, "call requires prior installation of package",
+                 "install.packages")
+
+  end_pos <- paren_pos + paren_len - 2
+  compat_versions <- strsplit(substr(packages, paren_pos + 1, end_pos), " ")
+
+  compatible <- map_logi(function(package_name, compat_version) {
+    if (length(compat_version) == 2) {
+      version <- packageVersion(package_name)
+      eval(call(compat_version[1], version, compat_version[2]))
+    } else TRUE
+  }, package_names, compat_versions)
+  package_errors(!compatible, "call requires updated package version",
+                 "update.packages")
+
+  invisible(installed & compatible)
 }
 
 

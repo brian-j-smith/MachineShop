@@ -4,7 +4,11 @@
 #'
 #' @param name character name of the object to which the model is assigned.
 #' @param label optional character descriptor for the model.
-#' @param packages character vector of packages required to use the model.
+#' @param packages character vector of package names upon which the model
+#'   depends.  Each name may be optionally followed by a comment in
+#'   parentheses specifying a version requirement.  The comment should contain
+#'   a comparison operator, whitespace and a valid version number, e.g.
+#'   \code{"xgboost (>= 1.3.0)"}.
 #' @param response_types character vector of response variable types to which
 #'   the model can be fit.  Supported types are \code{"binary"}, =
 #'   \code{"BinomialVariate"}, \code{"DiscreteVariate"}, \code{"factor"},
