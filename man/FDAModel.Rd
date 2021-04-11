@@ -31,8 +31,7 @@ linear regression is provided by \code{\link[mda]{polyreg}} from the
 \code{\link[mda]{gen.ridge}} is appropriate.  Other possibilities are
 \code{\link[mda]{mars}} for multivariate adaptive regression splines and
 \code{\link[mda]{bruto}} for adaptive backfitting of additive splines.  Use
-the \code{\link[MachineShop:dot-]{.}} operator to quote specified
-functions.}
+the \code{\link[=quote]{.}} operator to quote specified functions.}
 
 \item{...}{additional arguments to \code{method} for \code{FDAModel} and to
 \code{FDAModel} for \code{PDAModel}.}

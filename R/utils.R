@@ -9,17 +9,20 @@ utils::globalVariables(c("i", "x", "y"))
 
 #' Quote Operator
 #'
-#' Shorthand notation for the \code{\link{quote}} function.  The quote operator
-#' simply returns its argument unevaluated and can be applied to any \R
-#' expression.  Useful for calling model constructors with quoted parameter
-#' values that are defined in terms of \code{nobs}, \code{nvars}, or \code{y}.
+#' Shorthand notation for the \code{\link[base:substitute]{quote}} function.
+#' The quote operator simply returns its argument unevaluated and can be applied
+#' to any \R expression.  Useful for calling model constructors with quoted
+#' parameter values that are defined in terms of \code{nobs}, \code{nvars}, or
+#' \code{y}.
+#'
+#' @name quote
 #'
 #' @param expr any syntactically valid \R expression.
 #'
 #' @return
 #' The quoted (unevaluated) expression.
 #'
-#' @seealso \code{\link{quote}}
+#' @seealso \code{\link[base:substitute]{quote}}
 #'
 #' @examples
 #' ## Stepwise variable selection with BIC
