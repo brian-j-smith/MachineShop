@@ -32,7 +32,7 @@ f <- function(x) {
 }
 
 info <- metricinfo()
-df <- cbind("Function" = rdoc_url(names(info)),
+df <- cbind("Function" = rdoc_url(names(info), "metrics"),
             do.call(rbind, lapply(info, f)))
 names(df)[3:5] <- paste0(names(df)[3:5], footnote_marker_number(1:3))
 

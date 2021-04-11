@@ -12,12 +12,17 @@ knitr::opts_chunk$set(
 library(kableExtra)
 
 
-rdoc_url <- function(name) {
+rdoc_url <- function(names, rdoc_names = NULL) {
   version <- packageVersion("MachineShop")
   url <- paste0("https://www.rdocumentation.org/packages/MachineShop/versions",
               "/", version$major, ".", version$minor, ".0",
               "/topics/")
-  paste0("[`", name, "`](", url, name, ")")
+
+  if (is.null(rdoc_names)) {
+    rdoc_names <- sapply(names, function(x) as.character(str2lang(x))[1])
+  }
+
+  paste0("[`", names, "`](", url, rdoc_names, ")")
 }
 
 

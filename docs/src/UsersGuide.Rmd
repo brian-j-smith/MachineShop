@@ -20,5 +20,5 @@ vignette: >
 
 ```{r setup, include=FALSE}
 source("setup.R")
-rdoc_url <- function(name) name
+rdoc_url <- function(names, ...) names
 ```

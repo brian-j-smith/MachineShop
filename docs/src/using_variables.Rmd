@@ -1,6 +1,6 @@
 # Variable Specifications
 
-Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Four main types of specifications are supported by the package's `fit()` and `resample()` functions: traditional formula, design matrix, model frame, and recipe.
+Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Four main types of specifications are supported by the package's `r rdoc_url("fit()")` and `r rdoc_url("resample()")` functions: traditional formula, design matrix, model frame, and recipe.
 
 
 ## Traditional Formula
@@ -28,7 +28,7 @@ This setting is intended to help avoid the definition of predictor variable enco
 
 ## Design Matrix
 
-Variables stored separately in a design matrix of predictors and object of responses can be supplied to the fit functions directly.  Fitting with design matrices has less computational overhead than traditional formulas and allows for greater numbers of predictor variables in some models, including `GBMModel`, `GLMNetModel`, and `RandomForestModel`.
+Variables stored separately in a design matrix of predictors and object of responses can be supplied to the fit functions directly.  Fitting with design matrices has less computational overhead than traditional formulas and allows for greater numbers of predictor variables in some models, including `r rdoc_url("GBMModel")`, `r rdoc_url("GLMNetModel")`, and `r rdoc_url("RandomForestModel")`.
 
 ```{r using_variables_matrix}
 ## Example design matrix and response object
@@ -43,7 +43,7 @@ predict(model_fit, newdata = Pima.te) %>% head
 
 ## Model Frame
 
-A `ModelFrame` class is defined by the package for specification of predictor and response variables along with other attributes to control model fitting.  Model frames can be created with calls to the `ModelFrame()` constructor function using a syntax similar to the traditional formula or design matrix.
+A `r rdoc_url("ModelFrame")` class is defined by the package for specification of predictor and response variables along with other attributes to control model fitting.  Model frames can be created with calls to the `r rdoc_url("ModelFrame()")` constructor function using a syntax similar to the traditional formula or design matrix.
 
 ```{r using_variables_modelframe}
 ## Model frame specification
@@ -59,7 +59,7 @@ model_fit <- fit(mf, model = GBMModel)
 predict(model_fit, newdata = Pima.te) %>% head
 ```
 
-The model frame approach has a few advantages over model fitting directly with a traditional formula.  One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default.  This is often desirable for models that do not handle missing values.  Conversely, missing values can be retained in the model frame by setting its argument `na.rm = FALSE` for models, like `GBMModel`, that do handle them.  A second advantage is that case weights can be included in the model frame to be passed on to the model fitting functions.
+The model frame approach has a few advantages over model fitting directly with a traditional formula.  One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default.  This is often desirable for models that do not handle missing values.  Conversely, missing values can be retained in the model frame by setting its argument `na.rm = FALSE` for models, like `r rdoc_url("GBMModel")`, that do handle them.  A second advantage is that case weights can be included in the model frame to be passed on to the model fitting functions.
 
 ```{r using_variables_modelframe_weights, results="hide"}
 ## Model frame specification with case weights
@@ -84,7 +84,7 @@ model_fit <- fit(rec, model = GBMModel)
 predict(model_fit, newdata = Pima.te) %>% head
 ```
 
-As shown, prediction on new data with a model fit to a recipe is done on an unprocessed dataset.  Recipe case weights and stratified resampling are supported with the `role_case()` function.  As an example, an initial step is included in the recipe below to replace the original role of variable `weights` with a designation of case weights.  That is followed by a step to convert three ordinal factors to integer scores.
+As shown, prediction on new data with a model fit to a recipe is done on an unprocessed dataset.  Recipe case weights and stratified resampling are supported with the `r rdoc_url("role_case()", "recipe_roles")` function.  As an example, an initial step is included in the recipe below to replace the original role of variable `weights` with a designation of case weights.  That is followed by a step to convert three ordinal factors to integer scores.
 
 ```{r using_variables_recipe_weights, results="hide"}
 ## Recipe specification with case weights

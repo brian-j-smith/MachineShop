@@ -20,7 +20,7 @@ vignette: >
 
 ```{r setup, include=FALSE}
 source("setup.R")
-rdoc_url <- function(name) name
+rdoc_url <- function(names, ...) names
 ```
 
 
@@ -159,7 +159,7 @@ surv_fo <- Surv(time, status) ~ sex + age + year + thickness + ulcer
 
 ## Model Information
 
-Model fitting requires user specification of a **MachineShop** compatible model.  A named list of package-supplied models can be obtained interactively with the `modelinfo()` function, and includes the following components for each.
+Model fitting requires user specification of a **MachineShop** compatible model.  A named list of package-supplied models can be obtained interactively with the `r rdoc_url("modelinfo()")` function, and includes the following components for each.
 
 `label`
   : Character descriptor for the model.
@@ -179,14 +179,14 @@ Model fitting requires user specification of a **MachineShop** compatible model.
 `varimp`
   : Logical indicating whether variable importance is defined for the model.
 
-Function `modelinfo()` may be called without arguments, with one or more model functions, observed response variables, or vectors representing response variable types; and will return information on all matching models.
+Function `r rdoc_url("modelinfo()")` may be called without arguments, with one or more model functions, observed response variables, or vectors representing response variable types; and will return information on all matching models.
 
 ```{r using_fit_modelinfo}
 ## All available models
 modelinfo() %>% names
 ```
 
-Information is displayed below for the `GBMModel()` function corresponding to a generalized boosted regression model, which is applicable to survival outcomes.
+Information is displayed below for the `r rdoc_url("GBMModel()")` function corresponding to a generalized boosted regression model, which is applicable to survival outcomes.
 
 ```{r using_fit_modelinfo_gbmmodel}
 ## Model-specific information
@@ -202,7 +202,7 @@ GBMModel
 
 ### Type-Specific Models
 
-When data objects are supplied as arguments to `modelinfo()`, information is returned on all models applicable to response variables of the same data types.  If model functions are additionally supplied as arguments, information on the subset matching the data types is returned. 
+When data objects are supplied as arguments to `r rdoc_url("modelinfo()")`, information is returned on all models applicable to response variables of the same data types.  If model functions are additionally supplied as arguments, information on the subset matching the data types is returned. 
 
 ```{r using_fit_modelinfo_type}
 ## All survival response-specific models
@@ -225,7 +225,7 @@ modelinfo(Surv(surv_df$time, surv_df$status)) %>% names
 
 ## Fit Function
 
-Package models, such as `GBMModel`, can be specified in the `model` argument of the `fit()` function to estimate a relationship (`surv_fo`) between predictors and an outcome based on a set of data (`surv_train`).  Argument specifications may be in terms of the model function, function name, or a function call.
+Package models, such as `r rdoc_url("GBMModel")`, can be specified in the `model` argument of the `r rdoc_url("fit()")` function to estimate a relationship (`surv_fo`) between predictors and an outcome based on a set of data (`surv_train`).  Argument specifications may be in terms of the model function, function name, or a function call.
 
 ```{r using_fit_function, results="hide"}
 ## Generalized boosted regression fit
@@ -245,7 +245,7 @@ Model function arguments will assume their default values unless otherwise chang
 
 ## Dynamic Model Parameters
 
-*Dynamic model parameters* are model function arguments defined as expressions to be evaluated at the time of model fitting.  As such, their values can change based on characteristics of the analytic dataset, including the number of observations or predictor variables.  Expressions to dynamic parameters are specified within the package-supplied quote operator `.()` and can include the following objects:
+*Dynamic model parameters* are model function arguments defined as expressions to be evaluated at the time of model fitting.  As such, their values can change based on characteristics of the analytic dataset, including the number of observations or predictor variables.  Expressions to dynamic parameters are specified within the package-supplied quote operator `r rdoc_url(".()", "quote")` and can include the following objects:
 
 `nobs`
   : number of observations in `data`.
@@ -256,7 +256,7 @@ Model function arguments will assume their default values unless otherwise chang
 `y`
   : response variable.
   
-In the example below, Bayesian information criterion (BIC) based stepwise variable selection is performed by creating a `CoxStepAICModel` with dynamic parameter `k` to be calculated as the log number of observations in the fitted dataset.
+In the example below, Bayesian information criterion (BIC) based stepwise variable selection is performed by creating a `r rdoc_url("CoxStepAICModel", "CoxModel")` with dynamic parameter `k` to be calculated as the log number of observations in the fitted dataset.
 
 ```{r using_fit_dynamic, results="hide"}
 ## Dynamic model parameter k = log number of observations
@@ -271,7 +271,7 @@ fit(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(length(y)))))
 
 ## Predict Function
 
-A `predict()` function is supplied for application to model fit results to obtain predicted values on a dataset specified with its `newdata` argument or on the original dataset if not specified.  Survival means are predicted for survival outcomes by default.  Estimates of the associated survival distributions are needed to calculate the means.  For models, like `GBMModel`, that perform semi- or non-parametric survival analysis, Weibull approximations to the survival distributions are the default for mean estimation.  Other choices of distributional approximations are exponential, Rayleigh, and empirical.  Empirical distributions are applicable to Cox proportional hazards-based models and can be calculated with the method of Breslow [-@breslow:1972:DPC], Efron [-@efron:1977:ECL, default], or Fleming and Harrington [-@fleming:1984:NES].  Note, however, that empirical survival means are undefined mathematically if an event does not occur at the longest follow-up time.  In such situations, a restricted survival mean is calculated by changing the longest follow-up time to an event, as suggested by Efron [-@efron:1967:PFB], which will be negatively biased.  
+A `r rdoc_url("predict()")` function is supplied for application to model fit results to obtain predicted values on a dataset specified with its `newdata` argument or on the original dataset if not specified.  Survival means are predicted for survival outcomes by default.  Estimates of the associated survival distributions are needed to calculate the means.  For models, like `r rdoc_url("GBMModel")`, that perform semi- or non-parametric survival analysis, Weibull approximations to the survival distributions are the default for mean estimation.  Other choices of distributional approximations are exponential, Rayleigh, and empirical.  Empirical distributions are applicable to Cox proportional hazards-based models and can be calculated with the method of Breslow [-@breslow:1972:DPC], Efron [-@efron:1977:ECL, default], or Fleming and Harrington [-@fleming:1984:NES].  Note, however, that empirical survival means are undefined mathematically if an event does not occur at the longest follow-up time.  In such situations, a restricted survival mean is calculated by changing the longest follow-up time to an event, as suggested by Efron [-@efron:1967:PFB], which will be negatively biased.  
 
 ```{r using_predict_function}
 ## Predicted survival means (default: Weibull distribution)
@@ -299,7 +299,7 @@ Prediction of other outcome types is more straightforward.  Predicted numeric an
 
 # Variable Specifications
 
-Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Four main types of specifications are supported by the package's `fit()` and `resample()` functions: traditional formula, design matrix, model frame, and recipe.
+Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship.  Four main types of specifications are supported by the package's `r rdoc_url("fit()")` and `r rdoc_url("resample()")` functions: traditional formula, design matrix, model frame, and recipe.
 
 
 ## Traditional Formula
@@ -327,7 +327,7 @@ This setting is intended to help avoid the definition of predictor variable enco
 
 ## Design Matrix
 
-Variables stored separately in a design matrix of predictors and object of responses can be supplied to the fit functions directly.  Fitting with design matrices has less computational overhead than traditional formulas and allows for greater numbers of predictor variables in some models, including `GBMModel`, `GLMNetModel`, and `RandomForestModel`.
+Variables stored separately in a design matrix of predictors and object of responses can be supplied to the fit functions directly.  Fitting with design matrices has less computational overhead than traditional formulas and allows for greater numbers of predictor variables in some models, including `r rdoc_url("GBMModel")`, `r rdoc_url("GLMNetModel")`, and `r rdoc_url("RandomForestModel")`.
 
 ```{r using_variables_matrix}
 ## Example design matrix and response object
@@ -342,7 +342,7 @@ predict(model_fit, newdata = Pima.te) %>% head
 
 ## Model Frame
 
-A `ModelFrame` class is defined by the package for specification of predictor and response variables along with other attributes to control model fitting.  Model frames can be created with calls to the `ModelFrame()` constructor function using a syntax similar to the traditional formula or design matrix.
+A `r rdoc_url("ModelFrame")` class is defined by the package for specification of predictor and response variables along with other attributes to control model fitting.  Model frames can be created with calls to the `r rdoc_url("ModelFrame()")` constructor function using a syntax similar to the traditional formula or design matrix.
 
 ```{r using_variables_modelframe}
 ## Model frame specification
@@ -358,7 +358,7 @@ model_fit <- fit(mf, model = GBMModel)
 predict(model_fit, newdata = Pima.te) %>% head
 ```
 
-The model frame approach has a few advantages over model fitting directly with a traditional formula.  One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default.  This is often desirable for models that do not handle missing values.  Conversely, missing values can be retained in the model frame by setting its argument `na.rm = FALSE` for models, like `GBMModel`, that do handle them.  A second advantage is that case weights can be included in the model frame to be passed on to the model fitting functions.
+The model frame approach has a few advantages over model fitting directly with a traditional formula.  One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default.  This is often desirable for models that do not handle missing values.  Conversely, missing values can be retained in the model frame by setting its argument `na.rm = FALSE` for models, like `r rdoc_url("GBMModel")`, that do handle them.  A second advantage is that case weights can be included in the model frame to be passed on to the model fitting functions.
 
 ```{r using_variables_modelframe_weights, results="hide"}
 ## Model frame specification with case weights
@@ -383,7 +383,7 @@ model_fit <- fit(rec, model = GBMModel)
 predict(model_fit, newdata = Pima.te) %>% head
 ```
 
-As shown, prediction on new data with a model fit to a recipe is done on an unprocessed dataset.  Recipe case weights and stratified resampling are supported with the `role_case()` function.  As an example, an initial step is included in the recipe below to replace the original role of variable `weights` with a designation of case weights.  That is followed by a step to convert three ordinal factors to integer scores.
+As shown, prediction on new data with a model fit to a recipe is done on an unprocessed dataset.  Recipe case weights and stratified resampling are supported with the `r rdoc_url("role_case()", "recipe_roles")` function.  As an example, an initial step is included in the recipe below to replace the original role of variable `weights` with a designation of case weights.  That is followed by a step to convert three ordinal factors to integer scores.
 
 ```{r using_variables_recipe_weights, results="hide"}
 ## Recipe specification with case weights
@@ -532,7 +532,7 @@ library(survival)
 fit(Surv(time, status) ~ ., data = surv_train, model = GBMModel)
 ```
 
-For recipes, survival responses may be defined as a single `Surv` variable in a data frame or with the individual survival time and event variables given on the left hand side of a recipe formula and their roles designated with the `role_surv()` function.
+For recipes, survival responses may be defined as a single `Surv` variable in a data frame or with the individual survival time and event variables given on the left hand side of a recipe formula and their roles designated with the `r rdoc_url("role_surv()", "recipe_roles")` function.
 
 ```{r using_responses_surv_recipe, results="hide"}
 ## Survival response recipe
@@ -557,7 +557,7 @@ Performance metrics quantify associations between observed and predicted respons
 
 ## Performance Function
 
-Metrics can be computed with the `performance()` function applied to observed responses and responses predicted with the `predict()` function.  In the case of observed versus predicted survival probabilities or events, metrics will be calculated at user-specified survival times and returned along with their time-integrated mean.
+Metrics can be computed with the `r rdoc_url("performance()")` function applied to observed responses and responses predicted with the `r rdoc_url("predict()")` function.  In the case of observed versus predicted survival probabilities or events, metrics will be calculated at user-specified survival times and returned along with their time-integrated mean.
 
 ```{r using_performance_function}
 ## Survival performance metrics
@@ -578,7 +578,7 @@ pred_events <- predict(surv_fit, newdata = surv_test, times = surv_times)
 performance(obs, pred_events)
 ```
 
-Function `performance()` computes a default set of metrics according to the observed and predicted response types, as indicated and in the order given in the table below.
+Function `r rdoc_url("performance()")` computes a default set of metrics according to the observed and predicted response types, as indicated and in the order given in the table below.
 
 
 Table 3. Default performance metrics by response types.
@@ -593,7 +593,7 @@ Survival Probabilities   | Brier Score, Area Under ROC Curve, Accuracy
 Survival Events          | Accuracy
 
 
-These defaults may be changed by specifying one or more package-supplied metric functions to the `metrics` argument of `performance()`.  Specification of the `metrics` argument can be in terms of a single metric function, function name, or list of metric functions.  List names, if specified, will be displayed as metric labels in graphical and tabular summaries; otherwise, the function names will be used as labels for unnamed lists.
+These defaults may be changed by specifying one or more package-supplied metric functions to the `metrics` argument of `r rdoc_url("performance()")`.  Specification of the `metrics` argument can be in terms of a single metric function, function name, or list of metric functions.  List names, if specified, will be displayed as metric labels in graphical and tabular summaries; otherwise, the function names will be used as labels for unnamed lists.
 
 ```{r using_performance_function_metrics, eval=FALSE}
 ## Single metric function
@@ -621,7 +621,7 @@ performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.7
 
 ## Metric Functions
 
-Whereas multiple package-supplied metrics can be calculated simultaneously with the `performance()` function, each exists as a stand-alone function that can be called individually.
+Whereas multiple package-supplied metrics can be calculated simultaneously with the `r rdoc_url("performance()")` function, each exists as a stand-alone function that can be called individually.
 
 ```{r using_metrics_functions}
 ## Metric functions for survival means
@@ -640,7 +640,7 @@ specificity(obs, pred_probs)
 
 ## Metric Information
 
-A named list of available metrics can be obtained interactively with the `metricinfo()` function, and includes the following components for each one.
+A named list of available metrics can be obtained interactively with the `r rdoc_url("metricinfo()")` function, and includes the following components for each one.
 
 `label`
   : Character descriptor for the metric.
@@ -655,14 +655,14 @@ A named list of available metrics can be obtained interactively with the `metric
   : Data frame of the observed and predicted response variable types supported by the metric.
 
 
-Function `metricinfo()` may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.
+Function `r rdoc_url("metricinfo()")` may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.
 
 ```{r using_metrics_metricinfo}
 ## All available metrics
 metricinfo() %>% names
 ```
 
-Information is displayed below for the `cindex()` function corresponding to a concordance index, which is applicable to observed survival and predicted means.
+Information is displayed below for the `r rdoc_url("cindex()", "metrics")` function corresponding to a concordance index, which is applicable to observed survival and predicted means.
 
 ```{r using_metrics_metricinfo_cindex}
 ## Metric-specific information
@@ -678,7 +678,7 @@ cindex
 
 ### Type-Specific Metrics
 
-When data objects are supplied as arguments to `metricinfo()`, information is returned on all metrics applicable to response variables of the same data types.  Observed response variable type is inferred from the first data argument and predicted type from the second, if given.  For survival responses, predicted types may be `numeric` for survival means, `SurvEvents` for 0-1 survival events at specified follow-up times, or `SurvProbs` for follow-up time survival probabilities.  If model functions are additionally supplied as arguments, information on the subset matching the data types is returned. 
+When data objects are supplied as arguments to `r rdoc_url("metricinfo()")`, information is returned on all metrics applicable to response variables of the same data types.  Observed response variable type is inferred from the first data argument and predicted type from the second, if given.  For survival responses, predicted types may be `numeric` for survival means, `r rdoc_url("SurvEvents", "SurvMatrix")` for 0-1 survival events at specified follow-up times, or `r rdoc_url("SurvProbs", "SurvMatrix")` for follow-up time survival probabilities.  If model functions are additionally supplied as arguments, information on the subset matching the data types is returned. 
 
 ```{r using_metrics_metricinfo_type}
 ## Metrics for observed and predicted response variable types
@@ -697,7 +697,7 @@ metricinfo(Surv(0), auc, cross_entropy, cindex) %>% names
 
 ### Response Variable-Specific Metrics
 
-Existing response variables observed and those obtained from the `predict()` function may be given as arguments to identify metrics that are applicable to them.
+Existing response variables observed and those obtained from the `r rdoc_url("predict()")` function may be given as arguments to identify metrics that are applicable to them.
 
 ```{r using_metrics_metricinfo_response}
 ## Metrics for observed and predicted responses from model fits
@@ -711,19 +711,19 @@ metricinfo(obs, pred_probs) %>% names
 
 Metrics applicable to multi-level factor response variables are summarized below.
 
-`accuracy()`
+`r rdoc_url("accuracy()", "metrics")`
   : Proportion of correctly classified responses.
 
-`brier()`
+`r rdoc_url("brier()", "metrics")`
   : [Brier score](https://en.wikipedia.org/wiki/Brier_score).
   
-`cross_entropy()`
+`r rdoc_url("cross_entropy()", "metrics")`
   : [Cross entropy](https://en.wikipedia.org/wiki/Cross_entropy) loss averaged over the number of cases.
   
-`kappa2()`
+`r rdoc_url("kappa2()", "metrics")`
   : [Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa) statistic measuring relative agreement between observed and predicted classifications.
 
-`weighted_kappa2()`
+`r rdoc_url("weighted_kappa2()", "metrics")`
   : [Weighted Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa#Weighted_kappa) for ordered factor responses only.
   
 Brier score and cross entropy loss are computed directly on predicted class probabilities.  The other metrics are computed on predicted class membership, defined as the factor level with the highest predicted probability.
@@ -733,16 +733,16 @@ Brier score and cross entropy loss are computed directly on predicted class prob
 
 Metrics for binary factors include those given for multi-level factors as well as the following.
 
-`auc()`
+`r rdoc_url("auc()", "metrics")`
   : Area under a performance curve.
 
-`cindex()`
+`r rdoc_url("cindex()", "metrics")`
   : Concordance index computed as rank order agreement between predicted probabilities for paired event and non-event cases.  This metric can be interpreted as the probability that a randomly selected event case will have a higher predicted value than a randomly selected non-event case, and is the same as area under the ROC curve.
 
-`f_score()`
+`r rdoc_url("f_score()", "metrics")`
   : [F score](https://en.wikipedia.org/wiki/Precision_and_recall#F-measure), $F_\beta = (1 + \beta^2) \frac{\text{precision} \times \text{recall}}{\beta^2 \times \text{precision} + \text{recall}}$.  F1 score $(\beta = 1)$ is the package default.
 
-`fnr()`
+`r rdoc_url("fnr()", "metrics")`
   : False negative rate, $FNR = \frac{FN}{TP + FN} = 1 - TPR$.
 
 ```{r using_metrics_conf, echo=FALSE}
@@ -758,31 +758,31 @@ kable(conf,
   add_header_above(c("Predicted Response" = 1, "Observed Response" = 2))
 ```
 
-`fpr()`
+`r rdoc_url("fpr()", "metrics")`
   : False positive rate, $FPR = \frac{FP}{TN + FP} = 1 - TNR$.
 
-`npv()`
+`r rdoc_url("npv()", "metrics")`
   : Negative predictive value, $NPV = \frac{TN}{TN + FN}$.
 
-`ppv()`, `precision()`
+`r rdoc_url("ppv()", "metrics")`, `r rdoc_url("precision()", "metrics")`
   : Positive predictive value, $PPV = \frac{TP}{TP + FP}$.
 
-`pr_auc()`, `auc()`
+`r rdoc_url("pr_auc()", "metrics")`, `r rdoc_url("auc()", "metrics")`
   : Area under a precision recall curve.
   
-`roc_auc()`, `auc()`
+`r rdoc_url("roc_auc()", "metrics")`, `r rdoc_url("auc()", "metrics")`
   : [Area under an ROC curve](https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve).
 
-`roc_index()`
+`r rdoc_url("roc_index()", "metrics")`
   : A tradeoff function of sensitivity and specificity as defined by the `f` argument in this function (default: sensitivity + specificity).  The function allows for specification of tradeoffs [@perkins:2006:IOC] other than the default of Youden's J statistic [@youden:1950:IRD].
   
-`rpp()`
+`r rdoc_url("rpp()", "metrics")`
   : Rate of positive prediction, $RPP = \frac{TP + FP}{TP + FP + TN + FN}$.
   
-`sensitivity()`, `recall()`, `tpr()`
+`r rdoc_url("sensitivity()", "metrics")`, `r rdoc_url("recall()", "metrics")`, `r rdoc_url("tpr()", "metrics")`
   : True positive rate, $TPR =\frac{TP}{TP + FN} = 1 - FNR$.
   
-`specificity()`, `tnr()`
+`r rdoc_url("specificity()", "metrics")`, `r rdoc_url("tnr()", "metrics")`
   : True negative rate, $TNR = \frac{TN}{TN + FP} = 1 - FPR$.
 
 Area under the ROC and precision-recall curves as well as the concordance index are computed directly on predicted class probabilities.  The other metrics are computed on predicted class membership.  Memberships are defined to be in the second factor level if predicted probabilities are greater than the function default or user-specified cutoff value.
@@ -792,25 +792,25 @@ Area under the ROC and precision-recall curves as well as the concordance index 
 
 Performance metrics are defined below for numeric vector responses.  If applied to a numeric matrix response, the metrics are computed separately for each column and then averaged to produce a single value.
 
-`gini()`
+`r rdoc_url("gini()", "metrics")`
   : [Gini coefficient](https://en.wikipedia.org/wiki/Gini_coefficient).
   
-`mae()`
+`r rdoc_url("mae()", "metrics")`
   : Mean absolute error, $MAE = \frac{1}{N}\sum_{i=1}^N|y_i - \hat{y}_i|$, where $y_i$ and $\hat{y}_i$ are the $N$ observed and predicted responses.
 
-`mse()`
+`r rdoc_url("mse()", "metrics")`
   : Mean squared error, $MSE = \frac{1}{N}\sum_{i=1}^N(y_i - \hat{y}_i)^2$.
 
-`msle()`
+`r rdoc_url("msle()", "metrics")`
   : Mean squared log error, $MSLE = \frac{1}{N}\sum_{i=1}^N(log(1 + y_i) - log(1 + \hat{y}_i))^2$.
 
-`r2()`
+`r rdoc_url("r2()", "metrics")`
   : One minus residual divided by total sums of squares, $R^2 = 1 - \sum_{i=1}^N(y_i - \hat{y}_i)^2 / \sum_{i=1}^N(y_i - \bar{y})^2$.
 
-`rmse()`
+`r rdoc_url("rmse()", "metrics")`
   : Square root of mean squared error.
 
-`rmsle()`
+`r rdoc_url("rmsle()", "metrics")`
   : Square root of mean squared log error.
 
 
@@ -844,25 +844,25 @@ In addition, all of the metrics described for numeric vector responses are appli
 
 Model performance can be estimated with resampling methods that simulate repeated training and test set fits and predictions.  With these methods, performance metrics are computed on each resample to produce an empirical distribution for inference.  Resampling is controlled in the **MachineShop** with the functions:
 
-`BootControl()`
+`r rdoc_url("BootControl()", "MLControl")`
   : Simple bootstrap resampling [@efron:1993:IB].  Models are repeatedly fit with bootstrap resampled training sets and used to predict the full dataset.
 
-`BootOptimismControl()`
+`r rdoc_url("BootOptimismControl()", "MLControl")`
   : Optimism-corrected bootstrap resampling [@efron:1983:LLB; @harrell:1996:MPM].
 
-`CVControl()`
+`r rdoc_url("CVControl()", "MLControl")`
   : Repeated K-fold cross-validation [@kohavi:1995:SCB].  The full dataset is repeatedly partitioned into K-folds.  For a given partitioning, prediction is performed on each of the K folds with models fit on all remaining folds.  10-fold cross-validation is the package default.
 
-`CVOptimismControl()`
+`r rdoc_url("CVOptimismControl()", "MLControl")`
   :  Optimism-corrected cross-validation [@davison:1997:BMA, eq. 6.48].
 
-`OOBControl()`
+`r rdoc_url("OOBControl()", "MLControl")`
   : Out-of-bootstrap resampling.  Models are fit with bootstrap resampled training sets and used to predict the unsampled cases.
   
-`SplitControl()`
+`r rdoc_url("SplitControl()", "MLControl")`
   : Split training and test sets [@hastie:2009:ESL7].  The data are randomly partitioned into a training and test set.
   
-`TrainControl()`
+`r rdoc_url("TrainControl()", "MLControl")`
   : Training resubstitution.  A model is fit on and used to predict the full training set in order to estimate training, or apparent, error [@efron:1986:HBA].
   
 For the survival example, repeated cross-validation control structures are defined to estimate model performance in predicting survival means and 5 and 10-year survival probabilities.  In addition to arguments controlling the resampling algorithms, a `seed` can be set to ensure reproducibility of resampling results obtained with the structures.
@@ -891,7 +891,7 @@ registerDoParallel(cores = 2)
 
 ## Resample Function
 
-Resampling is performed by calling the `resample()` function with a variable specification, model, and control structure.  Like the `fit()` function, variables may be specified in terms of a traditional formula, design matrix, model frame, or recipe.
+Resampling is performed by calling the `r rdoc_url("resample()")` function with a variable specification, model, and control structure.  Like the `r rdoc_url("fit()")` function, variables may be specified in terms of a traditional formula, design matrix, model frame, or recipe.
 
 ```{r using_resample_function}
 ## Resample estimation for survival means and probabilities
@@ -903,7 +903,7 @@ Resampling is performed by calling the `resample()` function with a variable spe
 
 ## Summary Statistics
 
-The `summary()` function when applied directly to output from `resample()` computes summary statistics for the default performance metrics described in the *Performance Function* section.
+The `r rdoc_url("summary()")` function when applied directly to output from `r rdoc_url("resample()")` computes summary statistics for the default performance metrics described in the *Performance Function* section.
 
 ```{r using_resample_summary}
 ## Summary of survival means metric
@@ -913,7 +913,7 @@ summary(res_means)
 summary(res_probs)
 ```
 
-Other relevant metrics can be identified with `metricinfo()` and summarized with `performance()`.
+Other relevant metrics can be identified with `r rdoc_url("metricinfo()")` and summarized with `r rdoc_url("performance()")`.
 
 ```{r using_resample_summary_performance}
 ## Resample-specific metrics
@@ -923,7 +923,7 @@ metricinfo(res_means) %>% names
 summary(performance(res_means, metrics = c(cindex, rmse)))
 ```
 
-Futhermore, summaries can be customized with a user-defined statistics function or list of statistics functions passed to the `stats` argument of `summary()`.
+Furthermore, summaries can be customized with a user-defined statistics function or list of statistics functions passed to the `stats` argument of `r rdoc_url("summary()")`.
 
 ```{r using_resample_summary_stats}
 ## User-defined statistics function
@@ -937,7 +937,7 @@ summary(res_means, stats = c(Mean = mean, Percentile = percentiles))
 
 ## Plots
 
-Summary plots of resample output can be obtained with the `plot()` function.  Boxplots are the default plot type; but density, errorbar, and violin plots are also available.  Plots are generated with the **ggplot2** package [@wickham:2016:GEG] and returned as `ggplot` objects.  As such, annotation and formatting defined for ggplots can be applied to the returned plots.
+Summary plots of resample output can be obtained with the `r rdoc_url("plot()")` function.  Boxplots are the default plot type; but density, errorbar, and violin plots are also available.  Plots are generated with the **ggplot2** package [@wickham:2016:GEG] and returned as `ggplot` objects.  As such, annotation and formatting defined for ggplots can be applied to the returned plots.
 
 ```{r using_resample_plots}
 ## Libraries for plot annotation and fomatting
@@ -957,7 +957,7 @@ grid.arrange(p1, p2, p3, p4, nrow = 2)
 
 ## Stratified Resampling
 
-Stratification of cases for the construction of resampled training and test sets can be employed to help achieve balance across the sets.  Stratified resampling is automatically performed if variable specification is in terms of a traditional formula and will be done according to the response variable if a numeric vector or factor, the event variable if survival, and the first variable if a numeric matrix.  For model frames and recipes, stratification variables must be defined explicitly with the `strata` argument to the `ModelFrame()` constructor or with the `role_case()` function. 
+Stratification of cases for the construction of resampled training and test sets can be employed to help achieve balance across the sets.  Stratified resampling is automatically performed if variable specification is in terms of a traditional formula and will be done according to the response variable if a numeric vector or factor, the event variable if survival, and the first variable if a numeric matrix.  For model frames and recipes, stratification variables must be defined explicitly with the `strata` argument to the `r rdoc_url("ModelFrame()")` constructor or with the `r rdoc_url("role_case()", "recipe_roles")` function. 
 
 ```{r using_resample_strata, results="hide"}
 ## Model frame with case status stratification
@@ -984,7 +984,7 @@ resample(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(nobs))))
 
 ## Model Comparisons
 
-Resampled metrics from different models can be combined for comparison with the `c()` function.  Optional names given on the left hand side of equal operators within `c()` calls will be used as labels in output from the `summary()` and `plot()` functions.  For comparisons of resampled output, the same control structure must be used in all associated calls to `resample()` to ensure that resulting model metrics are computed on the same resampled training and test sets.  The combined resample output can be summarized and plotted as usual.
+Resampled metrics from different models can be combined for comparison with the `r rdoc_url("c()", "combine")` function.  Optional names given on the left hand side of equal operators within `r rdoc_url("c()", "combine")` calls will be used as labels in output from the `r rdoc_url("summary()")` and `r rdoc_url("plot()")` functions.  For comparisons of resampled output, the same control structure must be used in all associated calls to `r rdoc_url("resample()")` to ensure that resulting model metrics are computed on the same resampled training and test sets.  The combined resample output can be summarized and plotted as usual.
 
 ```{r using_resample_comparisons}
 ## Resample estimation
@@ -1003,7 +1003,7 @@ summary(res)
 plot(res)
 ```
 
-Pairwise model differences for each metric can be calculated with the `diff()` function applied to results from a call to `c()`.  Resulting differences can be summarized descriptively with the `summary()` and `plot()` functions and assessed for statistical significance with pairwise t-test performed by the `t.test()` function.
+Pairwise model differences for each metric can be calculated with the `r rdoc_url("diff()")` function applied to results from a call to `r rdoc_url("c()", "combine")`.  Resulting differences can be summarized descriptively with the `r rdoc_url("summary()")` and `r rdoc_url("plot()")` functions and assessed for statistical significance with pairwise t-test performed by the `r rdoc_url("t.test()")` function.
 
 ```{r using_resample_diff}
 ## Pairwise model comparisons
@@ -1026,7 +1026,7 @@ Calculation of performance metrics on test sets or by resampling, as discussed p
 
 ## Variable Importance
 
-The importance of predictor variables in a model fit is estimated with the `varimp()` function and displayed graphically with `plot()`.  Variable importance is a relative measure of the contributions of model predictors and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most.  Classes of models can differ with respect to how variable importance is defined.  In the case of a `GBMModel`, importance of each predictor is based on the sum of squared empirical improvements over all internal tree nodes created by splitting on that variable [@greenwell:2019:GBM].
+The importance of predictor variables in a model fit is estimated with the `r rdoc_url("varimp()")` function and displayed graphically with `r rdoc_url("plot()")`.  Variable importance is a relative measure of the contributions of model predictors and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most.  Classes of models can differ with respect to how variable importance is defined.  In the case of a `r rdoc_url("GBMModel")`, importance of each predictor is based on the sum of squared empirical improvements over all internal tree nodes created by splitting on that variable [@greenwell:2019:GBM].
 
 ```{r using_analyses_vi}
 ## Predictor variable importance
@@ -1035,7 +1035,7 @@ The importance of predictor variables in a model fit is estimated with the `vari
 plot(vi)
 ```
 
-Alternatively, importance is based on negative log-transformed p-values for statistical models, like `CoxModel`, that produce them.  For other models, variable importance may be defined and calculated by their underlying source packages or not defined at all, as is the case for `SVMModel`.  Logical indicators of the availability of variable importance are available in the printed model constructor information or from `modelinfo()`.
+Alternatively, importance is based on negative log-transformed p-values for statistical models, like `r rdoc_url("CoxModel")`, that produce them.  For other models, variable importance may be defined and calculated by their underlying source packages or not defined at all, as is the case for `r rdoc_url("SVMModel")`.  Logical indicators of the availability of variable importance are available in the printed model constructor information or from `r rdoc_url("modelinfo()")`.
 
 ```{r using_analysis_vi_info}
 SVMModel
@@ -1092,7 +1092,7 @@ Calibration curves close to the 45$^\circ$ line represent agreement between obse
 
 ## Confusion Matrices
 
-Confusion matrices of cross-classified observed and predicted categorical responses are available with the `confusion()` function.  They can be constructed with predicted class membership or with predicted class probabilities.  In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors (default: `cutoff = 0.5`) and according to the class with highest probability for factors with more than two levels.
+Confusion matrices of cross-classified observed and predicted categorical responses are available with the `r rdoc_url("confusion()")` function.  They can be constructed with predicted class membership or with predicted class probabilities.  In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors (default: `cutoff = 0.5`) and according to the class with highest probability for factors with more than two levels.
 
 
 ```{r using_analyses_conf}
@@ -1104,14 +1104,14 @@ Confusion matrices of cross-classified observed and predicted categorical respon
 plot(conf)
 ```
 
-Confusion matrices are the data structure upon which many of the performance metrics described earlier for factor predictor variables are based.  Metrics commonly reported for confusion matrices are generated by the `summary()` function.
+Confusion matrices are the data structure upon which many of the performance metrics described earlier for factor predictor variables are based.  Metrics commonly reported for confusion matrices are generated by the `r rdoc_url("summary()")` function.
 
 ```{r using_analyses_conf_summary}
 ## Summary performance metrics
 summary(conf)
 ```
 
-Summaries can also be obtained with the `performance()` function for default or use-specified metrics.
+Summaries can also be obtained with the `r rdoc_url("performance()")` function for default or use-specified metrics.
 
 ```{r using_analyses_conf_performance}
 ## Confusion matrix-specific metrics
@@ -1203,12 +1203,12 @@ plot(lf, find = 0.75)
 
 Model development often involves the comparison of multiple models from a candidate set for the purpose of selecting a final one.  Models in the set may differ with respect to their predictor variables, preprocessing steps and parameters, and model types and parameters.  Complex model selection strategies for sets that involve one or more of these differences can be implemented with the **MachineShop** package.  Implementation is achieved with a straightforward syntax based on the meta-input and meta-model functions listed in the table below and with resampling, including nested resampling, conducted automatically for model selection and predictive performance evaluation.
 
-Parameter Grid Tuning | Candidate Set Selection | Ensemble Learning
-----------------------|-------------------------|------------------
-`TunedInput()`        | `SelectedInput()`       | `StackedModel()`
-`TunedModel()`        | `SelectedModel()`       | `SuperModel()`
+| Parameter Grid Tuning        | Candidate Set Selection         | Ensemble Learning
+|:-----------------------------|:--------------------------------|:------------------------------
+| `r rdoc_url("TunedInput()")` | `r rdoc_url("SelectedInput()")` | `r rdoc_url("StackedModel()")`
+| `r rdoc_url("TunedModel()")` | `r rdoc_url("SelectedModel()")` | `r rdoc_url("SuperModel()")`
 
-These meta-functions fall into three main categories: 1) tuning of a given input or model over a grid of parameter values, 2) selection from an arbitrary set of different inputs or models, or 3) combining multiple models into an ensemble learner.  In the context of these strategies, an input may be a formula, design matrix, model frame, or preprocessing recipe.  The meta-input and meta-model functions themselves return input and model class objects, respectively.  Combinations and multiple levels of nesting of meta-functions, inputs, and models are allowed.  For example, `StackedModel()` and `SuperModel()` may consist of `TunedModel` and other model objects.  `SelectedModel()` can select among mixes of `TunedModel`, ensemble model, and other model objects.  Likewise, `TunedInput` objects, along with other inputs, may be nested within `SelectedInput()`.  Furthermore, selection and tuning of both inputs and models can be performed simultaneously.  These and other possibilities are illustrated in the following sections.
+These meta-functions fall into three main categories: 1) tuning of a given input or model over a grid of parameter values, 2) selection from an arbitrary set of different inputs or models, or 3) combining multiple models into an ensemble learner.  In the context of these strategies, an input may be a formula, design matrix, model frame, or preprocessing recipe.  The meta-input and meta-model functions themselves return input and model class objects, respectively.  Combinations and multiple levels of nesting of meta-functions, inputs, and models are allowed.  For example, `r rdoc_url("StackedModel()")` and `r rdoc_url("SuperModel()")` may consist of `r rdoc_url("TunedModel")` and other model objects.  `r rdoc_url("SelectedModel()")` can select among mixes of `r rdoc_url("TunedModel")`, ensemble model, and other model objects.  Likewise, `r rdoc_url("TunedInput")` objects, along with other inputs, may be nested within `r rdoc_url("SelectedInput()")`.  Furthermore, selection and tuning of both inputs and models can be performed simultaneously.  These and other possibilities are illustrated in the following sections.
 
 
 ## Inputs
@@ -1218,7 +1218,7 @@ Inputs to model fitting functions define the predictor and response variables an
 
 ### Input Tuning
 
-Preprocessing recipes may have step with parameters that affect predictive performance.  Steps can be tuned over a grid of parameter values with `TunedInput()` to select the best performing values.  Calls to `TunedInput()` return an input object that may be trained on data with the `fit()` function or evaluated for predictive performance with `resample()`.  As an example, a principal components analysis (PCA) step could be included in a preprocessing recipe for tuning over the number of components to retain in the final model.  Such a recipe is shown below accompanied by a call to `expand_steps()` to construct a tuning grid.  The grid parameter `num_comp` and name `PCA` correspond to the argument and id of the `step_pca()` function to which the values `1:3` apply.  The recipe and grid may then be passed to `TunedInput()` for model fitting.
+Preprocessing recipes may have step with parameters that affect predictive performance.  Steps can be tuned over a grid of parameter values with `r rdoc_url("TunedInput()")` to select the best performing values.  Calls to `r rdoc_url("TunedInput()")` return an input object that may be trained on data with the `r rdoc_url("fit()")` function or evaluated for predictive performance with `r rdoc_url("resample()")`.  As an example, a principal components analysis (PCA) step could be included in a preprocessing recipe for tuning over the number of components to retain in the final model.  Such a recipe is shown below accompanied by a call to `r rdoc_url("expand_steps()")` to construct a tuning grid.  The grid parameter `num_comp` and name `PCA` correspond to the argument and id of the `r rdoc_url("step_pca()")` function to which the values `1:3` apply.  The recipe and grid may then be passed to `r rdoc_url("TunedInput()")` for model fitting.
 
 ```{r using_stategies_TunedInput1, eval=FALSE}
 ## Preprocessing recipe with PCA steps
@@ -1237,7 +1237,7 @@ pca_grid <- expand_steps(
 tun_rec <- TunedInput(pca_rec, grid = pca_grid)
 ```
 
-From the fit, the resulting model can be extracted with `as.MLModel()`.  The output shows that one principal component was selected.  Resample estimation of predictive performance is applied to a `TunedInput` specification for the selection.  The default resampling method is cross-validation.  Other methods, performance metrics, and selection statistics can be supplied to the `TunedInput()` arguments.
+From the fit, the resulting model can be extracted with `r rdoc_url("as.MLModel()")`.  The output shows that one principal component was selected.  Resample estimation of predictive performance is applied to a `r rdoc_url("TunedInput")` specification for the selection.  The default resampling method is cross-validation.  Other methods, performance metrics, and selection statistics can be supplied to the `r rdoc_url("TunedInput()")` arguments.
 
 ```{r using_stategies_TunedInput2, eval=FALSE}
 ## Input-tuned model fit and final trained model
@@ -1283,7 +1283,7 @@ as.MLModel(model_fit)
 
 ### Input Selection
 
-Selection of recipes with different steps or predictors can be conducted with `SelectedInput()`.
+Selection of recipes with different steps or predictors can be conducted with `r rdoc_url("SelectedInput()")`.
 
 ```{r using_strategies_SelectedInput1, eval=FALSE}
 ## Preprocessing recipe without PCA steps
@@ -1358,7 +1358,7 @@ model_fit <- fit(sel_fo, model = GBMModel)
 as.MLModel(model_fit)
 ```
 
-In the previous examples, selection of different inputs was performed with the same model (`GBMModel`).  Selection among different combinations of inputs and models is supported with the `ModeledInput()` constructor.
+In the previous examples, selection of different inputs was performed with the same model (`r rdoc_url("GBMModel")`).  Selection among different combinations of inputs and models is supported with the `r rdoc_url("ModeledInput()")` constructor.
 
 ```{r using_strategies_SelectedInput4, eval=FALSE}
 ## Different combinations of inputs and models
@@ -1380,7 +1380,7 @@ Models define the functional relationships between predictor and response variab
 
 ### Model Tuning
 
-Many of the package-supplied modeling functions have arguments, or tuning parameters, that control aspects of their model fitting algorithms.  For example, `GBMModel` parameters `n.trees` and `interaction.depth` control the number of decision trees to fit and the maximum tree depths.  When called with a `TunedModel`, the `fit()` function performs model fitting over a grid of parameter values and returns the model with the optimal values.  Optimality is determined based on the first performance metric of the `metrics` argument to `TunedModel()` if given or the first default metric of the `performance()` function otherwise.  Argument `grid` additionally controls the construction of grid values and can be a single integer or vector of integers whose positions or names match the parameters in a model's pre-defined tuning grid if one exists and which specify the number of values used to construct the grid.  Pre-defined `TunedModel` grids can be extract and viewed apart from model fitting with `expand_modelgrid()`.  As shown in the output below, `as.MLModel()` will extract a tuned model from fit results for viewing of the tuning parameter grid values, the names of models fit to each, all calculated metrics, the final model selected, the metric upon which its selection was based, and its parameters.
+Many of the package-supplied modeling functions have arguments, or tuning parameters, that control aspects of their model fitting algorithms.  For example, `r rdoc_url("GBMModel")` parameters `n.trees` and `interaction.depth` control the number of decision trees to fit and the maximum tree depths.  When called with a `r rdoc_url("TunedModel")`, the `r rdoc_url("fit()")` function performs model fitting over a grid of parameter values and returns the model with the optimal values.  Optimality is determined based on the first performance metric of the `metrics` argument to `r rdoc_url("TunedModel()")` if given or the first default metric of the `r rdoc_url("performance()")` function otherwise.  Argument `grid` additionally controls the construction of grid values and can be a single integer or vector of integers whose positions or names match the parameters in a model's pre-defined tuning grid if one exists and which specify the number of values used to construct the grid.  Pre-defined `r rdoc_url("TunedModel")` grids can be extract and viewed apart from model fitting with `r rdoc_url("expand_modelgrid()")`.  As shown in the output below, `r rdoc_url("as.MLModel()")` will extract a tuned model from fit results for viewing of the tuning parameter grid values, the names of models fit to each, all calculated metrics, the final model selected, the metric upon which its selection was based, and its parameters.
 
 ```{r using_strategies_tune, eval=FALSE}
 ## Tune over automatic grid of model parameters
@@ -1436,7 +1436,7 @@ model_fit <- fit(surv_fo, data = surv_train,
 #> CIndex value: 0.7730294
 ```
 
-Grid values may also be given as a `Grid` function, function call, or object; `ParameterGrid` object; or data frame containing parameter values at which to evaluate the model, such as that returned by `expand_params()`.
+Grid values may also be given as a `r rdoc_url("Grid")` function, function call, or object; `r rdoc_url("ParameterGrid")` object; or data frame containing parameter values at which to evaluate the model, such as that returned by `r rdoc_url("expand_params()")`.
 
 ```{r using_strategies_tune_grid, eval=FALSE}
 ## Tune over randomly sampled grid points
@@ -1457,7 +1457,7 @@ fit(surv_fo, data = surv_train,
     ))
 ```
 
-Statistics summarizing the resampled performance metrics across all tuning parameter combinations can be obtained with the `summary()` function.
+Statistics summarizing the resampled performance metrics across all tuning parameter combinations can be obtained with the `r rdoc_url("summary()")` function.
   
 ```{r using_strategies_tune_summary, eval=FALSE}
 summary(trained_model)
@@ -1505,7 +1505,7 @@ knitr::include_graphics("img/using_strategies_tune_plot-1.png")
 
 ### Model Selection
 
-Model selection can be conducted by calling `fit()` with a `SelectedModel` to automatically choose from any combination of models and model parameters.  Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values.  Combinations of model functions, function names, or function calls can be supplied to `SelectedModel()` in order to define sets of candidate models from which to select.  An `expand_model()` helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired.
+Model selection can be conducted by calling `r rdoc_url("fit()")` with a `r rdoc_url("SelectedModel")` to automatically choose from any combination of models and model parameters.  Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values.  Combinations of model functions, function names, or function calls can be supplied to `r rdoc_url("SelectedModel()")` in order to define sets of candidate models from which to select.  An `r rdoc_url("expand_model()")` helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired.
 
 ```{r using_strategies_select, results="hide", eval=FALSE}
 ## Model interface for model selection
@@ -1520,7 +1520,7 @@ sel_model <- SelectedModel(
 fit(surv_fo, data = surv_train, model = sel_model)
 ```
 
-Selection may also be performed over candidate sets that include tuned models.  For instance, the `SelectedModel()` function is applicable to sets containing different classes of models each individually tuned over a grid of parameters.
+Selection may also be performed over candidate sets that include tuned models.  For instance, the `r rdoc_url("SelectedModel()")` function is applicable to sets containing different classes of models each individually tuned over a grid of parameters.
 
 ```{r using_strategies_select_tune, results="hide", eval=FALSE}
 ## Model interface for selection among tuned models
@@ -1550,7 +1550,7 @@ subject to the constraints that all $w_m \ge 0$ and $\sum_m w_m = 1$.  K-fold cr
 * minimization of least squares is replaced by maximization of Harrell's concordance index [-@harrell:1982:EYM] to accommodate censoring, and
 * prediction can only be performed on the same response type used for the model fit; i.e., either survival means or survival probabilities at given follow-up times.
 
-Super learners are a generalization of stacked regression that fit a specified model, such as `GBMModel`, to case responses $y_i$, base learner predictions $\hat{f}^{-\kappa(i)}(x_i)$, and optionally also to the original predictor variables $x_i$.  Given below are examples of a stacked regression and super learner each fit with gradient boosted, random forest, and Cox regression base learners.  A separate gradient boosted model is used as the super learner in the latter.
+Super learners are a generalization of stacked regression that fit a specified model, such as `r rdoc_url("GBMModel")`, to case responses $y_i$, base learner predictions $\hat{f}^{-\kappa(i)}(x_i)$, and optionally also to the original predictor variables $x_i$.  Given below are examples of a stacked regression and super learner each fit with gradient boosted, random forest, and Cox regression base learners.  A separate gradient boosted model is used as the super learner in the latter.
 
 ```{r using_strategies_ensembles, eval=FALSE}
 ## Stacked regression
@@ -1574,7 +1574,7 @@ summary(res_super)
 
 ## Methodology
 
-Combinations and multiple levels of nested meta-functions, inputs, and models are allowed.  If model fitting involves a single meta-function, performances of the inputs or models under consideration are estimated with standard resampling, and the best performing model is returned.  Nestings of meta-functions are trained with nested resampling.  Consider the example below in which training involves input tuning and model selection.  In particular, a preprocessing recipe is tuned over the number of predictor-derived principal components and model selection is of an untuned `GBMModel`, a tuned `GBMModel`, and a `SuperModel`.
+Combinations and multiple levels of nested meta-functions, inputs, and models are allowed.  If model fitting involves a single meta-function, performances of the inputs or models under consideration are estimated with standard resampling, and the best performing model is returned.  Nestings of meta-functions are trained with nested resampling.  Consider the example below in which training involves input tuning and model selection.  In particular, a preprocessing recipe is tuned over the number of predictor-derived principal components and model selection is of an untuned `r rdoc_url("GBMModel")`, a tuned `r rdoc_url("GBMModel")`, and a `r rdoc_url("SuperModel")`.
 
 ```{r using_strategies_methods, eval = FALSE}
 ## Preprocessing recipe with PCA steps
@@ -1604,7 +1604,7 @@ model_fit <- fit(tun_rec, model = sel_model)
 as.MLModel(model_fit)
 ```
 
-Model fitting proceeds with instances of the specified model selection nested within each of the input tuning grid parameter values.  Tuning of `GBMModel` and construction of `SuperModel` are further nested within the model selection, with tuning of `CForestModel` and `GLMBoostModel` nested within `SuperModel`.  Altogether, there are four levels of meta-input and meta-model functions in the hierarchy.
+Model fitting proceeds with instances of the specified model selection nested within each of the input tuning grid parameter values.  Tuning of `r rdoc_url("GBMModel")` and construction of `r rdoc_url("SuperModel")` are further nested within the model selection, with tuning of `r rdoc_url("CForestModel")` and `r rdoc_url("GLMBoostModel")` nested within `r rdoc_url("SuperModel")`.  Altogether, there are four levels of meta-input and meta-model functions in the hierarchy.
 
 ```{r using_strategies_dag, echo = FALSE, out.width = "100%"}
 knitr::include_graphics("img/FigModelDAG.png")
@@ -1616,7 +1616,7 @@ Each meta-function is fit based on resample estimation (default: cross-validatio
 knitr::include_graphics("img/FigNestedCV.png")
 ```
 
-Nesting of resampling routines is repeated recursively when a fit involves multiple levels of nested meta-functions.  For example, predictive performance estimation for the training of `TunedInput(pca_rec, grid = pca_grid)` involves up to three nested meta functions: `SelectedModel(...)` &rarr; `SuperModel(...)` &rarr; `TunedModel(CForestModel)`.  For this relationship, an outer and three nested inner resampling loops are executed as follows.  First, `CForestModel` is tuned at the third inner resampling loop.  Second, the tuned model is passed to the second inner loop for construction of `SuperModel`.  Third, the constructed model is passed to the first inner loop for model selection from the candidate set.  Finally, the selected model is passed to the outer loop for tuning of the preprocessing recipe.  Based on resample performance estimation of the entire input/model specification, one principal component is selected.
+Nesting of resampling routines is repeated recursively when a fit involves multiple levels of nested meta-functions.  For example, predictive performance estimation for the training of `r rdoc_url("TunedInput(pca_rec, grid = pca_grid)")` involves up to three nested meta functions: `r rdoc_url("SelectedModel(...)")` &rarr; `r rdoc_url("SuperModel(...)")` &rarr; `r rdoc_url("TunedModel(CForestModel)")`.  For this relationship, an outer and three nested inner resampling loops are executed as follows.  First, `r rdoc_url("CForestModel")` is tuned at the third inner resampling loop.  Second, the tuned model is passed to the second inner loop for construction of `r rdoc_url("SuperModel")`.  Third, the constructed model is passed to the first inner loop for model selection from the candidate set.  Finally, the selected model is passed to the outer loop for tuning of the preprocessing recipe.  Based on resample performance estimation of the entire input/model specification, one principal component is selected.
 
 ```{r using_strategies_methods1, echo=FALSE}
 cat('TrainStep1 :
@@ -1639,7 +1639,7 @@ Selected model: 1
 C-Index value: 0.7806223')
 ```
 
-In order to identify and return a final model fitted to the entire input data, the hierarchy is traversed from top to bottom along the path determined by the choice at each node.  Steps along the path are labelled `TrainStep1`, `TrainStep2`, and `TrainStep3` in the output.  As seen above in `TrainStep1`, one principal component is first selected for the tuned input.  Using an input recipe with one principal component, the entire dataset is refit at `TrainStep2` to select `TunedModel(GBMModel)`.
+In order to identify and return a final model fitted to the entire input data, the hierarchy is traversed from top to bottom along the path determined by the choice at each node.  Steps along the path are labeled `TrainStep1`, `TrainStep2`, and `TrainStep3` in the output.  As seen above in `TrainStep1`, one principal component is first selected for the tuned input.  Using an input recipe with one principal component, the entire dataset is refit at `TrainStep2` to select `r rdoc_url("TunedModel(GBMModel)")`.
 
 ```{r using_strategies_methods2, echo=FALSE}
 cat('TrainStep2 :
@@ -1662,7 +1662,7 @@ Selected model: TunedModel
 C-Index value: 0.7533878')
 ```
 
-Finally, the entire dataset is refit in `TrainStep3` to select 50 trees and an interaction depth of 1 in the tuning of `GBMModel`.
+Finally, the entire dataset is refit in `TrainStep3` to select 50 trees and an interaction depth of 1 in the tuning of `r rdoc_url("GBMModel")`.
 
 ```{r using_strategies_methods3, echo=FALSE}
 cat('TrainStep3 :
@@ -1713,7 +1713,7 @@ List of 5
  $ bag.fraction     : num 0.5')
 ```
 
-Generalization performance of the entire process can be estimated with a call to `resample()`.
+Generalization performance of the entire process can be estimated with a call to `r rdoc_url("resample()")`.
 
 ```{r eval = FALSE}
 ## Generalization performance of the modeling strategy
@@ -1731,7 +1731,7 @@ Data Reduction
 
 # Global Settings
 
-Core default behaviors of functions in the package can be viewed or changed globally through the `settings()` function.  The function accepts one or more character names of settings to view, `name = value` pairs giving the values of settings to change, or a vector of these, with available settings summarized below.
+Core default behaviors of functions in the package can be viewed or changed globally through the `r rdoc_url("settings()")` function.  The function accepts one or more character names of settings to view, `name = value` pairs giving the values of settings to change, or a vector of these, with available settings summarized below.
 
 `control`
   : function, function name, or call defining a default resampling method [default: ``"CVControl"``].
@@ -1746,7 +1746,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
   : character string specifying distributional approximations to estimated survival curves for predicting survival events/probabilities.  Choices are `"empirical"` (default) for the Kaplan-Meier estimator, `"exponential"`, or `"weibull"`.
 
 `grid`
-  : `size` argument to `Grid()` indicating the number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a `Grid()` function, function name, or call [default: 3].
+  : `size` argument to `r rdoc_url("Grid()")` indicating the number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a `r rdoc_url("Grid()")` function, function name, or call [default: 3].
 
 `max.print`
   : number of models or data rows to show with print methods or `Inf` to show all [default: 10].
@@ -1799,7 +1799,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `verbose.resample`
   : logical indicating whether to enable verbose messages when resampling [default: ``FALSE``].
 
-A call to `settings()` with `"reset"` will restore all package defaults and with no arguments will display the current values of all.  Settings may also be supplied as a single unnamed argument which is a named list.  Partial matching of setting names is supported.  The setting value is returned if only one is specified to view.  Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes.  Such a list can be passed as an argument to `settings()` to restore their values.
+A call to `r rdoc_url("settings()")` with `"reset"` will restore all package defaults and with no arguments will display the current values of all.  Settings may also be supplied as a single unnamed argument which is a named list.  Partial matching of setting names is supported.  The setting value is returned if only one is specified to view.  Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes.  Such a list can be passed as an argument to `r rdoc_url("settings()")` to restore their values.
 
 ```{r using_settings}
 ## Change settings
@@ -1818,12 +1818,12 @@ settings(presets)
 
 # Package Extensions
 
-Custom models and metrics can be defined with `MLModel()` and `MLMetric()` for use with the model fitting, prediction, and performance assessment tools provided by the package.
+Custom models and metrics can be defined with `r rdoc_url("MLModel()")` and `r rdoc_url("MLMetric()")` for use with the model fitting, prediction, and performance assessment tools provided by the package.
 
 
 ## Custom Models
 
-The `MLModel()` function creates a model object that can be used with the previously described fitting functions.  It take the following arguments.
+The `r rdoc_url("MLModel()")` function creates a model object that can be used with the previously described fitting functions.  It take the following arguments.
 
 `name`
   : Character name of the object to which the model is assigned.
@@ -1832,16 +1832,16 @@ The `MLModel()` function creates a model object that can be used with the previo
   : Optional character descriptor for the model (default: `name`).
   
 `packages`
-  : Character vector of source packages required to use the model.
+  : Character vector of package names upon which the model depends.  Each name may be optionally followed by a comment in parentheses specifying a version requirement.  The comment should contain a comparison operator, whitespace and a valid version number, e.g. `"xgboost (>= 1.3.0)"`.
   
 `response_types`
   : Character vector of response variable types to which the model can be fit.  Supported types are `"binary"`, `"factor"`, `"matrix"`, `"numeric"`, `"ordered"`, and `"Surv"`.
   
 `fit`
-  : Model fitting function whose arguments are a `formula`, a `ModelFrame` named `data`, case `weights`, and an ellipsis.  Argument `data` may be converted to a data frame with the `as.data.frame()` function as commonly needed.  The fit function should return the object resulting from the model fit.
+  : Model fitting function whose arguments are a `formula`, a `r rdoc_url("ModelFrame")` named `data`, case `weights`, and an ellipsis.  Argument `data` may be converted to a data frame with the `as.data.frame()` function as commonly needed.  The fit function should return the object resulting from the model fit.
   
 `predict`
-  : Prediction function whose arguments are the `object` returned by `fit()`, a `ModelFrame` named `newdata` of predictor variables, optional vector of `times` at which to predict survival, and an ellipsis.  Argument `data` may be converted to a data frame with the `as.data.frame()` function as needed.  Values returned by the function should be formatted according to the response variable types below.
+  : Prediction function whose arguments are the `object` returned by `r rdoc_url("fit()")`, a `r rdoc_url("ModelFrame")` named `newdata` of predictor variables, optional vector of `times` at which to predict survival, and an ellipsis.  Argument `data` may be converted to a data frame with the `as.data.frame()` function as needed.  Values returned by the function should be formatted according to the response variable types below.
 
 * `factor` : Vector or column matrix of probabilities for the second level of binary factors or a matrix whose columns contain the probabilities for factors with more than two levels.
 * `matrix` : Matrix of predicted responses.
@@ -1849,7 +1849,7 @@ The `MLModel()` function creates a model object that can be used with the previo
 * `Surv` : Matrix whose columns contain survival probabilities at `times` if supplied or a vector of predicted survival means otherwise.
   
 `varimp`
-  : Variable importance function whose arguments are the `object` returned by `fit()`, optional arguments passed from calls to `varimp()`, and an ellipsis.  The function should return a vector of importance values named after the predictor variables or a matrix or data frame whose rows are named after the predictors.
+  : Variable importance function whose arguments are the `object` returned by `r rdoc_url("fit()")`, optional arguments passed from calls to `r rdoc_url("varimp()")`, and an ellipsis.  The function should return a vector of importance values named after the predictor variables or a matrix or data frame whose rows are named after the predictors.
 
 ```{r using_extensions_mlmodel}
 ## Logistic regression model extension
@@ -1873,7 +1873,7 @@ LogisticModel <- MLModel(
 
 ## Custom Metrics
 
-The `MLMetric()` function creates a metric object that can be used as previously described for the model performance metrics.  Its first argument is a function to compute the metric, defined to accept `observed` and `predicted` as the first two arguments and with an ellipsis to accommodate others.  Its remaining arguments are as follows.
+The `r rdoc_url("MLMetric()")` function creates a metric object that can be used as previously described for the model performance metrics.  Its first argument is a function to compute the metric, defined to accept `observed` and `predicted` as the first two arguments and with an ellipsis to accommodate others.  Its remaining arguments are as follows.
 
 `name`
   :  Character name of the object to which the metric is assigned.
@@ -1979,7 +1979,7 @@ f <- function(x) {
 }
 
 info <- metricinfo()
-df <- cbind("Function" = rdoc_url(names(info)),
+df <- cbind("Function" = rdoc_url(names(info), "metrics"),
             do.call(rbind, lapply(info, f)))
 names(df)[3:5] <- paste0(names(df)[3:5], footnote_marker_number(1:3))
 

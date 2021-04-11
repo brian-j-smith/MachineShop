@@ -51,15 +51,15 @@
 
 ## Resample Control Structures
 
-|                                     |                                        | 
-|-------------------------------------|----------------------------------------|
-| `r rdoc_url("BootControl")`         | Simple bootstrap                       |
-| `r rdoc_url("BootOptimismControl")` | Optimism-corrected bootstrap           |
-| `r rdoc_url("CVControl")`           | Repeated K-fold cross-validation       |
-| `r rdoc_url("CVOptimismControl")`   | Optimism-corrected cross-validation    |
-| `r rdoc_url("OOBControl")`          | Out-of-bootstrap                       |
-| `r rdoc_url("SplitControl")`        | Split training-testing                 |
-| `r rdoc_url("TrainControl")`        | Training resubstitution                |
+|                                                  |                                        | 
+|--------------------------------------------------|----------------------------------------|
+| `r rdoc_url("BootControl", "MLControl")`         | Simple bootstrap                       |
+| `r rdoc_url("BootOptimismControl", "MLControl")` | Optimism-corrected bootstrap           |
+| `r rdoc_url("CVControl", "MLControl")`           | Repeated K-fold cross-validation       |
+| `r rdoc_url("CVOptimismControl", "MLControl")`   | Optimism-corrected cross-validation    |
+| `r rdoc_url("OOBControl", "MLControl")`          | Out-of-bootstrap                       |
+| `r rdoc_url("SplitControl", "MLControl")`        | Split training-testing                 |
+| `r rdoc_url("TrainControl", "MLControl")`        | Training resubstitution                |
 
 &nbsp;
 

@@ -95,7 +95,7 @@ library(survival)
 fit(Surv(time, status) ~ ., data = surv_train, model = GBMModel)
 ```
 
-For recipes, survival responses may be defined as a single `Surv` variable in a data frame or with the individual survival time and event variables given on the left hand side of a recipe formula and their roles designated with the `role_surv()` function.
+For recipes, survival responses may be defined as a single `Surv` variable in a data frame or with the individual survival time and event variables given on the left hand side of a recipe formula and their roles designated with the `r rdoc_url("role_surv()", "recipe_roles")` function.
 
 ```{r using_responses_surv_recipe, results="hide"}
 ## Survival response recipe
