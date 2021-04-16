@@ -19,9 +19,7 @@ rdoc_url <- function(names, rdoc_names = NULL) {
               "/topics/")
 
   if (is.null(rdoc_names)) {
-    paren_pos <- regexpr("\\(([^)]*)\\)", names)
-    end_pos <- ifelse(paren_pos > 0, paren_pos - 1, nchar(names))
-    rdoc_names <- trimws(substr(names, 1, end_pos))
+    rdoc_names <- sapply(names, function(x) as.character(str2lang(x))[1])
   }
 
   paste0("[`", names, "`](", url, rdoc_names, ")")
