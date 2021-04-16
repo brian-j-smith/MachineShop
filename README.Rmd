@@ -10,5 +10,5 @@ output: github_document
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/MachineShop)](https://CRAN.R-project.org/package=MachineShop)
 
 
-```{r child = "../src/overview.Rmd"}
+```{r child = "docs/src/overview.Rmd"}
 ```

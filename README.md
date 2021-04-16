@@ -21,36 +21,36 @@ modeling strategies.
 
 # Features
 
-  - Unified and concise interface for model fitting, prediction, and
+-   Unified and concise interface for model fitting, prediction, and
     performance assessment.
-  - Current support for 52 established models from 27 **R** packages.
-  - Dynamic model parameters.
-  - Ensemble modeling with stacked regression and super learners.
-  - Modeling of response variables types: binary factors, multi-class
+-   Current support for 52 established models from 27 **R** packages.
+-   Dynamic model parameters.
+-   Ensemble modeling with stacked regression and super learners.
+-   Modeling of response variables types: binary factors, multi-class
     nominal and ordinal factors, numeric vectors and matrices, and
     censored time-to-event survival.
-  - Model specification with traditional formulas, design matrices, and
+-   Model specification with traditional formulas, design matrices, and
     flexible pre-processing
     [recipes](https://cran.r-project.org/package=recipes).
-  - Resample estimation of predictive performance, including
+-   Resample estimation of predictive performance, including
     cross-validation, bootstrap resampling, and split training-test set
     validation.
-  - Parallel execution of resampling algorithms.
-  - Choices of performance metrics: accuracy, areas under ROC and
+-   Parallel execution of resampling algorithms.
+-   Choices of performance metrics: accuracy, areas under ROC and
     precision recall curves, Brier score, coefficient of determination
     (R<sup>2</sup>), concordance index, cross entropy, F score, Gini
     coefficient, unweighted and weighted Cohen’s kappa, mean absolute
     error, mean squared error, mean squared log error, positive and
     negative predictive values, precision and recall, and sensitivity
     and specificity.
-  - Graphical and tabular performance summaries: calibration curves,
+-   Graphical and tabular performance summaries: calibration curves,
     confusion matrices, partial dependence plots, performance curves,
     lift curves, and variable importance.
-  - Model tuning over automatically generated grids of parameter values
+-   Model tuning over automatically generated grids of parameter values
     and randomly sampled grid points.
-  - Model selection and comparisons for any combination of models and
+-   Model selection and comparisons for any combination of models and
     model parameter values.
-  - User-definable models and performance metrics.
+-   User-definable models and performance metrics.
 
 # Getting Started
 
