@@ -2,6 +2,11 @@
 
 ## Version Updates
 
+## 2.8.0
+* Replace `get_grid()` with `expand_modelgrid()`.
+* Fix for truncated grid of lambda values in `GLMNetModel`.
+* Support package version constraints in `MLModel`.
+
 ## 2.7.1
 * Rename `traininfo` slot to `train_steps` in `MLModel` classes.
 * Issue #4: compatibility fix for **recipes** package change in behavior of the `retain` argument in `prep()`.
