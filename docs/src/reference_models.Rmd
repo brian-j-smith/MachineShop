@@ -11,10 +11,30 @@ x <- lapply(names(info), function(modelname) {
 })
 df <- as.data.frame(do.call(rbind, x), stringsAsFactors = FALSE)
 names(df) <- c("Function", names(types))
+rdoc_names <- sapply(df$Function, function(name) {
+  switch(name,
+    "CoxStepAICModel" = "CoxModel",
+    "GLMStepAICModel" = "GLMModel",
+    "PDAModel" = "FDAModel",
+    "SurvRegStepAICModel" = "SurvRegModel",
+    "SVMANOVAModel" = "SVMModel",
+    "SVMBesselModel" = "SVMModel",
+    "SVMLaplaceModel" = "SVMModel",
+    "SVMLinearModel" = "SVMModel",
+    "SVMPolyModel" = "SVMModel",
+    "SVMRadialModel" = "SVMModel",
+    "SVMSplineModel" = "SVMModel",
+    "SVMTanhModel" = "SVMModel",
+    "XGBDARTModel" = "XGBModel",
+    "XGBLinearModel" = "XGBModel",
+    "XGBTreeModel" = "XGBModel",
+    name
+  )
+})
 
 toString2 <- function(x) toString(na.omit(x))
 df_classes <- data.frame(
-  Function = rdoc_url(df$Function),
+  Function = rdoc_url(df$Function, rdoc_names),
   Label = sapply(info, getElement, name = "label"),
   Categorical = apply(df[c("binary", "factor", "ordered")], 1, toString2),
   Continuous = apply(df[c("matrix", "numeric")], 1, toString2),
