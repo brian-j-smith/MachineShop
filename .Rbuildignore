@@ -1,5 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-README.Rmd
-docs
-tmp
+^docs$
+^tmp$
+^cran-comments\.md$
+^README\.Rmd$
