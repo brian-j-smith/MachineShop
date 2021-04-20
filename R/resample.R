@@ -392,7 +392,7 @@ subsample <- function(train, test, model, control, id = 1) {
 }
 
 
-resample_selection <- function(x, transform, params, ..., class) {
+resample_selection <- function(x, update, params, ..., class) {
 
   metrics <- params$metrics
   stat <- fget(params$stat)
@@ -406,7 +406,7 @@ resample_selection <- function(x, transform, params, ..., class) {
     name <- names(x)[i]
 
     res <- try(
-      resample(transform(x[[name]]), ..., control = params$control,
+      resample(update(x[[name]]), ..., control = params$control,
                progress_index = i),
       silent = TRUE
     )

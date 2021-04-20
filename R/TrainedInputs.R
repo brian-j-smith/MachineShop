@@ -176,7 +176,7 @@ SelectedInput.list <- function(x, ...) {
     "SelectedModelFrame" = {
       grid_name <- "ModelFrame"
       object <- as(x, "ModelFrame")
-      set_input <- function(x) {
+      update_input <- function(x) {
         input <- structure(object, terms = terms(x))
         if (is(x, "ModeledTerms")) {
           ModeledInput(input, model = x@model)
@@ -186,15 +186,15 @@ SelectedInput.list <- function(x, ...) {
     "SelectedModelRecipe" = {
       grid_name <- "ModelRecipe"
       object <- as.data.frame(x)
-      set_input <- function(x) recipe(x, object[unique(summary(x)$variable)])
+      update_input <- function(x) recipe(x, object[unique(summary(x)$variable)])
     },
     stop("unsupported input object of class ", input_class)
   )
-  train_step <- resample_selection(inputs, set_input, x@params, ...,
+  train_step <- resample_selection(inputs, update_input, x@params, ...,
                                    class = "SelectedInput")
   train_step$grid <- tibble(Input = factor(seq(inputs)))
   names(train_step$grid) <- grid_name
-  input <- set_input(inputs[[train_step$selected]])
+  input <- update_input(inputs[[train_step$selected]])
   push(do.call(TrainStep, train_step), fit(input, ...))
 }
 
@@ -278,11 +278,11 @@ TunedInput.recipe <- function(
   recipe <- as(x, "ModelRecipe")
   if (all(dim(grid) != 0)) {
     grid_split <- split(grid, 1:nrow(grid))
-    set_input <- function(x) do.call(update, c(list(recipe), x))
-    train_step <- resample_selection(grid_split, set_input, x@params, model,
+    update_input <- function(x) do.call(update, c(list(recipe), x))
+    train_step <- resample_selection(grid_split, update_input, x@params, model,
                                      class = "TunedInput")
     train_step$grid <- tibble(ModelRecipe = asS3(grid))
-    input <- set_input(grid_split[[train_step$selected]])
+    input <- update_input(grid_split[[train_step$selected]])
     push(do.call(TrainStep, train_step), fit(input, model = model))
   } else {
     fit(recipe, model = model)
