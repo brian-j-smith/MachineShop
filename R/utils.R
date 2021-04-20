@@ -283,6 +283,11 @@ match_indices <- function(indices, choices) {
 }
 
 
+max.progress_index <- function(x, ...) {
+  attr(x, "max")
+}
+
+
 missing_names <- function(x, data) {
   x[!(x %in% names(data))]
 }
@@ -306,14 +311,16 @@ new_progress_bar <- function(total, input = NULL, model = NULL, index = 0) {
     clear = TRUE,
     show_after = 0
   )
-  msg <- names(index)
-  if (length(msg) && index == 1) {
-    index_max <- attr(index, "max")
-    if (length(index_max)) msg <- paste0(msg, "(", index_max, ")")
-    pb$message(msg)
+  if (is(index, "progress_index") && index == 1) {
+    pb$message(paste0(names(index), "(", max(index), ")"))
   }
   pb$tick(0)
   pb
+}
+
+
+new_progress_index <- function(names, max) {
+  structure(0, names = names, max = max, class = c("progress_index", "numeric"))
 }
 
 

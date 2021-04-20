@@ -400,8 +400,8 @@ resample_selection <- function(x, update, params, ..., class) {
   perf_list <- list()
   perf_stats <- numeric()
   err_msgs <- character()
-  i <- structure(0, max = length(x), names = class)
-  while (i < attr(i, "max")) {
+  i <- new_progress_index(names = class, max = length(x))
+  while (i < max(i)) {
     i <- i + 1
     name <- names(x)[i]
 
