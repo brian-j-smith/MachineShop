@@ -234,11 +234,8 @@ expand_modelgrid.TunedModel <- function(x, ..., info = FALSE) {
       )
       grid <- dials::finalize(grid, x = data)
     }
-    if (grid@random) {
-      dials::grid_random(grid, size = grid@random)
-    } else {
-      dials::grid_regular(grid, levels = grid@size)
-    }
+    params <- map(dials::value_seq, grid$object, grid@size)
+    expand_params(params, random = grid@random)
   } else {
     tibble()
   }

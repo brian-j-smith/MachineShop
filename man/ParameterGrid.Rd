@@ -19,11 +19,11 @@ ParameterGrid(...)
 \item{...}{named \code{param} objects as defined in the \pkg{dials} package.}
 
 \item{size}{single integer or vector of integers whose positions or names
-match the given parameters and which specify the number of values to use in
-constructing a regular grid if \code{random = FALSE}; ignored otherwise.}
+match the given parameters and which specify the number of values used to
+construct the grid.}
 
-\item{random}{number of unique grid points to sample at random or
-\code{FALSE} for all points from a regular grid defined by \code{size}.}
+\item{random}{number of unique points to sample at random from the grid
+defined by \code{size}, or \code{FALSE} for all points.}
 
 \item{length}{deprecated argument; use \code{size} instead.}
 

@@ -110,7 +110,7 @@ setMethod("show", "DiscreteVariate",
 print.Grid <- function(x, n = MachineShop::settings("max.print"), ...) {
   print_title(x)
   cat("\n",
-      label_items("Size", x@size, add_names = TRUE), "\n",
+      label_items("Grid size", x@size, add_names = TRUE), "\n",
       "Random sample: ", x@random, "\n",
       sep = ""
   )
@@ -415,13 +415,9 @@ print.ModeledTerms <- function(x, n = MachineShop::settings("max.print"), ...) {
 print.ParameterGrid <- function(
   x, n = MachineShop::settings("max.print"), ...
 ) {
-  print_title(x)
+  NextMethod()
+  cat("\n")
   print(as(x, "parameters"))
-  if (x@random) {
-    cat("Random sample:", x@random, "\n")
-  } else {
-    cat(label_items("Size", x@size, add_names = TRUE), "\n")
-  }
   invisible(x)
 }
 

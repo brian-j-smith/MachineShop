@@ -56,10 +56,10 @@ Grid <- function(size = 3, random = FALSE, length = NULL) {
 #' @param x list of named \code{param} objects or a
 #'   \code{\link[dials]{parameters}} object.
 #' @param size single integer or vector of integers whose positions or names
-#'   match the given parameters and which specify the number of values to use in
-#'   constructing a regular grid if \code{random = FALSE}; ignored otherwise.
-#' @param random number of unique grid points to sample at random or
-#'   \code{FALSE} for all points from a regular grid defined by \code{size}.
+#'   match the given parameters and which specify the number of values used to
+#'   construct the grid.
+#' @param random number of unique points to sample at random from the grid
+#'   defined by \code{size}, or \code{FALSE} for all points.
 #' @param length deprecated argument; use \code{size} instead.
 #'
 #' @return \code{ParameterGrid} class object that inherits from
@@ -108,42 +108,31 @@ ParameterGrid.parameters <- function(
     size <- length
   }
 
-  if (length(size) && all(is.finite(size))) {
-    storage.mode(size) <- "integer"
-    if (any(size < 0)) stop("grid 'size' values must be >= 0")
-  } else {
-    stop("grid 'size' must contain one or more numeric values")
-  }
+  grid <- Grid(size = size, random = random)
 
-  if (isFALSE(random)) {
-    if (!is.null(names(size))) {
-      if (!all(names(size) %in% x$id)) {
-        warn("Unmatched parameter names in ParameterGrid() argument 'size'.\n",
-             "x Existing data has ", label_items("parameter", x$id), ".\n",
-             "x Assigned data has ", label_items("name", names(size)), ".")
-      }
-      size <- size[x$id]
-      size[is.na(size)] <- 0L
-    } else if (length(size) > 1 && length(size) != nrow(x)) {
-      stop("Length of ParameterGrid() argument 'size' must equal 1",
-           " or the number of parameters.\n",
-           "x Existing data has ", nrow(x), " ",
-           label_items("parameter", x$id), ".\n",
-           "x Assigned data has ", length(size), " ",
-           label_items("size", size), ".",
-           call. = FALSE)
+  size <- grid@size
+  if (!is.null(names(size))) {
+    if (!all(names(size) %in% x$id)) {
+      warn("Unmatched parameter names in ParameterGrid() argument 'size'.\n",
+           "x Existing data has ", label_items("parameter", x$id), ".\n",
+           "x Assigned data has ", label_items("name", names(size)), ".")
     }
-    keep <- size >= 1
-    x <- x[keep, ]
-    size <- size[keep]
-  } else if (length(random) && is.finite(random)) {
-    random <- as.integer(random[[1]])
-    if (random < 1) stop ("number of 'random' grid points must be >= 1")
-  } else {
-    stop("'random' grid value must be logical or numeric")
+    size <- size[x$id]
+    size[is.na(size)] <- 0L
+  } else if (length(size) > 1 && length(size) != nrow(x)) {
+    stop("Length of ParameterGrid() argument 'size' must equal 1",
+         " or the number of parameters.\n",
+         "x Existing data has ", nrow(x), " ",
+         label_items("parameter", x$id), ".\n",
+         "x Assigned data has ", length(size), " ",
+         label_items("size", size), ".",
+         call. = FALSE)
   }
+  keep <- size >= 1
+  x <- x[keep, ]
+  size <- size[keep]
 
-  new("ParameterGrid", x, size = size, random = random)
+  new("ParameterGrid", x, size = size, random = grid@random)
 }
 
 
