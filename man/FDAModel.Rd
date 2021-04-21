@@ -57,7 +57,7 @@ Performs flexible discriminant analysis.
     }
   }
 }
-* included only in randomly sampled grid points
+* excluded from grids by default
 
 The \code{\link{predict}} function for this model additionally accepts the
 following argument.

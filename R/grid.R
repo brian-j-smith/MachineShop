@@ -4,9 +4,12 @@
 #'
 #' @param size single integer or vector of integers whose positions or names
 #'   match the parameters in a model's tuning grid and which specify the number
-#'   of values to use in constructing the grid.
-#' @param random number of unique grid points to sample at random, \code{Inf}
-#'   for all random points, or \code{FALSE} for all fixed points.
+#'   of values used to construct the grid.
+#' @param random number of unique points to sample at random from the grid
+#'   defined by \code{size}.  If \code{size} is a single unnamed integer, then
+#'   \code{random = Inf} will include all values of all grid parameters in the
+#'   constructed grid, whereas \code{random = FALSE} will include all values of
+#'   default grid parameters.
 #' @param length deprecated argument; use \code{size} instead.
 #'
 #' @details

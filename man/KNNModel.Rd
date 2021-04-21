@@ -37,7 +37,7 @@ prediction is done via the maximum of summed kernel densities.
     \code{k}, \code{distance}*, \code{kernel}*
   }
 }
-* included only in randomly sampled grid points
+* excluded from grids by default
 
 Further model details can be found in the source link below.
 }

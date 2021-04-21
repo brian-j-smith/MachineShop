@@ -27,7 +27,7 @@
 #'     \code{mfinal}, \code{maxdepth}, \code{coeflearn}*
 #'   }
 #' }
-#' * included only in randomly sampled grid points
+#' * excluded from grids by default
 #'
 #' Further model details can be found in the source link below.
 #'
