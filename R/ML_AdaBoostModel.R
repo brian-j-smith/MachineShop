@@ -69,7 +69,7 @@ AdaBoostModel <- function(
       values = c(
         function(n, ...) round(seq_range(0, 25, c(1, 200), n + 1)),
         function(n, ...) 1:min(n, 30),
-        function(n, ...) head(sample(c("Breiman", "Freund", "Zhu")), n)
+        function(n, ...) head(c("Breiman", "Freund", "Zhu"), n)
       ),
       default = c(TRUE, TRUE, FALSE)
     ),

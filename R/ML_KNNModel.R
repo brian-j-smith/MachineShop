@@ -55,9 +55,10 @@ KNNModel <- function(
         },
         function(n, ...) seq_inner(0, 4, length = n),
         function(n, ...) {
-          kernel <- c("optimal", "biweight", "cos", "epanechnikov", "gaussian",
-                      "inv", "rank", "rectangular", "triangular", "triweight")
-          head(sample(kernel), n)
+          kernels <- c("optimal", "rectangular", "triangular", "epanechnikov",
+                       "biweight", "triweight", "cos", "inv", "gaussian",
+                       "rank")
+          head(kernels, n)
         }
       ),
       default = c(TRUE, FALSE, FALSE)

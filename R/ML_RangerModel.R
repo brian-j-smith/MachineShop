@@ -75,12 +75,12 @@ RangerModel <- function(
         function(n, data, ...) seq_nvars(data, RangerModel, n),
         function(n, data, ...) round(seq(1, min(20, nrow(data)), length = n)),
         function(n, data, ...) {
-          methods <- if (is.factor(response(data))) {
-            c("gini", "extratrees")
-          } else {
-            c("variance", "extratrees", "maxstat")
-          }
-          head(sample(methods), n)
+          methods <- switch_class(response(data),
+            "factor" = c("gini", "extratrees"),
+            "numeric" = c("variance", "extratrees", "maxstat"),
+            "Surv" = c("logrank", "extratrees", "C", "maxstat")
+          )
+          head(methods, n)
         }
       ),
       default = c(TRUE, FALSE, FALSE)
