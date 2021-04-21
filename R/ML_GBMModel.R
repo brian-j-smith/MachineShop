@@ -59,7 +59,7 @@ GBMModel <- function(
         function(n, ...) seq(0.001, 0.1, length = n),
         function(n, data, ...) round(seq(1, min(20, nrow(data)), length = n))
       ),
-      regular = c(TRUE, TRUE, FALSE, FALSE)
+      default = c(TRUE, TRUE, FALSE, FALSE)
     ),
     fit = function(formula, data, weights, distribution = NULL, ...) {
       if (is.null(distribution)) {

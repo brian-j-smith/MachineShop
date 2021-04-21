@@ -71,7 +71,7 @@ AdaBoostModel <- function(
         function(n, ...) 1:min(n, 30),
         function(n, ...) head(sample(c("Breiman", "Freund", "Zhu")), n)
       ),
-      regular = c(TRUE, TRUE, FALSE)
+      default = c(TRUE, TRUE, FALSE)
     ),
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)

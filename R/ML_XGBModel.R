@@ -271,7 +271,7 @@ MLModelFunction(XGBTreeModel) <- NULL
       function(n, ...) seq(0.01, 0.50, length = n),
       function(n, ...) seq(0.05, 0.95, length = n)
     ),
-    regular = c(rep(TRUE, 9), rep(FALSE, 6))
+    default = c(rep(TRUE, 9), rep(FALSE, 6))
   )
   params <- switch(booster,
     "dart" = c("nrounds", "max_depth", "eta", "gamma", "min_child_weight",

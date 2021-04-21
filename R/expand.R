@@ -172,7 +172,7 @@ expand_modelgrid.TunedModel <- function(x, ..., info = FALSE) {
     size <- size[gridinfo$param] * not_dup(gridinfo$param)
     size[is.na(size)] <- 0L
   } else if (length(size) == 1) {
-    if (!random) gridinfo <- gridinfo[gridinfo$regular, ]
+    if (!random) gridinfo <- gridinfo[gridinfo$default, ]
     size <- size * not_dup(gridinfo$param)
   } else if (length(size) != nrow(gridinfo)) {
     stop("Length of expand_modelgrid() argument 'size' must equal 1",

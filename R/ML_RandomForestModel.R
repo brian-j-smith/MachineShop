@@ -53,7 +53,7 @@ RandomForestModel <- function(
         function(n, data, ...) seq_nvars(data, RandomForestModel, n),
         function(n, data, ...) round(seq(1, min(20, nrow(data)), length = n))
       ),
-      regular = c(TRUE, FALSE)
+      default = c(TRUE, FALSE)
     ),
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)

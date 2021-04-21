@@ -24,7 +24,7 @@
 #'   consisting of a character column \code{param} with the names of parameters
 #'   in the grid, a list column \code{values} with functions to generate grid
 #'   points for the corresponding parameters, and an optional logical column
-#'   \code{regular} indicating which parameters to include by default in regular
+#'   \code{default} indicating which parameters to include by default in regular
 #'   grids.  Values functions may optionally include arguments \code{n} and
 #'   \code{data} for the number of grid points to generate and a
 #'   \code{\link{ModelFrame}} of the model fit data and formula, respectively;
@@ -96,7 +96,7 @@ MLModel <- function(
   response_types = character(),
   predictor_encoding = c(NA, "model.matrix", "terms"), params = list(),
   gridinfo = tibble::tibble(
-    param = character(), values = list(), regular = logical()
+    param = character(), values = list(), default = logical()
   ),
   fit = function(formula, data, weights, ...) stop("no fit function"),
   predict = function(object, newdata, times, ...) stop("no predict function"),
@@ -132,7 +132,7 @@ setMethod("initialize", "MLModel",
     .Object@gridinfo <- new_gridinfo(
       param = gridinfo[["param"]],
       values = gridinfo[["values"]],
-      regular = gridinfo[["regular"]]
+      default = gridinfo[["default"]]
     )
     .Object <- callNextMethod(.Object, ...)
     .Object

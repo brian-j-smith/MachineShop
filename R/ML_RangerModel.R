@@ -83,7 +83,7 @@ RangerModel <- function(
           head(sample(methods), n)
         }
       ),
-      regular = c(TRUE, FALSE, FALSE)
+      default = c(TRUE, FALSE, FALSE)
     ),
     fit = function(formula, data, weights, ...) {
       ranger::ranger(formula, data = as.data.frame(data),

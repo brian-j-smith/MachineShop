@@ -60,7 +60,7 @@ KNNModel <- function(
           head(sample(kernel), n)
         }
       ),
-      regular = c(TRUE, FALSE, FALSE)
+      default = c(TRUE, FALSE, FALSE)
     ),
     fit = function(formula, data, weights, ...) {
       assert_equal_weights(weights)
