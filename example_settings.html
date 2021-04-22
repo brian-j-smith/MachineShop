@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -297,12 +297,12 @@ div.tocify {
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row">
-<div class="col-sm-12 col-md-4 col-lg-3">
+<div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -360,7 +360,7 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/brian-j-smith/MachineShop">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -380,7 +380,7 @@ div.tocify {
 
 <div id="global-settings" class="section level1">
 <h1>Global Settings</h1>
-<p>Core default behaviors of functions in the package can be viewed or changed globally through the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.8.0/topics/settings"><code>settings()</code></a> function. The function accepts one or more character names of settings to view, <code>name = value</code> pairs giving the values of settings to change, a vector of these, or <code>"reset"</code> to restore all package defaults. Calls with no arguments will display the current values of all. Settings may also be supplied as a single unnamed argument which is a named list. Partial matching of setting names is supported. The setting value is returned if only one is specified to view. Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes. Such a list can be passed as an argument to <code>settings</code> to restore their values.</p>
+<p>Core default behaviors of functions in the package can be viewed or changed globally through the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/settings"><code>settings()</code></a> function. The function accepts one or more character names of settings to view, <code>name = value</code> pairs giving the values of settings to change, a vector of these, or <code>"reset"</code> to restore all package defaults. Calls with no arguments will display the current values of all. Settings may also be supplied as a single unnamed argument which is a named list. Partial matching of setting names is supported. The setting value is returned if only one is specified to view. Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes. Such a list can be passed as an argument to <code>settings</code> to restore their values.</p>
 <pre class="r"><code>## Package library
 library(MachineShop)
 
@@ -392,20 +392,17 @@ settings()
 #&gt; $cutoff
 #&gt; [1] 0.5
 #&gt; 
-#&gt; $dist.Surv
+#&gt; $distr.SurvMeans
 #&gt; [1] &quot;weibull&quot;
 #&gt; 
-#&gt; $dist.SurvProbs
+#&gt; $distr.SurvProbs
 #&gt; [1] &quot;empirical&quot;
 #&gt; 
 #&gt; $grid
 #&gt; Object of class &quot;Grid&quot;
 #&gt; 
-#&gt; Size: 3
+#&gt; Grid size: 3
 #&gt; Random sample: FALSE
-#&gt; 
-#&gt; $max.print
-#&gt; [1] 10
 #&gt; 
 #&gt; $method.EmpiricalSurv
 #&gt; [1] &quot;efron&quot;
@@ -464,11 +461,17 @@ settings()
 #&gt; [49] &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;     
 #&gt; [52] &quot;XGBTreeModel&quot;       
 #&gt; 
-#&gt; $progress.resample
-#&gt; [1] TRUE
+#&gt; $print_max
+#&gt; [1] 10
 #&gt; 
 #&gt; $require
 #&gt; [1] &quot;MachineShop&quot; &quot;survival&quot;    &quot;recipes&quot;    
+#&gt; 
+#&gt; $resample_progress
+#&gt; [1] TRUE
+#&gt; 
+#&gt; $resample_verbose
+#&gt; [1] FALSE
 #&gt; 
 #&gt; $reset
 #&gt; character(0)
@@ -496,7 +499,7 @@ settings()
 #&gt; $stat.Resamples
 #&gt; [1] &quot;base::mean&quot;
 #&gt; 
-#&gt; $stat.train
+#&gt; $stat.Trained
 #&gt; [1] &quot;base::mean&quot;
 #&gt; 
 #&gt; $stats.PartialDependence
@@ -505,10 +508,7 @@ settings()
 #&gt; 
 #&gt; $stats.Resamples
 #&gt;            Mean          Median              SD             Min             Max 
-#&gt;    &quot;base::mean&quot; &quot;stats::median&quot;     &quot;stats::sd&quot;     &quot;base::min&quot;     &quot;base::max&quot; 
-#&gt; 
-#&gt; $verbose.resample
-#&gt; [1] FALSE
+#&gt;    &quot;base::mean&quot; &quot;stats::median&quot;     &quot;stats::sd&quot;     &quot;base::min&quot;     &quot;base::max&quot;
 
 ## Change settings
 presets &lt;- settings(control = &quot;BootControl&quot;, grid = 10)
@@ -525,7 +525,7 @@ settings(&quot;control&quot;, &quot;grid&quot;)
 #&gt; $grid
 #&gt; Object of class &quot;Grid&quot;
 #&gt; 
-#&gt; Size: 10
+#&gt; Grid size: 10
 #&gt; Random sample: FALSE
 
 ## Restore the previous settings
@@ -570,6 +570,9 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
 
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')

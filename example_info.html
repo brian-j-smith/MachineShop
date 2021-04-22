@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -297,12 +297,12 @@ div.tocify {
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row">
-<div class="col-sm-12 col-md-4 col-lg-3">
+<div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -360,7 +360,7 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/brian-j-smith/MachineShop">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -380,7 +380,7 @@ div.tocify {
 
 <div id="model-information" class="section level1">
 <h1>Model Information</h1>
-<p>A named list of package-supplied models can be obtained interactively with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.8.0/topics/modelinfo"><code>modelinfo()</code></a> function, and includes a descriptive <code>"label"</code> for each, source <code>"packages"</code> on which the models depend, supported response variable <code>"types"</code>, and <code>"arguments"</code> that can be specified in calls to the model functions. Function <code>modelinfo</code> can be called without arguments, with one or more model functions, variable types, or response variables; and will return information on all models matching the calling arguments.</p>
+<p>A named list of package-supplied models can be obtained interactively with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/modelinfo"><code>modelinfo()</code></a> function, and includes a descriptive <code>"label"</code> for each, source <code>"packages"</code> on which the models depend, supported response variable <code>"types"</code>, and <code>"arguments"</code> that can be specified in calls to the model functions. Function <code>modelinfo</code> can be called without arguments, with one or more model functions, variable types, or response variables; and will return information on all models matching the calling arguments.</p>
 <pre class="r"><code>## Analysis libraries
 library(MachineShop)
 library(magrittr)
@@ -495,7 +495,7 @@ modelinfo(iris$Species) %&gt;% names
 </div>
 <div id="metric-information" class="section level1">
 <h1>Metric Information</h1>
-<p>A named list of supplied metrics can be obtained with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.8.0/topics/metricinfo"><code>metricinfo()</code></a> function, and includes a descriptive <code>"label"</code> for each, whether to <code>"maximize"</code> the metrics for better performance, their function <code>"arguments"</code>, and supported observed and predicted response variable <code>"types"</code>. Function <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.8.0/topics/metricinfo"><code>metricinfo()</code></a> may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.</p>
+<p>A named list of supplied metrics can be obtained with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/metricinfo"><code>metricinfo()</code></a> function, and includes a descriptive <code>"label"</code> for each, whether to <code>"maximize"</code> the metrics for better performance, their function <code>"arguments"</code>, and supported observed and predicted response variable <code>"types"</code>. Function <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/metricinfo"><code>metricinfo()</code></a> may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.</p>
 <pre class="r"><code>## Analysis libraries
 library(MachineShop)
 library(magrittr)
@@ -542,7 +542,7 @@ metricinfo(auc, r2)
 #&gt; [1] TRUE
 #&gt; 
 #&gt; $r2$arguments
-#&gt; function (observed, predicted = NULL, dist = NULL, ...) 
+#&gt; function (observed, predicted = NULL, distr = NULL, ...) 
 #&gt; NULL
 #&gt; 
 #&gt; $r2$response_types
@@ -629,6 +629,9 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
 
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')

@@ -7,5 +7,6 @@ docs/html/_site
 docs/html/*_cache
 docs/html/*_files
 inst/doc
+src
 tests/testthat/*.pdf
 tmp

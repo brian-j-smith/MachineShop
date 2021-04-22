@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -297,12 +297,12 @@ div.tocify {
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row">
-<div class="col-sm-12 col-md-4 col-lg-3">
+<div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -360,7 +360,7 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/brian-j-smith/MachineShop">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -425,9 +425,9 @@ model_res &lt;- resample(fo, ICHomes, model = tuned_model)
 summary(model_res)
 #&gt;       Statistic
 #&gt; Metric         Mean       Median           SD          Min          Max NA
-#&gt;   RMSE 5.391169e+04 5.517761e+04 1.248695e+04 3.456314e+04 7.155030e+04  0
-#&gt;   R2   6.355585e-01 6.493708e-01 8.728443e-02 4.948134e-01 7.580996e-01  0
-#&gt;   MAE  2.928142e+04 2.873637e+04 3.482948e+03 2.326426e+04 3.441728e+04  0</code></pre>
+#&gt;   RMSE 5.209878e+04 5.312584e+04 2.034232e+04 27787.170324 8.746420e+04  0
+#&gt;   R2   6.607077e-01 6.771051e-01 1.059521e-01     0.504885 7.810182e-01  0
+#&gt;   MAE  2.899518e+04 3.057214e+04 6.569017e+03 19621.133143 3.998957e+04  0</code></pre>
 </div>
 <div id="design-matrix" class="section level2">
 <h2>Design Matrix</h2>
@@ -441,9 +441,9 @@ model_res &lt;- resample(x, y, model = tuned_model)
 summary(model_res)
 #&gt;       Statistic
 #&gt; Metric         Mean       Median           SD          Min          Max NA
-#&gt;   RMSE 6.079404e+04 5.708597e+04 1.583046e+04 4.225192e+04 9.505956e+04  0
-#&gt;   R2   5.445676e-01 5.520985e-01 5.677629e-02 4.445944e-01 6.204447e-01  0
-#&gt;   MAE  3.440464e+04 3.467851e+04 5.659763e+03 2.767537e+04 4.486145e+04  0</code></pre>
+#&gt;   RMSE 5.984130e+04 5.350281e+04 2.259399e+04 3.782228e+04 9.716407e+04  0
+#&gt;   R2   5.440574e-01 5.715332e-01 9.711509e-02 3.840883e-01 6.660261e-01  0
+#&gt;   MAE  3.450690e+04 3.290967e+04 5.905925e+03 2.860651e+04 4.587251e+04  0</code></pre>
 </div>
 <div id="model-frame" class="section level2">
 <h2>Model Frame</h2>
@@ -455,10 +455,10 @@ tuned_model &lt;- as.MLModel(model_fit)
 model_res &lt;- resample(mf, model = tuned_model)
 summary(model_res)
 #&gt;       Statistic
-#&gt; Metric        Mean       Median           SD          Min          Max NA
-#&gt;   RMSE 53761.67533 5.344405e+04 1.312156e+04 3.401465e+04 7.610967e+04  0
-#&gt;   R2       0.64654 6.460278e-01 8.071483e-02 5.190084e-01 7.612403e-01  0
-#&gt;   MAE  28942.99977 2.758294e+04 3.266977e+03 2.495109e+04 3.456811e+04  0</code></pre>
+#&gt; Metric         Mean       Median           SD          Min          Max NA
+#&gt;   RMSE 5.232412e+04 5.106431e+04 1.808690e+04 32556.626622 8.867342e+04  0
+#&gt;   R2   6.555487e-01 6.853897e-01 1.132607e-01     0.396599 7.974336e-01  0
+#&gt;   MAE  2.891302e+04 2.931917e+04 5.623462e+03 22090.829713 4.159517e+04  0</code></pre>
 </div>
 <div id="preprocessing-recipe" class="section level2">
 <h2>Preprocessing Recipe</h2>
@@ -477,9 +477,9 @@ model_res &lt;- resample(rec, model = tuned_model)
 summary(model_res)
 #&gt;       Statistic
 #&gt; Metric         Mean       Median           SD          Min          Max NA
-#&gt;   RMSE 5.581613e+04 5.991927e+04 1.347279e+04 3.518723e+04 7.043638e+04  0
-#&gt;   R2   6.192501e-01 6.110489e-01 8.922939e-02 4.650246e-01 7.424928e-01  0
-#&gt;   MAE  3.051729e+04 3.003211e+04 4.392652e+03 2.436676e+04 3.893812e+04  0</code></pre>
+#&gt;   RMSE 5.505202e+04 6.176488e+04 1.455537e+04 3.288713e+04 7.015009e+04  0
+#&gt;   R2   6.320515e-01 6.209541e-01 7.367312e-02 5.328911e-01 7.398751e-01  0
+#&gt;   MAE  3.047956e+04 3.115397e+04 4.034256e+03 2.472347e+04 3.533094e+04  0</code></pre>
 </div>
 </div>
 
@@ -521,6 +521,9 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
 
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')

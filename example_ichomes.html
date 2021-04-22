@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -299,12 +299,12 @@ div.tocify {
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row">
-<div class="col-sm-12 col-md-4 col-lg-3">
+<div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -362,7 +362,7 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/brian-j-smith/MachineShop">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -768,8 +768,8 @@ plot(vi)</code></pre>
 #&gt; 
 #&gt; Parameters:
 #&gt; List of 5
-#&gt;  $ n.trees          : num 150
-#&gt;  $ interaction.depth: int 4
+#&gt;  $ n.trees          : num 200
+#&gt;  $ interaction.depth: int 5
 #&gt;  $ n.minobsinnode   : num 10
 #&gt;  $ shrinkage        : num 0.1
 #&gt;  $ bag.fraction     : num 0.5
@@ -777,7 +777,7 @@ plot(vi)</code></pre>
 #&gt; TrainStep1 :
 #&gt; Object of class &quot;TrainStep&quot;
 #&gt; 
-#&gt; Grid (selected = 18):
+#&gt; Grid (selected = 24):
 #&gt; # A tibble: 25 x 1
 #&gt;    Model$n.trees $interaction.depth
 #&gt;            &lt;dbl&gt;              &lt;int&gt;
@@ -799,8 +799,8 @@ plot(vi)</code></pre>
 #&gt; Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6,
 #&gt;   GBMModel.7, GBMModel.8, GBMModel.9, GBMModel.10... with 15 more
 #&gt; 
-#&gt; Selected model: GBMModel.18 
-#&gt; RMSE value: 47334.15
+#&gt; Selected model: GBMModel.24 
+#&gt; RMSE value: 44669.45
 plot(tuned_model, type = &quot;line&quot;)
 #&gt; $TrainStep1</code></pre>
 <p><img src="example_ichomes_files/figure-html/ex_ichomes_tune_model-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -814,7 +814,7 @@ pred &lt;- predict(model_fit, newdata = testset)
 ## Test set performance
 performance(obs, pred)
 #&gt;         RMSE           R2          MAE 
-#&gt; 4.497960e+04 7.216102e-01 2.690248e+04</code></pre>
+#&gt; 4.590169e+04 7.100791e-01 2.673539e+04</code></pre>
 </div>
 <div id="calibration-curve" class="section level2">
 <h2>Calibration Curve</h2>
@@ -877,6 +877,9 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
 
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')
