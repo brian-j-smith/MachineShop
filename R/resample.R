@@ -371,7 +371,8 @@ subsample <- function(train, test, model, control, id = 1) {
   model <- get_MLObject(model, "MLModel")
 
   model_fit <- fit(train, model)
-  if (is(model_fit, "StackedModel")) control@times <- model_fit$times
+  times <- time(model_fit)
+  if (length(times)) control@times <- times
 
   f <- function(test) {
     if (is(train, "ModelRecipe")) {

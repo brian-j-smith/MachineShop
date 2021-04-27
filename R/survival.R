@@ -325,3 +325,13 @@ surv_subset <- function(x, keep, time) {
 surv_times <- function(y) {
   sort(unique(y[y[, "status"] != 0, "time"]))
 }
+
+
+time.MLModelFit <- function(x, ...) {
+  NULL
+}
+
+
+time.StackedModelFit <- function(x, ...) {
+  x$times
+}
