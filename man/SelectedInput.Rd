@@ -18,7 +18,7 @@ SelectedInput(...)
   data,
   control = MachineShop::settings("control"),
   metrics = NULL,
-  stat = MachineShop::settings("stat.train"),
+  stat = MachineShop::settings("stat.Trained"),
   cutoff = MachineShop::settings("cutoff")
 )
 
@@ -27,7 +27,7 @@ SelectedInput(...)
   y,
   control = MachineShop::settings("control"),
   metrics = NULL,
-  stat = MachineShop::settings("stat.train"),
+  stat = MachineShop::settings("stat.Trained"),
   cutoff = MachineShop::settings("cutoff")
 )
 
@@ -35,7 +35,7 @@ SelectedInput(...)
   ...,
   control = MachineShop::settings("control"),
   metrics = NULL,
-  stat = MachineShop::settings("stat.train"),
+  stat = MachineShop::settings("stat.Trained"),
   cutoff = MachineShop::settings("cutoff")
 )
 
@@ -43,7 +43,7 @@ SelectedInput(...)
   ...,
   control = MachineShop::settings("control"),
   metrics = NULL,
-  stat = MachineShop::settings("stat.train"),
+  stat = MachineShop::settings("stat.Trained"),
   cutoff = MachineShop::settings("cutoff")
 )
 

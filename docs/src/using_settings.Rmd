@@ -17,9 +17,6 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `grid`
   : `size` argument to `r rdoc_url("Grid()")` indicating the number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a `r rdoc_url("Grid()")` function, function name, or call [default: 3].
 
-`max.print`
-  : number of models or data rows to show with print methods or `Inf` to show all [default: 10].
-
 `method.EmpiricalSurv`
   : character string specifying the empirical method of estimating baseline survival curves for Cox proportional hazards-based models.  Choices are `"breslow"`, `"efron"` (default), or `"fleming-harrington"`.
 
@@ -38,11 +35,17 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `metrics.Surv`
   : function, function name, or vector of these with which to calculate performance metrics for survival responses [default: ``c(`C-Index` = "cindex", Brier = "brier", `ROC AUC` = "roc_auc", Accuracy = "accuracy")``].
 
-`progress.resample`
-  : logical indicating whether to display a progress bar during resampling [default: ``TRUE``].  Displayed only if a computing cluster is not registered or is registered with the **doSNOW** package.
+`print_max`
+  : number of models or data rows to show with print methods or `Inf` to show all [default: 10].
 
 `require`
   : names of installed packages to load during parallel execution of resampling algorithms [default: ``c("MachineShop", "survival", "recipes")``].
+
+`resample_progress`
+  : logical indicating whether to display a progress bar during resampling [default: ``TRUE``].  Displayed only if a computing cluster is not registered or is registered with the **doSNOW** package.
+
+`resample_verbose`
+  : logical indicating whether to enable verbose messages when resampling [default: ``FALSE``].
 
 `reset`
   : character names of settings to reset to their default values.
@@ -56,7 +59,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `stat.Resamples`
   : function or character string naming a function to compute one summary statistic to control the ordering of models in plots [default: ``"base::mean"``].
 
-`stat.train`
+`stat.Trained`
   : function or character string naming a function to compute one summary statistic on resampled performance metrics for input selection or tuning or for model selection or tuning [default: ``"base::mean"``].
 
 `stats.PartialDependence`
@@ -64,9 +67,6 @@ Core default behaviors of functions in the package can be viewed or changed glob
 
 `stats.Resamples`
   : function, function name, or vector of these with which to compute summary statistics on resampled performance metrics [default: ``c(Mean = "base::mean", Median = "stats::median", SD = "stats::sd", Min = "base::min", Max = "base::max")``].
-
-`verbose.resample`
-  : logical indicating whether to enable verbose messages when resampling [default: ``FALSE``].
 
 A call to `r rdoc_url("settings()")` with `"reset"` will restore all package defaults and with no arguments will display the current values of all.  Settings may also be supplied as a single unnamed argument which is a named list.  Partial matching of setting names is supported.  The setting value is returned if only one is specified to view.  Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes.  Such a list can be passed as an argument to `r rdoc_url("settings()")` to restore their values.
 

@@ -19,35 +19,35 @@
 \alias{print.VarImp}
 \title{Print MachineShop Objects}
 \usage{
-\method{print}{BinomialVariate}(x, n = MachineShop::settings("max.print"), ...)
+\method{print}{BinomialVariate}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{Calibration}(x, n = MachineShop::settings("max.print"), ...)
+\method{print}{Calibration}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{ListOf}(x, n = MachineShop::settings("max.print"), ...)
+\method{print}{ListOf}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{MLModel}(x, n = MachineShop::settings("max.print"), ...)
+\method{print}{MLModel}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{ModelFrame}(x, n = MachineShop::settings("max.print"), ...)
+\method{print}{ModelFrame}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{ModeledInput}(x, n = MachineShop::settings("max.print"), ...)
+\method{print}{ModeledInput}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{Performance}(x, n = MachineShop::settings("max.print"), ...)
+\method{print}{Performance}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{PerformanceCurve}(x, n = MachineShop::settings("max.print"), ...)
+\method{print}{PerformanceCurve}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{RecipeGrid}(x, n = MachineShop::settings("max.print"), ...)
+\method{print}{RecipeGrid}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{Resamples}(x, n = MachineShop::settings("max.print"), ...)
+\method{print}{Resamples}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{SelectedInput}(x, n = MachineShop::settings("max.print"), ...)
+\method{print}{SelectedInput}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{SurvMatrix}(x, n = MachineShop::settings("max.print"), ...)
+\method{print}{SurvMatrix}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{TrainStep}(x, n = MachineShop::settings("max.print"), ...)
+\method{print}{TrainStep}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{TunedInput}(x, n = MachineShop::settings("max.print"), ...)
+\method{print}{TunedInput}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{VarImp}(x, n = MachineShop::settings("max.print"), ...)
+\method{print}{VarImp}(x, n = MachineShop::settings("print_max"), ...)
 }
 \arguments{
 \item{x}{object to print.}

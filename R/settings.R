@@ -33,8 +33,6 @@
 #'     the number of parameter-specific values to generate automatically for
 #'     \link[=TunedModel]{tuning} of models that have pre-defined grids or a
 #'     \code{\link{Grid}} function, function name, or call [default: 3].}
-#'   \item{\code{max.print}}{number of models or data rows to show with print
-#'     methods or \code{Inf} to show all [default: 10].}
 #'   \item{\code{method.EmpiricalSurv}}{character string specifying the
 #'     empirical method of estimating baseline survival curves for Cox
 #'     proportional hazards-based models.  Choices are \code{"breslow"},
@@ -59,13 +57,17 @@
 #'     which to calculate \link{performance} \link{metrics} for survival
 #'     responses [default: \code{c(`C-Index` = "cindex", Brier = "brier",
 #'     `ROC AUC` = "roc_auc", Accuracy = "accuracy")}].}
-#'   \item{\code{progress.resample}}{logical indicating whether to display a
-#'     progress bar during resampling [default: \code{TRUE}].  Displayed only
-#'     if a computing cluster is not registered or is registered with the
-#'     \pkg{doSNOW} package.}
+#'   \item{\code{print_max}}{number of models or data rows to show with print
+#'     methods or \code{Inf} to show all [default: 10].}
 #'   \item{\code{require}}{names of installed packages to load during parallel
 #'     execution of resampling algorithms [default: \code{c("MachineShop",
 #'     "survival", "recipes")}].}
+#'   \item{\code{resample_progress}}{logical indicating whether to display a
+#'     progress bar during resampling [default: \code{TRUE}].  Displayed only
+#'     if a computing cluster is not registered or is registered with the
+#'     \pkg{doSNOW} package.}
+#'   \item{\code{resample_verbose}}{logical indicating whether to enable verbose
+#'     messages when resampling [default: \code{FALSE}].}
 #'   \item{\code{reset}}{character names of settings to reset to their default
 #'     values.}
 #'   \item{\code{RHS.formula}}{non-modifiable character vector of operators and
@@ -77,7 +79,7 @@
 #'   \item{\code{stat.Resamples}}{function or character string naming a function
 #'     to compute one summary statistic to control the ordering of models in
 #'     \link[=plot]{plots} [default: \code{"base::mean"}].}
-#'   \item{\code{stat.train}}{function or character string naming a function
+#'   \item{\code{stat.Trained}}{function or character string naming a function
 #'     to compute one summary statistic on resampled performance metrics for
 #'     input \link[=SelectedInput]{selection} or \link[=TunedInput]{tuning} or
 #'     for model \link[=SelectedModel]{selection} or \link[=TunedModel]{tuning}
@@ -89,8 +91,6 @@
 #'     with which to compute \link{summary} statistics on resampled performance
 #'     metrics [default: \code{c(Mean = "base::mean", Median = "stats::median",
 #'     SD = "stats::sd", Min = "base::min", Max = "base::max")}].}
-#'   \item{\code{verbose.resample}}{logical indicating whether to enable verbose
-#'     messages when resampling [default: \code{FALSE}].}
 #' }
 #'
 #' @examples
@@ -276,16 +276,6 @@ MachineShop_global <- as.environment(list(
       check = check_grid
     ),
 
-    max.print = list(
-      value = 10,
-      check = function(x) {
-        result <- try(floor(x[[1]]), silent = TRUE)
-        if (is(result, "try-error") || result <= 0) {
-          DomainError(x, "must be a positive number")
-        } else result
-      }
-    ),
-
     method.EmpiricalSurv = list(
       value = "efron",
       check = check_match(c("efron", "breslow", "fleming-harrington"))
@@ -436,9 +426,14 @@ MachineShop_global <- as.environment(list(
       check = function(x) check_const(x, "models")
     ),
 
-    progress.resample = list(
-      value = TRUE,
-      check = check_logical
+    print_max = list(
+      value = 10,
+      check = function(x) {
+        result <- try(floor(x[[1]]), silent = TRUE)
+        if (is(result, "try-error") || result <= 0) {
+          DomainError(x, "must be a positive number")
+        } else result
+      }
     ),
 
     require = list(
@@ -451,6 +446,16 @@ MachineShop_global <- as.environment(list(
           DomainError(x, label_items("given unavailable package", missing))
         } else c(x, .global_defaults$require)
       }
+    ),
+
+    resample_progress = list(
+      value = TRUE,
+      check = check_logical
+    ),
+
+    resample_verbose = list(
+      value = FALSE,
+      check = check_logical
     ),
 
     reset = list(
@@ -508,7 +513,7 @@ MachineShop_global <- as.environment(list(
       check = check_stat
     ),
 
-    stat.train = list(
+    stat.Trained = list(
       value = "base::mean",
       check = check_stat
     ),
@@ -528,11 +533,6 @@ MachineShop_global <- as.environment(list(
         "Max" = "base::max"
       ),
       check = check_stats
-    ),
-
-    verbose.resample = list(
-      value = FALSE,
-      check = check_logical
     )
 
   )

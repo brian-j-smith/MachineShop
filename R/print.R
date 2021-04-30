@@ -15,7 +15,7 @@ NULL
 #' @rdname print-methods
 #'
 print.BinomialVariate <- function(
-  x, n = MachineShop::settings("max.print"), ...
+  x, n = MachineShop::settings("print_max"), ...
 ) {
   print_title(x)
   print_items(as(x, "matrix"), n = n)
@@ -25,7 +25,7 @@ print.BinomialVariate <- function(
 
 #' @rdname print-methods
 #'
-print.Calibration <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.Calibration <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   print_items(as(x, "data.frame"), n = n)
   invisible(x)
@@ -41,7 +41,7 @@ setMethod("show", "Calibration",
 
 
 print.ConfusionList <- function(
-  x, n = MachineShop::settings("max.print"), ...
+  x, n = MachineShop::settings("print_max"), ...
 ) {
   print_title(x)
   cat("\n")
@@ -50,7 +50,7 @@ print.ConfusionList <- function(
 
 
 print.ConfusionMatrix <- function(
-  x, n = MachineShop::settings("max.print"), ...
+  x, n = MachineShop::settings("print_max"), ...
 ) {
   print_title(x)
   print(as(x, "table"))
@@ -67,7 +67,7 @@ setMethod("show", "ConfusionMatrix",
 
 
 print.ConfusionSummary <- function(
-  x, n = MachineShop::settings("max.print"), ...
+  x, n = MachineShop::settings("print_max"), ...
 ) {
   total <- x@total
   acc <- x@accuracy
@@ -90,7 +90,7 @@ setMethod("show", "ConfusionSummary",
 
 
 print.DiscreteVariate <- function(
-  x, n = MachineShop::settings("max.print"), ...
+  x, n = MachineShop::settings("print_max"), ...
 ) {
   print_title(x)
   print(as(x, "numeric"))
@@ -107,7 +107,7 @@ setMethod("show", "DiscreteVariate",
 )
 
 
-print.Grid <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.Grid <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   cat("\n",
       label_items("Grid size", x@size, add_names = TRUE), "\n",
@@ -128,7 +128,7 @@ setMethod("show", "Grid",
 
 #' @rdname print-methods
 #'
-print.ListOf <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.ListOf <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_items(as(x, "listof"), n = n)
   invisible(x)
 }
@@ -142,7 +142,7 @@ setMethod("show", "ListOf",
 )
 
 
-print.MLControl <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.MLControl <- function(x, n = MachineShop::settings("print_max"), ...) {
   show(x)
   invisible(x)
 }
@@ -275,7 +275,7 @@ setMethod("show", "MLTrainControl",
 )
 
 
-print.MLMetric <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.MLMetric <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   cat("\n",
       "Metric name: ", x@name, "\n",
@@ -301,7 +301,7 @@ setMethod("show", "MLMetric",
 
 #' @rdname print-methods
 #'
-print.MLModel <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.MLModel <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   trained <- is_trained(x)
   print_modelinfo(x, trained = trained)
@@ -338,7 +338,7 @@ setMethod("show", "MLModelFit",
 
 
 print.MLModelFunction <- function(
-  x, n = MachineShop::settings("max.print"), ...
+  x, n = MachineShop::settings("print_max"), ...
 ) {
   print_title(x)
   print_modelinfo(x)
@@ -358,7 +358,7 @@ setMethod("show", "MLModelFunction",
 
 #' @rdname print-methods
 #'
-print.ModelFrame <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.ModelFrame <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   print_items(as(x, "data.frame"), n = n)
   invisible(x)
@@ -373,7 +373,7 @@ setMethod("show", "ModelFrame",
 )
 
 
-print.ModelRecipe <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.ModelRecipe <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   cat("\n")
   NextMethod()
@@ -389,14 +389,14 @@ setMethod("show", "ModelRecipe",
 )
 
 
-print.ModelTerms <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.ModelTerms <- function(x, n = MachineShop::settings("print_max"), ...) {
   print(formula(x))
 }
 
 
 #' @rdname print-methods
 #'
-print.ModeledInput <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.ModeledInput <- function(x, n = MachineShop::settings("print_max"), ...) {
   NextMethod()
   cat("\n")
   print(x@model, n = n)
@@ -404,7 +404,7 @@ print.ModeledInput <- function(x, n = MachineShop::settings("max.print"), ...) {
 }
 
 
-print.ModeledTerms <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.ModeledTerms <- function(x, n = MachineShop::settings("print_max"), ...) {
   print(formula(x))
   cat("\n")
   print(x@model, n)
@@ -413,7 +413,7 @@ print.ModeledTerms <- function(x, n = MachineShop::settings("max.print"), ...) {
 
 
 print.ParameterGrid <- function(
-  x, n = MachineShop::settings("max.print"), ...
+  x, n = MachineShop::settings("print_max"), ...
 ) {
   NextMethod()
   cat("\n")
@@ -432,7 +432,7 @@ setMethod("show", "ParameterGrid",
 
 #' @rdname print-methods
 #'
-print.Performance <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.Performance <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   dn <- dimnames(x)
   cat("\nMetrics:", toString(dn[[2]]), "\n")
@@ -446,7 +446,7 @@ print.Performance <- function(x, n = MachineShop::settings("max.print"), ...) {
 #' @rdname print-methods
 #'
 print.PerformanceCurve <- function(
-  x, n = MachineShop::settings("max.print"), ...
+  x, n = MachineShop::settings("print_max"), ...
 ) {
   print_title(x)
   cat("\n",
@@ -468,7 +468,7 @@ setMethod("show", "PerformanceCurve",
 
 
 print.PerformanceDiffTest <- function(
-  x, n = MachineShop::settings("max.print"), ...
+  x, n = MachineShop::settings("print_max"), ...
 ) {
   print_title(x)
   cat("\n",
@@ -483,7 +483,7 @@ print.PerformanceDiffTest <- function(
 
 #' @rdname print-methods
 #'
-print.RecipeGrid <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.RecipeGrid <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   print_items(as(x, "tbl_df"), n = n)
   invisible(x)
@@ -500,7 +500,7 @@ setMethod("show", "RecipeGrid",
 
 #' @rdname print-methods
 #'
-print.Resamples <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.Resamples <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   print_items(levels(x$Model), n = n, prefix = "\nModels: ", exdent = 2)
   if (isTRUE(nzchar(x@strata))) {
@@ -523,7 +523,7 @@ setMethod("show", "Resamples",
 #' @rdname print-methods
 #'
 print.SelectedInput <- function(
-  x, n = MachineShop::settings("max.print"), ...
+  x, n = MachineShop::settings("print_max"), ...
 ) {
   NextMethod()
   cat("\nModel inputs:\n\n")
@@ -534,7 +534,7 @@ print.SelectedInput <- function(
 
 
 print.SelectedModel <- function(
-  x, n = MachineShop::settings("max.print"), ...
+  x, n = MachineShop::settings("print_max"), ...
 ) {
   print_title(x)
   trained <- is_trained(x)
@@ -550,7 +550,7 @@ print.SelectedModel <- function(
 }
 
 
-print.StackedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.StackedModel <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   trained <- is_trained(x)
   print_modelinfo(x, trained = trained)
@@ -567,7 +567,7 @@ print.StackedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
 }
 
 
-print.SuperModel <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.SuperModel <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   trained <- is_trained(x)
   print_modelinfo(x, trained = trained)
@@ -594,7 +594,7 @@ format.SurvMatrix <- function(x, ...) {
 
 #' @rdname print-methods
 #'
-print.SurvMatrix <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.SurvMatrix <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   print_items(as(x, "matrix"), n = n)
   cat("Times:\n")
@@ -611,7 +611,7 @@ setMethod("show", "SurvMatrix",
 )
 
 
-print.TabularArray <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.TabularArray <- function(x, n = MachineShop::settings("print_max"), ...) {
   print(as(x, "array"))
   invisible(x)
 }
@@ -627,7 +627,7 @@ setMethod("show", "TabularArray",
 
 #' @rdname print-methods
 #'
-print.TrainStep <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.TrainStep <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   if (length(x@grid)) {
     cat("\nGrid (selected = ", x@selected, "):\n", sep = "")
@@ -654,7 +654,7 @@ setMethod("show", "TrainStep",
 
 #' @rdname print-methods
 #'
-print.TunedInput <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.TunedInput <- function(x, n = MachineShop::settings("print_max"), ...) {
   NextMethod()
   cat("\n")
   print_items(x@grid, n = n)
@@ -664,7 +664,7 @@ print.TunedInput <- function(x, n = MachineShop::settings("max.print"), ...) {
 }
 
 
-print.TunedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.TunedModel <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   trained <- is_trained(x)
   print_modelinfo(x, trained = trained)
@@ -686,7 +686,7 @@ print.TunedModel <- function(x, n = MachineShop::settings("max.print"), ...) {
 
 #' @rdname print-methods
 #'
-print.VarImp <- function(x, n = MachineShop::settings("max.print"), ...) {
+print.VarImp <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   print_items(as(x, "data.frame"), n = n)
   invisible(x)

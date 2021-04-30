@@ -60,7 +60,7 @@ SelectedInput <- function(...) {
 #'
 SelectedInput.formula <- function(
   ..., data, control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.train"),
+  stat = MachineShop::settings("stat.Trained"),
   cutoff = MachineShop::settings("cutoff")
 ) {
   inputs <- list(...)
@@ -77,7 +77,7 @@ SelectedInput.formula <- function(
 #'
 SelectedInput.matrix <- function(
   ..., y, control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.train"),
+  stat = MachineShop::settings("stat.Trained"),
   cutoff = MachineShop::settings("cutoff")
 ) {
   inputs <- list(...)
@@ -93,7 +93,7 @@ SelectedInput.matrix <- function(
 #'
 SelectedInput.ModelFrame <- function(
   ..., control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.train"),
+  stat = MachineShop::settings("stat.Trained"),
   cutoff = MachineShop::settings("cutoff")
 ) {
 
@@ -126,7 +126,7 @@ SelectedInput.ModelFrame <- function(
 #'
 SelectedInput.recipe <- function(
   ..., control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.train"),
+  stat = MachineShop::settings("stat.Trained"),
   cutoff = MachineShop::settings("cutoff")
 ) {
 
@@ -248,7 +248,7 @@ TunedInput <- function(x, ...) {
 #'
 TunedInput.recipe <- function(
   x, grid = expand_steps(), control = MachineShop::settings("control"),
-  metrics = NULL, stat = MachineShop::settings("stat.train"),
+  metrics = NULL, stat = MachineShop::settings("stat.Trained"),
   cutoff = MachineShop::settings("cutoff"), ...
 ) {
 

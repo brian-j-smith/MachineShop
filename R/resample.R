@@ -167,7 +167,7 @@ Resamples.list <- function(object, ...) {
 
   snow_opts <- list()
   progress <- function(n) NULL
-  if (settings("progress.resample")) {
+  if (settings("resample_progress")) {
     pb <- new_progress_bar(length(splits), input = x, model = model,
                            index = progress_index)
     on.exit(pb$terminate())
@@ -179,7 +179,7 @@ Resamples.list <- function(object, ...) {
 
   foreach(i = seq(splits),
           .packages = settings("require"),
-          .verbose = settings("verbose.resample"),
+          .verbose = settings("resample_verbose"),
           .options.snow = snow_opts) %dopar% {
     progress(i)
     settings(presets)
@@ -217,7 +217,7 @@ Resamples.list <- function(object, ...) {
 
   snow_opts <- list()
   progress <- function(n) NULL
-  if (settings("progress.resample")) {
+  if (settings("resample_progress")) {
     pb <- new_progress_bar(length(splits), input = x, model = model,
                            index = progress_index)
     on.exit(pb$terminate())
@@ -229,7 +229,7 @@ Resamples.list <- function(object, ...) {
 
   df_list <- foreach(i = seq(splits),
                      .packages = settings("require"),
-                     .verbose = settings("verbose.resample"),
+                     .verbose = settings("resample_verbose"),
                      .options.snow = snow_opts) %dopar% {
     progress(i)
     settings(presets)
@@ -272,7 +272,7 @@ Resamples.list <- function(object, ...) {
 
   snow_opts <- list()
   progress <- function(n) NULL
-  if (settings("progress.resample")) {
+  if (settings("resample_progress")) {
     pb <- new_progress_bar(length(splits), input = x, model = model,
                            index = progress_index)
     on.exit(pb$terminate())
@@ -284,7 +284,7 @@ Resamples.list <- function(object, ...) {
 
   foreach(i = seq(splits),
           .packages = settings("require"),
-          .verbose = settings("verbose.resample"),
+          .verbose = settings("resample_verbose"),
           .options.snow = snow_opts) %dopar% {
     progress(i)
     settings(presets)

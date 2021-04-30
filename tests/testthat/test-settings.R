@@ -6,10 +6,10 @@ test_that("settings changes and views", {
 
   presets <- settings()
 
-  expect_identical(settings("control", cut = 0.25, max.print = 5),
-                   presets[c("control", "cutoff", "max.print")])
+  expect_identical(settings("control", cut = 0.25, print_max = 5),
+                   presets[c("control", "cutoff", "print_max")])
   expect_identical(settings("cutoff"), 0.25)
-  expect_identical(settings("max.print"), 5)
+  expect_identical(settings("print_max"), 5)
 
   new_value <- "BootControl"
   expect_type(settings(control = new_value), "list")
@@ -37,12 +37,6 @@ test_that("settings changes and views", {
   expect_type(settings(grid = Grid), "list")
   expect_s4_class(settings("grid"), "Grid")
   expect_error(settings(grid = character()))
-
-  expect_type(settings(max.print = 5), "list")
-  expect_identical(settings("max.print"), 5)
-  expect_type(settings(max.print = Inf), "list")
-  expect_identical(settings("max.print"), Inf)
-  expect_error(settings(max.print = character()))
 
   new_value <- "fleming-harrington"
   expect_type(settings(method.EmpiricalSurv = substr(new_value, 1, 3)), "list")
@@ -74,16 +68,28 @@ test_that("settings changes and views", {
   expect_identical(settings("metrics.Surv"), new_value)
   expect_error(settings(metrics.Surv = "mean"))
 
-  expect_type(settings(progress.resample = 0), "list")
-  expect_identical(settings("progress.resample"), FALSE)
-  expect_type(settings(progress.resample = 1), "list")
-  expect_identical(settings("progress.resample"), TRUE)
-  expect_error(settings(progress.resample = character()))
+  expect_type(settings(print_max = 5), "list")
+  expect_identical(settings("print_max"), 5)
+  expect_type(settings(print_max = Inf), "list")
+  expect_identical(settings("print_max"), Inf)
+  expect_error(settings(print_max = character()))
 
   old_values <- settings("require")
   expect_type(settings(require = c("MachineShop", "stats")), "list")
   expect_identical(settings("require"), c("stats", old_values))
   expect_error(settings(require = 1))
+
+  expect_type(settings(resample_progress = 0), "list")
+  expect_identical(settings("resample_progress"), FALSE)
+  expect_type(settings(resample_progress = 1), "list")
+  expect_identical(settings("resample_progress"), TRUE)
+  expect_error(settings(resample_progress = character()))
+
+  expect_type(settings(resample_verbose = 0), "list")
+  expect_identical(settings("resample_verbose"), FALSE)
+  expect_type(settings(resample_verbose = 1), "list")
+  expect_identical(settings("resample_verbose"), TRUE)
+  expect_error(settings(resample_verbose = character()))
 
   settings("reset")
   values <- c("cut", "grid")
@@ -104,9 +110,9 @@ test_that("settings changes and views", {
   expect_error(settings(stat.Resamples = "character"))
 
   new_value <- "median"
-  expect_type(settings(stat.train = new_value), "list")
-  expect_identical(settings("stat.train"), new_value)
-  expect_error(settings(stat.train = "character"))
+  expect_type(settings(stat.Trained = new_value), "list")
+  expect_identical(settings("stat.Trained"), new_value)
+  expect_error(settings(stat.Trained = "character"))
 
   new_value <- c("median", sd)
   expect_type(settings(stats.PartialDependence = new_value), "list")
@@ -117,12 +123,6 @@ test_that("settings changes and views", {
   expect_type(settings(stats.Resamples = new_value), "list")
   expect_identical(settings("stats.Resamples"), new_value)
   expect_error(settings(stats.Resamples = "character"))
-
-  expect_type(settings(verbose.resample = 0), "list")
-  expect_identical(settings("verbose.resample"), FALSE)
-  expect_type(settings(verbose.resample = 1), "list")
-  expect_identical(settings("verbose.resample"), TRUE)
-  expect_error(settings(verbose.resample = character()))
 
   settings("reset")
   expect_identical(settings(), presets)

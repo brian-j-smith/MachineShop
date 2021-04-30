@@ -10,7 +10,7 @@ TunedModel(
   fixed = list(),
   control = MachineShop::settings("control"),
   metrics = NULL,
-  stat = MachineShop::settings("stat.train"),
+  stat = MachineShop::settings("stat.Trained"),
   cutoff = MachineShop::settings("cutoff")
 )
 }

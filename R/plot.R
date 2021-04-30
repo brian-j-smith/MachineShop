@@ -158,7 +158,7 @@ plot.LiftCurve <- function(
 #' @rdname plot-methods
 #'
 plot.MLModel <- function(
-  x, metrics = NULL, stat = MachineShop::settings("stat.train"),
+  x, metrics = NULL, stat = MachineShop::settings("stat.Trained"),
   type = c("boxplot", "density", "errorbar", "line", "violin"), ...
 ) {
   if (!is_trained(x)) stop("no training results to plot")
