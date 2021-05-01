@@ -44,7 +44,7 @@ SelectedModel <- function(
   models <- as.list(unlist(list(...)))
   model_names <- character()
   for (i in seq(models)) {
-    models[[i]] <- get_MLObject(models[[i]], class = "MLModel")
+    models[[i]] <- get_MLModel(models[[i]])
     name <- names(models)[i]
     model_names[i] <-
       if (!is.null(name) && nzchar(name)) name else models[[i]]@name
@@ -59,8 +59,8 @@ SelectedModel <- function(
                               init = settings("response_types")),
       predictor_encoding = NA_character_,
       params = list(models = ListOf(models),
-                    control = get_MLObject(control, "MLControl"),
-                    metrics = metrics, stat = stat, cutoff = cutoff)
+                    control = get_MLControl(control), metrics = metrics,
+                    stat = stat, cutoff = cutoff)
   )
 
 }
@@ -182,8 +182,8 @@ TunedModel <- function(
       },
       predictor_encoding = NA_character_,
       params = list(model = model, grid = grid, fixed = fixed,
-                    control = get_MLObject(control, "MLControl"),
-                    metrics = metrics, stat = stat, cutoff = cutoff)
+                    control = get_MLControl(control), metrics = metrics,
+                    stat = stat, cutoff = cutoff)
   )
 
 }

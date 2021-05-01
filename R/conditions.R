@@ -194,7 +194,7 @@ check_match <- function(choices) {
 
 
 check_metrics <- function(x) {
-  result <- try(map(get_MLObject, c(x), class = "MLMetric"), silent = TRUE)
+  result <- try(map(get_MLMetric, c(x)), silent = TRUE)
   if (is(result, "try-error")) {
     DomainError(x, "must be a metrics function, function name, ",
                    "or vector of these")

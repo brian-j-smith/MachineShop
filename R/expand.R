@@ -35,7 +35,7 @@ expand_model <- function(x, ..., random = FALSE) {
 
 
 .expand_model.default <- function(x, random, ...) {
-  expand_model(get_MLObject(x, class = "MLModel"), ..., random = random)
+  expand_model(get_MLModel(x), ..., random = random)
 }
 
 
@@ -224,7 +224,7 @@ expand_modelgrid.TunedModel <- function(x, ..., info = FALSE) {
     if (needs_data) {
       if (missing(x)) return(NULL)
       mf <- ModelFrame(x, ..., na.rm = FALSE)
-      model <- get_MLObject(model, "MLModel")
+      model <- get_MLModel(model)
       data <- switch(model@predictor_encoding,
                      "model.matrix" = model.matrix(mf, intercept = FALSE),
                      "terms" = {
