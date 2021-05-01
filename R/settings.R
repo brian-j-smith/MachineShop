@@ -191,19 +191,19 @@ check_grid <- function(x) {
 
 
 check_logical <- function(x) {
-  result <- as.logical(x)[[1]]
-  if (!(isTRUE(result) || isFALSE(result))) {
-    DomainError(x, "must be a logical value")
+  result <- try(as.logical(x), silent = TRUE)
+  pass <- is.logical(result) && length(result) == 1 && !is.na(result)
+  if (!pass) {
+    DomainError(x, "must be a single logical value")
   } else result
 }
 
 
 check_match <- function(choices) {
   function(x) {
-    result <- try(match.arg(x, choices), silent = TRUE)
-    if (is(result, "try-error")) {
+    tryCatch(match.arg(x, choices), error = function(e) {
       DomainError(x, "must be one of ", toString(paste0("\"", choices, "\"")))
-    } else result
+    })
   }
 }
 
@@ -219,7 +219,7 @@ check_metrics <- function(x) {
 
 check_stat <- function(x) {
   result <- try(fget(x)(1:5), silent = TRUE)
-  if (is(result, "try-error") || !is.numeric(result) || length(result) != 1) {
+  if (!is.numeric(result) || length(result) != 1) {
     DomainError(x, "must be a statistic function or function name")
   } else x
 }
@@ -227,7 +227,7 @@ check_stat <- function(x) {
 
 check_stats <- function(x) {
   result <- try(list_to_function(x)(1:5), silent = TRUE)
-  if (is(result, "try-error") || !is.numeric(result)) {
+  if (!is.numeric(result)) {
     DomainError(x, "must be a statistics function, function name, ",
                    "or vector of these")
   } else x
