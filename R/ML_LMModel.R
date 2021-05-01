@@ -47,7 +47,7 @@ LMModel <- function() {
       if (is.numeric(y)) {
         stats::lm(formula, data = data, weights = weights, ...)
       } else {
-        assert_equal_weights(weights)
+        throw(check_equal_weights(weights))
         stats::lm(formula, data = data, ...)
       }
     },

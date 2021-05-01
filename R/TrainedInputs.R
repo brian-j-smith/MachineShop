@@ -64,7 +64,9 @@ SelectedInput.formula <- function(
   cutoff = MachineShop::settings("cutoff")
 ) {
   inputs <- list(...)
-  if (!all(map_logi(is, inputs, "formula"))) stop("inputs must be formulas")
+  if (!all(map_logi(is, inputs, "formula"))) {
+    throw(Error("inputs must be formulas"))
+  }
   mf_list <- map(function(x) {
     ModelFrame(x, data, na.rm = FALSE, strata = strata(response(x, data)))
   }, inputs)
@@ -81,7 +83,9 @@ SelectedInput.matrix <- function(
   cutoff = MachineShop::settings("cutoff")
 ) {
   inputs <- list(...)
-  if (!all(map_logi(is, inputs, "matrix"))) stop("inputs must be matrices")
+  if (!all(map_logi(is, inputs, "matrix"))) {
+    throw(Error("inputs must be matrices"))
+  }
   mf_list <- map(ModelFrame,
                  inputs, list(y), na.rm = FALSE, strata = list(strata(y)))
   SelectedInput(mf_list, control = control, metrics = metrics, stat = stat,
@@ -101,11 +105,11 @@ SelectedInput.ModelFrame <- function(
 
   input_classes <- map_chr(function(x) class(x)[1], inputs)
   if (!all(input_classes %in% c("ModelFrame", "ModeledFrame"))) {
-    stop("inputs must be ModelFrames or ModeledFrames")
+    throw(Error("inputs must be ModelFrames or ModeledFrames"))
   }
 
   if (!identical_elements(inputs, function(x) x[[1]])) {
-    stop("ModelFrames have different response variables")
+    throw(Error("ModelFrames have different response variables"))
   }
 
   names(inputs) <- make_list_names(inputs, "ModelFrame")
@@ -141,7 +145,7 @@ SelectedInput.recipe <- function(
     info[info_order, ]
   }
   if (!identical_elements(inputs, get_info)) {
-    stop("recipes have different non-predictor variables")
+    throw(Error("recipes have different non-predictor variables"))
   }
   info <- get_info(inputs[[1]])
 
@@ -188,7 +192,7 @@ SelectedInput.list <- function(x, ...) {
       object <- as.data.frame(x)
       update_input <- function(x) recipe(x, object[unique(summary(x)$variable)])
     },
-    stop("unsupported input object of class ", input_class)
+    throw(TypeError(x, c("SelectedModelFrame", "SelectedModelRecipe"), "input"))
   )
   train_step <- resample_selection(inputs, update_input, x@params, ...,
                                    class = "SelectedInput")
@@ -262,8 +266,8 @@ TunedInput.recipe <- function(
   found <- grid_names %in% step_ids
   if (!all(found)) {
     missing <- grid_names[!found]
-    stop(label_items("grid step name", missing),
-         label_items("; not found in recipe step id", step_ids))
+    throw(Error(label_items("grid step name", missing),
+                label_items("; not found in recipe step id", step_ids)))
   }
 
   if (is(x, "ModeledRecipe")) {

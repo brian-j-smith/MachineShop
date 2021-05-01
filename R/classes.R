@@ -255,7 +255,7 @@ setClass("MLControl",
 
 setClass("MLBootstrapControl",
   contains = "MLControl",
-  slots = c(samples = "numeric")
+  slots = c(samples = "integer")
 )
 
 
@@ -272,8 +272,8 @@ setClass("MLBootOptimismControl",
 setClass("MLCrossValidationControl",
   contains = "MLControl",
   slots = c(
-    folds = "numeric",
-    repeats = "numeric"
+    folds = "integer",
+    repeats = "integer"
   )
 )
 
@@ -290,7 +290,7 @@ setClass("MLCVOptimismControl",
 
 setClass("MLOOBControl",
   contains = "MLControl",
-  slots = c(samples = "numeric")
+  slots = c(samples = "integer")
 )
 
 

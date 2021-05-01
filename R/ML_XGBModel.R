@@ -151,8 +151,8 @@ XGBModel <- function(
         "survival:aft" = if (is.null(times)) {
           pred
         } else {
-          stop("time-specific prediction not available for XGBModel",
-               " survival:aft")
+          throw(Error("time-specific prediction not available for XGBModel ",
+                      "survival:aft"))
         },
         "survival:cox" = {
           x <- model.matrix(predictor_frame(model), intercept = FALSE)

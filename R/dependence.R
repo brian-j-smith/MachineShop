@@ -76,7 +76,7 @@ dependence <- function(
         }
       )
     } else {
-      stop("unsupported variable type")
+      throw(TypeError(x, c("factor", "vector"), "selected variable"))
     }
   }
 

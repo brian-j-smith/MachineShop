@@ -34,7 +34,7 @@ NaiveBayesModel <- function(laplace = 0) {
     predictor_encoding = "terms",
     params = params(environment()),
     fit = function(formula, data, weights, ...) {
-      assert_equal_weights(weights)
+      throw(check_equal_weights(weights))
       eval_fit(data,
                formula = e1071::naiveBayes(formula, data = as.data.frame(data),
                                            ...),

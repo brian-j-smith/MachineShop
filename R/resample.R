@@ -130,7 +130,7 @@ Resamples.data.frame <- function(object, ..., strata = NULL, .check = TRUE) {
     var_names <- c("Model", "Resample", "Case", "Observed", "Predicted")
     missing <- missing_names(var_names, object)
     if (length(missing)) {
-      stop(label_items("missing resample variable", missing))
+      throw(Error(label_items("missing resample variable", missing)))
     }
     object$Model <- droplevels(object$Model)
   }
@@ -415,7 +415,7 @@ resample_selection <- function(x, update, params, ..., class) {
     if (is(res, "try-error")) {
       perf_list[[name]] <- NA
       perf_stats[name] <- NA
-      err_msgs[name] <- attr(res, "condition")$message
+      err_msgs[name] <- conditionMessage(attr(res, "condition"))
       next
     }
 
@@ -436,11 +436,11 @@ resample_selection <- function(x, update, params, ..., class) {
   }
 
   failed <- is.na(perf_list)
-  err_msgs <- paste(names(err_msgs), err_msgs, collapse = "\n")
+  err_msgs <- paste0(names(err_msgs), ": ", err_msgs, collapse = "\n")
   if (all(failed)) {
-    stop("resampling failed for all models\n", err_msgs, call. = FALSE)
+    throw(LocalError("Resampling failed for all models.\n", err_msgs))
   } else if (any(failed)) {
-    warn("resampling failed for some models\n", err_msgs)
+    throw(LocalWarning("Resampling failed for some models.\n", err_msgs))
     perf[] <- NA
     perf_list[failed] <- list(perf)
   }

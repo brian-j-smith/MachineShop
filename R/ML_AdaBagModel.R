@@ -64,7 +64,7 @@ AdaBagModel <- function(
       )
     ),
     fit = function(formula, data, weights, ...) {
-      assert_equal_weights(weights)
+      throw(check_equal_weights(weights))
       adabag::bagging(formula, data = as.data.frame(data), ...)
     },
     predict = function(object, newdata, ...) {

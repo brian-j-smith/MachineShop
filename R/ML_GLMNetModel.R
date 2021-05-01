@@ -81,8 +81,8 @@ GLMNetModel <- function(
           if (length(lambda) >= 2) {
             exp(seq(log(min(lambda)), log(max(lambda)), length = n))
           } else {
-            warn("GLMNetModel grid values for lambda could not be generated",
-                 " automatically")
+            throw(LocalWarning("GLMNetModel grid values for lambda could not ",
+                               "be generated automatically"))
             numeric()
           }
         },

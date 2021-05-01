@@ -161,13 +161,16 @@ TunedModel <- function(
     if (is(value, "data.frame")) {
       grid <- as_tibble(value)
     } else {
-      stop("'grid' value ", grid$message,
-           "; a ParameterGrid object; or a data frame")
+      grid$message <- paste0(grid$message,
+                             "; a ParameterGrid object; or a data frame")
+      throw(check_assignment(grid))
     }
   }
 
   fixed <- as_tibble(fixed)
-  if (nrow(fixed) > 1) stop("only single values allowed for fixed parameters")
+  if (nrow(fixed) > 1) {
+    throw(Error("only single values allowed for fixed parameters"))
+  }
 
   new("TunedModel",
       name = "TunedModel",

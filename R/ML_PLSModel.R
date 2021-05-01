@@ -43,7 +43,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
       )
     ),
     fit = function(formula, data, weights, ...) {
-      assert_equal_weights(weights)
+      throw(check_equal_weights(weights))
       y <- response(data)
       data <- as.data.frame(data)
       if (is.factor(y)) {

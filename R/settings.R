@@ -137,7 +137,7 @@ settings <- function(...) {
   settings_pmatch <- pmatch(arg_names, names(global_settings))
   valid_settings <- !is.na(settings_pmatch)
   for (name in arg_names[!valid_settings]) {
-    warning("'", name, "' is not a MachineShop setting")
+    throw(Warning("'", name, "' is not a MachineShop setting"))
   }
 
   presets <- global_values[settings_pmatch[valid_settings]]
@@ -146,9 +146,9 @@ settings <- function(...) {
   for (index in which_set_args) {
     global_name <- names(global_settings)[settings_pmatch[index]]
     value <- global_checks[[global_name]](args[[index]])
-    if (is(value, "DomainError")) {
-      stop("MachineShop '", global_name, "' setting ", value$message)
-    }
+    eval(substitute(
+      throw(check_assignment(global_name, value), call = sys.call(-2))
+    ))
     MachineShop_global$settings[[global_name]]$value <- value
   }
 
@@ -162,75 +162,6 @@ settings <- function(...) {
     NULL
   }
 
-}
-
-
-#################### Settings Utility Functions ####################
-
-
-check_const <- function(x, name) {
-  if (!identical(x, x <- .global_defaults[[name]])) {
-    warn("MachineShop '", name, "' setting cannot be changed")
-  }
-  x
-}
-
-
-check_grid <- function(x) {
-  if (is(x, "numeric")) {
-    Grid(x)
-  } else if (identical(x, "Grid") || identical(x, Grid)) {
-    Grid()
-  } else if (is(x, "Grid")) {
-    x
-  } else {
-    DomainError(x, "must be a positive integer value(s) or ",
-                "a Grid function, function name, or object")
-  }
-}
-
-
-check_logical <- function(x) {
-  result <- try(as.logical(x), silent = TRUE)
-  pass <- is.logical(result) && length(result) == 1 && !is.na(result)
-  if (!pass) {
-    DomainError(x, "must be a single logical value")
-  } else result
-}
-
-
-check_match <- function(choices) {
-  function(x) {
-    tryCatch(match.arg(x, choices), error = function(e) {
-      DomainError(x, "must be one of ", toString(paste0("\"", choices, "\"")))
-    })
-  }
-}
-
-
-check_metrics <- function(x) {
-  result <- try(lapply(c(x), get_MLObject, class = "MLMetric"), silent = TRUE)
-  if (is(result, "try-error")) {
-    DomainError(x, "must be a metrics function, function name, ",
-                   "or vector of these")
-  } else x
-}
-
-
-check_stat <- function(x) {
-  result <- try(fget(x)(1:5), silent = TRUE)
-  if (!is.numeric(result) || length(result) != 1) {
-    DomainError(x, "must be a statistic function or function name")
-  } else x
-}
-
-
-check_stats <- function(x) {
-  result <- try(list_to_function(x)(1:5), silent = TRUE)
-  if (!is.numeric(result)) {
-    DomainError(x, "must be a statistics function, function name, ",
-                   "or vector of these")
-  } else x
 }
 
 
@@ -255,9 +186,7 @@ MachineShop_global <- as.environment(list(
     cutoff = list(
       value = 0.5,
       check = function(x) {
-        if (!is.numeric(x) || length(x) != 1 || x <= 0 || x >= 1) {
-          DomainError(x, "must be a numeric value in (0, 1)")
-        } else x
+        check_numeric(x, bounds = c(0, 1))
       }
     ),
 
@@ -313,7 +242,7 @@ MachineShop_global <- as.environment(list(
         "tpr",
         "weighted_kappa2"
       ),
-      check = function(x) check_const(x, "metrics")
+      check = function(x) check_const_setting(x, "metrics")
     ),
 
     metrics.ConfusionMatrix = list(
@@ -423,16 +352,15 @@ MachineShop_global <- as.environment(list(
         "XGBLinearModel",
         "XGBTreeModel"
       ),
-      check = function(x) check_const(x, "models")
+      check = function(x) check_const_setting(x, "models")
     ),
 
     print_max = list(
       value = 10,
       check = function(x) {
-        result <- try(floor(x[[1]]), silent = TRUE)
-        if (is(result, "try-error") || result <= 0) {
-          DomainError(x, "must be a positive number")
-        } else result
+        result <- check_numeric(x, bounds = c(1, Inf), include = TRUE)
+        if (is.numeric(result)) result <- floor(result)
+        result
       }
     ),
 
@@ -443,7 +371,7 @@ MachineShop_global <- as.environment(list(
         available <- vapply(x, requireNamespace, logical(1), quietly = TRUE)
         if (!all(available)) {
           missing <- x[!available]
-          DomainError(x, label_items("given unavailable package", missing))
+          DomainError(x, label_items("includes unavailable package", missing))
         } else c(x, .global_defaults$require)
       }
     ),
@@ -470,7 +398,7 @@ MachineShop_global <- as.environment(list(
           }
           if ("reset" %in% reset_names) .global_defaults$reset else reset_names
         } else {
-          DomainError(x, "must be a character value or vector")
+          DomainError(x, "must be one or more character strings")
         }
       }
     ),
@@ -480,7 +408,7 @@ MachineShop_global <- as.environment(list(
         "binary", "BinomialVariate", "DiscreteVariate", "factor", "matrix",
         "NegBinomialVariate", "numeric", "ordered", "PoissonVariate", "Surv"
       ),
-      check = function(x) check_const(x, "response_types")
+      check = function(x) check_const_setting(x, "response_types")
     ),
 
     RHS.formula = list(
@@ -495,7 +423,7 @@ MachineShop_global <- as.environment(list(
         "cosh", "sinh", "tanh", "acosh", "asinh", "atanh",
         "lgamma", "gamma", "digamma", "trigamma"
       )),
-      check = function(x) check_const(x, "RHS.formula")
+      check = function(x) check_const_setting(x, "RHS.formula")
     ),
 
     stat.Curve = list(

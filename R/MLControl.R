@@ -42,6 +42,9 @@ NULL
 #' BootControl(samples = 100)
 #'
 BootControl <- function(samples = 25, ...) {
+  samples <- check_integer(samples, bounds = c(0, Inf))
+  throw(check_assignment(samples))
+
   new("MLBootControl", MLControl(...), samples = samples)
 }
 
@@ -65,6 +68,9 @@ BootControl <- function(samples = 25, ...) {
 #' BootOptimismControl(samples = 100)
 #'
 BootOptimismControl <- function(samples = 25, ...) {
+  samples <- check_integer(samples, bounds = c(0, Inf))
+  throw(check_assignment(samples))
+
   new("MLBootOptimismControl", MLControl(...), samples = samples)
 }
 
@@ -88,6 +94,12 @@ BootOptimismControl <- function(samples = 25, ...) {
 #' CVControl(folds = 10, repeats = 5)
 #'
 CVControl <- function(folds = 10, repeats = 1, ...) {
+  folds <- check_integer(folds, bounds = c(0, Inf))
+  throw(check_assignment(folds))
+
+  repeats <- check_integer(repeats, bounds = c(0, Inf))
+  throw(check_assignment(repeats))
+
   new("MLCVControl", MLControl(...), folds = folds, repeats = repeats)
 }
 
@@ -108,6 +120,12 @@ CVControl <- function(folds = 10, repeats = 1, ...) {
 #' CVOptimismControl(folds = 10, repeats = 5)
 #'
 CVOptimismControl <- function(folds = 10, repeats = 1, ...) {
+  folds <- check_integer(folds, bounds = c(0, Inf))
+  throw(check_assignment(folds))
+
+  repeats <- check_integer(repeats, bounds = c(0, Inf))
+  throw(check_assignment(repeats))
+
   new("MLCVOptimismControl", MLControl(...), folds = folds, repeats = repeats)
 }
 
@@ -124,6 +142,9 @@ CVOptimismControl <- function(folds = 10, repeats = 1, ...) {
 #' OOBControl(samples = 100)
 #'
 OOBControl <- function(samples = 25, ...) {
+  samples <- check_integer(samples, bounds = c(0, Inf))
+  throw(check_assignment(samples))
+
   new("MLOOBControl", MLControl(...), samples = samples)
 }
 
@@ -144,6 +165,9 @@ OOBControl <- function(samples = 25, ...) {
 #' SplitControl(prop = 2/3)
 #'
 SplitControl <- function(prop = 2/3, ...) {
+  prop <- check_numeric(prop, bounds = c(0, 1))
+  throw(check_assignment(prop))
+
   new("MLSplitControl", MLControl(...), prop = prop)
 }
 

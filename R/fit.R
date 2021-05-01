@@ -105,7 +105,7 @@ fit.MLModelFunction <- function(x, ...) {
 
   y <- response(mf)
   if (!is_valid_response(y, x)) {
-    stop("invalid response type '", class(y)[1], "' for ", x@name)
+    throw(TypeError(y, x@response_types, paste(x@name, "response variable")))
   }
 
   require_namespaces(x@packages)

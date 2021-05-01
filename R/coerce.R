@@ -1,7 +1,5 @@
 asS3Part <- function(from) {
-  if (!isS4(from)) {
-    stop("supplied ", class(from)[1], " object is not an S4 class")
-  }
+  if (!isS4(from)) throw(TypeError(from, "S4 class"))
   asS3(S3Part(from))
 }
 

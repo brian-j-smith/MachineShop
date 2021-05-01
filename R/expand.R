@@ -163,11 +163,12 @@ expand_modelgrid.TunedModel <- function(x, ..., info = FALSE) {
   not_dup <- function(x) !duplicated(x, fromLast = TRUE)
   if (!is.null(names(size))) {
     if (!all(names(size) %in% gridinfo$param)) {
-      warn("Unmatched model parameter names in expand_modelgrid() argument",
-           " 'size'.\n",
-           "x Existing ", model@name, " has ",
-           label_items("parameter", gridinfo$param), ".\n",
-           "x Assigned data has ", label_items("name", names(size)), ".")
+      throw(LocalWarning(
+        "Unmatched model parameters in expand_modelgrid() argument 'size'.\n",
+        "x Existing ", model@name, " has ",
+        label_items("parameter", gridinfo$param), ".\n",
+        "x Assigned data has ", label_items("name", names(size)), "."
+      ))
     }
     size <- size[gridinfo$param] * not_dup(gridinfo$param)
     size[is.na(size)] <- 0L
@@ -175,13 +176,13 @@ expand_modelgrid.TunedModel <- function(x, ..., info = FALSE) {
     if (!random) gridinfo <- gridinfo[gridinfo$default, ]
     size <- size * not_dup(gridinfo$param)
   } else if (length(size) != nrow(gridinfo)) {
-    stop("Length of expand_modelgrid() argument 'size' must equal 1",
-         " or the number of model parameters.\n",
-         "x Existing ", model@name, " has ", nrow(gridinfo), " ",
-         label_items("parameter", gridinfo$param), ".\n",
-         "x Assigned data has ", length(size), " ",
-         label_items("size", size), ".",
-         call. = FALSE)
+    throw(LocalError(
+      "Length of expand_modelgrid() argument 'size' must equal 1 ",
+      "or the number of model parameters.\n",
+      "x Existing ", model@name, " has ", nrow(gridinfo), " ",
+      label_items("parameter", gridinfo$param), ".\n",
+      "x Assigned data has ", length(size), " ", label_items("size", size), "."
+    ))
   }
   gridinfo$size <- size
   gridinfo <- gridinfo[gridinfo$size >= 1, ]
@@ -193,11 +194,12 @@ expand_modelgrid.TunedModel <- function(x, ..., info = FALSE) {
     if (is.null(mf)) {
       return(NULL)
     } else if (!is_valid_response(y <- response(mf), model)) {
-      warn("Invalid model response type in expand_modelgrid().\n",
-           "x Exising ", model@name, " supports ",
-           label_items("type", model@response_types), ".\n",
-           "x Supplied response is of ",
-           label_items("type", class(y)), ".")
+      throw(LocalWarning(
+        "Invalid model response type in expand_modelgrid().\n",
+        "x Exising ", model@name, " supports ",
+        label_items("type", model@response_types), ".\n",
+        "x Supplied response is of ", label_items("type", class(y)), "."
+      ))
       return(NULL)
     }
   }
@@ -329,7 +331,9 @@ expand_steps <- function(..., random = FALSE) {
     step_names <- names(steps)
   }
 
-  if (!all(map_logi(is.list, steps))) stop("step arguments must be lists")
+  if (!all(map_logi(is.list, steps))) {
+    throw(Error("step arguments must be lists"))
+  }
 
   get_names <- function(x) {
     res <- NULL
@@ -344,9 +348,9 @@ expand_steps <- function(..., random = FALSE) {
   }
 
   if (!all(nzchar(get_names(steps)))) {
-    stop("all steps and their parameters must be named")
+    throw(Error("all steps and their parameters must be named"))
   } else if (any(duplicated(step_names))) {
-    stop("step names must be unique")
+    throw(Error("step names must be unique"))
   }
 
   grid <- expand_params(unlist(steps, recursive = FALSE), random = random)

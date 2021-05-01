@@ -39,7 +39,7 @@ NULL
 #' @rdname diff-methods
 #'
 diff.MLModel <- function(x, ...) {
-  if (!is_trained(x)) stop("no training results to diff")
+  if (!is_trained(x)) throw(Error("no training results to diff"))
   map(function(train_step) diff(train_step@performance), x@train_steps)
 }
 
@@ -47,7 +47,7 @@ diff.MLModel <- function(x, ...) {
 #' @rdname diff-methods
 #'
 diff.Performance <- function(x, ...) {
-  if (length(dim(x)) <= 2) stop("more than one model needed to diff")
+  if (length(dim(x)) <= 2) throw(Error("more than one model needed to diff"))
   indices <- combn(dim(x)[3], 2)
   indices1 <- indices[1, ]
   indices2 <- indices[2, ]

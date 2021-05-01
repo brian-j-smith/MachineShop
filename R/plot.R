@@ -131,7 +131,9 @@ plot.LiftCurve <- function(
   p <- plot(as(x, "PerformanceCurve"), diagonal = diagonal, stat = NULL)
 
   if (!is.null(find)) {
-    if (find < 0 || find > 1) warning("'find' rate outside of 0 to 1 range")
+    if (find < 0 || find > 1) {
+      throw(Warning("'find' rate outside of 0 to 1 range"))
+    }
 
     indices <- x["Model"]
     indices$Resample <- x$Resample
@@ -161,7 +163,7 @@ plot.MLModel <- function(
   x, metrics = NULL, stat = MachineShop::settings("stat.Trained"),
   type = c("boxplot", "density", "errorbar", "line", "violin"), ...
 ) {
-  if (!is_trained(x)) stop("no training results to plot")
+  if (!is_trained(x)) throw(Error("no training results to plot"))
 
   stat <- fget(stat)
   type <- match.arg(type)
@@ -214,7 +216,8 @@ plot.MLModel <- function(
 #'
 plot.PartialDependence <- function(x, stats = NULL, ...) {
   if (any(rowSums(!is.na(x$Predictors)) > 1)) {
-    stop("partial dependence plots not available for interaction efffects")
+    msg <- "partial dependence plots not available for interaction efffects"
+    throw(Error(msg))
   }
 
   if (!is.null(stats)) {

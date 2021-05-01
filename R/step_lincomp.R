@@ -118,7 +118,8 @@ new_step_lincomp <- function(
   )
   invalid_names <- intersect(names(options), names(step_args))
   if (length(invalid_names)) {
-    stop(label_items("options list contains reserved step name", invalid_names))
+    msg <- "options list contains reserved step name"
+    throw(Error(label_items(msg, invalid_names)))
   }
   do.call(recipes::step, c(step_args, options))
 }
@@ -139,10 +140,11 @@ prep.step_lincomp <- function(x, training, info = NULL, ...) {
   res <- x$transform(x = training, step = x)
   if (!is.list(res)) res <- list(weights = res)
   if (!(is(res$weights, "matrix") || is(res$weights, "Matrix"))) {
-    stop("transform matrix should return a matrix or Matrix object")
+    throw(Error("transform matrix should return a matrix or Matrix object"))
   }
   if (nrow(res$weights) != ncol(training)) {
-    stop("transform matrix row length should equal the number of variables")
+    msg <- "transform matrix row length should equal the number of variables"
+    throw(Error(msg))
   }
   dimnames(res$weights) <- list(
     terms = colnames(training),

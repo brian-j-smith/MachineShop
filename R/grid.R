@@ -26,23 +26,32 @@
 #'
 Grid <- function(size = 3, random = FALSE, length = NULL) {
   if (!is.null(length)) {
-    depwarn("'length' argument to Grid is deprecated",
-            "use 'size' argument instead", expired = Sys.Date() >= "2021-04-15")
+    throw(DeprecatedCondition("Argument 'length' to Grid()",
+                              "argument 'size'",
+                              expired = Sys.Date() >= "2021-04-15"))
     size <- length
   }
 
   if (length(size) && all(is.finite(size))) {
     storage.mode(size) <- "integer"
-    if (any(size < 0)) stop("grid 'size' values must be >= 0")
+    if (any(size < 0)) {
+      size <- Error("Value must be one or more numerics >= 0.")
+      throw(check_assignment(size))
+    }
   } else {
-    stop("grid 'size' must contain one or more numeric values")
+    size <- Error("Value must be one or more numerics.")
+    throw(check_assignment(size))
   }
 
   if (isTRUE(random) || (length(random) && is.numeric(random))) {
     random <- floor(random[[1]])
-    if (random < 1) stop ("number of 'random' grid points must be >= 1")
+    if (random < 1) {
+      random <- Error("Value must be >= 1.")
+      throw(check_assignment(random))
+    }
   } else if (!isFALSE(random)) {
-    stop("'random' grid value must be logical or numeric")
+    random <- TypeError(random, c("logical", "numeric"), "value")
+    throw(check_assignment(random))
   }
 
   new("Grid", size = size, random = random)
@@ -106,8 +115,9 @@ ParameterGrid.parameters <- function(
   x, size = 3, random = FALSE, length = NULL, ...
 ) {
   if (!is.null(length)) {
-    depwarn("'length' argument to ParameterGrid is deprecated",
-            "use 'size' argument instead", expired = Sys.Date() >= "2021-04-15")
+    throw(DeprecatedCondition("Argument 'length' to ParameterGrid()",
+                              "argument 'size'",
+                              expired = Sys.Date() >= "2021-04-15"))
     size <- length
   }
 
@@ -116,20 +126,22 @@ ParameterGrid.parameters <- function(
   size <- grid@size
   if (!is.null(names(size))) {
     if (!all(names(size) %in% x$id)) {
-      warn("Unmatched parameter names in ParameterGrid() argument 'size'.\n",
-           "x Existing data has ", label_items("parameter", x$id), ".\n",
-           "x Assigned data has ", label_items("name", names(size)), ".")
+      throw(LocalWarning(
+        "Unmatched parameter names in ParameterGrid() argument 'size'.\n",
+        "x Existing data has ", label_items("parameter", x$id), ".\n",
+        "x Assigned data has ", label_items("name", names(size)), "."
+      ))
     }
     size <- size[x$id]
     size[is.na(size)] <- 0L
   } else if (length(size) > 1 && length(size) != nrow(x)) {
-    stop("Length of ParameterGrid() argument 'size' must equal 1",
-         " or the number of parameters.\n",
-         "x Existing data has ", nrow(x), " ",
-         label_items("parameter", x$id), ".\n",
-         "x Assigned data has ", length(size), " ",
-         label_items("size", size), ".",
-         call. = FALSE)
+    throw(LocalError(
+      "Length of ParameterGrid() argument 'size' must equal 1 ",
+      "or the number of parameters.\n",
+      "x Existing data has ", nrow(x), " ",
+      label_items("parameter", x$id), ".\n",
+      "x Assigned data has ", length(size), " ", label_items("size", size), "."
+    ))
   }
   keep <- size >= 1
   x <- x[keep, ]
@@ -147,7 +159,8 @@ new_gridinfo <- function(param = character(), values = list(), default = NULL) {
   stopifnot(is.logical(default))
 
   if (!all(map_logi(is.function, values))) {
-    stop("'values' must be a list of functions")
+    values <- Error("Value must be a list of functions.")
+    throw(check_assignment(values))
   }
 
   as_tibble(list(param = param, values = values, default = default))

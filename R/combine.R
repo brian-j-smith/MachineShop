@@ -34,7 +34,8 @@ c.Calibration <- function(...) {
   if (all(map_logi(is, args, "Calibration"))) {
 
     if (!identical_elements(args, function(x) x@smoothed)) {
-      stop("Calibration arguments are a mix of smoothed and binned curves")
+      msg <- "Calibration arguments are a mix of smoothed and binned curves"
+      throw(Error(msg))
     }
 
     df <- do.call(append, set_model_names(args))
@@ -135,7 +136,7 @@ c.Performance <- function(...) {
     if (length(args) > 1) {
 
       if (!identical_elements(args, function(x) dimnames(x)[1:2])) {
-        stop("Performance objects have different row or column names")
+        throw(Error("Performance objects have different row or column names"))
       }
 
       Performance(abind(args, along = 3))
@@ -157,7 +158,7 @@ c.PerformanceCurve <- function(...) {
   if (all(map_logi(is, args, class))) {
 
     if (!identical_elements(args, function(x) x@metrics)) {
-      stop(class, " arguments have different metrics")
+      throw(Error(class, " arguments have different metrics"))
     }
 
     df <- do.call(append, set_model_names(args))
@@ -176,11 +177,11 @@ c.Resamples <- function(...) {
   if (all(map_logi(is, args, "Resamples"))) {
 
     if (!identical_elements(args, function(x) x@control)) {
-      stop("Resamples arguments have different control structures")
+      throw(Error("Resamples arguments have different control structures"))
     }
 
     if (!identical_elements(args, function(x) x@strata)) {
-      stop("Resamples arguments have different strata variables")
+      throw(Error("Resamples arguments have different strata variables"))
     }
 
     df <- do.call(append, set_model_names(args))
@@ -198,7 +199,7 @@ c.SurvMatrix <- function(...) {
   class <- class(args[[1]])
   if (all(map_logi(is, args, class))) {
     if (!identical_elements(args, function(x) x@times)) {
-      stop(class, " arguments have different times")
+      throw(Error(class, " arguments have different times"))
     }
     new(class, do.call(rbind, args), times = args[[1]]@times)
   } else {

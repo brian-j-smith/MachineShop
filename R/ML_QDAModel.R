@@ -47,7 +47,7 @@ QDAModel <- function(
     predictor_encoding = "model.matrix",
     params = params(environment()),
     fit = function(formula, data, weights, use, ...) {
-      assert_equal_weights(weights)
+      throw(check_equal_weights(weights))
       model_fit <- eval_fit(
         data,
         formula = MASS::qda(formula, data = as.data.frame(data), ...),

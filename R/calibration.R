@@ -57,7 +57,7 @@ Calibration <- function(object, ..., .check = TRUE) {
     if (is.null(object$Model)) object$Model <- factor("Model")
     missing <- missing_names(c("Response", "Predicted", "Observed"), object)
     if (length(missing)) {
-      stop(label_items("missing calibration variable", missing))
+      throw(Error(label_items("missing calibration variable", missing)))
     }
   }
   rownames(object) <- NULL
@@ -90,7 +90,7 @@ setGeneric(".calibration_default", function(observed, predicted, ...)
 
 setMethod(".calibration_default", c("ANY", "ANY"),
   function(observed, predicted, ...) {
-    stop("calibration unavailable for response type")
+    throw(Error("calibration unavailable for response type"))
   }
 )
 

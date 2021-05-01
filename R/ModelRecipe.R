@@ -10,14 +10,14 @@ ModelRecipe.ModelRecipe <- function(object, ...) {
 
 ModelRecipe.recipe <- function(object, ...) {
   if (any(map_logi(function(step) isTRUE(step$trained), object$steps))) {
-    stop("recipe must be untrained")
+    throw(Error("recipe must be untrained"))
   }
 
   case_name_var <- "(names)"
   case_name_fo <- ~ -`(names)`
 
   if (case_name_var %in% summary(object)$variable) {
-    stop("conflict with existing recipe variable: ", case_name_var)
+    throw(Error("conflict with existing recipe variable: ", case_name_var))
   }
   case_name_info <- data.frame(
     variable = case_name_var,
@@ -46,12 +46,12 @@ bake.ModelRecipe <- function(object, new_data, ...) {
 
 
 bake.SelectedInput <- function(object, ...) {
-  stop("cannot create a design matrix from a ", class(object))
+  throw(Error("cannot create a design matrix from a ", class(object)))
 }
 
 
 bake.TunedInput <- function(object, ...) {
-  stop("cannot create a design matrix from a ", class(object))
+  throw(Error("cannot create a design matrix from a ", class(object)))
 }
 
 
@@ -87,12 +87,12 @@ prep.ModelRecipe <- function(x, ...) {
 
 
 prep.SelectedInput <- function(x, ...) {
-  stop("cannot train a ", class(x))
+  throw(Error("cannot train a ", class(x)))
 }
 
 
 prep.TunedInput <- function(x, ...) {
-  stop("cannot train a ", class(x))
+  throw(Error("cannot train a ", class(x)))
 }
 
 

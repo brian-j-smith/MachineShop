@@ -106,9 +106,9 @@ MLModel <- function(
   stopifnot(response_types %in% settings("response_types"))
 
   if (is.function(gridinfo)) {
-    depwarn("'grid' argument to MLModel() is deprecated",
-            "use 'gridinfo' argument with a tibble instead",
-            expired = Sys.Date() >= "2021-04-15")
+    throw(DeprecatedCondition("Argument 'grid' to MLModel()",
+                              "argument 'gridinfo' with a tibble",
+                              expired = Sys.Date() >= "2021-04-15"))
     gridinfo <- new_gridinfo()
   }
 
@@ -146,10 +146,10 @@ MLModelFit <- function(object, Class, model, x) {
   if (is(object, Class)) {
     object <- unMLModelFit(object)
   } else if (is(object, "MLModelFit")) {
-    stop("cannot change MLModelFit class")
+    throw(Error("cannot change MLModelFit class"))
   }
 
-  if (!is(model, "MLModel")) stop("model not of class MLModel")
+  if (!is(model, "MLModel")) throw(TypeError(model, "MLModel", "'model'"))
 
   if (isS4(object)) {
     object <- new(Class, object, mlmodel = model)
@@ -157,7 +157,7 @@ MLModelFit <- function(object, Class, model, x) {
     object$mlmodel <- model
     class(object) <- c(Class, "MLModelFit", class(object))
   } else {
-    stop("unsupported object class")
+    throw(TypeError(object, c("S4 class", "list"), "'object'"))
   }
 
   object

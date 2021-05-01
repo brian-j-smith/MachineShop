@@ -103,7 +103,7 @@ new_step_kmedoids <- function(
     require_namespaces("cluster")
 
     if (ncol(x) < 2) {
-      stop("step_kmedoids requires 2 or more variables", call. = FALSE)
+      throw(LocalError("step_kmedoids requires 2 or more variables"))
     }
     recipes::check_type(x)
 
@@ -154,7 +154,10 @@ new_step_kmedoids <- function(
       options$num_samp <- num_samp
       options$samp_size <- samp_size
     },
-    stop("'method' should be \"pam\" or \"clara\"")
+    {
+      method <- Error("Value must be \"pam\" or \"clara\".")
+      throw(check_assignment(method))
+    }
   )
 
   object <- new_step_sbf(..., filter = filter, multivariate = TRUE,

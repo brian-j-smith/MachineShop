@@ -100,7 +100,8 @@ new_step_sbf <- function(
   )
   invalid_names <- intersect(names(options), names(step_args))
   if (length(invalid_names)) {
-    stop(label_items("options list contains reserved step name", invalid_names))
+    msg <- "options list contains reserved step name"
+    throw(Error(label_items(msg, invalid_names)))
   }
   do.call(recipes::step, c(step_args, options))
 }
@@ -120,10 +121,10 @@ prep.step_sbf <- function(x, training, info = NULL, ...) {
   }
   if (!is.list(res)) res <- list(selected = res)
   if (!is.logical(res$selected)) {
-    stop("filter function should return logical values")
+    throw(Error("filter function should return logical values"))
   }
   if (length(res$selected) != length(x_vars)) {
-    stop("filter function should return one logical value per variable")
+    throw(Error("filter function should return one logical value per variable"))
   }
   x$res <- tibble(
     terms = col_names,

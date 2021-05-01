@@ -59,7 +59,7 @@ ConfusionMatrix <- function(data = NA, ordered = FALSE) {
   data <- as.matrix(data)
 
   n <- nrow(data)
-  if (n != ncol(data)) stop("unequal number of rows and columns")
+  if (n != ncol(data)) throw(Error("unequal number of rows and columns"))
 
   data_dimnames <- dimnames(data)
   if (is.null(data_dimnames)) data_dimnames <- list(NULL, NULL)
@@ -107,7 +107,8 @@ setGeneric(".confusion_matrix", function(observed, predicted, ...)
 
 setMethod(".confusion_matrix", c("ANY", "ANY"),
   function(observed, predicted, ...) {
-    stop("confusion requires a predicted factor or survival probabilities")
+    msg <- "confusion requires a predicted factor or survival probabilities"
+    throw(Error(msg))
   }
 )
 

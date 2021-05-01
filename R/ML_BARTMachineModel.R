@@ -78,7 +78,7 @@ BARTMachineModel <- function(
       )
     ),
     fit = function(formula, data, weights, ...) {
-      assert_equal_weights(weights)
+      throw(check_equal_weights(weights))
       x <- model.matrix(data, intercept = FALSE)
       y <- response(data)
       if (is_response(y, "binary")) y <- factor(y, levels = rev(levels(y)))

@@ -31,14 +31,14 @@ response.formula <- function(object, data = NULL, template = NULL, ...) {
       template_levels <- levels(template)
       new_levels <- y_levels[is.na(match(y_levels, template_levels))]
       if (length(new_levels)) {
-        stop(label_items("response factor has new level", new_levels))
+        throw(Error(label_items("response factor has new level", new_levels)))
       }
       y <- factor(y, levels = template_levels, ordered = is.ordered(template),
                   exclude = NULL)
     }
     template_class <- class(template)[1]
     if (!(is.null(template) || is(y, template_class))) {
-      stop("response variable must be of type ", template_class)
+      throw(TypeError(y, template_class, "response variable"))
     }
     y
   } else if (length(object) > 2) object[[2]]
@@ -166,7 +166,7 @@ SurvMatrix <- function(data = NA, times = NULL) {
   if (is.null(times)) times <- rep(NA_real_, ncol(data))
 
   if (length(times) != ncol(data)) {
-    stop("unequal number of survival times and predictions")
+    throw(Error("unequal number of survival times and predictions"))
   }
 
   rownames(data) <- NULL

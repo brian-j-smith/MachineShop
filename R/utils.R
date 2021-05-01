@@ -34,13 +34,6 @@ utils::globalVariables(c("i", "x", "y"))
 }
 
 
-assert_equal_weights <- function(weights) {
-  if (any(diff(weights) != 0)) {
-    warn("model weights are not supported and will be ignored")
-  }
-}
-
-
 attach_objects <- function(
   what, pos = 2L, name = deparse(substitute(what), backtick = FALSE)
 ) {
@@ -54,7 +47,7 @@ combine_dataframes <- function(x, y = NULL) {
   if (is.null(y)) return(x)
   common_cols <- intersect(names(x), names(y))
   if (!identical(x[common_cols], y[common_cols])) {
-    stop("common columns in data frames differ")
+    throw(Error("common columns in data frames differ"))
   }
   diff_cols <- setdiff(names(y), common_cols)
   x[diff_cols] <- y[diff_cols]
@@ -76,7 +69,7 @@ fget <- function(x) {
     } else {
       "invalid function"
     }
-    stop(msg)
+    throw(Error(msg))
   }
   f
 }
@@ -103,7 +96,7 @@ get_MLObject <- function(x, class = c("MLControl", "MLMetric", "MLModel")) {
   class <- match.arg(class)
   x <- get0(x)
   if (is.function(x) && class %in% c("MLControl", "MLModel")) x <- x()
-  if (!is(x, class)) stop("object not of class ", class)
+  if (!is(x, class)) throw(TypeError(x, class, "'x'"))
   x
 }
 
@@ -113,7 +106,8 @@ get_S3method <- function(generic, object) {
   classes <- substring(methods(generic_name), nchar(generic_name) + 2)
   class <- match_class(object, classes)
   if (is.na(class)) {
-    stop(generic_name, " method not found for '", class(object)[1], "' class")
+    throw(Error(generic_name, " method not found for '", class(object)[1],
+                "' class"))
   }
   fget(paste0(generic_name, ".", class))
 }
@@ -185,7 +179,7 @@ label_items <- function(label, x, n = Inf, add_names = FALSE) {
 
 
 list_to_function <- function(x) {
-  error_msg <- paste0("'", deparse(substitute(x)), "' must be a function, ",
+  err_msg <- paste0("'", deparse(substitute(x)), "' must be a function, ",
                       "function name, or vector of these")
   if (is(x, "MLMetric")) x <- list(x)
   if (is(x, "vector")) {
@@ -200,7 +194,7 @@ list_to_function <- function(x) {
       } else if (is(x[[i]], "function")) {
         metric_name <- "metric"
       } else {
-        stop(error_msg)
+        throw(Error(err_msg))
       }
       name <- names(x)[i]
       metric_names[i] <-
@@ -211,7 +205,7 @@ list_to_function <- function(x) {
   } else if (is(x, "function")) {
     x
   } else {
-    stop(error_msg)
+    throw(Error(err_msg))
   }
 }
 
@@ -277,7 +271,8 @@ match_indices <- function(indices, choices) {
   indices <- na.omit(names(lookup)[lookup[indices]])
   if (length(indices) == 0) {
     indices <- names(lookup)[1]
-    warn("specified indices not found; using ", indices, " instead")
+    throw(LocalWarning("specified indices not found; using ", indices,
+                       " instead"))
   }
   indices
 }
@@ -343,7 +338,7 @@ params <- function(envir, ...) {
   is_missing <- map_logi(function(x) is.symbol(x) && !nzchar(x), args)
   if (any(is_missing)) {
     missing <- names(args)[is_missing]
-    stop(label_items("missing values for required argument", missing))
+    throw(Error(label_items("missing values for required argument", missing)))
   }
   c(args[!map_logi(is.null, args)], list(...))
 }
@@ -379,14 +374,14 @@ require_namespaces <- function(packages) {
     if (any(x)) {
       items <- packages[x]
       item_names <- package_names[x]
-      stop(label_items(msg, items), ".\n",
-           "To address this issue, try running ", fix, "(", deparse(item_names),
-           ").", call. = FALSE)
+      throw(LocalError("Call ", label_items(msg, items), ".\n",
+                       "To address this issue, try running ", fix, "(",
+                       deparse(item_names), ")."))
     }
   }
 
   installed <- map_logi(requireNamespace, package_names, quietly = TRUE)
-  package_errors(!installed, "call requires prior installation of package",
+  package_errors(!installed, "requires prior installation of package",
                  "install.packages")
 
   end_pos <- paren_pos + paren_len - 2
@@ -398,7 +393,7 @@ require_namespaces <- function(packages) {
       eval(call(compat_version[1], version, compat_version[2]))
     } else TRUE
   }, package_names, compat_versions)
-  package_errors(!compatible, "call requires updated package version",
+  package_errors(!compatible, "requires updated package version",
                  "update.packages")
 
   invisible(installed & compatible)
@@ -560,13 +555,23 @@ strata_var.recipe <- function(object, ...) {
   var_name <- info$variable[info$role == "case_stratum"]
   if (length(var_name) == 0) NULL else
     if (length(var_name) == 1) var_name else
-      stop("multiple strata variables specified")
+      throw(Error("multiple strata variables specified"))
 }
 
 
 switch_class <- function(EXPR, ...) {
   blocks <- eval(substitute(alist(...)))
   eval.parent(blocks[[match_class(EXPR, names(blocks))]])
+}
+
+
+toString.character <- function(x, conjunction = NULL, ...) {
+  if (!is.null(conjunction)) {
+    n <- length(x)
+    if (n > 1) x[n] <- paste(conjunction, x[n])
+    if (n == 2) x <- paste(x[1], x[2])
+  }
+  NextMethod()
 }
 
 
@@ -582,25 +587,4 @@ unnest <- function(data) {
     df[name] <- x
   }
   df
-}
-
-
-#################### Exception Handling ####################
-
-
-DomainError <- function(value, ...) {
-  errorCondition(message = paste0(...),
-                 call = sys.call(-1),
-                 value = value,
-                 class = "DomainError")
-}
-
-
-depwarn <- function(old, new, expired = FALSE) {
-  ifelse(expired, stop, warning)(old, ";\n", new, call. = FALSE)
-}
-
-
-warn <- function(...) {
-  warning(..., call. = FALSE)
 }

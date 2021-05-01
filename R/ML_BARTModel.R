@@ -81,7 +81,7 @@ BARTModel <- function(
       y <- response(data)
       switch_class(y,
         "factor" = {
-          assert_equal_weights(weights)
+          throw(check_equal_weights(weights))
           if (nlevels(y) <= 2) {
             f <- BART::gbart
             y <- as.numeric(y) - 1
@@ -96,7 +96,7 @@ BARTModel <- function(
                       sigdf = sigdf, sigquant = sigquant, lambda = lambda, ...)
         },
         "Surv" = {
-          assert_equal_weights(weights)
+          throw(check_equal_weights(weights))
           BART::surv.bart(x.train = x, times = y[, "time"],
                           delta = y[, "status"], K = K, ...)
         }

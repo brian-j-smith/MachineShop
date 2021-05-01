@@ -88,6 +88,7 @@ Collate:
     'calibration.R'
     'coerce.R'
     'combine.R'
+    'conditions.R'
     'confusion.R'
     'convert.R'
     'data.R'
