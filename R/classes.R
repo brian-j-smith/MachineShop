@@ -24,8 +24,10 @@ setOldClass("Surv")
 
 setClass("DiscreteVariate",
   contains = "numeric",
-  slots = c(min = "numeric",
-            max = "numeric")
+  slots = c(
+    min = "numeric",
+    max = "numeric"
+  )
 )
 
 
@@ -65,8 +67,10 @@ setOldClass(c("grid_regular", "param_grid"))
 
 
 setClass("Grid",
-  slots = c(size = "integer",
-            random = "ANY")
+  slots = c(
+    size = "integer",
+    random = "ANY"
+  )
 )
 
 
@@ -84,18 +88,20 @@ RecipeGrid <- setClass("RecipeGrid",
 
 
 setClass("MLModel",
-  slots = c(name = "character",
-            label = "character",
-            packages = "character",
-            response_types = "character",
-            predictor_encoding = "character",
-            params = "list",
-            gridinfo = "tbl_df",
-            fit = "function",
-            predict = "function",
-            varimp = "function",
-            x = "ANY",
-            train_steps = "ListOf")
+  slots = c(
+    name = "character",
+    label = "character",
+    packages = "character",
+    response_types = "character",
+    predictor_encoding = "character",
+    params = "list",
+    gridinfo = "tbl_df",
+    fit = "function",
+    predict = "function",
+    varimp = "function",
+    x = "ANY",
+    train_steps = "ListOf"
+  )
 )
 
 
@@ -176,8 +182,10 @@ setClass("ModeledRecipe",
 
 setClass("SelectedInput",
   contains = "VIRTUAL",
-  slots = c(inputs = "ListOf",
-            params = "list")
+  slots = c(
+    inputs = "ListOf",
+    params = "list"
+  )
 )
 
 
@@ -193,8 +201,10 @@ setClass("SelectedModelRecipe",
 
 setClass("TunedInput",
   contains = "VIRTUAL",
-  slots = c(grid = "ANY",
-            params = "list")
+  slots = c(
+    grid = "ANY",
+    params = "list"
+  )
 )
 
 
@@ -234,10 +244,12 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 
 
 setClass("MLControl",
-  slots = c(times = "ANY",
-            dist = "ANY",
-            method = "ANY",
-            seed = "numeric")
+  slots = c(
+    times = "ANY",
+    dist = "ANY",
+    method = "ANY",
+    seed = "numeric"
+  )
 )
 
 
@@ -259,8 +271,10 @@ setClass("MLBootOptimismControl",
 
 setClass("MLCrossValidationControl",
   contains = "MLControl",
-  slots = c(folds = "numeric",
-            repeats = "numeric")
+  slots = c(
+    folds = "numeric",
+    repeats = "numeric"
+  )
 )
 
 
@@ -327,18 +341,22 @@ setClass("OrderedBinaryConfusionMatrix",
 
 ConfusionSummary <- setClass("ConfusionSummary",
   contains = "matrix",
-  slots = c(total = "numeric",
-            accuracy = "numeric",
-            majority = "numeric",
-            kappa2 = "numeric")
+  slots = c(
+    total = "numeric",
+    accuracy = "numeric",
+    majority = "numeric",
+    kappa2 = "numeric"
+  )
 )
 
 
 setClass("MLMetric",
   contains = "function",
-  slots = c(name = "character",
-            label = "character",
-            maximize = "logical")
+  slots = c(
+    name = "character",
+    label = "character",
+    maximize = "logical"
+  )
 )
 
 
@@ -372,22 +390,28 @@ setClass("LiftCurve",
 
 setClass("Resamples",
   contains = "data.frame",
-  slots = c(control = "MLControl",
-            strata = "character")
+  slots = c(
+    control = "MLControl",
+    strata = "character"
+  )
 )
 
 
 TrainStep <- setClass("TrainStep",
-  slots = c(grid = "tbl_df",
-            performance = "Performance",
-            selected = "numeric",
-            values = "numeric",
-            metric = "MLMetric")
+  slots = c(
+    grid = "tbl_df",
+    performance = "Performance",
+    selected = "numeric",
+    values = "numeric",
+    metric = "MLMetric"
+  )
 )
 
 
 setClass("VarImp",
   contains = "data.frame",
-  slots = c(shift = "numeric",
-            scale = "numeric")
+  slots = c(
+    shift = "numeric",
+    scale = "numeric"
+  )
 )
