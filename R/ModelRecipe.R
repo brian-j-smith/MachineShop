@@ -13,26 +13,26 @@ ModelRecipe.recipe <- function(object, ...) {
     throw(Error("recipe must be untrained"))
   }
 
-  case_name_var <- "(names)"
-  case_name_fo <- ~ -`(names)`
+  cases_name <- "(names)"
+  cases_fo <- ~ -`(names)`
 
-  if (case_name_var %in% summary(object)$variable) {
-    throw(Error("conflict with existing recipe variable: ", case_name_var))
+  if (cases_name %in% summary(object)$variable) {
+    throw(Error("conflict with existing recipe variable: ", cases_name))
   }
-  case_name_info <- data.frame(
-    variable = case_name_var,
+  cases_info <- data.frame(
+    variable = cases_name,
     type = "nominal",
     role = "case_name",
     source = "original"
   )
-  object$var_info <- rbind(object$var_info, case_name_info)
-  object$term_info <- rbind(object$term_info, case_name_info)
-  object$template[[case_name_var]] <- rownames(object$template)
+  object$var_info <- rbind(object$var_info, cases_info)
+  object$term_info <- rbind(object$term_info, cases_info)
+  object$template[[cases_name]] <- rownames(object$template)
 
   for (i in seq(object$steps)) {
     step_terms <- object$steps[[i]]$terms
-    environment(case_name_fo) <- environment(step_terms[[1]])
-    new_term <- rlang::as_quosure(case_name_fo)
+    environment(cases_fo) <- environment(step_terms[[1]])
+    new_term <- rlang::as_quosure(cases_fo)
     object$steps[[i]]$terms <- c(step_terms, new_term)
   }
 
@@ -75,12 +75,11 @@ prep.ModelFrame <- function(x, ...) x
 
 prep.ModelRecipe <- function(x, ...) {
   if (!recipes::fully_trained(x)) {
-    case_name_var <- "(names)"
     template <- x$template
     x <- new(class(x), prep(as(x, "recipe"), retain = FALSE))
     x$template <- template
-    x$orig_lvls[[case_name_var]] <- list(values = NA, ordered = NA)
-    x$levels[[case_name_var]] <- x$orig_lvls[[case_name_var]]
+    x$orig_lvls[["(names)"]] <- list(values = NA, ordered = NA)
+    x$levels[["(names)"]] <- x$orig_lvls[["(names)"]]
   }
   x
 }
@@ -97,8 +96,7 @@ prep.TunedInput <- function(x, ...) {
 
 
 prep_recipe_data <- function(x) {
-  case_name_var <- "(names)"
-  if (is.null(x[[case_name_var]])) x[[case_name_var]] <- rownames(x)
+  if (is.null(x[["(names)"]])) x[["(names)"]] <- rownames(x)
   x
 }
 
