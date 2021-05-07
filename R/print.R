@@ -150,11 +150,18 @@ print.MLControl <- function(x, n = MachineShop::settings("print_max"), ...) {
 
 setMethod("show", "MLControl",
   function(object) {
-    labels <- c("times" = "Survival times", "method" = "Method",
-                "dist" = "Distribution")
-    for (name in names(labels)) {
+    cat("Stratification parameters\n",
+        "  Breaks: ", object@strata_breaks, "\n",
+        "  Unique numeric threshold: ", object@strata_nunique, "\n",
+        "  Minimum proportion: ", object@strata_prop, "\n",
+        "  Minimum size: ", object@strata_size, "\n",
+        sep = "")
+    opts <- c("times" = "Survival times",
+              "method" = "Method",
+              "dist" = "Distribution")
+    for (name in names(opts)) {
       x <- slot(object, name)
-      if (length(x)) cat(labels[name], ": ", toString(x), "\n", sep = "")
+      if (length(x)) cat(opts[name], ": ", toString(x), "\n", sep = "")
     }
     cat("Seed:", object@seed, "\n")
     invisible()

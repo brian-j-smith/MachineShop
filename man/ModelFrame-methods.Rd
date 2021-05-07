@@ -34,7 +34,8 @@ for any of the model variables.}
 
 \item{weights}{vector of case weights [default: equal].}
 
-\item{strata}{vector of resampling stratification levels [default: none].}
+\item{strata}{vector of values to use in conducting stratified
+\link{resample} estimation of model performance [default: none].}
 
 \item{y}{response variable.}
 

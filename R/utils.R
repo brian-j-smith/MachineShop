@@ -457,6 +457,17 @@ sample_params <- function(x, size = NULL, replace = FALSE) {
 }
 
 
+sample_replace <- function(x, inds) {
+  if (!is.logical(inds)) {
+    old_inds <- inds
+    inds <- structure(logical(length(x)), names = names(x))
+    inds[old_inds] <- TRUE
+  }
+  x[inds] <- sample(x[!inds], sum(inds), replace = TRUE)
+  x
+}
+
+
 seq_boot <- function(src, dest) {
   indices <- seq_len(nrow(src))
   pad_size <- nrow(dest) - nrow(src)
@@ -527,50 +538,6 @@ stepAIC_args <- function(formula, direction, scope) {
   if (is.null(scope$upper)) scope$upper <- formula[-2]
   formula[-2] <- if (direction == "backward") scope$upper else scope$lower
   list(formula = formula, scope = scope)
-}
-
-
-strata <- function(object, ...) {
-  UseMethod("strata")
-}
-
-
-strata.default <- function(object, ...) {
-  object
-}
-
-
-strata.BinomialVariate <- function(object, ...) {
-  as.numeric(object)
-}
-
-
-strata.matrix <- function(object, ...) {
-  object[, 1]
-}
-
-
-strata.Surv <- function(object, ...) {
-  object[, "status"]
-}
-
-
-strata_var <- function(object, ...) {
-  UseMethod("strata_var")
-}
-
-
-strata_var.ModelFrame <- function(object, ...) {
-  if ("(strata)" %in% names(object)) "(strata)" else NULL
-}
-
-
-strata_var.recipe <- function(object, ...) {
-  info <- summary(object)
-  var_name <- info$variable[info$role == "case_stratum"]
-  if (length(var_name) == 0) NULL else
-    if (length(var_name) == 1) var_name else
-      throw(Error("multiple strata variables specified"))
 }
 
 

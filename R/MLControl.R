@@ -12,8 +12,14 @@
 #'   (\code{0 < prop < 1}).
 #' @param repeats number of repeats of the K-fold partitioning.
 #' @param samples number of bootstrap samples.
-#' @param seed integer to set the seed at the start of resampling.
+#' @param strata_breaks number of quantile bins desired for numeric data
+#'   used in stratified resample estimation of model predictive performance.
+#' @param strata_nunique number of unique values at or below which numeric
+#'   data are stratified as categorical.
+#' @param strata_prop minimum proportion of data in each strata.
+#' @param strata_size minimum number of values in each strata.
 #' @param times,dist,method arguments passed to \code{\link{predict}}.
+#' @param seed integer to set the seed at the start of resampling.
 #' @param ...  arguments passed to \code{MLControl}.
 #'
 #' @return \code{MLControl} class object.
@@ -197,9 +203,41 @@ TrainControl <- function(...) {
 #' The base \code{MLControl} constructor initializes a set of control parameters
 #' that are common to all resampling methods.
 #'
+#' Parameters are available to control resampling strata which are constructed
+#' from numeric proportions for \code{\link{BinomialVariate}}; original values
+#' for \code{character}, \code{factor}, \code{logical}, and \code{ordered};
+#' first columns of values for \code{matrix}; original values for
+#' \code{numeric}; and numeric times within event statuses for \code{Surv}.
+#' Stratification of survival data by event status only can be achieved by
+#' setting \code{strata_breaks = 1}.  Numeric values are stratified into
+#' quantile bins and categorical values into factor levels.  The number of bins
+#' will be the largest integer less than or equal to \code{strata_breaks}
+#' satisfying the \code{strata_prop} and \code{strata_size} control argument
+#' thresholds.  Categorical levels below the thresholds will be pooled
+#' iteratively by reassigning values in the smallest nominal level to the
+#' remaining ones at random and by combining the smallest adjacent ordinal
+#' levels.  Missing values are replaced with non-missing values sampled at
+#' random with replacement.
+#'
 MLControl <- function(
+  strata_breaks = 4, strata_nunique = 5, strata_prop = 0.1, strata_size = 20,
   times = NULL, dist = NULL, method = NULL,
   seed = sample(.Machine$integer.max, 1), ...
 ) {
-  new("MLControl", times = times, dist = dist, method = method, seed = seed)
+  strata_breaks <- check_integer(strata_breaks, bounds = c(0, Inf))
+  throw(check_assignment(strata_breaks))
+
+  strata_nunique <- check_integer(strata_nunique, bounds = c(0, Inf))
+  throw(check_assignment(strata_nunique))
+
+  strata_prop <- check_numeric(strata_prop, bounds = c(0, 1), include = TRUE)
+  throw(check_assignment(strata_prop))
+
+  strata_size <- check_integer(strata_size, bounds = c(0, Inf))
+  throw(check_assignment(strata_size))
+
+  new("MLControl", strata_breaks = strata_breaks,
+      strata_nunique = strata_nunique, strata_prop = strata_prop,
+      strata_size = strata_size, times = times, dist = dist, method = method,
+      seed = seed)
 }

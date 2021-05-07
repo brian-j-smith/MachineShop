@@ -17,7 +17,8 @@
 #'   with a fixed coefficient of 1 to linear predictors in compatible regression
 #'   models.
 #' @param weights vector of case weights [default: equal].
-#' @param strata vector of resampling stratification levels [default: none].
+#' @param strata vector of values to use in conducting stratified
+#'   \link{resample} estimation of model performance [default: none].
 #' @param ... arguments passed to other methods.
 #'
 #' @return \code{ModelFrame} class object that inherits from \code{data.frame}.

@@ -53,14 +53,20 @@ resample <- function(x, ...) {
 #' @rdname resample-methods
 #'
 #' @details
-#' Stratified resampling is performed for the \code{formula} method according to
-#' values of the response variable; i.e. categorical levels for \code{factor},
-#' continuous for \code{numeric}, and event status \code{Surv}.
+#' Stratified resampling is performed automatically for the \code{formula} and
+#' \code{matrix} methods according to the type of response variable.  In
+#' general, strata are constructed from numeric proportions for
+#' \code{\link{BinomialVariate}}; original values for \code{character},
+#' \code{factor}, \code{logical}, and \code{ordered}; first columns of values
+#' for \code{matrix}; original values for \code{numeric}; and numeric times
+#' within event statuses for \code{Surv}.  Numeric values are stratified into
+#' quantile bins and categorical values into factor levels defined by
+#' \code{\link{MLControl}}.
 #'
 resample.formula <- function(
   x, data, model, control = MachineShop::settings("control"), ...
 ) {
-  mf <- ModelFrame(x, data, na.rm = FALSE, strata = strata(response(x, data)))
+  mf <- ModelFrame(x, data, na.rm = FALSE, strata = response(x, data))
   resample(mf, model, control, ...)
 }
 
@@ -70,7 +76,7 @@ resample.formula <- function(
 resample.matrix <- function(
   x, y, model, control = MachineShop::settings("control"), ...
 ) {
-  mf <- ModelFrame(x, y, na.rm = FALSE, strata = strata(y))
+  mf <- ModelFrame(x, y, na.rm = FALSE, strata = y)
   resample(mf, model, control, ...)
 }
 
@@ -78,9 +84,9 @@ resample.matrix <- function(
 #' @rdname resample-methods
 #'
 #' @details
-#' User-specified stratification variables may be specified for
+#' Resampling stratification variables may be specified manually for
 #' \code{ModelFrames} upon creation with the \code{\link[=ModelFrame]{strata}}
-#' argument in its constructor.  Resampling of this class is unstratified by
+#' argument in their constructor.  Resampling of this class is unstratified by
 #' default.
 #'
 resample.ModelFrame <- function(
@@ -94,7 +100,7 @@ resample.ModelFrame <- function(
 #' @rdname resample-methods
 #'
 #' @details
-#' Variables in \code{recipe} specifications may be designated as case strata
+#' Stratification variables may be designated in \code{recipe} specifications
 #' with the \code{\link{role_case}} function.  Resampling will be unstratified
 #' otherwise.
 #'
@@ -153,11 +159,11 @@ Resamples.list <- function(object, ...) {
   object, x, model, progress_index = 0, ...
 ) {
   presets <- settings()
-  strata <- strata_var(x)
   set.seed(object@seed)
-  splits <- bootstraps(rsample_data(x),
-                       times = object@samples,
-                       strata = strata)$splits
+  splits <- rsample_sets(bootstraps,
+                         data = x,
+                         times = object@samples,
+                         control = object)$splits
   seeds <- sample.int(.Machine$integer.max, length(splits))
 
   is_optimism_control <- is(object, "MLBootOptimismControl")
@@ -197,7 +203,7 @@ Resamples.list <- function(object, ...) {
     } else {
       subsample(train, x, model, object, i)
     }
-  } %>% Resamples(control = object, strata = strata)
+  } %>% Resamples(control = object, strata = case_strata_name(x))
 }
 
 
@@ -205,12 +211,12 @@ Resamples.list <- function(object, ...) {
   object, x, model, progress_index = 0, ...
 ) {
   presets <- settings()
-  strata <- strata_var(x)
   set.seed(object@seed)
-  splits <- vfold_cv(rsample_data(x),
-                     v = object@folds,
-                     repeats = object@repeats,
-                     strata = strata)$splits
+  splits <- rsample_sets(vfold_cv,
+                         data = x,
+                         v = object@folds,
+                         repeats = object@repeats,
+                         control = object)$splits
   seeds <- sample.int(.Machine$integer.max, length(splits))
 
   is_optimism_control <- is(object, "MLCVOptimismControl")
@@ -243,7 +249,7 @@ Resamples.list <- function(object, ...) {
       subsample(train, test, model, object, i)
     }
   }
-  res <- Resamples(df_list, control = object, strata = strata)
+  res <- Resamples(df_list, control = object, strata = case_strata_name(x))
 
   if (is_optimism_control) {
     pred_list <- map(attr, df_list, "CV.Predicted")
@@ -263,11 +269,11 @@ Resamples.list <- function(object, ...) {
 
 .resample.MLOOBControl <- function(object, x, model, progress_index = 0, ...) {
   presets <- settings()
-  strata <- strata_var(x)
   set.seed(object@seed)
-  splits <- bootstraps(rsample_data(x),
-                       times = object@samples,
-                       strata = strata)$splits
+  splits <- rsample_sets(bootstraps,
+                         data = x,
+                         times = object@samples,
+                         control = object)$splits
   seeds <- sample.int(.Machine$integer.max, length(splits))
 
   snow_opts <- list()
@@ -292,20 +298,20 @@ Resamples.list <- function(object, ...) {
     train <- analysis(splits[[i]], x)
     test <- assessment(splits[[i]], x)
     subsample(train, test, model, object, i)
-  } %>% Resamples(control = object, strata = strata)
+  } %>% Resamples(control = object, strata = case_strata_name(x))
 }
 
 
 .resample.MLSplitControl <- function(object, x, model, ...) {
-  strata <- strata_var(x)
   set.seed(object@seed)
-  split <- initial_split(rsample_data(x),
-                         prop = object@prop,
-                         strata = strata)
+  split <- rsample_sets(initial_split,
+                        data = x,
+                        prop = object@prop,
+                        control = object)
   train <- training(split, x)
   test <- testing(split, x)
   subsample(train, test, model, object) %>%
-    Resamples(control = object, strata = strata)
+    Resamples(control = object, strata = case_strata_name(x))
 }
 
 
@@ -321,6 +327,17 @@ Resamples.list <- function(object, ...) {
 rsample_data <- function(x, ...) UseMethod("rsample_data")
 rsample_data.ModelFrame <- function(x, ...) asS3(x)
 rsample_data.ModelRecipe <- function(x, ...) as.data.frame(x)
+
+
+rsample_sets <- function(fun, data, control, ...) {
+  df <- rsample_data(data)
+  df[["(strata)"]] <- case_strata(data,
+                                  breaks = control@strata_breaks,
+                                  nunique = control@strata_nunique,
+                                  prop = control@strata_prop,
+                                  size = control@strata_size)
+  suppressWarnings(fun(df, ..., strata = case_strata_name(df), pool = 0))
+}
 
 
 analysis <- function(x, object, ...) UseMethod("analysis", object)

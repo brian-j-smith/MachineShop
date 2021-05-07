@@ -22,7 +22,8 @@ role_surv(recipe, time, event)
 \item{x, size}{number of counts and trials for the specification of a
 \code{\link{BinomialVariate}} outcome.}
 
-\item{stratum}{variable for stratified \link[=resample]{resampling} of cases.}
+\item{stratum}{variable to use in conducting stratified \link{resample}
+estimation of model performance.}
 
 \item{weight}{numeric variable of case weights for model
 \link[=fit]{fitting}.}
@@ -47,9 +48,12 @@ Add to or replace the roles of variables in a preprocessing recipe.
 library(survival)
 library(recipes)
 
-rec <- recipe(time + status ~ ., data = veteran) \%>\%
-  role_surv(time = time, event = status) \%>\%
-  role_case(stratum = status)
+df <- within(veteran, {
+  y <- Surv(time, status)
+  remove(time, status)
+})
+rec <- recipe(y ~ ., data = df) \%>\%
+  role_case(stratum = y)
 
 (res <- resample(rec, model = CoxModel))
 summary(res)

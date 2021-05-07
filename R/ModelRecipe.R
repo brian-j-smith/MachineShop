@@ -16,8 +16,10 @@ ModelRecipe.recipe <- function(object, ...) {
   cases_name <- "(names)"
   cases_fo <- ~ -`(names)`
 
-  if (cases_name %in% summary(object)$variable) {
-    throw(Error("conflict with existing recipe variable: ", cases_name))
+  reserved <- intersect(c(cases_name, "(strata)"), summary(object)$variable)
+  if (length(reserved)) {
+    msg <- label_items("supplied recipe contains reserved variable", reserved)
+    throw(Error(msg))
   }
   cases_info <- data.frame(
     variable = cases_name,
@@ -97,6 +99,7 @@ prep.TunedInput <- function(x, ...) {
 
 prep_recipe_data <- function(x) {
   if (is.null(x[["(names)"]])) x[["(names)"]] <- rownames(x)
+  x[["(strata)"]] <- NULL
   x
 }
 

@@ -245,6 +245,10 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 
 setClass("MLControl",
   slots = c(
+    strata_breaks = "integer",
+    strata_nunique = "integer",
+    strata_prop = "numeric",
+    strata_size = "integer",
     times = "ANY",
     dist = "ANY",
     method = "ANY",

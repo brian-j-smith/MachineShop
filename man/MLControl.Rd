@@ -27,6 +27,10 @@ SplitControl(prop = 2/3, ...)
 TrainControl(...)
 
 MLControl(
+  strata_breaks = 4,
+  strata_nunique = 5,
+  strata_prop = 0.1,
+  strata_size = 20,
   times = NULL,
   dist = NULL,
   method = NULL,
@@ -45,6 +49,16 @@ MLControl(
 
 \item{prop}{proportion of cases to include in the training set
 (\code{0 < prop < 1}).}
+
+\item{strata_breaks}{number of quantile bins desired for numeric data
+used in stratified resample estimation of model predictive performance.}
+
+\item{strata_nunique}{number of unique values at or below which numeric
+data are stratified as categorical.}
+
+\item{strata_prop}{minimum proportion of data in each strata.}
+
+\item{strata_size}{minimum number of values in each strata.}
 
 \item{times, dist, method}{arguments passed to \code{\link{predict}}.}
 
@@ -86,6 +100,22 @@ performance evaluation to be performed on the same training set (Efron 1986).
 
 The base \code{MLControl} constructor initializes a set of control parameters
 that are common to all resampling methods.
+
+Parameters are available to control resampling strata which are constructed
+from numeric proportions for \code{\link{BinomialVariate}}; original values
+for \code{character}, \code{factor}, \code{logical}, and \code{ordered};
+first columns of values for \code{matrix}; original values for
+\code{numeric}; and numeric times within event statuses for \code{Surv}.
+Stratification of survival data by event status only can be achieved by
+setting \code{strata_breaks = 1}.  Numeric values are stratified into
+quantile bins and categorical values into factor levels.  The number of bins
+will be the largest integer less than or equal to \code{strata_breaks}
+satisfying the \code{strata_prop} and \code{strata_size} control argument
+thresholds.  Categorical levels below the thresholds will be pooled
+iteratively by reassigning values in the smallest nominal level to the
+remaining ones at random and by combining the smallest adjacent ordinal
+levels.  Missing values are replaced with non-missing values sampled at
+random with replacement.
 }
 \examples{
 ## Bootstrapping with 100 samples
