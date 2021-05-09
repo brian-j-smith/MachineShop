@@ -12,7 +12,10 @@ library(magrittr)
 data(Melanoma, package = "MASS")
 
 ## Malignant melanoma analysis dataset
-surv_df <- within(Melanoma, status <- as.numeric(status != 2))
+surv_df <- within(Melanoma, {
+  y <- Surv(time, status != 2)
+  remove(time, status)
+})
 ```
 
 Descriptive summaries of the study variables are given below in Table 1, followed by a plot of estimated overall survival probabilities and 95% confidence intervals.
@@ -23,10 +26,10 @@ Table 1. Variable summaries for the Melanoma survival analysis example.
 
 ```{r using_example_summary, echo=FALSE}
 surv_stats <- list(
-  list("Number of subjects" = ~ length(status)),
-  "time" = list("Median (Range)" = ~ median_range(time)),
-  "status" = list("1 = Dead" = ~ n_perc(status == 1),
-                  "0 = Alive" = ~ n_perc(status == 0)),
+  list("Number of subjects" = ~ length(y)),
+  "time" = list("Median (Range)" = ~ median_range(y[, "time"])),
+  "status" = list("1 = Dead" = ~ n_perc(y[, "status"] == 1),
+                  "0 = Alive" = ~ n_perc(y[, "status"] == 0)),
   "sex" = list("1 = Male" = ~ n_perc(sex == 1),
                "0 = Female" = ~ n_perc(sex == 0)),
   "age" = list("Median (Range)" = ~ median_range(age)),
@@ -43,7 +46,7 @@ summary_kbl(surv_stats, surv_df)
 library(ggplot2)
 
 col <- "#F8766D"
-survfit(Surv(time, status) ~ 1, data = surv_df) %>%
+survfit(y ~ 1, data = surv_df) %>%
   with(data.frame(time, surv, lower, upper, censor = ifelse(n.censor > 0, time, NA))) %>%
   ggplot(aes(x = time, y = surv)) +
   geom_ribbon(aes(ymin = lower, ymax = upper), fill = col, alpha = 0.2) +
@@ -64,5 +67,5 @@ surv_train <- surv_df[train_indices, ]
 surv_test <- surv_df[-train_indices, ]
 
 ## Global formula for the analysis
-surv_fo <- Surv(time, status) ~ sex + age + year + thickness + ulcer
+surv_fo <- y ~ sex + age + year + thickness + ulcer
 ```

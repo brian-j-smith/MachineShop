@@ -33,11 +33,11 @@ Categorical responses can be designated as having ordered levels by storing them
 
 ```{r using_responses_ordered}
 ## Iowa City housing prices (ordered factor)
-df <- within(ICHomes,
+df <- within(ICHomes, {
   sale_amount <- cut(sale_amount, breaks = 3,
                      labels = c("Low", "Medium", "High"),
                      ordered_result = TRUE)
-)
+})
 
 model_fit <- fit(sale_amount ~ ., data = df, model = GBMModel)
 predict(model_fit) %>% head
@@ -69,16 +69,19 @@ model_fit <- fit(cbind(y1, y2, y3) ~ x1, data = anscombe, model = LMModel)
 predict(model_fit) %>% head
 ```
 
-For recipes, the multiple response may be defined as a single variable in a data frame or on the left hand side of a recipe formula.
+For recipes, the multiple response may be defined on the left hand side of a recipe formula or as a single variable within a data frame.
 
 ```{r using_responses_matrix_recipe}
 ## Numeric matrix response recipe
-## Defined in a data frame
-df <- within(anscombe, y <- cbind(y1, y2, y3))
-rec <- recipe(y ~ x1, data = df)
-
 ## Defined in a recipe formula
 rec <- recipe(y1 + y2 + y3 ~ x1, data = anscombe)
+
+## Defined within a data frame
+df <- within(anscombe, {
+  y <- cbind(y1, y2, y3)
+  remove(y1, y2, y3)
+})
+rec <- recipe(y ~ x1, data = df)
 model_fit <- fit(rec, model = LMModel)
 predict(model_fit) %>% head
 ```
@@ -92,22 +95,22 @@ Censored time-to-event survival responses should be stored as a `Surv` variable 
 ## Survival response formula
 library(survival)
 
-fit(Surv(time, status) ~ ., data = surv_train, model = GBMModel)
+fit(Surv(time, status) ~ ., data = veteran, model = GBMModel)
 ```
 
-For recipes, survival responses may be defined as a single `Surv` variable in a data frame or with the individual survival time and event variables given on the left hand side of a recipe formula and their roles designated with the `r rdoc_url("role_surv()", "recipe_roles")` function.
+For recipes, survival responses may be defined with the individual survival time and event variables given on the left hand side of a recipe formula and their roles designated with the `r rdoc_url("role_surv()", "recipe_roles")` function or as a single `Surv` variable within a data frame.
 
 ```{r using_responses_surv_recipe, results="hide"}
 ## Survival response recipe
-## Defined in a data frame
+## Defined in a recipe formula
+rec <- recipe(time + status ~ ., data = veteran) %>%
+  role_surv(time = time, event = status)
+
+## Defined within a data frame
 df <- within(veteran, {
   y <- Surv(time, status)
   remove(time, status)
 })
 rec <- recipe(y ~ ., data = df)
-
-## Defined in a recipe formula
-rec <- recipe(time + status ~ ., data = veteran) %>%
-  role_surv(time = time, event = status)
 fit(rec, model = GBMModel)
 ```

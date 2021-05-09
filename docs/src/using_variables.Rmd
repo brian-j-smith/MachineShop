@@ -91,6 +91,7 @@ As shown, prediction on new data with a model fit to a recipe is done on an unpr
 df <- within(esoph, {
   y <- ncases / (ncases + ncontrols)
   weights <- ncases + ncontrols
+  remove(ncases, ncontrols)
 })
 
 rec <- recipe(y ~ agegp + tobgp + alcgp + weights, data = df) %>%

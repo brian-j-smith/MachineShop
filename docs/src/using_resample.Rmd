@@ -118,17 +118,16 @@ grid.arrange(p1, p2, p3, p4, nrow = 2)
 
 ## Stratified Resampling
 
-Stratification of cases for the construction of resampled training and test sets can be employed to help achieve balance across the sets.  Stratified resampling is automatically performed if variable specification is in terms of a traditional formula and will be done according to the response variable if a numeric vector or factor, the event variable if survival, and the first variable if a numeric matrix.  For model frames and recipes, stratification variables must be defined explicitly with the `strata` argument to the `r rdoc_url("ModelFrame()")` constructor or with the `r rdoc_url("role_case()", "recipe_roles")` function. 
+Stratification of cases for the construction of resampled training and test sets can be employed to help achieve balance across the sets.  Stratified resampling is automatically performed if variable specification is in terms of a traditional formula or design matrix and will be done according to the response variable.  For model frames and recipes, stratification variables must be defined explicitly with the `strata` argument to the `r rdoc_url("ModelFrame()")` constructor or with the `r rdoc_url("role_case()", "recipe_roles")` function.   In general, strata are constructed from numeric proportions for `BinomialVariate`; original values for `character`, `factor`, `logical`, and `ordered`; first columns of values for `matrix`; original values for `numeric`; and numeric times within event statuses for `Surv`.  Numeric values are stratified into quantile bins and categorical values into factor levels defined by the resampling control functions.  Missing values are replaced with non-missing values sampled at random with replacement.
 
 ```{r using_resample_strata, results="hide"}
-## Model frame with case status stratification
-mf <- ModelFrame(surv_fo, data = surv_train, strata = surv_train$status)
+## Model frame with response variable stratification
+mf <- ModelFrame(surv_fo, data = surv_train, strata = surv_train$y)
 resample(mf, model = GBMModel)
 
-## Recipe with case status stratification
-rec <- recipe(time + status ~ ., data = surv_train) %>%
-  role_surv(time = time, event = status) %>%
-  role_case(stratum = status)
+## Recipe with response variable stratification
+rec <- recipe(y ~ ., data = surv_train) %>%
+  role_case(stratum = y)
 resample(rec, model = GBMModel)
 ```
 

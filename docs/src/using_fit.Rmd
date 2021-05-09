@@ -63,7 +63,7 @@ As a special case of type-specific arguments, existing response variables to be 
 
 ```{r using_fit_modelinfo_response}
 ## Models for a responses variable
-modelinfo(Surv(surv_df$time, surv_df$status)) %>% names
+modelinfo(surv_df$y) %>% names
 ```
 
 
