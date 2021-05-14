@@ -105,13 +105,6 @@ MLModel <- function(
 
   stopifnot(response_types %in% settings("response_types"))
 
-  if (is.function(gridinfo)) {
-    throw(DeprecatedCondition("Argument 'grid' to MLModel()",
-                              "argument 'gridinfo' with a tibble",
-                              expired = Sys.Date() >= "2021-04-15"))
-    gridinfo <- new_gridinfo()
-  }
-
   new("MLModel",
       name = name,
       label = label,
