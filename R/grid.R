@@ -10,7 +10,6 @@
 #'   \code{random = Inf} will include all values of all grid parameters in the
 #'   constructed grid, whereas \code{random = FALSE} will include all values of
 #'   default grid parameters.
-#' @param length deprecated argument; use \code{size} instead.
 #'
 #' @details
 #' Returned \code{Grid} objects may be supplied to \code{\link{TunedModel}} for
@@ -24,14 +23,7 @@
 #' @examples
 #' TunedModel(GBMModel, grid = Grid(10, random = 5))
 #'
-Grid <- function(size = 3, random = FALSE, length = NULL) {
-  if (!is.null(length)) {
-    throw(DeprecatedCondition("Argument 'length' to Grid()",
-                              "argument 'size'",
-                              expired = Sys.Date() >= "2021-04-15"))
-    size <- length
-  }
-
+Grid <- function(size = 3, random = FALSE) {
   if (length(size) && all(is.finite(size))) {
     storage.mode(size) <- "integer"
     if (any(size < 0)) {
@@ -72,7 +64,6 @@ Grid <- function(size = 3, random = FALSE, length = NULL) {
 #'   construct the grid.
 #' @param random number of unique points to sample at random from the grid
 #'   defined by \code{size}, or \code{FALSE} for all points.
-#' @param length deprecated argument; use \code{size} instead.
 #'
 #' @return \code{ParameterGrid} class object that inherits from
 #' \code{parameters} and \code{Grid}.
@@ -95,32 +86,21 @@ ParameterGrid <- function(...) {
 
 #' @rdname ParameterGrid
 #'
-ParameterGrid.param <- function(..., size = 3, random = FALSE, length = NULL) {
-  ParameterGrid(list(...), size = size, random = random, length = length)
+ParameterGrid.param <- function(..., size = 3, random = FALSE) {
+  ParameterGrid(list(...), size = size, random = random)
 }
 
 
 #' @rdname ParameterGrid
 #'
-ParameterGrid.list <- function(
-  x, size = 3, random = FALSE, length = NULL, ...
-) {
-  ParameterGrid(parameters(x), size = size, random = random, length = length)
+ParameterGrid.list <- function(x, size = 3, random = FALSE, ...) {
+  ParameterGrid(parameters(x), size = size, random = random)
 }
 
 
 #' @rdname ParameterGrid
 #'
-ParameterGrid.parameters <- function(
-  x, size = 3, random = FALSE, length = NULL, ...
-) {
-  if (!is.null(length)) {
-    throw(DeprecatedCondition("Argument 'length' to ParameterGrid()",
-                              "argument 'size'",
-                              expired = Sys.Date() >= "2021-04-15"))
-    size <- length
-  }
-
+ParameterGrid.parameters <- function(x, size = 3, random = FALSE, ...) {
   grid <- Grid(size = size, random = random)
 
   size <- grid@size

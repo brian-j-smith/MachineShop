@@ -4,7 +4,7 @@
 \alias{Grid}
 \title{Tuning Grid Control}
 \usage{
-Grid(size = 3, random = FALSE, length = NULL)
+Grid(size = 3, random = FALSE)
 }
 \arguments{
 \item{size}{single integer or vector of integers whose positions or names
@@ -16,8 +16,6 @@ defined by \code{size}.  If \code{size} is a single unnamed integer, then
 \code{random = Inf} will include all values of all grid parameters in the
 constructed grid, whereas \code{random = FALSE} will include all values of
 default grid parameters.}
-
-\item{length}{deprecated argument; use \code{size} instead.}
 }
 \value{
 \code{Grid} class object.
