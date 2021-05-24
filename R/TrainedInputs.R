@@ -113,7 +113,7 @@ SelectedInput.ModelFrame <- function(
 
   names(inputs) <- make_list_names(inputs, "ModelFrame")
   data <- NULL
-  for (i in seq(inputs)) {
+  for (i in seq_along(inputs)) {
     data <- combine_dataframes(as.data.frame(inputs[[i]]), data)
   }
 
@@ -135,7 +135,7 @@ SelectedInput.recipe <- function(
 
   inputs <- list(...)
 
-  for (i in seq(inputs)) inputs[[i]] <- ModelRecipe(inputs[[i]])
+  for (i in seq_along(inputs)) inputs[[i]] <- ModelRecipe(inputs[[i]])
 
   get_info <- function(x) {
     info <- summary(x)
@@ -150,7 +150,7 @@ SelectedInput.recipe <- function(
 
   names(inputs) <- make_list_names(inputs, "Recipe")
   data <- NULL
-  for (i in seq(inputs)) {
+  for (i in seq_along(inputs)) {
     data <- combine_dataframes(as.data.frame(inputs[[i]]), data)
     inputs[[i]] <- recipe(inputs[[i]], tibble())
   }
@@ -195,7 +195,7 @@ SelectedInput.list <- function(x, ...) {
   )
   train_step <- resample_selection(inputs, update_input, x@params, ...,
                                    class = "SelectedInput")
-  train_step$grid <- tibble(Input = factor(seq(inputs)))
+  train_step$grid <- tibble(Input = factor(seq_along(inputs)))
   names(train_step$grid) <- grid_name
   input <- update_input(inputs[[train_step$selected]])
   push(do.call(TrainStep, train_step), fit(input, ...))

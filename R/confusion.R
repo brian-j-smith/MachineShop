@@ -164,7 +164,7 @@ setMethod(".confusion_matrix", c("Surv", "SurvEvents"),
         conf_tbl[2, 2] <- (1 - pos_pred$surv) * pos_pred$p
 
         ConfusionMatrix(length(observed) * conf_tbl)
-      }, 1:length(times)),
+      }, seq_along(times)),
       names = paste0("time", seq_along(times))
     )
 

@@ -55,7 +55,7 @@ c.ConfusionList <- function(...) {
   if (all(map_logi(is_valid, args))) {
 
     conf_list <- list()
-    for (i in seq(args)) {
+    for (i in seq_along(args)) {
       x <- args[[i]]
       if (is(x, "ConfusionMatrix")) x <- list("Model" = x)
       arg_name <- names(args)[i]
@@ -115,7 +115,7 @@ c.ListOf <- function(...) {
   }
   if (all(map_logi(is_valid, args))) {
     x <- list()
-    for (i in seq(args)) {
+    for (i in seq_along(args)) {
       name <- names(args)[i]
       if (!is.null(name) && nzchar(name)) {
         names(args[[i]]) <- rep(name, length(args[[i]]))

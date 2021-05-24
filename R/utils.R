@@ -200,7 +200,7 @@ list_to_function <- function(x) {
   if (is(x, "vector")) {
     x <- as.list(x)
     metric_names <- character()
-    for (i in seq(x)) {
+    for (i in seq_along(x)) {
       if (is(x[[i]], "character")) {
         metric_name <- x[[i]]
         x[[i]] <- fget(metric_name)
@@ -228,7 +228,7 @@ list_to_function <- function(x) {
 make_list_names <- function(x, prefix) {
   old_names <- names(x)
   names(x) <- if (length(x)) {
-    if (length(x) > 1) paste0(prefix, ".", seq(x)) else prefix
+    if (length(x) > 1) paste0(prefix, ".", seq_along(x)) else prefix
   }
   if (!is.null(old_names)) {
     keep <- nzchar(old_names)
@@ -368,7 +368,7 @@ push.TrainStep <- function(x, object, ...) {
   stopifnot(is(object, "MLModelFit"))
   mlmodel <- if (isS4(object)) object@mlmodel else object$mlmodel
   train_steps <- ListOf(c(x, mlmodel@train_steps))
-  names(train_steps) <- paste0("TrainStep", seq(train_steps))
+  names(train_steps) <- paste0("TrainStep", seq_along(train_steps))
   if (isS4(object)) {
     object@mlmodel@train_steps <- train_steps
   } else {
@@ -421,7 +421,7 @@ sample_params <- function(x, size = NULL, replace = FALSE) {
   n <- length(x)
   if (n == 0) return(tibble())
 
-  var_names <- paste0("Var", seq(x))
+  var_names <- paste0("Var", seq_along(x))
   x_names <- names(x)
   if (!is.null(x_names)) {
     is_nzchar <- nzchar(x_names)
@@ -515,7 +515,7 @@ seq_nvars <- function(x, model, length) {
 set_model_names <- function(x) {
   name <- "Model"
   level_names <- list()
-  for (i in seq(x)) {
+  for (i in seq_along(x)) {
     if (is.null(x[[i]][[name]])) x[[i]][[name]] <- rep(name, nrow(x[[i]]))
     x[[i]][[name]] <- as.factor(x[[i]][[name]])
     arg_name <- names(x)[i]
@@ -527,7 +527,7 @@ set_model_names <- function(x) {
   }
   level_names <- level_names %>% unlist %>% make.unique %>% relist(level_names)
 
-  for (i in seq(x)) levels(x[[i]][[name]]) <- level_names[[i]]
+  for (i in seq_along(x)) levels(x[[i]][[name]]) <- level_names[[i]]
 
   x
 }

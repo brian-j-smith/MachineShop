@@ -37,7 +37,7 @@ StackedModel <- function(
 
   base_learners <- ListOf(map(get_MLModel, unlist(list(...))))
   names(base_learners) <- paste0(if (length(base_learners)) "Learner",
-                                 seq(base_learners))
+                                 seq_along(base_learners))
 
   control <- get_MLControl(control)
 
@@ -94,7 +94,7 @@ MLModelFunction(StackedModel) <- NULL
 
 .predict.StackedModel <- function(x, object, newdata, ...) {
   pred <- 0
-  for (i in seq(object$base_fits)) {
+  for (i in seq_along(object$base_fits)) {
     base_pred <- predict(object$base_fits[[i]], newdata = newdata,
                          times = object$times, type = "prob")
     pred <- pred + object$weights[i] * base_pred
@@ -105,7 +105,7 @@ MLModelFunction(StackedModel) <- NULL
 
 mean_stack_list <- function(x, weights) {
   pred <- 0
-  for (i in seq(x)) pred <- pred + weights[i] * x[[i]]$Predicted
+  for (i in seq_along(x)) pred <- pred + weights[i] * x[[i]]$Predicted
   res <- x[[1]]
   res$Predicted <- pred
   mean(stack_loss(res$Observed, res$Predicted, res), na.rm = TRUE)

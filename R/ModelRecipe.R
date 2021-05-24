@@ -31,7 +31,7 @@ ModelRecipe.recipe <- function(object, ...) {
   object$term_info <- rbind(object$term_info, cases_info)
   object$template[[cases_name]] <- rownames(object$template)
 
-  for (i in seq(object$steps)) {
+  for (i in seq_along(object$steps)) {
     step_terms <- object$steps[[i]]$terms
     environment(cases_fo) <- environment(step_terms[[1]])
     new_term <- rlang::as_quosure(cases_fo)
@@ -113,7 +113,7 @@ recipe.ModelRecipe <- function(x, data, ...) {
 
 update.recipe <- function(object, ...) {
   args <- list(...)
-  for (i in seq(object$steps)) {
+  for (i in seq_along(object$steps)) {
     step <- object$steps[[i]]
     params <- args[[step$id]]
     if (!is.null(params)) {

@@ -42,7 +42,7 @@ expand_model <- function(x, ..., random = FALSE) {
 .expand_model.list <- function(x, ...) {
   grid <- x[[2]]
   models <- map(function(args) do.call(x[[1]], args),
-                split(grid, seq(max(1, nrow(grid)))))
+                split(grid, seq_len(max(1, nrow(grid)))))
   names(models) <- paste0(models[[1]]@name, ".", names(models))
   models
 }
@@ -338,7 +338,7 @@ expand_steps <- function(..., random = FALSE) {
   get_names <- function(x) {
     res <- NULL
     if (is.list(x)) {
-      for (i in seq(x)) {
+      for (i in seq_along(x)) {
         name <- names(x[i])
         if (is.null(name)) name <- ""
         res <- c(res, name, get_names(x[[i]]))

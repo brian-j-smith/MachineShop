@@ -43,7 +43,7 @@ SelectedModel <- function(
 
   models <- as.list(unlist(list(...)))
   model_names <- character()
-  for (i in seq(models)) {
+  for (i in seq_along(models)) {
     models[[i]] <- get_MLModel(models[[i]])
     name <- names(models)[i]
     model_names[i] <-
@@ -72,7 +72,7 @@ MLModelFunction(SelectedModel) <- NULL
   models <- x@params$models
   train_step <- resample_selection(models, identity, x@params, inputs,
                                    class = "SelectedModel")
-  train_step$grid <- tibble(Model = factor(seq(models)))
+  train_step$grid <- tibble(Model = factor(seq_along(models)))
   model <- models[[train_step$selected]]
   push(do.call(TrainStep, train_step), fit(inputs, model = model))
 }

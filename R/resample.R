@@ -183,7 +183,7 @@ Resamples.list <- function(object, ...) {
     )
   }
 
-  foreach(i = seq(splits),
+  foreach(i = seq_along(splits),
           .packages = settings("require"),
           .verbose = settings("resample_verbose"),
           .options.snow = snow_opts) %dopar% {
@@ -233,7 +233,7 @@ Resamples.list <- function(object, ...) {
     )
   }
 
-  df_list <- foreach(i = seq(splits),
+  df_list <- foreach(i = seq_along(splits),
                      .packages = settings("require"),
                      .verbose = settings("resample_verbose"),
                      .options.snow = snow_opts) %dopar% {
@@ -254,10 +254,10 @@ Resamples.list <- function(object, ...) {
   if (is_optimism_control) {
     pred_list <- map(attr, df_list, "CV.Predicted")
     split_factor <- rep(seq_len(object@folds), times = object@repeats)
-    df <- split(seq(pred_list), split_factor) %>%
+    df <- split(seq_along(pred_list), split_factor) %>%
       map(function(indices) do.call(append, pred_list[indices]), .) %>%
       as.data.frame
-    names(df) <- paste0("CV.Predicted.", seq(df))
+    names(df) <- paste0("CV.Predicted.", seq_along(df))
     pred <- subsample(x, x, model, object)$Predicted
     df$Train.Predicted <- do.call(append, rep(list(pred), object@repeats))
     res[names(df)] <- df
@@ -288,7 +288,7 @@ Resamples.list <- function(object, ...) {
     )
   }
 
-  foreach(i = seq(splits),
+  foreach(i = seq_along(splits),
           .packages = settings("require"),
           .verbose = settings("resample_verbose"),
           .options.snow = snow_opts) %dopar% {

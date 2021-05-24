@@ -43,7 +43,7 @@ SuperModel <- function(
 
   base_learners <- ListOf(map(get_MLModel, unlist(list(...))))
   names(base_learners) <- paste0(if (length(base_learners)) "Learner",
-                                 seq(base_learners))
+                                 seq_along(base_learners))
 
   control <- get_MLControl(control)
 
@@ -111,7 +111,7 @@ MLModelFunction(SuperModel) <- NULL
 
 
 super_df <- function(y, predictors, case_names = NULL, data = NULL) {
-  names(predictors) <- make.names(seq(predictors))
+  names(predictors) <- make.names(seq_along(predictors))
   df <- data.frame(y = y, unnest(as.data.frame(predictors)))
 
   if (!is.null(data)) {

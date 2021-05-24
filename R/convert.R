@@ -47,7 +47,7 @@ setMethod("convert_prob", c("matrix", "matrix"),
     stopifnot(ncol(object) == ncol(x))
     var_names <- colnames(x)
     if (is.null(var_names)) var_names <- colnames(object)
-    if (is.null(var_names)) var_names <- paste0("y", seq(ncol(x)))
+    if (is.null(var_names)) var_names <- paste0("y", seq_len(ncol(x)))
     structure(x, dimnames = list(NULL, var_names))
   }
 )

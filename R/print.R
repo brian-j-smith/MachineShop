@@ -755,9 +755,9 @@ print_items.list <- function(x, n = Inf, n_extra = 10 * n, ...) {
 
 
 print_items.listof <- function(x, n = Inf, n_extra = 10 * n, ...) {
-  inds <- head(seq(x), n)
+  inds <- head(seq_along(x), n)
   x_names <- names(x)
-  if (is.null(x_names)) x_names <- paste("Component", seq(x))
+  if (is.null(x_names)) x_names <- paste("Component", seq_along(x))
   vsep <- strrep("-", 0.75 * getOption("width"))
   for (i in inds) {
     cat(x_names[i], ":\n")

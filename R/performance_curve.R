@@ -199,7 +199,7 @@ setMethod(".curve_default", c("factor", "numeric"),
   function(observed, predicted, metrics, ...) {
     cutoffs <- c(-Inf, unique(predicted))
     x <- y <- numeric(length(cutoffs))
-    for (i in 1:length(cutoffs)) {
+    for (i in seq_along(cutoffs)) {
       conf <- confusion(observed, predicted, cutoff = cutoffs[i])
       x[i] <- metrics[[2]](conf)
       y[i] <- metrics[[1]](conf)
@@ -223,7 +223,7 @@ setMethod(".curve_default", c("Surv", "SurvProbs"),
         cutoffs <- c(-Inf, unique(pred))
         x <- y <- numeric(length(cutoffs))
 
-        for (j in 1:length(cutoffs)) {
+        for (j in seq_along(cutoffs)) {
           pos <- pred <= cutoffs[j]
           pos_pred <- surv_subset(observed, pos, time)
           neg_pred <- surv_subset(observed, !pos, time)
@@ -239,7 +239,7 @@ setMethod(".curve_default", c("Surv", "SurvProbs"),
 
         PerformanceCurve(data.frame(Cutoff = cutoffs, x = x, y = y),
                          metrics = metrics)
-      }, 1:length(times)),
+      }, seq_along(times)),
       class = "listof",
       names = paste0("time", seq_along(times))
     )
