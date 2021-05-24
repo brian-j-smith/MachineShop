@@ -52,12 +52,10 @@ setMetricMethod("auc", c("factor", "numeric"),
 setMetricMethod("auc", c("PerformanceCurve", "NULL"),
   function(observed, predicted, stat, ...) {
     observed <- summary(observed, stat = stat)
-    indices <- observed["Model"]
-    indices$Resample <- observed$Resample
-    by(observed, indices, function(split) {
-      split <- na.omit(split)
-      n <- nrow(split)
-      if (n > 1) with(split, sum(diff(x) * (y[-n] + y[-1]) / 2)) else NA
+    by(observed, observed["Model"], function(curve) {
+      curve <- na.omit(curve)
+      n <- nrow(curve)
+      if (n) sum(diff(curve$x) * (curve$y[-n] + curve$y[-1]) / 2) else NA
     })
   }
 )
