@@ -112,7 +112,7 @@ plot.ConfusionList <- function(x, ...) {
 #'
 plot.ConfusionMatrix <- function(x, ...) {
   df <- as.data.frame(prop.table(as(x, "table")), responseName = "Value")
-  df$Predicted <- with(df, factor(Predicted, rev(levels(Predicted))))
+  df$Predicted <- factor(df$Predicted, rev(levels(df$Predicted)))
   ggplot(df, aes_(~ Observed, ~ Predicted, fill = ~ Value)) +
     geom_raster() +
     labs(fill = "Probability") +
