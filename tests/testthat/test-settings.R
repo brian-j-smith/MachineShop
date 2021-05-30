@@ -38,7 +38,7 @@ test_that("settings changes and views", {
   expect_s4_class(settings("grid"), "Grid")
   expect_error(settings(grid = character()))
 
-  new_value <- "fleming-harrington"
+  new_value <- "breslow"
   expect_type(settings(method.EmpiricalSurv = substr(new_value, 1, 3)), "list")
   expect_identical(settings("method.EmpiricalSurv"), new_value)
   expect_error(settings(method.EmpiricalSurv = character()))

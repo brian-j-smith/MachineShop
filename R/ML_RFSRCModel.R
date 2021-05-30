@@ -130,7 +130,7 @@ RFSRCModel <- function(
       randomForestSRC::rfsrc(formula, data = data, na.action = "na.impute",
                              case.wt = weights, ...)
     },
-    predict = function(object, newdata, model, times, ...) {
+    predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)
       pred <- randomForestSRC::predict.rfsrc(object, newdata = newdata)
       if (pred$family == "regr+") {
@@ -138,7 +138,7 @@ RFSRCModel <- function(
         names(y_names) <- sub("_.*", "", y_names)
         map_simplify(function(name) pred$regrOutput[[name]]$predicted, y_names)
       } else if (pred$family == "surv") {
-        predict(Surv(pred$time.interest), pred$survival, times, ...)
+        predict(Surv(pred$time.interest), pred$survival, ...)
       } else {
         pred$predicted
       }

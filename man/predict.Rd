@@ -40,8 +40,7 @@ of \code{"empirical"} for predicted survival events/probabilities and
 
 \item{method}{character string specifying the empirical method of estimating
 baseline survival curves for Cox proportional hazards-based models.
-Choices are \code{"breslow"}, \code{"efron"} (default), or
-\code{"fleming-harrington"}.}
+Choices are \code{"breslow"} or \code{"efron"} (default).}
 
 \item{...}{arguments passed to model-specific prediction functions.}
 }

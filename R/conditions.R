@@ -135,6 +135,16 @@ check_assignment <- function(x, value = x) {
 }
 
 
+check_censoring <- function(x, types, ...) {
+  type <- attr(x, "type")
+  if (!(type %in% types)) {
+    types <- paste0("'", types, "'")
+    Error("Expected survival data censoring type to be ",
+          toString(types, conj = "or"), "; got '", type, "' instead.")
+  } else x
+}
+
+
 check_const_setting <- function(x, name) {
   if (!identical(x, x <- .global_defaults[[name]])) {
     throw(LocalWarning("MachineShop '", name, "' setting cannot be changed."))

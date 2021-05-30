@@ -145,6 +145,11 @@ identical_elements <- function(x, transform = identity, ...) {
 }
 
 
+is_counting <- function(x) {
+  isTRUE(attr(x, "type") == "counting")
+}
+
+
 is_one_element <- function(x, class) {
   length(x) == 1 && is(x[[1]], class)
 }

@@ -30,7 +30,7 @@ test_predict_all <- function(..., model) {
     output(obs, predict(model_fit, times = times, type = "prob", dist = dist))
   }
 
-  for (method in c("bre", "efr", "fle")) {
+  for (method in c("bre", "efr")) {
     cat("\nPredicted means (method = ", method, ")\n", sep = "")
     output(obs, predict(model_fit, method = method))
     cat("\nPredicted probabilities (method = ", method, ")\n", sep = "")
@@ -53,7 +53,7 @@ verify_output(test_path("test-survival.txt"), {
   skip_if_not(TEST_ALL)
   set.seed(123)
   cat("Recipe Specification", "\n")
-  test_predict_all(rec, model = "CoxModel")
+  test_predict_all(rec, model = CoxModel())
   cat("Formula Specification", "\n")
   models <- c(CoxModel(), GBMModel(), CForestModel(), SurvRegModel(),
               XGBDARTModel(), XGBLinearModel(updater = "coord_descent"),

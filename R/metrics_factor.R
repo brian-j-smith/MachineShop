@@ -74,7 +74,7 @@ setMetricMethod("auc", c("Surv", "SurvProbs"),
     x <- unname(auc(performance_curve(observed, predicted, metrics = metrics)))
     times <- predicted@times
     if (length(times) > 1) {
-      c("mean" = surv_metric_mean(x, times), "time" = x)
+      c("mean" = survmetric_mean(x, times), "time" = x)
     } else {
       x
     }
@@ -118,21 +118,23 @@ setMetricMethod_Resamples("brier")
 setMetricMethod("brier", c("Surv", "SurvProbs"),
   function(observed, predicted, ...) {
     times <- predicted@times
-    obs_times <- observed[, "time"]
-    obs_events <- observed[, "status"]
 
-    cens_fit <- survfit(Surv(obs_times, 1 - obs_events) ~ 1, se.fit = FALSE)
+    observed[, "status"] <- 1 - observed[, "status"]
+    cens_fit <- survfit(observed ~ 1, stype = 2, se.fit = FALSE)
 
+    start_time <- function(x) if (is_counting(x)) x[, "start"] else -Inf
     x <- map_num(function(i) {
       time <- times[i]
-      obs_after_time <- obs_times > time
-      cens <- predict(cens_fit, pmin(obs_times, time))
-      weights <- ifelse(obs_events == 1 | obs_after_time, 1 / cens, 0)
-      mean(weights * (obs_after_time - predicted[, i, drop = TRUE])^2)
+      start_by <- start_time(observed) <= time
+      stop_after <- time(observed) > time
+      known_status <- start_by & (observed[, "status"] == 0 | stop_after)
+      cens <- predict(cens_fit, pmin(time(observed), time))
+      weights <- prop.table(ifelse(known_status, 1 / cens, 0))
+      sum(weights * (stop_after - predicted[, i, drop = TRUE])^2)
     }, seq_along(times))
 
     if (length(times) > 1) {
-      c("mean" = surv_metric_mean(x, times), "time" = x)
+      c("mean" = survmetric_mean(x, times), "time" = x)
     } else {
       x
     }

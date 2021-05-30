@@ -56,7 +56,7 @@ TreeModel <- function(
         tree::prune.tree(model_fit, k = k, best = best, method = method)
       } else model_fit
     },
-    predict = function(object, newdata, times, ...) {
+    predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata)
     }

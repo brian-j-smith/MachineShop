@@ -106,8 +106,9 @@ XGBModel <- function(
                       "reg:tweedie", "rank:pairwise", "rank:ndcg", "rank:map"),
         "PoissonVariate" = "count:poisson",
         "Surv" = {
+          throw(check_censoring(y, "right"))
           y_time <- y[, "time"]
-          y_event <- y[, "status"] != 0
+          y_event <- y[, "status"] == 1
           c("survival:cox", "survival:aft")
         }
       )
@@ -158,7 +159,7 @@ XGBModel <- function(
           x <- model.matrix(predictor_frame(model), intercept = FALSE)
           lp <- log(predict(object, newdata = x))
           new_lp <- log(pred)
-          predict(response(model), lp, times, new_lp, ...)
+          predict(response(model), lp, new_lp, times = times, ...)
         },
         pred
       )

@@ -90,11 +90,11 @@ RangerModel <- function(
                      case.weights = weights,
                      probability = is(response(data), "factor"), ...)
     },
-    predict = function(object, newdata, times, ...) {
+    predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
       pred <- predict(object, data = newdata)
       if (!is.null(object$survival)) {
-        predict(Surv(pred$unique.death.times), pred$survival, times, ...)
+        predict(Surv(pred$unique.death.times), pred$survival, ...)
       } else {
         pred$predictions
       }

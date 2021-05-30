@@ -3,41 +3,31 @@
 > cat("Recipe Specification", "\n")
 Recipe Specification 
 
-> test_predict_all(rec, model = "CoxModel")
-Error in cat("Model:", model@name, "\n"): trying to get slot "name" from an object of a basic class ("character") with no slots
-
-> cat("Formula Specification", "\n")
-Formula Specification 
-
-> models <- c(CoxModel(), GBMModel(), CForestModel(), SurvRegModel(),
-+ XGBDARTModel(), XGBLinearModel(updater = "coord_descent"), XGBTreeModel())
-> for (model in models) {
-+   test_predict_all(fo, df, model = model)
-+ }
+> test_predict_all(rec, model = CoxModel())
 Model: CoxModel 
 
 Predicted means (dist = emp)
-[1] 1691.819 4244.164 5076.745 4060.599 1077.598 3757.654
+[1] 1645.164 4220.353 5067.247 4033.989 1032.844 3726.738
   C-Index 
 0.7370791 
 
 Predicted probabilities (dist = emp)
 Object of class "SurvProbs"
         Time 1    Time 2     Time 3
-[1,] 0.7237020 0.3167701 0.09919981
-[2,] 0.9421105 0.8089726 0.65305497
-[3,] 0.9805260 0.9324761 0.86890577
-[4,] 0.9325183 0.7800707 0.60700535
-[5,] 0.5858046 0.1494089 0.02190389
-[6,] 0.9155684 0.7308250 0.53243790
+[1,] 0.7007254 0.3067131 0.09605034
+[2,] 0.9365220 0.8041738 0.64918106
+[3,] 0.9786040 0.9306482 0.86720254
+[4,] 0.9260406 0.7746520 0.60278882
+[5,] 0.5553683 0.1416462 0.02076585
+[6,] 0.9075460 0.7244213 0.52777255
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.16782376     0.07594167     0.16028806     0.20909803     0.77835364 
+    0.16795423     0.07537472     0.16062520     0.20938345     0.77835364 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.82155187     0.77578548     0.76261524     0.76538208     0.90200218 
+    0.82155188     0.77578548     0.76261524     0.76338256     0.90690244 
 Accuracy.time2 Accuracy.time3 
-    0.79198759     0.69477073 
+    0.78205568     0.69477073 
 
 Predicted means (dist = exp)
 [1]  1626.1482  8818.2639 26739.2056  7526.5948   983.3342  5961.4068
@@ -56,9 +46,9 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.16759400     0.07512318     0.16010622     0.20907499     0.77835364 
+    0.16776313     0.07512325     0.16016220     0.20937964     0.77835364 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.82155187     0.77578548     0.76261524     0.74755811     0.90694375 
+    0.82155188     0.77578548     0.76261524     0.74755811     0.90694375 
 Accuracy.time2 Accuracy.time3 
     0.78708715     0.66008642 
 
@@ -79,9 +69,9 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.21457210     0.09759468     0.21562627     0.26073057     0.77835364 
+    0.21550209     0.09759478     0.21576571     0.26250684     0.77835364 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.82155187     0.77578548     0.76261524     0.70315461     0.89710215 
+    0.82155188     0.77578548     0.76261524     0.70315461     0.89710215 
 Accuracy.time2 Accuracy.time3 
     0.73226261     0.60811080 
 
@@ -102,9 +92,9 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.16759557     0.07502917     0.15991290     0.20923172     0.77835364 
+    0.16779907     0.07502924     0.15997392     0.20960209     0.77835364 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.82155187     0.77578548     0.76261524     0.74300723     0.90202231 
+    0.82155188     0.77578548     0.76261524     0.74300723     0.90202231 
 Accuracy.time2 Accuracy.time3 
     0.77238731     0.66177315 
 
@@ -125,9 +115,9 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.16782305     0.07537734     0.16057073     0.20915272     0.77835364 
+    0.16795403     0.07537741     0.16062322     0.20938317     0.77835364 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.82155187     0.77578548     0.76261524     0.76338256     0.90690244 
+    0.82155188     0.77578548     0.76261524     0.76338256     0.90690244 
 Accuracy.time2 Accuracy.time3 
     0.78205568     0.69477073 
 
@@ -139,43 +129,20 @@ Predicted means (method = efr)
 Predicted probabilities (method = efr)
 Object of class "SurvProbs"
         Time 1    Time 2     Time 3
-[1,] 0.7237020 0.3167701 0.09919981
-[2,] 0.9421105 0.8089726 0.65305497
-[3,] 0.9805260 0.9324761 0.86890577
-[4,] 0.9325183 0.7800707 0.60700535
-[5,] 0.5858046 0.1494089 0.02190389
-[6,] 0.9155684 0.7308250 0.53243790
+[1,] 0.7007254 0.3067131 0.09605034
+[2,] 0.9365220 0.8041738 0.64918106
+[3,] 0.9786040 0.9306482 0.86720254
+[4,] 0.9260406 0.7746520 0.60278882
+[5,] 0.5553683 0.1416462 0.02076585
+[6,] 0.9075460 0.7244213 0.52777255
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.16782376     0.07594167     0.16028806     0.20909803     0.77835364 
+    0.16795423     0.07537472     0.16062520     0.20938345     0.77835364 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.82155187     0.77578548     0.76261524     0.76538208     0.90200218 
+    0.82155188     0.77578548     0.76261524     0.76338256     0.90690244 
 Accuracy.time2 Accuracy.time3 
-    0.79198759     0.69477073 
-
-Predicted means (method = fle)
-[1]  1721.472  8557.779 24510.308  7364.007  1068.259  5902.986
-  C-Index 
-0.7370791 
-
-Predicted probabilities (method = fle)
-Object of class "SurvProbs"
-        Time 1    Time 2     Time 3
-[1,] 0.6967490 0.3049726 0.09550529
-[2,] 0.9355397 0.8033303 0.64850015
-[3,] 0.9782653 0.9303262 0.86690247
-[4,] 0.9249028 0.7737001 0.60204813
-[5,] 0.5501663 0.1403194 0.02057134
-[6,] 0.9061383 0.7232976 0.52695390
-Times:
-[1]  730 1825 3650
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.16783248     0.07530228     0.16063049     0.20916575     0.77835364 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.82155187     0.77578548     0.76261524     0.76486220     0.90690244 
-Accuracy.time2 Accuracy.time3 
-    0.78698781     0.69477073 
+    0.78205568     0.69477073 
 
 Predicted events: 
 Object of class "SurvEvents"
@@ -189,31 +156,193 @@ Object of class "SurvEvents"
 Times:
 [1]  730 1825 3650
  Accuracy.mean Accuracy.time1 Accuracy.time2 Accuracy.time3 
-     0.7653821      0.9020022      0.7919876      0.6947707 
+     0.7633826      0.9069024      0.7820557      0.6947707 
+
+> cat("Formula Specification", "\n")
+Formula Specification 
+
+> models <- c(CoxModel(), GBMModel(), CForestModel(), SurvRegModel(),
++ XGBDARTModel(), XGBLinearModel(updater = "coord_descent"), XGBTreeModel())
+> for (model in models) {
++   test_predict_all(fo, df, model = model)
++ }
+Model: CoxModel 
+
+Predicted means (dist = emp)
+[1] 1645.164 4220.353 5067.247 4033.989 1032.844 3726.738
+  C-Index 
+0.7370791 
+
+Predicted probabilities (dist = emp)
+Object of class "SurvProbs"
+        Time 1    Time 2     Time 3
+[1,] 0.7007254 0.3067131 0.09605034
+[2,] 0.9365220 0.8041738 0.64918106
+[3,] 0.9786040 0.9306482 0.86720254
+[4,] 0.9260406 0.7746520 0.60278882
+[5,] 0.5553683 0.1416462 0.02076585
+[6,] 0.9075460 0.7244213 0.52777255
+Times:
+[1]  730 1825 3650
+    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    0.16795423     0.07537472     0.16062520     0.20938345     0.77835364 
+ ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+    0.82155188     0.77578548     0.76261524     0.76338256     0.90690244 
+Accuracy.time2 Accuracy.time3 
+    0.78205568     0.69477073 
+
+Predicted means (dist = exp)
+[1]  1626.1482  8818.2639 26739.2056  7526.5948   983.3342  5961.4068
+  C-Index 
+0.7370791 
+
+Predicted probabilities (dist = exp)
+Object of class "SurvProbs"
+        Time 1    Time 2     Time 3
+[1,] 0.6383213 0.3255354 0.10597332
+[2,] 0.9205511 0.8130547 0.66105802
+[3,] 0.9730686 0.9340252 0.87240311
+[4,] 0.9075656 0.7846845 0.61572979
+[5,] 0.4759834 0.1563074 0.02443201
+[6,] 0.8847463 0.7362866 0.54211800
+Times:
+[1]  730 1825 3650
+    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    0.16776313     0.07512325     0.16016220     0.20937964     0.77835364 
+ ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+    0.82155188     0.77578548     0.76261524     0.74755811     0.90694375 
+Accuracy.time2 Accuracy.time3 
+    0.78708715     0.66008642 
+
+Predicted means (dist = ray)
+[1]  3510.491  8174.841 14235.149  7552.436  2729.847  6721.437
+  C-Index 
+0.7370791 
+
+Predicted probabilities (dist = ray)
+Object of class "SurvProbs"
+        Time 1    Time 2    Time 3
+[1,] 0.9666077 0.8087497 0.4278156
+[2,] 0.9937566 0.9616129 0.8550691
+[3,] 0.9979367 0.9871740 0.9496746
+[4,] 0.9926891 0.9551749 0.8323992
+[5,] 0.9453840 0.7039656 0.2455873
+[6,] 0.9907785 0.9437427 0.7932580
+Times:
+[1]  730 1825 3650
+    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    0.21550209     0.09759478     0.21576571     0.26250684     0.77835364 
+ ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+    0.82155188     0.77578548     0.76261524     0.70315461     0.89710215 
+Accuracy.time2 Accuracy.time3 
+    0.73226261     0.60811080 
+
+Predicted means (dist = wei)
+[1]  1721.472  8557.779 24510.308  7364.007  1068.259  5902.986
+  C-Index 
+0.7370791 
+
+Predicted probabilities (dist = wei)
+Object of class "SurvProbs"
+        Time 1    Time 2     Time 3
+[1,] 0.6730275 0.3533327 0.11528186
+[2,] 0.9295828 0.8254333 0.67140149
+[3,] 0.9762067 0.9386912 0.87688143
+[4,] 0.9180067 0.7986996 0.62703249
+[5,] 0.5195369 0.1789896 0.02808187
+[6,] 0.8976167 0.7529288 0.55471236
+Times:
+[1]  730 1825 3650
+    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    0.16779907     0.07502924     0.15997392     0.20960209     0.77835364 
+ ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+    0.82155188     0.77578548     0.76261524     0.74300723     0.90202231 
+Accuracy.time2 Accuracy.time3 
+    0.77238731     0.66177315 
+
+Predicted means (method = bre)
+[1]  1721.472  8557.779 24510.308  7364.007  1068.259  5902.986
+  C-Index 
+0.7370791 
+
+Predicted probabilities (method = bre)
+Object of class "SurvProbs"
+        Time 1    Time 2     Time 3
+[1,] 0.7008656 0.3067745 0.09606956
+[2,] 0.9365565 0.8042035 0.64920501
+[3,] 0.9786159 0.9306596 0.86721309
+[4,] 0.9260807 0.7746855 0.60281488
+[5,] 0.5555521 0.1416930 0.02077272
+[6,] 0.9075955 0.7244608 0.52780135
+Times:
+[1]  730 1825 3650
+    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    0.16795403     0.07537741     0.16062322     0.20938317     0.77835364 
+ ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+    0.82155188     0.77578548     0.76261524     0.76338256     0.90690244 
+Accuracy.time2 Accuracy.time3 
+    0.78205568     0.69477073 
+
+Predicted means (method = efr)
+[1]  1721.472  8557.779 24510.308  7364.007  1068.259  5902.986
+  C-Index 
+0.7370791 
+
+Predicted probabilities (method = efr)
+Object of class "SurvProbs"
+        Time 1    Time 2     Time 3
+[1,] 0.7007254 0.3067131 0.09605034
+[2,] 0.9365220 0.8041738 0.64918106
+[3,] 0.9786040 0.9306482 0.86720254
+[4,] 0.9260406 0.7746520 0.60278882
+[5,] 0.5553683 0.1416462 0.02076585
+[6,] 0.9075460 0.7244213 0.52777255
+Times:
+[1]  730 1825 3650
+    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    0.16795423     0.07537472     0.16062520     0.20938345     0.77835364 
+ ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+    0.82155188     0.77578548     0.76261524     0.76338256     0.90690244 
+Accuracy.time2 Accuracy.time3 
+    0.78205568     0.69477073 
+
+Predicted events: 
+Object of class "SurvEvents"
+     Time 1 Time 2 Time 3
+[1,]      0      1      1
+[2,]      0      0      0
+[3,]      0      0      0
+[4,]      0      0      0
+[5,]      0      1      1
+[6,]      0      0      0
+Times:
+[1]  730 1825 3650
+ Accuracy.mean Accuracy.time1 Accuracy.time2 Accuracy.time3 
+     0.7633826      0.9069024      0.7820557      0.6947707 
 Model: GBMModel 
 
 Predicted means (dist = emp)
-[1] 1551.727 4506.047 5051.206 3303.603 1799.007 2787.876
+[1] 1506.141 4487.006 5041.515 3267.986 1753.445 2747.237
  C-Index 
 0.776006 
 
 Predicted probabilities (dist = emp)
 Object of class "SurvProbs"
         Time 1    Time 2     Time 3
-[1,] 0.6997134 0.2860207 0.07461352
-[2,] 0.9553118 0.8519274 0.71727688
-[3,] 0.9795950 0.9302837 0.86084067
-[4,] 0.8875281 0.6582068 0.42011365
-[5,] 0.7404810 0.3488237 0.11260931
-[6,] 0.8488801 0.5630986 0.30396700
+[1,] 0.6757390 0.2762208 0.07205702
+[2,] 0.9510571 0.8481332 0.71408236
+[3,] 0.9776252 0.9284131 0.85910967
+[4,] 0.8772490 0.6505837 0.41524801
+[5,] 0.7190745 0.3387396 0.10935390
+[6,] 0.8354092 0.5541628 0.29914334
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.15693439     0.07777817     0.15122123     0.19202476     0.81384371 
+    0.15704336     0.07720349     0.15135994     0.19238937     0.81384371 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.85129149     0.82004315     0.79514494     0.79863441     0.89710215 
+    0.85129149     0.82004315     0.79514494     0.80402894     0.89710215 
 Accuracy.time2 Accuracy.time3 
-    0.81562021     0.74905583 
+    0.82542304     0.75396319 
 
 Predicted means (dist = exp)
 [1]  1472.745 11503.125 25508.961  4407.610  1750.324  3209.855
@@ -232,7 +361,7 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.15640894     0.07684867     0.15120754     0.19135389     0.81384371 
+    0.15652364     0.07684873     0.15125603     0.19155417     0.81384371 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
     0.85129149     0.82004315     0.79514494     0.79679016     0.89224170 
 Accuracy.time2 Accuracy.time3 
@@ -255,7 +384,7 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.24085823     0.07756028     0.17614340     0.34500630     0.81384371 
+    0.23978448     0.07756035     0.17614818     0.34285591     0.81384371 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
     0.85129149     0.82004315     0.79514494     0.71880637     0.89710215 
 Accuracy.time2 Accuracy.time3 
@@ -278,7 +407,7 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.15905496     0.07683408     0.15186027     0.19626013     0.81384371 
+    0.15901241     0.07683415     0.15190171     0.19615013     0.81384371 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
     0.85129149     0.82004315     0.79514494     0.78172914     0.89224170 
 Accuracy.time2 Accuracy.time3 
@@ -301,7 +430,7 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.15697887     0.07720501     0.15131357     0.19228760     0.81384371 
+    0.15704310     0.07720508     0.15135948     0.19238847     0.81384371 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
     0.85129149     0.82004315     0.79514494     0.80402894     0.89710215 
 Accuracy.time2 Accuracy.time3 
@@ -315,43 +444,20 @@ Predicted means (method = efr)
 Predicted probabilities (method = efr)
 Object of class "SurvProbs"
         Time 1    Time 2     Time 3
-[1,] 0.6997134 0.2860207 0.07461352
-[2,] 0.9553118 0.8519274 0.71727688
-[3,] 0.9795950 0.9302837 0.86084067
-[4,] 0.8875281 0.6582068 0.42011365
-[5,] 0.7404810 0.3488237 0.11260931
-[6,] 0.8488801 0.5630986 0.30396700
+[1,] 0.6757390 0.2762208 0.07205702
+[2,] 0.9510571 0.8481332 0.71408236
+[3,] 0.9776252 0.9284131 0.85910967
+[4,] 0.8772490 0.6505837 0.41524801
+[5,] 0.7190745 0.3387396 0.10935390
+[6,] 0.8354092 0.5541628 0.29914334
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.15693439     0.07777817     0.15122123     0.19202476     0.81384371 
+    0.15704336     0.07720349     0.15135994     0.19238937     0.81384371 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.85129149     0.82004315     0.79514494     0.79863441     0.89710215 
+    0.85129149     0.82004315     0.79514494     0.80402894     0.89710215 
 Accuracy.time2 Accuracy.time3 
-    0.81562021     0.74905583 
-
-Predicted means (method = fle)
-[1]  1320.098  8308.444 16945.841  3521.042  1540.705  2651.065
- C-Index 
-0.776006 
-
-Predicted probabilities (method = fle)
-Object of class "SurvProbs"
-        Time 1    Time 2     Time 3
-[1,] 0.6712631 0.2743911 0.07157973
-[2,] 0.9502483 0.8474118 0.71347503
-[3,] 0.9772502 0.9280569 0.85878010
-[4,] 0.8753032 0.6491406 0.41432693
-[5,] 0.7150648 0.3368507 0.10874411
-[6,] 0.8328657 0.5524756 0.29823258
-Times:
-[1]  730 1825 3650
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-     0.1569975      0.0771217      0.1513406      0.1923420      0.8138437 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-     0.8512915      0.8200431      0.7951449      0.8040289      0.8971021 
-Accuracy.time2 Accuracy.time3 
-     0.8254230      0.7539632 
+    0.82542304     0.75396319 
 
 Predicted events: 
 Object of class "SurvEvents"
@@ -365,13 +471,13 @@ Object of class "SurvEvents"
 Times:
 [1]  730 1825 3650
  Accuracy.mean Accuracy.time1 Accuracy.time2 Accuracy.time3 
-     0.7986344      0.8971021      0.8156202      0.7490558 
+     0.8040289      0.8971021      0.8254230      0.7539632 
 Model: CForestModel 
 
 Predicted means (dist = emp)
-[1] 2293.102 4164.495 3889.431 3016.459 2039.587 2509.327
+[1] 2004.123 4164.495 3889.431 3016.459 2039.587 2509.327
   C-Index 
-0.8318169 
+0.8186849 
 
 Predicted probabilities (dist = emp)
 Object of class "SurvProbs"
@@ -385,85 +491,85 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.11816701     0.06487156     0.12860832     0.13322040     0.89615760 
+    0.11820534     0.06487162     0.12864794     0.13327326     0.89615760 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.91954158     0.88882891     0.89120122     0.81659927     0.89710215 
+    0.91954158     0.88882892     0.89120122     0.81659927     0.89710215 
 Accuracy.time2 Accuracy.time3 
     0.82282639     0.78066185 
 
 Predicted means (dist = exp)
-[1] 1734.974 8806.515 8118.071 3579.672 1947.817 2622.125
+[1] 1624.509 8647.588 8230.448 3748.636 1922.392 2729.576
   C-Index 
-0.8333015 
+0.8240369 
 
 Predicted probabilities (dist = exp)
 Object of class "SurvProbs"
         Time 1    Time 2    Time 3
-[1,] 0.6565505 0.3492773 0.1219946
-[2,] 0.9204495 0.8128303 0.6606931
-[3,] 0.9140017 0.7986703 0.6378742
-[4,] 0.8155200 0.6006017 0.3607224
-[5,] 0.6874415 0.3918225 0.1535249
-[6,] 0.7569939 0.4985755 0.2485775
+[1,] 0.6380322 0.3251670 0.1057336
+[2,] 0.9190483 0.8097405 0.6556796
+[3,] 0.9151246 0.8011255 0.6418021
+[4,] 0.8230507 0.6145631 0.3776878
+[5,] 0.6840425 0.3869971 0.1497667
+[6,] 0.7653356 0.5124244 0.2625788
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.12516308     0.07424167     0.13243078     0.14117102     0.88302547 
+     0.1279217      0.0775697      0.1378722      0.1420923      0.8745907 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.88172373     0.88364393     0.88317508     0.81219762     0.89556694 
+     0.8780143      0.8745324      0.8732563      0.7988029      0.8906736 
 Accuracy.time2 Accuracy.time3 
-    0.81974144     0.77432360 
+     0.8115388      0.7544132 
 
 Predicted means (dist = ray)
-[1] 1567.973 4702.389 3976.632 2776.029 2036.301 2348.554
+[1] 1469.759 4624.737 4018.136 2850.174 2015.897 2396.763
   C-Index 
-0.8250954 
+0.8157103 
 
 Predicted probabilities (dist = ray)
 Object of class "SurvProbs"
-        Time 1    Time 2     Time 3
-[1,] 0.8434634 0.3450754 0.01417933
-[2,] 0.9812503 0.8884310 0.62300974
-[3,] 0.9738802 0.8475387 0.51598620
-[4,] 0.9471375 0.7121664 0.25723258
-[5,] 0.9039897 0.5321349 0.08018389
-[6,] 0.9269263 0.6223468 0.15001333
+        Time 1    Time 2      Time 3
+[1,] 0.8238632 0.2979163 0.007877299
+[2,] 0.9806215 0.8848791 0.613106326
+[3,] 0.9744100 0.8504249 0.523050770
+[4,] 0.9497827 0.7246891 0.275807991
+[5,] 0.9021351 0.5253485 0.076171071
+[6,] 0.9297316 0.6342126 0.161785467
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.11991114     0.08593789     0.13606893     0.12380577     0.87227122 
+    0.12249199     0.08970935     0.14168015     0.12409215     0.86315698 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.87133378     0.87414331     0.87152294     0.80648341     0.89556694 
+    0.86539654     0.86374579     0.86190788     0.80075640     0.89067358 
 Accuracy.time2 Accuracy.time3 
-    0.79810368     0.77587783 
+    0.78371479     0.77501450 
 
 Predicted means (dist = wei)
-[1]  2275.601 36348.591  3554.363  3823.036  2136.669  2874.755
+[1]  2074.712 29166.253  3532.803  4022.290  2079.824  3020.063
   C-Index 
-0.7924166 
+0.7832604 
 
 Predicted probabilities (dist = wei)
 Object of class "SurvProbs"
         Time 1    Time 2    Time 3
-[1,] 0.5999975 0.3715419 0.1952694
-[2,] 0.8565371 0.7735700 0.6863677
-[3,] 0.9879699 0.8777399 0.4549607
-[4,] 0.8001815 0.5939524 0.3715382
-[5,] 0.6374725 0.3838676 0.1837255
-[6,] 0.7263974 0.4904051 0.2707436
+[1,] 0.5856886 0.3505366 0.1748609
+[2,] 0.8609095 0.7741516 0.6811324
+[3,] 0.9903106 0.8875314 0.4519450
+[4,] 0.8078044 0.6077182 0.3884952
+[5,] 0.6384444 0.3797429 0.1768470
+[6,] 0.7340978 0.5036349 0.2855137
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-     0.1198042      0.0726370      0.1391795      0.1270459      0.8821967 
+    0.12612437     0.07817225     0.14946901     0.13129843     0.86710269 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-     0.9097470      0.8702103      0.8783684      0.8047917      0.8901014 
+    0.90107755     0.85452438     0.86105973     0.78979063     0.88207847 
 Accuracy.time2 Accuracy.time3 
-     0.8045775      0.7707964 
+    0.79667096     0.74874729 
 
 Predicted means (method = bre)
-[1]  2275.601 36348.591  3554.363  3823.036  2136.669  2874.755
+[1]  2074.712 29166.253  3532.803  4022.290  2079.824  3020.063
   C-Index 
-0.7924166 
+0.7832604 
 
 Predicted probabilities (method = bre)
 Object of class "SurvProbs"
@@ -477,16 +583,16 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.11816701     0.06487156     0.12860832     0.13322040     0.89615760 
+    0.11820534     0.06487162     0.12864794     0.13327326     0.89615760 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.91954158     0.88882891     0.89120122     0.81659927     0.89710215 
+    0.91954158     0.88882892     0.89120122     0.81659927     0.89710215 
 Accuracy.time2 Accuracy.time3 
     0.82282639     0.78066185 
 
 Predicted means (method = efr)
-[1]  2275.601 36348.591  3554.363  3823.036  2136.669  2874.755
+[1]  2074.712 29166.253  3532.803  4022.290  2079.824  3020.063
   C-Index 
-0.7924166 
+0.7832604 
 
 Predicted probabilities (method = efr)
 Object of class "SurvProbs"
@@ -500,32 +606,9 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.11816701     0.06487156     0.12860832     0.13322040     0.89615760 
+    0.11820534     0.06487162     0.12864794     0.13327326     0.89615760 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.91954158     0.88882891     0.89120122     0.81659927     0.89710215 
-Accuracy.time2 Accuracy.time3 
-    0.82282639     0.78066185 
-
-Predicted means (method = fle)
-[1]  2275.601 36348.591  3554.363  3823.036  2136.669  2874.755
-  C-Index 
-0.7924166 
-
-Predicted probabilities (method = fle)
-Object of class "SurvProbs"
-        Time 1    Time 2    Time 3
-[1,] 0.5368193 0.3762318 0.3221621
-[2,] 0.9055654 0.8215813 0.6398857
-[3,] 0.9926117 0.8657521 0.4644955
-[4,] 0.8813266 0.6534341 0.3644524
-[5,] 0.6044973 0.3306267 0.2488742
-[6,] 0.7205886 0.4375116 0.3231885
-Times:
-[1]  730 1825 3650
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.11816701     0.06487156     0.12860832     0.13322040     0.89615760 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.91954158     0.88882891     0.89120122     0.81659927     0.89710215 
+    0.91954158     0.88882892     0.89120122     0.81659927     0.89710215 
 Accuracy.time2 Accuracy.time3 
     0.82282639     0.78066185 
 
@@ -561,11 +644,11 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-     0.1625862      0.0748709      0.1594926      0.1995285      0.7775841 
+    0.16274844     0.07487097     0.15954889     0.19981916     0.77757858 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-     0.8224406      0.7780348      0.7593711      0.7724789      0.9118029 
+    0.82244057     0.77803479     0.75936005     0.77247890     0.91180292 
 Accuracy.time2 Accuracy.time3 
-     0.7821145      0.7109679 
+    0.78211451     0.71096794 
 
 Predicted means (dist = exp)
 [1]  1504.553  7831.985 17839.505  6625.441  1141.152  5193.580
@@ -584,11 +667,11 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-     0.1625862      0.0748709      0.1594926      0.1995285      0.7775841 
+    0.16274844     0.07487097     0.15954889     0.19981916     0.77757858 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-     0.8224406      0.7780348      0.7593711      0.7724789      0.9118029 
+    0.82244057     0.77803479     0.75936005     0.77247890     0.91180292 
 Accuracy.time2 Accuracy.time3 
-     0.7821145      0.7109679 
+    0.78211451     0.71096794 
 
 Predicted means (dist = ray)
 [1]  1504.553  7831.985 17839.505  6625.441  1141.152  5193.580
@@ -607,11 +690,11 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-     0.1625862      0.0748709      0.1594926      0.1995285      0.7775841 
+    0.16274844     0.07487097     0.15954889     0.19981916     0.77757858 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-     0.8224406      0.7780348      0.7593711      0.7724789      0.9118029 
+    0.82244057     0.77803479     0.75936005     0.77247890     0.91180292 
 Accuracy.time2 Accuracy.time3 
-     0.7821145      0.7109679 
+    0.78211451     0.71096794 
 
 Predicted means (dist = wei)
 [1]  1504.553  7831.985 17839.505  6625.441  1141.152  5193.580
@@ -630,11 +713,11 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-     0.1625862      0.0748709      0.1594926      0.1995285      0.7775841 
+    0.16274844     0.07487097     0.15954889     0.19981916     0.77757858 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-     0.8224406      0.7780348      0.7593711      0.7724789      0.9118029 
+    0.82244057     0.77803479     0.75936005     0.77247890     0.91180292 
 Accuracy.time2 Accuracy.time3 
-     0.7821145      0.7109679 
+    0.78211451     0.71096794 
 
 Predicted means (method = bre)
 [1]  1504.553  7831.985 17839.505  6625.441  1141.152  5193.580
@@ -653,11 +736,11 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-     0.1625862      0.0748709      0.1594926      0.1995285      0.7775841 
+    0.16274844     0.07487097     0.15954889     0.19981916     0.77757858 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-     0.8224406      0.7780348      0.7593711      0.7724789      0.9118029 
+    0.82244057     0.77803479     0.75936005     0.77247890     0.91180292 
 Accuracy.time2 Accuracy.time3 
-     0.7821145      0.7109679 
+    0.78211451     0.71096794 
 
 Predicted means (method = efr)
 [1]  1504.553  7831.985 17839.505  6625.441  1141.152  5193.580
@@ -676,34 +759,11 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-     0.1625862      0.0748709      0.1594926      0.1995285      0.7775841 
+    0.16274844     0.07487097     0.15954889     0.19981916     0.77757858 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-     0.8224406      0.7780348      0.7593711      0.7724789      0.9118029 
+    0.82244057     0.77803479     0.75936005     0.77247890     0.91180292 
 Accuracy.time2 Accuracy.time3 
-     0.7821145      0.7109679 
-
-Predicted means (method = fle)
-[1]  1504.553  7831.985 17839.505  6625.441  1141.152  5193.580
-  C-Index 
-0.7389551 
-
-Predicted probabilities (method = fle)
-Object of class "SurvProbs"
-        Time 1    Time 2     Time 3
-[1,] 0.6468607 0.3043083 0.07855303
-[2,] 0.9311154 0.8228997 0.65915130
-[3,] 0.9714729 0.9240012 0.84449506
-[4,] 0.9178308 0.7912299 0.60609303
-[5,] 0.5543972 0.1996921 0.03191189
-[6,] 0.8940612 0.7365145 0.51998641
-Times:
-[1]  730 1825 3650
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-     0.1625862      0.0748709      0.1594926      0.1995285      0.7775841 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-     0.8224406      0.7780348      0.7593711      0.7724789      0.9118029 
-Accuracy.time2 Accuracy.time3 
-     0.7821145      0.7109679 
+    0.78211451     0.71096794 
 
 Predicted events: 
 Object of class "SurvEvents"
@@ -721,23 +781,23 @@ Times:
 Model: XGBDARTModel 
 
 Predicted means (dist = emp)
-[1] 2956.423 4015.253 4015.253 3052.307 2293.237 3369.904
+[1] 2913.325 3985.945 3985.945 3010.199 2245.017 3331.465
   C-Index 
 0.8412907 
 
 Predicted probabilities (dist = emp)
 Object of class "SurvProbs"
         Time 1    Time 2    Time 3
-[1,] 0.8524991 0.5917110 0.3472491
-[2,] 0.9250335 0.7739626 0.5966129
-[3,] 0.9250335 0.7739626 0.5966129
-[4,] 0.8602112 0.6094952 0.3686076
-[5,] 0.7893896 0.4594904 0.2085691
-[6,] 0.8838835 0.6664039 0.4412731
+[1,] 0.8390381 0.5823679 0.3417660
+[2,] 0.9178722 0.7679708 0.5919941
+[3,] 0.9178722 0.7679708 0.5919941
+[4,] 0.8473892 0.6004103 0.3631133
+[5,] 0.7709883 0.4487792 0.2037072
+[6,] 0.8730693 0.6582506 0.4358742
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.15321475     0.08203368     0.15399186     0.18122091     0.88372258 
+    0.15305980     0.08126738     0.15367327     0.18140868     0.88372258 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
     0.88639139     0.87992505     0.88493358     0.81665200     0.89710215 
 Accuracy.time2 Accuracy.time3 
@@ -760,7 +820,7 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.15286468     0.08031274     0.15410466     0.18114147     0.88372258 
+    0.15294087     0.08031282     0.15416470     0.18125780     0.88372258 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
     0.88639139     0.87992505     0.88493358     0.81074681     0.89710215 
 Accuracy.time2 Accuracy.time3 
@@ -783,7 +843,7 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.21337613     0.08623263     0.15417752     0.29975269     0.88372258 
+    0.21245721     0.08623272     0.15421786     0.29789062     0.88372258 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
     0.88639139     0.87992505     0.88493358     0.63759370     0.89710215 
 Accuracy.time2 Accuracy.time3 
@@ -806,7 +866,7 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.16317327     0.08171234     0.15315520     0.20176848     0.88372258 
+    0.16285243     0.08171242     0.15320546     0.20109661     0.88372258 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
     0.88639139     0.87992505     0.88493358     0.78283156     0.89710215 
 Accuracy.time2 Accuracy.time3 
@@ -829,7 +889,7 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.15301525     0.08127005     0.15361756     0.18135195     0.88372258 
+    0.15306048     0.08127013     0.15367460     0.18140815     0.88372258 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
     0.88639139     0.87992505     0.88493358     0.81665200     0.89710215 
 Accuracy.time2 Accuracy.time3 
@@ -843,39 +903,16 @@ Predicted means (method = efr)
 Predicted probabilities (method = efr)
 Object of class "SurvProbs"
         Time 1    Time 2    Time 3
-[1,] 0.8524991 0.5917110 0.3472491
-[2,] 0.9250335 0.7739626 0.5966129
-[3,] 0.9250335 0.7739626 0.5966129
-[4,] 0.8602112 0.6094952 0.3686076
-[5,] 0.7893896 0.4594904 0.2085691
-[6,] 0.8838835 0.6664039 0.4412731
+[1,] 0.8390381 0.5823679 0.3417660
+[2,] 0.9178722 0.7679708 0.5919941
+[3,] 0.9178722 0.7679708 0.5919941
+[4,] 0.8473892 0.6004103 0.3631133
+[5,] 0.7709883 0.4487792 0.2037072
+[6,] 0.8730693 0.6582506 0.4358742
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.15321475     0.08203368     0.15399186     0.18122091     0.88372258 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.88639139     0.87992505     0.88493358     0.81665200     0.89710215 
-Accuracy.time2 Accuracy.time3 
-    0.78613662     0.80278116 
-
-Predicted means (method = fle)
-[1] 2450.473 4118.035 4118.035 2555.753 1843.046 2951.499
-  C-Index 
-0.8412907 
-
-Predicted probabilities (method = fle)
-Object of class "SurvProbs"
-        Time 1    Time 2    Time 3
-[1,] 0.8370444 0.5809841 0.3409539
-[2,] 0.9168065 0.7670791 0.5913068
-[3,] 0.9168065 0.7670791 0.5913068
-[4,] 0.8454892 0.5990640 0.3622991
-[5,] 0.7682748 0.4471998 0.2029903
-[6,] 0.8714643 0.6570405 0.4350729
-Times:
-[1]  730 1825 3650
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.15299341     0.08117021     0.15356996     0.18137677     0.88372258 
+    0.15305980     0.08126738     0.15367327     0.18140868     0.88372258 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
     0.88639139     0.87992505     0.88493358     0.81665200     0.89710215 
 Accuracy.time2 Accuracy.time3 
@@ -897,27 +934,27 @@ Times:
 Model: XGBLinearModel 
 
 Predicted means (dist = emp)
-[1] 3040.941 3965.720 3924.397 4081.841 2544.267 3257.468
+[1] 2995.434 3933.209 3891.201 4051.301 2494.106 3214.539
   C-Index 
 0.7353907 
 
 Predicted probabilities (dist = emp)
 Object of class "SurvProbs"
         Time 1    Time 2    Time 3
-[1,] 0.8513876 0.6007148 0.3733230
-[2,] 0.9173739 0.7609573 0.5896930
-[3,] 0.9147987 0.7542114 0.5796278
-[4,] 0.9244603 0.7797334 0.6181478
-[5,] 0.8059049 0.5048245 0.2667238
-[6,] 0.8686460 0.6401415 0.4221439
+[1,] 0.8376196 0.5910005 0.3672859
+[2,] 0.9093918 0.7543362 0.5845621
+[3,] 0.9065807 0.7474360 0.5744209
+[4,] 0.9171314 0.7735519 0.6132473
+[5,] 0.7884735 0.4939054 0.2609547
+[6,] 0.8563386 0.6310716 0.4161627
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-     0.1848230      0.0855481      0.1745565      0.2306928      0.7646303 
+    0.18481580     0.08498026     0.17441868     0.23098829     0.76463673 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-     0.8312794      0.7736419      0.7325637      0.7166642      0.8971021 
+    0.83127942     0.77364334     0.73257569     0.71813315     0.89710215 
 Accuracy.time2 Accuracy.time3 
-     0.7469511      0.6263168 
+    0.75184768     0.62631684 
 
 Predicted means (dist = exp)
 [1] 3658.730 6825.647 6610.180 7494.344 2727.865 4180.136
@@ -936,9 +973,9 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.18471627     0.08450848     0.17475855     0.23077401     0.76463031 
+    0.18483300     0.08450856     0.17483047     0.23096430     0.76463673 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.83127942     0.77364192     0.73256371     0.71666419     0.89710215 
+    0.83127942     0.77364334     0.73257569     0.71666419     0.89710215 
 Accuracy.time2 Accuracy.time3 
     0.74695114     0.62631684 
 
@@ -959,9 +996,9 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.21050308     0.09223005     0.17620549     0.27839085     0.76463031 
+    0.20989991     0.09223014     0.17628490     0.27713683     0.76463673 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.83127942     0.77364192     0.73256371     0.62143150     0.89710215 
+    0.83127942     0.77364334     0.73257569     0.62143150     0.89710215 
 Accuracy.time2 Accuracy.time3 
     0.73226261     0.44466457 
 
@@ -982,9 +1019,9 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.18555053     0.08493747     0.17473925     0.23228252     0.76463031 
+    0.18556625     0.08493755     0.17481102     0.23227086     0.76463673 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.83127942     0.77364192     0.73256371     0.73783420     0.89710215 
+    0.83127942     0.77364334     0.73257569     0.73783420     0.89710215 
 Accuracy.time2 Accuracy.time3 
     0.74695114     0.66865687 
 
@@ -1005,9 +1042,9 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.18470526     0.08498218     0.17435171     0.23080663     0.76463031 
+    0.18481617     0.08498226     0.17441932     0.23098785     0.76463673 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.83127942     0.77364192     0.73256371     0.71813315     0.89710215 
+    0.83127942     0.77364334     0.73257569     0.71813315     0.89710215 
 Accuracy.time2 Accuracy.time3 
     0.75184768     0.62631684 
 
@@ -1019,41 +1056,18 @@ Predicted means (method = efr)
 Predicted probabilities (method = efr)
 Object of class "SurvProbs"
         Time 1    Time 2    Time 3
-[1,] 0.8513876 0.6007148 0.3733230
-[2,] 0.9173739 0.7609573 0.5896930
-[3,] 0.9147987 0.7542114 0.5796278
-[4,] 0.9244603 0.7797334 0.6181478
-[5,] 0.8059049 0.5048245 0.2667238
-[6,] 0.8686460 0.6401415 0.4221439
+[1,] 0.8376196 0.5910005 0.3672859
+[2,] 0.9093918 0.7543362 0.5845621
+[3,] 0.9065807 0.7474360 0.5744209
+[4,] 0.9171314 0.7735519 0.6132473
+[5,] 0.7884735 0.4939054 0.2609547
+[6,] 0.8563386 0.6310716 0.4161627
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-     0.1848230      0.0855481      0.1745565      0.2306928      0.7646303 
+    0.18481580     0.08498026     0.17441868     0.23098829     0.76463673 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-     0.8312794      0.7736419      0.7325637      0.7166642      0.8971021 
-Accuracy.time2 Accuracy.time3 
-     0.7469511      0.6263168 
-
-Predicted means (method = fle)
-[1] 3246.200 5658.067 5498.649 6149.407 2499.005 3655.343
-  C-Index 
-0.7353907 
-
-Predicted probabilities (method = fle)
-Object of class "SurvProbs"
-        Time 1    Time 2    Time 3
-[1,] 0.8360410 0.5898867 0.3665938
-[2,] 0.9084728 0.7535739 0.5839713
-[3,] 0.9056347 0.7466560 0.5738214
-[4,] 0.9162872 0.7728398 0.6126828
-[5,] 0.7864812 0.4926574 0.2602953
-[6,] 0.8549259 0.6300305 0.4154762
-Times:
-[1]  730 1825 3650
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.18469783     0.08492683     0.17433482     0.23082404     0.76463031 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.83127942     0.77364192     0.73256371     0.71813315     0.89710215 
+    0.83127942     0.77364334     0.73257569     0.71813315     0.89710215 
 Accuracy.time2 Accuracy.time3 
     0.75184768     0.62631684 
 
@@ -1064,32 +1078,32 @@ Object of class "SurvEvents"
 [2,]      0      0      0
 [3,]      0      0      0
 [4,]      0      0      0
-[5,]      0      0      1
+[5,]      0      1      1
 [6,]      0      0      1
 Times:
 [1]  730 1825 3650
  Accuracy.mean Accuracy.time1 Accuracy.time2 Accuracy.time3 
-     0.7166642      0.8971021      0.7469511      0.6263168 
+     0.7181332      0.8971021      0.7518477      0.6263168 
 Model: XGBTreeModel 
 
 Predicted means (dist = emp)
-[1] 2956.423 4015.253 4015.253 3052.307 2293.237 3369.904
+[1] 2913.325 3985.945 3985.945 3010.199 2245.017 3331.465
   C-Index 
 0.8412907 
 
 Predicted probabilities (dist = emp)
 Object of class "SurvProbs"
         Time 1    Time 2    Time 3
-[1,] 0.8524991 0.5917110 0.3472491
-[2,] 0.9250335 0.7739626 0.5966129
-[3,] 0.9250335 0.7739626 0.5966129
-[4,] 0.8602112 0.6094952 0.3686076
-[5,] 0.7893896 0.4594904 0.2085691
-[6,] 0.8838835 0.6664039 0.4412731
+[1,] 0.8390381 0.5823679 0.3417660
+[2,] 0.9178722 0.7679708 0.5919941
+[3,] 0.9178722 0.7679708 0.5919941
+[4,] 0.8473892 0.6004103 0.3631133
+[5,] 0.7709883 0.4487792 0.2037072
+[6,] 0.8730693 0.6582506 0.4358742
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.15321475     0.08203368     0.15399186     0.18122091     0.88372258 
+    0.15305980     0.08126738     0.15367327     0.18140868     0.88372258 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
     0.88639139     0.87992505     0.88493358     0.81665200     0.89710215 
 Accuracy.time2 Accuracy.time3 
@@ -1112,7 +1126,7 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.15286468     0.08031274     0.15410466     0.18114147     0.88372258 
+    0.15294087     0.08031282     0.15416470     0.18125780     0.88372258 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
     0.88639139     0.87992505     0.88493358     0.81074681     0.89710215 
 Accuracy.time2 Accuracy.time3 
@@ -1135,7 +1149,7 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.21337613     0.08623263     0.15417752     0.29975269     0.88372258 
+    0.21245721     0.08623272     0.15421786     0.29789062     0.88372258 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
     0.88639139     0.87992505     0.88493358     0.63759370     0.89710215 
 Accuracy.time2 Accuracy.time3 
@@ -1158,7 +1172,7 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.16317327     0.08171234     0.15315520     0.20176848     0.88372258 
+    0.16285243     0.08171242     0.15320546     0.20109661     0.88372258 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
     0.88639139     0.87992505     0.88493358     0.78283156     0.89710215 
 Accuracy.time2 Accuracy.time3 
@@ -1181,7 +1195,7 @@ Object of class "SurvProbs"
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.15301525     0.08127005     0.15361756     0.18135195     0.88372258 
+    0.15306048     0.08127013     0.15367460     0.18140815     0.88372258 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
     0.88639139     0.87992505     0.88493358     0.81665200     0.89710215 
 Accuracy.time2 Accuracy.time3 
@@ -1195,39 +1209,16 @@ Predicted means (method = efr)
 Predicted probabilities (method = efr)
 Object of class "SurvProbs"
         Time 1    Time 2    Time 3
-[1,] 0.8524991 0.5917110 0.3472491
-[2,] 0.9250335 0.7739626 0.5966129
-[3,] 0.9250335 0.7739626 0.5966129
-[4,] 0.8602112 0.6094952 0.3686076
-[5,] 0.7893896 0.4594904 0.2085691
-[6,] 0.8838835 0.6664039 0.4412731
+[1,] 0.8390381 0.5823679 0.3417660
+[2,] 0.9178722 0.7679708 0.5919941
+[3,] 0.9178722 0.7679708 0.5919941
+[4,] 0.8473892 0.6004103 0.3631133
+[5,] 0.7709883 0.4487792 0.2037072
+[6,] 0.8730693 0.6582506 0.4358742
 Times:
 [1]  730 1825 3650
     Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.15321475     0.08203368     0.15399186     0.18122091     0.88372258 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
-    0.88639139     0.87992505     0.88493358     0.81665200     0.89710215 
-Accuracy.time2 Accuracy.time3 
-    0.78613662     0.80278116 
-
-Predicted means (method = fle)
-[1] 2450.473 4118.035 4118.035 2555.753 1843.046 2951.499
-  C-Index 
-0.8412907 
-
-Predicted probabilities (method = fle)
-Object of class "SurvProbs"
-        Time 1    Time 2    Time 3
-[1,] 0.8370444 0.5809841 0.3409539
-[2,] 0.9168065 0.7670791 0.5913068
-[3,] 0.9168065 0.7670791 0.5913068
-[4,] 0.8454892 0.5990640 0.3622991
-[5,] 0.7682748 0.4471998 0.2029903
-[6,] 0.8714643 0.6570405 0.4350729
-Times:
-[1]  730 1825 3650
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
-    0.15299341     0.08117021     0.15356996     0.18137677     0.88372258 
+    0.15305980     0.08126738     0.15367327     0.18140868     0.88372258 
  ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
     0.88639139     0.87992505     0.88493358     0.81665200     0.89710215 
 Accuracy.time2 Accuracy.time3 

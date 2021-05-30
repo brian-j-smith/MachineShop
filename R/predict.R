@@ -21,8 +21,7 @@
 #'   \code{"weibull"} for predicted survival means.
 #' @param method character string specifying the empirical method of estimating
 #'   baseline survival curves for Cox proportional hazards-based models.
-#'   Choices are \code{"breslow"}, \code{"efron"} (default), or
-#'   \code{"fleming-harrington"}.
+#'   Choices are \code{"breslow"} or \code{"efron"} (default).
 #' @param ... arguments passed to model-specific prediction functions.
 #'
 #' @seealso \code{\link{confusion}}, \code{\link{performance}},

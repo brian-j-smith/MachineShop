@@ -160,6 +160,7 @@ setMethod(".calibration_default", c("Surv", "SurvProbs"),
                                     each = nrow(predicted)),
                      Predicted = as.numeric(predicted))
     if (is.null(breaks)) {
+      throw(check_censoring(observed, "right"))
       Mean <- c(map_num(function(i) {
         x <- predicted[, i]
         harefit <- polspline::hare(observed[, "time"], observed[, "status"], x)
@@ -190,8 +191,10 @@ setMethod(".calibration_default", c("Surv", "SurvProbs"),
 
 setMethod(".calibration_default", c("Surv", "numeric"),
   function(observed, predicted, breaks, dist, span, ...) {
-    max_time <- surv_max(observed)
-    dist <- if (is.null(dist)) {
+    max_time <- max(time(observed))
+    dist <- if (is_counting(observed)) {
+      "empirical"
+    } else if (is.null(dist)) {
       settings("dist.Surv")
     } else {
       match.arg(dist, c("empirical", names(survreg.distributions)))
@@ -243,7 +246,7 @@ setMethod(".calibration_default", c("Surv", "numeric"),
         observed <- data$Observed
         est <- if (dist == "empirical") {
           f_survfit(observed)
-        } else if (length(surv_times(observed)) >= nparams) {
+        } else if (length(event_time(observed)) >= nparams) {
           f_survreg(observed, dist)
         } else {
           list(Mean = NA_real_, SE = NA_real_)

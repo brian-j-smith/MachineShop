@@ -97,7 +97,9 @@ setMetricMethod_Resamples("r2")
 
 setMetricMethod("r2", c("Surv", "numeric"),
   function(observed, predicted, dist, ...) {
-    dist <- if (is.null(dist)) {
+    dist <- if (is_counting(observed)) {
+      "empirical"
+    } else if (is.null(dist)) {
       settings("dist.Surv")
     } else {
       match.arg(dist, c("empirical", names(survreg.distributions)))
@@ -105,7 +107,7 @@ setMetricMethod("r2", c("Surv", "numeric"),
     nparams <- if (dist %in% c("exponential", "rayleigh")) 1 else 2
     observed_mean <- if (dist == "empirical") {
       rep(mean(survfit(observed ~ 1, se.fit = FALSE)), length(observed))
-    } else if (length(surv_times(observed)) >= nparams) {
+    } else if (length(event_time(observed)) >= nparams) {
       predict(survreg(observed ~ 1, dist = dist))
     } else {
       rep(NA_real_, length(observed))

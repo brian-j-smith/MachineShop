@@ -68,13 +68,13 @@ RPartModel <- function(
       rpart::rpart(formula, data = as.data.frame(data), weights = weights,
                    na.action = na.pass, method = method, ...)
     },
-    predict = function(object, newdata, model, times, ...) {
+    predict = function(object, newdata, model, ...) {
       y <- response(model)
       newdata <- as.data.frame(newdata)
       if (is.Surv(y)) {
         object <- partykit::as.party(object)
         fits <- predict(object, newdata = newdata, type = "prob")
-        predict(y, fits, times, ...)
+        predict(y, fits, ...)
       } else {
         predict(object, newdata = newdata)
       }

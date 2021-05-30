@@ -221,11 +221,11 @@ metric_SurvMatrix <- function(observed, predicted, fun, cutoff = NULL, ...) {
   conf_list <- confusion(observed, predicted, cutoff = cutoff)
   x <- map_num(function(conf) fun(conf, ...), conf_list)
   times <- predicted@times
-  if (length(times) > 1) c("mean" = surv_metric_mean(x, times), x) else x[[1]]
+  if (length(times) > 1) c("mean" = survmetric_mean(x, times), x) else x[[1]]
 }
 
 
 metric_SurvMean <- function(observed, predicted, fun, ...) {
   events <- observed[, "status"] == 1
-  fun(observed[events, "time"], predicted[events], ...)
+  fun(time(observed[events]), predicted[events], ...)
 }

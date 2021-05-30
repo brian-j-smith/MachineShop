@@ -106,7 +106,7 @@ GLMNetModel <- function(
       glmnet::glmnet(x, y, offset = offset, weights = weights,
                      family = family, nlambda = nlambda, ...)
     },
-    predict = function(object, newdata, model, times, ...) {
+    predict = function(object, newdata, model, ...) {
       newx <- model.matrix(newdata, intercept = FALSE)
       newoffset <- model.offset(newdata)
       y <- response(model)
@@ -118,7 +118,7 @@ GLMNetModel <- function(
                       type = "link")[, 1]
         new_lp <- predict(object, newx = newx, newoffset = newoffset,
                           type = "link")[, 1]
-        predict(y, lp, times, new_lp, ...)
+        predict(y, lp, new_lp, ...)
       } else {
         predict(object, newx = newx, newoffset = newoffset,
                 s = object$lambda[1], type = "response")

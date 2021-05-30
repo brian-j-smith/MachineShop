@@ -115,7 +115,7 @@ case_strata.Surv <- function(
   status <- x[, "status"]
   status <- sample_replace(status, is.na(status))
 
-  time_split <- split(x[, ncol(x) - 1], status)
+  time_split <- split(time(x), status)
   strata_split <- list()
   strata_levels <- character()
 

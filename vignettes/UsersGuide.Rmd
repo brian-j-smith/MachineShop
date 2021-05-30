@@ -274,7 +274,7 @@ fit(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(length(y)))))
 
 ## Predict Function
 
-A `r rdoc_url("predict()")` function is supplied for application to model fit results to obtain predicted values on a dataset specified with its `newdata` argument or on the original dataset if not specified.  Survival means are predicted for survival outcomes by default.  Estimates of the associated survival distributions are needed to calculate the means.  For models, like `r rdoc_url("GBMModel")`, that perform semi- or non-parametric survival analysis, Weibull approximations to the survival distributions are the default for mean estimation.  Other choices of distributional approximations are exponential, Rayleigh, and empirical.  Empirical distributions are applicable to Cox proportional hazards-based models and can be calculated with the method of Breslow [-@breslow:1972:DPC], Efron [-@efron:1977:ECL, default], or Fleming and Harrington [-@fleming:1984:NES].  Note, however, that empirical survival means are undefined mathematically if an event does not occur at the longest follow-up time.  In such situations, a restricted survival mean is calculated by changing the longest follow-up time to an event, as suggested by Efron [-@efron:1967:PFB], which will be negatively biased.  
+A `r rdoc_url("predict()")` function is supplied for application to model fit results to obtain predicted values on a dataset specified with its `newdata` argument or on the original dataset if not specified.  Survival means are predicted for survival outcomes by default.  Estimates of the associated survival distributions are needed to calculate the means.  For models, like `r rdoc_url("GBMModel")`, that perform semi- or non-parametric survival analysis, Weibull approximations to the survival distributions are the default for mean estimation.  Other choices of distributional approximations are exponential, Rayleigh, and empirical.  Empirical distributions are applicable to Cox proportional hazards-based models and can be calculated with the method of Breslow [-@breslow:1972:DPC] or Efron [-@efron:1977:ECL, default].  Note, however, that empirical survival means are undefined mathematically if an event does not occur at the longest follow-up time.  In such situations, a restricted survival mean is calculated by changing the longest follow-up time to an event, as suggested by Efron [-@efron:1967:PFB], which will be negatively biased.  
 
 ```{r using_predict_function}
 ## Predicted survival means (default: Weibull distribution)
@@ -1731,16 +1731,16 @@ Core default behaviors of functions in the package can be viewed or changed glob
   : numeric (0, 1) threshold above which binary factor probabilities are classified as events and below which survival probabilities are classified [default: 0.5].
 
 `dist.Surv`
-  : character string specifying distributional approximations to estimated survival curves for predicting survival means.  Choices are `"empirical"` for the Kaplan-Meier estimator, `"exponential"`, or `"weibull"` (default).
+  : character string specifying distributional approximations to estimated survival curves for predicting survival means.  Choices are `"empirical"` for the Kaplan-Meier estimator, `"exponential"`, `"rayleigh"`, or `"weibull"` (default).
 
 `dist.SurvProbs`
-  : character string specifying distributional approximations to estimated survival curves for predicting survival events/probabilities.  Choices are `"empirical"` (default) for the Kaplan-Meier estimator, `"exponential"`, or `"weibull"`.
+  : character string specifying distributional approximations to estimated survival curves for predicting survival events/probabilities.  Choices are `"empirical"` (default) for the Kaplan-Meier estimator, `"exponential"`, `"rayleigh"`, or `"weibull"`.
 
 `grid`
   : `size` argument to `r rdoc_url("Grid()")` indicating the number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a `r rdoc_url("Grid()")` function, function name, or call [default: 3].
 
 `method.EmpiricalSurv`
-  : character string specifying the empirical method of estimating baseline survival curves for Cox proportional hazards-based models.  Choices are `"breslow"`, `"efron"` (default), or `"fleming-harrington"`.
+  : character string specifying the empirical method of estimating baseline survival curves for Cox proportional hazards-based models.  Choices are `"breslow"` or `"efron"` (default).
 
 `metrics.ConfusionMatrix`
   : function, function name, or vector of these with which to calculate performance metrics for confusion matrices [default: ``c(Accuracy = "accuracy", Kappa = "kappa2", `Weighted Kappa` = "weighted_kappa2", Sensitivity = "sensitivity", Specificity = "specificity")``].
