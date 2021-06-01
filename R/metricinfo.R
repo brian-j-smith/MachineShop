@@ -94,7 +94,7 @@ metricinfo <- function(...) {
   if (isGeneric(generic_name)) {
     methods <- findMethods(generic_name)
     is_defined <- map_logi(function(method) {
-      body(method) != quote(numeric())
+      body(method) != .(numeric())
     }, methods)
     types <- as.data.frame(do.call(rbind, methods@signatures[is_defined]),
                            stringsAsFactors = FALSE)

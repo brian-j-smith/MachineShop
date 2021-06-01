@@ -197,7 +197,7 @@ terms.list <- function(
   x_char[noname_inds] <- map_chr(deparse, x[noname_inds])
 
   valid_calls <- map_logi(function(var) {
-    is.call(var) && var[[1]] == .("offset")
+    is.call(var) && var[[1]] == "offset"
   }, x[noname_inds])
   if (!all(valid_calls)) {
     throw(Error("non-offset calls in variable specifications"))
