@@ -46,7 +46,7 @@ TreeModel <- function(
     label = "Regression and Classification Trees",
     packages = "tree",
     response_types = c("factor", "numeric"),
-    predictor_encoding = "terms",
+    predictor_encoding = "model.frame",
     params = params(environment()),
     fit = function(formula, data, weights, split, k = NULL, best = NULL,
                    method = NULL, ...) {

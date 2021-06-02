@@ -226,13 +226,13 @@ expand_modelgrid.TunedModel <- function(x, ..., info = FALSE) {
       mf <- ModelFrame(x, ..., na.rm = FALSE)
       model <- get_MLModel(model)
       data <- switch(model@predictor_encoding,
-                     "model.matrix" = model.matrix(mf, intercept = FALSE),
-                     "terms" = {
-                       mf_terms <- attributes(terms(mf))
-                       var_list <- eval(mf_terms$variables, mf)
-                       names(var_list) <- rownames(mf_terms$factors)
-                       as.data.frame(var_list[-c(1, mf_terms$offset)])
-                     }
+        "model.frame" = {
+          mf_terms <- attributes(terms(mf))
+          var_list <- eval(mf_terms$variables, mf)
+          names(var_list) <- rownames(mf_terms$factors)
+          as.data.frame(var_list[-c(1, mf_terms$offset)])
+        },
+        "model.matrix" = model.matrix(mf, intercept = FALSE)
       )
       grid <- dials::finalize(grid, x = data)
     }

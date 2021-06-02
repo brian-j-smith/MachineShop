@@ -15,9 +15,8 @@
 #'   \code{"matrix"}, \code{"NegBinomialVariate"}, \code{"numeric"},
 #'   \code{"ordered"}, \code{"PoissonVariate"}, and \code{"Surv"}.
 #' @param predictor_encoding character string indicating whether the model is
-#'   fit with predictor variables encoded as a \code{"\link{model.matrix}"}, a
-#'   data.frame containing the originally specified model \code{"terms"}, or
-#'   unspecified (default).
+#'   fit with predictor variables encoded as a \code{"\link{model.frame}"},
+#'   a \code{"\link{model.matrix}"}, or unspecified (default).
 #' @param params list of user-specified model parameters to be passed to the
 #'   \code{fit} function.
 #' @param gridinfo tibble of information for construction of tuning grids
@@ -94,7 +93,7 @@
 MLModel <- function(
   name = "MLModel", label = name, packages = character(),
   response_types = character(),
-  predictor_encoding = c(NA, "model.matrix", "terms"), params = list(),
+  predictor_encoding = c(NA, "model.frame", "model.matrix"), params = list(),
   gridinfo = tibble::tibble(
     param = character(), values = list(), default = logical()
   ),

@@ -47,7 +47,7 @@ RPartModel <- function(
     label = "Recursive Partitioning and Regression Trees",
     packages = c("rpart", "partykit"),
     response_types = c("factor", "numeric", "Surv"),
-    predictor_encoding = "terms",
+    predictor_encoding = "model.frame",
     params = list(control = as.call(c(.(list), params(environment())))),
     gridinfo = new_gridinfo(
       param = "cp",

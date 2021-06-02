@@ -31,7 +31,7 @@ NaiveBayesModel <- function(laplace = 0) {
     label = "Naive Bayes Classifier",
     packages = "e1071",
     response_types = "factor",
-    predictor_encoding = "terms",
+    predictor_encoding = "model.frame",
     params = params(environment()),
     fit = function(formula, data, weights, ...) {
       throw(check_equal_weights(weights))

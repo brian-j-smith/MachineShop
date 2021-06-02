@@ -67,7 +67,7 @@ GAMBoostModel <- function(
     packages = "mboost",
     response_types = c("binary", "BinomialVariate", "NegBinomialVariate",
                        "numeric", "PoissonVariate", "Surv"),
-    predictor_encoding = "terms",
+    predictor_encoding = "model.frame",
     params = params,
     gridinfo = new_gridinfo(
       param = "mstop",

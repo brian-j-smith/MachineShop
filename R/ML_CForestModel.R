@@ -51,7 +51,7 @@ CForestModel <- function(
     label = "Conditional Random Forests",
     packages = "party",
     response_types = c("factor", "numeric", "Surv"),
-    predictor_encoding = "terms",
+    predictor_encoding = "model.frame",
     params = list(controls = as.call(c(.(party::cforest_control), args))),
     gridinfo = new_gridinfo(
       param = "mtry",

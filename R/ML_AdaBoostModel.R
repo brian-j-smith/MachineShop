@@ -62,7 +62,7 @@ AdaBoostModel <- function(
     label = "Boosting with Classification Trees",
     packages = "adabag",
     response_types = "factor",
-    predictor_encoding = "terms",
+    predictor_encoding = "model.frame",
     params = params,
     gridinfo = new_gridinfo(
       param = c("mfinal", "maxdepth", "coeflearn"),

@@ -49,7 +49,7 @@ GBMModel <- function(
     label = "Generalized Boosted Regression",
     packages = "gbm",
     response_types = c("factor", "numeric", "PoissonVariate", "Surv"),
-    predictor_encoding = "terms",
+    predictor_encoding = "model.frame",
     params = params(environment()),
     gridinfo = new_gridinfo(
       param = c("n.trees", "interaction.depth", "shrinkage", "n.minobsinnode"),

@@ -342,14 +342,14 @@ new_progress_index <- function(names, max) {
 nvars <- function(x, model) {
   stopifnot(is(x, "ModelFrame"))
   model <- get_MLModel(model)
-  switch(model@predictor_encoding,
-    "model.matrix" =
-      ncol(model.matrix(x[1, , drop = FALSE], intercept = FALSE)),
-    "terms" = {
+  res <- switch(model@predictor_encoding,
+    "model.frame" = {
       x_terms <- attributes(terms(x))
       nrow(x_terms$factors) - x_terms$response - length(x_terms$offset)
-    }
+    },
+    "model.matrix" = ncol(model.matrix(x[1, , drop = FALSE], intercept = FALSE))
   )
+  if (is.null(res)) NA else res
 }
 
 
