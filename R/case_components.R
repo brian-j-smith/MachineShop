@@ -1,3 +1,31 @@
+case_comp_name <- function(x, ...) {
+  UseMethod("case_comp_name")
+}
+
+
+case_comp_name.data.frame <- function(x, type, ...) {
+  name <- paste0("(", type, ")")
+  if (name %in% names(x)) name
+}
+
+
+case_comp_name.recipe <- function(x, type, ...) {
+  type <- switch(type,
+    "names" = "name",
+    "strata" = "stratum",
+    "weights" = "weight"
+  )
+  role <- paste0("case_", type)
+  info <- summary(x)
+  name <- info$variable[info$role == role]
+  if (length(name) == 1) {
+    name
+  } else if (length(name) > 1) {
+    throw(Error("multiple ", role, " variables"))
+  }
+}
+
+
 case_strata <- function(x, ...) {
   UseMethod("case_strata")
 }
@@ -105,22 +133,33 @@ case_strata.Surv <- function(
 }
 
 
-case_strata_name <- function(x, ...) {
-  UseMethod("case_strata_name")
+case_strata_name <- function(x) {
+  case_comp_name(x, "strata")
 }
 
 
-case_strata_name.data.frame <- function(x, ...) {
-  if ("(strata)" %in% names(x)) "(strata)"
+case_weights <- function(x, ...) {
+  UseMethod("case_weights")
 }
 
 
-case_strata_name.recipe <- function(x, ...) {
-  info <- summary(x)
-  name <- info$variable[info$role == "case_stratum"]
-  if (length(name) == 1) {
-    name
-  } else if (length(name) > 1) {
-    throw(Error("multiple case stratum variables"))
-  }
+case_weights.MLModel <- function(x, ...) {
+  case_weights(x@x, ...)
+}
+
+
+case_weights.ModelFrame <- function(x, ...) {
+  name <- case_weights_name(x)
+  if (length(name)) x[[name]]
+}
+
+
+case_weights.ModelRecipe <- function(x, ...) {
+  name <- case_weights_name(x)
+  if (length(name)) juice(prep(x))[[name]]
+}
+
+
+case_weights_name <- function(x) {
+  case_comp_name(x, "weights")
 }
