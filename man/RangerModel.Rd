@@ -10,7 +10,7 @@ RangerModel(
   importance = c("impurity", "impurity_corrected", "permutation"),
   min.node.size = NULL,
   replace = TRUE,
-  sample.fraction = ifelse(replace, 1, 0.632),
+  sample.fraction = if (replace) 1 else 0.632,
   splitrule = NULL,
   num.random.splits = 1,
   alpha = 0.5,

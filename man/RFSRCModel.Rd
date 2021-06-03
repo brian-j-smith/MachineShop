@@ -15,7 +15,7 @@ RFSRCModel(
   block.size = NULL,
   samptype = c("swor", "swr"),
   membership = FALSE,
-  sampsize = ifelse(samptype == "swor", function(x) 0.632 * x, function(x) x),
+  sampsize = if (samptype == "swor") function(x) 0.632 * x else function(x) x,
   nimpute = 1,
   ntime = NULL,
   proximity = c(FALSE, TRUE, "inbag", "oob", "all"),

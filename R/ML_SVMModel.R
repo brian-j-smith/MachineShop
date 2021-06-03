@@ -82,9 +82,10 @@ SVMModel <- function(
     },
     predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)
-      kernlab::predict(object, newdata = newdata,
-                       type = ifelse(is.factor(response(model)),
-                                     "probabilities", "response"))
+      kernlab::predict(
+        object, newdata = newdata,
+        type = if (is.factor(response(model))) "probabilities" else "response"
+      )
     }
   )
 

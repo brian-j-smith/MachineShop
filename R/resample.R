@@ -464,7 +464,7 @@ resample_selection <- function(x, update, params, ..., class) {
 
   perf <- do.call(c, perf_list)
   metric <- get_MLMetric(c(metrics)[[1]])
-  selected <- ifelse(metric@maximize, which.max, which.min)(perf_stats)
+  selected <- (if (metric@maximize) which.max else which.min)(perf_stats)
 
   list(performance = perf,
        selected = structure(selected, names = colnames(perf)[1]),

@@ -14,7 +14,7 @@ GLMNetModel(
   standardize.response = FALSE,
   thresh = 1e-07,
   maxit = 1e+05,
-  type.gaussian = .(ifelse(nvars < 500, "covariance", "naive")),
+  type.gaussian = .(if (nvars < 500) "covariance" else "naive"),
   type.logistic = c("Newton", "modified.Newton"),
   type.multinomial = c("ungrouped", "grouped")
 )
