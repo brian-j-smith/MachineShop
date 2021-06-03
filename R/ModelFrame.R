@@ -129,25 +129,16 @@ ModelFrame.recipe <- function(x, ...) {
   x <- prep(x)
   data <- juice(x)
 
-  info <- summary(x)
-
-  var_name <- info$variable[info$role == "case_weight"]
-  weights <- if (length(var_name) == 0) NULL else
-    if (length(var_name) == 1) data[[var_name]] else
-      throw(Error("multiple case weights specified"))
-
-  var_name <- info$variable[info$role == "case_stratum"]
-  strata <- if (length(var_name) == 0) NULL else
-    if (length(var_name) == 1) data[[var_name]] else
-      throw(Error("multiple strata variables specified"))
-
   model_terms <- terms(x)
   data[[deparse(response(model_terms))]] <- response(model_terms, data)
   data <- data[all.vars(model_formula(model_terms))]
 
+  weights_name <- case_weights_name(x)
+  strata_name <- case_strata_name(x)
   ModelFrame(model_terms, data, na.rm = FALSE,
              names = if (is.null(data[["(names)"]])) rownames(data),
-             weights = weights, strata = strata)
+             weights = if (length(weights_name)) data[[weights_name]],
+             strata = if (length(strata_name)) data[[strata_name]])
 }
 
 
