@@ -76,7 +76,7 @@ fget <- function(x) {
 
 
 get0 <- function(x, mode = "any") {
-  if (is.character(x)) {
+  if (is.character(x) && length(x) == 1) {
     x_expr <- str2lang(x)
     x_name <- x
     if (is.symbol(x_expr)) {
@@ -150,8 +150,8 @@ is_counting <- function(x) {
 }
 
 
-is_one_element <- function(x, class) {
-  length(x) == 1 && is(x[[1]], class)
+is_one_element <- function(x, class = "ANY") {
+  is.vector(x) && length(x) == 1 && is(x[[1]], class)
 }
 
 
@@ -221,7 +221,7 @@ list_to_function <- function(x) {
         if (is.null(name) || !nzchar(name)) metric_name else name
     }
     names(x) <- make.unique(metric_names)
-    eval(bquote(function(...) unlist(map(function(x) x(...), .(x)))))
+    function(...) unlist(map(function(fun) fun(...), x))
   } else if (is(x, "function")) {
     x
   } else {

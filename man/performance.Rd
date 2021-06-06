@@ -68,7 +68,9 @@ performance(x, ...)
 
 \item{...}{arguments passed from the \code{Resamples} method to the response
 type-specific methods or from the method for \code{ConfusionList} to
-\code{ConfusionMatrix}.}
+\code{ConfusionMatrix}.  Elliptical arguments in the response
+type-specific methods are passed to \code{metrics} supplied as a single
+\code{\link[=metrics]{MLMetric}} function and are ignored otherwise.}
 
 \item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
 

@@ -17,7 +17,9 @@
 #'   responses that are \code{NA} when calculating metrics.
 #' @param ... arguments passed from the \code{Resamples} method to the response
 #'   type-specific methods or from the method for \code{ConfusionList} to
-#'   \code{ConfusionMatrix}.
+#'   \code{ConfusionMatrix}.  Elliptical arguments in the response
+#'   type-specific methods are passed to \code{metrics} supplied as a single
+#'   \code{\link[=metrics]{MLMetric}} function and are ignored otherwise.
 #'
 #' @seealso \code{\link{plot}}, \code{\link{summary}}
 #'
@@ -50,7 +52,7 @@ performance <- function(x, ...) {
 performance.BinomialVariate <- function(
   x, y, metrics = MachineShop::settings("metrics.numeric"), na.rm = TRUE, ...
 ) {
-  .performance(x, y, metrics, na.rm)
+  .performance(x, y, metrics, na.rm, dots = list(...))
 }
 
 
@@ -60,7 +62,7 @@ performance.factor <- function(
   x, y, metrics = MachineShop::settings("metrics.factor"),
   cutoff = MachineShop::settings("cutoff"), na.rm = TRUE, ...
 ) {
-  .performance(x, y, metrics, na.rm, cutoff = cutoff)
+  .performance(x, y, metrics, na.rm, cutoff = cutoff, dots = list(...))
 }
 
 
@@ -69,7 +71,7 @@ performance.factor <- function(
 performance.matrix <- function(
   x, y, metrics = MachineShop::settings("metrics.matrix"), na.rm = TRUE, ...
 ) {
-  .performance(x, y, metrics, na.rm)
+  .performance(x, y, metrics, na.rm, dots = list(...))
 }
 
 
@@ -78,7 +80,7 @@ performance.matrix <- function(
 performance.numeric <- function(
   x, y, metrics = MachineShop::settings("metrics.numeric"), na.rm = TRUE, ...
 ) {
-  .performance(x, y, metrics, na.rm)
+  .performance(x, y, metrics, na.rm, dots = list(...))
 }
 
 
@@ -88,17 +90,24 @@ performance.Surv <- function(
   x, y, metrics = MachineShop::settings("metrics.Surv"),
   cutoff = MachineShop::settings("cutoff"), na.rm = TRUE, ...
 ) {
-  .performance(x, y, metrics, na.rm, cutoff = cutoff)
+  .performance(x, y, metrics, na.rm, cutoff = cutoff, dots = list(...))
 }
 
 
-.performance <- function(x, y, metrics, na.rm, ...) {
+.performance <- function(x, y, metrics, na.rm, ..., dots = NULL) {
   if (na.rm) {
     complete <- complete_subset(x = x, y = y)
     x <- complete$x
     y <- complete$y
   }
-  if (length(x)) list_to_function(metrics)(x, y, ...) else NA_real_
+  if (length(x)) {
+    args <- list(x, y, ...)
+    metric <- if (is_one_element(metrics)) metrics[[1]] else metrics
+    if (is(get0(metric), "MLMetric")) args <- c(args, dots)
+    do.call(list_to_function(metrics), args)
+  } else {
+    NA_real_
+  }
 }
 
 
@@ -114,7 +123,10 @@ performance.ConfusionList <- function(x, ...) {
 performance.ConfusionMatrix <- function(
   x, metrics = MachineShop::settings("metrics.ConfusionMatrix"), ...
 ) {
-  list_to_function(metrics)(x)
+  args <- list(x)
+  metric <- if (is_one_element(metrics)) metrics[[1]] else metrics
+  if (is(get0(metric), "MLMetric")) args <- c(args, ...)
+  do.call(list_to_function(metrics), args)
 }
 
 
