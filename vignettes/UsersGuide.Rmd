@@ -278,10 +278,10 @@ A `r rdoc_url("predict()")` function is supplied for application to model fit re
 
 ```{r using_predict_function}
 ## Predicted survival means (default: Weibull distribution)
-predict(surv_fit, newdata = surv_test) %>% head
+predict(surv_fit, newdata = surv_test)
 
 ## Predicted survival means (empirical distribution)
-predict(surv_fit, newdata = surv_test, dist = "empirical") %>% head
+predict(surv_fit, newdata = surv_test, distr = "empirical")
 ```
 
 In addition to survival means, predicted survival probabilities (`type = "prob"`) or 0-1 survival events (default: `type = "response"`) can be obtained with the follow-up `times` argument.  The cutoff probability for classification of survival events (or other binary responses) can be set optionally with the `cutoff` argument (default: `cutoff = 0.5`).  As with mean estimation, distributional approximations to the survival functions may be specified for the predictions, with the default for survival probabilities being the empirical distribution.
@@ -290,9 +290,9 @@ In addition to survival means, predicted survival probabilities (`type = "prob"`
 ## Predict survival probabilities and events at specified follow-up times
 surv_times <- 365 * c(5, 10)
 
-predict(surv_fit, newdata = surv_test, times = surv_times, type = "prob") %>% head
+predict(surv_fit, newdata = surv_test, times = surv_times, type = "prob")
 
-predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.7) %>% head
+predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.7)
 ```
 
 Prediction of other outcome types is more straightforward.  Predicted numeric and factor responses are of the same class as the observed values at the default `type = "response"`; whereas, double (decimal) numeric values and factor level probabilities result when `type = "prob"`.
@@ -1730,7 +1730,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `cutoff`
   : numeric (0, 1) threshold above which binary factor probabilities are classified as events and below which survival probabilities are classified [default: 0.5].
 
-`distr.Surv`
+`distr.SurvMeans`
   : character string specifying distributional approximations to estimated survival curves for predicting survival means.  Choices are `"empirical"` for the Kaplan-Meier estimator, `"exponential"`, `"rayleigh"`, or `"weibull"` (default).
 
 `distr.SurvProbs`

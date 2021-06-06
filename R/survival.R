@@ -7,11 +7,14 @@ predict.Surv <- function(
   distr <- if (is_counting(object)) {
     "empirical"
   } else if (is.null(distr)) {
-    settings(if (length(times)) "distr.SurvProbs" else "distr.Surv")
+    settings(if (length(times)) "distr.SurvProbs" else "distr.SurvMeans")
   } else {
     match.arg(distr, c("empirical", "exponential", "rayleigh", "weibull"))
   }
-  .predict.Surv(object, ..., times = times, distr = distr, weights = weights)
+  structure(
+    .predict.Surv(object, ..., times = times, distr = distr, weights = weights),
+    surv_distr = distr
+  )
 }
 
 
@@ -259,6 +262,25 @@ event_time <- function(x) {
   if (length(x)) {
     sort(unique(time(x)), na.last = TRUE, method = "quick")
   } else numeric()
+}
+
+
+get_surv_distr <- function(distr, observed, predicted) {
+  if (is_counting(observed)) {
+    "empirical"
+  } else {
+    if (is(predicted, "SurvProbs")) {
+      pred_distr <- predicted@distr
+      default_distr <- settings("distr.SurvProbs")
+    } else {
+      pred_distr <- if (is(predicted, "SurvMeans")) predicted@distr
+      default_distr <- settings("distr.SurvMeans")
+    }
+    match.arg(
+      na.omit(c(distr, pred_distr, default_distr))[1],
+      c("empirical", names(survreg.distributions))
+    )
+  }
 }
 
 

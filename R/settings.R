@@ -21,7 +21,7 @@
 #'   \item{\code{cutoff}}{numeric (0, 1) threshold above which binary factor
 #'     probabilities are classified as events and below which survival
 #'     probabilities are classified [default: 0.5].}
-#'   \item{\code{distr.Surv}}{character string specifying distributional
+#'   \item{\code{distr.SurvMeans}}{character string specifying distributional
 #'     approximations to estimated survival curves for predicting survival
 #'     means.  Choices are \code{"empirical"} for the Kaplan-Meier estimator,
 #'     \code{"exponential"}, \code{"rayleigh"}, or \code{"weibull"} (default).}
@@ -191,7 +191,7 @@ MachineShop_global <- as.environment(list(
       }
     ),
 
-    distr.Surv = list(
+    distr.SurvMeans = list(
       value = "weibull",
       check = check_match(c("weibull", "exponential", "rayleigh", "empirical"))
     ),

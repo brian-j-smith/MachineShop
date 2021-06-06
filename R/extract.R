@@ -133,7 +133,17 @@ setMethod("[", c(x = "SurvMatrix", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
     y <- asS3(x)[i, j, drop = drop]
     if (is.matrix(y)) {
-      new(class(x), y, times = x@times[match(colnames(y), colnames(x))])
+      times <- x@times[match(colnames(y), colnames(x))]
+      new(class(x), y, times = times, distr = x@distr)
     } else y
+  }
+)
+
+
+#' @rdname extract-methods
+#'
+setMethod("[", c(x = "SurvMeans", i = "ANY", j = "missing", drop = "missing"),
+  function(x, i) {
+    new("SurvMeans", asS3(x)[i], distr = x@distr)
   }
 )

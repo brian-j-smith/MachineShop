@@ -48,13 +48,13 @@ SurvRegModel <- function(
     },
     predict = function(object, newdata, times, ...) {
       newdata <- as.data.frame(newdata)
-      if (length(times)) {
-        pred <- rms::survest(object, newdata = newdata, times = times,
-                             conf.int = FALSE)
-        if (is(pred, "survest.psm")) as.matrix(pred$surv) else pred
+      pred <- if (length(times)) {
+        rms::survest(object, newdata = newdata, times = times, conf.int = FALSE)
       } else {
         Hmisc::Mean(object)(predict(object, newdata = newdata, type = "lp"))
       }
+      if (is(pred, "survest.psm")) pred <- as.matrix(pred$surv)
+      structure(pred, surv_distr = object$dist)
     },
     varimp = function(object, base = exp(1), ...) {
       varimp_pval(object, base = base)

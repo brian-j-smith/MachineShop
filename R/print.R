@@ -608,11 +608,30 @@ print.SurvMatrix <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_items(as(x, "matrix"), n = n)
   cat("Times:\n")
   print(x@times)
+  cat("Distribution:", x@distr, "\n")
   invisible(x)
 }
 
 
 setMethod("show", "SurvMatrix",
+  function(object) {
+    print(object)
+    invisible()
+  }
+)
+
+
+#' @rdname print-methods
+#'
+print.SurvMeans <- function(x, n = MachineShop::settings("print_max"), ...) {
+  print_title(x)
+  print_items(as(x, "numeric"), n = n)
+  cat("Distribution:", x@distr, "\n")
+  invisible(x)
+}
+
+
+setMethod("show", "SurvMeans",
   function(object) {
     print(object)
     invisible()

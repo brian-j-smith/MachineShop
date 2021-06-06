@@ -196,14 +196,34 @@ c.Resamples <- function(...) {
 
 c.SurvMatrix <- function(...) {
   args <- list(...)
-  class <- class(args[[1]])
+  arg1 <- args[[1]]
+  class <- class(arg1)
   if (all(map_logi(is, args, class))) {
+
     if (!identical_elements(args, function(x) x@times)) {
       throw(Error(class, " arguments have different times"))
     }
-    new(class, do.call(rbind, args), times = args[[1]]@times)
+
+    if (!identical_elements(args, function(x) x@distr)) {
+      throw(Error(class, " arguments have different distributions"))
+    }
+
+    new(class, do.call(rbind, args), times = arg1@times, distr = arg1@distr)
+
   } else {
     NextMethod()
+  }
+}
+
+
+c.SurvMeans <- function(...) {
+  args <- list(...)
+  x <- NextMethod()
+  class <- class(args[[1]])
+  if (all(map_logi(is, args, class))) {
+    new(class, x, distr = args[[1]]@distr)
+  } else {
+    x
   }
 }
 
@@ -214,8 +234,8 @@ setMethod("+", c("SurvMatrix", "SurvMatrix"),
   function(e1, e2) {
     x <- callNextMethod()
     class <- class(e1)
-    if (class(e2) == class && all(e1@times == e2@times)) {
-      new(class, x, times = e1@times)
+    if (all(class(e2) == class, e1@times == e2@times, e1@distr == e2@distr)) {
+      new(class, x, times = e1@times, distr = e1@distr)
     } else x
   }
 )

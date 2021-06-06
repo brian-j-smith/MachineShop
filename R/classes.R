@@ -43,7 +43,10 @@ setClass("PoissonVariate",
 
 setClass("SurvMatrix",
   contains = "matrix",
-  slots = c(times = "numeric")
+  slots = c(
+    times = "numeric",
+    distr = "character"
+  )
 )
 
 
@@ -54,6 +57,12 @@ setClass("SurvEvents",
 
 setClass("SurvProbs",
   contains = "SurvMatrix"
+)
+
+
+setClass("SurvMeans",
+  contains = "numeric",
+  slots = c(distr = "character")
 )
 
 

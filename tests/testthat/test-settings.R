@@ -23,9 +23,9 @@ test_that("settings changes and views", {
   expect_error(settings(cutoff = character()))
 
   new_value <- "exponential"
-  expect_type(settings(distr.Surv = substr(new_value, 1, 3)), "list")
-  expect_identical(settings("distr.Surv"), new_value)
-  expect_error(settings(distr.Surv = character()))
+  expect_type(settings(distr.SurvMeans = substr(new_value, 1, 3)), "list")
+  expect_identical(settings("distr.SurvMeans"), new_value)
+  expect_error(settings(distr.SurvMeans = character()))
 
   new_value <- "exponential"
   expect_type(settings(distr.SurvProbs = substr(new_value, 1, 3)), "list")

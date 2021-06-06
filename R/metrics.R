@@ -15,12 +15,13 @@
 #'   probabilities are classified as events and below which survival
 #'   probabilities are classified.
 #' @param distr character string specifying a distribution with which to
-#'   estimate the survival mean in the total sum of square component of
+#'   estimate the observed survival mean in the total sum of square component of
 #'   \code{r2}.  Possible values are \code{"empirical"} for the Kaplan-Meier
 #'   estimator, \code{"exponential"}, \code{"extreme"}, \code{"gaussian"},
 #'   \code{"loggaussian"}, \code{"logistic"}, \code{"loglogistic"},
-#'   \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or \code{"weibull"}
-#'   (default).
+#'   \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or \code{"weibull"}.
+#'   Defaults to the distribution that was used in predicting mean survival
+#'   times.
 #' @param f function to calculate a desired sensitivity-specificity tradeoff.
 #' @param metrics list of two performance metrics for the calculation [default:
 #'   ROC metrics].

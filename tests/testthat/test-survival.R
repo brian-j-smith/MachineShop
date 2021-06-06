@@ -13,7 +13,7 @@ rec <- recipe(time + status ~ sex + age + year + thickness + ulcer, data = df) %
 times <- 365 * c(2, 5, 10)
 
 output <- function(obs, pred) {
-  print(head(pred))
+  print(pred)
   print(performance(obs, pred))
 }
 

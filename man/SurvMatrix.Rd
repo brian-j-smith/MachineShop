@@ -6,9 +6,9 @@
 \alias{SurvProbs}
 \title{SurvMatrix Class Constructors}
 \usage{
-SurvEvents(data = NA, times = NULL)
+SurvEvents(data = NA, times = NULL, distr = NULL)
 
-SurvProbs(data = NA, times = NULL)
+SurvProbs(data = NA, times = NULL, distr = NULL)
 }
 \arguments{
 \item{data}{matrix, or object that can be coerced to one, with survival
@@ -16,6 +16,9 @@ events or probabilities at points in time in the columns and cases in the
 rows.}
 
 \item{times}{numeric vector of survival times for the columns.}
+
+\item{distr}{character string specifying the survival distribution from which
+the matrix values were derived.}
 }
 \value{
 Object that is of the same class as the constructor name and inherits

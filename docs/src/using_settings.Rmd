@@ -8,7 +8,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `cutoff`
   : numeric (0, 1) threshold above which binary factor probabilities are classified as events and below which survival probabilities are classified [default: 0.5].
 
-`distr.Surv`
+`distr.SurvMeans`
   : character string specifying distributional approximations to estimated survival curves for predicting survival means.  Choices are `"empirical"` for the Kaplan-Meier estimator, `"exponential"`, `"rayleigh"`, or `"weibull"` (default).
 
 `distr.SurvProbs`

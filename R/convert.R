@@ -72,7 +72,14 @@ setMethod("convert_prob", c("numeric", "matrix"),
 
 setMethod("convert_prob", c("Surv", "matrix"),
   function(object, x, times, ...) {
-    SurvProbs(x, times)
+    SurvProbs(x, times, distr = attr(x, "surv_distr"))
+  }
+)
+
+
+setMethod("convert_prob", c("Surv", "numeric"),
+  function(object, x, ...) {
+    SurvMeans(x, distr = attr(x, "surv_distr"))
   }
 )
 
@@ -138,6 +145,6 @@ setMethod("convert_response", c("Surv", "SurvProbs"),
   function(object, x, cutoff, ...) {
     events <- x <= cutoff
     storage.mode(events) <- "integer"
-    SurvEvents(events, x@times)
+    SurvEvents(events, x@times, distr = x@distr)
   }
 )
