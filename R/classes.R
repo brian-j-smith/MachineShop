@@ -250,7 +250,7 @@ setClass("MLControl",
     strata_prop = "numeric",
     strata_size = "integer",
     times = "ANY",
-    dist = "ANY",
+    distr = "ANY",
     method = "ANY",
     seed = "numeric"
   )

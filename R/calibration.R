@@ -14,9 +14,9 @@
 #'   predicted survival probabilities and with \link[stats:loess]{loess} for
 #'   others.
 #' @param span numeric parameter controlling the degree of loess smoothing.
-#' @param dist character string specifying a distribution with which to estimate
-#'   observed survival means.  Possible values are \code{"empirical"} for the
-#'   Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
+#' @param distr character string specifying a distribution with which to
+#'   estimate observed survival means.  Possible values are \code{"empirical"}
+#'   for the Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
 #'   \code{"gaussian"}, \code{"loggaussian"}, \code{"logistic"},
 #'   \code{"loglogistic"}, \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or
 #'   \code{"weibull"} (default).
@@ -41,14 +41,14 @@
 #' }
 #'
 calibration <- function(
-  x, y = NULL, breaks = 10, span = 0.75, dist = NULL, na.rm = TRUE, ...
+  x, y = NULL, breaks = 10, span = 0.75, distr = NULL, na.rm = TRUE, ...
 ) {
   if (na.rm) {
     complete <- complete_subset(x = x, y = y)
     x <- complete$x
     y <- complete$y
   }
-  .calibration(x, y, breaks = breaks, span = span, dist = dist)
+  .calibration(x, y, breaks = breaks, span = span, distr = distr)
 }
 
 
@@ -190,16 +190,16 @@ setMethod(".calibration_default", c("Surv", "SurvProbs"),
 
 
 setMethod(".calibration_default", c("Surv", "numeric"),
-  function(observed, predicted, breaks, dist, span, ...) {
+  function(observed, predicted, breaks, distr, span, ...) {
     max_time <- max(time(observed))
-    dist <- if (is_counting(observed)) {
+    distr <- if (is_counting(observed)) {
       "empirical"
-    } else if (is.null(dist)) {
-      settings("dist.Surv")
+    } else if (is.null(distr)) {
+      settings("distr.Surv")
     } else {
-      match.arg(dist, c("empirical", names(survreg.distributions)))
+      match.arg(distr, c("empirical", names(survreg.distributions)))
     }
-    nparams <- if (dist %in% c("exponential", "rayleigh")) 1 else 2
+    nparams <- if (distr %in% c("exponential", "rayleigh")) 1 else 2
 
     f_survfit <- function(observed, weights = NULL) {
       km <- survfit(observed ~ 1, weights = weights, se.fit = FALSE)
@@ -207,8 +207,8 @@ setMethod(".calibration_default", c("Surv", "numeric"),
       list(Mean = est$matrix[["*rmean"]], SE = est$matrix[["*se(rmean)"]])
     }
 
-    f_survreg <- function(observed, dist, weights = NULL) {
-      regfit <- survreg(observed ~ 1, weights = weights, dist = dist)
+    f_survreg <- function(observed, distr, weights = NULL) {
+      regfit <- survreg(observed ~ 1, weights = weights, dist = distr)
       est <- predict(regfit, data.frame(row.names = 1), se.fit = TRUE)
       list(Mean = est$fit[[1]], SE = est$se.fit[[1]])
     }
@@ -225,10 +225,10 @@ setMethod(".calibration_default", c("Surv", "numeric"),
       }
       metrics_list <- map(function(value) {
         weights <- tricubic(predicted - value, span = span, min_weight = 0.01)
-        est <- if (dist == "empirical") {
+        est <- if (distr == "empirical") {
           f_survfit(observed, weights)
         } else {
-          f_survreg(observed, dist, weights)
+          f_survreg(observed, distr, weights)
         }
         with(est, c(Mean = Mean, SE = SE,
                     Lower = max(Mean - SE, 0),
@@ -244,10 +244,10 @@ setMethod(".calibration_default", c("Surv", "numeric"),
       )
       by_results <- by(df, df[c("Predicted", "Response")], function(data) {
         observed <- data$Observed
-        est <- if (dist == "empirical") {
+        est <- if (distr == "empirical") {
           f_survfit(observed)
         } else if (length(event_time(observed)) >= nparams) {
-          f_survreg(observed, dist)
+          f_survreg(observed, distr)
         } else {
           list(Mean = NA_real_, SE = NA_real_)
         }

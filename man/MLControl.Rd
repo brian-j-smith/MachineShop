@@ -32,7 +32,7 @@ MLControl(
   strata_prop = 0.1,
   strata_size = 20,
   times = NULL,
-  dist = NULL,
+  distr = NULL,
   method = NULL,
   seed = sample(.Machine$integer.max, 1),
   ...
@@ -60,7 +60,7 @@ data are stratified as categorical.}
 
 \item{strata_size}{minimum number of values in each strata.}
 
-\item{times, dist, method}{arguments passed to \code{\link{predict}}.}
+\item{times, distr, method}{arguments passed to \code{\link{predict}}.}
 
 \item{seed}{integer to set the seed at the start of resampling.}
 }

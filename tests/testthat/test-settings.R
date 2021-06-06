@@ -23,14 +23,14 @@ test_that("settings changes and views", {
   expect_error(settings(cutoff = character()))
 
   new_value <- "exponential"
-  expect_type(settings(dist.Surv = substr(new_value, 1, 3)), "list")
-  expect_identical(settings("dist.Surv"), new_value)
-  expect_error(settings(dist.Surv = character()))
+  expect_type(settings(distr.Surv = substr(new_value, 1, 3)), "list")
+  expect_identical(settings("distr.Surv"), new_value)
+  expect_error(settings(distr.Surv = character()))
 
   new_value <- "exponential"
-  expect_type(settings(dist.SurvProbs = substr(new_value, 1, 3)), "list")
-  expect_identical(settings("dist.SurvProbs"), new_value)
-  expect_error(settings(dist.SurvProbs = character()))
+  expect_type(settings(distr.SurvProbs = substr(new_value, 1, 3)), "list")
+  expect_identical(settings("distr.SurvProbs"), new_value)
+  expect_error(settings(distr.SurvProbs = character()))
 
   expect_type(settings(grid = 5), "list")
   expect_s4_class(settings("grid"), "Grid")

@@ -2,16 +2,16 @@
 
 
 predict.Surv <- function(
-  object, ..., times = NULL, dist = NULL, weights = NULL
+  object, ..., times = NULL, distr = NULL, weights = NULL
 ) {
-  dist <- if (is_counting(object)) {
+  distr <- if (is_counting(object)) {
     "empirical"
-  } else if (is.null(dist)) {
-    settings(if (length(times)) "dist.SurvProbs" else "dist.Surv")
+  } else if (is.null(distr)) {
+    settings(if (length(times)) "distr.SurvProbs" else "distr.Surv")
   } else {
-    match.arg(dist, c("empirical", "exponential", "rayleigh", "weibull"))
+    match.arg(distr, c("empirical", "exponential", "rayleigh", "weibull"))
   }
-  .predict.Surv(object, ..., times = times, dist = dist, weights = weights)
+  .predict.Surv(object, ..., times = times, distr = distr, weights = weights)
 }
 
 
@@ -28,8 +28,8 @@ predict.Surv <- function(
 }
 
 
-.predict.Surv.matrix <- function(object, x, times, dist, ...) {
-  individual_fits <- surv_fit(dist, SurvProbs(x, time(object)))
+.predict.Surv.matrix <- function(object, x, times, distr, ...) {
+  individual_fits <- surv_fit(distr, SurvProbs(x, time(object)))
   if (length(times)) {
     predict(individual_fits, times = times)
   } else {
@@ -38,10 +38,10 @@ predict.Surv <- function(
 }
 
 
-.predict.Surv.numeric <- function(object, lp, new_lp, times, dist, ...) {
+.predict.Surv.numeric <- function(object, lp, new_lp, times, distr, ...) {
   risks <- exp(lp)
   new_risks <- exp(new_lp)
-  baseline_fit <- surv_fit(dist, object, risks = risks, ...)
+  baseline_fit <- surv_fit(distr, object, risks = risks, ...)
   if (length(times)) {
     predict(baseline_fit, times = times, new_risks = new_risks)
   } else {
@@ -50,8 +50,8 @@ predict.Surv <- function(
 }
 
 
-.predict.Surv.survfit <- function(object, x, times, dist, ...) {
-  individual_fit <- surv_fit(dist, x)
+.predict.Surv.survfit <- function(object, x, times, distr, ...) {
+  individual_fit <- surv_fit(distr, x)
   if (length(times)) {
     predict(individual_fit, times = times)
   } else {

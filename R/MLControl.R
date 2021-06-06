@@ -18,7 +18,7 @@
 #'   data are stratified as categorical.
 #' @param strata_prop minimum proportion of data in each strata.
 #' @param strata_size minimum number of values in each strata.
-#' @param times,dist,method arguments passed to \code{\link{predict}}.
+#' @param times,distr,method arguments passed to \code{\link{predict}}.
 #' @param seed integer to set the seed at the start of resampling.
 #' @param ...  arguments passed to \code{MLControl}.
 #'
@@ -221,7 +221,7 @@ TrainControl <- function(...) {
 #'
 MLControl <- function(
   strata_breaks = 4, strata_nunique = 5, strata_prop = 0.1, strata_size = 20,
-  times = NULL, dist = NULL, method = NULL,
+  times = NULL, distr = NULL, method = NULL,
   seed = sample(.Machine$integer.max, 1), ...
 ) {
   strata_breaks <- check_integer(strata_breaks, bounds = c(0, Inf))
@@ -238,6 +238,6 @@ MLControl <- function(
 
   new("MLControl", strata_breaks = strata_breaks,
       strata_nunique = strata_nunique, strata_prop = strata_prop,
-      strata_size = strata_size, times = times, dist = dist, method = method,
+      strata_size = strata_size, times = times, distr = distr, method = method,
       seed = seed)
 }

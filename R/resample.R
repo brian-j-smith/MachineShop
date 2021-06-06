@@ -402,7 +402,7 @@ subsample <- function(train, test, model, control, id = 1) {
     df$Observed <- response(test)
     df$Predicted <- predict(model_fit, as.data.frame(test), type = "prob",
                             times = control@times, method = control@method,
-                            dist = control@dist)
+                            distr = control@distr)
     df
   }
 

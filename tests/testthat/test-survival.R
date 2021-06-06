@@ -23,11 +23,11 @@ test_predict_all <- function(..., model) {
   invisible(capture.output(model_fit <- fit(..., model = model)))
   obs <- response(model_fit)
 
-  for (dist in c("emp", "exp", "ray", "wei")) {
-    cat("\nPredicted means (dist = ", dist, ")\n", sep = "")
-    output(obs, predict(model_fit, dist = dist))
-    cat("\nPredicted probabilities (dist = ", dist, ")\n", sep = "")
-    output(obs, predict(model_fit, times = times, type = "prob", dist = dist))
+  for (distr in c("emp", "exp", "ray", "wei")) {
+    cat("\nPredicted means (distr = ", distr, ")\n", sep = "")
+    output(obs, predict(model_fit, distr = distr))
+    cat("\nPredicted probabilities (distr = ", distr, ")\n", sep = "")
+    output(obs, predict(model_fit, times = times, type = "prob", distr = distr))
   }
 
   for (method in c("bre", "efr")) {

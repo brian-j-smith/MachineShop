@@ -122,7 +122,7 @@ A `r rdoc_url("predict()")` function is supplied for application to model fit re
 predict(surv_fit, newdata = surv_test) %>% head
 
 ## Predicted survival means (empirical distribution)
-predict(surv_fit, newdata = surv_test, dist = "empirical") %>% head
+predict(surv_fit, newdata = surv_test, distr = "empirical") %>% head
 ```
 
 In addition to survival means, predicted survival probabilities (`type = "prob"`) or 0-1 survival events (default: `type = "response"`) can be obtained with the follow-up `times` argument.  The cutoff probability for classification of survival events (or other binary responses) can be set optionally with the `cutoff` argument (default: `cutoff = 0.5`).  As with mean estimation, distributional approximations to the survival functions may be specified for the predictions, with the default for survival probabilities being the empirical distribution.

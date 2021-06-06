@@ -134,7 +134,7 @@ mse(observed, predicted = NULL, ...)
 
 msle(observed, predicted = NULL, ...)
 
-r2(observed, predicted = NULL, dist = NULL, ...)
+r2(observed, predicted = NULL, distr = NULL, ...)
 
 rmse(observed, predicted = NULL, ...)
 
@@ -170,10 +170,10 @@ curves, or \code{NULL} for resample-specific metrics.}
 main diagonal in confusion matrices are raised to calculate
 \code{weighted_kappa2}.}
 
-\item{dist}{character string specifying a distribution with which to estimate
-the survival mean in the total sum of square component of \code{r2}.
-Possible values are \code{"empirical"} for the Kaplan-Meier estimator,
-\code{"exponential"}, \code{"extreme"}, \code{"gaussian"},
+\item{distr}{character string specifying a distribution with which to
+estimate the survival mean in the total sum of square component of
+\code{r2}.  Possible values are \code{"empirical"} for the Kaplan-Meier
+estimator, \code{"exponential"}, \code{"extreme"}, \code{"gaussian"},
 \code{"loggaussian"}, \code{"logistic"}, \code{"loglogistic"},
 \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or \code{"weibull"}
 (default).}

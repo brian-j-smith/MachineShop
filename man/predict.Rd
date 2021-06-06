@@ -11,7 +11,7 @@
   times = NULL,
   type = c("response", "prob"),
   cutoff = MachineShop::settings("cutoff"),
-  dist = NULL,
+  distr = NULL,
   method = NULL,
   ...
 )
@@ -32,7 +32,7 @@ survival events/probabilities or \code{NULL} for predicted survival means.}
 probabilities are classified as events and below which survival
 probabilities are classified.}
 
-\item{dist}{character string specifying distributional approximations to
+\item{distr}{character string specifying distributional approximations to
 estimated survival curves.  Possible values are \code{"empirical"},
 \code{"exponential"}, \code{"rayleigh"}, or \code{"weibull"}; with defaults
 of \code{"empirical"} for predicted survival events/probabilities and

@@ -158,7 +158,7 @@ setMethod("show", "MLControl",
         sep = "")
     opts <- c("times" = "Survival times",
               "method" = "Method",
-              "dist" = "Distribution")
+              "distr" = "Distribution")
     for (name in names(opts)) {
       x <- slot(object, name)
       if (length(x)) cat(opts[name], ": ", toString(x), "\n", sep = "")

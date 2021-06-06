@@ -9,7 +9,7 @@ calibration(
   y = NULL,
   breaks = 10,
   span = 0.75,
-  dist = NULL,
+  distr = NULL,
   na.rm = TRUE,
   ...
 )
@@ -28,9 +28,9 @@ others.}
 
 \item{span}{numeric parameter controlling the degree of loess smoothing.}
 
-\item{dist}{character string specifying a distribution with which to estimate
-observed survival means.  Possible values are \code{"empirical"} for the
-Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
+\item{distr}{character string specifying a distribution with which to
+estimate observed survival means.  Possible values are \code{"empirical"}
+for the Kaplan-Meier estimator, \code{"exponential"}, \code{"extreme"},
 \code{"gaussian"}, \code{"loggaussian"}, \code{"logistic"},
 \code{"loglogistic"}, \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or
 \code{"weibull"} (default).}
