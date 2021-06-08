@@ -136,11 +136,6 @@ setMethod("convert_response", c("ordered", "matrix"),
 )
 
 
-setMethod("convert_response", c("Surv", "SurvEvents"),
-  function(object, x, ...) x
-)
-
-
 setMethod("convert_response", c("Surv", "SurvProbs"),
   function(object, x, cutoff, ...) {
     events <- x <= cutoff
