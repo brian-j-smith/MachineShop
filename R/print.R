@@ -89,11 +89,13 @@ setMethod("show", "ConfusionSummary",
 )
 
 
+#' @rdname print-methods
+#'
 print.DiscreteVariate <- function(
   x, n = MachineShop::settings("print_max"), ...
 ) {
   print_title(x)
-  print(as(x, "numeric"))
+  print_items(as(x, "numeric"), n = n)
   cat("Range: ", x@min, ", ", x@max, "\n", sep = "")
   invisible(x)
 }
@@ -787,8 +789,8 @@ print_items.matrix <- function(x, n = Inf, n_extra = 10 * n, ...) {
   diff_cols <- ncol(x) - length(col_inds)
   cols <- tail(colnames(x), diff_cols)
   if (diff_rows) {
-    str <- paste("... with", format_len(diff_rows), "more row",
-                 if (diff_rows > 1) "\bs")
+    str <- paste0("... with ", format_len(diff_rows), " more row",
+                  if (diff_rows > 1) "s")
     if (diff_cols) {
       str <- paste(str, "and", format_len(diff_cols),
                    label_items("column", cols, n_extra))
@@ -797,6 +799,18 @@ print_items.matrix <- function(x, n = Inf, n_extra = 10 * n, ...) {
   } else if (diff_cols) {
     label <- paste("... with", format_len(diff_cols), "more column")
     print_items(label_items(label, cols, n_extra))
+  }
+}
+
+
+print_items.numeric <- function(x, n = Inf, ...) {
+  diff <- length(x) - n
+  if (diff > 0) {
+    print(head(x, n), max = n)
+    cat("... with ", format_len(diff), " more value", if (diff > 1) "s", "\n",
+        sep = "")
+  } else {
+    print(x, max = n)
   }
 }
 

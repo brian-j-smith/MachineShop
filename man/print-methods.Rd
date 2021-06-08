@@ -4,6 +4,7 @@
 \alias{print}
 \alias{print.BinomialVariate}
 \alias{print.Calibration}
+\alias{print.DiscreteVariate}
 \alias{print.ListOf}
 \alias{print.MLModel}
 \alias{print.ModelFrame}
@@ -22,6 +23,8 @@
 \method{print}{BinomialVariate}(x, n = MachineShop::settings("print_max"), ...)
 
 \method{print}{Calibration}(x, n = MachineShop::settings("print_max"), ...)
+
+\method{print}{DiscreteVariate}(x, n = MachineShop::settings("print_max"), ...)
 
 \method{print}{ListOf}(x, n = MachineShop::settings("print_max"), ...)
 
