@@ -91,8 +91,8 @@ MLModelFunction(SelectedModel) <- NULL
 #'   \code{\link{ParameterGrid}} object; or \link[=data.frame]{data frame}
 #'   containing parameter values at which to evaluate the model, such as that
 #'   returned by \code{\link{expand_params}}.
-#' @param fixed list of fixed parameter values to combine with those in
-#'   \code{grid}.
+#' @param fixed list or one-row data frame with columns of fixed parameter
+#'   values to combine with those in \code{grid}.
 #' @param control \link[=controls]{control} function, function name, or call
 #'   defining the resampling method to be employed.
 #' @param metrics \link[=metrics]{metric} function, function name, or vector of

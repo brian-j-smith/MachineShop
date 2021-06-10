@@ -26,8 +26,8 @@ and which specify the number of values used to construct the grid;
 containing parameter values at which to evaluate the model, such as that
 returned by \code{\link{expand_params}}.}
 
-\item{fixed}{list of fixed parameter values to combine with those in
-\code{grid}.}
+\item{fixed}{list or one-row data frame with columns of fixed parameter
+values to combine with those in \code{grid}.}
 
 \item{control}{\link[=controls]{control} function, function name, or call
 defining the resampling method to be employed.}
