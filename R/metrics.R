@@ -214,7 +214,7 @@ metric_method_name <- function(f) {
 metric_matrix <- function(observed, predicted, fun, ...) {
   mean(map_num(function(i) {
     fun(observed[, i], predicted[, i], ...)
-  }, 1:ncol(observed)))
+  }, seq_len(ncol(observed))))
 }
 
 

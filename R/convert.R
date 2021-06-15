@@ -110,7 +110,8 @@ setMethod("convert_response", c("factor", "factor"),
 
 setMethod("convert_response", c("factor", "matrix"),
   function(object, x, ...) {
-    factor(max.col(x), levels = 1:nlevels(object), labels = levels(object))
+    factor(max.col(x), levels = seq_len(nlevels(object)),
+           labels = levels(object))
   }
 )
 
@@ -131,7 +132,8 @@ setMethod("convert_response", c("integer", "numeric"),
 
 setMethod("convert_response", c("ordered", "matrix"),
   function(object, x, ...) {
-    ordered(max.col(x), levels = 1:nlevels(object), labels = levels(object))
+    ordered(max.col(x), levels = seq_len(nlevels(object)),
+            labels = levels(object))
   }
 )
 

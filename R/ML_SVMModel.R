@@ -194,8 +194,8 @@ MLModelFunction(SVMTanhModel) <- NULL
     param = c("C", "degree", "order", "scale", "sigma"),
     values = c(
       function(n, ...) 2^seq_range(-4, 2, c(-4, 10), n),
-      function(n, ...) 1:min(n, 3),
-      function(n, ...) 1:min(n, 3),
+      function(n, ...) seq_len(min(n, 3)),
+      function(n, ...) seq_len(min(n, 3)),
       function(n, ...) 10^seq_range(-4, 2, c(-4, log10(2)), n),
       function(n, data, ...) {
         sigmas <- kernlab::sigest(model.matrix(data, intercept = FALSE),

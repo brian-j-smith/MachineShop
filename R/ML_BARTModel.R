@@ -113,7 +113,7 @@ BARTModel <- function(
       } else if (is(object, "survbart")) {
         N <- nrow(newx)
         K <- object$K
-        newx <- cbind(t = object$times, newx[rep(1:N, each = K), ])
+        newx <- cbind(t = object$times, newx[rep(seq_len(N), each = K), ])
         pred <- predict(object, newdata = newx)$surv.test.mean %>%
           matrix(nrow = N, ncol = K, byrow = TRUE)
         predict(Surv(object$times), pred, ...)

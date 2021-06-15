@@ -67,7 +67,7 @@ MDAModel <- function(
     gridinfo = new_gridinfo(
       param = "subclasses",
       values = c(
-        function(n, ...) 1:min(n, 10) + 1
+        function(n, ...) seq(2, length = min(n, 10))
       )
     ),
     fit = function(formula, data, weights, ...) {

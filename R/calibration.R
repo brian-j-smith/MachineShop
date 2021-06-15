@@ -127,7 +127,7 @@ setMethod(".calibration_default", c("matrix", "matrix"),
         y <- observed[, i]
         x <- predicted[, i]
         predict(loess(y ~ x, span = span), se = TRUE)
-      }, 1:ncol(predicted))
+      }, seq_len(ncol(predicted)))
       Mean <- c(map_num(getElement, loessfit_list, "fit"))
       SE <- c(map_num(getElement, loessfit_list, "se.fit"))
       df$Observed <- cbind(Mean = Mean, SE = SE,
@@ -166,7 +166,7 @@ setMethod(".calibration_default", c("Surv", "SurvProbs"),
         x <- predicted[, i]
         harefit <- polspline::hare(observed[, "time"], observed[, "status"], x)
         1 - polspline::phare(times[i], x, harefit)
-      }, 1:ncol(predicted)))
+      }, seq_len(ncol(predicted))))
       df$Observed <- cbind(Mean = Mean, SE = NA, Lower = NA, Upper = NA)
       df
     } else {

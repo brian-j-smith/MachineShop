@@ -97,13 +97,13 @@ dependence <- function(
   data_select_grid <- if (interaction) {
     expand.grid(grid_list, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
   } else {
-    df <- data.frame(row.names = 1:sum(lengths(grid_list)))
-    pos <- 0
+    df <- data.frame(row.names = seq_len(sum(lengths(grid_list))))
+    start <- 1
     for (name in names(grid_list)) {
       n <- length(grid_list[[name]])
       df[[name]] <- rep_len(grid_list[[name]], nrow(df))
-      df[[name]][-(pos + seq_len(n))] <- NA
-      pos <- pos + n
+      df[[name]][-seq(start, length = n)] <- NA
+      start <- start + n
     }
     df
   }

@@ -280,7 +280,7 @@ TunedInput.recipe <- function(
   grid <- x@grid
   recipe <- as(x, "ModelRecipe")
   if (all(dim(grid) != 0)) {
-    grid_split <- split(grid, 1:nrow(grid))
+    grid_split <- split(grid, seq_len(nrow(grid)))
     update_input <- function(x) do.call(update, c(list(recipe), x))
     train_step <- resample_selection(grid_split, update_input, x@params, model,
                                      class = "TunedInput")

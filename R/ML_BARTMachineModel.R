@@ -71,9 +71,9 @@ BARTMachineModel <- function(
       values = c(
         function(n, ...) seq(0.9, 0.99, length = n),
         function(n, ...) seq(1, 3, length = n),
-        function(n, ...) 1:min(n, 10) + 1,
+        function(n, ...) seq(2, length = min(n, 10)),
         function(n, data, ...) {
-          if (is.numeric(response(data))) 1:min(n, 10) + 1
+          if (is.numeric(response(data))) seq(2, length = min(n, 10))
         }
       )
     ),

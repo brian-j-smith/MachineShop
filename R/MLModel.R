@@ -175,7 +175,7 @@ unMLModelFit <- function(object) {
       object$mlmodel <- NULL
       classes <- class(object)
       pos <- match("MLModelFit", classes)
-      structure(object, class = classes[-(1:pos)])
+      structure(object, class = classes[-seq_len(pos)])
     }
   } else object
 }

@@ -39,7 +39,9 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
     gridinfo = new_gridinfo(
       param = "ncomp",
       values = c(
-        function(n, data, ...) 1:min(nrow(data), nvars(data, PLSModel) - 1, n)
+        function(n, data, ...) {
+          seq_len(min(nrow(data), nvars(data, PLSModel) - 1, n))
+        }
       )
     ),
     fit = function(formula, data, weights, ...) {
@@ -60,12 +62,12 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
               type = "response")
     },
     varimp = function(object, ...) {
-      beta <- coef(object, comps = 1:object$ncomp)
+      beta <- coef(object, comps = seq_len(object$ncomp))
       perf <- quote(MSEP.mvr(x)$val[1, , , drop = FALSE]) %>%
         eval(list(x = object), asNamespace("pls"))
       vi <- map_num(function(i) {
         drop(as.matrix(abs(beta[, i, ])) %*% prop.table(-diff(perf[, i, ])))
-      }, 1:dim(beta)[2])
+      }, seq_len(dim(beta)[2]))
       dimnames(vi) <- dimnames(beta)[1:2]
       if (ncol(vi) <= 2) vi <- vi[, 1]
       vi

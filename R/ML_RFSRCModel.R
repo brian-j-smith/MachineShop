@@ -116,7 +116,7 @@ RFSRCModel <- function(
       data <- as.data.frame(data)
       family <- switch_class(y,
         "matrix" = {
-          colnames(y) <- paste0("y", 1:ncol(y))
+          colnames(y) <- paste0("y", seq_len(ncol(y)))
           "Multivar"
         },
         "Surv" = "Surv"

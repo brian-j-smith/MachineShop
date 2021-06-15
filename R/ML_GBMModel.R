@@ -55,7 +55,7 @@ GBMModel <- function(
       param = c("n.trees", "interaction.depth", "shrinkage", "n.minobsinnode"),
       values = c(
         function(n, ...) round(seq_range(0, 50, c(1, 1000), n + 1)),
-        function(n, ...) 1:min(n, 10),
+        function(n, ...) seq_len(min(n, 10)),
         function(n, ...) seq(0.001, 0.1, length = n),
         function(n, data, ...) round(seq(1, min(20, nrow(data)), length = n))
       ),

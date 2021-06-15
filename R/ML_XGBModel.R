@@ -257,7 +257,7 @@ MLModelFunction(XGBTreeModel) <- NULL
               "min_child_weight", "colsample_bytree", "rate_drop", "skip_drop"),
     values = c(
       function(n, ...) round(seq_range(0, 50, c(1, 1000), n + 1)),
-      function(n, ...) 1:min(n, 10),
+      function(n, ...) seq_len(min(n, 10)),
       function(...) c(0.3, 0.4),
       function(n, ...) seq(0.25, 1, length = n),
       function(...) c(0.6, 0.8),

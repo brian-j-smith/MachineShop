@@ -356,13 +356,13 @@ expand_steps <- function(..., random = FALSE) {
   grid <- expand_params(unlist(steps, recursive = FALSE), random = random)
   recipe_grid <- tibble(.rows = nrow(grid))
 
-  offset <- 0
+  start <- 1
   for (name in step_names) {
-    indices <- offset + seq_len(length(steps[[name]]))
-    x <- grid[indices]
+    n <- length(steps[[name]])
+    x <- grid[seq(start, length = n)]
     names(x) <- substring(names(x), nchar(name) + 2)
     recipe_grid[[name]] <- x
-    offset <- offset + length(indices)
+    start <- start + n
   }
 
   RecipeGrid(recipe_grid)

@@ -95,12 +95,12 @@ NNetModel <- function(
       beta <- abs(coef(object))
       nms <- names(beta)
 
-      idx <- expand.grid(hidden = 1:size, input = 1:nvars)
+      idx <- expand.grid(hidden = seq_len(size), input = seq_len(nvars))
       labels <- paste0("i", idx$input, "->h", idx$hidden)
       i2h <- matrix(beta[match(labels, nms)], size, nvars)
 
-      idx <- expand.grid(hidden = 1:size,
-                         output = if (nresp == 1) "" else 1:nresp)
+      idx <- expand.grid(hidden = seq_len(size),
+                         output = if (nresp == 1) "" else seq_len(nresp))
       labels <- paste0("h", idx$hidden, "->o", idx$output)
       h2o <- matrix(beta[match(labels, nms)], size, nresp)
 
@@ -109,7 +109,7 @@ NNetModel <- function(
           prop.table(margin = 1) %>%
           colSums %>%
           prop.table)
-      }, 1:nresp)
+      }, seq_len(nresp))
       dimnames(vi) <- list(object$coefnames, colnames(object$residuals))
       drop(vi)
     }
