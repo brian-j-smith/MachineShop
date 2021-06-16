@@ -253,7 +253,7 @@ Resamples.list <- function(object, ...) {
 
   if (is_optimism_control) {
     pred_list <- map(attr, df_list, "CV.Predicted")
-    split_factor <- rep(seq_len(object@folds), times = object@repeats)
+    split_factor <- rep(seq_len(object@folds), object@repeats)
     df <- split(seq_along(pred_list), split_factor) %>%
       map(function(indices) do.call(append, pred_list[indices]), .) %>%
       as.data.frame

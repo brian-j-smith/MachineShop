@@ -182,10 +182,10 @@ Weibull.Surv <- function(x, risks = NULL, shape = NULL, weights = NULL, ...) {
 
 Weibull.survfit <- function(x, weights = NULL, ...) {
   weights <- x$n / sum(x$n.event + x$n.censor)
-  time_event <- rep(x$time, times = round(weights * x$n.event))
-  time_censor <- rep(x$time, times = round(weights * x$n.censor))
+  time_event <- rep(x$time, round(weights * x$n.event))
+  time_censor <- rep(x$time, round(weights * x$n.censor))
   time <- c(time_event, time_censor)
-  status <- rep(c(1, 0), times = c(length(time_event), length(time_censor)))
+  status <- rep(c(1, 0), c(length(time_event), length(time_censor)))
   Weibull(Surv(time, status), ...)
 }
 

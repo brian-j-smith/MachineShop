@@ -216,7 +216,7 @@ check_numeric <- function(
   x, bounds = c(-Inf, Inf), include = FALSE, type = c("numeric", "integer"),
   scalar = TRUE
 ) {
-  include <- rep(include, length.out = 2)
+  include <- rep(include, length = 2)
   type <- match.arg(type)
 
   result <- try(suppressWarnings(as(x, type)), silent = TRUE)
