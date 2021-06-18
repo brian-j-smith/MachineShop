@@ -1,6 +1,44 @@
-# News
+# MachineShop News
 
 ## Version Updates
+
+## 2.9.0
+* Rename tibble column `regular` to `default` in `MLModel` gridinfo slot.
+* Redefine `size` and `random` arguments of `ParameterGrid()` to match those of `Grid()`.
+* Revise selection of character values in model grids.
+  * Select `coeflearn` values in their defined order instead of at random in `AdaBoostModel`.
+  * Select `kernels` values in their defined order instead of at random in `KNNModel`.
+  * Add survival `splitrule` methods in `RangerModel`.
+  * Select `splitrule` values in their defined order instead of at random in `RangerModel`.
+* Revise global settings names.
+  * Rename `max.print` to `print_max`.
+  * Rename `progress.resample` to `resample_progress`.
+  * Rename `stat.train` to `stat.Trained`.
+  * Rename `dist.Surv` to `distr.SurvMeans`.
+  * Rename `dist.SurvProbs` to `distr.SurvProbs`.
+* Implement customized stratification methods for resampling.
+  * Stratify survival data by time within event status by default instead of by event status only.
+  * Add `strata_breaks`, `strata_nunique`, `strata_prop` and `strata_size` arguments to `MLControl()` constructor.
+  * Reduce `strata_breaks` if numeric quantile bins are below `strata_prop` and `strata_size`.
+  * Pool smallest factor levels below `strata_prop` and `strata_size` iteratively.
+  * Pool smallest adjacent ordered levels below `strata_prop` and `strata_size` iteratively.
+* Remove deprecated `length` arguments from `Grid()` and `ParameterGrid()`.
+* Drop compatibility with deprecated `gridinfo` functions in `MLModel()`.
+* New and improved survival analysis methods.
+  * Add support for counting process survival data.
+  * Use model weights in estimation of predicted baseline survival curves.
+  * Change censoring curve estimation method from direct to cumulative hazard-based in the `brier()` metric.
+  * Improve computational speed of survival curve estimation.
+  * Remove `"fleming-harrington"` as a choice for the `method` argument of `predict()` and for the `method.EmpiricalSurv` global setting, because it is a special case of the existing (default) `"efron"` choice and thus not needed.
+  * Add `"rayleigh"` choice for the `distr.Surv` and `distr.SurvProbs` global settings.
+* Rename `dist` argument to `distr` in `calibration()`, `MLControl()`, `predict()`, and `r2()`.
+* Return survival distribution name with predicted values.
+  * Add `distr` argument to `SurvEvents()` and `SurvProbs()`.
+  * Add `SurvMeans` class.
+  * Return predicted mean survival times as `SurvMeans` object.
+  * Default to the distribution used in predicting mean survival times in `calibration()` and `r2()`.
+* Rename `"terms"` predictor_encoding to `"model.frame"` in `MLModel` class.
+* Pass elliptical arguments in `performance()` response type-specific methods to `metrics` supplied as a single `MLMetric` function.
 
 ## 2.8.0
 * Replace `get_grid()` with `expand_modelgrid()`.
