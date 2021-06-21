@@ -128,8 +128,8 @@ select_call <- function(x, parent_call = NULL, last_call = NULL) {
 
 check_assignment <- function(x, value = x) {
   if (is(value, "error")) {
-    value$message <- paste0("Failed to assign '", substitute(x), "' value.\n",
-                            value$message)
+    value$message <- paste0("Failed to assign '", deparse1(substitute(x)),
+                            "' value.\n", value$message)
   }
   value
 }
