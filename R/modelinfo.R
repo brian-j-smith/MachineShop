@@ -60,7 +60,7 @@ modelinfo <- function(...) {
 
 .modelinfo.default <- function(x, ...) {
   info <- list(x)
-  if (length(list(...))) c(info, .modelinfo(...)) else info
+  if (...length()) c(info, .modelinfo(...)) else info
 }
 
 
@@ -79,7 +79,7 @@ modelinfo <- function(...) {
 
 
 .modelinfo.list <- function(x, ...) {
-  if (length(list(...))) .modelinfo(...) else list()
+  if (...length()) .modelinfo(...) else list()
 }
 
 
@@ -92,7 +92,7 @@ modelinfo <- function(...) {
     grid = has_grid(x),
     varimp = has_varimp(x)
   )), names = x@name)
-  if (length(list(...))) c(info, .modelinfo(...)) else info
+  if (...length()) c(info, .modelinfo(...)) else info
 }
 
 

@@ -57,7 +57,7 @@ metricinfo <- function(...) {
 
 .metricinfo.default <- function(x, ...) {
   info <- list(x)
-  if (length(list(...))) c(info, .metricinfo(...)) else info
+  if (...length()) c(info, .metricinfo(...)) else info
 }
 
 
@@ -84,7 +84,7 @@ metricinfo <- function(...) {
 
 
 .metricinfo.list <- function(x, ...) {
-  if (length(list(...))) .metricinfo(...) else list()
+  if (...length()) .metricinfo(...) else list()
 }
 
 
@@ -110,7 +110,7 @@ metricinfo <- function(...) {
     response_types = types
   )), names = x@name)
 
-  if (length(list(...))) c(info, .metricinfo(...)) else info
+  if (...length()) c(info, .metricinfo(...)) else info
 }
 
 
