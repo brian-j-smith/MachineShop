@@ -69,7 +69,7 @@ ModelFrame.formula <- function(
 
   data <- as.data.frame(data)
   model_terms <- terms(x, data = data)
-  data[[deparse(response(model_terms))]] <- response(model_terms, data)
+  data[[deparse1(response(model_terms))]] <- response(model_terms, data)
   data <- data[all.vars(model_formula(model_terms))]
 
   ModelFrame(model_terms, data, na.rm = na.rm, names = rownames(data),
@@ -99,7 +99,7 @@ ModelFrame.matrix <- function(
     offsets <- tail(names(data), length(offsets))
   }
   model_terms <- terms(x, y, offsets = offsets)
-  data[[deparse(response(model_terms))]] <- y
+  data[[deparse1(response(model_terms))]] <- y
   end <- length(data)
   data <- data[c(end, seq_len(end - 1))]
 
@@ -130,7 +130,7 @@ ModelFrame.recipe <- function(x, ...) {
   data <- juice(x)
 
   model_terms <- terms(x)
-  data[[deparse(response(model_terms))]] <- response(model_terms, data)
+  data[[deparse1(response(model_terms))]] <- response(model_terms, data)
   data <- data[all.vars(model_formula(model_terms))]
 
   weights_name <- case_weights_name(x)
@@ -166,7 +166,7 @@ inline_calls <- function(x) {
 model_formula <- function(x) {
   x <- formula(x)
   response <- response(x)
-  if (!is.null(response)) x[[2]] <- as.name(deparse(response))
+  if (!is.null(response)) x[[2]] <- as.name(deparse1(response))
   x
 }
 
@@ -220,7 +220,7 @@ terms.list <- function(
     "ModelFormulaTerms"
   }
 
-  var_names <- c(if (has_y) deparse(y), x_char)
+  var_names <- c(if (has_y) deparse1(y), x_char)
   label_names <- x_char[name_inds]
 
   if (class == "ModelDesignTerms") {

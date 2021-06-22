@@ -35,7 +35,7 @@ utils::globalVariables(c("i", "x", "y"))
 
 
 attach_objects <- function(
-  what, pos = 2L, name = deparse(substitute(what), backtick = FALSE)
+  what, pos = 2L, name = deparse1(substitute(what), backtick = FALSE)
 ) {
   make_attach <- attach
   make_attach(what, pos, name, warn.conflicts = FALSE)
@@ -58,6 +58,11 @@ combine_dataframes <- function(x, y = NULL) {
 complete_subset <- function(...) {
   is_complete <- complete.cases(...)
   map(function(x) subset(x, is_complete), list(...))
+}
+
+
+deparse1 <- function(expr, collapse = " ", width.cutoff = 500L, ...) {
+  paste(deparse(expr, width.cutoff, ...), collapse = collapse)
 }
 
 
@@ -199,7 +204,7 @@ label_items <- function(label, x, n = Inf, add_names = FALSE) {
 
 
 list_to_function <- function(x) {
-  err_msg <- paste0("'", deparse(substitute(x)), "' must be a function, ",
+  err_msg <- paste0("'", deparse1(substitute(x)), "' must be a function, ",
                       "function name, or vector of these")
   if (is(x, "MLMetric")) x <- list(x)
   if (is(x, "vector")) {
@@ -396,7 +401,7 @@ require_namespaces <- function(packages) {
       item_names <- package_names[x]
       throw(LocalError("Call ", label_items(msg, items), ".\n",
                        "To address this issue, try running ", fix, "(",
-                       deparse(item_names), ")."))
+                       deparse1(item_names), ")."))
     }
   }
 
