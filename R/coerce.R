@@ -1,6 +1,8 @@
-asS3Part <- function(from) {
-  if (!isS4(from)) throw(TypeError(from, "S4 class"))
-  asS3(S3Part(from))
+setAsS3Part <- function(from, to) {
+  setAs(from, to, function(from) {
+    if (!isS4(from)) throw(TypeError(from, "S4 class"))
+    asS3(S3Part(from))
+  })
 }
 
 
@@ -9,7 +11,7 @@ as.data.frame.BinomialVariate <- function(x, ...) {
 }
 
 
-setAs("ListOf", "listof", asS3Part)
+setAsS3Part("ListOf", "listof")
 
 
 as.data.frame.ModelFrame <- function(x, ...) {
@@ -27,7 +29,7 @@ setAs("ModeledFrame", "data.frame",
 )
 
 
-setAs("ParameterGrid", "parameters", asS3Part)
+setAsS3Part("ParameterGrid", "parameters")
 
 
 setAs("recipe", "ModelRecipe",
@@ -35,7 +37,7 @@ setAs("recipe", "ModelRecipe",
 )
 
 
-setAs("RecipeGrid", "tbl_df", asS3Part)
+setAsS3Part("RecipeGrid", "tbl_df")
 
 
 setAs("SelectedModelFrame", "data.frame",
@@ -110,19 +112,19 @@ as.MLModel.MLModelFit <- function(x, ...) {
 }
 
 
-setAs("ModeledFrame", "ModelFrame", asS3Part)
+setAsS3Part("ModeledFrame", "ModelFrame")
 
 
-setAs("SelectedModelFrame", "ModelFrame", asS3Part)
+setAsS3Part("SelectedModelFrame", "ModelFrame")
 
 
-setAs("ModelRecipe", "recipe", asS3Part)
+setAsS3Part("ModelRecipe", "recipe")
 
 
-setAs("ModeledRecipe", "recipe", asS3Part)
+setAsS3Part("ModeledRecipe", "recipe")
 
 
-setAs("SelectedModelRecipe", "recipe", asS3Part)
+setAsS3Part("SelectedModelRecipe", "recipe")
 
 
-setAs("TunedModelRecipe", "recipe", asS3Part)
+setAsS3Part("TunedModelRecipe", "recipe")

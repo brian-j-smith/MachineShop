@@ -12,6 +12,14 @@
 NULL
 
 
+setShowDefault <- function(signature) {
+  setMethod("show", signature, function(object) {
+    print(object)
+    invisible()
+  })
+}
+
+
 #' @rdname print-methods
 #'
 print.BinomialVariate <- function(
@@ -32,12 +40,7 @@ print.Calibration <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setMethod("show", "Calibration",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("Calibration")
 
 
 print.ConfusionList <- function(
@@ -58,12 +61,7 @@ print.ConfusionMatrix <- function(
 }
 
 
-setMethod("show", "ConfusionMatrix",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("ConfusionMatrix")
 
 
 print.ConfusionSummary <- function(
@@ -81,12 +79,7 @@ print.ConfusionSummary <- function(
 }
 
 
-setMethod("show", "ConfusionSummary",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("ConfusionSummary")
 
 
 #' @rdname print-methods
@@ -101,12 +94,7 @@ print.DiscreteVariate <- function(
 }
 
 
-setMethod("show", "DiscreteVariate",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("DiscreteVariate")
 
 
 print.Grid <- function(x, n = MachineShop::settings("print_max"), ...) {
@@ -120,12 +108,7 @@ print.Grid <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setMethod("show", "Grid",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("Grid")
 
 
 #' @rdname print-methods
@@ -136,12 +119,7 @@ print.ListOf <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setMethod("show", "ListOf",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("ListOf")
 
 
 print.MLControl <- function(x, n = MachineShop::settings("print_max"), ...) {
@@ -300,12 +278,7 @@ print.MLMetric <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setMethod("show", "MLMetric",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("MLMetric")
 
 
 #' @rdname print-methods
@@ -324,12 +297,7 @@ print.MLModel <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setMethod("show", "MLModel",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("MLModel")
 
 
 print.MLModelFit <- function(x, ...) {
@@ -338,12 +306,7 @@ print.MLModelFit <- function(x, ...) {
 }
 
 
-setMethod("show", "MLModelFit",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("MLModelFit")
 
 
 print.MLModelFunction <- function(
@@ -357,12 +320,7 @@ print.MLModelFunction <- function(
 }
 
 
-setMethod("show", "MLModelFunction",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("MLModelFunction")
 
 
 #' @rdname print-methods
@@ -374,12 +332,7 @@ print.ModelFrame <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setMethod("show", "ModelFrame",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("ModelFrame")
 
 
 print.ModelRecipe <- function(x, n = MachineShop::settings("print_max"), ...) {
@@ -390,12 +343,7 @@ print.ModelRecipe <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setMethod("show", "ModelRecipe",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("ModelRecipe")
 
 
 print.ModelTerms <- function(x, n = MachineShop::settings("print_max"), ...) {
@@ -431,12 +379,7 @@ print.ParameterGrid <- function(
 }
 
 
-setMethod("show", "ParameterGrid",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("ParameterGrid")
 
 
 #' @rdname print-methods
@@ -468,12 +411,7 @@ print.PerformanceCurve <- function(
 }
 
 
-setMethod("show", "PerformanceCurve",
-  function(object){
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("PerformanceCurve")
 
 
 print.PerformanceDiffTest <- function(
@@ -499,12 +437,7 @@ print.RecipeGrid <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setMethod("show", "RecipeGrid",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("RecipeGrid")
 
 
 #' @rdname print-methods
@@ -521,12 +454,7 @@ print.Resamples <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setMethod("show", "Resamples",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("Resamples")
 
 
 #' @rdname print-methods
@@ -613,12 +541,7 @@ print.SurvMatrix <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setMethod("show", "SurvMatrix",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("SurvMatrix")
 
 
 #' @rdname print-methods
@@ -631,12 +554,7 @@ print.SurvMeans <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setMethod("show", "SurvMeans",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("SurvMeans")
 
 
 print.TabularArray <- function(x, n = MachineShop::settings("print_max"), ...) {
@@ -645,12 +563,7 @@ print.TabularArray <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setMethod("show", "TabularArray",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("TabularArray")
 
 
 #' @rdname print-methods
@@ -672,12 +585,7 @@ print.TrainStep <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setMethod("show", "TrainStep",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("TrainStep")
 
 
 #' @rdname print-methods
@@ -721,12 +629,7 @@ print.VarImp <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setMethod("show", "VarImp",
-  function(object) {
-    print(object)
-    invisible()
-  }
-)
+setShowDefault("VarImp")
 
 
 #################### Print Utility Functions ####################
