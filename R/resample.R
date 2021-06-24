@@ -331,11 +331,7 @@ rsample_data.ModelRecipe <- function(x, ...) as.data.frame(x)
 
 rsample_sets <- function(fun, data, control, ...) {
   df <- rsample_data(data)
-  df[["(strata)"]] <- case_strata(data,
-                                  breaks = control@strata_breaks,
-                                  nunique = control@strata_nunique,
-                                  prop = control@strata_prop,
-                                  size = control@strata_size)
+  df[["(strata)"]] <- do.call(case_strata, c(list(data), control@strata))
   suppressWarnings(fun(df, ..., strata = case_strata_name(df), pool = 0))
 }
 

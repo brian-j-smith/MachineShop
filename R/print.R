@@ -130,11 +130,12 @@ print.MLControl <- function(x, n = MachineShop::settings("print_max"), ...) {
 
 setMethod("show", "MLControl",
   function(object) {
+    strata <- object@strata
     cat("Stratification parameters\n",
-        "  Breaks: ", object@strata_breaks, "\n",
-        "  Unique numeric threshold: ", object@strata_nunique, "\n",
-        "  Minimum proportion: ", object@strata_prop, "\n",
-        "  Minimum size: ", object@strata_size, "\n",
+        "  Breaks: ", strata$breaks, "\n",
+        "  Unique numeric threshold: ", strata$nunique, "\n",
+        "  Minimum proportion: ", strata$prop, "\n",
+        "  Minimum size: ", strata$size, "\n",
         sep = "")
     opts <- c("times" = "Survival times",
               "method" = "Method",

@@ -12,12 +12,17 @@
 #'   (\code{0 < prop < 1}).
 #' @param repeats number of repeats of the K-fold partitioning.
 #' @param samples number of bootstrap samples.
-#' @param strata_breaks number of quantile bins desired for numeric data
-#'   used in stratified resample estimation of model predictive performance.
-#' @param strata_nunique number of unique values at or below which numeric
-#'   data are stratified as categorical.
-#' @param strata_prop minimum proportion of data in each strata.
-#' @param strata_size minimum number of values in each strata.
+#' @param strata list of the following optional arguments to be passed to
+#'   functions that construct resampling strata.  Strata arguments that are not
+#'   given will assume their default values.
+#'   \describe{
+#'     \item{\code{breaks}}{number of quantile bins desired for stratification
+#'       of numeric data.}
+#'     \item{\code{nunique}}{number of unique values at or below which numeric
+#'       data are stratified as categorical.}
+#'     \item{\code{prop}}{minimum proportion of data in each strata.}
+#'     \item{\code{size}}{minimum number of values in each strata.}
+#'   }
 #' @param times,distr,method arguments passed to \code{\link{predict}}.
 #' @param seed integer to set the seed at the start of resampling.
 #' @param ...  arguments passed to \code{MLControl}.
@@ -203,41 +208,54 @@ TrainControl <- function(...) {
 #' The base \code{MLControl} constructor initializes a set of control parameters
 #' that are common to all resampling methods.
 #'
-#' Parameters are available to control resampling strata which are constructed
-#' from numeric proportions for \code{\link{BinomialVariate}}; original values
-#' for \code{character}, \code{factor}, \code{logical}, and \code{ordered};
-#' first columns of values for \code{matrix}; original values for
-#' \code{numeric}; and numeric times within event statuses for \code{Surv}.
+#' The \code{strata} arguments are available to control resampling strata which
+#' are constructed from numeric proportions for \code{\link{BinomialVariate}};
+#' original values for \code{character}, \code{factor}, \code{logical},
+#' \code{numeric}, and \code{ordered}; first columns of values for
+#' \code{matrix}; and numeric times within event statuses for \code{Surv}.
 #' Stratification of survival data by event status only can be achieved by
-#' setting \code{strata_breaks = 1}.  Numeric values are stratified into
-#' quantile bins and categorical values into factor levels.  The number of bins
-#' will be the largest integer less than or equal to \code{strata_breaks}
-#' satisfying the \code{strata_prop} and \code{strata_size} control argument
-#' thresholds.  Categorical levels below the thresholds will be pooled
-#' iteratively by reassigning values in the smallest nominal level to the
-#' remaining ones at random and by combining the smallest adjacent ordinal
-#' levels.  Missing values are replaced with non-missing values sampled at
-#' random with replacement.
+#' setting \code{breaks = 1}.  Numeric values are stratified into quantile bins
+#' and categorical values into factor levels.  The number of bins will be the
+#' largest integer less than or equal to \code{breaks} satisfying the
+#' \code{prop} and \code{size} control argument thresholds.  Categorical levels
+#' below the thresholds will be pooled iteratively by reassigning values in the
+#' smallest nominal level to the remaining ones at random and by combining the
+#' smallest adjacent ordinal levels.  Missing values are replaced with
+#' non-missing values sampled at random with replacement.
 #'
 MLControl <- function(
-  strata_breaks = 4, strata_nunique = 5, strata_prop = 0.1, strata_size = 20,
+  strata = list(breaks = 4, nunique = 5, prop = 0.1, size = 20),
   times = NULL, distr = NULL, method = NULL,
   seed = sample(.Machine$integer.max, 1), ...
 ) {
-  strata_breaks <- check_integer(strata_breaks, bounds = c(0, Inf))
-  throw(check_assignment(strata_breaks))
+  strata_list <- eval(formals(sys.function())$strata)
 
-  strata_nunique <- check_integer(strata_nunique, bounds = c(0, Inf))
-  throw(check_assignment(strata_nunique))
+  dep_names <- paste0("strata_", names(strata_list))
+  if (!all(is.na(pmatch(...names(), dep_names)))) {
+    dep_names <- toString(paste0("'", dep_names, "'"), conj = "and")
+    throw(DeprecatedCondition(
+      paste0("Argument ", dep_names, " to MLControl()"),
+      paste0("argument 'strata'"), expired = TRUE
+    ))
+  }
 
-  strata_prop <- check_numeric(strata_prop, bounds = c(0, 1), include = TRUE)
-  throw(check_assignment(strata_prop))
+  strata_checks <- list(
+    breaks = function(x) check_integer(x, bounds = c(0, Inf)),
+    nunique = function(x) check_integer(x, bounds = c(0, Inf)),
+    prop = function(x) check_numeric(x, bounds = c(0, 1), include = TRUE),
+    size = function(x) check_integer(x, bounds = c(0, Inf))
+  )
 
-  strata_size <- check_integer(strata_size, bounds = c(0, Inf))
-  throw(check_assignment(strata_size))
+  match_inds <- pmatch(names(strata), names(strata_list))
+  for (i in which(!is.na(match_inds))) {
+    name <- names(strata_list)[match_inds[i]]
+    strata_list[[name]] <- strata_checks[[name]](strata[[i]])
+    eval(substitute(
+      throw(check_assignment(strata$x, strata_list[[name]]), sys.call(-2)),
+      list(x = name)
+    ))
+  }
 
-  new("MLControl", strata_breaks = strata_breaks,
-      strata_nunique = strata_nunique, strata_prop = strata_prop,
-      strata_size = strata_size, times = times, distr = distr, method = method,
-      seed = seed)
+  new("MLControl", strata = strata_list, times = times, distr = distr,
+      method = method, seed = seed)
 }
