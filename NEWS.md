@@ -1,6 +1,9 @@
-# MachineShop News
+# MachineShop (development version)
 
 ## Version Updates
+
+## 2.9.0.9000
+* Replace arguments `strata_breaks`, `strata_nunique`, `strata_prop`, and `strata_size` with `strata` in `MLModel()`.
 
 ## 2.9.0
 * Rename tibble column `regular` to `default` in `MLModel` gridinfo slot.
