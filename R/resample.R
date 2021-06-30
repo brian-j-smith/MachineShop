@@ -141,7 +141,7 @@ Resamples.data.frame <- function(object, ..., strata = NULL, .check = TRUE) {
     object$Model <- droplevels(object$Model)
   }
   rownames(object) <- NULL
-  new("Resamples", object, strata = as.character(strata), ...)
+  new("Resamples", object, strata = as.data.frame(strata), ...)
 }
 
 
@@ -160,10 +160,10 @@ Resamples.list <- function(object, ...) {
 ) {
   presets <- settings()
   set.seed(object@seed)
-  splits <- rsample_sets(bootstraps,
-                         data = x,
-                         times = object@samples,
-                         control = object)$splits
+  splits <- rsample_split(function(...) bootstraps(...)$splits,
+                          data = x,
+                          times = object@samples,
+                          control = object)
   seeds <- sample.int(.Machine$integer.max, length(splits))
 
   is_optimism_control <- is(object, "MLBootOptimismControl")
@@ -203,7 +203,7 @@ Resamples.list <- function(object, ...) {
     } else {
       subsample(train, x, model, object, i)
     }
-  } %>% Resamples(control = object, strata = case_strata_name(x))
+  } %>% Resamples(control = object, strata = attr(splits, "strata"))
 }
 
 
@@ -212,11 +212,11 @@ Resamples.list <- function(object, ...) {
 ) {
   presets <- settings()
   set.seed(object@seed)
-  splits <- rsample_sets(vfold_cv,
-                         data = x,
-                         v = object@folds,
-                         repeats = object@repeats,
-                         control = object)$splits
+  splits <- rsample_split(function(...) vfold_cv(...)$splits,
+                          data = x,
+                          v = object@folds,
+                          repeats = object@repeats,
+                          control = object)
   seeds <- sample.int(.Machine$integer.max, length(splits))
 
   is_optimism_control <- is(object, "MLCVOptimismControl")
@@ -249,7 +249,7 @@ Resamples.list <- function(object, ...) {
       subsample(train, test, model, object, i)
     }
   }
-  res <- Resamples(df_list, control = object, strata = case_strata_name(x))
+  res <- Resamples(df_list, control = object, strata = attr(splits, "strata"))
 
   if (is_optimism_control) {
     pred_list <- map(attr, df_list, "CV.Predicted")
@@ -270,10 +270,10 @@ Resamples.list <- function(object, ...) {
 .resample.MLOOBControl <- function(object, x, model, progress_index = 0, ...) {
   presets <- settings()
   set.seed(object@seed)
-  splits <- rsample_sets(bootstraps,
-                         data = x,
-                         times = object@samples,
-                         control = object)$splits
+  splits <- rsample_split(function(...) bootstraps(...)$splits,
+                          data = x,
+                          times = object@samples,
+                          control = object)
   seeds <- sample.int(.Machine$integer.max, length(splits))
 
   snow_opts <- list()
@@ -298,20 +298,20 @@ Resamples.list <- function(object, ...) {
     train <- analysis(splits[[i]], x)
     test <- assessment(splits[[i]], x)
     subsample(train, test, model, object, i)
-  } %>% Resamples(control = object, strata = case_strata_name(x))
+  } %>% Resamples(control = object, strata = attr(splits, "strata"))
 }
 
 
 .resample.MLSplitControl <- function(object, x, model, ...) {
   set.seed(object@seed)
-  split <- rsample_sets(initial_split,
-                        data = x,
-                        prop = object@prop,
-                        control = object)
+  split <- rsample_split(initial_split,
+                         data = x,
+                         prop = object@prop,
+                         control = object)
   train <- training(split, x)
   test <- testing(split, x)
   subsample(train, test, model, object) %>%
-    Resamples(control = object, strata = case_strata_name(x))
+    Resamples(control = object, strata = attr(split, "strata"))
 }
 
 
@@ -329,10 +329,16 @@ rsample_data.ModelFrame <- function(x, ...) asS3(x)
 rsample_data.ModelRecipe <- function(x, ...) as.data.frame(x)
 
 
-rsample_sets <- function(fun, data, control, ...) {
+rsample_split <- function(fun, data, control, ...) {
   df <- rsample_data(data)
-  df[["(strata)"]] <- do.call(case_strata, c(list(data), control@strata))
-  suppressWarnings(fun(df, ..., strata = case_strata_name(df), pool = 0))
+  strata <- do.call(case_strata, c(list(data), control@strata))
+  df[["(strata)"]] <- strata
+  res <- suppressWarnings(fun(df, ..., strata = case_strata_name(df), pool = 0))
+  if (length(strata)) {
+    attr(res, "strata") <- data.frame(strata, row.names = rownames(df))
+    names(attr(res, "strata")) <- case_strata_name(data)
+  }
+  res
 }
 
 

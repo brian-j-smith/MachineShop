@@ -446,8 +446,8 @@ setShowDefault("RecipeGrid")
 print.Resamples <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   print_items(levels(x$Model), n = n, prefix = "\nModels: ", exdent = 2)
-  if (isTRUE(nzchar(x@strata))) {
-    cat("Stratification variable:", x@strata, "\n")
+  if (length(x@strata)) {
+    cat("Stratification variable:", names(x@strata), "\n")
   }
   cat("\n")
   print(x@control)

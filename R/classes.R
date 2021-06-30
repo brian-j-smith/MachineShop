@@ -402,7 +402,7 @@ setClass("Resamples",
   contains = "data.frame",
   slots = c(
     control = "MLControl",
-    strata = "character"
+    strata = "data.frame"
   )
 )
 
