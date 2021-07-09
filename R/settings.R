@@ -187,7 +187,7 @@ MachineShop_global <- as.environment(list(
     cutoff = list(
       value = 0.5,
       check = function(x) {
-        check_numeric(x, bounds = c(0, 1))
+        check_numeric(x, bounds = c(0, 1), include = FALSE, size = 1)
       }
     ),
 
@@ -359,7 +359,7 @@ MachineShop_global <- as.environment(list(
     print_max = list(
       value = 10,
       check = function(x) {
-        result <- check_numeric(x, bounds = c(1, Inf), include = TRUE)
+        result <- check_numeric(x, bounds = c(1, Inf), size = 1)
         if (is.numeric(result)) result <- floor(result)
         result
       }
@@ -379,12 +379,12 @@ MachineShop_global <- as.environment(list(
 
     resample_progress = list(
       value = TRUE,
-      check = check_logical
+      check = function(x) check_logical(x, size = 1)
     ),
 
     resample_verbose = list(
       value = FALSE,
-      check = check_logical
+      check = function(x) check_logical(x, size = 1)
     ),
 
     reset = list(

@@ -174,22 +174,27 @@ check_grid <- function(x) {
 }
 
 
-check_integer <- function(...) {
-  check_numeric(..., type = "integer")
+check_integer <- function(x, bounds = c(-Inf, Inf), include = TRUE, ...) {
+  include <- include & is.finite(bounds)
+  check_numeric(x, bounds = bounds, include = include, type = "integer", ...)
 }
 
 
-check_logical <- function(x, scalar = TRUE) {
-  result <- try(as.logical(x), silent = TRUE)
-  pass <- is.logical(result) &&
-    length(result) &&
-    (!scalar || length(result) == 1) &&
-    !any(is.na(result))
-  if (!pass) {
-    msg <- "must be one%s logical%s"
-    edits <- if (scalar) character(2) else c(" or more", "s")
-    DomainError(x, sprintf(msg, edits[1], edits[2]))
-  } else result
+check_logical <- function(x, size = NULL, na_fail = TRUE) {
+  result <- try(suppressWarnings({
+    storage.mode(x) <- "logical"
+    x
+  }), silent = TRUE)
+
+  if (is(result, "try-error")) {
+    return(TypeError(x, "logical"))
+  }
+
+  if (na_fail && any(is.na(result))) {
+    return(DomainError(x, "must not contain missing values"))
+  }
+
+  if (is.null(size)) result else check_size(result, size)
 }
 
 
@@ -213,26 +218,53 @@ check_metrics <- function(x) {
 
 
 check_numeric <- function(
-  x, bounds = c(-Inf, Inf), include = FALSE, type = c("numeric", "integer"),
-  scalar = TRUE
+  x, bounds = c(-Inf, Inf), include = TRUE, type = c("double", "integer"),
+  size = NULL, na_fail = TRUE
 ) {
   include <- rep(include, length = 2)
   type <- match.arg(type)
 
-  result <- try(suppressWarnings(as(x, type)), silent = TRUE)
-  pass <- is(result, type) &&
-    length(result) &&
-    (!scalar || length(result) == 1) &&
-    !any(is.na(result)) &&
-    all((result > bounds[1] | (include[1] & result == bounds[1]))) &&
-    all((result < bounds[2] | (include[2] & result == bounds[2])))
-  if (!pass) {
-    directions <- ifelse(include, c(">=", "<="), c(">", "<"))
-    msg <- paste0("must be one%s ", type, "%s ",
-                  paste(directions, bounds, collapse = " and "))
-    edits <- if (scalar) character(2) else c(" or more", "s")
-    DomainError(x, sprintf(msg, edits[1], edits[2]))
-  } else result
+  result <- try(suppressWarnings({
+    storage.mode(x) <- type
+    x
+  }), silent = TRUE)
+
+  if (is(result, "try-error")) {
+    return(TypeError(x, type))
+  }
+
+  if (na_fail && any(is.na(result))) {
+    return(DomainError(x, "must not contain missing values"))
+  }
+
+  ops <- paste0(c(">", "<"), ifelse(include, "=", ""))
+  values <- na.omit(c(result))
+  inbounds <- function(op, bound) all(do.call(op, list(values, bound)))
+  if (!(inbounds(ops[1], bounds[1]) && inbounds(ops[2], bounds[2]))) {
+    msg <- paste0(if (length(result) > 1) "elements ", "must be ",
+                  paste(ops, bounds, collapse = " and "))
+    return(DomainError(x, msg))
+  }
+
+  if (is.null(size)) result else check_size(result, size)
+}
+
+
+check_size <- function(x, values) {
+  n <- length(values)
+  size_x <- dim(x)
+  if (is.null(size_x)) size_x <- length(x)
+  if (length(size_x) != n || any(na.omit(size_x != values))) {
+    msg <- if (n == 1 && values == 1) {
+      "a scalar"
+    } else if (n == 1) {
+      paste("a vector of length", values)
+    } else {
+      paste(if (n == 2) "a matrix" else "an array", "of dimension",
+            paste(values, collapse = "x"))
+    }
+    return(DomainError(x, paste("must be", msg)))
+  } else x
 }
 
 

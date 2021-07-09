@@ -53,7 +53,7 @@ NULL
 #' BootControl(samples = 100)
 #'
 BootControl <- function(samples = 25, ...) {
-  samples <- check_integer(samples, bounds = c(0, Inf))
+  samples <- check_integer(samples, bounds = c(1, Inf), size = 1)
   throw(check_assignment(samples))
 
   new("MLBootControl", MLControl(...), samples = samples)
@@ -79,7 +79,7 @@ BootControl <- function(samples = 25, ...) {
 #' BootOptimismControl(samples = 100)
 #'
 BootOptimismControl <- function(samples = 25, ...) {
-  samples <- check_integer(samples, bounds = c(0, Inf))
+  samples <- check_integer(samples, bounds = c(1, Inf), size = 1)
   throw(check_assignment(samples))
 
   new("MLBootOptimismControl", MLControl(...), samples = samples)
@@ -105,10 +105,10 @@ BootOptimismControl <- function(samples = 25, ...) {
 #' CVControl(folds = 10, repeats = 5)
 #'
 CVControl <- function(folds = 10, repeats = 1, ...) {
-  folds <- check_integer(folds, bounds = c(0, Inf))
+  folds <- check_integer(folds, bounds = c(1, Inf), size = 1)
   throw(check_assignment(folds))
 
-  repeats <- check_integer(repeats, bounds = c(0, Inf))
+  repeats <- check_integer(repeats, bounds = c(1, Inf), size = 1)
   throw(check_assignment(repeats))
 
   new("MLCVControl", MLControl(...), folds = folds, repeats = repeats)
@@ -131,10 +131,10 @@ CVControl <- function(folds = 10, repeats = 1, ...) {
 #' CVOptimismControl(folds = 10, repeats = 5)
 #'
 CVOptimismControl <- function(folds = 10, repeats = 1, ...) {
-  folds <- check_integer(folds, bounds = c(0, Inf))
+  folds <- check_integer(folds, bounds = c(1, Inf), size = 1)
   throw(check_assignment(folds))
 
-  repeats <- check_integer(repeats, bounds = c(0, Inf))
+  repeats <- check_integer(repeats, bounds = c(1, Inf), size = 1)
   throw(check_assignment(repeats))
 
   new("MLCVOptimismControl", MLControl(...), folds = folds, repeats = repeats)
@@ -153,7 +153,7 @@ CVOptimismControl <- function(folds = 10, repeats = 1, ...) {
 #' OOBControl(samples = 100)
 #'
 OOBControl <- function(samples = 25, ...) {
-  samples <- check_integer(samples, bounds = c(0, Inf))
+  samples <- check_integer(samples, bounds = c(1, Inf), size = 1)
   throw(check_assignment(samples))
 
   new("MLOOBControl", MLControl(...), samples = samples)
@@ -176,7 +176,7 @@ OOBControl <- function(samples = 25, ...) {
 #' SplitControl(prop = 2/3)
 #'
 SplitControl <- function(prop = 2/3, ...) {
-  prop <- check_numeric(prop, bounds = c(0, 1))
+  prop <- check_numeric(prop, bounds = c(0, 1), include = FALSE, size = 1)
   throw(check_assignment(prop))
 
   new("MLSplitControl", MLControl(...), prop = prop)
@@ -240,10 +240,10 @@ MLControl <- function(
   }
 
   strata_checks <- list(
-    breaks = function(x) check_integer(x, bounds = c(0, Inf)),
-    nunique = function(x) check_integer(x, bounds = c(0, Inf)),
-    prop = function(x) check_numeric(x, bounds = c(0, 1), include = TRUE),
-    size = function(x) check_integer(x, bounds = c(0, Inf))
+    breaks = function(x) check_integer(x, bounds = c(1, Inf), size = 1),
+    nunique = function(x) check_integer(x, bounds = c(1, Inf), size = 1),
+    prop = function(x) check_numeric(x, bounds = c(0, 1), size = 1),
+    size = function(x) check_integer(x, bounds = c(1, Inf), size = 1)
   )
 
   match_inds <- pmatch(names(strata), names(strata_list))
