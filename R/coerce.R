@@ -51,7 +51,7 @@ as.data.frame.ModelRecipe <- function(x, original = TRUE, ...) {
 
 
 as.data.frame.PerformanceDiffTest <- function(x, ...) {
-  stat_names <- matrix(NA_character_, dim(x)[1], dim(x)[2])
+  stat_names <- matrix(NA_character_, nrow(x), ncol(x))
   stat_names[upper.tri(stat_names)] <- "Mean"
   stat_names[lower.tri(stat_names)] <- "P-Value"
   df_stat_names <- as.data.frame(TabularArray(stat_names))

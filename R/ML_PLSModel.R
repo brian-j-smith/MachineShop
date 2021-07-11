@@ -67,7 +67,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
         eval(list(x = object), asNamespace("pls"))
       vi <- map_num(function(i) {
         drop(as.matrix(abs(beta[, i, ])) %*% prop.table(-diff(perf[, i, ])))
-      }, seq_len(dim(beta)[2]))
+      }, seq_len(ncol(beta)))
       dimnames(vi) <- dimnames(beta)[1:2]
       if (ncol(vi) <= 2) vi <- vi[, 1]
       vi
