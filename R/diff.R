@@ -47,8 +47,8 @@ diff.MLModel <- function(x, ...) {
 #' @rdname diff-methods
 #'
 diff.Performance <- function(x, ...) {
-  if (length(dim(x)) <= 2) throw(Error("more than one model needed to diff"))
-  indices <- combn(dim(x)[3], 2)
+  if (ndim(x) <= 2) throw(Error("more than one model needed to diff"))
+  indices <- combn(size(x, 3), 2)
   indices1 <- indices[1, ]
   indices2 <- indices[2, ]
   xdiff <- x[, , indices1, drop = FALSE] - x[, , indices2, drop = FALSE]
@@ -111,7 +111,7 @@ t.test.PerformanceDiff <- function(x, adjust = "holm", ...)
 
   model_names <- x@model_names
   num_models <- length(model_names)
-  results <- array(NA, dim = c(num_models, num_models, dim(x)[2]),
+  results <- array(NA, dim = c(num_models, num_models, size(x, 2)),
                    dimnames = list(Model2 = model_names,
                                    Model1 = model_names,
                                    Metric = dimnames(x)[[2]]))

@@ -344,6 +344,11 @@ new_progress_index <- function(names, max) {
 }
 
 
+ndim <- function(x) {
+  length(size(x))
+}
+
+
 nvars <- function(x, model) {
   stopifnot(is(x, "ModelFrame"))
   model <- get_MLModel(model)
@@ -543,6 +548,13 @@ set_model_names <- function(x) {
 }
 
 
+size <- function(x, dim = NULL) {
+  res <- dim(x)
+  if (is.null(res)) res <- length(x)
+  if (is.null(dim)) res else res[dim]
+}
+
+
 stepAIC_args <- function(formula, direction, scope) {
   if (is.null(scope$lower)) scope$lower <- ~ 1
   if (is.null(scope$upper)) scope$upper <- formula[-2]
@@ -572,7 +584,7 @@ unnest <- function(data) {
   df <- data.frame(row.names = seq_len(nrow(data)))
   for (name in names(data)) {
     x <- data[[name]]
-    if (length(dim(x)) > 1) {
+    if (ndim(x) > 1) {
       x <- if (is.data.frame(x)) unnest(x) else as.data.frame(as(x, "matrix"))
       name <- paste0(name, ".", names(x))
     }

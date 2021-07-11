@@ -19,7 +19,7 @@ setMethod("convert_prob", c("BinomialVariate", "ANY"),
 
 setMethod("convert_prob", c("factor", "array"),
   function(object, x, ...) {
-    convert_prob(object, adrop(x, length(dim(x))))
+    convert_prob(object, adrop(x, ndim(x)))
   }
 )
 
@@ -37,7 +37,7 @@ setMethod("convert_prob", c("factor", "matrix"),
 
 setMethod("convert_prob", c("matrix", "array"),
   function(object, x, ...) {
-    convert_prob(object, adrop(x, length(dim(x))))
+    convert_prob(object, adrop(x, ndim(x)))
   }
 )
 
@@ -55,8 +55,8 @@ setMethod("convert_prob", c("matrix", "matrix"),
 
 setMethod("convert_prob", c("numeric", "array"),
   function(object, x, ...) {
-    num_dim <- length(dim(x))
-    x <- if (num_dim == 1) c(x) else adrop(x, num_dim)
+    n <- ndim(x)
+    x <- if (n == 1) c(x) else adrop(x, n)
     convert_prob(object, x)
   }
 )

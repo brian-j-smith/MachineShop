@@ -108,7 +108,7 @@ summary.Performance <- function(
   margins <- 2
   perm <- c(2, 1)
   names <- c("Metric", "Statistic")
-  if (length(dim(object)) == 3) {
+  if (ndim(object) == 3) {
     margins <- c(3, margins)
     perm <- c(perm, 3)
     names <- c("Model", "Statistic", "Metric")

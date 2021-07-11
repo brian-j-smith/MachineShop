@@ -202,7 +202,7 @@ performance.MLCVOptimismControl <- function(x, resamples, ...) {
 Performance <- function(...) {
   object <- new("Performance", ...)
   names <- c("Resample", "Metric")
-  if (length(dim(object)) == 3) names <- c(names, "Model")
+  if (ndim(object) == 3) names <- c(names, "Model")
   names(dimnames(object)) <- names
   object
 }

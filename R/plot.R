@@ -146,7 +146,7 @@ plot.LiftCurve <- function(
       y = find,
       Model = dimnames(tested)$Model
     )
-    df$Resample <- rep(dimnames(tested)$Resample, each = dim(tested)[1])
+    df$Resample <- rep(dimnames(tested)$Resample, each = size(tested, 1))
 
     p <- p +
       geom_segment(aes_(x = ~ x, y = 0, xend = ~ x, yend = ~ y), df) +

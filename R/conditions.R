@@ -252,9 +252,7 @@ check_numeric <- function(
 
 check_size <- function(x, values) {
   n <- length(values)
-  size_x <- dim(x)
-  if (is.null(size_x)) size_x <- length(x)
-  if (length(size_x) != n || any(na.omit(size_x != values))) {
+  if (ndim(x) != n || any(na.omit(size(x) != values))) {
     msg <- if (n == 1 && values == 1) {
       "a scalar"
     } else if (n == 1) {
