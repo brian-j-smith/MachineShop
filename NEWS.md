@@ -2,6 +2,9 @@
 
 ## Version Updates
 
+## 2.9.0.9001
+* Return case stratification values in the 'strata' slot of 'Resamples' objects.
+
 ## 2.9.0.9000
 * Replace arguments `strata_breaks`, `strata_nunique`, `strata_prop`, and `strata_size` with `strata` in `MLModel()`.
 
