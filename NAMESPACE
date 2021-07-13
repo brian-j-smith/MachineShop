@@ -150,6 +150,7 @@ export(MLMetric,
        weighted_kappa2)
 
 export(.,
+       "%>%",
        as.MLModel,
        calibration,
        confusion,

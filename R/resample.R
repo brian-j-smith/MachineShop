@@ -183,14 +183,17 @@ Resamples.list <- function(object, ...) {
     )
   }
 
-  foreach(i = seq_along(splits),
-          .packages = settings("require"),
-          .verbose = settings("resample_verbose"),
-          .options.snow = snow_opts) %dopar% {
+  foreach(
+    i = seq_along(splits),
+    .export = c("seq_boot", "subsample", "subsample_data"),
+    .packages = settings("require"),
+    .verbose = settings("resample_verbose"),
+    .options.snow = snow_opts
+  ) %dopar% {
     progress(i)
     settings(presets)
     set.seed(seeds[i])
-    train <- analysis(splits[[i]], x)
+    train <- subsample_data(rsample::analysis, splits[[i]], x)
     if (is_optimism_control) {
       subs <- subsample(train, list(x, train), model, object, i)
       df <- subs[[1]]
@@ -233,15 +236,18 @@ Resamples.list <- function(object, ...) {
     )
   }
 
-  df_list <- foreach(i = seq_along(splits),
-                     .packages = settings("require"),
-                     .verbose = settings("resample_verbose"),
-                     .options.snow = snow_opts) %dopar% {
+  df_list <- foreach(
+    i = seq_along(splits),
+    .export = c("subsample", "subsample_data"),
+    .packages = settings("require"),
+    .verbose = settings("resample_verbose"),
+    .options.snow = snow_opts
+  ) %dopar% {
     progress(i)
     settings(presets)
     set.seed(seeds[i])
-    train <- analysis(splits[[i]], x)
-    test <- assessment(splits[[i]], x)
+    train <- subsample_data(rsample::analysis, splits[[i]], x)
+    test <- subsample_data(rsample::assessment, splits[[i]], x)
     if (is_optimism_control) {
       subs <- subsample(train, list(test, x), model, object, i)
       structure(subs[[1]], CV.Predicted = subs[[2]]["Predicted"])
@@ -288,15 +294,18 @@ Resamples.list <- function(object, ...) {
     )
   }
 
-  foreach(i = seq_along(splits),
-          .packages = settings("require"),
-          .verbose = settings("resample_verbose"),
-          .options.snow = snow_opts) %dopar% {
+  foreach(
+    i = seq_along(splits),
+    .export = c("subsample", "subsample_data"),
+    .packages = settings("require"),
+    .verbose = settings("resample_verbose"),
+    .options.snow = snow_opts
+  ) %dopar% {
     progress(i)
     settings(presets)
     set.seed(seeds[i])
-    train <- analysis(splits[[i]], x)
-    test <- assessment(splits[[i]], x)
+    train <- subsample_data(rsample::analysis, splits[[i]], x)
+    test <- subsample_data(rsample::assessment, splits[[i]], x)
     subsample(train, test, model, object, i)
   } %>% Resamples(control = object, strata = attr(splits, "strata"))
 }
@@ -308,8 +317,8 @@ Resamples.list <- function(object, ...) {
                          data = x,
                          prop = object@prop,
                          control = object)
-  train <- training(split, x)
-  test <- testing(split, x)
+  train <- subsample_data(rsample::training, split, x)
+  test <- subsample_data(rsample::testing, split, x)
   subsample(train, test, model, object) %>%
     Resamples(control = object, strata = attr(split, "strata"))
 }
@@ -342,50 +351,6 @@ rsample_split <- function(fun, data, control, ...) {
 }
 
 
-analysis <- function(x, object, ...) UseMethod("analysis", object)
-
-analysis.ModelFrame <- function(x, object, ...) {
-  as(rsample::analysis(x), class(object)[1])
-}
-
-analysis.ModelRecipe <- function(x, object, ...) {
-  recipe(object, rsample::analysis(x))
-}
-
-
-assessment <- function(x, object, ...) UseMethod("assessment", object)
-
-assessment.ModelFrame <- function(x, object, ...) {
-  as(rsample::assessment(x), class(object)[1])
-}
-
-assessment.ModelRecipe <- function(x, object, ...) {
-  recipe(object, rsample::assessment(x))
-}
-
-
-testing <- function(x, object, ...) UseMethod("testing", object)
-
-testing.ModelFrame <- function(x, object, ...) {
-  as(rsample::testing(x), class(object)[1])
-}
-
-testing.ModelRecipe <- function(x, object, ...) {
-  recipe(object, rsample::testing(x))
-}
-
-
-training <- function(x, object, ...) UseMethod("training", object)
-
-training.ModelFrame <- function(x, object, ...) {
-  as(rsample::training(x), class(object)[1])
-}
-
-training.ModelRecipe <- function(x, object, ...) {
-  recipe(object, rsample::training(x))
-}
-
-
 subsample <- function(train, test, model, control, id = 1) {
   model <- get_MLModel(model)
 
@@ -409,6 +374,16 @@ subsample <- function(train, test, model, control, id = 1) {
   }
 
   if (class(test)[1] == "list") map(f, test) else f(test)
+}
+
+
+subsample_data <- function(fun, x, object) {
+  classes <- c("ModelFrame", "ModelRecipe")
+  switch(which(c(map_logi(is, list(object), classes), TRUE))[1],
+    as(fun(x), class(object)[1]),
+    recipe(object, fun(x)),
+    throw(TypeError(object, classes))
+  )
 }
 
 
