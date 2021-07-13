@@ -126,6 +126,38 @@ select_call <- function(x, parent_call = NULL, last_call = NULL) {
 #################### Checks ####################
 
 
+check_array <- function(x, type, size = NULL, na.fail = TRUE) {
+  result <- try({
+    storage.mode(x) <- type
+    x
+  }, silent = TRUE)
+
+  n <- length(size)
+  if (is(result, "try-error")) {
+    TypeError(x, type)
+  } else if (n > 0 && (ndim(x) != n || any(na.omit(size(x) != size)))) {
+    msg <- if (n == 1 && size == 1) {
+      "a scalar"
+    } else if (n == 1) {
+      paste("a vector of length", size)
+    } else {
+      paste(if (n == 2) "a matrix" else "an array", "of dimension",
+            paste(size, collapse = "x"))
+    }
+    DomainError(x, paste("must be", msg))
+  } else if (na.fail && anyNA(result)) {
+    msg <- paste0(
+      c("", "must be ", paste("non-missing", type)),
+      if (length(result) == 1) c("", "a ", "") else c("elements ", "", "s"),
+      collapse = ""
+    )
+    DomainError(result, msg)
+  } else {
+    result
+  }
+}
+
+
 check_assignment <- function(x, value = x) {
   if (is(value, "error")) {
     value$message <- paste0("Failed to assign '", deparse1(substitute(x)),
@@ -142,6 +174,11 @@ check_censoring <- function(x, types, ...) {
     Error("Expected survival data censoring type to be ",
           toString(types, conj = "or"), "; got '", type, "' instead.")
   } else x
+}
+
+
+check_character <- function(x, ...) {
+  check_array(x, type = "character", ...)
 }
 
 
@@ -180,21 +217,8 @@ check_integer <- function(x, bounds = c(-Inf, Inf), include = TRUE, ...) {
 }
 
 
-check_logical <- function(x, size = NULL, na_fail = TRUE) {
-  result <- try(suppressWarnings({
-    storage.mode(x) <- "logical"
-    x
-  }), silent = TRUE)
-
-  if (is(result, "try-error")) {
-    return(TypeError(x, "logical"))
-  }
-
-  if (na_fail && any(is.na(result))) {
-    return(DomainError(x, "must not contain missing values"))
-  }
-
-  if (is.null(size)) result else check_size(result, size)
+check_logical <- function(x, ...) {
+  check_array(x, type = "logical", ...)
 }
 
 
@@ -218,51 +242,24 @@ check_metrics <- function(x) {
 
 
 check_numeric <- function(
-  x, bounds = c(-Inf, Inf), include = TRUE, type = c("double", "integer"),
-  size = NULL, na_fail = TRUE
+  x, bounds = c(-Inf, Inf), include = TRUE, type = c("double", "integer"), ...
 ) {
+  result <- check_array(x, type = match.arg(type), ...)
+  if (is(result, "error")) {
+    return(result)
+  }
+
   include <- rep(include, length = 2)
-  type <- match.arg(type)
-
-  result <- try(suppressWarnings({
-    storage.mode(x) <- type
-    x
-  }), silent = TRUE)
-
-  if (is(result, "try-error")) {
-    return(TypeError(x, type))
-  }
-
-  if (na_fail && any(is.na(result))) {
-    return(DomainError(x, "must not contain missing values"))
-  }
-
   ops <- paste0(c(">", "<"), ifelse(include, "=", ""))
   values <- na.omit(c(result))
   inbounds <- function(op, bound) all(do.call(op, list(values, bound)))
   if (!(inbounds(ops[1], bounds[1]) && inbounds(ops[2], bounds[2]))) {
     msg <- paste0(if (length(result) > 1) "elements ", "must be ",
                   paste(ops, bounds, collapse = " and "))
-    return(DomainError(x, msg))
+    DomainError(result, msg)
+  } else {
+    result
   }
-
-  if (is.null(size)) result else check_size(result, size)
-}
-
-
-check_size <- function(x, values) {
-  n <- length(values)
-  if (ndim(x) != n || any(na.omit(size(x) != values))) {
-    msg <- if (n == 1 && values == 1) {
-      "a scalar"
-    } else if (n == 1) {
-      paste("a vector of length", values)
-    } else {
-      paste(if (n == 2) "a matrix" else "an array", "of dimension",
-            paste(values, collapse = "x"))
-    }
-    return(DomainError(x, paste("must be", msg)))
-  } else x
 }
 
 
