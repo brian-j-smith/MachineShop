@@ -1,7 +1,7 @@
 #' Resampling Controls
 #'
-#' Structures to define and control sampling methods for estimating predictive
-#' performance of models in the \pkg{MachineShop} package.
+#' Structures to define and control sampling methods for estimation of model
+#' predictive performance in the \pkg{MachineShop} package.
 #'
 #' @name MLControl
 #' @rdname MLControl
@@ -12,24 +12,13 @@
 #'   (\code{0 < prop < 1}).
 #' @param repeats number of repeats of the K-fold partitioning.
 #' @param samples number of bootstrap samples.
-#' @param strata list of the following optional arguments to be passed to
-#'   functions that construct resampling strata.  Strata arguments that are not
-#'   given will assume their default values.
-#'   \describe{
-#'     \item{\code{breaks}}{number of quantile bins desired for stratification
-#'       of numeric data.}
-#'     \item{\code{nunique}}{number of unique values at or below which numeric
-#'       data are stratified as categorical.}
-#'     \item{\code{prop}}{minimum proportion of data in each strata.}
-#'     \item{\code{size}}{minimum number of values in each strata.}
-#'   }
-#' @param times,distr,method arguments passed to \code{\link{predict}}.
 #' @param seed integer to set the seed at the start of resampling.
-#' @param ...  arguments passed to \code{MLControl}.
+#' @param ...  arguments passed to other methods.
 #'
-#' @return \code{MLControl} class object.
+#' @return Object that inherits from the \code{MLControl} class.
 #'
-#' @seealso \code{\link{resample}}, \code{\link{SelectedInput}},
+#' @seealso \code{\link{set_predict}}, \code{\link{set_strata}},
+#' \code{\link{resample}}, \code{\link{SelectedInput}},
 #' \code{\link{SelectedModel}}, \code{\link{TunedInput}},
 #' \code{\link{TunedModel}}
 #'
@@ -52,11 +41,15 @@ NULL
 #' ## Bootstrapping with 100 samples
 #' BootControl(samples = 100)
 #'
-BootControl <- function(samples = 25, ...) {
+BootControl <- function(
+  samples = 25, seed = sample(.Machine$integer.max, 1), ...
+) {
   samples <- check_integer(samples, bounds = c(1, Inf), size = 1)
   throw(check_assignment(samples))
 
-  new("MLBootControl", MLControl(...), samples = samples)
+  new("MLBootControl", samples = samples, seed = seed) %>%
+    set_predict %>% dep_predictargs(...) %>%
+    set_strata %>% dep_strataargs(...)
 }
 
 
@@ -78,11 +71,15 @@ BootControl <- function(samples = 25, ...) {
 #' ## Optimism-corrected bootstrapping with 100 samples
 #' BootOptimismControl(samples = 100)
 #'
-BootOptimismControl <- function(samples = 25, ...) {
+BootOptimismControl <- function(
+  samples = 25, seed = sample(.Machine$integer.max, 1), ...
+) {
   samples <- check_integer(samples, bounds = c(1, Inf), size = 1)
   throw(check_assignment(samples))
 
-  new("MLBootOptimismControl", MLControl(...), samples = samples)
+  new("MLBootOptimismControl", samples = samples, seed = seed) %>%
+    set_predict %>% dep_predictargs(...) %>%
+    set_strata %>% dep_strataargs(...)
 }
 
 
@@ -104,14 +101,18 @@ BootOptimismControl <- function(samples = 25, ...) {
 #' ## Cross-validation with 5 repeats of 10 folds
 #' CVControl(folds = 10, repeats = 5)
 #'
-CVControl <- function(folds = 10, repeats = 1, ...) {
+CVControl <- function(
+  folds = 10, repeats = 1, seed = sample(.Machine$integer.max, 1), ...
+) {
   folds <- check_integer(folds, bounds = c(1, Inf), size = 1)
   throw(check_assignment(folds))
 
   repeats <- check_integer(repeats, bounds = c(1, Inf), size = 1)
   throw(check_assignment(repeats))
 
-  new("MLCVControl", MLControl(...), folds = folds, repeats = repeats)
+  new("MLCVControl", folds = folds, repeats = repeats, seed = seed) %>%
+    set_predict %>% dep_predictargs(...) %>%
+    set_strata %>% dep_strataargs(...)
 }
 
 
@@ -130,14 +131,18 @@ CVControl <- function(folds = 10, repeats = 1, ...) {
 #' ## Optimism-corrected cross-validation with 5 repeats of 10 folds
 #' CVOptimismControl(folds = 10, repeats = 5)
 #'
-CVOptimismControl <- function(folds = 10, repeats = 1, ...) {
+CVOptimismControl <- function(
+  folds = 10, repeats = 1, seed = sample(.Machine$integer.max, 1), ...
+) {
   folds <- check_integer(folds, bounds = c(1, Inf), size = 1)
   throw(check_assignment(folds))
 
   repeats <- check_integer(repeats, bounds = c(1, Inf), size = 1)
   throw(check_assignment(repeats))
 
-  new("MLCVOptimismControl", MLControl(...), folds = folds, repeats = repeats)
+  new("MLCVOptimismControl", folds = folds, repeats = repeats, seed = seed) %>%
+    set_predict %>% dep_predictargs(...) %>%
+    set_strata %>% dep_strataargs(...)
 }
 
 
@@ -152,11 +157,15 @@ CVOptimismControl <- function(folds = 10, repeats = 1, ...) {
 #' ## Out-of-bootstrap validation with 100 samples
 #' OOBControl(samples = 100)
 #'
-OOBControl <- function(samples = 25, ...) {
+OOBControl <- function(
+  samples = 25, seed = sample(.Machine$integer.max, 1), ...
+) {
   samples <- check_integer(samples, bounds = c(1, Inf), size = 1)
   throw(check_assignment(samples))
 
-  new("MLOOBControl", MLControl(...), samples = samples)
+  new("MLOOBControl", samples = samples, seed = seed) %>%
+    set_predict %>% dep_predictargs(...) %>%
+    set_strata %>% dep_strataargs(...)
 }
 
 
@@ -164,7 +173,7 @@ OOBControl <- function(samples = 25, ...) {
 #'
 #' @details
 #' \code{SplitControl} constructs an \code{MLControl} object for splitting data
-#' into a seperate trianing and test set (Hastie et al. 2009).
+#' into a separate training and test set (Hastie et al. 2009).
 #'
 #' @references
 #' Hastie T, Tibshirani R, and Friedman J (2009). The Elements of Statistical
@@ -175,11 +184,15 @@ OOBControl <- function(samples = 25, ...) {
 #' ## Split sample validation with 2/3 training and 1/3 testing
 #' SplitControl(prop = 2/3)
 #'
-SplitControl <- function(prop = 2/3, ...) {
+SplitControl <- function(
+  prop = 2/3, seed = sample(.Machine$integer.max, 1), ...
+) {
   prop <- check_numeric(prop, bounds = c(0, 1), include = FALSE, size = 1)
   throw(check_assignment(prop))
 
-  new("MLSplitControl", MLControl(...), prop = prop)
+  new("MLSplitControl", prop = prop, seed = seed) %>%
+    set_predict %>% dep_predictargs(...) %>%
+    set_strata %>% dep_strataargs(...)
 }
 
 
@@ -197,65 +210,145 @@ SplitControl <- function(prop = 2/3, ...) {
 #' ## Training set evaluation
 #' TrainControl()
 #'
-TrainControl <- function(...) {
-  new("MLTrainControl", MLControl(...))
+TrainControl <- function(seed = sample(.Machine$integer.max, 1), ...) {
+  new("MLTrainControl", seed = seed) %>%
+    set_predict %>% dep_predictargs(...) %>%
+    dep_strataargs(...)
 }
 
 
-#' @rdname MLControl
+dep_predictargs <- function(x, times, distr, method, ...) {
+  args <- list()
+  if (!missing(times)) args$times <- times
+  if (!missing(distr)) args$distr <- distr
+  if (!missing(method)) args$method <- method
+  if (length(args)) {
+    throw(
+      DeprecatedCondition(
+        "Argument 'times', 'distr', and 'method' to MLControl()",
+        "'set_predict()'", expired = Sys.Date() >= "2021-10-01"
+      ),
+      call = FALSE
+    )
+    x <- do.call(set_predict, c(list(x), args))
+  }
+  x
+}
+
+
+dep_strataargs <- function(
+  x, strata_breaks, strata_nunique, strata_prop, strata_size, ...
+) {
+  args <- list()
+  if (!missing(strata_breaks)) args$breaks <- strata_breaks
+  if (!missing(strata_nunique)) args$nunique <- strata_nunique
+  if (!missing(strata_prop)) args$prop <- strata_prop
+  if (!missing(strata_size)) args$size <- strata_size
+  if (length(args)) {
+    old <- paste("Argument 'strata_breaks', 'strata_nunique', 'strata_prop',",
+                 "and 'strata_size' to MLControl()")
+    throw(
+      DeprecatedCondition(
+        old, "'set_strata()'", expired = Sys.Date() >= "2021-10-01"
+      ),
+      call = FALSE
+    )
+    x <- do.call(set_strata, c(list(x), args))
+  }
+  x
+}
+
+
+#' Resampling Prediction Control
+#'
+#' Set parameters that control prediction during resample estimation of model
+#' performance.
+#'
+#' @param x \link[=controls]{control} object.
+#' @param times,distr,method arguments passed to \code{\link{predict}}.
+#'
+#' @return Argument \code{x} updated with the supplied parameters.
+#'
+#' @seealso \code{\link{set_strata}},
+#' \code{\link{resample}}, \code{\link{SelectedInput}},
+#' \code{\link{SelectedModel}}, \code{\link{TunedInput}},
+#' \code{\link{TunedModel}}
+#'
+#' @examples
+#' CVControl() %>% set_predict(times = 1:3)
+#'
+set_predict <- function(x, times = NULL, distr = NULL, method = NULL) {
+  stopifnot(is(x, "MLControl"))
+
+  if (!is.null(times)) times <- check_numeric(times, bounds = c(0, Inf),
+                                              include = FALSE, size = NA)
+  throw(check_assignment(times))
+
+  if (!is.null(distr)) distr <- check_character(distr, size = 1)
+  throw(check_assignment(distr))
+
+  if (!is.null(method)) method <- check_character(method, size = 1)
+  throw(check_assignment(method))
+
+  x@predict <- list(times = times, distr = distr, method = method)
+  x
+}
+
+
+#' Resampling Stratification Control
+#'
+#' Set parameters that control the construction of strata during resample
+#' estimation of model performance.
+#'
+#' @param x \link[=controls]{control} object.
+#' @param breaks number of quantile bins desired for stratification of numeric
+#'   data during resampling.
+#' @param nunique number of unique values at or below which numeric data are
+#'   stratified as categorical.
+#' @param prop minimum proportion of data in each strata.
+#' @param size minimum number of values in each strata.
 #'
 #' @details
-#' The base \code{MLControl} constructor initializes a set of control parameters
-#' that are common to all resampling methods.
+#' The arguments control resampling strata which are constructed from numeric
+#' proportions for \code{\link{BinomialVariate}}; original values for
+#' \code{character}, \code{factor}, \code{logical}, \code{numeric}, and
+#' \code{ordered}; first columns of values for \code{matrix}; and numeric times
+#' within event statuses for \code{Surv}.  Stratification of survival data by
+#' event status only can be achieved by setting \code{breaks = 1}.  Numeric
+#' values are stratified into quantile bins and categorical values into factor
+#' levels.  The number of bins will be the largest integer less than or equal to
+#' \code{breaks} satisfying the \code{prop} and \code{size} control argument
+#' thresholds.  Categorical levels below the thresholds will be pooled
+#' iteratively by reassigning values in the smallest nominal level to the
+#' remaining ones at random and by combining the smallest adjacent ordinal
+#' levels.  Missing values are replaced with non-missing values sampled at
+#' random with replacement.
 #'
-#' The \code{strata} arguments are available to control resampling strata which
-#' are constructed from numeric proportions for \code{\link{BinomialVariate}};
-#' original values for \code{character}, \code{factor}, \code{logical},
-#' \code{numeric}, and \code{ordered}; first columns of values for
-#' \code{matrix}; and numeric times within event statuses for \code{Surv}.
-#' Stratification of survival data by event status only can be achieved by
-#' setting \code{breaks = 1}.  Numeric values are stratified into quantile bins
-#' and categorical values into factor levels.  The number of bins will be the
-#' largest integer less than or equal to \code{breaks} satisfying the
-#' \code{prop} and \code{size} control argument thresholds.  Categorical levels
-#' below the thresholds will be pooled iteratively by reassigning values in the
-#' smallest nominal level to the remaining ones at random and by combining the
-#' smallest adjacent ordinal levels.  Missing values are replaced with
-#' non-missing values sampled at random with replacement.
+#' @return Argument \code{x} updated with the supplied parameters.
 #'
-MLControl <- function(
-  strata = list(breaks = 4, nunique = 5, prop = 0.1, size = 20),
-  times = NULL, distr = NULL, method = NULL,
-  seed = sample(.Machine$integer.max, 1), ...
-) {
-  strata_list <- eval(formals(sys.function())$strata)
+#' @seealso \code{\link{set_predict}},
+#' \code{\link{resample}}, \code{\link{SelectedInput}},
+#' \code{\link{SelectedModel}}, \code{\link{TunedInput}},
+#' \code{\link{TunedModel}}
+#'
+#' @examples
+#' CVControl() %>% set_strata(breaks = 3)
+#'
+set_strata <- function(x, breaks = 4, nunique = 5, prop = 0.1, size = 20) {
+  stopifnot(is(x, "MLControl"))
 
-  dep_names <- paste0("strata_", names(strata_list))
-  if (!all(is.na(pmatch(...names(), dep_names)))) {
-    dep_names <- toString(paste0("'", dep_names, "'"), conj = "and")
-    throw(DeprecatedCondition(
-      paste0("Argument ", dep_names, " to MLControl()"),
-      paste0("argument 'strata'"), expired = TRUE
-    ))
-  }
+  breaks <- check_integer(breaks, bounds = c(1, Inf), size = 1)
+  throw(check_assignment(breaks))
 
-  strata_checks <- list(
-    breaks = function(x) check_integer(x, bounds = c(1, Inf), size = 1),
-    nunique = function(x) check_integer(x, bounds = c(1, Inf), size = 1),
-    prop = function(x) check_numeric(x, bounds = c(0, 1), size = 1),
-    size = function(x) check_integer(x, bounds = c(1, Inf), size = 1)
-  )
+  nunique <- check_integer(nunique, bounds = c(1, Inf), size = 1)
+  throw(check_assignment(nunique))
 
-  match_inds <- pmatch(names(strata), names(strata_list))
-  for (i in which(!is.na(match_inds))) {
-    name <- names(strata_list)[match_inds[i]]
-    strata_list[[name]] <- strata_checks[[name]](strata[[i]])
-    eval(substitute(
-      throw(check_assignment(strata$x, strata_list[[name]]), sys.call(-2)),
-      list(x = name)
-    ))
-  }
+  prop <- check_numeric(prop, bounds = c(0, 1), size = 1)
+  throw(check_assignment(prop))
 
-  new("MLControl", strata = strata_list, times = times, distr = distr,
-      method = method, seed = seed)
+  size <- check_integer(size, bounds = c(1, Inf), size = 1)
+  throw(check_assignment(size))
+
+  x@strata <- list(breaks = breaks, nunique = nunique, prop = prop, size = size)
+  x
 }

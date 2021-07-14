@@ -122,7 +122,7 @@ print.ListOf <- function(x, n = MachineShop::settings("print_max"), ...) {
 setShowDefault("ListOf")
 
 
-print.MLControl <- function(x, n = MachineShop::settings("print_max"), ...) {
+print.MLControl <- function(x, ...) {
   show(x)
   invisible(x)
 }
@@ -130,20 +130,24 @@ print.MLControl <- function(x, n = MachineShop::settings("print_max"), ...) {
 
 setMethod("show", "MLControl",
   function(object) {
-    strata <- object@strata
-    cat("Stratification parameters\n",
-        "  Breaks: ", strata$breaks, "\n",
-        "  Unique numeric threshold: ", strata$nunique, "\n",
-        "  Minimum proportion: ", strata$prop, "\n",
-        "  Minimum size: ", strata$size, "\n",
-        sep = "")
-    opts <- c("times" = "Survival times",
-              "method" = "Method",
-              "distr" = "Distribution")
-    for (name in names(opts)) {
-      x <- slot(object, name)
-      if (length(x)) cat(opts[name], ": ", toString(x), "\n", sep = "")
+    print_params <- function(x, labels, title) {
+      is_set <- !map_logi(is.null, x[names(labels)])
+      if (any(is_set)) {
+        cat(title, "\n", sep = "")
+        for (name in names(labels)[is_set]) {
+          cat("  ", labels[name], ": ", toString(x[[name]]), "\n", sep = "")
+        }
+      }
     }
+    labels <- c("times" = "Survival times",
+                "distr" = "Distribution",
+                "method" = "Method")
+    print_params(object@predict, labels, "Prediction parameters")
+    labels <- c("breaks" = "Breaks",
+                "nunique" = "Unique numeric threshold",
+                "prop" = "Minimum proportion",
+                "size" = "Minimum size")
+    print_params(object@strata, labels, "Stratification parameters")
     cat("Seed:", object@seed, "\n")
     invisible()
   }

@@ -254,10 +254,8 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 
 setClass("MLControl",
   slots = c(
+    predict = "list",
     strata = "list",
-    times = "ANY",
-    distr = "ANY",
-    method = "ANY",
     seed = "numeric"
   )
 )

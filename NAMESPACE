@@ -108,14 +108,15 @@ export(ModelFrame,
        SelectedInput,
        TunedInput)
 
-export(MLControl,
-       BootControl,
+export(BootControl,
        BootOptimismControl,
        CVControl,
        CVOptimismControl,
        OOBControl,
        SplitControl,
-       TrainControl)
+       TrainControl,
+       set_predict,
+       set_strata)
 
 export(MLMetric,
        "MLMetric<-",

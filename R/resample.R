@@ -356,7 +356,7 @@ subsample <- function(train, test, model, control, id = 1) {
 
   model_fit <- fit(train, model)
   times <- time(model_fit)
-  if (length(times)) control@times <- times
+  if (length(times)) control@predict$times <- times
 
   f <- function(test) {
     if (is(train, "ModelRecipe")) {
@@ -367,9 +367,8 @@ subsample <- function(train, test, model, control, id = 1) {
                      Case = as.data.frame(test, original = FALSE)[["(names)"]],
                      stringsAsFactors = FALSE)
     df$Observed <- response(test)
-    df$Predicted <- predict(model_fit, as.data.frame(test), type = "prob",
-                            times = control@times, method = control@method,
-                            distr = control@distr)
+    predict_args <- list(model_fit, as.data.frame(test), type = "prob")
+    df$Predicted <- do.call(predict, c(predict_args, control@predict))
     df
   }
 

@@ -39,11 +39,14 @@ test_model <- function(formula, data, model, times = numeric()) {
   print(summary(perf_cv))
   print(plot(perf_cv))
 
-  perf_boot_times <- resample(formula, data, model, BootOptimismControl(times = times))
+  control <- BootOptimismControl() %>% set_predict(times = times)
+  perf_boot_times <- resample(formula, data, model, control)
   print(perf_boot_times)
-  perf_cv_times <- resample(formula, data, model, CVControl(times = times))
+  control <- CVControl() %>% set_predict(times = times)
+  perf_cv_times <- resample(formula, data, model, control)
   print(perf_cv_times)
-  perf_oob_times <- resample(formula, data, model, OOBControl(times = times))
+  control <- OOBControl() %>% set_predict(times = times)
+  perf_oob_times <- resample(formula, data, model, control)
   print(perf_oob_times)
 
   print(summary(perf_cv_times))

@@ -53,8 +53,9 @@ Calculate calibration estimates from observed and predicted responses.
 
 library(survival)
 
+control <- CVControl() \%>\% set_predict(times = c(90, 180, 360))
 res <- resample(Surv(time, status) ~ ., data = veteran, model = GBMModel,
-                control = CVControl(times = c(90, 180, 360)))
+                control = control)
 cal <- calibration(res)
 plot(cal)
 }

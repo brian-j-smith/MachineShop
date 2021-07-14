@@ -12,33 +12,31 @@
 \alias{TrainControl}
 \title{Resampling Controls}
 \usage{
-BootControl(samples = 25, ...)
+BootControl(samples = 25, seed = sample(.Machine$integer.max, 1), ...)
 
-BootOptimismControl(samples = 25, ...)
+BootOptimismControl(samples = 25, seed = sample(.Machine$integer.max, 1), ...)
 
-CVControl(folds = 10, repeats = 1, ...)
+CVControl(folds = 10, repeats = 1, seed = sample(.Machine$integer.max, 1), ...)
 
-CVOptimismControl(folds = 10, repeats = 1, ...)
-
-OOBControl(samples = 25, ...)
-
-SplitControl(prop = 2/3, ...)
-
-TrainControl(...)
-
-MLControl(
-  strata = list(breaks = 4, nunique = 5, prop = 0.1, size = 20),
-  times = NULL,
-  distr = NULL,
-  method = NULL,
+CVOptimismControl(
+  folds = 10,
+  repeats = 1,
   seed = sample(.Machine$integer.max, 1),
   ...
 )
+
+OOBControl(samples = 25, seed = sample(.Machine$integer.max, 1), ...)
+
+SplitControl(prop = 2/3, seed = sample(.Machine$integer.max, 1), ...)
+
+TrainControl(seed = sample(.Machine$integer.max, 1), ...)
 }
 \arguments{
 \item{samples}{number of bootstrap samples.}
 
-\item{...}{arguments passed to \code{MLControl}.}
+\item{seed}{integer to set the seed at the start of resampling.}
+
+\item{...}{arguments passed to other methods.}
 
 \item{folds}{number of cross-validation folds (K).}
 
@@ -46,29 +44,13 @@ MLControl(
 
 \item{prop}{proportion of cases to include in the training set
 (\code{0 < prop < 1}).}
-
-\item{strata}{list of the following optional arguments to be passed to
-functions that construct resampling strata.  Strata arguments that are not
-given will assume their default values.
-\describe{
-  \item{\code{breaks}}{number of quantile bins desired for stratification
-    of numeric data.}
-  \item{\code{nunique}}{number of unique values at or below which numeric
-    data are stratified as categorical.}
-  \item{\code{prop}}{minimum proportion of data in each strata.}
-  \item{\code{size}}{minimum number of values in each strata.}
-}}
-
-\item{times, distr, method}{arguments passed to \code{\link{predict}}.}
-
-\item{seed}{integer to set the seed at the start of resampling.}
 }
 \value{
-\code{MLControl} class object.
+Object that inherits from the \code{MLControl} class.
 }
 \description{
-Structures to define and control sampling methods for estimating predictive
-performance of models in the \pkg{MachineShop} package.
+Structures to define and control sampling methods for estimation of model
+predictive performance in the \pkg{MachineShop} package.
 }
 \details{
 \code{BootControl} constructs an \code{MLControl} object for simple bootstrap
@@ -92,28 +74,10 @@ resampling in which models are fit with bootstrap resampled training sets and
 used to predict the unsampled cases.
 
 \code{SplitControl} constructs an \code{MLControl} object for splitting data
-into a seperate trianing and test set (Hastie et al. 2009).
+into a separate training and test set (Hastie et al. 2009).
 
 \code{TrainControl} constructs an \code{MLControl} object for training and
 performance evaluation to be performed on the same training set (Efron 1986).
-
-The base \code{MLControl} constructor initializes a set of control parameters
-that are common to all resampling methods.
-
-The \code{strata} arguments are available to control resampling strata which
-are constructed from numeric proportions for \code{\link{BinomialVariate}};
-original values for \code{character}, \code{factor}, \code{logical},
-\code{numeric}, and \code{ordered}; first columns of values for
-\code{matrix}; and numeric times within event statuses for \code{Surv}.
-Stratification of survival data by event status only can be achieved by
-setting \code{breaks = 1}.  Numeric values are stratified into quantile bins
-and categorical values into factor levels.  The number of bins will be the
-largest integer less than or equal to \code{breaks} satisfying the
-\code{prop} and \code{size} control argument thresholds.  Categorical levels
-below the thresholds will be pooled iteratively by reassigning values in the
-smallest nominal level to the remaining ones at random and by combining the
-smallest adjacent ordinal levels.  Missing values are replaced with
-non-missing values sampled at random with replacement.
 }
 \examples{
 ## Bootstrapping with 100 samples
@@ -166,6 +130,7 @@ Efron B (1986). How biased is the apparent error rate of a prediction rule?
 Journal of the American Statistical Association, 81 (394): 461-70.
 }
 \seealso{
+\code{\link{set_predict}}, \code{\link{set_strata}},
 \code{\link{resample}}, \code{\link{SelectedInput}},
 \code{\link{SelectedModel}}, \code{\link{TunedInput}},
 \code{\link{TunedModel}}
