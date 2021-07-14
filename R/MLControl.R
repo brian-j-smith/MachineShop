@@ -47,8 +47,10 @@ BootControl <- function(
   samples <- check_integer(samples, bounds = c(1, Inf), size = 1)
   throw(check_assignment(samples))
 
-  new("MLBootControl", samples = samples, seed = seed) %>%
-    set_predict %>% dep_predictargs(...) %>%
+  new("MLBootControl",
+    name = "BootControl", label = "Bootstrap Resampling",
+    samples = samples, seed = seed
+  ) %>% set_predict %>% dep_predictargs(...) %>%
     set_strata %>% dep_strataargs(...)
 }
 
@@ -74,12 +76,11 @@ BootControl <- function(
 BootOptimismControl <- function(
   samples = 25, seed = sample(.Machine$integer.max, 1), ...
 ) {
-  samples <- check_integer(samples, bounds = c(1, Inf), size = 1)
-  throw(check_assignment(samples))
-
-  new("MLBootOptimismControl", samples = samples, seed = seed) %>%
-    set_predict %>% dep_predictargs(...) %>%
-    set_strata %>% dep_strataargs(...)
+  new("MLBootOptimismControl",
+    BootControl(samples = samples, seed = seed, ...),
+    name = "BootOptimismControl",
+    label = "Optimism-Corrected Bootstrap Resampling"
+  )
 }
 
 
@@ -110,8 +111,10 @@ CVControl <- function(
   repeats <- check_integer(repeats, bounds = c(1, Inf), size = 1)
   throw(check_assignment(repeats))
 
-  new("MLCVControl", folds = folds, repeats = repeats, seed = seed) %>%
-    set_predict %>% dep_predictargs(...) %>%
+  new("MLCVControl",
+    name = "CVControl", label = "K-Fold Cross-Validation",
+    folds = folds, repeats = repeats, seed = seed
+  ) %>% set_predict %>% dep_predictargs(...) %>%
     set_strata %>% dep_strataargs(...)
 }
 
@@ -134,15 +137,11 @@ CVControl <- function(
 CVOptimismControl <- function(
   folds = 10, repeats = 1, seed = sample(.Machine$integer.max, 1), ...
 ) {
-  folds <- check_integer(folds, bounds = c(1, Inf), size = 1)
-  throw(check_assignment(folds))
-
-  repeats <- check_integer(repeats, bounds = c(1, Inf), size = 1)
-  throw(check_assignment(repeats))
-
-  new("MLCVOptimismControl", folds = folds, repeats = repeats, seed = seed) %>%
-    set_predict %>% dep_predictargs(...) %>%
-    set_strata %>% dep_strataargs(...)
+  new("MLCVOptimismControl",
+    CVControl(folds = folds, repeats = repeats, seed = seed, ...),
+    name = "CVOptimismControl",
+    label = "Optimism-Corrected K-Fold Cross-Validation"
+  )
 }
 
 
@@ -163,8 +162,10 @@ OOBControl <- function(
   samples <- check_integer(samples, bounds = c(1, Inf), size = 1)
   throw(check_assignment(samples))
 
-  new("MLOOBControl", samples = samples, seed = seed) %>%
-    set_predict %>% dep_predictargs(...) %>%
+  new("MLOOBControl",
+    name = "OOBControl", label = "Out-of-Bootstrap Resampling",
+    samples = samples, seed = seed
+  ) %>% set_predict %>% dep_predictargs(...) %>%
     set_strata %>% dep_strataargs(...)
 }
 
@@ -190,8 +191,10 @@ SplitControl <- function(
   prop <- check_numeric(prop, bounds = c(0, 1), include = FALSE, size = 1)
   throw(check_assignment(prop))
 
-  new("MLSplitControl", prop = prop, seed = seed) %>%
-    set_predict %>% dep_predictargs(...) %>%
+  new("MLSplitControl",
+    name = "SplitControl", label = "Split Training and Test Samples",
+    prop = prop, seed = seed
+  ) %>% set_predict %>% dep_predictargs(...) %>%
     set_strata %>% dep_strataargs(...)
 }
 
@@ -211,9 +214,9 @@ SplitControl <- function(
 #' TrainControl()
 #'
 TrainControl <- function(seed = sample(.Machine$integer.max, 1), ...) {
-  new("MLTrainControl", seed = seed) %>%
-    set_predict %>% dep_predictargs(...) %>%
-    dep_strataargs(...)
+  new("MLTrainControl",
+    name = "TrainControl", label = "Training Resubstitution", seed = seed
+  ) %>% set_predict %>% dep_predictargs(...) %>% dep_strataargs(...)
 }
 
 

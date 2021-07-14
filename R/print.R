@@ -154,46 +154,10 @@ setMethod("show", "MLControl",
 )
 
 
-setMethod("show", "MLBootstrapControl",
-  function(object) {
-    cat("Samples:", object@samples, "\n")
-    callNextMethod()
-    invisible()
-  }
-)
-
-
 setMethod("show", "MLBootControl",
   function(object) {
-    print_title("MLControl")
-    cat("\n",
-        "Name: BootControl\n",
-        "Label: Bootstrap Resampling\n",
-        sep = "")
-    callNextMethod()
-    invisible()
-  }
-)
-
-
-setMethod("show", "MLBootOptimismControl",
-  function(object) {
-    print_title("MLControl")
-    cat("\n",
-        "Name: BootOptimismControl\n",
-        "Label: Optimism-Corrected Bootstrap Resampling\n",
-        sep = "")
-    callNextMethod()
-    invisible()
-  }
-)
-
-
-setMethod("show", "MLCrossValidationControl",
-  function(object) {
-    cat("Folds: ", object@folds, "\n",
-        "Repeats: ", object@repeats, "\n",
-         sep = "")
+    print_controltitle(object)
+    cat("Samples: ", object@samples, "\n", sep = "")
     callNextMethod()
     invisible()
   }
@@ -202,23 +166,9 @@ setMethod("show", "MLCrossValidationControl",
 
 setMethod("show", "MLCVControl",
   function(object) {
-    print_title("MLControl")
-    cat("\n",
-        "Name: CVControl\n",
-        "Label: K-Fold Cross-Validation\n",
-        sep = "")
-    callNextMethod()
-    invisible()
-  }
-)
-
-
-setMethod("show", "MLCVOptimismControl",
-  function(object) {
-    print_title("MLControl")
-    cat("\n",
-        "Name: CVOptimismControl\n",
-        "Label: Optimism-Corrected K-Fold Cross-Validation\n",
+    print_controltitle(object)
+    cat("Folds: ", object@folds, "\n",
+        "Repeats: ", object@repeats, "\n",
         sep = "")
     callNextMethod()
     invisible()
@@ -228,12 +178,8 @@ setMethod("show", "MLCVOptimismControl",
 
 setMethod("show", "MLOOBControl",
   function(object) {
-    print_title("MLControl")
-    cat("\n",
-        "Name: OOBControl\n",
-        "Label: Out-Of-Bootstrap Resampling\n",
-        "Samples: ", object@samples, "\n",
-        sep = "")
+    print_controltitle(object)
+    cat("Samples: ", object@samples, "\n", sep = "")
     callNextMethod()
     invisible()
   }
@@ -242,12 +188,8 @@ setMethod("show", "MLOOBControl",
 
 setMethod("show", "MLSplitControl",
   function(object) {
-    print_title("MLControl")
-    cat("\n",
-        "Name: SplitControl\n",
-        "Label: Split Training and Test Samples\n",
-        "Training proportion: ", object@prop, "\n",
-        sep = "")
+    print_controltitle(object)
+    cat("Training proportion: ", object@prop, "\n", sep = "")
     callNextMethod()
     invisible()
   }
@@ -256,11 +198,7 @@ setMethod("show", "MLSplitControl",
 
 setMethod("show", "MLTrainControl",
   function(object) {
-    print_title("MLControl")
-    cat("\n",
-        "Name: TrainControl\n",
-        "Label: Training Resubstitution\n",
-        sep = "")
+    print_controltitle(object)
     callNextMethod()
     invisible()
   }
@@ -641,6 +579,15 @@ setShowDefault("VarImp")
 
 
 format_len <- function(x) format(x, big.mark = ",")
+
+
+print_controltitle <- function(x) {
+  print_title("MLControl")
+  cat("\n",
+      "Name: ", x@name, "\n",
+      "Label: ", x@label, "\n",
+      sep = "")
+}
 
 
 print_items <- function(x, ...) {

@@ -155,9 +155,7 @@ Resamples.list <- function(object, ...) {
 }
 
 
-.resample.MLBootstrapControl <- function(
-  object, x, model, progress_index = 0, ...
-) {
+.resample.MLBootControl <- function(object, x, model, progress_index = 0, ...) {
   presets <- settings()
   set.seed(object@seed)
   splits <- rsample_split(function(...) bootstraps(...)$splits,
@@ -210,9 +208,7 @@ Resamples.list <- function(object, ...) {
 }
 
 
-.resample.MLCrossValidationControl <- function(
-  object, x, model, progress_index = 0, ...
-) {
+.resample.MLCVControl <- function(object, x, model, progress_index = 0, ...) {
   presets <- settings()
   set.seed(object@seed)
   splits <- rsample_split(function(...) vfold_cv(...)$splits,

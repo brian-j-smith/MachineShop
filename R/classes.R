@@ -254,6 +254,8 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 
 setClass("MLControl",
   slots = c(
+    name = "character",
+    label = "character",
     predict = "list",
     strata = "list",
     seed = "numeric"
@@ -261,23 +263,18 @@ setClass("MLControl",
 )
 
 
-setClass("MLBootstrapControl",
+setClass("MLBootControl",
   contains = "MLControl",
   slots = c(samples = "integer")
 )
 
 
-setClass("MLBootControl",
-  contains = "MLBootstrapControl"
-)
-
-
 setClass("MLBootOptimismControl",
-  contains = "MLBootstrapControl"
+  contains = "MLBootControl"
 )
 
 
-setClass("MLCrossValidationControl",
+setClass("MLCVControl",
   contains = "MLControl",
   slots = c(
     folds = "integer",
@@ -286,13 +283,8 @@ setClass("MLCrossValidationControl",
 )
 
 
-setClass("MLCVControl",
-  contains = "MLCrossValidationControl"
-)
-
-
 setClass("MLCVOptimismControl",
-  contains = "MLCrossValidationControl"
+  contains = "MLCVControl"
 )
 
 
