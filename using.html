@@ -405,11 +405,10 @@ div.tocify {
 <div id="melanoma-example" class="section level1">
 <h1>Melanoma Example</h1>
 <p>Use of the <strong>MachineShop</strong> package is demonstrated with a survival analysis example in which the response variable is a censored time to event outcome. Since survival outcomes are a combination of numerical (time to event) and categorical (event) variables, package features for both variable types are illustrated with the example. Support for outcomes other than survival, including nominal and ordinal factors as well as numeric vectors and matrices, is also discussed.</p>
-<p>Survival analysis is performed with the <code>Melanoma</code> dataset from the <strong>MASS</strong> package <span class="citation">(Andersen et al. 1993)</span>. This dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at study termination, or (3) death from other causes for 205 Denmark patients with malignant melanomas. Also provided are potential predictors of the survival outcomes. The analysis begins by loading required packages <strong>MachineShop</strong>, <strong>survival</strong> <span class="citation">(Therneau 2020)</span>, and <strong>MASS</strong> as well as <strong>magrittr</strong> <span class="citation">(Bache and Wickham 2014)</span> for its pipe (<code>%&gt;%</code>) operator to simplify some of the code syntax. For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one.</p>
+<p>Survival analysis is performed with the <code>Melanoma</code> dataset from the <strong>MASS</strong> package <span class="citation">(Andersen et al. 1993)</span>. This dataset provides survival time, in days, from disease treatment to (1) death from disease, (2) alive at study termination, or (3) death from other causes for 205 Denmark patients with malignant melanomas. Also provided are potential predictors of the survival outcomes. The analysis begins by loading required packages <strong>MachineShop</strong>, <strong>survival</strong> <span class="citation">(Therneau 2020)</span>, and <strong>MASS</strong>. For the analysis, a binary overall survival outcome is created by combining the two death categories (1 and 3) into one.</p>
 <pre class="r"><code>## Analysis libraries and dataset
 library(MachineShop)
 library(survival)
-library(magrittr)
 data(Melanoma, package = &quot;MASS&quot;)
 
 ## Malignant melanoma analysis dataset
@@ -688,7 +687,7 @@ modelinfo(surv_df$y) %&gt;% names
 </div>
 <div id="fit-function" class="section level2">
 <h2>Fit Function</h2>
-<p>Package models, such as <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/GBMModel"><code>GBMModel</code></a>, can be specified in the <code>model</code> argument of the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/fit"><code>fit()</code></a> function to estimate a relationship (<code>surv_fo</code>) between predictors and an outcome based on a set of data (<code>surv_train</code>). Argument specifications may be in terms of the model function, function name, or a function call.</p>
+<p>Package models, such as <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/GBMModel"><code>GBMModel</code></a>, can be specified in the <code>model</code> argument of the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/fit"><code>fit()</code></a> function to estimate a relationship (<code>surv_fo</code>) between predictors and an outcome based on a set of data (<code>surv_train</code>). Argument specifications may be in terms of a model function, function name, or object.</p>
 <pre class="r"><code>## Generalized boosted regression fit
 
 ## Model function
@@ -697,7 +696,7 @@ surv_fit &lt;- fit(surv_fo, data = surv_train, model = GBMModel)
 ## Model function name
 fit(surv_fo, data = surv_train, model = &quot;GBMModel&quot;)
 
-## Model function call
+## Model object
 fit(surv_fo, data = surv_train, model = GBMModel(n.trees = 100, interaction.depth = 1))</code></pre>
 <p>Model function arguments will assume their default values unless otherwise changed in a function call.</p>
 </div>
@@ -1601,7 +1600,8 @@ Event
 surv_means_control &lt;- CVControl(folds = 5, repeats = 3, seed = 123)
 
 ## Prediction of survival probabilities
-surv_probs_control &lt;- CVControl(folds = 5, repeats = 3, times = surv_times, seed = 123)</code></pre>
+surv_probs_control &lt;- CVControl(folds = 5, repeats = 3, seed = 123) %&gt;%
+  set_predict(times = surv_times)</code></pre>
 </div>
 <div id="parallel-processing" class="section level2">
 <h2>Parallel Processing</h2>
@@ -1631,6 +1631,7 @@ registerDoParallel(cores = 2)</code></pre>
 #&gt;   Unique numeric threshold: 5
 #&gt;   Minimum proportion: 0.1
 #&gt;   Minimum size: 20
+#&gt; Monitoring: progress 
 #&gt; Seed: 123
 
 (res_probs &lt;- resample(surv_fo, data = surv_train, model = GBMModel, control = surv_probs_control))
@@ -1645,12 +1646,14 @@ registerDoParallel(cores = 2)</code></pre>
 #&gt; Label: K-Fold Cross-Validation
 #&gt; Folds: 5
 #&gt; Repeats: 3
+#&gt; Prediction parameters
+#&gt;   Survival times: 1825, 3650
 #&gt; Stratification parameters
 #&gt;   Breaks: 4
 #&gt;   Unique numeric threshold: 5
 #&gt;   Minimum proportion: 0.1
 #&gt;   Minimum size: 20
-#&gt; Survival times: 1825, 3650
+#&gt; Monitoring: progress 
 #&gt; Seed: 123</code></pre>
 </div>
 <div id="summary-statistics" class="section level2">
@@ -1764,6 +1767,7 @@ res3 &lt;- resample(surv_fo, data = surv_train, model = GBMModel(n.trees = 100),
 #&gt;   Unique numeric threshold: 5
 #&gt;   Minimum proportion: 0.1
 #&gt;   Minimum size: 20
+#&gt; Monitoring: progress 
 #&gt; Seed: 123
 
 summary(res)
@@ -2249,7 +2253,7 @@ model_fit &lt;- fit(surv_fo, data = surv_train,
 #&gt; 
 #&gt; Selected model: GBMModel.1 
 #&gt; CIndex value: 0.7513153</code></pre>
-<p>Grid values may also be given as a <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/Grid"><code>Grid</code></a> function, function call, or object; <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/ParameterGrid"><code>ParameterGrid</code></a> object; or data frame containing parameter values at which to evaluate the model, such as that returned by <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/expand_params"><code>expand_params()</code></a>.</p>
+<p>Grid values may also be given as a <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/Grid"><code>Grid</code></a> function, function name, or object; <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/ParameterGrid"><code>ParameterGrid</code></a> object; or data frame containing parameter values at which to evaluate the model, such as that returned by <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/expand_params"><code>expand_params()</code></a>.</p>
 <pre class="r"><code>## Tune over randomly sampled grid points
 fit(surv_fo, data = surv_train,
     model = TunedModel(
@@ -2303,7 +2307,7 @@ fit(surv_fo, data = surv_train,
 </div>
 <div id="model-selection" class="section level3">
 <h3>Model Selection</h3>
-<p>Model selection can be conducted by calling <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/fit"><code>fit()</code></a> with a <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/SelectedModel"><code>SelectedModel</code></a> to automatically choose from any combination of models and model parameters. Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values. Combinations of model functions, function names, or function calls can be supplied to <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/SelectedModel"><code>SelectedModel()</code></a> in order to define sets of candidate models from which to select. An <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/expand_model"><code>expand_model()</code></a> helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired.</p>
+<p>Model selection can be conducted by calling <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/fit"><code>fit()</code></a> with a <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/SelectedModel"><code>SelectedModel</code></a> to automatically choose from any combination of models and model parameters. Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values. Combinations of model functions, function names, or objects can be supplied to <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/SelectedModel"><code>SelectedModel()</code></a> in order to define sets of candidate models from which to select. An <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/expand_model"><code>expand_model()</code></a> helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired.</p>
 <pre class="r"><code>## Model interface for model selection
 sel_model &lt;- SelectedModel(
   expand_model(GBMModel, n.trees = c(50, 100), interaction.depth = 1:2),
@@ -2460,7 +2464,7 @@ resample(tun_rec, model = sel_model)</code></pre>
 <p>Core default behaviors of functions in the package can be viewed or changed globally through the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/settings"><code>settings()</code></a> function. The function accepts one or more character names of settings to view, <code>name = value</code> pairs giving the values of settings to change, or a vector of these, with available settings summarized below.</p>
 <dl>
 <dt><code>control</code></dt>
-<dd>function, function name, or call defining a default resampling method [default: <code>"CVControl"</code>].
+<dd>function, function name, or object defining a default resampling method [default: <code>"CVControl"</code>].
 </dd>
 <dt><code>cutoff</code></dt>
 <dd>numeric (0, 1) threshold above which binary factor probabilities are classified as events and below which survival probabilities are classified [default: 0.5].
@@ -2472,7 +2476,7 @@ resample(tun_rec, model = sel_model)</code></pre>
 <dd>character string specifying distributional approximations to estimated survival curves for predicting survival events/probabilities. Choices are <code>"empirical"</code> (default) for the Kaplan-Meier estimator, <code>"exponential"</code>, <code>"rayleigh"</code>, or <code>"weibull"</code>.
 </dd>
 <dt><code>grid</code></dt>
-<dd><code>size</code> argument to <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/Grid"><code>Grid()</code></a> indicating the number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/Grid"><code>Grid()</code></a> function, function name, or call [default: 3].
+<dd><code>size</code> argument to <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/Grid"><code>Grid()</code></a> indicating the number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/Grid"><code>Grid()</code></a> function, function name, or object [default: 3].
 </dd>
 <dt><code>method.EmpiricalSurv</code></dt>
 <dd>character string specifying the empirical method of estimating baseline survival curves for Cox proportional hazards-based models. Choices are <code>"breslow"</code> or <code>"efron"</code> (default).
@@ -2497,12 +2501,6 @@ resample(tun_rec, model = sel_model)</code></pre>
 </dd>
 <dt><code>require</code></dt>
 <dd>names of installed packages to load during parallel execution of resampling algorithms [default: <code>c("MachineShop", "survival", "recipes")</code>].
-</dd>
-<dt><code>resample_progress</code></dt>
-<dd>logical indicating whether to display a progress bar during resampling [default: <code>TRUE</code>]. Displayed only if a computing cluster is not registered or is registered with the <strong>doSNOW</strong> package.
-</dd>
-<dt><code>resample_verbose</code></dt>
-<dd>logical indicating whether to enable verbose messages when resampling [default: <code>FALSE</code>].
 </dd>
 <dt><code>reset</code></dt>
 <dd>character names of settings to reset to their default values.
@@ -2643,9 +2641,6 @@ summary(performance(res, metric = f2_score))
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-andersen:1993:SMB" class="csl-entry">
 Andersen, Per K, Ornulf Borgan, Richard D Gill, and Niels Keiding. 1993. <em>Statistical Models Based on Counting Processes</em>. New York: Springer.
-</div>
-<div id="ref-bache:2014:MFP" class="csl-entry">
-Bache, Stefan Milton, and Hadley Wickham. 2014. <em><span class="nocase">magrittr</span>: A Forward-Pipe Operator for r</em>. <a href="https://CRAN.R-project.org/package=magrittr">https://CRAN.R-project.org/package=magrittr</a>.
 </div>
 <div id="ref-breiman:1996:SR" class="csl-entry">
 Breiman, Leo. 1996. <span>“Stacked Regression.”</span> <em>Machine Learning</em> 24: 49–64.
