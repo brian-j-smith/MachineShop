@@ -74,7 +74,7 @@ EmpiricalSurv <- function(x, ...) {
 EmpiricalSurv.Surv <- function(
   x, risks = NULL, weights = NULL, method = c("efron", "breslow"), ...
 ) {
-  event <- as.numeric(x[, "status"] == 1)
+  event <- as.integer(x[, "status"] == 1)
   if (is.null(risks)) risks <- 1
   if (is.null(weights)) weights <- 1
   if (is.null(method)) method <- settings("method.EmpiricalSurv")
@@ -92,8 +92,7 @@ EmpiricalSurv.Surv <- function(
     "efron" = {
       data <- data.frame(event, wt_eventrisk = data$wt_event * risks)
       sums[names(data)] <- rowsum(data, time(x))
-      hazfit_efron(nrow(sums), sums$event, sums$wt_event, sums$wt_risk,
-                   sums$wt_eventrisk)
+      hazfit_efron(sums$event, sums$wt_event, sums$wt_risk, sums$wt_eventrisk)
     }
   ))
 

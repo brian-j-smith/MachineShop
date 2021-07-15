@@ -3,10 +3,10 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 NumericVector hazfit_efron(
-    int n, IntegerVector event, NumericVector wt_event, NumericVector wt_risk,
+    IntegerVector event, NumericVector wt_event, NumericVector wt_risk,
     NumericVector wt_eventrisk
 ) {
-  int i, j, m;
+  int i, j, m, n = event.length();
   NumericVector res(n);
 
   for (i = 0; i < n; i++) {
