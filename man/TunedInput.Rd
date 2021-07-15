@@ -26,7 +26,7 @@ TunedInput(x, ...)
 \item{grid}{\code{RecipeGrid} containing parameter values at which to
 evaluate a recipe, such as those returned by \code{\link{expand_steps}}.}
 
-\item{control}{\link[=controls]{control} function, function name, or call
+\item{control}{\link[=controls]{control} function, function name, or object
 defining the resampling method to be employed.}
 
 \item{metrics}{\link[=metrics]{metric} function, function name, or vector of

@@ -7,7 +7,7 @@
 modelinfo(...)
 }
 \arguments{
-\item{...}{\link[=models]{model} functions, function names, or calls;
+\item{...}{\link[=models]{model} functions, function names, or objects;
 \link[=response]{observed responses} for which to display information.  If
 none are specified, information is returned on all available models by
 default.}

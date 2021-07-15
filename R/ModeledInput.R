@@ -10,11 +10,11 @@
 #'
 #' @param x \link[=inputs]{input} specifying a relationship between model
 #'   predictor and response variables.  Alternatively, a \link[=models]{model}
-#'   function or call may be given first followed by the input specification.
+#'   function or object may be given first followed by the input specification.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} or an object that can be converted
 #'   to one.
-#' @param model \link[=models]{model} function, function name, or call.
+#' @param model \link[=models]{model} function, function name, or object.
 #' @param ... arguments passed to other methods.
 #'
 #' @return \code{ModeledFrame} or \code{ModeledRecipe} class object that

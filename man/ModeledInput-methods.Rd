@@ -29,14 +29,14 @@ ModeledInput(x, ...)
 \arguments{
 \item{x}{\link[=inputs]{input} specifying a relationship between model
 predictor and response variables.  Alternatively, a \link[=models]{model}
-function or call may be given first followed by the input specification.}
+function or object may be given first followed by the input specification.}
 
 \item{...}{arguments passed to other methods.}
 
 \item{data}{\link[=data.frame]{data frame} or an object that can be converted
 to one.}
 
-\item{model}{\link[=models]{model} function, function name, or call.}
+\item{model}{\link[=models]{model} function, function name, or object.}
 
 \item{y}{response variable.}
 }

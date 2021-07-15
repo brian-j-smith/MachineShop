@@ -15,13 +15,13 @@ TunedModel(
 )
 }
 \arguments{
-\item{model}{\link[=models]{model} function, function name, or call defining
-the model to be tuned.}
+\item{model}{\link[=models]{model} function, function name, or object
+defining the model to be tuned.}
 
 \item{grid}{single integer or vector of integers whose positions or names
 match the parameters in the model's pre-defined tuning grid if one exists
 and which specify the number of values used to construct the grid;
-\code{\link{Grid}} function, function call, or object;
+\code{\link{Grid}} function, function name, or object;
 \code{\link{ParameterGrid}} object; or \link[=data.frame]{data frame}
 containing parameter values at which to evaluate the model, such as that
 returned by \code{\link{expand_params}}.}
@@ -29,7 +29,7 @@ returned by \code{\link{expand_params}}.}
 \item{fixed}{list or one-row data frame with columns of fixed parameter
 values to combine with those in \code{grid}.}
 
-\item{control}{\link[=controls]{control} function, function name, or call
+\item{control}{\link[=controls]{control} function, function name, or object
 defining the resampling method to be employed.}
 
 \item{metrics}{\link[=metrics]{metric} function, function name, or vector of

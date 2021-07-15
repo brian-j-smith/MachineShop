@@ -15,7 +15,7 @@
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} or an object that can be converted
 #'   to one.
-#' @param control \link[=controls]{control} function, function name, or call
+#' @param control \link[=controls]{control} function, function name, or object
 #'   defining the resampling method to be employed.
 #' @param metrics \link[=metrics]{metric} function, function name, or vector of
 #'   these with which to calculate performance.  If not specified, default
@@ -213,7 +213,7 @@ SelectedInput.list <- function(x, ...) {
 #' @param x untrained \code{\link[recipes]{recipe}}.
 #' @param grid \code{RecipeGrid} containing parameter values at which to
 #'   evaluate a recipe, such as those returned by \code{\link{expand_steps}}.
-#' @param control \link[=controls]{control} function, function name, or call
+#' @param control \link[=controls]{control} function, function name, or object
 #'   defining the resampling method to be employed.
 #' @param metrics \link[=metrics]{metric} function, function name, or vector of
 #'   these with which to calculate performance.  If not specified, default

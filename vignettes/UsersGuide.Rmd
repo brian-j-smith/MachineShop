@@ -227,7 +227,7 @@ modelinfo(surv_df$y) %>% names
 
 ## Fit Function
 
-Package models, such as `r rdoc_url("GBMModel")`, can be specified in the `model` argument of the `r rdoc_url("fit()")` function to estimate a relationship (`surv_fo`) between predictors and an outcome based on a set of data (`surv_train`).  Argument specifications may be in terms of the model function, function name, or a function call.
+Package models, such as `r rdoc_url("GBMModel")`, can be specified in the `model` argument of the `r rdoc_url("fit()")` function to estimate a relationship (`surv_fo`) between predictors and an outcome based on a set of data (`surv_train`).  Argument specifications may be in terms of a model function, function name, or object.
 
 ```{r using_fit_function, results="hide"}
 ## Generalized boosted regression fit
@@ -238,7 +238,7 @@ surv_fit <- fit(surv_fo, data = surv_train, model = GBMModel)
 ## Model function name
 fit(surv_fo, data = surv_train, model = "GBMModel")
 
-## Model function call
+## Model object
 fit(surv_fo, data = surv_train, model = GBMModel(n.trees = 100, interaction.depth = 1))
 ```
 
@@ -1458,7 +1458,7 @@ model_fit <- fit(surv_fo, data = surv_train,
 #> CIndex value: 0.7513153
 ```
 
-Grid values may also be given as a `r rdoc_url("Grid")` function, function call, or object; `r rdoc_url("ParameterGrid")` object; or data frame containing parameter values at which to evaluate the model, such as that returned by `r rdoc_url("expand_params()")`.
+Grid values may also be given as a `r rdoc_url("Grid")` function, function name, or object; `r rdoc_url("ParameterGrid")` object; or data frame containing parameter values at which to evaluate the model, such as that returned by `r rdoc_url("expand_params()")`.
 
 ```{r using_strategies_tune_grid, eval=FALSE}
 ## Tune over randomly sampled grid points
@@ -1527,7 +1527,7 @@ knitr::include_graphics("img/using_strategies_tune_plot-1.png")
 
 ### Model Selection
 
-Model selection can be conducted by calling `r rdoc_url("fit()")` with a `r rdoc_url("SelectedModel")` to automatically choose from any combination of models and model parameters.  Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values.  Combinations of model functions, function names, or function calls can be supplied to `r rdoc_url("SelectedModel()")` in order to define sets of candidate models from which to select.  An `r rdoc_url("expand_model()")` helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired.
+Model selection can be conducted by calling `r rdoc_url("fit()")` with a `r rdoc_url("SelectedModel")` to automatically choose from any combination of models and model parameters.  Selection has as a special case the just-discussed tuning of a single model over a grid of parameter values.  Combinations of model functions, function names, or objects can be supplied to `r rdoc_url("SelectedModel()")` in order to define sets of candidate models from which to select.  An `r rdoc_url("expand_model()")` helper function is additionally available to expand a model over a grid of tuning parameters for inclusion in the candidate set if so desired.
 
 ```{r using_strategies_select, results="hide", eval=FALSE}
 ## Model interface for model selection
@@ -1725,7 +1725,7 @@ Data Reduction
 Core default behaviors of functions in the package can be viewed or changed globally through the `r rdoc_url("settings()")` function.  The function accepts one or more character names of settings to view, `name = value` pairs giving the values of settings to change, or a vector of these, with available settings summarized below.
 
 `control`
-  : function, function name, or call defining a default resampling method [default: ``"CVControl"``].
+  : function, function name, or object defining a default resampling method [default: ``"CVControl"``].
 
 `cutoff`
   : numeric (0, 1) threshold above which binary factor probabilities are classified as events and below which survival probabilities are classified [default: 0.5].
@@ -1737,7 +1737,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
   : character string specifying distributional approximations to estimated survival curves for predicting survival events/probabilities.  Choices are `"empirical"` (default) for the Kaplan-Meier estimator, `"exponential"`, `"rayleigh"`, or `"weibull"`.
 
 `grid`
-  : `size` argument to `r rdoc_url("Grid()")` indicating the number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a `r rdoc_url("Grid()")` function, function name, or call [default: 3].
+  : `size` argument to `r rdoc_url("Grid()")` indicating the number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a `r rdoc_url("Grid()")` function, function name, or object [default: 3].
 
 `method.EmpiricalSurv`
   : character string specifying the empirical method of estimating baseline survival curves for Cox proportional hazards-based models.  Choices are `"breslow"` or `"efron"` (default).

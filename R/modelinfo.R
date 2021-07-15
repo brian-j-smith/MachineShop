@@ -2,7 +2,7 @@
 #'
 #' Display information about models supplied by the \pkg{MachineShop} package.
 #'
-#' @param ... \link[=models]{model} functions, function names, or calls;
+#' @param ... \link[=models]{model} functions, function names, or objects;
 #' \link[=response]{observed responses} for which to display information.  If
 #' none are specified, information is returned on all available models by
 #' default.

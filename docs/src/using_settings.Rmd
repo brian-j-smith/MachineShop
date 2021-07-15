@@ -3,7 +3,7 @@
 Core default behaviors of functions in the package can be viewed or changed globally through the `r rdoc_url("settings()")` function.  The function accepts one or more character names of settings to view, `name = value` pairs giving the values of settings to change, or a vector of these, with available settings summarized below.
 
 `control`
-  : function, function name, or call defining a default resampling method [default: ``"CVControl"``].
+  : function, function name, or object defining a default resampling method [default: ``"CVControl"``].
 
 `cutoff`
   : numeric (0, 1) threshold above which binary factor probabilities are classified as events and below which survival probabilities are classified [default: 0.5].
@@ -15,7 +15,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
   : character string specifying distributional approximations to estimated survival curves for predicting survival events/probabilities.  Choices are `"empirical"` (default) for the Kaplan-Meier estimator, `"exponential"`, `"rayleigh"`, or `"weibull"`.
 
 `grid`
-  : `size` argument to `r rdoc_url("Grid()")` indicating the number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a `r rdoc_url("Grid()")` function, function name, or call [default: 3].
+  : `size` argument to `r rdoc_url("Grid()")` indicating the number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a `r rdoc_url("Grid()")` function, function name, or object [default: 3].
 
 `method.EmpiricalSurv`
   : character string specifying the empirical method of estimating baseline survival curves for Cox proportional hazards-based models.  Choices are `"breslow"` or `"efron"` (default).

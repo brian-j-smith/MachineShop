@@ -7,10 +7,10 @@
 StackedModel(..., control = MachineShop::settings("control"), weights = NULL)
 }
 \arguments{
-\item{...}{\link[=models]{model} functions, function names, calls, or vector
-of these to serve as base learners.}
+\item{...}{\link[=models]{model} functions, function names, objects, or
+vector of these to serve as base learners.}
 
-\item{control}{\link[=controls]{control} function, function name, or call
+\item{control}{\link[=controls]{control} function, function name, or object
 defining the resampling method to be employed for the estimation of base
 learner weights.}
 

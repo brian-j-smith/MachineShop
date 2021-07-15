@@ -57,7 +57,7 @@ may be named or unnamed.}
 \item{data}{\link[=data.frame]{data frame} or an object that can be converted
 to one.}
 
-\item{control}{\link[=controls]{control} function, function name, or call
+\item{control}{\link[=controls]{control} function, function name, or object
 defining the resampling method to be employed.}
 
 \item{metrics}{\link[=metrics]{metric} function, function name, or vector of

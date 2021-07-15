@@ -2,9 +2,9 @@
 #'
 #' Fit a stacked regression model from multiple base learners.
 #'
-#' @param ... \link[=models]{model} functions, function names, calls, or vector
-#'   of these to serve as base learners.
-#' @param control \link[=controls]{control} function, function name, or call
+#' @param ... \link[=models]{model} functions, function names, objects, or
+#'   vector of these to serve as base learners.
+#' @param control \link[=controls]{control} function, function name, or object
 #'   defining the resampling method to be employed for the estimation of base
 #'   learner weights.
 #' @param weights optional fixed base learner weights.

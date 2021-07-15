@@ -8,14 +8,15 @@
 #'
 #' @param x \link[=inputs]{input} specifying a relationship between model
 #'   predictor and response variables.  Alternatively, a \link[=models]{model}
-#'   function or call may be given first followed by the input specification and
-#'   \code{control} value.
+#'   function or object may be given first followed by the input specification
+#'   and \code{control} value.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
 #'   outcomes.
-#' @param model \link[=models]{model} function, function name, or call; ignored
-#'   and can be omitted when resampling \link[=ModeledInput]{modeled inputs}.
-#' @param control \link[=controls]{control} function, function name, or call
+#' @param model \link[=models]{model} function, function name, or object;
+#'   ignored and can be omitted when resampling
+#'   \link[=ModeledInput]{modeled inputs}.
+#' @param control \link[=controls]{control} function, function name, or object
 #'   defining the resampling method to be employed.
 #' @param ... arguments passed to other methods.
 #'

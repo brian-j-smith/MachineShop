@@ -2,10 +2,10 @@
 #'
 #' Model selection from a candidate set.
 #'
-#' @param ... \link[=models]{model} functions, function names, calls, or vectors
-#'   of these to serve as the candidate set from which to select, such as that
-#'   returned by \code{\link{expand_model}}.
-#' @param control \link[=controls]{control} function, function name, or call
+#' @param ... \link[=models]{model} functions, function names, objects, or
+#'   vectors of these to serve as the candidate set from which to select, such
+#'   as that returned by \code{\link{expand_model}}.
+#' @param control \link[=controls]{control} function, function name, or object
 #'   defining the resampling method to be employed.
 #' @param metrics \link[=metrics]{metric} function, function name, or vector of
 #'   these with which to calculate performance.  If not specified, default
@@ -82,18 +82,18 @@ MLModelFunction(SelectedModel) <- NULL
 #'
 #' Model tuning over a grid of parameter values.
 #'
-#' @param model \link[=models]{model} function, function name, or call defining
-#'   the model to be tuned.
+#' @param model \link[=models]{model} function, function name, or object
+#'   defining the model to be tuned.
 #' @param grid single integer or vector of integers whose positions or names
 #'   match the parameters in the model's pre-defined tuning grid if one exists
 #'   and which specify the number of values used to construct the grid;
-#'   \code{\link{Grid}} function, function call, or object;
+#'   \code{\link{Grid}} function, function name, or object;
 #'   \code{\link{ParameterGrid}} object; or \link[=data.frame]{data frame}
 #'   containing parameter values at which to evaluate the model, such as that
 #'   returned by \code{\link{expand_params}}.
 #' @param fixed list or one-row data frame with columns of fixed parameter
 #'   values to combine with those in \code{grid}.
-#' @param control \link[=controls]{control} function, function name, or call
+#' @param control \link[=controls]{control} function, function name, or object
 #'   defining the resampling method to be employed.
 #' @param metrics \link[=metrics]{metric} function, function name, or vector of
 #'   these with which to calculate performance.  If not specified, default

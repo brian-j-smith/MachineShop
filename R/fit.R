@@ -7,12 +7,13 @@
 #'
 #' @param x \link[=inputs]{input} specifying a relationship between model
 #'   predictor and response variables.  Alternatively, a \link[=models]{model}
-#'   function or call may be given first followed by the input specification.
+#'   function or object may be given first followed by the input specification.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} containing observed predictors and
 #'   outcomes.
-#' @param model \link[=models]{model} function, function name, or call; ignored
-#'   and can be omitted when fitting \link[=ModeledInput]{modeled inputs}.
+#' @param model \link[=models]{model} function, function name, or object;
+#'   ignored and can be omitted when fitting
+#'   \link[=ModeledInput]{modeled inputs}.
 #' @param ... arguments passed to other methods.
 #'
 #' @return \code{MLModelFit} class object.

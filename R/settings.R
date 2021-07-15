@@ -16,7 +16,7 @@
 #' @section Settings:
 #'
 #' \describe{
-#'   \item{\code{\link[=controls]{control}}}{function, function name, or call
+#'   \item{\code{\link[=controls]{control}}}{function, function name, or object
 #'     defining a default resampling method [default: \code{"CVControl"}].}
 #'   \item{\code{cutoff}}{numeric (0, 1) threshold above which binary factor
 #'     probabilities are classified as events and below which survival
@@ -33,7 +33,7 @@
 #'   \item{\code{grid}}{\code{size} argument to \code{\link{Grid}} indicating
 #'     the number of parameter-specific values to generate automatically for
 #'     \link[=TunedModel]{tuning} of models that have pre-defined grids or a
-#'     \code{\link{Grid}} function, function name, or call [default: 3].}
+#'     \code{\link{Grid}} function, function name, or object [default: 3].}
 #'   \item{\code{method.EmpiricalSurv}}{character string specifying the
 #'     empirical method of estimating baseline survival curves for Cox
 #'     proportional hazards-based models.  Choices are \code{"breslow"} or

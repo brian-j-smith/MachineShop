@@ -7,7 +7,7 @@
 expand_model(x, ..., random = FALSE)
 }
 \arguments{
-\item{x}{\link[=models]{model} function, function name, or call.}
+\item{x}{\link[=models]{model} function, function name, or object.}
 
 \item{...}{named vectors or factors or a list of these containing the
 parameter values over which to expand \code{x}.}

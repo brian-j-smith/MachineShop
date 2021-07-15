@@ -2,7 +2,7 @@
 #'
 #' Expand a model over all combinations of a grid of tuning parameters.
 #'
-#' @param x \link[=models]{model} function, function name, or call.
+#' @param x \link[=models]{model} function, function name, or object.
 #' @param ... named vectors or factors or a list of these containing the
 #'   parameter values over which to expand \code{x}.
 #' @param random number of points to be randomly sampled from the parameter grid

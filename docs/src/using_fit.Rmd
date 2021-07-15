@@ -69,7 +69,7 @@ modelinfo(surv_df$y) %>% names
 
 ## Fit Function
 
-Package models, such as `r rdoc_url("GBMModel")`, can be specified in the `model` argument of the `r rdoc_url("fit()")` function to estimate a relationship (`surv_fo`) between predictors and an outcome based on a set of data (`surv_train`).  Argument specifications may be in terms of the model function, function name, or a function call.
+Package models, such as `r rdoc_url("GBMModel")`, can be specified in the `model` argument of the `r rdoc_url("fit()")` function to estimate a relationship (`surv_fo`) between predictors and an outcome based on a set of data (`surv_train`).  Argument specifications may be in terms of a model function, function name, or object.
 
 ```{r using_fit_function, results="hide"}
 ## Generalized boosted regression fit
@@ -80,7 +80,7 @@ surv_fit <- fit(surv_fo, data = surv_train, model = GBMModel)
 ## Model function name
 fit(surv_fo, data = surv_train, model = "GBMModel")
 
-## Model function call
+## Model object
 fit(surv_fo, data = surv_train, model = GBMModel(n.trees = 100, interaction.depth = 1))
 ```
 
