@@ -17,7 +17,8 @@
 #'
 #' @return Object that inherits from the \code{MLControl} class.
 #'
-#' @seealso \code{\link{set_predict}}, \code{\link{set_strata}},
+#' @seealso \code{\link{set_monitor}}, \code{\link{set_predict}},
+#' \code{\link{set_strata}},
 #' \code{\link{resample}}, \code{\link{SelectedInput}},
 #' \code{\link{SelectedModel}}, \code{\link{TunedInput}},
 #' \code{\link{TunedModel}}
@@ -50,7 +51,7 @@ BootControl <- function(
   new("MLBootControl",
     name = "BootControl", label = "Bootstrap Resampling",
     samples = samples, seed = seed
-  ) %>% set_predict %>% dep_predictargs(...) %>%
+  ) %>% set_monitor %>% set_predict %>% dep_predictargs(...) %>%
     set_strata %>% dep_strataargs(...)
 }
 
@@ -114,7 +115,7 @@ CVControl <- function(
   new("MLCVControl",
     name = "CVControl", label = "K-Fold Cross-Validation",
     folds = folds, repeats = repeats, seed = seed
-  ) %>% set_predict %>% dep_predictargs(...) %>%
+  ) %>% set_monitor %>% set_predict %>% dep_predictargs(...) %>%
     set_strata %>% dep_strataargs(...)
 }
 
@@ -165,7 +166,7 @@ OOBControl <- function(
   new("MLOOBControl",
     name = "OOBControl", label = "Out-of-Bootstrap Resampling",
     samples = samples, seed = seed
-  ) %>% set_predict %>% dep_predictargs(...) %>%
+  ) %>% set_monitor %>% set_predict %>% dep_predictargs(...) %>%
     set_strata %>% dep_strataargs(...)
 }
 
@@ -262,6 +263,42 @@ dep_strataargs <- function(
 }
 
 
+#' Resampling Monitoring Control
+#'
+#' Set parameters that control the monitoring of resample estimation of model
+#' performance.
+#'
+#' @param x \link[=controls]{control} object.
+#' @param progress logical indicating whether to display a progress bar during
+#'   resampling if a computing cluster is not registered or is registered with
+#'   the \pkg{doSNOW} package.
+#' @param verbose logical indicating whether to enable verbose messages which
+#'   may be useful for trouble shooting.
+#'
+#' @return Argument \code{x} updated with the supplied parameters.
+#'
+#' @seealso \code{\link{set_predict}}, \code{\link{set_strata}},
+#' \code{\link{resample}}, \code{\link{SelectedInput}},
+#' \code{\link{SelectedModel}}, \code{\link{TunedInput}},
+#' \code{\link{TunedModel}}
+#'
+#' @examples
+#' CVControl() %>% set_monitor(verbose = TRUE)
+#'
+set_monitor <- function(x, progress = TRUE, verbose = FALSE) {
+  stopifnot(is(x, "MLControl"))
+
+  progress <- check_logical(progress, size = 1)
+  throw(check_assignment(progress))
+
+  verbose <- check_logical(verbose, size = 1)
+  throw(check_assignment(verbose))
+
+  x@monitor <- list(progress = progress, verbose = verbose)
+  x
+}
+
+
 #' Resampling Prediction Control
 #'
 #' Set parameters that control prediction during resample estimation of model
@@ -272,7 +309,7 @@ dep_strataargs <- function(
 #'
 #' @return Argument \code{x} updated with the supplied parameters.
 #'
-#' @seealso \code{\link{set_strata}},
+#' @seealso \code{\link{set_monitor}}, \code{\link{set_strata}},
 #' \code{\link{resample}}, \code{\link{SelectedInput}},
 #' \code{\link{SelectedModel}}, \code{\link{TunedInput}},
 #' \code{\link{TunedModel}}
@@ -329,7 +366,7 @@ set_predict <- function(x, times = NULL, distr = NULL, method = NULL) {
 #'
 #' @return Argument \code{x} updated with the supplied parameters.
 #'
-#' @seealso \code{\link{set_predict}},
+#' @seealso \code{\link{set_monitor}}, \code{\link{set_predict}},
 #' \code{\link{resample}}, \code{\link{SelectedInput}},
 #' \code{\link{SelectedModel}}, \code{\link{TunedInput}},
 #' \code{\link{TunedModel}}

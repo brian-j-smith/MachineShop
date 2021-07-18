@@ -172,7 +172,7 @@ Resamples.list <- function(object, ...) {
 
   snow_opts <- list()
   progress <- function(n) NULL
-  if (settings("resample_progress")) {
+  if (object@monitor$progress) {
     pb <- new_progress_bar(length(splits), input = x, model = model,
                            index = progress_index)
     on.exit(pb$terminate())
@@ -186,7 +186,7 @@ Resamples.list <- function(object, ...) {
     i = seq_along(splits),
     .export = c("seq_boot", "subsample", "subsample_data"),
     .packages = settings("require"),
-    .verbose = settings("resample_verbose"),
+    .verbose = object@monitor$verbose,
     .options.snow = snow_opts
   ) %dopar% {
     progress(i)
@@ -223,7 +223,7 @@ Resamples.list <- function(object, ...) {
 
   snow_opts <- list()
   progress <- function(n) NULL
-  if (settings("resample_progress")) {
+  if (object@monitor$progress) {
     pb <- new_progress_bar(length(splits), input = x, model = model,
                            index = progress_index)
     on.exit(pb$terminate())
@@ -237,7 +237,7 @@ Resamples.list <- function(object, ...) {
     i = seq_along(splits),
     .export = c("subsample", "subsample_data"),
     .packages = settings("require"),
-    .verbose = settings("resample_verbose"),
+    .verbose = object@monitor$verbose,
     .options.snow = snow_opts
   ) %dopar% {
     progress(i)
@@ -281,7 +281,7 @@ Resamples.list <- function(object, ...) {
 
   snow_opts <- list()
   progress <- function(n) NULL
-  if (settings("resample_progress")) {
+  if (object@monitor$progress) {
     pb <- new_progress_bar(length(splits), input = x, model = model,
                            index = progress_index)
     on.exit(pb$terminate())
@@ -295,7 +295,7 @@ Resamples.list <- function(object, ...) {
     i = seq_along(splits),
     .export = c("subsample", "subsample_data"),
     .packages = settings("require"),
-    .verbose = settings("resample_verbose"),
+    .verbose = object@monitor$verbose,
     .options.snow = snow_opts
   ) %dopar% {
     progress(i)

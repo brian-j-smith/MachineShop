@@ -130,7 +130,8 @@ Efron B (1986). How biased is the apparent error rate of a prediction rule?
 Journal of the American Statistical Association, 81 (394): 461-70.
 }
 \seealso{
-\code{\link{set_predict}}, \code{\link{set_strata}},
+\code{\link{set_monitor}}, \code{\link{set_predict}},
+\code{\link{set_strata}},
 \code{\link{resample}}, \code{\link{SelectedInput}},
 \code{\link{SelectedModel}}, \code{\link{TunedInput}},
 \code{\link{TunedModel}}

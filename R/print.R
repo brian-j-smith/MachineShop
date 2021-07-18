@@ -148,6 +148,8 @@ setMethod("show", "MLControl",
                 "prop" = "Minimum proportion",
                 "size" = "Minimum size")
     print_params(object@strata, labels, "Stratification parameters")
+    monitor <- object@monitor[map_logi(isTRUE, object@monitor)]
+    if (length(monitor)) cat("Monitoring:", toString(names(monitor)), "\n")
     cat("Seed:", object@seed, "\n")
     invisible()
   }

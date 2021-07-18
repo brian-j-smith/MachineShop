@@ -47,7 +47,7 @@ CVControl() \%>\% set_strata(breaks = 3)
 
 }
 \seealso{
-\code{\link{set_predict}},
+\code{\link{set_monitor}}, \code{\link{set_predict}},
 \code{\link{resample}}, \code{\link{SelectedInput}},
 \code{\link{SelectedModel}}, \code{\link{TunedInput}},
 \code{\link{TunedModel}}

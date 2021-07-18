@@ -1763,12 +1763,6 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `require`
   : names of installed packages to load during parallel execution of resampling algorithms [default: ``c("MachineShop", "survival", "recipes")``].
 
-`resample_progress`
-  : logical indicating whether to display a progress bar during resampling [default: ``TRUE``].  Displayed only if a computing cluster is not registered or is registered with the **doSNOW** package.
-
-`resample_verbose`
-  : logical indicating whether to enable verbose messages when resampling [default: ``FALSE``].
-
 `reset`
   : character names of settings to reset to their default values.
 

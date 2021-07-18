@@ -115,6 +115,7 @@ export(BootControl,
        OOBControl,
        SplitControl,
        TrainControl,
+       set_monitor,
        set_predict,
        set_strata)
 

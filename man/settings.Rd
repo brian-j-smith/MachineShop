@@ -73,12 +73,6 @@ behaviors of functions in the \pkg{MachineShop} package.
   \item{\code{require}}{names of installed packages to load during parallel
     execution of resampling algorithms [default: \code{c("MachineShop",
     "survival", "recipes")}].}
-  \item{\code{resample_progress}}{logical indicating whether to display a
-    progress bar during resampling [default: \code{TRUE}].  Displayed only
-    if a computing cluster is not registered or is registered with the
-    \pkg{doSNOW} package.}
-  \item{\code{resample_verbose}}{logical indicating whether to enable verbose
-    messages when resampling [default: \code{FALSE}].}
   \item{\code{reset}}{character names of settings to reset to their default
     values.}
   \item{\code{RHS.formula}}{non-modifiable character vector of operators and

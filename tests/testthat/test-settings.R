@@ -79,18 +79,6 @@ test_that("settings changes and views", {
   expect_identical(settings("require"), c("stats", old_values))
   expect_error(settings(require = 1))
 
-  expect_type(settings(resample_progress = 0), "list")
-  expect_identical(settings("resample_progress"), FALSE)
-  expect_type(settings(resample_progress = 1), "list")
-  expect_identical(settings("resample_progress"), TRUE)
-  expect_error(settings(resample_progress = character()))
-
-  expect_type(settings(resample_verbose = 0), "list")
-  expect_identical(settings("resample_verbose"), FALSE)
-  expect_type(settings(resample_verbose = 1), "list")
-  expect_identical(settings("resample_verbose"), TRUE)
-  expect_error(settings(resample_verbose = character()))
-
   settings("reset")
   values <- c("cut", "grid")
   old_values <- settings(values)
