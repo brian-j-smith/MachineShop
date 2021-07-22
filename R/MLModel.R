@@ -21,7 +21,7 @@
 #'   \code{fit} function.
 #' @param gridinfo tibble of information for construction of tuning grids
 #'   consisting of a character column \code{param} with the names of parameters
-#'   in the grid, a list column \code{values} with functions to generate grid
+#'   in the grid, a list column \code{get_values} with functions to generate grid
 #'   points for the corresponding parameters, and an optional logical column
 #'   \code{default} indicating which parameters to include by default in regular
 #'   grids.  Values functions may optionally include arguments \code{n} and
@@ -95,7 +95,7 @@ MLModel <- function(
   response_types = character(),
   predictor_encoding = c(NA, "model.frame", "model.matrix"), params = list(),
   gridinfo = tibble::tibble(
-    param = character(), values = list(), default = logical()
+    param = character(), get_values = list(), default = logical()
   ),
   fit = function(formula, data, weights, ...) stop("no fit function"),
   predict = function(object, newdata, times, ...) stop("no predict function"),
@@ -123,7 +123,7 @@ setMethod("initialize", "MLModel",
     stopifnot(is_tibble(gridinfo))
     .Object@gridinfo <- new_gridinfo(
       param = gridinfo[["param"]],
-      values = gridinfo[["values"]],
+      get_values = gridinfo[["get_values"]],
       default = gridinfo[["default"]]
     )
     .Object <- callNextMethod(.Object, ...)

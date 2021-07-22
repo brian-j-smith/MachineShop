@@ -38,7 +38,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
     params = params(environment()),
     gridinfo = new_gridinfo(
       param = "ncomp",
-      values = c(
+      get_values = c(
         function(n, data, ...) {
           seq_len(min(nrow(data), nvars(data, PLSModel) - 1, n))
         }

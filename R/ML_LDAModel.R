@@ -53,7 +53,7 @@ LDAModel <- function(
     params = params(environment()),
     gridinfo = new_gridinfo(
       param = "dimen",
-      values = c(
+      get_values = c(
         function(n, data, ...) {
           seq_len(min(nlevels(response(data)) - 1, nvars(data, LDAModel), n))
         }

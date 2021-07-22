@@ -75,7 +75,7 @@ C50Model <- function(
     params = params,
     gridinfo = new_gridinfo(
       param = c("trials", "rules", "winnow"),
-      values = c(
+      get_values = c(
         function(n, ...) c(1, round(seq_range(0, 10, c(2, 100), n))),
         function(...) c(FALSE, TRUE),
         function(...) c(FALSE, TRUE)

@@ -68,7 +68,7 @@ GLMNetModel <- function(
     params = params(environment()),
     gridinfo = new_gridinfo(
       param = c("lambda", "alpha"),
-      values = c(
+      get_values = c(
         function(n, data, ...) {
           lambda <- numeric()
           model <- GLMNetModel(lambda = NULL)

@@ -51,7 +51,7 @@ RPartModel <- function(
     params = list(control = as.call(c(.(list), params(environment())))),
     gridinfo = new_gridinfo(
       param = "cp",
-      values = c(
+      get_values = c(
         function(n, data, ...) {
           cptable <- fit(data, model = RPartModel(cp = 0))$cptable
           xerror_order <- order(cptable[, "xerror"] + cptable[, "xstd"])

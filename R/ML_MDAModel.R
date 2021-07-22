@@ -66,7 +66,7 @@ MDAModel <- function(
     params = params(environment(), ...),
     gridinfo = new_gridinfo(
       param = "subclasses",
-      values = c(
+      get_values = c(
         function(n, ...) seq(2, length = min(n, 10))
       )
     ),

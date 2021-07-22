@@ -61,7 +61,7 @@ GLMBoostModel <- function(
     params = params,
     gridinfo = new_gridinfo(
       param = "mstop",
-      values = c(
+      get_values = c(
         function(n, ...) round(seq_range(0, 50, c(1, 1000), n + 1))
       )
     ),

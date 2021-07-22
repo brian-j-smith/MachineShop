@@ -68,7 +68,7 @@ FDAModel <- function(
     params = params(environment(), ...),
     gridinfo = new_gridinfo(
       param = c("nprune", "degree"),
-      values = c(
+      get_values = c(
         function(n, data, ...) {
           model_fit <- fit(data, model = EarthModel(pmethod = "none"))
           max_terms <- min(2 + 0.75 * nrow(model_fit$dirs), 200)
@@ -113,7 +113,7 @@ PDAModel <- function(lambda = 1, df = NULL, ...) {
   model@label <- "Penalized Discriminant Analysis"
   model@gridinfo <- new_gridinfo(
     param = "lambda",
-    values = c(
+    get_values = c(
       function(n, ...) c(0, 10^seq_inner(-5, 1, n - 1))
     )
   )

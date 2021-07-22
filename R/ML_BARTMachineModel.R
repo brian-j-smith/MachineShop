@@ -68,7 +68,7 @@ BARTMachineModel <- function(
     params = params(environment(), ...),
     gridinfo = new_gridinfo(
       param = c("alpha", "beta", "k", "nu"),
-      values = c(
+      get_values = c(
         function(n, ...) seq(0.9, 0.99, length = n),
         function(n, ...) seq(1, 3, length = n),
         function(n, ...) seq(2, length = min(n, 10)),

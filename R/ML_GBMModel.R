@@ -53,7 +53,7 @@ GBMModel <- function(
     params = params(environment()),
     gridinfo = new_gridinfo(
       param = c("n.trees", "interaction.depth", "shrinkage", "n.minobsinnode"),
-      values = c(
+      get_values = c(
         function(n, ...) round(seq_range(0, 50, c(1, 1000), n + 1)),
         function(n, ...) seq_len(min(n, 10)),
         function(n, ...) seq(0.001, 0.1, length = n),

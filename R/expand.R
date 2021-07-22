@@ -188,7 +188,7 @@ expand_modelgrid.TunedModel <- function(x, ..., info = FALSE) {
   gridinfo <- gridinfo[gridinfo$size >= 1, ]
 
   has_data_arg <- function(fun) "data" %in% names(formals(fun))
-  needs_data <- any(map_logi(has_data_arg, gridinfo$values))
+  needs_data <- any(map_logi(has_data_arg, gridinfo$get_values))
   if (needs_data && has_grid(model)) {
     if (!missing(x)) mf <- ModelFrame(x, ..., na.rm = FALSE)
     if (is.null(mf)) {
@@ -206,7 +206,7 @@ expand_modelgrid.TunedModel <- function(x, ..., info = FALSE) {
 
   param_names <- unique(gridinfo$param)
   params <- map(function(fun, n) unique(fun(n = n, data = mf)),
-                gridinfo$values, gridinfo$size)
+                gridinfo$get_values, gridinfo$size)
   params <- map(function(name) {
     unlist(params[gridinfo$param == name], use.names = FALSE)
   }, param_names)

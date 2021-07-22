@@ -192,7 +192,7 @@ MLModelFunction(SVMTanhModel) <- NULL
 
   gridinfo <- new_gridinfo(
     param = c("C", "degree", "order", "scale", "sigma"),
-    values = c(
+    get_values = c(
       function(n, ...) 2^seq_range(-4, 2, c(-4, 10), n),
       function(n, ...) seq_len(min(n, 3)),
       function(n, ...) seq_len(min(n, 3)),

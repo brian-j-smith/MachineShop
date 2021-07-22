@@ -84,7 +84,7 @@ BlackBoostModel <- function(
     params = params,
     gridinfo = new_gridinfo(
       param = c("mstop", "maxdepth"),
-      values = c(
+      get_values = c(
         function(n, ...) round(seq_range(0, 50, c(1, 1000), n + 1)),
         function(n, ...) seq_len(min(n, 10))
       )

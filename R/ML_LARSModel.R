@@ -53,7 +53,7 @@ LARSModel <- function(
     params = params(environment()),
     gridinfo = new_gridinfo(
       param = "step",
-      values = c(
+      get_values = c(
         function(n, data, ...) seq_nvars(data, LARSModel, n)
       )
     ),

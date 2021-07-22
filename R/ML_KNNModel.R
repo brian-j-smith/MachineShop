@@ -49,7 +49,7 @@ KNNModel <- function(
     params = params(environment()),
     gridinfo = new_gridinfo(
       param = c("k", "distance", "kernel"),
-      values = c(
+      get_values = c(
         function(n, data, ...) {
           round(seq_range(0, 5, c(1, nrow(data) / 3), n + 1))
         },

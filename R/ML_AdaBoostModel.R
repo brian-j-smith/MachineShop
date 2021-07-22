@@ -66,7 +66,7 @@ AdaBoostModel <- function(
     params = params,
     gridinfo = new_gridinfo(
       param = c("mfinal", "maxdepth", "coeflearn"),
-      values = c(
+      get_values = c(
         function(n, ...) round(seq_range(0, 25, c(1, 200), n + 1)),
         function(n, ...) seq_len(min(n, 30)),
         function(n, ...) head(c("Breiman", "Freund", "Zhu"), n)

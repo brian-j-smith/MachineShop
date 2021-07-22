@@ -55,7 +55,7 @@ NNetModel <- function(
     params = params(environment()),
     gridinfo = new_gridinfo(
       param = c("size", "decay"),
-      values = c(
+      get_values = c(
         function(n, ...) round(seq_range(1, 2, c(1, 20), length = n)),
         function(n, ...) c(0, 10^seq_inner(-5, 1, n - 1))
       )

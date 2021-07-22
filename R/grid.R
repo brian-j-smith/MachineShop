@@ -131,17 +131,19 @@ ParameterGrid.parameters <- function(x, size = 3, random = FALSE, ...) {
 }
 
 
-new_gridinfo <- function(param = character(), values = list(), default = NULL) {
+new_gridinfo <- function(
+  param = character(), get_values = list(), default = NULL
+) {
   if (is.null(default)) default <- TRUE
 
   stopifnot(is.character(param))
-  stopifnot(is.list(values))
+  stopifnot(is.list(get_values))
   stopifnot(is.logical(default))
 
-  if (!all(map_logi(is.function, values))) {
-    values <- Error("Value must be a list of functions.")
-    throw(check_assignment(values))
+  if (!all(map_logi(is.function, get_values))) {
+    get_values <- Error("Value must be a list of functions.")
+    throw(check_assignment(get_values))
   }
 
-  as_tibble(list(param = param, values = values, default = default))
+  as_tibble(list(param = param, get_values = get_values, default = default))
 }

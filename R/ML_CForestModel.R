@@ -55,7 +55,7 @@ CForestModel <- function(
     params = list(controls = as.call(c(.(party::cforest_control), args))),
     gridinfo = new_gridinfo(
       param = "mtry",
-      values = c(
+      get_values = c(
         function(n, data, ...) seq_nvars(data, CForestModel, n)
       )
     ),

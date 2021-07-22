@@ -255,7 +255,7 @@ MLModelFunction(XGBTreeModel) <- NULL
     param = c("nrounds", "max_depth", "eta", "subsample", "colsample_bytree",
               "rate_drop", "skip_drop", "lambda", "alpha", "eta", "gamma",
               "min_child_weight", "colsample_bytree", "rate_drop", "skip_drop"),
-    values = c(
+    get_values = c(
       function(n, ...) round(seq_range(0, 50, c(1, 1000), n + 1)),
       function(n, ...) seq_len(min(n, 10)),
       function(...) c(0.3, 0.4),

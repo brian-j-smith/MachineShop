@@ -71,7 +71,7 @@ RangerModel <- function(
     params = params(environment()),
     gridinfo = new_gridinfo(
       param = c("mtry", "min.node.size", "splitrule"),
-      values = c(
+      get_values = c(
         function(n, data, ...) seq_nvars(data, RangerModel, n),
         function(n, data, ...) round(seq(1, min(20, nrow(data)), length = n)),
         function(n, data, ...) {
