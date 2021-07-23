@@ -74,7 +74,7 @@ BARTModel <- function(
     packages = "BART",
     response_types = c("factor", "numeric", "Surv"),
     predictor_encoding = "model.matrix",
-    params = params(environment()),
+    params = new_params(environment()),
     fit = function(formula, data, weights, K = NULL, sigest = NA, sigdf = 3,
                    sigquant = 0.90, lambda = NA, ...) {
       x <- model.matrix(data, intercept = FALSE)

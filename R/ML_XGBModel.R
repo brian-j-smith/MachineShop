@@ -90,7 +90,7 @@ XGBModel <- function(
     packages = "xgboost (>= 1.3.0)",
     response_types = c("factor", "numeric", "PoissonVariate", "Surv"),
     predictor_encoding = "model.matrix",
-    params = params(environment()),
+    params = new_params(environment()),
     fit = function(formula, data, weights, params, ...) {
       x <- model.matrix(data, intercept = FALSE)
       y <- response(data)
@@ -246,7 +246,7 @@ MLModelFunction(XGBTreeModel) <- NULL
 
 .XGBModel <- function(name, label, booster, envir, ...) {
   args <- list(...)
-  args$params <- as.call(c(.(list), params(envir), booster = booster))
+  args$params <- as.call(c(.(list), new_params(envir), booster = booster))
   model <- do.call(XGBModel, args, quote = TRUE)
   model@name <- name
   model@label <- label

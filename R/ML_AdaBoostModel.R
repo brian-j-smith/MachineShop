@@ -52,7 +52,7 @@ AdaBoostModel <- function(
 
   coeflearn <- match.arg(coeflearn)
 
-  args <- params(environment())
+  args <- new_params(environment())
   is_main <- names(args) %in% c("boos", "mfinal", "coeflearn")
   params <- args[is_main]
   params$control <- as.call(c(.(list), args[!is_main]))

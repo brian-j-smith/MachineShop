@@ -56,7 +56,7 @@ GAMBoostModel <- function(
   baselearner <- match.arg(baselearner)
   risk <- match.arg(risk)
 
-  args <- params(environment())
+  args <- new_params(environment())
   is_main <- names(args) %in% c("family", "baselearner", "dfbase")
   params <- args[is_main]
   params$control <- as.call(c(.(mboost::boost_control), args[!is_main]))

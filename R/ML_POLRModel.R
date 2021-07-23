@@ -43,7 +43,7 @@ POLRModel <- function(
     packages = "MASS",
     response_types = "ordered",
     predictor_encoding = "model.matrix",
-    params = params(environment()),
+    params = new_params(environment()),
     fit = function(formula, data, weights, ...) {
       MASS::polr(formula, data = as.data.frame(data), weights = weights,
                  Hess = TRUE, ...)

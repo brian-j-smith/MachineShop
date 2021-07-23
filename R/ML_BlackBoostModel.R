@@ -65,7 +65,7 @@ BlackBoostModel <- function(
   teststat <- match.arg(teststat)
   testtype <- match.arg(testtype)
 
-  args <- params(environment(), ...)
+  args <- new_params(environment(), ...)
   is_main <- names(args) %in% "family"
   is_control <- names(args) %in% c("mstop", "nu", "risk", "stopintern", "trace")
 

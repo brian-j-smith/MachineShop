@@ -42,7 +42,7 @@
 #'
 GLMModel <- function(family = NULL, quasi = FALSE, ...) {
 
-  params <- params(environment())
+  params <- new_params(environment())
   params$control <- as.call(c(.(stats::glm.control), list(...)))
 
   MLModel(
@@ -126,7 +126,7 @@ GLMStepAICModel <- function(
 
   direction <- match.arg(direction)
 
-  args <- params(environment())
+  args <- new_params(environment())
   is_step <- names(args) %in% c("direction", "scope", "k", "trace", "steps")
   params <- args[is_step]
 

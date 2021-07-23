@@ -60,7 +60,7 @@ EarthModel <- function(
     packages = "earth",
     response_types = c("factor", "numeric"),
     predictor_encoding = "model.matrix",
-    params = params(environment()),
+    params = new_params(environment()),
     gridinfo = new_gridinfo(
       param = c("nprune", "degree"),
       get_values = c(

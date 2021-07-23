@@ -61,7 +61,7 @@ C50Model <- function(
   sample = 0, earlyStopping = TRUE
 ) {
 
-  args <- params(environment())
+  args <- new_params(environment())
   is_main <- names(args) %in% c("trials", "rules")
   params <- args[is_main]
   params$control <- as.call(c(.(C50::C5.0Control), args[!is_main]))

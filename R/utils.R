@@ -313,6 +313,17 @@ missing_names <- function(x, data) {
 }
 
 
+new_params <- function(envir, ...) {
+  args <- as.list(envir)
+  is_missing <- map_logi(function(x) is.symbol(x) && !nzchar(x), args)
+  if (any(is_missing)) {
+    missing <- names(args)[is_missing]
+    throw(Error(label_items("missing values for required argument", missing)))
+  }
+  c(args[!map_logi(is.null, args)], list(...))
+}
+
+
 new_progress_bar <- function(total, input = NULL, model = NULL, index = 0) {
   if (getDoParName() == "doSEQ") index <- as.numeric(index)
   width <- max(10, round(0.25 * getOption("width")))
@@ -360,17 +371,6 @@ nvars <- function(x, model) {
     "model.matrix" = ncol(model.matrix(x[1, , drop = FALSE], intercept = FALSE))
   )
   if (is.null(res)) NA else res
-}
-
-
-params <- function(envir, ...) {
-  args <- as.list(envir)
-  is_missing <- map_logi(function(x) is.symbol(x) && !nzchar(x), args)
-  if (any(is_missing)) {
-    missing <- names(args)[is_missing]
-    throw(Error(label_items("missing values for required argument", missing)))
-  }
-  c(args[!map_logi(is.null, args)], list(...))
 }
 
 

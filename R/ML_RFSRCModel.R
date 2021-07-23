@@ -103,7 +103,7 @@ RFSRCModel <- function(
     packages = "randomForestSRC",
     response_types = c("factor", "matrix", "numeric", "Surv"),
     predictor_encoding = "model.frame",
-    params = params(environment()),
+    params = new_params(environment()),
     gridinfo = new_gridinfo(
       param = c("mtry", "nodesize"),
       get_values = c(

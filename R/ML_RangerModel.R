@@ -68,7 +68,7 @@ RangerModel <- function(
     packages = "ranger",
     response_types = c("factor", "numeric", "Surv"),
     predictor_encoding = "model.frame",
-    params = params(environment()),
+    params = new_params(environment()),
     gridinfo = new_gridinfo(
       param = c("mtry", "min.node.size", "splitrule"),
       get_values = c(

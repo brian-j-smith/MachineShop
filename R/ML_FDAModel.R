@@ -65,7 +65,7 @@ FDAModel <- function(
     packages = "mda",
     response_types = "factor",
     predictor_encoding = "model.matrix",
-    params = params(environment(), ...),
+    params = new_params(environment(), ...),
     gridinfo = new_gridinfo(
       param = c("nprune", "degree"),
       get_values = c(
@@ -106,7 +106,7 @@ MLModelFunction(FDAModel) <- NULL
 #' }
 #'
 PDAModel <- function(lambda = 1, df = NULL, ...) {
-  args <- params(environment(), ...)
+  args <- new_params(environment(), ...)
   args$method <- .(mda::gen.ridge)
   model <- do.call(FDAModel, args, quote = TRUE)
   model@name <- "PDAModel"

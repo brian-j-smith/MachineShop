@@ -50,7 +50,7 @@ LDAModel <- function(
     packages = "MASS",
     response_types = "factor",
     predictor_encoding = "model.matrix",
-    params = params(environment()),
+    params = new_params(environment()),
     gridinfo = new_gridinfo(
       param = "dimen",
       get_values = c(

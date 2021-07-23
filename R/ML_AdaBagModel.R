@@ -44,7 +44,7 @@ AdaBagModel <- function(
   surrogatestyle = 0, maxdepth = 30
 ) {
 
-  args <- params(environment())
+  args <- new_params(environment())
   is_main <- names(args) %in% "mfinal"
   params <- args[is_main]
   params$control <- as.call(c(.(list), args[!is_main]))

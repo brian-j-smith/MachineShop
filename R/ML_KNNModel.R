@@ -46,7 +46,7 @@ KNNModel <- function(
     packages = "kknn",
     response_types = c("factor", "numeric", "ordered"),
     predictor_encoding = "model.matrix",
-    params = params(environment()),
+    params = new_params(environment()),
     gridinfo = new_gridinfo(
       param = c("k", "distance", "kernel"),
       get_values = c(

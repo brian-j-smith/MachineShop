@@ -39,7 +39,7 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
 
   ties <- match.arg(ties)
 
-  args <- params(environment(), ...)
+  args <- new_params(environment(), ...)
   is_main <- names(args) %in% c("ties", "eps", "iter.max")
   params <- args[is_main]
   params$tol <- args$toler.chol
@@ -95,7 +95,7 @@ CoxStepAICModel <- function(
 
   direction <- match.arg(direction)
 
-  args <- params(environment())
+  args <- new_params(environment())
   is_step <- names(args) %in% c("direction", "scope", "k", "trace", "steps")
   params <- args[is_step]
 

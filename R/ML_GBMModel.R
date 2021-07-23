@@ -50,7 +50,7 @@ GBMModel <- function(
     packages = "gbm",
     response_types = c("factor", "numeric", "PoissonVariate", "Surv"),
     predictor_encoding = "model.frame",
-    params = params(environment()),
+    params = new_params(environment()),
     gridinfo = new_gridinfo(
       param = c("n.trees", "interaction.depth", "shrinkage", "n.minobsinnode"),
       get_values = c(

@@ -44,7 +44,7 @@ CForestModel <- function(
 
   teststat <- match.arg(teststat)
   testtype <- match.arg(testtype)
-  args <- params(environment())
+  args <- new_params(environment())
 
   MLModel(
     name = "CForestModel",

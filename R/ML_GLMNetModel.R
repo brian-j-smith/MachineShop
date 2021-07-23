@@ -65,7 +65,7 @@ GLMNetModel <- function(
     response_types = c("BinomialVariate", "factor", "matrix", "numeric",
                        "PoissonVariate", "Surv"),
     predictor_encoding = "model.matrix",
-    params = params(environment()),
+    params = new_params(environment()),
     gridinfo = new_gridinfo(
       param = c("lambda", "alpha"),
       get_values = c(

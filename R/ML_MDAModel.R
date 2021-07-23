@@ -63,7 +63,7 @@ MDAModel <- function(
     packages = "mda",
     response_types = "factor",
     predictor_encoding = "model.matrix",
-    params = params(environment(), ...),
+    params = new_params(environment(), ...),
     gridinfo = new_gridinfo(
       param = "subclasses",
       get_values = c(

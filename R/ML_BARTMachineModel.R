@@ -65,7 +65,7 @@ BARTMachineModel <- function(
     packages = "bartMachine",
     response_types = c("binary", "numeric"),
     predictor_encoding = "model.matrix",
-    params = params(environment(), ...),
+    params = new_params(environment(), ...),
     gridinfo = new_gridinfo(
       param = c("alpha", "beta", "k", "nu"),
       get_values = c(

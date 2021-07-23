@@ -48,7 +48,7 @@ RPartModel <- function(
     packages = c("rpart", "partykit"),
     response_types = c("factor", "numeric", "Surv"),
     predictor_encoding = "model.frame",
-    params = list(control = as.call(c(.(list), params(environment())))),
+    params = list(control = as.call(c(.(list), new_params(environment())))),
     gridinfo = new_gridinfo(
       param = "cp",
       get_values = c(

@@ -52,7 +52,7 @@ NNetModel <- function(
     packages = "nnet",
     response_types = c("factor", "numeric"),
     predictor_encoding = "model.matrix",
-    params = params(environment()),
+    params = new_params(environment()),
     gridinfo = new_gridinfo(
       param = c("size", "decay"),
       get_values = c(

@@ -31,7 +31,7 @@ SurvRegModel <- function(
 
   dist <- match.arg(dist)
 
-  args <- params(environment(), ...)
+  args <- new_params(environment(), ...)
   is_main <- names(args) %in% c("dist", "scale", "parms")
   params <- args[is_main]
   params$control <- as.call(c(.(survival::survreg.control), args[!is_main]))
@@ -103,7 +103,7 @@ SurvRegStepAICModel <- function(
 
   direction <- match.arg(direction)
 
-  args <- params(environment())
+  args <- new_params(environment())
   is_step <- names(args) %in% c("direction", "scope", "k", "trace", "steps")
   params <- args[is_step]
 

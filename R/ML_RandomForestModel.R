@@ -46,7 +46,7 @@ RandomForestModel <- function(
     packages = "randomForest",
     response_types = c("factor", "numeric"),
     predictor_encoding = "model.frame",
-    params = params(environment()),
+    params = new_params(environment()),
     gridinfo = new_gridinfo(
       param = c("mtry", "nodesize"),
       get_values = c(
