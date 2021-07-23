@@ -1,7 +1,7 @@
 ---
 title: "Conventions for MLModels Implementation"
 author: "Brian J Smith"
-date: "`r Sys.Date()`"
+date: "2021-07-23"
 output: rmarkdown::html_vignette
 bibliography: bibliography.bib
 vignette: >
@@ -43,9 +43,9 @@ knitr::opts_chunk$set(
 
 ### packages Slot
 
-- Include all packages whose functions are called directly from within the constructor.
+- Include all external packages whose functions are called directly from within the constructor.
 
-- Use :: or ::: to reference source package functions.
+- Use :: to reference source package functions.
 
 
 ### response_types Slot
@@ -55,19 +55,14 @@ knitr::opts_chunk$set(
 
 ### params Slot
 
-- List of parameter values set by the constructor, typically obtained with `MachineShop:::params(environment())` if all arguments are to be passed to the source package fit function as supplied.  Additional steps may be needed to pass the constructor arguments to the source package in a different format; e.g., when some model parameters must be passed in a control structure, as in `C50Model` and `CForestModel`.
-
-
-### nvars Function
-
-- Should have a single `data` argument that represents a model frame and return its number of analytic predictor variables.
+- List of parameter values set by the constructor, typically obtained internally with `new_params(environment())` if all arguments are to be passed to the source package fit function as supplied.  Additional steps may be needed to pass the constructor arguments to the source package in a different format; e.g., when some model parameters must be passed in a control structure, as in `C50Model` and `CForestModel`.
 
 
 ### fit Function
 
 - The first three arguments should be `formula`, `data`, and `weights` followed by an ellipsis (`...`).
 
-- If weights are not supported, the following should be included in the function:
+- If weights are not supported, the following, or equivalent, should be included in the function:
 
 ```{r eval = FALSE}
 if(!all(weights == 1)) warning("weights are not supported and will be ignored")
@@ -129,7 +124,7 @@ if(!all(weights == 1)) warning("weights are not supported and will be ignored")
 
 ```
 \code{\link[<source package>]{<fit function>}}, \code{\link{fit}},
-\code{\link{resample}}, \code{\link{tune}}
+\code{\link{resample}}
 ```
 
 ## Package Extensions
@@ -140,7 +135,7 @@ if(!all(weights == 1)) warning("weights are not supported and will be ignored")
 
 - Add any required packages to the "Suggests" section of `DESCRIPTION`.
 
-- Add the model to `R/MachineShop-package.R`.
+- Add the model to `R/models.R`.
 
 - Add the model to `R/modelinfo.R`.
 
