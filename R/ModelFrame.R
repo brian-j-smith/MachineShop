@@ -318,8 +318,8 @@ terms.recipe_info <- function(x, ...) {
   if (length(matrix) == 1) matrix <- character()
   other <- setdiff(get_vars("outcome"), c(binom, surv, matrix))
 
-  have_outcome <- as.logical(lengths(list(binom, surv, matrix, other)))
-  if (sum(have_outcome) > 1 || length(other) > 1) {
+  num_roles <- sum(lengths(list(binom, surv, matrix, other)) > 0)
+  if (num_roles > 1 || length(other) > 1) {
     throw(Error("specified outcome is not a single variable, binomial ",
                 "variable with roles 'binom_x' and 'binom_size', survival ",
                 "variables with roles 'surv_time' and 'surv_event', or ",
