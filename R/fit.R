@@ -100,7 +100,7 @@ fit.MLModelFunction <- function(x, ...) {
 .fit.MLModel <- function(x, inputs, ...) {
   inputs_prep <- prep(inputs)
   mf <- ModelFrame(inputs_prep, na.rm = FALSE)
-  if (is.null(model.weights(mf))) {
+  if (is.null(case_weights(mf))) {
     mf <- ModelFrame(mf, weights = 1, na.rm = FALSE)
   }
 
@@ -114,7 +114,7 @@ fit.MLModelFunction <- function(x, ...) {
   params_env <- list2env(list(
     formula = formula(mf),
     data = mf,
-    weights = model.weights(mf),
+    weights = case_weights(mf),
     y = y,
     nobs = nrow(mf),
     nvars = nvars(mf, x)

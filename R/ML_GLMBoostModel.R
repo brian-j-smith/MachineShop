@@ -84,12 +84,12 @@ GLMBoostModel <- function(
                matrix = mboost::glmboost(x, y, weights = weights,
                                          family = family, ...))
     },
-    predict = function(object, newdata, ...) {
+    predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)
       if (object$family@name == "Cox Partial Likelihood") {
         lp <- drop(predict(object, type = "link"))
         new_lp <- drop(predict(object, newdata = newdata, type = "link"))
-        predict(object$response, lp, new_lp, ...)
+        predict(object$response, lp, new_lp, weights = case_weights(model), ...)
       } else {
         predict(object, newdata = newdata, type = "response")
       }

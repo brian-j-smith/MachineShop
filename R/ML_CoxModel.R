@@ -55,12 +55,12 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
       survival::coxph(formula, data = as.data.frame(data), weights = weights,
                       ...)
     },
-    predict = function(object, newdata, ...) {
+    predict = function(object, newdata, model, ...) {
       y <- object$y
       newdata <- as.data.frame(newdata)
       lp <- predict(object, type = "lp")
       new_lp <- predict(object, newdata = newdata, type = "lp")
-      predict(y, lp, new_lp, ...)
+      predict(y, lp, new_lp, weights = case_weights(model), ...)
     },
     varimp = function(object, base = exp(1), ...) {
       varimp_pval(object, base = base)

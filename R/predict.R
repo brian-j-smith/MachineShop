@@ -45,8 +45,8 @@ predict.MLModelFit <- function(
   model <- as.MLModel(object)
   require_namespaces(model@packages)
   obs <- response(object)
-  pred <- .predict(model, object, newdata, weights = case_weights(model),
-                   times = times, distr = distr, method = method, ...)
+  pred <- .predict(model, object, newdata, times = times, distr = distr,
+                   method = method, ...)
   pred <- convert_prob(obs, pred, times = times)
   if (match.arg(type) == "response") {
     convert_response(obs, pred, cutoff = cutoff)

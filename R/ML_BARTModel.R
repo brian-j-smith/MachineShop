@@ -103,7 +103,7 @@ BARTModel <- function(
         }
       )
     },
-    predict = function(object, newdata, weights, ...) {
+    predict = function(object, newdata, ...) {
       newx <- model.matrix(newdata, intercept = FALSE)
       if (is(object, "mbart")) {
         predict(object, newdata = newx)$prob.test.mean %>%

@@ -159,7 +159,8 @@ XGBModel <- function(
           x <- model.matrix(predictor_frame(model), intercept = FALSE)
           lp <- log(predict(object, newdata = x))
           new_lp <- log(pred)
-          predict(response(model), lp, new_lp, times = times, ...)
+          predict(response(model), lp, new_lp, times = times,
+                  weights = case_weights(model), ...)
         },
         pred
       )

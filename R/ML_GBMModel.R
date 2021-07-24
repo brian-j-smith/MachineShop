@@ -92,7 +92,7 @@ GBMModel <- function(
         data <- as.data.frame(predictor_frame(model))
         lp <- predict(object, newdata = data, n.trees = n, type = "link")
         new_lp <- predict(object, newdata = newdata, n.trees = n, type = "link")
-        predict(y, lp, new_lp, ...)
+        predict(y, lp, new_lp, weights = case_weights(model), ...)
       } else {
         predict(object, newdata = newdata, n.trees = n, type = "response")
       }
