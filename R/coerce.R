@@ -45,8 +45,8 @@ setAs("SelectedModelFrame", "data.frame",
 )
 
 
-as.data.frame.ModelRecipe <- function(x, original = TRUE, ...) {
-  as.data.frame(if (original) x$template else juice(prep(x)))
+as.data.frame.ModelRecipe <- function(x, ...) {
+  as.data.frame(x$template)
 }
 
 

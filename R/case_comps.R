@@ -1,3 +1,45 @@
+case_comps <- function(x, ...) {
+  UseMethod("case_comps")
+}
+
+
+case_comps.MLModel <- function(x, ...) {
+  case_comps(x@x, ...)
+}
+
+
+case_comps.MLModelFit <- function(x, ...) {
+  case_comps(as.MLModel(x), ...)
+}
+
+
+case_comps.ModelFrame <- function(
+  x, newdata = NULL, types = c("names", "weights"), response = FALSE, ...
+) {
+  data <- if (is.null(newdata)) x else newdata
+  res <- map(function(type) {
+    name <- case_comp_name(x, type)
+    if (length(name)) data[[name]]
+  }, types)
+  if (response) res$response <- response(x, newdata)
+  res
+}
+
+
+case_comps.ModelRecipe <- function(
+  x, newdata = NULL, types = c("names", "weights"), response = FALSE, ...
+) {
+  names <- map(function(type) case_comp_name(x, type), types)
+  data <- if (any(lengths(names)) || response) bake(prep(x), newdata)
+  res <- map(function(type) {
+    name <- names[[type]]
+    if (length(name)) data[[name]]
+  }, types)
+  if (response) res$response <- response(terms(x), data)
+  res
+}
+
+
 case_comp_name <- function(x, ...) {
   UseMethod("case_comp_name")
 }
@@ -13,7 +55,8 @@ case_comp_name.recipe <- function(x, type, ...) {
   type <- switch(type,
     "names" = "name",
     "strata" = "stratum",
-    "weights" = "weight"
+    "weights" = "weight",
+    return(NULL)
   )
   role <- paste0("case_", type)
   info <- summary(x)
@@ -138,25 +181,8 @@ case_strata_name <- function(x) {
 }
 
 
-case_weights <- function(x, ...) {
-  UseMethod("case_weights")
-}
-
-
-case_weights.MLModel <- function(x, ...) {
-  case_weights(x@x, ...)
-}
-
-
-case_weights.ModelFrame <- function(x, ...) {
-  name <- case_weights_name(x)
-  if (length(name)) x[[name]]
-}
-
-
-case_weights.ModelRecipe <- function(x, ...) {
-  name <- case_weights_name(x)
-  if (length(name)) juice(prep(x))[[name]]
+case_weights <- function(x, newdata = NULL) {
+  case_comps(x, newdata, "weights")$weights
 }
 
 

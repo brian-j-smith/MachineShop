@@ -356,16 +356,15 @@ subsample <- function(train, test, model, control, id = 1) {
   if (length(times)) control@predict$times <- times
 
   f <- function(test) {
-    if (is(train, "ModelRecipe")) {
-      test <- recipe(as.MLModel(model_fit)@x, as.data.frame(test))
-    }
+    comps <- case_comps(model_fit, test, response = TRUE)
     df <- data.frame(Model = factor(model@name),
                      Resample = as.integer(id),
-                     Case = as.data.frame(test, original = FALSE)[["(names)"]],
+                     Case = comps$names,
                      stringsAsFactors = FALSE)
-    df$Observed <- response(test)
+    df$Observed <- comps$response
     predict_args <- list(model_fit, as.data.frame(test), type = "prob")
     df$Predicted <- do.call(predict, c(predict_args, control@predict))
+    df$Weight <- comps$weights
     df
   }
 
