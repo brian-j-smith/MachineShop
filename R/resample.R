@@ -175,11 +175,11 @@ Resamples.list <- function(object, ...) {
   if (object@monitor$progress) {
     pb <- new_progress_bar(length(splits), input = x, model = model,
                            index = progress_index)
-    on.exit(pb$terminate())
     switch(getDoParName(),
       "doSEQ"  = progress <- function(n) pb$tick(),
       "doSNOW" = snow_opts$progress <- function(n) pb$tick()
     )
+    on.exit(pb$terminate())
   }
 
   foreach(
@@ -226,11 +226,11 @@ Resamples.list <- function(object, ...) {
   if (object@monitor$progress) {
     pb <- new_progress_bar(length(splits), input = x, model = model,
                            index = progress_index)
-    on.exit(pb$terminate())
     switch(getDoParName(),
       "doSEQ"  = progress <- function(n) pb$tick(),
       "doSNOW" = snow_opts$progress <- function(n) pb$tick()
     )
+    on.exit(pb$terminate())
   }
 
   df_list <- foreach(
@@ -284,11 +284,11 @@ Resamples.list <- function(object, ...) {
   if (object@monitor$progress) {
     pb <- new_progress_bar(length(splits), input = x, model = model,
                            index = progress_index)
-    on.exit(pb$terminate())
     switch(getDoParName(),
       "doSEQ"  = progress <- function(n) pb$tick(),
       "doSNOW" = snow_opts$progress <- function(n) pb$tick()
     )
+    on.exit(pb$terminate())
   }
 
   foreach(
