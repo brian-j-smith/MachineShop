@@ -1,8 +1,8 @@
 Package: MachineShop
 Type: Package
 Title: Machine Learning Models and Tools
-Version: 2.9.0.9001
-Date: 2021-07-12
+Version: 2.9.0.9002
+Date: 2021-07-27
 Authors@R: person(c("Brian", "J"), "Smith",
                   email = "brian-j-smith@uiowa.edu",
                   role = c("aut", "cre"))
@@ -24,13 +24,13 @@ Description: Meta-package for statistical and machine learning with a unified
     curves.
 Depends: R (>= 3.6.0)
 Imports: abind, dials (>= 0.0.4), foreach, ggplot2 (>= 3.3.0), kernlab,
-         magrittr, Matrix, methods, nnet, party, polspline, Rcpp, progress,
-         recipes (>= 0.1.4), rlang, rsample (>= 0.1.0), Rsolnp, survival,
-         tibble, utils
+    magrittr, Matrix, methods, nnet, party, polspline, Rcpp, progress,
+    recipes (>= 0.1.4), rlang, rsample (>= 0.1.0), Rsolnp, survival, tibble,
+    utils
 Suggests: adabag, BART, bartMachine, C50, cluster, doParallel, e1071, earth,
-          elasticnet, gbm, glmnet, gridExtra, Hmisc, kableExtra, kknn, knitr,
-          lars, MASS, mboost, mda, partykit, pls, randomForest, randomForestSRC,
-          ranger, rmarkdown, rms, rpart, testthat, tree, xgboost
+    elasticnet, gbm, glmnet, gridExtra, Hmisc, kableExtra, kknn, knitr, lars,
+    MASS, mboost, mda, partykit, pls, randomForest, randomForestSRC, ranger,
+    rmarkdown, rms, rpart, testthat, tree, xgboost
 LazyData: true
 License: GPL-3
 URL: https://brian-j-smith.github.io/MachineShop/

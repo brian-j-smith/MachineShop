@@ -2,6 +2,14 @@
 
 ## Version Updates
 
+## 2.9.0.9002
+* Add column `Weight` of case weights to `Resamples` data frame.
+* Rename `values` column to `get_values` in `MLModel` `gridinfo` slot.
+* Move global settings `resample_progress` and `resample_verbose` to `set_monitor()` arguments `progress` and `verbose`.
+* Move `MLControl()` arguments `strata_breaks`, `strata_nunique`, `strata_prop`, and `strata_size` to `set_strata()` arguments `breaks`, `nunique`, `prop`, and `size`.
+* Move `MLControl()` arguments `times`, `distr`, and `method` to `set_predict()`.
+* Export `%>%` operator.
+
 ## 2.9.0.9001
 * Return case stratification values in the 'strata' slot of 'Resamples' objects.
 
