@@ -329,9 +329,9 @@ surv_mean <- function(times, surv, max_time = max(times)) {
 }
 
 
-surv_subset <- function(x, keep, time) {
+surv_subset <- function(x, include, time) {
   surv <- 1
-  x <- x[keep]
+  x <- x[include]
   if (length(x) && any(event_time(x) <= time)) {
     data <- data.frame(event = x[, "status"], total = 1)
     sums <- cbind(
@@ -341,7 +341,7 @@ surv_subset <- function(x, keep, time) {
     sums <- sums[sums$stop_time <= time, ]
     surv <- prod(1 - sums$event / sums$total)
   }
-  list(surv = surv, p = mean(keep))
+  list(surv = surv, p = mean(include))
 }
 
 

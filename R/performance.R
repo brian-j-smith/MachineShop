@@ -136,27 +136,22 @@ performance.Resamples <- function(x, ...) {
   perf_list <- by(x, x$Model, function(resamples) {
     Performance(performance(x@control, resamples, ...))
   }, simplify = FALSE)
-
   do.call(c, perf_list)
 }
 
 
 performance.MLControl <- function(x, resamples, ...) {
-  perf_list <- by(resamples[c("Observed", "Predicted")], resamples$Resample,
-                  function(resample) {
-                    performance(resample[[1]], resample[[2]], ...)
-                  }, simplify = FALSE)
+  perf_list <- by(resamples, resamples$Resample, function(resample) {
+    performance(resample$Observed, resample$Predicted, ...)
+  }, simplify = FALSE)
   do.call(rbind, perf_list)
 }
 
 
 performance.MLBootOptimismControl <- function(x, resamples, ...) {
-  vars <- c("Observed", "Predicted", "Boot.Observed", "Boot.Predicted",
-            "Train.Predicted")
-
   test_perf_list <- list()
   boot_perf_list <- list()
-  resamples_split <- split(resamples[vars], resamples$Resample)
+  resamples_split <- split(resamples, resamples$Resample)
   for (name in names(resamples_split)) {
     resample <- resamples_split[[name]]
     test_perf_list[[name]] <- performance(resample$Observed,
@@ -174,23 +169,17 @@ performance.MLBootOptimismControl <- function(x, resamples, ...) {
 
 
 performance.MLCVOptimismControl <- function(x, resamples, ...) {
-  vars <- c("Observed", "Predicted")
-  vars2 <- c("Resample", "Observed", "Train.Predicted",
-             paste0("CV.Predicted.", seq_len(x@folds)))
+  test_perf <- NextMethod()
 
-  resamples_split <- split(resamples[vars], resamples$Resample)
-  test_perf <- map(function(resample) {
-    performance(resample$Observed, resample$Predicted, ...)
-  }, resamples_split) %>% do.call(rbind, .)
-
-  f <- function(p, obs, pred) p * performance(obs, pred, ...)
-  resamples_factor <- ceiling(resamples$Resample / x@folds)
-  resamples_split <- split(resamples[vars2], resamples_factor)
-  cv_perf_list <- map(function(resample) {
-    p <- prop.table(table(resample$Resample))
-    Reduce("+", map(f, p, resample["Observed"], resample[-(1:3)]))
+  resamples_split <- split(resamples, ceiling(resamples$Resample / x@folds))
+  vars <- paste0("CV.Predicted.", seq_len(x@folds))
+  perf_list <- map(function(resample) {
+    f <- function(p, pred) {
+      p * performance(resample$Observed, pred, ...)
+    }
+    Reduce("+", map(f, prop.table(table(resample$Resample)), resample[vars]))
   }, resamples_split)
-  cv_perf <- do.call(rbind, rep(cv_perf_list, each = x@folds))
+  cv_perf <- do.call(rbind, rep(perf_list, each = x@folds))
   train_perf <- performance(resamples_split[[1]]$Observed,
                             resamples_split[[1]]$Train.Predicted, ...)
 

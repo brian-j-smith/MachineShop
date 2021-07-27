@@ -43,7 +43,7 @@ NULL
 
 setMetric_auc <- function(f, metrics) {
   definition <- function(observed, predicted, ...) {
-    auc(observed, predicted, metrics = metrics)
+    auc(observed, predicted, metrics = metrics, ...)
   }
   setMetricGeneric(f)
   setMetricMethod(f, c("factor", "factor"))
@@ -156,7 +156,7 @@ setMetricMethod_factor_numeric <- function(f) {
 setMetricMethod_matrix_matrix <- function(f) {
   setMetricMethod(f, c("matrix", "matrix"),
     function(observed, predicted, ...) {
-      metric_matrix(observed, predicted, get(f), ...)
+      metric_matrix(get(f), observed, predicted, ...)
     }
   )
 }
@@ -174,7 +174,7 @@ setMetricMethod_Resamples <- function(f) {
 setMetricMethod_Surv_numeric <- function(f) {
   setMetricMethod(f, c("Surv", "numeric"),
     function(observed, predicted, ...) {
-      metric_SurvMean(observed, predicted, get(f), ...)
+      metric_SurvMean(get(f), observed, predicted, ...)
     }
   )
 }
@@ -183,7 +183,7 @@ setMetricMethod_Surv_numeric <- function(f) {
 setMetricMethod_Surv_SurvEvents <- function(f) {
   setMetricMethod(f, c("Surv", "SurvEvents"),
     function(observed, predicted, ...) {
-      metric_SurvMatrix(observed, predicted, get(f), ...)
+      metric_SurvMatrix(get(f), observed, predicted, ...)
     }
   )
 }
@@ -192,7 +192,7 @@ setMetricMethod_Surv_SurvEvents <- function(f) {
 setMetricMethod_Surv_SurvProbs <- function(f) {
   setMetricMethod(f, c("Surv", "SurvProbs"),
     function(observed, predicted, ...) {
-      metric_SurvMatrix(observed, predicted, get(f), ...)
+      metric_SurvMatrix(get(f), observed, predicted, ...)
     }
   )
 }
@@ -211,14 +211,14 @@ metric_method_name <- function(f) {
 }
 
 
-metric_matrix <- function(observed, predicted, fun, ...) {
+metric_matrix <- function(fun, observed, predicted, ...) {
   mean(map_num(function(i) {
     fun(observed[, i], predicted[, i], ...)
   }, seq_len(ncol(observed))))
 }
 
 
-metric_SurvMatrix <- function(observed, predicted, fun, cutoff = NULL, ...) {
+metric_SurvMatrix <- function(fun, observed, predicted, cutoff = NULL, ...) {
   conf_list <- confusion(observed, predicted, cutoff = cutoff)
   x <- map_num(function(conf) fun(conf, ...), conf_list)
   times <- predicted@times
@@ -226,7 +226,7 @@ metric_SurvMatrix <- function(observed, predicted, fun, cutoff = NULL, ...) {
 }
 
 
-metric_SurvMean <- function(observed, predicted, fun, ...) {
+metric_SurvMean <- function(fun, observed, predicted, ...) {
   events <- observed[, "status"] == 1
   fun(time(observed[events]), predicted[events], ...)
 }

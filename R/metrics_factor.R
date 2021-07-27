@@ -36,12 +36,8 @@ setMetricMethod("auc", c("factor", "factor"))
 
 setMetricMethod("auc", c("factor", "numeric"),
   function(observed, predicted, metrics, ...) {
-    if (identical(metrics[[1]], tpr) && identical(metrics[[2]], fpr)) {
-      R <- rank(predicted)
-      is_event <- observed == levels(observed)[2]
-      n_event <- sum(is_event)
-      n_nonevent <- length(observed) - n_event
-      (sum(R[is_event]) - n_event * (n_event + 1) / 2) / (n_event * n_nonevent)
+    if (all(map_logi(identical, metrics[1:2], c(tpr, fpr)))) {
+      cindex(observed, predicted)
     } else {
       unname(auc(performance_curve(observed, predicted, metrics = metrics)))
     }
@@ -100,7 +96,7 @@ setMetricMethod("brier", c("factor", "factor"))
 setMetricMethod("brier", c("factor", "matrix"),
   function(observed, predicted, ...) {
     observed <- model.matrix(~ observed - 1)
-    sum((observed - predicted)^2) / nrow(observed)
+    ncol(observed) * mse(observed, predicted)
   }
 )
 
@@ -159,7 +155,7 @@ setMetricMethod("cindex", c("factor", "factor"))
 
 setMetricMethod("cindex", c("factor", "numeric"),
   function(observed, predicted, ...) {
-    roc_auc(observed, predicted)
+    concordance(observed ~ predicted)$concordance
   }
 )
 
@@ -193,7 +189,7 @@ setMetricMethod("cross_entropy", c("factor", "matrix"),
   function(observed, predicted, ...) {
     observed <- model.matrix(~ observed - 1)
     eps <- 1e-15
-    predicted <- pmax(pmin(predicted, 1 - eps), eps)
+    predicted <- pmax(eps, pmin(predicted, 1 - eps))
     -sum(observed * log(predicted)) / nrow(predicted)
   }
 )

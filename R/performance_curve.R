@@ -29,7 +29,7 @@
 #' }
 #'
 lift <- function(x, y = NULL, na.rm = TRUE, ...) {
-  as(performance_curve(x, y = y, metrics = c(tpr, rpp), na.rm = na.rm),
+  as(performance_curve(x, y, metrics = c(tpr, rpp), na.rm = na.rm),
      "LiftCurve")
 }
 
@@ -99,7 +99,9 @@ performance_curve.default <- function(
     x <- complete$x
     y <- complete$y
   }
-  .curve(x, y, metrics = .get_curve_metrics(metrics))
+  metrics <- get_curve_metrics(metrics)
+  curve <- .performance_curve(x, y, metrics = metrics)
+  if (is(curve, "listof")) do.call(c, curve) else curve
 }
 
 
@@ -108,15 +110,14 @@ performance_curve.default <- function(
 performance_curve.Resamples <- function(
   x, metrics = c(MachineShop::tpr, MachineShop::fpr), na.rm = TRUE, ...
 ) {
-  metrics <- .get_curve_metrics(metrics)
-
   if (na.rm) x <- na.omit(x)
+  metrics <- get_curve_metrics(metrics)
 
   curves <- NULL
   for (model in unique(x$Model)) {
     for (resample in unique(x$Resample)) {
       df <- x[x$Model == model & x$Resample == resample, ]
-      curve <- .curve_default(df$Observed, df$Predicted, metrics = metrics)
+      curve <- .performance_curve(df$Observed, df$Predicted, metrics = metrics)
       curve <- if (is(curve, "listof")) {
         structure(curve, names = paste0(model, ".", names(curve)))
       } else {
@@ -132,7 +133,7 @@ performance_curve.Resamples <- function(
 }
 
 
-.get_curve_metrics <- function(metrics) {
+get_curve_metrics <- function(metrics) {
   metrics <- map(fget, metrics)
   if (length(metrics) != 2 || !all(map_logi(is, metrics, "MLMetric"))) {
     metrics <- Error("Value must be a list of two performance metrics.")
@@ -168,27 +169,12 @@ PerformanceCurve <- function(object, ..., metrics, .check = TRUE) {
 }
 
 
-.curve <- function(x, ...) {
-  UseMethod(".curve")
-}
-
-
-.curve.default <- function(x, y, metrics, ...) {
-  .curve_default(x, y, metrics = metrics)
-}
-
-
-.curve.Surv <- function(x, y, metrics, ...) {
-  do.call(c, .curve_default(x, y, metrics = metrics))
-}
-
-
-setGeneric(".curve_default",
-  function(observed, predicted, ...) standardGeneric(".curve_default")
+setGeneric(".performance_curve",
+  function(observed, predicted, ...) standardGeneric(".performance_curve")
 )
 
 
-setMethod(".curve_default", c("ANY", "ANY"),
+setMethod(".performance_curve", c("ANY", "ANY"),
   function(observed, predicted, ...) {
     throw(Error("performance_curve requires a predicted binary factor or ",
                 "survival probabilities"))
@@ -196,7 +182,7 @@ setMethod(".curve_default", c("ANY", "ANY"),
 )
 
 
-setMethod(".curve_default", c("factor", "numeric"),
+setMethod(".performance_curve", c("factor", "numeric"),
   function(observed, predicted, metrics, ...) {
     cutoffs <- c(-Inf, unique(predicted))
     x <- y <- numeric(length(cutoffs))
@@ -211,7 +197,7 @@ setMethod(".curve_default", c("factor", "numeric"),
 )
 
 
-setMethod(".curve_default", c("Surv", "SurvProbs"),
+setMethod(".performance_curve", c("Surv", "SurvProbs"),
   function(observed, predicted, metrics, ...) {
 
     times <- predicted@times
@@ -241,8 +227,8 @@ setMethod(".curve_default", c("Surv", "SurvProbs"),
         PerformanceCurve(data.frame(Cutoff = cutoffs, x = x, y = y),
                          metrics = metrics)
       }, seq_along(times)),
-      class = "listof",
-      names = paste0("time", seq_along(times))
+      names = paste0("time", seq_along(times)),
+      class = "listof"
     )
 
   }

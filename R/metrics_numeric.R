@@ -62,7 +62,7 @@ MLMetric(msle) <- list("msle", "Mean Squared Log Error", FALSE)
 
 setMetric_numeric("msle",
   function(observed, predicted, ...) {
-    mean((log(1 + observed) - log(1 + predicted))^2)
+    mse(log(1 + observed), log(1 + predicted))
   }
 )
 
