@@ -113,7 +113,8 @@ mean_stack_list <- function(x, weights) {
 
 
 setGeneric("stack_loss",
-           function(observed, predicted, x, ...) standardGeneric("stack_loss"))
+  function(observed, predicted, x, ...) standardGeneric("stack_loss")
+)
 
 
 setMethod("stack_loss", c("ANY", "ANY", "Resamples"),

@@ -1,5 +1,6 @@
 setGeneric("convert_prob",
-           function(object, x, ...) standardGeneric("convert_prob"))
+  function(object, x, ...) standardGeneric("convert_prob")
+)
 
 
 setMethod("convert_prob", c("ANY", "ANY"),
@@ -85,7 +86,8 @@ setMethod("convert_prob", c("Surv", "numeric"),
 
 
 setGeneric("convert_response",
-           function(object, x, ...) standardGeneric("convert_response"))
+  function(object, x, ...) standardGeneric("convert_response")
+)
 
 
 setMethod("convert_response", c("ANY", "ANY"),

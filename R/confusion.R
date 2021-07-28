@@ -101,8 +101,9 @@ ConfusionMatrix <- function(data = NA, ordered = FALSE) {
 }
 
 
-setGeneric(".confusion_matrix", function(observed, predicted, ...)
-  standardGeneric(".confusion_matrix"))
+setGeneric(".confusion_matrix",
+  function(observed, predicted, ...) standardGeneric(".confusion_matrix")
+)
 
 
 setMethod(".confusion_matrix", c("ANY", "ANY"),

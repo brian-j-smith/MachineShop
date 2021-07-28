@@ -86,8 +86,9 @@ Calibration <- function(object, ..., .check = TRUE) {
 }
 
 
-setGeneric(".calibration_default", function(observed, predicted, ...)
-  standardGeneric(".calibration_default"))
+setGeneric(".calibration_default",
+  function(observed, predicted, ...) standardGeneric(".calibration_default")
+)
 
 
 setMethod(".calibration_default", c("ANY", "ANY"),

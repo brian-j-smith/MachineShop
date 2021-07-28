@@ -183,8 +183,9 @@ PerformanceCurve <- function(object, ..., metrics, .check = TRUE) {
 }
 
 
-setGeneric(".curve_default", function(observed, predicted, ...)
-  standardGeneric(".curve_default"))
+setGeneric(".curve_default",
+  function(observed, predicted, ...) standardGeneric(".curve_default")
+)
 
 
 setMethod(".curve_default", c("ANY", "ANY"),
