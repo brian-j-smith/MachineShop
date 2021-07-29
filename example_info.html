@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -380,7 +380,7 @@ div.tocify {
 
 <div id="model-information" class="section level1">
 <h1>Model Information</h1>
-<p>A named list of package-supplied models can be obtained interactively with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/modelinfo"><code>modelinfo()</code></a> function, and includes a descriptive <code>"label"</code> for each, source <code>"packages"</code> on which the models depend, supported response variable <code>"types"</code>, and <code>"arguments"</code> that can be specified in calls to the model functions. Function <code>modelinfo</code> can be called without arguments, with one or more model functions, variable types, or response variables; and will return information on all models matching the calling arguments.</p>
+<p>A named list of package-supplied models can be obtained interactively with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/modelinfo"><code>modelinfo()</code></a> function, and includes a descriptive <code>"label"</code> for each, source <code>"packages"</code> on which the models depend, supported response variable <code>"types"</code>, and <code>"arguments"</code> that can be specified in calls to the model functions. Function <code>modelinfo</code> can be called without arguments, with one or more model functions, variable types, or response variables; and will return information on all models matching the calling arguments.</p>
 <pre class="r"><code>## Analysis libraries
 library(MachineShop)
 library(magrittr)
@@ -418,6 +418,9 @@ modelinfo(C50Model, CoxModel)
 #&gt; $C50Model$response_types
 #&gt; [1] &quot;factor&quot;
 #&gt; 
+#&gt; $C50Model$weights
+#&gt; [1] TRUE
+#&gt; 
 #&gt; $C50Model$arguments
 #&gt; function (trials = 1, rules = FALSE, subset = TRUE, bands = 0, 
 #&gt;     winnow = FALSE, noGlobalPruning = FALSE, CF = 0.25, minCases = 2, 
@@ -440,6 +443,9 @@ modelinfo(C50Model, CoxModel)
 #&gt; 
 #&gt; $CoxModel$response_types
 #&gt; [1] &quot;Surv&quot;
+#&gt; 
+#&gt; $CoxModel$weights
+#&gt; [1] TRUE
 #&gt; 
 #&gt; $CoxModel$arguments
 #&gt; function (ties = c(&quot;efron&quot;, &quot;breslow&quot;, &quot;exact&quot;), ...) 
@@ -495,7 +501,7 @@ modelinfo(iris$Species) %&gt;% names
 </div>
 <div id="metric-information" class="section level1">
 <h1>Metric Information</h1>
-<p>A named list of supplied metrics can be obtained with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/metricinfo"><code>metricinfo()</code></a> function, and includes a descriptive <code>"label"</code> for each, whether to <code>"maximize"</code> the metrics for better performance, their function <code>"arguments"</code>, and supported observed and predicted response variable <code>"types"</code>. Function <a href="https://www.rdocumentation.org/packages/MachineShop/versions/2.9.0/topics/metricinfo"><code>metricinfo()</code></a> may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.</p>
+<p>A named list of supplied metrics can be obtained with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/metricinfo"><code>metricinfo()</code></a> function, and includes a descriptive <code>"label"</code> for each, whether to <code>"maximize"</code> the metrics for better performance, their function <code>"arguments"</code>, and supported observed and predicted response variable <code>"types"</code>. Function <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/metricinfo"><code>metricinfo()</code></a> may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.</p>
 <pre class="r"><code>## Analysis libraries
 library(MachineShop)
 library(magrittr)
@@ -521,7 +527,7 @@ metricinfo(auc, r2)
 #&gt; [1] TRUE
 #&gt; 
 #&gt; $auc$arguments
-#&gt; function (observed, predicted = NULL, metrics = c(MachineShop::tpr, 
+#&gt; function (observed, predicted = NULL, weights = NULL, metrics = c(MachineShop::tpr, 
 #&gt;     MachineShop::fpr), stat = MachineShop::settings(&quot;stat.Curve&quot;), 
 #&gt;     ...) 
 #&gt; NULL
@@ -542,7 +548,8 @@ metricinfo(auc, r2)
 #&gt; [1] TRUE
 #&gt; 
 #&gt; $r2$arguments
-#&gt; function (observed, predicted = NULL, distr = NULL, ...) 
+#&gt; function (observed, predicted = NULL, weights = NULL, distr = NULL, 
+#&gt;     ...) 
 #&gt; NULL
 #&gt; 
 #&gt; $r2$response_types

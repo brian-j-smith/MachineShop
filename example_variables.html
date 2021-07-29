@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -425,9 +425,9 @@ model_res &lt;- resample(fo, ICHomes, model = tuned_model)
 summary(model_res)
 #&gt;       Statistic
 #&gt; Metric         Mean       Median           SD          Min          Max NA
-#&gt;   RMSE 5.209878e+04 5.312584e+04 2.034232e+04 27787.170324 8.746420e+04  0
-#&gt;   R2   6.607077e-01 6.771051e-01 1.059521e-01     0.504885 7.810182e-01  0
-#&gt;   MAE  2.899518e+04 3.057214e+04 6.569017e+03 19621.133143 3.998957e+04  0</code></pre>
+#&gt;   RMSE 5.302266e+04 5.231573e+04 1.622282e+04 3.251007e+04 8.608477e+04  0
+#&gt;   R2   6.418977e-01 6.437558e-01 8.575161e-02 4.525585e-01 7.518838e-01  0
+#&gt;   MAE  2.903010e+04 2.883829e+04 5.842833e+03 2.033232e+04 4.124774e+04  0</code></pre>
 </div>
 <div id="design-matrix" class="section level2">
 <h2>Design Matrix</h2>
@@ -441,9 +441,9 @@ model_res &lt;- resample(x, y, model = tuned_model)
 summary(model_res)
 #&gt;       Statistic
 #&gt; Metric         Mean       Median           SD          Min          Max NA
-#&gt;   RMSE 5.984130e+04 5.350281e+04 2.259399e+04 3.782228e+04 9.716407e+04  0
-#&gt;   R2   5.440574e-01 5.715332e-01 9.711509e-02 3.840883e-01 6.660261e-01  0
-#&gt;   MAE  3.450690e+04 3.290967e+04 5.905925e+03 2.860651e+04 4.587251e+04  0</code></pre>
+#&gt;   RMSE 58886.715345 5.384446e+04 2.307003e+04 2.945653e+04 1.097881e+05  0
+#&gt;   R2       0.564112 5.679539e-01 9.732047e-02 4.428837e-01 7.479153e-01  0
+#&gt;   MAE  34361.856685 3.353678e+04 7.072403e+03 2.321820e+04 4.908157e+04  0</code></pre>
 </div>
 <div id="model-frame" class="section level2">
 <h2>Model Frame</h2>
@@ -456,9 +456,9 @@ model_res &lt;- resample(mf, model = tuned_model)
 summary(model_res)
 #&gt;       Statistic
 #&gt; Metric         Mean       Median           SD          Min          Max NA
-#&gt;   RMSE 5.232412e+04 5.106431e+04 1.808690e+04 32556.626622 8.867342e+04  0
-#&gt;   R2   6.555487e-01 6.853897e-01 1.132607e-01     0.396599 7.974336e-01  0
-#&gt;   MAE  2.891302e+04 2.931917e+04 5.623462e+03 22090.829713 4.159517e+04  0</code></pre>
+#&gt;   RMSE 5.371947e+04 5.619320e+04 1.333714e+04 3.059374e+04 7.334122e+04  0
+#&gt;   R2   6.445565e-01 6.601372e-01 8.786260e-02 4.610021e-01 7.400269e-01  0
+#&gt;   MAE  2.898967e+04 2.873675e+04 4.577752e+03 2.376471e+04 3.638660e+04  0</code></pre>
 </div>
 <div id="preprocessing-recipe" class="section level2">
 <h2>Preprocessing Recipe</h2>
@@ -477,9 +477,9 @@ model_res &lt;- resample(rec, model = tuned_model)
 summary(model_res)
 #&gt;       Statistic
 #&gt; Metric         Mean       Median           SD          Min          Max NA
-#&gt;   RMSE 5.505202e+04 6.176488e+04 1.455537e+04 3.288713e+04 7.015009e+04  0
-#&gt;   R2   6.320515e-01 6.209541e-01 7.367312e-02 5.328911e-01 7.398751e-01  0
-#&gt;   MAE  3.047956e+04 3.115397e+04 4.034256e+03 2.472347e+04 3.533094e+04  0</code></pre>
+#&gt;   RMSE 5.470691e+04 5.721398e+04 1.461138e+04 3.088706e+04 7.180968e+04  0
+#&gt;   R2   6.365785e-01 6.387889e-01 8.781990e-02 4.953528e-01 7.634067e-01  0
+#&gt;   MAE  3.018935e+04 2.964397e+04 3.633008e+03 2.367205e+04 3.642675e+04  0</code></pre>
 </div>
 </div>
 
