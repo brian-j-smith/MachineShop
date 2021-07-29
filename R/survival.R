@@ -74,7 +74,7 @@ EmpiricalSurv <- function(x, ...) {
 EmpiricalSurv.Surv <- function(
   x, risks = NULL, weights = NULL, method = c("efron", "breslow"), ...
 ) {
-  event <- as.integer(x[, "status"] == 1)
+  event <- as.integer(x[, "status"])
   if (is.null(risks)) risks <- 1
   if (is.null(weights)) weights <- 1
   if (is.null(method)) method <- settings("method.EmpiricalSurv")
@@ -333,7 +333,7 @@ surv_subset <- function(x, keep, time) {
   surv <- 1
   x <- x[keep]
   if (length(x) && any(event_time(x) <= time)) {
-    data <- data.frame(event = as.numeric(x[, "status"] == 1), total = 1)
+    data <- data.frame(event = x[, "status"], total = 1)
     sums <- cbind(
       rowsum(data["event"], time(x)),
       risksum(data["total"], x)
