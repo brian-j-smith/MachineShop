@@ -80,7 +80,7 @@ MLModelFunction(StackedModel) <- NULL
     weights <- Rsolnp::solnp(rep(1 / num_learners, num_learners),
                              function(weights) mean_stack_list(stack, weights),
                              eqfun = function(x) sum(x), eqB = 1,
-                             LB = rep(0, num_learners),
+                             LB = numeric(num_learners),
                              control = list(trace = FALSE))$pars
   }
 
