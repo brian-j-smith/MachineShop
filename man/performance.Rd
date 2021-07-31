@@ -17,6 +17,7 @@ performance(x, ...)
 \method{performance}{BinomialVariate}(
   x,
   y,
+  weights = NULL,
   metrics = MachineShop::settings("metrics.numeric"),
   na.rm = TRUE,
   ...
@@ -25,6 +26,7 @@ performance(x, ...)
 \method{performance}{factor}(
   x,
   y,
+  weights = NULL,
   metrics = MachineShop::settings("metrics.factor"),
   cutoff = MachineShop::settings("cutoff"),
   na.rm = TRUE,
@@ -34,6 +36,7 @@ performance(x, ...)
 \method{performance}{matrix}(
   x,
   y,
+  weights = NULL,
   metrics = MachineShop::settings("metrics.matrix"),
   na.rm = TRUE,
   ...
@@ -42,6 +45,7 @@ performance(x, ...)
 \method{performance}{numeric}(
   x,
   y,
+  weights = NULL,
   metrics = MachineShop::settings("metrics.numeric"),
   na.rm = TRUE,
   ...
@@ -50,6 +54,7 @@ performance(x, ...)
 \method{performance}{Surv}(
   x,
   y,
+  weights = NULL,
   metrics = MachineShop::settings("metrics.Surv"),
   cutoff = MachineShop::settings("cutoff"),
   na.rm = TRUE,
@@ -73,6 +78,10 @@ type-specific methods are passed to \code{metrics} supplied as a single
 \code{\link[=metrics]{MLMetric}} function and are ignored otherwise.}
 
 \item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
+
+\item{weights}{numeric vector of non-negative
+\link[=case_weights]{case weights} for the observed \code{x} responses
+[default: equal weights].}
 
 \item{metrics}{\link[=metrics]{metric} function, function name, or vector of
 these with which to calculate performance.}

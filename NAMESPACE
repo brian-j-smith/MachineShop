@@ -22,7 +22,7 @@ importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
            model.frame, model.matrix, model.matrix.default, model.response,
            model.weights, na.fail, na.omit, na.pass, offset, p.adjust, pchisq,
            predict, quantile, reformulate, reshape, sd, t.test, terms, time,
-           update, vcov)
+           update, vcov, xtabs)
 importFrom(survival, concordance, is.Surv, Surv, survfit, survreg,
            survreg.distributions)
 importFrom(tibble, as_tibble, is_tibble, tibble)
@@ -155,6 +155,7 @@ export(.,
        "%>%",
        as.MLModel,
        calibration,
+       case_weights,
        confusion,
        ConfusionMatrix,
        dependence,

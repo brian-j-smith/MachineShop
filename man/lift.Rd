@@ -4,13 +4,17 @@
 \alias{lift}
 \title{Model Lift Curves}
 \usage{
-lift(x, y = NULL, na.rm = TRUE, ...)
+lift(x, y = NULL, weights = NULL, na.rm = TRUE, ...)
 }
 \arguments{
 \item{x}{\link[=response]{observed responses} or \link{resample} result
 containing observed and predicted responses.}
 
 \item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
+
+\item{weights}{numeric vector of non-negative
+\link[=case_weights]{case weights} for the observed \code{x} responses
+[default: equal weights].}
 
 \item{na.rm}{logical indicating whether to remove observed or predicted
 responses that are \code{NA} when calculating metrics.}

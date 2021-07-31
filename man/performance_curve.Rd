@@ -12,6 +12,7 @@ performance_curve(x, ...)
 \method{performance_curve}{default}(
   x,
   y,
+  weights = NULL,
   metrics = c(MachineShop::tpr, MachineShop::fpr),
   na.rm = TRUE,
   ...
@@ -31,6 +32,10 @@ containing observed and predicted responses.}
 \item{...}{arguments passed to other methods.}
 
 \item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
+
+\item{weights}{numeric vector of non-negative
+\link[=case_weights]{case weights} for the observed \code{x} responses
+[default: equal weights].}
 
 \item{metrics}{list of two performance \link{metrics} for the analysis
 [default: ROC metrics].  Precision recall curves can be obtained with

@@ -9,6 +9,9 @@
 #'   result containing observed and predicted responses.
 #' @param predicted \link[=predict]{predicted responses} if not contained in
 #'   \code{observed}.
+#' @param weights numeric vector of non-negative
+#'   \link[=case_weights]{case weights} for the observed responses [default:
+#'   equal weights].
 #' @param beta relative importance of recall to precision in the calculation of
 #'   \code{f_score} [default: F1 score].
 #' @param cutoff numeric (0, 1) threshold above which binary factor
@@ -79,8 +82,8 @@ setMetric_ConfusionMatrix <- function(f, definition) {
 setMetric_OrderedConfusionMatrix <- function(f, definition) {
   setMetricGeneric(f)
   setMetricMethod(f, c("OrderedConfusionMatrix", "NULL"), definition)
-  definition_ordered <- function(observed, predicted, ...) {
-    get(f)(confusion(observed, predicted), ...)
+  definition_ordered <- function(observed, predicted, weights, ...) {
+    get(f)(confusion(observed, predicted, weights), ...)
   }
   setMetricMethod(f, c("ordered", "ordered"), definition_ordered)
   setMetricMethod(f, c("ordered", "matrix"), definition_ordered)
@@ -128,8 +131,8 @@ setMetricMethod_BinomialMatrix_numeric <- function(f) {
 
 setMetricMethod_factor_factor <- function(f) {
   setMetricMethod(f, c("factor", "factor"),
-    function(observed, predicted, ...) {
-      get(f)(confusion(observed, predicted), ...)
+    function(observed, predicted, weights, ...) {
+      get(f)(confusion(observed, predicted, weights), ...)
     }
   )
 }
@@ -137,8 +140,8 @@ setMetricMethod_factor_factor <- function(f) {
 
 setMetricMethod_factor_matrix <- function(f) {
   setMetricMethod(f, c("factor", "matrix"),
-    function(observed, predicted, ...) {
-      get(f)(confusion(observed, predicted), ...)
+    function(observed, predicted, weights, ...) {
+      get(f)(confusion(observed, predicted, weights), ...)
     }
   )
 }
@@ -146,8 +149,8 @@ setMetricMethod_factor_matrix <- function(f) {
 
 setMetricMethod_factor_numeric <- function(f) {
   setMetricMethod(f, c("factor", "numeric"),
-    function(observed, predicted, cutoff, ...) {
-      get(f)(confusion(observed, predicted, cutoff = cutoff), ...)
+    function(observed, predicted, weights, cutoff, ...) {
+      get(f)(confusion(observed, predicted, weights, cutoff = cutoff), ...)
     }
   )
 }
@@ -164,7 +167,7 @@ setMetricMethod_matrix_matrix <- function(f) {
 
 setMetricMethod_Resamples <- function(f) {
   setMetricMethod(f, c("Resamples", "NULL"),
-    function(observed, predicted, ...) {
+    function(observed, predicted, weights, ...) {
       performance(observed, metrics = get(f), ...)
     }
   )
@@ -218,8 +221,10 @@ metric_matrix <- function(fun, observed, predicted, ...) {
 }
 
 
-metric_SurvMatrix <- function(fun, observed, predicted, cutoff = NULL, ...) {
-  conf_list <- confusion(observed, predicted, cutoff = cutoff)
+metric_SurvMatrix <- function(
+  fun, observed, predicted, weights, cutoff = NULL, ...
+) {
+  conf_list <- confusion(observed, predicted, weights, cutoff = cutoff)
   x <- map_num(function(conf) fun(conf, ...), conf_list)
   times <- predicted@times
   if (length(times) > 1) c("mean" = survmetric_mean(x, times), x) else x[[1]]
@@ -229,4 +234,21 @@ metric_SurvMatrix <- function(fun, observed, predicted, cutoff = NULL, ...) {
 metric_SurvMean <- function(fun, observed, predicted, ...) {
   events <- observed[, "status"] == 1
   fun(time(observed[events]), predicted[events], ...)
+}
+
+
+weighted_mean <- function(x, weights = NULL) {
+  if (is.null(weights)) {
+    sum(x) / length(x)
+  } else {
+    weights <- check_weights(weights, x)
+    throw(check_assignment(weights))
+    sum(weights * x) / sum(weights)
+  }
+}
+
+
+weighted_sd <- function(x, weights = NULL) {
+  n <- length(x)
+  sqrt(mse(x, weighted_mean(x, weights), weights) * n / (n - 1))
 }

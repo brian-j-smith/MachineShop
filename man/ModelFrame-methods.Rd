@@ -35,7 +35,8 @@ to one.}
 \item{na.rm}{logical indicating whether to remove cases with \code{NA} values
 for any of the model variables.}
 
-\item{weights}{vector of case weights [default: equal].}
+\item{weights}{numeric vector of non-negative case weights for the \code{y}
+response variable [default: equal weights].}
 
 \item{strata}{vector of values to use in conducting stratified
 \link{resample} estimation of model performance [default: none].}

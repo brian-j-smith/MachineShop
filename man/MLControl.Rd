@@ -12,27 +12,57 @@
 \alias{TrainControl}
 \title{Resampling Controls}
 \usage{
-BootControl(samples = 25, seed = sample(.Machine$integer.max, 1), ...)
-
-BootOptimismControl(samples = 25, seed = sample(.Machine$integer.max, 1), ...)
-
-CVControl(folds = 10, repeats = 1, seed = sample(.Machine$integer.max, 1), ...)
-
-CVOptimismControl(
-  folds = 10,
-  repeats = 1,
+BootControl(
+  samples = 25,
+  weights = TRUE,
   seed = sample(.Machine$integer.max, 1),
   ...
 )
 
-OOBControl(samples = 25, seed = sample(.Machine$integer.max, 1), ...)
+BootOptimismControl(
+  samples = 25,
+  weights = TRUE,
+  seed = sample(.Machine$integer.max, 1),
+  ...
+)
 
-SplitControl(prop = 2/3, seed = sample(.Machine$integer.max, 1), ...)
+CVControl(
+  folds = 10,
+  repeats = 1,
+  weights = TRUE,
+  seed = sample(.Machine$integer.max, 1),
+  ...
+)
 
-TrainControl(seed = sample(.Machine$integer.max, 1), ...)
+CVOptimismControl(
+  folds = 10,
+  repeats = 1,
+  weights = TRUE,
+  seed = sample(.Machine$integer.max, 1),
+  ...
+)
+
+OOBControl(
+  samples = 25,
+  weights = TRUE,
+  seed = sample(.Machine$integer.max, 1),
+  ...
+)
+
+SplitControl(
+  prop = 2/3,
+  weights = TRUE,
+  seed = sample(.Machine$integer.max, 1),
+  ...
+)
+
+TrainControl(weights = TRUE, seed = sample(.Machine$integer.max, 1), ...)
 }
 \arguments{
 \item{samples}{number of bootstrap samples.}
+
+\item{weights}{logical indicating whether to return case weights in resampled
+output for the calculation of performance \link{metrics}.}
 
 \item{seed}{integer to set the seed at the start of resampling.}
 

@@ -8,6 +8,7 @@
 confusion(
   x,
   y = NULL,
+  weights = NULL,
   cutoff = MachineShop::settings("cutoff"),
   na.rm = TRUE,
   ...
@@ -20,6 +21,10 @@ ConfusionMatrix(data = NA, ordered = FALSE)
 result containing observed and predicted responses.}
 
 \item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
+
+\item{weights}{numeric vector of non-negative
+\link[=case_weights]{case weights} for the observed \code{x} responses
+[default: equal weights].}
 
 \item{cutoff}{numeric (0, 1) threshold above which binary factor
 probabilities are classified as events and below which survival

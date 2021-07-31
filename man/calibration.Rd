@@ -7,6 +7,7 @@
 calibration(
   x,
   y = NULL,
+  weights = NULL,
   breaks = 10,
   span = 0.75,
   distr = NULL,
@@ -19,6 +20,10 @@ calibration(
 containing observed and predicted responses.}
 
 \item{y}{\link[=predict]{predicted responses} if not contained in \code{x}.}
+
+\item{weights}{numeric vector of non-negative
+\link[=case_weights]{case weights} for the observed \code{x} responses
+[default: equal weights].}
 
 \item{breaks}{value defining the response variable bins within which to
 calculate observed mean values.  May be specified as a number of bins, a

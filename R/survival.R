@@ -76,7 +76,8 @@ EmpiricalSurv.Surv <- function(
 ) {
   event <- as.integer(x[, "status"])
   if (is.null(risks)) risks <- 1
-  if (is.null(weights)) weights <- 1
+  weights <- check_weights(weights, x)
+  throw(check_assignment(weights))
   if (is.null(method)) method <- settings("method.EmpiricalSurv")
   method <- match.arg(method)
 
@@ -329,11 +330,12 @@ surv_mean <- function(times, surv, max_time = max(times)) {
 }
 
 
-surv_subset <- function(x, include, time) {
+surv_subset <- function(x, weights, include, time) {
   surv <- 1
   x <- x[include]
+  weights <- weights[include]
   if (length(x) && any(event_time(x) <= time)) {
-    data <- data.frame(event = x[, "status"], total = 1)
+    data <- data.frame(event = weights * x[, "status"], total = weights)
     sums <- cbind(
       rowsum(data["event"], time(x)),
       risksum(data["total"], x)

@@ -19,7 +19,8 @@
 #' @param offsets numeric vector, matrix, or data frame of values to be added
 #'   with a fixed coefficient of 1 to linear predictors in compatible regression
 #'   models.
-#' @param weights vector of case weights [default: equal].
+#' @param weights numeric vector of non-negative case weights for the \code{y}
+#'   response variable [default: equal weights].
 #' @param strata vector of values to use in conducting stratified
 #'   \link{resample} estimation of model performance [default: none].
 #' @param ... arguments passed to other methods.

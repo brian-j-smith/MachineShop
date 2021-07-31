@@ -3,6 +3,7 @@
 
 setOldClass("listof")
 setOldClass(c("tbl_df", "tbl", "data.frame"))
+setOldClass(c("xtabs", "table"))
 
 
 ListOf <- setClass("ListOf",
@@ -259,6 +260,7 @@ setClass("MLControl",
     monitor = "list",
     predict = "list",
     strata = "list",
+    weights = "logical",
     seed = "numeric"
   )
 )

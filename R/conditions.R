@@ -278,3 +278,13 @@ check_stats <- function(x) {
                    "or vector of these")
   } else x
 }
+
+
+check_weights <- function(x, along) {
+  n <- length(along)
+  if (is.null(x)) {
+    rep(1, n)
+  } else {
+    check_numeric(x, bounds = c(0, Inf), include = c(TRUE, FALSE), size = n)
+  }
+}

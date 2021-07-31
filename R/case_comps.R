@@ -26,7 +26,7 @@ case_comps.ModelFrame <- function(
 }
 
 
-case_comps.ModelRecipe <- function(
+case_comps.recipe <- function(
   object, newdata = NULL, types = c("names", "weights"), response = FALSE, ...
 ) {
   names <- map(function(type) case_comp_name(object, type), types)
@@ -125,7 +125,7 @@ case_strata.ModelFrame <- function(object, ...) {
 }
 
 
-case_strata.ModelRecipe <- function(object, ...) {
+case_strata.recipe <- function(object, ...) {
   name <- case_strata_name(object)
   if (length(name)) case_strata(as.data.frame(object)[[name]], ...)
 }
@@ -182,6 +182,38 @@ case_strata_name <- function(object) {
 }
 
 
+#' Extract Case Weights
+#'
+#' Extract the case weights from an object.
+#'
+#' @param object model \link{fit} result, \code{\link{ModelFrame}}, or
+#'   \code{\link[recipes]{recipe}}.
+#' @param newdata dataset from which to extract the weights if given; otherwise,
+#'   \code{object} is used.  The dataset should be given as a \code{ModelFrame}
+#'   or as a \link[=data.frame]{data frame} if \code{object} contains a
+#'   \code{ModelFrame} or a \code{recipe}, respectively.
+#'
+#' @examples
+#' ## Training and test sets
+#' inds <- sample(nrow(ICHomes), nrow(ICHomes) * 2 / 3)
+#' trainset <- ICHomes[inds, ]
+#' testset <- ICHomes[-inds, ]
+#'
+#' ## ModelFrame case weights
+#' trainmf <- ModelFrame(sale_amount ~ . - built, data = trainset, weights = built)
+#' testmf <- ModelFrame(formula(trainmf), data = testset, weights = built)
+#' mf_fit <- fit(trainmf, model = GLMModel)
+#' rmse(response(mf_fit, testmf), predict(mf_fit, testmf),
+#'      case_weights(mf_fit, testmf))
+#'
+#' ## Recipe case weights
+#' library(recipes)
+#' rec <- recipe(sale_amount ~ ., data = trainset) %>%
+#'   role_case(weight = built, replace = TRUE)
+#' rec_fit <- fit(rec, model = GLMModel)
+#' rmse(response(rec_fit, testset), predict(rec_fit, testset),
+#'      case_weights(rec_fit, testset))
+#'
 case_weights <- function(object, newdata = NULL) {
   case_comps(object, newdata, "weights")$weights
 }

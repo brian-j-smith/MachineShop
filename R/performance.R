@@ -8,6 +8,9 @@
 #' @param x \link[=response]{observed responses}; or \link{confusion} or
 #'   \link{resample} result containing observed and predicted responses.
 #' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
+#' @param weights numeric vector of non-negative
+#'   \link[=case_weights]{case weights} for the observed \code{x} responses
+#'   [default: equal weights].
 #' @param metrics \link[=metrics]{metric} function, function name, or vector of
 #'   these with which to calculate performance.
 #' @param cutoff numeric (0, 1) threshold above which binary factor
@@ -50,58 +53,62 @@ performance <- function(x, ...) {
 #' @rdname performance
 #'
 performance.BinomialVariate <- function(
-  x, y, metrics = MachineShop::settings("metrics.numeric"), na.rm = TRUE, ...
+  x, y, weights = NULL, metrics = MachineShop::settings("metrics.numeric"),
+  na.rm = TRUE, ...
 ) {
-  .performance(x, y, metrics, na.rm, dots = list(...))
+  .performance(x, y, weights, metrics, na.rm, dots = list(...))
 }
 
 
 #' @rdname performance
 #'
 performance.factor <- function(
-  x, y, metrics = MachineShop::settings("metrics.factor"),
+  x, y, weights = NULL, metrics = MachineShop::settings("metrics.factor"),
   cutoff = MachineShop::settings("cutoff"), na.rm = TRUE, ...
 ) {
-  .performance(x, y, metrics, na.rm, cutoff = cutoff, dots = list(...))
+  .performance(x, y, weights, metrics, na.rm, cutoff = cutoff, dots = list(...))
 }
 
 
 #' @rdname performance
 #'
 performance.matrix <- function(
-  x, y, metrics = MachineShop::settings("metrics.matrix"), na.rm = TRUE, ...
+  x, y, weights = NULL, metrics = MachineShop::settings("metrics.matrix"),
+  na.rm = TRUE, ...
 ) {
-  .performance(x, y, metrics, na.rm, dots = list(...))
+  .performance(x, y, weights, metrics, na.rm, dots = list(...))
 }
 
 
 #' @rdname performance
 #'
 performance.numeric <- function(
-  x, y, metrics = MachineShop::settings("metrics.numeric"), na.rm = TRUE, ...
+  x, y, weights = NULL, metrics = MachineShop::settings("metrics.numeric"),
+  na.rm = TRUE, ...
 ) {
-  .performance(x, y, metrics, na.rm, dots = list(...))
+  .performance(x, y, weights, metrics, na.rm, dots = list(...))
 }
 
 
 #' @rdname performance
 #'
 performance.Surv <- function(
-  x, y, metrics = MachineShop::settings("metrics.Surv"),
+  x, y, weights = NULL, metrics = MachineShop::settings("metrics.Surv"),
   cutoff = MachineShop::settings("cutoff"), na.rm = TRUE, ...
 ) {
-  .performance(x, y, metrics, na.rm, cutoff = cutoff, dots = list(...))
+  .performance(x, y, weights, metrics, na.rm, cutoff = cutoff, dots = list(...))
 }
 
 
-.performance <- function(x, y, metrics, na.rm, ..., dots = NULL) {
+.performance <- function(x, y, weights, metrics, na.rm, ..., dots = NULL) {
   if (na.rm) {
-    complete <- complete_subset(x = x, y = y)
+    complete <- complete_subset(x = x, y = y, weights = weights)
     x <- complete$x
     y <- complete$y
+    weights <- complete$weights
   }
   if (length(x)) {
-    args <- list(x, y, ...)
+    args <- list(x, y, weights = weights, ...)
     metric <- if (is_one_element(metrics)) metrics[[1]] else metrics
     if (is(get0(metric), "MLMetric")) args <- c(args, dots)
     do.call(list_to_function(metrics), args)
@@ -142,7 +149,7 @@ performance.Resamples <- function(x, ...) {
 
 performance.MLControl <- function(x, resamples, ...) {
   perf_list <- by(resamples, resamples$Resample, function(resample) {
-    performance(resample$Observed, resample$Predicted, ...)
+    performance(resample$Observed, resample$Predicted, resample$Weight, ...)
   }, simplify = FALSE)
   do.call(rbind, perf_list)
 }
@@ -155,13 +162,16 @@ performance.MLBootOptimismControl <- function(x, resamples, ...) {
   for (name in names(resamples_split)) {
     resample <- resamples_split[[name]]
     test_perf_list[[name]] <- performance(resample$Observed,
-                                          resample$Predicted, ...)
+                                          resample$Predicted,
+                                          resample$Weight, ...)
     boot_perf_list[[name]] <- performance(resample$Boot.Observed,
-                                          resample$Boot.Predicted, ...)
+                                          resample$Boot.Predicted,
+                                          resample$Weight, ...)
   }
   test_perf <- do.call(rbind, test_perf_list)
   boot_perf <- do.call(rbind, boot_perf_list)
-  train_perf <- performance(resample$Observed, resample$Train.Predicted, ...)
+  train_perf <- performance(resample$Observed, resample$Train.Predicted,
+                            resample$Weight, ...)
 
   pessimism <- test_perf - boot_perf
   sweep(pessimism, 2, train_perf, "+")
@@ -175,13 +185,14 @@ performance.MLCVOptimismControl <- function(x, resamples, ...) {
   vars <- paste0("CV.Predicted.", seq_len(x@folds))
   perf_list <- map(function(resample) {
     f <- function(p, pred) {
-      p * performance(resample$Observed, pred, ...)
+      p * performance(resample$Observed, pred, resample$Weight, ...)
     }
     Reduce("+", map(f, prop.table(table(resample$Resample)), resample[vars]))
   }, resamples_split)
   cv_perf <- do.call(rbind, rep(perf_list, each = x@folds))
   train_perf <- performance(resamples_split[[1]]$Observed,
-                            resamples_split[[1]]$Train.Predicted, ...)
+                            resamples_split[[1]]$Train.Predicted,
+                            resamples_split[[1]]$Weight, ...)
 
   pessimism <- test_perf - cv_perf
   sweep(pessimism, 2, train_perf, "+")

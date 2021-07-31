@@ -8,6 +8,9 @@
 #' @param x \link[=response]{observed responses} or \link{resample} result
 #'   containing observed and predicted responses.
 #' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
+#' @param weights numeric vector of non-negative
+#'   \link[=case_weights]{case weights} for the observed \code{x} responses
+#'   [default: equal weights].
 #' @param breaks value defining the response variable bins within which to
 #'   calculate observed mean values.  May be specified as a number of bins, a
 #'   vector of breakpoints, or \code{NULL} to fit smooth curves with splines for
@@ -43,15 +46,17 @@
 #' }
 #'
 calibration <- function(
-  x, y = NULL, breaks = 10, span = 0.75, distr = NULL, na.rm = TRUE, ...
+  x, y = NULL, weights = NULL, breaks = 10, span = 0.75, distr = NULL,
+  na.rm = TRUE, ...
 ) {
   if (na.rm) {
-    complete <- complete_subset(x = x, y = y)
+    complete <- complete_subset(x = x, y = y, weights = weights)
     x <- complete$x
     y <- complete$y
+    weights <- complete$weights
   }
   Calibration(
-    .calibration(x, y, breaks = breaks, span = span, distr = distr),
+    .calibration(x, y, weights, breaks = breaks, span = span, distr = distr),
     smoothed = is.null(breaks)
   )
 }
@@ -104,7 +109,9 @@ setMethod(".calibration", c("factor", "numeric"),
 
 
 setMethod(".calibration", c("matrix", "matrix"),
-  function(observed, predicted, breaks, span, ...) {
+  function(observed, predicted, weights, breaks, span, ...) {
+    weights <- check_weights(weights, observed[, 1])
+    throw(check_assignment(weights))
     df <- data.frame(Response = rep(factor(colnames(predicted)),
                                     each = nrow(predicted)),
                      Predicted = as.numeric(predicted))
@@ -112,7 +119,7 @@ setMethod(".calibration", c("matrix", "matrix"),
       loessfit_list <- map(function(i) {
         y <- observed[, i]
         x <- predicted[, i]
-        predict(loess(y ~ x, span = span), se = TRUE)
+        predict(loess(y ~ x, weights = weights, span = span), se = TRUE)
       }, seq_len(ncol(predicted)))
       Mean <- c(map_num(getElement, loessfit_list, "fit"))
       SE <- c(map_num(getElement, loessfit_list, "se.fit"))
@@ -123,11 +130,17 @@ setMethod(".calibration", c("matrix", "matrix"),
     } else {
       df$Predicted <- midpoints(df$Predicted, breaks)
       df$Observed <- c(observed)
-      aggregate(Observed ~ Response + Predicted, df, function(x) {
-        Mean <- mean(x)
-        SE <- sd(x) / sqrt(length(x))
-        c(Mean = Mean, SE = SE, Lower = Mean - SE, Upper = Mean + SE)
-      })
+      df$Weight <- weights
+      by_result <- by(df, df[c("Predicted", "Response")], function(data) {
+        Mean <- weighted_mean(data$Observed, data$Weight)
+        SE <- weighted_sd(data$Observed, data$Weight) / sqrt(nrow(data))
+        result <- data[1, c("Response", "Predicted")]
+        result$Observed <- cbind(Mean = Mean, SE = SE,
+                                 Lower = Mean - SE,
+                                 Upper = Mean + SE)
+        result
+      }, simplify = FALSE)
+      do.call(rbind, by_result)
     }
   }
 )
@@ -141,9 +154,10 @@ setMethod(".calibration", c("numeric", "numeric"),
 
 
 setMethod(".calibration", c("Resamples", "ANY"),
-  function(observed, predicted, ...) {
+  function(observed, predicted, weights, ...) {
     cal_list <- by(observed, observed$Model, function(resample) {
-      calibration(resample$Observed, resample$Predicted, na.rm = FALSE, ...)
+      calibration(resample$Observed, resample$Predicted, resample$Weight,
+                  na.rm = FALSE, ...)
     }, simplify = FALSE)
     do.call(c, cal_list)
   }
@@ -151,13 +165,16 @@ setMethod(".calibration", c("Resamples", "ANY"),
 
 
 setMethod(".calibration", c("Surv", "SurvProbs"),
-  function(observed, predicted, breaks, ...) {
+  function(observed, predicted, weights, breaks, ...) {
+    weights <- check_weights(weights, observed)
+    throw(check_assignment(weights))
     times <- predicted@times
     df <- data.frame(Response = rep(factor(colnames(predicted)),
                                     each = nrow(predicted)),
                      Predicted = as.numeric(predicted))
     if (is.null(breaks)) {
       throw(check_censoring(observed, "right"))
+      throw(check_equal_weights(weights))
       Mean <- c(map_num(function(i) {
         x <- predicted[, i]
         harefit <- polspline::hare(observed[, "time"], observed[, "status"], x)
@@ -168,9 +185,10 @@ setMethod(".calibration", c("Surv", "SurvProbs"),
     } else {
       df$Predicted <- midpoints(df$Predicted, breaks)
       df$Observed <- rep(observed, times = length(times))
+      df$Weight <- weights
       df$Time <- rep(times, each = nrow(predicted))
       by_results <- by(df, df[c("Predicted", "Response")], function(data) {
-        km <- survfit(Observed ~ 1, data = data)
+        km <- survfit(Observed ~ 1, data = data, weights = data$Weight)
         interval <- findInterval(data$Time[1], c(0, km$time))
         Mean <- c(1, km$surv)[interval]
         SE <- c(0, km$std.err)[interval]
@@ -187,7 +205,9 @@ setMethod(".calibration", c("Surv", "SurvProbs"),
 
 
 setMethod(".calibration", c("Surv", "numeric"),
-  function(observed, predicted, breaks, distr, span, ...) {
+  function(observed, predicted, weights, breaks, distr, span, ...) {
+    weights <- check_weights(weights, observed)
+    throw(check_assignment(weights))
     max_time <- max(time(observed))
     distr <- get_surv_distr(distr, observed, predicted)
     nparams <- if (distr %in% c("exponential", "rayleigh")) 1 else 2
@@ -215,7 +235,8 @@ setMethod(".calibration", c("Surv", "numeric"),
         (1 - min_weight) * pmax(0, (1 - (x / x_range)^3)^3) + min_weight
       }
       metrics_list <- map(function(value) {
-        weights <- tricubic(predicted - value, span = span, min_weight = 0.01)
+        weights <- weights * tricubic(predicted - value, span = span,
+                                      min_weight = 0.01)
         est <- if (distr == "empirical") {
           survfit_est(observed, weights)
         } else {
@@ -231,14 +252,16 @@ setMethod(".calibration", c("Surv", "numeric"),
       df <- data.frame(
         Response = factor("Mean"),
         Predicted = midpoints(predicted, breaks),
-        Observed = observed
+        Observed = observed,
+        Weight = weights
       )
       by_results <- by(df, df[c("Predicted", "Response")], function(data) {
         observed <- data$Observed
+        weights <- data$Weight
         est <- if (distr == "empirical") {
-          survfit_est(observed)
+          survfit_est(observed, weights)
         } else if (length(event_time(observed)) >= nparams) {
-          survreg_est(observed, distr)
+          survreg_est(observed, distr, weights)
         } else {
           list(Mean = NA_real_, SE = NA_real_)
         }

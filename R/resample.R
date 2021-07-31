@@ -356,7 +356,8 @@ subsample <- function(train, test, model, control, id = 1) {
   if (length(times)) control@predict$times <- times
 
   f <- function(test) {
-    comps <- case_comps(model_fit, test, response = TRUE)
+    weights <- if (control@weights) "weights"
+    comps <- case_comps(model_fit, test, c("names", weights), response = TRUE)
     df <- data.frame(Model = factor(model@name),
                      Resample = as.integer(id),
                      Case = comps$names,

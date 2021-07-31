@@ -8,6 +8,9 @@
 #' @param x \link[=response]{observed responses} or \link{resample} result
 #'   containing observed and predicted responses.
 #' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
+#' @param weights numeric vector of non-negative
+#'   \link[=case_weights]{case weights} for the observed \code{x} responses
+#'   [default: equal weights].
 #' @param na.rm logical indicating whether to remove observed or predicted
 #'   responses that are \code{NA} when calculating metrics.
 #' @param ... arguments passed to other methods.
@@ -28,8 +31,8 @@
 #' plot(lf)
 #' }
 #'
-lift <- function(x, y = NULL, na.rm = TRUE, ...) {
-  as(performance_curve(x, y, metrics = c(tpr, rpp), na.rm = na.rm),
+lift <- function(x, y = NULL, weights = NULL, na.rm = TRUE, ...) {
+  as(performance_curve(x, y, weights, metrics = c(tpr, rpp), na.rm = na.rm),
      "LiftCurve")
 }
 
@@ -56,6 +59,9 @@ LiftCurve <- function(...) {
 #' @param x \link[=response]{observed responses} or \link{resample} result
 #'   containing observed and predicted responses.
 #' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
+#' @param weights numeric vector of non-negative
+#'   \link[=case_weights]{case weights} for the observed \code{x} responses
+#'   [default: equal weights].
 #' @param metrics list of two performance \link{metrics} for the analysis
 #'   [default: ROC metrics].  Precision recall curves can be obtained with
 #'   \code{c(precision, recall)}.
@@ -92,15 +98,17 @@ performance_curve <- function(x, ...) {
 #' @rdname performance_curve
 #'
 performance_curve.default <- function(
-  x, y, metrics = c(MachineShop::tpr, MachineShop::fpr), na.rm = TRUE, ...
+  x, y, weights = NULL, metrics = c(MachineShop::tpr, MachineShop::fpr),
+  na.rm = TRUE, ...
 ) {
   if (na.rm) {
-    complete <- complete_subset(x = x, y = y)
+    complete <- complete_subset(x = x, y = y, weights = weights)
     x <- complete$x
     y <- complete$y
+    weights <- complete$weights
   }
   metrics <- get_curve_metrics(metrics)
-  curve <- .performance_curve(x, y, metrics = metrics)
+  curve <- .performance_curve(x, y, weights, metrics = metrics)
   if (is(curve, "listof")) do.call(c, curve) else curve
 }
 
@@ -117,7 +125,8 @@ performance_curve.Resamples <- function(
   for (model in unique(x$Model)) {
     for (resample in unique(x$Resample)) {
       df <- x[x$Model == model & x$Resample == resample, ]
-      curve <- .performance_curve(df$Observed, df$Predicted, metrics = metrics)
+      curve <- .performance_curve(df$Observed, df$Predicted, df$Weight,
+                                  metrics = metrics)
       curve <- if (is(curve, "listof")) {
         structure(curve, names = paste0(model, ".", names(curve)))
       } else {
@@ -183,11 +192,11 @@ setMethod(".performance_curve", c("ANY", "ANY"),
 
 
 setMethod(".performance_curve", c("factor", "numeric"),
-  function(observed, predicted, metrics, ...) {
+  function(observed, predicted, weights, metrics, ...) {
     cutoffs <- c(-Inf, unique(predicted))
     x <- y <- numeric(length(cutoffs))
     for (i in seq_along(cutoffs)) {
-      conf <- confusion(observed, predicted, cutoff = cutoffs[i])
+      conf <- confusion(observed, predicted, weights, cutoff = cutoffs[i])
       x[i] <- metrics[[2]](conf)
       y[i] <- metrics[[1]](conf)
     }
@@ -198,7 +207,10 @@ setMethod(".performance_curve", c("factor", "numeric"),
 
 
 setMethod(".performance_curve", c("Surv", "SurvProbs"),
-  function(observed, predicted, metrics, ...) {
+  function(observed, predicted, weights, metrics, ...) {
+
+    weights <- check_weights(weights, observed)
+    throw(check_assignment(weights))
 
     times <- predicted@times
     conf <- ConfusionMatrix(table(Predicted = 0:1, Observed = 0:1))
@@ -212,8 +224,8 @@ setMethod(".performance_curve", c("Surv", "SurvProbs"),
 
         for (j in seq_along(cutoffs)) {
           pos <- pred <= cutoffs[j]
-          pos_pred <- surv_subset(observed, pos, time)
-          neg_pred <- surv_subset(observed, !pos, time)
+          pos_pred <- surv_subset(observed, weights, pos, time)
+          neg_pred <- surv_subset(observed, weights, !pos, time)
 
           conf[1, 1] <- neg_pred$surv * neg_pred$p
           conf[2, 1] <- pos_pred$surv * pos_pred$p

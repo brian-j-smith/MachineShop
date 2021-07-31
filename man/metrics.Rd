@@ -37,6 +37,7 @@
 accuracy(
   observed,
   predicted = NULL,
+  weights = NULL,
   cutoff = MachineShop::settings("cutoff"),
   ...
 )
@@ -44,45 +45,73 @@ accuracy(
 auc(
   observed,
   predicted = NULL,
+  weights = NULL,
   metrics = c(MachineShop::tpr, MachineShop::fpr),
   stat = MachineShop::settings("stat.Curve"),
   ...
 )
 
-brier(observed, predicted = NULL, ...)
+brier(observed, predicted = NULL, weights = NULL, ...)
 
-cindex(observed, predicted = NULL, ...)
+cindex(observed, predicted = NULL, weights = NULL, ...)
 
-cross_entropy(observed, predicted = NULL, ...)
+cross_entropy(observed, predicted = NULL, weights = NULL, ...)
 
 f_score(
   observed,
   predicted = NULL,
+  weights = NULL,
   cutoff = MachineShop::settings("cutoff"),
   beta = 1,
   ...
 )
 
-fnr(observed, predicted = NULL, cutoff = MachineShop::settings("cutoff"), ...)
-
-fpr(observed, predicted = NULL, cutoff = MachineShop::settings("cutoff"), ...)
-
-kappa2(
+fnr(
   observed,
   predicted = NULL,
+  weights = NULL,
   cutoff = MachineShop::settings("cutoff"),
   ...
 )
 
-npv(observed, predicted = NULL, cutoff = MachineShop::settings("cutoff"), ...)
+fpr(
+  observed,
+  predicted = NULL,
+  weights = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  ...
+)
 
-ppv(observed, predicted = NULL, cutoff = MachineShop::settings("cutoff"), ...)
+kappa2(
+  observed,
+  predicted = NULL,
+  weights = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  ...
+)
 
-pr_auc(observed, predicted = NULL, ...)
+npv(
+  observed,
+  predicted = NULL,
+  weights = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  ...
+)
+
+ppv(
+  observed,
+  predicted = NULL,
+  weights = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  ...
+)
+
+pr_auc(observed, predicted = NULL, weights = NULL, ...)
 
 precision(
   observed,
   predicted = NULL,
+  weights = NULL,
   cutoff = MachineShop::settings("cutoff"),
   ...
 )
@@ -90,25 +119,34 @@ precision(
 recall(
   observed,
   predicted = NULL,
+  weights = NULL,
   cutoff = MachineShop::settings("cutoff"),
   ...
 )
 
-roc_auc(observed, predicted = NULL, ...)
+roc_auc(observed, predicted = NULL, weights = NULL, ...)
 
 roc_index(
   observed,
   predicted = NULL,
+  weights = NULL,
   cutoff = MachineShop::settings("cutoff"),
   f = function(sensitivity, specificity) (sensitivity + specificity)/2,
   ...
 )
 
-rpp(observed, predicted = NULL, cutoff = MachineShop::settings("cutoff"), ...)
+rpp(
+  observed,
+  predicted = NULL,
+  weights = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  ...
+)
 
 sensitivity(
   observed,
   predicted = NULL,
+  weights = NULL,
   cutoff = MachineShop::settings("cutoff"),
   ...
 )
@@ -116,29 +154,42 @@ sensitivity(
 specificity(
   observed,
   predicted = NULL,
+  weights = NULL,
   cutoff = MachineShop::settings("cutoff"),
   ...
 )
 
-tnr(observed, predicted = NULL, cutoff = MachineShop::settings("cutoff"), ...)
+tnr(
+  observed,
+  predicted = NULL,
+  weights = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  ...
+)
 
-tpr(observed, predicted = NULL, cutoff = MachineShop::settings("cutoff"), ...)
+tpr(
+  observed,
+  predicted = NULL,
+  weights = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  ...
+)
 
-weighted_kappa2(observed, predicted = NULL, power = 1, ...)
+weighted_kappa2(observed, predicted = NULL, weights = NULL, power = 1, ...)
 
-gini(observed, predicted = NULL, ...)
+gini(observed, predicted = NULL, weights = NULL, ...)
 
-mae(observed, predicted = NULL, ...)
+mae(observed, predicted = NULL, weights = NULL, ...)
 
-mse(observed, predicted = NULL, ...)
+mse(observed, predicted = NULL, weights = NULL, ...)
 
-msle(observed, predicted = NULL, ...)
+msle(observed, predicted = NULL, weights = NULL, ...)
 
-r2(observed, predicted = NULL, distr = NULL, ...)
+r2(observed, predicted = NULL, weights = NULL, distr = NULL, ...)
 
-rmse(observed, predicted = NULL, ...)
+rmse(observed, predicted = NULL, weights = NULL, ...)
 
-rmsle(observed, predicted = NULL, ...)
+rmsle(observed, predicted = NULL, weights = NULL, ...)
 }
 \arguments{
 \item{observed}{\link[=response]{observed responses}; or
@@ -147,6 +198,10 @@ result containing observed and predicted responses.}
 
 \item{predicted}{\link[=predict]{predicted responses} if not contained in
 \code{observed}.}
+
+\item{weights}{numeric vector of non-negative
+\link[=case_weights]{case weights} for the observed responses [default:
+equal weights].}
 
 \item{cutoff}{numeric (0, 1) threshold above which binary factor
 probabilities are classified as events and below which survival
