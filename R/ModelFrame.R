@@ -127,7 +127,7 @@ ModelFrame.ModelTerms <- function(x, data, ...) {
 
 ModelFrame.recipe <- function(x, ...) {
   x <- prep(x)
-  data <- bake(x)
+  data <- bake(x, NULL)
 
   model_terms <- terms(x)
   data[[deparse1(response(model_terms))]] <- response(model_terms, data)

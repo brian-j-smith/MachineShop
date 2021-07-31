@@ -42,7 +42,7 @@ ModelRecipe.recipe <- function(object, ...) {
 }
 
 
-bake.ModelRecipe <- function(object, new_data = NULL, ...) {
+bake.ModelRecipe <- function(object, new_data, ...) {
   new_data <- if (is.null(new_data)) {
     object$template
   } else if (is(new_data, "ModelRecipe")) {
