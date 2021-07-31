@@ -7,7 +7,10 @@
 #' @rdname ModelFrame-methods
 #'
 #' @param x model \code{\link{formula}} or \code{\link{matrix}} of predictor
-#'   variables.
+#'   variables.  In the case of a formula, arguments \code{weights} and
+#'   \code{strata} are evaluated as expressions, whose objects are searched for
+#'   first in the accompanying \code{data} environment and, if not found there,
+#'   next in the calling environment.
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} or an object that can be converted
 #'   to one.
@@ -31,7 +34,7 @@
 #' ## Requires prior installation of suggested package gbm to run
 #'
 #' mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
-#'                  data = esoph, weights = with(esoph, ncases + ncontrols))
+#'                  data = esoph, weights = ncases + ncontrols)
 #' gbm_fit <- fit(mf, model = GBMModel)
 #' varimp(gbm_fit)
 #' }
@@ -68,6 +71,10 @@ ModelFrame.formula <- function(
   }
 
   data <- as.data.frame(data)
+
+  weights <- eval(substitute(weights), data, parent.frame())
+  strata <- eval(substitute(strata), data, parent.frame())
+
   model_terms <- terms(x, data = data)
   data[[deparse1(response(model_terms))]] <- response(model_terms, data)
   data <- data[all.vars(model_formula(model_terms))]

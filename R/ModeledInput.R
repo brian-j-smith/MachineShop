@@ -43,7 +43,7 @@ ModeledInput <- function(x, ...) {
 #' @rdname ModeledInput-methods
 #'
 ModeledInput.formula <- function(x, data, model, ...) {
-  mf <- ModelFrame(x, data, na.rm = FALSE, strata = response(x, data))
+  mf <- do.call(ModelFrame, list(x, data, na.rm = FALSE, strata = response(x)))
   ModeledInput(mf, model = model)
 }
 

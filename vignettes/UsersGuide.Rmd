@@ -365,7 +365,7 @@ The model frame approach has a few advantages over model fitting directly with a
 ```{r using_variables_modelframe_weights, results="hide"}
 ## Model frame specification with case weights
 mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp, data = esoph,
-                 weights = with(esoph, ncases + ncontrols))
+                 weights = ncases + ncontrols)
 fit(mf, model = GBMModel)
 ```
 

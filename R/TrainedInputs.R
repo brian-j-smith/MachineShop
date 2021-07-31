@@ -68,7 +68,7 @@ SelectedInput.formula <- function(
     throw(Error("inputs must be formulas"))
   }
   mf_list <- map(function(x) {
-    ModelFrame(x, data, na.rm = FALSE, strata = response(x, data))
+    do.call(ModelFrame, list(x, data, na.rm = FALSE, strata = response(x)))
   }, inputs)
   SelectedInput(mf_list, control = control, metrics = metrics, stat = stat,
                 cutoff = cutoff)

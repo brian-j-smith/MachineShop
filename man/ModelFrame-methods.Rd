@@ -22,7 +22,10 @@ ModelFrame(x, ...)
 }
 \arguments{
 \item{x}{model \code{\link{formula}} or \code{\link{matrix}} of predictor
-variables.}
+variables.  In the case of a formula, arguments \code{weights} and
+\code{strata} are evaluated as expressions, whose objects are searched for
+first in the accompanying \code{data} environment and, if not found there,
+next in the calling environment.}
 
 \item{...}{arguments passed to other methods.}
 
@@ -55,7 +58,7 @@ model fitting.
 ## Requires prior installation of suggested package gbm to run
 
 mf <- ModelFrame(ncases / (ncases + ncontrols) ~ agegp + tobgp + alcgp,
-                 data = esoph, weights = with(esoph, ncases + ncontrols))
+                 data = esoph, weights = ncases + ncontrols)
 gbm_fit <- fit(mf, model = GBMModel)
 varimp(gbm_fit)
 }

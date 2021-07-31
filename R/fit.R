@@ -40,7 +40,7 @@ fit <- function(x, ...) {
 #' @rdname fit-methods
 #'
 fit.formula <- function(x, data, model, ...) {
-  mf <- ModelFrame(x, data, na.rm = FALSE, strata = response(x, data))
+  mf <- do.call(ModelFrame, list(x, data, na.rm = FALSE, strata = response(x)))
   fit(mf, model)
 }
 
