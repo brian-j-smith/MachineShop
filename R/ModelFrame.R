@@ -129,16 +129,18 @@ ModelFrame.recipe <- function(x, ...) {
   x <- prep(x)
   data <- bake(x, NULL)
 
+  weights_name <- case_weights_name(x)
+  weights <- if (length(weights_name)) data[[weights_name]]
+  strata_name <- case_strata_name(x)
+  strata <- if (length(strata_name)) data[[strata_name]]
+
   model_terms <- terms(x)
   data[[deparse1(response(model_terms))]] <- response(model_terms, data)
   data <- data[all.vars(model_formula(model_terms))]
 
-  weights_name <- case_weights_name(x)
-  strata_name <- case_strata_name(x)
   ModelFrame(model_terms, data, na.rm = FALSE,
              names = if (is.null(data[["(names)"]])) rownames(data),
-             weights = if (length(weights_name)) data[[weights_name]],
-             strata = if (length(strata_name)) data[[strata_name]])
+             weights = weights, strata = strata)
 }
 
 
