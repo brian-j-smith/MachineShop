@@ -2,6 +2,10 @@
 
 ## Version Updates
 
+## 2.9.0.9003
+* Evaluate `ModelFrame()` arguments `strata` and `weights` in `data` environment.
+* Fix issue introduced in package version 2.9.0 of recipe case strata and weights not being used in model fitting and resampling.
+
 ## 2.9.0.9002
 * Add column `Weight` of case weights to `Resamples` data frame.
 * Rename `values` column to `get_values` in `MLModel` `gridinfo` slot.
