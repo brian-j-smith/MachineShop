@@ -309,7 +309,7 @@ print.ModeledInput <- function(x, n = MachineShop::settings("print_max"), ...) {
 print.ModeledTerms <- function(x, n = MachineShop::settings("print_max"), ...) {
   print(formula(x))
   cat("\n")
-  print(x@model, n)
+  print(x@model, n = n)
   invisible(x)
 }
 
@@ -592,6 +592,12 @@ print_controltitle <- function(x) {
 }
 
 
+print_default <- function(x, max = NULL, ...) {
+  if (identical(max, Inf)) max <- .Machine$integer.max
+  print(x, max = max, ...)
+}
+
+
 print_items <- function(x, ...) {
   UseMethod("print_items")
 }
@@ -622,12 +628,12 @@ print_items.data.frame <- function(x, ...) {
 print_items.list <- function(x, n = Inf, n_extra = 10 * n, ...) {
   diff <- length(x) - n
   if (diff > 0) {
-    print(head(x, n), max = n)
+    print_default(head(x, n), max = n)
     label <- paste("... with", format_len(diff), "more element")
     print_items(label_items(label, tail(names(x), diff), n_extra))
     cat("\n")
   } else {
-    print(x, max = n)
+    print_default(x, max = n)
   }
 }
 
@@ -656,7 +662,7 @@ print_items.matrix <- function(x, n = Inf, n_extra = 10 * n, ...) {
   col_inds <- head(seq_len(ncol(x)), n)
   num_items <- length(row_inds) * length(col_inds)
   if (num_items) {
-    print(x[row_inds, col_inds, drop = FALSE], max = num_items)
+    print_default(x[row_inds, col_inds, drop = FALSE], max = num_items)
   } else {
     cat("<", format_len(nrow(x)), " x ", format_len(ncol(x)), " ", class(x)[1],
         ">\n", sep = "")
@@ -682,11 +688,11 @@ print_items.matrix <- function(x, n = Inf, n_extra = 10 * n, ...) {
 print_items.numeric <- function(x, n = Inf, ...) {
   diff <- length(x) - n
   if (diff > 0) {
-    print(head(x, n), max = n)
+    print_default(head(x, n), max = n)
     cat("... with ", format_len(diff), " more value", if (diff > 1) "s", "\n",
         sep = "")
   } else {
-    print(x, max = n)
+    print_default(x, max = n)
   }
 }
 
