@@ -279,7 +279,7 @@ setMethod(".calibration", c("Surv", "numeric"),
 
 midpoints <- function(x, breaks) {
   breaks <- if (length(breaks) == 1) {
-    break_range <- range(x, na.rm = TRUE)
+    break_range <- range(x, na.rm = TRUE, finite = TRUE)
     num_breaks <- max(1, as.integer(breaks)) + 1
     seq(break_range[1], break_range[2], length = num_breaks)
   } else {
