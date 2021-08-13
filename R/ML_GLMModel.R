@@ -73,8 +73,7 @@ GLMModel <- function(family = NULL, quasi = FALSE, ...) {
       }
       data <- as.data.frame(data)
       if (identical(family, "mgaussian")) {
-        throw(check_equal_weights(weights))
-        stats::lm(formula, data = data)
+        stats::lm(formula, data = data, weights = weights)
       } else if (identical(family, "multinom")) {
         nnet::multinom(formula, data = data, weights = weights,
                        maxit = 4 * control$maxit, trace = control$trace,
