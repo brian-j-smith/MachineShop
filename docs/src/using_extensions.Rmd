@@ -39,6 +39,7 @@ LogisticModel <- MLModel(
   name = "LogisticModel",
   label = "Logistic Model",
   response_types = "binary",
+  weights = TRUE,
   fit = function(formula, data, weights, ...) {
     glm(formula, data = as.data.frame(data), weights = weights,
         family = binomial, ...)

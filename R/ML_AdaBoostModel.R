@@ -74,7 +74,6 @@ AdaBoostModel <- function(
       default = c(TRUE, TRUE, FALSE)
     ),
     fit = function(formula, data, weights, ...) {
-      throw(check_equal_weights(weights))
       adabag::boosting(formula, data = as.data.frame(data), ...)
     },
     predict = function(object, newdata, ...) {

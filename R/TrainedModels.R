@@ -51,12 +51,12 @@ SelectedModel <- function(
   }
   names(models) <- make.unique(model_names)
 
+  slots <- combine_modelslots(models, settings("response_types"))
   new("SelectedModel",
       name = "SelectedModel",
       label = "Selected Model",
-      response_types = Reduce(intersect,
-                              map(slot, models, "response_types"),
-                              init = settings("response_types")),
+      response_types = slots$response_types,
+      weights = slots$weights,
       predictor_encoding = NA_character_,
       params = list(models = ListOf(models),
                     control = get_MLControl(control), metrics = metrics,
@@ -150,9 +150,14 @@ TunedModel <- function(
 
   if (missing(model)) {
     model <- NULL
+    response_types <- settings("response_types")
+    weights <- FALSE
   } else {
     model <- if (is(model, "MLModel")) fget(model@name) else fget(model)
     stopifnot(is(model, "MLModelFunction"))
+    model_call <- model()
+    response_types <- model_call@response_types
+    weights <- model_call@weights
   }
 
   grid <- check_grid(grid)
@@ -175,11 +180,8 @@ TunedModel <- function(
   new("TunedModel",
       name = "TunedModel",
       label = "Grid Tuned Model",
-      response_types = if (is.null(model)) {
-        settings("response_types")
-      } else {
-        model()@response_types
-      },
+      response_types = response_types,
+      weights = weights,
       predictor_encoding = NA_character_,
       params = list(model = model, grid = grid, fixed = fixed,
                     control = get_MLControl(control), metrics = metrics,

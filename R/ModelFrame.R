@@ -117,10 +117,9 @@ ModelFrame.matrix <- function(
 
 
 ModelFrame.ModelFrame <- function(x, na.rm = TRUE, ...) {
-  extras <- as.data.frame(Filter(length, list(...)), stringsAsFactors = FALSE)
-  if (length(extras)) {
-    names(extras) <- paste0("(", names(extras), ")")
-    x[names(extras)] <- extras
+  extras <- list(...)
+  for (name in names(extras)) {
+    x[[paste0("(", name, ")")]] <- extras[[name]]
   }
   if (na.rm) na.omit(x) else x
 }

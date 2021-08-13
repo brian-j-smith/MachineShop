@@ -49,6 +49,7 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
     label = "Cox Regression",
     packages = "survival",
     response_types = "Surv",
+    weights = TRUE,
     predictor_encoding = "model.matrix",
     params = params,
     fit = function(formula, data, weights, ...) {
@@ -106,6 +107,7 @@ CoxStepAICModel <- function(
     label = "Cox Regression (Stepwise)",
     packages = c(stepmodel@packages, "MASS"),
     response_types = stepmodel@response_types,
+    weights = stepmodel@weights,
     predictor_encoding = stepmodel@predictor_encoding,
     params = c(stepmodel@params, params),
     fit = function(formula, data, weights, direction = "both", scope = list(),

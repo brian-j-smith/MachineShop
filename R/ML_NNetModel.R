@@ -51,6 +51,7 @@ NNetModel <- function(
     label = "Feed-Forward Neural Networks",
     packages = "nnet",
     response_types = c("factor", "numeric"),
+    weights = TRUE,
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
     gridinfo = new_gridinfo(

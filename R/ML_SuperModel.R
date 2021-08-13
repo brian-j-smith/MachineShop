@@ -47,12 +47,12 @@ SuperModel <- function(
 
   control <- get_MLControl(control)
 
+  slots <- combine_modelslots(base_learners, get_MLModel(model)@response_types)
   new("SuperModel",
     name = "SuperModel",
     label = "Super Learner",
-    response_types =
-      Reduce(intersect, map(slot, base_learners, "response_types"),
-             init = get_MLModel(model)@response_types),
+    response_types = slots$response_types,
+    weights = slots$weights,
     predictor_encoding = NA_character_,
     params = as.list(environment()),
     varimp = function(object, ...) NULL

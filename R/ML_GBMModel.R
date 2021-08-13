@@ -49,6 +49,7 @@ GBMModel <- function(
     label = "Generalized Boosted Regression",
     packages = "gbm",
     response_types = c("factor", "numeric", "PoissonVariate", "Surv"),
+    weights = TRUE,
     predictor_encoding = "model.frame",
     params = new_params(environment()),
     gridinfo = new_gridinfo(

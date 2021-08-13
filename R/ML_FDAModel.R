@@ -64,6 +64,7 @@ FDAModel <- function(
     label = "Flexible Discriminant Analysis",
     packages = "mda",
     response_types = "factor",
+    weights = TRUE,
     predictor_encoding = "model.matrix",
     params = new_params(environment(), ...),
     gridinfo = new_gridinfo(

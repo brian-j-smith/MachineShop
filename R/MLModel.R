@@ -14,6 +14,9 @@
 #'   \code{"BinomialVariate"}, \code{"DiscreteVariate"}, \code{"factor"},
 #'   \code{"matrix"}, \code{"NegBinomialVariate"}, \code{"numeric"},
 #'   \code{"ordered"}, \code{"PoissonVariate"}, and \code{"Surv"}.
+#' @param weights logical value or vector of the same length as
+#'    \code{response_types} indicating whether case weights are supported for
+#'    the responses.
 #' @param predictor_encoding character string indicating whether the model is
 #'   fit with predictor variables encoded as a \code{"\link{model.frame}"},
 #'   a \code{"\link{model.matrix}"}, or unspecified (default).
@@ -75,6 +78,7 @@
 #' LogisticModel <- MLModel(
 #'   name = "LogisticModel",
 #'   response_types = "binary",
+#'   weights = TRUE,
 #'   fit = function(formula, data, weights, ...) {
 #'     glm(formula, data = data, weights = weights, family = binomial, ...)
 #'   },
@@ -92,7 +96,7 @@
 #'
 MLModel <- function(
   name = "MLModel", label = name, packages = character(),
-  response_types = character(),
+  response_types = character(), weights = FALSE,
   predictor_encoding = c(NA, "model.frame", "model.matrix"), params = list(),
   gridinfo = tibble::tibble(
     param = character(), get_values = list(), default = logical()
@@ -102,13 +106,16 @@ MLModel <- function(
   varimp = function(object, ...) NULL, ...
 ) {
 
+  stopifnot(!any(duplicated(response_types)))
   stopifnot(response_types %in% settings("response_types"))
+  stopifnot(length(weights) %in% c(1, length(response_types)))
 
   new("MLModel",
       name = name,
       label = label,
       packages = packages,
       response_types = response_types,
+      weights = weights,
       predictor_encoding = match.arg(predictor_encoding),
       params = params,
       gridinfo = gridinfo,

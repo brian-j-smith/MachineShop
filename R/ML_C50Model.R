@@ -71,6 +71,7 @@ C50Model <- function(
     label = "C5.0 Classification",
     packages = "C50",
     response_types = "factor",
+    weights = TRUE,
     predictor_encoding = "model.frame",
     params = params,
     gridinfo = new_gridinfo(

@@ -17,6 +17,9 @@
 #'     not be loaded with, for example, the \code{\link{library}} function.}
 #'   \item{response_types}{character vector of response variable types supported
 #'     by the model.}
+#'  \item{weights}{logical value or vector of the same length as
+#'    \code{response_types} indicating whether case weights are supported for
+#'    the responses.}
 #'   \item{arguments}{closure with the argument names and corresponding default
 #'     values of the model function.}
 #'   \item{grid}{logical indicating whether automatic generation of tuning
@@ -88,6 +91,7 @@ modelinfo <- function(...) {
     label = x@label,
     packages = x@packages,
     response_types = x@response_types,
+    weights = x@weights,
     arguments = args(get0(x@name, mode = "function")),
     grid = has_grid(x),
     varimp = has_varimp(x)
@@ -99,7 +103,8 @@ modelinfo <- function(...) {
 .modelinfo_types <- function(...) {
   info <- modelinfo()
   check_model <- function(model) {
-    all(map_logi(is_valid_response, list(...), list(model)))
+    check_response <- function(y) any(is_response(y, model$response_types))
+    all(map_logi(check_response, list(...)))
   }
   info[map_logi(check_model, info)]
 }

@@ -29,6 +29,7 @@ LMModel <- function() {
     label = "Linear Model",
     packages = "stats",
     response_types = c("factor", "matrix", "numeric"),
+    weights = TRUE,
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
     fit = function(formula, data, weights, ...) {

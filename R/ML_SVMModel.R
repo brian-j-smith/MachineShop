@@ -74,7 +74,6 @@ SVMModel <- function(
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
     fit = function(formula, data, weights, ...) {
-      throw(check_equal_weights(weights))
       eval_fit(data,
                formula = kernlab::ksvm(formula, data = as.data.frame(data),
                                        prob.model = TRUE, ...),

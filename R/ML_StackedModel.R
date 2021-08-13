@@ -43,12 +43,12 @@ StackedModel <- function(
 
   if (!is.null(weights)) stopifnot(length(weights) == length(base_learners))
 
+  slots <- combine_modelslots(base_learners, settings("response_types"))
   new("StackedModel",
     name = "StackedModel",
     label = "Stacked Regression",
-    response_types =
-      Reduce(intersect, map(slot, base_learners, "response_types"),
-             init = settings("response_types")),
+    response_types = slots$response_types,
+    weights = slots$weights,
     predictor_encoding = NA_character_,
     params = as.list(environment()),
     varimp = function(object, ...) NULL

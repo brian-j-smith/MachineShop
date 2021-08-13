@@ -58,7 +58,6 @@ LARSModel <- function(
       )
     ),
     fit = function(formula, data, weights, step = NULL, ...) {
-      throw(check_equal_weights(weights))
       x <- model.matrix(data, intercept = FALSE)
       y <- response(data)
       if (is.null(step)) {

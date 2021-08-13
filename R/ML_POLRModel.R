@@ -42,6 +42,7 @@ POLRModel <- function(
     label = "Ordered Logistic Regression",
     packages = "MASS",
     response_types = "ordered",
+    weights = TRUE,
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
     fit = function(formula, data, weights, ...) {

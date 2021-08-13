@@ -23,6 +23,9 @@ components:
     not be loaded with, for example, the \code{\link{library}} function.}
   \item{response_types}{character vector of response variable types supported
     by the model.}
+ \item{weights}{logical value or vector of the same length as
+   \code{response_types} indicating whether case weights are supported for
+   the responses.}
   \item{arguments}{closure with the argument names and corresponding default
     values of the model function.}
   \item{grid}{logical indicating whether automatic generation of tuning

@@ -9,6 +9,7 @@ MLModel(
   label = name,
   packages = character(),
   response_types = character(),
+  weights = FALSE,
   predictor_encoding = c(NA, "model.frame", "model.matrix"),
   params = list(),
   gridinfo = tibble::tibble(param = character(), get_values = list(), default =
@@ -35,6 +36,10 @@ the model can be fit.  Supported types are \code{"binary"}, =
 \code{"BinomialVariate"}, \code{"DiscreteVariate"}, \code{"factor"},
 \code{"matrix"}, \code{"NegBinomialVariate"}, \code{"numeric"},
 \code{"ordered"}, \code{"PoissonVariate"}, and \code{"Surv"}.}
+
+\item{weights}{logical value or vector of the same length as
+\code{response_types} indicating whether case weights are supported for
+the responses.}
 
 \item{predictor_encoding}{character string indicating whether the model is
 fit with predictor variables encoded as a \code{"\link{model.frame}"},
@@ -105,6 +110,7 @@ after the predictors.
 LogisticModel <- MLModel(
   name = "LogisticModel",
   response_types = "binary",
+  weights = TRUE,
   fit = function(formula, data, weights, ...) {
     glm(formula, data = data, weights = weights, family = binomial, ...)
   },

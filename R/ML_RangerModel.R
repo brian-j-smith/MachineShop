@@ -67,6 +67,7 @@ RangerModel <- function(
     label = "Fast Random Forests",
     packages = "ranger",
     response_types = c("factor", "numeric", "Surv"),
+    weights = TRUE,
     predictor_encoding = "model.frame",
     params = new_params(environment()),
     gridinfo = new_gridinfo(

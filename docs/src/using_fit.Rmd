@@ -14,6 +14,9 @@ Model fitting requires user specification of a **MachineShop** compatible model.
 `response_types`
   : Character vector of response variable types supported by the model.
   
+`weights`
+  : Logical value or vector of the same length as `response_types` indicating whether case weights are supported for the responses.
+  
 `arguments`
   : Closure with the argument names and corresponding default values of the model function.
   

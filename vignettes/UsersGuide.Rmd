@@ -172,6 +172,9 @@ Model fitting requires user specification of a **MachineShop** compatible model.
 `response_types`
   : Character vector of response variable types supported by the model.
   
+`weights`
+  : Logical value or vector of the same length as `response_types` indicating whether case weights are supported for the responses.
+  
 `arguments`
   : Closure with the argument names and corresponding default values of the model function.
   
@@ -1254,6 +1257,7 @@ as.MLModel(model_fit)
 #> Label: Trained Generalized Boosted Regression
 #> Package: gbm
 #> Response types: factor, numeric, PoissonVariate, Surv
+#> Case weights support: TRUE
 #> Tuning grid: TRUE
 #> Variable importance: TRUE
 #> 
@@ -1315,6 +1319,7 @@ as.MLModel(model_fit)
 #> Label: Trained Generalized Boosted Regression
 #> Package: gbm
 #> Response types: factor, numeric, PoissonVariate, Surv
+#> Case weights support: TRUE
 #> Tuning grid: TRUE
 #> Variable importance: TRUE
 #> 
@@ -1420,6 +1425,7 @@ model_fit <- fit(surv_fo, data = surv_train,
 #> Label: Trained Generalized Boosted Regression
 #> Package: gbm
 #> Response types: factor, numeric, PoissonVariate, Surv
+#> Case weights support: TRUE
 #> Tuning grid: TRUE
 #> Variable importance: TRUE
 #> 
@@ -1692,6 +1698,7 @@ Model name: GBMModel
 Label: Trained Generalized Boosted Regression
 Package: gbm
 Response types: factor, numeric, PoissonVariate, Surv
+Case weights support: TRUE
 Tuning grid: TRUE
 Variable importance: TRUE
 
@@ -1842,6 +1849,7 @@ LogisticModel <- MLModel(
   name = "LogisticModel",
   label = "Logistic Model",
   response_types = "binary",
+  weights = TRUE,
   fit = function(formula, data, weights, ...) {
     glm(formula, data = as.data.frame(data), weights = weights,
         family = binomial, ...)

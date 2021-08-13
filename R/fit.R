@@ -100,13 +100,17 @@ fit.MLModelFunction <- function(x, ...) {
 .fit.MLModel <- function(x, inputs, ...) {
   inputs_prep <- prep(inputs)
   mf <- ModelFrame(inputs_prep, na.rm = FALSE)
-  if (is.null(case_weights(mf))) {
-    mf <- ModelFrame(mf, weights = 1, na.rm = FALSE)
-  }
-
   y <- response(mf)
-  if (!is_valid_response(y, x)) {
-    throw(TypeError(y, x@response_types, paste(x@name, "response variable")))
+
+  info <- data.frame(type = x@response_types, weights = x@weights)
+  is_response_types <- is_response(y, info$type)
+  if (!any(is_response_types)) {
+    throw(TypeError(y, info$type, paste(x@name, "response variable")))
+  }
+  weights <- case_weights(mf)
+  if (!all(info$weights[is_response_types]) || is.null(weights)) {
+    throw(check_equal_weights(weights))
+    mf <- ModelFrame(mf, weights = 1, na.rm = FALSE)
   }
 
   require_namespaces(x@packages)

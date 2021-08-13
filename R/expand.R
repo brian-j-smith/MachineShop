@@ -193,7 +193,9 @@ expand_modelgrid.TunedModel <- function(x, ..., info = FALSE) {
     if (!missing(x)) mf <- ModelFrame(x, ..., na.rm = FALSE)
     if (is.null(mf)) {
       return(NULL)
-    } else if (!is_valid_response(y <- response(mf), model)) {
+    }
+    y <- response(mf)
+    if (!any(is_response(y, model@response_types))) {
       throw(LocalWarning(
         "Invalid model response type in expand_modelgrid().\n",
         "x Exising ", model@name, " supports ",

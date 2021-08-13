@@ -53,6 +53,11 @@ knitr::opts_chunk$set(
 - Include all response variable types (`"binary"`, `"factor"`, `"matrix"`, `"numeric"`, `"ordered"`, and/or `"Surv"`) that can be analyzed with the model.
 
 
+### weights Slot
+
+- Logical indicating whether the model supports case weights.
+
+
 ### params Slot
 
 - List of parameter values set by the constructor, typically obtained internally with `new_params(environment())` if all arguments are to be passed to the source package fit function as supplied.  Additional steps may be needed to pass the constructor arguments to the source package in a different format; e.g., when some model parameters must be passed in a control structure, as in `C50Model` and `CForestModel`.

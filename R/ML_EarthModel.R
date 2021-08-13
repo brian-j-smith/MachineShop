@@ -59,6 +59,7 @@ EarthModel <- function(
     label = "Multivariate Adaptive Regression Splines",
     packages = "earth",
     response_types = c("factor", "numeric"),
+    weights = TRUE,
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
     gridinfo = new_gridinfo(

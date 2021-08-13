@@ -55,6 +55,37 @@ combine_dataframes <- function(x, y = NULL) {
 }
 
 
+combine_modelslots <- function(models, types) {
+  init <- data.frame(type = types, weights = FALSE)
+  any_ordered <- any(map_logi(function(model) {
+    "ordered" %in% model@response_types
+  }, models))
+  info_list <- map(function(model) {
+    types <- model@response_types
+    res <- data.frame(type = types, weights = model@weights)
+    factor_match <- match("factor", types, nomatch = 0)
+    if (any_ordered && !("ordered" %in% types) && factor_match) {
+      res <- rbind(
+        res,
+        data.frame(type = "ordered", weights = res$weights[factor_match])
+      )
+    }
+    res
+  }, models)
+  info <- Reduce(function(x, y) {
+    res <- merge(x, y, by = "type")
+    res$weights <- if (nrow(res)) res$weights.x | res$weights.y else logical()
+    res[c("weights.x", "weights.y")] <- NULL
+    res
+  }, info_list, init)
+  list(
+    response_types = info$type,
+    weights = switch(length(unique(info$weights)) + 1,
+                     FALSE, info$weights[1], info@weights)
+  )
+}
+
+
 complete_subset <- function(...) {
   is_complete <- complete.cases(...)
   map(function(x) subset(x, is_complete), list(...))
@@ -160,12 +191,14 @@ is_one_element <- function(x, class = "ANY") {
 }
 
 
-is_response <- function(y, class2) {
-  if (class2 == "binary") {
-    is(y, "factor") && nlevels(y) == 2
-  } else {
-    is(y, class2)
-  }
+is_response <- function(y, types) {
+  map_logi(function(type) {
+    if (type == "binary") {
+      is(y, "factor") && nlevels(y) == 2
+    } else {
+      is(y, type)
+    }
+  }, types)
 }
 
 
@@ -181,16 +214,6 @@ is_trained.MLModel <- function(x, ...) {
 
 is_trained.step <- function(x, ...) {
   recipes::is_trained(x)
-}
-
-
-is_valid_response <- function(y, object) {
-  response_types <- if (is(object, "MLModel")) {
-    object@response_types
-  } else if (is.list(object)) {
-    object$response_types
-  }
-  any(map_logi(is_response, list(y), response_types))
 }
 
 

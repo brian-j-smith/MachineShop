@@ -711,6 +711,8 @@ print_modelinfo <- function(x, trained = FALSE) {
       sep = "")
   print_items(label_items("Package", info$packages), exdent = 2)
   print_items(label_items("Response type", info$response_types), exdent = 2)
+  print_items(paste("Case weights support:", toString(info$weights)),
+              exdent = 2)
   cat("Tuning grid: ", info$grid, "\n",
       "Variable importance: ", info$varimp, "\n",
       sep = "")
