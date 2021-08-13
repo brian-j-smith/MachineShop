@@ -1960,7 +1960,7 @@ kable(df_classes,
 
 # Metric Functions
 
-```{r reference_metrics, table_metrics, echo=FALSE}
+```{r reference_metrics, echo=FALSE}
 library(MachineShop)
 
 f <- function(x) {
