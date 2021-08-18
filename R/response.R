@@ -62,8 +62,8 @@ response.MLModelFit <- function(object, newdata = NULL, ...) {
 response.ModelFrame <- function(object, newdata = NULL, ...) {
   y <- model.response(object)
   if (!is.null(newdata)) {
-    fo <- if (is(newdata, "ModelFrame")) formula(newdata) else terms(object)
-    y <- response(fo, newdata, y)
+    f <- if (is(newdata, "ModelFrame")) formula else terms
+    y <- response(f(object), newdata, y)
   }
   y
 }
