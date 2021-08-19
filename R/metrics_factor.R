@@ -100,7 +100,7 @@ setMetricMethod("brier", c("factor", "factor"))
 setMetricMethod("brier", c("factor", "matrix"),
   function(observed, predicted, weights, ...) {
     observed <- model.matrix(~ observed - 1)
-    ncol(observed) * mse(observed, predicted, weights)
+    mse(observed, predicted, weights) * ncol(observed)
   }
 )
 
@@ -197,7 +197,8 @@ setMetricMethod("cross_entropy", c("factor", "matrix"),
     observed <- model.matrix(~ observed - 1)
     eps <- 1e-15
     predicted <- pmax(eps, pmin(predicted, 1 - eps))
-    -sum(apply(observed * log(predicted), 2, weighted_mean, weights = weights))
+    n <- ncol(observed)
+    -weighted_mean(observed * log(predicted), rep(weights, n)) * n
   }
 )
 
