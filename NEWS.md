@@ -1,24 +1,22 @@
-# MachineShop (development version)
+# MachineShop News
 
 ## Version Updates
 
-## 2.9.0.9003
+## 3.0.0
+* Add slot `weights` to `MLModel` classes.
+* Allow case weights in `LMModel` for all response types.
+* Exclude infinite values from calculation of `breaks` in `calibration()`.
+* Fix invalid `max = Inf` arguments to `print.default()`.
+* Add support for case weights in performance metrics and curves.
 * Evaluate `ModelFrame()` arguments `strata` and `weights` in `data` environment.
-* Fix issue introduced in package version 2.9.0 of recipe case strata and weights not being used in model fitting and resampling.
-
-## 2.9.0.9002
+* Fix issue introduced in package version 2.9.0 of recipe case weights not being used in model fitting.
 * Add column `Weight` of case weights to `Resamples` data frame.
 * Rename `values` column to `get_values` in `MLModel` `gridinfo` slot.
 * Move global settings `resample_progress` and `resample_verbose` to `set_monitor()` arguments `progress` and `verbose`.
 * Move `MLControl()` arguments `strata_breaks`, `strata_nunique`, `strata_prop`, and `strata_size` to `set_strata()` arguments `breaks`, `nunique`, `prop`, and `size`.
 * Move `MLControl()` arguments `times`, `distr`, and `method` to `set_predict()`.
 * Export `%>%` operator.
-
-## 2.9.0.9001
-* Return case stratification values in the 'strata' slot of 'Resamples' objects.
-
-## 2.9.0.9000
-* Replace arguments `strata_breaks`, `strata_nunique`, `strata_prop`, and `strata_size` with `strata` in `MLModel()`.
+* Return case stratification values in the 'strata' slot of `Resamples` objects.
 
 ## 2.9.0
 * Rename tibble column `regular` to `default` in `MLModel` gridinfo slot.
