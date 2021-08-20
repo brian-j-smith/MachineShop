@@ -242,7 +242,8 @@ check_metrics <- function(x) {
 
 
 check_numeric <- function(
-  x, bounds = c(-Inf, Inf), include = TRUE, type = c("double", "integer"), ...
+  x, bounds = c(-Inf, Inf), include = TRUE,
+  type = c("numeric", "double", "integer"), ...
 ) {
   result <- check_array(x, type = match.arg(type), ...)
   if (is(result, "error")) {
