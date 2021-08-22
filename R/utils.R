@@ -271,35 +271,35 @@ make_list_names <- function(x, prefix) {
 }
 
 
-map <- function(f, ...) {
+map <- function(FUN, ...) {
   all_args <- all(lengths(list(...)))
-  if (all_args) mapply(FUN = f, ..., SIMPLIFY = FALSE) else list()
+  if (all_args) mapply(FUN = FUN, ..., SIMPLIFY = FALSE) else list()
 }
 
 
-map_chr <- function(f, ...) {
-  res <- map_simplify(f, ...)
+map_chr <- function(FUN, ...) {
+  res <- map_simplify(FUN, ...)
   storage.mode(res) <- "character"
   res
 }
 
 
-map_logi <- function(f, ...) {
-  res <- map_simplify(f, ...)
+map_logi <- function(FUN, ...) {
+  res <- map_simplify(FUN, ...)
   storage.mode(res) <- "logical"
   res
 }
 
 
-map_num <- function(f, ...) {
-  res <- map_simplify(f, ...)
+map_num <- function(FUN, ...) {
+  res <- map_simplify(FUN, ...)
   storage.mode(res) <- "numeric"
   res
 }
 
 
-map_simplify <- function(f, ...) {
-  res <- map(f, ...)
+map_simplify <- function(FUN, ...) {
+  res <- map(FUN, ...)
   if (length(res)) simplify2array(res, higher = TRUE) else res
 }
 
