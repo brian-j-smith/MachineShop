@@ -231,9 +231,9 @@ metric_SurvMatrix <- function(
 }
 
 
-metric_SurvMean <- function(FUN, observed, predicted, ...) {
+metric_SurvMean <- function(FUN, observed, predicted, weights = NULL, ...) {
   events <- observed[, "status"] == 1
-  FUN(time(observed[events]), predicted[events], ...)
+  FUN(time(observed[events]), predicted[events], weights = weights[events], ...)
 }
 
 
