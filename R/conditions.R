@@ -52,7 +52,7 @@ LocalWarning <- function(...) {
 TypeError <- function(value, expected, subject = character(), call = FALSE) {
   errorCondition(
     message = paste0("Expected ", subject, if (length(subject)) " to be ",
-                     toString(expected, conj = "or"), "; got ", class(value)[1],
+                     toString(expected, conj = "or"), "; got ", class1(value),
                      " instead."),
     call = select_call(call, sys.call(-1)),
     class = "TypeError"
@@ -88,7 +88,7 @@ throw <- function(x, call = TRUE) {
 
 .throw.error <- function(x, call, parent_call, ...) {
   if (match("error", class(x)) > 1) {
-    x$message <- paste0(class(x)[1], ": ", x$message)
+    x$message <- paste0(class1(x), ": ", x$message)
   }
   x$call <- select_call(call, parent_call, conditionCall(x))
   stop(x)
@@ -107,7 +107,7 @@ throw <- function(x, call = TRUE) {
 
 .throw.warning <- function(x, call, parent_call, ...) {
   if (match("warning", class(x)) > 1) {
-    x$message <- paste0(class(x)[1], ": ", x$message)
+    x$message <- paste0(class1(x), ": ", x$message)
   }
   x$call <- select_call(call, parent_call, conditionCall(x))
   warning(x)

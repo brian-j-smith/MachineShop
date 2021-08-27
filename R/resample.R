@@ -369,14 +369,14 @@ subsample <- function(train, test, model, control, id = 1) {
     df
   }
 
-  if (class(test)[1] == "list") map(f, test) else f(test)
+  if (class1(test) == "list") map(f, test) else f(test)
 }
 
 
 subsample_data <- function(fun, x, object) {
   classes <- c("ModelFrame", "ModelRecipe")
   switch(which(c(map_logi(is, list(object), classes), TRUE))[1],
-    as(fun(x), class(object)[1]),
+    as(fun(x), class1(object)),
     recipe(object, fun(x)),
     throw(TypeError(object, classes))
   )

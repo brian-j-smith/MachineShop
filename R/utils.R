@@ -43,6 +43,11 @@ attach_objects <- function(
 }
 
 
+class1 <- function(x) {
+  class(x)[1]
+}
+
+
 combine_dataframes <- function(x, y = NULL) {
   if (is.null(y)) return(x)
   common_cols <- intersect(names(x), names(y))
@@ -157,7 +162,7 @@ get_S3method <- function(generic, object) {
   classes <- substring(methods(generic_name), nchar(generic_name) + 2)
   class <- match_class(object, classes)
   if (is.na(class)) {
-    throw(Error(generic_name, " method not found for '", class(object)[1],
+    throw(Error(generic_name, " method not found for '", class1(object),
                 "' class"))
   }
   fget(paste0(generic_name, ".", class))
@@ -350,7 +355,7 @@ new_params <- function(envir, ...) {
 new_progress_bar <- function(total, input = NULL, model = NULL, index = 0) {
   if (getDoParName() == "doSEQ") index <- as.numeric(index)
   width <- max(10, round(0.25 * getOption("width")))
-  if (!is.null(input)) input <- substr(class(input)[1], 1, width)
+  if (!is.null(input)) input <- substr(class1(input), 1, width)
   if (!is.null(model)) {
     model <- substr(get_MLModel(model)@name, 1, width)
   }
