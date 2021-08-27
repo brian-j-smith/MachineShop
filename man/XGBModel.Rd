@@ -153,7 +153,7 @@ Default values for the \code{NULL} arguments and further model details can be
 found in the source link below.
 
 In calls to \code{\link{varimp}} for \code{XGBTreeModel}, argument
-\code{metric} may be specified as \code{"Gain"} (default) for the fractional
+\code{type} may be specified as \code{"Gain"} (default) for the fractional
 contribution of each predictor to the total gain of its splits, as
 \code{"Cover"} for the number of observations related to each predictor, or
 as \code{"Frequency"} for the percentage of times each predictor is used in
@@ -166,7 +166,7 @@ example below.
 ## Requires prior installation of suggested package xgboost to run
 
 model_fit <- fit(Species ~ ., data = iris, model = XGBTreeModel)
-varimp(model_fit, metric = "Frequency", scale = FALSE)
+varimp(model_fit, type = "Frequency", scale = FALSE)
 }
 
 }
