@@ -226,29 +226,28 @@ label_items <- function(label, x, n = Inf, add_names = FALSE) {
 }
 
 
-list_to_function <- function(x) {
+list_to_function <- function(x, type) {
   err_msg <- paste0("'", deparse1(substitute(x)), "' must be a function, ",
                       "function name, or vector of these")
   if (is(x, "MLMetric")) x <- list(x)
   if (is(x, "vector")) {
     x <- as.list(x)
-    metric_names <- character()
+    x_names <- character()
     for (i in seq_along(x)) {
       if (is(x[[i]], "character")) {
-        metric_name <- x[[i]]
-        x[[i]] <- fget(metric_name)
+        x_name <- x[[i]]
+        x[[i]] <- fget(x_name)
       } else if (is(x[[i]], "MLMetric")) {
-        metric_name <- x[[i]]@name
+        x_name <- x[[i]]@name
       } else if (is(x[[i]], "function")) {
-        metric_name <- "metric"
+        x_name <- type
       } else {
         throw(Error(err_msg))
       }
       name <- names(x)[i]
-      metric_names[i] <-
-        if (is.null(name) || !nzchar(name)) metric_name else name
+      x_names[i] <- if (is.null(name) || !nzchar(name)) x_name else name
     }
-    names(x) <- make.unique(metric_names)
+    names(x) <- make.unique(x_names)
     function(...) unlist(map(function(fun) fun(...), x))
   } else if (is(x, "function")) {
     x

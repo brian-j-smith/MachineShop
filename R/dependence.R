@@ -57,7 +57,7 @@ dependence <- function(
 
   intervals <- match.arg(intervals)
 
-  stats <- list_to_function(stats)
+  stats <- list_to_function(stats, "stat")
 
   select_values <- function(x) {
     if (is.factor(x)) {

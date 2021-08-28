@@ -272,7 +272,7 @@ check_stat <- function(x) {
 
 
 check_stats <- function(x) {
-  result <- try(list_to_function(x)(1:5), silent = TRUE)
+  result <- try(list_to_function(x, "stat")(1:5), silent = TRUE)
   if (!is.numeric(result)) {
     DomainError(x, "must be a statistics function, function name, ",
                    "or vector of these")

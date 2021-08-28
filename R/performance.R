@@ -111,7 +111,7 @@ performance.Surv <- function(
     args <- list(x, y, weights = weights, ...)
     metric <- if (is_one_element(metrics)) metrics[[1]] else metrics
     if (is(get0(metric), "MLMetric")) args <- c(args, dots)
-    do.call(list_to_function(metrics), args)
+    do.call(list_to_function(metrics, "metric"), args)
   } else {
     NA_real_
   }
@@ -133,7 +133,7 @@ performance.ConfusionMatrix <- function(
   args <- list(x)
   metric <- if (is_one_element(metrics)) metrics[[1]] else metrics
   if (is(get0(metric), "MLMetric")) args <- c(args, ...)
-  do.call(list_to_function(metrics), args)
+  do.call(list_to_function(metrics, "metric"), args)
 }
 
 
