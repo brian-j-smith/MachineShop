@@ -182,12 +182,14 @@ performance.MLCVOptimismControl <- function(x, resamples, ...) {
   test_perf <- NextMethod()
 
   resamples_split <- split(resamples, ceiling(resamples$Resample / x@folds))
-  vars <- paste0("CV.Predicted.", seq_len(x@folds))
+  pred_names <- paste0("CV.Predicted.", seq_len(x@folds))
   perf_list <- map(function(resample) {
-    f <- function(p, pred) {
-      p * performance(resample$Observed, pred, resample$Weight, ...)
+    f <- function(prop, pred) {
+      prop * performance(resample$Observed, pred, resample$Weight, ...)
     }
-    Reduce("+", map(f, prop.table(table(resample$Resample)), resample[vars]))
+    props <- prop.table(table(resample$Resample))
+    preds <- resample[pred_names]
+    Reduce("+", map(f, props, preds))
   }, resamples_split)
   cv_perf <- do.call(rbind, rep(perf_list, each = x@folds))
   train_perf <- performance(resamples_split[[1]]$Observed,

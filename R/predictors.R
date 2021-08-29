@@ -22,8 +22,8 @@ predictors.recipe <- function(object, newdata = NULL, ...) {
   object <- prep(object)
   data <- bake(object, newdata)
   info <- summary(object)
-  vars <- info$variable[info$role %in% c("predictor", "pred_offset")]
-  data[, vars, drop = FALSE]
+  pred_names <- info$variable[info$role %in% c("predictor", "pred_offset")]
+  data[, pred_names, drop = FALSE]
 }
 
 

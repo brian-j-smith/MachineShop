@@ -48,9 +48,9 @@ dependence <- function(
   x <- as.MLModel(object)@x
   if (is.null(data)) data <- x
   data <- as.data.frame(data)
-  vars <- all.vars(predictors(terms(x, original = TRUE)))
+  pred_names <- all.vars(predictors(terms(x, original = TRUE)))
 
-  indices <- structure(match(vars, names(data)), names = vars)
+  indices <- structure(match(pred_names, names(data)), names = pred_names)
   select <- eval(substitute(select), as.list(indices), parent.frame())
   if (is.null(select)) select <- indices
   data_select <- data[, select, drop = FALSE]
