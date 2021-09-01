@@ -1788,7 +1788,9 @@ summary(res)
 
 plot(res)</code></pre>
 <p><img src="using_files/figure-html/using_resample_comparisons-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Pairwise model differences for each metric can be calculated with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/diff"><code>diff()</code></a> function applied to results from a call to <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/combine"><code>c()</code></a>. Resulting differences can be summarized descriptively with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/summary"><code>summary()</code></a> and <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/plot"><code>plot()</code></a> functions and assessed for statistical significance with pairwise t-test performed by the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/t.test"><code>t.test()</code></a> function.</p>
+<p>Pairwise model differences for each metric can be calculated with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/diff"><code>diff()</code></a> function applied to results from a call to <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/combine"><code>c()</code></a>. Resulting differences can be summarized descriptively with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/summary"><code>summary()</code></a> and <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/plot"><code>plot()</code></a> functions and assessed for statistical significance with pairwise t-tests performed by the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/t.test"><code>t.test()</code></a> function. The t-test statistic for a given set of <span class="math inline">\(R\)</span> resampled differences is calculated as <span class="math display">\[
+t = \frac{\bar{x}_R}{\sqrt{F s^2_R / R}},
+\]</span> where <span class="math inline">\(\bar{x}_R\)</span> and <span class="math inline">\(s^2_R\)</span> are the sample mean and variance. Statistical testing for a mean difference is then performed by comparing <span class="math inline">\(t\)</span> to a <span class="math inline">\(t_{R-1}\)</span> null distribution. The sample variance in the t statistic is known to underestimate the true variances of cross-validation mean estimators. Underestimation of these variances will lead to increased probabilities of false-positive statistical conclusions. Thus, an additional factor <span class="math inline">\(F\)</span> is included in the t statistic to allow for variance corrections. A correction of <span class="math inline">\(F = 1 + K / (K - 1)\)</span> was found by Nadeau and Bengio <span class="citation">(2003)</span> to be a good choice for cross-validation with <span class="math inline">\(K\)</span> folds and is thus used for that resampling method. The extension of this correction by Bouchaert and Frank <span class="citation">(2004)</span> to <span class="math inline">\(F = 1 + T K / (K - 1)\)</span> is used for cross-validation with <span class="math inline">\(K\)</span> folds repeated <span class="math inline">\(T\)</span> times. For other resampling methods <span class="math inline">\(F = 1\)</span>. Below are t-test results based on the extended correction factor for 3 repeats of 5-fold cross-validation.</p>
 <pre class="r"><code>## Pairwise model comparisons
 (res_diff &lt;- diff(res))
 #&gt; Object of class &quot;PerformanceDiff&quot;
@@ -1817,10 +1819,10 @@ plot(res_diff)</code></pre>
 #&gt; , , Metric = C-Index
 #&gt; 
 #&gt;       Model2
-#&gt; Model1        GBM1       GBM2       GBM3
-#&gt;   GBM1          NA 0.01124657 0.03256885
-#&gt;   GBM2 0.066026447         NA 0.02132228
-#&gt;   GBM3 0.001245902 0.00173105         NA</code></pre>
+#&gt; Model1      GBM1       GBM2       GBM3
+#&gt;   GBM1        NA 0.01124657 0.03256885
+#&gt;   GBM2 0.3757686         NA 0.02132228
+#&gt;   GBM3 0.1603145 0.16031452         NA</code></pre>
 </div>
 </div>
 <div id="model-predictor-effects-and-diagnostics" class="section level1">
@@ -2655,6 +2657,9 @@ summary(performance(res, metric = f2_score))
 <div id="ref-andersen:1993:SMB" class="csl-entry">
 Andersen, Per K, Ornulf Borgan, Richard D Gill, and Niels Keiding. 1993. <em>Statistical Models Based on Counting Processes</em>. New York: Springer.
 </div>
+<div id="ref-bouckaert:2004:ERS" class="csl-entry">
+Bouckaert, Remco R, and Eibe Frank. 2004. <span>“Evaluating the Replicability of Significance Tests for Comparing Learning Algorithms.”</span> In <em>Advances in Knowledge Discovery and Data Mining</em>, 3–12. Berlin, Heidelberg: Springer.
+</div>
 <div id="ref-breiman:1996:SR" class="csl-entry">
 Breiman, Leo. 1996. <span>“Stacked Regression.”</span> <em>Machine Learning</em> 24: 49–64.
 </div>
@@ -2717,6 +2722,9 @@ Microsoft Corporation, and Steve Weston. 2019b. <em><span class="nocase">doParal
 </div>
 <div id="ref-microsoft:2019:FPF" class="csl-entry">
 Microsoft, and Steve Weston. 2019. <em><span class="nocase">foreach</span>: Provides Foreach Looping Construct for r</em>. <a href="https://CRAN.R-project.org/package=foreach">https://CRAN.R-project.org/package=foreach</a>.
+</div>
+<div id="ref-nadeau:2003:IGE" class="csl-entry">
+Nadeau, Claude, and Yoshua Bengio. 2003. <span>“Inference for the Generalization Error.”</span> <em>Machine Learning</em> 52: 239–81.
 </div>
 <div id="ref-perkins:2006:IOC" class="csl-entry">
 Perkins, Neil J, and Enrique F Schisterman. 2006. <span>“The Inconsistency of "Optimal" Cutpoints Obtained Using Two Criteria Based on the Receiver Operating Characteristic Curve.”</span> <em>American Journal of Epidemiology</em> 163 (7): 670–75.
