@@ -53,7 +53,7 @@
 #' found in the source link below.
 #'
 #' In calls to \code{\link{varimp}} for \code{RFSRCModel}, argument
-#' \code{metric} may be specified as \code{"permute"} (default) from permuting
+#' \code{type} may be specified as \code{"permute"} (default) for permutation of
 #' OOB cases, as \code{"random"} for permutation replaced with random
 #' assignment, or as \code{"anit"} for cases assigned to the split opposite of
 #' the random assignments.  Variable importance is automatically scaled to range
@@ -71,7 +71,7 @@
 #' ## Requires prior installation of suggested package randomForestSRC to run
 #'
 #' model_fit <- fit(sale_amount ~ ., data = ICHomes, model = RFSRCModel)
-#' varimp(model_fit, metric = "random", scale = TRUE)
+#' varimp(model_fit, type = "random", scale = TRUE)
 #' }
 #'
 RFSRCModel <- function(
@@ -144,8 +144,8 @@ RFSRCModel <- function(
         pred$predicted
       }
     },
-    varimp = function(object, metric = c("permute", "random", "anti"), ...) {
-      vi <- randomForestSRC::vimp(object, importance = match.arg(metric))
+    varimp = function(object, type = c("permute", "random", "anti"), ...) {
+      vi <- randomForestSRC::vimp(object, importance = match.arg(type))
       if (vi$family == "regr+") {
         y_names <- vi$yvar.names
         names(y_names) <- sub("_.*", "", y_names)

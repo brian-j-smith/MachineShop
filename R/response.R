@@ -36,7 +36,7 @@ response.formula <- function(object, data = NULL, template = NULL, ...) {
       y <- factor(y, levels = template_levels, ordered = is.ordered(template),
                   exclude = NULL)
     }
-    template_class <- class(template)[1]
+    template_class <- class1(template)
     if (!(is.null(template) || is(y, template_class))) {
       throw(TypeError(y, template_class, "response variable"))
     }

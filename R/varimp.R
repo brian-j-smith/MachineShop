@@ -63,7 +63,7 @@ varimp <- function(object, scale = TRUE, ...) {
   require_namespaces(model@packages)
   vi <- model@varimp(unMLModelFit(object), ...)
   if (is.null(vi)) {
-    throw(Warning("variable importance not defined for ", class(object)[1]))
+    throw(Warning("variable importance not defined for ", class1(object)))
     vi <- varimp_undef(model@x)
   }
   VarImp(vi, scale = scale)
@@ -95,7 +95,7 @@ varimp_pval.lm <- function(object, base = exp(1), ...) {
 varimp_pval.mlm <- function(object, ...) {
   check <- check_equal_weights(object$weights)
   if (is(check, "warning")) {
-    throw(LocalWarning("variable importance not defined for ", class(object)[1],
+    throw(LocalWarning("variable importance not defined for ", class1(object),
                        " with case weights"))
     varimp_undef(object)
   } else {

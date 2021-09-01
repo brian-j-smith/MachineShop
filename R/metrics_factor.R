@@ -61,7 +61,7 @@ setMetricMethod("auc", c("PerformanceCurve", "NULL"),
 
 
 setMetricMethod("auc", c("Resamples", "NULL"),
-  function(observed, predicted, metrics, ...) {
+  function(observed, predicted, weights, metrics, ...) {
     auc@.Data <- function(...) MachineShop::auc(..., metrics = metrics)
     performance(observed, metrics = auc, ...)
   }
@@ -205,7 +205,7 @@ setMetricMethod("cross_entropy", c("factor", "matrix"),
 
 setMetricMethod("cross_entropy", c("factor", "numeric"),
   function(observed, predicted, ...) {
-    cross_entropy(observed, cbind(1 - predicted, predicted))
+    cross_entropy(observed, cbind(1 - predicted, predicted), ...)
   }
 )
 

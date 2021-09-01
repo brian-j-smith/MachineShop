@@ -59,7 +59,7 @@
 #' found in the source link below.
 #'
 #' In calls to \code{\link{varimp}} for \code{XGBTreeModel}, argument
-#' \code{metric} may be specified as \code{"Gain"} (default) for the fractional
+#' \code{type} may be specified as \code{"Gain"} (default) for the fractional
 #' contribution of each predictor to the total gain of its splits, as
 #' \code{"Cover"} for the number of observations related to each predictor, or
 #' as \code{"Frequency"} for the percentage of times each predictor is used in
@@ -77,7 +77,7 @@
 #' ## Requires prior installation of suggested package xgboost to run
 #'
 #' model_fit <- fit(Species ~ ., data = iris, model = XGBTreeModel)
-#' varimp(model_fit, metric = "Frequency", scale = FALSE)
+#' varimp(model_fit, type = "Frequency", scale = FALSE)
 #' }
 #'
 XGBModel <- function(
@@ -166,7 +166,7 @@ XGBModel <- function(
         pred
       )
     },
-    varimp = function(object, metric = c("Gain", "Cover", "Frequency"), ...) {
+    varimp = function(object, type = c("Gain", "Cover", "Frequency"), ...) {
       vi <- xgboost::xgb.importance(model = object, ...)
       if (!is.null(vi$Weight)) {
         if (!is.null(vi$Class)) {
@@ -178,7 +178,7 @@ XGBModel <- function(
           structure(vi$Weight, names = vi$Feature)
         }
       } else {
-        data.frame(vi[, match.arg(metric), drop = FALSE],
+        data.frame(vi[, match.arg(type), drop = FALSE],
                    row.names = vi$Feature)
       }
     }

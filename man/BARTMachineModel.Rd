@@ -63,7 +63,7 @@ Builds a BART model for regression or classification.
 Further model details can be found in the source link below.
 
 In calls to \code{\link{varimp}} for \code{BARTMachineModel}, argument
-\code{metric} may be specified as \code{"splits"} (default) for the
+\code{type} may be specified as \code{"splits"} (default) for the
 proportion of time each predictor is chosen for a splitting rule or as
 \code{"trees"} for the proportion of times each predictor appears in a tree.
 Argument \code{num_replicates} is also available to control the number of
@@ -77,7 +77,7 @@ below.
 ## Requires prior installation of suggested package bartMachine to run
 
 model_fit <- fit(sale_amount ~ ., data = ICHomes, model = BARTMachineModel)
-varimp(model_fit, metric = "splits", num_replicates = 20, scale = FALSE)
+varimp(model_fit, type = "splits", num_replicates = 20, scale = FALSE)
 }
 
 }

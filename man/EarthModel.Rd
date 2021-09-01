@@ -51,20 +51,20 @@ Default values for the \code{NULL} arguments and further model details can be
 found in the source link below.
 
 In calls to \code{\link{varimp}} for \code{EarthModel}, argument
-\code{metric} may be specified as \code{"gcv"} (default) for the generalized
-cross-validation decrease over all subsets that include each predictor, as
-\code{"rss"} for the residual sums of squares decrease, or as
-\code{"nsubsets"} for the number of model subsets that include each
-predictor.  Variable importance is automatically scaled to range from 0 to
-100.  To obtain unscaled importance values, set \code{scale = FALSE}.  See
-example below.
+\code{type} may be specified as \code{"nsubsets"} (default) for the number of
+model subsets that include each predictor, as \code{"gcv"} for the
+generalized cross-validation decrease over all subsets that include each
+predictor, or as \code{"rss"} for the residual sums of squares decrease.
+Variable importance is automatically scaled to range from 0 to 100.  To
+obtain unscaled importance values, set \code{scale = FALSE}.  See example
+below.
 }
 \examples{
 \donttest{
 ## Requires prior installation of suggested package earth to run
 
 model_fit <- fit(Species ~ ., data = iris, model = EarthModel)
-varimp(model_fit, metric = "nsubsets", scale = FALSE)
+varimp(model_fit, type = "gcv", scale = FALSE)
 }
 
 }

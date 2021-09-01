@@ -1,6 +1,15 @@
-# MachineShop News
+# MachineShop News (Development)
 
 ## Version Updates
+
+## 3.0.0.9000
+* Rename argument `metric` to `type` in `varimp()` functions for `BartMachineModel`, `C50Model`,  `EarthModel`,  `RFSRCModel`, and `XGBModel`.  
+* Set argument `type` default to `"nsubsets"` in `EarthModel` `varimp()`.
+* Expand case weighted metrics support.
+  * Fix weights used in survival event-specific metrics.
+  * Use weights for `cross_entropy()` `numeric` method.
+  * Use weights for predicted survival probabilities.
+* Fix error with argument `f` in `roc_index()` `Surv` method.
 
 ## 3.0.0
 * Add slot `weights` to `MLModel` classes.

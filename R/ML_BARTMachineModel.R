@@ -31,7 +31,7 @@
 #' Further model details can be found in the source link below.
 #'
 #' In calls to \code{\link{varimp}} for \code{BARTMachineModel}, argument
-#' \code{metric} may be specified as \code{"splits"} (default) for the
+#' \code{type} may be specified as \code{"splits"} (default) for the
 #' proportion of time each predictor is chosen for a splitting rule or as
 #' \code{"trees"} for the proportion of times each predictor appears in a tree.
 #' Argument \code{num_replicates} is also available to control the number of
@@ -50,7 +50,7 @@
 #' ## Requires prior installation of suggested package bartMachine to run
 #'
 #' model_fit <- fit(sale_amount ~ ., data = ICHomes, model = BARTMachineModel)
-#' varimp(model_fit, metric = "splits", num_replicates = 20, scale = FALSE)
+#' varimp(model_fit, type = "splits", num_replicates = 20, scale = FALSE)
 #' }
 #'
 BARTMachineModel <- function(
@@ -87,10 +87,10 @@ BARTMachineModel <- function(
       newx <- model.matrix(newdata, intercept = FALSE)
       predict(object, new_data = as.data.frame(newx))
     },
-    varimp = function(object, metric = c("splits", "trees"), num_replicates = 5,
+    varimp = function(object, type = c("splits", "trees"), num_replicates = 5,
                       ...) {
       bartMachine::investigate_var_importance(object,
-                                              type = match.arg(metric),
+                                              type = match.arg(type),
                                               num_replicates = num_replicates,
                                               plot = FALSE)$avg_var_props
     }

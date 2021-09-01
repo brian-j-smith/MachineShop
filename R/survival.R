@@ -332,6 +332,7 @@ surv_mean <- function(times, surv, max_time = max(times)) {
 
 surv_subset <- function(x, weights, include, time) {
   surv <- 1
+  p <- weighted_mean(include, weights)
   x <- x[include]
   weights <- weights[include]
   if (length(x) && any(event_time(x) <= time)) {
@@ -343,7 +344,7 @@ surv_subset <- function(x, weights, include, time) {
     sums <- sums[sums$stop_time <= time, ]
     surv <- prod(1 - sums$event / sums$total)
   }
-  list(surv = surv, p = mean(include))
+  list(surv = surv, p = p)
 }
 
 

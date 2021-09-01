@@ -43,6 +43,11 @@ attach_objects <- function(
 }
 
 
+class1 <- function(x) {
+  class(x)[1]
+}
+
+
 combine_dataframes <- function(x, y = NULL) {
   if (is.null(y)) return(x)
   common_cols <- intersect(names(x), names(y))
@@ -157,7 +162,7 @@ get_S3method <- function(generic, object) {
   classes <- substring(methods(generic_name), nchar(generic_name) + 2)
   class <- match_class(object, classes)
   if (is.na(class)) {
-    throw(Error(generic_name, " method not found for '", class(object)[1],
+    throw(Error(generic_name, " method not found for '", class1(object),
                 "' class"))
   }
   fget(paste0(generic_name, ".", class))
@@ -270,35 +275,35 @@ make_list_names <- function(x, prefix) {
 }
 
 
-map <- function(f, ...) {
+map <- function(FUN, ...) {
   all_args <- all(lengths(list(...)))
-  if (all_args) mapply(FUN = f, ..., SIMPLIFY = FALSE) else list()
+  if (all_args) mapply(FUN = FUN, ..., SIMPLIFY = FALSE) else list()
 }
 
 
-map_chr <- function(f, ...) {
-  res <- map_simplify(f, ...)
+map_chr <- function(FUN, ...) {
+  res <- map_simplify(FUN, ...)
   storage.mode(res) <- "character"
   res
 }
 
 
-map_logi <- function(f, ...) {
-  res <- map_simplify(f, ...)
+map_logi <- function(FUN, ...) {
+  res <- map_simplify(FUN, ...)
   storage.mode(res) <- "logical"
   res
 }
 
 
-map_num <- function(f, ...) {
-  res <- map_simplify(f, ...)
+map_num <- function(FUN, ...) {
+  res <- map_simplify(FUN, ...)
   storage.mode(res) <- "numeric"
   res
 }
 
 
-map_simplify <- function(f, ...) {
-  res <- map(f, ...)
+map_simplify <- function(FUN, ...) {
+  res <- map(FUN, ...)
   if (length(res)) simplify2array(res, higher = TRUE) else res
 }
 
@@ -349,7 +354,7 @@ new_params <- function(envir, ...) {
 new_progress_bar <- function(total, input = NULL, model = NULL, index = 0) {
   if (getDoParName() == "doSEQ") index <- as.numeric(index)
   width <- max(10, round(0.25 * getOption("width")))
-  if (!is.null(input)) input <- substr(class(input)[1], 1, width)
+  if (!is.null(input)) input <- substr(class1(input), 1, width)
   if (!is.null(model)) {
     model <- substr(get_MLModel(model)@name, 1, width)
   }

@@ -102,7 +102,7 @@ SelectedInput.ModelFrame <- function(
 
   inputs <- list(...)
 
-  input_classes <- map_chr(function(x) class(x)[1], inputs)
+  input_classes <- map_chr(function(x) class1(x), inputs)
   if (!all(input_classes %in% c("ModelFrame", "ModeledFrame"))) {
     throw(Error("inputs must be ModelFrames or ModeledFrames"))
   }
