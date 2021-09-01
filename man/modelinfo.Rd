@@ -30,8 +30,8 @@ components:
     values of the model function.}
   \item{grid}{logical indicating whether automatic generation of tuning
     parameter grids is implemented for the model.}
-  \item{varimp}{logical indicating whether variable importance is defined for
-    the model.}
+  \item{varimp}{logical indicating whether model-specific variable importance
+    is defined.}
 }
 }
 \description{

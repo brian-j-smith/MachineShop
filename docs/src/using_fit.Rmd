@@ -24,7 +24,7 @@ Model fitting requires user specification of a **MachineShop** compatible model.
   : Logical indicating whether automatic generation of tuning parameter grids is implemented for the model.
   
 `varimp`
-  : Logical indicating whether variable importance is defined for the model.
+  : Logical indicating whether model-specific variable importance is defined.
 
 Function `r rdoc_url("modelinfo()")` may be called without arguments, with one or more model functions, observed response variables, or vectors representing response variable types; and will return information on all matching models.
 

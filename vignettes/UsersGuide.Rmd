@@ -45,7 +45,7 @@ info <- modelinfo()
 * Resample estimation of predictive performance, including cross-validation, bootstrap resampling, and split training-test set validation.
 * Parallel execution of resampling algorithms.
 * Choices of performance metrics: accuracy, areas under ROC and precision recall curves, Brier score, coefficient of determination (R^2^), concordance index, cross entropy, F score, Gini coefficient, unweighted and weighted Cohen's kappa, mean absolute error, mean squared error, mean squared log error, positive and negative predictive values, precision and recall, and sensitivity and specificity.
-* Graphical and tabular performance summaries: calibration curves, confusion matrices, partial dependence plots, performance curves, lift curves, and variable importance.
+* Graphical and tabular performance summaries: calibration curves, confusion matrices, partial dependence plots, performance curves, lift curves, and model-specific and permutation-based variable importance.
 * Model tuning over automatically generated grids of parameter values and randomly sampled grid points.
 * Model selection and comparisons for any combination of models and model parameter values.
 * User-definable models and performance metrics.
@@ -182,7 +182,7 @@ Model fitting requires user specification of a **MachineShop** compatible model.
   : Logical indicating whether automatic generation of tuning parameter grids is implemented for the model.
   
 `varimp`
-  : Logical indicating whether variable importance is defined for the model.
+  : Logical indicating whether model-specific variable importance is defined.
 
 Function `r rdoc_url("modelinfo()")` may be called without arguments, with one or more model functions, observed response variables, or vectors representing response variable types; and will return information on all matching models.
 
@@ -890,7 +890,7 @@ surv_probs_control <- CVControl(folds = 5, repeats = 3, seed = 123) %>%
 
 ## Parallel Processing
 
-Resampling is implemented with the **foreach** package [@microsoft:2019:FPF] and will run in parallel if a compatible backend is loaded, such as that provided by the **doParallel** [@microsoft:2019:DFP] or **doSNOW** package [@microsoft:2019:DFS].
+Resampling and permutation-based variable importance are implemented with the **foreach** package [@microsoft:2019:FPF] and will run in parallel if a compatible backend is loaded, such as that provided by the **doParallel** [@microsoft:2019:DFP] or **doSNOW** package [@microsoft:2019:DFS].
 
 ```{r using_resample_parallel}
 ## Register multiple cores for parallel computations
@@ -1039,7 +1039,7 @@ Calculation of performance metrics on test sets or by resampling, as discussed p
 
 ## Variable Importance
 
-The importance of predictor variables in a model fit is estimated with the `r rdoc_url("varimp()")` function and displayed graphically with `r rdoc_url("plot()")`.  Variable importance is a relative measure of the contributions of model predictors and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most.  Classes of models can differ with respect to how variable importance is defined.  In the case of a `r rdoc_url("GBMModel")`, importance of each predictor is based on the sum of squared empirical improvements over all internal tree nodes created by splitting on that variable [@greenwell:2019:GBM].
+The importance of predictor variables in a model fit is estimated with the `r rdoc_url("varimp()")` function and displayed graphically with `r rdoc_url("plot()")`.  Variable importance is a relative measure of the contributions of model predictors and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most.  Model-specific implementations of variable importance are available in many cases, although their definitions may differ.  In the case of a `r rdoc_url("GBMModel")`, importance of each predictor is based on the sum of squared empirical improvements over all internal tree nodes created by splitting on that variable [@greenwell:2019:GBM].
 
 ```{r using_analyses_vi}
 ## Predictor variable importance
@@ -1048,13 +1048,48 @@ The importance of predictor variables in a model fit is estimated with the `r rd
 plot(vi)
 ```
 
-Alternatively, importance is based on negative log-transformed p-values for statistical models, like `r rdoc_url("CoxModel")`, that produce them.  For other models, variable importance may be defined and calculated by their underlying source packages or not defined at all, as is the case for `r rdoc_url("SVMModel")`.  Logical indicators of the availability of variable importance are available in the printed model constructor information or from `r rdoc_url("modelinfo()")`.
+In contrast, importance is based on negative log-transformed p-values for statistical models, like `r rdoc_url("CoxModel")`, that produce them.  For other models, variable importance may be defined and calculated by their underlying source packages or not defined at all, as is the case for `r rdoc_url("SVMModel")`.  Logical indicators of model-specific variable importance are given in the information displayed by model constructors and returned by `r rdoc_url("modelinfo()")`.
 
 ```{r using_analysis_vi_info}
 SVMModel
 
 modelinfo(SVMModel)[[1]]$varimp
 ```
+
+Variable importance can be computed with model-agnostic permutation methods [@fisher:2019:AMW] as an alternative to model-specific methods.  The following algorithm for permutation-based variable importance is implemented in **MachineShop**.
+
+* Fit a model to a training dataset
+
+* Compute training performance.
+
+* For $s = 1, \ldots, S$.
+
+  * Optionally sample a subset of the training set without replacement.
+    
+  * For predictor variable $p = 1, \ldots, P$.
+  
+    * Randomly permute the variable values so that none match the original values.
+    
+    * Compute performance on the permutation set.
+    
+    * Compute importance as the difference or ratio between the permutation and training performances.
+    
+    * Reset the variable to its original values.
+
+* Return the mean or other summary statistics of importance for each variable.
+
+```{r using_analysis_vi_permute}
+## Permutation-based variable importance
+varimp(surv_fit, method = "permute")
+```
+
+There are a number of advantages to permutation-based variable importance.  In particular, it can be computed for any
+
+1. model,
+2. performance metric defined for the given response variable type, and
+3. predictor variable in the original training set.
+
+Conversely, model-specific methods are not defined for some models, are generally limited to metrics implemented in their source packages, and might be computed on derived, rather than original, predictor variables.  These differences can make comparisons of variable importance across classes of models difficult if not impossible.  The trade-off for the advantages of a permutation-based approach is increased computation time.  To speed up computations, the algorithm will run in parallel if a compatible backend is loaded as described in the *Parallel Processing* section. 
 
 
 ## Partial Dependence Plots

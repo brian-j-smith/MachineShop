@@ -42,7 +42,7 @@ surv_probs_control <- CVControl(folds = 5, repeats = 3, seed = 123) %>%
 
 ## Parallel Processing
 
-Resampling is implemented with the **foreach** package [@microsoft:2019:FPF] and will run in parallel if a compatible backend is loaded, such as that provided by the **doParallel** [@microsoft:2019:DFP] or **doSNOW** package [@microsoft:2019:DFS].
+Resampling and permutation-based variable importance are implemented with the **foreach** package [@microsoft:2019:FPF] and will run in parallel if a compatible backend is loaded, such as that provided by the **doParallel** [@microsoft:2019:DFP] or **doSNOW** package [@microsoft:2019:DFS].
 
 ```{r using_resample_parallel}
 ## Register multiple cores for parallel computations

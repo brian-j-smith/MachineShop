@@ -163,7 +163,7 @@ Resamples.list <- function(object, ...) {
                           data = x,
                           times = object@samples,
                           control = object)
-  seeds <- sample.int(.Machine$integer.max, length(splits))
+  seeds <- rand_int(length(splits))
 
   is_optimism_control <- is(object, "MLBootOptimismControl")
   if (is_optimism_control) {
@@ -183,7 +183,7 @@ Resamples.list <- function(object, ...) {
   }
 
   foreach(
-    i = seq_along(splits),
+    i = i <- seq_along(splits),
     .export = c("seq_boot", "subsample", "subsample_data"),
     .packages = settings("require"),
     .verbose = object@monitor$verbose,
@@ -217,7 +217,7 @@ Resamples.list <- function(object, ...) {
                           v = object@folds,
                           repeats = object@repeats,
                           control = object)
-  seeds <- sample.int(.Machine$integer.max, length(splits))
+  seeds <- rand_int(length(splits))
 
   is_optimism_control <- is(object, "MLCVOptimismControl")
 
@@ -234,7 +234,7 @@ Resamples.list <- function(object, ...) {
   }
 
   df_list <- foreach(
-    i = seq_along(splits),
+    i = i <- seq_along(splits),
     .export = c("subsample", "subsample_data"),
     .packages = settings("require"),
     .verbose = object@monitor$verbose,
@@ -277,7 +277,7 @@ Resamples.list <- function(object, ...) {
                           data = x,
                           times = object@samples,
                           control = object)
-  seeds <- sample.int(.Machine$integer.max, length(splits))
+  seeds <- rand_int(length(splits))
 
   snow_opts <- list()
   progress <- function(n) NULL
@@ -292,7 +292,7 @@ Resamples.list <- function(object, ...) {
   }
 
   foreach(
-    i = seq_along(splits),
+    i = i <- seq_along(splits),
     .export = c("subsample", "subsample_data"),
     .packages = settings("require"),
     .verbose = object@monitor$verbose,
@@ -410,14 +410,7 @@ resample_selection <- function(x, update, params, ..., class) {
     }
 
     if (is.null(metrics)) {
-      method <- get_S3method(performance, res$Observed)
-      metrics <- c(eval(formals(method)$metrics))
-      is_defined <- map_logi(function(metric) {
-        types <- metricinfo(metric)[[1]]$response_types
-        any(map_logi(is, list(res$Observed), types$observed) &
-              map_logi(is, list(res$Predicted), types$predicted))
-      }, metrics)
-      metrics <- metrics[is_defined]
+      metrics <- get_perf_metrics(res$Observed, res$Predicted)
     }
 
     perf <- performance(res, metrics = metrics, cutoff = params$cutoff)

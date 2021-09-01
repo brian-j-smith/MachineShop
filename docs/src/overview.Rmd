@@ -19,7 +19,7 @@ info <- modelinfo()
 * Resample estimation of predictive performance, including cross-validation, bootstrap resampling, and split training-test set validation.
 * Parallel execution of resampling algorithms.
 * Choices of performance metrics: accuracy, areas under ROC and precision recall curves, Brier score, coefficient of determination (R^2^), concordance index, cross entropy, F score, Gini coefficient, unweighted and weighted Cohen's kappa, mean absolute error, mean squared error, mean squared log error, positive and negative predictive values, precision and recall, and sensitivity and specificity.
-* Graphical and tabular performance summaries: calibration curves, confusion matrices, partial dependence plots, performance curves, lift curves, and variable importance.
+* Graphical and tabular performance summaries: calibration curves, confusion matrices, partial dependence plots, performance curves, lift curves, and model-specific and permutation-based variable importance.
 * Model tuning over automatically generated grids of parameter values and randomly sampled grid points.
 * Model selection and comparisons for any combination of models and model parameter values.
 * User-definable models and performance metrics.

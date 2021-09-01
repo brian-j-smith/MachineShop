@@ -1,4 +1,4 @@
-utils::globalVariables(c("i", "x", "y"))
+utils::globalVariables(c("x", "y"))
 
 
 .onLoad <- function(libname, pkgname) {
@@ -157,15 +157,18 @@ get_MLModel <- function(x) {
 }
 
 
-get_S3method <- function(generic, object) {
-  generic_name <- as.character(substitute(generic))[1]
+get_perf_metrics <- function(x, y) {
+  generic_name <- "performance"
   classes <- substring(methods(generic_name), nchar(generic_name) + 2)
-  class <- match_class(object, classes)
-  if (is.na(class)) {
-    throw(Error(generic_name, " method not found for '", class1(object),
-                "' class"))
-  }
-  fget(paste0(generic_name, ".", class))
+  class <- match_class(x, classes)
+  method <- fget(paste0(generic_name, ".", class))
+  metrics <- c(eval(formals(method)$metrics))
+  is_defined <- map_logi(function(metric) {
+    types <- metricinfo(metric)[[1]]$response_types
+    any(map_logi(is, list(x), types$observed) &
+          map_logi(is, list(y), types$predicted))
+  }, metrics)
+  metrics[is_defined]
 }
 
 
@@ -417,6 +420,11 @@ push.TrainStep <- function(x, object, ...) {
     object$mlmodel@train_steps <- train_steps
   }
   object
+}
+
+
+rand_int <- function(n = 1) {
+  sample.int(.Machine$integer.max, n)
 }
 
 

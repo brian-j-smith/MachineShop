@@ -9,7 +9,7 @@ importClassesFrom(party, RandomForest)
 importFrom(abind, abind, adrop)
 importFrom(dials, parameters)
 importFrom(foreach, "%dopar%", foreach, getDoParName, getDoParRegistered,
-           registerDoSEQ)
+           getDoParWorkers, registerDoSEQ)
 importFrom(graphics, plot)
 importFrom(magrittr, "%>%")
 importFrom(polspline, hare, phare)
