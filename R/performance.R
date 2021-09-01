@@ -141,7 +141,7 @@ performance.ConfusionMatrix <- function(
 #'
 performance.Resamples <- function(x, ...) {
   perf_list <- by(x, x$Model, function(resamples) {
-    Performance(performance(x@control, resamples, ...))
+    Performance(performance(x@control, resamples, ...), control = x@control)
   }, simplify = FALSE)
   do.call(c, perf_list)
 }

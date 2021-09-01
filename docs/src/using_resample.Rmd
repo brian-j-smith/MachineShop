@@ -164,7 +164,11 @@ summary(res)
 plot(res)
 ```
 
-Pairwise model differences for each metric can be calculated with the `r rdoc_url("diff()")` function applied to results from a call to `r rdoc_url("c()", "combine")`.  Resulting differences can be summarized descriptively with the `r rdoc_url("summary()")` and `r rdoc_url("plot()")` functions and assessed for statistical significance with pairwise t-test performed by the `r rdoc_url("t.test()")` function.
+Pairwise model differences for each metric can be calculated with the `r rdoc_url("diff()")` function applied to results from a call to `r rdoc_url("c()", "combine")`.  Resulting differences can be summarized descriptively with the `r rdoc_url("summary()")` and `r rdoc_url("plot()")` functions and assessed for statistical significance with pairwise t-tests performed by the `r rdoc_url("t.test()")` function.  The t-test statistic for a given set of $R$ resampled differences is calculated as
+$$
+t = \frac{\bar{x}_R}{\sqrt{F s^2_R / R}},
+$$
+where $\bar{x}_R$ and $s^2_R$ are the sample mean and variance.  Statistical testing for a mean difference is then performed by comparing $t$ to a $t_{R-1}$ null distribution.  The sample variance in the t statistic is known to underestimate the true variances of cross-validation mean estimators.  Underestimation of these variances will lead to increased probabilities of false-positive statistical conclusions.  Thus, an additional factor $F$ is included in the t statistic to allow for variance corrections.  A correction of $F = 1 + K / (K - 1)$ was found by Nadeau and Bengio [-@nadeau:2003:IGE] to be a good choice for cross-validation with $K$ folds and is thus used for that resampling method.  The extension of this correction by Bouchaert and Frank [-@bouckaert:2004:ERS] to $F = 1 + T K / (K - 1)$ is used for cross-validation with $K$ folds repeated $T$ times.  For other resampling methods $F = 1$.  Below are t-test results based on the extended correction factor for 3 repeats of 5-fold cross-validation.
 
 ```{r using_resample_diff}
 ## Pairwise model comparisons

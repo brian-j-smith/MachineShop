@@ -19,11 +19,31 @@ implemented by \code{\link[stats]{p.adjust}}.}
 \code{PerformanceDiffTest} class object that inherits from
 \code{array}.  p-values and mean differences are contained in the lower and
 upper triangular portions, respectively, of the first two dimensions.  Model
-pairs are contined in the third dimension.
+pairs are contained in the third dimension.
 }
 \description{
 Paired t-test comparisons of resampled performance metrics from different
 models.
+}
+\details{
+The t-test statistic for pairwise model differences of \eqn{R} resampled
+performance metric values is calculated as
+\deqn{
+  t = \frac{\bar{x}_R}{\sqrt{F s^2_R / R}},
+}
+where \eqn{\bar{x}_R} and \eqn{s^2_R} are the sample mean and variance.
+Statistical testing for a mean difference is then performed by comparing
+\eqn{t} to a \eqn{t_{R-1}} null distribution.  The sample variance in the
+t statistic is known to underestimate the true variances of cross-validation
+mean estimators.  Underestimation of these variances will lead to increased
+probabilities of false-positive statistical conclusions.  Thus, an additional
+factor \eqn{F} is included in the t statistic to allow for variance
+corrections.  A correction of \eqn{F = 1 + K / (K - 1)} was found by
+Nadeau and Bengio (2003) to be a good choice for cross-validation with
+\eqn{K} folds and is thus used for that resampling method.  The extension of
+this correction by Bouchaert and Frank (2004) to \eqn{F = 1 + T K / (K - 1)}
+is used for cross-validation with \eqn{K} folds repeated \eqn{T} times.  For
+other resampling methods \eqn{F = 1}.
 }
 \examples{
 \donttest{
@@ -42,4 +62,12 @@ res_diff <- diff(res)
 t.test(res_diff)
 }
 
+}
+\references{
+Nadeau C and Bengio Y (2003). Inference for the generalization error. Machine
+Learning, 52: 239–81.
+
+Bouckaert RR and Frank E (2004). Evaluating the Replicability of Significance
+Tests for Comparing Learning Algorithms. In Advances in Knowledge Discovery
+and Data Mining, 3–12. Berlin, Heidelberg: Springer.
 }
