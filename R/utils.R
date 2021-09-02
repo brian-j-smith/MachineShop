@@ -48,7 +48,7 @@ class1 <- function(x) {
 }
 
 
-combine_dataframes <- function(x, y = NULL) {
+combine_data_frames <- function(x, y = NULL) {
   if (is.null(y)) return(x)
   common_cols <- intersect(names(x), names(y))
   if (!identical(x[common_cols], y[common_cols])) {
@@ -60,7 +60,7 @@ combine_dataframes <- function(x, y = NULL) {
 }
 
 
-combine_modelslots <- function(models, types) {
+combine_model_slots <- function(models, types) {
   init <- data.frame(type = types, weights = FALSE)
   any_ordered <- any(map_logi(function(model) {
     "ordered" %in% model@response_types

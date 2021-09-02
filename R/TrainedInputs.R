@@ -114,7 +114,7 @@ SelectedInput.ModelFrame <- function(
   names(inputs) <- make_list_names(inputs, "ModelFrame")
   data <- NULL
   for (i in seq_along(inputs)) {
-    data <- combine_dataframes(as.data.frame(inputs[[i]]), data)
+    data <- combine_data_frames(as.data.frame(inputs[[i]]), data)
   }
 
   new("SelectedModelFrame", ModelFrame(data),
@@ -151,7 +151,7 @@ SelectedInput.recipe <- function(
   names(inputs) <- make_list_names(inputs, "Recipe")
   data <- NULL
   for (i in seq_along(inputs)) {
-    data <- combine_dataframes(as.data.frame(inputs[[i]]), data)
+    data <- combine_data_frames(as.data.frame(inputs[[i]]), data)
     inputs[[i]] <- recipe(inputs[[i]], tibble())
   }
 

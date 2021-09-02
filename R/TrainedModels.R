@@ -51,7 +51,7 @@ SelectedModel <- function(
   }
   names(models) <- make.unique(model_names)
 
-  slots <- combine_modelslots(models, settings("response_types"))
+  slots <- combine_model_slots(models, settings("response_types"))
   new("SelectedModel",
       name = "SelectedModel",
       label = "Selected Model",
