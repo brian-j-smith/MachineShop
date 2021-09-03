@@ -109,7 +109,7 @@ c.LiftCurve <- function(...) {
 #'
 c.ListOf <- function(...) {
   args <- list(...)
-  class <- class(args[[1]][[1]])[1]
+  class <- class1(args[[1]][[1]])
   is_valid <- function(x) {
     is(x, "ListOf") && is(x[[1]], class) && is(x[[1]], "vector")
   }
