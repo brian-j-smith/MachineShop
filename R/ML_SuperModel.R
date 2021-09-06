@@ -47,7 +47,7 @@ SuperModel <- function(
 
   control <- get_MLControl(control)
 
-  slots <- combine_modelslots(base_learners, get_MLModel(model)@response_types)
+  slots <- combine_model_slots(base_learners, get_MLModel(model)@response_types)
   new("SuperModel",
     name = "SuperModel",
     label = "Super Learner",

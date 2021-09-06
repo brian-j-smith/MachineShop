@@ -110,7 +110,7 @@ CVControl <- function(
   folds = 10, repeats = 1, weights = TRUE,
   seed = sample(.Machine$integer.max, 1), ...
 ) {
-  folds <- check_integer(folds, bounds = c(1, Inf), size = 1)
+  folds <- check_integer(folds, bounds = c(2, Inf), size = 1)
   throw(check_assignment(folds))
 
   repeats <- check_integer(repeats, bounds = c(1, Inf), size = 1)

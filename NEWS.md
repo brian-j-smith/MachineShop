@@ -2,6 +2,10 @@
 
 ## Version Updates
 
+## 3.0.0.9001
+* Correct the estimated variances for cross-validation estimators of mean performance difference in `t.test.PerformanceDiff()`.
+* Deprecate argument `metric` in `varimp()`.
+
 ## 3.0.0.9000
 * Rename argument `metric` to `type` in `varimp()` functions for `BartMachineModel`, `C50Model`,  `EarthModel`,  `RFSRCModel`, and `XGBModel`.  
 * Set argument `type` default to `"nsubsets"` in `EarthModel` `varimp()`.

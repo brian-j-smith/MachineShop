@@ -109,7 +109,7 @@ c.LiftCurve <- function(...) {
 #'
 c.ListOf <- function(...) {
   args <- list(...)
-  class <- class(args[[1]][[1]])[1]
+  class <- class1(args[[1]][[1]])
   is_valid <- function(x) {
     is(x, "ListOf") && is(x[[1]], class) && is(x[[1]], "vector")
   }
@@ -139,7 +139,11 @@ c.Performance <- function(...) {
         throw(Error("Performance objects have different row or column names"))
       }
 
-      Performance(abind(args, along = 3))
+      if (!identical_elements(args, function(x) x@control)) {
+        throw(Error("Performance arguments have different control structures"))
+      }
+
+      Performance(abind(args, along = 3), control = args[[1]]@control)
 
     } else {
       args[[1]]

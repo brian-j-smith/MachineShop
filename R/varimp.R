@@ -61,12 +61,26 @@ varimp <- function(object, scale = TRUE, ...) {
   stopifnot(is(object, "MLModelFit"))
   model <- as.MLModel(object)
   require_namespaces(model@packages)
-  vi <- model@varimp(unMLModelFit(object), ...)
+  args <- dep_varimpargs(...)
+  vi <- do.call(model@varimp, c(list(unMLModelFit(object)), args))
   if (is.null(vi)) {
     throw(Warning("variable importance not defined for ", class1(object)))
     vi <- varimp_undef(model@x)
   }
   VarImp(vi, scale = scale)
+}
+
+
+dep_varimpargs <- function(metric, ...) {
+  args <- list(...)
+  if (!missing(metric)) {
+    throw(DeprecatedCondition(
+      "Argument 'metric' to varimp()", "'type'",
+      expired = Sys.Date() >= "2021-12-01"
+    ), call = FALSE)
+    args$type <- metric
+  }
+  args
 }
 
 

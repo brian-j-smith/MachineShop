@@ -43,7 +43,7 @@ StackedModel <- function(
 
   if (!is.null(weights)) stopifnot(length(weights) == length(base_learners))
 
-  slots <- combine_modelslots(base_learners, settings("response_types"))
+  slots <- combine_model_slots(base_learners, settings("response_types"))
   new("StackedModel",
     name = "StackedModel",
     label = "Stacked Regression",
