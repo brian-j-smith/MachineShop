@@ -132,14 +132,12 @@ diff.Resamples <- function(x, ...) {
 #'
 t.test.PerformanceDiff <- function(x, adjust = "holm", ...)
 {
-  vcf <- if (is(x@control, "MLCVControl")) {
-    1 + x@control@repeats * x@control@folds / (x@control@folds - 1)
-  } else 1
+  vadj <- if (is(x@control, "MLCVControl")) 1 / (x@control@folds - 1) else 0
 
   t_test <- function(x) {
     x <- na.omit(x)
     n <- length(x)
-    stat <- mean(x) / sqrt(vcf * var(x) / n)
+    stat <- mean(x) / sqrt(var(x) * (1 / n + vadj))
     2 * pt(abs(stat), n - 1, lower.tail = FALSE)
   }
 
