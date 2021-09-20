@@ -2,6 +2,10 @@
 
 ## Version Updates
 
+## 3.0.0.9002
+* Implement permutation-based variable importance in `varimp()`.
+* Sort variable importance by first column only if not scaled.
+
 ## 3.0.0.9001
 * Correct the estimated variances for cross-validation estimators of mean performance difference in `t.test.PerformanceDiff()`.
 * Deprecate argument `metric` in `varimp()`.
