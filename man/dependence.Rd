@@ -11,7 +11,8 @@ dependence(
   interaction = FALSE,
   n = 10,
   intervals = c("uniform", "quantile"),
-  stats = MachineShop::settings("stats.PartialDependence")
+  stats = MachineShop::settings("stats.PartialDependence"),
+  na.rm = TRUE
 )
 }
 \arguments{
@@ -36,6 +37,9 @@ spaced uniformly (\code{"uniform"}) or according to variable quantiles
 \item{stats}{function, function name, or vector of these with which to
 compute response variable summary statistics over non-selected predictor
 variables.}
+
+\item{na.rm}{logical indicating whether to exclude missing predicted response
+values from the calculation of summary statistics.}
 }
 \value{
 \code{PartialDependence} class object that inherits from

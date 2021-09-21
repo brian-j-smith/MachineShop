@@ -22,6 +22,8 @@ PartialDependence <- function(object) {
 #' @param stats function, function name, or vector of these with which to
 #'   compute response variable summary statistics over non-selected predictor
 #'   variables.
+#' @param na.rm logical indicating whether to exclude missing predicted response
+#'   values from the calculation of summary statistics.
 #'
 #' @return \code{PartialDependence} class object that inherits from
 #' \code{data.frame}.
@@ -40,7 +42,7 @@ PartialDependence <- function(object) {
 dependence <- function(
   object, data = NULL, select = NULL, interaction = FALSE, n = 10,
   intervals = c("uniform", "quantile"),
-  stats = MachineShop::settings("stats.PartialDependence")
+  stats = MachineShop::settings("stats.PartialDependence"), na.rm = TRUE
 ) {
 
   stopifnot(is(object, "MLModelFit"))
@@ -80,10 +82,10 @@ dependence <- function(
   }
 
   predict_stats <- function(data) {
-    stats_list <- predict(object, newdata = data, type = "prob")  %>%
-      as.data.frame %>%
-      as.list %>%
-      map(stats, .)
+    stats_list <- map(
+      function(x) stats(if (na.rm) na.omit(x) else x),
+      as.data.frame(predict(object, newdata = data, type = "prob"))
+    )
     x <- do.call(cbind, stats_list)
     if (is.null(rownames(x))) rownames(x) <- make.unique(rep("stat", nrow(x)))
     if (is.null(colnames(x))) colnames(x) <- make.unique(rep("y", ncol(x)))
