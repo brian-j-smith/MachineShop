@@ -72,9 +72,10 @@ VarImp.numeric <- function(object, ...) {
 #'       change to compute in comparing model predictive performances between
 #'       datasets with and without permuted values.  The choices are difference
 #'       (\code{"-"}) and ratio (\code{"/"}).}
-#'     \item{\code{stats = c(mean = base::mean)}}{function, function name, or
-#'       vector of these with which to compute summary statistics on the set of
-#'       variable importance values from the permuted datasets.}
+#'     \item{\code{stats = MachineShop::settings("stats.VarImp")}}{function,
+#'       function name, or vector of these with which to compute summary
+#'       statistics on the set of variable importance values from the permuted
+#'       datasets.}
 #'     \item{\code{na.rm = TRUE}}{logical indicating whether to exclude missing
 #'       variable importance values from the calculation of summary statistics.}
 #'   }
@@ -135,7 +136,8 @@ dep_varimpargs <- function(metric, ...) {
 
 varimp_permute <- function(
   object, select = NULL, samples = 1, size = NULL, prop = NULL, metric = NULL,
-  compare = c("-", "/"), stats = c(mean = base::mean), na.rm = TRUE
+  compare = c("-", "/"), stats = MachineShop::settings("stats.VarImp"),
+  na.rm = TRUE
 ) {
   x <- as.MLModel(object)@x
   data <- as.data.frame(x)
