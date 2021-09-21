@@ -49,11 +49,10 @@ dependence <- function(
   if (is.null(data)) data <- x
   data <- as.data.frame(data)
   pred_names <- all.vars(predictors(terms(x, original = TRUE)))
+  pred_names <- do.call(subset_names, list(pred_names, substitute(select)),
+                        envir = parent.frame())
 
-  indices <- structure(match(pred_names, names(data)), names = pred_names)
-  select <- eval(substitute(select), as.list(indices), parent.frame())
-  if (is.null(select)) select <- indices
-  data_select <- data[, select, drop = FALSE]
+  data_select <- data[, pred_names, drop = FALSE]
 
   intervals <- match.arg(intervals)
 

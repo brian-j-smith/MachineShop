@@ -598,6 +598,21 @@ stepAIC_args <- function(formula, direction, scope) {
 }
 
 
+subset_names <- function(x, select = NULL) {
+  indices <- seq_along(x)
+  names(indices) <- x
+  select <- eval(substitute(select), as.list(indices), parent.frame())
+  if (is.character(select)) {
+    x <- intersect(x, select)
+  } else if (is.numeric(select)) {
+    x <- x[select]
+  } else if (!is.null(select)) {
+    throw(Warning("invalid 'select' value of class ", class1(select)))
+  }
+  x
+}
+
+
 switch_class <- function(EXPR, ...) {
   blocks <- eval(substitute(alist(...)))
   eval.parent(blocks[[match_class(EXPR, names(blocks))]])

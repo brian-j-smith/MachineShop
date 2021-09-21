@@ -26,6 +26,9 @@ to range from 0 to 100.}
 importance functions.  These include the following arguments and default
 values for \code{method = "permute"}.
 \describe{
+  \item{\code{select = NULL}}{expression indicating predictor variables for
+    which to compute variable importance (see \code{\link[base]{subset}}
+    for syntax) [default: all].}
   \item{\code{samples = 1}}{number of times to permute the values of each
     variable.  Larger numbers of samples decrease variability in the
     estimates at the expense of increased computation time.}

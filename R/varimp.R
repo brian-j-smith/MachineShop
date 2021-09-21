@@ -53,6 +53,9 @@ VarImp.numeric <- function(object, ...) {
 #'   importance functions.  These include the following arguments and default
 #'   values for \code{method = "permute"}.
 #'   \describe{
+#'     \item{\code{select = NULL}}{expression indicating predictor variables for
+#'       which to compute variable importance (see \code{\link[base]{subset}}
+#'       for syntax) [default: all].}
 #'     \item{\code{samples = 1}}{number of times to permute the values of each
 #'       variable.  Larger numbers of samples decrease variability in the
 #'       estimates at the expense of increased computation time.}
@@ -109,7 +112,8 @@ varimp <- function(object, method = c("model", "permute"), scale = TRUE, ...) {
       if (is.null(vi)) vi <- varimp_permute(object)
     },
     "permute" = {
-      vi <- varimp_permute(object, ...)
+      args <- eval(substitute(alist(object, ...)))
+      vi <- do.call(varimp_permute, args, envir = parent.frame())
     }
   )
   VarImp(vi, scale = scale)
@@ -130,12 +134,14 @@ dep_varimpargs <- function(metric, ...) {
 
 
 varimp_permute <- function(
-  object, samples = 1, size = NULL, prop = NULL, metric = NULL,
+  object, select = NULL, samples = 1, size = NULL, prop = NULL, metric = NULL,
   compare = c("-", "/"), stats = c(mean = base::mean), na.rm = TRUE
 ) {
   x <- as.MLModel(object)@x
   data <- as.data.frame(x)
   pred_names <- all.vars(predictors(terms(x, original = TRUE)))
+  pred_names <- do.call(subset_names, list(pred_names, substitute(select)),
+                        envir = parent.frame())
 
   samples <- check_integer(samples, bounds = c(1, Inf), size = 1)
   throw(check_assignment(samples))
@@ -165,7 +171,7 @@ varimp_permute <- function(
   work_pred_names <- map(na.omit, split(work, seq_len(num_workers)))
   seeds <- rand_int(samples)
 
-  permute <- function(n, size = n) {
+  permute_int <- function(n, size = n) {
     inds <- sample.int(n, size)
     half_size <- size / 2
     inds1 <- head(inds, half_size)
@@ -193,7 +199,7 @@ varimp_permute <- function(
     colnames(perf) <- pred_names
     for (s in seq_len(samples)) {
       set.seed(seeds[s])
-      inds <- permute(n, size)
+      inds <- permute_int(n, size)
       base_perf[s] <- if (s == 1 || subset) {
         newdata <- if (subset) data[inds$i, , drop = FALSE] else data
         obs <- response(object, newdata)
