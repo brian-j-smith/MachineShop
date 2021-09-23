@@ -45,7 +45,8 @@ modeling strategies.
     and specificity.
 -   Graphical and tabular performance summaries: calibration curves,
     confusion matrices, partial dependence plots, performance curves,
-    lift curves, and variable importance.
+    lift curves, and model-specific and permutation-based variable
+    importance.
 -   Model tuning over automatically generated grids of parameter values
     and randomly sampled grid points.
 -   Model selection and comparisons for any combination of models and

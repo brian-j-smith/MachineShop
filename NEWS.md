@@ -2,6 +2,9 @@
 
 ## Version Updates
 
+## 3.0.0.9004
+* Fix "undefined (response) column selected" error in permute method of `varimp()`.
+
 ## 3.0.0.9003
 * Add argument `na.rm` to `dependence()`.
 * Add global setting `stats.VarImp` for summary statistics to compute on permutation-based variable importance.
