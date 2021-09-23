@@ -593,7 +593,7 @@ surv_fo &lt;- y ~ sex + age + year + thickness + ulcer</code></pre>
 <dd>Logical indicating whether automatic generation of tuning parameter grids is implemented for the model.
 </dd>
 <dt><code>varimp</code></dt>
-<dd>Logical indicating whether variable importance is defined for the model.
+<dd>Logical indicating whether model-specific variable importance is defined.
 </dd>
 </dl>
 <p>Function <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/modelinfo"><code>modelinfo()</code></a> may be called without arguments, with one or more model functions, observed response variables, or vectors representing response variable types; and will return information on all matching models.</p>
@@ -1612,7 +1612,7 @@ surv_probs_control &lt;- CVControl(folds = 5, repeats = 3, seed = 123) %&gt;%
 </div>
 <div id="parallel-processing" class="section level2">
 <h2>Parallel Processing</h2>
-<p>Resampling is implemented with the <strong>foreach</strong> package <span class="citation">(Microsoft and Weston 2019)</span> and will run in parallel if a compatible backend is loaded, such as that provided by the <strong>doParallel</strong> <span class="citation">(Microsoft Corporation and Weston 2019b)</span> or <strong>doSNOW</strong> package <span class="citation">(Microsoft Corporation and Weston 2019a)</span>.</p>
+<p>Resampling and permutation-based variable importance are implemented with the <strong>foreach</strong> package <span class="citation">(Microsoft and Weston 2019)</span> and will run in parallel if a compatible backend is loaded, such as that provided by the <strong>doParallel</strong> <span class="citation">(Microsoft Corporation and Weston 2019b)</span> or <strong>doSNOW</strong> package <span class="citation">(Microsoft Corporation and Weston 2019a)</span>.</p>
 <pre class="r"><code>## Register multiple cores for parallel computations
 library(doParallel)
 registerDoParallel(cores = 2)</code></pre>
@@ -1830,7 +1830,7 @@ plot(res_diff)</code></pre>
 <p>Calculation of performance metrics on test sets or by resampling, as discussed previously, is one method of assessing model performance. Others available include measures of predictor variable importance, partial dependence plots, calibration curves comparing observed and predicted response values, and receiver operating characteristic analysis.</p>
 <div id="variable-importance" class="section level2">
 <h2>Variable Importance</h2>
-<p>The importance of predictor variables in a model fit is estimated with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/varimp"><code>varimp()</code></a> function and displayed graphically with <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/plot"><code>plot()</code></a>. Variable importance is a relative measure of the contributions of model predictors and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most. Classes of models can differ with respect to how variable importance is defined. In the case of a <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/GBMModel"><code>GBMModel</code></a>, importance of each predictor is based on the sum of squared empirical improvements over all internal tree nodes created by splitting on that variable <span class="citation">(Greenwell et al. 2019)</span>.</p>
+<p>The importance of predictor variables in a model fit is estimated with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/varimp"><code>varimp()</code></a> function and displayed graphically with <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/plot"><code>plot()</code></a>. Variable importance is a relative measure of the contributions of model predictors and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most. Model-specific implementations of variable importance are available in many cases, although their definitions may differ. In the case of a <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/GBMModel"><code>GBMModel</code></a>, importance of each predictor is based on the sum of squared empirical improvements over all internal tree nodes created by splitting on that variable <span class="citation">(Greenwell et al. 2019)</span>.</p>
 <pre class="r"><code>## Predictor variable importance
 (vi &lt;- varimp(surv_fit))
 #&gt; Object of class &quot;VarImp&quot;
@@ -1843,7 +1843,7 @@ plot(res_diff)</code></pre>
 
 plot(vi)</code></pre>
 <p><img src="using_files/figure-html/using_analyses_vi-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Alternatively, importance is based on negative log-transformed p-values for statistical models, like <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/CoxModel"><code>CoxModel</code></a>, that produce them. For other models, variable importance may be defined and calculated by their underlying source packages or not defined at all, as is the case for <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/SVMModel"><code>SVMModel</code></a>. Logical indicators of the availability of variable importance are available in the printed model constructor information or from <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/modelinfo"><code>modelinfo()</code></a>.</p>
+<p>In contrast, importance is based on negative log-transformed p-values for statistical models, like <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/CoxModel"><code>CoxModel</code></a>, that produce them. For other models, variable importance may be defined and calculated by their underlying source packages or not defined at all, as is the case for <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/SVMModel"><code>SVMModel</code></a>. Logical indicators of model-specific variable importance are given in the information displayed by model constructors and returned by <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/modelinfo"><code>modelinfo()</code></a>.</p>
 <pre class="r"><code>SVMModel
 #&gt; Object of class &quot;MLModelFunction&quot;
 #&gt; 
@@ -1864,6 +1864,39 @@ plot(vi)</code></pre>
 
 modelinfo(SVMModel)[[1]]$varimp
 #&gt; [1] FALSE</code></pre>
+<p>Variable importance can be computed with model-agnostic permutation methods <span class="citation">(Fisher, Rudin, and Dominici 2019)</span> as an alternative to model-specific methods. The following algorithm for permutation-based variable importance is implemented in <strong>MachineShop</strong>.</p>
+<ul>
+<li><p>Fit a model to a training dataset</p></li>
+<li><p>Compute training performance.</p></li>
+<li><p>For <span class="math inline">\(s = 1, \ldots, S\)</span>.</p>
+<ul>
+<li><p>Optionally sample a subset of the training set without replacement.</p></li>
+<li><p>For predictor variable <span class="math inline">\(p = 1, \ldots, P\)</span>.</p>
+<ul>
+<li><p>Randomly permute the variable values so that none match the original values.</p></li>
+<li><p>Compute performance on the permutation set.</p></li>
+<li><p>Compute importance as the difference or ratio between the permutation and training performances.</p></li>
+<li><p>Reset the variable to its original values.</p></li>
+</ul></li>
+</ul></li>
+<li><p>Return the mean or other summary statistics of importance for each variable.</p></li>
+</ul>
+<pre class="r"><code>## Permutation-based variable importance
+varimp(surv_fit, method = &quot;permute&quot;)
+#&gt; Object of class &quot;VarImp&quot;
+#&gt;           Permute.Mean
+#&gt; age          100.00000
+#&gt; thickness     60.98439
+#&gt; ulcer         50.78031
+#&gt; year          30.97239
+#&gt; sex            0.00000</code></pre>
+<p>There are a number of advantages to permutation-based variable importance. In particular, it can be computed for any</p>
+<ol style="list-style-type: decimal">
+<li>model,</li>
+<li>performance metric defined for the given response variable type, and</li>
+<li>predictor variable in the original training set.</li>
+</ol>
+<p>Conversely, model-specific methods are not defined for some models, are generally limited to metrics implemented in their source packages, and might be computed on derived, rather than original, predictor variables. These differences can make comparisons of variable importance across classes of models difficult if not impossible. The trade-off for the advantages of a permutation-based approach is increased computation time. To speed up computations, the algorithm will run in parallel if a compatible backend is loaded as described in the <em>Parallel Processing</em> section.</p>
 </div>
 <div id="partial-dependence-plots" class="section level2">
 <h2>Partial Dependence Plots</h2>
@@ -2537,6 +2570,9 @@ resample(tun_rec, model = sel_model)</code></pre>
 <dt><code>stats.Resamples</code></dt>
 <dd>function, function name, or vector of these with which to compute summary statistics on resampled performance metrics [default: <code>c(Mean = "base::mean", Median = "stats::median", SD = "stats::sd", Min = "base::min", Max = "base::max")</code>].
 </dd>
+<dt><code>stats.VarImp</code></dt>
+<dd>function, function name, or vector of these with which to compute variable importance summary statistics [default: <code>c(Mean = "base::mean")</code>].
+</dd>
 </dl>
 <p>A call to <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/settings"><code>settings()</code></a> with <code>"reset"</code> will restore all package defaults and with no arguments will display the current values of all. Settings may also be supplied as a single unnamed argument which is a named list. Partial matching of setting names is supported. The setting value is returned if only one is specified to view. Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes. Such a list can be passed as an argument to <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.0.0/topics/settings"><code>settings()</code></a> to restore their values.</p>
 <pre class="r"><code>## Change settings
@@ -2647,8 +2683,8 @@ data(Pima.tr, package = &quot;MASS&quot;)
 res &lt;- resample(type ~ ., data = Pima.tr, model = LogisticModel)
 summary(performance(res, metric = f2_score))
 #&gt;           Statistic
-#&gt; Metric          Mean    Median        SD       Min       Max NA
-#&gt;   f2_score 0.5705702 0.5798319 0.1800264 0.1724138 0.8571429  0</code></pre>
+#&gt; Metric          Mean    Median        SD    Min       Max NA
+#&gt;   f2_score 0.5587255 0.5808081 0.1363136 0.3125 0.8108108  0</code></pre>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">
@@ -2689,6 +2725,9 @@ Efron, Bradley, and Robert J Tibshirani. 1993. <em>An Introduction to the Bootst
 </div>
 <div id="ref-fawcett:2006:IRA" class="csl-entry">
 Fawcett, Tom. 2006. <span>“An Introduction to <span>ROC</span> Analysis.”</span> <em>Pattern Recognition Letters</em> 27 (8): 861–74.
+</div>
+<div id="ref-fisher:2019:AMW" class="csl-entry">
+Fisher, Aaron, Cynthia Rudin, and Francesca Dominici. 2019. <span>“Models Are Wrong, but Many Are Useful: Learning a Variable’s Importance by Studying an Entire Class of Prediction Models Simultaneously.”</span> <em>Machine Learning Research</em> 20: 1–81.
 </div>
 <div id="ref-graf:1999:ACP" class="csl-entry">
 Graf, Erika, Claudia Schmoor, Willi Sauerbrei, and Martin Schumacher. 1999. <span>“Assessment and Comparison of Prognostic Classification Schemes for Survival Data.”</span> <em>Statistics in Medicine</em> 18 (17–18): 2529–45.
