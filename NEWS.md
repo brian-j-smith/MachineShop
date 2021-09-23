@@ -2,6 +2,11 @@
 
 ## Version Updates
 
+## 3.0.0.9003
+* Add argument `na.rm` to `dependence()`.
+* Add global setting `stats.VarImp` for summary statistics to compute on permutation-based variable importance.
+* Add argument `select` to permute method of `varimp()`.
+
 ## 3.0.0.9002
 * Implement permutation-based variable importance in `varimp()`.
 * Sort variable importance by first column only if not scaled.
