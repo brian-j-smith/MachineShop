@@ -140,7 +140,7 @@ varimp_permute <- function(
   na.rm = TRUE
 ) {
   x <- as.MLModel(object)@x
-  data <- as.data.frame(x)
+  data <- if (is.data.frame(x)) x else as.data.frame(x)
   pred_names <- all.vars(predictors(terms(x, original = TRUE)))
   pred_names <- do.call(subset_names, list(pred_names, substitute(select)),
                         envir = parent.frame())
@@ -179,7 +179,7 @@ varimp_permute <- function(
     inds1 <- head(inds, half_size)
     inds2 <- tail(inds, -half_size)
     res <- data.frame(i = c(inds1, inds2), j = c(inds2, inds1))
-    res[order(res$i), , drop = FALSE]
+    res[order(res$i), ]
   }
 
   pb <- progress_bar$new(
@@ -203,7 +203,7 @@ varimp_permute <- function(
       set.seed(seeds[s])
       inds <- permute_int(n, size)
       base_perf[s] <- if (s == 1 || subset) {
-        newdata <- if (subset) data[inds$i, , drop = FALSE] else data
+        newdata <- if (subset) data[inds$i, ] else data
         obs <- response(object, newdata)
         pred <- predict(object, newdata, type = "prob")
         if (is.null(metric)) metric <- get_perf_metrics(obs, pred)[[1]]
@@ -214,7 +214,7 @@ varimp_permute <- function(
       }
       for (name in pred_names) {
         x <- newdata[[name]]
-        newdata[[name]] <- data[inds$j, name]
+        newdata[[name]] <- data[[name]][inds$j]
         pred <- predict(object, newdata, type = "prob")
         perf[s, name] <- performance(obs, pred, metrics = metric)[1]
         newdata[[name]] <- x
