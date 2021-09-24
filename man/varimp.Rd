@@ -73,10 +73,10 @@ plot(vi)
 
 }
 \references{
-Fisher A, Rudin C, and Dominici F (2019). All models are wrong, but many are
-useful: learning a variable's importance by studying an entire class of
-prediction models simultaneously. Journal of Machine Learning Research, 20:
-1-81.
+Fisher, A., Rudin, C., & Dominici, F. (2019). All models are wrong, but many
+are useful: Learning a variable's importance by studying an entire class of
+prediction models simultaneously. \emph{Journal of Machine Learning
+Research}, \emph{20}, 1-81.
 }
 \seealso{
 \code{\link{plot}}

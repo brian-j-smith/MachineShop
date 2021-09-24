@@ -101,20 +101,19 @@ tidy(kmeans_prep, number = 1)
 
 }
 \references{
-Forgy EW (1965). Cluster analysis of multivariate data: efficiency vs
-interpretability of classifications. Biometrics 21, 768--769.
+Forgy, E. W. (1965). Cluster analysis of multivariate data: efficiency versus
+interpretability of classifications. \emph{Biometrics}, \emph{21}, 768-769.
 
-Hartigan JA and Wong MA (1979). A K-means clustering algorithm.  Applied
-Statistics 28, 100--108.
+Hartigan, J. A., & Wong, M. A. (1979). A K-means clustering algorithm.
+\emph{Applied Statistics}, \emph{28}, 100-108.
 
-Lloyd SP (1957, 1982). Least squares quantization in PCM. Technical Note,
-Bell Laboratories. Published in 1982 in IEEE Transactions on Information
-Theory 28, 128--137.
+Lloyd, S. P. (1982). Least squares quantization in PCM. \emph{IEEE
+Transactions on Information Theory}, \emph{28}(2), 129-137.
 
-MacQueen J (1967). Some methods for classification and analysis of
-multivariate observations. In Proceedings of the Fifth Berkeley Symposium
-on Mathematical Statistics and Probability, eds L. M. Le Cam & J. Neyman,
-1, 281--297. Berkeley, CA: University of California Press.
+MacQueen, J. (1967). Some methods for classification and analysis of
+multivariate observations. In L. M. Le Cam & J. Neyman (Eds.),
+\emph{Proceedings of the fifth Berkeley Symposium on Mathematical Statistics
+and Probability} (vol. 1, pp. 281-297). University of California Press.
 }
 \seealso{
 \code{\link[stats]{kmeans}}, \code{\link[recipes]{recipe}},

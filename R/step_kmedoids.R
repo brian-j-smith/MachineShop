@@ -40,12 +40,13 @@
 #' minimized.  Cluster medoids are then returned as a set of k variables.
 #'
 #' @references
-#' Kaufman L and Rousseeuw PJ (1990). Finding Groups in Data: An Introduction to
-#' Cluster Analysis. Wiley: New York.
+#' Kaufman, L., & Rousseeuw, P. J. (1990). \emph{Finding groups in data: An
+#' introduction to cluster analysis}. Wiley.
 #'
-#' Reynolds A, Richards G, de la Iglesia B and Rayward-Smith V (1992).
-#' Clustering rules: a comparison of partitioning and hierarchical clustering
-#' algorithms. Journal of Mathematical Modelling and Algorithms 5, 475--504.
+#' Reynolds, A., Richards, G., de la Iglesia, B., & Rayward-Smith, V. (1992).
+#' Clustering rules: A comparison of partitioning and hierarchical clustering
+#' algorithms. \emph{Journal of Mathematical Modelling and Algorithms},
+#' \emph{5}, 475-504.
 #'
 #' @seealso \code{\link[cluster]{pam}}, \code{\link[cluster]{clara}},
 #' \code{\link[recipes]{recipe}}, \code{\link[recipes]{prep}},

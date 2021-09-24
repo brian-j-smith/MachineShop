@@ -21,9 +21,9 @@
 #' @return \code{SuperModel} class object that inherits from \code{MLModel}.
 #'
 #' @references
-#'
-#' van der Lann, M.J., Hubbard A.E. (2007) \emph{Super Learner.} Statistical
-#' Applications in Genetics and Molecular Biology, 6(1).
+#' van der Laan, M. J., Polley, E. C., & Hubbard, A. E. (2007). Super learner.
+#' \emph{Statistical Applications in Genetics and Molecular Biology},
+#' \emph{6}(1).
 #'
 #' @seealso \code{\link{fit}}, \code{\link{resample}}
 #'

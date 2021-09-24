@@ -106,12 +106,13 @@ diff.Resamples <- function(x, ...) {
 #' pairs are contained in the third dimension.
 #'
 #' @references
-#' Nadeau C and Bengio Y (2003). Inference for the generalization error. Machine
-#' Learning, 52: 239–81.
+#' Nadeau, C., & Bengio, Y. (2003). Inference for the generalization error.
+#' \emph{Machine Learning}, \emph{52}, 239–81.
 #'
-#' Bouckaert RR and Frank E (2004). Evaluating the Replicability of Significance
-#' Tests for Comparing Learning Algorithms. In Advances in Knowledge Discovery
-#' and Data Mining, 3–12. Berlin, Heidelberg: Springer.
+#' Bouckaert, R. R., & Frank, E. (2004). Evaluating the replicability of
+#' significance tests for comparing learning algorithms. In H. Dai, R. Srikant,
+#' & C. Zhang (Eds.), \emph{Advances in knowledge discovery and data mining}
+#' (pp. 3–12). Springer.
 #'
 #' @examples
 #' \donttest{

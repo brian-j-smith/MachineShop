@@ -33,8 +33,9 @@
 #' that form the components.
 #'
 #' @references
-#' Zou H, Hastie T and Tibshirani R (2006). Sparse principal component analysis.
-#' Journal of Computational and Graphical Statistics, 15(2):265--286.
+#' Zou, H., Hastie, T., & Tibshirani, R. (2006). Sparse principal component
+#' analysis. \emph{Journal of Computational and Graphical Statistics},
+#' \emph{15}(2), 265-286.
 #'
 #' @seealso \code{\link[elasticnet]{spca}}, \code{\link[recipes]{recipe}},
 #' \code{\link[recipes]{prep}}, \code{\link[recipes]{bake}}

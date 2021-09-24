@@ -18,7 +18,8 @@
 #' @return \code{StackedModel} class object that inherits from \code{MLModel}.
 #'
 #' @references
-#' Breiman, L. (1996) \emph{Stacked Regression.} Machine Learning, 24, 49--64.
+#' Breiman, L. (1996). Stacked regression. \emph{Machine Learning}, \emph{24},
+#' 49-64.
 #'
 #' @seealso \code{\link{fit}}, \code{\link{resample}}
 #'
