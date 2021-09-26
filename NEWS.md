@@ -2,6 +2,9 @@
 
 ## Version Updates
 
+## 3.0.0.9005
+* Fix `varimp()` compatibility with R versions < 4.1.0.
+
 ## 3.0.0.9004
 * Fix "undefined (response) column selected" error in permute method of `varimp()`.
 
