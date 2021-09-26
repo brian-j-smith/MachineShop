@@ -225,7 +225,7 @@ varimp_permute <- function(
   }
 
   f <- function(x) stats(if (na.rm) na.omit(x) else x)
-  res <- do.call(rbind, apply(sims, 2, f, simplify = FALSE))
+  res <- do.call(rbind, map(f, as.data.frame(sims)))
   colnames(res) <- paste0("Permute.", colnames(res))
   res
 }
