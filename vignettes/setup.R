@@ -1,4 +1,5 @@
 knitr::opts_chunk$set(
+  strip.white = FALSE,
   collapse = TRUE,
   comment = "#>",
   warning = FALSE,
