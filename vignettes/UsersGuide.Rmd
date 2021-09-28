@@ -1043,7 +1043,7 @@ The importance of predictor variables in a model fit is estimated with the `r rd
 
 ```{r using_analyses_vi}
 ## Predictor variable importance
-(vi <- varimp(surv_fit))
+(vi <- varimp(surv_fit, method = "model"))
 
 plot(vi)
 ```
@@ -1056,7 +1056,7 @@ SVMModel
 modelinfo(SVMModel)[[1]]$varimp
 ```
 
-Variable importance can be computed with model-agnostic permutation methods [@fisher:2019:AMW] as an alternative to model-specific methods.  The following algorithm for permutation-based variable importance is implemented in **MachineShop**.
+Variable importance can be computed with model-agnostic permutation methods [@fisher:2019:AMW] as an alternative to model-specific methods.  The following algorithm for permutation-based variable importance is implemented and the default method in **MachineShop**.
 
 * Fit a model to a training dataset
 
@@ -1080,7 +1080,7 @@ Variable importance can be computed with model-agnostic permutation methods [@fi
 
 ```{r using_analysis_vi_permute}
 ## Permutation-based variable importance
-varimp(surv_fit, method = "permute")
+varimp(surv_fit)
 ```
 
 There are a number of advantages to permutation-based variable importance.  In particular, it can be computed for any

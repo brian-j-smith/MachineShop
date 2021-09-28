@@ -50,7 +50,8 @@
 #' ## Requires prior installation of suggested package bartMachine to run
 #'
 #' model_fit <- fit(sale_amount ~ ., data = ICHomes, model = BARTMachineModel)
-#' varimp(model_fit, type = "splits", num_replicates = 20, scale = FALSE)
+#' varimp(model_fit, method = "model", type = "splits", num_replicates = 20,
+#'        scale = FALSE)
 #' }
 #'
 BARTMachineModel <- function(

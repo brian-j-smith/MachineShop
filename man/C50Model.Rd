@@ -81,7 +81,7 @@ example below.
 ## Requires prior installation of suggested package C50 to run
 
 model_fit <- fit(Species ~ ., data = iris, model = C50Model)
-varimp(model_fit, type = "splits", scale = FALSE)
+varimp(model_fit, method = "model", type = "splits", scale = FALSE)
 }
 
 }

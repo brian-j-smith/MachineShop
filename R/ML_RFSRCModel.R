@@ -71,7 +71,7 @@
 #' ## Requires prior installation of suggested package randomForestSRC to run
 #'
 #' model_fit <- fit(sale_amount ~ ., data = ICHomes, model = RFSRCModel)
-#' varimp(model_fit, type = "random", scale = TRUE)
+#' varimp(model_fit, method = "model", type = "random", scale = TRUE)
 #' }
 #'
 RFSRCModel <- function(

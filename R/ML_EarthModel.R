@@ -44,7 +44,7 @@
 #' ## Requires prior installation of suggested package earth to run
 #'
 #' model_fit <- fit(Species ~ ., data = iris, model = EarthModel)
-#' varimp(model_fit, type = "gcv", scale = FALSE)
+#' varimp(model_fit, method = "model", type = "gcv", scale = FALSE)
 #' }
 #'
 EarthModel <- function(

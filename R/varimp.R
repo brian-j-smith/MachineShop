@@ -39,14 +39,12 @@ VarImp.numeric <- function(object, ...) {
 #'
 #' @param object model \link{fit} result.
 #' @param method character string specifying the calculation of variable
-#'   importance as model-specific (\code{"model"}) or permutation-base
-#'   (\code{"permute"}).  If model-specific importance is specified but not
+#'   importance as permutation-base (\code{"permute"}) or model-specific
+#'   (\code{"model"}).  If model-specific importance is specified but not
 #'   defined, the permutation-based method will be used instead with its default
-#'   values (below).  To change the default permutation values, set
-#'   \code{method = "permute"}.  Permutation-based variable importance is
-#'   defined as the relative change in model predictive performances between
-#'   datasets with and without permuted values for the associated variable
-#'   (Fisher et al. 2019).
+#'   values (below).  Permutation-based variable importance is defined as the
+#'   relative change in model predictive performances between datasets with and
+#'   without permuted values for the associated variable (Fisher et al. 2019).
 #' @param scale logical indicating whether importance measures should be scaled
 #'   to range from 0 to 100.
 #' @param ... arguments passed to model-specific or permutation-based variable
@@ -102,11 +100,20 @@ VarImp.numeric <- function(object, ...) {
 #' plot(vi)
 #' }
 #'
-varimp <- function(object, method = c("model", "permute"), scale = TRUE, ...) {
+varimp <- function(object, method = c("permute", "model"), scale = TRUE, ...) {
   stopifnot(is(object, "MLModelFit"))
   model <- as.MLModel(object)
   require_namespaces(model@packages)
-  switch(match.arg(method),
+
+  choices <- eval(formals(sys.function())$method)
+  if (identical(method, choices)) {
+    throw(Warning(
+      "The default method has changed from \"model\" to \"permute\"; ",
+      "set 'method = \"model\"' to revert to the previous behavior."
+    ), times = 3)
+  }
+
+  switch(match.arg(method, choices),
     "model" = {
       args <- dep_varimpargs(...)
       vi <- do.call(model@varimp, c(list(unMLModelFit(object)), args))

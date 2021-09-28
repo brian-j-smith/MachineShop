@@ -166,7 +166,7 @@ example below.
 ## Requires prior installation of suggested package xgboost to run
 
 model_fit <- fit(Species ~ ., data = iris, model = XGBTreeModel)
-varimp(model_fit, type = "Frequency", scale = FALSE)
+varimp(model_fit, method = "model", type = "Frequency", scale = FALSE)
 }
 
 }

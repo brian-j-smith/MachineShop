@@ -4,20 +4,18 @@
 \alias{varimp}
 \title{Variable Importance}
 \usage{
-varimp(object, method = c("model", "permute"), scale = TRUE, ...)
+varimp(object, method = c("permute", "model"), scale = TRUE, ...)
 }
 \arguments{
 \item{object}{model \link{fit} result.}
 
 \item{method}{character string specifying the calculation of variable
-importance as model-specific (\code{"model"}) or permutation-base
-(\code{"permute"}).  If model-specific importance is specified but not
+importance as permutation-base (\code{"permute"}) or model-specific
+(\code{"model"}).  If model-specific importance is specified but not
 defined, the permutation-based method will be used instead with its default
-values (below).  To change the default permutation values, set
-\code{method = "permute"}.  Permutation-based variable importance is
-defined as the relative change in model predictive performances between
-datasets with and without permuted values for the associated variable
-(Fisher et al. 2019).}
+values (below).  Permutation-based variable importance is defined as the
+relative change in model predictive performances between datasets with and
+without permuted values for the associated variable (Fisher et al. 2019).}
 
 \item{scale}{logical indicating whether importance measures should be scaled
 to range from 0 to 100.}
