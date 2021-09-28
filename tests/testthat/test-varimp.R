@@ -48,8 +48,6 @@ test_that("test permuation-based varimp", {
   rec <- recipe(fo, data = data) %>%
     step_pca(all_numeric_predictors())
   rec_fit <- fit(rec, model = model)
-  test_block(fo_fit)
-  test_block(rec_fit)
   with_parallel({
     test_block(fo_fit)
     test_block(rec_fit)
