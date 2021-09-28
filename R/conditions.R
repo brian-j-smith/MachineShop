@@ -71,8 +71,8 @@ Warning <- function(..., call = FALSE) {
 #################### Throw ####################
 
 
-throw <- function(x, call = TRUE) {
-  .throw(x, call = call, parent_call = sys.call(-1))
+throw <- function(x, call = TRUE, ...) {
+  .throw(x, call = call, parent_call = sys.call(-1), ...)
 }
 
 
@@ -105,12 +105,19 @@ throw <- function(x, call = TRUE) {
 }
 
 
-.throw.warning <- function(x, call, parent_call, ...) {
-  if (match("warning", class(x)) > 1) {
-    x$message <- paste0(class1(x), ": ", x$message)
+.throw.warning <- function(x, call, parent_call, times = Inf, ...) {
+  if (is.call(parent_call) && is.finite(times)) {
+    name <- parent_call[[1]]
+    times <- min(MachineShop_global$throw_times[[name]], times)
+    MachineShop_global$throw_times[[name]] <- times - 1
   }
-  x$call <- select_call(call, parent_call, conditionCall(x))
-  warning(x)
+  if (times > 0) {
+    if (match("warning", class(x)) > 1) {
+      x$message <- paste0(class1(x), ": ", x$message)
+    }
+    x$call <- select_call(call, parent_call, conditionCall(x))
+    warning(x)
+  }
 }
 
 

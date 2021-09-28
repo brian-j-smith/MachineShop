@@ -457,7 +457,9 @@ MachineShop_global <- as.environment(list(
 
     )
 
-  )
+  ),
+
+  throw_times = list()
 
 ))
 
