@@ -1,27 +1,13 @@
-# MachineShop News (Development)
+# MachineShop News
 
 ## Version Updates
 
-## 3.0.0.9005
-* Fix `varimp()` compatibility with R versions < 4.1.0.
-
-## 3.0.0.9004
-* Fix "undefined (response) column selected" error in permute method of `varimp()`.
-
-## 3.0.0.9003
+## 3.1.0
 * Add argument `na.rm` to `dependence()`.
 * Add global setting `stats.VarImp` for summary statistics to compute on permutation-based variable importance.
-* Add argument `select` to permute method of `varimp()`.
-
-## 3.0.0.9002
-* Implement permutation-based variable importance in `varimp()`.
+* Add permutation-based variable importance to `varimp()`.
 * Sort variable importance by first column only if not scaled.
-
-## 3.0.0.9001
 * Correct the estimated variances for cross-validation estimators of mean performance difference in `t.test.PerformanceDiff()`.
-* Deprecate argument `metric` in `varimp()`.
-
-## 3.0.0.9000
 * Rename argument `metric` to `type` in `varimp()` functions for `BartMachineModel`, `C50Model`,  `EarthModel`,  `RFSRCModel`, and `XGBModel`.  
 * Set argument `type` default to `"nsubsets"` in `EarthModel` `varimp()`.
 * Expand case weighted metrics support.
