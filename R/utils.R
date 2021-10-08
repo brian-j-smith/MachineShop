@@ -364,7 +364,7 @@ new_progress_bar <- function(total, input = NULL, model = NULL, index = 0) {
   format <- paste(input, "|", model)
   if (index > 0) format <- paste0(index, ": ", format)
   if (getDoParName() %in% c("doSEQ", "doSNOW")) {
-    format <- paste(format, "[:bar] :percent | :elapsed")
+    format <- paste(format, "[:bar] :percent | :eta")
   }
   pb <- progress_bar$new(
     format = format,

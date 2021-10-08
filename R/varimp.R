@@ -183,7 +183,7 @@ varimp_permute <- function(
   }
 
   pb <- progress_bar$new(
-    format = "varimp permute [:bar] :percent | :elapsed",
+    format = "varimp permute [:bar] :percent | :eta",
     total = samples * length(pred_names),
     show_after = 1
   )
