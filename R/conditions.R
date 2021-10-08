@@ -136,7 +136,7 @@ check_array <- function(x, type, size = NULL, na.fail = TRUE) {
   if (is(result, "try-error")) {
     TypeError(x, type)
   } else if (n > 0 && (ndim(x) != n || any(na.omit(size(x) != size)))) {
-    msg <- if (n == 1 && size == 1) {
+    msg <- if (identical(size, 1)) {
       "a scalar"
     } else if (n == 1) {
       paste("a vector of length", size)
