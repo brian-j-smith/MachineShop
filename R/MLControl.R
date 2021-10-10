@@ -342,8 +342,9 @@ set_monitor <- function(x, progress = TRUE, verbose = FALSE) {
 set_predict <- function(x, times = NULL, distr = NULL, method = NULL) {
   stopifnot(is(x, "MLControl"))
 
-  if (!is.null(times)) times <- check_numeric(times, bounds = c(0, Inf),
-                                              include = FALSE, size = NA)
+  if (!is.null(times)) {
+    times <- check_numeric(times, bounds = c(0, Inf), include = 0, size = NA)
+  }
   throw(check_assignment(times))
 
   if (!is.null(distr)) distr <- check_character(distr, size = 1)
