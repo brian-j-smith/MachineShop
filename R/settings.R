@@ -86,9 +86,6 @@
 #'     with which to compute \link{summary} statistics on resampled performance
 #'     metrics [default: \code{c(Mean = "base::mean", Median = "stats::median",
 #'     SD = "stats::sd", Min = "base::min", Max = "base::max")}].}
-#'   \item{\code{stats.VarImp}}{function, function name, or vector of these with
-#'     which to compute \link[=varimp]{variable importance} summary statistics
-#'     [default: \code{c(Mean = "base::mean")}].}
 #' }
 #'
 #' @examples
@@ -449,12 +446,6 @@ MachineShop_global <- as.environment(list(
         "Max" = "base::max"
       ),
       check = check_stats
-    ),
-
-    stats.VarImp = list(
-      value = c("Mean" = "base::mean"),
-      check = check_stats
-
     )
 
   ),
