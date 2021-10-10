@@ -51,6 +51,7 @@ modeling strategies.
     and randomly sampled grid points.
 -   Model selection and comparisons for any combination of models and
     model parameter values.
+-   Recursive feature elimination.
 -   User-definable models and performance metrics.
 
 # Getting Started

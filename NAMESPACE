@@ -167,6 +167,7 @@ export(.,
        performance_curve,
        resample,
        response,
+       rfe,
        settings,
        step_kmeans,
        step_kmedoids,
@@ -304,6 +305,12 @@ S3method(resample, recipe)
 S3method(response, MLModelFit)
 S3method(response, ModelFrame)
 S3method(response, recipe)
+S3method(rfe, formula)
+S3method(rfe, matrix)
+S3method(rfe, ModelFrame)
+S3method(rfe, recipe)
+S3method(rfe, MLModel)
+S3method(rfe, MLModelFunction)
 S3method(SelectedInput, formula)
 S3method(SelectedInput, list)
 S3method(SelectedInput, matrix)

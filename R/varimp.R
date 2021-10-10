@@ -57,11 +57,14 @@ VarImp.numeric <- function(object, ...) {
 #'     \item{\code{samples = 1}}{number of times to permute the values of each
 #'       variable.  Larger numbers of samples decrease variability in the
 #'       estimates at the expense of increased computation time.}
-#'     \item{\code{size = NULL}}{number of observations to sample without
+#'     \item{\code{prop = NULL}}{proportion of observations to sample without
 #'       replacement at each round of variable permutations [default: all].
-#'       Subsampling of observations will decrease computation time.}
-#'     \item{\code{prop = NULL}}{proportion of observations to sample at each
+#'       Subsampling of observations can decrease computation time.}
+#'     \item{\code{size = NULL}}{number of observations to sample at each
 #'       round of permutations [default: all].}
+#'     \item{\code{times = NULL}}{numeric vector of follow-up times at which to
+#'       predict survival probabilities or \code{NULL} for predicted survival
+#'       means.}
 #'     \item{\code{metric = NULL}}{\link[=metrics]{metric} function or function
 #'       name with which to calculate performance.  If not specified, the first
 #'       applicable default metric from the \link{performance} functions is
@@ -141,8 +144,9 @@ dep_varimpargs <- function(metric, ...) {
 
 
 varimp_permute <- function(
-  object, select = NULL, samples = 1, size = NULL, prop = NULL, metric = NULL,
-  compare = c("-", "/"), stats = c(Mean = "base::mean"), na.rm = TRUE
+  object, select = NULL, samples = 1, prop = NULL, size = NULL, times = NULL,
+  metric = NULL, compare = c("-", "/"), stats = c(Mean = "base::mean"),
+  na.rm = TRUE
 ) {
   x <- as.MLModel(object)@x
   data <- if (is.data.frame(x)) x else as.data.frame(x)
@@ -154,18 +158,18 @@ varimp_permute <- function(
   throw(check_assignment(samples))
 
   n <- nrow(data)
-  size <- if (is.null(c(size, prop))) {
+  size <- if (is.null(c(prop, size))) {
     n
+  } else if (is.null(size)) {
+    prop <- check_numeric(prop, bounds = c(0, 1), include = 0:1, size = 1)
+    throw(check_assignment(prop))
+    max(min(2, n), prop * n)
   } else if (is.null(prop)) {
     size <- check_numeric(size, bounds = c(2, Inf), size = 1)
     throw(check_assignment(size))
     min(size, n)
-  } else if (is.null(size)) {
-    prop <- check_numeric(prop, bounds = c(0, 1), include = 0:1, size = 1)
-    throw(check_assignment(prop))
-    max(min(2, n), n * prop)
   } else {
-    throw(Error("Arguments 'size' and 'prop' cannot be specified together."))
+    throw(Error("Arguments 'prop' and 'size' cannot be specified together."))
   }
 
   if (!is.null(metric)) {
@@ -183,15 +187,6 @@ varimp_permute <- function(
   work_pred_names <- map(na.omit, split(work, seq_len(num_workers)))
   seeds <- rand_int(samples)
 
-  permute_int <- function(n, size = n) {
-    inds <- sample.int(n, size)
-    half_size <- size / 2
-    inds1 <- head(inds, half_size)
-    inds2 <- tail(inds, -half_size)
-    res <- data.frame(i = c(inds1, inds2), j = c(inds2, inds1))
-    res[order(res$i), ]
-  }
-
   pb <- progress_bar$new(
     format = "varimp permute [:bar] :percent | :eta",
     total = samples * length(pred_names),
@@ -202,7 +197,7 @@ varimp_permute <- function(
   sims <- foreach(
     pred_names = work_pred_names[lengths(work_pred_names) > 0],
     .combine = cbind,
-    .export = c("get_MLMetric", "get_perf_metrics"),
+    .export = c("get_MLMetric", "get_perf_metrics", "permute_int"),
     .packages = "MachineShop"
   ) %dopar% {
     subset <- size < n
@@ -215,19 +210,19 @@ varimp_permute <- function(
       base_perf[s] <- if (s == 1 || subset) {
         newdata <- if (subset) data[inds$i, ] else data
         obs <- response(object, newdata)
-        pred <- predict(object, newdata, type = "prob")
+        pred <- predict(object, newdata, times = times, type = "prob")
         if (is.null(metric)) {
           metric <- get_MLMetric(get_perf_metrics(obs, pred)[[1]])
         }
-        performance(obs, pred, metrics = metric)[1]
+        metric(obs, pred)[1]
       } else {
         base_perf[1]
       }
       for (name in pred_names) {
         x <- newdata[[name]]
         newdata[[name]] <- data[[name]][inds$j]
-        pred <- predict(object, newdata, type = "prob")
-        perf[s, name] <- performance(obs, pred, metrics = metric)[1]
+        pred <- predict(object, newdata, times = times, type = "prob")
+        perf[s, name] <- metric(obs, pred)[1]
         newdata[[name]] <- x
         pb$tick()
       }

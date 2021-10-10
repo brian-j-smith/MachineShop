@@ -34,7 +34,7 @@ Variable importance can be computed with model-agnostic permutation methods [@fi
     
   * For predictor variable $p = 1, \ldots, P$.
   
-    * Randomly permute the variable values so that none match the original values.
+    * Randomly permute the variable values.
     
     * Compute performance on the permutation set.
     
@@ -56,6 +56,32 @@ There are a number of advantages to permutation-based variable importance.  In p
 3. predictor variable in the original training set.
 
 Conversely, model-specific methods are not defined for some models, are generally limited to metrics implemented in their source packages, and might be computed on derived, rather than original, predictor variables.  These differences can make comparisons of variable importance across classes of models difficult if not impossible.  The trade-off for the advantages of a permutation-based approach is increased computation time.  To speed up computations, the algorithm will run in parallel if a compatible backend is loaded as described in the *Parallel Processing* section. 
+
+
+## Recursive Feature Elimination
+
+Recursive feature elimination (RFE) is a wrapper method of variable selection.  In wrapper methods, a given model is fit to subsets of predictor variables in order to select the subset whose fit is optimal.  Forward, backward, and step-wise variable selection are examples of wrapper methods.  RFE is a type of backward selection in which subsets are formed from decreasing numbers of the most important predictor variables.  The RFE algorithm implemented in the package-supplied `rfe()` function is summarized below.
+
+* Compute variable importance for all predictors.
+
+* For predictor subsets of sizes $S = S_n > ... > S_1$.
+
+  * Eliminate predictors whose variable importance is not in the top $S$ by randomly permuting their values.
+  
+  * Compute a resampled estimate of model predictive performance.
+  
+  * Optionally recompute variable importance for the top $S$ predictors, and set importance equal to zero for those eliminated.
+  
+* Select the predictor set with highest predictive performance.
+
+This RFE algorithm differs from others in that variables are "eliminated" by permuting their values rather than by removing them from the dataset.  Using a permutation approach for both the elimination of variables and computation of variable importance enables application of the `rfe()` function to any variable specification (traditional formula, design matrix, model frame, or recipe) and any model available in the package.  The syntax for `rfe()` is similar to `resample()` as illustrated in the following example.
+
+```{r using_analysis_rfe}
+## Recursive feature elimination
+(surv_rfe <- rfe(surv_fo, data = surv_train, model = GBMModel,
+                 control = surv_means_control))
+surv_rfe$terms[surv_rfe$optimal]
+```
 
 
 ## Partial Dependence Plots

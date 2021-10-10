@@ -44,6 +44,7 @@
 | `r rdoc_url("lift")`              | Lift curves                              |
 | `r rdoc_url("performance")`       | Model performance metrics                |
 | `r rdoc_url("performance_curve")` | Model performance curves                 |
+| `r rdoc_url("rfe")`               | Recursive feature elimination            |
 | `r rdoc_url("varimp")`            | Variable importance                      |
 
 &nbsp;

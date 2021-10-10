@@ -31,6 +31,7 @@
 #'   \code{\link{lift}} \tab Lift curves \cr
 #'   \code{\link{performance} \link{metrics}} \tab Model performance metrics \cr
 #'   \code{\link{performance_curve}} \tab Model performance curves \cr
+#'   \code{\link{rfe}} \tab Recursive feature elimination \cr
 #'   \code{\link{varimp}} \tab Variable importance \cr
 #' }
 #'

@@ -373,6 +373,16 @@ nvars <- function(x, model) {
 }
 
 
+permute_int <- function(n, size = n) {
+  inds <- sample.int(n, size)
+  half_size <- size / 2
+  inds1 <- head(inds, half_size)
+  inds2 <- tail(inds, -half_size)
+  res <- data.frame(i = c(inds1, inds2), j = c(inds2, inds1))
+  res[order(res$i), ]
+}
+
+
 push <- function(x, object, ...) {
   UseMethod("push")
 }

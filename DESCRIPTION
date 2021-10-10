@@ -118,6 +118,7 @@ Collate:
     'reexports.R'
     'resample.R'
     'response.R'
+    'rfe.R'
     'settings.R'
     'step_kmeans.R'
     'step_kmedoids.R'
