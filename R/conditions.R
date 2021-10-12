@@ -257,7 +257,7 @@ check_metrics <- function(x, convert = FALSE) {
     DomainError(x, "must be a metrics function, function name, ",
                    "or vector of these")
   } else if (convert) {
-    list_to_function(x, "metric")
+    vector_to_function(x, "metric")
   } else {
     x
   }
@@ -304,7 +304,7 @@ check_stat <- function(x, convert = FALSE) {
 
 check_stats <- function(x, convert = FALSE) {
   result <- try({
-    stats <- list_to_function(x, "stat")
+    stats <- vector_to_function(x, "stat")
     stats(1:5)
   }, silent = TRUE)
   if (!is.numeric(result)) {

@@ -234,37 +234,6 @@ label_items <- function(label, x, n = Inf, add_names = FALSE) {
 }
 
 
-list_to_function <- function(x, type) {
-  err_msg <- paste0("'", deparse1(substitute(x)), "' must be a function, ",
-                      "function name, or vector of these")
-  if (is(x, "MLMetric")) x <- list(x)
-  if (is(x, "vector")) {
-    x <- as.list(x)
-    x_names <- character()
-    for (i in seq_along(x)) {
-      if (is(x[[i]], "character")) {
-        x_name <- x[[i]]
-        x[[i]] <- fget(x_name)
-      } else if (is(x[[i]], "MLMetric")) {
-        x_name <- x[[i]]@name
-      } else if (is(x[[i]], "function")) {
-        x_name <- type
-      } else {
-        throw(Error(err_msg))
-      }
-      name <- names(x)[i]
-      x_names[i] <- if (is.null(name) || !nzchar(name)) x_name else name
-    }
-    names(x) <- make.unique(x_names)
-    function(...) unlist(map(function(fun) fun(...), x))
-  } else if (is(x, "function")) {
-    x
-  } else {
-    throw(Error(err_msg))
-  }
-}
-
-
 make_list_names <- function(x, prefix) {
   old_names <- names(x)
   names(x) <- if (length(x)) {
@@ -641,4 +610,35 @@ unnest <- function(data) {
     df[name] <- x
   }
   df
+}
+
+
+vector_to_function <- function(x, type) {
+  err_msg <- paste0("'", deparse1(substitute(x)), "' must be a function, ",
+                      "function name, or vector of these")
+  if (is(x, "MLMetric")) x <- list(x)
+  if (is(x, "vector")) {
+    x <- as.list(x)
+    x_names <- character()
+    for (i in seq_along(x)) {
+      if (is(x[[i]], "character")) {
+        x_name <- x[[i]]
+        x[[i]] <- fget(x_name)
+      } else if (is(x[[i]], "MLMetric")) {
+        x_name <- x[[i]]@name
+      } else if (is(x[[i]], "function")) {
+        x_name <- type
+      } else {
+        throw(Error(err_msg))
+      }
+      name <- names(x)[i]
+      x_names[i] <- if (is.null(name) || !nzchar(name)) x_name else name
+    }
+    names(x) <- make.unique(x_names)
+    function(...) unlist(map(function(fun) fun(...), x))
+  } else if (is(x, "function")) {
+    x
+  } else {
+    throw(Error(err_msg))
+  }
 }
