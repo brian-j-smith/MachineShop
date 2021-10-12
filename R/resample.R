@@ -386,7 +386,8 @@ subsample_data <- function(fun, x, object) {
 resample_selection <- function(x, update, params, ..., class) {
 
   metrics <- params$metrics
-  stat <- fget(params$stat)
+  stat <- check_stat(params$stat, convert = TRUE)
+  throw(check_assignment(stat))
 
   perf_list <- list()
   perf_stats <- numeric()

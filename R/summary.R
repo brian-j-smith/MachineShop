@@ -97,7 +97,8 @@ summary.MLModelFit <- function(object, ...) {
 summary.Performance <- function(
   object, stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...
 ) {
-  stats <- list_to_function(stats, "stat")
+  stats <- check_stats(stats, convert = TRUE)
+  throw(check_assignment(stats))
 
   f <- function(x) {
     prop_na <- mean(is.na(x))
@@ -126,7 +127,8 @@ summary.PerformanceCurve <- function(
 ) {
   if (!(is.null(object$Resample) || is.null(stat))) {
 
-    stat <- fget(stat)
+    stat <- check_stat(stat, convert = TRUE)
+    throw(check_assignment(stat))
 
     object_class <- class(object)
     stat_na_omit <- function(x) stat(x[is.finite(x)])

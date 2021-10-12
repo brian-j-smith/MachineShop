@@ -165,7 +165,8 @@ plot.MLModel <- function(
 ) {
   if (!is_trained(x)) throw(Error("no training results to plot"))
 
-  stat <- fget(stat)
+  stat <- check_stat(stat, convert = TRUE)
+  throw(check_assignment(stat))
   type <- match.arg(type)
 
   map(function(train_step) {
@@ -263,7 +264,8 @@ plot.Performance <- function(
   }
   df$Metric <- factor(df$Metric, metrics)
 
-  stat <- fget(stat)
+  stat <- check_stat(stat, convert = TRUE)
+  throw(check_assignment(stat))
 
   firstmetric <- df[df$Metric == metrics[1], , drop = FALSE]
   sortedlevels <- tapply(firstmetric$Value, firstmetric$Model,

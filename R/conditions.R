@@ -271,20 +271,34 @@ check_numeric <- function(
 }
 
 
-check_stat <- function(x) {
-  result <- try(fget(x)(1:5), silent = TRUE)
+check_stat <- function(x, convert = FALSE) {
+  result <- try({
+    stat <- fget(x)
+    stat(1:5)
+  }, silent = TRUE)
   if (!is.numeric(result) || length(result) != 1) {
     DomainError(x, "must be a statistic function or function name")
-  } else x
+  } else if (convert) {
+    stat
+  } else {
+    x
+  }
 }
 
 
-check_stats <- function(x) {
-  result <- try(list_to_function(x, "stat")(1:5), silent = TRUE)
+check_stats <- function(x, convert = FALSE) {
+  result <- try({
+    stats <- list_to_function(x, "stat")
+    stats(1:5)
+  }, silent = TRUE)
   if (!is.numeric(result)) {
     DomainError(x, "must be a statistics function, function name, ",
                    "or vector of these")
-  } else x
+  } else if (convert) {
+    stats
+  } else {
+    x
+  }
 }
 
 

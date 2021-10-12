@@ -172,7 +172,8 @@ varimp_permute <- function(
 
   compare <- match.arg(compare)
   varimp <- function(x, y) do.call(compare, list(x, y))
-  stats <- list_to_function(stats, "stat")
+  stats <- check_stats(stats, convert = TRUE)
+  throw(check_assignment(stats))
 
   num_workers <- getDoParWorkers()
   work <- pred_names
