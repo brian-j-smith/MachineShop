@@ -170,6 +170,10 @@ varimp_permute <- function(
     throw(Error("Arguments 'size' and 'prop' cannot be specified together."))
   }
 
+  if (!is.null(metric)) {
+    metric <- check_metric(metric, convert = TRUE)
+    throw(check_assignment(metric))
+  }
   compare <- match.arg(compare)
   varimp <- function(x, y) do.call(compare, list(x, y))
   stats <- check_stats(stats, convert = TRUE)
@@ -214,8 +218,9 @@ varimp_permute <- function(
         newdata <- if (subset) data[inds$i, ] else data
         obs <- response(object, newdata)
         pred <- predict(object, newdata, type = "prob")
-        if (is.null(metric)) metric <- get_perf_metrics(obs, pred)[[1]]
-        metric <- get_MLMetric(metric)
+        if (is.null(metric)) {
+          metric <- get_MLMetric(get_perf_metrics(obs, pred)[[1]])
+        }
         performance(obs, pred, metrics = metric)[1]
       } else {
         base_perf[1]

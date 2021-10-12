@@ -239,12 +239,28 @@ check_match <- function(choices) {
 }
 
 
-check_metrics <- function(x) {
+check_metric <- function(x, convert = FALSE) {
+  result <- try(get_MLMetric(x), silent = TRUE)
+  if (is(result, "try-error")) {
+    DomainError(x, "must be a metrics function or function name")
+  } else if (convert) {
+    result
+  } else {
+    x
+  }
+}
+
+
+check_metrics <- function(x, convert = FALSE) {
   result <- try(map(get_MLMetric, c(x)), silent = TRUE)
   if (is(result, "try-error")) {
     DomainError(x, "must be a metrics function, function name, ",
                    "or vector of these")
-  } else x
+  } else if (convert) {
+    list_to_function(x, "metric")
+  } else {
+    x
+  }
 }
 
 
