@@ -1832,7 +1832,7 @@ plot(res_diff)</code></pre>
 <h2>Variable Importance</h2>
 <p>The importance of predictor variables in a model fit is estimated with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/varimp"><code>varimp()</code></a> function and displayed graphically with <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/plot"><code>plot()</code></a>. Variable importance is a relative measure of the contributions of model predictors and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most. Model-specific implementations of variable importance are available in many cases, although their definitions may differ. In the case of a <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/GBMModel"><code>GBMModel</code></a>, importance of each predictor is based on the sum of squared empirical improvements over all internal tree nodes created by splitting on that variable <span class="citation">(Greenwell et al. 2019)</span>.</p>
 <pre class="r"><code>## Predictor variable importance
-(vi &lt;- varimp(surv_fit))
+(vi &lt;- varimp(surv_fit, method = &quot;model&quot;))
 #&gt; Object of class &quot;VarImp&quot;
 #&gt;             Overall
 #&gt; age       100.00000
@@ -1864,7 +1864,7 @@ plot(vi)</code></pre>
 
 modelinfo(SVMModel)[[1]]$varimp
 #&gt; [1] FALSE</code></pre>
-<p>Variable importance can be computed with model-agnostic permutation methods <span class="citation">(Fisher, Rudin, and Dominici 2019)</span> as an alternative to model-specific methods. The following algorithm for permutation-based variable importance is implemented in <strong>MachineShop</strong>.</p>
+<p>Variable importance can be computed with model-agnostic permutation methods <span class="citation">(Fisher, Rudin, and Dominici 2019)</span> as an alternative to model-specific methods. The following algorithm for permutation-based variable importance is implemented and the default method in <strong>MachineShop</strong>.</p>
 <ul>
 <li><p>Fit a model to a training dataset</p></li>
 <li><p>Compute training performance.</p></li>
@@ -1873,7 +1873,7 @@ modelinfo(SVMModel)[[1]]$varimp
 <li><p>Optionally sample a subset of the training set without replacement.</p></li>
 <li><p>For predictor variable <span class="math inline">\(p = 1, \ldots, P\)</span>.</p>
 <ul>
-<li><p>Randomly permute the variable values so that none match the original values.</p></li>
+<li><p>Randomly permute the variable values.</p></li>
 <li><p>Compute performance on the permutation set.</p></li>
 <li><p>Compute importance as the difference or ratio between the permutation and training performances.</p></li>
 <li><p>Reset the variable to its original values.</p></li>
@@ -1882,7 +1882,7 @@ modelinfo(SVMModel)[[1]]$varimp
 <li><p>Return the mean or other summary statistics of importance for each variable.</p></li>
 </ul>
 <pre class="r"><code>## Permutation-based variable importance
-varimp(surv_fit, method = &quot;permute&quot;)
+varimp(surv_fit)
 #&gt; Object of class &quot;VarImp&quot;
 #&gt;           Permute.Mean
 #&gt; age          100.00000
@@ -1897,6 +1897,34 @@ varimp(surv_fit, method = &quot;permute&quot;)
 <li>predictor variable in the original training set.</li>
 </ol>
 <p>Conversely, model-specific methods are not defined for some models, are generally limited to metrics implemented in their source packages, and might be computed on derived, rather than original, predictor variables. These differences can make comparisons of variable importance across classes of models difficult if not impossible. The trade-off for the advantages of a permutation-based approach is increased computation time. To speed up computations, the algorithm will run in parallel if a compatible backend is loaded as described in the <em>Parallel Processing</em> section.</p>
+</div>
+<div id="recursive-feature-elimination" class="section level2">
+<h2>Recursive Feature Elimination</h2>
+<p>Recursive feature elimination (RFE) is a wrapper method of variable selection. In wrapper methods, a given model is fit to subsets of predictor variables in order to select the subset whose fit is optimal. Forward, backward, and step-wise variable selection are examples of wrapper methods. RFE is a type of backward selection in which subsets are formed from decreasing numbers of the most important predictor variables. The RFE algorithm implemented in the package-supplied <code>rfe()</code> function is summarized below.</p>
+<ul>
+<li><p>Compute variable importance for all predictors.</p></li>
+<li><p>For predictor subsets of sizes <span class="math inline">\(S = S_n &gt; ... &gt; S_1\)</span>.</p>
+<ul>
+<li><p>Eliminate predictors whose variable importance is not in the top <span class="math inline">\(S\)</span> by randomly permuting their values.</p></li>
+<li><p>Compute a resampled estimate of model predictive performance.</p></li>
+<li><p>Optionally recompute variable importance for the top <span class="math inline">\(S\)</span> predictors, and set importance equal to zero for those eliminated.</p></li>
+</ul></li>
+<li><p>Select the predictor set with highest predictive performance.</p></li>
+</ul>
+<p>This RFE algorithm differs from others in that variables are “eliminated” by permuting their values rather than by removing them from the dataset. Using a permutation approach for both the elimination of variables and computation of variable importance enables application of the <code>rfe()</code> function to any variable specification (traditional formula, design matrix, model frame, or recipe) and any model available in the package. The syntax for <code>rfe()</code> is similar to <code>resample()</code> as illustrated in the following example.</p>
+<pre class="r"><code>## Recursive feature elimination
+(surv_rfe &lt;- rfe(surv_fo, data = surv_train, model = GBMModel,
+                 control = surv_means_control))
+#&gt; # A tibble: 4 x 4
+#&gt;    size terms     optimal performance[,&quot;C-Index&quot;]
+#&gt;   &lt;int&gt; &lt;list&gt;    &lt;lgl&gt;                     &lt;dbl&gt;
+#&gt; 1     5 &lt;chr [5]&gt; FALSE                     0.730
+#&gt; 2     4 &lt;chr [4]&gt; TRUE                      0.741
+#&gt; 3     2 &lt;chr [2]&gt; FALSE                     0.737
+#&gt; 4     1 &lt;chr [1]&gt; FALSE                     0.734
+surv_rfe$terms[surv_rfe$optimal]
+#&gt; [[1]]
+#&gt; [1] &quot;age&quot;       &quot;thickness&quot; &quot;ulcer&quot;     &quot;year&quot;</code></pre>
 </div>
 <div id="partial-dependence-plots" class="section level2">
 <h2>Partial Dependence Plots</h2>
@@ -2570,9 +2598,6 @@ resample(tun_rec, model = sel_model)</code></pre>
 <dt><code>stats.Resamples</code></dt>
 <dd>function, function name, or vector of these with which to compute summary statistics on resampled performance metrics [default: <code>c(Mean = "base::mean", Median = "stats::median", SD = "stats::sd", Min = "base::min", Max = "base::max")</code>].
 </dd>
-<dt><code>stats.VarImp</code></dt>
-<dd>function, function name, or vector of these with which to compute variable importance summary statistics [default: <code>c(Mean = "base::mean")</code>].
-</dd>
 </dl>
 <p>A call to <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/settings"><code>settings()</code></a> with <code>"reset"</code> will restore all package defaults and with no arguments will display the current values of all. Settings may also be supplied as a single unnamed argument which is a named list. Partial matching of setting names is supported. The setting value is returned if only one is specified to view. Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes. Such a list can be passed as an argument to <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/settings"><code>settings()</code></a> to restore their values.</p>
 <pre class="r"><code>## Change settings
@@ -2683,8 +2708,8 @@ data(Pima.tr, package = &quot;MASS&quot;)
 res &lt;- resample(type ~ ., data = Pima.tr, model = LogisticModel)
 summary(performance(res, metric = f2_score))
 #&gt;           Statistic
-#&gt; Metric          Mean    Median        SD    Min       Max NA
-#&gt;   f2_score 0.5587255 0.5808081 0.1363136 0.3125 0.8108108  0</code></pre>
+#&gt; Metric          Mean    Median        SD       Min       Max NA
+#&gt;   f2_score 0.5705702 0.5798319 0.1800264 0.1724138 0.8571429  0</code></pre>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">
