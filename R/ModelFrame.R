@@ -14,15 +14,15 @@
 #' @param y response variable.
 #' @param data \link[=data.frame]{data frame} or an object that can be converted
 #'   to one.
-#' @param na.rm logical indicating whether to remove cases with \code{NA} values
-#'   for any of the model variables.
 #' @param offsets numeric vector, matrix, or data frame of values to be added
 #'   with a fixed coefficient of 1 to linear predictors in compatible regression
 #'   models.
-#' @param weights numeric vector of non-negative case weights for the \code{y}
-#'   response variable [default: equal weights].
 #' @param strata vector of values to use in conducting stratified
 #'   \link{resample} estimation of model performance [default: none].
+#' @param weights numeric vector of non-negative case weights for the \code{y}
+#'   response variable [default: equal weights].
+#' @param na.rm logical indicating whether to remove cases with \code{NA} values
+#'   for any of the model variables.
 #' @param ... arguments passed to other methods.
 #'
 #' @return \code{ModelFrame} class object that inherits from \code{data.frame}.
@@ -47,21 +47,21 @@ ModelFrame <- function(x, ...) {
 
 ModelFrame.data.frame <- function(x, ...) {
   case_names <- x[["(names)"]]
-  weights <- x[["(weights)"]]
   strata <- x[["(strata)"]]
-  x[c("(names)", "(weights)", "(strata)")] <- NULL
+  weights <- x[["(weights)"]]
+  x[c("(names)", "(strata)", "(weights)")] <- NULL
   model_terms <- terms(map(as.name, names(x)[-1]), names(x)[1],
                        all_numeric = all(map_logi(is.numeric, x[-1])))
-  ModelFrame(model_terms, x, na.rm = FALSE,
+  ModelFrame(model_terms, x,
              names = if (is.null(case_names)) rownames(x) else case_names,
-             weights = weights, strata = strata)
+             strata = strata, weights = weights, na.rm = FALSE)
 }
 
 
 #' @rdname ModelFrame-methods
 #'
 ModelFrame.formula <- function(
-  x, data, na.rm = TRUE, weights = NULL, strata = NULL, ...
+  x, data, strata = NULL, weights = NULL, na.rm = TRUE, ...
 ) {
   invalid_calls <- setdiff(inline_calls(predictors(x)), settings("RHS.formula"))
   if (length(invalid_calls)) {
@@ -73,22 +73,22 @@ ModelFrame.formula <- function(
 
   data <- as.data.frame(data)
 
-  weights <- eval(substitute(weights), data, parent.frame())
   strata <- eval(substitute(strata), data, parent.frame())
+  weights <- eval(substitute(weights), data, parent.frame())
 
   model_terms <- terms(x, data = data)
   data[[deparse1(response(model_terms))]] <- response(model_terms, data)
   data <- data[all.vars(model_formula(model_terms))]
 
-  ModelFrame(model_terms, data, na.rm = na.rm, names = rownames(data),
-             weights = weights, strata = strata, ...)
+  ModelFrame(model_terms, data, names = rownames(data), strata = strata,
+             weights = weights, na.rm = na.rm, ...)
 }
 
 
 #' @rdname ModelFrame-methods
 #'
 ModelFrame.matrix <- function(
-  x, y = NULL, na.rm = TRUE, offsets = NULL, weights = NULL, strata = NULL, ...
+  x, y = NULL, offsets = NULL, strata = NULL, weights = NULL, na.rm = TRUE, ...
 ) {
   data <- as.data.frame(x)
   colnames(x) <- names(data)
@@ -111,8 +111,8 @@ ModelFrame.matrix <- function(
   end <- length(data)
   data <- data[c(end, seq_len(end - 1))]
 
-  ModelFrame(model_terms, data, na.rm = na.rm, names = rownames(data),
-             weights = weights, strata = strata, ...)
+  ModelFrame(model_terms, data, names = rownames(data), strata = strata,
+             weights = weights, na.rm = na.rm, ...)
 }
 
 
@@ -136,18 +136,18 @@ ModelFrame.recipe <- function(x, ...) {
   x <- prep(x)
   data <- bake(x, NULL)
 
-  weights_name <- case_weights_name(x)
-  weights <- if (length(weights_name)) data[[weights_name]]
   strata_name <- case_strata_name(x)
   strata <- if (length(strata_name)) data[[strata_name]]
+  weights_name <- case_weights_name(x)
+  weights <- if (length(weights_name)) data[[weights_name]]
 
   model_terms <- terms(x)
   data[[deparse1(response(model_terms))]] <- response(model_terms, data)
   data <- data[all.vars(model_formula(model_terms))]
 
-  ModelFrame(model_terms, data, na.rm = FALSE,
+  ModelFrame(model_terms, data,
              names = if (is.null(data[["(names)"]])) rownames(data),
-             weights = weights, strata = strata)
+             strata = strata, weights = weights, na.rm = FALSE)
 }
 
 

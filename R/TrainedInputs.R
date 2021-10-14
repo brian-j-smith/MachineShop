@@ -68,7 +68,7 @@ SelectedInput.formula <- function(
     throw(Error("inputs must be formulas"))
   }
   mf_list <- map(function(x) {
-    do.call(ModelFrame, list(x, data, na.rm = FALSE, strata = response(x)))
+    do.call(ModelFrame, list(x, data, strata = response(x), na.rm = FALSE))
   }, inputs)
   SelectedInput(mf_list, control = control, metrics = metrics, stat = stat,
                 cutoff = cutoff)
@@ -86,7 +86,7 @@ SelectedInput.matrix <- function(
   if (!all(map_logi(is, inputs, "matrix"))) {
     throw(Error("inputs must be matrices"))
   }
-  mf_list <- map(ModelFrame, inputs, list(y), na.rm = FALSE, strata = list(y))
+  mf_list <- map(ModelFrame, inputs, list(y), strata = list(y), na.rm = FALSE)
   SelectedInput(mf_list, control = control, metrics = metrics, stat = stat,
                 cutoff = cutoff)
 }

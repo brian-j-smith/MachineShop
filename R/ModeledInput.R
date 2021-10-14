@@ -43,7 +43,7 @@ ModeledInput <- function(x, ...) {
 #' @rdname ModeledInput-methods
 #'
 ModeledInput.formula <- function(x, data, model, ...) {
-  mf <- do.call(ModelFrame, list(x, data, na.rm = FALSE, strata = response(x)))
+  mf <- do.call(ModelFrame, list(x, data, strata = response(x), na.rm = FALSE))
   ModeledInput(mf, model = model)
 }
 
@@ -51,7 +51,7 @@ ModeledInput.formula <- function(x, data, model, ...) {
 #' @rdname ModeledInput-methods
 #'
 ModeledInput.matrix <- function(x, y, model, ...) {
-  mf <- ModelFrame(x, y, na.rm = FALSE, strata = y)
+  mf <- ModelFrame(x, y, strata = y, na.rm = FALSE)
   ModeledInput(mf, model = model)
 }
 

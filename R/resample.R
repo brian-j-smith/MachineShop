@@ -67,7 +67,7 @@ resample <- function(x, ...) {
 resample.formula <- function(
   x, data, model, control = MachineShop::settings("control"), ...
 ) {
-  mf <- do.call(ModelFrame, list(x, data, na.rm = FALSE, strata = response(x)))
+  mf <- do.call(ModelFrame, list(x, data, strata = response(x), na.rm = FALSE))
   resample(mf, model, control, ...)
 }
 
@@ -77,7 +77,7 @@ resample.formula <- function(
 resample.matrix <- function(
   x, y, model, control = MachineShop::settings("control"), ...
 ) {
-  mf <- ModelFrame(x, y, na.rm = FALSE, strata = y)
+  mf <- ModelFrame(x, y, strata = y, na.rm = FALSE)
   resample(mf, model, control, ...)
 }
 

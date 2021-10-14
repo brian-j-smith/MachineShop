@@ -68,7 +68,7 @@ rfe.formula <- function(
   sizes = NULL, recompute = FALSE, optimize = c("global", "local"),
   samples = c(rfe = 1, varimp = 1), metrics = NULL, stat = "base::mean", ...
 ) {
-  mf <- do.call(ModelFrame, list(x, data, na.rm = FALSE, strata = response(x)))
+  mf <- do.call(ModelFrame, list(x, data, strata = response(x), na.rm = FALSE))
   rfe(mf, model, control, props = props, sizes = sizes, recompute = recompute,
       optimize = optimize, samples = samples, metrics = metrics, stat = stat)
 }
@@ -81,7 +81,7 @@ rfe.matrix <- function(
   sizes = NULL, recompute = FALSE, optimize = c("global", "local"),
   samples = c(rfe = 1, varimp = 1), metrics = NULL, stat = "base::mean", ...
 ) {
-  mf <- ModelFrame(x, y, na.rm = FALSE, strata = y)
+  mf <- ModelFrame(x, y, strata = y, na.rm = FALSE)
   rfe(mf, model, control, props = props, sizes = sizes, recompute = recompute,
       optimize = optimize, samples = samples, metrics = metrics, stat = stat)
 }

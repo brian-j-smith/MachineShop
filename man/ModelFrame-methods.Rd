@@ -8,15 +8,15 @@
 \usage{
 ModelFrame(x, ...)
 
-\method{ModelFrame}{formula}(x, data, na.rm = TRUE, weights = NULL, strata = NULL, ...)
+\method{ModelFrame}{formula}(x, data, strata = NULL, weights = NULL, na.rm = TRUE, ...)
 
 \method{ModelFrame}{matrix}(
   x,
   y = NULL,
-  na.rm = TRUE,
   offsets = NULL,
-  weights = NULL,
   strata = NULL,
+  weights = NULL,
+  na.rm = TRUE,
   ...
 )
 }
@@ -32,14 +32,14 @@ next in the calling environment.}
 \item{data}{\link[=data.frame]{data frame} or an object that can be converted
 to one.}
 
-\item{na.rm}{logical indicating whether to remove cases with \code{NA} values
-for any of the model variables.}
+\item{strata}{vector of values to use in conducting stratified
+\link{resample} estimation of model performance [default: none].}
 
 \item{weights}{numeric vector of non-negative case weights for the \code{y}
 response variable [default: equal weights].}
 
-\item{strata}{vector of values to use in conducting stratified
-\link{resample} estimation of model performance [default: none].}
+\item{na.rm}{logical indicating whether to remove cases with \code{NA} values
+for any of the model variables.}
 
 \item{y}{response variable.}
 
