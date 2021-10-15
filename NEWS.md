@@ -1,6 +1,12 @@
-# MachineShop News
+# MachineShop News (Development)
 
 ## Version Updates
+
+## 3.1.0.9001
+* Add `rfe()` function for recursive feature elimination.
+* Remove global setting `stats.VarImp`.
+* Change argument `method` default from `"model"` to `"permute"` in `varimp()`.
+* Change progress bar display from elapsed to estimated completion time.
 
 ## 3.1.0
 * Add argument `na.rm` to `dependence()`.
