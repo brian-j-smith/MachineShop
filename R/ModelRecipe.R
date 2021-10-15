@@ -16,7 +16,9 @@ ModelRecipe.recipe <- function(object, ...) {
   cases_name <- "(names)"
   cases_fo <- ~ -`(names)`
 
-  reserved <- intersect(c(cases_name, "(strata)"), summary(object)$variable)
+  reserved <- intersect(
+    c("(groups)", "(names)", "(strata)"), summary(object)$variable
+  )
   if (length(reserved)) {
     msg <- label_items("supplied recipe contains reserved variable", reserved)
     throw(Error(msg))
@@ -91,7 +93,7 @@ prep.TunedInput <- function(x, ...) {
 
 prep_recipe_data <- function(x) {
   if (is.null(x[["(names)"]])) x[["(names)"]] <- rownames(x)
-  x[["(strata)"]] <- NULL
+  x[c("(groups)", "(strata)")] <- NULL
   x
 }
 

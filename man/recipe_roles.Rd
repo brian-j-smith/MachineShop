@@ -10,7 +10,7 @@
 \usage{
 role_binom(recipe, x, size)
 
-role_case(recipe, stratum, weight, replace = FALSE)
+role_case(recipe, group, stratum, weight, replace = FALSE)
 
 role_pred(recipe, offset, replace = FALSE)
 
@@ -21,6 +21,10 @@ role_surv(recipe, time, event)
 
 \item{x, size}{number of counts and trials for the specification of a
 \code{\link{BinomialVariate}} outcome.}
+
+\item{group}{variable defining groupings of cases to keep together when
+folds are constructed for \link[=controls]{cross-validation}
+[default: none].}
 
 \item{stratum}{variable to use in conducting stratified \link{resample}
 estimation of model performance.}

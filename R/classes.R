@@ -397,7 +397,7 @@ setClass("Resamples",
   contains = "data.frame",
   slots = c(
     control = "MLControl",
-    strata = "data.frame"
+    case_comps = "data.frame"
   )
 )
 

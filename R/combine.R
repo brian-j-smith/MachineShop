@@ -184,13 +184,13 @@ c.Resamples <- function(...) {
       throw(Error("Resamples arguments have different control structures"))
     }
 
-    if (!identical_elements(args, function(x) x@strata)) {
-      throw(Error("Resamples arguments have different strata variables"))
+    if (!identical_elements(args, function(x) x@case_comps)) {
+      throw(Error("Resamples arguments have different case components"))
     }
 
     df <- do.call(append, set_model_names(args))
-    Resamples(df, control = args[[1]]@control, strata = args[[1]]@strata,
-              .check = FALSE)
+    Resamples(df, control = args[[1]]@control,
+              case_comps = args[[1]]@case_comps, .check = FALSE)
 
   } else {
     NextMethod()

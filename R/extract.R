@@ -102,7 +102,7 @@ setMethod("[", c(x = "Resamples", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
     y <- as.data.frame(x)[i, j, drop = drop]
     if (identical(colnames(x), colnames(y))) {
-      Resamples(y, control = x@control, strata = x@strata)
+      Resamples(y, control = x@control, case_comps = x@case_comps)
     } else y
   }
 )

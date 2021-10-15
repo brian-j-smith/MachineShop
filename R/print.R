@@ -390,8 +390,10 @@ setShowDefault("RecipeGrid")
 print.Resamples <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x)
   print_items(levels(x$Model), n = n, prefix = "\nModels: ", exdent = 2)
-  if (length(x@strata)) {
-    cat("Stratification variable:", names(x@strata), "\n")
+  labels <- c(groups = "Grouping", strata = "Stratification")
+  for (type in names(labels)) {
+    comp <- x@case_comps[[type]]
+    if (length(comp)) cat(labels[type], "variable:", names(comp), "\n")
   }
   cat("\n")
   print(x@control)

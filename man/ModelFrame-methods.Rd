@@ -8,12 +8,21 @@
 \usage{
 ModelFrame(x, ...)
 
-\method{ModelFrame}{formula}(x, data, strata = NULL, weights = NULL, na.rm = TRUE, ...)
+\method{ModelFrame}{formula}(
+  x,
+  data,
+  groups = NULL,
+  strata = NULL,
+  weights = NULL,
+  na.rm = TRUE,
+  ...
+)
 
 \method{ModelFrame}{matrix}(
   x,
   y = NULL,
   offsets = NULL,
+  groups = NULL,
   strata = NULL,
   weights = NULL,
   na.rm = TRUE,
@@ -31,6 +40,10 @@ next in the calling environment.}
 
 \item{data}{\link[=data.frame]{data frame} or an object that can be converted
 to one.}
+
+\item{groups}{vector of values defining groupings of cases to keep together
+when folds are constructed for \link[=controls]{cross-validation}
+[default: none].}
 
 \item{strata}{vector of values to use in conducting stratified
 \link{resample} estimation of model performance [default: none].}

@@ -14,8 +14,10 @@ case_comps.MLModelFit <- function(object, ...) {
 
 
 case_comps.ModelFrame <- function(
-  object, newdata = NULL, types = c("names", "weights"), response = FALSE, ...
+  object, newdata = NULL, types = c("names", "weights"), response = FALSE,
+  original = FALSE, ...
 ) {
+  stopifnot(!original)
   data <- if (is.null(newdata)) object else newdata
   res <- map(function(type) {
     name <- case_comp_name(object, type)
@@ -27,8 +29,10 @@ case_comps.ModelFrame <- function(
 
 
 case_comps.recipe <- function(
-  object, newdata = NULL, types = c("names", "weights"), response = FALSE, ...
+  object, newdata = NULL, types = c("names", "weights"), response = FALSE,
+  original = FALSE, ...
 ) {
+  stopifnot(!original)
   names <- map(function(type) case_comp_name(object, type), types)
   data <- if (any(lengths(names)) || response) bake(prep(object), newdata)
   res <- map(function(type) {
@@ -53,6 +57,7 @@ case_comp_name.data.frame <- function(object, type, ...) {
 
 case_comp_name.recipe <- function(object, type, ...) {
   type <- switch(type,
+    "groups" = "group",
     "names" = "name",
     "strata" = "stratum",
     "weights" = "weight",
@@ -66,6 +71,12 @@ case_comp_name.recipe <- function(object, type, ...) {
   } else if (length(name) > 1) {
     throw(Error("multiple ", role, " variables"))
   }
+}
+
+
+case_groups <- function(object, ...) {
+  name <- case_comp_name(object, type = "groups")
+  if (length(name)) as.data.frame(object)[[name]]
 }
 
 
@@ -120,13 +131,13 @@ case_strata.matrix <- function(object, ...) {
 
 
 case_strata.ModelFrame <- function(object, ...) {
-  name <- case_strata_name(object)
+  name <- case_comp_name(object, "strata")
   if (length(name)) case_strata(object[[name]], ...)
 }
 
 
 case_strata.recipe <- function(object, ...) {
-  name <- case_strata_name(object)
+  name <- case_comp_name(object, "strata")
   if (length(name)) case_strata(as.data.frame(object)[[name]], ...)
 }
 
@@ -177,11 +188,6 @@ case_strata.Surv <- function(
 }
 
 
-case_strata_name <- function(object) {
-  case_comp_name(object, "strata")
-}
-
-
 #' Extract Case Weights
 #'
 #' Extract the case weights from an object.
@@ -215,10 +221,5 @@ case_strata_name <- function(object) {
 #'      case_weights(rec_fit, testset))
 #'
 case_weights <- function(object, newdata = NULL) {
-  case_comps(object, newdata, "weights")$weights
-}
-
-
-case_weights_name <- function(object) {
-  case_comp_name(object, "weights")
+  case_comps(object, newdata, "weights")[[1]]
 }

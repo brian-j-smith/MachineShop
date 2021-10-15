@@ -17,6 +17,9 @@
 #' @param offsets numeric vector, matrix, or data frame of values to be added
 #'   with a fixed coefficient of 1 to linear predictors in compatible regression
 #'   models.
+#' @param groups vector of values defining groupings of cases to keep together
+#'   when folds are constructed for \link[=controls]{cross-validation}
+#'   [default: none].
 #' @param strata vector of values to use in conducting stratified
 #'   \link{resample} estimation of model performance [default: none].
 #' @param weights numeric vector of non-negative case weights for the \code{y}
@@ -46,22 +49,26 @@ ModelFrame <- function(x, ...) {
 
 
 ModelFrame.data.frame <- function(x, ...) {
-  case_names <- x[["(names)"]]
-  strata <- x[["(strata)"]]
-  weights <- x[["(weights)"]]
-  x[c("(names)", "(strata)", "(weights)")] <- NULL
+  args <- list()
+  for (type in c("groups", "names", "strata", "weights")) {
+    name <- paste0("(", type, ")")
+    args[[type]] <- x[[name]]
+    x[[name]] <- NULL
+  }
+  if (is.null(args$names)) args$names <- rownames(x)
+  args$na.rm <- FALSE
+
   model_terms <- terms(map(as.name, names(x)[-1]), names(x)[1],
                        all_numeric = all(map_logi(is.numeric, x[-1])))
-  ModelFrame(model_terms, x,
-             names = if (is.null(case_names)) rownames(x) else case_names,
-             strata = strata, weights = weights, na.rm = FALSE)
+
+  do.call(ModelFrame, c(list(model_terms, x), args))
 }
 
 
 #' @rdname ModelFrame-methods
 #'
 ModelFrame.formula <- function(
-  x, data, strata = NULL, weights = NULL, na.rm = TRUE, ...
+  x, data, groups = NULL, strata = NULL, weights = NULL, na.rm = TRUE, ...
 ) {
   invalid_calls <- setdiff(inline_calls(predictors(x)), settings("RHS.formula"))
   if (length(invalid_calls)) {
@@ -73,22 +80,31 @@ ModelFrame.formula <- function(
 
   data <- as.data.frame(data)
 
-  strata <- eval(substitute(strata), data, parent.frame())
-  weights <- eval(substitute(weights), data, parent.frame())
+  args <- map(
+    function(x) eval(x, data, parent.frame()),
+    eval(substitute(alist(
+      groups = groups,
+      strata = strata,
+      weights = weights,
+      ...
+    )))
+  )
+  args$names <- rownames(data)
+  args$na.rm <- na.rm
 
   model_terms <- terms(x, data = data)
   data[[deparse1(response(model_terms))]] <- response(model_terms, data)
   data <- data[all.vars(model_formula(model_terms))]
 
-  ModelFrame(model_terms, data, names = rownames(data), strata = strata,
-             weights = weights, na.rm = na.rm, ...)
+  do.call(ModelFrame, c(list(model_terms, data), args))
 }
 
 
 #' @rdname ModelFrame-methods
 #'
 ModelFrame.matrix <- function(
-  x, y = NULL, offsets = NULL, strata = NULL, weights = NULL, na.rm = TRUE, ...
+  x, y = NULL, offsets = NULL, groups = NULL, strata = NULL, weights = NULL,
+  na.rm = TRUE, ...
 ) {
   data <- as.data.frame(x)
   colnames(x) <- names(data)
@@ -111,15 +127,15 @@ ModelFrame.matrix <- function(
   end <- length(data)
   data <- data[c(end, seq_len(end - 1))]
 
-  ModelFrame(model_terms, data, names = rownames(data), strata = strata,
-             weights = weights, na.rm = na.rm, ...)
+  ModelFrame(model_terms, data, names = rownames(data), groups = groups,
+             strata = strata, weights = weights, na.rm = na.rm, ...)
 }
 
 
 ModelFrame.ModelFrame <- function(x, na.rm = TRUE, ...) {
-  extras <- list(...)
-  for (name in names(extras)) {
-    x[[paste0("(", name, ")")]] <- extras[[name]]
+  comps <- list(...)
+  for (type in names(comps)) {
+    x[[paste0("(", type, ")")]] <- comps[[type]]
   }
   if (na.rm) na.omit(x) else x
 }
@@ -136,18 +152,19 @@ ModelFrame.recipe <- function(x, ...) {
   x <- prep(x)
   data <- bake(x, NULL)
 
-  strata_name <- case_strata_name(x)
-  strata <- if (length(strata_name)) data[[strata_name]]
-  weights_name <- case_weights_name(x)
-  weights <- if (length(weights_name)) data[[weights_name]]
+  args <- list()
+  for (type in c("groups", "names", "strata", "weights")) {
+    name <- case_comp_name(x, type)
+    args[[type]] <- if (length(name)) data[[name]]
+  }
+  if (is.null(args$names)) args$names <- rownames(data)
+  args$na.rm <- FALSE
 
   model_terms <- terms(x)
   data[[deparse1(response(model_terms))]] <- response(model_terms, data)
   data <- data[all.vars(model_formula(model_terms))]
 
-  ModelFrame(model_terms, data,
-             names = if (is.null(data[["(names)"]])) rownames(data),
-             strata = strata, weights = weights, na.rm = FALSE)
+  do.call(ModelFrame, c(list(model_terms, data), args))
 }
 
 
