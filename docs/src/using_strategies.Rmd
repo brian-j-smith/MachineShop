@@ -60,7 +60,7 @@ as.MLModel(model_fit)
 #>  $ bag.fraction     : num 0.5
 #> 
 #> TrainStep1 :
-#> Object of class "TrainStep"
+#> # Object of class "TrainStep"
 #> 
 #> Grid (selected = 1):
 #> # A tibble: 3 x 1
@@ -70,7 +70,7 @@ as.MLModel(model_fit)
 #> 2                        2
 #> 3                        3
 #> 
-#> Object of class "Performance"
+#> ## Object of class "Performance"
 #> 
 #> Metrics: C-Index 
 #> Models: 1, 2, 3
@@ -122,7 +122,7 @@ as.MLModel(model_fit)
 #>  $ bag.fraction     : num 0.5
 #> 
 #> TrainStep1 :
-#> Object of class "TrainStep"
+#> # Object of class "TrainStep"
 #> 
 #> Grid (selected = 3):
 #> # A tibble: 3 x 1
@@ -132,7 +132,7 @@ as.MLModel(model_fit)
 #> 2 2          
 #> 3 3          
 #> 
-#> Object of class "Performance"
+#> ## Object of class "Performance"
 #> 
 #> Metrics: C-Index 
 #> Models: Recipe.1, Recipe.2, Recipe.3
@@ -141,7 +141,7 @@ as.MLModel(model_fit)
 #> C-Index value: 0.7487572 
 #> ------------------------------------------------------------ 
 #> TrainStep2 :
-#> Object of class "TrainStep"
+#> # Object of class "TrainStep"
 #> 
 #> Grid (selected = 1):
 #> # A tibble: 3 x 1
@@ -151,7 +151,7 @@ as.MLModel(model_fit)
 #> 2                        2
 #> 3                        3
 #> 
-#> Object of class "Performance"
+#> ## Object of class "Performance"
 #> 
 #> Metrics: C-Index 
 #> Models: 1, 2, 3
@@ -228,7 +228,7 @@ model_fit <- fit(surv_fo, data = surv_train,
 #>  $ bag.fraction     : num 0.5
 #> 
 #> TrainStep1 :
-#> Object of class "TrainStep"
+#> # Object of class "TrainStep"
 #> 
 #> Grid (selected = 1):
 #> # A tibble: 9 x 1
@@ -244,7 +244,7 @@ model_fit <- fit(surv_fo, data = surv_train,
 #> 8           100                  3
 #> 9           150                  3
 #> 
-#> Object of class "Performance"
+#> ## Object of class "Performance"
 #> 
 #> Metrics: CIndex, RMSE 
 #> Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6,
@@ -437,7 +437,7 @@ Nesting of resampling routines is repeated recursively when a fit involves multi
 
 ```{r using_strategies_methods1, echo=FALSE}
 cat('TrainStep1 :
-Object of class "TrainStep"
+# Object of class "TrainStep"
 
 Grid (selected = 1):
 # A tibble: 3 x 1
@@ -447,12 +447,12 @@ Grid (selected = 1):
 2                        2
 3                        3
 
-Object of class "Performance"
+## Object of class "Performance"
 
-Metrics: C-Index
+Metrics: C-Index 
 Models: 1, 2, 3
 
-Selected model: 1
+Selected model: 1 
 C-Index value: 0.7133325')
 ```
 
@@ -460,7 +460,7 @@ In order to identify and return a final model fitted to the entire input data, t
 
 ```{r using_strategies_methods2, echo=FALSE}
 cat('TrainStep2 :
-Object of class "TrainStep"
+# Object of class "TrainStep"
 
 Grid (selected = 1):
 # A tibble: 3 x 1
@@ -470,7 +470,7 @@ Grid (selected = 1):
 2 2    
 3 3    
 
-Object of class "Performance"
+## Object of class "Performance"
 
 Metrics: C-Index 
 Models: GBMModel, TunedModel, SuperModel

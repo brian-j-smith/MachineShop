@@ -226,11 +226,11 @@ is_trained.step <- function(x, ...) {
 
 
 label_items <- function(label, x, n = Inf, add_names = FALSE) {
-  item_len <- length(x)
+  nitems <- length(x)
   if (add_names && !is.null(names(x))) x <- paste(names(x), x, sep = " = ")
-  items <- if (n < item_len) paste(toString(head(x, n)), "...") else toString(x)
-  if (item_len != 1) label <- paste0(label, "s")
-  if (item_len) paste0(label, ": ", items) else label
+  items <- if (nitems > n) paste(toString(head(x, n)), "...") else toString(x)
+  if (nitems != 1) label <- paste0(label, "s")
+  paste0(label, ": ", items)
 }
 
 
