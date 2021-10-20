@@ -757,7 +757,7 @@ plot(vi)</code></pre>
 <p><img src="example_ichomes_files/figure-html/ex_ichomes_tune-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Performance plotted over the grid points
 (tuned_model &lt;- as.MLModel(model_fit))
-#&gt; Object of class &quot;MLModel&quot;
+#&gt; --- MLModel object -------------------------------------------------------------
 #&gt; 
 #&gt; Model name: GBMModel
 #&gt; Label: Trained Generalized Boosted Regression
@@ -769,39 +769,33 @@ plot(vi)</code></pre>
 #&gt; 
 #&gt; Parameters:
 #&gt; List of 5
-#&gt;  $ n.trees          : num 200
-#&gt;  $ interaction.depth: int 5
+#&gt;  $ n.trees          : num 250
+#&gt;  $ interaction.depth: int 2
 #&gt;  $ n.minobsinnode   : num 10
 #&gt;  $ shrinkage        : num 0.1
 #&gt;  $ bag.fraction     : num 0.5
 #&gt; 
-#&gt; TrainStep1 :
-#&gt; Object of class &quot;TrainStep&quot;
+#&gt; == TrainStep1 ==================================================================
+#&gt; --- TrainStep object ---
 #&gt; 
-#&gt; Grid (selected = 24):
-#&gt; # A tibble: 25 x 1
-#&gt;    Model$n.trees $interaction.depth
-#&gt;            &lt;dbl&gt;              &lt;int&gt;
-#&gt;  1            50                  1
-#&gt;  2           100                  1
-#&gt;  3           150                  1
-#&gt;  4           200                  1
-#&gt;  5           250                  1
-#&gt;  6            50                  2
-#&gt;  7           100                  2
-#&gt;  8           150                  2
-#&gt;  9           200                  2
-#&gt; 10           250                  2
+#&gt; TunedModel grid:
+#&gt; # A tibble: 25 x 4
+#&gt;    name      selected params$n.trees $interaction.dep~ metrics$RMSE   $R2   $MAE
+#&gt;    &lt;chr&gt;     &lt;lgl&gt;             &lt;dbl&gt;             &lt;int&gt;        &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+#&gt;  1 GBMModel~ FALSE                50                 1       56468. 0.612 36950.
+#&gt;  2 GBMModel~ FALSE               100                 1       52583. 0.666 33754.
+#&gt;  3 GBMModel~ FALSE               150                 1       51587. 0.680 33147.
+#&gt;  4 GBMModel~ FALSE               200                 1       50569. 0.693 32309.
+#&gt;  5 GBMModel~ FALSE               250                 1       49592. 0.704 31646.
+#&gt;  6 GBMModel~ FALSE                50                 2       52525. 0.668 33291.
+#&gt;  7 GBMModel~ FALSE               100                 2       50173. 0.701 31656.
+#&gt;  8 GBMModel~ FALSE               150                 2       49197. 0.713 30621.
+#&gt;  9 GBMModel~ FALSE               200                 2       48933. 0.716 29824.
+#&gt; 10 GBMModel~ TRUE                250                 2       47760. 0.728 29235.
 #&gt; # ... with 15 more rows
 #&gt; 
-#&gt; Object of class &quot;Performance&quot;
-#&gt; 
-#&gt; Metrics: RMSE, R2, MAE 
-#&gt; Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6,
-#&gt;   GBMModel.7, GBMModel.8, GBMModel.9, GBMModel.10... with 15 more
-#&gt; 
-#&gt; Selected model: GBMModel.24 
-#&gt; RMSE value: 44669.45
+#&gt; Selected grid row: 10
+#&gt; RMSE value: 47760.29
 plot(tuned_model, type = &quot;line&quot;)
 #&gt; $TrainStep1</code></pre>
 <p><img src="example_ichomes_files/figure-html/ex_ichomes_tune_model-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -815,7 +809,7 @@ pred &lt;- predict(model_fit, newdata = testset)
 ## Test set performance
 performance(obs, pred)
 #&gt;         RMSE           R2          MAE 
-#&gt; 4.590169e+04 7.100791e-01 2.673539e+04</code></pre>
+#&gt; 4.663678e+04 7.007189e-01 2.718321e+04</code></pre>
 </div>
 <div id="calibration-curve" class="section level2">
 <h2>Calibration Curve</h2>

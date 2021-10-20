@@ -607,16 +607,16 @@ modelinfo() %&gt;% names
 #&gt; [16] &quot;GLMStepAICModel&quot;     &quot;GLMNetModel&quot;         &quot;KNNModel&quot;           
 #&gt; [19] &quot;LARSModel&quot;           &quot;LDAModel&quot;            &quot;LMModel&quot;            
 #&gt; [22] &quot;MDAModel&quot;            &quot;NaiveBayesModel&quot;     &quot;NNetModel&quot;          
-#&gt; [25] &quot;PDAModel&quot;            &quot;PLSModel&quot;            &quot;POLRModel&quot;          
-#&gt; [28] &quot;QDAModel&quot;            &quot;RandomForestModel&quot;   &quot;RangerModel&quot;        
-#&gt; [31] &quot;RFSRCModel&quot;          &quot;RPartModel&quot;          &quot;SelectedModel&quot;      
-#&gt; [34] &quot;StackedModel&quot;        &quot;SuperModel&quot;          &quot;SurvRegModel&quot;       
-#&gt; [37] &quot;SurvRegStepAICModel&quot; &quot;SVMModel&quot;            &quot;SVMANOVAModel&quot;      
-#&gt; [40] &quot;SVMBesselModel&quot;      &quot;SVMLaplaceModel&quot;     &quot;SVMLinearModel&quot;     
-#&gt; [43] &quot;SVMPolyModel&quot;        &quot;SVMRadialModel&quot;      &quot;SVMSplineModel&quot;     
-#&gt; [46] &quot;SVMTanhModel&quot;        &quot;TreeModel&quot;           &quot;TunedModel&quot;         
-#&gt; [49] &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;     
-#&gt; [52] &quot;XGBTreeModel&quot;</code></pre>
+#&gt; [25] &quot;ParsnipModel&quot;        &quot;PDAModel&quot;            &quot;PLSModel&quot;           
+#&gt; [28] &quot;POLRModel&quot;           &quot;QDAModel&quot;            &quot;RandomForestModel&quot;  
+#&gt; [31] &quot;RangerModel&quot;         &quot;RFSRCModel&quot;          &quot;RPartModel&quot;         
+#&gt; [34] &quot;SelectedModel&quot;       &quot;StackedModel&quot;        &quot;SuperModel&quot;         
+#&gt; [37] &quot;SurvRegModel&quot;        &quot;SurvRegStepAICModel&quot; &quot;SVMModel&quot;           
+#&gt; [40] &quot;SVMANOVAModel&quot;       &quot;SVMBesselModel&quot;      &quot;SVMLaplaceModel&quot;    
+#&gt; [43] &quot;SVMLinearModel&quot;      &quot;SVMPolyModel&quot;        &quot;SVMRadialModel&quot;     
+#&gt; [46] &quot;SVMSplineModel&quot;      &quot;SVMTanhModel&quot;        &quot;TreeModel&quot;          
+#&gt; [49] &quot;TunedModel&quot;          &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;       
+#&gt; [52] &quot;XGBLinearModel&quot;      &quot;XGBTreeModel&quot;</code></pre>
 <p>Information is displayed below for the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/GBMModel"><code>GBMModel()</code></a> function corresponding to a generalized boosted regression model, which is applicable to survival outcomes.</p>
 <pre class="r"><code>## Model-specific information
 modelinfo(GBMModel)
@@ -634,7 +634,7 @@ modelinfo(GBMModel)
 #&gt; [1] TRUE
 #&gt; 
 #&gt; $GBMModel$arguments
-#&gt; function (distribution = NULL, n.trees = 100, interaction.depth = 1, 
+#&gt; function (distribution = character(), n.trees = 100, interaction.depth = 1, 
 #&gt;     n.minobsinnode = 10, shrinkage = 0.1, bag.fraction = 0.5) 
 #&gt; NULL
 #&gt; 
@@ -645,7 +645,7 @@ modelinfo(GBMModel)
 #&gt; [1] TRUE</code></pre>
 <p>Submitting the model function at the console will result in similar information being displayed as formatted text.</p>
 <pre class="r"><code>GBMModel
-#&gt; Object of class &quot;MLModelFunction&quot;
+#&gt; --- MLModelFunction object -----------------------------------------------------
 #&gt; 
 #&gt; Model name: GBMModel
 #&gt; Label: Generalized Boosted Regression
@@ -656,7 +656,7 @@ modelinfo(GBMModel)
 #&gt; Variable importance: TRUE
 #&gt; 
 #&gt; Arguments:
-#&gt; function (distribution = NULL, n.trees = 100, interaction.depth = 1, 
+#&gt; function (distribution = character(), n.trees = 100, interaction.depth = 1, 
 #&gt;     n.minobsinnode = 10, shrinkage = 0.1, bag.fraction = 0.5) 
 #&gt; NULL</code></pre>
 <div id="type-specific-models" class="section level3">
@@ -667,11 +667,11 @@ modelinfo(Surv(0)) %&gt;% names
 #&gt;  [1] &quot;BARTModel&quot;           &quot;BlackBoostModel&quot;     &quot;CForestModel&quot;       
 #&gt;  [4] &quot;CoxModel&quot;            &quot;CoxStepAICModel&quot;     &quot;GAMBoostModel&quot;      
 #&gt;  [7] &quot;GBMModel&quot;            &quot;GLMBoostModel&quot;       &quot;GLMNetModel&quot;        
-#&gt; [10] &quot;RangerModel&quot;         &quot;RFSRCModel&quot;          &quot;RPartModel&quot;         
-#&gt; [13] &quot;SelectedModel&quot;       &quot;StackedModel&quot;        &quot;SuperModel&quot;         
-#&gt; [16] &quot;SurvRegModel&quot;        &quot;SurvRegStepAICModel&quot; &quot;TunedModel&quot;         
-#&gt; [19] &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;     
-#&gt; [22] &quot;XGBTreeModel&quot;
+#&gt; [10] &quot;ParsnipModel&quot;        &quot;RangerModel&quot;         &quot;RFSRCModel&quot;         
+#&gt; [13] &quot;RPartModel&quot;          &quot;SelectedModel&quot;       &quot;StackedModel&quot;       
+#&gt; [16] &quot;SuperModel&quot;          &quot;SurvRegModel&quot;        &quot;SurvRegStepAICModel&quot;
+#&gt; [19] &quot;TunedModel&quot;          &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;       
+#&gt; [22] &quot;XGBLinearModel&quot;      &quot;XGBTreeModel&quot;
 
 ## Identify survival response-specific models
 modelinfo(Surv(0), CoxModel, GBMModel, SVMModel) %&gt;% names
@@ -685,11 +685,11 @@ modelinfo(surv_df$y) %&gt;% names
 #&gt;  [1] &quot;BARTModel&quot;           &quot;BlackBoostModel&quot;     &quot;CForestModel&quot;       
 #&gt;  [4] &quot;CoxModel&quot;            &quot;CoxStepAICModel&quot;     &quot;GAMBoostModel&quot;      
 #&gt;  [7] &quot;GBMModel&quot;            &quot;GLMBoostModel&quot;       &quot;GLMNetModel&quot;        
-#&gt; [10] &quot;RangerModel&quot;         &quot;RFSRCModel&quot;          &quot;RPartModel&quot;         
-#&gt; [13] &quot;SelectedModel&quot;       &quot;StackedModel&quot;        &quot;SuperModel&quot;         
-#&gt; [16] &quot;SurvRegModel&quot;        &quot;SurvRegStepAICModel&quot; &quot;TunedModel&quot;         
-#&gt; [19] &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;     
-#&gt; [22] &quot;XGBTreeModel&quot;</code></pre>
+#&gt; [10] &quot;ParsnipModel&quot;        &quot;RangerModel&quot;         &quot;RFSRCModel&quot;         
+#&gt; [13] &quot;RPartModel&quot;          &quot;SelectedModel&quot;       &quot;StackedModel&quot;       
+#&gt; [16] &quot;SuperModel&quot;          &quot;SurvRegModel&quot;        &quot;SurvRegStepAICModel&quot;
+#&gt; [19] &quot;TunedModel&quot;          &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;       
+#&gt; [22] &quot;XGBLinearModel&quot;      &quot;XGBTreeModel&quot;</code></pre>
 </div>
 </div>
 <div id="fit-function" class="section level2">
@@ -735,17 +735,17 @@ fit(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(length(y)))))<
 <p>A <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/predict"><code>predict()</code></a> function is supplied for application to model fit results to obtain predicted values on a dataset specified with its <code>newdata</code> argument or on the original dataset if not specified. Survival means are predicted for survival outcomes by default. Estimates of the associated survival distributions are needed to calculate the means. For models, like <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/GBMModel"><code>GBMModel</code></a>, that perform semi- or non-parametric survival analysis, Weibull approximations to the survival distributions are the default for mean estimation. Other choices of distributional approximations are exponential, Rayleigh, and empirical. Empirical distributions are applicable to Cox proportional hazards-based models and can be calculated with the method of Breslow <span class="citation">(1972)</span> or Efron <span class="citation">(1977, default)</span>. Note, however, that empirical survival means are undefined mathematically if an event does not occur at the longest follow-up time. In such situations, a restricted survival mean is calculated by changing the longest follow-up time to an event, as suggested by Efron <span class="citation">(1967)</span>, which will be negatively biased.</p>
 <pre class="r"><code>## Predicted survival means (default: Weibull distribution)
 predict(surv_fit, newdata = surv_test)
-#&gt; Object of class &quot;SurvMeans&quot;
-#&gt;  [1]   776.3621  6568.9623 16476.4377  1301.2555  1650.2195  8737.8829
-#&gt;  [7]   823.0170   589.4337  2250.4036  3881.8356
+#&gt; --- SurvMeans object -----------------------------------------------------------
+#&gt;  [1]  1020.3292 12838.1565 30349.8667  1550.9966  1779.4713 11289.6080
+#&gt;  [7]  1020.3292   722.3811  2892.0104  5206.1128
 #&gt; ... with 59 more values
 #&gt; Distribution: weibull
 
 ## Predicted survival means (empirical distribution)
 predict(surv_fit, newdata = surv_test, distr = &quot;empirical&quot;)
-#&gt; Object of class &quot;SurvMeans&quot;
-#&gt;  [1] 1001.1687 4673.0572 5265.4372 1804.2130 2292.9799 4923.2102 1069.6342
-#&gt;  [8]  746.3406 2960.4056 3990.3918
+#&gt; --- SurvMeans object -----------------------------------------------------------
+#&gt;  [1] 1202.3337 4951.6384 5326.2364 1852.1582 2106.4354 4862.0062 1202.3337
+#&gt;  [8]  845.3581 3050.4220 4039.6691
 #&gt; ... with 59 more values
 #&gt; Distribution: empirical</code></pre>
 <p>In addition to survival means, predicted survival probabilities (<code>type = "prob"</code>) or 0-1 survival events (default: <code>type = "response"</code>) can be obtained with the follow-up <code>times</code> argument. The cutoff probability for classification of survival events (or other binary responses) can be set optionally with the <code>cutoff</code> argument (default: <code>cutoff = 0.5</code>). As with mean estimation, distributional approximations to the survival functions may be specified for the predictions, with the default for survival probabilities being the empirical distribution.</p>
@@ -753,25 +753,24 @@ predict(surv_fit, newdata = surv_test, distr = &quot;empirical&quot;)
 surv_times &lt;- 365 * c(5, 10)
 
 predict(surv_fit, newdata = surv_test, times = surv_times, type = &quot;prob&quot;)
-#&gt; Object of class &quot;SurvProbs&quot;
-#&gt;           Time 1      Time 2
-#&gt;  [1,] 0.11258853 0.023553588
-#&gt;  [2,] 0.86420882 0.778425708
-#&gt;  [3,] 0.95550372 0.924852282
-#&gt;  [4,] 0.32136445 0.142511123
-#&gt;  [5,] 0.43166474 0.236479490
-#&gt;  [6,] 0.90333017 0.839882117
-#&gt;  [7,] 0.13155195 0.030767057
-#&gt;  [8,] 0.04522074 0.004921805
-#&gt;  [9,] 0.56718066 0.377838551
-#&gt; [10,] 0.75260795 0.613977037
+#&gt; --- SurvProbs object -----------------------------------------------------------
+#&gt;           Time 1     Time 2
+#&gt;  [1,] 0.16532173 0.04800578
+#&gt;  [2,] 0.90658275 0.84750991
+#&gt;  [3,] 0.96416567 0.94029314
+#&gt;  [4,] 0.32877020 0.15310155
+#&gt;  [5,] 0.38677485 0.20138479
+#&gt;  [6,] 0.89254119 0.82548284
+#&gt;  [7,] 0.16532173 0.04800578
+#&gt;  [8,] 0.06880331 0.01093966
+#&gt;  [9,] 0.58061210 0.39963823
+#&gt; [10,] 0.75830222 0.62703175
 #&gt; ... with 59 more rows
-#&gt; Times:
-#&gt; [1] 1825 3650
+#&gt; Times: 1825, 3650
 #&gt; Distribution: empirical
 
 predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.7)
-#&gt; Object of class &quot;SurvEvents&quot;
+#&gt; --- SurvEvents object ----------------------------------------------------------
 #&gt;       Time 1 Time 2
 #&gt;  [1,]      1      1
 #&gt;  [2,]      0      0
@@ -784,8 +783,7 @@ predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.7)
 #&gt;  [9,]      1      1
 #&gt; [10,]      0      1
 #&gt; ... with 59 more rows
-#&gt; Times:
-#&gt; [1] 1825 3650
+#&gt; Times: 1825, 3650
 #&gt; Distribution: empirical</code></pre>
 <p>Prediction of other outcome types is more straightforward. Predicted numeric and factor responses are of the same class as the observed values at the default <code>type = "response"</code>; whereas, double (decimal) numeric values and factor level probabilities result when <code>type = "prob"</code>.</p>
 </div>
@@ -803,7 +801,7 @@ data(Pima.tr, package = &quot;MASS&quot;)
 ## Formula specification
 model_fit &lt;- fit(type ~ ., data = Pima.tr, model = GBMModel)
 predict(model_fit, newdata = Pima.te) %&gt;% head
-#&gt; [1] Yes No  No  No  Yes Yes
+#&gt; [1] Yes No  No  No  No  Yes
 #&gt; Levels: No Yes</code></pre>
 <p>The syntax for traditional formulas is detailed in the <strong>R</strong> help documentation on the <code>formula()</code> function. However, some constraints are placed on the syntax by the <strong>MachineShop</strong> package. Specifically, in-lining on the right-hand side of formulas is limited to the operators and functions listed in the <code>"RHS.formula"</code> package setting.</p>
 <pre class="r"><code>settings(&quot;RHS.formula&quot;)
@@ -840,14 +838,14 @@ predict(model_fit, newdata = Pima.te) %&gt;% head
 mf &lt;- ModelFrame(type ~ ., data = Pima.tr)
 model_fit &lt;- fit(mf, model = GBMModel)
 predict(model_fit, newdata = Pima.te) %&gt;% head
-#&gt; [1] Yes No  No  No  Yes Yes
+#&gt; [1] Yes No  No  No  No  Yes
 #&gt; Levels: No Yes
 
 ## Design matrix
 mf &lt;- ModelFrame(x, y)
 model_fit &lt;- fit(mf, model = GBMModel)
 predict(model_fit, newdata = Pima.te) %&gt;% head
-#&gt; [1] Yes No  No  No  No  Yes
+#&gt; [1] Yes No  No  No  Yes Yes
 #&gt; Levels: No Yes</code></pre>
 <p>The model frame approach has a few advantages over model fitting directly with a traditional formula. One is that cases with missing values on any of the response or predictor variables are excluded from the model frame by default. This is often desirable for models that do not handle missing values. Conversely, missing values can be retained in the model frame by setting its argument <code>na.rm = FALSE</code> for models, like <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/GBMModel"><code>GBMModel</code></a>, that do handle them. A second advantage is that case weights can be included in the model frame to be passed on to the model fitting functions.</p>
 <pre class="r"><code>## Model frame specification with case weights
@@ -865,7 +863,7 @@ library(recipes)
 rec &lt;- recipe(type ~ ., data = Pima.tr)
 model_fit &lt;- fit(rec, model = GBMModel)
 predict(model_fit, newdata = Pima.te) %&gt;% head
-#&gt; [1] Yes No  No  No  No  Yes
+#&gt; [1] Yes No  No  No  Yes Yes
 #&gt; Levels: No Yes</code></pre>
 <p>As shown, prediction on new data with a model fit to a recipe is done on an unprocessed dataset. Recipe case weights and stratified resampling are supported with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/recipe_roles"><code>role_case()</code></a> function. As an example, an initial step is included in the recipe below to replace the original role of variable <code>weights</code> with a designation of case weights. That is followed by a step to convert three ordinal factors to integer scores.</p>
 <pre class="r"><code>## Recipe specification with case weights
@@ -1032,12 +1030,12 @@ predict(model_fit) %&gt;% head
 #&gt; Levels: setosa versicolor virginica
 predict(model_fit, type = &quot;prob&quot;) %&gt;% head
 #&gt;         setosa   versicolor    virginica
-#&gt; [1,] 0.9999236 7.632570e-05 6.077426e-08
-#&gt; [2,] 0.9999825 1.716847e-05 3.722919e-07
-#&gt; [3,] 0.9999713 2.851341e-05 1.663462e-07
-#&gt; [4,] 0.9999755 2.425451e-05 1.969964e-07
-#&gt; [5,] 0.9999236 7.632570e-05 6.077426e-08
-#&gt; [6,] 0.9999236 7.632570e-05 6.077426e-08</code></pre>
+#&gt; [1,] 0.9999011 9.878531e-05 7.353240e-08
+#&gt; [2,] 0.9999888 1.075598e-05 4.353292e-07
+#&gt; [3,] 0.9999697 3.021020e-05 1.185318e-07
+#&gt; [4,] 0.9999749 2.491956e-05 1.438610e-07
+#&gt; [5,] 0.9999011 9.878531e-05 7.353240e-08
+#&gt; [6,] 0.9999011 9.878531e-05 7.353240e-08</code></pre>
 <p>In the case of a binary factor, the second factor level is treated as the event and the level for which predicted probabilities are computed.</p>
 <pre class="r"><code>## Pima Indians diabetes statuses (binary factor)
 data(Pima.te, package = &quot;MASS&quot;)
@@ -1048,7 +1046,7 @@ predict(model_fit, newdata = Pima.te) %&gt;% head
 #&gt; [1] Yes No  No  No  Yes Yes
 #&gt; Levels: No Yes
 predict(model_fit, newdata = Pima.te, type = &quot;prob&quot;) %&gt;% head
-#&gt; [1] 0.90724668 0.07228020 0.01806732 0.03284889 0.62654894 0.82684946</code></pre>
+#&gt; [1] 0.87360478 0.04615359 0.01710191 0.03293086 0.62253306 0.72600317</code></pre>
 </div>
 <div id="ordered-factor" class="section level2">
 <h2>Ordered Factor</h2>
@@ -1066,12 +1064,12 @@ predict(model_fit) %&gt;% head
 #&gt; Levels: Low &lt; Medium &lt; High
 predict(model_fit, type = &quot;prob&quot;) %&gt;% head
 #&gt;            Low      Medium         High
-#&gt; [1,] 0.9974132 0.002554372 3.240887e-05
-#&gt; [2,] 0.9974023 0.002572455 2.527048e-05
-#&gt; [3,] 0.9791038 0.020831702 6.446588e-05
-#&gt; [4,] 0.9540882 0.045822941 8.885475e-05
-#&gt; [5,] 0.9115048 0.088383703 1.114675e-04
-#&gt; [6,] 0.9341394 0.065776477 8.416416e-05</code></pre>
+#&gt; [1,] 0.9970793 0.002861748 5.895869e-05
+#&gt; [2,] 0.9984774 0.001486834 3.576000e-05
+#&gt; [3,] 0.9739075 0.026018571 7.394441e-05
+#&gt; [4,] 0.9776636 0.022233496 1.028732e-04
+#&gt; [5,] 0.9428796 0.056888859 2.315649e-04
+#&gt; [6,] 0.9022544 0.097553889 1.916967e-04</code></pre>
 </div>
 <div id="numeric-vector" class="section level2">
 <h2>Numeric Vector</h2>
@@ -1079,9 +1077,9 @@ predict(model_fit, type = &quot;prob&quot;) %&gt;% head
 <pre class="r"><code>## Iowa City housing prices
 model_fit &lt;- fit(sale_amount ~ ., data = ICHomes, model = GBMModel)
 predict(model_fit) %&gt;% head
-#&gt; [1] 107132 165636 210175 133135 229971 235009
+#&gt; [1] 105070 174539 222170 121540 216691 218347
 predict(model_fit, type = &quot;prob&quot;) %&gt;% head
-#&gt; [1] 107132.0 165636.5 210175.3 133134.6 229971.0 235009.2</code></pre>
+#&gt; [1] 105069.7 174539.2 222169.9 121539.5 216691.0 218347.1</code></pre>
 </div>
 <div id="numeric-matrix" class="section level2">
 <h2>Numeric Matrix</h2>
@@ -1156,21 +1154,21 @@ obs &lt;- response(surv_fit, newdata = surv_test)
 pred_means &lt;- predict(surv_fit, newdata = surv_test)
 performance(obs, pred_means)
 #&gt;   C-Index 
-#&gt; 0.6127013
+#&gt; 0.6498211
 
 ## Predicted survival probabilities
 pred_probs &lt;- predict(surv_fit, newdata = surv_test, times = surv_times, type = &quot;prob&quot;)
 performance(obs, pred_probs)
 #&gt;     Brier.mean    Brier.time1    Brier.time2   ROC AUC.mean  ROC AUC.time1 
-#&gt;      0.2822545      0.2285053      0.3360037      0.5886238      0.5972226 
+#&gt;      0.2795832      0.2259404      0.3332259      0.6041638      0.6498347 
 #&gt;  ROC AUC.time2  Accuracy.mean Accuracy.time1 Accuracy.time2 
-#&gt;      0.5800249      0.6312072      0.7354396      0.5269749
+#&gt;      0.5584929      0.6592908      0.7208724      0.5977092
 
 ## Predicted survival events
 pred_events &lt;- predict(surv_fit, newdata = surv_test, times = surv_times)
 performance(obs, pred_events)
 #&gt;  Accuracy.mean Accuracy.time1 Accuracy.time2 
-#&gt;      0.6312072      0.7354396      0.5269749</code></pre>
+#&gt;      0.6592908      0.7208724      0.5977092</code></pre>
 <p>Function <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/performance"><code>performance()</code></a> computes a default set of metrics according to the observed and predicted response types, as indicated and in the order given in the table below.</p>
 <p>Table 3. Default performance metrics by response types.</p>
 <table>
@@ -1222,38 +1220,37 @@ performance(obs, pred_means, metrics = &quot;cindex&quot;)
 performance(obs, pred_means, metrics = c(cindex, rmse, rmsle))
 
 ## Named list of metric functions
-performance(obs, pred_means, metrics = c(&quot;CIndex&quot; = cindex,
-                                         &quot;RMSE&quot; = rmse,
-                                         &quot;RMSLE&quot; = rmsle))</code></pre>
+performance(obs, pred_means,
+            metrics = c(&quot;CIndex&quot; = cindex, &quot;RMSE&quot; = rmse, &quot;RMSLE&quot; = rmsle))</code></pre>
 <p>Metrics based on classification of two-level class probabilities, like sensitivity and specificity, optionally allow for specification of the classification cutoff probability (default: <code>cutoff = 0.5</code>).</p>
 <pre class="r"><code>## User-specified survival probability metrics
 performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.7)
 #&gt;  sensitivity.mean sensitivity.time1 sensitivity.time2  specificity.mean 
-#&gt;         0.5073679         0.4634801         0.5512557         0.7013981 
+#&gt;         0.4532483         0.4634801         0.4430165         0.6558548 
 #&gt; specificity.time1 specificity.time2 
-#&gt;         0.7294125         0.6733836</code></pre>
+#&gt;         0.7294125         0.5822970</code></pre>
 </div>
 <div id="metric-functions" class="section level2">
 <h2>Metric Functions</h2>
 <p>Whereas multiple package-supplied metrics can be calculated simultaneously with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/performance"><code>performance()</code></a> function, each exists as a stand-alone function that can be called individually.</p>
 <pre class="r"><code>## Metric functions for survival means
 cindex(obs, pred_means)
-#&gt; [1] 0.6127013
+#&gt; [1] 0.6498211
 
 rmse(obs, pred_means)
-#&gt; [1] 5264.37
+#&gt; [1] 8418.752
 
 rmsle(obs, pred_means)
-#&gt; [1] 1.934614
+#&gt; [1] 2.199837
 
 ## Metric functions for survival probabilities
 sensitivity(obs, pred_probs)
 #&gt;      mean     time1     time2 
-#&gt; 0.3451033 0.3477320 0.3424745
+#&gt; 0.3891633 0.3476286 0.4306980
 
 specificity(obs, pred_probs)
 #&gt;      mean     time1     time2 
-#&gt; 0.9323611 0.8647221 1.0000000</code></pre>
+#&gt; 0.9226907 0.8453813 1.0000000</code></pre>
 </div>
 <div id="metric-information" class="section level2">
 <h2>Metric Information</h2>
@@ -1304,7 +1301,7 @@ metricinfo(cindex)
 #&gt; 3      Surv   numeric</code></pre>
 <p>Submitting the metric function at the console will result in similar information being displayed as formatted text.</p>
 <pre class="r"><code>cindex
-#&gt; Object of class &quot;MLMetric&quot;
+#&gt; --- MLMetric object ------------------------------------------------------------
 #&gt; 
 #&gt; Metric name: cindex
 #&gt; Label: Concordance Index
@@ -1600,15 +1597,21 @@ Event
 <dd>Training resubstitution. A model is fit on and used to predict the full training set in order to estimate training, or apparent, error <span class="citation">(Efron 1986)</span>.
 </dd>
 </dl>
-<p>For the survival example, repeated cross-validation control structures are defined to estimate model performance in predicting survival means and 5 and 10-year survival probabilities. In addition to arguments controlling the resampling algorithms, a <code>seed</code> can be set to ensure reproducibility of resampling results obtained with the structures.</p>
-<pre class="r"><code>## Control parameters for K-fold cross-validation
+<p>For the survival example, repeated cross-validation control structures are defined for the estimation of model performance in predicting survival means and 5 and 10-year survival probabilities. In addition to arguments controlling the resampling methods, a <code>seed</code> can be set to ensure reproducibility of resampling results obtained with the structures. The default control structure can also be set globally by users and subsequently changed back to its package default as desired.</p>
+<pre class="r"><code>## Control structures for K-fold cross-validation
 
 ## Prediction of survival means
 surv_means_control &lt;- CVControl(folds = 5, repeats = 3, seed = 123)
 
 ## Prediction of survival probabilities
 surv_probs_control &lt;- CVControl(folds = 5, repeats = 3, seed = 123) %&gt;%
-  set_predict(times = surv_times)</code></pre>
+  set_predict(times = surv_times)
+
+## User-specification of the default control structure
+MachineShop::settings(control = CVControl(folds = 5, seed = 123))
+
+## Package default
+# MachineShop::settings(reset = &quot;control&quot;)</code></pre>
 </div>
 <div id="parallel-processing" class="section level2">
 <h2>Parallel Processing</h2>
@@ -1621,38 +1624,40 @@ registerDoParallel(cores = 2)</code></pre>
 <h2>Resample Function</h2>
 <p>Resampling is performed by calling the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/resample"><code>resample()</code></a> function with a variable specification, model, and control structure. Like the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/fit"><code>fit()</code></a> function, variables may be specified in terms of a traditional formula, design matrix, model frame, or recipe.</p>
 <pre class="r"><code>## Resample estimation for survival means and probabilities
-(res_means &lt;- resample(surv_fo, data = surv_train, model = GBMModel, control = surv_means_control))
-#&gt; Object of class &quot;Resamples&quot;
+(res_means &lt;- resample(surv_fo, data = surv_train, model = GBMModel,
+                       control = surv_means_control))
+#&gt; --- Resamples object -----------------------------------------------------------
 #&gt; 
-#&gt; Models: GBMModel
-#&gt; Stratification variable: (strata) 
+#&gt; Model: GBMModel
+#&gt; Stratification variable: (strata)
 #&gt; 
-#&gt; Object of class &quot;MLControl&quot;
+#&gt; --- CVControl object ---
 #&gt; 
-#&gt; Name: CVControl
 #&gt; Label: K-Fold Cross-Validation
 #&gt; Folds: 5
 #&gt; Repeats: 3
+#&gt; Case-weighted metrics: TRUE
 #&gt; Stratification parameters
 #&gt;   Breaks: 4
 #&gt;   Unique numeric threshold: 5
 #&gt;   Minimum proportion: 0.1
 #&gt;   Minimum size: 20
-#&gt; Monitoring: progress 
+#&gt; Monitoring: progress
 #&gt; Seed: 123
 
-(res_probs &lt;- resample(surv_fo, data = surv_train, model = GBMModel, control = surv_probs_control))
-#&gt; Object of class &quot;Resamples&quot;
+(res_probs &lt;- resample(surv_fo, data = surv_train, model = GBMModel,
+                       control = surv_probs_control))
+#&gt; --- Resamples object -----------------------------------------------------------
 #&gt; 
-#&gt; Models: GBMModel
-#&gt; Stratification variable: (strata) 
+#&gt; Model: GBMModel
+#&gt; Stratification variable: (strata)
 #&gt; 
-#&gt; Object of class &quot;MLControl&quot;
+#&gt; --- CVControl object ---
 #&gt; 
-#&gt; Name: CVControl
 #&gt; Label: K-Fold Cross-Validation
 #&gt; Folds: 5
 #&gt; Repeats: 3
+#&gt; Case-weighted metrics: TRUE
 #&gt; Prediction parameters
 #&gt;   Survival times: 1825, 3650
 #&gt; Stratification parameters
@@ -1660,7 +1665,7 @@ registerDoParallel(cores = 2)</code></pre>
 #&gt;   Unique numeric threshold: 5
 #&gt;   Minimum proportion: 0.1
 #&gt;   Minimum size: 20
-#&gt; Monitoring: progress 
+#&gt; Monitoring: progress
 #&gt; Seed: 123</code></pre>
 </div>
 <div id="summary-statistics" class="section level2">
@@ -1669,22 +1674,22 @@ registerDoParallel(cores = 2)</code></pre>
 <pre class="r"><code>## Summary of survival means metric
 summary(res_means)
 #&gt;          Statistic
-#&gt; Metric        Mean    Median        SD       Min       Max NA
-#&gt;   C-Index 0.729993 0.7222222 0.0544976 0.6283784 0.8207547  0
+#&gt; Metric        Mean    Median         SD       Min       Max NA
+#&gt;   C-Index 0.749108 0.7548387 0.04951456 0.6365639 0.8160377  0
 
 ## Summary of survival probability metrics
 summary(res_probs)
 #&gt;                 Statistic
 #&gt; Metric                Mean    Median         SD       Min       Max NA
-#&gt;   Brier.mean     0.1854810 0.1783993 0.03819170 0.1338333 0.2696552  0
-#&gt;   Brier.time1    0.1716919 0.1708841 0.02697760 0.1184808 0.2072244  0
-#&gt;   Brier.time2    0.1992700 0.1652362 0.06554483 0.1273934 0.3339587  0
-#&gt;   ROC AUC.mean   0.7789080 0.7839920 0.07814200 0.6331908 0.9282160  0
-#&gt;   ROC AUC.time1  0.7857826 0.7731481 0.07412132 0.6591331 0.8943866  0
-#&gt;   ROC AUC.time2  0.7720333 0.7880174 0.09201800 0.5976826 0.9620454  0
-#&gt;   Accuracy.mean  0.7269223 0.7279678 0.06775892 0.6265693 0.8352991  0
-#&gt;   Accuracy.time1 0.7658061 0.7650000 0.06421327 0.6607143 0.9000000  0
-#&gt;   Accuracy.time2 0.6880385 0.6909357 0.09516973 0.5333333 0.8551587  0</code></pre>
+#&gt;   Brier.mean     0.1842841 0.1750869 0.04217653 0.1330281 0.2792609  0
+#&gt;   Brier.time1    0.1668872 0.1727468 0.02530010 0.1228330 0.2095500  0
+#&gt;   Brier.time2    0.2016809 0.1758462 0.07289618 0.1172593 0.3489718  0
+#&gt;   ROC AUC.mean   0.7985160 0.8156269 0.07333851 0.6273644 0.9306415  0
+#&gt;   ROC AUC.time1  0.8068618 0.8082255 0.06426184 0.6759259 0.8975211  0
+#&gt;   ROC AUC.time2  0.7901702 0.8071797 0.09104398 0.5788030 0.9637620  0
+#&gt;   Accuracy.mean  0.7476811 0.7411719 0.06878052 0.6416667 0.8489583  0
+#&gt;   Accuracy.time1 0.7675844 0.7649123 0.06854295 0.6607143 0.9000000  0
+#&gt;   Accuracy.time2 0.7277778 0.7162698 0.09552037 0.5333333 0.9166667  0</code></pre>
 <p>Other relevant metrics can be identified with <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/metricinfo"><code>metricinfo()</code></a> and summarized with <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/performance"><code>performance()</code></a>.</p>
 <pre class="r"><code>## Resample-specific metrics
 metricinfo(res_means) %&gt;% names
@@ -1694,21 +1699,21 @@ metricinfo(res_means) %&gt;% names
 summary(performance(res_means, metrics = c(cindex, rmse)))
 #&gt;         Statistic
 #&gt; Metric          Mean       Median           SD          Min          Max NA
-#&gt;   cindex    0.729993    0.7222222    0.0544976    0.6283784    0.8207547  0
-#&gt;   rmse   3983.720800 3819.9455016 1046.3418458 2132.8404344 5731.9116005  0</code></pre>
+#&gt;   cindex    0.749108    0.7548387 4.951456e-02    0.6365639    0.8160377  0
+#&gt;   rmse   4165.777541 3716.3268472 2.001567e+03 2218.4275342 9745.4644550  0</code></pre>
 <p>Furthermore, summaries can be customized with a user-defined statistics function or list of statistics functions passed to the <code>stats</code> argument of <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/summary"><code>summary()</code></a>.</p>
 <pre class="r"><code>## User-defined statistics function
 percentiles &lt;- function(x) quantile(x, probs = c(0.25, 0.50, 0.75))
 summary(res_means, stats = percentiles)
 #&gt;          Statistic
 #&gt; Metric          25%       50%       75% NA
-#&gt;   C-Index 0.6983609 0.7222222 0.7696212  0
+#&gt;   C-Index 0.7340854 0.7548387 0.7808712  0
 
 ## User-defined list of statistics functions
 summary(res_means, stats = c(Mean = mean, Percentile = percentiles))
 #&gt;          Statistic
 #&gt; Metric        Mean Percentile.25% Percentile.50% Percentile.75% NA
-#&gt;   C-Index 0.729993      0.6983609      0.7222222      0.7696212  0</code></pre>
+#&gt;   C-Index 0.749108      0.7340854      0.7548387      0.7808712  0</code></pre>
 </div>
 <div id="plots" class="section level2">
 <h2>Plots</h2>
@@ -1758,23 +1763,23 @@ res3 &lt;- resample(surv_fo, data = surv_train, model = GBMModel(n.trees = 100),
 
 ## Combine resample output for comparison
 (res &lt;- c(GBM1 = res1, GBM2 = res2, GBM3 = res3))
-#&gt; Object of class &quot;Resamples&quot;
+#&gt; --- Resamples object -----------------------------------------------------------
 #&gt; 
 #&gt; Models: GBM1, GBM2, GBM3
-#&gt; Stratification variable: (strata) 
+#&gt; Stratification variable: (strata)
 #&gt; 
-#&gt; Object of class &quot;MLControl&quot;
+#&gt; --- CVControl object ---
 #&gt; 
-#&gt; Name: CVControl
 #&gt; Label: K-Fold Cross-Validation
 #&gt; Folds: 5
 #&gt; Repeats: 3
+#&gt; Case-weighted metrics: TRUE
 #&gt; Stratification parameters
 #&gt;   Breaks: 4
 #&gt;   Unique numeric threshold: 5
 #&gt;   Minimum proportion: 0.1
 #&gt;   Minimum size: 20
-#&gt; Monitoring: progress 
+#&gt; Monitoring: progress
 #&gt; Seed: 123
 
 summary(res)
@@ -1782,9 +1787,9 @@ summary(res)
 #&gt; 
 #&gt;       Statistic
 #&gt; Model       Mean    Median         SD       Min       Max NA
-#&gt;   GBM1 0.7625619 0.7669683 0.05929276 0.6431718 0.8537736  0
-#&gt;   GBM2 0.7513153 0.7548387 0.05260501 0.6486486 0.8261803  0
-#&gt;   GBM3 0.7299930 0.7222222 0.05449760 0.6283784 0.8207547  0
+#&gt;   GBM1 0.7684073 0.7708333 0.05120949 0.6718062 0.8466981  0
+#&gt;   GBM2 0.7601717 0.7612903 0.04748957 0.6674009 0.8396226  0
+#&gt;   GBM3 0.7415412 0.7535545 0.04505467 0.6621622 0.8160377  0
 
 plot(res)</code></pre>
 <p><img src="using_files/figure-html/using_resample_comparisons-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -1793,24 +1798,24 @@ t = \frac{\bar{x}_R}{\sqrt{F s^2_R / R}},
 \]</span> where <span class="math inline">\(\bar{x}_R\)</span> and <span class="math inline">\(s^2_R\)</span> are the sample mean and variance. Statistical testing for a mean difference is then performed by comparing <span class="math inline">\(t\)</span> to a <span class="math inline">\(t_{R-1}\)</span> null distribution. The sample variance in the t statistic is known to underestimate the true variances of cross-validation mean estimators. Underestimation of these variances will lead to increased probabilities of false-positive statistical conclusions. Thus, an additional factor <span class="math inline">\(F\)</span> is included in the t statistic to allow for variance corrections. A correction of <span class="math inline">\(F = 1 + K / (K - 1)\)</span> was found by Nadeau and Bengio <span class="citation">(2003)</span> to be a good choice for cross-validation with <span class="math inline">\(K\)</span> folds and is thus used for that resampling method. The extension of this correction by Bouchaert and Frank <span class="citation">(2004)</span> to <span class="math inline">\(F = 1 + T K / (K - 1)\)</span> is used for cross-validation with <span class="math inline">\(K\)</span> folds repeated <span class="math inline">\(T\)</span> times. For other resampling methods <span class="math inline">\(F = 1\)</span>. Below are t-test results based on the extended correction factor for 3 repeats of 5-fold cross-validation.</p>
 <pre class="r"><code>## Pairwise model comparisons
 (res_diff &lt;- diff(res))
-#&gt; Object of class &quot;PerformanceDiff&quot;
+#&gt; --- PerformanceDiff object -----------------------------------------------------
 #&gt; 
-#&gt; Metrics: C-Index 
+#&gt; Metric: C-Index
 #&gt; Models: GBM1 - GBM2, GBM1 - GBM3, GBM2 - GBM3
 
 summary(res_diff)
 #&gt; , , Metric = C-Index
 #&gt; 
 #&gt;              Statistic
-#&gt; Model               Mean     Median         SD          Min        Max NA
-#&gt;   GBM1 - GBM2 0.01124657 0.01056338 0.02184631 -0.027896996 0.04646018  0
-#&gt;   GBM1 - GBM3 0.03256885 0.03040541 0.02744293 -0.002293578 0.09070796  0
-#&gt;   GBM2 - GBM3 0.02132228 0.01762115 0.01959371 -0.013761468 0.05882353  0
+#&gt; Model                Mean      Median         SD          Min        Max NA
+#&gt;   GBM1 - GBM2 0.008235568 0.007075472 0.01878752 -0.022935780 0.05203620  0
+#&gt;   GBM1 - GBM3 0.026866122 0.023605150 0.02885836 -0.022058824 0.08371041  0
+#&gt;   GBM2 - GBM3 0.018630555 0.022727273 0.01530547 -0.006451613 0.04635762  0
 
 plot(res_diff)</code></pre>
 <p><img src="using_files/figure-html/using_resample_diff-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>t.test(res_diff)
-#&gt; Object of class &quot;PerformanceDiffTest&quot;
+#&gt; --- PerformanceDiffTest object -------------------------------------------------
 #&gt; 
 #&gt; Upper diagonal: mean differences (Model1 - Model2)
 #&gt; Lower diagonal: p-values
@@ -1819,10 +1824,10 @@ plot(res_diff)</code></pre>
 #&gt; , , Metric = C-Index
 #&gt; 
 #&gt;       Model2
-#&gt; Model1      GBM1       GBM2       GBM3
-#&gt;   GBM1        NA 0.01124657 0.03256885
-#&gt;   GBM2 0.3757686         NA 0.02132228
-#&gt;   GBM3 0.1603145 0.16031452         NA</code></pre>
+#&gt; Model1      GBM1        GBM2       GBM3
+#&gt;   GBM1        NA 0.008235568 0.02686612
+#&gt;   GBM2 0.4489624          NA 0.01863055
+#&gt;   GBM3 0.2405801 0.144965346         NA</code></pre>
 </div>
 </div>
 <div id="model-predictor-effects-and-diagnostics" class="section level1">
@@ -1830,22 +1835,22 @@ plot(res_diff)</code></pre>
 <p>Calculation of performance metrics on test sets or by resampling, as discussed previously, is one method of assessing model performance. Others available include measures of predictor variable importance, partial dependence plots, calibration curves comparing observed and predicted response values, and receiver operating characteristic analysis.</p>
 <div id="variable-importance" class="section level2">
 <h2>Variable Importance</h2>
-<p>The importance of predictor variables in a model fit is estimated with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/varimp"><code>varimp()</code></a> function and displayed graphically with <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/plot"><code>plot()</code></a>. Variable importance is a relative measure of the contributions of model predictors and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most. Model-specific implementations of variable importance are available in many cases, although their definitions may differ. In the case of a <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/GBMModel"><code>GBMModel</code></a>, importance of each predictor is based on the sum of squared empirical improvements over all internal tree nodes created by splitting on that variable <span class="citation">(Greenwell et al. 2019)</span>.</p>
+<p>The importance of predictor variables in a model fit is estimated with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/varimp"><code>varimp()</code></a> function and displayed graphically with <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/plot"><code>plot()</code></a>. Variable importance is a relative measure of the contributions of model predictors and is scaled by default to have a maximum value of 100, where higher values represent more important variables. Model-specific implementations of variable importance are available in many cases, although their definitions may differ. In the case of a <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/GBMModel"><code>GBMModel</code></a>, importance of each predictor is based on the sum of squared empirical improvements over all internal tree nodes created by splitting on that variable <span class="citation">(Greenwell et al. 2019)</span>.</p>
 <pre class="r"><code>## Predictor variable importance
 (vi &lt;- varimp(surv_fit, method = &quot;model&quot;))
-#&gt; Object of class &quot;VarImp&quot;
-#&gt;             Overall
-#&gt; age       100.00000
-#&gt; thickness  96.67023
-#&gt; year       54.34984
-#&gt; ulcer      25.68188
-#&gt; sex         0.00000
+#&gt; --- VariableImportance object --------------------------------------------------
+#&gt;              Overall
+#&gt; thickness 100.000000
+#&gt; age        93.779497
+#&gt; year       34.068372
+#&gt; ulcer      22.569795
+#&gt; sex         2.243286
 
 plot(vi)</code></pre>
 <p><img src="using_files/figure-html/using_analyses_vi-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>In contrast, importance is based on negative log-transformed p-values for statistical models, like <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/CoxModel"><code>CoxModel</code></a>, that produce them. For other models, variable importance may be defined and calculated by their underlying source packages or not defined at all, as is the case for <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/SVMModel"><code>SVMModel</code></a>. Logical indicators of model-specific variable importance are given in the information displayed by model constructors and returned by <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/modelinfo"><code>modelinfo()</code></a>.</p>
 <pre class="r"><code>SVMModel
-#&gt; Object of class &quot;MLModelFunction&quot;
+#&gt; --- MLModelFunction object -----------------------------------------------------
 #&gt; 
 #&gt; Model name: SVMModel
 #&gt; Label: Support Vector Machines
@@ -1856,10 +1861,10 @@ plot(vi)</code></pre>
 #&gt; Variable importance: FALSE
 #&gt; 
 #&gt; Arguments:
-#&gt; function (scaled = TRUE, type = NULL, kernel = c(&quot;rbfdot&quot;, &quot;polydot&quot;, 
-#&gt;     &quot;vanilladot&quot;, &quot;tanhdot&quot;, &quot;laplacedot&quot;, &quot;besseldot&quot;, &quot;anovadot&quot;, 
-#&gt;     &quot;splinedot&quot;), kpar = &quot;automatic&quot;, C = 1, nu = 0.2, epsilon = 0.1, 
-#&gt;     cache = 40, tol = 0.001, shrinking = TRUE) 
+#&gt; function (scaled = TRUE, type = character(), kernel = c(&quot;rbfdot&quot;, 
+#&gt;     &quot;polydot&quot;, &quot;vanilladot&quot;, &quot;tanhdot&quot;, &quot;laplacedot&quot;, &quot;besseldot&quot;, 
+#&gt;     &quot;anovadot&quot;, &quot;splinedot&quot;), kpar = &quot;automatic&quot;, C = 1, nu = 0.2, 
+#&gt;     epsilon = 0.1, cache = 40, tol = 0.001, shrinking = TRUE) 
 #&gt; NULL
 
 modelinfo(SVMModel)[[1]]$varimp
@@ -1883,13 +1888,13 @@ modelinfo(SVMModel)[[1]]$varimp
 </ul>
 <pre class="r"><code>## Permutation-based variable importance
 varimp(surv_fit)
-#&gt; Object of class &quot;VarImp&quot;
-#&gt;           Permute.Mean
-#&gt; age          100.00000
-#&gt; thickness     60.98439
-#&gt; ulcer         50.78031
-#&gt; year          30.97239
-#&gt; sex            0.00000</code></pre>
+#&gt; --- VariableImportance object --------------------------------------------------
+#&gt;           Permute.mean.cindex
+#&gt; age                100.000000
+#&gt; thickness           52.364066
+#&gt; year                34.751773
+#&gt; ulcer               20.094563
+#&gt; sex                  2.009456</code></pre>
 <p>There are a number of advantages to permutation-based variable importance. In particular, it can be computed for any</p>
 <ol style="list-style-type: decimal">
 <li>model,</li>
@@ -1916,15 +1921,15 @@ varimp(surv_fit)
 (surv_rfe &lt;- rfe(surv_fo, data = surv_train, model = GBMModel,
                  control = surv_means_control))
 #&gt; # A tibble: 4 x 4
-#&gt;    size terms     optimal performance[,&quot;C-Index&quot;]
-#&gt;   &lt;int&gt; &lt;list&gt;    &lt;lgl&gt;                     &lt;dbl&gt;
-#&gt; 1     5 &lt;chr [5]&gt; FALSE                     0.730
-#&gt; 2     4 &lt;chr [4]&gt; TRUE                      0.741
-#&gt; 3     2 &lt;chr [2]&gt; FALSE                     0.737
-#&gt; 4     1 &lt;chr [1]&gt; FALSE                     0.734
+#&gt;    size terms     optimal metrics$`C-Index`
+#&gt;   &lt;int&gt; &lt;list&gt;    &lt;lgl&gt;               &lt;dbl&gt;
+#&gt; 1     5 &lt;chr [5]&gt; TRUE                0.749
+#&gt; 2     4 &lt;chr [4]&gt; FALSE               0.746
+#&gt; 3     2 &lt;chr [2]&gt; FALSE               0.747
+#&gt; 4     1 &lt;chr [1]&gt; FALSE               0.723
 surv_rfe$terms[surv_rfe$optimal]
 #&gt; [[1]]
-#&gt; [1] &quot;age&quot;       &quot;thickness&quot; &quot;ulcer&quot;     &quot;year&quot;</code></pre>
+#&gt; [1] &quot;age&quot;       &quot;thickness&quot; &quot;year&quot;      &quot;ulcer&quot;     &quot;sex&quot;</code></pre>
 </div>
 <div id="partial-dependence-plots" class="section level2">
 <h2>Partial Dependence Plots</h2>
@@ -1961,55 +1966,55 @@ plot(cal)</code></pre>
 <p>Confusion matrices of cross-classified observed and predicted categorical responses are available with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/confusion"><code>confusion()</code></a> function. They can be constructed with predicted class membership or with predicted class probabilities. In the latter case, predicted class membership is derived from predicted probabilities according to a probability cutoff value for binary factors (default: <code>cutoff = 0.5</code>) and according to the class with highest probability for factors with more than two levels.</p>
 <pre class="r"><code>## Confusion matrices
 (conf &lt;- confusion(res_probs, cutoff = 0.7))
-#&gt; Object of class &quot;ConfusionList&quot;
+#&gt; --- ConfusionList object -------------------------------------------------------
 #&gt; 
-#&gt; GBMModel.time1 :
-#&gt; Object of class &quot;BinaryConfusionMatrix&quot;
+#&gt; == GBMModel.time1 ==============================================================
+#&gt; --- BinaryConfusionMatrix object ---
 #&gt;          Observed
 #&gt; Predicted         0         1
-#&gt;         0 224.09158  37.90842
-#&gt;         1  71.40000  74.60000
-#&gt; ------------------------------------------------------------ 
-#&gt; GBMModel.time2 :
-#&gt; Object of class &quot;BinaryConfusionMatrix&quot;
+#&gt;         0 235.29675  36.70325
+#&gt;         1  60.41667  75.58333
+#&gt; 
+#&gt; == GBMModel.time2 ==============================================================
+#&gt; --- BinaryConfusionMatrix object ---
 #&gt;          Observed
 #&gt; Predicted         0         1
-#&gt;         0 167.74794  41.25206
-#&gt;         1  83.59702 115.40298</code></pre>
+#&gt;         0 167.70015  31.29985
+#&gt;         1  83.47545 125.52455</code></pre>
 <pre class="r"><code>plot(conf)</code></pre>
 <p><img src="using_files/figure-html/using_analyses_conf_plot-1.png" width="672" style="display: block; margin: auto;" /><img src="using_files/figure-html/using_analyses_conf_plot-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Confusion matrices are the data structure upon which many of the performance metrics described earlier for factor predictor variables are based. Metrics commonly reported for confusion matrices are generated by the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/summary"><code>summary()</code></a> function.</p>
 <pre class="r"><code>## Summary performance metrics
 summary(conf)
-#&gt; GBMModel.time1 :
+#&gt; -- GBMModel.time1 --------------------------------------------------------------
 #&gt; Number of responses: 408
-#&gt; Accuracy (SE): 0.7320872 (0.02192543)
-#&gt; Majority class: 0.7242441
-#&gt; Kappa: 0.3858653
+#&gt; Accuracy (SE): 0.761961 (0.02108436)
+#&gt; Majority class: 0.7247878
+#&gt; Kappa: 0.4400014
 #&gt; 
 #&gt;                     0         1
-#&gt; Observed    0.7242441 0.2757559
-#&gt; Predicted   0.6421569 0.3578431
-#&gt; Agreement   0.5492441 0.1828431
-#&gt; Sensitivity 0.7583688 0.6630615
-#&gt; Specificity 0.6630615 0.7583688
-#&gt; PPV         0.8553114 0.5109589
-#&gt; NPV         0.5109589 0.8553114
-#&gt; ------------------------------------------------------------ 
-#&gt; GBMModel.time2 :
+#&gt; Observed    0.7247878 0.2752122
+#&gt; Predicted   0.6666667 0.3333333
+#&gt; Agreement   0.5767077 0.1852533
+#&gt; Sensitivity 0.7956918 0.6731288
+#&gt; Specificity 0.6731288 0.7956918
+#&gt; PPV         0.8650616 0.5557598
+#&gt; NPV         0.5557598 0.8650616
+#&gt; 
+#&gt; -- GBMModel.time2 --------------------------------------------------------------
 #&gt; Number of responses: 408
-#&gt; Accuracy (SE): 0.6939974 (0.02281452)
-#&gt; Majority class: 0.6160416
-#&gt; Kappa: 0.3844935
+#&gt; Accuracy (SE): 0.718688 (0.02226047)
+#&gt; Majority class: 0.6156265
+#&gt; Kappa: 0.440547
 #&gt; 
 #&gt;                     0         1
-#&gt; Observed    0.6160416 0.3839584
-#&gt; Predicted   0.5122549 0.4877451
-#&gt; Agreement   0.4111469 0.2828504
-#&gt; Sensitivity 0.6674013 0.7366694
-#&gt; Specificity 0.7366694 0.6674013
-#&gt; PPV         0.8026217 0.5799145
-#&gt; NPV         0.5799145 0.8026217</code></pre>
+#&gt; Observed    0.6156265 0.3843735
+#&gt; Predicted   0.4877451 0.5122549
+#&gt; Agreement   0.4110298 0.3076582
+#&gt; Sensitivity 0.6676610 0.8004147
+#&gt; Specificity 0.8004147 0.6676610
+#&gt; PPV         0.8427143 0.6005960
+#&gt; NPV         0.6005960 0.8427143</code></pre>
 <p>Summaries can also be obtained with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/performance"><code>performance()</code></a> function for default or use-specified metrics.</p>
 <pre class="r"><code>## Confusion matrix-specific metrics
 metricinfo(conf) %&gt;% names
@@ -2021,13 +2026,13 @@ metricinfo(conf) %&gt;% names
 performance(conf, metrics = c(&quot;Accuracy&quot; = accuracy,
                               &quot;Sensitivity&quot; = sensitivity,
                               &quot;Specificity&quot; = specificity))
-#&gt; GBMModel.time1 :
+#&gt; -- GBMModel.time1 --------------------------------------------------------------
 #&gt;    Accuracy Sensitivity Specificity 
-#&gt;   0.7320872   0.6630615   0.7583688 
-#&gt; ------------------------------------------------------------ 
-#&gt; GBMModel.time2 :
+#&gt;   0.7619610   0.6731288   0.7956918 
+#&gt; 
+#&gt; -- GBMModel.time2 --------------------------------------------------------------
 #&gt;    Accuracy Sensitivity Specificity 
-#&gt;   0.6939974   0.7366694   0.6674013</code></pre>
+#&gt;   0.7186880   0.8004147   0.6676610</code></pre>
 </div>
 <div id="performance-curves" class="section level2">
 <h2>Performance Curves</h2>
@@ -2050,10 +2055,10 @@ plot(roc, diagonal = TRUE)</code></pre>
 <p>Area under the ROC curve (ROC AUC) is an overall measure of model predictive performance. It is interpreted as the probability that a randomly selected positive case will have a higher predicted value than a randomly selected negative case. AUC values of 0.5 and 1.0 indicate chance and perfect <em>concordance</em> between predicted probabilities and observed responses.</p>
 <pre class="r"><code>auc(roc)
 #&gt; Model: GBMModel.time1
-#&gt; [1] 0.7843416
+#&gt; [1] 0.8023438
 #&gt; ------------------------------------------------------------ 
 #&gt; Model: GBMModel.time2
-#&gt; [1] 0.7698968</code></pre>
+#&gt; [1] 0.7848233</code></pre>
 </div>
 <div id="precision-recall-curves" class="section level3">
 <h3>Precision Recall Curves</h3>
@@ -2069,10 +2074,10 @@ plot(pr)</code></pre>
 <p><img src="using_files/figure-html/using_analyses_pr-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>auc(pr)
 #&gt; Model: GBMModel.time1
-#&gt; [1] 0.5211144
+#&gt; [1] 0.5339372
 #&gt; ------------------------------------------------------------ 
 #&gt; Model: GBMModel.time2
-#&gt; [1] 0.6080139</code></pre>
+#&gt; [1] 0.6160276</code></pre>
 </div>
 <div id="lift-curves" class="section level3">
 <h3>Lift Curves</h3>
@@ -2122,6 +2127,7 @@ plot(lf, find = 0.75)</code></pre>
 <p>Preprocessing recipes may have step with parameters that affect predictive performance. Steps can be tuned over a grid of parameter values with <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/TunedInput"><code>TunedInput()</code></a> to select the best performing values. Calls to <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/TunedInput"><code>TunedInput()</code></a> return an input object that may be trained on data with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/fit"><code>fit()</code></a> function or evaluated for predictive performance with <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/resample"><code>resample()</code></a>. As an example, a principal components analysis (PCA) step could be included in a preprocessing recipe for tuning over the number of components to retain in the final model. Such a recipe is shown below accompanied by a call to <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/expand_steps"><code>expand_steps()</code></a> to construct a tuning grid. The grid parameter <code>num_comp</code> and name <code>PCA</code> correspond to the argument and id of the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/step_pca"><code>step_pca()</code></a> function to which the values <code>1:3</code> apply. The recipe and grid may then be passed to <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/TunedInput"><code>TunedInput()</code></a> for model fitting.</p>
 <pre class="r"><code>## Preprocessing recipe with PCA steps
 pca_rec &lt;- recipe(y ~ ., data = surv_train) %&gt;%
+  role_case(stratum = y) %&gt;%
   step_center(all_predictors()) %&gt;%
   step_scale(all_predictors()) %&gt;%
   step_pca(all_predictors(), id = &quot;PCA&quot;)
@@ -2137,7 +2143,7 @@ tun_rec &lt;- TunedInput(pca_rec, grid = pca_grid)</code></pre>
 <pre class="r"><code>## Input-tuned model fit and final trained model
 model_fit &lt;- fit(tun_rec, model = GBMModel)
 as.MLModel(model_fit)
-#&gt; Object of class &quot;MLModel&quot;
+#&gt; --- MLModel object -------------------------------------------------------------
 #&gt; 
 #&gt; Model name: GBMModel
 #&gt; Label: Trained Generalized Boosted Regression
@@ -2155,31 +2161,28 @@ as.MLModel(model_fit)
 #&gt;  $ shrinkage        : num 0.1
 #&gt;  $ bag.fraction     : num 0.5
 #&gt; 
-#&gt; TrainStep1 :
-#&gt; Object of class &quot;TrainStep&quot;
+#&gt; == TrainStep1 ==================================================================
+#&gt; --- TrainStep object ---
 #&gt; 
-#&gt; Grid (selected = 1):
-#&gt; # A tibble: 3 x 1
-#&gt;   ModelRecipe$PCA$num_comp
-#&gt;                      &lt;int&gt;
-#&gt; 1                        1
-#&gt; 2                        2
-#&gt; 3                        3
+#&gt; ModelRecipe grid:
+#&gt; # A tibble: 3 x 4
+#&gt;   name  selected params$PCA$num_comp metrics$`C-Index`
+#&gt;   &lt;chr&gt; &lt;lgl&gt;                  &lt;int&gt;             &lt;dbl&gt;
+#&gt; 1 1     TRUE                       1             0.753
+#&gt; 2 2     FALSE                      2             0.724
+#&gt; 3 3     FALSE                      3             0.740
 #&gt; 
-#&gt; Object of class &quot;Performance&quot;
-#&gt; 
-#&gt; Metrics: C-Index 
-#&gt; Models: 1, 2, 3
-#&gt; 
-#&gt; Selected model: 1 
-#&gt; C-Index value: 0.734361</code></pre>
+#&gt; Selected grid row: 1
+#&gt; C-Index value: 0.7528376</code></pre>
 </div>
 <div id="input-selection" class="section level3">
 <h3>Input Selection</h3>
 <p>Selection of recipes with different steps or predictors can be conducted with <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/SelectedInput"><code>SelectedInput()</code></a>.</p>
 <pre class="r"><code>## Preprocessing recipe without PCA steps
-rec1 &lt;- recipe(y ~ sex + age + year + thickness + ulcer, data = surv_train)
-rec2 &lt;- recipe(y ~ sex + age + year, data = surv_train)
+rec1 &lt;- recipe(y ~ sex + age + year + thickness + ulcer, data = surv_train) %&gt;%
+  role_case(stratum = y)
+rec2 &lt;- recipe(y ~ sex + age + year, data = surv_train) %&gt;%
+  role_case(stratum = y)
 
 ## Selection among recipes with and without PCA steps
 sel_rec &lt;- SelectedInput(
@@ -2187,11 +2190,11 @@ sel_rec &lt;- SelectedInput(
   rec2,
   TunedInput(pca_rec, grid = pca_grid)
 )</code></pre>
-<p>In this case, the tuned recipe with one principal component is selected.</p>
+<p>In this case, the first recipe is selected.</p>
 <pre class="r"><code>## Input-selected model fit and model
 model_fit &lt;- fit(sel_rec, model = GBMModel)
 as.MLModel(model_fit)
-#&gt; Object of class &quot;MLModel&quot;
+#&gt; --- MLModel object -------------------------------------------------------------
 #&gt; 
 #&gt; Model name: GBMModel
 #&gt; Label: Trained Generalized Boosted Regression
@@ -2209,43 +2212,19 @@ as.MLModel(model_fit)
 #&gt;  $ shrinkage        : num 0.1
 #&gt;  $ bag.fraction     : num 0.5
 #&gt; 
-#&gt; TrainStep1 :
-#&gt; Object of class &quot;TrainStep&quot;
+#&gt; == TrainStep1 ==================================================================
+#&gt; --- TrainStep object ---
 #&gt; 
-#&gt; Grid (selected = 3):
-#&gt; # A tibble: 3 x 1
-#&gt;   ModelRecipe
-#&gt;   &lt;fct&gt;      
-#&gt; 1 1          
-#&gt; 2 2          
-#&gt; 3 3          
+#&gt; ModelRecipe grid:
+#&gt; # A tibble: 3 x 4
+#&gt;   name     selected params metrics$`C-Index`
+#&gt;   &lt;chr&gt;    &lt;lgl&gt;    &lt;fct&gt;              &lt;dbl&gt;
+#&gt; 1 Recipe.1 TRUE     1                  0.747
+#&gt; 2 Recipe.2 FALSE    2                  0.689
+#&gt; 3 Recipe.3 FALSE    3                  0.722
 #&gt; 
-#&gt; Object of class &quot;Performance&quot;
-#&gt; 
-#&gt; Metrics: C-Index 
-#&gt; Models: Recipe.1, Recipe.2, Recipe.3
-#&gt; 
-#&gt; Selected model: Recipe.3 
-#&gt; C-Index value: 0.7487572 
-#&gt; ------------------------------------------------------------ 
-#&gt; TrainStep2 :
-#&gt; Object of class &quot;TrainStep&quot;
-#&gt; 
-#&gt; Grid (selected = 1):
-#&gt; # A tibble: 3 x 1
-#&gt;   ModelRecipe$PCA$num_comp
-#&gt;                      &lt;int&gt;
-#&gt; 1                        1
-#&gt; 2                        2
-#&gt; 3                        3
-#&gt; 
-#&gt; Object of class &quot;Performance&quot;
-#&gt; 
-#&gt; Metrics: C-Index 
-#&gt; Models: 1, 2, 3
-#&gt; 
-#&gt; Selected model: 1 
-#&gt; C-Index value: 0.7474176</code></pre>
+#&gt; Selected grid row: 1
+#&gt; C-Index value: 0.7471439</code></pre>
 <p>Selection can also be performed among traditional formulas, design matrices, or model frames.</p>
 <pre class="r"><code>## Traditional formulas
 fo1 &lt;- y ~ sex + age + year + thickness + ulcer
@@ -2284,7 +2263,7 @@ model_fit &lt;- fit(surv_fo, data = surv_train,
                    metrics = c(&quot;CIndex&quot; = cindex, &quot;RMSE&quot; = rmse)
                  ))
 (trained_model &lt;- as.MLModel(model_fit))
-#&gt; Object of class &quot;MLModel&quot;
+#&gt; --- MLModel object -------------------------------------------------------------
 #&gt; 
 #&gt; Model name: GBMModel
 #&gt; Label: Trained Generalized Boosted Regression
@@ -2302,31 +2281,25 @@ model_fit &lt;- fit(surv_fo, data = surv_train,
 #&gt;  $ shrinkage        : num 0.1
 #&gt;  $ bag.fraction     : num 0.5
 #&gt; 
-#&gt; TrainStep1 :
-#&gt; Object of class &quot;TrainStep&quot;
+#&gt; == TrainStep1 ==================================================================
+#&gt; --- TrainStep object ---
 #&gt; 
-#&gt; Grid (selected = 1):
-#&gt; # A tibble: 9 x 1
-#&gt;   Model$n.trees $interaction.depth
-#&gt;           &lt;dbl&gt;              &lt;int&gt;
-#&gt; 1            50                  1
-#&gt; 2           100                  1
-#&gt; 3           150                  1
-#&gt; 4            50                  2
-#&gt; 5           100                  2
-#&gt; 6           150                  2
-#&gt; 7            50                  3
-#&gt; 8           100                  3
-#&gt; 9           150                  3
+#&gt; TunedModel grid:
+#&gt; # A tibble: 9 x 4
+#&gt;   name       selected params$n.trees $interaction.depth metrics$CIndex  $RMSE
+#&gt;   &lt;chr&gt;      &lt;lgl&gt;             &lt;dbl&gt;              &lt;int&gt;          &lt;dbl&gt;  &lt;dbl&gt;
+#&gt; 1 GBMModel.1 TRUE                 50                  1          0.760  3842.
+#&gt; 2 GBMModel.2 FALSE               100                  1          0.742  4353.
+#&gt; 3 GBMModel.3 FALSE               150                  1          0.733  4742.
+#&gt; 4 GBMModel.4 FALSE                50                  2          0.750  5179.
+#&gt; 5 GBMModel.5 FALSE               100                  2          0.737  6108.
+#&gt; 6 GBMModel.6 FALSE               150                  2          0.709   Inf 
+#&gt; 7 GBMModel.7 FALSE                50                  3          0.749  7135.
+#&gt; 8 GBMModel.8 FALSE               100                  3          0.731  9582.
+#&gt; 9 GBMModel.9 FALSE               150                  3          0.706 13326.
 #&gt; 
-#&gt; Object of class &quot;Performance&quot;
-#&gt; 
-#&gt; Metrics: CIndex, RMSE 
-#&gt; Models: GBMModel.1, GBMModel.2, GBMModel.3, GBMModel.4, GBMModel.5, GBMModel.6,
-#&gt;   GBMModel.7, GBMModel.8, GBMModel.9
-#&gt; 
-#&gt; Selected model: GBMModel.1 
-#&gt; CIndex value: 0.7513153</code></pre>
+#&gt; Selected grid row: 1
+#&gt; CIndex value: 0.7601717</code></pre>
 <p>Grid values may also be given as a <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/Grid"><code>Grid</code></a> function, function name, or object; <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/ParameterGrid"><code>ParameterGrid</code></a> object; or data frame containing parameter values at which to evaluate the model, such as that returned by <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/expand_params"><code>expand_params()</code></a>.</p>
 <pre class="r"><code>## Tune over randomly sampled grid points
 fit(surv_fo, data = surv_train,
@@ -2351,29 +2324,29 @@ fit(surv_fo, data = surv_train,
 #&gt; 
 #&gt;             Statistic
 #&gt; Model             Mean    Median         SD       Min       Max NA
-#&gt;   GBMModel.1 0.7513153 0.7548387 0.05260501 0.6486486 0.8261803  0
-#&gt;   GBMModel.2 0.7299930 0.7222222 0.05449760 0.6283784 0.8207547  0
-#&gt;   GBMModel.3 0.7313907 0.7300885 0.04459823 0.6541850 0.7863636  0
-#&gt;   GBMModel.4 0.7396956 0.7548387 0.05221877 0.6148649 0.8025751  0
-#&gt;   GBMModel.5 0.7187003 0.7288732 0.04911338 0.6289593 0.7843137  0
-#&gt;   GBMModel.6 0.7107110 0.7181818 0.04722521 0.6148649 0.7745098  0
-#&gt;   GBMModel.7 0.7329099 0.7477876 0.05461139 0.6013514 0.7896996  0
-#&gt;   GBMModel.8 0.7151567 0.7318182 0.05737671 0.5894040 0.7870968  0
-#&gt;   GBMModel.9 0.7003070 0.7061611 0.05647950 0.5945946 0.7889908  0
+#&gt;   GBMModel.1 0.7601717 0.7612903 0.04748957 0.6674009 0.8396226  0
+#&gt;   GBMModel.2 0.7415412 0.7535545 0.04505467 0.6621622 0.8160377  0
+#&gt;   GBMModel.3 0.7325695 0.7401961 0.04667504 0.6486486 0.7870968  0
+#&gt;   GBMModel.4 0.7503396 0.7535211 0.03813508 0.6756757 0.7982833  0
+#&gt;   GBMModel.5 0.7373694 0.7465753 0.03947876 0.6742081 0.7870968  0
+#&gt;   GBMModel.6 0.7094913 0.7109005 0.07097101 0.5000000 0.7741935  0
+#&gt;   GBMModel.7 0.7485997 0.7596567 0.03610803 0.6877828 0.8018868  0
+#&gt;   GBMModel.8 0.7306992 0.7297297 0.03620813 0.6606335 0.7916667  0
+#&gt;   GBMModel.9 0.7064914 0.7092511 0.05152966 0.6148649 0.7752294  0
 #&gt; 
 #&gt; , , Metric = RMSE
 #&gt; 
 #&gt;             Statistic
-#&gt; Model             Mean   Median       SD      Min       Max NA
-#&gt;   GBMModel.1  3820.101 3922.004 1114.457 2067.702  5634.290  0
-#&gt;   GBMModel.2  3983.721 3819.946 1046.342 2132.840  5731.912  0
-#&gt;   GBMModel.3  4927.169 4607.758 1648.306 2913.023  8981.286  0
-#&gt;   GBMModel.4  5577.329 4754.214 2760.113 1952.892 12794.955  0
-#&gt;   GBMModel.5  5155.270 4156.921 2543.658 1761.762 10932.087  0
-#&gt;   GBMModel.6  5659.614 4696.612 2813.594 2045.974 11673.612  0
-#&gt;   GBMModel.7  7699.418 6963.495 3820.770 3525.290 19525.003  0
-#&gt;   GBMModel.8  9112.486 8183.500 4469.315 4290.710 20736.130  0
-#&gt;   GBMModel.9 12906.024 9741.308 8188.991 4937.101 32771.044  0</code></pre>
+#&gt; Model             Mean   Median        SD      Min       Max NA
+#&gt;   GBMModel.1  3841.768 3685.379  1268.270 2145.222  6430.256  0
+#&gt;   GBMModel.2  4353.382 4292.333  1384.148 2595.917  7695.740  0
+#&gt;   GBMModel.3  4741.660 4020.777  1940.302 3043.956  9130.845  0
+#&gt;   GBMModel.4  5179.342 4784.122  1999.522 2243.479  9139.478  0
+#&gt;   GBMModel.5  6107.560 5435.867  3281.509 2369.865 14253.253  0
+#&gt;   GBMModel.6       Inf 6285.845       NaN 1779.970       Inf  0
+#&gt;   GBMModel.7  7134.676 6270.934  3128.398 3969.808 14322.135  0
+#&gt;   GBMModel.8  9582.117 7141.632  6177.723 4153.980 27127.817  0
+#&gt;   GBMModel.9 13325.815 9014.482 13383.643 4997.519 59322.350  0</code></pre>
 <p>Line plots of tuning results display the resampled metric means, or another statistic specified with the <code>stat</code> argument, versus the first tuning parameter values and with lines grouped according to the remaining parameters, if any.</p>
 <pre class="r"><code>plot(trained_model, type = &quot;line&quot;)
 #&gt; $TrainStep1</code></pre>
@@ -2417,27 +2390,28 @@ fit(surv_fo, data = surv_train, model = sel_tun_model)</code></pre>
 </ul>
 <p>Super learners are a generalization of stacked regression that fit a specified model, such as <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/GBMModel"><code>GBMModel</code></a>, to case responses <span class="math inline">\(y_i\)</span>, base learner predictions <span class="math inline">\(\hat{f}^{-\kappa(i)}(x_i)\)</span>, and optionally also to the original predictor variables <span class="math inline">\(x_i\)</span>. Given below are examples of a stacked regression and super learner each fit with gradient boosted, random forest, and Cox regression base learners. A separate gradient boosted model is used as the super learner in the latter.</p>
 <pre class="r"><code>## Stacked regression
-stackedmodel &lt;- StackedModel(GLMBoostModel, CForestModel, CoxModel)
+stackedmodel &lt;- StackedModel(CoxModel, CForestModel, GLMBoostModel)
 res_stacked &lt;- resample(surv_fo, data = surv_train, model = stackedmodel)
 summary(res_stacked)
 #&gt;          Statistic
-#&gt; Metric         Mean    Median        SD      Min       Max NA
-#&gt;   C-Index 0.7098798 0.7111111 0.1482607 0.484375 0.9285714  0
+#&gt; Metric         Mean   Median        SD      Min       Max NA
+#&gt;   C-Index 0.7212822 0.762963 0.1279784 0.512987 0.8432432  0
 
 ## Super learner
-supermodel &lt;- SuperModel(GLMBoostModel, CForestModel, CoxModel,
+supermodel &lt;- SuperModel(CoxModel, CForestModel, GLMBoostModel,
                          model = GBMModel)
 res_super &lt;- resample(surv_fo, data = surv_train, model = supermodel)
 summary(res_super)
 #&gt;          Statistic
-#&gt; Metric         Mean    Median        SD    Min       Max NA
-#&gt;   C-Index 0.6572016 0.6985294 0.1459938 0.4375 0.8488372  0</code></pre>
+#&gt; Metric         Mean    Median        SD       Min       Max NA
+#&gt;   C-Index 0.7460541 0.7863636 0.1073949 0.5903084 0.8679245  0</code></pre>
 </div>
 <div id="methodology" class="section level2">
 <h2>Methodology</h2>
-<p>Combinations and multiple levels of nested meta-functions, inputs, and models are allowed. If model fitting involves a single meta-function, performances of the inputs or models under consideration are estimated with standard resampling, and the best performing model is returned. Nestings of meta-functions are trained with nested resampling. Consider the example below in which training involves input tuning and model selection. In particular, a preprocessing recipe is tuned over the number of predictor-derived principal components and model selection is of an untuned <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/GBMModel"><code>GBMModel</code></a>, a tuned <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/GBMModel"><code>GBMModel</code></a>, and a <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/SuperModel"><code>SuperModel</code></a>.</p>
+<p>Combinations and multiple levels of nested meta-functions, inputs, and models are possible. If model fitting involves a single meta-function, performances of the inputs or models under consideration are estimated with standard resampling, and the best performing model is returned. Nestings of meta-functions are trained with nested resampling. Consider the example below in which training involves input tuning and model selection. In particular, a preprocessing recipe is tuned over the number of predictor-derived principal components and model selection is of an untuned <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/GBMModel"><code>GBMModel</code></a>, a tuned <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/GBMModel"><code>GBMModel</code></a>, and a <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/StackedModel"><code>StackedModel</code></a>.</p>
 <pre class="r"><code>## Preprocessing recipe with PCA steps
 pca_rec &lt;- recipe(y ~ ., data = surv_train) %&gt;%
+  role_case(stratum = y) %&gt;%
   step_center(all_predictors()) %&gt;%
   step_scale(all_predictors()) %&gt;%
   step_pca(all_predictors(), id = &quot;PCA&quot;)
@@ -2454,56 +2428,46 @@ tun_rec &lt;- TunedInput(pca_rec, grid = pca_grid)
 sel_model &lt;- SelectedModel(
   GBMModel,
   TunedModel(GBMModel),
-  SuperModel(CoxModel, TunedModel(CForestModel), TunedModel(GLMBoostModel))
+  StackedModel(CoxModel, TunedModel(CForestModel), TunedModel(GBMModel))
 )
 
 ## Model fit and final trained model
 model_fit &lt;- fit(tun_rec, model = sel_model)
 as.MLModel(model_fit)</code></pre>
-<p>Model fitting proceeds with instances of the specified model selection nested within each of the input tuning grid parameter values. Tuning of <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/GBMModel"><code>GBMModel</code></a> and construction of <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/SuperModel"><code>SuperModel</code></a> are further nested within the model selection, with tuning of <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/CForestModel"><code>CForestModel</code></a> and <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/GLMBoostModel"><code>GLMBoostModel</code></a> nested within <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/SuperModel"><code>SuperModel</code></a>. Altogether, there are four levels of meta-input and meta-model functions in the hierarchy.</p>
+<p>Model fitting proceeds with instances of the specified model selection nested within each of the input tuning grid parameter values. Tuning of <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/GBMModel"><code>GBMModel</code></a> and construction of <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/StackedModel"><code>StackedModel</code></a> are further nested within the model selection, with tuning of <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/CForestModel"><code>CForestModel</code></a> and <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/GBMModel"><code>GBMModel</code></a> nested within <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/StackedModel"><code>StackedModel</code></a>. Altogether, there are four levels of meta-input and meta-model functions in the hierarchy.</p>
 <p><img src="img/FigModelDAG.png" width="100%" style="display: block; margin: auto;" /></p>
 <p>Each meta-function is fit based on resample estimation (default: cross-validation) of predictive performance. When one meta-function is nested within another, nested resampling is employed, as illustrated in the figure below.</p>
 <p><img src="img/FigNestedCV.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>Nesting of resampling routines is repeated recursively when a fit involves multiple levels of nested meta-functions. For example, predictive performance estimation for the training of <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/TunedInput"><code>TunedInput(pca_rec, grid = pca_grid)</code></a> involves up to three nested meta functions: <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/SelectedModel"><code>SelectedModel(...)</code></a> → <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/SuperModel"><code>SuperModel(...)</code></a> → <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/TunedModel"><code>TunedModel(CForestModel)</code></a>. For this relationship, an outer and three nested inner resampling loops are executed as follows. First, <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/CForestModel"><code>CForestModel</code></a> is tuned at the third inner resampling loop. Second, the tuned model is passed to the second inner loop for construction of <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/SuperModel"><code>SuperModel</code></a>. Third, the constructed model is passed to the first inner loop for model selection from the candidate set. Finally, the selected model is passed to the outer loop for tuning of the preprocessing recipe. Based on resample performance estimation of the entire input/model specification, one principal component is selected.</p>
-<pre><code>#&gt; TrainStep1 :
-#&gt; Object of class &quot;TrainStep&quot;
+<p>Nesting of resampling routines is repeated recursively when a fit involves multiple levels of nested meta-functions. For example, predictive performance estimation for the training of <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/TunedInput"><code>TunedInput(pca_rec, grid = pca_grid)</code></a> involves up to three nested meta functions: <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/SelectedModel"><code>SelectedModel(...)</code></a> → <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/StackedModel"><code>StackedModel(...)</code></a> → <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/TunedModel"><code>TunedModel(CForestModel)</code></a>. For this relationship, an outer and three nested inner resampling loops are executed as follows. First, <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/CForestModel"><code>CForestModel</code></a> is tuned at the third inner resampling loop. Second, the tuned model is passed to the second inner loop for construction of <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/StackedModel"><code>StackedModel</code></a>. Third, the constructed model is passed to the first inner loop for model selection from the candidate set. Finally, the selected model is passed to the outer loop for tuning of the preprocessing recipe. Based on resample performance estimation of the entire input/model specification, one principal component is selected for the <code>GBMModel</code>.</p>
+<pre class="r"><code>#&gt; == TrainStep1 ==================================================================
+#&gt; --- TrainStep object ---
 #&gt; 
-#&gt; Grid (selected = 1):
-#&gt; # A tibble: 3 x 1
-#&gt;   ModelRecipe$PCA$num_comp
-#&gt;                      &lt;int&gt;
-#&gt; 1                        1
-#&gt; 2                        2
-#&gt; 3                        3
+#&gt; ModelRecipe grid:
+#&gt; # A tibble: 3 x 4
+#&gt;   name  selected params$PCA$num_comp metrics$`C-Index`
+#&gt;   &lt;chr&gt; &lt;lgl&gt;                  &lt;int&gt;             &lt;dbl&gt;
+#&gt; 1 1     TRUE                       1             0.734
+#&gt; 2 2     FALSE                      2             0.708
+#&gt; 3 3     FALSE                      3             0.722
 #&gt; 
-#&gt; Object of class &quot;Performance&quot;
-#&gt; 
-#&gt; Metrics: C-Index
-#&gt; Models: 1, 2, 3
-#&gt; 
-#&gt; Selected model: 1
-#&gt; C-Index value: 0.7133325</code></pre>
+#&gt; Selected grid row: 1
+#&gt; C-Index value: 0.7340365</code></pre>
 <p>In order to identify and return a final model fitted to the entire input data, the hierarchy is traversed from top to bottom along the path determined by the choice at each node. Steps along the path are labeled <code>TrainStep1</code> and <code>TrainStep2</code> in the output. As seen above in <code>TrainStep1</code>, one principal component is first selected for the tuned input. Using an input recipe with one principal component, the entire dataset is refit at <code>TrainStep2</code> to finally select <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/GBMModel"><code>GBMModel</code></a>.</p>
-<pre><code>#&gt; TrainStep2 :
-#&gt; Object of class &quot;TrainStep&quot;
+<pre class="r"><code>#&gt; == TrainStep2 ==================================================================
+#&gt; --- TrainStep object ---
 #&gt; 
-#&gt; Grid (selected = 1):
-#&gt; # A tibble: 3 x 1
-#&gt;   Model
-#&gt;   &lt;fct&gt;
-#&gt; 1 1    
-#&gt; 2 2    
-#&gt; 3 3    
+#&gt; SelectedModel grid:
+#&gt; # A tibble: 3 x 4
+#&gt;   name         selected params metrics$`C-Index`
+#&gt;   &lt;chr&gt;        &lt;lgl&gt;    &lt;fct&gt;              &lt;dbl&gt;
+#&gt; 1 GBMModel     TRUE     1                  0.753
+#&gt; 2 TunedModel   FALSE    2                  0.732
+#&gt; 3 StackedModel FALSE    3                  0.633
 #&gt; 
-#&gt; Object of class &quot;Performance&quot;
-#&gt; 
-#&gt; Metrics: C-Index 
-#&gt; Models: GBMModel, TunedModel, SuperModel
-#&gt; 
-#&gt; Selected model: GBMModel 
-#&gt; C-Index value: 0.7712238</code></pre>
+#&gt; Selected grid row: 1
+#&gt; C-Index value: 0.7528376</code></pre>
 <p>After the series of training steps reaches the bottom of its hierarchy, the final model is fitted to the entire dataset and returned.</p>
-<pre><code>#&gt; Object of class &quot;MLModel&quot;
+<pre class="r"><code>#&gt; --- MLModel object -------------------------------------------------------------
 #&gt; 
 #&gt; Model name: GBMModel
 #&gt; Label: Trained Generalized Boosted Regression
@@ -2613,7 +2577,7 @@ settings(&quot;control&quot;, &quot;grid&quot;)
 #&gt; [1] &quot;BootControl&quot;
 #&gt; 
 #&gt; $grid
-#&gt; Object of class &quot;Grid&quot;
+#&gt; --- Grid object ----------------------------------------------------------------
 #&gt; 
 #&gt; Grid size: 10
 #&gt; Random sample: FALSE
@@ -2708,8 +2672,8 @@ data(Pima.tr, package = &quot;MASS&quot;)
 res &lt;- resample(type ~ ., data = Pima.tr, model = LogisticModel)
 summary(performance(res, metric = f2_score))
 #&gt;           Statistic
-#&gt; Metric          Mean    Median        SD       Min       Max NA
-#&gt;   f2_score 0.5705702 0.5798319 0.1800264 0.1724138 0.8571429  0</code></pre>
+#&gt; Metric          Mean    Median         SD       Min       Max NA
+#&gt;   f2_score 0.5499676 0.5714286 0.05093445 0.4761905 0.6060606  0</code></pre>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">

@@ -395,16 +395,16 @@ modelinfo() %&gt;% names
 #&gt; [16] &quot;GLMStepAICModel&quot;     &quot;GLMNetModel&quot;         &quot;KNNModel&quot;           
 #&gt; [19] &quot;LARSModel&quot;           &quot;LDAModel&quot;            &quot;LMModel&quot;            
 #&gt; [22] &quot;MDAModel&quot;            &quot;NaiveBayesModel&quot;     &quot;NNetModel&quot;          
-#&gt; [25] &quot;PDAModel&quot;            &quot;PLSModel&quot;            &quot;POLRModel&quot;          
-#&gt; [28] &quot;QDAModel&quot;            &quot;RandomForestModel&quot;   &quot;RangerModel&quot;        
-#&gt; [31] &quot;RFSRCModel&quot;          &quot;RPartModel&quot;          &quot;SelectedModel&quot;      
-#&gt; [34] &quot;StackedModel&quot;        &quot;SuperModel&quot;          &quot;SurvRegModel&quot;       
-#&gt; [37] &quot;SurvRegStepAICModel&quot; &quot;SVMModel&quot;            &quot;SVMANOVAModel&quot;      
-#&gt; [40] &quot;SVMBesselModel&quot;      &quot;SVMLaplaceModel&quot;     &quot;SVMLinearModel&quot;     
-#&gt; [43] &quot;SVMPolyModel&quot;        &quot;SVMRadialModel&quot;      &quot;SVMSplineModel&quot;     
-#&gt; [46] &quot;SVMTanhModel&quot;        &quot;TreeModel&quot;           &quot;TunedModel&quot;         
-#&gt; [49] &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;        &quot;XGBLinearModel&quot;     
-#&gt; [52] &quot;XGBTreeModel&quot;
+#&gt; [25] &quot;ParsnipModel&quot;        &quot;PDAModel&quot;            &quot;PLSModel&quot;           
+#&gt; [28] &quot;POLRModel&quot;           &quot;QDAModel&quot;            &quot;RandomForestModel&quot;  
+#&gt; [31] &quot;RangerModel&quot;         &quot;RFSRCModel&quot;          &quot;RPartModel&quot;         
+#&gt; [34] &quot;SelectedModel&quot;       &quot;StackedModel&quot;        &quot;SuperModel&quot;         
+#&gt; [37] &quot;SurvRegModel&quot;        &quot;SurvRegStepAICModel&quot; &quot;SVMModel&quot;           
+#&gt; [40] &quot;SVMANOVAModel&quot;       &quot;SVMBesselModel&quot;      &quot;SVMLaplaceModel&quot;    
+#&gt; [43] &quot;SVMLinearModel&quot;      &quot;SVMPolyModel&quot;        &quot;SVMRadialModel&quot;     
+#&gt; [46] &quot;SVMSplineModel&quot;      &quot;SVMTanhModel&quot;        &quot;TreeModel&quot;          
+#&gt; [49] &quot;TunedModel&quot;          &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;       
+#&gt; [52] &quot;XGBLinearModel&quot;      &quot;XGBTreeModel&quot;
 
 ## Model-specific information
 modelinfo(C50Model, CoxModel)
@@ -465,15 +465,15 @@ modelinfo(factor(0)) %&gt;% names
 #&gt;  [7] &quot;FDAModel&quot;          &quot;GBMModel&quot;          &quot;GLMModel&quot;         
 #&gt; [10] &quot;GLMNetModel&quot;       &quot;KNNModel&quot;          &quot;LDAModel&quot;         
 #&gt; [13] &quot;LMModel&quot;           &quot;MDAModel&quot;          &quot;NaiveBayesModel&quot;  
-#&gt; [16] &quot;NNetModel&quot;         &quot;PDAModel&quot;          &quot;PLSModel&quot;         
-#&gt; [19] &quot;QDAModel&quot;          &quot;RandomForestModel&quot; &quot;RangerModel&quot;      
-#&gt; [22] &quot;RFSRCModel&quot;        &quot;RPartModel&quot;        &quot;SelectedModel&quot;    
-#&gt; [25] &quot;StackedModel&quot;      &quot;SuperModel&quot;        &quot;SVMModel&quot;         
-#&gt; [28] &quot;SVMANOVAModel&quot;     &quot;SVMBesselModel&quot;    &quot;SVMLaplaceModel&quot;  
-#&gt; [31] &quot;SVMLinearModel&quot;    &quot;SVMPolyModel&quot;      &quot;SVMRadialModel&quot;   
-#&gt; [34] &quot;SVMSplineModel&quot;    &quot;SVMTanhModel&quot;      &quot;TreeModel&quot;        
-#&gt; [37] &quot;TunedModel&quot;        &quot;XGBModel&quot;          &quot;XGBDARTModel&quot;     
-#&gt; [40] &quot;XGBLinearModel&quot;    &quot;XGBTreeModel&quot;
+#&gt; [16] &quot;NNetModel&quot;         &quot;ParsnipModel&quot;      &quot;PDAModel&quot;         
+#&gt; [19] &quot;PLSModel&quot;          &quot;QDAModel&quot;          &quot;RandomForestModel&quot;
+#&gt; [22] &quot;RangerModel&quot;       &quot;RFSRCModel&quot;        &quot;RPartModel&quot;       
+#&gt; [25] &quot;SelectedModel&quot;     &quot;StackedModel&quot;      &quot;SuperModel&quot;       
+#&gt; [28] &quot;SVMModel&quot;          &quot;SVMANOVAModel&quot;     &quot;SVMBesselModel&quot;   
+#&gt; [31] &quot;SVMLaplaceModel&quot;   &quot;SVMLinearModel&quot;    &quot;SVMPolyModel&quot;     
+#&gt; [34] &quot;SVMRadialModel&quot;    &quot;SVMSplineModel&quot;    &quot;SVMTanhModel&quot;     
+#&gt; [37] &quot;TreeModel&quot;         &quot;TunedModel&quot;        &quot;XGBModel&quot;         
+#&gt; [40] &quot;XGBDARTModel&quot;      &quot;XGBLinearModel&quot;    &quot;XGBTreeModel&quot;
 
 ## Identify factor response-specific models
 modelinfo(factor(0), AdaBagModel, C50Model, CoxModel) %&gt;% names
@@ -488,15 +488,15 @@ modelinfo(iris$Species) %&gt;% names
 #&gt;  [7] &quot;FDAModel&quot;          &quot;GBMModel&quot;          &quot;GLMModel&quot;         
 #&gt; [10] &quot;GLMNetModel&quot;       &quot;KNNModel&quot;          &quot;LDAModel&quot;         
 #&gt; [13] &quot;LMModel&quot;           &quot;MDAModel&quot;          &quot;NaiveBayesModel&quot;  
-#&gt; [16] &quot;NNetModel&quot;         &quot;PDAModel&quot;          &quot;PLSModel&quot;         
-#&gt; [19] &quot;QDAModel&quot;          &quot;RandomForestModel&quot; &quot;RangerModel&quot;      
-#&gt; [22] &quot;RFSRCModel&quot;        &quot;RPartModel&quot;        &quot;SelectedModel&quot;    
-#&gt; [25] &quot;StackedModel&quot;      &quot;SuperModel&quot;        &quot;SVMModel&quot;         
-#&gt; [28] &quot;SVMANOVAModel&quot;     &quot;SVMBesselModel&quot;    &quot;SVMLaplaceModel&quot;  
-#&gt; [31] &quot;SVMLinearModel&quot;    &quot;SVMPolyModel&quot;      &quot;SVMRadialModel&quot;   
-#&gt; [34] &quot;SVMSplineModel&quot;    &quot;SVMTanhModel&quot;      &quot;TreeModel&quot;        
-#&gt; [37] &quot;TunedModel&quot;        &quot;XGBModel&quot;          &quot;XGBDARTModel&quot;     
-#&gt; [40] &quot;XGBLinearModel&quot;    &quot;XGBTreeModel&quot;</code></pre>
+#&gt; [16] &quot;NNetModel&quot;         &quot;ParsnipModel&quot;      &quot;PDAModel&quot;         
+#&gt; [19] &quot;PLSModel&quot;          &quot;QDAModel&quot;          &quot;RandomForestModel&quot;
+#&gt; [22] &quot;RangerModel&quot;       &quot;RFSRCModel&quot;        &quot;RPartModel&quot;       
+#&gt; [25] &quot;SelectedModel&quot;     &quot;StackedModel&quot;      &quot;SuperModel&quot;       
+#&gt; [28] &quot;SVMModel&quot;          &quot;SVMANOVAModel&quot;     &quot;SVMBesselModel&quot;   
+#&gt; [31] &quot;SVMLaplaceModel&quot;   &quot;SVMLinearModel&quot;    &quot;SVMPolyModel&quot;     
+#&gt; [34] &quot;SVMRadialModel&quot;    &quot;SVMSplineModel&quot;    &quot;SVMTanhModel&quot;     
+#&gt; [37] &quot;TreeModel&quot;         &quot;TunedModel&quot;        &quot;XGBModel&quot;         
+#&gt; [40] &quot;XGBDARTModel&quot;      &quot;XGBLinearModel&quot;    &quot;XGBTreeModel&quot;</code></pre>
 </div>
 </div>
 <div id="metric-information" class="section level1">
@@ -548,7 +548,7 @@ metricinfo(auc, r2)
 #&gt; [1] TRUE
 #&gt; 
 #&gt; $r2$arguments
-#&gt; function (observed, predicted = NULL, weights = NULL, distr = NULL, 
+#&gt; function (observed, predicted = NULL, weights = NULL, distr = character(), 
 #&gt;     ...) 
 #&gt; NULL
 #&gt; 
