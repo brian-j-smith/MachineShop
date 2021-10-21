@@ -229,13 +229,11 @@ check_logical <- function(x, ...) {
 }
 
 
-check_match <- function(choices) {
-  function(x) {
-    tryCatch(match.arg(x, choices), error = function(e) {
-      choices <- paste0("\"", choices, "\"")
-      DomainError(x, "must be one of ", toString(choices, conj = "or"))
-    })
-  }
+check_match <- function(x, choices) {
+  tryCatch(match.arg(x, choices), error = function(e) {
+    choices <- paste0("\"", choices, "\"")
+    DomainError(x, "must be one of ", toString(choices, conj = "or"))
+  })
 }
 
 

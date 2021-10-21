@@ -139,7 +139,7 @@ settings <- function(...) {
 
   which_set_args <- which(arg_names_nzchar & valid_settings)
   for (index in which_set_args) {
-    global_name <- names(global_settings)[settings_pmatch[index]]
+    global_name <- as.name(names(global_settings)[settings_pmatch[index]])
     value <- global_checks[[global_name]](args[[index]])
     eval(substitute(
       throw(check_assignment(global_name, value), call = sys.call(-2))
@@ -187,12 +187,16 @@ MachineShop_global <- as.environment(list(
 
     distr.SurvMeans = list(
       value = "weibull",
-      check = check_match(c("weibull", "exponential", "rayleigh", "empirical"))
+      check = function(x) {
+        check_match(x, c("weibull", "exponential", "rayleigh", "empirical"))
+      }
     ),
 
     distr.SurvProbs = list(
       value = "empirical",
-      check = check_match(c("empirical", "weibull", "exponential", "rayleigh"))
+      check = function(x) {
+        check_match(x, c("empirical", "weibull", "exponential", "rayleigh"))
+      }
     ),
 
     grid = list(
@@ -202,7 +206,9 @@ MachineShop_global <- as.environment(list(
 
     method.EmpiricalSurv = list(
       value = "efron",
-      check = check_match(c("efron", "breslow"))
+      check = function(x) {
+        check_match(x, c("efron", "breslow"))
+      }
     ),
 
     metrics = list(
