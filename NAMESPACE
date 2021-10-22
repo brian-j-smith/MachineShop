@@ -73,6 +73,7 @@ export(MLModel,
        MDAModel,
        NaiveBayesModel,
        NNetModel,
+       ParsnipModel,
        PDAModel,
        PLSModel,
        POLRModel,
@@ -189,6 +190,7 @@ S3method(as.data.frame, SurvMatrix)
 S3method(as.data.frame, TabularArray)
 S3method(as.double, BinomialVariate)
 S3method(as.MLModel, MLModelFit)
+S3method(as.MLModel, model_spec)
 S3method(bake, step_lincomp)
 S3method(bake, step_sbf)
 S3method(bake, ModelRecipe)
@@ -279,6 +281,7 @@ S3method(print, ModelTerms)
 S3method(print, ModeledInput)
 S3method(print, ModeledTerms)
 S3method(print, ParameterGrid)
+S3method(print, ParsnipModel)
 S3method(print, Performance)
 S3method(print, PerformanceCurve)
 S3method(print, PerformanceDiffTest)

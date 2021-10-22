@@ -328,6 +328,12 @@ print.ParameterGrid <- function(
 setShowDefault("ParameterGrid")
 
 
+print.ParsnipModel <- function(x, ...) {
+  x@params <- x@params$object$args
+  NextMethod()
+}
+
+
 #' @rdname print-methods
 #'
 print.Performance <- function(x, n = MachineShop::settings("print_max"), ...) {

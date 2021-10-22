@@ -324,6 +324,7 @@ MachineShop_global <- as.environment(list(
         "MDAModel",
         "NaiveBayesModel",
         "NNetModel",
+        "ParsnipModel",
         "PDAModel",
         "PLSModel",
         "POLRModel",

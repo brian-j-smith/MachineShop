@@ -119,6 +119,7 @@ setClass("MLModel",
 )
 
 
+setClass("ParsnipModel", contains = "MLModel")
 setClass("SelectedModel", contains = "MLModel")
 setClass("StackedModel", contains = "MLModel")
 setClass("SuperModel", contains = "MLModel")

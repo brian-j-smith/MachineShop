@@ -91,14 +91,17 @@ as.double.BinomialVariate <- function(x, ...) {
 
 #' Coerce to an MLModel
 #'
-#' Function to coerce an \code{MLModelFit} object to an \code{MLModel}.
+#' Function to coerce an object to \code{MLModel}.
 #'
 #' @rdname as.MLModel
 #'
-#' @param x model \link{fit} result.
+#' @param x model \link{fit} result or \link[parsnip:model_spec]{model
+#'   specification} from the \pkg{parsnip} package.
 #' @param ... arguments passed to other methods.
 #'
 #' @return \code{MLModel} class object.
+#'
+#' @seealso \code{\link{ParsnipModel}}
 #'
 as.MLModel <- function(x, ...) {
   UseMethod("as.MLModel")
@@ -109,6 +112,13 @@ as.MLModel <- function(x, ...) {
 #'
 as.MLModel.MLModelFit <- function(x, ...) {
   getElement(x, "mlmodel")
+}
+
+
+#' @rdname as.MLModel
+#'
+as.MLModel.model_spec <- function(x, ...) {
+  ParsnipModel(x)
 }
 
 

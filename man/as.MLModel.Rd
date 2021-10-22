@@ -3,14 +3,18 @@
 \name{as.MLModel}
 \alias{as.MLModel}
 \alias{as.MLModel.MLModelFit}
+\alias{as.MLModel.model_spec}
 \title{Coerce to an MLModel}
 \usage{
 as.MLModel(x, ...)
 
 \method{as.MLModel}{MLModelFit}(x, ...)
+
+\method{as.MLModel}{model_spec}(x, ...)
 }
 \arguments{
-\item{x}{model \link{fit} result.}
+\item{x}{model \link{fit} result or \link[parsnip:model_spec]{model
+specification} from the \pkg{parsnip} package.}
 
 \item{...}{arguments passed to other methods.}
 }
@@ -18,5 +22,8 @@ as.MLModel(x, ...)
 \code{MLModel} class object.
 }
 \description{
-Function to coerce an \code{MLModelFit} object to an \code{MLModel}.
+Function to coerce an object to \code{MLModel}.
+}
+\seealso{
+\code{\link{ParsnipModel}}
 }

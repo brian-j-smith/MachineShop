@@ -3,7 +3,7 @@ MachineShop: Machine Learning Models and Tools for R
 
 [![Generic
 badge](https://img.shields.io/badge/docs-online-green.svg)](https://brian-j-smith.github.io/MachineShop/)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/MachineShop)](https://CRAN.R-project.org/package=MachineShop)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/MachineShop)](https://CRAN.R-project.org/package=MachineShop)
 
 # Description
 
@@ -23,15 +23,16 @@ modeling strategies.
 
 -   Unified and concise interface for model fitting, prediction, and
     performance assessment.
--   Current support for 52 established models from 27 **R** packages.
+-   Support for 53+ models from 28 **R** packages, including model
+    specifications from the
+    [**parsnip**](https://parsnip.tidymodels.org/) package.
 -   Dynamic model parameters.
 -   Ensemble modeling with stacked regression and super learners.
 -   Modeling of response variables types: binary factors, multi-class
     nominal and ordinal factors, numeric vectors and matrices, and
     censored time-to-event survival.
 -   Model specification with traditional formulas, design matrices, and
-    flexible pre-processing
-    [recipes](https://cran.r-project.org/package=recipes).
+    flexible pre-processing [recipes](https://recipes.tidymodels.org/).
 -   Resample estimation of predictive performance, including
     cross-validation, bootstrap resampling, and split training-test set
     validation.

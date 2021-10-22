@@ -35,6 +35,7 @@ can be used.
   \code{\link{MDAModel}}            \tab f   \tab     \tab   \cr
   \code{\link{NaiveBayesModel}}     \tab f   \tab     \tab   \cr
   \code{\link{NNetModel}}           \tab f   \tab n   \tab   \cr
+  \code{\link{ParsnipModel}}        \tab f   \tab m,n \tab S \cr
   \code{\link{PDAModel}}            \tab f   \tab     \tab   \cr
   \code{\link{PLSModel}}            \tab f   \tab n   \tab   \cr
   \code{\link{POLRModel}}           \tab o   \tab     \tab   \cr
