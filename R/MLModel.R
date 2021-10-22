@@ -139,8 +139,8 @@ setMethod("initialize", "MLModel",
 )
 
 
-MLModelFit <- function(object, Class, model, x) {
-  model@x <- prep(x)
+MLModelFit <- function(object, Class, model, input) {
+  model@input <- prep(input)
 
   if (is(object, Class)) {
     object <- unMLModelFit(object)

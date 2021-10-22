@@ -6,10 +6,10 @@
 \alias{TunedInput.recipe}
 \title{Tuned Model Inputs}
 \usage{
-TunedInput(x, ...)
+TunedInput(object, ...)
 
 \method{TunedInput}{recipe}(
-  x,
+  object,
   grid = expand_steps(),
   control = MachineShop::settings("control"),
   metrics = NULL,
@@ -19,7 +19,7 @@ TunedInput(x, ...)
 )
 }
 \arguments{
-\item{x}{untrained \code{\link[recipes]{recipe}}.}
+\item{object}{untrained \code{\link[recipes]{recipe}}.}
 
 \item{...}{arguments passed to other methods.}
 

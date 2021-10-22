@@ -46,7 +46,7 @@ response.formula <- function(object, data = NULL, template = NULL, ...) {
 
 
 response.MLModel <- function(object, newdata = NULL, ...) {
-  response(object@x, newdata)
+  response(object@input, newdata)
 }
 
 

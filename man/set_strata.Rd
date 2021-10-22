@@ -4,10 +4,10 @@
 \alias{set_strata}
 \title{Resampling Stratification Control}
 \usage{
-set_strata(x, breaks = 4, nunique = 5, prop = 0.1, size = 20)
+set_strata(control, breaks = 4, nunique = 5, prop = 0.1, size = 20)
 }
 \arguments{
-\item{x}{\link[=controls]{control} object.}
+\item{control}{\link[=controls]{control} object.}
 
 \item{breaks}{number of quantile bins desired for stratification of numeric
 data during resampling.}
@@ -20,7 +20,7 @@ stratified as categorical.}
 \item{size}{minimum number of values in each strata.}
 }
 \value{
-Argument \code{x} updated with the supplied parameters.
+Argument \code{control} updated with the supplied parameters.
 }
 \description{
 Set parameters that control the construction of strata during resample

@@ -6,14 +6,17 @@
 #' @name ModelFrame
 #' @rdname ModelFrame-methods
 #'
-#' @param x model \code{\link{formula}} or \code{\link{matrix}} of predictor
-#'   variables.  In the case of a formula, arguments \code{weights} and
-#'   \code{strata} are evaluated as expressions, whose objects are searched for
-#'   first in the accompanying \code{data} environment and, if not found there,
-#'   next in the calling environment.
-#' @param y response variable.
-#' @param data \link[=data.frame]{data frame} or an object that can be converted
-#'   to one.
+#' @param ... arguments passed from the generic function to its methods.  The
+#'   first arguments of \code{ModelFrame} methods are positional and, as such,
+#'   must be given first in calls to them.
+#' @param formula,data \link[=formula]{formula} defining the model predictor and
+#'   response variables and a \link[=data.frame]{data frame} containing them.
+#'   In the associated method, arguments \code{groups}, \code{strata}, and
+#'   \code{weights} will be evaluated as expressions, whose objects are searched
+#'   for first in the accompanying \code{data} environment and, if not found
+#'   there, next in the calling environment.
+#' @param x,y \link{matrix} and object containing predictor and response
+#'   variables.
 #' @param offsets numeric vector, matrix, or data frame of values to be added
 #'   with a fixed coefficient of 1 to linear predictors in compatible regression
 #'   models.
@@ -26,7 +29,6 @@
 #'   response variable [default: equal weights].
 #' @param na.rm logical indicating whether to remove cases with \code{NA} values
 #'   for any of the model variables.
-#' @param ... arguments passed to other methods.
 #'
 #' @return \code{ModelFrame} class object that inherits from \code{data.frame}.
 #'
@@ -43,34 +45,35 @@
 #' varimp(gbm_fit)
 #' }
 #'
-ModelFrame <- function(x, ...) {
+ModelFrame <- function(...) {
   UseMethod("ModelFrame")
 }
 
 
-ModelFrame.data.frame <- function(x, ...) {
+ModelFrame.data.frame <- function(data, ...) {
   args <- list()
   for (type in c("groups", "names", "strata", "weights")) {
     name <- paste0("(", type, ")")
-    args[[type]] <- x[[name]]
-    x[[name]] <- NULL
+    args[[type]] <- data[[name]]
+    data[[name]] <- NULL
   }
-  if (is.null(args$names)) args$names <- rownames(x)
+  if (is.null(args$names)) args$names <- rownames(data)
   args$na.rm <- FALSE
 
-  model_terms <- terms(map(as.name, names(x)[-1]), names(x)[1],
-                       all_numeric = all(map_logi(is.numeric, x[-1])))
+  model_terms <- terms(map(as.name, names(data)[-1]), names(data)[1],
+                       all_numeric = all(map_logi(is.numeric, data[-1])))
 
-  do.call(ModelFrame, c(list(model_terms, x), args))
+  do.call(ModelFrame, c(list(model_terms, data), args))
 }
 
 
 #' @rdname ModelFrame-methods
 #'
 ModelFrame.formula <- function(
-  x, data, groups = NULL, strata = NULL, weights = NULL, na.rm = TRUE, ...
+  formula, data, groups = NULL, strata = NULL, weights = NULL, na.rm = TRUE, ...
 ) {
-  invalid_calls <- setdiff(inline_calls(predictors(x)), settings("RHS.formula"))
+  invalid_calls <- setdiff(inline_calls(predictors(formula)),
+                           settings("RHS.formula"))
   if (length(invalid_calls)) {
     throw(Error(
       label_items("unsupported predictor variable function", invalid_calls),
@@ -92,7 +95,7 @@ ModelFrame.formula <- function(
   args$names <- rownames(data)
   args$na.rm <- na.rm
 
-  model_terms <- terms(x, data = data)
+  model_terms <- terms(formula, data = data)
   data[[deparse1(response(model_terms))]] <- response(model_terms, data)
   data <- data[all.vars(model_formula(model_terms))]
 
@@ -132,35 +135,35 @@ ModelFrame.matrix <- function(
 }
 
 
-ModelFrame.ModelFrame <- function(x, na.rm = TRUE, ...) {
+ModelFrame.ModelFrame <- function(input, na.rm = TRUE, ...) {
   comps <- list(...)
   for (type in names(comps)) {
-    x[[paste0("(", type, ")")]] <- comps[[type]]
+    input[[paste0("(", type, ")")]] <- comps[[type]]
   }
-  if (na.rm) na.omit(x) else x
+  if (na.rm) na.omit(input) else input
 }
 
 
-ModelFrame.ModelTerms <- function(x, data, ...) {
+ModelFrame.ModelTerms <- function(object, data, ...) {
   ModelFrame(structure(
-    as.data.frame(data), terms = x, class = c("ModelFrame", "data.frame")
+    as.data.frame(data), terms = object, class = c("ModelFrame", "data.frame")
   ), ...)
 }
 
 
-ModelFrame.recipe <- function(x, ...) {
-  x <- prep(x)
-  data <- bake(x, NULL)
+ModelFrame.recipe <- function(input, ...) {
+  input <- prep(input)
+  data <- bake(input, NULL)
 
   args <- list()
   for (type in c("groups", "names", "strata", "weights")) {
-    name <- case_comp_name(x, type)
+    name <- case_comp_name(input, type)
     args[[type]] <- if (length(name)) data[[name]]
   }
   if (is.null(args$names)) args$names <- rownames(data)
   args$na.rm <- FALSE
 
-  model_terms <- terms(x)
+  model_terms <- terms(input)
   data[[deparse1(response(model_terms))]] <- response(model_terms, data)
   data <- data[all.vars(model_formula(model_terms))]
 

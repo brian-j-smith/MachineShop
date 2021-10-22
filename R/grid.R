@@ -57,8 +57,9 @@ Grid <- function(size = 3, random = FALSE) {
 #' @rdname ParameterGrid
 #'
 #' @param ... named \code{param} objects as defined in the \pkg{dials} package.
-#' @param x list of named \code{param} objects or a
-#'   \code{\link[dials]{parameters}} object.
+#' @param object list of named \code{param} objects or a
+#'   \code{\link[dials]{parameters}} object.  This is a positional argument
+#'   that must be given first in calls to its methods.
 #' @param size single integer or vector of integers whose positions or names
 #'   match the given parameters and which specify the number of values used to
 #'   construct the grid.
@@ -93,41 +94,41 @@ ParameterGrid.param <- function(..., size = 3, random = FALSE) {
 
 #' @rdname ParameterGrid
 #'
-ParameterGrid.list <- function(x, size = 3, random = FALSE, ...) {
-  ParameterGrid(parameters(x), size = size, random = random)
+ParameterGrid.list <- function(object, size = 3, random = FALSE, ...) {
+  ParameterGrid(parameters(object), size = size, random = random)
 }
 
 
 #' @rdname ParameterGrid
 #'
-ParameterGrid.parameters <- function(x, size = 3, random = FALSE, ...) {
+ParameterGrid.parameters <- function(object, size = 3, random = FALSE, ...) {
   grid <- Grid(size = size, random = random)
 
   size <- grid@size
   if (!is.null(names(size))) {
-    if (!all(names(size) %in% x$id)) {
+    if (!all(names(size) %in% object$id)) {
       throw(LocalWarning(
         "Unmatched parameter names in ParameterGrid() argument 'size'.\n",
-        "x Existing data has ", label_items("parameter", x$id), ".\n",
+        "x Existing data has ", label_items("parameter", object$id), ".\n",
         "x Assigned data has ", label_items("name", names(size)), "."
       ))
     }
-    size <- size[x$id]
+    size <- size[object$id]
     size[is.na(size)] <- 0L
-  } else if (length(size) > 1 && length(size) != nrow(x)) {
+  } else if (length(size) > 1 && length(size) != nrow(object)) {
     throw(LocalError(
       "Length of ParameterGrid() argument 'size' must equal 1 ",
       "or the number of parameters.\n",
-      "x Existing data has ", nrow(x), " ",
-      label_items("parameter", x$id), ".\n",
+      "x Existing data has ", nrow(object), " ",
+      label_items("parameter", object$id), ".\n",
       "x Assigned data has ", length(size), " ", label_items("size", size), "."
     ))
   }
   keep <- size >= 1
-  x <- x[keep, ]
+  object <- object[keep, ]
   size <- size[keep]
 
-  new("ParameterGrid", x, size = size, random = grid@random)
+  new("ParameterGrid", object, size = size, random = grid@random)
 }
 
 

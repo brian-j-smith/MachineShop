@@ -60,19 +60,19 @@ StackedModel <- function(
 MLModelFunction(StackedModel) <- NULL
 
 
-.fit.StackedModel <- function(x, inputs, ...) {
-  base_learners <- x@params$base_learners
-  weights <- x@params$weights
-  control <-  x@params$control
+.fit.StackedModel <- function(object, input, ...) {
+  base_learners <- object@params$base_learners
+  weights <- object@params$weights
+  control <-  object@params$control
 
   if (is.null(weights)) {
     num_learners <- length(base_learners)
     stack <- list()
     complete_cases <- TRUE
-    i <- new_progress_index(names = x@name, max = num_learners)
+    i <- new_progress_index(names = object@name, max = num_learners)
     while (i < max(i)) {
       i <- i + 1
-      stack[[i]] <- resample(inputs, model = base_learners[[i]],
+      stack[[i]] <- resample(input, model = base_learners[[i]],
                              control = control, progress_index = i)
       complete_cases <- complete_cases & complete.cases(stack[[i]])
     }
@@ -85,20 +85,20 @@ MLModelFunction(StackedModel) <- NULL
                              control = list(trace = FALSE))$pars
   }
 
-  list(base_fits = map(function(learner) fit(inputs, model = learner),
+  list(base_fits = map(function(learner) fit(input, model = learner),
                        base_learners),
        weights = weights,
        times = control@predict$times) %>%
-    MLModelFit("StackedModelFit", model = x, x = inputs)
+    MLModelFit("StackedModelFit", model = object, input = input)
 }
 
 
-.predict.StackedModel <- function(x, object, newdata, ...) {
+.predict.StackedModel <- function(object, model_fit, newdata, ...) {
   pred <- 0
-  for (i in seq_along(object$base_fits)) {
-    base_pred <- predict(object$base_fits[[i]], newdata = newdata,
-                         times = object$times, type = "prob")
-    pred <- pred + object$weights[i] * base_pred
+  for (i in seq_along(model_fit$base_fits)) {
+    base_pred <- predict(model_fit$base_fits[[i]], newdata = newdata,
+                         times = model_fit$times, type = "prob")
+    pred <- pred + model_fit$weights[i] * base_pred
   }
   pred
 }

@@ -10,10 +10,10 @@
 \alias{rfe.MLModelFunction}
 \title{Recursive Feature Elimination}
 \usage{
-rfe(x, ...)
+rfe(...)
 
 \method{rfe}{formula}(
-  x,
+  formula,
   data,
   model,
   control = MachineShop::settings("control"),
@@ -43,7 +43,7 @@ rfe(x, ...)
 )
 
 \method{rfe}{ModelFrame}(
-  x,
+  input,
   model,
   control = MachineShop::settings("control"),
   props = 4,
@@ -57,7 +57,7 @@ rfe(x, ...)
 )
 
 \method{rfe}{recipe}(
-  x,
+  input,
   model,
   control = MachineShop::settings("control"),
   props = 4,
@@ -70,23 +70,22 @@ rfe(x, ...)
   ...
 )
 
-\method{rfe}{MLModel}(x, ...)
+\method{rfe}{MLModel}(model, ...)
 
-\method{rfe}{MLModelFunction}(x, ...)
+\method{rfe}{MLModelFunction}(model, ...)
 }
 \arguments{
-\item{x}{\link[=inputs]{input} specifying a relationship between model
-predictor and response variables.  Alternatively, a \link[=models]{model}
-function or object may be given first followed by the input specification.}
+\item{...}{arguments passed from the generic function to its methods and from
+the \code{MLModel} and \code{MLModelFunction} methods to others.  The
+first arguments of \code{rfe} methods are positional and, as such, must be
+given first in calls to them.}
 
-\item{...}{arguments passed to other methods.}
+\item{formula, data}{\link[=formula]{formula} defining the model predictor and
+response variables and a \link[=data.frame]{data frame} containing them.}
 
-\item{data}{\link[=data.frame]{data frame} containing observed predictors and
-outcomes.}
-
-\item{model}{\link[=models]{model} function, function name, or object;
-ignored and can be omitted when fitting
-\link[=ModeledInput]{modeled inputs}.}
+\item{model}{\link[=models]{model} function, function name, or object.  Can
+be given first followed by any of the variable specifications, and can be
+omitted in the case of \link[=ModeledInput]{modeled inputs}.}
 
 \item{control}{\link[=controls]{control} function, function name, or object
 defining the resampling method to be employed.}
@@ -120,7 +119,11 @@ metrics defined in the \link{performance} functions are used.}
 \item{stat}{function or character string naming a function to compute a
 summary statistic on resampled metric values and permuted samples.}
 
-\item{y}{response variable.}
+\item{x, y}{\link{matrix} and object containing predictor and response
+variables.}
+
+\item{input}{\link[=inputs]{input} object defining and containing the model
+predictor and response variables.}
 }
 \value{
 A data frame with columns for the numbers of predictor variables

@@ -7,14 +7,14 @@
 #' @aliases SelectedModelRecipe
 #' @rdname SelectedInput
 #'
-#' @param ... \link{inputs} specifying relationships between model predictor
+#' @param ... \link{inputs} defining relationships between model predictor
 #'   and response variables.  Supplied inputs must all be of the same type and
 #'   may be named or unnamed.
 #' @param x list of inputs followed by arguments passed to their method
 #'   function.
 #' @param y response variable.
-#' @param data \link[=data.frame]{data frame} or an object that can be converted
-#'   to one.
+#' @param data \link[=data.frame]{data frame} containing predictor and response
+#'   variables.
 #' @param control \link[=controls]{control} function, function name, or object
 #'   defining the resampling method to be employed.
 #' @param metrics \link[=metrics]{metric} function, function name, or vector of
@@ -172,14 +172,14 @@ SelectedInput.list <- function(x, ...) {
 }
 
 
-.fit.SelectedInput <- function(x, ...) {
-  inputs <- x@inputs
-  input_class <- class(x)
-  switch(input_class,
+.fit.SelectedInput <- function(object, ...) {
+  inputs <- object@inputs
+  params <- object@params
+  update_input <- switch(class(object),
     "SelectedModelFrame" = {
       grid_name <- "ModelFrame"
-      object <- as(x, "ModelFrame")
-      update_input <- function(x) {
+      object <- as(object, "ModelFrame")
+      function(x) {
         input <- structure(object, terms = terms(x))
         if (is(x, "ModeledTerms")) {
           ModeledInput(input, model = x@model)
@@ -188,12 +188,13 @@ SelectedInput.list <- function(x, ...) {
     },
     "SelectedModelRecipe" = {
       grid_name <- "ModelRecipe"
-      object <- as.data.frame(x)
-      update_input <- function(x) recipe(x, object[unique(summary(x)$variable)])
+      object <- as.data.frame(object)
+      function(x) recipe(x, object[unique(summary(x)$variable)])
     },
-    throw(TypeError(x, c("SelectedModelFrame", "SelectedModelRecipe"), "input"))
+    TypeError(object, c("SelectedModelFrame", "SelectedModelRecipe"), "input")
   )
-  train_step <- resample_selection(inputs, update_input, x@params, ...,
+  throw(update_input)
+  train_step <- resample_selection(inputs, update_input, params, ...,
                                    class = "SelectedInput")
   train_step$grid <- tibble(Input = factor(seq_along(inputs)))
   names(train_step$grid) <- grid_name
@@ -210,7 +211,7 @@ SelectedInput.list <- function(x, ...) {
 #'
 #' @rdname TunedInput
 #'
-#' @param x untrained \code{\link[recipes]{recipe}}.
+#' @param object untrained \code{\link[recipes]{recipe}}.
 #' @param grid \code{RecipeGrid} containing parameter values at which to
 #'   evaluate a recipe, such as those returned by \code{\link{expand_steps}}.
 #' @param control \link[=controls]{control} function, function name, or object
@@ -242,7 +243,7 @@ SelectedInput.list <- function(x, ...) {
 #'
 #' fit(TunedInput(rec, grid = grid), model = GLMModel)
 #'
-TunedInput <- function(x, ...) {
+TunedInput <- function(object, ...) {
   UseMethod("TunedInput")
 }
 
@@ -250,12 +251,12 @@ TunedInput <- function(x, ...) {
 #' @rdname TunedInput
 #'
 TunedInput.recipe <- function(
-  x, grid = expand_steps(), control = MachineShop::settings("control"),
+  object, grid = expand_steps(), control = MachineShop::settings("control"),
   metrics = NULL, stat = MachineShop::settings("stat.Trained"),
   cutoff = MachineShop::settings("cutoff"), ...
 ) {
 
-  object <- new("TunedModelRecipe", ModelRecipe(x),
+  object <- new("TunedModelRecipe", ModelRecipe(object),
                 grid = grid,
                 params = list(control = get_MLControl(control),
                               metrics = metrics, stat = stat, cutoff = cutoff))
@@ -269,21 +270,21 @@ TunedInput.recipe <- function(
                 label_items("; not found in recipe step id", step_ids)))
   }
 
-  if (is(x, "ModeledRecipe")) {
-    new("TunedModeledRecipe", object, model = x@model)
+  if (is(object, "ModeledRecipe")) {
+    new("TunedModeledRecipe", object, model = object@model)
   } else object
 
 }
 
 
-.fit.TunedModelRecipe <- function(x, model, ...) {
-  grid <- x@grid
-  recipe <- as(x, "ModelRecipe")
+.fit.TunedModelRecipe <- function(object, model, ...) {
+  grid <- object@grid
+  recipe <- as(object, "ModelRecipe")
   if (all(size(grid) > 0)) {
     grid_split <- split(grid, seq_len(nrow(grid)))
     update_input <- function(x) do.call(update, c(list(recipe), x))
-    train_step <- resample_selection(grid_split, update_input, x@params, model,
-                                     class = "TunedInput")
+    train_step <- resample_selection(grid_split, update_input, object@params,
+                                     model, class = "TunedInput")
     train_step$grid <- tibble(ModelRecipe = asS3(grid))
     input <- update_input(grid_split[[train_step$selected]])
     push(do.call(TrainStep, train_step), fit(input, model = model))

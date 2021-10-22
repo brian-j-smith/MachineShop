@@ -10,35 +10,38 @@
 \alias{fit.MLModelFunction}
 \title{Model Fitting}
 \usage{
-fit(x, ...)
+fit(...)
 
-\method{fit}{formula}(x, data, model, ...)
+\method{fit}{formula}(formula, data, model, ...)
 
 \method{fit}{matrix}(x, y, model, ...)
 
-\method{fit}{ModelFrame}(x, model, ...)
+\method{fit}{ModelFrame}(input, model, ...)
 
-\method{fit}{recipe}(x, model, ...)
+\method{fit}{recipe}(input, model, ...)
 
-\method{fit}{MLModel}(x, ...)
+\method{fit}{MLModel}(model, ...)
 
-\method{fit}{MLModelFunction}(x, ...)
+\method{fit}{MLModelFunction}(model, ...)
 }
 \arguments{
-\item{x}{\link[=inputs]{input} specifying a relationship between model
-predictor and response variables.  Alternatively, a \link[=models]{model}
-function or object may be given first followed by the input specification.}
+\item{...}{arguments passed from the generic function to its methods and from
+the \code{MLModel} and \code{MLModelFunction} methods to others.  The
+first arguments of \code{fit} methods are positional and, as such, must be
+given first in calls to them.}
 
-\item{...}{arguments passed to other methods.}
+\item{formula, data}{\link[=formula]{formula} defining the model predictor and
+response variables and a \link[=data.frame]{data frame} containing them.}
 
-\item{data}{\link[=data.frame]{data frame} containing observed predictors and
-outcomes.}
+\item{model}{\link[=models]{model} function, function name, or object.  Can
+be given first followed by any of the variable specifications, and can be
+omitted in the case of \link[=ModeledInput]{modeled inputs}.}
 
-\item{model}{\link[=models]{model} function, function name, or object;
-ignored and can be omitted when fitting
-\link[=ModeledInput]{modeled inputs}.}
+\item{x, y}{\link{matrix} and object containing predictor and response
+variables.}
 
-\item{y}{response variable.}
+\item{input}{\link[=inputs]{input} object defining and containing the model
+predictor and response variables.}
 }
 \value{
 \code{MLModelFit} class object.

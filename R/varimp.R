@@ -148,9 +148,9 @@ varimp_permute <- function(
   metric = NULL, compare = c("-", "/"), stats = c(Mean = "base::mean"),
   na.rm = TRUE
 ) {
-  x <- as.MLModel(object)@x
-  data <- if (is.data.frame(x)) x else as.data.frame(x)
-  pred_names <- all.vars(predictors(terms(x, original = TRUE)))
+  input <- as.MLModel(object)@input
+  data <- if (is.data.frame(input)) input else as.data.frame(input)
+  pred_names <- all.vars(predictors(terms(input, original = TRUE)))
   pred_names <- do.call(subset_names, list(pred_names, substitute(select)),
                         envir = parent.frame())
 

@@ -2,9 +2,9 @@
 #'
 #' Expand a model over all combinations of a grid of tuning parameters.
 #'
-#' @param x \link[=models]{model} function, function name, or object.
+#' @param object \link[=models]{model} function, function name, or object.
 #' @param ... named vectors or factors or a list of these containing the
-#'   parameter values over which to expand \code{x}.
+#'   parameter values over which to expand \code{object}.
 #' @param random number of points to be randomly sampled from the parameter grid
 #'   or \code{FALSE} if all points are to be returned.
 #'
@@ -24,33 +24,33 @@
 #' fit(medv ~ ., data = Boston, model = SelectedModel(models))
 #' }
 #'
-expand_model <- function(x, ..., random = FALSE) {
-  .expand_model(x, random, ...)
+expand_model <- function(object, ..., random = FALSE) {
+  .expand_model(object, random, ...)
 }
 
 
-.expand_model <- function(x, ...) {
+.expand_model <- function(object, ...) {
   UseMethod(".expand_model")
 }
 
 
-.expand_model.default <- function(x, random, ...) {
-  expand_model(get_MLModel(x), ..., random = random)
+.expand_model.default <- function(object, random, ...) {
+  expand_model(get_MLModel(object), ..., random = random)
 }
 
 
-.expand_model.list <- function(x, ...) {
-  grid <- x[[2]]
-  models <- map(function(args) do.call(x[[1]], args),
+.expand_model.list <- function(object, ...) {
+  grid <- object[[2]]
+  models <- map(function(args) do.call(object[[1]], args),
                 split(grid, seq_len(max(1, nrow(grid)))))
   names(models) <- paste0(models[[1]]@name, ".", names(models))
   models
 }
 
 
-.expand_model.MLModel <- function(x, random, ...) {
+.expand_model.MLModel <- function(object, random, ...) {
   grid <- expand_params(..., random = random)
-  expand_model(list(fget(x@name), grid))
+  expand_model(list(fget(object@name), grid))
 }
 
 
@@ -61,17 +61,20 @@ expand_model <- function(x, ..., random = FALSE) {
 #' @name expand_modelgrid
 #' @rdname expand_modelgrid-methods
 #'
-#' @param x \link[=inputs]{input} specifying a relationship between model
-#'   predictor and response variables.  Alternatively, a
-#'   \code{\link{TunedModel}} object may be given first followed optionally by
-#'   an input specification.
-#' @param y response variable.
-#' @param data \link[=data.frame]{data frame} containing observed predictors and
-#'   outcomes.
-#' @param model \code{\link{TunedModel}} object.
+#' @param ... arguments passed from the generic function to its methods and from
+#'   the \code{TunedModel} method to others.  The first arguments of
+#'   \code{expand_modelgrid} methods are positional and, as such, must be
+#'   given first in calls to them.
+#' @param formula,data \link[=formula]{formula} defining the model predictor and
+#'   response variables and a \link[=data.frame]{data frame} containing them.
+#' @param x,y \link{matrix} and object containing predictor and response
+#'   variables.
+#' @param input \link[=inputs]{input} object defining and containing the model
+#'   predictor and response variables.
+#' @param model \code{\link{TunedModel}} object.  Can be given first followed by
+#'   any of the variable specifications.
 #' @param info logical indicating whether to return model-defined grid
 #'   construction information rather than the grid values.
-#' @param ... arguments passed to other methods.
 #'
 #' @details
 #' The \code{expand_modelgrid} function enables manual extraction and viewing of
@@ -103,15 +106,15 @@ expand_model <- function(x, ..., random = FALSE) {
 #' expand_modelgrid(TunedModel(RandomForestModel, grid = rf_grid),
 #'                  sale_amount ~ ., data = ICHomes)
 #'
-expand_modelgrid <- function(x, ...) {
+expand_modelgrid <- function(...) {
   UseMethod("expand_modelgrid")
 }
 
 
 #' @rdname expand_modelgrid-methods
 #'
-expand_modelgrid.formula <- function(x, data, model, info = FALSE, ...) {
-  expand_modelgrid(model, x, data, info = info)
+expand_modelgrid.formula <- function(formula, data, model, info = FALSE, ...) {
+  expand_modelgrid(model, formula, data, info = info)
 }
 
 
@@ -124,22 +127,22 @@ expand_modelgrid.matrix <- function(x, y, model, info = FALSE, ...) {
 
 #' @rdname expand_modelgrid-methods
 #'
-expand_modelgrid.ModelFrame <- function(x, model, info = FALSE, ...) {
-  expand_modelgrid(model, x, info = info)
+expand_modelgrid.ModelFrame <- function(input, model, info = FALSE, ...) {
+  expand_modelgrid(model, input, info = info)
 }
 
 
 #' @rdname expand_modelgrid-methods
 #'
-expand_modelgrid.recipe <- function(x, model, info = FALSE, ...) {
-  expand_modelgrid(model, x, info = info)
+expand_modelgrid.recipe <- function(input, model, info = FALSE, ...) {
+  expand_modelgrid(model, input, info = info)
 }
 
 
 #' @rdname expand_modelgrid-methods
 #'
-expand_modelgrid.TunedModel <- function(x, ..., info = FALSE) {
-  params <- x@params
+expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
+  params <- model@params
   model <- params$model()
   if (info) {
     model@gridinfo
@@ -154,7 +157,7 @@ expand_modelgrid.TunedModel <- function(x, ..., info = FALSE) {
 }
 
 
-.expand_modelgrid.Grid <- function(grid, x, ..., model, fixed) {
+.expand_modelgrid.Grid <- function(grid, input, ..., model, fixed) {
   gridinfo <- model@gridinfo
   size <- grid@size
   random <- grid@random
@@ -190,7 +193,7 @@ expand_modelgrid.TunedModel <- function(x, ..., info = FALSE) {
   has_data_arg <- function(fun) "data" %in% names(formals(fun))
   needs_data <- any(map_logi(has_data_arg, gridinfo$get_values))
   if (needs_data && has_grid(model)) {
-    if (!missing(x)) mf <- ModelFrame(x, ..., na.rm = FALSE)
+    if (!missing(input)) mf <- ModelFrame(input, ..., na.rm = FALSE)
     if (is.null(mf)) {
       return(NULL)
     }
@@ -220,12 +223,12 @@ expand_modelgrid.TunedModel <- function(x, ..., info = FALSE) {
 }
 
 
-.expand_modelgrid.ParameterGrid <- function(grid, x, ..., model, fixed) {
+.expand_modelgrid.ParameterGrid <- function(grid, input, ..., model, fixed) {
   grid <- if (nrow(grid)) {
     needs_data <- any(dials::has_unknowns(grid$object))
     if (needs_data) {
-      if (missing(x)) return(NULL)
-      mf <- ModelFrame(x, ..., na.rm = FALSE)
+      if (missing(input)) return(NULL)
+      mf <- ModelFrame(input, ..., na.rm = FALSE)
       model <- get_MLModel(model)
       data <- switch(model@predictor_encoding,
         "model.frame" = {

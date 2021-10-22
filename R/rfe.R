@@ -7,15 +7,19 @@
 #' @name rfe
 #' @rdname rfe-methods
 #'
-#' @param x \link[=inputs]{input} specifying a relationship between model
-#'   predictor and response variables.  Alternatively, a \link[=models]{model}
-#'   function or object may be given first followed by the input specification.
-#' @param y response variable.
-#' @param data \link[=data.frame]{data frame} containing observed predictors and
-#'   outcomes.
-#' @param model \link[=models]{model} function, function name, or object;
-#'   ignored and can be omitted when fitting
-#'   \link[=ModeledInput]{modeled inputs}.
+#' @param ... arguments passed from the generic function to its methods and from
+#'   the \code{MLModel} and \code{MLModelFunction} methods to others.  The
+#'   first arguments of \code{rfe} methods are positional and, as such, must be
+#'   given first in calls to them.
+#' @param formula,data \link[=formula]{formula} defining the model predictor and
+#'   response variables and a \link[=data.frame]{data frame} containing them.
+#' @param x,y \link{matrix} and object containing predictor and response
+#'   variables.
+#' @param input \link[=inputs]{input} object defining and containing the model
+#'   predictor and response variables.
+#' @param model \link[=models]{model} function, function name, or object.  Can
+#'   be given first followed by any of the variable specifications, and can be
+#'   omitted in the case of \link[=ModeledInput]{modeled inputs}.
 #' @param control \link[=controls]{control} function, function name, or object
 #'   defining the resampling method to be employed.
 #' @param props numeric vector of the proportions of most important predictor
@@ -40,7 +44,6 @@
 #'   metrics defined in the \link{performance} functions are used.
 #' @param stat function or character string naming a function to compute a
 #'   summary statistic on resampled metric values and permuted samples.
-#' @param ... arguments passed to other methods.
 #'
 #' @return A data frame with columns for the numbers of predictor variables
 #' retained (size), their names (terms), logical indicators to identify the
@@ -56,7 +59,7 @@
 #' rfe(sale_amount ~ ., data = ICHomes, model = GBMModel)
 #' }
 #'
-rfe <- function(x, ...) {
+rfe <- function(...) {
   UseMethod("rfe")
 }
 
@@ -64,11 +67,12 @@ rfe <- function(x, ...) {
 #' @rdname rfe-methods
 #'
 rfe.formula <- function(
-  x, data, model, control = MachineShop::settings("control"), props = 4,
+  formula, data, model, control = MachineShop::settings("control"), props = 4,
   sizes = NULL, recompute = FALSE, optimize = c("global", "local"),
   samples = c(rfe = 1, varimp = 1), metrics = NULL, stat = "base::mean", ...
 ) {
-  mf <- do.call(ModelFrame, list(x, data, strata = response(x), na.rm = FALSE))
+  args <- list(formula, data, strata = response(formula), na.rm = FALSE)
+  mf <- do.call(ModelFrame, args)
   rfe(mf, model, control, props = props, sizes = sizes, recompute = recompute,
       optimize = optimize, samples = samples, metrics = metrics, stat = stat)
 }
@@ -90,15 +94,15 @@ rfe.matrix <- function(
 #' @rdname rfe-methods
 #'
 rfe.ModelFrame <- function(
-  x, model, control = MachineShop::settings("control"), props = 4,
+  input, model, control = MachineShop::settings("control"), props = 4,
   sizes = NULL, recompute = FALSE, optimize = c("global", "local"),
   samples = c(rfe = 1, varimp = 1), metrics = NULL, stat = "base::mean", ...
 ) {
-  update <- function(x, data) {
-    if (isS4(x)) x@.Data <- data else x[] <- data
-    x
+  update <- function(input, data) {
+    if (isS4(input)) input@.Data <- data else input[] <- data
+    input
   }
-  .rfe(x, update, model, control, props = props, sizes = sizes,
+  .rfe(input, update, model, control, props = props, sizes = sizes,
        recompute = recompute, optimize = match.arg(optimize), samples = samples,
        metrics = metrics, stat = stat)
 }
@@ -107,37 +111,37 @@ rfe.ModelFrame <- function(
 #' @rdname rfe-methods
 #'
 rfe.recipe <- function(
-  x, model, control = MachineShop::settings("control"), props = 4,
+  input, model, control = MachineShop::settings("control"), props = 4,
   sizes = NULL, recompute = FALSE, optimize = c("global", "local"),
   samples = c(rfe = 1, varimp = 1), metrics = NULL, stat = "base::mean", ...
 ) {
-  update <- function(x, data) recipe(x, data)
-  .rfe(ModelRecipe(x), update, model, control, props = props, sizes = sizes,
-       recompute = recompute, optimize = match.arg(optimize), samples = samples,
-       metrics = metrics, stat = stat)
+  update <- function(input, data) recipe(input, data)
+  .rfe(ModelRecipe(input), update, model, control, props = props,
+       sizes = sizes, recompute = recompute, optimize = match.arg(optimize),
+       samples = samples, metrics = metrics, stat = stat)
 }
 
 
 #' @rdname rfe-methods
 #'
-rfe.MLModel <- function(x, ...) {
-  rfe(..., model = x)
+rfe.MLModel <- function(model, ...) {
+  rfe(..., model = model)
 }
 
 
 #' @rdname rfe-methods
 #'
-rfe.MLModelFunction <- function(x, ...) {
-  rfe(x(), ...)
+rfe.MLModelFunction <- function(model, ...) {
+  rfe(model(), ...)
 }
 
 
 .rfe <- function(
-  x, update, model, control, props, sizes, recompute, optimize, samples,
+  input, update, model, control, props, sizes, recompute, optimize, samples,
   metrics, stat
 ) {
-  data <- as.data.frame(x)
-  model_fit <- fit(x, model)
+  data <- as.data.frame(input)
+  model_fit <- fit(input, model)
   control <- get_MLControl(control)
 
   get_samples <- function(rfe = 1, varimp = 1) as.list(environment())
@@ -161,9 +165,9 @@ rfe.MLModelFunction <- function(x, ...) {
     apply(do.call(cbind, x), 1, function(x) stat(na.omit(x)))
   }
 
-  varimp <- function(x, ...) {
+  varimp <- function(object, ...) {
     MachineShop::varimp(
-      x, scale = FALSE, method = "permute", samples = samples$varimp,
+      object, scale = FALSE, method = "permute", samples = samples$varimp,
       times = times, metric = metric, stats = stat, ...
     )
   }
@@ -204,15 +208,15 @@ rfe.MLModelFunction <- function(x, ...) {
     for (s in seq_len(samples$rfe)) {
 
       data[drop] <- data[inds[, s], drop]
-      x <- update(x, data)
-      res <- resample(x, model, control)
+      input <- update(input, data)
+      res <- resample(input, model, control)
       perf_samples[[s]] <- summary(
         performance(res, metrics = metrics),
         stats = stat
       )[, 1, drop = FALSE]
 
       if (recompute && size > tail(sizes, 1)) {
-        vi <- do.call(varimp, list(fit(x, model), select = subset))
+        vi <- do.call(varimp, list(fit(input, model), select = subset))
         vi_samples[[s]] <- vi[subset, 1, drop = FALSE]
       }
 

@@ -12,33 +12,36 @@
 \alias{ModeledInput.MLModelFunction}
 \title{ModeledInput Classes}
 \usage{
-ModeledInput(x, ...)
+ModeledInput(...)
 
-\method{ModeledInput}{formula}(x, data, model, ...)
+\method{ModeledInput}{formula}(formula, data, model, ...)
 
 \method{ModeledInput}{matrix}(x, y, model, ...)
 
-\method{ModeledInput}{ModelFrame}(x, model, ...)
+\method{ModeledInput}{ModelFrame}(object, model, ...)
 
-\method{ModeledInput}{recipe}(x, model, ...)
+\method{ModeledInput}{recipe}(object, model, ...)
 
-\method{ModeledInput}{MLModel}(x, ...)
+\method{ModeledInput}{MLModel}(model, ...)
 
-\method{ModeledInput}{MLModelFunction}(x, ...)
+\method{ModeledInput}{MLModelFunction}(model, ...)
 }
 \arguments{
-\item{x}{\link[=inputs]{input} specifying a relationship between model
-predictor and response variables.  Alternatively, a \link[=models]{model}
-function or object may be given first followed by the input specification.}
+\item{...}{arguments passed from the generic function to its methods.  The
+first arguments of \code{ModeledInput} methods are positional and, as such,
+must be given first in calls to them.}
 
-\item{...}{arguments passed to other methods.}
+\item{formula, data}{\link[=formula]{formula} defining the model predictor and
+response variables and a \link[=data.frame]{data frame} containing them.}
 
-\item{data}{\link[=data.frame]{data frame} or an object that can be converted
-to one.}
+\item{model}{\link[=models]{model} function, function name, or object.  Can
+be given first followed by any of the variable specifications.}
 
-\item{model}{\link[=models]{model} function, function name, or object.}
+\item{x, y}{\link{matrix} and object containing predictor and response
+variables.}
 
-\item{y}{response variable.}
+\item{object}{\link[=inputs]{input} object defining and containing the model
+predictor and response variables.}
 }
 \value{
 \code{ModeledFrame} or \code{ModeledRecipe} class object that

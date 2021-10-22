@@ -4,13 +4,13 @@
 \alias{expand_model}
 \title{Model Expansion Over Tuning Parameters}
 \usage{
-expand_model(x, ..., random = FALSE)
+expand_model(object, ..., random = FALSE)
 }
 \arguments{
-\item{x}{\link[=models]{model} function, function name, or object.}
+\item{object}{\link[=models]{model} function, function name, or object.}
 
 \item{...}{named vectors or factors or a list of these containing the
-parameter values over which to expand \code{x}.}
+parameter values over which to expand \code{object}.}
 
 \item{random}{number of points to be randomly sampled from the parameter grid
 or \code{FALSE} if all points are to be returned.}

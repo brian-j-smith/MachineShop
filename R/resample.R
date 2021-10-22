@@ -6,19 +6,21 @@
 #' @name resample
 #' @rdname resample-methods
 #'
-#' @param x \link[=inputs]{input} specifying a relationship between model
-#'   predictor and response variables.  Alternatively, a \link[=models]{model}
-#'   function or object may be given first followed by the input specification
-#'   and \code{control} value.
-#' @param y response variable.
-#' @param data \link[=data.frame]{data frame} containing observed predictors and
-#'   outcomes.
-#' @param model \link[=models]{model} function, function name, or object;
-#'   ignored and can be omitted when resampling
-#'   \link[=ModeledInput]{modeled inputs}.
+#' @param ... arguments passed from the generic function to its methods and from
+#'   the \code{MLModel} and \code{MLModelFunction} methods to others.  The
+#'   first arguments of \code{resample} methods are positional and, as such,
+#'   must be given first in calls to them.
+#' @param formula,data \link[=formula]{formula} defining the model predictor and
+#'   response variables and a \link[=data.frame]{data frame} containing them.
+#' @param x,y \link{matrix} and object containing predictor and response
+#'   variables.
+#' @param input \link[=inputs]{input} object defining and containing the model
+#'   predictor and response variables.
+#' @param model \link[=models]{model} function, function name, or object.  Can
+#'   be given first followed by any of the variable specifications, and can be
+#'   omitted in the case of \link[=ModeledInput]{modeled inputs}.
 #' @param control \link[=controls]{control} function, function name, or object
 #'   defining the resampling method to be employed.
-#' @param ... arguments passed to other methods.
 #'
 #' @return \code{Resamples} class object.
 #'
@@ -46,7 +48,7 @@
 #' plot(res)
 #' }
 #'
-resample <- function(x, ...) {
+resample <- function(...) {
   UseMethod("resample")
 }
 
@@ -65,10 +67,11 @@ resample <- function(x, ...) {
 #' \code{\link{MLControl}}.
 #'
 resample.formula <- function(
-  x, data, model, control = MachineShop::settings("control"), ...
+  formula, data, model, control = MachineShop::settings("control"), ...
 ) {
-  mf <- do.call(ModelFrame, list(x, data, strata = response(x), na.rm = FALSE))
-  resample(mf, model, control, ...)
+  args <- list(formula, data, strata = response(formula), na.rm = FALSE)
+  mf <- do.call(ModelFrame, args)
+  resample(mf, model = model, control = control, ...)
 }
 
 
@@ -78,7 +81,7 @@ resample.matrix <- function(
   x, y, model, control = MachineShop::settings("control"), ...
 ) {
   mf <- ModelFrame(x, y, strata = y, na.rm = FALSE)
-  resample(mf, model, control, ...)
+  resample(mf, model = model, control = control, ...)
 }
 
 
@@ -91,10 +94,10 @@ resample.matrix <- function(
 #' default.
 #'
 resample.ModelFrame <- function(
-  x, model, control = MachineShop::settings("control"), ...
+  input, model, control = MachineShop::settings("control"), ...
 ) {
   if (missing(model)) model <- NullModel()
-  .resample(get_MLControl(control), x, model, ...)
+  .resample(get_MLControl(control), input = input, model = model, ...)
 }
 
 
@@ -106,24 +109,25 @@ resample.ModelFrame <- function(
 #' otherwise.
 #'
 resample.recipe <- function(
-  x, model, control = MachineShop::settings("control"), ...
+  input, model, control = MachineShop::settings("control"), ...
 ) {
   if (missing(model)) model <- NullModel()
-  .resample(get_MLControl(control), ModelRecipe(x), model, ...)
+  .resample(get_MLControl(control), input = ModelRecipe(input), model = model,
+            ...)
 }
 
 
 #' @rdname resample-methods
 #'
-resample.MLModel <- function(x, ...) {
-  resample(..., model = x)
+resample.MLModel <- function(model, ...) {
+  resample(..., model = model)
 }
 
 
 #' @rdname resample-methods
 #'
-resample.MLModelFunction <- function(x, ...) {
-  resample(x(), ...)
+resample.MLModelFunction <- function(model, ...) {
+  resample(model(), ...)
 }
 
 
@@ -157,30 +161,32 @@ Resamples.list <- function(object, ...) {
 }
 
 
-.resample <- function(object, x, model, ...) {
+.resample <- function(control, input, model, ...) {
   UseMethod(".resample")
 }
 
 
-.resample.MLBootControl <- function(object, x, model, progress_index = 0, ...) {
+.resample.MLBootControl <- function(
+  control, input, model, progress_index = 0, ...
+) {
   presets <- settings()
-  set.seed(object@seed)
+  set.seed(control@seed)
   splits <- rsample_split(
     function(..., strata = NULL) {
-      bootstraps(..., times = object@samples, strata = strata)$splits
-    }, data = x, control = object
+      bootstraps(..., times = control@samples, strata = strata)$splits
+    }, data = input, control = control
   )
   seeds <- rand_int(length(splits))
 
-  is_optimism_control <- is(object, "MLBootOptimismControl")
+  is_optimism_control <- is(control, "MLBootOptimismControl")
   if (is_optimism_control) {
-    train_pred <- subsample(x, x, model, object)$Predicted
+    train_pred <- subsample(input, input, model, control)$Predicted
   }
 
   snow_opts <- list()
   progress <- function(n) NULL
-  if (object@monitor$progress) {
-    pb <- new_progress_bar(length(splits), input = x, model = model,
+  if (control@monitor$progress) {
+    pb <- new_progress_bar(length(splits), input = input, model = model,
                            index = progress_index)
     switch(getDoParName(),
       "doSEQ"  = progress <- function(n) pb$tick(),
@@ -191,17 +197,17 @@ Resamples.list <- function(object, ...) {
 
   foreach(
     i = i <- seq_along(splits),
-    .export = c("seq_boot", "subsample", "subsample_data"),
+    .export = c("seq_boot", "subsample", "subsample_input"),
     .packages = settings("require"),
-    .verbose = object@monitor$verbose,
+    .verbose = control@monitor$verbose,
     .options.snow = snow_opts
   ) %dopar% {
     progress(i)
     settings(presets)
     set.seed(seeds[i])
-    train <- subsample_data(rsample::analysis, splits[[i]], x)
+    train <- subsample_input(input, rsample::analysis(splits[[i]]))
     if (is_optimism_control) {
-      subs <- subsample(train, list(x, train), model, object, i)
+      subs <- subsample(train, list(input, train), model, control, i)
       df <- subs[[1]]
       df_boot <- subs[[2]]
       indices <- seq_boot(df_boot, df)
@@ -210,19 +216,21 @@ Resamples.list <- function(object, ...) {
       df$Train.Predicted <- train_pred
       df
     } else {
-      subsample(train, x, model, object, i)
+      subsample(train, input, model, control, i)
     }
-  } %>% Resamples(control = object, case_comps = attr(splits, "case_comps"))
+  } %>% Resamples(control = control, case_comps = attr(splits, "case_comps"))
 }
 
 
-.resample.MLCVControl <- function(object, x, model, progress_index = 0, ...) {
+.resample.MLCVControl <- function(
+  control, input, model, progress_index = 0, ...
+) {
   presets <- settings()
-  set.seed(object@seed)
+  set.seed(control@seed)
   splits <- rsample_split(
     function(..., group = NULL, strata = NULL) {
-      v <- object@folds
-      repeats <- object@repeats
+      v <- control@folds
+      repeats <- control@repeats
       if (length(group)) {
         splits <- list()
         for (i in seq_len(repeats)) {
@@ -232,16 +240,16 @@ Resamples.list <- function(object, ...) {
       } else {
         vfold_cv(..., v = v, repeats = repeats, strata = strata)$splits
       }
-    }, data = x, control = object
+    }, data = input, control = control
   )
   seeds <- rand_int(length(splits))
 
-  is_optimism_control <- is(object, "MLCVOptimismControl")
+  is_optimism_control <- is(control, "MLCVOptimismControl")
 
   snow_opts <- list()
   progress <- function(n) NULL
-  if (object@monitor$progress) {
-    pb <- new_progress_bar(length(splits), input = x, model = model,
+  if (control@monitor$progress) {
+    pb <- new_progress_bar(length(splits), input = input, model = model,
                            index = progress_index)
     switch(getDoParName(),
       "doSEQ"  = progress <- function(n) pb$tick(),
@@ -252,35 +260,35 @@ Resamples.list <- function(object, ...) {
 
   df_list <- foreach(
     i = i <- seq_along(splits),
-    .export = c("subsample", "subsample_data"),
+    .export = c("subsample", "subsample_input"),
     .packages = settings("require"),
-    .verbose = object@monitor$verbose,
+    .verbose = control@monitor$verbose,
     .options.snow = snow_opts
   ) %dopar% {
     progress(i)
     settings(presets)
     set.seed(seeds[i])
-    train <- subsample_data(rsample::analysis, splits[[i]], x)
-    test <- subsample_data(rsample::assessment, splits[[i]], x)
+    train <- subsample_input(input, rsample::analysis(splits[[i]]))
+    test <- subsample_input(input, rsample::assessment(splits[[i]]))
     if (is_optimism_control) {
-      subs <- subsample(train, list(test, x), model, object, i)
+      subs <- subsample(train, list(test, input), model, control, i)
       structure(subs[[1]], CV.Predicted = subs[[2]]["Predicted"])
     } else {
-      subsample(train, test, model, object, i)
+      subsample(train, test, model, control, i)
     }
   }
-  res <- Resamples(df_list, control = object,
+  res <- Resamples(df_list, control = control,
                    case_comps = attr(splits, "case_comps"))
 
   if (is_optimism_control) {
     pred_list <- map(attr, df_list, "CV.Predicted")
-    split_factor <- rep(seq_len(object@folds), object@repeats)
+    split_factor <- rep(seq_len(control@folds), control@repeats)
     df <- split(seq_along(pred_list), split_factor) %>%
       map(function(indices) do.call(append, pred_list[indices]), .) %>%
       as.data.frame
     names(df) <- paste0("CV.Predicted.", seq_along(df))
-    pred <- subsample(x, x, model, object)$Predicted
-    df$Train.Predicted <- do.call(append, rep(list(pred), object@repeats))
+    pred <- subsample(input, input, model, control)$Predicted
+    df$Train.Predicted <- do.call(append, rep(list(pred), control@repeats))
     res[names(df)] <- df
   }
 
@@ -288,20 +296,22 @@ Resamples.list <- function(object, ...) {
 }
 
 
-.resample.MLOOBControl <- function(object, x, model, progress_index = 0, ...) {
+.resample.MLOOBControl <- function(
+  control, input, model, progress_index = 0, ...
+) {
   presets <- settings()
-  set.seed(object@seed)
+  set.seed(control@seed)
   splits <- rsample_split(
     function(..., strata = NULL) {
-      bootstraps(..., times = object@samples, strata = strata)$splits
-    }, data = x, control = object
+      bootstraps(..., times = control@samples, strata = strata)$splits
+    }, data = input, control = control
   )
   seeds <- rand_int(length(splits))
 
   snow_opts <- list()
   progress <- function(n) NULL
-  if (object@monitor$progress) {
-    pb <- new_progress_bar(length(splits), input = x, model = model,
+  if (control@monitor$progress) {
+    pb <- new_progress_bar(length(splits), input = input, model = model,
                            index = progress_index)
     switch(getDoParName(),
       "doSEQ"  = progress <- function(n) pb$tick(),
@@ -312,46 +322,46 @@ Resamples.list <- function(object, ...) {
 
   foreach(
     i = i <- seq_along(splits),
-    .export = c("subsample", "subsample_data"),
+    .export = c("subsample", "subsample_input"),
     .packages = settings("require"),
-    .verbose = object@monitor$verbose,
+    .verbose = control@monitor$verbose,
     .options.snow = snow_opts
   ) %dopar% {
     progress(i)
     settings(presets)
     set.seed(seeds[i])
-    train <- subsample_data(rsample::analysis, splits[[i]], x)
-    test <- subsample_data(rsample::assessment, splits[[i]], x)
-    subsample(train, test, model, object, i)
-  } %>% Resamples(control = object, case_comps = attr(splits, "case_comps"))
+    train <- subsample_input(input, rsample::analysis(splits[[i]]))
+    test <- subsample_input(input, rsample::assessment(splits[[i]]))
+    subsample(train, test, model, control, i)
+  } %>% Resamples(control = control, case_comps = attr(splits, "case_comps"))
 }
 
 
-.resample.MLSplitControl <- function(object, x, model, ...) {
-  set.seed(object@seed)
+.resample.MLSplitControl <- function(control, input, model, ...) {
+  set.seed(control@seed)
   split <- rsample_split(
-    function(...) initial_split(..., prop = object@prop),
-    data = x, control = object
+    function(...) initial_split(..., prop = control@prop),
+    data = input, control = control
   )
-  train <- subsample_data(rsample::training, split, x)
-  test <- subsample_data(rsample::testing, split, x)
-  subsample(train, test, model, object) %>%
-    Resamples(control = object, case_comps = attr(split, "case_comps"))
+  train <- subsample_input(input, rsample::training(split))
+  test <- subsample_input(input, rsample::testing(split))
+  subsample(train, test, model, control) %>%
+    Resamples(control = control, case_comps = attr(split, "case_comps"))
 }
 
 
-.resample.MLTrainControl <- function(object, x, model, ...) {
-  set.seed(object@seed)
-  Resamples(subsample(x, x, model, object), control = object)
+.resample.MLTrainControl <- function(control, input, model, ...) {
+  set.seed(control@seed)
+  Resamples(subsample(input, input, model, control), control = control)
 }
 
 
 #################### Utility Functions ####################
 
 
-rsample_data <- function(x, ...) UseMethod("rsample_data")
-rsample_data.ModelFrame <- function(x, ...) asS3(x)
-rsample_data.ModelRecipe <- function(x, ...) as.data.frame(x)
+rsample_data <- function(input, ...) UseMethod("rsample_data")
+rsample_data.ModelFrame <- function(input, ...) asS3(input)
+rsample_data.ModelRecipe <- function(input, ...) as.data.frame(input)
 
 
 rsample_split <- function(fun, data, control) {
@@ -409,14 +419,9 @@ subsample <- function(train, test, model, control, id = 1) {
 }
 
 
-subsample_data <- function(fun, x, object) {
-  classes <- c("ModelFrame", "ModelRecipe")
-  switch(which(c(map_logi(is, list(object), classes), TRUE))[1],
-    as(fun(x), class1(object)),
-    recipe(object, fun(x)),
-    throw(TypeError(object, classes))
-  )
-}
+subsample_input <- function(x, ...) UseMethod("subsample_input")
+subsample_input.ModelFrame <- function(x, data, ...) as(data, class1(x))
+subsample_input.ModelRecipe <- function(x, data, ...) recipe(x, data)
 
 
 resample_selection <- function(x, update, params, ..., class) {

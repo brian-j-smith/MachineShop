@@ -47,10 +47,10 @@ dependence <- function(
 
   stopifnot(is(object, "MLModelFit"))
 
-  x <- as.MLModel(object)@x
-  if (is.null(data)) data <- x
+  input <- as.MLModel(object)@input
+  if (is.null(data)) data <- input
   data <- as.data.frame(data)
-  pred_names <- all.vars(predictors(terms(x, original = TRUE)))
+  pred_names <- all.vars(predictors(terms(input, original = TRUE)))
   pred_names <- do.call(subset_names, list(pred_names, substitute(select)),
                         envir = parent.frame())
 

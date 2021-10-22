@@ -6,10 +6,10 @@
 \alias{ModelFrame.matrix}
 \title{ModelFrame Class}
 \usage{
-ModelFrame(x, ...)
+ModelFrame(...)
 
 \method{ModelFrame}{formula}(
-  x,
+  formula,
   data,
   groups = NULL,
   strata = NULL,
@@ -30,16 +30,16 @@ ModelFrame(x, ...)
 )
 }
 \arguments{
-\item{x}{model \code{\link{formula}} or \code{\link{matrix}} of predictor
-variables.  In the case of a formula, arguments \code{weights} and
-\code{strata} are evaluated as expressions, whose objects are searched for
-first in the accompanying \code{data} environment and, if not found there,
-next in the calling environment.}
+\item{...}{arguments passed from the generic function to its methods.  The
+first arguments of \code{ModelFrame} methods are positional and, as such,
+must be given first in calls to them.}
 
-\item{...}{arguments passed to other methods.}
-
-\item{data}{\link[=data.frame]{data frame} or an object that can be converted
-to one.}
+\item{formula, data}{\link[=formula]{formula} defining the model predictor and
+response variables and a \link[=data.frame]{data frame} containing them.
+In the associated method, arguments \code{groups}, \code{strata}, and
+\code{weights} will be evaluated as expressions, whose objects are searched
+for first in the accompanying \code{data} environment and, if not found
+there, next in the calling environment.}
 
 \item{groups}{vector of values defining groupings of cases to keep together
 when folds are constructed for \link[=controls]{cross-validation}
@@ -54,7 +54,8 @@ response variable [default: equal weights].}
 \item{na.rm}{logical indicating whether to remove cases with \code{NA} values
 for any of the model variables.}
 
-\item{y}{response variable.}
+\item{x, y}{\link{matrix} and object containing predictor and response
+variables.}
 
 \item{offsets}{numeric vector, matrix, or data frame of values to be added
 with a fixed coefficient of 1 to linear predictors in compatible regression

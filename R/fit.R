@@ -5,16 +5,19 @@
 #' @name fit
 #' @rdname fit-methods
 #'
-#' @param x \link[=inputs]{input} specifying a relationship between model
-#'   predictor and response variables.  Alternatively, a \link[=models]{model}
-#'   function or object may be given first followed by the input specification.
-#' @param y response variable.
-#' @param data \link[=data.frame]{data frame} containing observed predictors and
-#'   outcomes.
-#' @param model \link[=models]{model} function, function name, or object;
-#'   ignored and can be omitted when fitting
-#'   \link[=ModeledInput]{modeled inputs}.
-#' @param ... arguments passed to other methods.
+#' @param ... arguments passed from the generic function to its methods and from
+#'   the \code{MLModel} and \code{MLModelFunction} methods to others.  The
+#'   first arguments of \code{fit} methods are positional and, as such, must be
+#'   given first in calls to them.
+#' @param formula,data \link[=formula]{formula} defining the model predictor and
+#'   response variables and a \link[=data.frame]{data frame} containing them.
+#' @param x,y \link{matrix} and object containing predictor and response
+#'   variables.
+#' @param input \link[=inputs]{input} object defining and containing the model
+#'   predictor and response variables.
+#' @param model \link[=models]{model} function, function name, or object.  Can
+#'   be given first followed by any of the variable specifications, and can be
+#'   omitted in the case of \link[=ModeledInput]{modeled inputs}.
 #'
 #' @return \code{MLModelFit} class object.
 #'
@@ -32,16 +35,17 @@
 #' varimp(gbm_fit)
 #' }
 #'
-fit <- function(x, ...) {
+fit <- function(...) {
   UseMethod("fit")
 }
 
 
 #' @rdname fit-methods
 #'
-fit.formula <- function(x, data, model, ...) {
-  mf <- do.call(ModelFrame, list(x, data, strata = response(x), na.rm = FALSE))
-  fit(mf, model)
+fit.formula <- function(formula, data, model, ...) {
+  args <- list(formula, data, strata = response(formula), na.rm = FALSE)
+  mf <- do.call(ModelFrame, args)
+  fit(mf, model = model)
 }
 
 
@@ -49,7 +53,7 @@ fit.formula <- function(x, data, model, ...) {
 #'
 fit.matrix <- function(x, y, model, ...) {
   mf <- ModelFrame(x, y, strata = y, na.rm = FALSE)
-  fit(mf, model)
+  fit(mf, model = model)
 }
 
 
@@ -60,9 +64,9 @@ fit.matrix <- function(x, y, model, ...) {
 #' creation with the \code{\link[=ModelFrame]{weights}} argument in its
 #' constructor.
 #'
-fit.ModelFrame <- function(x, model, ...) {
+fit.ModelFrame <- function(input, model, ...) {
   model <- if (missing(model)) NullModel() else get_MLModel(model)
-  .fit(x, model)
+  .fit(input, model = model)
 }
 
 
@@ -72,40 +76,40 @@ fit.ModelFrame <- function(x, model, ...) {
 #' Variables in \code{recipe} specifications may be designated as case weights
 #' with the \code{\link{role_case}} function.
 #'
-fit.recipe <- function(x, model, ...) {
+fit.recipe <- function(input, model, ...) {
   model <- if (missing(model)) NullModel() else get_MLModel(model)
-  .fit(x, model)
+  .fit(ModelRecipe(input), model = model)
 }
 
 
 #' @rdname fit-methods
 #'
-fit.MLModel <- function(x, ...) {
-  fit(..., model = x)
+fit.MLModel <- function(model, ...) {
+  fit(..., model = model)
 }
 
 
 #' @rdname fit-methods
 #'
-fit.MLModelFunction <- function(x, ...) {
-  fit(x(), ...)
+fit.MLModelFunction <- function(model, ...) {
+  fit(model(), ...)
 }
 
 
-.fit <- function(x, ...) {
+.fit <- function(object, ...) {
   UseMethod(".fit")
 }
 
 
-.fit.MLModel <- function(x, inputs, ...) {
-  inputs_prep <- prep(inputs)
-  mf <- ModelFrame(inputs_prep, na.rm = FALSE)
+.fit.MLModel <- function(object, input, ...) {
+  input_prep <- prep(input)
+  mf <- ModelFrame(input_prep, na.rm = FALSE)
   y <- response(mf)
 
-  info <- data.frame(type = x@response_types, weights = x@weights)
+  info <- data.frame(type = object@response_types, weights = object@weights)
   is_response_types <- is_response(y, info$type)
   if (!any(is_response_types)) {
-    throw(TypeError(y, info$type, paste(x@name, "response variable")))
+    throw(TypeError(y, info$type, paste(object@name, "response variable")))
   }
   weights <- case_weights(mf)
   if (!all(info$weights[is_response_types]) || is.null(weights)) {
@@ -113,7 +117,7 @@ fit.MLModelFunction <- function(x, ...) {
     mf <- ModelFrame(mf, weights = 1, na.rm = FALSE)
   }
 
-  throw(check_packages(x@packages))
+  throw(check_packages(object@packages))
 
   params_env <- list2env(list(
     formula = formula(mf),
@@ -121,39 +125,40 @@ fit.MLModelFunction <- function(x, ...) {
     weights = case_weights(mf),
     y = y,
     nobs = nrow(mf),
-    nvars = nvars(mf, x)
+    nvars = nvars(mf, object)
   ), parent = new.env(parent = asNamespace("MachineShop")))
   environment(params_env$formula) <- params_env
 
-  args <- c(mget(c("formula", "data", "weights"), params_env), x@params)
+  args <- c(mget(c("formula", "data", "weights"), params_env), object@params)
 
-  do.call(x@fit, args, envir = params_env) %>%
-    MLModelFit(paste0(x@name, "Fit"), model = x, x = inputs_prep)
+  do.call(object@fit, args, envir = params_env) %>%
+    MLModelFit(paste0(object@name, "Fit"), model = object, input = input_prep)
 }
 
 
-.fit.ModelFrame <- function(x, model, ...) {
-  .fit(model, x)
+.fit.ModelFrame <- function(object, model, ...) {
+  .fit(model, input = object)
 }
 
 
-.fit.ModeledFrame <- function(x, ...) {
-  fit(as(x, "ModelFrame"), model = x@model)
+.fit.ModeledFrame <- function(object, ...) {
+  fit(as(object, "ModelFrame"), model = object@model)
 }
 
 
-.fit.ModeledRecipe <- function(x, ...) {
-  fit(as(x, "ModelRecipe"), model = x@model)
+.fit.ModelRecipe <- function(object, model, ...) {
+  .fit(model, input = object)
 }
 
 
-.fit.recipe <- function(x, model, ...) {
-  .fit(model, ModelRecipe(x))
+
+.fit.ModeledRecipe <- function(object, ...) {
+  fit(as(object, "ModelRecipe"), model = object@model)
 }
 
 
-.fit.TunedModeledRecipe <- function(x, ...) {
-  fit(as(x, "TunedModelRecipe"), model = x@model)
+.fit.TunedModeledRecipe <- function(object, ...) {
+  fit(as(object, "TunedModelRecipe"), model = object@model)
 }
 
 

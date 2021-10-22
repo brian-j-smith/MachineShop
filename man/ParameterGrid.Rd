@@ -11,9 +11,9 @@ ParameterGrid(...)
 
 \method{ParameterGrid}{param}(..., size = 3, random = FALSE)
 
-\method{ParameterGrid}{list}(x, size = 3, random = FALSE, ...)
+\method{ParameterGrid}{list}(object, size = 3, random = FALSE, ...)
 
-\method{ParameterGrid}{parameters}(x, size = 3, random = FALSE, ...)
+\method{ParameterGrid}{parameters}(object, size = 3, random = FALSE, ...)
 }
 \arguments{
 \item{...}{named \code{param} objects as defined in the \pkg{dials} package.}
@@ -25,8 +25,9 @@ construct the grid.}
 \item{random}{number of unique points to sample at random from the grid
 defined by \code{size}, or \code{FALSE} for all points.}
 
-\item{x}{list of named \code{param} objects or a
-\code{\link[dials]{parameters}} object.}
+\item{object}{list of named \code{param} objects or a
+\code{\link[dials]{parameters}} object.  This is a positional argument
+that must be given first in calls to its methods.}
 }
 \value{
 \code{ParameterGrid} class object that inherits from

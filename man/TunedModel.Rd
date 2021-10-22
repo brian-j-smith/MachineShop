@@ -5,7 +5,7 @@
 \title{Tuned Model}
 \usage{
 TunedModel(
-  model,
+  object,
   grid = MachineShop::settings("grid"),
   fixed = list(),
   control = MachineShop::settings("control"),
@@ -15,7 +15,7 @@ TunedModel(
 )
 }
 \arguments{
-\item{model}{\link[=models]{model} function, function name, or object
+\item{object}{\link[=models]{model} function, function name, or object
 defining the model to be tuned.}
 
 \item{grid}{single integer or vector of integers whose positions or names

@@ -50,8 +50,8 @@ predict.MLModelFit <- function(
   model <- as.MLModel(object)
   throw(check_packages(model@packages))
   obs <- response(object)
-  pred <- .predict(model, object, newdata, times = times, distr = distr,
-                   method = method, ...)
+  pred <- .predict(model, model_fit = object, newdata = newdata, times = times,
+                   distr = distr, method = method, ...)
   pred <- convert_prob(obs, pred)
   if (match.arg(type) == "response") {
     convert_response(obs, pred, cutoff = cutoff)
@@ -59,12 +59,14 @@ predict.MLModelFit <- function(
 }
 
 
-.predict <- function(x, ...) {
+.predict <- function(object, ...) {
   UseMethod(".predict")
 }
 
 
-.predict.MLModel <- function(x, object, newdata, ...) {
-  newdata <- predictor_frame(x, newdata)
-  x@predict(unMLModelFit(object), newdata, model = x, ...)
+.predict.MLModel <- function(object, model_fit, newdata, ...) {
+  object@predict(
+    unMLModelFit(model_fit), newdata = predictor_frame(object, newdata),
+    model = object, ...
+  )
 }

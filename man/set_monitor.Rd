@@ -4,10 +4,10 @@
 \alias{set_monitor}
 \title{Resampling Monitoring Control}
 \usage{
-set_monitor(x, progress = TRUE, verbose = FALSE)
+set_monitor(control, progress = TRUE, verbose = FALSE)
 }
 \arguments{
-\item{x}{\link[=controls]{control} object.}
+\item{control}{\link[=controls]{control} object.}
 
 \item{progress}{logical indicating whether to display a progress bar during
 resampling if a computing cluster is not registered or is registered with
@@ -17,7 +17,7 @@ the \pkg{doSNOW} package.}
 may be useful for trouble shooting.}
 }
 \value{
-Argument \code{x} updated with the supplied parameters.
+Argument \code{control} updated with the supplied parameters.
 }
 \description{
 Set parameters that control the monitoring of resample estimation of model

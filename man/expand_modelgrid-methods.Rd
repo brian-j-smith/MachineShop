@@ -9,35 +9,38 @@
 \alias{expand_modelgrid.TunedModel}
 \title{Model Tuning Grid Expansion}
 \usage{
-expand_modelgrid(x, ...)
+expand_modelgrid(...)
 
-\method{expand_modelgrid}{formula}(x, data, model, info = FALSE, ...)
+\method{expand_modelgrid}{formula}(formula, data, model, info = FALSE, ...)
 
 \method{expand_modelgrid}{matrix}(x, y, model, info = FALSE, ...)
 
-\method{expand_modelgrid}{ModelFrame}(x, model, info = FALSE, ...)
+\method{expand_modelgrid}{ModelFrame}(input, model, info = FALSE, ...)
 
-\method{expand_modelgrid}{recipe}(x, model, info = FALSE, ...)
+\method{expand_modelgrid}{recipe}(input, model, info = FALSE, ...)
 
-\method{expand_modelgrid}{TunedModel}(x, ..., info = FALSE)
+\method{expand_modelgrid}{TunedModel}(model, ..., info = FALSE)
 }
 \arguments{
-\item{x}{\link[=inputs]{input} specifying a relationship between model
-predictor and response variables.  Alternatively, a
-\code{\link{TunedModel}} object may be given first followed optionally by
-an input specification.}
+\item{...}{arguments passed from the generic function to its methods and from
+the \code{TunedModel} method to others.  The first arguments of
+\code{expand_modelgrid} methods are positional and, as such, must be
+given first in calls to them.}
 
-\item{...}{arguments passed to other methods.}
+\item{formula, data}{\link[=formula]{formula} defining the model predictor and
+response variables and a \link[=data.frame]{data frame} containing them.}
 
-\item{data}{\link[=data.frame]{data frame} containing observed predictors and
-outcomes.}
-
-\item{model}{\code{\link{TunedModel}} object.}
+\item{model}{\code{\link{TunedModel}} object.  Can be given first followed by
+any of the variable specifications.}
 
 \item{info}{logical indicating whether to return model-defined grid
 construction information rather than the grid values.}
 
-\item{y}{response variable.}
+\item{x, y}{\link{matrix} and object containing predictor and response
+variables.}
+
+\item{input}{\link[=inputs]{input} object defining and containing the model
+predictor and response variables.}
 }
 \value{
 A data frame of parameter values or \code{NULL} if data are required

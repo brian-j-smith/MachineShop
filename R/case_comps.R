@@ -4,7 +4,7 @@ case_comps <- function(object, ...) {
 
 
 case_comps.MLModel <- function(object, ...) {
-  case_comps(object@x, ...)
+  case_comps(object@input, ...)
 }
 
 

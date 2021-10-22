@@ -4,15 +4,15 @@
 \alias{set_predict}
 \title{Resampling Prediction Control}
 \usage{
-set_predict(x, times = NULL, distr = NULL, method = NULL)
+set_predict(control, times = NULL, distr = NULL, method = NULL)
 }
 \arguments{
-\item{x}{\link[=controls]{control} object.}
+\item{control}{\link[=controls]{control} object.}
 
 \item{times, distr, method}{arguments passed to \code{\link{predict}}.}
 }
 \value{
-Argument \code{x} updated with the supplied parameters.
+Argument \code{control} updated with the supplied parameters.
 }
 \description{
 Set parameters that control prediction during resample estimation of model

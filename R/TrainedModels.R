@@ -68,13 +68,13 @@ SelectedModel <- function(
 MLModelFunction(SelectedModel) <- NULL
 
 
-.fit.SelectedModel <- function(x, inputs, ...) {
-  models <- x@params$models
-  train_step <- resample_selection(models, identity, x@params, inputs,
+.fit.SelectedModel <- function(object, input, ...) {
+  models <- object@params$models
+  train_step <- resample_selection(models, identity, object@params, input,
                                    class = "SelectedModel")
   train_step$grid <- tibble(Model = factor(seq_along(models)))
   model <- models[[train_step$selected]]
-  push(do.call(TrainStep, train_step), fit(inputs, model = model))
+  push(do.call(TrainStep, train_step), fit(input, model = model))
 }
 
 
@@ -82,7 +82,7 @@ MLModelFunction(SelectedModel) <- NULL
 #'
 #' Model tuning over a grid of parameter values.
 #'
-#' @param model \link[=models]{model} function, function name, or object
+#' @param object \link[=models]{model} function, function name, or object
 #'   defining the model to be tuned.
 #' @param grid single integer or vector of integers whose positions or names
 #'   match the parameters in the model's pre-defined tuning grid if one exists
@@ -142,22 +142,22 @@ MLModelFunction(SelectedModel) <- NULL
 #' }
 #'
 TunedModel <- function(
-  model, grid = MachineShop::settings("grid"), fixed = list(),
+  object, grid = MachineShop::settings("grid"), fixed = list(),
   control = MachineShop::settings("control"), metrics = NULL,
   stat = MachineShop::settings("stat.Trained"),
   cutoff = MachineShop::settings("cutoff")
 ) {
 
-  if (missing(model)) {
-    model <- NULL
+  if (missing(object)) {
+    object <- NULL
     response_types <- settings("response_types")
     weights <- FALSE
   } else {
-    model <- if (is(model, "MLModel")) fget(model@name) else fget(model)
-    stopifnot(is(model, "MLModelFunction"))
-    model_call <- model()
-    response_types <- model_call@response_types
-    weights <- model_call@weights
+    object <- if (is(object, "MLModel")) fget(object@name) else fget(object)
+    stopifnot(is(object, "MLModelFunction"))
+    model <- object()
+    response_types <- model@response_types
+    weights <- model@weights
   }
 
   grid <- check_grid(grid)
@@ -183,7 +183,7 @@ TunedModel <- function(
       response_types = response_types,
       weights = weights,
       predictor_encoding = NA_character_,
-      params = list(model = model, grid = grid, fixed = fixed,
+      params = list(model = object, grid = grid, fixed = fixed,
                     control = get_MLControl(control), metrics = metrics,
                     stat = stat, cutoff = cutoff)
   )
@@ -193,13 +193,13 @@ TunedModel <- function(
 MLModelFunction(TunedModel) <- NULL
 
 
-.fit.TunedModel <- function(x, inputs, ...) {
-  params <- x@params
-  grid <- expand_modelgrid(x, inputs)
+.fit.TunedModel <- function(object, input, ...) {
+  params <- object@params
+  grid <- expand_modelgrid(object, input)
   models <- expand_model(list(params$model, grid))
-  train_step <- resample_selection(models, identity, params, inputs,
+  train_step <- resample_selection(models, identity, params, input,
                                    class = "TunedModel")
   train_step$grid <- tibble(Model = grid)
   model <- models[[train_step$selected]]
-  push(do.call(TrainStep, train_step), fit(inputs, model = model))
+  push(do.call(TrainStep, train_step), fit(input, model = model))
 }

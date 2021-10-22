@@ -113,7 +113,7 @@ setClass("MLModel",
     fit = "function",
     predict = "function",
     varimp = "function",
-    x = "ANY",
+    input = "ANY",
     train_steps = "ListOf"
   )
 )
