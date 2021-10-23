@@ -48,7 +48,7 @@ predict.MLModelFit <- function(
   throw(check_assignment(times))
 
   model <- as.MLModel(object)
-  require_namespaces(model@packages)
+  throw(check_packages(model@packages))
   obs <- response(object)
   pred <- .predict(model, object, newdata, times = times, distr = distr,
                    method = method, ...)

@@ -113,7 +113,7 @@ fit.MLModelFunction <- function(x, ...) {
     mf <- ModelFrame(mf, weights = 1, na.rm = FALSE)
   }
 
-  require_namespaces(x@packages)
+  throw(check_packages(x@packages))
 
   params_env <- list2env(list(
     formula = formula(mf),

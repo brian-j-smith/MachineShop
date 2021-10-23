@@ -84,11 +84,11 @@ step_spca <- function(
 new_step_spca <- function(..., sparsity, num_var, shrinkage, max_iter,
                           tol) {
 
-  require_namespaces("elasticnet")
+  throw(check_packages("elasticnet"))
 
   transform <- function(x, step) {
 
-    require_namespaces("elasticnet")
+    throw(check_packages("elasticnet"))
 
     num_comp <- min(step$num_comp, nrow(x))
     if (is.null(step$num_var)) {

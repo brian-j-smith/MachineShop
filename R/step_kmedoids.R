@@ -97,11 +97,11 @@ new_step_kmedoids <- function(
   ..., k, center, scale, method, metric, optimize, num_samp, samp_size
 ) {
 
-  require_namespaces("cluster")
+  throw(check_packages("cluster"))
 
   filter <- function(x, y, step) {
 
-    require_namespaces("cluster")
+    throw(check_packages("cluster"))
 
     if (ncol(x) < 2) {
       throw(LocalError("step_kmedoids requires 2 or more variables"))

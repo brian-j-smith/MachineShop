@@ -407,43 +407,6 @@ rand_int <- function(n = 1) {
 }
 
 
-require_namespaces <- function(packages) {
-  paren_pos <- regexpr("\\(([^)]*)\\)", packages)
-  paren_len <- attr(paren_pos, "match.length")
-
-  end_pos <- ifelse(paren_pos > 0, paren_pos - 1, nchar(packages))
-  package_names <- trimws(substr(packages, 1, end_pos))
-
-  package_errors <- function(x, msg, fix) {
-    if (any(x)) {
-      items <- packages[x]
-      item_names <- package_names[x]
-      throw(LocalError("Call ", label_items(msg, items), ".\n",
-                       "To address this issue, try running ", fix, "(",
-                       deparse1(item_names), ")."))
-    }
-  }
-
-  installed <- map_logi(requireNamespace, package_names, quietly = TRUE)
-  package_errors(!installed, "requires prior installation of package",
-                 "install.packages")
-
-  end_pos <- paren_pos + paren_len - 2
-  compat_versions <- strsplit(substr(packages, paren_pos + 1, end_pos), " ")
-
-  compatible <- map_logi(function(package_name, compat_version) {
-    if (length(compat_version) == 2) {
-      version <- packageVersion(package_name)
-      eval(call(compat_version[1], version, compat_version[2]))
-    } else TRUE
-  }, package_names, compat_versions)
-  package_errors(!compatible, "requires updated package version",
-                 "update.packages")
-
-  invisible(installed & compatible)
-}
-
-
 sample_params <- function(x, size = NULL, replace = FALSE) {
   stopifnot(is.list(x))
 

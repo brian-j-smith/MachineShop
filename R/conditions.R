@@ -289,6 +289,45 @@ check_numeric <- function(
 }
 
 
+check_packages <- function(x) {
+  paren_pos <- regexpr("\\(([^)]*)\\)", x)
+  paren_len <- attr(paren_pos, "match.length")
+
+  end_pos <- ifelse(paren_pos > 0, paren_pos - 1, nchar(x))
+  pkg_names <- trimws(substr(x, 1, end_pos))
+
+  check <- function(failures, msg, pkgs_fun) {
+    if (any(failures)) {
+      x <- x[failures]
+      pkg_names <- pkg_names[failures]
+      Error("Call ", label_items(msg, x), ".\n",
+            "To address this issue, try running ", pkgs_fun, "(",
+            deparse1(pkg_names), ").")
+    }
+  }
+
+  installed <- map_logi(requireNamespace, pkg_names, quietly = TRUE)
+  result <- check(!installed, "requires prior installation of package",
+                  "install.packages")
+  if (is(result, "error")) return(result)
+
+  end_pos <- paren_pos + paren_len - 2
+  compat_versions <- strsplit(substr(x, paren_pos + 1, end_pos), " ")
+
+  compatible <- map_logi(function(pkg_name, compat_version) {
+    if (length(compat_version) == 2) {
+      version <- packageVersion(pkg_name)
+      eval(call(compat_version[1], version, compat_version[2]))
+    } else TRUE
+  }, pkg_names, compat_versions)
+  result <- check(!compatible, "requires updated package version",
+                  "update.packages")
+  if (is(result, "error")) return(result)
+
+  x
+}
+
+
 check_stat <- function(x, convert = FALSE) {
   result <- try({
     stat <- fget(x)

@@ -105,7 +105,7 @@ VarImp.numeric <- function(object, ...) {
 varimp <- function(object, method = c("permute", "model"), scale = TRUE, ...) {
   stopifnot(is(object, "MLModelFit"))
   model <- as.MLModel(object)
-  require_namespaces(model@packages)
+  throw(check_packages(model@packages))
 
   choices <- eval(formals(sys.function())$method)
   if (identical(method, choices)) {
