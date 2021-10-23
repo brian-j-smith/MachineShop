@@ -243,7 +243,7 @@ MachineShop_global <- as.environment(list(
         "tpr",
         "weighted_kappa2"
       ),
-      check = function(x) check_const_setting(x, "metrics")
+      check = function(x) throw(check_const_setting(x, "metrics"))
     ),
 
     metrics.ConfusionMatrix = list(
@@ -353,7 +353,7 @@ MachineShop_global <- as.environment(list(
         "XGBLinearModel",
         "XGBTreeModel"
       ),
-      check = function(x) check_const_setting(x, "models")
+      check = function(x) throw(check_const_setting(x, "models"))
     ),
 
     print_max = list(
@@ -399,7 +399,7 @@ MachineShop_global <- as.environment(list(
         "binary", "BinomialVariate", "DiscreteVariate", "factor", "matrix",
         "NegBinomialVariate", "numeric", "ordered", "PoissonVariate", "Surv"
       ),
-      check = function(x) check_const_setting(x, "response_types")
+      check = function(x) throw(check_const_setting(x, "response_types"))
     ),
 
     RHS.formula = list(
@@ -414,7 +414,7 @@ MachineShop_global <- as.environment(list(
         "cosh", "sinh", "tanh", "acosh", "asinh", "atanh",
         "lgamma", "gamma", "digamma", "trigamma"
       )),
-      check = function(x) check_const_setting(x, "RHS.formula")
+      check = function(x) throw(check_const_setting(x, "RHS.formula"))
     ),
 
     stat.Curve = list(

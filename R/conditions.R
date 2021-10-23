@@ -41,9 +41,10 @@ LocalError <- function(...) {
 }
 
 
-LocalWarning <- function(...) {
+LocalWarning <- function(..., value = NULL) {
   warningCondition(
     message = paste0(...),
+    value = value,
     class = "LocalWarning"
   )
 }
@@ -60,9 +61,10 @@ TypeError <- function(value, expected, subject = character(), call = FALSE) {
 }
 
 
-Warning <- function(..., call = FALSE) {
+Warning <- function(..., value = NULL, call = FALSE) {
   warningCondition(
     message = paste0(...),
+    value = value,
     call = select_call(call, sys.call(-1))
   )
 }
@@ -102,6 +104,7 @@ throw <- function(x, call = TRUE, ...) {
 
 .throw.LocalWarning <- function(x, ...) {
   warning(x$message, call. = FALSE)
+  x$value
 }
 
 
@@ -118,6 +121,7 @@ throw <- function(x, call = TRUE, ...) {
     x$call <- select_call(call, parent_call, conditionCall(x))
     warning(x)
   }
+  x$value
 }
 
 
@@ -191,16 +195,16 @@ check_character <- function(x, ...) {
 
 check_const_setting <- function(x, name) {
   if (!identical(x, x <- .global_defaults[[name]])) {
-    throw(LocalWarning("MachineShop '", name, "' setting cannot be changed."))
-  }
-  x
+    LocalWarning("MachineShop '", name, "' setting cannot be changed.",
+                 value = x)
+  } else x
 }
 
 
 check_equal_weights <- function(x) {
   if (length(x) && any(diff(x) != 0)) {
-    Warning("Model weights are not supported and will be ignored.")
-  }
+    Warning("Model weights are not supported and will be ignored.", value = x)
+  } else x
 }
 
 
