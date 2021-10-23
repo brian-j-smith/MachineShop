@@ -15,7 +15,7 @@
 \alias{print.Resamples}
 \alias{print.SelectedInput}
 \alias{print.SurvMatrix}
-\alias{print.SurvMeans}
+\alias{print.SurvTimes}
 \alias{print.TrainStep}
 \alias{print.TunedInput}
 \alias{print.VarImp}
@@ -47,7 +47,7 @@
 
 \method{print}{SurvMatrix}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{SurvMeans}(x, n = MachineShop::settings("print_max"), ...)
+\method{print}{SurvTimes}(x, n = MachineShop::settings("print_max"), ...)
 
 \method{print}{TrainStep}(x, n = MachineShop::settings("print_max"), ...)
 

@@ -177,7 +177,7 @@ setMetricMethod_Resamples <- function(f) {
 setMetricMethod_Surv_numeric <- function(f) {
   setMetricMethod(f, c("Surv", "numeric"),
     function(observed, predicted, ...) {
-      metric_SurvMean(get(f), observed, predicted, ...)
+      metric_SurvTimes(get(f), observed, predicted, ...)
     }
   )
 }
@@ -231,7 +231,7 @@ metric_SurvMatrix <- function(
 }
 
 
-metric_SurvMean <- function(FUN, observed, predicted, weights = NULL, ...) {
+metric_SurvTimes <- function(FUN, observed, predicted, weights = NULL, ...) {
   events <- observed[, "status"] == 1
   FUN(time(observed[events]), predicted[events], weights = weights[events], ...)
 }

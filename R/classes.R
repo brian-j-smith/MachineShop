@@ -61,10 +61,13 @@ setClass("SurvProbs",
 )
 
 
-setClass("SurvMeans",
+setClass("SurvTimes",
   contains = "numeric",
   slots = c(distr = "character")
 )
+
+
+setClass("SurvMeans", contains = "SurvTimes")
 
 
 #################### Tuning Grids ####################

@@ -55,7 +55,7 @@ SurvRegModel <- function(
         Hmisc::Mean(object)(predict(object, newdata = newdata, type = "lp"))
       }
       if (is(pred, "survest.psm")) pred <- as.matrix(pred$surv)
-      structure(pred, surv_distr = object$dist)
+      SurvPrediction(pred, times = times, distr = object$dist)
     },
     varimp = function(object, base = exp(1), ...) {
       varimp_pval(object, base = base)

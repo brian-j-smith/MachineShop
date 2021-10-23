@@ -13,7 +13,7 @@
 \alias{[,Resamples,ANY,missing,ANY-method}
 \alias{[,Resamples,missing,missing,ANY-method}
 \alias{[,SurvMatrix,ANY,ANY,ANY-method}
-\alias{[,SurvMeans,ANY,missing,missing-method}
+\alias{[,SurvTimes,ANY,missing,missing-method}
 \title{Extract Elements of an Object}
 \usage{
 \method{[}{BinomialVariate}(x, i, j, ..., drop = FALSE)
@@ -38,7 +38,7 @@
 
 \S4method{[}{SurvMatrix,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{SurvMeans,ANY,missing,missing}(x, i)
+\S4method{[}{SurvTimes,ANY,missing,missing}(x, i)
 }
 \arguments{
 \item{x}{object from which to extract elements.}

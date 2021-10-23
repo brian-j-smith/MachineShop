@@ -496,7 +496,7 @@ setShowDefault("SurvMatrix")
 
 #' @rdname print-methods
 #'
-print.SurvMeans <- function(x, n = MachineShop::settings("print_max"), ...) {
+print.SurvTimes <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_title(x, ...)
   print_items(as(x, "numeric"), n = n)
   cat("Distribution:", x@distr, "\n")
@@ -504,7 +504,7 @@ print.SurvMeans <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setShowDefault("SurvMeans")
+setShowDefault("SurvTimes")
 
 
 print.TabularArray <- function(x, n = MachineShop::settings("print_max"), ...) {

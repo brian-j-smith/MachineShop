@@ -72,20 +72,6 @@ setMethod("convert_prob", c("numeric", "matrix"),
 )
 
 
-setMethod("convert_prob", c("Surv", "matrix"),
-  function(object, x, times, ...) {
-    SurvProbs(x, times, distr = attr(x, "surv_distr"))
-  }
-)
-
-
-setMethod("convert_prob", c("Surv", "numeric"),
-  function(object, x, ...) {
-    SurvMeans(x, distr = attr(x, "surv_distr"))
-  }
-)
-
-
 setGeneric("convert_response",
   function(object, x, ...) standardGeneric("convert_response")
 )

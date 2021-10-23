@@ -11,9 +11,9 @@ predict.Surv <- function(
   } else {
     match.arg(distr, c("empirical", "exponential", "rayleigh", "weibull"))
   }
-  structure(
+  SurvPrediction(
     .predict.Surv(object, ..., times = times, distr = distr, weights = weights),
-    surv_distr = distr
+    times = times, distr = distr
   )
 }
 
@@ -273,7 +273,7 @@ get_surv_distr <- function(distr, observed, predicted) {
       pred_distr <- predicted@distr
       default_distr <- settings("distr.SurvProbs")
     } else {
-      pred_distr <- if (is(predicted, "SurvMeans")) predicted@distr
+      pred_distr <- if (is(predicted, "SurvTimes")) predicted@distr
       default_distr <- settings("distr.SurvMeans")
     }
     match.arg(

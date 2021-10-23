@@ -196,7 +196,17 @@ SurvProbs <- function(data = NA, times = NULL, distr = NULL) {
 }
 
 
-SurvMeans <- function(x = numeric(), distr = NULL) {
+SurvMeans <- function(...) {
+  new("SurvMeans", SurvTimes(...))
+}
+
+
+SurvTimes <- function(x = numeric(), distr = NULL, ...) {
   if (is.null(distr)) distr <- NA_character_
-  new("SurvMeans", x, distr = distr)
+  new("SurvTimes", x, distr = distr)
+}
+
+
+SurvPrediction <- function(object, ...) {
+  (if (is.matrix(object)) SurvProbs else SurvMeans)(object, ...)
 }

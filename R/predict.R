@@ -52,7 +52,7 @@ predict.MLModelFit <- function(
   obs <- response(object)
   pred <- .predict(model, object, newdata, times = times, distr = distr,
                    method = method, ...)
-  pred <- convert_prob(obs, pred, times = times)
+  pred <- convert_prob(obs, pred)
   if (match.arg(type) == "response") {
     convert_response(obs, pred, cutoff = cutoff)
   } else pred

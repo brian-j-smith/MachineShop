@@ -142,8 +142,8 @@ setMethod("[", c(x = "SurvMatrix", i = "ANY", j = "ANY", drop = "ANY"),
 
 #' @rdname extract-methods
 #'
-setMethod("[", c(x = "SurvMeans", i = "ANY", j = "missing", drop = "missing"),
+setMethod("[", c(x = "SurvTimes", i = "ANY", j = "missing", drop = "missing"),
   function(x, i) {
-    new("SurvMeans", asS3(x)[i], distr = x@distr)
+    new(class(x), asS3(x)[i], distr = x@distr)
   }
 )

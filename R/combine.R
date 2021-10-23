@@ -220,7 +220,7 @@ c.SurvMatrix <- function(...) {
 }
 
 
-c.SurvMeans <- function(...) {
+c.SurvTimes <- function(...) {
   args <- list(...)
   x <- NextMethod()
   class <- class(args[[1]])
