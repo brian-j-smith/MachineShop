@@ -1,5 +1,4 @@
-context("Global Settings")
-
+## Global Settings
 
 test_that("settings changes and views", {
   skip_if_not(TEST_ALL)
@@ -114,4 +113,5 @@ test_that("settings changes and views", {
 
   settings("reset")
   expect_identical(settings(), presets)
+
 })

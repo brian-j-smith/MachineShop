@@ -1,8 +1,7 @@
-context("SuperModel")
-
 test_that("model fitting", {
   skip_if_not(TEST_MODEL_FITTING)
   with_parallel({
+
     model <- SuperModel(GBMModel, SVMRadialModel, KNNModel)
     expect_output(test_model_binary(model))
     expect_output(test_model_factor(model))
@@ -13,5 +12,6 @@ test_that("model fitting", {
 
     model <- SuperModel(GBMModel, GLMNetModel(lambda = 0.01))
     expect_output(test_model_Surv(model))
+
   })
 })

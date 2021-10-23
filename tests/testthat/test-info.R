@@ -1,13 +1,14 @@
-context("Metric and Model Information")
+## Metric and Model Information
 
-
-modelinfo_names <- function(...) names(modelinfo(...))
-metricinfo_names <- function(...) names(metricinfo(...))
-
-
-test_that("binary outcomes", {
+test_that("test response types", {
   skip_if_not(TEST_ALL)
   with_parallel({
+
+    modelinfo_names <- function(...) names(modelinfo(...))
+    metricinfo_names <- function(...) names(metricinfo(...))
+
+
+    ## binary response
 
     library(MASS)
 
@@ -35,13 +36,8 @@ test_that("binary outcomes", {
     expect_setequal(modelinfo_names(obs, CoxModel, "GBMModel", GLMModel),
                     c("GBMModel", "GLMModel"))
 
-  })
-})
 
-
-test_that("category outcomes", {
-  skip_if_not(TEST_ALL)
-  with_parallel({
+    ## categorical  response
 
     df <- iris
     fo <- Species ~ .
@@ -67,13 +63,8 @@ test_that("category outcomes", {
     expect_setequal(modelinfo_names(obs, CoxModel, "GBMModel", GLMNetModel),
                     c("GBMModel", "GLMNetModel"))
 
-  })
-})
 
-
-test_that("numeric outcomes", {
-  skip_if_not(TEST_ALL)
-  with_parallel({
+    ## numeric response
 
     df <- ICHomes
     fo <- sale_amount ~ .
@@ -97,13 +88,8 @@ test_that("numeric outcomes", {
     expect_setequal(modelinfo_names(obs, CoxModel, "GBMModel", GLMModel),
                     c("GBMModel", "GLMModel"))
 
-  })
-})
 
-
-test_that("survival outcomes", {
-  skip_if_not(TEST_ALL)
-  with_parallel({
+    ## survival response
 
     library(MASS)
 

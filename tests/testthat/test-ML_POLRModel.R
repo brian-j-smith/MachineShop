@@ -1,10 +1,7 @@
-model <- "POLRModel"
-
-context(model)
-
 test_that("model fitting", {
   skip_if_not(TEST_MODEL_FITTING)
   with_parallel({
+    model <- "POLRModel"
     expect_error(test_model_binary(model))
     expect_error(test_model_factor(model))
     expect_error(test_model_numeric(model))

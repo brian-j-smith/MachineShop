@@ -1,5 +1,4 @@
-context("Combine Methods")
-
+## Combine Methods
 
 test_that("object combinations", {
   skip_if_not(TEST_ALL)
