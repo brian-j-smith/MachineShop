@@ -27,6 +27,7 @@ setMethod("convert_prob", c("factor", "array"),
 
 setMethod("convert_prob", c("factor", "matrix"),
   function(object, x, ...) {
+    stopifnot(ncol(x) > 0)
     if (nlevels(object) == 2) {
       convert_prob(object, x[, ncol(x)])
     } else {
