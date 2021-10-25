@@ -49,7 +49,7 @@ BootControl <- function(
   samples <- check_integer(samples, bounds = c(1, Inf), size = 1)
   throw(check_assignment(samples))
 
-  new_control("MLBootControl",
+  new_control("BootControl",
     name = "BootControl", label = "Bootstrap Resampling",
     samples = samples, weights = weights, seed = seed
   ) %>% set_monitor %>% set_strata %>%
@@ -81,7 +81,7 @@ BootControl <- function(
 BootOptimismControl <- function(
   samples = 25, weights = TRUE, seed = sample(.Machine$integer.max, 1), ...
 ) {
-  new_control("MLBootOptimismControl",
+  new_control("BootOptimismControl",
     BootControl(samples = samples, ...),
     name = "BootOptimismControl",
     label = "Optimism-Corrected Bootstrap Resampling",
@@ -118,7 +118,7 @@ CVControl <- function(
   repeats <- check_integer(repeats, bounds = c(1, Inf), size = 1)
   throw(check_assignment(repeats))
 
-  new_control("MLCVControl",
+  new_control("CVControl",
     name = "CVControl", label = "K-Fold Cross-Validation",
     folds = folds, repeats = repeats, weights = weights, seed = seed
   ) %>% set_monitor %>% set_strata %>%
@@ -145,7 +145,7 @@ CVOptimismControl <- function(
   folds = 10, repeats = 1, weights = TRUE,
   seed = sample(.Machine$integer.max, 1), ...
 ) {
-  new("MLCVOptimismControl",
+  new("CVOptimismControl",
     CVControl(folds = folds, repeats = repeats, ...),
     name = "CVOptimismControl",
     label = "Optimism-Corrected K-Fold Cross-Validation",
@@ -171,7 +171,7 @@ OOBControl <- function(
   samples <- check_integer(samples, bounds = c(1, Inf), size = 1)
   throw(check_assignment(samples))
 
-  new_control("MLOOBControl",
+  new_control("OOBControl",
     name = "OOBControl", label = "Out-of-Bootstrap Resampling",
     samples = samples, weights = weights, seed = seed
   ) %>% set_monitor %>% set_strata %>%
@@ -200,7 +200,7 @@ SplitControl <- function(
   prop <- check_numeric(prop, bounds = c(0, 1), include = FALSE, size = 1)
   throw(check_assignment(prop))
 
-  new_control("MLSplitControl",
+  new_control("SplitControl",
     name = "SplitControl", label = "Split Training and Test Samples",
     prop = prop, weights = weights, seed = seed
   ) %>% set_strata %>% dep_predictargs(...) %>% dep_strataargs(...)
@@ -225,7 +225,7 @@ SplitControl <- function(
 TrainControl <- function(
   weights = TRUE, seed = sample(.Machine$integer.max, 1), ...
 ) {
-  new_control("MLTrainControl",
+  new_control("TrainControl",
     name = "TrainControl", label = "Training Resubstitution",
     weights = weights, seed = seed
   ) %>% dep_predictargs(...) %>% dep_strataargs(...)

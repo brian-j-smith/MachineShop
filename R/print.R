@@ -122,73 +122,35 @@ print.ListOf <- function(x, n = MachineShop::settings("print_max"), ...) {
 setShowDefault("ListOf")
 
 
-print.MLControl <- function(x, ...) {
-  print_params <- function(x, labels, title) {
-    is_set <- !map_logi(is.null, x[names(labels)])
-    if (any(is_set)) {
-      cat(title, "\n", sep = "")
-      for (name in names(labels)[is_set]) {
-        cat("  ", labels[name], ": ", toString(x[[name]]), "\n", sep = "")
-      }
-    }
-  }
-  labels <- c("times" = "Survival times",
-              "distr" = "Distribution",
-              "method" = "Method")
-  print_params(x@predict, labels, "Prediction parameters")
-  labels <- c("breaks" = "Breaks",
-              "nunique" = "Unique numeric threshold",
-              "prop" = "Minimum proportion",
-              "size" = "Minimum size")
-  print_params(x@strata, labels, "Stratification parameters")
-  monitor <- x@monitor[map_logi(isTRUE, x@monitor)]
-  if (length(monitor)) cat("Monitoring:", toString(names(monitor)), "\n")
-  cat("Seed:", x@seed, "\n")
-  invisible(x)
-}
-
-
 setShowDefault("MLControl")
 
 
-print.MLBootControl <- function(x, ...) {
-  print_controltitle(x, ...)
-  cat("Samples: ", x@samples, "\n", sep = "")
-  NextMethod()
-  invisible(x)
+print.BootControl <- function(x, ...) {
+  subtext <- paste0("Samples: ", x@samples, "\n")
+  print_control(x, subtext, ...)
 }
 
 
-print.MLCVControl <- function(x, ...) {
-  print_controltitle(x, ...)
-  cat("Folds: ", x@folds, "\n",
-      "Repeats: ", x@repeats, "\n",
-      sep = "")
-  NextMethod()
-  invisible(x)
+print.CVControl <- function(x, ...) {
+  subtext <- paste0("Folds: ", x@folds, "\nRepeats: ", x@repeats, "\n")
+  print_control(x, subtext, ...)
 }
 
 
-print.MLOOBControl <- function(x, ...) {
-  print_controltitle(x, ...)
-  cat("Samples: ", x@samples, "\n", sep = "")
-  NextMethod()
-  invisible(x)
+print.OOBControl <- function(x, ...) {
+  subtext <- paste0("Samples: ", x@samples, "\n")
+  print_control(x, subtext, ...)
 }
 
 
-print.MLSplitControl <- function(x, ...) {
-  print_controltitle(x, ...)
-  cat("Training proportion: ", x@prop, "\n", sep = "")
-  NextMethod()
-  invisible(x)
+print.SplitControl <- function(x, ...) {
+  subtext <- paste0("Training proportion: ", x@prop, "\n")
+  print_control(x, subtext, ...)
 }
 
 
-print.MLTrainControl <- function(x, ...) {
-  print_controltitle(x, ...)
-  NextMethod()
-  invisible(x)
+print.TrainControl <- function(x, ...) {
+  print_control(x, ...)
 }
 
 
@@ -605,12 +567,30 @@ setShowDefault("VarImp")
 format_len <- function(x) format(x, big.mark = ",")
 
 
-print_controltitle <- function(x, ...) {
-  print_title("MLControl", ...)
+print_control <- function(x, subtext = NULL, ...) {
+  print_title(x, ...)
   cat("\n",
-      "Name: ", x@name, "\n",
+      "Control name: ", x@name, "\n",
       "Label: ", x@label, "\n",
       sep = "")
+  cat(subtext)
+  print_params(x@predict, labels = c(
+    times = "Survival time",
+    distr = "Distribution",
+    method = "Method"
+  ), "Prediction parameters")
+  print_params(x@strata, labels = c(
+    breaks = "Breaks",
+    nunique = "Unique numeric threshold",
+    prop = "Minimum proportion",
+    size = "Minimum size"
+  ), "Stratification parameters")
+  monitor <- x@monitor[map_logi(isTRUE, x@monitor)]
+  if (length(monitor)) {
+    print_items(names(monitor), prefix = "Monitoring: ", exdent = 2)
+  }
+  cat("Seed: ", x@seed, "\n", sep = "")
+  invisible(x)
 }
 
 
@@ -636,7 +616,9 @@ print_items.default <- function(x, ...) {
 }
 
 
-print_items.character <- function(x, n = Inf, prefix = "", exdent = 0, ...) {
+print_items.character <- function(
+  x, n = Inf, prefix = "", indent = 0, exdent = 0, ...
+) {
   diff <- length(x) - n
   str <- if (diff > 0) {
     paste0(toString(head(x, n)), "... with ", format_len(diff), " more")
@@ -644,7 +626,8 @@ print_items.character <- function(x, n = Inf, prefix = "", exdent = 0, ...) {
     toString(x)
   }
   writeLines(strwrap(
-    str, initial = prefix, width = getOption("width"), exdent = exdent
+    str, initial = prefix, width = getOption("width"), indent = indent,
+    exdent = exdent
   ))
 }
 
@@ -732,20 +715,34 @@ print_items.tbl <- function(x, n = Inf, n_extra = 10 * n, ...) {
 
 
 print_modelinfo <- function(x, trained = FALSE) {
+  cat("\n")
   info_list <- modelinfo(x)
   if (length(info_list)) {
     info <- info_list[[1]]
-    cat("\n",
-        "Model name: ", names(info_list), "\n",
+    cat("Model name: ", names(info_list), "\n",
         "Label: ", if (trained) "Trained ", info$label, "\n",
         sep = "")
-    print_items(label_items("Package", info$packages), exdent = 2)
-    print_items(label_items("Response type", info$response_types), exdent = 2)
-    print_items(paste("Case weights support:", toString(info$weights)),
-                exdent = 2)
-    cat("Tuning grid: ", info$grid, "\n",
-        "Variable importance: ", info$varimp, "\n",
-        sep = "")
+    print_params(info, labels = c(
+      packages = "Package",
+      response_types = "Response type",
+      weights = "Case weights support",
+      grid = "Tuning grid",
+      varimp = "Variable importance"
+    ))
+  }
+}
+
+
+print_params <- function(x, labels, title = NULL) {
+  label_names <- names(labels)
+  nzlengths <- lengths(x[label_names]) > 0
+  if (any(nzlengths)) {
+    indent <- 2 * (length(title) > 0)
+    if (indent) cat(title, "\n", sep = "")
+    for (name in label_names[nzlengths]) {
+      print_items(label_items(labels[name], x[[name]]), indent = indent,
+                  exdent = 2)
+    }
   }
 }
 

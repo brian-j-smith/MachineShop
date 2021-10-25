@@ -133,7 +133,7 @@ diff.Resamples <- function(x, ...) {
 #'
 t.test.PerformanceDiff <- function(x, adjust = "holm", ...)
 {
-  vadj <- if (is(x@control, "MLCVControl")) 1 / (x@control@folds - 1) else 0
+  vadj <- if (is(x@control, "CVControl")) 1 / (x@control@folds - 1) else 0
 
   t_test <- function(x) {
     x <- na.omit(x)

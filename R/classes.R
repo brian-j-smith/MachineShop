@@ -271,18 +271,18 @@ setClass("MLControl",
 )
 
 
-setClass("MLBootControl",
+setClass("BootControl",
   contains = "MLControl",
   slots = c(samples = "integer")
 )
 
 
-setClass("MLBootOptimismControl",
-  contains = "MLBootControl"
+setClass("BootOptimismControl",
+  contains = "BootControl"
 )
 
 
-setClass("MLCVControl",
+setClass("CVControl",
   contains = "MLControl",
   slots = c(
     folds = "integer",
@@ -291,24 +291,24 @@ setClass("MLCVControl",
 )
 
 
-setClass("MLCVOptimismControl",
-  contains = "MLCVControl"
+setClass("CVOptimismControl",
+  contains = "CVControl"
 )
 
 
-setClass("MLOOBControl",
+setClass("OOBControl",
   contains = "MLControl",
   slots = c(samples = "integer")
 )
 
 
-setClass("MLSplitControl",
+setClass("SplitControl",
   contains = "MLControl",
   slots = c(prop = "numeric")
 )
 
 
-setClass("MLTrainControl",
+setClass("TrainControl",
   contains = "MLControl"
 )
 

@@ -159,7 +159,7 @@ performance.MLControl <- function(x, resamples, ...) {
 }
 
 
-performance.MLBootOptimismControl <- function(x, resamples, ...) {
+performance.BootOptimismControl <- function(x, resamples, ...) {
   test_perf_list <- list()
   boot_perf_list <- list()
   resamples_split <- split(resamples, resamples$Resample)
@@ -182,7 +182,7 @@ performance.MLBootOptimismControl <- function(x, resamples, ...) {
 }
 
 
-performance.MLCVOptimismControl <- function(x, resamples, ...) {
+performance.CVOptimismControl <- function(x, resamples, ...) {
   test_perf <- NextMethod()
 
   resamples_split <- split(resamples, ceiling(resamples$Resample / x@folds))

@@ -168,7 +168,7 @@ Resamples.list <- function(object, ...) {
 }
 
 
-.resample.MLBootControl <- function(
+.resample.BootControl <- function(
   control, input, model, progress_index = 0, ...
 ) {
   presets <- settings()
@@ -180,7 +180,7 @@ Resamples.list <- function(object, ...) {
   )
   seeds <- rand_int(length(splits))
 
-  is_optimism_control <- is(control, "MLBootOptimismControl")
+  is_optimism_control <- is(control, "BootOptimismControl")
   if (is_optimism_control) {
     train_pred <- subsample(input, input, model, control)$Predicted
   }
@@ -224,7 +224,7 @@ Resamples.list <- function(object, ...) {
 }
 
 
-.resample.MLCVControl <- function(
+.resample.CVControl <- function(
   control, input, model, progress_index = 0, ...
 ) {
   presets <- settings()
@@ -246,7 +246,7 @@ Resamples.list <- function(object, ...) {
   )
   seeds <- rand_int(length(splits))
 
-  is_optimism_control <- is(control, "MLCVOptimismControl")
+  is_optimism_control <- is(control, "CVOptimismControl")
 
   snow_opts <- list()
   progress <- function(n) NULL
@@ -298,7 +298,7 @@ Resamples.list <- function(object, ...) {
 }
 
 
-.resample.MLOOBControl <- function(
+.resample.OOBControl <- function(
   control, input, model, progress_index = 0, ...
 ) {
   presets <- settings()
@@ -339,7 +339,7 @@ Resamples.list <- function(object, ...) {
 }
 
 
-.resample.MLSplitControl <- function(control, input, model, ...) {
+.resample.SplitControl <- function(control, input, model, ...) {
   set.seed(control@seed)
   split <- rsample_split(
     function(...) initial_split(..., prop = control@prop),
@@ -352,7 +352,7 @@ Resamples.list <- function(object, ...) {
 }
 
 
-.resample.MLTrainControl <- function(control, input, model, ...) {
+.resample.TrainControl <- function(control, input, model, ...) {
   set.seed(control@seed)
   Resamples(subsample(input, input, model, control), control = control)
 }
