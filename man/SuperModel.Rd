@@ -12,11 +12,13 @@ SuperModel(
 )
 }
 \arguments{
-\item{...}{\link[=models]{model} functions, function names, objects, or
-vector of these to serve as base learners.}
+\item{...}{\link[=models]{model} functions, function names, objects; other
+objects that can be \link[=as.MLModel]{coerced} to models; or vector of
+these to serve as base learners.}
 
 \item{model}{\link[=models]{model} function, function name, or object
-defining the super model.}
+defining the super model; or another object that can be
+\link[=as.MLModel]{coerced} to the model.}
 
 \item{control}{\link[=controls]{control} function, function name, or object
 defining the resampling method to be employed for the estimation of base

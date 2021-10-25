@@ -3,6 +3,7 @@
 \name{as.MLModel}
 \alias{as.MLModel}
 \alias{as.MLModel.MLModelFit}
+\alias{as.MLModel.ModeledInput}
 \alias{as.MLModel.model_spec}
 \title{Coerce to an MLModel}
 \usage{
@@ -10,11 +11,14 @@ as.MLModel(x, ...)
 
 \method{as.MLModel}{MLModelFit}(x, ...)
 
+\method{as.MLModel}{ModeledInput}(x, ...)
+
 \method{as.MLModel}{model_spec}(x, ...)
 }
 \arguments{
-\item{x}{model \link{fit} result or \link[parsnip:model_spec]{model
-specification} from the \pkg{parsnip} package.}
+\item{x}{model \link{fit} result, \link[=ModeledInput]{modeled input}, or
+\link[parsnip:model_spec]{model specification} from the \pkg{parsnip}
+package.}
 
 \item{...}{arguments passed to other methods.}
 }

@@ -15,9 +15,11 @@
 #'   variables.
 #' @param input \link[=inputs]{input} object defining and containing the model
 #'   predictor and response variables.
-#' @param model \link[=models]{model} function, function name, or object.  Can
-#'   be given first followed by any of the variable specifications, and can be
-#'   omitted in the case of \link[=ModeledInput]{modeled inputs}.
+#' @param model \link[=models]{model} function, function name, or object; or
+#'   another object that can be \link[=as.MLModel]{coerced} to a model.  A model
+#'   can be given first followed by any of the variable specifications, and the
+#'   argument can be omitted altogether in the case of
+#'   \link[=ModeledInput]{modeled inputs}.
 #'
 #' @return \code{MLModelFit} class object.
 #'
@@ -65,7 +67,7 @@ fit.matrix <- function(x, y, model, ...) {
 #' constructor.
 #'
 fit.ModelFrame <- function(input, model, ...) {
-  model <- if (missing(model)) NullModel() else get_MLModel(model)
+  model <- if (missing(model)) NullModel() else as.MLModel(model)
   .fit(input, model = model)
 }
 
@@ -77,7 +79,7 @@ fit.ModelFrame <- function(input, model, ...) {
 #' with the \code{\link{role_case}} function.
 #'
 fit.recipe <- function(input, model, ...) {
-  model <- if (missing(model)) NullModel() else get_MLModel(model)
+  model <- if (missing(model)) NullModel() else as.MLModel(model)
   .fit(ModelRecipe(input), model = model)
 }
 
@@ -92,7 +94,7 @@ fit.MLModel <- function(model, ...) {
 #' @rdname fit-methods
 #'
 fit.MLModelFunction <- function(model, ...) {
-  fit(model(), ...)
+  fit(as.MLModel(model), ...)
 }
 
 

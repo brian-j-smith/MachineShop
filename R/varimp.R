@@ -197,7 +197,7 @@ varimp_permute <- function(
   sims <- foreach(
     pred_names = work_pred_names[lengths(work_pred_names) > 0],
     .combine = cbind,
-    .export = c("get_MLMetric", "get_perf_metrics", "permute_int"),
+    .export = c("as.MLMetric", "get_perf_metrics", "permute_int"),
     .packages = "MachineShop"
   ) %dopar% {
     subset <- size < n
@@ -212,7 +212,7 @@ varimp_permute <- function(
         obs <- response(object, newdata)
         pred <- predict(object, newdata, times = times, type = "prob")
         if (is.null(metric)) {
-          metric <- get_MLMetric(get_perf_metrics(obs, pred)[[1]])
+          metric <- as.MLMetric(get_perf_metrics(obs, pred)[[1]])
         }
         metric(obs, pred)[1]
       } else {

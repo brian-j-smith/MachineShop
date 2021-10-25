@@ -2,8 +2,9 @@
 #'
 #' Fit a stacked regression model from multiple base learners.
 #'
-#' @param ... \link[=models]{model} functions, function names, objects, or
-#'   vector of these to serve as base learners.
+#' @param ... \link[=models]{model} functions, function names, objects; other
+#'   objects that can be \link[=as.MLModel]{coerced} to models; or vector of
+#'   these to serve as base learners.
 #' @param control \link[=controls]{control} function, function name, or object
 #'   defining the resampling method to be employed for the estimation of base
 #'   learner weights.
@@ -36,11 +37,11 @@ StackedModel <- function(
   ..., control = MachineShop::settings("control"), weights = NULL
 ) {
 
-  base_learners <- ListOf(map(get_MLModel, unlist(list(...))))
+  base_learners <- ListOf(map(as.MLModel, unlist(list(...))))
   names(base_learners) <- paste0(if (length(base_learners)) "Learner",
                                  seq_along(base_learners))
 
-  control <- get_MLControl(control)
+  control <- as.MLControl(control)
 
   if (!is.null(weights)) stopifnot(length(weights) == length(base_learners))
 

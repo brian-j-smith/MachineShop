@@ -17,9 +17,11 @@
 #'   variables.
 #' @param input \link[=inputs]{input} object defining and containing the model
 #'   predictor and response variables.
-#' @param model \link[=models]{model} function, function name, or object.  Can
-#'   be given first followed by any of the variable specifications, and can be
-#'   omitted in the case of \link[=ModeledInput]{modeled inputs}.
+#' @param model \link[=models]{model} function, function name, or object; or
+#'   another object that can be \link[=as.MLModel]{coerced} to a model.  A model
+#'   can be given first followed by any of the variable specifications, and the
+#'   argument can be omitted altogether in the case of
+#'   \link[=ModeledInput]{modeled inputs}.
 #' @param control \link[=controls]{control} function, function name, or object
 #'   defining the resampling method to be employed.
 #' @param props numeric vector of the proportions of most important predictor
@@ -132,7 +134,7 @@ rfe.MLModel <- function(model, ...) {
 #' @rdname rfe-methods
 #'
 rfe.MLModelFunction <- function(model, ...) {
-  rfe(model(), ...)
+  rfe(as.MLModel(model), ...)
 }
 
 
@@ -142,7 +144,7 @@ rfe.MLModelFunction <- function(model, ...) {
 ) {
   data <- as.data.frame(input)
   model_fit <- fit(input, model)
-  control <- get_MLControl(control)
+  control <- as.MLControl(control)
 
   get_samples <- function(rfe = 1, varimp = 1) as.list(environment())
   samples <- do.call("get_samples", as.list(samples))

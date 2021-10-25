@@ -89,14 +89,63 @@ as.double.BinomialVariate <- function(x, ...) {
 }
 
 
+as.MLControl <- function(x, ...) {
+  UseMethod("as.MLControl")
+}
+
+
+as.MLControl.default <- function(x, ...) {
+  throw(Error("Cannot coerce class ", class1(x), " to an MLControl."))
+}
+
+
+as.MLControl.character <- function(x, ...) {
+  x <- get0(x)
+  as.MLControl(x)
+}
+
+
+as.MLControl.function <- function(x, ...) {
+  result <- try(x(), silent = TRUE)
+  if (!is(result, "MLControl")) {
+    throw(Error("Cannot coerce specified function to an MLControl"))
+  } else result
+}
+
+
+as.MLControl.MLControl <- function(x, ...) {
+  x
+}
+
+
+as.MLMetric <- function(x, ...) {
+  UseMethod("as.MLMetric")
+}
+
+
+as.MLMetric.default <- function(x, ...) {
+  throw(Error("Cannot coerce class ", class1(x), " to an MLMetric."))
+}
+
+
+as.MLMetric.character <- function(x, ...) {
+  x <- get0(x)
+  as.MLMetric(x)
+}
+
+
+as.MLMetric.MLMetric <- function(x, ...) {
+  x
+}
+
+
 #' Coerce to an MLModel
 #'
 #' Function to coerce an object to \code{MLModel}.
 #'
-#' @rdname as.MLModel
-#'
-#' @param x model \link{fit} result or \link[parsnip:model_spec]{model
-#'   specification} from the \pkg{parsnip} package.
+#' @param x model \link{fit} result, \link[=ModeledInput]{modeled input}, or
+#'   \link[parsnip:model_spec]{model specification} from the \pkg{parsnip}
+#'   package.
 #' @param ... arguments passed to other methods.
 #'
 #' @return \code{MLModel} class object.
@@ -108,10 +157,38 @@ as.MLModel <- function(x, ...) {
 }
 
 
+as.MLModel.default <- function(x, ...) {
+  throw(Error("Cannot coerce class ", class1(x), " to an MLModel."))
+}
+
+
+as.MLModel.character <- function(x, ...) {
+  x <- get0(x)
+  as.MLModel(x)
+}
+
+
+as.MLModel.MLModel <- function(x, ...) {
+  x
+}
+
+
 #' @rdname as.MLModel
 #'
 as.MLModel.MLModelFit <- function(x, ...) {
   getElement(x, "mlmodel")
+}
+
+
+as.MLModel.MLModelFunction <- function(x, ...) {
+  x()
+}
+
+
+#' @rdname as.MLModel
+#'
+as.MLModel.ModeledInput <- function(x, ...) {
+  x@model
 }
 
 

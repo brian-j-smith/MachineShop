@@ -2,9 +2,10 @@
 #'
 #' Model selection from a candidate set.
 #'
-#' @param ... \link[=models]{model} functions, function names, objects, or
-#'   vectors of these to serve as the candidate set from which to select, such
-#'   as that returned by \code{\link{expand_model}}.
+#' @param ... \link[=models]{model} functions, function names, objects; other
+#'   objects that can be \link[=as.MLModel]{coerced} to models; or vectors of
+#'   these to serve as the candidate set from which to select, such as that
+#'   returned by \code{\link{expand_model}}.
 #' @param control \link[=controls]{control} function, function name, or object
 #'   defining the resampling method to be employed.
 #' @param metrics \link[=metrics]{metric} function, function name, or vector of
@@ -44,7 +45,7 @@ SelectedModel <- function(
   models <- as.list(unlist(list(...)))
   model_names <- character()
   for (i in seq_along(models)) {
-    models[[i]] <- get_MLModel(models[[i]])
+    models[[i]] <- as.MLModel(models[[i]])
     name <- names(models)[i]
     model_names[i] <-
       if (!is.null(name) && nzchar(name)) name else models[[i]]@name
@@ -59,7 +60,7 @@ SelectedModel <- function(
       weights = slots$weights,
       predictor_encoding = NA_character_,
       params = list(models = ListOf(models),
-                    control = get_MLControl(control), metrics = metrics,
+                    control = as.MLControl(control), metrics = metrics,
                     stat = stat, cutoff = cutoff)
   )
 
@@ -155,7 +156,7 @@ TunedModel <- function(
   } else {
     object <- if (is(object, "MLModel")) fget(object@name) else fget(object)
     stopifnot(is(object, "MLModelFunction"))
-    model <- object()
+    model <- as.MLModel(object)
     response_types <- model@response_types
     weights <- model@weights
   }
@@ -184,7 +185,7 @@ TunedModel <- function(
       weights = weights,
       predictor_encoding = NA_character_,
       params = list(model = object, grid = grid, fixed = fixed,
-                    control = get_MLControl(control), metrics = metrics,
+                    control = as.MLControl(control), metrics = metrics,
                     stat = stat, cutoff = cutoff)
   )
 

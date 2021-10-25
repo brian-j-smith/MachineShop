@@ -17,13 +17,14 @@
 #'   response variables and a \link[=data.frame]{data frame} containing them.
 #' @param x,y \link{matrix} and object containing predictor and response
 #'   variables.
-#' @param model \link[=models]{model} function, function name, or object.  Can
+#' @param model \link[=models]{model} function, function name, or object; or
+#'   another object that can be \link[=as.MLModel]{coerced} to a model.  Can
 #'   be given first followed by any of the variable specifications.
 #'
 #' @return \code{ModeledFrame} or \code{ModeledRecipe} class object that
 #' inherits from \code{ModelFrame} or \code{recipe}.
 #'
-#' @seealso \code{\link{fit}}, \code{\link{resample}},
+#' @seealso \code{\link{as.MLModel}}, \code{\link{fit}}, \code{\link{resample}},
 #' \code{\link{SelectedInput}}
 #'
 #' @examples
@@ -63,7 +64,7 @@ ModeledInput.matrix <- function(x, y, model, ...) {
 #' @rdname ModeledInput-methods
 #'
 ModeledInput.ModelFrame <- function(object, model, ...) {
-  model <- get_MLModel(model)
+  model <- as.MLModel(model)
   switch_class(object,
     "SelectedModelFrame" = {
       inputs <- map(ModeledInput, object@inputs, model = list(model))
@@ -94,7 +95,7 @@ ModeledInput.ModeledTerms <- function(object, model, ...) {
 #' @rdname ModeledInput-methods
 #'
 ModeledInput.recipe <- function(object, model, ...) {
-  model <- get_MLModel(model)
+  model <- as.MLModel(model)
   switch_class(object,
     "SelectedModelRecipe" = {
       inputs <- map(ModeledInput, object@inputs, model = list(model))
@@ -117,5 +118,5 @@ ModeledInput.MLModel <- function(model, ...) {
 #' @rdname ModeledInput-methods
 #'
 ModeledInput.MLModelFunction <- function(model, ...) {
-  ModeledInput(model(), ...)
+  ModeledInput(as.MLModel(model), ...)
 }

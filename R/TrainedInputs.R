@@ -119,7 +119,7 @@ SelectedInput.ModelFrame <- function(
 
   new("SelectedModelFrame", ModelFrame(data),
       inputs = ListOf(map(terms, inputs)),
-      params = list(control = get_MLControl(control), metrics = metrics,
+      params = list(control = as.MLControl(control), metrics = metrics,
                     stat = stat, cutoff = cutoff))
 
 }
@@ -159,7 +159,7 @@ SelectedInput.recipe <- function(
   fo <- reformulate(".", paste(outcome_vars, collapse = "+"))
   new("SelectedModelRecipe", new("ModelRecipe", recipe(fo, data = data)),
       inputs = ListOf(inputs),
-      params = list(control = get_MLControl(control), metrics = metrics,
+      params = list(control = as.MLControl(control), metrics = metrics,
                     stat = stat, cutoff = cutoff))
 
 }
@@ -258,7 +258,7 @@ TunedInput.recipe <- function(
 
   object <- new("TunedModelRecipe", ModelRecipe(object),
                 grid = grid,
-                params = list(control = get_MLControl(control),
+                params = list(control = as.MLControl(control),
                               metrics = metrics, stat = stat, cutoff = cutoff))
 
   grid_names <- names(object@grid)

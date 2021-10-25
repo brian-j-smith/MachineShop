@@ -16,9 +16,11 @@
 #'   variables.
 #' @param input \link[=inputs]{input} object defining and containing the model
 #'   predictor and response variables.
-#' @param model \link[=models]{model} function, function name, or object.  Can
-#'   be given first followed by any of the variable specifications, and can be
-#'   omitted in the case of \link[=ModeledInput]{modeled inputs}.
+#' @param model \link[=models]{model} function, function name, or object; or
+#'   another object that can be \link[=as.MLModel]{coerced} to a model.  A model
+#'   can be given first followed by any of the variable specifications, and the
+#'   argument can be omitted altogether in the case of
+#'   \link[=ModeledInput]{modeled inputs}.
 #' @param control \link[=controls]{control} function, function name, or object
 #'   defining the resampling method to be employed.
 #'
@@ -97,7 +99,7 @@ resample.ModelFrame <- function(
   input, model, control = MachineShop::settings("control"), ...
 ) {
   if (missing(model)) model <- NullModel()
-  .resample(get_MLControl(control), input = input, model = model, ...)
+  .resample(as.MLControl(control), input = input, model = model, ...)
 }
 
 
@@ -112,7 +114,7 @@ resample.recipe <- function(
   input, model, control = MachineShop::settings("control"), ...
 ) {
   if (missing(model)) model <- NullModel()
-  .resample(get_MLControl(control), input = ModelRecipe(input), model = model,
+  .resample(as.MLControl(control), input = ModelRecipe(input), model = model,
             ...)
 }
 
@@ -127,7 +129,7 @@ resample.MLModel <- function(model, ...) {
 #' @rdname resample-methods
 #'
 resample.MLModelFunction <- function(model, ...) {
-  resample(model(), ...)
+  resample(as.MLModel(model), ...)
 }
 
 
@@ -395,7 +397,7 @@ rsample_split <- function(fun, data, control) {
 
 
 subsample <- function(train, test, model, control, id = 1) {
-  model <- get_MLModel(model)
+  model <- as.MLModel(model)
 
   model_fit <- fit(train, model)
   times <- time(model_fit)
@@ -471,7 +473,7 @@ resample_selection <- function(x, update, params, ..., class) {
   }
 
   perf <- do.call(c, perf_list)
-  metric <- get_MLMetric(c(metrics)[[1]])
+  metric <- as.MLMetric(c(metrics)[[1]])
   selected <- (if (metric@maximize) which.max else which.min)(perf_stats)
 
   list(performance = perf,

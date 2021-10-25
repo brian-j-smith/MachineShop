@@ -33,9 +33,11 @@ must be given first in calls to them.}
 \item{formula, data}{\link[=formula]{formula} defining the model predictor and
 response variables and a \link[=data.frame]{data frame} containing them.}
 
-\item{model}{\link[=models]{model} function, function name, or object.  Can
-be given first followed by any of the variable specifications, and can be
-omitted in the case of \link[=ModeledInput]{modeled inputs}.}
+\item{model}{\link[=models]{model} function, function name, or object; or
+another object that can be \link[=as.MLModel]{coerced} to a model.  A model
+can be given first followed by any of the variable specifications, and the
+argument can be omitted altogether in the case of
+\link[=ModeledInput]{modeled inputs}.}
 
 \item{control}{\link[=controls]{control} function, function name, or object
 defining the resampling method to be employed.}

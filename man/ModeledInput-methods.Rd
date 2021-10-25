@@ -34,7 +34,8 @@ must be given first in calls to them.}
 \item{formula, data}{\link[=formula]{formula} defining the model predictor and
 response variables and a \link[=data.frame]{data frame} containing them.}
 
-\item{model}{\link[=models]{model} function, function name, or object.  Can
+\item{model}{\link[=models]{model} function, function name, or object; or
+another object that can be \link[=as.MLModel]{coerced} to a model.  Can
 be given first followed by any of the variable specifications.}
 
 \item{x, y}{\link{matrix} and object containing predictor and response
@@ -65,6 +66,6 @@ fit(mod_rec)
 
 }
 \seealso{
-\code{\link{fit}}, \code{\link{resample}},
+\code{\link{as.MLModel}}, \code{\link{fit}}, \code{\link{resample}},
 \code{\link{SelectedInput}}
 }

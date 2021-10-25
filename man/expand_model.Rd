@@ -7,7 +7,8 @@
 expand_model(object, ..., random = FALSE)
 }
 \arguments{
-\item{object}{\link[=models]{model} function, function name, or object.}
+\item{object}{\link[=models]{model} function, function name, or object; or
+another object that can be \link[=as.MLModel]{coerced} to a model.}
 
 \item{...}{named vectors or factors or a list of these containing the
 parameter values over which to expand \code{object}.}

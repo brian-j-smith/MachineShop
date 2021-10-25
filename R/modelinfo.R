@@ -68,14 +68,14 @@ modelinfo <- function(...) {
 
 
 .modelinfo.character <- function(x, ...) {
-  model <- try(get_MLModel(x), silent = TRUE)
+  model <- try(as.MLModel(x), silent = TRUE)
   if (is(model, "try-error")) model <- list()
   .modelinfo(model, ...)
 }
 
 
 .modelinfo.function <- function(x, ...) {
-  model <- try(get_MLModel(x), silent = TRUE)
+  model <- try(as.MLModel(x), silent = TRUE)
   if (is(model, "try-error")) model <- list()
   .modelinfo(model, ...)
 }

@@ -133,30 +133,6 @@ get0 <- function(x, mode = "any") {
 }
 
 
-get_MLObject <- function(x, class = c("MLControl", "MLMetric", "MLModel")) {
-  class <- match.arg(class)
-  x <- get0(x)
-  if (is.function(x) && class %in% c("MLControl", "MLModel")) x <- x()
-  if (!is(x, class)) throw(TypeError(x, class, "'x'"))
-  x
-}
-
-
-get_MLControl <- function(x) {
-  get_MLObject(x, class = "MLControl")
-}
-
-
-get_MLMetric <- function(x) {
-  get_MLObject(x, class = "MLMetric")
-}
-
-
-get_MLModel <- function(x) {
-  get_MLObject(x, class = "MLModel")
-}
-
-
 get_perf_metrics <- function(x, y) {
   generic_name <- "performance"
   classes <- substring(methods(generic_name), nchar(generic_name) + 2)
@@ -328,7 +304,7 @@ new_progress_bar <- function(total, input = NULL, model = NULL, index = 0) {
   width <- max(10, round(0.25 * getOption("width")))
   if (!is.null(input)) input <- substr(class1(input), 1, width)
   if (!is.null(model)) {
-    model <- substr(get_MLModel(model)@name, 1, width)
+    model <- substr(as.MLModel(model)@name, 1, width)
   }
   format <- paste(input, "|", model)
   if (index > 0) format <- paste0(index, ": ", format)
@@ -361,7 +337,7 @@ ndim <- function(x) {
 
 nvars <- function(x, model) {
   stopifnot(is(x, "ModelFrame"))
-  model <- get_MLModel(model)
+  model <- as.MLModel(model)
   res <- switch(model@predictor_encoding,
     "model.frame" = {
       x_terms <- attributes(terms(x))

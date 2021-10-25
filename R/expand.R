@@ -2,7 +2,8 @@
 #'
 #' Expand a model over all combinations of a grid of tuning parameters.
 #'
-#' @param object \link[=models]{model} function, function name, or object.
+#' @param object \link[=models]{model} function, function name, or object; or
+#'   another object that can be \link[=as.MLModel]{coerced} to a model.
 #' @param ... named vectors or factors or a list of these containing the
 #'   parameter values over which to expand \code{object}.
 #' @param random number of points to be randomly sampled from the parameter grid
@@ -35,7 +36,7 @@ expand_model <- function(object, ..., random = FALSE) {
 
 
 .expand_model.default <- function(object, random, ...) {
-  expand_model(get_MLModel(object), ..., random = random)
+  expand_model(as.MLModel(object), ..., random = random)
 }
 
 
@@ -143,7 +144,7 @@ expand_modelgrid.recipe <- function(input, model, info = FALSE, ...) {
 #'
 expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
   params <- model@params
-  model <- params$model()
+  model <- as.MLModel(params$model)
   if (info) {
     model@gridinfo
   } else {
@@ -229,7 +230,7 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
     if (needs_data) {
       if (missing(input)) return(NULL)
       mf <- ModelFrame(input, ..., na.rm = FALSE)
-      model <- get_MLModel(model)
+      model <- as.MLModel(model)
       data <- switch(model@predictor_encoding,
         "model.frame" = {
           mf_terms <- attributes(terms(mf))
