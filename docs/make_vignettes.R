@@ -1,13 +1,13 @@
 dest <- "vignettes"
 
-out <- file(file.path(dest, "UsersGuide.Rmd"), "w")
+out <- file(file.path(dest, "UserGuide.Rmd"), "w")
 
 sourceLines <- function(file) {
   c(readLines(file.path("docs", "src", file)), "\n")
 }
 
 files <- c(
-  "UsersGuide.Rmd",
+  "UserGuide.Rmd",
   "overview.Rmd",
   "using_example.Rmd",
   "using_fit.Rmd",

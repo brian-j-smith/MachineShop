@@ -85,5 +85,5 @@ library(MachineShop)
 ?MachineShop
 
 # Vignette
-RShowDoc("Introduction", package = "MachineShop")
+RShowDoc("UserGuide", package = "MachineShop")
 ```

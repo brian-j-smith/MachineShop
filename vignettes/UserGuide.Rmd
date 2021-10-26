@@ -1,5 +1,5 @@
 ---
-title: "MachineShop User's Guide"
+title: "MachineShop User Guide"
 subtitle: "R Package Version `r packageVersion('MachineShop')`"
 author:
 - name: "Brian J Smith"
@@ -13,7 +13,7 @@ output:
     number_sections: true
 bibliography: bibliography.bib
 vignette: >
-  %\VignetteIndexEntry{MachineShop User's Guide}
+  %\VignetteIndexEntry{MachineShop User Guide}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -81,7 +81,7 @@ library(MachineShop)
 ?MachineShop
 
 # Vignette
-RShowDoc("Introduction", package = "MachineShop")
+RShowDoc("UserGuide", package = "MachineShop")
 ```
 
 
