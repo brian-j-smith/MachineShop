@@ -7,19 +7,17 @@ VarImp.default <- function(object, scale = TRUE, ...) {
   stopifnot(nrow(object) == 0 || is.character(rownames(object)))
 
   object <- object[rownames(object) != "(Intercept)", , drop = FALSE]
-  if (scale) {
-    object_shift <- min(object)
-    object_scale <- diff(range(object)) / 100
-    object <- (object - object_shift) / object_scale
+  if (scale) scale <- max(object, 0) / 100
+  if (scale > 0) {
+    object <- object / scale
     sort_vals <- rowSums(object)
   } else {
-    object_shift = 0
-    object_scale = 1
+    scale <- 1
     sort_vals <- object[, 1]
   }
   object <- object[order(sort_vals, decreasing = TRUE), , drop = FALSE]
 
-  new("VarImp", object, shift = object_shift, scale = object_scale)
+  new("VarImp", object, scale = scale)
 }
 
 
@@ -45,8 +43,8 @@ VarImp.numeric <- function(object, ...) {
 #'   values (below).  Permutation-based variable importance is defined as the
 #'   relative change in model predictive performances between datasets with and
 #'   without permuted values for the associated variable (Fisher et al. 2019).
-#' @param scale logical indicating whether importance measures should be scaled
-#'   to range from 0 to 100.
+#' @param scale logical indicating whether importance values should be scaled to
+#'   a maximum of 100.
 #' @param ... arguments passed to model-specific or permutation-based variable
 #'   importance functions.  These include the following arguments and default
 #'   values for \code{method = "permute"}.
@@ -73,7 +71,7 @@ VarImp.numeric <- function(object, ...) {
 #'       change to compute in comparing model predictive performances between
 #'       datasets with and without permuted values.  The choices are difference
 #'       (\code{"-"}) and ratio (\code{"/"}).}
-#'     \item{\code{stats = c(Mean = "base::mean")}}{function, function name, or
+#'     \item{\code{stats = c(mean = "base::mean")}}{function, function name, or
 #'       vector of these with which to compute summary statistics on the set of
 #'       variable importance values from the permuted datasets.}
 #'     \item{\code{na.rm = TRUE}}{logical indicating whether to exclude missing
@@ -145,7 +143,7 @@ dep_varimpargs <- function(metric, ...) {
 
 varimp_permute <- function(
   object, select = NULL, samples = 1, prop = NULL, size = NULL, times = NULL,
-  metric = NULL, compare = c("-", "/"), stats = c(Mean = "base::mean"),
+  metric = NULL, compare = c("-", "/"), stats = c(mean = "base::mean"),
   na.rm = TRUE
 ) {
   input <- as.MLModel(object)@input
@@ -177,9 +175,14 @@ varimp_permute <- function(
     throw(check_assignment(metric))
   }
   compare <- match.arg(compare)
-  varimp <- function(x, y) do.call(compare, list(x, y))
+  varimp <- function(x, baseline, maximize = FALSE) {
+    do.call(compare, if (maximize) list(baseline, x) else list(x, baseline))
+  }
   stats <- check_stats(stats, convert = TRUE)
   throw(check_assignment(stats))
+  map_stats <- function(x) {
+    map(function(x) stats(if (na.rm) na.omit(x) else x), as.data.frame(x))
+  }
 
   num_workers <- getDoParWorkers()
   work <- pred_names
@@ -194,10 +197,10 @@ varimp_permute <- function(
   )
   on.exit(pb$terminate())
 
-  sims <- foreach(
+  foreach(
     pred_names = work_pred_names[lengths(work_pred_names) > 0],
-    .combine = cbind,
-    .export = c("as.MLMetric", "get_perf_metrics", "permute_int"),
+    .combine = rbind,
+    .export = c("as.MLMetric", "get_perf_metrics", "map", "permute_int"),
     .packages = "MachineShop"
   ) %dopar% {
     subset <- size < n
@@ -227,13 +230,11 @@ varimp_permute <- function(
         pb$tick()
       }
     }
-    if (metric@maximize) varimp(base_perf, perf) else varimp(perf, base_perf)
+    sims <- varimp(perf, base_perf, metric@maximize)
+    res <- do.call(rbind, map_stats(sims))
+    colnames(res) <- paste0("Permute.", colnames(res), ".", metric@name)
+    res
   }
-
-  f <- function(x) stats(if (na.rm) na.omit(x) else x)
-  res <- do.call(rbind, map(f, as.data.frame(sims)))
-  colnames(res) <- paste0("Permute.", colnames(res))
-  res
 }
 
 

@@ -17,8 +17,8 @@ values (below).  Permutation-based variable importance is defined as the
 relative change in model predictive performances between datasets with and
 without permuted values for the associated variable (Fisher et al. 2019).}
 
-\item{scale}{logical indicating whether importance measures should be scaled
-to range from 0 to 100.}
+\item{scale}{logical indicating whether importance values should be scaled to
+a maximum of 100.}
 
 \item{...}{arguments passed to model-specific or permutation-based variable
 importance functions.  These include the following arguments and default
@@ -46,7 +46,7 @@ values for \code{method = "permute"}.
     change to compute in comparing model predictive performances between
     datasets with and without permuted values.  The choices are difference
     (\code{"-"}) and ratio (\code{"/"}).}
-  \item{\code{stats = c(Mean = "base::mean")}}{function, function name, or
+  \item{\code{stats = c(mean = "base::mean")}}{function, function name, or
     vector of these with which to compute summary statistics on the set of
     variable importance values from the permuted datasets.}
   \item{\code{na.rm = TRUE}}{logical indicating whether to exclude missing

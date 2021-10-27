@@ -419,8 +419,5 @@ TrainStep <- setClass("TrainStep",
 
 setClass("VarImp",
   contains = "data.frame",
-  slots = c(
-    shift = "numeric",
-    scale = "numeric"
-  )
+  slots = c(scale = "numeric")
 )

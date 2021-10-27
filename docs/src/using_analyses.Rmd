@@ -5,7 +5,7 @@ Calculation of performance metrics on test sets or by resampling, as discussed p
 
 ## Variable Importance
 
-The importance of predictor variables in a model fit is estimated with the `r rdoc_url("varimp()")` function and displayed graphically with `r rdoc_url("plot()")`.  Variable importance is a relative measure of the contributions of model predictors and has a default range of 0 to 100, where 0 denotes the least important variables and 100 the most.  Model-specific implementations of variable importance are available in many cases, although their definitions may differ.  In the case of a `r rdoc_url("GBMModel")`, importance of each predictor is based on the sum of squared empirical improvements over all internal tree nodes created by splitting on that variable [@greenwell:2019:GBM].
+The importance of predictor variables in a model fit is estimated with the `r rdoc_url("varimp()")` function and displayed graphically with `r rdoc_url("plot()")`.  Variable importance is a relative measure of the contributions of model predictors and is scaled by default to have a maximum value of 100, where higher values represent more important variables.  Model-specific implementations of variable importance are available in many cases, although their definitions may differ.  In the case of a `r rdoc_url("GBMModel")`, importance of each predictor is based on the sum of squared empirical improvements over all internal tree nodes created by splitting on that variable [@greenwell:2019:GBM].
 
 ```{r using_analyses_vi}
 ## Predictor variable importance
