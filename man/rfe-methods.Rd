@@ -19,7 +19,8 @@ rfe(...)
   control = MachineShop::settings("control"),
   props = 4,
   sizes = NULL,
-  recompute = FALSE,
+  random = FALSE,
+  recompute = TRUE,
   optimize = c("global", "local"),
   samples = c(rfe = 1, varimp = 1),
   metrics = NULL,
@@ -34,7 +35,8 @@ rfe(...)
   control = MachineShop::settings("control"),
   props = 4,
   sizes = NULL,
-  recompute = FALSE,
+  random = FALSE,
+  recompute = TRUE,
   optimize = c("global", "local"),
   samples = c(rfe = 1, varimp = 1),
   metrics = NULL,
@@ -48,7 +50,8 @@ rfe(...)
   control = MachineShop::settings("control"),
   props = 4,
   sizes = NULL,
-  recompute = FALSE,
+  random = FALSE,
+  recompute = TRUE,
   optimize = c("global", "local"),
   samples = c(rfe = 1, varimp = 1),
   metrics = NULL,
@@ -62,7 +65,8 @@ rfe(...)
   control = MachineShop::settings("control"),
   props = 4,
   sizes = NULL,
-  recompute = FALSE,
+  random = FALSE,
+  recompute = TRUE,
   optimize = c("global", "local"),
   samples = c(rfe = 1, varimp = 1),
   metrics = NULL,
@@ -98,6 +102,9 @@ proportions to generate automatically; ignored if \code{sizes} are given.}
 
 \item{sizes}{integer vector of the set sizes of most important predictor
 variables to retain.}
+
+\item{random}{logical indicating whether to eliminate variables at random
+with probabilities proportional to their importance.}
 
 \item{recompute}{logical indicating whether to recompute variable importance
 after eliminating each set of variables.}

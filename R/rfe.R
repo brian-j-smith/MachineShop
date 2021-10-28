@@ -29,6 +29,8 @@
 #'   proportions to generate automatically; ignored if \code{sizes} are given.
 #' @param sizes integer vector of the set sizes of most important predictor
 #'   variables to retain.
+#' @param random logical indicating whether to eliminate variables at random
+#'   with probabilities proportional to their importance.
 #' @param recompute logical indicating whether to recompute variable importance
 #'   after eliminating each set of variables.
 #' @param optimize character string specifying a search through all \code{props}
@@ -70,13 +72,14 @@ rfe <- function(...) {
 #'
 rfe.formula <- function(
   formula, data, model, control = MachineShop::settings("control"), props = 4,
-  sizes = NULL, recompute = FALSE, optimize = c("global", "local"),
-  samples = c(rfe = 1, varimp = 1), metrics = NULL, stat = "base::mean", ...
+  sizes = NULL, random = FALSE, recompute = TRUE,
+  optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
+  metrics = NULL, stat = "base::mean", ...
 ) {
+  rfe_args <- c(list(input = NULL), as.list(environment()))
   args <- list(formula, data, strata = response(formula), na.rm = FALSE)
-  mf <- do.call(ModelFrame, args)
-  rfe(mf, model, control, props = props, sizes = sizes, recompute = recompute,
-      optimize = optimize, samples = samples, metrics = metrics, stat = stat)
+  rfe_args$input <- do.call(ModelFrame, args)
+  do.call(rfe, rfe_args)
 }
 
 
@@ -84,12 +87,13 @@ rfe.formula <- function(
 #'
 rfe.matrix <- function(
   x, y, model, control = MachineShop::settings("control"), props = 4,
-  sizes = NULL, recompute = FALSE, optimize = c("global", "local"),
-  samples = c(rfe = 1, varimp = 1), metrics = NULL, stat = "base::mean", ...
+  sizes = NULL, random = FALSE, recompute = TRUE,
+  optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
+  metrics = NULL, stat = "base::mean", ...
 ) {
-  mf <- ModelFrame(x, y, strata = y, na.rm = FALSE)
-  rfe(mf, model, control, props = props, sizes = sizes, recompute = recompute,
-      optimize = optimize, samples = samples, metrics = metrics, stat = stat)
+  rfe_args <- c(list(input = NULL), as.list(environment()))
+  rfe_args$input <- ModelFrame(x, y, strata = y, na.rm = FALSE)
+  do.call(rfe, rfe_args)
 }
 
 
@@ -97,16 +101,17 @@ rfe.matrix <- function(
 #'
 rfe.ModelFrame <- function(
   input, model, control = MachineShop::settings("control"), props = 4,
-  sizes = NULL, recompute = FALSE, optimize = c("global", "local"),
-  samples = c(rfe = 1, varimp = 1), metrics = NULL, stat = "base::mean", ...
+  sizes = NULL, random = FALSE, recompute = TRUE,
+  optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
+  metrics = NULL, stat = "base::mean", ...
 ) {
-  update <- function(input, data) {
+  .rfe_args <- as.list(environment())
+  .rfe_args$update <- function(input, data) {
     if (isS4(input)) input@.Data <- data else input[] <- data
     input
   }
-  .rfe(input, update, model, control, props = props, sizes = sizes,
-       recompute = recompute, optimize = match.arg(optimize), samples = samples,
-       metrics = metrics, stat = stat)
+  .rfe_args$optimize <- match.arg(optimize)
+  do.call(.rfe, .rfe_args)
 }
 
 
@@ -114,13 +119,15 @@ rfe.ModelFrame <- function(
 #'
 rfe.recipe <- function(
   input, model, control = MachineShop::settings("control"), props = 4,
-  sizes = NULL, recompute = FALSE, optimize = c("global", "local"),
-  samples = c(rfe = 1, varimp = 1), metrics = NULL, stat = "base::mean", ...
+  sizes = NULL, random = FALSE, recompute = TRUE,
+  optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
+  metrics = NULL, stat = "base::mean", ...
 ) {
-  update <- function(input, data) recipe(input, data)
-  .rfe(ModelRecipe(input), update, model, control, props = props,
-       sizes = sizes, recompute = recompute, optimize = match.arg(optimize),
-       samples = samples, metrics = metrics, stat = stat)
+  .rfe_args <- as.list(environment())
+  .rfe_args$input <- ModelRecipe(input)
+  .rfe_args$update <- function(input, data) recipe(input, data)
+  .rfe_args$optimize <- match.arg(optimize)
+  do.call(.rfe, .rfe_args)
 }
 
 
@@ -139,8 +146,8 @@ rfe.MLModelFunction <- function(model, ...) {
 
 
 .rfe <- function(
-  input, update, model, control, props, sizes, recompute, optimize, samples,
-  metrics, stat
+  input, update, model, control, props, sizes, random, recompute, optimize,
+  samples, metrics, stat, ...
 ) {
   data <- as.data.frame(input)
   model_fit <- fit(input, model)
@@ -168,13 +175,20 @@ rfe.MLModelFunction <- function(model, ...) {
   }
 
   varimp <- function(object, ...) {
-    MachineShop::varimp(
+    res <- MachineShop::varimp(
       object, scale = FALSE, method = "permute", samples = samples$varimp,
       times = times, metric = metric, stats = stat, ...
     )
+    structure(res[[1]], names = rownames(res))
   }
-  vi_names <- rownames(varimp(model_fit))
-  superset <- vi_names
+  scale <- function(x) {
+    scale <- max(x, 0)
+    if (scale > 0) x <- x / scale
+    pmax(pmin(sort(x, decreasing = TRUE), 0.99), 0.01)
+  }
+
+  vi <- scale(varimp(model_fit))
+  superset <- names(vi)
 
   if (!is.null(sizes)) {
     sizes <- check_integer(sizes, bounds = c(1, Inf), size = NA)
@@ -199,10 +213,15 @@ rfe.MLModelFunction <- function(model, ...) {
   on.exit(pb$terminate())
 
   subsets <- list()
-  perfs <- NULL
+  perf_stats <- NULL
   for (size in sizes) {
 
-    subset <- head(vi_names, size)
+    if (random) {
+      subset <- sample(names(vi), size, prob = vi)
+      subset <- subset[order(vi[subset], decreasing = TRUE)]
+    } else {
+      subset <- head(names(vi), size)
+    }
     drop <- setdiff(superset, subset)
 
     perf_samples <- list()
@@ -219,22 +238,24 @@ rfe.MLModelFunction <- function(model, ...) {
 
       if (recompute && size > tail(sizes, 1)) {
         vi <- do.call(varimp, list(fit(input, model), select = subset))
-        vi_samples[[s]] <- vi[subset, 1, drop = FALSE]
+        vi_samples[[s]] <- vi[subset]
       }
 
       pb$tick()
 
     }
 
-    if (length(vi_samples)) {
-      vi_names <- names(sort(apply_stat(vi_samples), decreasing = TRUE))
+    vi <- if (length(vi_samples)) {
+      scale(apply_stat(vi_samples))
+    } else {
+      vi[subset]
     }
 
     subsets <- c(subsets, list(subset))
-    perfs <- rbind(perfs, apply_stat(perf_samples))
+    perf_stats <- rbind(perf_stats, apply_stat(perf_samples))
 
-    check_local_perfs <- optimize == "local" && nrow(perfs) > 1
-    if (check_local_perfs && diff(tail(loss(perfs), 2)) > 0) break
+    check_local_perfs <- optimize == "local" && nrow(perf_stats) > 1
+    if (check_local_perfs && diff(tail(loss(perf_stats), 2)) > 0) break
 
   }
 
@@ -242,8 +263,8 @@ rfe.MLModelFunction <- function(model, ...) {
     size = lengths(subsets),
     terms = subsets,
     optimal = FALSE,
-    performance = perfs
+    metrics = as_tibble(perf_stats)
   )
-  tbl$optimal[which.min(loss(perfs))] <- TRUE
+  tbl$optimal[which.min(loss(perf_stats))] <- TRUE
   tbl
 }

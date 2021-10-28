@@ -19,7 +19,7 @@ test_that("test rfe", {
         all(lengths(x$terms) == x$size) &&
         is.logical(x$optimal) &&
         sum(x$optimal) == 1 &&
-        is.numeric(x$performance)
+        all(sapply(x$metrics, is.numeric))
       if (!is.null(nrow)) pass <- pass && nrow(x) == nrow
       expect_true(pass)
       x
@@ -78,6 +78,9 @@ test_that("test rfe", {
     ## test sizes
     rfe_default(sizes = 0) %>% expect_error()
     rfe_default(sizes = c(8, 8, 12, 100)) %>% expect_output(nrow = 3)
+
+    ## test random
+    rfe_default(random = TRUE) %>% expect_output(nrow = n)
 
     ## test recompute
     rfe_default(recompute = TRUE) %>% expect_output(nrow = n)
