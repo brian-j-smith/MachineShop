@@ -23,7 +23,7 @@ Description: Meta-package for statistical and machine learning with a unified
     dependence plots; confusion matrices; and ROC, lift, and other performance
     curves.
 Depends: R (>= 3.6.0)
-Imports: abind, dials (>= 0.0.4), foreach, ggplot2 (>= 3.3.0), kernlab,
+Imports: abind, cli, dials (>= 0.0.4), foreach, ggplot2 (>= 3.3.0), kernlab,
     magrittr, Matrix, methods, nnet, party, polspline, Rcpp, progress,
     recipes (>= 0.1.4), rlang, rsample (>= 0.1.0), Rsolnp, survival, tibble,
     utils

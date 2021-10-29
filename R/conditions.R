@@ -52,9 +52,10 @@ LocalWarning <- function(..., value = NULL) {
 
 TypeError <- function(value, expected, subject = character(), call = FALSE) {
   errorCondition(
-    message = paste0("Expected ", subject, if (length(subject)) " to be ",
-                     toString(expected, conj = "or"), "; got ", class1(value),
-                     " instead."),
+    message = paste0(
+      "Expected ", subject, if (length(subject)) " to be ",
+      as_string(expected, conj = "or"), "; got ", class1(value), " instead."
+    ),
     call = select_call(call, sys.call(-1)),
     class = "TypeError"
   )
@@ -183,7 +184,7 @@ check_censoring <- function(x, types, ...) {
   if (!(type %in% types)) {
     types <- paste0("'", types, "'")
     Error("Expected survival data censoring type to be ",
-          toString(types, conj = "or"), "; got '", type, "' instead.")
+          as_string(types, conj = "or"), "; got '", type, "' instead.")
   } else x
 }
 
@@ -236,7 +237,7 @@ check_logical <- function(x, ...) {
 check_match <- function(x, choices) {
   tryCatch(match.arg(x, choices), error = function(e) {
     choices <- paste0("\"", choices, "\"")
-    DomainError(x, "must be one of ", toString(choices, conj = "or"))
+    DomainError(x, "must be one of ", as_string(choices, conj = "or"))
   })
 }
 
@@ -300,14 +301,14 @@ check_packages <- function(x) {
     if (any(failures)) {
       x <- x[failures]
       pkg_names <- pkg_names[failures]
-      Error("Call ", label_items(msg, x), ".\n",
+      Error("Call ", note_items(msg, x), ".\n",
             "To address this issue, try running ", pkgs_fun, "(",
             deparse1(pkg_names), ").")
     }
   }
 
   installed <- map_logi(requireNamespace, pkg_names, quietly = TRUE)
-  result <- check(!installed, "requires prior installation of package",
+  result <- check(!installed, "requires prior installation of package{?s}: ",
                   "install.packages")
   if (is(result, "error")) return(result)
 
@@ -320,7 +321,7 @@ check_packages <- function(x) {
       eval(call(compat_version[1], version, compat_version[2]))
     } else TRUE
   }, pkg_names, compat_versions)
-  result <- check(!compatible, "requires updated package version",
+  result <- check(!compatible, "requires updated package version{?s}: ",
                   "update.packages")
   if (is(result, "error")) return(result)
 

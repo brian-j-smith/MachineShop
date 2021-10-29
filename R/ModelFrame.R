@@ -75,10 +75,10 @@ ModelFrame.formula <- function(
   invalid_calls <- setdiff(inline_calls(predictors(formula)),
                            settings("RHS.formula"))
   if (length(invalid_calls)) {
-    throw(Error(
-      label_items("unsupported predictor variable function", invalid_calls),
-      "; use a recipe or include transformed predictors in the data frame"
-    ))
+    throw(Error(note_items(
+      "Unsupported predictor variable function{?s}: ", invalid_calls,
+      "; use a recipe or include transformed predictors in the data frame."
+    )))
   }
 
   data <- as.data.frame(data)

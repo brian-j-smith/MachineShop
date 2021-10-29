@@ -157,7 +157,9 @@ PerformanceCurve <- function(object, ..., metrics, .check = TRUE) {
     if (is.null(object$Model)) object$Model <- factor("Model")
     missing <- missing_names(c("Cutoff", "x", "y"), object)
     if (length(missing)) {
-      throw(Error(label_items("missing performance curve variable", missing)))
+      throw(Error(note_items(
+        "Missing performance curve variable{?s}: ", missing, "."
+      )))
     }
 
     if (!all(map_logi(is, metrics[1:2], "MLMetric"))) {

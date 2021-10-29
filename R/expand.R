@@ -170,8 +170,8 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
       throw(LocalWarning(
         "Unmatched model parameters in expand_modelgrid() argument 'size'.\n",
         "x Existing ", model@name, " has ",
-        label_items("parameter", gridinfo$param), ".\n",
-        "x Assigned data has ", label_items("name", names(size)), "."
+        note_items("parameter{?s}: ", gridinfo$param), ".\n",
+        "x Assigned data has ", note_items("name{?s}: ", names(size)), "."
       ))
     }
     size <- size[gridinfo$param] * not_dup(gridinfo$param)
@@ -184,8 +184,9 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
       "Length of expand_modelgrid() argument 'size' must equal 1 ",
       "or the number of model parameters.\n",
       "x Existing ", model@name, " has ", nrow(gridinfo), " ",
-      label_items("parameter", gridinfo$param), ".\n",
-      "x Assigned data has ", length(size), " ", label_items("size", size), "."
+      note_items("parameter{?s}: ", gridinfo$param), ".\n",
+      "x Assigned data has ", length(size), " ",
+      note_items("size{?s}: ", size), "."
     ))
   }
   gridinfo$size <- size
@@ -203,8 +204,8 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
       throw(LocalWarning(
         "Invalid model response type in expand_modelgrid().\n",
         "x Exising ", model@name, " supports ",
-        label_items("type", model@response_types), ".\n",
-        "x Supplied response is of ", label_items("type", class(y)), "."
+        note_items("type{?s}: ", model@response_types), ".\n",
+        "x Supplied response is of ", note_items("type{?s}: ", class(y)), "."
       ))
       return(NULL)
     }

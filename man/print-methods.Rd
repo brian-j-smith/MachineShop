@@ -6,18 +6,19 @@
 \alias{print.Calibration}
 \alias{print.DiscreteVariate}
 \alias{print.ListOf}
+\alias{print.MLControl}
+\alias{print.MLMetric}
 \alias{print.MLModel}
+\alias{print.MLModelFunction}
 \alias{print.ModelFrame}
-\alias{print.ModeledInput}
+\alias{print.ModelRecipe}
 \alias{print.Performance}
 \alias{print.PerformanceCurve}
 \alias{print.RecipeGrid}
 \alias{print.Resamples}
-\alias{print.SelectedInput}
 \alias{print.SurvMatrix}
 \alias{print.SurvTimes}
 \alias{print.TrainStep}
-\alias{print.TunedInput}
 \alias{print.VarImp}
 \title{Print MachineShop Objects}
 \usage{
@@ -29,11 +30,17 @@
 
 \method{print}{ListOf}(x, n = MachineShop::settings("print_max"), ...)
 
+\method{print}{MLControl}(x, n = MachineShop::settings("print_max"), ...)
+
+\method{print}{MLMetric}(x, ...)
+
 \method{print}{MLModel}(x, n = MachineShop::settings("print_max"), ...)
+
+\method{print}{MLModelFunction}(x, ...)
 
 \method{print}{ModelFrame}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{ModeledInput}(x, n = MachineShop::settings("print_max"), ...)
+\method{print}{ModelRecipe}(x, n = MachineShop::settings("print_max"), ...)
 
 \method{print}{Performance}(x, n = MachineShop::settings("print_max"), ...)
 
@@ -43,15 +50,11 @@
 
 \method{print}{Resamples}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{SelectedInput}(x, n = MachineShop::settings("print_max"), ...)
-
 \method{print}{SurvMatrix}(x, n = MachineShop::settings("print_max"), ...)
 
 \method{print}{SurvTimes}(x, n = MachineShop::settings("print_max"), ...)
 
 \method{print}{TrainStep}(x, n = MachineShop::settings("print_max"), ...)
-
-\method{print}{TunedInput}(x, n = MachineShop::settings("print_max"), ...)
 
 \method{print}{VarImp}(x, n = MachineShop::settings("print_max"), ...)
 }
@@ -60,7 +63,14 @@
 
 \item{n}{integer number of models or data frame rows to show.}
 
-\item{...}{arguments passed to other methods.}
+\item{...}{arguments passed to other methods, including the one described
+below.
+\describe{
+  \item{\code{level} = 0}{current nesting level of the corresponding
+  object in recursive calls to \code{print}.  The amount of information
+  displayed decreases and increases with positive and negative levels,
+  respectively.}
+}}
 }
 \description{
 Print methods for objects defined in the \pkg{MachineShop} package.

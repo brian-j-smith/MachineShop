@@ -67,7 +67,9 @@ Calibration <- function(object, ..., .check = TRUE) {
     if (is.null(object$Model)) object$Model <- factor("Model")
     missing <- missing_names(c("Response", "Predicted", "Observed"), object)
     if (length(missing)) {
-      throw(Error(label_items("missing calibration variable", missing)))
+      throw(Error(note_items(
+        "Missing calibration variable{?s}: ", missing, "."
+      )))
     }
   }
   rownames(object) <- NULL

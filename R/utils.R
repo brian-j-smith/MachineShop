@@ -34,6 +34,27 @@ utils::globalVariables(c("x", "y"))
 }
 
 
+as_string <- function(x, ...) {
+  UseMethod("as_string")
+}
+
+
+as_string.default <- function(x, ...) {
+  x <- format(x, trim = TRUE)
+  as_string(structure(as.character(x), names = names(x)), ...)
+}
+
+
+as_string.character <- function(x, sep = ", ", conj = NULL) {
+  if (length(conj)) {
+    n <- length(x)
+    if (n > 1) x[n] <- paste(conj, x[n])
+    if (n == 2) x <- paste(x[1], x[2])
+  }
+  if (length(sep)) paste(x, collapse = sep) else x
+}
+
+
 attach_objects <- function(
   what, pos = 2L, name = deparse1(substitute(what), backtick = FALSE)
 ) {
@@ -196,17 +217,13 @@ is_trained.MLModel <- function(x, ...) {
 }
 
 
-is_trained.step <- function(x, ...) {
-  recipes::is_trained(x)
+is_trained.ModelRecipe <- function(x, ...) {
+  recipes::fully_trained(x)
 }
 
 
-label_items <- function(label, x, n = Inf, add_names = FALSE) {
-  nitems <- length(x)
-  if (add_names && !is.null(names(x))) x <- paste(names(x), x, sep = " = ")
-  items <- if (nitems > n) paste(toString(head(x, n)), "...") else toString(x)
-  if (nitems != 1) label <- paste0(label, "s")
-  paste0(label, ": ", items)
+is_trained.step <- function(x, ...) {
+  recipes::is_trained(x)
 }
 
 
@@ -290,10 +307,11 @@ missing_names <- function(x, data) {
 
 new_params <- function(envir, ...) {
   args <- as.list(envir)
-  is_missing <- map_logi(function(x) is.symbol(x) && !nzchar(x), args)
-  if (any(is_missing)) {
-    missing <- names(args)[is_missing]
-    throw(Error(label_items("missing values for required argument", missing)))
+  missing <- map_logi(function(x) is.symbol(x) && !nzchar(x), args)
+  if (any(missing)) {
+    throw(Error(note_items(
+      "Missing values for required argument{?s}: ", names(args)[missing], "."
+    )))
   }
   c(args[!map_logi(is.null, args)], list(...))
 }
@@ -301,7 +319,7 @@ new_params <- function(envir, ...) {
 
 new_progress_bar <- function(total, input = NULL, model = NULL, index = 0) {
   if (getDoParName() == "doSEQ") index <- as.numeric(index)
-  width <- max(round(0.25 * getOption("width")), 10)
+  width <- max(round(0.25 * console_width()), 10)
   if (!is.null(input)) input <- substr(class1(input), 1, width)
   if (!is.null(model)) {
     model <- substr(as.MLModel(model)@name, 1, width)
@@ -346,6 +364,17 @@ nvars <- function(x, model) {
     "model.matrix" = ncol(model.matrix(x[1, , drop = FALSE], intercept = FALSE))
   )
   if (is.null(res)) NA else res
+}
+
+
+note_items <- function(
+  begin, values, end = NULL, add_names = FALSE, sep = ", ", conj = NULL
+) {
+  if (add_names && length(names(values))) {
+    values <- paste(names(values), values, sep = " = ")
+  }
+  qty <- "{qty(length(values))}"
+  pluralize(paste0(begin, as_string(values, sep = sep, conj = conj), end, qty))
 }
 
 
@@ -534,16 +563,6 @@ subset_names <- function(x, select = NULL) {
 switch_class <- function(EXPR, ...) {
   blocks <- eval(substitute(alist(...)))
   eval.parent(blocks[[match_class(EXPR, names(blocks))]])
-}
-
-
-toString.character <- function(x, conjunction = NULL, ...) {
-  if (!is.null(conjunction)) {
-    n <- length(x)
-    if (n > 1) x[n] <- paste(conjunction, x[n])
-    if (n == 2) x <- paste(x[1], x[2])
-  }
-  NextMethod()
 }
 
 

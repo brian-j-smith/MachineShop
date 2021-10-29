@@ -109,8 +109,8 @@ ParameterGrid.parameters <- function(object, size = 3, random = FALSE, ...) {
     if (!all(names(size) %in% object$id)) {
       throw(LocalWarning(
         "Unmatched parameter names in ParameterGrid() argument 'size'.\n",
-        "x Existing data has ", label_items("parameter", object$id), ".\n",
-        "x Assigned data has ", label_items("name", names(size)), "."
+        "x Existing data has ", note_items("parameter{?s}: ", object$id), ".\n",
+        "x Assigned data has ", note_items("name{?s}: ", names(size)), "."
       ))
     }
     size <- size[object$id]
@@ -120,8 +120,9 @@ ParameterGrid.parameters <- function(object, size = 3, random = FALSE, ...) {
       "Length of ParameterGrid() argument 'size' must equal 1 ",
       "or the number of parameters.\n",
       "x Existing data has ", nrow(object), " ",
-      label_items("parameter", object$id), ".\n",
-      "x Assigned data has ", length(size), " ", label_items("size", size), "."
+      note_items("parameter{?s}: ", object$id), ".\n",
+      "x Assigned data has ", length(size), " ", note_items("size{?s}: ", size),
+      "."
     ))
   }
   keep <- size >= 1

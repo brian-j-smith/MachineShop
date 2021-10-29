@@ -100,8 +100,9 @@ new_step_sbf <- function(
   )
   invalid_names <- intersect(names(options), names(step_args))
   if (length(invalid_names)) {
-    msg <- "options list contains reserved step name"
-    throw(Error(label_items(msg, invalid_names)))
+    throw(Error(note_items(
+      "Options list contains reserved step name{?s}: ", invalid_names, "."
+    )))
   }
   do.call(recipes::step, c(step_args, options))
 }
@@ -152,7 +153,7 @@ bake.step_sbf <- function(object, new_data, ...) {
 }
 
 
-print.step_sbf <- function(x, width = getOption("width"), ...) {
+print.step_sbf <- function(x, width = console_width(), ...) {
   msg <- paste(x$prefix, "selection by filtering for ")
   width <- max(width - nchar(msg), 20)
   cat(msg)

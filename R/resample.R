@@ -145,7 +145,7 @@ Resamples.data.frame <- function(
     var_names <- c("Model", "Resample", "Case", "Observed", "Predicted")
     missing <- missing_names(var_names, object)
     if (length(missing)) {
-      throw(Error(label_items("missing resample variable", missing)))
+      throw(Error(note_items("Missing resample variable{?s}: ", missing, ".")))
     }
     object$Model <- droplevels(object$Model)
   }

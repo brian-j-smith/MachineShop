@@ -20,8 +20,9 @@ ModelRecipe.recipe <- function(object, ...) {
     c("(groups)", "(names)", "(strata)"), summary(object)$variable
   )
   if (length(reserved)) {
-    msg <- label_items("supplied recipe contains reserved variable", reserved)
-    throw(Error(msg))
+    throw(Error(note_items(
+      "Supplied recipe contains reserved variable{?s}: ", reserved, "."
+    )))
   }
   cases_info <- data.frame(
     variable = cases_name,
@@ -70,7 +71,7 @@ prep.ModelFrame <- function(x, ...) x
 
 
 prep.ModelRecipe <- function(x, ...) {
-  if (!recipes::fully_trained(x)) {
+  if (!is_trained(x)) {
     template <- x$template
     x <- new(class(x), prep(as(x, "recipe"), retain = FALSE))
     x$template <- template

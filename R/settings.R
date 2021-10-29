@@ -370,10 +370,11 @@ MachineShop_global <- as.environment(list(
       value = c("MachineShop", "survival", "recipes"),
       check = function(x) {
         x <- setdiff(x, .global_defaults$require)
-        available <- vapply(x, requireNamespace, logical(1), quietly = TRUE)
-        if (!all(available)) {
-          missing <- x[!available]
-          DomainError(x, label_items("includes unavailable package", missing))
+        unavailable <- !vapply(x, requireNamespace, logical(1), quietly = TRUE)
+        if (any(unavailable)) {
+          DomainError(x, note_items(
+            "includes unavailable package{?s}: ", x[unavailable]
+          ))
         } else c(x, .global_defaults$require)
       }
     ),

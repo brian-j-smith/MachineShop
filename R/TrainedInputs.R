@@ -263,11 +263,12 @@ TunedInput.recipe <- function(
 
   grid_names <- names(object@grid)
   step_ids <- map_chr(getElement, object$steps, "id")
-  found <- grid_names %in% step_ids
-  if (!all(found)) {
-    missing <- grid_names[!found]
-    throw(Error(label_items("grid step name", missing),
-                label_items("; not found in recipe step id", step_ids)))
+  missing <- !(grid_names %in% step_ids)
+  if (any(missing)) {
+    throw(Error(
+      note_items("Grid step name{?s}: ", grid_names[missing], "; "),
+      note_items("not found in recipe step id{?s}: ", step_ids, ".")
+    ))
   }
 
   if (is(object, "ModeledRecipe")) {
