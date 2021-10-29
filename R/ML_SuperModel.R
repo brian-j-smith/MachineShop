@@ -48,6 +48,7 @@ SuperModel <- function(
                                  seq_along(base_learners))
 
   control <- as.MLControl(control)
+  params <- as.list(environment())
 
   slots <- combine_model_slots(base_learners, as.MLModel(model)@response_types)
   new("SuperModel",
@@ -56,7 +57,7 @@ SuperModel <- function(
     response_types = slots$response_types,
     weights = slots$weights,
     predictor_encoding = NA_character_,
-    params = as.list(environment()),
+    params = params,
     varimp = function(object, ...) NULL
   )
 

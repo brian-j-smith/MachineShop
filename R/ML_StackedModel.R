@@ -42,8 +42,8 @@ StackedModel <- function(
                                  seq_along(base_learners))
 
   control <- as.MLControl(control)
-
-  if (!is.null(weights)) stopifnot(length(weights) == length(base_learners))
+  if (length(weights)) stopifnot(length(weights) == length(base_learners))
+  params <- as.list(environment())
 
   slots <- combine_model_slots(base_learners, settings("response_types"))
   new("StackedModel",
@@ -52,7 +52,7 @@ StackedModel <- function(
     response_types = slots$response_types,
     weights = slots$weights,
     predictor_encoding = NA_character_,
-    params = as.list(environment()),
+    params = params,
     varimp = function(object, ...) NULL
   )
 
