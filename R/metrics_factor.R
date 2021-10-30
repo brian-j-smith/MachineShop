@@ -132,7 +132,7 @@ setMetricMethod("brier", c("Surv", "SurvProbs"),
       start_by <- start_time(observed) <= time
       stop_after <- time(observed) > time
       known_status <- start_by & (observed[, "status"] == 0 | stop_after)
-      cens <- predict(cens_fit, pmin(time(observed), time))
+      cens <- predict(cens_fit, pmin(time, time(observed)))
       cens_weights <- prop.table(ifelse(known_status, weights / cens, 0))
       sum(cens_weights * (stop_after - predicted[, i, drop = TRUE])^2)
     }, seq_along(times))
@@ -197,7 +197,7 @@ setMetricMethod("cross_entropy", c("factor", "matrix"),
   function(observed, predicted, weights, ...) {
     observed <- model.matrix(~ observed - 1)
     eps <- 1e-15
-    predicted <- pmax(eps, pmin(predicted, 1 - eps))
+    predicted <- pmin(pmax(predicted, eps), 1 - eps)
     n <- ncol(observed)
     -weighted_mean(observed * log(predicted), rep(weights, n)) * n
   }

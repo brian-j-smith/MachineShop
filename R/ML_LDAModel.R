@@ -55,7 +55,7 @@ LDAModel <- function(
       param = "dimen",
       get_values = c(
         function(n, data, ...) {
-          seq_len(min(nlevels(response(data)) - 1, nvars(data, LDAModel), n))
+          seq_len(min(n, nlevels(response(data)) - 1, nvars(data, LDAModel)))
         }
       )
     ),

@@ -31,7 +31,7 @@ RFSRCModel(
 
 RFSRCFastModel(
   ntree = 500,
-  sampsize = function(x) min(0.632 * x, max(150, x^0.75)),
+  sampsize = function(x) min(0.632 * x, max(x^0.75, 150)),
   ntime = 50,
   terminal.qualts = FALSE,
   ...

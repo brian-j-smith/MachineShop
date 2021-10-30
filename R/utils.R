@@ -301,7 +301,7 @@ new_params <- function(envir, ...) {
 
 new_progress_bar <- function(total, input = NULL, model = NULL, index = 0) {
   if (getDoParName() == "doSEQ") index <- as.numeric(index)
-  width <- max(10, round(0.25 * getOption("width")))
+  width <- max(round(0.25 * getOption("width")), 10)
   if (!is.null(input)) input <- substr(class1(input), 1, width)
   if (!is.null(model)) {
     model <- substr(as.MLModel(model)@name, 1, width)

@@ -161,7 +161,7 @@ varimp_permute <- function(
   } else if (is.null(size)) {
     prop <- check_numeric(prop, bounds = c(0, 1), include = 0:1, size = 1)
     throw(check_assignment(prop))
-    max(min(2, n), prop * n)
+    min(max(prop * n, 2), n)
   } else if (is.null(prop)) {
     size <- check_numeric(size, bounds = c(2, Inf), size = 1)
     throw(check_assignment(size))

@@ -154,7 +154,7 @@ bake.step_sbf <- function(object, new_data, ...) {
 
 print.step_sbf <- function(x, width = getOption("width"), ...) {
   msg <- paste(x$prefix, "selection by filtering for ")
-  width <- max(20, width - nchar(msg))
+  width <- max(width - nchar(msg), 20)
   cat(msg)
   recipes::printer(x$res$terms, x$terms, x$trained, width = width)
   invisible(x)

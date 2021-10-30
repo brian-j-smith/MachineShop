@@ -112,7 +112,7 @@ new_step_kmedoids <- function(
       if (is.function(stat)) apply(x, 2, stat) else stat
     }, step[c("center", "scale")])
     x <- t(base::scale(x, center = stats$center, scale = stats$scale))
-    k <- max(min(step$k, nrow(x) - 1), 1)
+    k <- min(max(step$k, 1), nrow(x) - 1)
     switch(step$method,
       "pam" = {
         res <- cluster::pam(x, k, metric = step$metric, pamonce = step$optimize,

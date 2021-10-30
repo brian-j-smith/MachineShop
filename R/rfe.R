@@ -184,7 +184,7 @@ rfe.MLModelFunction <- function(model, ...) {
   scale <- function(x) {
     scale <- max(x, 0)
     if (scale > 0) x <- x / scale
-    pmax(pmin(sort(x, decreasing = TRUE), 0.99), 0.01)
+    pmin(pmax(sort(x, decreasing = TRUE), 0.01), 0.99)
   }
 
   vi <- scale(varimp(model_fit))
@@ -202,7 +202,7 @@ rfe.MLModelFunction <- function(model, ...) {
     } else {
       props <- seq(0, 1, length = nprops + 1)[-1]
     }
-    sizes <- pmax(1, round(props * length(superset)))
+    sizes <- pmax(round(props * length(superset)), 1)
   }
   sizes <- sort(unique(sizes), decreasing = TRUE)
 

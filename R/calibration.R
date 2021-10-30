@@ -91,7 +91,7 @@ setMethod(".calibration", c("factor", "matrix"),
   function(observed, predicted, ...) {
     cal <- .calibration(model.matrix(~ observed - 1), predicted, ...)
     bounds <- c("Lower", "Upper")
-    cal$Observed[, bounds] <- pmin(pmax(0, cal$Observed[, bounds]), 1)
+    cal$Observed[, bounds] <- pmin(pmax(cal$Observed[, bounds], 0), 1)
     cal
   }
 )
@@ -102,7 +102,7 @@ setMethod(".calibration", c("factor", "numeric"),
     observed <- as.numeric(observed == levels(observed)[2])
     cal <- .calibration(observed, predicted, ...)
     bounds <- c("Lower", "Upper")
-    cal$Observed[, bounds] <- pmin(pmax(0, cal$Observed[, bounds]), 1)
+    cal$Observed[, bounds] <- pmin(pmax(cal$Observed[, bounds], 0), 1)
     cal
   }
 )
@@ -194,7 +194,7 @@ setMethod(".calibration", c("Surv", "SurvProbs"),
         SE <- c(0, km$std.err)[interval]
         result <- data[1, c("Response", "Predicted")]
         result$Observed <- cbind(Mean = Mean, SE = SE,
-                                 Lower = max(0, Mean - SE),
+                                 Lower = max(Mean - SE, 0),
                                  Upper = min(Mean + SE, 1))
         result
       }, simplify = FALSE)
@@ -232,7 +232,7 @@ setMethod(".calibration", c("Surv", "numeric"),
       tricubic <- function(x, span = 1, min_weight = 0) {
         x <- abs(x)
         x_range <- span * diff(range(x))
-        (1 - min_weight) * pmax(0, (1 - (x / x_range)^3)^3) + min_weight
+        (1 - min_weight) * pmax((1 - (x / x_range)^3)^3, 0) + min_weight
       }
       metrics_list <- map(function(value) {
         weights <- weights * tricubic(predicted - value, span = span,
@@ -243,7 +243,7 @@ setMethod(".calibration", c("Surv", "numeric"),
           survreg_est(observed, distr, weights)
         }
         with(est, c(Mean = Mean, SE = SE,
-                    Lower = max(0, Mean - SE),
+                    Lower = max(Mean - SE, 0),
                     Upper = Mean + SE))
       }, df$Predicted)
       df$Observed <- do.call(rbind, metrics_list)
@@ -267,7 +267,7 @@ setMethod(".calibration", c("Surv", "numeric"),
         }
         result <- data[1, c("Response", "Predicted")]
         result$Observed <- with(est, cbind(Mean = Mean, SE = SE,
-                                           Lower = max(0, Mean - SE),
+                                           Lower = max(Mean - SE, 0),
                                            Upper = Mean + SE))
         result
       }, simplify = FALSE)
@@ -280,7 +280,7 @@ setMethod(".calibration", c("Surv", "numeric"),
 midpoints <- function(x, breaks) {
   breaks <- if (length(breaks) == 1) {
     break_range <- range(x, na.rm = TRUE, finite = TRUE)
-    num_breaks <- max(1, as.integer(breaks)) + 1
+    num_breaks <- max(as.integer(breaks), 1) + 1
     seq(break_range[1], break_range[2], length = num_breaks)
   } else {
     sort(breaks)

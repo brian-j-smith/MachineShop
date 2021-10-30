@@ -91,7 +91,7 @@ new_step_kmeans <- function(..., k, algorithm, max_iter, num_start) {
 
   transform <- function(x, step) {
 
-    res <- stats::kmeans(t(x), centers = max(min(step$k, ncol(x) - 1), 1),
+    res <- stats::kmeans(t(x), centers = min(max(step$k, 1), ncol(x) - 1),
                          iter.max = step$max_iter, nstart = step$num_start,
                          algorithm = step$algorithm)
 

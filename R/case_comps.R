@@ -104,7 +104,7 @@ case_strata.character <- function(object, ...) {
 
 case_strata.factor <- function(object, prop = 0.1, size = 20, ...) {
   object <- sample_replace(object, is.na(object))
-  min_count <- max(1, prop * length(object), size)
+  min_count <- max(prop * length(object), size, 1)
   while (nlevels(object) > 1 && any((counts <- table(object)) < min_count)) {
     if (is.ordered(object)) {
       i <- which.min(head(counts, -1) + tail(counts, -1))
@@ -146,13 +146,13 @@ case_strata.numeric <- function(
   object, breaks = 4, nunique = 5, prop = 0.1, size = 20, ...
 ) {
   object <- sample_replace(object, is.na(object))
-  if (length(unique(object)) <= max(1, nunique)) {
+  if (length(unique(object)) <= max(nunique, 1)) {
     object <- ordered(object)
     levels(object) <- paste0("V", seq_len(nlevels(object)))
     res <- case_strata(object, prop = prop, size = size)
   } else {
-    min_count <- max(1, prop * length(object), size)
-    breaks <- max(1, breaks)
+    min_count <- max(prop * length(object), 1, size)
+    breaks <- max(breaks, 1)
     while (breaks > 0) {
       quants <- quantile(object, 0:breaks / breaks)
       res <- cut(object, unique(quants), include.lowest = TRUE)

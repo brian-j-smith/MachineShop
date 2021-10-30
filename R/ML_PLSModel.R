@@ -40,7 +40,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
       param = "ncomp",
       get_values = c(
         function(n, data, ...) {
-          seq_len(min(nrow(data), nvars(data, PLSModel) - 1, n))
+          seq_len(min(n, nrow(data), nvars(data, PLSModel) - 1))
         }
       )
     ),

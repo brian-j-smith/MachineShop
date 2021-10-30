@@ -111,7 +111,7 @@ throw <- function(x, call = TRUE, ...) {
 .throw.warning <- function(x, call, parent_call, times = Inf, ...) {
   if (is.call(parent_call) && is.finite(times)) {
     name <- parent_call[[1]]
-    times <- min(MachineShop_global$throw_times[[name]], times)
+    times <- min(times, MachineShop_global$throw_times[[name]])
     MachineShop_global$throw_times[[name]] <- times - 1
   }
   if (times > 0) {

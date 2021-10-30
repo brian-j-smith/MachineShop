@@ -43,7 +43,7 @@ expand_model <- function(object, ..., random = FALSE) {
 .expand_model.list <- function(object, ...) {
   grid <- object[[2]]
   models <- map(function(args) do.call(object[[1]], args),
-                split(grid, seq_len(max(1, nrow(grid)))))
+                split(grid, seq_len(max(nrow(grid), 1))))
   names(models) <- paste0(models[[1]]@name, ".", names(models))
   models
 }

@@ -135,7 +135,7 @@ prep.step_lincomp <- function(x, training, info = NULL, ...) {
   if (is.function(x$scale)) x$scale <- apply(training, 2, x$scale)
   training <- scale(training, center = x$center, scale = x$scale)
 
-  x$num_comp <- max(min(x$num_comp, ncol(training)), 1)
+  x$num_comp <- min(max(x$num_comp, 1), ncol(training))
 
   res <- x$transform(x = training, step = x)
   if (!is.list(res)) res <- list(weights = res)
@@ -177,7 +177,7 @@ bake.step_lincomp <- function(object, new_data, ...) {
 
 print.step_lincomp <- function(x, width = getOption("width"), ...) {
   msg <- paste(x$prefix, "variable reduction for ")
-  width <- max(20, width - nchar(msg))
+  width <- max(width - nchar(msg), 20)
   cat(msg)
   recipes::printer(rownames(x$res$weights), x$terms, x$trained, width = width)
   invisible(x)
