@@ -209,8 +209,8 @@ probabilities are classified.}
 
 \item{...}{arguments passed to or from other methods.}
 
-\item{metrics}{list of two performance metrics for the calculation [default:
-ROC metrics].}
+\item{metrics}{vector of two metric functions or function names that define a
+curve under which to calculate area [default: ROC metrics].}
 
 \item{stat}{function or character string naming a function to compute a
 summary statistic at each cutoff value of resampled metrics in performance

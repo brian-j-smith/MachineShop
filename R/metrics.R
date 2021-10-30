@@ -26,8 +26,8 @@
 #'   Defaults to the distribution that was used in predicting mean survival
 #'   times.
 #' @param f function to calculate a desired sensitivity-specificity tradeoff.
-#' @param metrics list of two performance metrics for the calculation [default:
-#'   ROC metrics].
+#' @param metrics vector of two metric functions or function names that define a
+#'   curve under which to calculate area [default: ROC metrics].
 #' @param power power to which positional distances of off-diagonals from the
 #'   main diagonal in confusion matrices are raised to calculate
 #'   \code{weighted_kappa2}.

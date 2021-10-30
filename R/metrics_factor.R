@@ -24,6 +24,7 @@ auc <- function(
   metrics = c(MachineShop::tpr, MachineShop::fpr),
   stat = MachineShop::settings("stat.Curve"), ...
 ) {
+  metrics <- map(as.MLMetric, metrics)
   call_metric_method("auc", environment())
 }
 
