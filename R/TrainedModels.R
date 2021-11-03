@@ -72,10 +72,11 @@ MLModelFunction(SelectedModel) <- NULL
 .fit.SelectedModel <- function(object, input, ...) {
   models <- object@params$models
   train_step <- resample_selection(models, identity, object@params, input,
-                                   class = "SelectedModel")
-  train_step$grid <- tibble(Model = factor(seq_along(models)))
-  model <- models[[train_step$selected]]
-  push(do.call(TrainStep, train_step), fit(input, model = model))
+                                   name = "SelectedModel")
+  train_step@grid$params <- factor(seq_along(models))
+  selected <- which(train_step@grid$selected)
+  model <- models[[selected]]
+  push(train_step, fit(input, model = model))
 }
 
 
@@ -199,8 +200,9 @@ MLModelFunction(TunedModel) <- NULL
   grid <- expand_modelgrid(object, input)
   models <- expand_model(list(params$model, grid))
   train_step <- resample_selection(models, identity, params, input,
-                                   class = "TunedModel")
-  train_step$grid <- tibble(Model = grid)
-  model <- models[[train_step$selected]]
-  push(do.call(TrainStep, train_step), fit(input, model = model))
+                                   name = "TunedModel")
+  train_step@grid$params <- grid
+  selected <- which(train_step@grid$selected)
+  model <- models[[selected]]
+  push(train_step, fit(input, model = model))
 }

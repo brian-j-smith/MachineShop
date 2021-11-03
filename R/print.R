@@ -561,19 +561,18 @@ setShowDefault("TabularArray")
 print.TrainStep <- function(x, n = MachineShop::settings("print_max"), ...) {
   title(x, ...)
   level <- nesting_level(...)
-  if (length(x@grid)) {
-    print_label("Grid (selected = ", x@selected, "):")
+  selected <- which(x@grid$selected)
+  if (length(x@grid$params)) {
+    print_label(x@name, " grid:")
     print_items(x@grid, n = n)
+  }
+  if (size(x@performance, 3) > 1) {
     newline()
+    print_fields(list("Selected grid row: " = selected))
+    print_fields(list(value = x@grid$metrics[[1]][selected]), labels = c(
+      value = paste(names(x@grid$metrics)[1], "value: ")
+    ))
   }
-  print(x@performance, n = n, level = level + 1)
-  newline()
-  if (length(x@values) > 1) {
-    print_fields(list("Selected model: " = names(x@values)[x@selected]))
-  }
-  print_fields(list(value = x@values[x@selected]), labels = c(
-    value = paste(names(x@selected), "value: ")
-  ))
   invisible(x)
 }
 

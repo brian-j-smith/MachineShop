@@ -177,7 +177,6 @@ SelectedInput.list <- function(x, ...) {
   params <- object@params
   update_input <- switch(class(object),
     "SelectedModelFrame" = {
-      grid_name <- "ModelFrame"
       object <- as(object, "ModelFrame")
       function(x) {
         input <- structure(object, terms = terms(x))
@@ -187,7 +186,6 @@ SelectedInput.list <- function(x, ...) {
       }
     },
     "SelectedModelRecipe" = {
-      grid_name <- "ModelRecipe"
       object <- as.data.frame(object)
       function(x) recipe(x, object[unique(summary(x)$variable)])
     },
@@ -195,11 +193,11 @@ SelectedInput.list <- function(x, ...) {
   )
   throw(update_input)
   train_step <- resample_selection(inputs, update_input, params, ...,
-                                   class = "SelectedInput")
-  train_step$grid <- tibble(Input = factor(seq_along(inputs)))
-  names(train_step$grid) <- grid_name
-  input <- update_input(inputs[[train_step$selected]])
-  push(do.call(TrainStep, train_step), fit(input, ...))
+                                   name = "SelectedInput")
+  train_step@grid$params <- factor(seq_along(inputs))
+  selected <- which(train_step@grid$selected)
+  input <- update_input(inputs[[selected]])
+  push(train_step, fit(input, ...))
 }
 
 
@@ -285,10 +283,11 @@ TunedInput.recipe <- function(
     grid_split <- split(grid, seq_len(nrow(grid)))
     update_input <- function(x) do.call(update, c(list(recipe), x))
     train_step <- resample_selection(grid_split, update_input, object@params,
-                                     model, class = "TunedInput")
-    train_step$grid <- tibble(ModelRecipe = asS3(grid))
-    input <- update_input(grid_split[[train_step$selected]])
-    push(do.call(TrainStep, train_step), fit(input, model = model))
+                                     model, name = "TunedInput")
+    train_step@grid$params <- asS3(grid)
+    selected <- which(train_step@grid$selected)
+    input <- update_input(grid_split[[selected]])
+    push(train_step, fit(input, model = model))
   } else {
     fit(recipe, model = model)
   }

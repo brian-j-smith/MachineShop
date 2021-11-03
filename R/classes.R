@@ -408,11 +408,9 @@ setClass("Resamples",
 
 TrainStep <- setClass("TrainStep",
   slots = c(
+    name = "character",
     grid = "tbl_df",
-    performance = "Performance",
-    selected = "numeric",
-    values = "numeric",
-    metric = "MLMetric"
+    performance = "Performance"
   )
 )
 

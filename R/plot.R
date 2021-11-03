@@ -172,7 +172,7 @@ plot.MLModel <- function(
   map(function(train_step) {
     perf <- train_step@performance
     if (type == "line") {
-      grid <- unnest(train_step@grid)
+      grid <- unnest(train_step@grid$params)
       stats <- apply(perf, c(3, 2), function(x) stat(na.omit(x))) %>%
         TabularArray %>%
         as.data.frame

@@ -426,16 +426,16 @@ subsample_input.ModelFrame <- function(x, data, ...) as(data, class1(x))
 subsample_input.ModelRecipe <- function(x, data, ...) recipe(x, data)
 
 
-resample_selection <- function(x, update, params, ..., class) {
+resample_selection <- function(x, update, params, ..., name, id) {
 
   metrics <- params$metrics
   stat <- check_stat(params$stat, convert = TRUE)
   throw(check_assignment(stat))
 
   perf_list <- list()
-  perf_stats <- numeric()
+  perf_stats <- list()
   err_msgs <- character()
-  i <- new_progress_index(names = class, max = length(x))
+  i <- new_progress_index(names = name, max = length(x))
   while (i < max(i)) {
     i <- i + 1
     name <- names(x)[i]
@@ -448,7 +448,7 @@ resample_selection <- function(x, update, params, ..., class) {
 
     if (is(res, "try-error")) {
       perf_list[[name]] <- NA
-      perf_stats[name] <- NA
+      perf_stats[[name]] <- NA
       err_msgs[name] <- conditionMessage(attr(res, "condition"))
       next
     }
@@ -459,7 +459,7 @@ resample_selection <- function(x, update, params, ..., class) {
 
     perf <- performance(res, metrics = metrics, cutoff = params$cutoff)
     perf_list[[name]] <- perf
-    perf_stats[name] <- stat(na.omit(perf[, 1]))
+    perf_stats[[name]] <- apply(perf, 2, function(x) stat(na.omit(x)))
   }
 
   failed <- is.na(perf_list)
@@ -470,15 +470,26 @@ resample_selection <- function(x, update, params, ..., class) {
     throw(LocalWarning("Resampling failed for some models.\n", err_msgs))
     perf[] <- NA
     perf_list[failed] <- list(perf)
+    perf_stats[failed] <- list(perf[1, ])
   }
 
   perf <- do.call(c, perf_list)
+  perf_stats <- do.call(rbind, perf_stats)
   metric <- as.MLMetric(c(metrics)[[1]])
-  selected <- (if (metric@maximize) which.max else which.min)(perf_stats)
+  selected <- (if (metric@maximize) which.max else which.min)(perf_stats[, 1])
 
-  list(performance = perf,
-       selected = structure(selected, names = colnames(perf)[1]),
-       values = perf_stats,
-       metric = metric)
+  res <- TrainStep(
+    id = id,
+    name = name,
+    grid = tibble(
+      name = names(perf_list),
+      selected = FALSE,
+      params = tibble(.rows = 1),
+      metrics = as_tibble(perf_stats)
+    ),
+    performance = perf
+  )
+  res@grid$selected[selected] <- TRUE
+  res
 
 }
