@@ -137,16 +137,18 @@ SelectedInput.recipe <- function(
 
   for (i in seq_along(inputs)) inputs[[i]] <- ModelRecipe(inputs[[i]])
 
-  get_info <- function(x) {
+  get_info <- function(x, roles = NULL, exclude = FALSE) {
     info <- summary(x)
-    info <- info[info$role != "predictor", ]
+    keep <- if (length(roles)) info$role %in% roles else TRUE
+    if (exclude) keep <- !keep
+    info <- info[keep, ]
     info_order <- do.call(order, info)
     info[info_order, ]
   }
-  if (!identical_elements(inputs, get_info)) {
+  common_info <- function(x) get_info(x, roles = "predictor", exclude = TRUE)
+  if (!identical_elements(inputs, common_info)) {
     throw(Error("recipes have different non-predictor variables"))
   }
-  info <- get_info(inputs[[1]])
 
   names(inputs) <- make_list_names(inputs, "Recipe")
   data <- NULL
@@ -155,9 +157,18 @@ SelectedInput.recipe <- function(
     inputs[[i]] <- recipe(inputs[[i]], tibble())
   }
 
-  outcome_vars <- info$variable[info$role == "outcome"]
+  outcome_vars <- get_info(inputs[[1]], roles = "outcome")$variable
   fo <- reformulate(".", paste(outcome_vars, collapse = "+"))
-  new("SelectedModelRecipe", new("ModelRecipe", recipe(fo, data = data)),
+  rec <- recipe(fo, data = data)
+
+  other_vars <- get_info(inputs[[1]], roles = c("predictor", "outcome"),
+                         exclude = TRUE)$variable
+  if (length(other_vars)) {
+    args <- list(rec, other_vars, new_role = "other")
+    rec <- do.call(recipes::update_role, args)
+  }
+
+  new("SelectedModelRecipe", new("ModelRecipe", rec),
       inputs = ListOf(inputs),
       params = list(control = as.MLControl(control), metrics = metrics,
                     stat = stat, cutoff = cutoff))
