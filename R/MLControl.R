@@ -15,7 +15,6 @@
 #' @param weights logical indicating whether to return case weights in resampled
 #'   output for the calculation of performance \link{metrics}.
 #' @param seed integer to set the seed at the start of resampling.
-#' @param ...  arguments passed to other methods.
 #'
 #' @return Object that inherits from the \code{MLControl} class.
 #'
@@ -44,16 +43,15 @@ NULL
 #' BootControl(samples = 100)
 #'
 BootControl <- function(
-  samples = 25, weights = TRUE, seed = sample(.Machine$integer.max, 1), ...
+  samples = 25, weights = TRUE, seed = sample(.Machine$integer.max, 1)
 ) {
   samples <- check_integer(samples, bounds = c(1, Inf), size = 1)
   throw(check_assignment(samples))
 
   new_control("BootControl",
-    name = "BootControl", label = "Bootstrap Resampling",
+    label = "Bootstrap Resampling",
     samples = samples, weights = weights, seed = seed
-  ) %>% set_monitor %>% set_strata %>%
-    dep_predictargs(...) %>% dep_strataargs(...)
+  ) %>% set_monitor %>% set_strata
 }
 
 
@@ -79,13 +77,11 @@ BootControl <- function(
 #' BootOptimismControl(samples = 100)
 #'
 BootOptimismControl <- function(
-  samples = 25, weights = TRUE, seed = sample(.Machine$integer.max, 1), ...
+  samples = 25, weights = TRUE, seed = sample(.Machine$integer.max, 1)
 ) {
-  new_control("BootOptimismControl",
-    BootControl(samples = samples, ...),
-    name = "BootOptimismControl",
-    label = "Optimism-Corrected Bootstrap Resampling",
-    weights = weights, seed = seed
+  new("BootOptimismControl",
+    BootControl(samples = samples, weights = weights, seed = seed),
+    label = "Optimism-Corrected Bootstrap Resampling"
   )
 }
 
@@ -110,7 +106,7 @@ BootOptimismControl <- function(
 #'
 CVControl <- function(
   folds = 10, repeats = 1, weights = TRUE,
-  seed = sample(.Machine$integer.max, 1), ...
+  seed = sample(.Machine$integer.max, 1)
 ) {
   folds <- check_integer(folds, bounds = c(2, Inf), size = 1)
   throw(check_assignment(folds))
@@ -119,10 +115,9 @@ CVControl <- function(
   throw(check_assignment(repeats))
 
   new_control("CVControl",
-    name = "CVControl", label = "K-Fold Cross-Validation",
+    label = "K-Fold Cross-Validation",
     folds = folds, repeats = repeats, weights = weights, seed = seed
-  ) %>% set_monitor %>% set_strata %>%
-    dep_predictargs(...) %>% dep_strataargs(...)
+  ) %>% set_monitor %>% set_strata
 }
 
 
@@ -143,13 +138,11 @@ CVControl <- function(
 #'
 CVOptimismControl <- function(
   folds = 10, repeats = 1, weights = TRUE,
-  seed = sample(.Machine$integer.max, 1), ...
+  seed = sample(.Machine$integer.max, 1)
 ) {
   new("CVOptimismControl",
-    CVControl(folds = folds, repeats = repeats, ...),
-    name = "CVOptimismControl",
-    label = "Optimism-Corrected K-Fold Cross-Validation",
-    weights = weights, seed = seed
+    CVControl(folds = folds, repeats = repeats, weights = weights, seed = seed),
+    label = "Optimism-Corrected K-Fold Cross-Validation"
   )
 }
 
@@ -166,16 +159,15 @@ CVOptimismControl <- function(
 #' OOBControl(samples = 100)
 #'
 OOBControl <- function(
-  samples = 25, weights = TRUE, seed = sample(.Machine$integer.max, 1), ...
+  samples = 25, weights = TRUE, seed = sample(.Machine$integer.max, 1)
 ) {
   samples <- check_integer(samples, bounds = c(1, Inf), size = 1)
   throw(check_assignment(samples))
 
   new_control("OOBControl",
-    name = "OOBControl", label = "Out-of-Bootstrap Resampling",
+    label = "Out-of-Bootstrap Resampling",
     samples = samples, weights = weights, seed = seed
-  ) %>% set_monitor %>% set_strata %>%
-    dep_predictargs(...) %>% dep_strataargs(...)
+  ) %>% set_monitor %>% set_strata
 }
 
 
@@ -195,15 +187,15 @@ OOBControl <- function(
 #' SplitControl(prop = 2/3)
 #'
 SplitControl <- function(
-  prop = 2/3, weights = TRUE, seed = sample(.Machine$integer.max, 1), ...
+  prop = 2/3, weights = TRUE, seed = sample(.Machine$integer.max, 1)
 ) {
   prop <- check_numeric(prop, bounds = c(0, 1), include = FALSE, size = 1)
   throw(check_assignment(prop))
 
   new_control("SplitControl",
-    name = "SplitControl", label = "Split Training and Test Samples",
+    label = "Split Training and Test Samples",
     prop = prop, weights = weights, seed = seed
-  ) %>% set_strata %>% dep_predictargs(...) %>% dep_strataargs(...)
+  ) %>% set_strata
 }
 
 
@@ -223,12 +215,12 @@ SplitControl <- function(
 #' TrainControl()
 #'
 TrainControl <- function(
-  weights = TRUE, seed = sample(.Machine$integer.max, 1), ...
+  weights = TRUE, seed = sample(.Machine$integer.max, 1)
 ) {
   new_control("TrainControl",
-    name = "TrainControl", label = "Training Resubstitution",
+    label = "Training Resubstitution",
     weights = weights, seed = seed
-  ) %>% dep_predictargs(...) %>% dep_strataargs(...)
+  )
 }
 
 
@@ -240,48 +232,6 @@ new_control <- function(class, ..., weights, seed) {
   throw(check_assignment(seed))
 
   new(class, ..., weights = weights, seed = seed) %>% set_predict
-}
-
-
-dep_predictargs <- function(x, times, distr, method, ...) {
-  args <- list()
-  if (!missing(times)) args$times <- times
-  if (!missing(distr)) args$distr <- distr
-  if (!missing(method)) args$method <- method
-  if (length(args)) {
-    throw(
-      DeprecatedCondition(
-        "Argument 'times', 'distr', and 'method' to MLControl()",
-        "'set_predict()'", expired = Sys.Date() >= "2021-10-01"
-      ),
-      call = FALSE
-    )
-    x <- do.call(set_predict, c(list(x), args))
-  }
-  x
-}
-
-
-dep_strataargs <- function(
-  x, strata_breaks, strata_nunique, strata_prop, strata_size, ...
-) {
-  args <- list()
-  if (!missing(strata_breaks)) args$breaks <- strata_breaks
-  if (!missing(strata_nunique)) args$nunique <- strata_nunique
-  if (!missing(strata_prop)) args$prop <- strata_prop
-  if (!missing(strata_size)) args$size <- strata_size
-  if (length(args)) {
-    old <- paste("Argument 'strata_breaks', 'strata_nunique', 'strata_prop',",
-                 "and 'strata_size' to MLControl()")
-    throw(
-      DeprecatedCondition(
-        old, "'set_strata()'", expired = Sys.Date() >= "2021-10-01"
-      ),
-      call = FALSE
-    )
-    x <- do.call(set_strata, c(list(x), args))
-  }
-  x
 }
 
 

@@ -265,7 +265,6 @@ setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 
 setClass("MLControl",
   slots = c(
-    name = "character",
     label = "character",
     monitor = "list",
     predict = "list",
