@@ -30,8 +30,10 @@
 #' \donttest{
 #' ## Requires prior installation of suggested package gbm and glmnet to run
 #'
-#' model_fit <- fit(sale_amount ~ ., data = ICHomes,
-#'                  model = SelectedModel(GBMModel, GLMNetModel, SVMRadialModel))
+#' model_fit <- fit(
+#'   sale_amount ~ ., data = ICHomes,
+#'   model = SelectedModel(GBMModel, GLMNetModel, SVMRadialModel)
+#' )
 #' (selected_model <- as.MLModel(model_fit))
 #' summary(selected_model)
 #' }
@@ -53,16 +55,16 @@ SelectedModel <- function(
   names(models) <- make.unique(model_names)
 
   slots <- combine_model_slots(models, settings("response_types"))
-  new("SelectedModel",
-      name = "SelectedModel",
-      label = "Selected Model",
-      response_types = slots$response_types,
-      weights = slots$weights,
-      predictor_encoding = NA_character_,
-      params = list(models = ListOf(models),
-                    control = as.MLControl(control), metrics = metrics,
-                    stat = stat, cutoff = cutoff)
-  )
+  new("SelectedModel", MLModel(
+    name = "SelectedModel",
+    label = "Selected Model",
+    response_types = slots$response_types,
+    weights = slots$weights,
+    params = list(
+      models = ListOf(models), control = as.MLControl(control),
+      metrics = metrics, stat = stat, cutoff = cutoff
+    )
+  ))
 
 }
 
@@ -137,10 +139,14 @@ MLModelFunction(SelectedModel) <- NULL
 #'
 #' # User-specified grid
 #' fit(sale_amount ~ ., data = ICHomes,
-#'     model = TunedModel(GBMModel,
-#'                        grid = expand_params(n.trees = c(50, 100),
-#'                                             interaction.depth = 1:2,
-#'                                             n.minobsinnode = c(5, 10))))
+#'     model = TunedModel(
+#'       GBMModel,
+#'       grid = expand_params(
+#'         n.trees = c(50, 100),
+#'         interaction.depth = 1:2,
+#'         n.minobsinnode = c(5, 10)
+#'       )
+#'     ))
 #' }
 #'
 TunedModel <- function(
@@ -179,16 +185,17 @@ TunedModel <- function(
     throw(Error("only single values allowed for fixed parameters"))
   }
 
-  new("TunedModel",
-      name = "TunedModel",
-      label = "Grid Tuned Model",
-      response_types = response_types,
-      weights = weights,
-      predictor_encoding = NA_character_,
-      params = list(model = object, grid = grid, fixed = fixed,
-                    control = as.MLControl(control), metrics = metrics,
-                    stat = stat, cutoff = cutoff)
-  )
+  new("TunedModel", MLModel(
+    name = "TunedModel",
+    label = "Grid Tuned Model",
+    response_types = response_types,
+    weights = weights,
+    params = list(
+      model = object, grid = grid, fixed = fixed,
+      control = as.MLControl(control), metrics = metrics, stat = stat,
+      cutoff = cutoff
+    )
+  ))
 
 }
 

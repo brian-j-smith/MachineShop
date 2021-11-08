@@ -46,15 +46,13 @@ StackedModel <- function(
   params <- as.list(environment())
 
   slots <- combine_model_slots(base_learners, settings("response_types"))
-  new("StackedModel",
+  new("StackedModel", MLModel(
     name = "StackedModel",
     label = "Stacked Regression",
     response_types = slots$response_types,
     weights = slots$weights,
-    predictor_encoding = NA_character_,
-    params = params,
-    varimp = function(object, ...) NULL
-  )
+    params = params
+  ))
 
 }
 

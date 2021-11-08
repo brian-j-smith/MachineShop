@@ -76,10 +76,14 @@ fit(sale_amount ~ ., data = ICHomes,
 
 # User-specified grid
 fit(sale_amount ~ ., data = ICHomes,
-    model = TunedModel(GBMModel,
-                       grid = expand_params(n.trees = c(50, 100),
-                                            interaction.depth = 1:2,
-                                            n.minobsinnode = c(5, 10))))
+    model = TunedModel(
+      GBMModel,
+      grid = expand_params(
+        n.trees = c(50, 100),
+        interaction.depth = 1:2,
+        n.minobsinnode = c(5, 10)
+      )
+    ))
 }
 
 }

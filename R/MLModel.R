@@ -110,6 +110,13 @@ MLModel <- function(
   stopifnot(response_types %in% settings("response_types"))
   stopifnot(length(weights) %in% c(1, length(response_types)))
 
+  stopifnot(is_tibble(gridinfo))
+  gridinfo <- new_gridinfo(
+    param = gridinfo[["param"]],
+    get_values = gridinfo[["get_values"]],
+    default = gridinfo[["default"]]
+  )
+
   new("MLModel",
       name = name,
       label = label,
@@ -123,20 +130,6 @@ MLModel <- function(
       predict = predict,
       varimp = varimp)
 }
-
-
-setMethod("initialize", "MLModel",
-  function(.Object, ..., gridinfo = new_gridinfo()) {
-    stopifnot(is_tibble(gridinfo))
-    .Object@gridinfo <- new_gridinfo(
-      param = gridinfo[["param"]],
-      get_values = gridinfo[["get_values"]],
-      default = gridinfo[["default"]]
-    )
-    .Object <- callNextMethod(.Object, ...)
-    .Object
-  }
-)
 
 
 MLModelFit <- function(object, Class, model, input) {

@@ -51,15 +51,13 @@ SuperModel <- function(
   params <- as.list(environment())
 
   slots <- combine_model_slots(base_learners, as.MLModel(model)@response_types)
-  new("SuperModel",
+  new("SuperModel", MLModel(
     name = "SuperModel",
     label = "Super Learner",
     response_types = slots$response_types,
     weights = slots$weights,
-    predictor_encoding = NA_character_,
-    params = params,
-    varimp = function(object, ...) NULL
-  )
+    params = params
+  ))
 
 }
 
