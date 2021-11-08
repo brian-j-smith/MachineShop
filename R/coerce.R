@@ -15,7 +15,7 @@ setAsS3Part("ListOf", "listof")
 
 
 as.data.frame.ModelFrame <- function(x, ...) {
-  structure(as(x, "ModelFrame"), terms = NULL, class = "data.frame")
+  structure(asS3(x), terms = NULL)
 }
 
 
@@ -197,12 +197,6 @@ as.MLModel.ModeledInput <- function(x, ...) {
 as.MLModel.model_spec <- function(x, ...) {
   ParsnipModel(x)
 }
-
-
-setAsS3Part("ModeledFrame", "ModelFrame")
-
-
-setAsS3Part("SelectedModelFrame", "ModelFrame")
 
 
 setAsS3Part("ModelRecipe", "recipe")

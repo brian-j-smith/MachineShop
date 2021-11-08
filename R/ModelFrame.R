@@ -145,9 +145,8 @@ ModelFrame.ModelFrame <- function(input, na.rm = TRUE, ...) {
 
 
 ModelFrame.ModelTerms <- function(object, data, ...) {
-  ModelFrame(structure(
-    as.data.frame(data), terms = object, class = c("ModelFrame", "data.frame")
-  ), ...)
+  data <- structure(as.data.frame(data), terms = object)
+  ModelFrame(new("ModelFrame", data), ...)
 }
 
 

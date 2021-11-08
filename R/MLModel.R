@@ -48,12 +48,11 @@
 #' named after and contain values of parameters to include in a tuning grid to
 #' be constructed automatically by the package.
 #'
-#' Argument \code{data} in the \code{fit} function may be converted to a data
-#' frame with the \code{as.data.frame} function as needed.  The function should
-#' return the object resulting from the model fit.
-#'
-#' Values returned by the \code{predict} functions should be formatted according
-#' to the response variable types below.
+#' Arguments \code{data} and \code{newdata} in the \code{fit} and \code{predict}
+#' functions may be converted to data frames with \code{as.data.frame()}
+#' if needed for their operation.  The \code{fit} function should return the
+#' object resulting from the model fit.  Values returned by the \code{predict}
+#' functions should be formatted according to the response variable types below.
 #' \describe{
 #'   \item{factor}{vector or column matrix of probabilities for the second level
 #'     of binary factors or a matrix whose columns contain the probabilities for
@@ -80,10 +79,11 @@
 #'   response_types = "binary",
 #'   weights = TRUE,
 #'   fit = function(formula, data, weights, ...) {
-#'     glm(formula, data = data, weights = weights, family = binomial, ...)
+#'     glm(formula, data = as.data.frame(data), weights = weights,
+#'         family = binomial, ...)
 #'   },
 #'   predict = function(object, newdata, ...) {
-#'     predict(object, newdata = newdata, type = "response")
+#'     predict(object, newdata = as.data.frame(newdata), type = "response")
 #'   },
 #'   varimp = function(object, ...) {
 #'     pchisq(coef(object)^2 / diag(vcov(object)), 1)

@@ -4,9 +4,9 @@
 \alias{extract}
 \alias{[.BinomialVariate}
 \alias{[,DiscreteVariate,ANY,missing,missing-method}
-\alias{[.ModelFrame}
 \alias{[,ModelFrame,ANY,ANY,ANY-method}
 \alias{[,ModelFrame,ANY,missing,ANY-method}
+\alias{[,ModelFrame,missing,ANY,ANY-method}
 \alias{[,ModelFrame,missing,missing,ANY-method}
 \alias{[,RecipeGrid,ANY,ANY,ANY-method}
 \alias{[,Resamples,ANY,ANY,ANY-method}
@@ -20,11 +20,11 @@
 
 \S4method{[}{DiscreteVariate,ANY,missing,missing}(x, i)
 
-\method{[}{ModelFrame}(x, i, j, ..., drop = FALSE)
-
 \S4method{[}{ModelFrame,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 
 \S4method{[}{ModelFrame,ANY,missing,ANY}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{ModelFrame,missing,ANY,ANY}(x, i, j, ..., drop = FALSE)
 
 \S4method{[}{ModelFrame,missing,missing,ANY}(x, i, j, ..., drop = FALSE)
 

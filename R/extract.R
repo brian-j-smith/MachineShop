@@ -36,30 +36,18 @@ setMethod("[",
 
 #' @rdname extract-methods
 #'
-"[.ModelFrame" <- function(x, i, j, ..., drop = FALSE) {
-  ninds <- nargs() - 1 - !missing(drop)
-  if (ninds > 1) {
-    if (!missing(j) || drop) {
-      y <- as.data.frame(x)[i, j, drop = drop]
-      if (identical(colnames(x), colnames(y))) {
-        ModelFrame(terms(x), y, na.rm = FALSE)
-      } else y
-    } else NextMethod(drop = FALSE)
-  } else x[, i, drop = FALSE]
-}
-
-
-#' @rdname extract-methods
-#'
 setMethod("[", c(x = "ModelFrame", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
-    y <- as(x, "ModelFrame")[i, j, drop = drop]
-    if (is(y, "ModelFrame")) {
-      switch_class(x,
-        "ModeledInput" = new(class(x), y, model = x@model),
-        "SelectedInput" = new(class(x), y, inputs = x@inputs, params = x@params)
-      )
-    } else y
+    y <- as.data.frame(x)[i, j, drop = drop]
+    if (identical(colnames(x), colnames(y))) {
+      y <- ModelFrame(terms(x), y, na.rm = FALSE)
+      if (is(x, "ModeledInput")) {
+        y <- new(class(x), y, model = x@model)
+      } else if (is(x, "SelectedInput")) {
+        y <- new(class(x), y, inputs = x@inputs, params = x@params)
+      }
+    }
+    y
   }
 )
 
@@ -74,6 +62,15 @@ setMethod("[", c(x = "ModelFrame", i = "ANY", j = "missing", drop = "ANY"),
         as(asS3(x)[i, , drop = FALSE], class(x))
       } else x[i, TRUE, drop = TRUE]
     } else x[, i, drop = FALSE]
+  }
+)
+
+
+#' @rdname extract-methods
+#'
+setMethod("[", c(x = "ModelFrame", i = "missing", j = "ANY", drop = "ANY"),
+  function(x, i, j, ..., drop = FALSE) {
+    x[TRUE, j, drop = drop]
   }
 )
 

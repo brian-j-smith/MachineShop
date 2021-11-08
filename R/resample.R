@@ -422,7 +422,7 @@ subsample <- function(train, test, model, control, id = 1) {
 
 
 subsample_input <- function(x, ...) UseMethod("subsample_input")
-subsample_input.ModelFrame <- function(x, data, ...) as(data, class1(x))
+subsample_input.ModelFrame <- function(x, data, ...) as(data, class(x))
 subsample_input.ModelRecipe <- function(x, data, ...) recipe(x, data)
 
 
