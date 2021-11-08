@@ -71,7 +71,7 @@ which to predict survival, and an ellipsis.}
 \code{object} returned by \code{fit}, optional arguments passed from calls
 to \code{\link{varimp}}, and an ellipsis.}
 
-\item{...}{arguments passed from other methods.}
+\item{...}{arguments passed to other methods.}
 }
 \value{
 \code{MLModel} class object.

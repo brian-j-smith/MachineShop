@@ -97,11 +97,24 @@ RecipeGrid <- setClass("RecipeGrid",
 )
 
 
-#################### Models ####################
+#################### Model Components ####################
+
+
+setClass("MLInput",
+  slots = c(id = "character")
+)
+
+
+setMethod("initialize", "MLInput",
+  function(.Object, ..., id = make_id()) {
+    callNextMethod(.Object, ..., id = id)
+  }
+)
 
 
 setClass("MLModel",
   slots = c(
+    id = "character",
     name = "character",
     label = "character",
     packages = "character",
@@ -113,27 +126,17 @@ setClass("MLModel",
     fit = "function",
     predict = "function",
     varimp = "function",
-    input = "ANY",
+    input = "MLInput",
     train_steps = "ListOf"
   )
 )
 
 
-setClass("ParsnipModel", contains = "MLModel")
-setClass("SelectedModel", contains = "MLModel")
-setClass("StackedModel", contains = "MLModel")
-setClass("SuperModel", contains = "MLModel")
-setClass("TunedModel", contains = "MLModel")
-
-
-MLModelFunction <- setClass("MLModelFunction",
-  contains = "function"
+setMethod("initialize", "MLModel",
+  function(.Object, ..., id = make_id(), input = NullInput()) {
+    callNextMethod(.Object, ..., id = id, input = input)
+  }
 )
-
-
-"MLModelFunction<-" <- function(object, value) {
-  do.call(MLModelFunction, c(object, value))
-}
 
 
 #################### Model Inputs ####################
@@ -145,12 +148,13 @@ setOldClass(c("terms", "formula"))
 
 
 setClass("ModelFrame",
-  contains = "data.frame"
+  contains = c("data.frame", "MLInput")
 )
 
 
 setClass("ModelTerms",
-  contains = "terms"
+  contains = "terms",
+  slots = c(id = "character")
 )
 
 
@@ -165,7 +169,7 @@ ModelFormulaTerms <- setClass("ModelFormulaTerms",
 
 
 setClass("ModelRecipe",
-  contains = "recipe"
+  contains = c("recipe", "MLInput")
 )
 
 
@@ -200,9 +204,15 @@ setClass("ModeledRecipe",
 )
 
 
+setClass("NullInput",
+  contains = "MLInput"
+)
+
+
 setClass("SelectedInput",
   contains = "VIRTUAL",
   slots = c(
+    id = "character",
     inputs = "ListOf",
     params = "list"
   )
@@ -237,6 +247,26 @@ setClass("TunedModelRecipe",
 setClass("TunedModeledRecipe",
   contains = c("TunedModelRecipe", "ModeledRecipe")
 )
+
+
+#################### Models ####################
+
+
+setClass("ParsnipModel", contains = "MLModel")
+setClass("SelectedModel", contains = "MLModel")
+setClass("StackedModel", contains = "MLModel")
+setClass("SuperModel", contains = "MLModel")
+setClass("TunedModel", contains = "MLModel")
+
+
+MLModelFunction <- setClass("MLModelFunction",
+  contains = "function"
+)
+
+
+"MLModelFunction<-" <- function(object, value) {
+  do.call(MLModelFunction, c(object, value))
+}
 
 
 #################### Model Fits ####################
@@ -412,6 +442,7 @@ setClass("Resamples",
 
 TrainStep <- setClass("TrainStep",
   slots = c(
+    id = "character",
     name = "character",
     grid = "tbl_df",
     performance = "Performance"

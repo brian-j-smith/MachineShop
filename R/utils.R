@@ -227,6 +227,11 @@ is_trained.step <- function(x, ...) {
 }
 
 
+make_id <- function(n = 8) {
+  paste(sample(c(letters, 0:9), n, replace = TRUE), collapse = "")
+}
+
+
 make_list_names <- function(x, prefix) {
   old_names <- names(x)
   names(x) <- if (length(x)) {

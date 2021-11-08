@@ -188,24 +188,24 @@ SelectedInput.list <- function(x, ...) {
   params <- object@params
   update_input <- switch(class(object),
     "SelectedModelFrame" = {
-      object <- as(object, "ModelFrame")
+      data <- as(object, "ModelFrame")
       function(x) {
-        input <- structure(object, terms = terms(x))
+        input <- structure(data, terms = terms(x))
         if (is(x, "ModeledTerms")) {
           ModeledInput(input, model = x@model)
         } else input
       }
     },
     "SelectedModelRecipe" = {
-      object <- as.data.frame(object)
-      function(x) recipe(x, object[unique(summary(x)$variable)])
+      data <- as.data.frame(object)
+      function(x) recipe(x, data[unique(summary(x)$variable)])
     },
     TypeError(object, c("SelectedModelFrame", "SelectedModelRecipe"), "input")
   )
   throw(update_input)
   train_step <- resample_selection(inputs, update_input, params, ...,
-                                   name = "SelectedInput")
-  train_step@grid$params <- factor(seq_along(inputs))
+                                   name = "SelectedInput", id = object@id)
+  train_step@grid$params <- tibble(id = map("char", slot, inputs, "id"))
   selected <- which(train_step@grid$selected)
   input <- update_input(inputs[[selected]])
   push(train_step, fit(input, ...))
@@ -294,7 +294,7 @@ TunedInput.recipe <- function(
     grid_split <- split(grid, seq_len(nrow(grid)))
     update_input <- function(x) do.call(update, c(list(recipe), x))
     train_step <- resample_selection(grid_split, update_input, object@params,
-                                     model, name = "TunedInput")
+                                     model, name = "TunedInput", id = object@id)
     train_step@grid$params <- asS3(grid)
     selected <- which(train_step@grid$selected)
     input <- update_input(grid_split[[selected]])

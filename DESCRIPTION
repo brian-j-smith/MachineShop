@@ -66,7 +66,7 @@ Collate:
     'ML_MDAModel.R'
     'ML_NNetModel.R'
     'ML_NaiveBayesModel.R'
-    'ML_NullModel.R'
+    'ML_Null.R'
     'ML_ParsnipModel.R'
     'ML_PLSModel.R'
     'ML_POLRModel.R'

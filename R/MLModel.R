@@ -41,7 +41,7 @@
 #' @param varimp variable importance function whose arguments are the
 #'   \code{object} returned by \code{fit}, optional arguments passed from calls
 #'   to \code{\link{varimp}}, and an ellipsis.
-#' @param ... arguments passed from other methods.
+#' @param ... arguments passed to other methods.
 #'
 #' @details
 #' If supplied, the \code{grid} function should return a list whose elements are
@@ -118,17 +118,19 @@ MLModel <- function(
   )
 
   new("MLModel",
-      name = name,
-      label = label,
-      packages = packages,
-      response_types = response_types,
-      weights = weights,
-      predictor_encoding = match.arg(predictor_encoding),
-      params = params,
-      gridinfo = gridinfo,
-      fit = fit,
-      predict = predict,
-      varimp = varimp)
+    name = name,
+    label = label,
+    packages = packages,
+    response_types = response_types,
+    weights = weights,
+    predictor_encoding = match.arg(predictor_encoding),
+    params = params,
+    gridinfo = gridinfo,
+    fit = fit,
+    predict = predict,
+    varimp = varimp,
+    ...
+  )
 }
 
 
