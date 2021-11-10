@@ -54,7 +54,7 @@ values for \code{method = "permute"}.
 }}
 }
 \value{
-\code{VarImp} class object.
+\code{VariableImportance} class object.
 }
 \description{
 Calculate measures of the relative importance of predictors in a model.

@@ -450,7 +450,7 @@ TrainStep <- setClass("TrainStep",
 )
 
 
-setClass("VarImp",
+setClass("VariableImportance",
   contains = "data.frame",
   slots = c(scale = "numeric")
 )

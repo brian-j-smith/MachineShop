@@ -11,7 +11,7 @@
 \alias{plot.Performance}
 \alias{plot.PerformanceCurve}
 \alias{plot.Resamples}
-\alias{plot.VarImp}
+\alias{plot.VariableImportance}
 \title{Model Performance Plots}
 \usage{
 \method{plot}{Calibration}(x, type = c("line", "point"), se = FALSE, ...)
@@ -62,7 +62,7 @@
   ...
 )
 
-\method{plot}{VarImp}(x, n = NULL, ...)
+\method{plot}{VariableImportance}(x, n = NULL, ...)
 }
 \arguments{
 \item{x}{\link{calibration}, \link{confusion}, \link{lift},

@@ -1,9 +1,9 @@
-VarImp <- function(object, ...) {
-  UseMethod("VarImp")
+VariableImportance <- function(object, ...) {
+  UseMethod("VariableImportance")
 }
 
 
-VarImp.default <- function(object, scale = TRUE, ...) {
+VariableImportance.default <- function(object, scale = TRUE, ...) {
   stopifnot(nrow(object) == 0 || is.character(rownames(object)))
 
   object <- object[rownames(object) != "(Intercept)", , drop = FALSE]
@@ -17,17 +17,17 @@ VarImp.default <- function(object, scale = TRUE, ...) {
   }
   object <- object[order(sort_vals, decreasing = TRUE), , drop = FALSE]
 
-  new("VarImp", object, scale = scale)
+  new("VariableImportance", object, scale = scale)
 }
 
 
-VarImp.matrix <- function(object, ...) {
-  VarImp(as.data.frame(object), ...)
+VariableImportance.matrix <- function(object, ...) {
+  VariableImportance(as.data.frame(object), ...)
 }
 
 
-VarImp.numeric <- function(object, ...) {
-  VarImp(cbind(Overall = object), ...)
+VariableImportance.numeric <- function(object, ...) {
+  VariableImportance(cbind(Overall = object), ...)
 }
 
 
@@ -78,7 +78,7 @@ VarImp.numeric <- function(object, ...) {
 #'       variable importance values from the calculation of summary statistics.}
 #'   }
 #'
-#' @return \code{VarImp} class object.
+#' @return \code{VariableImportance} class object.
 #'
 #' @references
 #' Fisher, A., Rudin, C., & Dominici, F. (2019). All models are wrong, but many
@@ -124,7 +124,7 @@ varimp <- function(object, method = c("permute", "model"), scale = TRUE, ...) {
       vi <- do.call(varimp_permute, args, envir = parent.frame())
     }
   )
-  VarImp(vi, scale = scale)
+  VariableImportance(vi, scale = scale)
 }
 
 

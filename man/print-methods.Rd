@@ -19,7 +19,7 @@
 \alias{print.SurvMatrix}
 \alias{print.SurvTimes}
 \alias{print.TrainStep}
-\alias{print.VarImp}
+\alias{print.VariableImportance}
 \title{Print MachineShop Objects}
 \usage{
 \method{print}{BinomialVariate}(x, n = MachineShop::settings("print_max"), ...)
@@ -56,7 +56,7 @@
 
 \method{print}{TrainStep}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{VarImp}(x, n = MachineShop::settings("print_max"), ...)
+\method{print}{VariableImportance}(x, n = MachineShop::settings("print_max"), ...)
 }
 \arguments{
 \item{x}{object to print.}

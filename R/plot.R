@@ -348,7 +348,7 @@ plot.Resamples <- function(
 
 #' @rdname plot-methods
 #'
-plot.VarImp <- function(x, n = NULL, ...) {
+plot.VariableImportance <- function(x, n = NULL, ...) {
   if (!is.null(n)) x <- head(x, n)
   var_names <- rownames(x)
   df <- cbind(stack(x), variables = factor(var_names, rev(var_names)))

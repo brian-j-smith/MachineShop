@@ -89,7 +89,7 @@ if(!all(weights == 1)) warning("weights are not supported and will be ignored")
 
 - Should have a single model fit `object` argument followed by an ellipsis.
 
-- Variable importance results should generally be returned as a vector with elements named after the corresponding predictor variables.  The package will handle conversions to a data frame and `VarImp` object.  If there is more than one set of relevant variable importance measures, they can be returned as a matrix or data frame with predictor variable names as the row names.
+- Variable importance results should generally be returned as a vector with elements named after the corresponding predictor variables.  The package will handle conversions to a data frame and `VariableImportance` object.  If there is more than one set of relevant variable importance measures, they can be returned as a matrix or data frame with predictor variable names as the row names.
 
 
 ## Documenting an MLModel

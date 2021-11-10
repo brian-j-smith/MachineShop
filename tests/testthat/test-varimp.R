@@ -13,7 +13,7 @@ test_that("test permuation-based varimp", {
     test_varimp <- function(x, ...) {
       set.seed(123)
       vi <- varimp(x, ..., method = "permute", scale = FALSE)
-      expect_true(is(vi, "VarImp") && !any(is.na(vi)))
+      expect_true(is(vi, "VariableImportance") && !any(is.na(vi)))
       vi
     }
 

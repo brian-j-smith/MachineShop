@@ -632,14 +632,16 @@ print.TunedModel <- function(x, n = MachineShop::settings("print_max"), ...) {
 
 #' @rdname print-methods
 #'
-print.VarImp <- function(x, n = MachineShop::settings("print_max"), ...) {
+print.VariableImportance <- function(
+  x, n = MachineShop::settings("print_max"), ...
+) {
   title(x, pad = FALSE, ...)
   print_items(as(x, "data.frame"), n = n)
   invisible(x)
 }
 
 
-setShowDefault("VarImp")
+setShowDefault("VariableImportance")
 
 
 #################### Print Utility Functions ####################
