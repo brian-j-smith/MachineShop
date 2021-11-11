@@ -7,13 +7,18 @@
 \alias{XGBTreeModel}
 \title{Extreme Gradient Boosting Models}
 \usage{
-XGBModel(params = list(), nrounds = 1, verbose = 0, print_every_n = 1)
-
-XGBDARTModel(
+XGBModel(
+  nrounds = 100,
+  ...,
   objective = character(),
   aft_loss_distribution = "normal",
   aft_loss_distribution_scale = 1,
   base_score = 0.5,
+  verbose = 0,
+  print_every_n = 1
+)
+
+XGBDARTModel(
   eta = 0.3,
   gamma = 0,
   max_depth = 6,
@@ -23,8 +28,8 @@ XGBDARTModel(
   colsample_bytree = 1,
   colsample_bylevel = 1,
   colsample_bynode = 1,
-  lambda = 1,
   alpha = 0,
+  lambda = 1,
   tree_method = "auto",
   sketch_eps = 0.03,
   scale_pos_weight = 1,
@@ -43,12 +48,8 @@ XGBDARTModel(
 )
 
 XGBLinearModel(
-  objective = character(),
-  aft_loss_distribution = "normal",
-  aft_loss_distribution_scale = 1,
-  base_score = 0.5,
-  lambda = 0,
   alpha = 0,
+  lambda = 0,
   updater = "shotgun",
   feature_selector = "cyclic",
   top_k = 0,
@@ -56,10 +57,6 @@ XGBLinearModel(
 )
 
 XGBTreeModel(
-  objective = character(),
-  aft_loss_distribution = "normal",
-  aft_loss_distribution_scale = 1,
-  base_score = 0.5,
   eta = 0.3,
   gamma = 0,
   max_depth = 6,
@@ -69,8 +66,8 @@ XGBTreeModel(
   colsample_bytree = 1,
   colsample_bylevel = 1,
   colsample_bynode = 1,
-  lambda = 1,
   alpha = 0,
+  lambda = 1,
   tree_method = "auto",
   sketch_eps = 0.03,
   scale_pos_weight = 1,
@@ -84,10 +81,35 @@ XGBTreeModel(
 )
 }
 \arguments{
-\item{params}{list of model parameters as described in the XGBoost
-\href{https://xgboost.readthedocs.io/en/latest/parameter.html}{documentation}.}
+\item{nrounds}{number of boosting iterations.}
 
-\item{nrounds}{maximum number of boosting iterations.}
+\item{...}{model parameters as described below and in the XGBoost
+\href{https://xgboost.readthedocs.io/en/latest/parameter.html}{documentation}
+and arguments passed to \code{XGBModel} from the other constructors.}
+
+\item{objective}{optional character string defining the learning task and
+objective.  Set automatically if not specified according to the following
+values available for supported response variable types.
+\describe{
+  \item{\code{factor}:}{\code{"multi:softprob"}, \code{"binary:logistic"}
+    (2 levels only)}
+  \item{\code{numeric}:}{\code{"reg:squarederror"}, \code{"reg:logistic"},
+    \code{"reg:gamma"}, \code{"reg:tweedie"}, \code{"rank:pairwise"},
+    \code{"rank:ndcg"}, \code{"rank:map"}}
+  \item{\code{PoissonVariate}:}{\code{"count:poisson"}}
+  \item{\code{Surv}:}{\code{"survival:aft"}, \code{"survival:cox"}}
+}
+The first values listed are the defaults for the corresponding response
+types.}
+
+\item{aft_loss_distribution}{character string specifying a distribution for
+the accelerated failure time objective (\code{"survival:aft"}) as
+\code{"extreme"}, \code{"logistic"}, or \code{"normal"}.}
+
+\item{aft_loss_distribution_scale}{numeric scaling parameter for the
+accelerated failure time distribution.}
+
+\item{base_score}{initial prediction score of all observations, global bias.}
 
 \item{verbose}{numeric value controlling the amount of output printed
 during model fitting, such that 0 = none, 1 = performance information, and
@@ -96,39 +118,44 @@ during model fitting, such that 0 = none, 1 = performance information, and
 \item{print_every_n}{numeric value designating the fitting iterations at
 at which to print output when \code{verbose > 0}.}
 
-\item{objective}{character string specifying the learning task and objective.
-Possible values for supported response variable types are as follows.
-\describe{
-  \item{\code{factor}:}{\code{"multi:softprob"}, \code{"binary:logistic"}
-    (2 levels only)}
-  \item{\code{numeric}:}{\code{"reg:squarederror"}, \code{"reg:logistic"},
-    \code{"reg:gamma"}, \code{"reg:tweedie"}, \code{"rank:pairwise"},
-    \code{"rank:ndcg"}, \code{"rank:map"}}
-  \item{\code{PoissonVariate}:}{\code{"count:poisson"}}
-  \item{\code{Surv}:}{\code{"survival:cox"}, \code{"survival:aft"}}
-}
-The first values listed are the defaults for the corresponding response
-types.}
+\item{eta}{shrinkage of variable weights at each iteration to prevent
+overfitting.}
 
-\item{aft_loss_distribution}{character string specifying the distribution for
-the accelerated failure time objective (\code{"survival:aft"}) as
-\code{"normal"}, \code{"logistic"}, or \code{"extreme"}.}
+\item{gamma}{minimum loss reduction required to split a tree node.}
 
-\item{aft_loss_distribution_scale}{numeric scaling parameter for the
-accelerated failure time distribution.}
+\item{max_depth}{maximum tree depth.}
 
-\item{base_score}{initial numeric prediction score of all instances, global
-bias.}
+\item{min_child_weight}{minimum sum of observation weights required of nodes.}
 
-\item{eta, gamma, max_depth, min_child_weight, max_delta_step, subsample, colsample_bytree, colsample_bylevel, colsample_bynode, lambda, alpha, tree_method, sketch_eps, scale_pos_weight, refresh_leaf, process_type, grow_policy, max_leaves, max_bin, num_parallel_tree, sample_type, normalize_type, rate_drop, one_drop, skip_drop, updater, feature_selector, top_k}{see \code{params} reference.}
+\item{max_delta_step, tree_method, sketch_eps, scale_pos_weight, updater, refresh_leaf, process_type, grow_policy, max_leaves, max_bin, num_parallel_tree}{other tree booster parameters.}
 
-\item{...}{arguments passed to \code{XGBModel}.}
+\item{subsample}{subsample ratio of the training observations.}
+
+\item{colsample_bytree, colsample_bylevel, colsample_bynode}{subsample ratio of
+variables for each tree, level, or split.}
+
+\item{alpha, lambda}{L1 and L2 regularization terms for variable weights.}
+
+\item{sample_type, normalize_type}{type of sampling and normalization
+algorithms.}
+
+\item{rate_drop}{rate at which to drop trees during the dropout procedure.}
+
+\item{one_drop}{integer indicating whether to drop at least one tree during
+the dropout procedure.}
+
+\item{skip_drop}{probability of skipping the dropout procedure during a
+boosting iteration.}
+
+\item{feature_selector, top_k}{character string specifying the feature
+selection and ordering method, and number of top variables to select in the
+\code{"greedy"} and \code{"thrifty"} feature selectors.}
 }
 \value{
 \code{MLModel} class object.
 }
 \description{
-Fits models within an efficient implementation of the gradient boosting
+Fits models with an efficient implementation of the gradient boosting
 framework from Chen & Guestrin.
 }
 \details{
@@ -137,13 +164,13 @@ framework from Chen & Guestrin.
     \code{PoissonVariate}, \code{Surv}}
   \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters}{
     \itemize{
-      \item XGBDARTModel: \code{nrounds}, \code{max_depth}, \code{eta},
-        \code{gamma}*, \code{min_child_weight}*, \code{subsample},
-        \code{colsample_bytree}, \code{rate_drop}, \code{skip_drop}
-      \item XGBLinearModel: \code{nrounds}, \code{lambda}, \code{alpha}
-      \item XGBTreeModel: \code{nrounds}, \code{max_depth}, \code{eta},
-        \code{gamma}*, \code{min_child_weight}*, \code{subsample},
-        \code{colsample_bytree}
+      \item XGBDARTModel: \code{nrounds}, \code{eta}*, \code{gamma}*,
+        \code{max_depth}, \code{min_child_weight}*, \code{subsample}*,
+        \code{colsample_bytree}*, \code{rate_drop}*, \code{skip_drop}*
+      \item XGBLinearModel: \code{nrounds}, \code{alpha}, \code{lambda}
+      \item XGBTreeModel: \code{nrounds}, \code{eta}*, \code{gamma}*,
+        \code{max_depth}, \code{min_child_weight}*, \code{subsample}*,
+        \code{colsample_bytree}*
     }
   }
 }

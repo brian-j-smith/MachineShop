@@ -58,7 +58,7 @@ test_that("test survival models output", {
     cat("Formula Specification", "\n")
     models <- c(CoxModel(), GBMModel(), CForestModel(), SurvRegModel(),
                 XGBDARTModel(), XGBLinearModel(updater = "coord_descent"),
-                XGBTreeModel())
+                XGBTreeModel(), XGBTreeModel(objective = "survival:aft"))
     for (model in models) {
       test_predict_all(fo, df, model = model)
     }

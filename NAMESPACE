@@ -24,13 +24,13 @@ importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
            delete.response, drop1, formula, get_all_vars, loess, lm, median,
            model.frame, model.matrix, model.matrix.default, model.response,
            model.weights, na.fail, na.omit, na.pass, offset, p.adjust, pchisq,
-           predict, pt, quantile, reformulate, reshape, sd, t.test, terms, time,
-           update, var, vcov, xtabs)
+           pnorm, predict, pt, quantile, reformulate, reshape, sd, t.test,
+           terms, time, update, var, vcov, xtabs)
 importFrom(survival, concordance, is.Surv, Surv, survfit, survreg,
            survreg.distributions)
 importFrom(tibble, as_tibble, is_tibble, tibble)
-importFrom(utils, combn, head, methods, packageVersion, relist, stack, str,
-           tail)
+importFrom(utils, capture.output, combn, head, methods, packageVersion, relist,
+           stack, str, tail)
 
 
 export(BinomialVariate,
