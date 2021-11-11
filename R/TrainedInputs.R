@@ -154,7 +154,7 @@ SelectedInput.recipe <- function(
   data <- NULL
   for (i in seq_along(inputs)) {
     data <- combine_data_frames(as.data.frame(inputs[[i]]), data)
-    inputs[[i]] <- recipe(inputs[[i]], tibble())
+    inputs[[i]] <- recipe(inputs[[i]], tibble(.rows = nrow(data)))
   }
 
   outcome_vars <- get_info(inputs[[1]], roles = "outcome")$variable

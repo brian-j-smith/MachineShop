@@ -54,9 +54,8 @@ performance(obs, pred_means, metrics = "cindex")
 performance(obs, pred_means, metrics = c(cindex, rmse, rmsle))
 
 ## Named list of metric functions
-performance(obs, pred_means, metrics = c("CIndex" = cindex,
-                                         "RMSE" = rmse,
-                                         "RMSLE" = rmsle))
+performance(obs, pred_means,
+            metrics = c("CIndex" = cindex, "RMSE" = rmse, "RMSLE" = rmsle))
 ```
 
 Metrics based on classification of two-level class probabilities, like sensitivity and specificity, optionally allow for specification of the classification cutoff probability (default: `cutoff = 0.5`).

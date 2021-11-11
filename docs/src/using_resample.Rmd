@@ -26,10 +26,10 @@ Model performance can be estimated with resampling methods that simulate repeate
 `r rdoc_url("TrainControl()", "MLControl")`
   : Training resubstitution.  A model is fit on and used to predict the full training set in order to estimate training, or apparent, error [@efron:1986:HBA].
   
-For the survival example, repeated cross-validation control structures are defined to estimate model performance in predicting survival means and 5 and 10-year survival probabilities.  In addition to arguments controlling the resampling algorithms, a `seed` can be set to ensure reproducibility of resampling results obtained with the structures.
+For the survival example, repeated cross-validation control structures are defined for the estimation of model performance in predicting survival means and 5 and 10-year survival probabilities.  In addition to arguments controlling the resampling methods, a `seed` can be set to ensure reproducibility of resampling results obtained with the structures.  The default control structure can also be set globally by users and subsequently changed back to its package default as desired.
 
 ```{r using_resample_control}
-## Control parameters for K-fold cross-validation
+## Control structures for K-fold cross-validation
 
 ## Prediction of survival means
 surv_means_control <- CVControl(folds = 5, repeats = 3, seed = 123)
@@ -37,6 +37,12 @@ surv_means_control <- CVControl(folds = 5, repeats = 3, seed = 123)
 ## Prediction of survival probabilities
 surv_probs_control <- CVControl(folds = 5, repeats = 3, seed = 123) %>%
   set_predict(times = surv_times)
+
+## User-specification of the default control structure
+MachineShop::settings(control = CVControl(folds = 5, seed = 123))
+
+## Package default
+# MachineShop::settings(reset = "control")
 ```
 
 
@@ -57,9 +63,11 @@ Resampling is performed by calling the `r rdoc_url("resample()")` function with 
 
 ```{r using_resample_function}
 ## Resample estimation for survival means and probabilities
-(res_means <- resample(surv_fo, data = surv_train, model = GBMModel, control = surv_means_control))
+(res_means <- resample(surv_fo, data = surv_train, model = GBMModel,
+                       control = surv_means_control))
 
-(res_probs <- resample(surv_fo, data = surv_train, model = GBMModel, control = surv_probs_control))
+(res_probs <- resample(surv_fo, data = surv_train, model = GBMModel,
+                       control = surv_probs_control))
 ```
 
 
