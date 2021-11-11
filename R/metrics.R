@@ -222,7 +222,7 @@ metric_matrix <- function(FUN, observed, predicted, ...) {
 
 
 metric_SurvMatrix <- function(
-  FUN, observed, predicted, weights, cutoff = NULL, ...
+  FUN, observed, predicted, weights, cutoff = numeric(), ...
 ) {
   conf_list <- confusion(observed, predicted, weights, cutoff = cutoff)
   x <- map_num(function(conf) FUN(conf, ...), conf_list)

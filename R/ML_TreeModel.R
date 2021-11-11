@@ -35,11 +35,11 @@
 #'
 TreeModel <- function(
   mincut = 5, minsize = 10, mindev = 0.01, split = c("deviance", "gini"),
-  k = NULL, best = NULL, method = c("deviance", "misclass")
+  k = numeric(), best = integer(), method = c("deviance", "misclass")
 ) {
 
   split <- match.arg(split)
-  method <- if (is.null(k) && is.null(best)) NULL else match.arg(method)
+  method <- if (length(k) || length(best)) match.arg(method)
 
   MLModel(
     name = "TreeModel",

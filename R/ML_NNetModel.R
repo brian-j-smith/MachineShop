@@ -30,8 +30,8 @@
 #'   }
 #' }
 #'
-#' Default values for the \code{NULL} arguments and further model details can be
-#' found in the source link below.
+#' Default values and further model details can be found in the source link
+#' below.
 #'
 #' @return \code{MLModel} class object.
 #'
@@ -41,9 +41,9 @@
 #' fit(sale_amount ~ ., data = ICHomes, model = NNetModel)
 #'
 NNetModel <- function(
-  size = 1, linout = NULL, entropy = NULL, softmax = NULL, censored = FALSE,
-  skip = FALSE, rang = 0.7, decay = 0, maxit = 100, trace = FALSE,
-  MaxNWts = 1000, abstol = 1e-4, reltol = 1e-8
+  size = 1, linout = logical(), entropy = logical(), softmax = logical(),
+  censored = FALSE, skip = FALSE, rang = 0.7, decay = 0, maxit = 100,
+  trace = FALSE, MaxNWts = 1000, abstol = 1e-4, reltol = 1e-8
 ) {
 
   MLModel(

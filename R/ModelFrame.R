@@ -328,9 +328,9 @@ terms.recipe <- function(x, original = FALSE, ...) {
 terms.recipe_info <- function(x, ...) {
 
   first <- function(x) head(x, 1)
-  get_vars <- function(roles = NULL, types = NULL) {
+  get_vars <- function(roles = character(), types = character()) {
     is_match <- by(x, x$variable, function(split) {
-      valid_types <- if (is.null(types)) TRUE else any(types %in% split$type)
+      valid_types <- if (length(types)) any(types %in% split$type) else TRUE
       all(roles %in% split$role) && valid_types
     })
     names(is_match)[is_match]
@@ -409,9 +409,9 @@ model.matrix.ModelFormulaTerms <- function(object, data, ...) {
 }
 
 
-model.matrix.ModelFrame <- function(object, intercept = NULL, ...) {
+model.matrix.ModelFrame <- function(object, intercept = logical(), ...) {
   model_terms <- terms(object)
-  if (!is.null(intercept)) {
+  if (length(intercept)) {
     attr(model_terms, "intercept") <- as.integer(intercept)
   }
   model.matrix(model_terms, object, ...)

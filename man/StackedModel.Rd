@@ -4,7 +4,11 @@
 \alias{StackedModel}
 \title{Stacked Regression Model}
 \usage{
-StackedModel(..., control = MachineShop::settings("control"), weights = NULL)
+StackedModel(
+  ...,
+  control = MachineShop::settings("control"),
+  weights = numeric()
+)
 }
 \arguments{
 \item{...}{\link[=models]{model} functions, function names, objects; other

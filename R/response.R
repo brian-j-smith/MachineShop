@@ -167,11 +167,11 @@ PoissonVariate <- function(x = integer()) {
 NULL
 
 
-SurvMatrix <- function(data = NA, times = NULL, distr = NULL) {
+SurvMatrix <- function(data = NA, times = numeric(), distr = character()) {
   data <- as.matrix(data)
 
-  if (is.null(times)) times <- rep(NA_real_, ncol(data))
-  if (is.null(distr)) distr <- NA_character_
+  if (is_empty(times)) times <- rep(NA_real_, ncol(data))
+  if (is_empty(distr)) distr <- NA_character_
 
   if (length(times) != ncol(data)) {
     throw(Error("unequal number of survival times and predictions"))
@@ -186,14 +186,14 @@ SurvMatrix <- function(data = NA, times = NULL, distr = NULL) {
 
 #' @rdname SurvMatrix
 #'
-SurvEvents <- function(data = NA, times = NULL, distr = NULL) {
+SurvEvents <- function(data = NA, times = numeric(), distr = character()) {
   as(SurvMatrix(data, times, distr), "SurvEvents")
 }
 
 
 #' @rdname SurvMatrix
 #'
-SurvProbs <- function(data = NA, times = NULL, distr = NULL) {
+SurvProbs <- function(data = NA, times = numeric(), distr = character()) {
   as(SurvMatrix(data, times, distr), "SurvProbs")
 }
 
@@ -203,8 +203,8 @@ SurvMeans <- function(...) {
 }
 
 
-SurvTimes <- function(x = numeric(), distr = NULL, ...) {
-  if (is.null(distr)) distr <- NA_character_
+SurvTimes <- function(x = numeric(), distr = character(), ...) {
+  if (is_empty(distr)) distr <- NA_character_
   new("SurvTimes", x, distr = distr)
 }
 

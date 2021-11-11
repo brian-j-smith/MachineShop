@@ -5,11 +5,11 @@
 \title{Linear Discriminant Analysis Model}
 \usage{
 LDAModel(
-  prior = NULL,
+  prior = numeric(),
   tol = 1e-04,
   method = c("moment", "mle", "mve", "t"),
   nu = 5,
-  dimen = NULL,
+  dimen = integer(),
   use = c("plug-in", "debiased", "predictive")
 )
 }
@@ -48,8 +48,8 @@ following argument.
     data if different from the training set.}
 }
 
-Default values for the \code{NULL} arguments and further model details can be
-found in the source links below.
+Default values and further model details can be found in the source links
+below.
 }
 \examples{
 fit(Species ~ ., data = iris, model = LDAModel)

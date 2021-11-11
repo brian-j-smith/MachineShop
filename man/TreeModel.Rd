@@ -9,8 +9,8 @@ TreeModel(
   minsize = 10,
   mindev = 0.01,
   split = c("deviance", "gini"),
-  k = NULL,
-  best = NULL,
+  k = numeric(),
+  best = integer(),
   method = c("deviance", "misclass")
 )
 }

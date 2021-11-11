@@ -81,7 +81,9 @@ setMetric_numeric("msle",
 
 #' @rdname metrics
 #'
-r2 <- function(observed, predicted = NULL, weights = NULL, distr = NULL, ...) {
+r2 <- function(
+  observed, predicted = NULL, weights = NULL, distr = character(), ...
+) {
   call_metric_method("r2", environment())
 }
 

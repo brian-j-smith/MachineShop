@@ -5,7 +5,7 @@
 \title{Generalized Boosted Regression Model}
 \usage{
 GBMModel(
-  distribution = NULL,
+  distribution = character(),
   n.trees = 100,
   interaction.depth = 1,
   n.minobsinnode = 10,
@@ -48,8 +48,8 @@ Fits generalized boosted regression models.
 }
 * excluded from grids by default
 
-Default values for the \code{NULL} arguments and further model details can be
-found in the source link below.
+Default values and further model details can be found in the source link
+below.
 }
 \examples{
 \donttest{

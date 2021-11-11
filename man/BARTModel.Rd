@@ -5,15 +5,15 @@
 \title{Bayesian Additive Regression Trees Model}
 \usage{
 BARTModel(
-  K = NULL,
+  K = integer(),
   sparse = FALSE,
   theta = 0,
   omega = 1,
   a = 0.5,
   b = 1,
-  rho = NULL,
+  rho = numeric(),
   augment = FALSE,
-  xinfo = NULL,
+  xinfo = matrix(NA, 0, 0),
   usequants = FALSE,
   sigest = NA,
   sigdf = 3,
@@ -22,13 +22,13 @@ BARTModel(
   k = 2,
   power = 2,
   base = 0.95,
-  tau.num = NULL,
-  offset = NULL,
-  ntree = NULL,
+  tau.num = numeric(),
+  offset = numeric(),
+  ntree = integer(),
   numcut = 100,
   ndpost = 1000,
-  nskip = NULL,
-  keepevery = NULL,
+  nskip = integer(),
+  keepevery = integer(),
   printevery = 1000
 )
 }
@@ -103,8 +103,8 @@ categorical and time-to-event outcomes.
   \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
 }
 
-Default values for the \code{NULL} arguments and further model details can be
-found in the source links below.
+Default values and further model details can be found in the source links
+below.
 }
 \examples{
 \donttest{

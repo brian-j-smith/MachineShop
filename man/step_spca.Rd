@@ -10,7 +10,7 @@ step_spca(
   ...,
   num_comp = 5,
   sparsity = 0,
-  num_var = NULL,
+  num_var = integer(),
   shrinkage = 1e-06,
   center = TRUE,
   scale = TRUE,

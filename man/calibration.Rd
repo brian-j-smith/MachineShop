@@ -10,7 +10,7 @@ calibration(
   weights = NULL,
   breaks = 10,
   span = 0.75,
-  distr = NULL,
+  distr = character(),
   na.rm = TRUE,
   ...
 )

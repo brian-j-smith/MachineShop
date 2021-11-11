@@ -55,14 +55,14 @@ VariableImportance.numeric <- function(object, ...) {
 #'     \item{\code{samples = 1}}{number of times to permute the values of each
 #'       variable.  Larger numbers of samples decrease variability in the
 #'       estimates at the expense of increased computation time.}
-#'     \item{\code{prop = NULL}}{proportion of observations to sample without
-#'       replacement at each round of variable permutations [default: all].
-#'       Subsampling of observations can decrease computation time.}
-#'     \item{\code{size = NULL}}{number of observations to sample at each
+#'     \item{\code{prop = numeric()}}{proportion of observations to sample
+#'       without replacement at each round of variable permutations [default:
+#'       all].  Subsampling of observations can decrease computation time.}
+#'     \item{\code{size = integer()}}{number of observations to sample at each
 #'       round of permutations [default: all].}
-#'     \item{\code{times = NULL}}{numeric vector of follow-up times at which to
-#'       predict survival probabilities or \code{NULL} for predicted survival
-#'       means.}
+#'     \item{\code{times = numeric()}}{numeric vector of follow-up times at
+#'       which to predict survival probabilities or \code{NULL} for predicted
+#'       survival means.}
 #'     \item{\code{metric = NULL}}{\link[=metrics]{metric} function or function
 #'       name with which to calculate performance.  If not specified, the first
 #'       applicable default metric from the \link{performance} functions is
@@ -142,9 +142,9 @@ dep_varimpargs <- function(metric, ...) {
 
 
 varimp_permute <- function(
-  object, select = NULL, samples = 1, prop = NULL, size = NULL, times = NULL,
-  metric = NULL, compare = c("-", "/"), stats = c(mean = "base::mean"),
-  na.rm = TRUE
+  object, select = NULL, samples = 1, prop = numeric(), size = integer(),
+  times = numeric(), metric = NULL, compare = c("-", "/"),
+  stats = c(mean = "base::mean"), na.rm = TRUE
 ) {
   input <- as.MLModel(object)@input
   data <- if (is.data.frame(input)) input else as.data.frame(input)
@@ -156,13 +156,13 @@ varimp_permute <- function(
   throw(check_assignment(samples))
 
   n <- nrow(data)
-  size <- if (is.null(c(prop, size))) {
+  size <- if (is_empty(c(prop, size))) {
     n
-  } else if (is.null(size)) {
+  } else if (is_empty(size)) {
     prop <- check_numeric(prop, bounds = c(0, 1), include = 0:1, size = 1)
     throw(check_assignment(prop))
     min(max(prop * n, 2), n)
-  } else if (is.null(prop)) {
+  } else if (is_empty(prop)) {
     size <- check_numeric(size, bounds = c(2, Inf), size = 1)
     throw(check_assignment(size))
     min(size, n)

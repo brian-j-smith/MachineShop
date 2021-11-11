@@ -9,7 +9,7 @@ GLMNetModel(
   alpha = 1,
   lambda = 0,
   standardize = TRUE,
-  intercept = NULL,
+  intercept = logical(),
   penalty.factor = .(rep(1, nvars)),
   standardize.response = FALSE,
   thresh = 1e-07,
@@ -66,8 +66,8 @@ Fit a generalized linear model via penalized maximum likelihood.
   }
 }
 
-Default values for the \code{NULL} arguments and further model details can be
-found in the source link below.
+Default values and further model details can be found in the source link
+below.
 }
 \examples{
 \donttest{

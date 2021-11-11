@@ -46,7 +46,7 @@
 #' }
 #'
 calibration <- function(
-  x, y = NULL, weights = NULL, breaks = 10, span = 0.75, distr = NULL,
+  x, y = NULL, weights = NULL, breaks = 10, span = 0.75, distr = character(),
   na.rm = TRUE, ...
 ) {
   if (na.rm) {
@@ -57,7 +57,7 @@ calibration <- function(
   }
   Calibration(
     .calibration(x, y, weights, breaks = breaks, span = span, distr = distr),
-    smoothed = is.null(breaks)
+    smoothed = is_empty(breaks)
   )
 }
 
@@ -117,7 +117,7 @@ setMethod(".calibration", c("matrix", "matrix"),
     df <- data.frame(Response = rep(factor(colnames(predicted)),
                                     each = nrow(predicted)),
                      Predicted = as.numeric(predicted))
-    if (is.null(breaks)) {
+    if (is_empty(breaks)) {
       loessfit_list <- map(function(i) {
         y <- observed[, i]
         x <- predicted[, i]
@@ -174,7 +174,7 @@ setMethod(".calibration", c("Surv", "SurvProbs"),
     df <- data.frame(Response = rep(factor(colnames(predicted)),
                                     each = nrow(predicted)),
                      Predicted = as.numeric(predicted))
-    if (is.null(breaks)) {
+    if (is_empty(breaks)) {
       throw(check_censoring(observed, "right"))
       throw(check_equal_weights(weights))
       Mean <- c(map_num(function(i) {
@@ -226,7 +226,7 @@ setMethod(".calibration", c("Surv", "numeric"),
       list(Mean = est$fit[[1]], SE = est$se.fit[[1]])
     }
 
-    if (is.null(breaks)) {
+    if (is_empty(breaks)) {
       df <- data.frame(
         Response = factor("Mean"),
         Predicted = unique(predicted)

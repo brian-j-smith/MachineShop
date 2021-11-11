@@ -55,9 +55,9 @@
 #' tidy(spca_prep, number = 1)
 #'
 step_spca <- function(
-  recipe, ..., num_comp = 5, sparsity = 0, num_var = NULL, shrinkage = 1e-6,
-  center = TRUE, scale = TRUE, max_iter = 200, tol = 1e-3, replace = TRUE,
-  prefix = "SPCA", role = "predictor", skip = FALSE,
+  recipe, ..., num_comp = 5, sparsity = 0, num_var = integer(),
+  shrinkage = 1e-6, center = TRUE, scale = TRUE, max_iter = 200, tol = 1e-3,
+  replace = TRUE, prefix = "SPCA", role = "predictor", skip = FALSE,
   id = recipes::rand_id("spca")
 ) {
 
@@ -91,7 +91,7 @@ new_step_spca <- function(..., sparsity, num_var, shrinkage, max_iter,
     throw(check_packages("elasticnet"))
 
     num_comp <- min(step$num_comp, nrow(x))
-    if (is.null(step$num_var)) {
+    if (is_empty(step$num_var)) {
       para <- step$sparsity
       sparse <- "penalty"
     } else {

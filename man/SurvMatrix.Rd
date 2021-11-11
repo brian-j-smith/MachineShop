@@ -6,9 +6,9 @@
 \alias{SurvProbs}
 \title{SurvMatrix Class Constructors}
 \usage{
-SurvEvents(data = NA, times = NULL, distr = NULL)
+SurvEvents(data = NA, times = numeric(), distr = character())
 
-SurvProbs(data = NA, times = NULL, distr = NULL)
+SurvProbs(data = NA, times = numeric(), distr = character())
 }
 \arguments{
 \item{data}{matrix, or object that can be coerced to one, with survival

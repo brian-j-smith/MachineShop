@@ -185,7 +185,7 @@ mse(observed, predicted = NULL, weights = NULL, ...)
 
 msle(observed, predicted = NULL, weights = NULL, ...)
 
-r2(observed, predicted = NULL, weights = NULL, distr = NULL, ...)
+r2(observed, predicted = NULL, weights = NULL, distr = character(), ...)
 
 rmse(observed, predicted = NULL, weights = NULL, ...)
 

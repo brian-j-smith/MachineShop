@@ -138,7 +138,7 @@ select_call <- function(x, parent_call = NULL, last_call = NULL) {
 #################### Checks ####################
 
 
-check_array <- function(x, type, size = NULL, na.fail = TRUE) {
+check_array <- function(x, type, size = integer(), na.fail = TRUE) {
   result <- try({
     storage.mode(x) <- type
     x

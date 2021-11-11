@@ -8,7 +8,7 @@
 #' @param ntree number of trees.
 #' @param mtry number of variables randomly selected as candidates for splitting
 #'   a node.
-#' @param nodesize forest average number of unique cases in a terminal node.
+#' @param nodesize minumum size of terminal nodes.
 #' @param nodedepth maximum depth to which a tree should be grown.
 #' @param splitrule splitting rule (see \code{\link[randomForestSRC]{rfsrc}}).
 #' @param nsplit non-negative integer value for number of random splits to
@@ -49,8 +49,8 @@
 #'   }
 #' }
 #'
-#' Default values for the \code{NULL} arguments and further model details can be
-#' found in the source link below.
+#' Default values and further model details can be found in the source links
+#' below.
 #'
 #' In calls to \code{\link{varimp}} for \code{RFSRCModel}, argument
 #' \code{type} may be specified as \code{"permute"} (default) for permutation of
@@ -75,15 +75,15 @@
 #' }
 #'
 RFSRCModel <- function(
-  ntree = 1000, mtry = NULL, nodesize = NULL, nodedepth = NULL,
-  splitrule = NULL, nsplit = 10, block.size = NULL,
+  ntree = 1000, mtry = integer(), nodesize = integer(), nodedepth = integer(),
+  splitrule = character(), nsplit = 10, block.size = integer(),
   samptype = c("swor", "swr"), membership = FALSE,
   sampsize = if (samptype == "swor") function(x) 0.632 * x else function(x) x,
-  nimpute = 1, ntime = NULL,
+  nimpute = 1, ntime = integer(),
   proximity = c(FALSE, TRUE, "inbag", "oob", "all"),
   distance = c(FALSE, TRUE, "inbag", "oob", "all"),
   forest.wt = c(FALSE, TRUE, "inbag", "oob", "all"),
-  xvar.wt = NULL, split.wt = NULL,
+  xvar.wt = numeric(), split.wt = numeric(),
   var.used = c(FALSE, "all.trees", "by.tree"),
   split.depth = c(FALSE, "all.trees", "by.tree"),
   do.trace = FALSE, statistics = FALSE

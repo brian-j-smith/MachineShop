@@ -19,8 +19,8 @@
 #' }
 #' * excluded from grids by default
 #'
-#' Default values for the \code{NULL} arguments and further model details can be
-#' found in the source link below.
+#' Default values and further model details can be found in the source link
+#' below.
 #'
 #' @return \code{MLModel} class object.
 #'
@@ -37,7 +37,7 @@
 RandomForestModel <- function(
   ntree = 500,
   mtry = .(if (is.factor(y)) floor(sqrt(nvars)) else max(floor(nvars / 3), 1)),
-  replace = TRUE, nodesize = .(if (is.factor(y)) 1 else 5), maxnodes = NULL
+  replace = TRUE, nodesize = .(if (is.factor(y)) 1 else 5), maxnodes = integer()
 ) {
 
   MLModel(

@@ -6,8 +6,8 @@
 \usage{
 MDAModel(
   subclasses = 3,
-  sub.df = NULL,
-  tot.df = NULL,
+  sub.df = numeric(),
+  tot.df = numeric(),
   dimension = sum(subclasses) - 1,
   eps = .Machine$double.eps,
   iter = 5,
@@ -65,8 +65,8 @@ following argument.
     if different from the training set.}
 }
 
-Default values for the \code{NULL} arguments and further model details can be
-found in the source links below.
+Default values and further model details can be found in the source links
+below.
 }
 \examples{
 \donttest{

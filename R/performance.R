@@ -100,7 +100,7 @@ performance.Surv <- function(
 }
 
 
-.performance <- function(x, y, weights, metrics, na.rm, ..., dots = NULL) {
+.performance <- function(x, y, weights, metrics, na.rm, ..., dots = list()) {
   if (na.rm) {
     complete <- complete_subset(x = x, y = y, weights = weights)
     x <- complete$x

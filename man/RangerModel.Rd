@@ -6,18 +6,18 @@
 \usage{
 RangerModel(
   num.trees = 500,
-  mtry = NULL,
+  mtry = integer(),
   importance = c("impurity", "impurity_corrected", "permutation"),
-  min.node.size = NULL,
+  min.node.size = integer(),
   replace = TRUE,
   sample.fraction = if (replace) 1 else 0.632,
-  splitrule = NULL,
+  splitrule = character(),
   num.random.splits = 1,
   alpha = 0.5,
   minprop = 0.1,
-  split.select.weights = NULL,
-  always.split.variables = NULL,
-  respect.unordered.factors = NULL,
+  split.select.weights = numeric(),
+  always.split.variables = character(),
+  respect.unordered.factors = character(),
   scale.permutation.importance = FALSE,
   verbose = FALSE
 )
@@ -75,8 +75,8 @@ Fast implementation of random forests or recursive partitioning.
 }
 * excluded from grids by default
 
-Default values for the \code{NULL} arguments and further model details can be
-found in the source link below.
+Default values and further model details can be found in the source link
+below.
 }
 \examples{
 \donttest{

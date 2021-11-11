@@ -2,11 +2,11 @@
 
 
 predict.Surv <- function(
-  object, ..., times = NULL, distr = NULL, weights = NULL
+  object, ..., times = numeric(), distr = character(), weights = NULL
 ) {
   distr <- if (is_counting(object)) {
     "empirical"
-  } else if (is.null(distr)) {
+  } else if (is_empty(distr)) {
     settings(if (length(times)) "distr.SurvProbs" else "distr.SurvMeans")
   } else {
     match.arg(distr, c("empirical", "exponential", "rayleigh", "weibull"))
@@ -72,13 +72,13 @@ EmpiricalSurv <- function(x, ...) {
 
 
 EmpiricalSurv.Surv <- function(
-  x, risks = NULL, weights = NULL, method = c("efron", "breslow"), ...
+  x, risks = numeric(), weights = NULL, method = c("efron", "breslow"), ...
 ) {
   event <- as.integer(x[, "status"])
-  if (is.null(risks)) risks <- 1
+  if (is_empty(risks)) risks <- 1
   weights <- check_weights(weights, x)
   throw(check_assignment(weights))
-  if (is.null(method)) method <- settings("method.EmpiricalSurv")
+  if (is_empty(method)) method <- settings("method.EmpiricalSurv")
   method <- match.arg(method)
 
   data <- data.frame(wt = weights, wt_censor = weights * !event,
@@ -121,16 +121,16 @@ EmpiricalSurv.SurvProbs <- function(x, ...) {
 }
 
 
-mean.EmpiricalSurv <- function(x, new_risks = NULL, ...) {
+mean.EmpiricalSurv <- function(x, new_risks = numeric(), ...) {
   times <- x$time[x$n.event > 0]
   surv <- predict(x, times = times, new_risks = new_risks)
   surv_mean(times, surv, max(x$time))
 }
 
 
-predict.EmpiricalSurv <- function(object, times, new_risks = NULL, ...) {
+predict.EmpiricalSurv <- function(object, times, new_risks = numeric(), ...) {
   surv <- NextMethod()
-  if (is.null(new_risks)) rbind(surv) else t(outer(surv, new_risks, "^"))
+  if (length(new_risks)) t(outer(surv, new_risks, "^")) else rbind(surv)
 }
 
 
@@ -163,15 +163,17 @@ Weibull.numeric <- function(x = scale, shape, scale, ...) {
 }
 
 
-Weibull.Surv <- function(x, risks = NULL, shape = NULL, weights = NULL, ...) {
-  if (is.null(shape)) {
+Weibull.Surv <- function(
+  x, risks = numeric(), shape = numeric(), weights = NULL, ...
+) {
+  if (length(shape)) {
+    nparams <- 1
+  } else {
     shape <- Inf
     nparams <- 2
-  } else {
-    nparams <- 1
   }
   params <- if (length(event_time(x)) >= nparams) {
-    fo <- if (is.null(risks)) { x ~ 1 } else { x ~ offset(-log(risks)) }
+    fo <- if (length(risks)) { x ~ offset(-log(risks)) } else { x ~ 1 }
     regfit <- survreg(fo, dist = "weibull", scale = 1 / shape,
                       weights = weights)
     c(1 / regfit$scale, exp(coef(regfit)[[1]]))
@@ -190,13 +192,13 @@ Weibull.survfit <- function(x, weights = NULL, ...) {
 }
 
 
-Weibull.SurvProbs <- function(x, shape = NULL, ...) {
-  weibullfit <- if (is.null(shape)) {
+Weibull.SurvProbs <- function(x, shape = numeric(), ...) {
+  weibullfit <- if (length(shape)) {
+    function(df) c(mean(df$y - shape * df$x), shape)
+  } else {
     function(df) if (nrow(df) >= 2) {
       coef(lm(y ~ x, data = df))
     } else c(NA_real_, NA_real_)
-  } else {
-    function(df) c(mean(df$y - shape * df$x), shape)
   }
   coef <- apply(x, 1, function(surv) {
     df <- surv_cases(x = log(x@times), y = log(-log(surv)),
@@ -207,14 +209,14 @@ Weibull.SurvProbs <- function(x, shape = NULL, ...) {
 }
 
 
-mean.Weibull <- function(x, new_risks = NULL, ...) {
-  if (!is.null(new_risks)) x$scale <- new_risks * x$scale
+mean.Weibull <- function(x, new_risks = numeric(), ...) {
+  if (length(new_risks)) x$scale <- new_risks * x$scale
   x$scale^(-1 / x$shape) * gamma(1 + 1 / x$shape)
 }
 
 
-predict.Weibull <- function(object, times, new_risks = NULL, ...) {
-  if (is.null(new_risks)) new_risks <- 1
+predict.Weibull <- function(object, times, new_risks = numeric(), ...) {
+  if (is_empty(new_risks)) new_risks <- 1
   shape <- object$shape
   times_shape <- if (length(shape) == 1) {
     matrix(times^shape, length(new_risks), length(times), byrow = TRUE)

@@ -25,8 +25,8 @@
 #' }
 #' * excluded from grids by default
 #'
-#' Default values for the \code{NULL} arguments and further model details can be
-#' found in the source link below.
+#' Default values and further model details can be found in the source link
+#' below.
 #'
 #' @return \code{MLModel} class object.
 #'
@@ -40,7 +40,7 @@
 #' }
 #'
 GBMModel <- function(
-  distribution = NULL, n.trees = 100, interaction.depth = 1,
+  distribution = character(), n.trees = 100, interaction.depth = 1,
   n.minobsinnode = 10, shrinkage = 0.1, bag.fraction = 0.5
 ) {
 

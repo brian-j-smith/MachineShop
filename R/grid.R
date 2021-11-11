@@ -134,9 +134,9 @@ ParameterGrid.parameters <- function(object, size = 3, random = FALSE, ...) {
 
 
 new_gridinfo <- function(
-  param = character(), get_values = list(), default = NULL
+  param = character(), get_values = list(), default = logical()
 ) {
-  if (is.null(default)) default <- TRUE
+  if (is_empty(default)) default <- TRUE
 
   stopifnot(is.character(param))
   stopifnot(is.list(get_values))

@@ -12,7 +12,7 @@ GLMStepAICModel(
   quasi = FALSE,
   ...,
   direction = c("both", "backward", "forward"),
-  scope = NULL,
+  scope = list(),
   k = 2,
   trace = FALSE,
   steps = 1000
@@ -62,8 +62,8 @@ the linear predictor and a description of the error distribution.
     \code{PoissonVariate}}
 }
 
-Default values for the \code{NULL} arguments and further model details can be
-found in the source link below.
+Default values and further model details can be found in the source links
+below.
 
 In calls to \code{\link{varimp}} for \code{GLMModel} and
 \code{GLMStepAICModel}, numeric argument \code{base} may be specified for the

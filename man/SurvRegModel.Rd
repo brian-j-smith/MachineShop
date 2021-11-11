@@ -8,19 +8,19 @@
 SurvRegModel(
   dist = c("weibull", "exponential", "gaussian", "logistic", "lognormal",
     "logloglogistic"),
-  scale = NULL,
-  parms = NULL,
+  scale = 0,
+  parms = list(),
   ...
 )
 
 SurvRegStepAICModel(
   dist = c("weibull", "exponential", "gaussian", "logistic", "lognormal",
     "logloglogistic"),
-  scale = NULL,
-  parms = NULL,
+  scale = 0,
+  parms = list(),
   ...,
   direction = c("both", "backward", "forward"),
-  scope = NULL,
+  scope = list(),
   k = 2,
   trace = FALSE,
   steps = 1000
@@ -63,8 +63,8 @@ Fits the accelerated failure time family of parametric survival models.
   \item{Response Types:}{\code{Surv}}
 }
 
-Default values for the \code{NULL} arguments and further model details can be
-found in the source link below.
+Default values and further model details can be found in the source links
+below.
 }
 \examples{
 \donttest{

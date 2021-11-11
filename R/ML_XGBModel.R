@@ -55,8 +55,8 @@
 #' }
 #' * excluded from grids by default
 #'
-#' Default values for the \code{NULL} arguments and further model details can be
-#' found in the source link below.
+#' Default values and further model details can be found in the source link
+#' below.
 #'
 #' In calls to \code{\link{varimp}} for \code{XGBTreeModel}, argument
 #' \code{type} may be specified as \code{"Gain"} (default) for the fractional
@@ -91,7 +91,7 @@ XGBModel <- function(
     response_types = c("factor", "numeric", "PoissonVariate", "Surv"),
     weights = TRUE,
     predictor_encoding = "model.matrix",
-    params = new_params(environment()),
+    params = as.list(environment()),
     fit = function(formula, data, weights, params, ...) {
       x <- model.matrix(data, intercept = FALSE)
       y <- response(data)
@@ -150,7 +150,7 @@ XGBModel <- function(
       pred <- predict(object, newdata = newx)
       switch(object$params$objective,
         "multi:softprob" = matrix(pred, nrow = nrow(newx), byrow = TRUE),
-        "survival:aft" = if (is.null(times)) {
+        "survival:aft" = if (empty(times)) {
           pred
         } else {
           throw(Error("time-specific prediction not available for XGBModel ",
@@ -192,7 +192,7 @@ MLModelFunction(XGBModel) <- NULL
 #' @rdname XGBModel
 #'
 XGBDARTModel <- function(
-  objective = NULL, aft_loss_distribution = "normal",
+  objective = character(), aft_loss_distribution = "normal",
   aft_loss_distribution_scale = 1, base_score = 0.5,
   eta = 0.3, gamma = 0, max_depth = 6, min_child_weight = 1,
   max_delta_step = .(0.7 * is(y, "PoissonVariate")), subsample = 1,
@@ -214,7 +214,7 @@ MLModelFunction(XGBDARTModel) <- NULL
 #' @rdname XGBModel
 #'
 XGBLinearModel <- function(
-  objective = NULL, aft_loss_distribution = "normal",
+  objective = character(), aft_loss_distribution = "normal",
   aft_loss_distribution_scale = 1, base_score = 0.5,
   lambda = 0, alpha = 0,
   updater = "shotgun", feature_selector = "cyclic", top_k = 0, ...
@@ -229,7 +229,7 @@ MLModelFunction(XGBLinearModel) <- NULL
 #' @rdname XGBModel
 #'
 XGBTreeModel <- function(
-  objective = NULL, aft_loss_distribution = "normal",
+  objective = character(), aft_loss_distribution = "normal",
   aft_loss_distribution_scale = 1, base_score = 0.5,
   eta = 0.3, gamma = 0, max_depth = 6, min_child_weight = 1,
   max_delta_step = .(0.7 * is(y, "PoissonVariate")), subsample = 1,

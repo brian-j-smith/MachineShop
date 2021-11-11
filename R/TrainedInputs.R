@@ -137,7 +137,7 @@ SelectedInput.recipe <- function(
 
   for (i in seq_along(inputs)) inputs[[i]] <- ModelRecipe(inputs[[i]])
 
-  get_info <- function(x, roles = NULL, exclude = FALSE) {
+  get_info <- function(x, roles = character(), exclude = FALSE) {
     info <- summary(x)
     keep <- if (length(roles)) info$role %in% roles else TRUE
     if (exclude) keep <- !keep

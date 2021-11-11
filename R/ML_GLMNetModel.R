@@ -31,8 +31,8 @@
 #'   }
 #' }
 #'
-#' Default values for the \code{NULL} arguments and further model details can be
-#' found in the source link below.
+#' Default values and further model details can be found in the source link
+#' below.
 #'
 #' @return \code{MLModel} class object.
 #'
@@ -47,9 +47,9 @@
 #' }
 #'
 GLMNetModel <- function(
-  family = NULL, alpha = 1, lambda = 0, standardize = TRUE, intercept = NULL,
-  penalty.factor = .(rep(1, nvars)), standardize.response = FALSE,
-  thresh = 1e-7, maxit = 100000,
+  family = NULL, alpha = 1, lambda = 0, standardize = TRUE,
+  intercept = logical(), penalty.factor = .(rep(1, nvars)),
+  standardize.response = FALSE, thresh = 1e-7, maxit = 100000,
   type.gaussian = .(if (nvars < 500) "covariance" else "naive"),
   type.logistic = c("Newton", "modified.Newton"),
   type.multinomial = c("ungrouped", "grouped")

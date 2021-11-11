@@ -14,8 +14,8 @@
 #'   \item{Response Types:}{\code{Surv}}
 #' }
 #'
-#' Default values for the \code{NULL} arguments and further model details can be
-#' found in the source link below.
+#' Default values and further model details can be found in the source links
+#' below.
 #'
 #' In calls to \code{\link{varimp}} for \code{CoxModel} and
 #' \code{CoxStepAICModel}, numeric argument \code{base} may be specified for the
@@ -90,7 +90,7 @@ MLModelFunction(CoxModel) <- NULL
 #'
 CoxStepAICModel <- function(
   ties = c("efron", "breslow", "exact"), ...,
-  direction = c("both", "backward", "forward"), scope = NULL, k = 2,
+  direction = c("both", "backward", "forward"), scope = list(), k = 2,
   trace = FALSE, steps = 1000
 ) {
 

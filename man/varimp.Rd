@@ -30,14 +30,14 @@ values for \code{method = "permute"}.
   \item{\code{samples = 1}}{number of times to permute the values of each
     variable.  Larger numbers of samples decrease variability in the
     estimates at the expense of increased computation time.}
-  \item{\code{prop = NULL}}{proportion of observations to sample without
-    replacement at each round of variable permutations [default: all].
-    Subsampling of observations can decrease computation time.}
-  \item{\code{size = NULL}}{number of observations to sample at each
+  \item{\code{prop = numeric()}}{proportion of observations to sample
+    without replacement at each round of variable permutations [default:
+    all].  Subsampling of observations can decrease computation time.}
+  \item{\code{size = integer()}}{number of observations to sample at each
     round of permutations [default: all].}
-  \item{\code{times = NULL}}{numeric vector of follow-up times at which to
-    predict survival probabilities or \code{NULL} for predicted survival
-    means.}
+  \item{\code{times = numeric()}}{numeric vector of follow-up times at
+    which to predict survival probabilities or \code{NULL} for predicted
+    survival means.}
   \item{\code{metric = NULL}}{\link[=metrics]{metric} function or function
     name with which to calculate performance.  If not specified, the first
     applicable default metric from the \link{performance} functions is

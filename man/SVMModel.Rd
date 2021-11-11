@@ -14,7 +14,7 @@
 \usage{
 SVMModel(
   scaled = TRUE,
-  type = NULL,
+  type = character(),
   kernel = c("rbfdot", "polydot", "vanilladot", "tanhdot", "laplacedot", "besseldot",
     "anovadot", "splinedot"),
   kpar = "automatic",
@@ -30,13 +30,13 @@ SVMANOVAModel(sigma = 1, degree = 1, ...)
 
 SVMBesselModel(sigma = 1, order = 1, degree = 1, ...)
 
-SVMLaplaceModel(sigma = NULL, ...)
+SVMLaplaceModel(sigma = numeric(), ...)
 
 SVMLinearModel(...)
 
 SVMPolyModel(degree = 1, scale = 1, offset = 1, ...)
 
-SVMRadialModel(sigma = NULL, ...)
+SVMRadialModel(sigma = numeric(), ...)
 
 SVMSplineModel(...)
 
@@ -105,8 +105,8 @@ classification formulations and the bound-constraint SVM formulations.
 
 Arguments \code{kernel} and \code{kpar} are automatically set by the
 kernel-specific constructor functions.
-Default values for the \code{NULL} arguments and further model details can be
-found in the source link below.
+Default values and further model details can be found in the source link
+below.
 }
 \examples{
 fit(sale_amount ~ ., data = ICHomes, model = SVMRadialModel)

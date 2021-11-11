@@ -152,7 +152,7 @@ Resamples.data.frame <- function(
   rownames(object) <- NULL
 
   case_comps <- as.data.frame(case_comps)
-  if (!length(case_comps$strata)) control@strata <- list()
+  if (is_empty(case_comps$strata)) control@strata <- list()
 
   new("Resamples", object, control = control, case_comps = case_comps, ...)
 }
@@ -426,7 +426,9 @@ subsample_input.ModelFrame <- function(x, data, ...) as(data, class(x))
 subsample_input.ModelRecipe <- function(x, data, ...) recipe(x, data)
 
 
-resample_selection <- function(x, update, params, ..., name, id) {
+resample_selection <- function(
+  x, update, params, ..., name = character(), id = character()
+) {
 
   metrics <- params$metrics
   stat <- check_stat(params$stat, convert = TRUE)

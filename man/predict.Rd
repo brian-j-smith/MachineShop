@@ -8,11 +8,11 @@
 \method{predict}{MLModelFit}(
   object,
   newdata = NULL,
-  times = NULL,
+  times = numeric(),
   type = c("response", "prob"),
   cutoff = MachineShop::settings("cutoff"),
-  distr = NULL,
-  method = NULL,
+  distr = character(),
+  method = character(),
   ...
 )
 }

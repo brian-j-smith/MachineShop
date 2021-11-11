@@ -10,7 +10,7 @@
 XGBModel(params = list(), nrounds = 1, verbose = 0, print_every_n = 1)
 
 XGBDARTModel(
-  objective = NULL,
+  objective = character(),
   aft_loss_distribution = "normal",
   aft_loss_distribution_scale = 1,
   base_score = 0.5,
@@ -43,7 +43,7 @@ XGBDARTModel(
 )
 
 XGBLinearModel(
-  objective = NULL,
+  objective = character(),
   aft_loss_distribution = "normal",
   aft_loss_distribution_scale = 1,
   base_score = 0.5,
@@ -56,7 +56,7 @@ XGBLinearModel(
 )
 
 XGBTreeModel(
-  objective = NULL,
+  objective = character(),
   aft_loss_distribution = "normal",
   aft_loss_distribution_scale = 1,
   base_score = 0.5,
@@ -149,8 +149,8 @@ framework from Chen & Guestrin.
 }
 * excluded from grids by default
 
-Default values for the \code{NULL} arguments and further model details can be
-found in the source link below.
+Default values and further model details can be found in the source link
+below.
 
 In calls to \code{\link{varimp}} for \code{XGBTreeModel}, argument
 \code{type} may be specified as \code{"Gain"} (default) for the fractional

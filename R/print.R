@@ -661,7 +661,7 @@ heading <- function(x, level = 0, pad = TRUE, ...) {
 }
 
 
-hline <- function(symbol = 0, label = NULL, trim = 0, style = NULL) {
+hline <- function(symbol = 0, label = character(), trim = 0, style = NULL) {
   if (is.numeric(symbol)) {
     symbols <- c("-", "=", ".", "_", "~")
     symbol <- symbols[symbol %% length(symbols) + 1]
@@ -733,8 +733,8 @@ print_default <- function(x, max = NULL, ...) {
 }
 
 
-print_fields <- function(x, labels = NULL, heading = NULL, ...) {
-  if (is.null(labels)) {
+print_fields <- function(x, labels = character(), heading = character(), ...) {
+  if (is_empty(labels)) {
     labels <- names(x)
     names(labels) <- labels
   }
@@ -898,7 +898,7 @@ print_label <- function(...) {
 
 print_modelinfo <- function(x, trained = FALSE, level = 0, ...) {
   info_list <- modelinfo(x)
-  if (!length(info_list)) return(NULL)
+  if (is_empty(info_list)) return(NULL)
   info <- info_list[[1]]
   print_fields(list(
     "Model name: " =  names(info_list),

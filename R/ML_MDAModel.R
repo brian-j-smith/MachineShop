@@ -36,8 +36,8 @@
 #'     if different from the training set.}
 #' }
 #'
-#' Default values for the \code{NULL} arguments and further model details can be
-#' found in the source links below.
+#' Default values and further model details can be found in the source links
+#' below.
 #'
 #' @return \code{MLModel} class object.
 #'
@@ -52,9 +52,9 @@
 #' }
 #'
 MDAModel <- function(
-  subclasses = 3, sub.df = NULL, tot.df = NULL, dimension = sum(subclasses) - 1,
-  eps = .Machine$double.eps, iter = 5, method = .(mda::polyreg), trace = FALSE,
-  ...
+  subclasses = 3, sub.df = numeric(), tot.df = numeric(),
+  dimension = sum(subclasses) - 1, eps = .Machine$double.eps, iter = 5,
+  method = .(mda::polyreg), trace = FALSE, ...
 ) {
 
   MLModel(

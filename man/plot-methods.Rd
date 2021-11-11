@@ -22,7 +22,7 @@
 
 \method{plot}{LiftCurve}(
   x,
-  find = NULL,
+  find = numeric(),
   diagonal = TRUE,
   stat = MachineShop::settings("stat.Curve"),
   ...
@@ -62,7 +62,7 @@
   ...
 )
 
-\method{plot}{VariableImportance}(x, n = NULL, ...)
+\method{plot}{VariableImportance}(x, n = Inf, ...)
 }
 \arguments{
 \item{x}{\link{calibration}, \link{confusion}, \link{lift},
@@ -94,8 +94,7 @@ metrics to plot.}
 \item{stats}{vector of numeric indexes or character names of partial
 dependence summary statistics to plot.}
 
-\item{n}{number of most important variables to include in the plot
-[default: all].}
+\item{n}{number of most important variables to include in the plot.}
 }
 \description{
 Plot measures of model performance and predictor variable importance.

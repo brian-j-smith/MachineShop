@@ -23,8 +23,8 @@
 #'   }
 #' }
 #'
-#' Default values for the \code{NULL} arguments and further model details can be
-#' found in the source link below.
+#' Default values and further model details can be found in the source link
+#' below.
 #'
 #' @return \code{MLModel} class object.
 #'
@@ -39,7 +39,7 @@
 #'
 LARSModel <- function(
   type = c("lasso", "lar", "forward.stagewise", "stepwise"), trace = FALSE,
-  normalize = TRUE, intercept = TRUE, step = NULL, use.Gram = TRUE
+  normalize = TRUE, intercept = TRUE, step = numeric(), use.Gram = TRUE
 ) {
 
   type <- match.arg(type)

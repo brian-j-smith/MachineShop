@@ -15,8 +15,7 @@
 #'   identifying the corresponding rates of positive predictions.
 #' @param metrics vector of numeric indexes or character names of performance
 #'   metrics to plot.
-#' @param n number of most important variables to include in the plot
-#'   [default: all].
+#' @param n number of most important variables to include in the plot.
 #' @param se logical indicating whether to include standard error bars.
 #' @param stat function or character string naming a function to compute a
 #'   summary statistic on resampled metrics for trained \code{MLModel} line
@@ -124,13 +123,13 @@ plot.ConfusionMatrix <- function(x, ...) {
 #' @rdname plot-methods
 #'
 plot.LiftCurve <- function(
-  x, find = NULL, diagonal = TRUE, stat = MachineShop::settings("stat.Curve"),
-  ...
+  x, find = numeric(), diagonal = TRUE,
+  stat = MachineShop::settings("stat.Curve"), ...
 ) {
   x <- summary(x, stat = stat)
   p <- plot(as(x, "PerformanceCurve"), diagonal = diagonal, stat = NULL)
 
-  if (!is.null(find)) {
+  if (length(find)) {
     if (find < 0 || find > 1) {
       throw(Warning("'find' rate outside of 0 to 1 range"))
     }
@@ -348,8 +347,8 @@ plot.Resamples <- function(
 
 #' @rdname plot-methods
 #'
-plot.VariableImportance <- function(x, n = NULL, ...) {
-  if (!is.null(n)) x <- head(x, n)
+plot.VariableImportance <- function(x, n = Inf, ...) {
+  x <- head(x, n)
   var_names <- rownames(x)
   df <- cbind(stack(x), variables = factor(var_names, rev(var_names)))
   p <- ggplot(df, aes_(~ variables, ~ values)) +

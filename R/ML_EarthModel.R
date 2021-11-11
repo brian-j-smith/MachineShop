@@ -22,8 +22,8 @@
 #' }
 #' * excluded from grids by default
 #'
-#' Default values for the \code{NULL} arguments and further model details can be
-#' found in the source link below.
+#' Default values and further model details can be found in the source link
+#' below.
 #'
 #' In calls to \code{\link{varimp}} for \code{EarthModel}, argument
 #' \code{type} may be specified as \code{"nsubsets"} (default) for the number of
@@ -49,7 +49,8 @@
 #'
 EarthModel <- function(
   pmethod = c("backward", "none", "exhaustive", "forward", "seqrep", "cv"),
-  trace = 0, degree = 1, nprune = NULL, nfold = 0, ncross = 1, stratify = TRUE
+  trace = 0, degree = 1, nprune = integer(), nfold = 0, ncross = 1,
+  stratify = TRUE
 ) {
 
   pmethod <- match.arg(pmethod)

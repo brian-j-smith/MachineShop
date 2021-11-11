@@ -9,7 +9,7 @@ LARSModel(
   trace = FALSE,
   normalize = TRUE,
   intercept = TRUE,
-  step = NULL,
+  step = numeric(),
   use.Gram = TRUE
 )
 }
@@ -46,8 +46,8 @@ fits, starting from zero to the least squares fit.
   }
 }
 
-Default values for the \code{NULL} arguments and further model details can be
-found in the source link below.
+Default values and further model details can be found in the source link
+below.
 }
 \examples{
 \donttest{

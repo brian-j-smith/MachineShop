@@ -45,7 +45,7 @@ as_string.default <- function(x, ...) {
 }
 
 
-as_string.character <- function(x, sep = ", ", conj = NULL) {
+as_string.character <- function(x, sep = ", ", conj = character()) {
   if (length(conj)) {
     n <- length(x)
     if (n > 1) x[n] <- paste(conj, x[n])
@@ -191,6 +191,11 @@ is_counting <- function(x) {
 }
 
 
+is_empty <- function(x) {
+  length(x) == 0
+}
+
+
 is_one_element <- function(x, class = "ANY") {
   is.vector(x) && length(x) == 1 && is(x[[1]], class)
 }
@@ -291,7 +296,7 @@ match_class <- function(object, choices) {
 match_indices <- function(indices, choices) {
   lookup <- structure(seq_along(choices), names = choices)
   indices <- na.omit(names(lookup)[lookup[indices]])
-  if (length(indices) == 0) {
+  if (is_empty(indices)) {
     indices <- names(lookup)[1]
     throw(LocalWarning("specified indices not found; using ", indices,
                        " instead"))
@@ -311,14 +316,14 @@ missing_names <- function(x, data) {
 
 
 new_params <- function(envir, ...) {
-  args <- as.list(envir)
+  args <- c(as.list(envir), ...)
   missing <- map_logi(function(x) is.symbol(x) && !nzchar(x), args)
   if (any(missing)) {
     throw(Error(note_items(
       "Missing values for required argument{?s}: ", names(args)[missing], "."
     )))
   }
-  c(args[!map_logi(is.null, args)], list(...))
+  args[lengths(args) > 0]
 }
 
 
@@ -373,7 +378,8 @@ nvars <- function(x, model) {
 
 
 note_items <- function(
-  begin, values, end = NULL, add_names = FALSE, sep = ", ", conj = NULL
+  begin, values, end = character(), add_names = FALSE, sep = ", ",
+  conj = character()
 ) {
   if (add_names && length(names(values))) {
     values <- paste(names(values), values, sep = " = ")
@@ -417,7 +423,7 @@ rand_int <- function(n = 1) {
 }
 
 
-sample_params <- function(x, size = NULL, replace = FALSE) {
+sample_params <- function(x, size = integer(), replace = FALSE) {
   stopifnot(is.list(x))
 
   n <- length(x)
@@ -432,7 +438,7 @@ sample_params <- function(x, size = NULL, replace = FALSE) {
   names(x) <- var_names
 
   max_size <- prod(lengths(x))
-  if (is.null(size)) size <- max_size
+  if (is_empty(size)) size <- max_size
   if (!replace) size <- min(size, max_size)
 
   grid <- as_tibble(matrix(nrow = 0, ncol = n, dimnames = list(NULL, names(x))))
@@ -535,10 +541,10 @@ set_model_names <- function(x) {
 }
 
 
-size <- function(x, dim = NULL) {
+size <- function(x, dim = integer()) {
   res <- dim(x)
   if (is.null(res)) res <- length(x)
-  if (is.null(dim)) res else res[dim]
+  if (length(dim)) res[dim] else res
 }
 
 

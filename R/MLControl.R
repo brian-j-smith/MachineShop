@@ -289,18 +289,20 @@ set_monitor <- function(control, progress = TRUE, verbose = FALSE) {
 #' @examples
 #' CVControl() %>% set_predict(times = 1:3)
 #'
-set_predict <- function(control, times = NULL, distr = NULL, method = NULL) {
+set_predict <- function(
+  control, times = numeric(), distr = character(), method = character()
+) {
   stopifnot(is(control, "MLControl"))
 
-  if (!is.null(times)) {
+  if (length(times)) {
     times <- check_numeric(times, bounds = c(0, Inf), include = 0, size = NA)
   }
   throw(check_assignment(times))
 
-  if (!is.null(distr)) distr <- check_character(distr, size = 1)
+  if (length(distr)) distr <- check_character(distr, size = 1)
   throw(check_assignment(distr))
 
-  if (!is.null(method)) method <- check_character(method, size = 1)
+  if (length(method)) method <- check_character(method, size = 1)
   throw(check_assignment(method))
 
   control@predict <- list(times = times, distr = distr, method = method)

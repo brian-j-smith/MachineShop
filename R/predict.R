@@ -39,10 +39,11 @@
 #' }
 #'
 predict.MLModelFit <- function(
-  object, newdata = NULL, times = NULL, type = c("response", "prob"),
-  cutoff = MachineShop::settings("cutoff"), distr = NULL, method = NULL, ...
+  object, newdata = NULL, times = numeric(), type = c("response", "prob"),
+  cutoff = MachineShop::settings("cutoff"), distr = character(),
+  method = character(), ...
 ) {
-  if (!is.null(times)) {
+  if (length(times)) {
     times <- check_numeric(times, bounds = c(0, Inf), include = 0, size = NA)
   }
   throw(check_assignment(times))

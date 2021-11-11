@@ -5,7 +5,7 @@
 \title{Quadratic Discriminant Analysis Model}
 \usage{
 QDAModel(
-  prior = NULL,
+  prior = numeric(),
   method = c("moment", "mle", "mve", "t"),
   nu = 5,
   use = c("plug-in", "predictive", "debiased", "looCV")
@@ -39,8 +39,8 @@ following argument.
     if different from the training set.}
 }
 
-Default values for the \code{NULL} arguments and further model details can be
-found in the source links below.
+Default values and further model details can be found in the source links
+below.
 }
 \examples{
 fit(Species ~ ., data = iris, model = QDAModel)

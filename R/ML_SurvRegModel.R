@@ -14,8 +14,8 @@
 #'   \item{Response Types:}{\code{Surv}}
 #' }
 #'
-#' Default values for the \code{NULL} arguments and further model details can be
-#' found in the source link below.
+#' Default values and further model details can be found in the source links
+#' below.
 #'
 #' @return \code{MLModel} class object.
 #'
@@ -26,7 +26,7 @@
 SurvRegModel <- function(
   dist = c("weibull", "exponential", "gaussian", "logistic", "lognormal",
            "logloglogistic"),
-  scale = NULL, parms = NULL, ...
+  scale = 0, parms = list(), ...
 ) {
 
   dist <- match.arg(dist)
@@ -97,8 +97,8 @@ MLModelFunction(SurvRegModel) <- NULL
 SurvRegStepAICModel <- function(
   dist = c("weibull", "exponential", "gaussian", "logistic", "lognormal",
            "logloglogistic"),
-  scale = NULL, parms = NULL, ...,
-  direction = c("both", "backward", "forward"), scope = NULL, k = 2,
+  scale = 0, parms = list(), ...,
+  direction = c("both", "backward", "forward"), scope = list(), k = 2,
   trace = FALSE, steps = 1000
 ) {
 

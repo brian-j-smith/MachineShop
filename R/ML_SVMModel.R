@@ -45,8 +45,8 @@
 #'
 #' Arguments \code{kernel} and \code{kpar} are automatically set by the
 #' kernel-specific constructor functions.
-#' Default values for the \code{NULL} arguments and further model details can be
-#' found in the source link below.
+#' Default values and further model details can be found in the source link
+#' below.
 #'
 #' @return \code{MLModel} class object.
 #'
@@ -57,7 +57,7 @@
 #' fit(sale_amount ~ ., data = ICHomes, model = SVMRadialModel)
 #'
 SVMModel <- function(
-  scaled = TRUE, type = NULL,
+  scaled = TRUE, type = character(),
   kernel = c("rbfdot", "polydot", "vanilladot", "tanhdot", "laplacedot",
              "besseldot", "anovadot", "splinedot"),
   kpar = "automatic", C = 1, nu = 0.2, epsilon = 0.1, cache = 40, tol = 0.001,
@@ -115,7 +115,7 @@ MLModelFunction(SVMBesselModel) <- NULL
 
 #' @rdname SVMModel
 #'
-SVMLaplaceModel <- function(sigma = NULL, ...) {
+SVMLaplaceModel <- function(sigma = numeric(), ...) {
   .SVMModel("SVMLaplaceModel", "Support Vector Machines (Laplace)",
             "laplacedot", environment(), ...)
 }
@@ -145,7 +145,7 @@ MLModelFunction(SVMPolyModel) <- NULL
 
 #' @rdname SVMModel
 #'
-SVMRadialModel <- function(sigma = NULL, ...) {
+SVMRadialModel <- function(sigma = numeric(), ...) {
   .SVMModel("SVMRadialModel", "Support Vector Machines (Radial)",
             "rbfdot", environment(), ...)
 }
@@ -177,7 +177,7 @@ MLModelFunction(SVMTanhModel) <- NULL
   args <- list(...)
   args$kernel <- kernel
   kpar <- new_params(envir)
-  args$kpar <- if (kernel %in% c("laplacedot", "rbfdot") && length(kpar) == 0) {
+  args$kpar <- if (kernel %in% c("laplacedot", "rbfdot") && is_empty(kpar)) {
     "automatic"
   } else {
     as.call(c(.(list), kpar))

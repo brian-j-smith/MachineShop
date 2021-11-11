@@ -22,8 +22,8 @@
 #'     \code{PoissonVariate}}
 #' }
 #'
-#' Default values for the \code{NULL} arguments and further model details can be
-#' found in the source link below.
+#' Default values and further model details can be found in the source links
+#' below.
 #'
 #' In calls to \code{\link{varimp}} for \code{GLMModel} and
 #' \code{GLMStepAICModel}, numeric argument \code{base} may be specified for the
@@ -120,7 +120,7 @@ MLModelFunction(GLMModel) <- NULL
 #'
 GLMStepAICModel <- function(
   family = NULL, quasi = FALSE, ...,
-  direction = c("both", "backward", "forward"), scope = NULL, k = 2,
+  direction = c("both", "backward", "forward"), scope = list(), k = 2,
   trace = FALSE, steps = 1000
 ) {
 

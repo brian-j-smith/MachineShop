@@ -72,7 +72,7 @@ rfe <- function(...) {
 #'
 rfe.formula <- function(
   formula, data, model, control = MachineShop::settings("control"), props = 4,
-  sizes = NULL, random = FALSE, recompute = TRUE,
+  sizes = integer(), random = FALSE, recompute = TRUE,
   optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
   metrics = NULL, stat = "base::mean", ...
 ) {
@@ -87,7 +87,7 @@ rfe.formula <- function(
 #'
 rfe.matrix <- function(
   x, y, model, control = MachineShop::settings("control"), props = 4,
-  sizes = NULL, random = FALSE, recompute = TRUE,
+  sizes = integer(), random = FALSE, recompute = TRUE,
   optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
   metrics = NULL, stat = "base::mean", ...
 ) {
@@ -101,7 +101,7 @@ rfe.matrix <- function(
 #'
 rfe.ModelFrame <- function(
   input, model, control = MachineShop::settings("control"), props = 4,
-  sizes = NULL, random = FALSE, recompute = TRUE,
+  sizes = integer(), random = FALSE, recompute = TRUE,
   optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
   metrics = NULL, stat = "base::mean", ...
 ) {
@@ -119,7 +119,7 @@ rfe.ModelFrame <- function(
 #'
 rfe.recipe <- function(
   input, model, control = MachineShop::settings("control"), props = 4,
-  sizes = NULL, random = FALSE, recompute = TRUE,
+  sizes = integer(), random = FALSE, recompute = TRUE,
   optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
   metrics = NULL, stat = "base::mean", ...
 ) {
@@ -190,7 +190,7 @@ rfe.MLModelFunction <- function(model, ...) {
   vi <- scale(varimp(model_fit))
   superset <- names(vi)
 
-  if (!is.null(sizes)) {
+  if (length(sizes)) {
     sizes <- check_integer(sizes, bounds = c(1, Inf), size = NA)
     throw(check_assignment(sizes))
     sizes <- pmin(sizes, length(superset))

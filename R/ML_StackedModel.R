@@ -34,16 +34,18 @@
 #' }
 #'
 StackedModel <- function(
-  ..., control = MachineShop::settings("control"), weights = NULL
+  ..., control = MachineShop::settings("control"), weights = numeric()
 ) {
 
   base_learners <- ListOf(map(as.MLModel, unlist(list(...))))
   names(base_learners) <- paste0(if (length(base_learners)) "Learner",
                                  seq_along(base_learners))
 
-  control <- as.MLControl(control)
-  if (length(weights)) stopifnot(length(weights) == length(base_learners))
-  params <- as.list(environment())
+  params <- list(base_learners = base_learners, control = as.MLControl(control))
+  if (length(weights)) {
+    stopifnot(length(weights) == length(base_learners))
+    params$weights <- weights
+  }
 
   slots <- combine_model_slots(base_learners, settings("response_types"))
   new("StackedModel", MLModel(

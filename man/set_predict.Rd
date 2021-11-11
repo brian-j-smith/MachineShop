@@ -4,7 +4,12 @@
 \alias{set_predict}
 \title{Resampling Prediction Control}
 \usage{
-set_predict(control, times = NULL, distr = NULL, method = NULL)
+set_predict(
+  control,
+  times = numeric(),
+  distr = character(),
+  method = character()
+)
 }
 \arguments{
 \item{control}{\link[=controls]{control} object.}

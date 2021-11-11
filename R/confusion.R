@@ -115,7 +115,7 @@ setMethod(".confusion", c("factor", "matrix"),
 
 setMethod(".confusion", c("factor", "numeric"),
   function(observed, predicted, cutoff, ...) {
-    predicted <- if (is.null(cutoff)) {
+    predicted <- if (is_empty(cutoff)) {
       cbind(1 - predicted, predicted)
     } else {
       convert_response(observed, predicted, cutoff = cutoff)
@@ -141,7 +141,7 @@ setMethod(".confusion", c("Resamples", "ANY"),
 
 setMethod(".confusion", c("Surv", "SurvProbs"),
   function(observed, predicted, cutoff, ...) {
-    if (is.null(cutoff)) cutoff <- 0.5
+    if (is_empty(cutoff)) cutoff <- 0.5
     predicted <- convert_response(observed, predicted, cutoff = cutoff)
     .confusion(observed, predicted, ...)
   }
