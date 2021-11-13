@@ -176,6 +176,7 @@ eval_fit <- function(data, formula, matrix) {
     )
     eval(substitute(matrix), envir, parent.frame())
   } else {
-    eval.parent(substitute(formula))
+    envir <- list(data = as.data.frame(data))
+    eval(substitute(formula), envir, parent.frame())
   }
 }

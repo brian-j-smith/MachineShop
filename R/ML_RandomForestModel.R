@@ -56,11 +56,11 @@ RandomForestModel <- function(
       default = c(TRUE, FALSE)
     ),
     fit = function(formula, data, weights, ...) {
-      eval_fit(data,
-               formula = randomForest::randomForest(formula,
-                                                    data = as.data.frame(data),
-                                                    ...),
-               matrix = randomForest::randomForest(x, y, ...))
+      eval_fit(
+        data,
+        formula = randomForest::randomForest(formula, data = data, ...),
+        matrix = randomForest::randomForest(x, y, ...)
+      )
     },
     predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)

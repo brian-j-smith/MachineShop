@@ -34,10 +34,11 @@ NaiveBayesModel <- function(laplace = 0) {
     predictor_encoding = "model.frame",
     params = new_params(environment()),
     fit = function(formula, data, weights, ...) {
-      eval_fit(data,
-               formula = e1071::naiveBayes(formula, data = as.data.frame(data),
-                                           ...),
-               matrix = e1071::naiveBayes(x, y, ...))
+      eval_fit(
+        data,
+        formula = e1071::naiveBayes(formula, data = data, ...),
+        matrix = e1071::naiveBayes(x, y, ...)
+      )
     },
     predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)

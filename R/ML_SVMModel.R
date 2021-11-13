@@ -74,10 +74,11 @@ SVMModel <- function(
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
     fit = function(formula, data, weights, ...) {
-      eval_fit(data,
-               formula = kernlab::ksvm(formula, data = as.data.frame(data),
-                                       prob.model = TRUE, ...),
-               matrix = kernlab::ksvm(x, y, prob.model = TRUE, ...))
+      eval_fit(
+        data,
+        formula = kernlab::ksvm(formula, data = data, prob.model = TRUE, ...),
+        matrix = kernlab::ksvm(x, y, prob.model = TRUE, ...)
+      )
     },
     predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)

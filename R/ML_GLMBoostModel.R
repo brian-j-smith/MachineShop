@@ -77,13 +77,14 @@ GLMBoostModel <- function(
           "Surv" = mboost::CoxPH()
         )
       }
-      eval_fit(data,
-               formula = mboost::glmboost(formula, data = as.data.frame(data),
-                                          na.action = na.pass,
-                                          weights = weights, family = family,
-                                          ...),
-               matrix = mboost::glmboost(x, y, weights = weights,
-                                         family = family, ...))
+      eval_fit(
+        data,
+        formula = mboost::glmboost(
+          formula, data = data, na.action = na.pass, weights = weights,
+          family = family, ...
+        ),
+        matrix = mboost::glmboost(x, y, weights = weights, family = family, ...)
+      )
     },
     predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)
