@@ -83,7 +83,7 @@ combine_data_frames <- function(x, y = NULL) {
 
 combine_model_slots <- function(models, types) {
   init <- data.frame(type = types, weights = FALSE)
-  any_ordered <- any(map_logi(function(model) {
+  any_ordered <- any(map("logi", function(model) {
     "ordered" %in% model@response_types
   }, models))
   info_list <- map(function(model) {
@@ -160,10 +160,10 @@ get_perf_metrics <- function(x, y) {
   class <- match_class(x, classes)
   method <- fget(paste0(generic_name, ".", class))
   metrics <- c(eval(formals(method)$metrics))
-  is_defined <- map_logi(function(metric) {
+  is_defined <- map("logi", function(metric) {
     types <- metricinfo(metric)[[1]]$response_types
-    any(map_logi(is, list(x), types$observed) &
-          map_logi(is, list(y), types$predicted))
+    any(map("logi", is, list(x), types$observed) &
+          map("logi", is, list(y), types$predicted))
   }, metrics)
   metrics[is_defined]
 }
@@ -182,7 +182,7 @@ has_varimp <- function(object) {
 identical_elements <- function(x, transform = identity, ...) {
   target <- transform(x[[1]])
   compare <- function(current) identical(transform(current), target, ...)
-  all(map_logi(compare, x[-1]))
+  all(map("logi", compare, x[-1]))
 }
 
 
@@ -202,7 +202,7 @@ is_one_element <- function(x, class = "ANY") {
 
 
 is_response <- function(y, types) {
-  map_logi(function(type) {
+  map("logi", function(type) {
     if (type == "binary") {
       is(y, "factor") && nlevels(y) == 2
     } else {
@@ -250,36 +250,23 @@ make_list_names <- function(x, prefix) {
 }
 
 
-map <- function(FUN, ...) {
-  all_args <- all(lengths(list(...)))
-  if (all_args) mapply(FUN = FUN, ..., SIMPLIFY = FALSE) else list()
+map <- function(.object, ...) {
+  UseMethod("map")
 }
 
 
-map_chr <- function(FUN, ...) {
-  res <- map_simplify(FUN, ...)
-  storage.mode(res) <- "character"
+map.character <- function(.object, .fun, ...) {
+  type <- match.arg(.object, c("character", "complex", "double", "integer",
+                               "list", "logical", "numeric", "raw"))
+  res <- simplify(map(.fun, ...))
+  storage.mode(res) <- type
   res
 }
 
 
-map_logi <- function(FUN, ...) {
-  res <- map_simplify(FUN, ...)
-  storage.mode(res) <- "logical"
-  res
-}
-
-
-map_num <- function(FUN, ...) {
-  res <- map_simplify(FUN, ...)
-  storage.mode(res) <- "numeric"
-  res
-}
-
-
-map_simplify <- function(FUN, ...) {
-  res <- map(FUN, ...)
-  if (length(res)) simplify2array(res, higher = TRUE) else res
+map.function <- function(.object, ...) {
+  nonempty <- all(lengths(list(...)))
+  if (nonempty) mapply(FUN = .object, ..., SIMPLIFY = FALSE) else list()
 }
 
 
@@ -317,7 +304,7 @@ missing_names <- function(x, data) {
 
 new_params <- function(envir, ...) {
   args <- c(as.list(envir), ...)
-  missing <- map_logi(function(x) is.symbol(x) && !nzchar(x), args)
+  missing <- map("logi", function(x) is.symbol(x) && !nzchar(x), args)
   if (any(missing)) {
     throw(Error(note_items(
       "Missing values for required argument{?s}: ", names(args)[missing], "."
@@ -453,8 +440,8 @@ sample_params <- function(x, size = integer(), replace = FALSE) {
   grid <- head(grid, size)
   sortable_types <- c("character", "complex", "Date", "factor", "logical",
                       "numeric")
-  is_sortable <- map_logi(function(column) {
-    any(map_logi(is, list(column), sortable_types))
+  is_sortable <- map("logi", function(column) {
+    any(map("logi", is, list(column), sortable_types))
   }, grid)
   if (any(is_sortable)) {
     sort_order <- do.call(order, rev(grid[is_sortable]))
@@ -538,6 +525,11 @@ set_model_names <- function(x) {
   for (i in seq_along(x)) levels(x[[i]][[name]]) <- level_names[[i]]
 
   x
+}
+
+
+simplify <- function(x) {
+  if (length(x)) simplify2array(x, higher = TRUE) else x
 }
 
 

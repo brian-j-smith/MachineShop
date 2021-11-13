@@ -307,7 +307,7 @@ check_packages <- function(x) {
     }
   }
 
-  installed <- map_logi(requireNamespace, pkg_names, quietly = TRUE)
+  installed <- map("logi", requireNamespace, pkg_names, quietly = TRUE)
   result <- check(!installed, "requires prior installation of package{?s}: ",
                   "install.packages")
   if (is(result, "error")) return(result)
@@ -315,7 +315,7 @@ check_packages <- function(x) {
   end_pos <- paren_pos + paren_len - 2
   compat_versions <- strsplit(substr(x, paren_pos + 1, end_pos), " ")
 
-  compatible <- map_logi(function(pkg_name, compat_version) {
+  compatible <- map("logi", function(pkg_name, compat_version) {
     if (length(compat_version) == 2) {
       version <- packageVersion(pkg_name)
       eval(call(compat_version[1], version, compat_version[2]))

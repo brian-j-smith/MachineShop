@@ -39,7 +39,7 @@ lift <- function(x, y = NULL, weights = NULL, na.rm = TRUE, ...) {
 
 LiftCurve <- function(...) {
   object <- as(PerformanceCurve(...), "LiftCurve")
-  if (!all(map_logi(identical, object@metrics, c(tpr, rpp)))) {
+  if (!all(map("logi", identical, object@metrics, c(tpr, rpp)))) {
     throw(Error("incorrect LiftCurve metrics"))
   }
   object
@@ -144,7 +144,7 @@ performance_curve.Resamples <- function(
 
 get_curve_metrics <- function(metrics) {
   metrics <- map(fget, metrics)
-  if (length(metrics) != 2 || !all(map_logi(is, metrics, "MLMetric"))) {
+  if (length(metrics) != 2 || !all(map("logi", is, metrics, "MLMetric"))) {
     metrics <- Error("Value must be a list of two performance metrics.")
     throw(check_assignment(metrics))
   }
@@ -162,7 +162,7 @@ PerformanceCurve <- function(object, ..., metrics, .check = TRUE) {
       )))
     }
 
-    if (!all(map_logi(is, metrics[1:2], "MLMetric"))) {
+    if (!all(map("logi", is, metrics[1:2], "MLMetric"))) {
       msg <- "missing performance metrics in PerformanceCurve constructor"
       throw(Error(msg))
     }

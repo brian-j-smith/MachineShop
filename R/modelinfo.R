@@ -44,7 +44,7 @@ modelinfo <- function(...) {
   args <- if (length(args)) unname(args) else as.list(settings("models"))
   info <- do.call(.modelinfo, args)
 
-  is_type <- if (length(info)) !map_logi(is, info, "list") else NULL
+  is_type <- if (length(info)) !map("logi", is, info, "list") else NULL
   if (any(is_type)) {
     info_models <- if (all(is_type)) modelinfo() else info[!is_type]
     info_types <- do.call(.modelinfo_types, info[is_type])
@@ -104,7 +104,7 @@ modelinfo <- function(...) {
   info <- modelinfo()
   check_model <- function(model) {
     check_response <- function(y) any(is_response(y, model$response_types))
-    all(map_logi(check_response, list(...)))
+    all(map("logi", check_response, list(...)))
   }
-  info[map_logi(check_model, info)]
+  info[map("logi", check_model, info)]
 }

@@ -131,7 +131,7 @@ setMethod(".confusion", c("Resamples", "ANY"),
       confusion(resample$Observed, resample$Predicted, resample$Weight,
                 na.rm = FALSE, ...)
     }, simplify = FALSE)
-    if (all(map_logi(is, conf_list, "ConfusionList"))) {
+    if (all(map("logi", is, conf_list, "ConfusionList"))) {
       conf_list <- unlist(conf_list, recursive = FALSE)
     }
     do.call(c, conf_list)

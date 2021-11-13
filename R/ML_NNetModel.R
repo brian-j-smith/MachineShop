@@ -105,7 +105,7 @@ NNetModel <- function(
       labels <- paste0("h", idx$hidden, "->o", idx$output)
       h2o <- matrix(beta[match(labels, nms)], size, nresp)
 
-      vi <- map_num(function(output) {
+      vi <- map("num", function(output) {
         100 * ((i2h * h2o[, output]) %>%
           prop.table(margin = 1) %>%
           colSums %>%

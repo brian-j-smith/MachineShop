@@ -64,7 +64,7 @@ SelectedInput.formula <- function(
   cutoff = MachineShop::settings("cutoff")
 ) {
   inputs <- list(...)
-  if (!all(map_logi(is, inputs, "formula"))) {
+  if (!all(map("logi", is, inputs, "formula"))) {
     throw(Error("inputs must be formulas"))
   }
   mf_list <- map(function(x) {
@@ -83,7 +83,7 @@ SelectedInput.matrix <- function(
   cutoff = MachineShop::settings("cutoff")
 ) {
   inputs <- list(...)
-  if (!all(map_logi(is, inputs, "matrix"))) {
+  if (!all(map("logi", is, inputs, "matrix"))) {
     throw(Error("inputs must be matrices"))
   }
   mf_list <- map(ModelFrame, inputs, list(y), strata = list(y), na.rm = FALSE)
@@ -102,7 +102,7 @@ SelectedInput.ModelFrame <- function(
 
   inputs <- list(...)
 
-  input_classes <- map_chr(function(x) class1(x), inputs)
+  input_classes <- map("char", function(x) class1(x), inputs)
   if (!all(input_classes %in% c("ModelFrame", "ModeledFrame"))) {
     throw(Error("inputs must be ModelFrames or ModeledFrames"))
   }
@@ -271,7 +271,7 @@ TunedInput.recipe <- function(
                               metrics = metrics, stat = stat, cutoff = cutoff))
 
   grid_names <- names(object@grid)
-  step_ids <- map_chr(getElement, object$steps, "id")
+  step_ids <- map("char", getElement, object$steps, "id")
   missing <- !(grid_names %in% step_ids)
   if (any(missing)) {
     throw(Error(

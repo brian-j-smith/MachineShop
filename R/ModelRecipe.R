@@ -9,7 +9,7 @@ ModelRecipe.ModelRecipe <- function(object, ...) {
 
 
 ModelRecipe.recipe <- function(object, ...) {
-  if (any(map_logi(function(step) isTRUE(step$trained), object$steps))) {
+  if (any(map("logi", function(step) isTRUE(step$trained), object$steps))) {
     throw(Error("recipe must be untrained"))
   }
 

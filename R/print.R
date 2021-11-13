@@ -267,7 +267,7 @@ print.ModelRecipe <- function(x, n = MachineShop::settings("print_max"), ...) {
   if (level < 2) {
     status <- if (is_trained(x)) "Prepared" else "Unprepared"
     print_fields(
-      list(steps = if (length(x$steps)) map_chr(class1, x$steps)),
+      list(steps = if (length(x$steps)) map("char", class1, x$steps)),
       labels = c(steps = paste(status, "step{?s}: "))
     )
   }
@@ -717,7 +717,7 @@ print_control <- function(x, fields = NULL, n = Inf, ...) {
       prop = "Minimum proportion: ",
       size = "Minimum size: "
     ), "Stratification parameters")
-    monitor <- x@monitor[map_logi(isTRUE, x@monitor)]
+    monitor <- x@monitor[map("logi", isTRUE, x@monitor)]
     if (length(monitor)) {
       print_fields(list("Monitor: " = names(monitor)))
     }

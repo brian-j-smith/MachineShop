@@ -190,7 +190,7 @@ plot.MLModel <- function(
       }
       df$Metric <- factor(df$Metric, metrics)
 
-      indices <- map_logi(function(x) length(unique(x)), grid[-1])
+      indices <- map("logi", function(x) length(unique(x)), grid[-1])
       args <- list(~ x, ~ Value)
       if (any(indices)) {
         df$Group <- interaction(grid[-1][indices])

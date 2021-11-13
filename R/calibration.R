@@ -123,8 +123,8 @@ setMethod(".calibration", c("matrix", "matrix"),
         x <- predicted[, i]
         predict(loess(y ~ x, weights = weights, span = span), se = TRUE)
       }, seq_len(ncol(predicted)))
-      Mean <- c(map_num(getElement, loessfit_list, "fit"))
-      SE <- c(map_num(getElement, loessfit_list, "se.fit"))
+      Mean <- c(map("num", getElement, loessfit_list, "fit"))
+      SE <- c(map("num", getElement, loessfit_list, "se.fit"))
       df$Observed <- cbind(Mean = Mean, SE = SE,
                            Lower = Mean - SE,
                            Upper = Mean + SE)
@@ -177,7 +177,7 @@ setMethod(".calibration", c("Surv", "SurvProbs"),
     if (is_empty(breaks)) {
       throw(check_censoring(observed, "right"))
       throw(check_equal_weights(weights))
-      Mean <- c(map_num(function(i) {
+      Mean <- c(map("num", function(i) {
         x <- predicted[, i]
         harefit <- polspline::hare(observed[, "time"], observed[, "status"], x)
         1 - polspline::phare(times[i], x, harefit)

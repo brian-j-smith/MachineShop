@@ -61,7 +61,7 @@ ModelFrame.data.frame <- function(data, ...) {
   args$na.rm <- FALSE
 
   model_terms <- terms(map(as.name, names(data)[-1]), names(data)[1],
-                       all_numeric = all(map_logi(is.numeric, data[-1])))
+                       all_numeric = all(map("logi", is.numeric, data[-1])))
 
   do.call(ModelFrame, c(list(model_terms, data), args))
 }
@@ -218,15 +218,15 @@ terms.list <- function(
   if (is.character(y)) y <- as.name(y)
   has_y <- 1L - is.null(y)
 
-  is_names <- map_logi(is.name, x)
+  is_names <- map("logi", is.name, x)
   name_inds <- which(is_names)
   noname_inds <- which(!is_names)
 
   x_char <- character(length(x))
   x_char[name_inds] <- as.character(x[name_inds])
-  x_char[noname_inds] <- map_chr(deparse, x[noname_inds])
+  x_char[noname_inds] <- map("char", deparse, x[noname_inds])
 
-  valid_calls <- map_logi(function(var) {
+  valid_calls <- map("logi", function(var) {
     is.call(var) && var[[1]] == "offset"
   }, x[noname_inds])
   if (!all(valid_calls)) {
@@ -244,7 +244,7 @@ terms.list <- function(
   fo[[2]] <- y
 
   class <- if (all_numeric) {
-    x_char[name_inds] <- map_chr(as.character, x[name_inds])
+    x_char[name_inds] <- map("char", as.character, x[name_inds])
     "ModelDesignTerms"
   } else {
     "ModelFormulaTerms"

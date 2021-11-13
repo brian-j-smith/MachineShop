@@ -214,26 +214,27 @@ metric_method_name <- function(f) {
 }
 
 
-metric_matrix <- function(FUN, observed, predicted, ...) {
-  mean(map_num(function(i) {
-    FUN(observed[, i], predicted[, i], ...)
+metric_matrix <- function(.fun, observed, predicted, ...) {
+  mean(map("num", function(i) {
+    .fun(observed[, i], predicted[, i], ...)
   }, seq_len(ncol(observed))))
 }
 
 
 metric_SurvMatrix <- function(
-  FUN, observed, predicted, weights, cutoff = numeric(), ...
+  .fun, observed, predicted, weights, cutoff = numeric(), ...
 ) {
   conf_list <- confusion(observed, predicted, weights, cutoff = cutoff)
-  x <- map_num(function(conf) FUN(conf, ...), conf_list)
+  x <- map("num", function(conf) .fun(conf, ...), conf_list)
   times <- predicted@times
   if (length(times) > 1) c("mean" = survmetric_mean(x, times), x) else x[[1]]
 }
 
 
-metric_SurvTimes <- function(FUN, observed, predicted, weights = NULL, ...) {
+metric_SurvTimes <- function(.fun, observed, predicted, weights = NULL, ...) {
   events <- observed[, "status"] == 1
-  FUN(time(observed[events]), predicted[events], weights = weights[events], ...)
+  .fun(time(observed[events]), predicted[events], weights = weights[events],
+       ...)
 }
 
 

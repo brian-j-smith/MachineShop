@@ -142,7 +142,7 @@ new_gridinfo <- function(
   stopifnot(is.list(get_values))
   stopifnot(is.logical(default))
 
-  if (!all(map_logi(is.function, get_values))) {
+  if (!all(map("logi", is.function, get_values))) {
     get_values <- Error("Value must be a list of functions.")
     throw(check_assignment(get_values))
   }

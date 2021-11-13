@@ -193,7 +193,7 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
   gridinfo <- gridinfo[gridinfo$size >= 1, ]
 
   has_data_arg <- function(fun) "data" %in% names(formals(fun))
-  needs_data <- any(map_logi(has_data_arg, gridinfo$get_values))
+  needs_data <- any(map("logi", has_data_arg, gridinfo$get_values))
   if (needs_data && has_grid(model)) {
     if (!missing(input)) mf <- ModelFrame(input, ..., na.rm = FALSE)
     if (is.null(mf)) {
@@ -338,7 +338,7 @@ expand_steps <- function(..., random = FALSE) {
     step_names <- names(steps)
   }
 
-  if (!all(map_logi(is.list, steps))) {
+  if (!all(map("logi", is.list, steps))) {
     throw(Error("step arguments must be lists"))
   }
 

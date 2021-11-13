@@ -116,7 +116,7 @@ prep.step_sbf <- function(x, training, info = NULL, ...) {
     x$filter(x = x_vars, y = y_var, step = x)
   } else {
     res_list <- map(x$filter, x = x_vars, y = list(y_var), step = list(x))
-    if (all(map_logi(is.list, res_list))) {
+    if (all(map("logi", is.list, res_list))) {
       do.call(rbind, map(as_tibble, res_list))
     } else unlist(res_list)
   }

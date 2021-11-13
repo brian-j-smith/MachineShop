@@ -123,7 +123,7 @@ RFSRCModel <- function(
         "Surv" = "Surv"
       )
       if (!is.null(family)) {
-        y_names <- map_chr(recipes::rand_id, colnames(y))
+        y_names <- map("char", recipes::rand_id, colnames(y))
         data[[response(formula)]] <- NULL
         data[y_names] <- y
         formula[[2]] <- as.call(map(as.name, c(family, y_names)))
@@ -137,7 +137,7 @@ RFSRCModel <- function(
       if (pred$family == "regr+") {
         y_names <- pred$yvar.names
         names(y_names) <- sub("_.*", "", y_names)
-        map_simplify(function(name) pred$regrOutput[[name]]$predicted, y_names)
+        simplify(map(function(name) pred$regrOutput[[name]]$predicted, y_names))
       } else if (pred$family == "surv") {
         predict(Surv(pred$time.interest), pred$survival, ...)
       } else {
@@ -149,7 +149,7 @@ RFSRCModel <- function(
       if (vi$family == "regr+") {
         y_names <- vi$yvar.names
         names(y_names) <- sub("_.*", "", y_names)
-        map_simplify(function(name) vi$regrOutput[[name]]$importance, y_names)
+        simplify(map(function(name) vi$regrOutput[[name]]$importance, y_names))
       } else {
         vi$importance
       }
