@@ -56,11 +56,6 @@ GAMBoostModel <- function(
   baselearner <- match.arg(baselearner)
   risk <- match.arg(risk)
 
-  args <- new_params(environment())
-  is_main <- names(args) %in% c("family", "baselearner", "dfbase")
-  params <- args[is_main]
-  params$control <- as.call(c(.(mboost::boost_control), args[!is_main]))
-
   MLModel(
     name = "GAMBoostModel",
     label = "Gradient Boosting with Additive Models",
@@ -69,14 +64,16 @@ GAMBoostModel <- function(
                        "numeric", "PoissonVariate", "Surv"),
     weights = TRUE,
     predictor_encoding = "model.frame",
-    params = params,
+    params = new_params(environment()),
     gridinfo = new_gridinfo(
       param = "mstop",
       get_values = c(
         function(n, ...) round(seq_range(0, 50, c(1, 1000), n + 1))
       )
     ),
-    fit = function(formula, data, weights, family = NULL, ...) {
+    fit = function(
+      formula, data, weights, family = NULL, baselearner, dfbase, ...
+    ) {
       attach_objects(list(
         bbs = mboost::bbs,
         bols = mboost::bols,
@@ -95,8 +92,11 @@ GAMBoostModel <- function(
           "Surv" = mboost::CoxPH()
         )
       }
-      mboost::gamboost(formula, data = as.data.frame(data), na.action = na.pass,
-                       weights = weights, family = family, ...)
+      mboost::gamboost(
+        formula, data = as.data.frame(data), na.action = na.pass,
+        weights = weights, family = family, baselearner = baselearner,
+        dfbase = dfbase, control = mboost::boost_control(...)
+      )
     },
     predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)

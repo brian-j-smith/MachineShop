@@ -44,7 +44,6 @@ CForestModel <- function(
 
   teststat <- match.arg(teststat)
   testtype <- match.arg(testtype)
-  args <- new_params(environment())
 
   MLModel(
     name = "CForestModel",
@@ -53,7 +52,7 @@ CForestModel <- function(
     response_types = c("factor", "numeric", "Surv"),
     weights = TRUE,
     predictor_encoding = "model.frame",
-    params = list(controls = as.call(c(.(party::cforest_control), args))),
+    params = new_params(environment()),
     gridinfo = new_gridinfo(
       param = "mtry",
       get_values = c(
@@ -62,7 +61,7 @@ CForestModel <- function(
     ),
     fit = function(formula, data, weights, ...) {
       party::cforest(formula, data = as.data.frame(data), weights = weights,
-                     ...)
+                     controls = party::cforest_control(...))
     },
     predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)

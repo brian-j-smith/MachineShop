@@ -45,12 +45,6 @@ GLMBoostModel <- function(
   family = NULL, mstop = 100, nu = 0.1, risk = c("inbag", "oobag", "none"),
   stopintern = FALSE, trace = FALSE
 ) {
-
-  args <- new_params(environment())
-  is_main <- names(args) %in% "family"
-  params <- args[is_main]
-  params$control <- as.call(c(.(mboost::boost_control), args[!is_main]))
-
   MLModel(
     name = "GLMBoostModel",
     label = "Gradient Boosting with Linear Models",
@@ -59,7 +53,7 @@ GLMBoostModel <- function(
                        "numeric", "PoissonVariate", "Surv"),
     weights = TRUE,
     predictor_encoding = "model.frame",
-    params = params,
+    params = new_params(environment()),
     gridinfo = new_gridinfo(
       param = "mstop",
       get_values = c(
@@ -77,13 +71,16 @@ GLMBoostModel <- function(
           "Surv" = mboost::CoxPH()
         )
       }
+      control <- mboost::boost_control(...)
       eval_fit(
         data,
         formula = mboost::glmboost(
           formula, data = data, na.action = na.pass, weights = weights,
-          family = family, ...
+          family = family, control = control
         ),
-        matrix = mboost::glmboost(x, y, weights = weights, family = family, ...)
+        matrix = mboost::glmboost(
+          x, y, weights = weights, family = family, control = control
+        )
       )
     },
     predict = function(object, newdata, model, ...) {
@@ -100,7 +97,6 @@ GLMBoostModel <- function(
       structure(mboost::varimp(object), class = "numeric")
     }
   )
-
 }
 
 MLModelFunction(GLMBoostModel) <- NULL

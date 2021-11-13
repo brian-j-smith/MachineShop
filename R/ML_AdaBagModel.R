@@ -43,19 +43,13 @@ AdaBagModel <- function(
   maxcompete = 4, maxsurrogate = 5, usesurrogate = 2, xval = 10,
   surrogatestyle = 0, maxdepth = 30
 ) {
-
-  args <- new_params(environment())
-  is_main <- names(args) %in% "mfinal"
-  params <- args[is_main]
-  params$control <- as.call(c(.(list), args[!is_main]))
-
   MLModel(
     name = "AdaBagModel",
     label = "Bagging with Classification Trees",
     packages = "adabag",
     response_types = "factor",
     predictor_encoding = "model.frame",
-    params = params,
+    params = new_params(environment()),
     gridinfo = new_gridinfo(
       param = c("mfinal", "maxdepth"),
       get_values = c(
@@ -63,8 +57,9 @@ AdaBagModel <- function(
         function(n, ...) seq_len(min(n, 30))
       )
     ),
-    fit = function(formula, data, weights, ...) {
-      adabag::bagging(formula, data = as.data.frame(data), ...)
+    fit = function(formula, data, weights, mfinal, ...) {
+      adabag::bagging(formula, data = as.data.frame(data), mfinal = mfinal,
+                      control = list(...))
     },
     predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
@@ -74,7 +69,6 @@ AdaBagModel <- function(
       object$importance
     }
   )
-
 }
 
 MLModelFunction(AdaBagModel) <- NULL

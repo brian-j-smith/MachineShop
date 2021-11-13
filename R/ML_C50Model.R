@@ -60,12 +60,6 @@ C50Model <- function(
   noGlobalPruning = FALSE, CF = 0.25, minCases = 2, fuzzyThreshold = FALSE,
   sample = 0, earlyStopping = TRUE
 ) {
-
-  args <- new_params(environment())
-  is_main <- names(args) %in% c("trials", "rules")
-  params <- args[is_main]
-  params$control <- as.call(c(.(C50::C5.0Control), args[!is_main]))
-
   MLModel(
     name = "C50Model",
     label = "C5.0 Classification",
@@ -73,7 +67,7 @@ C50Model <- function(
     response_types = "factor",
     weights = TRUE,
     predictor_encoding = "model.frame",
-    params = params,
+    params = new_params(environment()),
     gridinfo = new_gridinfo(
       param = c("trials", "rules", "winnow"),
       get_values = c(
@@ -82,11 +76,18 @@ C50Model <- function(
         function(...) c(FALSE, TRUE)
       )
     ),
-    fit = function(formula, data, weights, ...) {
+    fit = function(formula, data, weights, trials, rules, ...) {
+      control <- C50::C5.0Control(...)
       eval_fit(
         data,
-        formula = C50::C5.0(formula, data = data, weights = weights, ...),
-        matrix = C50::C5.0(x, y, weights = weights, ...)
+        formula = C50::C5.0(
+          formula, data = data, weights = weights, trials = trials,
+          rules = rules, control = control
+        ),
+        matrix = C50::C5.0(
+          x, y, weights = weights, trials = trials, rules = rules,
+          control = control
+        )
       )
     },
     predict = function(object, newdata, ...) {
@@ -97,7 +98,6 @@ C50Model <- function(
       C50::C5imp(object, metric = match.arg(type))
     }
   )
-
 }
 
 MLModelFunction(C50Model) <- NULL

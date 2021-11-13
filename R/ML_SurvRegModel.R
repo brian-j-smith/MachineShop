@@ -31,11 +31,6 @@ SurvRegModel <- function(
 
   dist <- match.arg(dist)
 
-  args <- new_params(environment(), ...)
-  is_main <- names(args) %in% c("dist", "scale", "parms")
-  params <- args[is_main]
-  params$control <- as.call(c(.(survival::survreg.control), args[!is_main]))
-
   MLModel(
     name = "SurvRegModel",
     label = "Parametric Survival",
@@ -43,9 +38,12 @@ SurvRegModel <- function(
     response_types = "Surv",
     weights = TRUE,
     predictor_encoding = "model.matrix",
-    params = params,
-    fit = function(formula, data, weights, ...) {
-      rms::psm(formula, data = as.data.frame(data), weights = weights, ...)
+    params = new_params(environment(), ...),
+    fit = function(formula, data, weights, dist, scale, parms = NULL, ...) {
+      rms::psm(
+        formula, data = as.data.frame(data), weights = weights, dist = dist,
+        scale = scale, parms = parms, control = survival::survreg.control(...)
+      )
     },
     predict = function(object, newdata, times, ...) {
       newdata <- as.data.frame(newdata)
@@ -104,11 +102,9 @@ SurvRegStepAICModel <- function(
 
   direction <- match.arg(direction)
 
-  args <- new_params(environment())
-  is_step <- names(args) %in% c("direction", "scope", "k", "trace", "steps")
-  params <- args[is_step]
-
+  params <- new_params(environment())
   stepmodel <- SurvRegModel(dist = dist, scale = scale, parms = parms, ...)
+  params <- params[setdiff(names(params), names(stepmodel@params))]
 
   MLModel(
     name = "SurvRegStepAICModel",
@@ -118,13 +114,18 @@ SurvRegStepAICModel <- function(
     weights = stepmodel@weights,
     predictor_encoding = stepmodel@predictor_encoding,
     params = c(stepmodel@params, params),
-    fit = function(formula, data, weights, direction = "both", scope = list(),
-                   k = 2, trace = 1, steps = 1000, ...) {
+    fit = function(
+      formula, data, weights, dist, scale, parms = NULL, ...,
+      direction, scope = list(), k, trace, steps
+    ) {
       environment(formula) <- environment()
       stepargs <- stepAIC_args(formula, direction, scope)
       data <- as.data.frame(data)
       MASS::stepAIC(
-        rms::psm(stepargs$formula, data = data, weights = weights, ...),
+        rms::psm(
+          stepargs$formula, data = data, weights = weights, dist = dist,
+          scale = scale, parms = parms, control = survival::survreg.control(...)
+        ),
         direction = direction, scope = stepargs$scope, k = k, trace = trace,
         steps = steps
       )

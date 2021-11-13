@@ -49,7 +49,7 @@ RPartModel <- function(
     response_types = c("factor", "numeric", "Surv"),
     weights = TRUE,
     predictor_encoding = "model.frame",
-    params = list(control = as.call(c(.(list), new_params(environment())))),
+    params = new_params(environment()),
     gridinfo = new_gridinfo(
       param = "cp",
       get_values = c(
@@ -67,7 +67,7 @@ RPartModel <- function(
         "Surv" = "exp"
       )
       rpart::rpart(formula, data = as.data.frame(data), weights = weights,
-                   na.action = na.pass, method = method, ...)
+                   na.action = na.pass, method = method, control = list(...))
     },
     predict = function(object, newdata, model, ...) {
       y <- response(model)
