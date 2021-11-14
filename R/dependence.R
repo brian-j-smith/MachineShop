@@ -19,6 +19,7 @@ PartialDependence <- function(object) {
 #' @param intervals character string specifying whether the \code{n} values are
 #'   spaced uniformly (\code{"uniform"}) or according to variable quantiles
 #'   (\code{"quantile"}).
+#' @param distr,method arguments passed to \code{\link{predict}}.
 #' @param stats function, function name, or vector of these with which to
 #'   compute response variable summary statistics over non-selected predictor
 #'   variables.
@@ -41,7 +42,8 @@ PartialDependence <- function(object) {
 #'
 dependence <- function(
   object, data = NULL, select = NULL, interaction = FALSE, n = 10,
-  intervals = c("uniform", "quantile"),
+  intervals = c("uniform", "quantile"), distr = character(),
+  method = character(),
   stats = MachineShop::settings("stats.PartialDependence"), na.rm = TRUE
 ) {
 
@@ -85,7 +87,8 @@ dependence <- function(
   predict_stats <- function(data) {
     stats_list <- map(
       function(x) stats(if (na.rm) na.omit(x) else x),
-      as.data.frame(predict(object, newdata = data, type = "prob"))
+      as.data.frame(predict(object, newdata = data, type = "prob",
+                            distr = distr, method = method))
     )
     x <- do.call(cbind, stats_list)
     if (is.null(rownames(x))) rownames(x) <- make.unique(rep("stat", nrow(x)))

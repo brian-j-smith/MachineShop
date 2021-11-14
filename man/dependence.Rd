@@ -11,6 +11,8 @@ dependence(
   interaction = FALSE,
   n = 10,
   intervals = c("uniform", "quantile"),
+  distr = character(),
+  method = character(),
   stats = MachineShop::settings("stats.PartialDependence"),
   na.rm = TRUE
 )
@@ -33,6 +35,8 @@ interacted predictors.}
 \item{intervals}{character string specifying whether the \code{n} values are
 spaced uniformly (\code{"uniform"}) or according to variable quantiles
 (\code{"quantile"}).}
+
+\item{distr, method}{arguments passed to \code{\link{predict}}.}
 
 \item{stats}{function, function name, or vector of these with which to
 compute response variable summary statistics over non-selected predictor
