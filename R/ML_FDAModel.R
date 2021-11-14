@@ -60,6 +60,7 @@ FDAModel <- function(
 ) {
 
   MLModel(
+
     name = "FDAModel",
     label = "Flexible Discriminant Analysis",
     packages = "mda",
@@ -67,6 +68,7 @@ FDAModel <- function(
     weights = TRUE,
     predictor_encoding = "model.matrix",
     params = new_params(environment(), ...),
+
     gridinfo = new_gridinfo(
       param = c("nprune", "degree"),
       get_values = c(
@@ -79,13 +81,16 @@ FDAModel <- function(
       ),
       default = c(TRUE, FALSE)
     ),
+
     fit = function(formula, data, weights, ...) {
       mda::fda(formula, data = as.data.frame(data), weights = weights, ...)
     },
+
     predict = function(object, newdata, prior = object$prior, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, type = "posterior", prior = prior)
     }
+
   )
 
 }
@@ -107,9 +112,9 @@ MLModelFunction(FDAModel) <- NULL
 #' }
 #'
 PDAModel <- function(lambda = 1, df = numeric(), ...) {
-  args <- new_params(environment(), ...)
-  args$method <- .(mda::gen.ridge)
-  model <- do.call(FDAModel, args, quote = TRUE)
+  params <- new_params(environment(), ...)
+  params$method <- .(mda::gen.ridge)
+  model <- do.call(FDAModel, params, quote = TRUE)
   model@name <- "PDAModel"
   model@label <- "Penalized Discriminant Analysis"
   model@gridinfo <- new_gridinfo(

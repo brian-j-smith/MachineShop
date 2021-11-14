@@ -27,12 +27,14 @@
 NaiveBayesModel <- function(laplace = 0) {
 
   MLModel(
+
     name = "NaiveBayesModel",
     label = "Naive Bayes Classifier",
     packages = "e1071",
     response_types = "factor",
     predictor_encoding = "model.frame",
     params = new_params(environment()),
+
     fit = function(formula, data, weights, ...) {
       eval_fit(
         data,
@@ -40,10 +42,12 @@ NaiveBayesModel <- function(laplace = 0) {
         matrix = e1071::naiveBayes(x, y, ...)
       )
     },
+
     predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, type = "raw")
     }
+
   )
 
 }

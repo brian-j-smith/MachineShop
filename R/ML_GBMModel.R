@@ -45,6 +45,7 @@ GBMModel <- function(
 ) {
 
   MLModel(
+
     name = "GBMModel",
     label = "Generalized Boosted Regression",
     packages = "gbm",
@@ -52,6 +53,7 @@ GBMModel <- function(
     weights = TRUE,
     predictor_encoding = "model.frame",
     params = new_params(environment()),
+
     gridinfo = new_gridinfo(
       param = c("n.trees", "interaction.depth", "shrinkage", "n.minobsinnode"),
       get_values = c(
@@ -62,6 +64,7 @@ GBMModel <- function(
       ),
       default = c(TRUE, TRUE, FALSE, FALSE)
     ),
+
     fit = function(formula, data, weights, distribution = NULL, ...) {
       if (is.null(distribution)) {
         y <- response(data)
@@ -101,6 +104,7 @@ GBMModel <- function(
       }
       model_fit
     },
+
     predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)
       n <- object$n.trees
@@ -114,9 +118,11 @@ GBMModel <- function(
         predict(object, newdata = newdata, n.trees = n, type = "response")
       }
     },
+
     varimp = function(object, ...) {
       gbm::relative.influence(object, n.trees = object$n.trees)
     }
+
   )
 
 }

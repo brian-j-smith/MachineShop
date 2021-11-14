@@ -62,10 +62,12 @@ BlackBoostModel <- function(
   saveinfo = FALSE, ...
 ) {
 
+  risk <- match.arg(risk)
   teststat <- match.arg(teststat)
   testtype <- match.arg(testtype)
 
   MLModel(
+
     name = "BlackBoostModel",
     label = "Gradient Boosting with Regression Trees",
     packages = c("mboost", "partykit"),
@@ -74,6 +76,7 @@ BlackBoostModel <- function(
     weights = TRUE,
     predictor_encoding = "model.frame",
     params = new_params(environment(), ...),
+
     gridinfo = new_gridinfo(
       param = c("mstop", "maxdepth"),
       get_values = c(
@@ -81,6 +84,7 @@ BlackBoostModel <- function(
         function(n, ...) seq_len(min(n, 10))
       )
     ),
+
     fit = function(
       formula, data, weights, family = NULL, mstop, nu, risk, stopintern,
       trace, ...
@@ -105,6 +109,7 @@ BlackBoostModel <- function(
         tree_controls = partykit::ctree_control(...)
       )
     },
+
     predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)
       if (object$family@name == "Cox Partial Likelihood") {
@@ -115,9 +120,11 @@ BlackBoostModel <- function(
         predict(object, newdata = newdata, type = "response")
       }
     },
+
     varimp = function(object, ...) {
       structure(mboost::varimp(object), class = "numeric")
     }
+
   )
 
 }

@@ -42,6 +42,7 @@ TreeModel <- function(
   method <- if (length(k) || length(best)) match.arg(method)
 
   MLModel(
+
     name = "TreeModel",
     label = "Regression and Classification Trees",
     packages = "tree",
@@ -49,18 +50,22 @@ TreeModel <- function(
     weights = TRUE,
     predictor_encoding = "model.frame",
     params = new_params(environment()),
-    fit = function(formula, data, weights, split, k = NULL, best = NULL,
-                   method = NULL, ...) {
+
+    fit = function(
+      formula, data, weights, split, k = NULL, best = NULL, method = NULL, ...
+    ) {
       model_fit <- tree::tree(formula, data = as.data.frame(data),
                               weights = weights, split = split, ...)
       if (!is.null(method)) {
         tree::prune.tree(model_fit, k = k, best = best, method = method)
       } else model_fit
     },
+
     predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata)
     }
+
   )
 
 }

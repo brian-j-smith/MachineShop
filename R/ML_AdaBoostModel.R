@@ -53,12 +53,14 @@ AdaBoostModel <- function(
   coeflearn <- match.arg(coeflearn)
 
   MLModel(
+
     name = "AdaBoostModel",
     label = "Boosting with Classification Trees",
     packages = "adabag",
     response_types = "factor",
     predictor_encoding = "model.frame",
     params = new_params(environment()),
+
     gridinfo = new_gridinfo(
       param = c("mfinal", "maxdepth", "coeflearn"),
       get_values = c(
@@ -68,19 +70,23 @@ AdaBoostModel <- function(
       ),
       default = c(TRUE, TRUE, FALSE)
     ),
+
     fit = function(formula, data, weights, boos, mfinal, coeflearn, ...) {
       adabag::boosting(
         formula, data = as.data.frame(data), boos = boos, mfinal = mfinal,
         coeflearn = coeflearn, control = list(...)
       )
     },
+
     predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata)$prob
     },
+
     varimp = function(object, ...) {
       object$importance
     }
+
   )
 
 }

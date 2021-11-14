@@ -98,6 +98,7 @@ RFSRCModel <- function(
   split.depth <- match.arg(as.character(split.depth), split.depth)
 
   MLModel(
+
     name = "RFSRCModel",
     label = "Random Forest (SRC)",
     packages = "randomForestSRC",
@@ -105,6 +106,7 @@ RFSRCModel <- function(
     weights = TRUE,
     predictor_encoding = "model.frame",
     params = new_params(environment()),
+
     gridinfo = new_gridinfo(
       param = c("mtry", "nodesize"),
       get_values = c(
@@ -112,6 +114,7 @@ RFSRCModel <- function(
         function(n, data, ...) round(seq(1, min(20, nrow(data)), length = n))
       )
     ),
+
     fit = function(formula, data, weights, ...) {
       y <- response(data)
       data <- as.data.frame(data)
@@ -131,6 +134,7 @@ RFSRCModel <- function(
       randomForestSRC::rfsrc(formula, data = data, na.action = "na.impute",
                              case.wt = weights, ...)
     },
+
     predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)
       pred <- randomForestSRC::predict.rfsrc(object, newdata = newdata)
@@ -144,6 +148,7 @@ RFSRCModel <- function(
         pred$predicted
       }
     },
+
     varimp = function(object, type = c("permute", "random", "anti"), ...) {
       vi <- randomForestSRC::vimp(object, importance = match.arg(type))
       if (vi$family == "regr+") {
@@ -154,6 +159,7 @@ RFSRCModel <- function(
         vi$importance
       }
     }
+
   )
 
 }
@@ -167,11 +173,9 @@ RFSRCFastModel <- function(
   ntree = 500, sampsize = function(x) min(0.632 * x, max(x^0.75, 150)),
   ntime = 50, terminal.qualts = FALSE, ...
 ) {
-
   model <- RFSRCModel(ntree = ntree, sampsize = sampsize, ntime = ntime, ...)
   model@params$terminal.qualts <- terminal.qualts
   model
-
 }
 
 MLModelFunction(RFSRCFastModel) <- NULL

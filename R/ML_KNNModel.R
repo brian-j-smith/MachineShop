@@ -41,12 +41,14 @@ KNNModel <- function(
   kernel <- match.arg(kernel)
 
   MLModel(
+
     name = "KNNModel",
     label = "K-Nearest Neighbors Model",
     packages = "kknn",
     response_types = c("factor", "numeric", "ordered"),
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
+
     gridinfo = new_gridinfo(
       param = c("k", "distance", "kernel"),
       get_values = c(
@@ -63,9 +65,11 @@ KNNModel <- function(
       ),
       default = c(TRUE, FALSE, FALSE)
     ),
+
     fit = function(formula, data, weights, ...) {
       list(formula = formula, train = as.data.frame(data), ...)
     },
+
     predict = function(object, newdata, ...) {
       attach_objects(list(
         contr.dummy = kknn::contr.dummy,
@@ -77,6 +81,7 @@ KNNModel <- function(
       pred <- do.call(kknn::kknn, object)
       if (pred$response == "continuous") pred$fitted.values else pred$prob
     }
+
   )
 
 }

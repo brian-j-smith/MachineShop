@@ -40,6 +40,7 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
   ties <- match.arg(ties)
 
   MLModel(
+
     name = "CoxModel",
     label = "Cox Regression",
     packages = "survival",
@@ -47,10 +48,12 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
     weights = TRUE,
     predictor_encoding = "model.matrix",
     params = new_params(environment(), ...),
+
     fit = function(formula, data, weights, ...) {
       data <- as.data.frame(data)
       survival::coxph(formula, data = data, weights = weights, ...)
     },
+
     predict = function(object, newdata, model, ...) {
       y <- object$y
       newdata <- as.data.frame(newdata)
@@ -58,9 +61,11 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
       new_lp <- predict(object, newdata = newdata, type = "lp")
       predict(y, lp, new_lp, weights = case_weights(model), ...)
     },
+
     varimp = function(object, base = exp(1), ...) {
       varimp_pval(object, base = base)
     }
+
   )
 
 }
@@ -96,6 +101,7 @@ CoxStepAICModel <- function(
   params <- params[setdiff(names(params), names(stepmodel@params))]
 
   MLModel(
+
     name = "CoxStepAICModel",
     label = "Cox Regression (Stepwise)",
     packages = c(stepmodel@packages, "MASS"),
@@ -103,6 +109,7 @@ CoxStepAICModel <- function(
     weights = stepmodel@weights,
     predictor_encoding = stepmodel@predictor_encoding,
     params = c(stepmodel@params, params),
+
     fit = function(
       formula, data, weights, direction, scope = list(), k, trace, steps, ...
     ) {
@@ -115,8 +122,11 @@ CoxStepAICModel <- function(
         steps = steps
       )
     },
+
     predict = stepmodel@predict,
+
     varimp = stepmodel@varimp
+
   )
 
 }

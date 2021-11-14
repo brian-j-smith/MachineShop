@@ -108,6 +108,7 @@ XGBModel <- function(
   params <- as.list(environment())
 
   MLModel(
+
     name = "XGBModel",
     label = "Extreme Gradient Boosting",
     packages = "xgboost (>= 1.3.0)",
@@ -115,6 +116,7 @@ XGBModel <- function(
     weights = TRUE,
     predictor_encoding = "model.matrix",
     params = new_params(c(params[1], ..., params[-1])),
+
     fit = function(
       formula, data, weights, nrounds, verbose, print_every_n, ...
     ) {
@@ -175,6 +177,7 @@ XGBModel <- function(
       model_fit$levels <- y_levels
       model_fit
     },
+
     predict = function(object, newdata, model, times, ...) {
       newx <- model.matrix(newdata, intercept = FALSE)
       xgb_predict <- function(newdata = newx, lp = FALSE) {
@@ -214,13 +217,15 @@ XGBModel <- function(
         xgb_predict()
       )
     },
+
     varimp = function(object, type = c("Gain", "Cover", "Frequency"), ...) {
       vi <- xgboost::xgb.importance(model = object, ...)
       if (!is.null(vi$Weight)) {
         if (!is.null(vi$Class)) {
-          vi <- reshape(vi, idvar = "Feature", timevar = "Class",
-                        v.names = "Weight", varying = list(object$levels),
-                        direction = "wide")
+          vi <- reshape(
+            vi, idvar = "Feature", timevar = "Class", v.names = "Weight",
+            varying = list(object$levels), direction = "wide"
+          )
           data.frame(vi[, -1], row.names = vi$Feature)
         } else {
           structure(vi$Weight, names = vi$Feature)
@@ -230,7 +235,9 @@ XGBModel <- function(
                    row.names = vi$Feature)
       }
     }
+
   )
+
 }
 
 MLModelFunction(XGBModel) <- NULL

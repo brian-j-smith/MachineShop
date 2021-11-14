@@ -56,6 +56,7 @@ EarthModel <- function(
   pmethod <- match.arg(pmethod)
 
   MLModel(
+
     name = "EarthModel",
     label = "Multivariate Adaptive Regression Splines",
     packages = "earth",
@@ -63,6 +64,7 @@ EarthModel <- function(
     weights = TRUE,
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
+
     gridinfo = new_gridinfo(
       param = c("nprune", "degree"),
       get_values = c(
@@ -75,14 +77,18 @@ EarthModel <- function(
       ),
       default = c(TRUE, FALSE)
     ),
+
     fit = function(formula, data, weights, ...) {
       attach_objects(list(
         contr.earth.response = earth::contr.earth.response
       ), name = "earth_exports")
 
-      glm <- list(family = switch_class(response(data),
-                                        "factor" = "binomial",
-                                        "numeric" = "gaussian"))
+      glm <- list(
+        family = switch_class(response(data),
+          "factor" = "binomial",
+          "numeric" = "gaussian"
+        )
+      )
       eval_fit(
         data,
         formula = earth::earth(
@@ -91,13 +97,16 @@ EarthModel <- function(
         matrix = earth::earth(x, y, weights = weights, glm = glm, ...)
       )
     },
+
     predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, type = "response")
     },
+
     varimp = function(object, type = c("nsubsets", "gcv", "rss"), ...) {
       earth::evimp(object)[, match.arg(type), drop = FALSE]
     }
+
   )
 
 }

@@ -58,25 +58,30 @@ MDAModel <- function(
 ) {
 
   MLModel(
+
     name = "MDAModel",
     label = "Mixture Discriminant Analysis",
     packages = "mda",
     response_types = "factor",
     predictor_encoding = "model.matrix",
     params = new_params(environment(), ...),
+
     gridinfo = new_gridinfo(
       param = "subclasses",
       get_values = c(
         function(n, ...) seq(2, length = min(n, 10))
       )
     ),
+
     fit = function(formula, data, weights, ...) {
       mda::mda(formula, data = as.data.frame(data), ...)
     },
+
     predict = function(object, newdata, prior = object$prior, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, type = "posterior", prior = prior)
     }
+
   )
 
 }

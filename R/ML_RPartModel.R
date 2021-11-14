@@ -43,6 +43,7 @@ RPartModel <- function(
 ) {
 
   MLModel(
+
     name = "RPartModel",
     label = "Recursive Partitioning and Regression Trees",
     packages = c("rpart", "partykit"),
@@ -50,6 +51,7 @@ RPartModel <- function(
     weights = TRUE,
     predictor_encoding = "model.frame",
     params = new_params(environment()),
+
     gridinfo = new_gridinfo(
       param = "cp",
       get_values = c(
@@ -60,6 +62,7 @@ RPartModel <- function(
         }
       )
     ),
+
     fit = function(formula, data, weights, ...) {
       method <- switch_class(response(data),
         "factor" = "class",
@@ -69,6 +72,7 @@ RPartModel <- function(
       rpart::rpart(formula, data = as.data.frame(data), weights = weights,
                    na.action = na.pass, method = method, control = list(...))
     },
+
     predict = function(object, newdata, model, ...) {
       y <- response(model)
       newdata <- as.data.frame(newdata)
@@ -80,9 +84,11 @@ RPartModel <- function(
         predict(object, newdata = newdata)
       }
     },
+
     varimp = function(object, ...) {
       object$variable.importance
     }
+
   )
 
 }

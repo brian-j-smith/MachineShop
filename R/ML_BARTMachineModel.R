@@ -61,12 +61,14 @@ BARTMachineModel <- function(
 ) {
 
   MLModel(
+
     name = "BARTMachineModel",
     label = "Bayesian Additive Regression Trees",
     packages = "bartMachine",
     response_types = c("binary", "numeric"),
     predictor_encoding = "model.matrix",
     params = new_params(environment(), ...),
+
     gridinfo = new_gridinfo(
       param = c("alpha", "beta", "k", "nu"),
       get_values = c(
@@ -78,23 +80,28 @@ BARTMachineModel <- function(
         }
       )
     ),
+
     fit = function(formula, data, weights, ...) {
       x <- model.matrix(data, intercept = FALSE)
       y <- response(data)
       if (is_response(y, "binary")) y <- factor(y, levels = rev(levels(y)))
       bartMachine::bartMachine(as.data.frame(x), y, ...)
     },
+
     predict = function(object, newdata, ...) {
       newx <- model.matrix(newdata, intercept = FALSE)
       predict(object, new_data = as.data.frame(newx))
     },
-    varimp = function(object, type = c("splits", "trees"), num_replicates = 5,
-                      ...) {
-      bartMachine::investigate_var_importance(object,
-                                              type = match.arg(type),
-                                              num_replicates = num_replicates,
-                                              plot = FALSE)$avg_var_props
+
+    varimp = function(
+      object, type = c("splits", "trees"), num_replicates = 5, ...
+    ) {
+      bartMachine::investigate_var_importance(
+        object, type = match.arg(type), num_replicates = num_replicates,
+        plot = FALSE
+      )$avg_var_props
     }
+
   )
 
 }

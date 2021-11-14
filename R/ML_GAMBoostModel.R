@@ -57,6 +57,7 @@ GAMBoostModel <- function(
   risk <- match.arg(risk)
 
   MLModel(
+
     name = "GAMBoostModel",
     label = "Gradient Boosting with Additive Models",
     packages = "mboost",
@@ -65,12 +66,14 @@ GAMBoostModel <- function(
     weights = TRUE,
     predictor_encoding = "model.frame",
     params = new_params(environment()),
+
     gridinfo = new_gridinfo(
       param = "mstop",
       get_values = c(
         function(n, ...) round(seq_range(0, 50, c(1, 1000), n + 1))
       )
     ),
+
     fit = function(
       formula, data, weights, family = NULL, baselearner, dfbase, ...
     ) {
@@ -98,6 +101,7 @@ GAMBoostModel <- function(
         dfbase = dfbase, control = mboost::boost_control(...)
       )
     },
+
     predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)
       if (object$family@name == "Cox Partial Likelihood") {
@@ -108,9 +112,11 @@ GAMBoostModel <- function(
         predict(object, newdata = newdata, type = "response")
       }
     },
+
     varimp = function(object, ...) {
       structure(mboost::varimp(object), class = "numeric")
     }
+
   )
 
 }

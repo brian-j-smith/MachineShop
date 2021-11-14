@@ -40,12 +40,14 @@ QDAModel <- function(
   use <- match.arg(use)
 
   MLModel(
+
     name = "QDAModel",
     label = "Quadratic Discriminant Analysis",
     packages = "MASS",
     response_types = "factor",
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
+
     fit = function(formula, data, weights, use, ...) {
       model_fit <- eval_fit(
         data,
@@ -55,11 +57,13 @@ QDAModel <- function(
       model_fit$use <- use
       model_fit
     },
+
     predict = function(object, newdata, prior = object$prior, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, prior = prior,
               method = object$use)$posterior
     }
+
   )
 
 }

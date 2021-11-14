@@ -32,6 +32,7 @@ SurvRegModel <- function(
   dist <- match.arg(dist)
 
   MLModel(
+
     name = "SurvRegModel",
     label = "Parametric Survival",
     packages = c("rms", "Hmisc"),
@@ -39,12 +40,14 @@ SurvRegModel <- function(
     weights = TRUE,
     predictor_encoding = "model.matrix",
     params = new_params(environment(), ...),
+
     fit = function(formula, data, weights, dist, scale, parms = NULL, ...) {
       rms::psm(
         formula, data = as.data.frame(data), weights = weights, dist = dist,
         scale = scale, parms = parms, control = survival::survreg.control(...)
       )
     },
+
     predict = function(object, newdata, times, ...) {
       newdata <- as.data.frame(newdata)
       pred <- if (length(times)) {
@@ -55,9 +58,11 @@ SurvRegModel <- function(
       if (is(pred, "survest.psm")) pred <- as.matrix(pred$surv)
       SurvPrediction(pred, times = times, distr = object$dist)
     },
+
     varimp = function(object, base = exp(1), ...) {
       varimp_pval(object, base = base)
     }
+
   )
 
 }
@@ -107,6 +112,7 @@ SurvRegStepAICModel <- function(
   params <- params[setdiff(names(params), names(stepmodel@params))]
 
   MLModel(
+
     name = "SurvRegStepAICModel",
     label = "Parametric Survival (Stepwise)",
     packages = c(stepmodel@packages, "MASS"),
@@ -114,6 +120,7 @@ SurvRegStepAICModel <- function(
     weights = stepmodel@weights,
     predictor_encoding = stepmodel@predictor_encoding,
     params = c(stepmodel@params, params),
+
     fit = function(
       formula, data, weights, dist, scale, parms = NULL, ...,
       direction, scope = list(), k, trace, steps
@@ -130,8 +137,11 @@ SurvRegStepAICModel <- function(
         steps = steps
       )
     },
+
     predict = stepmodel@predict,
+
     varimp = stepmodel@varimp
+
   )
 
 }

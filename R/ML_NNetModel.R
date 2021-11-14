@@ -47,6 +47,7 @@ NNetModel <- function(
 ) {
 
   MLModel(
+
     name = "NNetModel",
     label = "Feed-Forward Neural Networks",
     packages = "nnet",
@@ -54,6 +55,7 @@ NNetModel <- function(
     weights = TRUE,
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
+
     gridinfo = new_gridinfo(
       param = c("size", "decay"),
       get_values = c(
@@ -61,6 +63,7 @@ NNetModel <- function(
         function(n, ...) c(0, 10^seq_inner(-5, 1, n - 1))
       )
     ),
+
     fit = function(formula, data, weights, linout = NULL, ...) {
       y <- response(data)
       if (is.null(linout)) linout <- is_response(y, "numeric")
@@ -84,10 +87,12 @@ NNetModel <- function(
                    linout = linout, ...)
       }
     },
+
     predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, type = "raw")
     },
+
     varimp = function(object, ...) {
       nvars <- object$n[1]
       size <- object$n[2]
@@ -114,6 +119,7 @@ NNetModel <- function(
       dimnames(vi) <- list(object$coefnames, colnames(object$residuals))
       drop(vi)
     }
+
   )
 
 }

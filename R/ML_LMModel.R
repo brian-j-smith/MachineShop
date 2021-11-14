@@ -25,6 +25,7 @@
 LMModel <- function() {
 
   MLModel(
+
     name = "LMModel",
     label = "Linear Model",
     packages = "stats",
@@ -32,6 +33,7 @@ LMModel <- function() {
     weights = TRUE,
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
+
     fit = function(formula, data, weights, ...) {
       y <- response(data)
       data <- as.data.frame(data)
@@ -47,13 +49,16 @@ LMModel <- function() {
       }
       stats::lm(formula, data = data, weights = weights, ...)
     },
+
     predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata)
     },
+
     varimp = function(object, base = exp(1), ...) {
       varimp_pval(object, base = base)
     }
+
   )
 
 }

@@ -38,6 +38,7 @@ POLRModel <- function(
   method <- match.arg(method)
 
   MLModel(
+
     name = "POLRModel",
     label = "Ordered Logistic Regression",
     packages = "MASS",
@@ -45,19 +46,23 @@ POLRModel <- function(
     weights = TRUE,
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
+
     fit = function(formula, data, weights, ...) {
       MASS::polr(formula, data = as.data.frame(data), weights = weights,
                  Hess = TRUE, ...)
     },
+
     predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, type = "probs")
     },
+
     varimp = function(object, base = exp(1), ...) {
       beta_est <- coef(object)
       beta_var <- diag(vcov(object))[seq_along(beta_est)]
       varimp_pval(beta_est, beta_var, base = base)
     }
+
   )
 
 }

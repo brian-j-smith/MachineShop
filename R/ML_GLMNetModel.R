@@ -59,6 +59,7 @@ GLMNetModel <- function(
   type.multinomial <- match.arg(type.multinomial)
 
   MLModel(
+
     name = "GLMNetModel",
     label = "Lasso and Elastic-Net",
     packages = "glmnet",
@@ -67,6 +68,7 @@ GLMNetModel <- function(
     weights = TRUE,
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
+
     gridinfo = new_gridinfo(
       param = c("lambda", "alpha"),
       get_values = c(
@@ -90,6 +92,7 @@ GLMNetModel <- function(
         function(n, ...) seq(0.1, 1, length = n)
       )
     ),
+
     fit = function(formula, data, weights, family = NULL, nlambda = 1, ...) {
       x <- model.matrix(data, intercept = FALSE)
       offset <- model.offset(data)
@@ -107,16 +110,17 @@ GLMNetModel <- function(
       glmnet::glmnet(x, y, offset = offset, weights = weights,
                      family = family, nlambda = nlambda, ...)
     },
+
     predict = function(object, newdata, model, ...) {
       newx <- model.matrix(newdata, intercept = FALSE)
       newoffset <- model.offset(newdata)
       y <- response(model)
       if (is.Surv(y)) {
         data <- predictor_frame(model)
-        lp <- predict(object,
-                      newx = model.matrix(data, intercept = FALSE),
-                      newoffset = model.offset(data),
-                      type = "link")[, 1]
+        lp <- predict(
+          object, newx = model.matrix(data, intercept = FALSE),
+          newoffset = model.offset(data), type = "link"
+        )[, 1]
         new_lp <- predict(object, newx = newx, newoffset = newoffset,
                           type = "link")[, 1]
         predict(y, lp, new_lp, ...)
@@ -125,6 +129,7 @@ GLMNetModel <- function(
                 s = object$lambda[1], type = "response")
       }
     },
+
     varimp = function(object, ...) {
       convert <- function(x) abs(drop(as.matrix(x)))
       beta <- object$beta
@@ -134,6 +139,7 @@ GLMNetModel <- function(
         convert(beta)
       }
     }
+
   )
 
 }

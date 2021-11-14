@@ -26,7 +26,7 @@
 #'   kernels as a convenient way of normalizing patterns without the need to
 #'   modify the data itself.
 #' @param offset offset used in polynomial and hyperbolic tangent kernels.
-#' @param ... arguments passed to \code{SVMModel}.
+#' @param ... arguments passed to \code{SVMModel} from the other constructors.
 #'
 #' @details
 #' \describe{
@@ -67,12 +67,14 @@ SVMModel <- function(
   kernel <- match.arg(kernel)
 
   MLModel(
+
     name = "SVMModel",
     label = "Support Vector Machines",
     packages = "kernlab",
     response_types = c("factor", "numeric"),
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
+
     fit = function(formula, data, weights, ...) {
       eval_fit(
         data,
@@ -80,6 +82,7 @@ SVMModel <- function(
         matrix = kernlab::ksvm(x, y, prob.model = TRUE, ...)
       )
     },
+
     predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)
       kernlab::predict(
@@ -87,6 +90,7 @@ SVMModel <- function(
         type = if (is.factor(response(model))) "probabilities" else "response"
       )
     }
+
   )
 
 }
@@ -97,8 +101,8 @@ MLModelFunction(SVMModel) <- NULL
 #' @rdname SVMModel
 #'
 SVMANOVAModel <- function(sigma = 1, degree = 1, ...) {
-  .SVMModel("SVMANOVAModel", "Support Vector Machines (ANOVA)",
-            "anovadot", environment(), ...)
+  .SVMModel(name = "SVMANOVAModel", label = "Support Vector Machines (ANOVA)",
+            model = "anovadot", envir = environment(), ...)
 }
 
 MLModelFunction(SVMANOVAModel) <- NULL
@@ -107,8 +111,8 @@ MLModelFunction(SVMANOVAModel) <- NULL
 #' @rdname SVMModel
 #'
 SVMBesselModel <- function(sigma = 1, order = 1, degree = 1, ...) {
-  .SVMModel("SVMBesselModel", "Support Vector Machines (Bessel)",
-            "besseldot", environment(), ...)
+  .SVMModel(name = "SVMBesselModel", label = "Support Vector Machines (Bessel)",
+            model = "besseldot", envir = environment(), ...)
 }
 
 MLModelFunction(SVMBesselModel) <- NULL
@@ -117,8 +121,8 @@ MLModelFunction(SVMBesselModel) <- NULL
 #' @rdname SVMModel
 #'
 SVMLaplaceModel <- function(sigma = numeric(), ...) {
-  .SVMModel("SVMLaplaceModel", "Support Vector Machines (Laplace)",
-            "laplacedot", environment(), ...)
+  .SVMModel(name = "SVMLaplaceModel", label = "Support Vector Machines (Laplace)",
+            model = "laplacedot", envir = environment(), ...)
 }
 
 MLModelFunction(SVMLaplaceModel) <- NULL
@@ -127,8 +131,8 @@ MLModelFunction(SVMLaplaceModel) <- NULL
 #' @rdname SVMModel
 #'
 SVMLinearModel <- function(...) {
-  .SVMModel("SVMLinearModel", "Support Vector Machines (Linear)",
-            "vanilladot", environment(), ...)
+  .SVMModel(name = "SVMLinearModel", label = "Support Vector Machines (Linear)",
+            model = "vanilladot", envir = environment(), ...)
 }
 
 MLModelFunction(SVMLinearModel) <- NULL
@@ -137,8 +141,8 @@ MLModelFunction(SVMLinearModel) <- NULL
 #' @rdname SVMModel
 #'
 SVMPolyModel <- function(degree = 1, scale = 1, offset = 1, ...) {
-  .SVMModel("SVMPolyModel", "Support Vector Machines (Poly)",
-            "polydot", environment(), ...)
+  .SVMModel(name = "SVMPolyModel", label = "Support Vector Machines (Poly)",
+            model = "polydot", envir = environment(), ...)
 }
 
 MLModelFunction(SVMPolyModel) <- NULL
@@ -147,8 +151,8 @@ MLModelFunction(SVMPolyModel) <- NULL
 #' @rdname SVMModel
 #'
 SVMRadialModel <- function(sigma = numeric(), ...) {
-  .SVMModel("SVMRadialModel", "Support Vector Machines (Radial)",
-            "rbfdot", environment(), ...)
+  .SVMModel(name = "SVMRadialModel", label = "Support Vector Machines (Radial)",
+            model = "rbfdot", envir = environment(), ...)
 }
 
 MLModelFunction(SVMRadialModel) <- NULL
@@ -157,8 +161,8 @@ MLModelFunction(SVMRadialModel) <- NULL
 #' @rdname SVMModel
 #'
 SVMSplineModel <- function(...) {
-  .SVMModel("SVMSplineModel", "Support Vector Machines (Spline)",
-            "splinedot", environment(), ...)
+  .SVMModel(name = "SVMSplineModel", label = "Support Vector Machines (Spline)",
+            model = "splinedot", envir = environment(), ...)
 }
 
 MLModelFunction(SVMSplineModel) <- NULL
@@ -167,23 +171,25 @@ MLModelFunction(SVMSplineModel) <- NULL
 #' @rdname SVMModel
 #'
 SVMTanhModel <- function(scale = 1, offset = 1, ...) {
-  .SVMModel("SVMTanhModel", "Support Vector Machines (Tanh)",
-            "tanhdot", environment(), ...)
+  .SVMModel(name = "SVMTanhModel", label = "Support Vector Machines (Tanh)",
+            model = "tanhdot", envir = environment(), ...)
 }
 
 MLModelFunction(SVMTanhModel) <- NULL
 
 
-.SVMModel <- function(name, label, kernel, envir, ...) {
-  args <- list(...)
-  args$kernel <- kernel
+.SVMModel <- function(name, label, model, envir, ...) {
+  params <- list(...)
+  params$kernel <- model
   kpar <- new_params(envir)
-  args$kpar <- if (kernel %in% c("laplacedot", "rbfdot") && is_empty(kpar)) {
+  params$kpar <- if (
+    params$kernel %in% c("laplacedot", "rbfdot") && is_empty(kpar)
+  ) {
     "automatic"
   } else {
     as.call(c(.(list), kpar))
   }
-  model <- do.call(SVMModel, args, quote = TRUE)
+  model <- do.call(SVMModel, params, quote = TRUE)
   model@name <- name
   model@label <- label
 
@@ -204,7 +210,7 @@ MLModelFunction(SVMTanhModel) <- NULL
       }
     )
   )
-  params <- switch(kernel,
+  grid_params <- switch(params$kernel,
     "anovadot" = c("C", "degree"),
     "besseldot" = c("C", "order", "degree"),
     "laplacedot" = c("C", "sigma"),
@@ -212,7 +218,7 @@ MLModelFunction(SVMTanhModel) <- NULL
     "rbfdot" = c("C", "sigma"),
     "vanilladot" = "C"
   )
-  model@gridinfo <- gridinfo[gridinfo$param %in% params, ]
+  model@gridinfo <- gridinfo[gridinfo$param %in% grid_params, ]
 
   model
 }

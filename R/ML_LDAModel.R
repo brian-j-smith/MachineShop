@@ -45,12 +45,14 @@ LDAModel <- function(
   use <- match.arg(use)
 
   MLModel(
+
     name = "LDAModel",
     label = "Linear Discriminant Analysis",
     packages = "MASS",
     response_types = "factor",
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
+
     gridinfo = new_gridinfo(
       param = "dimen",
       get_values = c(
@@ -59,17 +61,20 @@ LDAModel <- function(
         }
       )
     ),
+
     fit = function(formula, data, weights, dimen, use, ...) {
       model_fit <- MASS::lda(formula, data = as.data.frame(data), ...)
       model_fit$dimen <- if (missing(dimen)) length(model_fit$svd) else dimen
       model_fit$use <- use
       model_fit
     },
+
     predict = function(object, newdata, prior = object$prior, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata, prior = prior, dimen = object$dimen,
               method = object$use)$posterior
     }
+
   )
 
 }

@@ -70,6 +70,7 @@ BARTModel <- function(
 ) {
 
   MLModel(
+
     name = "BARTModel",
     label = "Bayesian Additive Regression Trees",
     packages = "BART",
@@ -77,8 +78,10 @@ BARTModel <- function(
     weights = c(FALSE, TRUE, FALSE),
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
-    fit = function(formula, data, weights, K = NULL, sigest = NA, sigdf = 3,
-                   sigquant = 0.90, lambda = NA, ...) {
+
+    fit = function(
+      formula, data, weights, K = NULL, sigest, sigdf, sigquant, lambda, ...
+    ) {
       x <- model.matrix(data, intercept = FALSE)
       y <- response(data)
       switch_class(y,
@@ -103,6 +106,7 @@ BARTModel <- function(
         }
       )
     },
+
     predict = function(object, newdata, ...) {
       newx <- model.matrix(newdata, intercept = FALSE)
       if (is(object, "mbart")) {
@@ -121,6 +125,7 @@ BARTModel <- function(
         colMeans(predict(object, newdata = newx))
       }
     }
+
   )
 
 }

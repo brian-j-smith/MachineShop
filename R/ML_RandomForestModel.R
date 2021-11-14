@@ -41,12 +41,14 @@ RandomForestModel <- function(
 ) {
 
   MLModel(
+
     name = "RandomForestModel",
     label = "Random Forests",
     packages = "randomForest",
     response_types = c("factor", "numeric"),
     predictor_encoding = "model.frame",
     params = new_params(environment()),
+
     gridinfo = new_gridinfo(
       param = c("mtry", "nodesize"),
       get_values = c(
@@ -55,6 +57,7 @@ RandomForestModel <- function(
       ),
       default = c(TRUE, FALSE)
     ),
+
     fit = function(formula, data, weights, ...) {
       eval_fit(
         data,
@@ -62,14 +65,17 @@ RandomForestModel <- function(
         matrix = randomForest::randomForest(x, y, ...)
       )
     },
+
     predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata,
               type = if (is.factor(response(model))) "prob" else "response")
     },
+
     varimp = function(object, ...) {
       randomForest::importance(object)
     }
+
   )
 
 }

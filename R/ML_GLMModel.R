@@ -41,7 +41,9 @@
 #' fit(sale_amount ~ ., data = ICHomes, model = GLMModel)
 #'
 GLMModel <- function(family = NULL, quasi = FALSE, ...) {
+
   MLModel(
+
     name = "GLMModel",
     label = "Generalized Linear Models",
     packages = c("MASS", "nnet", "stats"),
@@ -50,6 +52,7 @@ GLMModel <- function(family = NULL, quasi = FALSE, ...) {
     weights = TRUE,
     predictor_encoding = "model.matrix",
     params = new_params(environment(), ...),
+
     fit = function(formula, data, weights, family = NULL, quasi, ...) {
       if (is.null(family)) {
         quasi_prefix <- function(x) if (quasi) paste0("quasi", x) else x
@@ -85,15 +88,19 @@ GLMModel <- function(family = NULL, quasi = FALSE, ...) {
                    control = control)
       }
     },
+
     predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
       predict(object, newdata = newdata,
               type = if (is(object, "multinom")) "probs" else "response")
     },
+
     varimp = function(object, base = exp(1), ...) {
       varimp_pval(object, base = base)
     }
+
   )
+
 }
 
 MLModelFunction(GLMModel) <- NULL
@@ -127,6 +134,7 @@ GLMStepAICModel <- function(
   params <- params[setdiff(names(params), names(stepmodel@params))]
 
   MLModel(
+
     name = "GLMStepAICModel",
     label = "Generalized Linear Models (Stepwise)",
     packages = stepmodel@packages,
@@ -135,6 +143,7 @@ GLMStepAICModel <- function(
     weights = TRUE,
     predictor_encoding = stepmodel@predictor_encoding,
     params = c(stepmodel@params, params),
+
     fit = function(
       formula, data, weights, family = NULL, quasi, ...,
       direction, scope = list(), k, trace, steps
@@ -170,8 +179,11 @@ GLMStepAICModel <- function(
         )
       }
     },
+
     predict = stepmodel@predict,
+
     varimp = stepmodel@varimp
+
   )
 
 }

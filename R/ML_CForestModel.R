@@ -46,6 +46,7 @@ CForestModel <- function(
   testtype <- match.arg(testtype)
 
   MLModel(
+
     name = "CForestModel",
     label = "Conditional Random Forests",
     packages = "party",
@@ -53,16 +54,19 @@ CForestModel <- function(
     weights = TRUE,
     predictor_encoding = "model.frame",
     params = new_params(environment()),
+
     gridinfo = new_gridinfo(
       param = "mtry",
       get_values = c(
         function(n, data, ...) seq_nvars(data, CForestModel, n)
       )
     ),
+
     fit = function(formula, data, weights, ...) {
       party::cforest(formula, data = as.data.frame(data), weights = weights,
                      controls = party::cforest_control(...))
     },
+
     predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)
       if (object@responses@is_censored) {
@@ -75,9 +79,11 @@ CForestModel <- function(
           matrix(nrow = nrow(newdata), byrow = TRUE)
       }
     },
+
     varimp = function(object, ...) {
       party::varimp(object, ...)
     }
+
   )
 
 }

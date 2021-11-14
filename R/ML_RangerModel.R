@@ -63,6 +63,7 @@ RangerModel <- function(
   importance <- match.arg(importance)
 
   MLModel(
+
     name = "RangerModel",
     label = "Fast Random Forests",
     packages = "ranger",
@@ -70,6 +71,7 @@ RangerModel <- function(
     weights = TRUE,
     predictor_encoding = "model.frame",
     params = new_params(environment()),
+
     gridinfo = new_gridinfo(
       param = c("mtry", "min.node.size", "splitrule"),
       get_values = c(
@@ -86,11 +88,14 @@ RangerModel <- function(
       ),
       default = c(TRUE, FALSE, FALSE)
     ),
+
     fit = function(formula, data, weights, ...) {
-      ranger::ranger(formula, data = as.data.frame(data),
-                     case.weights = weights,
-                     probability = is(response(data), "factor"), ...)
+      ranger::ranger(
+        formula, data = as.data.frame(data), case.weights = weights,
+        probability = is(response(data), "factor"), ...
+      )
     },
+
     predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
       pred <- predict(object, data = newdata)
@@ -100,9 +105,11 @@ RangerModel <- function(
         pred$predictions
       }
     },
+
     varimp = function(object, ...) {
       ranger::importance(object)
     }
+
   )
 
 }

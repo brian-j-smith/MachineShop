@@ -45,7 +45,11 @@ GLMBoostModel <- function(
   family = NULL, mstop = 100, nu = 0.1, risk = c("inbag", "oobag", "none"),
   stopintern = FALSE, trace = FALSE
 ) {
+
+  risk <- match.arg(risk)
+
   MLModel(
+
     name = "GLMBoostModel",
     label = "Gradient Boosting with Linear Models",
     packages = "mboost",
@@ -54,12 +58,14 @@ GLMBoostModel <- function(
     weights = TRUE,
     predictor_encoding = "model.frame",
     params = new_params(environment()),
+
     gridinfo = new_gridinfo(
       param = "mstop",
       get_values = c(
         function(n, ...) round(seq_range(0, 50, c(1, 1000), n + 1))
       )
     ),
+
     fit = function(formula, data, weights, family = NULL, ...) {
       if (is.null(family)) {
         family <- switch_class(response(data),
@@ -83,6 +89,7 @@ GLMBoostModel <- function(
         )
       )
     },
+
     predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)
       if (object$family@name == "Cox Partial Likelihood") {
@@ -93,10 +100,13 @@ GLMBoostModel <- function(
         predict(object, newdata = newdata, type = "response")
       }
     },
+
     varimp = function(object, ...) {
       structure(mboost::varimp(object), class = "numeric")
     }
+
   )
+
 }
 
 MLModelFunction(GLMBoostModel) <- NULL

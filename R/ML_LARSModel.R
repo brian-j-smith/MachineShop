@@ -45,18 +45,21 @@ LARSModel <- function(
   type <- match.arg(type)
 
   MLModel(
+
     name = "LARSModel",
     label = "Least Angle Regression",
     packages = "lars",
     response_types = "numeric",
     predictor_encoding = "model.matrix",
     params = new_params(environment()),
+
     gridinfo = new_gridinfo(
       param = "step",
       get_values = c(
         function(n, data, ...) seq_nvars(data, LARSModel, n)
       )
     ),
+
     fit = function(formula, data, weights, step = NULL, ...) {
       x <- model.matrix(data, intercept = FALSE)
       y <- response(data)
@@ -69,10 +72,12 @@ LARSModel <- function(
       }
       model_fit
     },
+
     predict = function(object, newdata, ...) {
       newx <- model.matrix(newdata, intercept = FALSE)
       predict(object, newx = newx, s = object$step, type = "fit")$fit
     }
+
   )
 
 }

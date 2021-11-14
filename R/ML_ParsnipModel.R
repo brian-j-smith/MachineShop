@@ -44,6 +44,7 @@ ParsnipModel <- function(object, ...) {
   throw(check_assignment(mode, check_match(object$mode, names(modes))))
 
   new("ParsnipModel", MLModel(
+
     name = "ParsnipModel",
     label = sprintf("%s(mode = \"%s\", engine = \"%s\")",
                     class1(object), object$mode, object$engine),
@@ -51,9 +52,11 @@ ParsnipModel <- function(object, ...) {
     response_types = modes[[object$mode]],
     predictor_encoding = "model.frame",
     params = list(object = object),
+
     fit = function(formula, data, weights, object, ...) {
       parsnip::fit(object, formula, data = as.data.frame(data))
     },
+
     predict = function(object, newdata, model, times, ...) {
       prsp_predict <- function(...) {
         predict(object, new_data = as.data.frame(newdata), ...)
@@ -77,6 +80,7 @@ ParsnipModel <- function(object, ...) {
         as.matrix(pred[select])
       }
     }
+
   ))
 
 }
