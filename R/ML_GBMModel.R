@@ -77,17 +77,29 @@ GBMModel <- function(
           "Surv" = "coxph"
         )
       }
-      eval_fit(
-        data,
-        formula = gbm::gbm(
-          formula, data = data, weights = weights, distribution = distribution,
-          ...
+      cnd <- NULL
+      suppressWarnings(withCallingHandlers(
+        model_fit <- eval_fit(
+          data,
+          formula = gbm::gbm(
+            formula, data = data, weights = weights,
+            distribution = distribution, ...
+          ),
+          matrix = gbm::gbm.fit(
+            x, y, offset = model.offset(data), w = weights,
+            distribution = distribution, verbose = FALSE, ...
+          )
         ),
-        matrix = gbm::gbm.fit(
-          x, y, offset = model.offset(data), w = weights,
-          distribution = distribution, verbose = FALSE, ...
-        )
-      )
+        warning = function(cnd) cnd <<- cnd
+      ))
+      if (is(cnd, "warning")) {
+        if (distribution == "multinomial") {
+          throw(Warning(conditionMessage(cnd)), call = call("gbm"), times = 3)
+        } else {
+          warning(cnd)
+        }
+      }
+      model_fit
     },
     predict = function(object, newdata, model, ...) {
       newdata <- as.data.frame(newdata)
