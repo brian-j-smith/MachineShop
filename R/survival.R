@@ -286,6 +286,12 @@ get_surv_distr <- function(distr, observed, predicted) {
 }
 
 
+hazfit_efron <- function(event, wt_event, wt_risk, wt_eventrisk) {
+  .Call(C_hazfit_efron, as.integer(event), as.double(wt_event),
+        as.double(wt_risk), as.double(wt_eventrisk))
+}
+
+
 risksum <- function(x, group) {
   rcumsum <- function(x) rev(cumsum(rev(x)))
   stop <- time(group)
