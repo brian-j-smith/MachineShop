@@ -138,7 +138,9 @@ select_call <- function(x, parent_call = NULL, last_call = NULL) {
 #################### Checks ####################
 
 
-check_array <- function(x, type, size = integer(), na.fail = TRUE) {
+check_array <- function(
+  x, type, size = integer(), nonempty = TRUE, na.fail = TRUE
+) {
   result <- try({
     storage.mode(x) <- type
     x
@@ -157,6 +159,8 @@ check_array <- function(x, type, size = integer(), na.fail = TRUE) {
             paste(size, collapse = "x"))
     }
     DomainError(x, paste("must be", msg))
+  } else if (nonempty && is_empty(x)) {
+    DomainError(x, "must be non-empty")
   } else if (na.fail && anyNA(result)) {
     msg <- paste0(
       c("", "must be ", paste("non-missing", type)),
@@ -211,14 +215,14 @@ check_equal_weights <- function(x) {
 
 check_grid <- function(x) {
   if (is(x, "numeric")) {
-    Grid(x)
-  } else if (identical(x, "Grid") || identical(x, Grid)) {
-    Grid()
-  } else if (is(x, "Grid")) {
+    TuningGrid(x)
+  } else if (identical(x, "TuningGrid") || identical(x, TuningGrid)) {
+    TuningGrid()
+  } else if (is(x, "TuningGrid")) {
     x
   } else {
-    DomainError(x, "must be one or more positive integers or a Grid function, ",
-                   "function name, or object")
+    DomainError(x, "must be one or more positive integers or a ",
+                   "TuningGrid function, function name, or object")
   }
 }
 
@@ -367,4 +371,33 @@ check_weights <- function(x, along) {
   } else {
     check_numeric(x, bounds = c(0, Inf), include = c(TRUE, FALSE), size = n)
   }
+}
+
+
+#################### Deprecations ####################
+
+
+#' Deprecated Functions
+#'
+#' Functions that have been deprecated and will be removed in a future version
+#' of the package.
+#'
+#' @name deprecated
+#' @rdname deprecated
+#'
+#' @param ... arguments passed to non-deprecated equivalent.
+#'
+NULL
+
+
+#' @rdname deprecated
+#'
+#' @details
+#' Use \code{\link[=TuningGrid]{TuningGrid()}} instead of \code{Grid()}.
+#'
+Grid <- function(...) {
+  throw(DeprecatedCondition(
+    "Grid()", "TuningGrid()", expired = Sys.Date() >= "2022-02-01"
+  ))
+  TuningGrid(...)
 }

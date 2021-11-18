@@ -430,8 +430,8 @@ resample_selection <- function(
   x, update, params, ..., name = character(), id = character()
 ) {
 
-  metrics <- params$metrics
-  stat <- check_stat(params$stat, convert = TRUE)
+  metrics <- params@metrics
+  stat <- check_stat(params@stat, convert = TRUE)
   throw(check_assignment(stat))
 
   perf_list <- list()
@@ -443,7 +443,7 @@ resample_selection <- function(
     name <- names(x)[i]
 
     res <- try(
-      resample(update(x[[name]]), ..., control = params$control,
+      resample(update(x[[name]]), ..., control = params@control,
                progress_index = i),
       silent = TRUE
     )
@@ -459,7 +459,7 @@ resample_selection <- function(
       metrics <- get_perf_metrics(res$Observed, res$Predicted)
     }
 
-    perf <- performance(res, metrics = metrics, cutoff = params$cutoff)
+    perf <- performance(res, metrics = metrics, cutoff = params@cutoff)
     perf_list[[name]] <- perf
     perf_stats[[name]] <- apply(perf, 2, function(x) stat(na.omit(x)))
   }
@@ -480,7 +480,7 @@ resample_selection <- function(
   metric <- as.MLMetric(c(metrics)[[1]])
   selected <- (if (metric@maximize) which.max else which.min)(perf_stats[, 1])
 
-  res <- TrainStep(
+  res <- TrainingStep(
     id = id,
     name = name,
     grid = tibble(

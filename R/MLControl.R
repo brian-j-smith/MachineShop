@@ -294,9 +294,8 @@ set_predict <- function(
 ) {
   stopifnot(is(control, "MLControl"))
 
-  if (length(times)) {
-    times <- check_numeric(times, bounds = c(0, Inf), include = 0, size = NA)
-  }
+  times <- check_numeric(times, bounds = c(0, Inf), include = FALSE, size = NA,
+                         nonempty = FALSE)
   throw(check_assignment(times))
 
   if (length(distr)) distr <- check_character(distr, size = 1)

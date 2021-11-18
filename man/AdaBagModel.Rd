@@ -50,7 +50,7 @@ trees as single classifiers.
 \details{
 \describe{
   \item{Response Types:}{\code{factor}}
-  \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters:}{
+  \item{\link[=TunedModel]{Automatic tuning} of grid parameters:}{
     \code{mfinal}, \code{maxdepth}
   }
 }

@@ -61,7 +61,7 @@ Fit a generalized linear model via penalized maximum likelihood.
 \describe{
   \item{Response Types:}{\code{BinomialVariate}, \code{factor},
     \code{matrix}, \code{numeric}, \code{PoissonVariate}, \code{Surv}}
-  \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters:}{
+  \item{\link[=TunedModel]{Automatic tuning} of grid parameters:}{
     \code{lambda}, \code{alpha}
   }
 }

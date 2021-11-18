@@ -18,7 +18,7 @@
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{numeric}}
-#'   \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters:}{
+#'   \item{\link[=TunedModel]{Automatic tuning} of grid parameter:}{
 #'     \code{step}
 #'   }
 #' }

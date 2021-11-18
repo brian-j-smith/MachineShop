@@ -162,7 +162,7 @@ framework from Chen & Guestrin.
 \describe{
   \item{Response Types:}{\code{factor}, \code{numeric},
     \code{PoissonVariate}, \code{Surv}}
-  \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters}{
+  \item{\link[=TunedModel]{Automatic tuning} of grid parameters:}{
     \itemize{
       \item XGBDARTModel: \code{nrounds}, \code{eta}*, \code{gamma}*,
         \code{max_depth}, \code{min_child_weight}*, \code{subsample}*,

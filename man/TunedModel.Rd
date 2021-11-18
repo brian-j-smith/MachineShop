@@ -10,7 +10,7 @@ TunedModel(
   fixed = list(),
   control = MachineShop::settings("control"),
   metrics = NULL,
-  stat = MachineShop::settings("stat.Trained"),
+  stat = MachineShop::settings("stat.TrainingParams"),
   cutoff = MachineShop::settings("cutoff")
 )
 }
@@ -21,7 +21,7 @@ defining the model to be tuned.}
 \item{grid}{single integer or vector of integers whose positions or names
 match the parameters in the model's pre-defined tuning grid if one exists
 and which specify the number of values used to construct the grid;
-\code{\link{Grid}} function, function name, or object;
+\code{\link{TuningGrid}} function, function name, or object;
 \code{\link{ParameterGrid}} object; or \link[=data.frame]{data frame}
 containing parameter values at which to evaluate the model, such as that
 returned by \code{\link{expand_params}}.}
@@ -72,7 +72,10 @@ plot(tuned_model, type = "l")
 
 # Randomly sampled grid points
 fit(sale_amount ~ ., data = ICHomes,
-    model = TunedModel(GBMModel, grid = Grid(size = 1000, random = 5)))
+    model = TunedModel(
+      GBMModel,
+      grid = TuningGrid(size = 1000, random = 5)
+    ))
 
 # User-specified grid
 fit(sale_amount ~ ., data = ICHomes,

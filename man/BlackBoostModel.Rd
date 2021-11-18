@@ -70,7 +70,7 @@ trees are utilized as base-learners.
   \item{Response Types:}{\code{binary factor}, \code{BinomialVariate},
     \code{NegBinomialVariate}, \code{numeric}, \code{PoissonVariate},
     \code{Surv}}
-  \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters:}{
+  \item{\link[=TunedModel]{Automatic tuning} of grid parameters:}{
     \code{mstop}, \code{maxdepth}
   }
 }

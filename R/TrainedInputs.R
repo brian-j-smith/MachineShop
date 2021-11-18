@@ -60,7 +60,7 @@ SelectedInput <- function(...) {
 #'
 SelectedInput.formula <- function(
   ..., data, control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.Trained"),
+  stat = MachineShop::settings("stat.TrainingParams"),
   cutoff = MachineShop::settings("cutoff")
 ) {
   inputs <- list(...)
@@ -79,7 +79,7 @@ SelectedInput.formula <- function(
 #'
 SelectedInput.matrix <- function(
   ..., y, control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.Trained"),
+  stat = MachineShop::settings("stat.TrainingParams"),
   cutoff = MachineShop::settings("cutoff")
 ) {
   inputs <- list(...)
@@ -96,7 +96,7 @@ SelectedInput.matrix <- function(
 #'
 SelectedInput.ModelFrame <- function(
   ..., control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.Trained"),
+  stat = MachineShop::settings("stat.TrainingParams"),
   cutoff = MachineShop::settings("cutoff")
 ) {
 
@@ -118,9 +118,14 @@ SelectedInput.ModelFrame <- function(
   }
 
   new("SelectedModelFrame", ModelFrame(data),
-      inputs = ListOf(map(terms, inputs)),
-      params = list(control = as.MLControl(control), metrics = metrics,
-                    stat = stat, cutoff = cutoff))
+    inputs = ListOf(map(terms, inputs)),
+    params = TrainingParams(
+      control = as.MLControl(control),
+      metrics = metrics,
+      stat = stat,
+      cutoff = cutoff
+    )
+  )
 
 }
 
@@ -129,7 +134,7 @@ SelectedInput.ModelFrame <- function(
 #'
 SelectedInput.recipe <- function(
   ..., control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.Trained"),
+  stat = MachineShop::settings("stat.TrainingParams"),
   cutoff = MachineShop::settings("cutoff")
 ) {
 
@@ -169,9 +174,14 @@ SelectedInput.recipe <- function(
   }
 
   new("SelectedModelRecipe", new("ModelRecipe", rec),
-      inputs = ListOf(inputs),
-      params = list(control = as.MLControl(control), metrics = metrics,
-                    stat = stat, cutoff = cutoff))
+    inputs = ListOf(inputs),
+    params = TrainingParams(
+      control = as.MLControl(control),
+      metrics = metrics,
+      stat = stat,
+      cutoff = cutoff
+    )
+  )
 
 }
 
@@ -203,12 +213,12 @@ SelectedInput.list <- function(x, ...) {
     TypeError(object, c("SelectedModelFrame", "SelectedModelRecipe"), "input")
   )
   throw(update_input)
-  train_step <- resample_selection(inputs, update_input, params, ...,
-                                   name = "SelectedInput", id = object@id)
-  train_step@grid$params <- tibble(id = map("char", slot, inputs, "id"))
-  selected <- which(train_step@grid$selected)
+  step <- resample_selection(inputs, update_input, params, ...,
+                             name = "SelectedInput", id = object@id)
+  step@grid$params <- tibble(id = map("char", slot, inputs, "id"))
+  selected <- which(step@grid$selected)
   input <- update_input(inputs[[selected]])
-  push(train_step, fit(input, ...))
+  push(step, fit(input, ...))
 }
 
 
@@ -261,14 +271,19 @@ TunedInput <- function(object, ...) {
 #'
 TunedInput.recipe <- function(
   object, grid = expand_steps(), control = MachineShop::settings("control"),
-  metrics = NULL, stat = MachineShop::settings("stat.Trained"),
+  metrics = NULL, stat = MachineShop::settings("stat.TrainingParams"),
   cutoff = MachineShop::settings("cutoff"), ...
 ) {
 
   object <- new("TunedModelRecipe", ModelRecipe(object),
-                grid = grid,
-                params = list(control = as.MLControl(control),
-                              metrics = metrics, stat = stat, cutoff = cutoff))
+    grid = grid,
+    params = TrainingParams(
+      control = as.MLControl(control),
+      metrics = metrics,
+      stat = stat,
+      cutoff = cutoff
+    )
+  )
 
   grid_names <- names(object@grid)
   step_ids <- map("char", getElement, object$steps, "id")
@@ -293,12 +308,12 @@ TunedInput.recipe <- function(
   if (all(size(grid) > 0)) {
     grid_split <- split(grid, seq_len(nrow(grid)))
     update_input <- function(x) do.call(update, c(list(recipe), x))
-    train_step <- resample_selection(grid_split, update_input, object@params,
-                                     model, name = "TunedInput", id = object@id)
-    train_step@grid$params <- asS3(grid)
-    selected <- which(train_step@grid$selected)
+    step <- resample_selection(grid_split, update_input, object@params,
+                               model, name = "TunedInput", id = object@id)
+    step@grid$params <- asS3(grid)
+    selected <- which(step@grid$selected)
     input <- update_input(grid_split[[selected]])
-    push(train_step, fit(input, model = model))
+    push(step, fit(input, model = model))
   } else {
     fit(recipe, model = model)
   }

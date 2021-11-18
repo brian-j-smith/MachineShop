@@ -18,7 +18,7 @@
 \alias{print.Resamples}
 \alias{print.SurvMatrix}
 \alias{print.SurvTimes}
-\alias{print.TrainStep}
+\alias{print.TrainingStep}
 \alias{print.VariableImportance}
 \title{Print MachineShop Objects}
 \usage{
@@ -54,7 +54,7 @@
 
 \method{print}{SurvTimes}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{TrainStep}(x, n = MachineShop::settings("print_max"), ...)
+\method{print}{TrainingStep}(x, n = MachineShop::settings("print_max"), ...)
 
 \method{print}{VariableImportance}(x, n = MachineShop::settings("print_max"), ...)
 }

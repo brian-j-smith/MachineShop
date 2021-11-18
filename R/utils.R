@@ -218,7 +218,7 @@ is_trained <- function(x, ...) {
 
 
 is_trained.MLModel <- function(x, ...) {
-  length(x@train_steps) > 0
+  length(x@steps) > 0
 }
 
 
@@ -391,15 +391,15 @@ push <- function(x, object, ...) {
 }
 
 
-push.TrainStep <- function(x, object, ...) {
+push.TrainingStep <- function(x, object, ...) {
   stopifnot(is(object, "MLModelFit"))
   mlmodel <- if (isS4(object)) object@mlmodel else object$mlmodel
-  train_steps <- ListOf(c(x, mlmodel@train_steps))
-  names(train_steps) <- paste0("TrainStep", seq_along(train_steps))
+  steps <- ListOf(c(x, mlmodel@steps))
+  names(steps) <- paste0(class(x), seq_along(steps))
   if (isS4(object)) {
-    object@mlmodel@train_steps <- train_steps
+    object@mlmodel@steps <- steps
   } else {
-    object$mlmodel@train_steps <- train_steps
+    object$mlmodel@steps <- steps
   }
   object
 }

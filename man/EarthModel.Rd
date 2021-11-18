@@ -41,7 +41,7 @@ Build a regression model using the techniques in Friedman's papers
 \details{
 \describe{
   \item{Response Types:}{\code{factor}, \code{numeric}}
-  \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters:}{
+  \item{\link[=TunedModel]{Automatic tuning} of grid parameters:}{
     \code{nprune}, \code{degree}*
   }
 }

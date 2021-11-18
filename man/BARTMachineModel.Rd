@@ -55,7 +55,7 @@ Builds a BART model for regression or classification.
 \details{
 \describe{
   \item{Response Types:}{\code{binary factor}, \code{numeric}}
-  \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters:}{
+  \item{\link[=TunedModel]{Automatic tuning} of grid parameters:}{
     \code{alpha}, \code{beta}, \code{k}, \code{nu}
   }
 }

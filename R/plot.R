@@ -159,7 +159,7 @@ plot.LiftCurve <- function(
 #' @rdname plot-methods
 #'
 plot.MLModel <- function(
-  x, metrics = NULL, stat = MachineShop::settings("stat.Trained"),
+  x, metrics = NULL, stat = MachineShop::settings("stat.TrainingParams"),
   type = c("boxplot", "density", "errorbar", "line", "violin"), ...
 ) {
   if (!is_trained(x)) throw(Error("no training results to plot"))
@@ -168,10 +168,10 @@ plot.MLModel <- function(
   throw(check_assignment(stat))
   type <- match.arg(type)
 
-  map(function(train_step) {
-    perf <- train_step@performance
+  map(function(step) {
+    perf <- step@performance
     if (type == "line") {
-      grid <- unnest(train_step@grid$params)
+      grid <- unnest(step@grid$params)
       stats <- apply(perf, c(3, 2), function(x) stat(na.omit(x))) %>%
         TabularArray %>%
         as.data.frame
@@ -208,7 +208,7 @@ plot.MLModel <- function(
     } else {
       plot(perf, metrics = metrics, stat = stat, type = type, ...)
     }
-  }, x@train_steps)
+  }, x@steps)
 }
 
 

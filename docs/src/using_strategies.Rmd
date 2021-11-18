@@ -222,14 +222,14 @@ model_fit <- fit(surv_fo, data = surv_train,
 #> CIndex value: 0.7601717
 ```
 
-Grid values may also be given as a `r rdoc_url("Grid")` function, function name, or object; `r rdoc_url("ParameterGrid")` object; or data frame containing parameter values at which to evaluate the model, such as that returned by `r rdoc_url("expand_params()")`.
+Grid values may also be given as a `r rdoc_url("TuningGrid")` function, function name, or object; `r rdoc_url("ParameterGrid")` object; or data frame containing parameter values at which to evaluate the model, such as that returned by `r rdoc_url("expand_params()")`.
 
 ```{r using_strategies_tune_grid, eval=FALSE}
 ## Tune over randomly sampled grid points
 fit(surv_fo, data = surv_train,
     model = TunedModel(
       GBMModel,
-      grid = Grid(size = 100, random = 10),
+      grid = TuningGrid(size = 100, random = 10),
       control = surv_means_control
     ))
 

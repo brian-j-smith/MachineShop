@@ -31,7 +31,7 @@
 \method{plot}{MLModel}(
   x,
   metrics = NULL,
-  stat = MachineShop::settings("stat.Trained"),
+  stat = MachineShop::settings("stat.TrainingParams"),
   type = c("boxplot", "density", "errorbar", "line", "violin"),
   ...
 )

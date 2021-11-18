@@ -31,7 +31,7 @@ that must be given first in calls to its methods.}
 }
 \value{
 \code{ParameterGrid} class object that inherits from
-\code{parameters} and \code{Grid}.
+\code{parameters} and \code{TuningGrid}.
 }
 \description{
 Defines a tuning grid from a set of parameters.

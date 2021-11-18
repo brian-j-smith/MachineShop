@@ -32,9 +32,9 @@ test_that("settings changes and views", {
   expect_error(settings(distr.SurvProbs = character()))
 
   expect_type(settings(grid = 5), "list")
-  expect_s4_class(settings("grid"), "Grid")
-  expect_type(settings(grid = Grid), "list")
-  expect_s4_class(settings("grid"), "Grid")
+  expect_s4_class(settings("grid"), "TuningGrid")
+  expect_type(settings(grid = TuningGrid), "list")
+  expect_s4_class(settings("grid"), "TuningGrid")
   expect_error(settings(grid = character()))
 
   new_value <- "breslow"
@@ -97,9 +97,9 @@ test_that("settings changes and views", {
   expect_error(settings(stat.Resamples = "character"))
 
   new_value <- "median"
-  expect_type(settings(stat.Trained = new_value), "list")
-  expect_identical(settings("stat.Trained"), new_value)
-  expect_error(settings(stat.Trained = "character"))
+  expect_type(settings(stat.TrainingParams = new_value), "list")
+  expect_identical(settings("stat.TrainingParams"), new_value)
+  expect_error(settings(stat.TrainingParams = "character"))
 
   new_value <- c("median", sd)
   expect_type(settings(stats.PartialDependence = new_value), "list")

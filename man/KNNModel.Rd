@@ -33,7 +33,7 @@ prediction is done via the maximum of summed kernel densities.
 \details{
 \describe{
   \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordinal}}
-  \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters:}{
+  \item{\link[=TunedModel]{Automatic tuning} of grid parameters:}{
     \code{k}, \code{distance}*, \code{kernel}*
   }
 }

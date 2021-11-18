@@ -9,7 +9,7 @@
 #' @details
 #' \describe{
 #'   \item{Response Types:}{\code{factor}, \code{numeric}}
-#'   \item{\link[=TunedModel]{Automatic Tuning} of Grid Parameters:}{
+#'   \item{\link[=TunedModel]{Automatic tuning} of grid parameters:}{
 #'     \code{ncomp}
 #'   }
 #' }

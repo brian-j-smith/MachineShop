@@ -1,4 +1,4 @@
-#################### Data Structures ####################
+#################### Base Classes ####################
 
 
 setOldClass("listof")
@@ -13,6 +13,11 @@ ListOf <- setClass("ListOf",
 
 TabularArray <- setClass("TabularArray",
   contains = "array"
+)
+
+
+setClassUnion("IntegerOrLogical",
+  members = c("integer", "logical")
 )
 
 
@@ -70,30 +75,105 @@ setClass("SurvTimes",
 setClass("SurvMeans", contains = "SurvTimes")
 
 
-#################### Tuning Grids ####################
+#################### Resampling Controls ####################
+
+
+setClass("MLControl",
+  slots = c(
+    label = "character",
+    monitor = "list",
+    predict = "list",
+    strata = "list",
+    weights = "logical",
+    seed = "numeric"
+  )
+)
+
+
+setClass("BootControl",
+  contains = "MLControl",
+  slots = c(samples = "integer")
+)
+
+
+setClass("BootOptimismControl",
+  contains = "BootControl"
+)
+
+
+setClass("CVControl",
+  contains = "MLControl",
+  slots = c(
+    folds = "integer",
+    repeats = "integer"
+  )
+)
+
+
+setClass("CVOptimismControl",
+  contains = "CVControl"
+)
+
+
+setClass("OOBControl",
+  contains = "MLControl",
+  slots = c(samples = "integer")
+)
+
+
+setClass("SplitControl",
+  contains = "MLControl",
+  slots = c(prop = "numeric")
+)
+
+
+setClass("TrainControl",
+  contains = "MLControl"
+)
+
+
+#################### Parameters and Grids ####################
 
 
 setOldClass(c("parameters", "tbl_df"))
-setOldClass(c("param_grid", "tbl_df"))
-setOldClass(c("grid_random", "param_grid"))
-setOldClass(c("grid_regular", "param_grid"))
 
 
-setClass("Grid",
+TrainingParams <- setClass("TrainingParams",
+  slots = c(
+    control = "MLControl",
+    metrics = "ANY",
+    stat = "ANY",
+    cutoff = "numeric",
+    fixed = "ANY"
+  )
+)
+
+
+setClassUnion("Params",
+  members = c("list", "TrainingParams")
+)
+
+
+setClass("TuningGrid",
   slots = c(
     size = "integer",
-    random = "ANY"
+    random = "IntegerOrLogical"
   )
 )
 
 
 setClass("ParameterGrid",
-  contains = c("Grid", "parameters")
+  contains = c("TuningGrid", "parameters")
 )
 
 
 RecipeGrid <- setClass("RecipeGrid",
   contains = "tbl_df"
+)
+
+
+setClassUnion("Grid",
+  members = c("tbl_df", "TuningGrid")
 )
 
 
@@ -121,13 +201,13 @@ setClass("MLModel",
     response_types = "character",
     weights = "logical",
     predictor_encoding = "character",
-    params = "list",
+    params = "Params",
     gridinfo = "tbl_df",
     fit = "function",
     predict = "function",
     varimp = "function",
     input = "MLInput",
-    train_steps = "ListOf"
+    steps = "ListOf"
   )
 )
 
@@ -214,7 +294,7 @@ setClass("SelectedInput",
   slots = c(
     id = "character",
     inputs = "ListOf",
-    params = "list"
+    params = "TrainingParams"
   )
 )
 
@@ -232,8 +312,8 @@ setClass("SelectedModelRecipe",
 setClass("TunedInput",
   contains = "VIRTUAL",
   slots = c(
-    grid = "ANY",
-    params = "list"
+    grid = "Grid",
+    params = "TrainingParams"
   )
 )
 
@@ -253,10 +333,29 @@ setClass("TunedModeledRecipe",
 
 
 setClass("ParsnipModel", contains = "MLModel")
-setClass("SelectedModel", contains = "MLModel")
+
+
+setClass("SelectedModel",
+  contains = "MLModel",
+  slots = c(
+    models = "ListOf",
+    params = "TrainingParams"
+  )
+)
+
+
 setClass("StackedModel", contains = "MLModel")
 setClass("SuperModel", contains = "MLModel")
-setClass("TunedModel", contains = "MLModel")
+
+
+setClass("TunedModel",
+  contains = "MLModel",
+  slots = c(
+    model = "MLModel",
+    grid = "Grid",
+    params = "TrainingParams"
+  )
+)
 
 
 MLModelFunction <- setClass("MLModelFunction",
@@ -278,6 +377,7 @@ setClass("MLModelFit",
 )
 
 
+setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
 setClass("SVMModelFit", contains = c("MLModelFit", "ksvm"))
 setClass("SVMANOVAModelFit", contains = c("MLModelFit", "ksvm"))
 setClass("SVMBesselModelFit", contains = c("MLModelFit", "ksvm"))
@@ -287,64 +387,6 @@ setClass("SVMPolyModelFit", contains = c("MLModelFit", "ksvm"))
 setClass("SVMRadialModelFit", contains = c("MLModelFit", "ksvm"))
 setClass("SVMSplineModelFit", contains = c("MLModelFit", "ksvm"))
 setClass("SVMTanhModelFit", contains = c("MLModelFit", "ksvm"))
-setClass("CForestModelFit", contains = c("MLModelFit", "RandomForest"))
-
-
-#################### Resampling Controls ####################
-
-
-setClass("MLControl",
-  slots = c(
-    label = "character",
-    monitor = "list",
-    predict = "list",
-    strata = "list",
-    weights = "logical",
-    seed = "numeric"
-  )
-)
-
-
-setClass("BootControl",
-  contains = "MLControl",
-  slots = c(samples = "integer")
-)
-
-
-setClass("BootOptimismControl",
-  contains = "BootControl"
-)
-
-
-setClass("CVControl",
-  contains = "MLControl",
-  slots = c(
-    folds = "integer",
-    repeats = "integer"
-  )
-)
-
-
-setClass("CVOptimismControl",
-  contains = "CVControl"
-)
-
-
-setClass("OOBControl",
-  contains = "MLControl",
-  slots = c(samples = "integer")
-)
-
-
-setClass("SplitControl",
-  contains = "MLControl",
-  slots = c(prop = "numeric")
-)
-
-
-setClass("TrainControl",
-  contains = "MLControl"
-)
 
 
 #################### Performance Measures ####################
@@ -440,7 +482,7 @@ setClass("Resamples",
 )
 
 
-TrainStep <- setClass("TrainStep",
+TrainingStep <- setClass("TrainingStep",
   slots = c(
     id = "character",
     name = "character",

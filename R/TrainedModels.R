@@ -40,7 +40,7 @@
 #'
 SelectedModel <- function(
   ..., control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.Trained"),
+  stat = MachineShop::settings("stat.TrainingParams"),
   cutoff = MachineShop::settings("cutoff")
 ) {
 
@@ -60,11 +60,13 @@ SelectedModel <- function(
     label = "Selected Model",
     response_types = slots$response_types,
     weights = slots$weights,
-    params = list(
-      models = ListOf(models), control = as.MLControl(control),
-      metrics = metrics, stat = stat, cutoff = cutoff
+    params = TrainingParams(
+      control = as.MLControl(control),
+      metrics = metrics,
+      stat = stat,
+      cutoff = cutoff
     )
-  ))
+  ), models = ListOf(models))
 
 }
 
@@ -72,13 +74,13 @@ MLModelFunction(SelectedModel) <- NULL
 
 
 .fit.SelectedModel <- function(object, input, ...) {
-  models <- object@params$models
-  train_step <- resample_selection(models, identity, object@params, input,
-                                   name = "SelectedModel", id = object@id)
-  train_step@grid$params <- tibble(id = map("char", slot, models, "id"))
-  selected <- which(train_step@grid$selected)
+  models <- object@models
+  step <- resample_selection(models, identity, object@params, input,
+                             name = "SelectedModel", id = object@id)
+  step@grid$params <- tibble(id = map("char", slot, models, "id"))
+  selected <- which(step@grid$selected)
   model <- models[[selected]]
-  push(train_step, fit(input, model = model))
+  push(step, fit(input, model = model))
 }
 
 
@@ -91,7 +93,7 @@ MLModelFunction(SelectedModel) <- NULL
 #' @param grid single integer or vector of integers whose positions or names
 #'   match the parameters in the model's pre-defined tuning grid if one exists
 #'   and which specify the number of values used to construct the grid;
-#'   \code{\link{Grid}} function, function name, or object;
+#'   \code{\link{TuningGrid}} function, function name, or object;
 #'   \code{\link{ParameterGrid}} object; or \link[=data.frame]{data frame}
 #'   containing parameter values at which to evaluate the model, such as that
 #'   returned by \code{\link{expand_params}}.
@@ -135,7 +137,10 @@ MLModelFunction(SelectedModel) <- NULL
 #'
 #' # Randomly sampled grid points
 #' fit(sale_amount ~ ., data = ICHomes,
-#'     model = TunedModel(GBMModel, grid = Grid(size = 1000, random = 5)))
+#'     model = TunedModel(
+#'       GBMModel,
+#'       grid = TuningGrid(size = 1000, random = 5)
+#'     ))
 #'
 #' # User-specified grid
 #' fit(sale_amount ~ ., data = ICHomes,
@@ -152,12 +157,12 @@ MLModelFunction(SelectedModel) <- NULL
 TunedModel <- function(
   object, grid = MachineShop::settings("grid"), fixed = list(),
   control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.Trained"),
+  stat = MachineShop::settings("stat.TrainingParams"),
   cutoff = MachineShop::settings("cutoff")
 ) {
 
   if (missing(object)) {
-    object <- NULL
+    object <- NullModel()
     response_types <- settings("response_types")
     weights <- FALSE
   } else {
@@ -190,12 +195,14 @@ TunedModel <- function(
     label = "Grid Tuned Model",
     response_types = response_types,
     weights = weights,
-    params = list(
-      model = object, grid = grid, fixed = fixed,
-      control = as.MLControl(control), metrics = metrics, stat = stat,
-      cutoff = cutoff
+    params = TrainingParams(
+      control = as.MLControl(control),
+      metrics = metrics,
+      stat = stat,
+      cutoff = cutoff,
+      fixed = fixed
     )
-  ))
+  ), model = object, grid = grid)
 
 }
 
@@ -203,13 +210,12 @@ MLModelFunction(TunedModel) <- NULL
 
 
 .fit.TunedModel <- function(object, input, ...) {
-  params <- object@params
   grid <- expand_modelgrid(object, input)
-  models <- expand_model(list(params$model, grid))
-  train_step <- resample_selection(models, identity, params, input,
-                                   name = "TunedModel", id = object@id)
-  train_step@grid$params <- grid
-  selected <- which(train_step@grid$selected)
+  models <- expand_model(list(object@model, grid))
+  step <- resample_selection(models, identity, object@params, input,
+                             name = "TunedModel", id = object@id)
+  step@grid$params <- grid
+  selected <- which(step@grid$selected)
   model <- models[[selected]]
-  push(train_step, fit(input, model = model))
+  push(step, fit(input, model = model))
 }

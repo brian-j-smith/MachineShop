@@ -102,17 +102,6 @@ print.DiscreteVariate <- function(
 setShowDefault("DiscreteVariate")
 
 
-print.Grid <- function(x, ...) {
-  title(x, ...)
-  print_fields(list("Grid size{?s}: " = x@size), add_names = TRUE)
-  print_fields(list("Random sample: " = x@random))
-  invisible(x)
-}
-
-
-setShowDefault("Grid")
-
-
 #' @rdname print-methods
 #'
 print.ListOf <- function(x, n = MachineShop::settings("print_max"), ...) {
@@ -197,7 +186,7 @@ print.MLModel <- function(x, n = MachineShop::settings("print_max"), ...) {
     cat(str(x@params, give.attr = FALSE, list.len = n))
     if (trained) {
       newline()
-      print(x@train_steps, n = n, level = level + 1)
+      print(x@steps, n = n, level = level + 1)
     }
   }
   invisible(x)
@@ -415,7 +404,7 @@ print.SelectedInput <- function(
     newline()
     print(x@inputs, n = n, level = nextlevel)
     hline(level)
-    print(x@params$control, n = n, level = nextlevel)
+    print(x@params@control, n = n, level = nextlevel)
   } else if (level == 1) {
     newline()
     print_train_label("Selection set:")
@@ -437,17 +426,17 @@ print.SelectedModel <- function(
     hline(level)
     print_train_label("Selection set:")
     newline()
-    print(x@params$models, n = n, level = nextlevel)
+    print(x@models, n = n, level = nextlevel)
     hline(level)
-    print(x@params$control, n = n, level = nextlevel)
+    print(x@params@control, n = n, level = nextlevel)
     if (trained) {
       hline(level)
-      print(x@train_steps, n = n, level = nextlevel)
+      print(x@steps, n = n, level = nextlevel)
     }
   } else if (level == 1) {
     newline()
     print_train_label("Selection set:")
-    print(x@params$models, n = n, level = nextlevel)
+    print(x@models, n = n, level = nextlevel)
   }
   invisible(x)
 }
@@ -472,7 +461,7 @@ print.StackedModel <- function(x, n = MachineShop::settings("print_max"), ...) {
     print(x@params$control, n = n, level = nextlevel)
     if (trained) {
       hline(level)
-      print(x@train_steps, n = n, level = nextlevel)
+      print(x@steps, n = n, level = nextlevel)
     }
   }
   invisible(x)
@@ -502,7 +491,7 @@ print.SuperModel <- function(x, n = MachineShop::settings("print_max"), ...) {
     print(x@params$control, n = n, level = nextlevel)
     if (trained) {
       hline(level)
-      print(x@train_steps, n = n, level = nextlevel)
+      print(x@steps, n = n, level = nextlevel)
     }
   } else if (level == 1) {
     newline()
@@ -558,7 +547,7 @@ setShowDefault("TabularArray")
 
 #' @rdname print-methods
 #'
-print.TrainStep <- function(x, n = MachineShop::settings("print_max"), ...) {
+print.TrainingStep <- function(x, n = MachineShop::settings("print_max"), ...) {
   title(x, ...)
   level <- nesting_level(...)
   selected <- which(x@grid$selected)
@@ -577,7 +566,7 @@ print.TrainStep <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setShowDefault("TrainStep")
+setShowDefault("TrainingStep")
 
 
 print.TunedInput <- function(x, n = MachineShop::settings("print_max"), ...) {
@@ -594,7 +583,7 @@ print.TunedInput <- function(x, n = MachineShop::settings("print_max"), ...) {
       print_items(grid, n = n)
     }
     newline()
-    print(x@params$control, n = n, level = nextlevel)
+    print(x@params@control, n = n, level = nextlevel)
   }
   invisible(x)
 }
@@ -608,10 +597,10 @@ print.TunedModel <- function(x, n = MachineShop::settings("print_max"), ...) {
   print_modelinfo(x, trained = trained, ...)
   if (level < 2) {
     newline()
-    print(x@params$model, n = n, level = nextlevel)
+    print(x@model, n = n, level = nextlevel)
     if (level < 1) {
       newline()
-      grid <- x@params$grid
+      grid <- x@grid
       if (isS4(grid)) {
         print(grid, level = nextlevel)
       } else {
@@ -619,15 +608,26 @@ print.TunedModel <- function(x, n = MachineShop::settings("print_max"), ...) {
         print_items(grid, n = n)
       }
       newline()
-      print(x@params$control, n = n, level = nextlevel)
+      print(x@params@control, n = n, level = nextlevel)
       if (trained) {
         newline()
-        print(x@train_steps, n = n, level = nextlevel)
+        print(x@steps, n = n, level = nextlevel)
       }
     }
   }
   invisible(x)
 }
+
+
+print.TuningGrid <- function(x, ...) {
+  title(x, ...)
+  print_fields(list("Grid size{?s}: " = x@size), add_names = TRUE)
+  print_fields(list("Random sample: " = x@random))
+  invisible(x)
+}
+
+
+setShowDefault("TuningGrid")
 
 
 #' @rdname print-methods

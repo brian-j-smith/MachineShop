@@ -143,12 +143,11 @@ expand_modelgrid.recipe <- function(input, model, info = FALSE, ...) {
 #' @rdname expand_modelgrid-methods
 #'
 expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
-  params <- model@params
-  model <- as.MLModel(params$model)
   if (info) {
     model@gridinfo
   } else {
-    .expand_modelgrid(params$grid, ..., model = model, fixed = params$fixed)
+    .expand_modelgrid(model@grid, ..., model = model@model,
+                      fixed = model@params@fixed)
   }
 }
 
@@ -158,7 +157,7 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
 }
 
 
-.expand_modelgrid.Grid <- function(grid, input, ..., model, fixed) {
+.expand_modelgrid.TuningGrid <- function(grid, input, ..., model, fixed) {
   gridinfo <- model@gridinfo
   size <- grid@size
   random <- grid@random
