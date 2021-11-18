@@ -427,9 +427,11 @@ subsample_input.ModelRecipe <- function(x, data, ...) recipe(x, data)
 
 
 resample_selection <- function(
-  x, update, params, ..., name = character(), id = character()
+  object, ..., grid = tibble(), params = TrainingParams(), id = character(),
+  name = character()
 ) {
 
+  grid <- as(grid, "tbl_df")
   metrics <- params@metrics
   stat <- check_stat(params@stat, convert = TRUE)
   throw(check_assignment(stat))
@@ -437,21 +439,22 @@ resample_selection <- function(
   perf_list <- list()
   perf_stats <- list()
   err_msgs <- character()
-  ind <- new_progress_index(name = name, max = length(x))
+  ind <- new_progress_index(name = name, max = nrow(grid))
+  ind_names <- make.unique(rep(training_names(object), length = max(ind)))
   while (ind < max(ind)) {
     ind <- ind + 1
-    name <- names(x)[ind]
+    ind_name <- ind_names[ind]
 
     res <- try(
-      resample(update(x[[name]]), ..., control = params@control,
-               progress_index = ind),
+      resample(update(object, grid[as.integer(ind), ]), ...,
+               control = params@control, progress_index = ind),
       silent = TRUE
     )
 
     if (is(res, "try-error")) {
-      perf_list[[name]] <- NA
-      perf_stats[[name]] <- NA
-      err_msgs[name] <- conditionMessage(attr(res, "condition"))
+      perf_list[[ind_name]] <- NA
+      perf_stats[[ind_name]] <- NA
+      err_msgs[ind_name] <- conditionMessage(attr(res, "condition"))
       next
     }
 
@@ -460,8 +463,8 @@ resample_selection <- function(
     }
 
     perf <- performance(res, metrics = metrics, cutoff = params@cutoff)
-    perf_list[[name]] <- perf
-    perf_stats[[name]] <- apply(perf, 2, function(x) stat(na.omit(x)))
+    perf_list[[ind_name]] <- perf
+    perf_stats[[ind_name]] <- apply(perf, 2, function(x) stat(na.omit(x)))
   }
 
   failed <- is.na(perf_list)
@@ -486,7 +489,7 @@ resample_selection <- function(
     grid = tibble(
       name = names(perf_list),
       selected = FALSE,
-      params = tibble(.rows = 1),
+      params = grid,
       metrics = as_tibble(perf_stats)
     ),
     performance = perf
@@ -495,3 +498,10 @@ resample_selection <- function(
   res
 
 }
+
+
+training_names <- function(x, ...) UseMethod("training_names")
+training_names.MLInput <- function(x, ...) class(x)
+training_names.MLModel <- function(x, ...) x@name
+training_names.SelectedInput <- function(x, ...) names(x@inputs)
+training_names.SelectedModel <- function(x, ...) names(x@models)

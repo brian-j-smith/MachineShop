@@ -27,7 +27,9 @@ containing parameter values at which to evaluate the model, such as that
 returned by \code{\link{expand_params}}.}
 
 \item{fixed}{list or one-row data frame with columns of fixed parameter
-values to combine with those in \code{grid}.}
+values to combine with those in \code{grid}.  This argument is deprecated
+and will be removed in a future version.  Fixed parameters may be specified
+directly in the model \code{object} instead.}
 
 \item{control}{\link[=controls]{control} function, function name, or object
 defining the resampling method to be employed.}

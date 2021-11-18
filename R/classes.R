@@ -143,8 +143,7 @@ TrainingParams <- setClass("TrainingParams",
     control = "MLControl",
     metrics = "ANY",
     stat = "ANY",
-    cutoff = "numeric",
-    fixed = "ANY"
+    cutoff = "numeric"
   )
 )
 
@@ -290,7 +289,6 @@ setClass("NullInput",
 
 
 setClass("SelectedInput",
-  contains = "VIRTUAL",
   slots = c(
     id = "character",
     inputs = "ListOf",

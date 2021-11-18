@@ -26,7 +26,7 @@
 #' }
 #'
 expand_model <- function(object, ..., random = FALSE) {
-  .expand_model(object, random, ...)
+  .expand_model(object, ..., random = random)
 }
 
 
@@ -35,23 +35,22 @@ expand_model <- function(object, ..., random = FALSE) {
 }
 
 
-.expand_model.default <- function(object, random, ...) {
+.expand_model.default <- function(object, ..., random) {
   expand_model(as.MLModel(object), ..., random = random)
 }
 
 
-.expand_model.list <- function(object, ...) {
-  grid <- object[[2]]
-  models <- map(function(args) do.call(object[[1]], args),
-                split(grid, seq_len(max(nrow(grid), 1))))
+.expand_model.tbl_df <- function(object, model, ...) {
+  models <- map(function(params) {
+    do.call(update, list(model, params, new_id = TRUE), quote = TRUE)
+  }, split(object, seq_len(max(nrow(object), 1))))
   names(models) <- paste0(models[[1]]@name, ".", names(models))
   models
 }
 
 
-.expand_model.MLModel <- function(object, random, ...) {
-  grid <- expand_params(..., random = random)
-  expand_model(list(fget(object@name), grid))
+.expand_model.MLModel <- function(object, ..., random) {
+  expand_model(expand_params(..., random = random), object)
 }
 
 
@@ -146,8 +145,7 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
   if (info) {
     model@gridinfo
   } else {
-    .expand_modelgrid(model@grid, ..., model = model@model,
-                      fixed = model@params@fixed)
+    .expand_modelgrid(model@grid, ..., model = model@model)
   }
 }
 
@@ -157,7 +155,7 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
 }
 
 
-.expand_modelgrid.TuningGrid <- function(grid, input, ..., model, fixed) {
+.expand_modelgrid.TuningGrid <- function(grid, input, ..., model) {
   gridinfo <- model@gridinfo
   size <- grid@size
   random <- grid@random
@@ -165,28 +163,11 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
 
   not_dup <- function(x) !duplicated(x, fromLast = TRUE)
   if (!is.null(names(size))) {
-    if (!all(names(size) %in% gridinfo$param)) {
-      throw(LocalWarning(
-        "Unmatched model parameters in expand_modelgrid() argument 'size'.\n",
-        "x Existing ", model@name, " has ",
-        note_items("parameter{?s}: ", gridinfo$param), ".\n",
-        "x Assigned data has ", note_items("name{?s}: ", names(size)), "."
-      ))
-    }
     size <- size[gridinfo$param] * not_dup(gridinfo$param)
     size[is.na(size)] <- 0L
   } else if (length(size) == 1) {
     if (!random) gridinfo <- gridinfo[gridinfo$default, ]
     size <- size * not_dup(gridinfo$param)
-  } else if (length(size) != nrow(gridinfo)) {
-    throw(LocalError(
-      "Length of expand_modelgrid() argument 'size' must equal 1 ",
-      "or the number of model parameters.\n",
-      "x Existing ", model@name, " has ", nrow(gridinfo), " ",
-      note_items("parameter{?s}: ", gridinfo$param), ".\n",
-      "x Assigned data has ", length(size), " ",
-      note_items("size{?s}: ", size), "."
-    ))
   }
   gridinfo$size <- size
   gridinfo <- gridinfo[gridinfo$size >= 1, ]
@@ -220,11 +201,11 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
   params[lengths(params) == 0] <- NULL
   grid <- expand_params(params, random = random)
 
-  .expand_modelgrid(grid, fixed = fixed)
+  .expand_modelgrid(grid)
 }
 
 
-.expand_modelgrid.ParameterGrid <- function(grid, input, ..., model, fixed) {
+.expand_modelgrid.ParameterGrid <- function(grid, input, ..., model) {
   grid <- if (nrow(grid)) {
     needs_data <- any(dials::has_unknowns(grid$object))
     if (needs_data) {
@@ -248,13 +229,12 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
     tibble()
   }
 
-  .expand_modelgrid(grid, fixed = fixed)
+  .expand_modelgrid(grid)
 }
 
 
-.expand_modelgrid.tbl_df <- function(grid, fixed, ...) {
+.expand_modelgrid.tbl_df <- function(grid, ...) {
   if (!nrow(grid)) grid <- tibble(.rows = 1)
-  grid[names(fixed)] <- fixed
   if (ncol(grid)) grid[!duplicated(grid), ] else grid
 }
 

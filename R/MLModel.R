@@ -134,6 +134,17 @@ MLModel <- function(
 }
 
 
+update.MLModel <- function(
+  object, params = list(), quote = TRUE, new_id = FALSE, ...
+) {
+  new_params <- as(object, "list")
+  new_params[names(params)] <- params
+  res <- do.call(object@name, new_params, quote = quote)
+  if (!new_id) res@id <- object@id
+  res
+}
+
+
 MLModelFit <- function(object, Class, model, input) {
   model@input <- prep(input)
 

@@ -86,3 +86,8 @@ ParsnipModel <- function(object, ...) {
 }
 
 MLModelFunction(ParsnipModel) <- NULL
+
+
+update.ParsnipModel <- function(object, ...) {
+  NextMethod(quote = FALSE)
+}

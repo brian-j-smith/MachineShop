@@ -36,6 +36,15 @@ setMethod("[",
 
 #' @rdname extract-methods
 #'
+setMethod("[", c(x = "ListOf", i = "ANY", j = "missing", drop = "missing"),
+  function(x, i) {
+    ListOf(asS3(x)[i])
+  }
+)
+
+
+#' @rdname extract-methods
+#'
 setMethod("[", c(x = "ModelFrame", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
     y <- as.data.frame(x)[i, j, drop = drop]

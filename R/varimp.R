@@ -105,15 +105,14 @@ varimp <- function(object, method = c("permute", "model"), scale = TRUE, ...) {
   model <- as.MLModel(object)
   throw(check_packages(model@packages))
 
-  choices <- eval(formals(sys.function())$method)
-  if (identical(method, choices)) {
+  if (missing(method)) {
     throw(Warning(
       "The default method has changed from \"model\" to \"permute\"; ",
       "set 'method = \"model\"' to revert to the previous behavior."
     ), times = 3)
   }
 
-  switch(match.arg(method, choices),
+  switch(match.arg(method),
     "model" = {
       args <- dep_varimpargs(...)
       vi <- do.call(model@varimp, c(list(unMLModelFit(object)), args))
@@ -125,19 +124,6 @@ varimp <- function(object, method = c("permute", "model"), scale = TRUE, ...) {
     }
   )
   VariableImportance(vi, scale = scale)
-}
-
-
-dep_varimpargs <- function(metric, ...) {
-  args <- list(...)
-  if (!missing(metric)) {
-    throw(DeprecatedCondition(
-      "Argument 'metric' to varimp()", "'type'",
-      expired = Sys.Date() >= "2021-12-01"
-    ), call = FALSE)
-    args$type <- metric
-  }
-  args
 }
 
 

@@ -102,6 +102,10 @@ SelectedInput.ModelFrame <- function(
 
   inputs <- list(...)
 
+  if (length(inputs) == 1) {
+    return(inputs[[1]])
+  }
+
   input_classes <- map("char", function(x) class1(x), inputs)
   if (!all(input_classes %in% c("ModelFrame", "ModeledFrame"))) {
     throw(Error("inputs must be ModelFrames or ModeledFrames"))
@@ -139,8 +143,11 @@ SelectedInput.recipe <- function(
 ) {
 
   inputs <- list(...)
-
   for (i in seq_along(inputs)) inputs[[i]] <- ModelRecipe(inputs[[i]])
+
+  if (length(inputs) == 1) {
+    return(inputs[[1]])
+  }
 
   get_info <- function(x, roles = character(), exclude = FALSE) {
     info <- summary(x)
@@ -194,31 +201,50 @@ SelectedInput.list <- function(x, ...) {
 
 
 .fit.SelectedInput <- function(object, ...) {
-  inputs <- object@inputs
-  params <- object@params
-  update_input <- switch(class(object),
-    "SelectedModelFrame" = {
-      data <- as(object, "ModelFrame")
-      function(x) {
-        input <- structure(data, terms = terms(x))
-        if (is(x, "ModeledTerms")) {
-          ModeledInput(input, model = x@model)
-        } else input
-      }
-    },
-    "SelectedModelRecipe" = {
-      data <- as.data.frame(object)
-      function(x) recipe(x, data[unique(summary(x)$variable)])
-    },
-    TypeError(object, c("SelectedModelFrame", "SelectedModelRecipe"), "input")
+  grid <- tibble(id = map("char", slot, object@inputs, "id"))
+  step <- resample_selection(
+    object, ..., grid = grid, params = object@params, id = object@id,
+    name = "SelectedInput"
   )
-  throw(update_input)
-  step <- resample_selection(inputs, update_input, params, ...,
-                             name = "SelectedInput", id = object@id)
-  step@grid$params <- tibble(id = map("char", slot, inputs, "id"))
-  selected <- which(step@grid$selected)
-  input <- update_input(inputs[[selected]])
+  input <- update(object, grid[step@grid$selected, ])
   push(step, fit(input, ...))
+}
+
+
+update.SelectedInput <- function(object, params = list(), new_id = FALSE, ...) {
+  object <- as(object, "SelectedInput")
+  new_params <- as(object, "list")
+  new_params[names(params)] <- params
+  objects <- new_params$objects
+  new_params[c("objects", "id")] <- NULL
+  res <- do.call(SelectedInput, c(objects, new_params))
+  if (!new_id) res@id <- object@id
+  res
+}
+
+
+update.SelectedModelFrame <- function(object, params = list(), ...) {
+  object <- subset_selected(object, "inputs", params$id)
+  mf <- as(object, "ModelFrame")
+  object@inputs <- ListOf(map(function(x) {
+    if (is(x, "ModeledTerms")) mf <- ModeledInput(mf, model = x@model)
+    mf@id <- x@id
+    attr(mf, "terms") <- terms(x)
+    mf
+  }, object@inputs))
+  NextMethod()
+}
+
+
+update.SelectedModelRecipe <- function(object, params = list(), ...) {
+  object <- subset_selected(object, "inputs", params$id)
+  data <- as.data.frame(object)
+  object@inputs <- ListOf(map(function(x) {
+    rec <- ModelRecipe(recipe(x, data[unique(summary(x)$variable)]))
+    rec@id <- x@id
+    rec
+  }, object@inputs))
+  NextMethod()
 }
 
 
@@ -302,19 +328,17 @@ TunedInput.recipe <- function(
 }
 
 
-.fit.TunedModelRecipe <- function(object, model, ...) {
+.fit.TunedModelRecipe <- function(object, ...) {
   grid <- object@grid
-  recipe <- as(object, "ModelRecipe")
-  if (all(size(grid) > 0)) {
-    grid_split <- split(grid, seq_len(nrow(grid)))
-    update_input <- function(x) do.call(update, c(list(recipe), x))
-    step <- resample_selection(grid_split, update_input, object@params,
-                               model, name = "TunedInput", id = object@id)
-    step@grid$params <- asS3(grid)
-    selected <- which(step@grid$selected)
-    input <- update_input(grid_split[[selected]])
-    push(step, fit(input, model = model))
+  object_input <- as(object, "ModelRecipe")
+  if (prod(size(grid)) > 0) {
+    step <- resample_selection(
+      object_input, ..., grid = grid, params = object@params, id = object@id,
+      name = "TunedInput"
+    )
+    input <- update(object_input, grid[step@grid$selected, ])
+    push(step, fit(input, ...))
   } else {
-    fit(recipe, model = model)
+    fit(object_input, ...)
   }
 }

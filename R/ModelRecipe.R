@@ -106,14 +106,14 @@ recipe.ModelRecipe <- function(x, data, ...) {
 }
 
 
-update.recipe <- function(object, ...) {
-  args <- list(...)
+update.ModelRecipe <- function(object, params = list(), new_id = FALSE, ...) {
   for (i in seq_along(object$steps)) {
     step <- object$steps[[i]]
-    params <- args[[step$id]]
-    if (!is.null(params)) {
-      object$steps[[i]] <- do.call(update, c(list(step), params))
+    step_params <- params[[step$id]]
+    if (length(step_params)) {
+      object$steps[[i]] <- do.call(update, c(list(step), step_params))
     }
   }
+  if (new_id) object@id <- make_id()
   object
 }

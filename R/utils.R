@@ -548,6 +548,15 @@ stepAIC_args <- function(formula, direction, scope) {
 }
 
 
+subset_selected <- function(object, slot_name, id = character()) {
+  if (length(id)) {
+    keep <- map("char", slot, slot(object, slot_name), "id") %in% id
+    slot(object, slot_name) <- slot(object, slot_name)[keep]
+  }
+  object
+}
+
+
 subset_names <- function(x, select = NULL) {
   indices <- seq_along(x)
   names(indices) <- x

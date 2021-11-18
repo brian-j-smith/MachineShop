@@ -89,6 +89,33 @@ as.double.BinomialVariate <- function(x, ...) {
 }
 
 
+setAs("MLModel", "list",
+  function(from) as(from@params, "list")
+)
+
+
+setAs("SelectedInput", "list",
+  function(from) c(list(objects = from@inputs), as(from@params, "list"))
+)
+
+
+setAs("SelectedModel", "list",
+  function(from) c(list(objects = from@models), as(from@params, "list"))
+)
+
+
+setAs("TrainingParams", "list",
+  function(from) map(function(name) slot(from, name), slotNames(from))
+)
+
+
+setAs("TunedModel", "list",
+  function(from) {
+    c(list(object = from@model, grid = from@grid), as(from@params, "list"))
+  }
+)
+
+
 as.MLControl <- function(x, ...) {
   UseMethod("as.MLControl")
 }

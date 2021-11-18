@@ -401,3 +401,27 @@ Grid <- function(...) {
   ))
   TuningGrid(...)
 }
+
+
+dep_fixedarg <- function(x) {
+  if (length(x)) {
+    throw(DeprecatedCondition(
+      "Argument 'fixed' to TunedModel()", "the model 'object'",
+      expired = Sys.Date() >= "2022-02-01"
+    ), call = FALSE)
+  }
+  x
+}
+
+
+dep_varimpargs <- function(metric, ...) {
+  args <- list(...)
+  if (!missing(metric)) {
+    throw(DeprecatedCondition(
+      "Argument 'metric' to varimp()", "'type'",
+      expired = Sys.Date() >= "2021-12-01"
+    ), call = FALSE)
+    args$type <- metric
+  }
+  args
+}
