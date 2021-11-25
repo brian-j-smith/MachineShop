@@ -42,7 +42,7 @@
 #'
 #' @details
 #' \describe{
-#'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
+#'   \item{Response types:}{\code{factor}, \code{numeric}, \code{Surv}}
 #' }
 #'
 #' Default values and further model details can be found in the source links

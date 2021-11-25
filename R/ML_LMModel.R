@@ -4,7 +4,7 @@
 #'
 #' @details
 #' \describe{
-#'   \item{Response Types:}{\code{factor}, \code{matrix}, \code{numeric}}
+#'   \item{Response types:}{\code{factor}, \code{matrix}, \code{numeric}}
 #' }
 #'
 #' Further model details can be found in the source link below.

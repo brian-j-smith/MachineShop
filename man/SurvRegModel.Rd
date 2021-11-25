@@ -60,7 +60,7 @@ Fits the accelerated failure time family of parametric survival models.
 }
 \details{
 \describe{
-  \item{Response Types:}{\code{Surv}}
+  \item{Response types:}{\code{Surv}}
 }
 
 Default values and further model details can be found in the source links

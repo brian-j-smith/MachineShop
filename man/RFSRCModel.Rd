@@ -104,7 +104,7 @@ settings including right-censored survival, regression, and classification.
 }
 \details{
 \describe{
-  \item{Response Types:}{\code{factor}, \code{matrix}, \code{numeric},
+  \item{Response types:}{\code{factor}, \code{matrix}, \code{numeric},
     \code{Surv}}
   \item{\link[=TunedModel]{Automatic tuning} of grid parameters:}{
     \code{mtry}, \code{nodesize}

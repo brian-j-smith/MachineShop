@@ -58,7 +58,7 @@
 #'
 #' @details
 #' \describe{
-#'   \item{Response Types:}{\code{factor}, \code{numeric},
+#'   \item{Response types:}{\code{factor}, \code{numeric},
 #'     \code{PoissonVariate}, \code{Surv}}
 #'   \item{\link[=TunedModel]{Automatic tuning} of grid parameters:}{
 #'     \itemize{

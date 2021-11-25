@@ -23,7 +23,7 @@
 #'
 #' @details
 #' \describe{
-#'   \item{Response Types:}{\code{factor}}
+#'   \item{Response types:}{\code{factor}}
 #'   \item{\link[=TunedModel]{Automatic tuning} of grid parameter:}{
 #'     \code{subclasses}
 #'   }

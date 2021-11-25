@@ -40,7 +40,7 @@ fits, starting from zero to the least squares fit.
 }
 \details{
 \describe{
-  \item{Response Types:}{\code{numeric}}
+  \item{Response types:}{\code{numeric}}
   \item{\link[=TunedModel]{Automatic tuning} of grid parameter:}{
     \code{step}
   }

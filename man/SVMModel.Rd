@@ -90,7 +90,7 @@ classification formulations and the bound-constraint SVM formulations.
 }
 \details{
 \describe{
-  \item{Response Types:}{\code{factor}, \code{numeric}}
+  \item{Response types:}{\code{factor}, \code{numeric}}
   \item{\link[=TunedModel]{Automatic tuning} of grid parameters:}{
     \itemize{
       \item SVMANOVAModel: \code{C}, \code{degree}

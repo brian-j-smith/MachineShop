@@ -29,7 +29,7 @@ Performs quadratic discriminant analysis.
 }
 \details{
 \describe{
-  \item{Response Types:}{\code{factor}}
+  \item{Response types:}{\code{factor}}
 }
 
 The \code{\link{predict}} function for this model additionally accepts the

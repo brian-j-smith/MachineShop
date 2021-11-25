@@ -16,7 +16,7 @@
 #'
 #' @details
 #' \describe{
-#'   \item{Response Types:}{\code{factor}, \code{numeric}}
+#'   \item{Response types:}{\code{factor}, \code{numeric}}
 #' }
 #'
 #' Further model details can be found in the source link below.

@@ -7,7 +7,7 @@
 #'
 #' @details
 #' \describe{
-#'   \item{Response Types:}{\code{factor}}
+#'   \item{Response types:}{\code{factor}}
 #' }
 #'
 #' Further model details can be found in the source link below.

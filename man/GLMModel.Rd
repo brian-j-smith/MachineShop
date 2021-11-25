@@ -54,10 +54,10 @@ the linear predictor and a description of the error distribution.
 }
 \details{
 \describe{
-  \item{\code{GLMModel} Response Types:}{\code{BinomialVariate},
+  \item{\code{GLMModel} Response types:}{\code{BinomialVariate},
     \code{factor}, \code{matrix}, \code{NegBinomialVariate},
     \code{numeric}, \code{PoissonVariate}}
-  \item{\code{GLMStepAICModel} Response Types:}{\code{binary factor},
+  \item{\code{GLMStepAICModel} Response types:}{\code{binary factor},
     \code{BinomialVariate}, \code{NegBinomialVariate}, \code{numeric},
     \code{PoissonVariate}}
 }

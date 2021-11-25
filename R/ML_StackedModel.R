@@ -12,7 +12,7 @@
 #'
 #' @details
 #' \describe{
-#'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
+#'   \item{Response types:}{\code{factor}, \code{numeric}, \code{ordered},
 #'     \code{Surv}}
 #' }
 #'

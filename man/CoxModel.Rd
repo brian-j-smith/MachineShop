@@ -46,7 +46,7 @@ incorporated using the counting process formulation of Andersen and Gill.
 }
 \details{
 \describe{
-  \item{Response Types:}{\code{Surv}}
+  \item{Response types:}{\code{Surv}}
 }
 
 Default values and further model details can be found in the source links

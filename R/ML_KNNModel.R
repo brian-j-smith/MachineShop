@@ -12,7 +12,7 @@
 #'
 #' @details
 #' \describe{
-#'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordinal}}
+#'   \item{Response types:}{\code{factor}, \code{numeric}, \code{ordinal}}
 #'   \item{\link[=TunedModel]{Automatic tuning} of grid parameters:}{
 #'     \code{k}, \code{distance}*, \code{kernel}*
 #'   }

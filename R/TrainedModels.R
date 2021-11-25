@@ -18,7 +18,7 @@
 #'
 #' @details
 #' \describe{
-#'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
+#'   \item{Response types:}{\code{factor}, \code{numeric}, \code{ordered},
 #'     \code{Surv}}
 #' }
 #'
@@ -114,7 +114,7 @@ MLModelFunction(SelectedModel) <- NULL
 #' viewing of grids created automatically when a \code{TunedModel} is fit.
 #'
 #' \describe{
-#'   \item{Response Types:}{\code{factor}, \code{numeric}, \code{ordered},
+#'   \item{Response types:}{\code{factor}, \code{numeric}, \code{ordered},
 #'     \code{Surv}}
 #' }
 #'

@@ -68,7 +68,7 @@ Fast implementation of random forests or recursive partitioning.
 }
 \details{
 \describe{
-  \item{Response Types:}{\code{factor}, \code{numeric}, \code{Surv}}
+  \item{Response types:}{\code{factor}, \code{numeric}, \code{Surv}}
   \item{\link[=TunedModel]{Automatic tuning} of grid parameters:}{
     \code{mtry}, \code{min.node.size}*, \code{splitrule}*
   }
