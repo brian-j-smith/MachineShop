@@ -437,14 +437,14 @@ resample_selection <- function(
   perf_list <- list()
   perf_stats <- list()
   err_msgs <- character()
-  i <- new_progress_index(names = name, max = length(x))
-  while (i < max(i)) {
-    i <- i + 1
-    name <- names(x)[i]
+  ind <- new_progress_index(name = name, max = length(x))
+  while (ind < max(ind)) {
+    ind <- ind + 1
+    name <- names(x)[ind]
 
     res <- try(
       resample(update(x[[name]]), ..., control = params@control,
-               progress_index = i),
+               progress_index = ind),
       silent = TRUE
     )
 

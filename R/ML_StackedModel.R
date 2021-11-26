@@ -70,12 +70,12 @@ MLModelFunction(StackedModel) <- NULL
     num_learners <- length(base_learners)
     stack <- list()
     complete_cases <- TRUE
-    i <- new_progress_index(names = object@name, max = num_learners)
-    while (i < max(i)) {
-      i <- i + 1
-      stack[[i]] <- resample(input, model = base_learners[[i]],
-                             control = control, progress_index = i)
-      complete_cases <- complete_cases & complete.cases(stack[[i]])
+    ind <- new_progress_index(name = object@name, max = num_learners)
+    while (ind < max(ind)) {
+      ind <- ind + 1
+      stack[[ind]] <- resample(input, model = base_learners[[ind]],
+                               control = control, progress_index = ind)
+      complete_cases <- complete_cases & complete.cases(stack[[ind]])
     }
     stack <- map(function(res) res[complete_cases, ], stack)
 

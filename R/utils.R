@@ -340,8 +340,8 @@ new_progress_bar <- function(total, input = NULL, model = NULL, index = 0) {
 }
 
 
-new_progress_index <- function(names, max) {
-  structure(0, names = names, max = max, class = c("progress_index", "numeric"))
+new_progress_index <- function(name, max) {
+  structure(0, names = name, max = max, class = c("progress_index", "numeric"))
 }
 
 

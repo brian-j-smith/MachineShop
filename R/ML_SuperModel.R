@@ -74,12 +74,12 @@ MLModelFunction(SuperModel) <- NULL
   control <- params$control
 
   predictors <- list()
-  i <- new_progress_index(names = object@name, max = length(base_learners))
-  while (i < max(i)) {
-    i <- i + 1
-    res <- resample(input, model = base_learners[[i]], control = control,
-                    progress_index = i)
-    predictors[[i]] <- res$Predicted
+  ind <- new_progress_index(name = object@name, max = length(base_learners))
+  while (ind < max(ind)) {
+    ind <- ind + 1
+    res <- resample(input, model = base_learners[[ind]], control = control,
+                    progress_index = ind)
+    predictors[[ind]] <- res$Predicted
   }
 
   df <- super_df(res$Observed, predictors, res$Case, if (params$all_vars) mf)
