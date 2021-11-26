@@ -283,7 +283,7 @@ terms.matrix <- function(x, y = NULL, offsets = NULL, ...) {
   stopifnot(!anyDuplicated(colnames(x)))
 
   labels <- colnames(x)
-  response <- if (!is.null(y)) make.unique(c(labels, "y"))[length(labels) + 1]
+  response <- if (!is.null(y)) make_unique(c(labels, "y"))[length(labels) + 1]
   labels <- map(as.name, labels)
 
   if (length(offsets)) {

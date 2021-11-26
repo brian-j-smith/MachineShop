@@ -820,7 +820,7 @@ print_items.list <- function(x, n = Inf, ...) {
 print_items.ListOf <- function(x, n = Inf, level = 0, ...) {
   inds <- head(seq_along(x), n)
   list_names <- names(x)
-  if (is.null(list_names)) list_names <- paste("Component", seq_along(x))
+  if (is.null(list_names)) list_names <- make_names_len(length(x), "Component ")
   for (i in inds) {
     hline(level, label = list_names[i])
     print(x[[i]], n = n, level = level, na.print = NULL)

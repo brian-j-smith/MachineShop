@@ -91,8 +91,8 @@ dependence <- function(
                             distr = distr, method = method))
     )
     x <- do.call(cbind, stats_list)
-    if (is.null(rownames(x))) rownames(x) <- make.unique(rep("stat", nrow(x)))
-    if (is.null(colnames(x))) colnames(x) <- make.unique(rep("y", ncol(x)))
+    if (is.null(rownames(x))) rownames(x) <- make_unique(rep("stat", nrow(x)))
+    if (is.null(colnames(x))) colnames(x) <- make_unique(rep("y", ncol(x)))
     names(dimnames(x)) <- c("Statistic", "Response")
     as.data.frame(TabularArray(x))
   }

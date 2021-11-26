@@ -45,19 +45,14 @@ SelectedModel <- function(
 ) {
 
   models <- as.list(unlist(list(...)))
-  model_names <- character()
-  for (i in seq_along(models)) {
-    models[[i]] <- as.MLModel(models[[i]])
-    name <- names(models)[i]
-    model_names[i] <-
-      if (!is.null(name) && nzchar(name)) name else models[[i]]@name
-  }
+  for (i in seq_along(models)) models[[i]] <- as.MLModel(models[[i]])
 
   if (length(models) == 1) {
     return(models[[1]])
   }
 
-  names(models) <- make.unique(model_names)
+  default_names <- map("char", training_names.MLModel, models)
+  names(models) <- make_names_along(models, default_names)
 
   slots <- combine_model_slots(models, settings("response_types"))
   new("SelectedModel", MLModel(

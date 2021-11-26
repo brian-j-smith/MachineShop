@@ -115,7 +115,8 @@ SelectedInput.ModelFrame <- function(
     throw(Error("ModelFrames have different response variables"))
   }
 
-  names(inputs) <- make_list_names(inputs, "ModelFrame")
+  default_names <- map("char", training_names.MLInput, inputs)
+  names(inputs) <- make_names_along(inputs, default_names)
   data <- NULL
   for (i in seq_along(inputs)) {
     data <- combine_data_frames(as.data.frame(inputs[[i]]), data)
@@ -162,7 +163,8 @@ SelectedInput.recipe <- function(
     throw(Error("recipes have different non-predictor variables"))
   }
 
-  names(inputs) <- make_list_names(inputs, "Recipe")
+  default_names <- map("char", training_names.MLInput, inputs)
+  names(inputs) <- make_names_along(inputs, default_names)
   data <- NULL
   for (i in seq_along(inputs)) {
     data <- combine_data_frames(as.data.frame(inputs[[i]]), data)

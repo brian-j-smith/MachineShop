@@ -178,7 +178,7 @@ SurvMatrix <- function(data = NA, times = numeric(), distr = character()) {
   }
 
   rownames(data) <- NULL
-  colnames(data) <- if (length(times)) paste("Time", seq_along(times))
+  colnames(data) <- make_names_len(length(times), "Time")
 
   new("SurvMatrix", data, times = times, distr = distr)
 }

@@ -168,7 +168,7 @@ setMethod(".confusion", c("Surv", "SurvEvents"),
 
       ConfusionMatrix(length(observed) * conf_tbl)
     }, seq_along(times))
-    names(conf_list) <- paste0("time", seq_along(times))
+    names(conf_list) <- make_names_len(length(times), "time")
     do.call(c, conf_list)
 
   }

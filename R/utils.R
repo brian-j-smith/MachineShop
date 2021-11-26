@@ -237,16 +237,31 @@ make_id <- function(n = 8) {
 }
 
 
-make_list_names <- function(x, prefix) {
+make_names_along <- function(x, default = "..", sep = ".") {
+  if (length(default) == 1) default <- rep(default, length = length(x))
   old_names <- names(x)
-  names(x) <- if (length(x)) {
-    if (length(x) > 1) paste0(prefix, ".", seq_along(x)) else prefix
-  }
+  names(x) <- default
   if (!is.null(old_names)) {
-    keep <- nzchar(old_names)
+    keep <- nzchar(old_names) & !is.na(old_names)
     names(x)[keep] <- old_names[keep]
   }
-  names(x)
+  make_unique(names(x), sep = sep)
+}
+
+
+make_names_len <- function(n, prefix) {
+  paste0(rep(prefix, n), seq_len(n))
+}
+
+
+make_unique <- function(names, sep = ".") {
+  sort_order <- order(names)
+  counts <- table(names)
+  unames <- map(function(count, name) {
+    paste0(name, if (count > 1) paste0(sep, seq_len(count)))
+  }, counts, names(counts))
+  names[sort_order] <- unlist(unames)
+  names
 }
 
 
@@ -395,7 +410,7 @@ push.TrainingStep <- function(x, object, ...) {
   stopifnot(is(object, "MLModelFit"))
   mlmodel <- if (isS4(object)) object@mlmodel else object$mlmodel
   steps <- ListOf(c(x, mlmodel@steps))
-  names(steps) <- paste0(class(x), seq_along(steps))
+  names(steps) <- make_names_len(length(steps), class(x))
   if (isS4(object)) {
     object@mlmodel@steps <- steps
   } else {
@@ -416,13 +431,7 @@ sample_params <- function(x, size = integer(), replace = FALSE) {
   n <- length(x)
   if (n == 0) return(tibble())
 
-  var_names <- paste0("Var", seq_along(x))
-  x_names <- names(x)
-  if (!is.null(x_names)) {
-    is_nzchar <- nzchar(x_names)
-    var_names[is_nzchar] <- x_names[is_nzchar]
-  }
-  names(x) <- var_names
+  names(x) <- make_names_along(x, make_names_len(length(x), "Var"))
 
   max_size <- prod(lengths(x))
   if (is_empty(size)) size <- max_size
@@ -520,7 +529,7 @@ set_model_names <- function(x) {
       levels(x[[i]][[name]])
     }
   }
-  level_names <- level_names %>% unlist %>% make.unique %>% relist(level_names)
+  level_names <- level_names %>% unlist %>% make_unique %>% relist(level_names)
 
   for (i in seq_along(x)) levels(x[[i]][[name]]) <- level_names[[i]]
 
@@ -599,6 +608,7 @@ vector_to_function <- function(x, type) {
   if (is(x, "MLMetric")) x <- list(x)
   if (is(x, "vector")) {
     x <- as.list(x)
+    types <- make_names_len(length(x), type)
     x_names <- character()
     for (i in seq_along(x)) {
       if (is(x[[i]], "character")) {
@@ -607,14 +617,14 @@ vector_to_function <- function(x, type) {
       } else if (is(x[[i]], "MLMetric")) {
         x_name <- x[[i]]@name
       } else if (is(x[[i]], "function")) {
-        x_name <- type
+        x_name <- types[i]
       } else {
         throw(Error(err_msg))
       }
       name <- names(x)[i]
       x_names[i] <- if (is.null(name) || !nzchar(name)) x_name else name
     }
-    names(x) <- make.unique(x_names)
+    names(x) <- make_unique(x_names)
     function(...) unlist(map(function(fun) fun(...), x))
   } else if (is(x, "function")) {
     x

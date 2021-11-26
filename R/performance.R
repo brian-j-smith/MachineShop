@@ -186,7 +186,7 @@ performance.CVOptimismControl <- function(x, resamples, ...) {
   test_perf <- NextMethod()
 
   resamples_split <- split(resamples, ceiling(resamples$Resample / x@folds))
-  pred_names <- paste0("CV.Predicted.", seq_len(x@folds))
+  pred_names <- make_names_len(x@folds, "CV.Predicted.")
   perf_list <- map(function(resample) {
     f <- function(prop, pred) {
       prop * performance(resample$Observed, pred, resample$Weight, ...)

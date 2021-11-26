@@ -64,7 +64,7 @@ c.ConfusionList <- function(...) {
       }
       conf_list <- c(conf_list, x)
     }
-    names(conf_list) <- make.unique(names(conf_list))
+    names(conf_list) <- make_unique(names(conf_list))
 
     ConfusionList(conf_list)
 
@@ -122,7 +122,7 @@ c.ListOf <- function(...) {
       }
       x <- c(x, args[[i]])
     }
-    if (!is.null(names(x))) names(x) <- make.unique(names(x))
+    if (!is.null(names(x))) names(x) <- make_unique(names(x))
     ListOf(x)
   } else {
     NextMethod()

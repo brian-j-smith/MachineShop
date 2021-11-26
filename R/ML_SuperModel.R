@@ -44,8 +44,7 @@ SuperModel <- function(
 ) {
 
   base_learners <- ListOf(map(as.MLModel, unlist(list(...))))
-  names(base_learners) <- paste0(if (length(base_learners)) "Learner",
-                                 seq_along(base_learners))
+  names(base_learners) <- make_names_len(length(base_learners), "Learner")
 
   control <- as.MLControl(control)
   params <- as.list(environment())
@@ -112,14 +111,14 @@ MLModelFunction(SuperModel) <- NULL
 
 
 super_df <- function(y, predictors, case_names = NULL, data = NULL) {
-  names(predictors) <- make.names(seq_along(predictors))
+  names(predictors) <- make_names_len(length(predictors), "X")
   df <- data.frame(y = y, unnest(as.data.frame(predictors)))
 
   if (!is.null(data)) {
     df[["(names)"]] <- case_names
 
     data_predictors <- predictors(data)
-    unique_names <- make.unique(c(names(df), names(data_predictors)))
+    unique_names <- make_unique(c(names(df), names(data_predictors)))
     names(data_predictors) <- tail(unique_names, length(data_predictors))
     data_predictors[["(names)"]] <- data[["(names)"]]
 

@@ -38,8 +38,7 @@ StackedModel <- function(
 ) {
 
   base_learners <- ListOf(map(as.MLModel, unlist(list(...))))
-  names(base_learners) <- paste0(if (length(base_learners)) "Learner",
-                                 seq_along(base_learners))
+  names(base_learners) <- make_names_len(length(base_learners), "Learner")
 
   params <- list(base_learners = base_learners, control = as.MLControl(control))
   if (length(weights)) {

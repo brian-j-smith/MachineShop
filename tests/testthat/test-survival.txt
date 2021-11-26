@@ -17,7 +17,7 @@ Distribution: empirical
 
 Predicted probabilities (distr = emp)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.7007254 0.3067131 0.09605034
  [2,] 0.9365220 0.8041738 0.64918106
  [3,] 0.9786040 0.9306482 0.86720254
@@ -49,7 +49,7 @@ Distribution: exponential
 
 Predicted probabilities (distr = exp)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.6383213 0.3255354 0.10597332
  [2,] 0.9205511 0.8130547 0.66105802
  [3,] 0.9730686 0.9340252 0.87240311
@@ -81,7 +81,7 @@ Distribution: rayleigh
 
 Predicted probabilities (distr = ray)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2    Time 3
+          Time1     Time2     Time3
  [1,] 0.9666077 0.8087497 0.4278156
  [2,] 0.9937566 0.9616129 0.8550691
  [3,] 0.9979367 0.9871740 0.9496746
@@ -113,7 +113,7 @@ Distribution: weibull
 
 Predicted probabilities (distr = wei)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.6730275 0.3533327 0.11528186
  [2,] 0.9295828 0.8254333 0.67140149
  [3,] 0.9762067 0.9386912 0.87688143
@@ -145,7 +145,7 @@ Distribution: weibull
 
 Predicted probabilities (method = bre)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.7008656 0.3067745 0.09606956
  [2,] 0.9365565 0.8042035 0.64920501
  [3,] 0.9786159 0.9306596 0.86721309
@@ -177,7 +177,7 @@ Distribution: weibull
 
 Predicted probabilities (method = efr)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.7007254 0.3067131 0.09605034
  [2,] 0.9365220 0.8041738 0.64918106
  [3,] 0.9786040 0.9306482 0.86720254
@@ -200,17 +200,17 @@ Accuracy.time2 Accuracy.time3
 
 Predicted events: 
 --- SurvEvents object ----------------------------------------------------------
-      Time 1 Time 2 Time 3
- [1,]      0      1      1
- [2,]      0      0      0
- [3,]      0      0      0
- [4,]      0      0      0
- [5,]      0      1      1
- [6,]      0      0      0
- [7,]      0      1      1
- [8,]      0      0      0
- [9,]      0      1      1
-[10,]      0      1      1
+      Time1 Time2 Time3
+ [1,]     0     1     1
+ [2,]     0     0     0
+ [3,]     0     0     0
+ [4,]     0     0     0
+ [5,]     0     1     1
+ [6,]     0     0     0
+ [7,]     0     1     1
+ [8,]     0     0     0
+ [9,]     0     1     1
+[10,]     0     1     1
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
@@ -239,7 +239,7 @@ Distribution: empirical
 
 Predicted probabilities (distr = emp)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.7007254 0.3067131 0.09605034
  [2,] 0.9365220 0.8041738 0.64918106
  [3,] 0.9786040 0.9306482 0.86720254
@@ -271,7 +271,7 @@ Distribution: exponential
 
 Predicted probabilities (distr = exp)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.6383213 0.3255354 0.10597332
  [2,] 0.9205511 0.8130547 0.66105802
  [3,] 0.9730686 0.9340252 0.87240311
@@ -303,7 +303,7 @@ Distribution: rayleigh
 
 Predicted probabilities (distr = ray)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2    Time 3
+          Time1     Time2     Time3
  [1,] 0.9666077 0.8087497 0.4278156
  [2,] 0.9937566 0.9616129 0.8550691
  [3,] 0.9979367 0.9871740 0.9496746
@@ -335,7 +335,7 @@ Distribution: weibull
 
 Predicted probabilities (distr = wei)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.6730275 0.3533327 0.11528186
  [2,] 0.9295828 0.8254333 0.67140149
  [3,] 0.9762067 0.9386912 0.87688143
@@ -367,7 +367,7 @@ Distribution: weibull
 
 Predicted probabilities (method = bre)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.7008656 0.3067745 0.09606956
  [2,] 0.9365565 0.8042035 0.64920501
  [3,] 0.9786159 0.9306596 0.86721309
@@ -399,7 +399,7 @@ Distribution: weibull
 
 Predicted probabilities (method = efr)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.7007254 0.3067131 0.09605034
  [2,] 0.9365220 0.8041738 0.64918106
  [3,] 0.9786040 0.9306482 0.86720254
@@ -422,17 +422,17 @@ Accuracy.time2 Accuracy.time3
 
 Predicted events: 
 --- SurvEvents object ----------------------------------------------------------
-      Time 1 Time 2 Time 3
- [1,]      0      1      1
- [2,]      0      0      0
- [3,]      0      0      0
- [4,]      0      0      0
- [5,]      0      1      1
- [6,]      0      0      0
- [7,]      0      1      1
- [8,]      0      0      0
- [9,]      0      1      1
-[10,]      0      1      1
+      Time1 Time2 Time3
+ [1,]     0     1     1
+ [2,]     0     0     0
+ [3,]     0     0     0
+ [4,]     0     0     0
+ [5,]     0     1     1
+ [6,]     0     0     0
+ [7,]     0     1     1
+ [8,]     0     0     0
+ [9,]     0     1     1
+[10,]     0     1     1
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
@@ -451,7 +451,7 @@ Distribution: empirical
 
 Predicted probabilities (distr = emp)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.6021981 0.1878479 0.03339754
  [2,] 0.9480782 0.8387950 0.69951852
  [3,] 0.9784293 0.9306275 0.86402082
@@ -483,7 +483,7 @@ Distribution: exponential
 
 Predicted probabilities (distr = exp)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.5252695 0.1999656 0.03998626
  [2,] 0.9345531 0.8443256 0.71288576
  [3,] 0.9726963 0.9331323 0.87073583
@@ -515,7 +515,7 @@ Distribution: rayleigh
 
 Predicted probabilities (distr = ray)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1     Time 2       Time 3
+          Time1      Time2        Time3
  [1,] 0.6125412 0.04672999 4.768509e-06
  [2,] 0.9497771 0.72466218 2.757671e-01
  [3,] 0.9791460 0.87659029 5.904548e-01
@@ -547,7 +547,7 @@ Distribution: weibull
 
 Predicted probabilities (distr = wei)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.5257347 0.1683550 0.02123853
  [2,] 0.9346401 0.8291894 0.66700924
  [3,] 0.9727334 0.9262539 0.84736678
@@ -579,7 +579,7 @@ Distribution: weibull
 
 Predicted probabilities (method = bre)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.6022917 0.1878771 0.03340273
  [2,] 0.9480937 0.8388087 0.69952996
  [3,] 0.9784359 0.9306337 0.86402660
@@ -611,7 +611,7 @@ Distribution: weibull
 
 Predicted probabilities (method = efr)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.6021981 0.1878479 0.03339754
  [2,] 0.9480782 0.8387950 0.69951852
  [3,] 0.9784293 0.9306275 0.86402082
@@ -634,17 +634,17 @@ Accuracy.time2 Accuracy.time3
 
 Predicted events: 
 --- SurvEvents object ----------------------------------------------------------
-      Time 1 Time 2 Time 3
- [1,]      0      1      1
- [2,]      0      0      0
- [3,]      0      0      0
- [4,]      0      0      1
- [5,]      0      1      1
- [6,]      0      0      1
- [7,]      0      1      1
- [8,]      0      0      0
- [9,]      0      0      1
-[10,]      0      1      1
+      Time1 Time2 Time3
+ [1,]     0     1     1
+ [2,]     0     0     0
+ [3,]     0     0     0
+ [4,]     0     0     1
+ [5,]     0     1     1
+ [6,]     0     0     1
+ [7,]     0     1     1
+ [8,]     0     0     0
+ [9,]     0     0     1
+[10,]     0     1     1
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
@@ -663,7 +663,7 @@ Distribution: empirical
 
 Predicted probabilities (distr = emp)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2    Time 3
+          Time1     Time2     Time3
  [1,] 0.5434780 0.3720858 0.3235596
  [2,] 0.9169977 0.8402495 0.6755845
  [3,] 0.9949041 0.8676696 0.4757327
@@ -695,7 +695,7 @@ Distribution: exponential
 
 Predicted probabilities (distr = exp)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2    Time 3
+          Time1     Time2     Time3
  [1,] 0.6567222 0.3495057 0.1221542
  [2,] 0.9274488 0.8283710 0.6861985
  [3,] 0.9219532 0.8161541 0.6661075
@@ -727,7 +727,7 @@ Distribution: rayleigh
 
 Predicted probabilities (distr = ray)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.8373653 0.3297756 0.01182698
  [2,] 0.9827788 0.8971160 0.64773052
  [3,] 0.9760497 0.8594083 0.54550432
@@ -759,7 +759,7 @@ Distribution: weibull
 
 Predicted probabilities (distr = wei)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2    Time 3
+          Time1     Time2     Time3
  [1,] 0.6060177 0.3709116 0.1895802
  [2,] 0.8802876 0.7980483 0.7065673
  [3,] 0.9931578 0.9023638 0.4513772
@@ -791,7 +791,7 @@ Distribution: weibull
 
 Predicted probabilities (method = bre)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2    Time 3
+          Time1     Time2     Time3
  [1,] 0.5434780 0.3720858 0.3235596
  [2,] 0.9169977 0.8402495 0.6755845
  [3,] 0.9949041 0.8676696 0.4757327
@@ -823,7 +823,7 @@ Distribution: weibull
 
 Predicted probabilities (method = efr)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2    Time 3
+          Time1     Time2     Time3
  [1,] 0.5434780 0.3720858 0.3235596
  [2,] 0.9169977 0.8402495 0.6755845
  [3,] 0.9949041 0.8676696 0.4757327
@@ -846,17 +846,17 @@ Accuracy.time2 Accuracy.time3
 
 Predicted events: 
 --- SurvEvents object ----------------------------------------------------------
-      Time 1 Time 2 Time 3
- [1,]      0      1      1
- [2,]      0      0      0
- [3,]      0      0      1
- [4,]      0      0      1
- [5,]      0      1      1
- [6,]      0      1      1
- [7,]      0      1      1
- [8,]      0      0      1
- [9,]      0      1      1
-[10,]      0      1      1
+      Time1 Time2 Time3
+ [1,]     0     1     1
+ [2,]     0     0     0
+ [3,]     0     0     1
+ [4,]     0     0     1
+ [5,]     0     1     1
+ [6,]     0     1     1
+ [7,]     0     1     1
+ [8,]     0     0     1
+ [9,]     0     1     1
+[10,]     0     1     1
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
@@ -875,7 +875,7 @@ Distribution: weibull
 
 Predicted probabilities (distr = emp)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.6468607 0.3043083 0.07855303
  [2,] 0.9311154 0.8228997 0.65915130
  [3,] 0.9714729 0.9240012 0.84449506
@@ -907,7 +907,7 @@ Distribution: weibull
 
 Predicted probabilities (distr = exp)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.6468607 0.3043083 0.07855303
  [2,] 0.9311154 0.8228997 0.65915130
  [3,] 0.9714729 0.9240012 0.84449506
@@ -939,7 +939,7 @@ Distribution: weibull
 
 Predicted probabilities (distr = ray)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.6468607 0.3043083 0.07855303
  [2,] 0.9311154 0.8228997 0.65915130
  [3,] 0.9714729 0.9240012 0.84449506
@@ -971,7 +971,7 @@ Distribution: weibull
 
 Predicted probabilities (distr = wei)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.6468607 0.3043083 0.07855303
  [2,] 0.9311154 0.8228997 0.65915130
  [3,] 0.9714729 0.9240012 0.84449506
@@ -1003,7 +1003,7 @@ Distribution: weibull
 
 Predicted probabilities (method = bre)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.6468607 0.3043083 0.07855303
  [2,] 0.9311154 0.8228997 0.65915130
  [3,] 0.9714729 0.9240012 0.84449506
@@ -1035,7 +1035,7 @@ Distribution: weibull
 
 Predicted probabilities (method = efr)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.6468607 0.3043083 0.07855303
  [2,] 0.9311154 0.8228997 0.65915130
  [3,] 0.9714729 0.9240012 0.84449506
@@ -1058,17 +1058,17 @@ Accuracy.time2 Accuracy.time3
 
 Predicted events: 
 --- SurvEvents object ----------------------------------------------------------
-      Time 1 Time 2 Time 3
- [1,]      0      1      1
- [2,]      0      0      0
- [3,]      0      0      0
- [4,]      0      0      0
- [5,]      0      1      1
- [6,]      0      0      0
- [7,]      0      1      1
- [8,]      0      0      1
- [9,]      0      1      1
-[10,]      0      1      1
+      Time1 Time2 Time3
+ [1,]     0     1     1
+ [2,]     0     0     0
+ [3,]     0     0     0
+ [4,]     0     0     0
+ [5,]     0     1     1
+ [6,]     0     0     0
+ [7,]     0     1     1
+ [8,]     0     0     1
+ [9,]     0     1     1
+[10,]     0     1     1
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: weibull
@@ -1087,7 +1087,7 @@ Distribution: gaussian
 
 Predicted probabilities (distr = emp)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1119,7 +1119,7 @@ Distribution: gaussian
 
 Predicted probabilities (distr = exp)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1151,7 +1151,7 @@ Distribution: gaussian
 
 Predicted probabilities (distr = ray)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1183,7 +1183,7 @@ Distribution: gaussian
 
 Predicted probabilities (distr = wei)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1215,7 +1215,7 @@ Distribution: gaussian
 
 Predicted probabilities (method = bre)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1247,7 +1247,7 @@ Distribution: gaussian
 
 Predicted probabilities (method = efr)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1270,17 +1270,17 @@ Accuracy.time2 Accuracy.time3
 
 Predicted events: 
 --- SurvEvents object ----------------------------------------------------------
-      Time 1 Time 2 Time 3
- [1,]      1      1      1
- [2,]      1      1      1
- [3,]      0      0      0
- [4,]      1      1      1
- [5,]      1      1      1
- [6,]      1      1      1
- [7,]      1      1      1
- [8,]      1      1      1
- [9,]      1      1      1
-[10,]      1      1      1
+      Time1 Time2 Time3
+ [1,]     1     1     1
+ [2,]     1     1     1
+ [3,]     0     0     0
+ [4,]     1     1     1
+ [5,]     1     1     1
+ [6,]     1     1     1
+ [7,]     1     1     1
+ [8,]     1     1     1
+ [9,]     1     1     1
+[10,]     1     1     1
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
@@ -1299,7 +1299,7 @@ Distribution: gaussian
 
 Predicted probabilities (distr = emp)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.5903385 0.2457657 0.08363607
  [2,] 0.9668431 0.8212152 0.58973326
  [3,] 0.9780912 0.8642339 0.65777336
@@ -1331,7 +1331,7 @@ Distribution: gaussian
 
 Predicted probabilities (distr = exp)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.5903385 0.2457657 0.08363607
  [2,] 0.9668431 0.8212152 0.58973326
  [3,] 0.9780912 0.8642339 0.65777336
@@ -1363,7 +1363,7 @@ Distribution: gaussian
 
 Predicted probabilities (distr = ray)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.5903385 0.2457657 0.08363607
  [2,] 0.9668431 0.8212152 0.58973326
  [3,] 0.9780912 0.8642339 0.65777336
@@ -1395,7 +1395,7 @@ Distribution: gaussian
 
 Predicted probabilities (distr = wei)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.5903385 0.2457657 0.08363607
  [2,] 0.9668431 0.8212152 0.58973326
  [3,] 0.9780912 0.8642339 0.65777336
@@ -1427,7 +1427,7 @@ Distribution: gaussian
 
 Predicted probabilities (method = bre)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.5903385 0.2457657 0.08363607
  [2,] 0.9668431 0.8212152 0.58973326
  [3,] 0.9780912 0.8642339 0.65777336
@@ -1459,7 +1459,7 @@ Distribution: gaussian
 
 Predicted probabilities (method = efr)
 --- SurvProbs object -----------------------------------------------------------
-         Time 1    Time 2     Time 3
+          Time1     Time2      Time3
  [1,] 0.5903385 0.2457657 0.08363607
  [2,] 0.9668431 0.8212152 0.58973326
  [3,] 0.9780912 0.8642339 0.65777336
@@ -1482,17 +1482,17 @@ Accuracy.time2 Accuracy.time3
 
 Predicted events: 
 --- SurvEvents object ----------------------------------------------------------
-      Time 1 Time 2 Time 3
- [1,]      0      1      1
- [2,]      0      0      0
- [3,]      0      0      0
- [4,]      0      0      0
- [5,]      0      1      1
- [6,]      0      0      1
- [7,]      0      1      1
- [8,]      0      0      1
- [9,]      0      1      1
-[10,]      0      1      1
+      Time1 Time2 Time3
+ [1,]     0     1     1
+ [2,]     0     0     0
+ [3,]     0     0     0
+ [4,]     0     0     0
+ [5,]     0     1     1
+ [6,]     0     0     1
+ [7,]     0     1     1
+ [8,]     0     0     1
+ [9,]     0     1     1
+[10,]     0     1     1
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
@@ -1511,7 +1511,7 @@ Distribution: gaussian
 
 Predicted probabilities (distr = emp)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1543,7 +1543,7 @@ Distribution: gaussian
 
 Predicted probabilities (distr = exp)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1575,7 +1575,7 @@ Distribution: gaussian
 
 Predicted probabilities (distr = ray)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1607,7 +1607,7 @@ Distribution: gaussian
 
 Predicted probabilities (distr = wei)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1639,7 +1639,7 @@ Distribution: gaussian
 
 Predicted probabilities (method = bre)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1671,7 +1671,7 @@ Distribution: gaussian
 
 Predicted probabilities (method = efr)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1694,17 +1694,17 @@ Accuracy.time2 Accuracy.time3
 
 Predicted events: 
 --- SurvEvents object ----------------------------------------------------------
-      Time 1 Time 2 Time 3
- [1,]      1      1      1
- [2,]      1      1      1
- [3,]      0      0      0
- [4,]      1      1      1
- [5,]      1      1      1
- [6,]      1      1      1
- [7,]      1      1      1
- [8,]      1      1      1
- [9,]      1      1      1
-[10,]      1      1      1
+      Time1 Time2 Time3
+ [1,]     1     1     1
+ [2,]     1     1     1
+ [3,]     0     0     0
+ [4,]     1     1     1
+ [5,]     1     1     1
+ [6,]     1     1     1
+ [7,]     1     1     1
+ [8,]     1     1     1
+ [9,]     1     1     1
+[10,]     1     1     1
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
@@ -1723,7 +1723,7 @@ Distribution: gaussian
 
 Predicted probabilities (distr = emp)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1755,7 +1755,7 @@ Distribution: gaussian
 
 Predicted probabilities (distr = exp)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1787,7 +1787,7 @@ Distribution: gaussian
 
 Predicted probabilities (distr = ray)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1819,7 +1819,7 @@ Distribution: gaussian
 
 Predicted probabilities (distr = wei)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1851,7 +1851,7 @@ Distribution: gaussian
 
 Predicted probabilities (method = bre)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1883,7 +1883,7 @@ Distribution: gaussian
 
 Predicted probabilities (method = efr)
 --- SurvProbs object -----------------------------------------------------------
-            Time 1       Time 2       Time 3
+             Time1        Time2        Time3
  [1,] 9.885787e-06 1.087368e-07 2.090194e-09
  [2,] 1.076820e-03 3.381479e-05 1.451106e-06
  [3,] 1.000000e+00 9.999997e-01 9.999924e-01
@@ -1906,17 +1906,17 @@ Accuracy.time2 Accuracy.time3
 
 Predicted events: 
 --- SurvEvents object ----------------------------------------------------------
-      Time 1 Time 2 Time 3
- [1,]      1      1      1
- [2,]      1      1      1
- [3,]      0      0      0
- [4,]      1      1      1
- [5,]      1      1      1
- [6,]      1      1      1
- [7,]      1      1      1
- [8,]      1      1      1
- [9,]      1      1      1
-[10,]      1      1      1
+      Time1 Time2 Time3
+ [1,]     1     1     1
+ [2,]     1     1     1
+ [3,]     0     0     0
+ [4,]     1     1     1
+ [5,]     1     1     1
+ [6,]     1     1     1
+ [7,]     1     1     1
+ [8,]     1     1     1
+ [9,]     1     1     1
+[10,]     1     1     1
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian

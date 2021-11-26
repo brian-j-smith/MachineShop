@@ -148,7 +148,7 @@ case_strata.numeric <- function(
   object <- sample_replace(object, is.na(object))
   if (length(unique(object)) <= max(nunique, 1)) {
     object <- ordered(object)
-    levels(object) <- paste0("V", seq_len(nlevels(object)))
+    levels(object) <- make_names_len(nlevels(object), "V")
     res <- case_strata(object, prop = prop, size = size)
   } else {
     min_count <- max(prop * length(object), 1, size)

@@ -288,7 +288,7 @@ Resamples.list <- function(object, ...) {
     df <- split(seq_along(pred_list), split_factor) %>%
       map(function(indices) do.call(append, pred_list[indices]), .) %>%
       as.data.frame
-    names(df) <- paste0("CV.Predicted.", seq_along(df))
+    names(df) <- make_names_len(length(df), "CV.Predicted.")
     pred <- subsample(input, input, model, control)$Predicted
     df$Train.Predicted <- do.call(append, rep(list(pred), control@repeats))
     res[names(df)] <- df
@@ -440,7 +440,7 @@ resample_selection <- function(
   perf_stats <- list()
   err_msgs <- character()
   ind <- new_progress_index(name = name, max = nrow(grid))
-  ind_names <- make.unique(rep(training_names(object), length = max(ind)))
+  ind_names <- make_unique(rep(training_names(object), length = max(ind)))
   while (ind < max(ind)) {
     ind <- ind + 1
     ind_name <- ind_names[ind]

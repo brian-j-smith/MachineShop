@@ -60,16 +60,16 @@ as.MLModel(model_fit)
 #>  $ shrinkage        : num 0.1
 #>  $ bag.fraction     : num 0.5
 #> 
-#> == TrainStep1 ==================================================================
-#> --- TrainStep object ---
+#> === TrainingStep1 ==============================================================
+#> === TrainingStep object ===
 #> 
-#> ModelRecipe grid:
+#> TunedInput grid:
 #> # A tibble: 3 x 4
-#>   name  selected params$PCA$num_comp metrics$`C-Index`
-#>   <chr> <lgl>                  <int>             <dbl>
-#> 1 1     TRUE                       1             0.753
-#> 2 2     FALSE                      2             0.724
-#> 3 3     FALSE                      3             0.740
+#>   name          selected params$PCA$num_comp metrics$`C-Index`
+#>   <chr>         <lgl>                  <int>             <dbl>
+#> 1 ModelRecipe.1 TRUE                       1             0.753
+#> 2 ModelRecipe.2 FALSE                      2             0.724
+#> 3 ModelRecipe.3 FALSE                      3             0.740
 #> 
 #> Selected grid row: 1
 #> C-Index value: 0.7528376
@@ -119,16 +119,16 @@ as.MLModel(model_fit)
 #>  $ shrinkage        : num 0.1
 #>  $ bag.fraction     : num 0.5
 #> 
-#> == TrainStep1 ==================================================================
-#> --- TrainStep object ---
+#> === TrainingStep1 ==============================================================
+#> === TrainingStep object ===
 #> 
-#> ModelRecipe grid:
+#> SelectedInput grid:
 #> # A tibble: 3 x 4
-#>   name     selected params metrics$`C-Index`
-#>   <chr>    <lgl>    <fct>              <dbl>
-#> 1 Recipe.1 TRUE     1                  0.747
-#> 2 Recipe.2 FALSE    2                  0.689
-#> 3 Recipe.3 FALSE    3                  0.722
+#>   name             selected params$id metrics$`C-Index`
+#>   <chr>            <lgl>    <chr>                 <dbl>
+#> 1 ModelRecipe.1    TRUE     exln50hn              0.747
+#> 2 ModelRecipe.2    FALSE    1vstbj53              0.689
+#> 3 TunedModelRecipe FALSE    n25h2dcf              0.722
 #> 
 #> Selected grid row: 1
 #> C-Index value: 0.7471439
@@ -201,8 +201,8 @@ model_fit <- fit(surv_fo, data = surv_train,
 #>  $ shrinkage        : num 0.1
 #>  $ bag.fraction     : num 0.5
 #> 
-#> == TrainStep1 ==================================================================
-#> --- TrainStep object ---
+#> === TrainingStep1 ==============================================================
+#> === TrainingStep object ===
 #> 
 #> TunedModel grid:
 #> # A tibble: 9 x 4
@@ -247,7 +247,7 @@ Statistics summarizing the resampled performance metrics across all tuning param
   
 ```{r using_strategies_tune_summary, eval=FALSE}
 summary(trained_model)
-#> $TrainStep1
+#> $TrainingStep1
 #> , , Metric = CIndex
 #> 
 #>             Statistic
@@ -405,34 +405,34 @@ knitr::include_graphics("img/FigNestedCV.png")
 Nesting of resampling routines is repeated recursively when a fit involves multiple levels of nested meta-functions.  For example, predictive performance estimation for the training of `r rdoc_url("TunedInput(pca_rec, grid = pca_grid)")` involves up to three nested meta functions: `r rdoc_url("SelectedModel(...)")` &rarr; `r rdoc_url("StackedModel(...)")` &rarr; `r rdoc_url("TunedModel(CForestModel)")`.  For this relationship, an outer and three nested inner resampling loops are executed as follows.  First, `r rdoc_url("CForestModel")` is tuned at the third inner resampling loop.  Second, the tuned model is passed to the second inner loop for construction of `r rdoc_url("StackedModel")`.  Third, the constructed model is passed to the first inner loop for model selection from the candidate set.  Finally, the selected model is passed to the outer loop for tuning of the preprocessing recipe.  Based on resample performance estimation of the entire input/model specification, one principal component is selected for the `GBMModel`.
 
 ```{r using_strategies_methods1, eval=FALSE}
-#> == TrainStep1 ==================================================================
-#> --- TrainStep object ---
+#> === TrainingStep1 ==============================================================
+#> === TrainingStep object ===
 #> 
-#> ModelRecipe grid:
+#> TunedInput grid:
 #> # A tibble: 3 x 4
-#>   name  selected params$PCA$num_comp metrics$`C-Index`
-#>   <chr> <lgl>                  <int>             <dbl>
-#> 1 1     TRUE                       1             0.734
-#> 2 2     FALSE                      2             0.708
-#> 3 3     FALSE                      3             0.722
+#>   name          selected params$PCA$num_comp metrics$`C-Index`
+#>   <chr>         <lgl>                  <int>             <dbl>
+#> 1 ModelRecipe.1 TRUE                       1             0.740
+#> 2 ModelRecipe.2 FALSE                      2             0.721
+#> 3 ModelRecipe.3 FALSE                      3             0.705
 #> 
 #> Selected grid row: 1
-#> C-Index value: 0.7340365
+#> C-Index value: 0.7404364
 ```
 
 In order to identify and return a final model fitted to the entire input data, the hierarchy is traversed from top to bottom along the path determined by the choice at each node.  Steps along the path are labeled `TrainStep1` and `TrainStep2` in the output.  As seen above in `TrainStep1`, one principal component is first selected for the tuned input.  Using an input recipe with one principal component, the entire dataset is refit at `TrainStep2` to finally select `r rdoc_url("GBMModel")`.
 
 ```{r using_strategies_methods2, eval=FALSE}
-#> == TrainStep2 ==================================================================
-#> --- TrainStep object ---
+#> === TrainingStep2 ==============================================================
+#> === TrainingStep object ===
 #> 
 #> SelectedModel grid:
 #> # A tibble: 3 x 4
-#>   name         selected params metrics$`C-Index`
-#>   <chr>        <lgl>    <fct>              <dbl>
-#> 1 GBMModel     TRUE     1                  0.753
-#> 2 TunedModel   FALSE    2                  0.732
-#> 3 StackedModel FALSE    3                  0.633
+#>   name         selected params$id metrics$`C-Index`
+#>   <chr>        <lgl>    <chr>                 <dbl>
+#> 1 GBMModel     TRUE     2t3hjqrk              0.753
+#> 2 TunedModel   FALSE    wnf0azq2              0.746
+#> 3 StackedModel FALSE    r5q5zmtt              0.650
 #> 
 #> Selected grid row: 1
 #> C-Index value: 0.7528376

@@ -1343,16 +1343,16 @@ as.MLModel(model_fit)
 #>  $ shrinkage        : num 0.1
 #>  $ bag.fraction     : num 0.5
 #> 
-#> == TrainStep1 ==================================================================
-#> --- TrainStep object ---
+#> === TrainingStep1 ==============================================================
+#> === TrainingStep object ===
 #> 
-#> ModelRecipe grid:
+#> TunedInput grid:
 #> # A tibble: 3 x 4
-#>   name  selected params$PCA$num_comp metrics$`C-Index`
-#>   <chr> <lgl>                  <int>             <dbl>
-#> 1 1     TRUE                       1             0.753
-#> 2 2     FALSE                      2             0.724
-#> 3 3     FALSE                      3             0.740
+#>   name          selected params$PCA$num_comp metrics$`C-Index`
+#>   <chr>         <lgl>                  <int>             <dbl>
+#> 1 ModelRecipe.1 TRUE                       1             0.753
+#> 2 ModelRecipe.2 FALSE                      2             0.724
+#> 3 ModelRecipe.3 FALSE                      3             0.740
 #> 
 #> Selected grid row: 1
 #> C-Index value: 0.7528376
@@ -1402,16 +1402,16 @@ as.MLModel(model_fit)
 #>  $ shrinkage        : num 0.1
 #>  $ bag.fraction     : num 0.5
 #> 
-#> == TrainStep1 ==================================================================
-#> --- TrainStep object ---
+#> === TrainingStep1 ==============================================================
+#> === TrainingStep object ===
 #> 
-#> ModelRecipe grid:
+#> SelectedInput grid:
 #> # A tibble: 3 x 4
-#>   name     selected params metrics$`C-Index`
-#>   <chr>    <lgl>    <fct>              <dbl>
-#> 1 Recipe.1 TRUE     1                  0.747
-#> 2 Recipe.2 FALSE    2                  0.689
-#> 3 Recipe.3 FALSE    3                  0.722
+#>   name             selected params$id metrics$`C-Index`
+#>   <chr>            <lgl>    <chr>                 <dbl>
+#> 1 ModelRecipe.1    TRUE     exln50hn              0.747
+#> 2 ModelRecipe.2    FALSE    1vstbj53              0.689
+#> 3 TunedModelRecipe FALSE    n25h2dcf              0.722
 #> 
 #> Selected grid row: 1
 #> C-Index value: 0.7471439
@@ -1484,8 +1484,8 @@ model_fit <- fit(surv_fo, data = surv_train,
 #>  $ shrinkage        : num 0.1
 #>  $ bag.fraction     : num 0.5
 #> 
-#> == TrainStep1 ==================================================================
-#> --- TrainStep object ---
+#> === TrainingStep1 ==============================================================
+#> === TrainingStep object ===
 #> 
 #> TunedModel grid:
 #> # A tibble: 9 x 4
@@ -1505,14 +1505,14 @@ model_fit <- fit(surv_fo, data = surv_train,
 #> CIndex value: 0.7601717
 ```
 
-Grid values may also be given as a `r rdoc_url("Grid")` function, function name, or object; `r rdoc_url("ParameterGrid")` object; or data frame containing parameter values at which to evaluate the model, such as that returned by `r rdoc_url("expand_params()")`.
+Grid values may also be given as a `r rdoc_url("TuningGrid")` function, function name, or object; `r rdoc_url("ParameterGrid")` object; or data frame containing parameter values at which to evaluate the model, such as that returned by `r rdoc_url("expand_params()")`.
 
 ```{r using_strategies_tune_grid, eval=FALSE}
 ## Tune over randomly sampled grid points
 fit(surv_fo, data = surv_train,
     model = TunedModel(
       GBMModel,
-      grid = Grid(size = 100, random = 10),
+      grid = TuningGrid(size = 100, random = 10),
       control = surv_means_control
     ))
 
@@ -1530,7 +1530,7 @@ Statistics summarizing the resampled performance metrics across all tuning param
   
 ```{r using_strategies_tune_summary, eval=FALSE}
 summary(trained_model)
-#> $TrainStep1
+#> $TrainingStep1
 #> , , Metric = CIndex
 #> 
 #>             Statistic
@@ -1688,34 +1688,34 @@ knitr::include_graphics("img/FigNestedCV.png")
 Nesting of resampling routines is repeated recursively when a fit involves multiple levels of nested meta-functions.  For example, predictive performance estimation for the training of `r rdoc_url("TunedInput(pca_rec, grid = pca_grid)")` involves up to three nested meta functions: `r rdoc_url("SelectedModel(...)")` &rarr; `r rdoc_url("StackedModel(...)")` &rarr; `r rdoc_url("TunedModel(CForestModel)")`.  For this relationship, an outer and three nested inner resampling loops are executed as follows.  First, `r rdoc_url("CForestModel")` is tuned at the third inner resampling loop.  Second, the tuned model is passed to the second inner loop for construction of `r rdoc_url("StackedModel")`.  Third, the constructed model is passed to the first inner loop for model selection from the candidate set.  Finally, the selected model is passed to the outer loop for tuning of the preprocessing recipe.  Based on resample performance estimation of the entire input/model specification, one principal component is selected for the `GBMModel`.
 
 ```{r using_strategies_methods1, eval=FALSE}
-#> == TrainStep1 ==================================================================
-#> --- TrainStep object ---
+#> === TrainingStep1 ==============================================================
+#> === TrainingStep object ===
 #> 
-#> ModelRecipe grid:
+#> TunedInput grid:
 #> # A tibble: 3 x 4
-#>   name  selected params$PCA$num_comp metrics$`C-Index`
-#>   <chr> <lgl>                  <int>             <dbl>
-#> 1 1     TRUE                       1             0.734
-#> 2 2     FALSE                      2             0.708
-#> 3 3     FALSE                      3             0.722
+#>   name          selected params$PCA$num_comp metrics$`C-Index`
+#>   <chr>         <lgl>                  <int>             <dbl>
+#> 1 ModelRecipe.1 TRUE                       1             0.740
+#> 2 ModelRecipe.2 FALSE                      2             0.721
+#> 3 ModelRecipe.3 FALSE                      3             0.705
 #> 
 #> Selected grid row: 1
-#> C-Index value: 0.7340365
+#> C-Index value: 0.7404364
 ```
 
 In order to identify and return a final model fitted to the entire input data, the hierarchy is traversed from top to bottom along the path determined by the choice at each node.  Steps along the path are labeled `TrainStep1` and `TrainStep2` in the output.  As seen above in `TrainStep1`, one principal component is first selected for the tuned input.  Using an input recipe with one principal component, the entire dataset is refit at `TrainStep2` to finally select `r rdoc_url("GBMModel")`.
 
 ```{r using_strategies_methods2, eval=FALSE}
-#> == TrainStep2 ==================================================================
-#> --- TrainStep object ---
+#> === TrainingStep2 ==============================================================
+#> === TrainingStep object ===
 #> 
 #> SelectedModel grid:
 #> # A tibble: 3 x 4
-#>   name         selected params metrics$`C-Index`
-#>   <chr>        <lgl>    <fct>              <dbl>
-#> 1 GBMModel     TRUE     1                  0.753
-#> 2 TunedModel   FALSE    2                  0.732
-#> 3 StackedModel FALSE    3                  0.633
+#>   name         selected params$id metrics$`C-Index`
+#>   <chr>        <lgl>    <chr>                 <dbl>
+#> 1 GBMModel     TRUE     2t3hjqrk              0.753
+#> 2 TunedModel   FALSE    wnf0azq2              0.746
+#> 3 StackedModel FALSE    r5q5zmtt              0.650
 #> 
 #> Selected grid row: 1
 #> C-Index value: 0.7528376
@@ -1776,7 +1776,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
   : character string specifying distributional approximations to estimated survival curves for predicting survival events/probabilities.  Choices are `"empirical"` (default) for the Kaplan-Meier estimator, `"exponential"`, `"rayleigh"`, or `"weibull"`.
 
 `grid`
-  : `size` argument to `r rdoc_url("Grid()")` indicating the number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a `r rdoc_url("Grid()")` function, function name, or object [default: 3].
+  : `size` argument to `r rdoc_url("TuningGrid()")` indicating the number of parameter-specific values to generate automatically for tuning of models that have pre-defined grids or a `r rdoc_url("TuningGrid()")` function, function name, or object [default: 3].
 
 `method.EmpiricalSurv`
   : character string specifying the empirical method of estimating baseline survival curves for Cox proportional hazards-based models.  Choices are `"breslow"` or `"efron"` (default).
@@ -1814,7 +1814,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `stat.Resamples`
   : function or character string naming a function to compute one summary statistic to control the ordering of models in plots [default: ``"base::mean"``].
 
-`stat.Trained`
+`stat.TrainingParams`
   : function or character string naming a function to compute one summary statistic on resampled performance metrics for input selection or tuning or for model selection or tuning [default: ``"base::mean"``].
 
 `stats.PartialDependence`
