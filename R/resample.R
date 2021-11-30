@@ -71,9 +71,7 @@ resample <- function(...) {
 resample.formula <- function(
   formula, data, model, control = MachineShop::settings("control"), ...
 ) {
-  args <- list(formula, data, strata = response(formula), na.rm = FALSE)
-  mf <- do.call(ModelFrame, args)
-  resample(mf, model = model, control = control, ...)
+  resample(as.MLInput(formula, data), model = model, control = control, ...)
 }
 
 
@@ -82,8 +80,7 @@ resample.formula <- function(
 resample.matrix <- function(
   x, y, model, control = MachineShop::settings("control"), ...
 ) {
-  mf <- ModelFrame(x, y, strata = y, na.rm = FALSE)
-  resample(mf, model = model, control = control, ...)
+  resample(as.MLInput(x, y), model = model, control = control, ...)
 }
 
 
@@ -98,8 +95,8 @@ resample.matrix <- function(
 resample.ModelFrame <- function(
   input, model = NULL, control = MachineShop::settings("control"), ...
 ) {
-  .resample(as.MLControl(control), input = input, model = as.MLModel(model),
-            ...)
+  .resample(as.MLControl(control), input = as.MLInput(input),
+            model = as.MLModel(model), ...)
 }
 
 
@@ -113,7 +110,7 @@ resample.ModelFrame <- function(
 resample.recipe <- function(
   input, model = NULL, control = MachineShop::settings("control"), ...
 ) {
-  .resample(as.MLControl(control), input = ModelRecipe(input),
+  .resample(as.MLControl(control), input = as.MLInput(input),
             model = as.MLModel(model), ...)
 }
 

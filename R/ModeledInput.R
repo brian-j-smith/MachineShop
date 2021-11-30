@@ -47,17 +47,14 @@ ModeledInput <- function(...) {
 #' @rdname ModeledInput-methods
 #'
 ModeledInput.formula <- function(formula, data, model, ...) {
-  args <- list(formula, data, strata = response(formula), na.rm = FALSE)
-  mf <- do.call(ModelFrame, args)
-  ModeledInput(mf, model = model)
+  ModeledInput(as.MLInput(formula, data), model = model)
 }
 
 
 #' @rdname ModeledInput-methods
 #'
 ModeledInput.matrix <- function(x, y, model, ...) {
-  mf <- ModelFrame(x, y, strata = y, na.rm = FALSE)
-  ModeledInput(mf, model = model)
+  ModeledInput(as.MLInput(x, y), model = model)
 }
 
 
@@ -119,4 +116,19 @@ ModeledInput.MLModel <- function(model, ...) {
 #'
 ModeledInput.MLModelFunction <- function(model, ...) {
   ModeledInput(as.MLModel(model), ...)
+}
+
+
+.fit.ModeledFrame <- function(object, ...) {
+  fit(as(object, "ModelFrame"), model = object@model)
+}
+
+
+.fit.ModeledRecipe <- function(object, ...) {
+  fit(as(object, "ModelRecipe"), model = object@model)
+}
+
+
+.fit.TunedModeledRecipe <- function(object, ...) {
+  fit(as(object, "TunedModelRecipe"), model = object@model)
 }

@@ -45,17 +45,14 @@ fit <- function(...) {
 #' @rdname fit-methods
 #'
 fit.formula <- function(formula, data, model, ...) {
-  args <- list(formula, data, strata = response(formula), na.rm = FALSE)
-  mf <- do.call(ModelFrame, args)
-  fit(mf, model = model)
+  fit(as.MLInput(formula, data), model = model)
 }
 
 
 #' @rdname fit-methods
 #'
 fit.matrix <- function(x, y, model, ...) {
-  mf <- ModelFrame(x, y, strata = y, na.rm = FALSE)
-  fit(mf, model = model)
+  fit(as.MLInput(x, y), model = model)
 }
 
 
@@ -67,7 +64,7 @@ fit.matrix <- function(x, y, model, ...) {
 #' constructor.
 #'
 fit.ModelFrame <- function(input, model = NULL, ...) {
-  .fit(input, model = as.MLModel(model))
+  .fit(as.MLInput(input), model = as.MLModel(model))
 }
 
 
@@ -78,7 +75,7 @@ fit.ModelFrame <- function(input, model = NULL, ...) {
 #' with the \code{\link{role_case}} function.
 #'
 fit.recipe <- function(input, model = NULL, ...) {
-  .fit(ModelRecipe(input), model = as.MLModel(model))
+  .fit(as.MLInput(input), model = as.MLModel(model))
 }
 
 
@@ -98,6 +95,11 @@ fit.MLModelFunction <- function(model, ...) {
 
 .fit <- function(object, ...) {
   UseMethod(".fit")
+}
+
+
+.fit.MLInput <- function(object, model, ...) {
+  .fit(model, input = object)
 }
 
 
@@ -133,32 +135,6 @@ fit.MLModelFunction <- function(model, ...) {
 
   do.call(object@fit, args, envir = params_env) %>%
     MLModelFit(paste0(object@name, "Fit"), model = object, input = input_prep)
-}
-
-
-.fit.ModelFrame <- function(object, model, ...) {
-  .fit(model, input = object)
-}
-
-
-.fit.ModeledFrame <- function(object, ...) {
-  fit(as(object, "ModelFrame"), model = object@model)
-}
-
-
-.fit.ModelRecipe <- function(object, model, ...) {
-  .fit(model, input = object)
-}
-
-
-
-.fit.ModeledRecipe <- function(object, ...) {
-  fit(as(object, "ModelRecipe"), model = object@model)
-}
-
-
-.fit.TunedModeledRecipe <- function(object, ...) {
-  fit(as(object, "TunedModelRecipe"), model = object@model)
 }
 
 

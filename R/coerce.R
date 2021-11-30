@@ -145,6 +145,37 @@ as.MLControl.MLControl <- function(x, ...) {
 }
 
 
+as.MLInput <- function(x, ...) {
+  UseMethod("as.MLInput")
+}
+
+
+as.MLInput.default <- function(x, ...) {
+  throw(Error("Cannot coerce class ", class1(x), " to an MLInput."))
+}
+
+
+as.MLInput.formula <- function(x, data, ...) {
+  args <- list(x, data, strata = response(x), na.rm = FALSE)
+  do.call(ModelFrame, args)
+}
+
+
+as.MLInput.matrix <- function(x, y, ...) {
+  ModelFrame(x, y, strata = y, na.rm = FALSE)
+}
+
+
+as.MLInput.ModelFrame <- function(x, ...) {
+  x
+}
+
+
+as.MLInput.recipe <- function(x, ...) {
+  ModelRecipe(x)
+}
+
+
 as.MLMetric <- function(x, ...) {
   UseMethod("as.MLMetric")
 }

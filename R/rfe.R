@@ -77,8 +77,7 @@ rfe.formula <- function(
   metrics = NULL, stat = "base::mean", ...
 ) {
   rfe_args <- c(list(input = NULL), as.list(environment()))
-  args <- list(formula, data, strata = response(formula), na.rm = FALSE)
-  rfe_args$input <- do.call(ModelFrame, args)
+  rfe_args$input <- as.MLInput(formula, data)
   do.call(rfe, rfe_args)
 }
 
@@ -92,7 +91,7 @@ rfe.matrix <- function(
   metrics = NULL, stat = "base::mean", ...
 ) {
   rfe_args <- c(list(input = NULL), as.list(environment()))
-  rfe_args$input <- ModelFrame(x, y, strata = y, na.rm = FALSE)
+  rfe_args$input <- as.MLInput(x, y)
   do.call(rfe, rfe_args)
 }
 
@@ -106,6 +105,7 @@ rfe.ModelFrame <- function(
   metrics = NULL, stat = "base::mean", ...
 ) {
   .rfe_args <- as.list(environment())
+  .rfe_args$input <- as.MLInput(input)
   .rfe_args$update <- function(input, data) {
     if (isS4(input)) input@.Data <- data else input[] <- data
     input
@@ -124,7 +124,7 @@ rfe.recipe <- function(
   metrics = NULL, stat = "base::mean", ...
 ) {
   .rfe_args <- as.list(environment())
-  .rfe_args$input <- ModelRecipe(input)
+  .rfe_args$input <- as.MLInput(input)
   .rfe_args$update <- function(input, data) recipe(input, data)
   .rfe_args$optimize <- match.arg(optimize)
   do.call(.rfe, .rfe_args)
