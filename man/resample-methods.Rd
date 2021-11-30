@@ -16,9 +16,9 @@ resample(...)
 
 \method{resample}{matrix}(x, y, model, control = MachineShop::settings("control"), ...)
 
-\method{resample}{ModelFrame}(input, model, control = MachineShop::settings("control"), ...)
+\method{resample}{ModelFrame}(input, model = NULL, control = MachineShop::settings("control"), ...)
 
-\method{resample}{recipe}(input, model, control = MachineShop::settings("control"), ...)
+\method{resample}{recipe}(input, model = NULL, control = MachineShop::settings("control"), ...)
 
 \method{resample}{MLModel}(model, ...)
 

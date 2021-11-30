@@ -46,7 +46,7 @@ rfe(...)
 
 \method{rfe}{ModelFrame}(
   input,
-  model,
+  model = NULL,
   control = MachineShop::settings("control"),
   props = 4,
   sizes = integer(),
@@ -61,7 +61,7 @@ rfe(...)
 
 \method{rfe}{recipe}(
   input,
-  model,
+  model = NULL,
   control = MachineShop::settings("control"),
   props = 4,
   sizes = integer(),

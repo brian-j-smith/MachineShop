@@ -66,9 +66,8 @@ fit.matrix <- function(x, y, model, ...) {
 #' creation with the \code{\link[=ModelFrame]{weights}} argument in its
 #' constructor.
 #'
-fit.ModelFrame <- function(input, model, ...) {
-  model <- if (missing(model)) NullModel() else as.MLModel(model)
-  .fit(input, model = model)
+fit.ModelFrame <- function(input, model = NULL, ...) {
+  .fit(input, model = as.MLModel(model))
 }
 
 
@@ -78,9 +77,8 @@ fit.ModelFrame <- function(input, model, ...) {
 #' Variables in \code{recipe} specifications may be designated as case weights
 #' with the \code{\link{role_case}} function.
 #'
-fit.recipe <- function(input, model, ...) {
-  model <- if (missing(model)) NullModel() else as.MLModel(model)
-  .fit(ModelRecipe(input), model = model)
+fit.recipe <- function(input, model = NULL, ...) {
+  .fit(ModelRecipe(input), model = as.MLModel(model))
 }
 
 

@@ -9,6 +9,8 @@ NullModel <- function() {
     name = "NullModel",
     label = "Null Model",
     response_types = settings("response_types"),
-    fit = function(...) throw(LocalError("no specified model to fit"))
+    fit = function(...) {
+      throw(Error("No specified model to fit."), call = call("fit"))
+    }
   )
 }

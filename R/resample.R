@@ -96,10 +96,10 @@ resample.matrix <- function(
 #' default.
 #'
 resample.ModelFrame <- function(
-  input, model, control = MachineShop::settings("control"), ...
+  input, model = NULL, control = MachineShop::settings("control"), ...
 ) {
-  if (missing(model)) model <- NullModel()
-  .resample(as.MLControl(control), input = input, model = model, ...)
+  .resample(as.MLControl(control), input = input, model = as.MLModel(model),
+            ...)
 }
 
 
@@ -111,11 +111,10 @@ resample.ModelFrame <- function(
 #' otherwise.
 #'
 resample.recipe <- function(
-  input, model, control = MachineShop::settings("control"), ...
+  input, model = NULL, control = MachineShop::settings("control"), ...
 ) {
-  if (missing(model)) model <- NullModel()
-  .resample(as.MLControl(control), input = ModelRecipe(input), model = model,
-            ...)
+  .resample(as.MLControl(control), input = ModelRecipe(input),
+            model = as.MLModel(model), ...)
 }
 
 
@@ -397,8 +396,6 @@ rsample_split <- function(fun, data, control) {
 
 
 subsample <- function(train, test, model, control, id = 1) {
-  model <- as.MLModel(model)
-
   model_fit <- fit(train, model)
   times <- time(model_fit)
   if (length(times)) control@predict$times <- times

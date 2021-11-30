@@ -226,6 +226,11 @@ as.MLModel.model_spec <- function(x, ...) {
 }
 
 
+as.MLModel.NULL <- function(x, ...) {
+  NullModel()
+}
+
+
 setAsS3Part("ModelRecipe", "recipe")
 
 

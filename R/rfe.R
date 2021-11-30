@@ -100,7 +100,7 @@ rfe.matrix <- function(
 #' @rdname rfe-methods
 #'
 rfe.ModelFrame <- function(
-  input, model, control = MachineShop::settings("control"), props = 4,
+  input, model = NULL, control = MachineShop::settings("control"), props = 4,
   sizes = integer(), random = FALSE, recompute = TRUE,
   optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
   metrics = NULL, stat = "base::mean", ...
@@ -118,7 +118,7 @@ rfe.ModelFrame <- function(
 #' @rdname rfe-methods
 #'
 rfe.recipe <- function(
-  input, model, control = MachineShop::settings("control"), props = 4,
+  input, model = NULL, control = MachineShop::settings("control"), props = 4,
   sizes = integer(), random = FALSE, recompute = TRUE,
   optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
   metrics = NULL, stat = "base::mean", ...
