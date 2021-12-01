@@ -73,7 +73,7 @@ combine_data_frames <- function(x, y = NULL) {
   if (is.null(y)) return(x)
   common_cols <- intersect(names(x), names(y))
   if (!identical(x[common_cols], y[common_cols])) {
-    throw(Error("common columns in data frames differ"))
+    throw(Error("Common columns in data frames differ."))
   }
   diff_cols <- setdiff(names(y), common_cols)
   x[diff_cols] <- y[diff_cols]
@@ -127,9 +127,9 @@ fget <- function(x) {
   f <- get0(x, mode = "function")
   if (is.null(f)) {
     msg <- if (is.character(x)) {
-      paste0("function '", x, "' not found")
+      paste0("Function '", x, "' not found.")
     } else {
-      "invalid function"
+      "Invalid function."
     }
     throw(Error(msg))
   }
@@ -300,8 +300,9 @@ match_indices <- function(indices, choices) {
   indices <- na.omit(names(lookup)[lookup[indices]])
   if (is_empty(indices)) {
     indices <- names(lookup)[1]
-    throw(LocalWarning("specified indices not found; using ", indices,
-                       " instead"))
+    throw(LocalWarning(
+      "Specified indices not found; using ", indices, " instead."
+    ))
   }
   indices
 }
@@ -575,7 +576,7 @@ subset_names <- function(x, select = NULL) {
   } else if (is.numeric(select)) {
     x <- x[select]
   } else if (!is.null(select)) {
-    throw(Warning("invalid 'select' value of class ", class1(select)))
+    throw(Warning("Invalid 'select' value of class ", class1(select), "."))
   }
   x
 }
@@ -603,8 +604,8 @@ unnest <- function(data) {
 
 
 vector_to_function <- function(x, type) {
-  err_msg <- paste0("'", deparse1(substitute(x)), "' must be a function, ",
-                      "function name, or vector of these")
+  err_msg <- paste0("Value of '", deparse1(substitute(x)),
+                    "' must be a function, function name, or vector of these.")
   if (is(x, "MLMetric")) x <- list(x)
   if (is(x, "vector")) {
     x <- as.list(x)

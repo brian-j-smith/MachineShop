@@ -104,7 +104,7 @@ new_step_kmedoids <- function(
     throw(check_packages("cluster"))
 
     if (ncol(x) < 2) {
-      throw(LocalError("step_kmedoids requires 2 or more variables"))
+      throw(LocalError("Step_kmedoids requires 2 or more variables."))
     }
     recipes::check_type(x)
 

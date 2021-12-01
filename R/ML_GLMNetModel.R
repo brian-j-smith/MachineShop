@@ -85,7 +85,7 @@ GLMNetModel <- function(
             exp(seq(log(min(lambda)), log(max(lambda)), length = n))
           } else {
             throw(LocalWarning("GLMNetModel grid values for lambda could not ",
-                               "be generated automatically"))
+                               "be generated automatically."))
             numeric()
           }
         },

@@ -69,7 +69,7 @@ case_comp_name.recipe <- function(object, type, ...) {
   if (length(name) == 1) {
     name
   } else if (length(name) > 1) {
-    throw(Error("multiple ", role, " variables"))
+    throw(Error("Multiple ", role, " variables."))
   }
 }
 

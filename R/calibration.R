@@ -84,7 +84,7 @@ setGeneric(".calibration",
 
 setMethod(".calibration", c("ANY", "ANY"),
   function(observed, predicted, ...) {
-    throw(Error("calibration unavailable for response type"))
+    throw(Error("Calibration unavailable for response type."))
   }
 )
 

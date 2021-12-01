@@ -120,7 +120,9 @@ ModelFrame.matrix <- function(
       }
       data.frame(offsets)
     } else if (!is.data.frame(offsets)) {
-      throw(Error("'offsets' must be a numeric vector, matrix, or data frame"))
+      throw(Error(
+        "Value of 'offsets' must be a numeric vector, matrix, or data frame."
+      ))
     }
     data <- data.frame(data, offsets)
     offsets <- tail(names(data), length(offsets))
@@ -230,7 +232,7 @@ terms.list <- function(
     is.call(var) && var[[1]] == "offset"
   }, x[noname_inds])
   if (!all(valid_calls)) {
-    throw(Error("non-offset calls in variable specifications"))
+    throw(Error("Non-offset calls in variable specifications."))
   }
   offsets <- has_y + noname_inds
 
@@ -350,10 +352,10 @@ terms.recipe_info <- function(x, ...) {
 
   num_roles <- sum(lengths(list(binom, surv, matrix, other)) > 0)
   if (num_roles > 1 || length(other) > 1) {
-    throw(Error("specified outcome is not a single variable, binomial ",
+    throw(Error("Specified outcome is not a single variable, binomial ",
                 "variable with roles 'binom_x' and 'binom_size', survival ",
                 "variables with roles 'surv_time' and 'surv_event', or ",
-                "multiple numeric variables"))
+                "multiple numeric variables."))
   }
 
   outcome <- if (length(other)) {
@@ -363,12 +365,13 @@ terms.recipe_info <- function(x, ...) {
     if (!is.na(surv["event"])) args <- c(args, as.name(surv["event"]))
     as.call(c(.(Surv), args))
   } else if (length(surv)) {
-    msg <- "survival outcome role 'surv_event' specified without 'surv_time'"
-    throw(Error(msg))
+    throw(Error(
+      "Survival outcome role 'surv_event' specified without 'surv_time'."
+    ))
   } else if (all(!is.na(binom[c("count", "size")]))) {
     call("BinomialVariate", as.name(binom["count"]), as.name(binom["size"]))
   } else if (length(binom)) {
-    throw(Error("binomial outcome must have 'binom_x' and 'binom_size' roles"))
+    throw(Error("Binomial outcome must have 'binom_x' and 'binom_size' roles."))
   } else if (length(matrix)) {
     as.call(c(.(cbind), map(as.name, matrix)))
   }
@@ -419,7 +422,7 @@ model.matrix.ModelFrame <- function(object, intercept = logical(), ...) {
 
 
 model.matrix.SelectedInput <- function(object, ...) {
-  throw(Error("cannot create a design matrix from a ", class(object)))
+  throw(Error("Cannot create a design matrix from a ", class(object), "."))
 }
 
 

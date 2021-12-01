@@ -80,7 +80,7 @@ summary.ConfusionMatrix <- function(object, ...) {
 summary.MLModel <- function(
   object, stats = MachineShop::settings("stats.Resample"), na.rm = TRUE, ...
 ) {
-  if (!is_trained(object)) throw(Error("no training results to summarize"))
+  if (!is_trained(object)) throw(Error("No training results to summarize."))
   map(function(step) {
     summary(step@performance, stats = stats, na.rm = na.rm, ...)
   }, object@steps)

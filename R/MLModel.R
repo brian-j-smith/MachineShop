@@ -101,8 +101,8 @@ MLModel <- function(
   gridinfo = tibble::tibble(
     param = character(), get_values = list(), default = logical()
   ),
-  fit = function(formula, data, weights, ...) stop("no fit function"),
-  predict = function(object, newdata, times, ...) stop("no predict function"),
+  fit = function(formula, data, weights, ...) stop("No fit function."),
+  predict = function(object, newdata, times, ...) stop("No predict function."),
   varimp = function(object, ...) NULL, ...
 ) {
 
@@ -151,7 +151,7 @@ MLModelFit <- function(object, Class, model, input) {
   if (is(object, Class)) {
     object <- unMLModelFit(object)
   } else if (is(object, "MLModelFit")) {
-    throw(Error("cannot change MLModelFit class"))
+    throw(Error("Cannot change MLModelFit class."))
   }
 
   if (!is(model, "MLModel")) throw(TypeError(model, "MLModel", "'model'"))

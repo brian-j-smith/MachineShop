@@ -10,7 +10,7 @@ ModelRecipe.ModelRecipe <- function(object, ...) {
 
 ModelRecipe.recipe <- function(object, ...) {
   if (any(map("logi", function(step) isTRUE(step$trained), object$steps))) {
-    throw(Error("recipe must be untrained"))
+    throw(Error("Recipe must be untrained."))
   }
 
   cases_name <- "(names)"
@@ -58,12 +58,12 @@ bake.ModelRecipe <- function(object, new_data, ...) {
 
 
 bake.SelectedInput <- function(object, ...) {
-  throw(Error("cannot create a design matrix from a ", class(object)))
+  throw(Error("Cannot create a design matrix from a ", class(object), "."))
 }
 
 
 bake.TunedInput <- function(object, ...) {
-  throw(Error("cannot create a design matrix from a ", class(object)))
+  throw(Error("Cannot create a design matrix from a ", class(object), "."))
 }
 
 
@@ -83,12 +83,12 @@ prep.ModelRecipe <- function(x, ...) {
 
 
 prep.SelectedInput <- function(x, ...) {
-  throw(Error("cannot train a ", class(x)))
+  throw(Error("Cannot train a ", class(x), "."))
 }
 
 
 prep.TunedInput <- function(x, ...) {
-  throw(Error("cannot train a ", class(x)))
+  throw(Error("Cannot train a ", class(x), "."))
 }
 
 

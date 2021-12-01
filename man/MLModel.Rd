@@ -14,8 +14,8 @@ MLModel(
   params = list(),
   gridinfo = tibble::tibble(param = character(), get_values = list(), default =
     logical()),
-  fit = function(formula, data, weights, ...) stop("no fit function"),
-  predict = function(object, newdata, times, ...) stop("no predict function"),
+  fit = function(formula, data, weights, ...) stop("No fit function."),
+  predict = function(object, newdata, times, ...) stop("No predict function."),
   varimp = function(object, ...) NULL,
   ...
 )

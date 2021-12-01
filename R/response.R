@@ -174,7 +174,7 @@ SurvMatrix <- function(data = NA, times = numeric(), distr = character()) {
   if (is_empty(distr)) distr <- NA_character_
 
   if (length(times) != ncol(data)) {
-    throw(Error("unequal number of survival times and predictions"))
+    throw(Error("Unequal number of survival times and predictions."))
   }
 
   rownames(data) <- NULL

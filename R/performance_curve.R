@@ -40,7 +40,7 @@ lift <- function(x, y = NULL, weights = NULL, na.rm = TRUE, ...) {
 LiftCurve <- function(...) {
   object <- as(PerformanceCurve(...), "LiftCurve")
   if (!all(map("logi", identical, object@metrics, c(tpr, rpp)))) {
-    throw(Error("incorrect LiftCurve metrics"))
+    throw(Error("Incorrect LiftCurve metrics."))
   }
   object
 }
@@ -163,8 +163,9 @@ PerformanceCurve <- function(object, ..., metrics, .check = TRUE) {
     }
 
     if (!all(map("logi", is, metrics[1:2], "MLMetric"))) {
-      msg <- "missing performance metrics in PerformanceCurve constructor"
-      throw(Error(msg))
+      throw(Error(
+        "Missing performance metrics in PerformanceCurve constructor."
+      ))
     }
     metrics <- c(y = metrics[[1]], x = metrics[[2]])
 
@@ -187,8 +188,8 @@ setGeneric(".performance_curve",
 
 setMethod(".performance_curve", c("ANY", "ANY"),
   function(observed, predicted, ...) {
-    throw(Error("performance_curve requires a predicted binary factor or ",
-                "survival probabilities"))
+    throw(Error("Performance_curve requires a predicted binary factor or ",
+                "survival probabilities."))
   }
 )
 

@@ -318,7 +318,7 @@ expand_steps <- function(..., random = FALSE) {
   }
 
   if (!all(map("logi", is.list, steps))) {
-    throw(Error("step arguments must be lists"))
+    throw(Error("Step arguments must be lists."))
   }
 
   get_names <- function(x) {
@@ -334,9 +334,9 @@ expand_steps <- function(..., random = FALSE) {
   }
 
   if (!all(nzchar(get_names(steps)))) {
-    throw(Error("all steps and their parameters must be named"))
+    throw(Error("All steps and their parameters must be named."))
   } else if (any(duplicated(step_names))) {
-    throw(Error("step names must be unique"))
+    throw(Error("Step names must be unique."))
   }
 
   grid <- expand_params(unlist(steps, recursive = FALSE), random = random)

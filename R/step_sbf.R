@@ -122,10 +122,12 @@ prep.step_sbf <- function(x, training, info = NULL, ...) {
   }
   if (!is.list(res)) res <- list(selected = res)
   if (!is.logical(res$selected)) {
-    throw(Error("filter function should return logical values"))
+    throw(Error("Filter function should return logical values."))
   }
   if (length(res$selected) != length(x_vars)) {
-    throw(Error("filter function should return one logical value per variable"))
+    throw(Error(
+      "Filter function should return one logical value per variable."
+    ))
   }
   x$res <- tibble(
     terms = col_names,

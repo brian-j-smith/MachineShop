@@ -141,11 +141,12 @@ prep.step_lincomp <- function(x, training, info = NULL, ...) {
   res <- x$transform(x = training, step = x)
   if (!is.list(res)) res <- list(weights = res)
   if (!(is(res$weights, "matrix") || is(res$weights, "Matrix"))) {
-    throw(Error("transform matrix should return a matrix or Matrix object"))
+    throw(Error("Transform matrix should return a matrix or Matrix object."))
   }
   if (nrow(res$weights) != ncol(training)) {
-    msg <- "transform matrix row length should equal the number of variables"
-    throw(Error(msg))
+    throw(Error(
+      "Transform matrix row length should equal the number of variables."
+    ))
   }
   dimnames(res$weights) <- list(
     terms = colnames(training),

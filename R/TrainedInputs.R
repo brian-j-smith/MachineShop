@@ -65,7 +65,7 @@ SelectedInput.formula <- function(
 ) {
   inputs <- list(...)
   if (!all(map("logi", is, inputs, "formula"))) {
-    throw(Error("inputs must be formulas"))
+    throw(Error("Inputs must be formulas."))
   }
   mf_list <- map(function(x) {
     do.call(ModelFrame, list(x, data, strata = response(x), na.rm = FALSE))
@@ -84,7 +84,7 @@ SelectedInput.matrix <- function(
 ) {
   inputs <- list(...)
   if (!all(map("logi", is, inputs, "matrix"))) {
-    throw(Error("inputs must be matrices"))
+    throw(Error("Inputs must be matrices."))
   }
   mf_list <- map(ModelFrame, inputs, list(y), strata = list(y), na.rm = FALSE)
   SelectedInput(mf_list, control = control, metrics = metrics, stat = stat,
@@ -108,11 +108,11 @@ SelectedInput.ModelFrame <- function(
 
   input_classes <- map("char", function(x) class1(x), inputs)
   if (!all(input_classes %in% c("ModelFrame", "ModeledFrame"))) {
-    throw(Error("inputs must be ModelFrames or ModeledFrames"))
+    throw(Error("Inputs must be ModelFrames or ModeledFrames."))
   }
 
   if (!identical_elements(inputs, function(x) x[[1]])) {
-    throw(Error("ModelFrames have different response variables"))
+    throw(Error("ModelFrames have different response variables."))
   }
 
   default_names <- map("char", training_names.MLInput, inputs)
@@ -160,7 +160,7 @@ SelectedInput.recipe <- function(
   }
   common_info <- function(x) get_info(x, roles = "predictor", exclude = TRUE)
   if (!identical_elements(inputs, common_info)) {
-    throw(Error("recipes have different non-predictor variables"))
+    throw(Error("Recipes have different non-predictor variables."))
   }
 
   default_names <- map("char", training_names.MLInput, inputs)

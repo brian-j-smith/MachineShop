@@ -172,7 +172,7 @@ TunedModel <- function(
 
   fixed <- as_tibble(dep_fixedarg(fixed))
   if (nrow(fixed) > 1) {
-    throw(Error("only single values allowed for fixed parameters"))
+    throw(Error("Only single values allowed for fixed parameters."))
   }
 
   if (missing(object)) {

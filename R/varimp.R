@@ -249,8 +249,8 @@ varimp_pval.lm <- function(object, base = exp(1), ...) {
 varimp_pval.mlm <- function(object, ...) {
   check <- check_equal_weights(object$weights)
   if (is(check, "warning")) {
-    throw(LocalWarning("model-specific variable importance not defined for ",
-                       class1(object), " with case weights"))
+    throw(LocalWarning("Model-specific variable importance not defined for ",
+                       class1(object), " with case weights."))
     NULL
   } else {
     object$weights <- NULL

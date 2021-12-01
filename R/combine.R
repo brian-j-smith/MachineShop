@@ -34,8 +34,9 @@ c.Calibration <- function(...) {
   if (all(map("logi", is, args, "Calibration"))) {
 
     if (!identical_elements(args, function(x) x@smoothed)) {
-      msg <- "Calibration arguments are a mix of smoothed and binned curves"
-      throw(Error(msg))
+      throw(Error(
+        "Calibration arguments are a mix of smoothed and binned curves."
+      ))
     }
 
     df <- do.call(append, set_model_names(args))
@@ -136,11 +137,11 @@ c.Performance <- function(...) {
     if (length(args) > 1) {
 
       if (!identical_elements(args, function(x) dimnames(x)[1:2])) {
-        throw(Error("Performance objects have different row or column names"))
+        throw(Error("Performance objects have different row or column names."))
       }
 
       if (!identical_elements(args, function(x) x@control)) {
-        throw(Error("Performance arguments have different control structures"))
+        throw(Error("Performance arguments have different control structures."))
       }
 
       Performance(abind(args, along = 3), control = args[[1]]@control)
@@ -162,7 +163,7 @@ c.PerformanceCurve <- function(...) {
   if (all(map("logi", is, args, class))) {
 
     if (!identical_elements(args, function(x) x@metrics)) {
-      throw(Error(class, " arguments have different metrics"))
+      throw(Error(class, " arguments have different metrics."))
     }
 
     df <- do.call(append, set_model_names(args))
@@ -181,11 +182,11 @@ c.Resample <- function(...) {
   if (all(map("logi", is, args, "Resample"))) {
 
     if (!identical_elements(args, function(x) x@control)) {
-      throw(Error("Resample arguments have different control structures"))
+      throw(Error("Resample arguments have different control structures."))
     }
 
     if (!identical_elements(args, function(x) x@case_comps)) {
-      throw(Error("Resample arguments have different case components"))
+      throw(Error("Resample arguments have different case components."))
     }
 
     df <- do.call(append, set_model_names(args))
@@ -205,11 +206,11 @@ c.SurvMatrix <- function(...) {
   if (all(map("logi", is, args, class))) {
 
     if (!identical_elements(args, function(x) x@times)) {
-      throw(Error(class, " arguments have different times"))
+      throw(Error(class, " arguments have different times."))
     }
 
     if (!identical_elements(args, function(x) x@distr)) {
-      throw(Error(class, " arguments have different distributions"))
+      throw(Error(class, " arguments have different distributions."))
     }
 
     new(class, do.call(rbind, args), times = arg1@times, distr = arg1@distr)
