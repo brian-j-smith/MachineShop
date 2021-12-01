@@ -135,7 +135,7 @@ plot.LiftCurve <- function(
     }
 
     indices <- x["Model"]
-    indices$Resample <- x$Resample
+    indices$Iteration <- x$Iteration
     tested <- by(x, indices, function(data) {
       approx(data$y, data$x, find, ties = "ordered")$y
     })
@@ -145,7 +145,7 @@ plot.LiftCurve <- function(
       y = find,
       Model = dimnames(tested)$Model
     )
-    df$Resample <- rep(dimnames(tested)$Resample, each = size(tested, 1))
+    df$Iteration <- rep(dimnames(tested)$Iteration, each = size(tested, 1))
 
     p <- p +
       geom_segment(aes_(x = ~ x, y = 0, xend = ~ x, yend = ~ y), df) +
@@ -303,7 +303,7 @@ plot.PerformanceCurve <- function(
 
   args <- list(~ x, ~ y)
   if (nlevels(x$Model) > 1) args$color <- ~ Model
-  if (!is.null(x$Resample)) args$group <- ~ interaction(Model, Resample)
+  if (!is.null(x$Iteration)) args$group <- ~ interaction(Model, Iteration)
   mapping <- do.call(aes_, args)
 
   labels <- c(x = x@metrics$x@label, y = x@metrics$y@label)

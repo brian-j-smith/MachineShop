@@ -152,7 +152,7 @@ performance.Resamples <- function(x, ...) {
 
 
 performance.MLControl <- function(x, resamples, ...) {
-  perf_list <- by(resamples, resamples$Resample, function(resample) {
+  perf_list <- by(resamples, resamples$Iteration, function(resample) {
     performance(resample$Observed, resample$Predicted, resample$Weight, ...)
   }, simplify = FALSE)
   do.call(rbind, perf_list)
@@ -162,7 +162,7 @@ performance.MLControl <- function(x, resamples, ...) {
 performance.BootOptimismControl <- function(x, resamples, ...) {
   test_perf_list <- list()
   boot_perf_list <- list()
-  resamples_split <- split(resamples, resamples$Resample)
+  resamples_split <- split(resamples, resamples$Iteration)
   for (name in names(resamples_split)) {
     resample <- resamples_split[[name]]
     test_perf_list[[name]] <- performance(resample$Observed,
@@ -185,13 +185,13 @@ performance.BootOptimismControl <- function(x, resamples, ...) {
 performance.CVOptimismControl <- function(x, resamples, ...) {
   test_perf <- NextMethod()
 
-  resamples_split <- split(resamples, ceiling(resamples$Resample / x@folds))
+  resamples_split <- split(resamples, ceiling(resamples$Iteration / x@folds))
   pred_names <- make_names_len(x@folds, "CV.Predicted.")
   perf_list <- map(function(resample) {
     f <- function(prop, pred) {
       prop * performance(resample$Observed, pred, resample$Weight, ...)
     }
-    props <- prop.table(table(resample$Resample))
+    props <- prop.table(table(resample$Iteration))
     preds <- resample[pred_names]
     Reduce("+", map(f, props, preds))
   }, resamples_split)
@@ -207,7 +207,7 @@ performance.CVOptimismControl <- function(x, resamples, ...) {
 
 Performance <- function(...) {
   object <- new("Performance", ...)
-  names <- c("Resample", "Metric")
+  names <- c("Iteration", "Metric")
   if (ndim(object) == 3) names <- c(names, "Model")
   names(dimnames(object)) <- names
   object

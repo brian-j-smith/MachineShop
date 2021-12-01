@@ -125,7 +125,7 @@ summary.Performance <- function(
 summary.PerformanceCurve <- function(
   object, stat = MachineShop::settings("stat.Curve"), ...
 ) {
-  if (!(is.null(object$Resample) || is.null(stat))) {
+  if (!(is.null(object$Iteration) || is.null(stat))) {
 
     stat <- check_stat(stat, convert = TRUE)
     throw(check_assignment(stat))
@@ -135,7 +135,7 @@ summary.PerformanceCurve <- function(
 
     object_list <- by(object, object$Model, function(curves) {
       cutoffs <- unique(curves$Cutoff)
-      curves_split <- split(curves, curves$Resample)
+      curves_split <- split(curves, curves$Iteration)
       x_all <- y_all <- matrix(NA, length(cutoffs), length(curves_split))
       for (j in seq_along(curves_split)) {
         curve <- curves_split[[j]]

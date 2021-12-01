@@ -123,8 +123,8 @@ performance_curve.Resamples <- function(
 
   curves <- NULL
   for (model in unique(x$Model)) {
-    for (resample in unique(x$Resample)) {
-      df <- x[x$Model == model & x$Resample == resample, ]
+    for (iter in unique(x$Iteration)) {
+      df <- x[x$Model == model & x$Iteration == iter, ]
       curve <- .performance_curve(df$Observed, df$Predicted, df$Weight,
                                   metrics = metrics)
       curve <- if (is(curve, "listof")) {
@@ -133,7 +133,7 @@ performance_curve.Resamples <- function(
         structure(list(curve), names = model)
       }
       curve <- do.call(c, curve)
-      curve$Resample <- resample
+      curve$Iteration <- iter
       curves <- rbind(curves, curve)
     }
   }

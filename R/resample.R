@@ -138,7 +138,7 @@ Resamples.data.frame <- function(
   object, ..., control, case_comps = NULL, .check = TRUE
 ) {
   if (.check) {
-    var_names <- c("Model", "Resample", "Case", "Observed", "Predicted")
+    var_names <- c("Model", "Iteration", "Case", "Observed", "Predicted")
     missing <- missing_names(var_names, object)
     if (length(missing)) {
       throw(Error(note_items("Missing resample variable{?s}: ", missing, ".")))
@@ -392,7 +392,7 @@ rsample_split <- function(fun, data, control) {
 }
 
 
-subsample <- function(train, test, model, control, id = 1) {
+subsample <- function(train, test, model, control, iter = 1) {
   model_fit <- fit(train, model)
   times <- time(model_fit)
   if (length(times)) control@predict$times <- times
@@ -401,7 +401,7 @@ subsample <- function(train, test, model, control, id = 1) {
     weights <- if (control@weights) "weights"
     comps <- case_comps(model_fit, test, c("names", weights), response = TRUE)
     df <- data.frame(Model = factor(model@name),
-                     Resample = as.integer(id),
+                     Iteration = as.integer(iter),
                      Case = comps$names,
                      stringsAsFactors = FALSE)
     df$Observed <- comps$response
