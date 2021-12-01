@@ -10,9 +10,9 @@
 \alias{[,ModelFrame,missing,ANY,ANY-method}
 \alias{[,ModelFrame,missing,missing,ANY-method}
 \alias{[,RecipeGrid,ANY,ANY,ANY-method}
-\alias{[,Resamples,ANY,ANY,ANY-method}
-\alias{[,Resamples,ANY,missing,ANY-method}
-\alias{[,Resamples,missing,missing,ANY-method}
+\alias{[,Resample,ANY,ANY,ANY-method}
+\alias{[,Resample,ANY,missing,ANY-method}
+\alias{[,Resample,missing,missing,ANY-method}
 \alias{[,SurvMatrix,ANY,ANY,ANY-method}
 \alias{[,SurvTimes,ANY,missing,missing-method}
 \title{Extract Elements of an Object}
@@ -33,11 +33,11 @@
 
 \S4method{[}{RecipeGrid,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{Resamples,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{Resample,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{Resamples,ANY,missing,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{Resample,ANY,missing,ANY}(x, i, j, ..., drop = FALSE)
 
-\S4method{[}{Resamples,missing,missing,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{Resample,missing,missing,ANY}(x, i, j, ..., drop = FALSE)
 
 \S4method{[}{SurvMatrix,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 

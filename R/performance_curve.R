@@ -115,7 +115,7 @@ performance_curve.default <- function(
 
 #' @rdname performance_curve
 #'
-performance_curve.Resamples <- function(
+performance_curve.Resample <- function(
   x, metrics = c(MachineShop::tpr, MachineShop::fpr), na.rm = TRUE, ...
 ) {
   if (na.rm) x <- na.omit(x)

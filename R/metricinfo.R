@@ -114,7 +114,7 @@ metricinfo <- function(...) {
 }
 
 
-.metricinfo.Resamples <- function(x, ...) {
+.metricinfo.Resample <- function(x, ...) {
   .metricinfo(x$Observed, x$Predicted, ...)
 }
 

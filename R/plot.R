@@ -19,7 +19,7 @@
 #' @param se logical indicating whether to include standard error bars.
 #' @param stat function or character string naming a function to compute a
 #'   summary statistic on resampled metrics for trained \code{MLModel} line
-#'   plots and \code{Resamples} model ordering.  For \code{LiftCurve} and
+#'   plots and \code{Resample} model ordering.  For \code{LiftCurve} and
 #'   \code{PerformanceCurve} classes, plots are of resampled metrics aggregated
 #'   by the statistic if given or of resample-specific metrics if \code{NULL}.
 #' @param stats vector of numeric indexes or character names of partial
@@ -248,7 +248,7 @@ plot.PartialDependence <- function(x, stats = NULL, ...) {
 #' @rdname plot-methods
 #'
 plot.Performance <- function(
-  x, metrics = NULL, stat = MachineShop::settings("stat.Resamples"),
+  x, metrics = NULL, stat = MachineShop::settings("stat.Resample"),
   type = c("boxplot", "density", "errorbar", "violin"), ...
 ) {
   df <- as.data.frame(x)
@@ -337,8 +337,8 @@ plot.PerformanceCurve <- function(
 
 #' @rdname plot-methods
 #'
-plot.Resamples <- function(
-  x, metrics = NULL, stat = MachineShop::settings("stat.Resamples"),
+plot.Resample <- function(
+  x, metrics = NULL, stat = MachineShop::settings("stat.Resample"),
   type = c("boxplot", "density", "errorbar", "violin"), ...
 ) {
   plot(performance(x), metrics = metrics, stat = stat, type = type)

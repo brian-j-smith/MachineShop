@@ -471,7 +471,7 @@ setClass("LiftCurve",
 )
 
 
-setClass("Resamples",
+setClass("Resample",
   contains = "data.frame",
   slots = c(
     control = "MLControl",

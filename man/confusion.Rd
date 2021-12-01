@@ -50,7 +50,7 @@ columns should be regarded as ordered.}
 The return value is a \code{ConfusionMatrix} class object that inherits from
 \code{table} if \code{x} and \code{y} responses are specified or a
 \code{ConfusionList} object that inherits from \code{list} if \code{x} is a
-\code{Resamples} object.
+\code{Resample} object.
 }
 \description{
 Calculate confusion matrices of predicted and observed responses.

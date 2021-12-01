@@ -49,7 +49,7 @@ variables.}
 predictor and response variables.}
 }
 \value{
-\code{Resamples} class object.
+\code{Resample} class object.
 }
 \description{
 Estimation of the predictive performance of a model estimated and evaluated

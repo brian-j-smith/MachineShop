@@ -4,14 +4,14 @@
 \alias{diff}
 \alias{diff.MLModel}
 \alias{diff.Performance}
-\alias{diff.Resamples}
+\alias{diff.Resample}
 \title{Model Performance Differences}
 \usage{
 \method{diff}{MLModel}(x, ...)
 
 \method{diff}{Performance}(x, ...)
 
-\method{diff}{Resamples}(x, ...)
+\method{diff}{Resample}(x, ...)
 }
 \arguments{
 \item{x}{model \link{performance} or \link{resample} result.}

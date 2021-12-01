@@ -176,20 +176,20 @@ c.PerformanceCurve <- function(...) {
 
 #' @rdname combine-methods
 #'
-c.Resamples <- function(...) {
+c.Resample <- function(...) {
   args <- list(...)
-  if (all(map("logi", is, args, "Resamples"))) {
+  if (all(map("logi", is, args, "Resample"))) {
 
     if (!identical_elements(args, function(x) x@control)) {
-      throw(Error("Resamples arguments have different control structures"))
+      throw(Error("Resample arguments have different control structures"))
     }
 
     if (!identical_elements(args, function(x) x@case_comps)) {
-      throw(Error("Resamples arguments have different case components"))
+      throw(Error("Resample arguments have different case components"))
     }
 
     df <- do.call(append, set_model_names(args))
-    Resamples(df, control = args[[1]]@control,
+    Resample(df, control = args[[1]]@control,
               case_comps = args[[1]]@case_comps, .check = FALSE)
 
   } else {

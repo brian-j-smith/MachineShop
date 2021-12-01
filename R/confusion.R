@@ -31,7 +31,7 @@
 #' The return value is a \code{ConfusionMatrix} class object that inherits from
 #' \code{table} if \code{x} and \code{y} responses are specified or a
 #' \code{ConfusionList} object that inherits from \code{list} if \code{x} is a
-#' \code{Resamples} object.
+#' \code{Resample} object.
 #'
 #' @seealso \code{\link{c}}, \code{\link{plot}}, \code{\link{summary}}
 #'
@@ -125,7 +125,7 @@ setMethod(".confusion", c("factor", "numeric"),
 )
 
 
-setMethod(".confusion", c("Resamples", "ANY"),
+setMethod(".confusion", c("Resample", "ANY"),
   function(observed, predicted, weights, ...) {
     conf_list <- by(observed, observed$Model, function(resample) {
       confusion(resample$Observed, resample$Predicted, resample$Weight,

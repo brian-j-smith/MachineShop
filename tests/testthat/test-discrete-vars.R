@@ -55,7 +55,7 @@ test_that("discrete variate construction and model fitting", {
     expect_true(test_fit(fo, df, model = GLMBoostModel(), type = "Binomial"))
     expect_true(test_fit(fo, df, model = GLMModel(), type = "binomial"))
     expect_true(test_fit(fo, df, model = GLMNetModel(), type = "lognet"))
-    expect_s4_class(resample(fo, df, model = GLMModel), "Resamples")
+    expect_s4_class(resample(fo, df, model = GLMModel), "Resample")
 
     rec <- recipe(ncases + n ~ ., data = within(df, n <- ncases + ncontrols)) %>%
       role_binom(x = ncases, size = n) %>%
@@ -67,7 +67,7 @@ test_that("discrete variate construction and model fitting", {
     expect_true(test_fit(rec, model = GLMBoostModel(), type = "Binomial"))
     expect_true(test_fit(rec, model = GLMModel(), type = "binomial"))
     expect_true(test_fit(rec, model = GLMNetModel(), type = "lognet"))
-    expect_s4_class(resample(rec, model = GLMModel), "Resamples")
+    expect_s4_class(resample(rec, model = GLMModel), "Resample")
 
 
     ## DiscreteVariate
@@ -81,14 +81,14 @@ test_that("discrete variate construction and model fitting", {
     df <- ICHomes
     fo <- DiscreteVariate(sale_amount, min = 0) ~ .
     expect_true(test_fit(fo, df, model = GLMModel(), type = "gaussian"))
-    expect_s4_class(resample(fo, df, model = GLMModel), "Resamples")
+    expect_s4_class(resample(fo, df, model = GLMModel), "Resample")
 
     rec <- recipe(
       sale_amount ~ .,
       data = within(df, sale_amount <- DiscreteVariate(sale_amount, min = 0))
     )
     expect_true(test_fit(rec, model = GLMModel(), type = "gaussian"))
-    expect_s4_class(resample(rec, model = GLMModel), "Resamples")
+    expect_s4_class(resample(rec, model = GLMModel), "Resample")
 
 
     ## NegBinomialVariate
@@ -104,7 +104,7 @@ test_that("discrete variate construction and model fitting", {
     expect_true(test_fit(fo, df, model = GLMBoostModel(), type = "Negative"))
     expect_true(test_fit(fo, df, model = GLMModel(),
                          type = "Negative Binomial"))
-    expect_s4_class(resample(fo, df, model = GLMModel), "Resamples")
+    expect_s4_class(resample(fo, df, model = GLMModel), "Resample")
 
     rec <- recipe(
       Days ~ .,
@@ -115,7 +115,7 @@ test_that("discrete variate construction and model fitting", {
                          type = "Negative"))
     expect_true(test_fit(rec, model = GLMBoostModel(), type = "Negative"))
     expect_true(test_fit(rec, model = GLMModel(), type = "Negative Binomial"))
-    expect_s4_class(resample(rec, model = GLMModel), "Resamples")
+    expect_s4_class(resample(rec, model = GLMModel), "Resample")
 
 
     ## PoissonVariate
@@ -133,7 +133,7 @@ test_that("discrete variate construction and model fitting", {
     expect_true(test_fit(fo, df, model = GBMModel(), type = "poisson"))
     expect_true(test_fit(fo, df, model = GLMNetModel(), type = "fishnet"))
     expect_true(test_fit(fo, df, model = XGBModel(), type = "count:poisson"))
-    expect_s4_class(resample(fo, df, model = GLMModel), "Resamples")
+    expect_s4_class(resample(fo, df, model = GLMModel), "Resample")
 
     rec <- recipe(
       Days ~ .,
@@ -147,7 +147,7 @@ test_that("discrete variate construction and model fitting", {
     expect_true(test_fit(rec, model = GBMModel(), type = "poisson"))
     expect_true(test_fit(rec, model = GLMNetModel(), type = "fishnet"))
     expect_true(test_fit(rec, model = XGBModel(), type = "count:poisson"))
-    expect_s4_class(resample(rec, model = GLMModel), "Resamples")
+    expect_s4_class(resample(rec, model = GLMModel), "Resample")
 
   })
 })

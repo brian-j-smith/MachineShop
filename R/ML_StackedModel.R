@@ -118,21 +118,21 @@ setGeneric("stack_loss",
 )
 
 
-setMethod("stack_loss", c("ANY", "ANY", "Resamples"),
+setMethod("stack_loss", c("ANY", "ANY", "Resample"),
   function(observed, predicted, x, ...) mse(x)
 )
 
 
-setMethod("stack_loss", c("factor", "ANY", "Resamples"),
+setMethod("stack_loss", c("factor", "ANY", "Resample"),
   function(observed, predicted, x, ...) brier(x)
 )
 
 
-setMethod("stack_loss", c("Surv", "numeric", "Resamples"),
+setMethod("stack_loss", c("Surv", "numeric", "Resample"),
   function(observed, predicted, x, ...) -cindex(x)
 )
 
 
-setMethod("stack_loss", c("Surv", "SurvProbs", "Resamples"),
+setMethod("stack_loss", c("Surv", "SurvProbs", "Resample"),
   function(observed, predicted, x, ...) brier(x)[, 1]
 )

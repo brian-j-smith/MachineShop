@@ -24,7 +24,7 @@
 #' @param control \link[=controls]{control} function, function name, or object
 #'   defining the resampling method to be employed.
 #'
-#' @return \code{Resamples} class object.
+#' @return \code{Resample} class object.
 #'
 #' @seealso \code{\link{c}}, \code{\link{metrics}}, \code{\link{performance}},
 #' \code{\link{plot}}, \code{\link{summary}}
@@ -129,12 +129,12 @@ resample.MLModelFunction <- function(model, ...) {
 }
 
 
-Resamples <- function(object, ...) {
-  UseMethod("Resamples")
+Resample <- function(object, ...) {
+  UseMethod("Resample")
 }
 
 
-Resamples.data.frame <- function(
+Resample.data.frame <- function(
   object, ..., control, case_comps = NULL, .check = TRUE
 ) {
   if (.check) {
@@ -150,12 +150,12 @@ Resamples.data.frame <- function(
   case_comps <- as.data.frame(case_comps)
   if (is_empty(case_comps$strata)) control@strata <- list()
 
-  new("Resamples", object, control = control, case_comps = case_comps, ...)
+  new("Resample", object, control = control, case_comps = case_comps, ...)
 }
 
 
-Resamples.list <- function(object, ...) {
-  Resamples(do.call(append, object), ...)
+Resample.list <- function(object, ...) {
+  Resample(do.call(append, object), ...)
 }
 
 
@@ -216,7 +216,7 @@ Resamples.list <- function(object, ...) {
     } else {
       subsample(train, input, model, control, i)
     }
-  } %>% Resamples(control = control, case_comps = attr(splits, "case_comps"))
+  } %>% Resample(control = control, case_comps = attr(splits, "case_comps"))
 }
 
 
@@ -275,7 +275,7 @@ Resamples.list <- function(object, ...) {
       subsample(train, test, model, control, i)
     }
   }
-  res <- Resamples(df_list, control = control,
+  res <- Resample(df_list, control = control,
                    case_comps = attr(splits, "case_comps"))
 
   if (is_optimism_control) {
@@ -331,7 +331,7 @@ Resamples.list <- function(object, ...) {
     train <- subsample_input(input, rsample::analysis(splits[[i]]))
     test <- subsample_input(input, rsample::assessment(splits[[i]]))
     subsample(train, test, model, control, i)
-  } %>% Resamples(control = control, case_comps = attr(splits, "case_comps"))
+  } %>% Resample(control = control, case_comps = attr(splits, "case_comps"))
 }
 
 
@@ -344,13 +344,13 @@ Resamples.list <- function(object, ...) {
   train <- subsample_input(input, rsample::training(split))
   test <- subsample_input(input, rsample::testing(split))
   subsample(train, test, model, control) %>%
-    Resamples(control = control, case_comps = attr(split, "case_comps"))
+    Resample(control = control, case_comps = attr(split, "case_comps"))
 }
 
 
 .resample.TrainControl <- function(control, input, model, ...) {
   set.seed(control@seed)
-  Resamples(subsample(input, input, model, control), control = control)
+  Resample(subsample(input, input, model, control), control = control)
 }
 
 

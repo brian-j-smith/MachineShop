@@ -4,7 +4,7 @@
 \alias{performance_curve}
 \alias{curves}
 \alias{performance_curve.default}
-\alias{performance_curve.Resamples}
+\alias{performance_curve.Resample}
 \title{Model Performance Curves}
 \usage{
 performance_curve(x, ...)
@@ -18,7 +18,7 @@ performance_curve(x, ...)
   ...
 )
 
-\method{performance_curve}{Resamples}(
+\method{performance_curve}{Resample}(
   x,
   metrics = c(MachineShop::tpr, MachineShop::fpr),
   na.rm = TRUE,

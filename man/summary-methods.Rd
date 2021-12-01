@@ -7,7 +7,7 @@
 \alias{summary.MLModel}
 \alias{summary.Performance}
 \alias{summary.PerformanceCurve}
-\alias{summary.Resamples}
+\alias{summary.Resample}
 \title{Model Performance Summaries}
 \usage{
 \method{summary}{ConfusionList}(object, ...)
@@ -16,23 +16,23 @@
 
 \method{summary}{MLModel}(
   object,
-  stats = MachineShop::settings("stats.Resamples"),
+  stats = MachineShop::settings("stats.Resample"),
   na.rm = TRUE,
   ...
 )
 
 \method{summary}{Performance}(
   object,
-  stats = MachineShop::settings("stats.Resamples"),
+  stats = MachineShop::settings("stats.Resample"),
   na.rm = TRUE,
   ...
 )
 
 \method{summary}{PerformanceCurve}(object, stat = MachineShop::settings("stat.Curve"), ...)
 
-\method{summary}{Resamples}(
+\method{summary}{Resample}(
   object,
-  stats = MachineShop::settings("stats.Resamples"),
+  stats = MachineShop::settings("stats.Resample"),
   na.rm = TRUE,
   ...
 )

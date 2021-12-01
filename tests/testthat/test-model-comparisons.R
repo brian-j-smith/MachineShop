@@ -1,11 +1,11 @@
 ## Model Comparisons
 
 
-test_that("Resamples differences", {
+test_that("Resample differences", {
   skip_if_not(TEST_MODEL_COMPARISONS)
   with_parallel({
 
-    test_Resamples <- function() {
+    test_Resample <- function() {
       fo <- factor(Species) ~ .
       control <- CVControl()
 
@@ -23,7 +23,7 @@ test_that("Resamples differences", {
       t.test(perfdiff)
     }
 
-    expect_s4_class(test_Resamples(), "PerformanceDiffTest")
+    expect_s4_class(test_Resample(), "PerformanceDiffTest")
 
   })
 })

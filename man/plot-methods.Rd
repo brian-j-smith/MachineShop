@@ -10,7 +10,7 @@
 \alias{plot.PartialDependence}
 \alias{plot.Performance}
 \alias{plot.PerformanceCurve}
-\alias{plot.Resamples}
+\alias{plot.Resample}
 \alias{plot.VariableImportance}
 \title{Model Performance Plots}
 \usage{
@@ -41,7 +41,7 @@
 \method{plot}{Performance}(
   x,
   metrics = NULL,
-  stat = MachineShop::settings("stat.Resamples"),
+  stat = MachineShop::settings("stat.Resample"),
   type = c("boxplot", "density", "errorbar", "violin"),
   ...
 )
@@ -54,10 +54,10 @@
   ...
 )
 
-\method{plot}{Resamples}(
+\method{plot}{Resample}(
   x,
   metrics = NULL,
-  stat = MachineShop::settings("stat.Resamples"),
+  stat = MachineShop::settings("stat.Resample"),
   type = c("boxplot", "density", "errorbar", "violin"),
   ...
 )
@@ -84,7 +84,7 @@ line.}
 
 \item{stat}{function or character string naming a function to compute a
 summary statistic on resampled metrics for trained \code{MLModel} line
-plots and \code{Resamples} model ordering.  For \code{LiftCurve} and
+plots and \code{Resample} model ordering.  For \code{LiftCurve} and
 \code{PerformanceCurve} classes, plots are of resampled metrics aggregated
 by the statistic if given or of resample-specific metrics if \code{NULL}.}
 

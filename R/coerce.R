@@ -69,7 +69,7 @@ as.data.frame.PerformanceDiffTest <- function(x, ...) {
 }
 
 
-as.data.frame.Resamples <- function(x, ...) {
+as.data.frame.Resample <- function(x, ...) {
   asS3(as(x, "data.frame"))
 }
 

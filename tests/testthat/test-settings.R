@@ -93,8 +93,8 @@ test_that("settings changes and views", {
 
   new_value <- "median"
   expect_type(settings(stat.Resample = new_value), "list")
-  expect_identical(settings("stat.Resamples"), new_value)
-  expect_error(settings(stat.Resamples = "character"))
+  expect_identical(settings("stat.Resample"), new_value)
+  expect_error(settings(stat.Resample = "character"))
 
   new_value <- "median"
   expect_type(settings(stat.TrainingParams = new_value), "list")
@@ -107,9 +107,9 @@ test_that("settings changes and views", {
   expect_error(settings(stats.PartialDependence = "character"))
 
   new_value <- c("median", sd)
-  expect_type(settings(stats.Resamples = new_value), "list")
-  expect_identical(settings("stats.Resamples"), new_value)
-  expect_error(settings(stats.Resamples = "character"))
+  expect_type(settings(stats.Resample = new_value), "list")
+  expect_identical(settings("stats.Resample"), new_value)
+  expect_error(settings(stats.Resample = "character"))
 
   settings("reset")
   expect_identical(settings(), presets)

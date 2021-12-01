@@ -51,7 +51,7 @@ setMetric_auc <- function(f, metrics) {
   setMetricGeneric(f)
   setMetricMethod(f, c("factor", "factor"))
   setMetricMethod(f, c("factor", "numeric"), definition)
-  setMetricMethod_Resamples(f)
+  setMetricMethod_Resample(f)
   setMetricMethod(f, c("Surv", "SurvProbs"), definition)
 }
 
@@ -61,7 +61,7 @@ setMetric_BinaryConfusionMatrix <- function(f, definition) {
   setMetricMethod(f, c("BinaryConfusionMatrix", "NULL"), definition)
   setMetricMethod_factor_factor(f)
   setMetricMethod_factor_numeric(f)
-  setMetricMethod_Resamples(f)
+  setMetricMethod_Resample(f)
   setMetricMethod_Surv_SurvEvents(f)
   setMetricMethod_Surv_SurvProbs(f)
 }
@@ -73,7 +73,7 @@ setMetric_ConfusionMatrix <- function(f, definition) {
   setMetricMethod_factor_factor(f)
   setMetricMethod_factor_matrix(f)
   setMetricMethod_factor_numeric(f)
-  setMetricMethod_Resamples(f)
+  setMetricMethod_Resample(f)
   setMetricMethod_Surv_SurvEvents(f)
   setMetricMethod_Surv_SurvProbs(f)
 }
@@ -87,7 +87,7 @@ setMetric_OrderedConfusionMatrix <- function(f, definition) {
   }
   setMetricMethod(f, c("ordered", "ordered"), definition_ordered)
   setMetricMethod(f, c("ordered", "matrix"), definition_ordered)
-  setMetricMethod_Resamples(f)
+  setMetricMethod_Resample(f)
 }
 
 
@@ -96,7 +96,7 @@ setMetric_numeric <- function(f, definition) {
   setMetricMethod(f, c("numeric", "numeric"), definition)
   setMetricMethod_BinomialMatrix_numeric(f)
   setMetricMethod_matrix_matrix(f)
-  setMetricMethod_Resamples(f)
+  setMetricMethod_Resample(f)
   setMetricMethod_Surv_numeric(f)
 }
 
@@ -165,8 +165,8 @@ setMetricMethod_matrix_matrix <- function(f) {
 }
 
 
-setMetricMethod_Resamples <- function(f) {
-  setMetricMethod(f, c("Resamples", "NULL"),
+setMetricMethod_Resample <- function(f) {
+  setMetricMethod(f, c("Resample", "NULL"),
     function(observed, predicted, weights, ...) {
       performance(observed, metrics = get(f), ...)
     }

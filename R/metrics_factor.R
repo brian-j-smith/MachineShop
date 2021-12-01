@@ -61,7 +61,7 @@ setMetricMethod("auc", c("PerformanceCurve", "NULL"),
 )
 
 
-setMetricMethod("auc", c("Resamples", "NULL"),
+setMetricMethod("auc", c("Resample", "NULL"),
   function(observed, predicted, weights, metrics, ...) {
     auc@.Data <- function(...) MachineShop::auc(..., metrics = metrics)
     performance(observed, metrics = auc, ...)
@@ -113,7 +113,7 @@ setMetricMethod("brier", c("factor", "numeric"),
 )
 
 
-setMetricMethod_Resamples("brier")
+setMetricMethod_Resample("brier")
 
 
 setMetricMethod("brier", c("Surv", "SurvProbs"),
@@ -168,7 +168,7 @@ setMetricMethod("cindex", c("factor", "numeric"),
 )
 
 
-setMetricMethod_Resamples("cindex")
+setMetricMethod_Resample("cindex")
 
 
 setMetricMethod("cindex", c("Surv", "numeric"),
@@ -211,7 +211,7 @@ setMetricMethod("cross_entropy", c("factor", "numeric"),
 )
 
 
-setMetricMethod_Resamples("cross_entropy")
+setMetricMethod_Resample("cross_entropy")
 
 
 #' @rdname metrics

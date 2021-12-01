@@ -8,7 +8,7 @@
 \alias{c.LiftCurve}
 \alias{c.ListOf}
 \alias{c.PerformanceCurve}
-\alias{c.Resamples}
+\alias{c.Resample}
 \alias{+,SurvMatrix,SurvMatrix-method}
 \title{Combine MachineShop Objects}
 \usage{
@@ -24,7 +24,7 @@
 
 \method{c}{PerformanceCurve}(...)
 
-\method{c}{Resamples}(...)
+\method{c}{Resample}(...)
 
 \S4method{+}{SurvMatrix,SurvMatrix}(e1, e2)
 }

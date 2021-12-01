@@ -35,13 +35,13 @@ test_that("formula resampling", {
 
     for (control in controls) {
       ## formula resampling
-      expect_s4_class(resample(fo1, df1, model, control = control), "Resamples")
-      expect_s4_class(resample(fo2, df2, model, control = control), "Resamples")
-      expect_s4_class(resample(fo3, df3, model, control = control), "Resamples")
+      expect_s4_class(resample(fo1, df1, model, control = control), "Resample")
+      expect_s4_class(resample(fo2, df2, model, control = control), "Resample")
+      expect_s4_class(resample(fo3, df3, model, control = control), "Resample")
       ## recipe resampling
-      expect_s4_class(resample(rec1, model, control = control), "Resamples")
-      expect_s4_class(resample(rec2, model, control = control), "Resamples")
-      expect_s4_class(resample(rec3, model, control = control), "Resamples")
+      expect_s4_class(resample(rec1, model, control = control), "Resample")
+      expect_s4_class(resample(rec2, model, control = control), "Resample")
+      expect_s4_class(resample(rec3, model, control = control), "Resample")
     }
 
   })

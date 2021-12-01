@@ -155,7 +155,7 @@ setMethod(".calibration", c("numeric", "numeric"),
 )
 
 
-setMethod(".calibration", c("Resamples", "ANY"),
+setMethod(".calibration", c("Resample", "ANY"),
   function(observed, predicted, weights, ...) {
     cal_list <- by(observed, observed$Model, function(resample) {
       calibration(resample$Observed, resample$Predicted, resample$Weight,

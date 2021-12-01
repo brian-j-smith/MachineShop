@@ -78,7 +78,7 @@ summary.ConfusionMatrix <- function(object, ...) {
 #' @rdname summary-methods
 #'
 summary.MLModel <- function(
-  object, stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...
+  object, stats = MachineShop::settings("stats.Resample"), na.rm = TRUE, ...
 ) {
   if (!is_trained(object)) throw(Error("no training results to summarize"))
   map(function(step) {
@@ -95,7 +95,7 @@ summary.MLModelFit <- function(object, ...) {
 #' @rdname summary-methods
 #'
 summary.Performance <- function(
-  object, stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...
+  object, stats = MachineShop::settings("stats.Resample"), na.rm = TRUE, ...
 ) {
   stats <- check_stats(stats, convert = TRUE)
   throw(check_assignment(stats))
@@ -168,8 +168,8 @@ summary.PerformanceCurve <- function(
 
 #' @rdname summary-methods
 #'
-summary.Resamples <- function(
-  object, stats = MachineShop::settings("stats.Resamples"), na.rm = TRUE, ...
+summary.Resample <- function(
+  object, stats = MachineShop::settings("stats.Resample"), na.rm = TRUE, ...
 ) {
   summary(performance(object), stats = stats, na.rm = na.rm)
 }

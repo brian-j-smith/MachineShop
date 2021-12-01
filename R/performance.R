@@ -18,7 +18,7 @@
 #'   probabilities are classified.
 #' @param na.rm logical indicating whether to remove observed or predicted
 #'   responses that are \code{NA} when calculating metrics.
-#' @param ... arguments passed from the \code{Resamples} method to the response
+#' @param ... arguments passed from the \code{Resample} method to the response
 #'   type-specific methods or from the method for \code{ConfusionList} to
 #'   \code{ConfusionMatrix}.  Elliptical arguments in the response
 #'   type-specific methods are passed to \code{metrics} supplied as a single
@@ -143,7 +143,7 @@ performance.ConfusionMatrix <- function(
 
 #' @rdname performance
 #'
-performance.Resamples <- function(x, ...) {
+performance.Resample <- function(x, ...) {
   perf_list <- by(x, x$Model, function(resamples) {
     Performance(performance(x@control, resamples, ...), control = x@control)
   }, simplify = FALSE)

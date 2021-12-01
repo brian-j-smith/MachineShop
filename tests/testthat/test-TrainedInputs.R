@@ -71,15 +71,15 @@ test_that("testing of trained inputs", {
 
     ## resampling of selected inputs
     model <- models[[1]]
-    expect_is(resample(sel_mf, model = model), "Resamples")
-    expect_is(resample(sel_mo_mf), "Resamples")
-    expect_is(resample(sel_rec, model = model), "Resamples")
-    expect_is(resample(sel_mo_rec), "Resamples")
+    expect_is(resample(sel_mf, model = model), "Resample")
+    expect_is(resample(sel_mo_mf), "Resample")
+    expect_is(resample(sel_rec, model = model), "Resample")
+    expect_is(resample(sel_mo_rec), "Resample")
 
 
     ## resampling of tuned inputs
     model <- models[[1]]
-    expect_is(resample(tun_rec, model = model), "Resamples")
+    expect_is(resample(tun_rec, model = model), "Resample")
 
   })
 })

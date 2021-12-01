@@ -52,8 +52,8 @@ test_that("object combinations", {
     expect_s4_class(c(lift_curve, lift_curve), "PerformanceCurve")
     expect_type(c(lift_curve, curve), "list")
 
-    expect_s4_class(c(res), "Resamples")
-    expect_s4_class(c(res, res), "Resamples")
+    expect_s4_class(c(res), "Resample")
+    expect_s4_class(c(res, res), "Resample")
     expect_type(c(res, cal), "list")
     expect_type(c(res, conf), "list")
     expect_type(c(res, conf[[1]]), "list")

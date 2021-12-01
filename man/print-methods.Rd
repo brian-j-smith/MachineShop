@@ -15,7 +15,7 @@
 \alias{print.Performance}
 \alias{print.PerformanceCurve}
 \alias{print.RecipeGrid}
-\alias{print.Resamples}
+\alias{print.Resample}
 \alias{print.SurvMatrix}
 \alias{print.SurvTimes}
 \alias{print.TrainingStep}
@@ -48,7 +48,7 @@
 
 \method{print}{RecipeGrid}(x, n = MachineShop::settings("print_max"), ...)
 
-\method{print}{Resamples}(x, n = MachineShop::settings("print_max"), ...)
+\method{print}{Resample}(x, n = MachineShop::settings("print_max"), ...)
 
 \method{print}{SurvMatrix}(x, n = MachineShop::settings("print_max"), ...)
 

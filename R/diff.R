@@ -61,7 +61,7 @@ diff.Performance <- function(x, ...) {
 
 #' @rdname diff-methods
 #'
-diff.Resamples <- function(x, ...) {
+diff.Resample <- function(x, ...) {
   diff(performance(x))
 }
 

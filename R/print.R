@@ -375,7 +375,7 @@ setShowDefault("RecipeGrid")
 
 #' @rdname print-methods
 #'
-print.Resamples <- function(x, n = MachineShop::settings("print_max"), ...) {
+print.Resample <- function(x, n = MachineShop::settings("print_max"), ...) {
   title(x, ...)
   level <- nesting_level(...)
   print_fields(list("Model{?s}: " = levels(x$Model)), n = n)
@@ -389,7 +389,7 @@ print.Resamples <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-setShowDefault("Resamples")
+setShowDefault("Resample")
 
 
 print.SelectedInput <- function(

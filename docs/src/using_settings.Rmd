@@ -50,7 +50,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `stat.Curve`
   : function or character string naming a function to compute one summary statistic at each cutoff value of resampled metrics in performance curves, or `NULL` for resample-specific metrics [default: ``"base::mean"``].
 
-`stat.Resamples`
+`stat.Resample`
   : function or character string naming a function to compute one summary statistic to control the ordering of models in plots [default: ``"base::mean"``].
 
 `stat.TrainingParams`
@@ -59,7 +59,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `stats.PartialDependence`
   : function, function name, or vector of these with which to compute partial dependence summary statistics [default: ``c(Mean = "base::mean")``].
 
-`stats.Resamples`
+`stats.Resample`
   : function, function name, or vector of these with which to compute summary statistics on resampled performance metrics [default: ``c(Mean = "base::mean", Median = "stats::median", SD = "stats::sd", Min = "base::min", Max = "base::max")``].
 
 A call to `r rdoc_url("settings()")` with `"reset"` will restore all package defaults and with no arguments will display the current values of all.  Settings may also be supplied as a single unnamed argument which is a named list.  Partial matching of setting names is supported.  The setting value is returned if only one is specified to view.  Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes.  Such a list can be passed as an argument to `r rdoc_url("settings()")` to restore their values.
