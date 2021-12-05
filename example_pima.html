@@ -569,23 +569,23 @@ res &lt;- resample(fo, data = Pima, model = selected_model, control = CVControl)
 summary(performance(res))
 #&gt;              Statistic
 #&gt; Metric             Mean    Median         SD       Min       Max NA
-#&gt;   Brier       0.1482555 0.1482356 0.02130632 0.1176627 0.1962928  0
-#&gt;   Accuracy    0.7857051 0.7948718 0.04023913 0.7179487 0.8461538  0
-#&gt;   Kappa       0.5023312 0.5384615 0.09782386 0.3265306 0.6400000  0
-#&gt;   ROC AUC     0.8421050 0.8374425 0.05094069 0.7529586 0.9304734  0
-#&gt;   Sensitivity 0.6230769 0.6153846 0.09209377 0.4615385 0.7692308  0
-#&gt;   Specificity 0.8662393 0.8461538 0.04173381 0.8076923 0.9259259  0
+#&gt;   Brier       0.1459446 0.1461277 0.02305177 0.1141591 0.1778320  0
+#&gt;   Accuracy    0.7780769 0.7692308 0.03398685 0.7435897 0.8461538  0
+#&gt;   Kappa       0.4803283 0.4580490 0.09301829 0.3750000 0.6666667  0
+#&gt;   ROC AUC     0.8518573 0.8720414 0.05938594 0.7588757 0.9142012  0
+#&gt;   Sensitivity 0.6076923 0.5769231 0.17930394 0.3846154 0.9230769  0
+#&gt;   Specificity 0.8625356 0.8846154 0.08546811 0.6538462 0.9615385  0
 
 ## Variable probability cutoff
 summary(performance(res, cutoff = 0.25))
 #&gt;              Statistic
 #&gt; Metric             Mean    Median         SD       Min       Max NA
-#&gt;   Brier       0.1482555 0.1482356 0.02130632 0.1176627 0.1962928  0
-#&gt;   Accuracy    0.7372436 0.7564103 0.05112373 0.6666667 0.7948718  0
-#&gt;   Kappa       0.4770904 0.4986034 0.09772134 0.3389831 0.6000000  0
-#&gt;   ROC AUC     0.8421050 0.8374425 0.05094069 0.7529586 0.9304734  0
-#&gt;   Sensitivity 0.8692308 0.8846154 0.10288412 0.6923077 1.0000000  0
-#&gt;   Specificity 0.6712251 0.6794872 0.06484846 0.5769231 0.8148148  0</code></pre>
+#&gt;   Brier       0.1459446 0.1461277 0.02305177 0.1141591 0.1778320  0
+#&gt;   Accuracy    0.7323077 0.7000000 0.07193921 0.6410256 0.8717949  0
+#&gt;   Kappa       0.4699345 0.4148371 0.12498627 0.3157895 0.7169811  0
+#&gt;   ROC AUC     0.8518573 0.8720414 0.05938594 0.7588757 0.9142012  0
+#&gt;   Sensitivity 0.8538462 0.8461538 0.08465423 0.6923077 1.0000000  0
+#&gt;   Specificity 0.6719373 0.6602564 0.11559458 0.4615385 0.8846154  0</code></pre>
 </div>
 <div id="roc-curve" class="section level2">
 <h2>ROC Curve</h2>
@@ -598,55 +598,55 @@ plot(roc, diagonal = TRUE) + coord_fixed()</code></pre>
 <pre class="r"><code>## Area under the curve
 auc(roc)
 #&gt; Model: SelectedModel
-#&gt; [1] 0.8447498</code></pre>
+#&gt; [1] 0.8467413</code></pre>
 </div>
 <div id="confusion-matrices" class="section level2">
 <h2>Confusion Matrices</h2>
 <pre class="r"><code>(conf &lt;- confusion(res))
 #&gt; --- ConfusionList object -------------------------------------------------------
 #&gt; 
-#&gt; == SelectedModel ===============================================================
-#&gt; --- BinaryConfusionMatrix object ---
+#&gt; === SelectedModel ==============================================================
+#&gt; === BinaryConfusionMatrix object ===
 #&gt;          Observed
 #&gt; Predicted neg pos
-#&gt;       neg 227  49
-#&gt;       pos  35  81
+#&gt;       neg 226  51
+#&gt;       pos  36  79
 
 summary(conf)
-#&gt; -- SelectedModel ---------------------------------------------------------------
+#&gt; --- SelectedModel --------------------------------------------------------------
 #&gt; Number of responses: 392
-#&gt; Accuracy (SE): 0.7857143 (0.02072459)
+#&gt; Accuracy (SE): 0.7780612 (0.02098845)
 #&gt; Majority class: 0.6683673
-#&gt; Kappa: 0.5031386
+#&gt; Kappa: 0.4843665
 #&gt; 
 #&gt;                   neg       pos
 #&gt; Observed    0.6683673 0.3316327
-#&gt; Predicted   0.7040816 0.2959184
-#&gt; Agreement   0.5790816 0.2066327
-#&gt; Sensitivity 0.8664122 0.6230769
-#&gt; Specificity 0.6230769 0.8664122
-#&gt; PPV         0.8224638 0.6982759
-#&gt; NPV         0.6982759 0.8224638
+#&gt; Predicted   0.7066327 0.2933673
+#&gt; Agreement   0.5765306 0.2015306
+#&gt; Sensitivity 0.8625954 0.6076923
+#&gt; Specificity 0.6076923 0.8625954
+#&gt; PPV         0.8158845 0.6869565
+#&gt; NPV         0.6869565 0.8158845
 
 plot(conf)
 #&gt; $SelectedModel</code></pre>
 <p><img src="example_pima_files/figure-html/ex_pima_conf-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Variable probability cutoff
 summary(confusion(res, cutoff = 0.25))
-#&gt; -- SelectedModel ---------------------------------------------------------------
+#&gt; --- SelectedModel --------------------------------------------------------------
 #&gt; Number of responses: 392
-#&gt; Accuracy (SE): 0.7372449 (0.02222995)
+#&gt; Accuracy (SE): 0.7321429 (0.02236694)
 #&gt; Majority class: 0.6683673
-#&gt; Kappa: 0.4771844
+#&gt; Kappa: 0.4652045
 #&gt; 
 #&gt;                   neg       pos
 #&gt; Observed    0.6683673 0.3316327
-#&gt; Predicted   0.4923469 0.5076531
-#&gt; Agreement   0.4489796 0.2882653
-#&gt; Sensitivity 0.6717557 0.8692308
-#&gt; Specificity 0.8692308 0.6717557
-#&gt; PPV         0.9119171 0.5678392
-#&gt; NPV         0.5678392 0.9119171</code></pre>
+#&gt; Predicted   0.4974490 0.5025510
+#&gt; Agreement   0.4489796 0.2831633
+#&gt; Sensitivity 0.6717557 0.8538462
+#&gt; Specificity 0.8538462 0.6717557
+#&gt; PPV         0.9025641 0.5634518
+#&gt; NPV         0.5634518 0.9025641</code></pre>
 </div>
 <div id="calibration-curve" class="section level2">
 <h2>Calibration Curve</h2>

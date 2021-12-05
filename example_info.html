@@ -380,7 +380,7 @@ div.tocify {
 
 <div id="model-information" class="section level1">
 <h1>Model Information</h1>
-<p>A named list of package-supplied models can be obtained interactively with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/modelinfo"><code>modelinfo()</code></a> function, and includes a descriptive <code>"label"</code> for each, source <code>"packages"</code> on which the models depend, supported response variable <code>"types"</code>, and <code>"arguments"</code> that can be specified in calls to the model functions. Function <code>modelinfo</code> can be called without arguments, with one or more model functions, variable types, or response variables; and will return information on all models matching the calling arguments.</p>
+<p>A named list of package-supplied models can be obtained interactively with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.2.0/topics/modelinfo"><code>modelinfo()</code></a> function, and includes a descriptive <code>"label"</code> for each, source <code>"packages"</code> on which the models depend, supported response variable <code>"types"</code>, and <code>"arguments"</code> that can be specified in calls to the model functions. Function <code>modelinfo</code> can be called without arguments, with one or more model functions, variable types, or response variables; and will return information on all models matching the calling arguments.</p>
 <pre class="r"><code>## Analysis libraries
 library(MachineShop)
 library(magrittr)
@@ -501,7 +501,7 @@ modelinfo(iris$Species) %&gt;% names
 </div>
 <div id="metric-information" class="section level1">
 <h1>Metric Information</h1>
-<p>A named list of supplied metrics can be obtained with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/metricinfo"><code>metricinfo()</code></a> function, and includes a descriptive <code>"label"</code> for each, whether to <code>"maximize"</code> the metrics for better performance, their function <code>"arguments"</code>, and supported observed and predicted response variable <code>"types"</code>. Function <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.1.0/topics/metricinfo"><code>metricinfo()</code></a> may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.</p>
+<p>A named list of supplied metrics can be obtained with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.2.0/topics/metricinfo"><code>metricinfo()</code></a> function, and includes a descriptive <code>"label"</code> for each, whether to <code>"maximize"</code> the metrics for better performance, their function <code>"arguments"</code>, and supported observed and predicted response variable <code>"types"</code>. Function <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.2.0/topics/metricinfo"><code>metricinfo()</code></a> may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.</p>
 <pre class="r"><code>## Analysis libraries
 library(MachineShop)
 library(magrittr)
@@ -536,7 +536,7 @@ metricinfo(auc, r2)
 #&gt;           observed predicted
 #&gt; 1           factor   numeric
 #&gt; 2 PerformanceCurve      NULL
-#&gt; 3        Resamples      NULL
+#&gt; 3         Resample      NULL
 #&gt; 4             Surv SurvProbs
 #&gt; 
 #&gt; 
@@ -557,7 +557,7 @@ metricinfo(auc, r2)
 #&gt; 1 BinomialVariate   numeric
 #&gt; 2          matrix    matrix
 #&gt; 3         numeric   numeric
-#&gt; 4       Resamples      NULL
+#&gt; 4        Resample      NULL
 #&gt; 5            Surv   numeric</code></pre>
 <div id="type-specific-1" class="section level2">
 <h2>Type-Specific</h2>

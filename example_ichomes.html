@@ -769,35 +769,35 @@ plot(vi)</code></pre>
 #&gt; 
 #&gt; Parameters:
 #&gt; List of 5
-#&gt;  $ n.trees          : num 250
-#&gt;  $ interaction.depth: int 2
+#&gt;  $ n.trees          : num 200
+#&gt;  $ interaction.depth: int 5
 #&gt;  $ n.minobsinnode   : num 10
 #&gt;  $ shrinkage        : num 0.1
 #&gt;  $ bag.fraction     : num 0.5
 #&gt; 
-#&gt; == TrainStep1 ==================================================================
-#&gt; --- TrainStep object ---
+#&gt; === TrainingStep1 ==============================================================
+#&gt; === TrainingStep object ===
 #&gt; 
 #&gt; TunedModel grid:
 #&gt; # A tibble: 25 x 4
 #&gt;    name      selected params$n.trees $interaction.dep~ metrics$RMSE   $R2   $MAE
 #&gt;    &lt;chr&gt;     &lt;lgl&gt;             &lt;dbl&gt;             &lt;int&gt;        &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
-#&gt;  1 GBMModel~ FALSE                50                 1       56468. 0.612 36950.
-#&gt;  2 GBMModel~ FALSE               100                 1       52583. 0.666 33754.
-#&gt;  3 GBMModel~ FALSE               150                 1       51587. 0.680 33147.
-#&gt;  4 GBMModel~ FALSE               200                 1       50569. 0.693 32309.
-#&gt;  5 GBMModel~ FALSE               250                 1       49592. 0.704 31646.
-#&gt;  6 GBMModel~ FALSE                50                 2       52525. 0.668 33291.
-#&gt;  7 GBMModel~ FALSE               100                 2       50173. 0.701 31656.
-#&gt;  8 GBMModel~ FALSE               150                 2       49197. 0.713 30621.
-#&gt;  9 GBMModel~ FALSE               200                 2       48933. 0.716 29824.
-#&gt; 10 GBMModel~ TRUE                250                 2       47760. 0.728 29235.
+#&gt;  1 GBMModel~ FALSE                50                 1       55579. 0.608 36335.
+#&gt;  2 GBMModel~ FALSE               100                 1       51949. 0.656 33704.
+#&gt;  3 GBMModel~ FALSE               150                 1       50365. 0.678 32325.
+#&gt;  4 GBMModel~ FALSE               200                 1       49598. 0.685 31699.
+#&gt;  5 GBMModel~ FALSE               250                 1       49529. 0.687 31357.
+#&gt;  6 GBMModel~ FALSE                50                 2       52110. 0.653 32941.
+#&gt;  7 GBMModel~ FALSE               100                 2       49558. 0.692 30787.
+#&gt;  8 GBMModel~ FALSE               150                 2       49021. 0.700 29978.
+#&gt;  9 GBMModel~ FALSE               200                 2       48302. 0.710 29220.
+#&gt; 10 GBMModel~ FALSE               250                 2       48553. 0.710 29252.
 #&gt; # ... with 15 more rows
 #&gt; 
-#&gt; Selected grid row: 10
-#&gt; RMSE value: 47760.29
+#&gt; Selected grid row: 24
+#&gt; RMSE value: 47841.02
 plot(tuned_model, type = &quot;line&quot;)
-#&gt; $TrainStep1</code></pre>
+#&gt; $TrainingStep1</code></pre>
 <p><img src="example_ichomes_files/figure-html/ex_ichomes_tune_model-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="generalization-performance" class="section level2">
@@ -809,7 +809,7 @@ pred &lt;- predict(model_fit, newdata = testset)
 ## Test set performance
 performance(obs, pred)
 #&gt;         RMSE           R2          MAE 
-#&gt; 4.663678e+04 7.007189e-01 2.718321e+04</code></pre>
+#&gt; 4.647277e+04 7.028202e-01 2.674602e+04</code></pre>
 </div>
 <div id="calibration-curve" class="section level2">
 <h2>Calibration Curve</h2>
