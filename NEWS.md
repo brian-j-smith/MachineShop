@@ -1,12 +1,72 @@
-# MachineShop News (Development)
+# MachineShop News
 
 ## Version Updates
 
-## 3.1.0.9001
-* Add `rfe()` function for recursive feature elimination.
-* Remove global setting `stats.VarImp`.
+## 3.2.0
+* Add argument `distr` and `method` to `dependence()`.
+* Add function `ParsnipModel()` for model specifications (`model_spec`) from the [**parsnip**](https://parsnip.tidymodels.org/) package.
+* Add function `rfe()` for recursive feature elimination.
+* Add method `as.MLModel()` for `model_spec` and `ModeledInput`.
+* Add support for any model specification whose object has an `as.MLModel()` method.
+* Add support for cross-validation with case groups.
+* Add support for names in argument `metric` of `auc()`.
 * Change argument `method` default from `"model"` to `"permute"` in `varimp()`.
+* Change class `ModelFrame` to an S4 class; generally requires explicit conversion to a data frame with `as.data.frame()` in `MLModel` `fit` and `predict` functions.
 * Change progress bar display from elapsed to estimated completion time.
+* Changes to global settings
+  * Rename `stat.Trained` to `stat.TrainingParams`.
+  * Remove `stats.VarImp`.
+* Changes to internal classes
+  * Add class `ParsnipModel`.
+  * Add class `SurvTimes`.
+  * Add class `TrainingParams`.
+  * Add class union `Grid`.
+  * Add class union `Params`.
+  * Add column `name`, `selected`, and `metrics` to slot `grid` of `TrainingStep` class.
+  * Add slot `grid` to `TunedInput`.
+  * Add slot `id` to `MLInput` and `MLModel` classes.
+  * Add slot `id` and `name` to `TrainingStep` class.
+  * Add slot `models` to `SelectedModel`.
+  * Remove slot `name` from `MLControl` classes.
+  * Remove slot `selected`, `values`, and `metric` from `TrainingStep` class.
+  * Remove slot `shift` from `VariableImportance` class.
+  * Rename class `Grid` to `TuningGrid`.
+  * Rename class `Resamples` to `Resample`.
+  * Rename class `TrainStep` to `TrainingStep`.
+  * Rename class `VarImp` to `VariableImportance`.
+  * Rename classes of `MLControl`.
+    * `MLBootControl` &rarr; `BootControl`
+    * `MLBootOptimismControl` &rarr; `BootOptimismControl`
+    * `MLCVControl` &rarr; `CVControl`
+    * `MLCVOptimismControl` &rarr; `CVOptimismControl`
+    * `MLOOBControl` &rarr; `OOBControl`
+    * `MLSplitControl` &rarr; `SplitControl`
+    * `MLTrainControl` &rarr; `TrainControl`
+  * Rename column `Input` and `Model` to `params` in slot `grid` of `TrainingStep` class.
+  * Rename column `Resample` to `Iteration` in `Resample` class
+  * Rename slot `x` to `input` in `MLModel` class.
+* Changes to `XGBModel`
+  * Change argument default for `nrounds` from 1 to 100.
+  * Rearrange constructor arguments.
+  * Reduce number of tuning grid parameters
+    * Include `nrounds` and `max_depth` in automated grids for `XGBDARTModel` and `XGBTreeModel`.
+    * Include `nrounds`, `lambda`, and `alpha` in automated grid for `XGBLinearModel`.
+  * Compute survival probabilities for `survival:aft` prediction.
+  * Change default survival objective from `survival:cox` to `survival:aft`.
+* Format and condense printout of objects.
+* Include all computed performance metrics in `TrainingStep` objects and output.
+* Remove shift from variable importance scaling in `varimp()`.
+* Rename and redefine dispatch (first) arguments in functions.
+  * `model` &rarr; `object` in `TunedModel()`
+  * `x` &rarr; `object` in `expand_model()`
+  * `x` &rarr; `formula`/`input`/`model` in `expand_modelgrid()`, `fit()`, `ModelFrame()`, `resample()`, `rfe()` methods
+  * `x` &rarr; `formula`/`object`/`model` in `ModeledInput()` methods
+  * `x` &rarr; `object` in `ParameterGrid()` methods
+  * `x` &rarr; `control` in `set_monitor()`, `set_predict()`, `set_strata()`
+  * `x` &rarr; `object` in `TunedInput()`
+* Rename function `Grid()` to `TuningGrid()`.
+* Reorder optional arguments in `ModelFrame()`.
+* Save model constructor arguments as the list elements in `MLModel` `params` slots.
 
 ## 3.1.0
 * Add argument `na.rm` to `dependence()`.
