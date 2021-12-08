@@ -143,7 +143,8 @@ TrainingParams <- setClass("TrainingParams",
     control = "MLControl",
     metrics = "ANY",
     stat = "ANY",
-    cutoff = "numeric"
+    cutoff = "numeric",
+    options = "list"
   )
 )
 
@@ -316,10 +317,7 @@ setClass("TunedModeledRecipe",
 #################### Models ####################
 
 
-setClass("ParsnipModel", contains = "MLModel")
-
-
-setClass("SelectedModel",
+setClass("EnsembleModel",
   contains = "MLModel",
   slots = c(
     models = "ListOf",
@@ -328,8 +326,10 @@ setClass("SelectedModel",
 )
 
 
-setClass("StackedModel", contains = "MLModel")
-setClass("SuperModel", contains = "MLModel")
+setClass("ParsnipModel", contains = "MLModel")
+setClass("SelectedModel", contains = "EnsembleModel")
+setClass("StackedModel", contains = "EnsembleModel")
+setClass("SuperModel", contains = "StackedModel")
 
 
 setClass("TunedModel",

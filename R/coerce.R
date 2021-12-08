@@ -104,8 +104,34 @@ setAs("SelectedModel", "list",
 )
 
 
+setAs("StackedModel", "list",
+  function(from) {
+    c(list(
+      objects = from@models,
+      control = from@params@control),
+      from@params@options
+    )
+  }
+)
+
+
+setAs("SuperModel", "list",
+  function(from) {
+    res <- callNextMethod()
+    res$model <- res$objects[[1]]
+    res$objects[1] <- NULL
+    res
+  }
+)
+
+
 setAs("TrainingParams", "list",
-  function(from) map(function(name) slot(from, name), slotNames(from))
+  function(from) {
+    res <- map(function(name) slot(from, name), slotNames(from))
+    options <- res$options
+    res$options <- NULL
+    c(new_params(res), options)
+  }
 )
 
 

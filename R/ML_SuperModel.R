@@ -43,20 +43,21 @@ SuperModel <- function(
   all_vars = FALSE
 ) {
 
-  base_learners <- ListOf(map(as.MLModel, unlist(list(...))))
-  names(base_learners) <- make_names_len(length(base_learners), "Learner")
+  models <- map(as.MLModel, unlist(list(model, ...)))
+  names(models)[1] <- "SuperLearner"
+  names(models)[-1] <- make_names_len(length(models) - 1, "BaseLearner")
 
-  control <- as.MLControl(control)
-  params <- as.list(environment())
-
-  slots <- combine_model_slots(base_learners, as.MLModel(model)@response_types)
+  slots <- combine_model_slots(models, models[[1]]@response_types)
   new("SuperModel", MLModel(
     name = "SuperModel",
     label = "Super Learner",
     response_types = slots$response_types,
     weights = slots$weights,
-    params = params
-  ))
+    params = TrainingParams(
+      control = as.MLControl(control),
+      options = list(all_vars = all_vars)
+    )
+  ), models = ListOf(models))
 
 }
 
@@ -67,10 +68,10 @@ MLModelFunction(SuperModel) <- NULL
   input_prep <- prep(input)
   mf <- ModelFrame(input_prep, na.rm = FALSE)
 
-  params <- object@params
-  base_learners <- params$base_learners
-  super_learner <- params$model
-  control <- params$control
+  super_learner <- object@models[[1]]
+  base_learners <- object@models[-1]
+  control <- object@params@control
+  all_vars <- object@params@options$all_vars
 
   predictors <- list()
   ind <- new_progress_index(name = object@name, max = length(base_learners))
@@ -81,13 +82,13 @@ MLModelFunction(SuperModel) <- NULL
     predictors[[ind]] <- res$Predicted
   }
 
-  df <- super_df(res$Observed, predictors, res$Case, if (params$all_vars) mf)
+  df <- super_df(res$Observed, predictors, res$Case, if (all_vars) mf)
   super_mf <- ModelFrame(formula(df), df)
 
   list(base_fits = map(function(learner) fit(input, model = learner),
                        base_learners),
        super_fit = fit(super_mf, model = super_learner),
-       all_vars = params$all_vars,
+       all_vars = all_vars,
        times = control@predict$times) %>%
     MLModelFit("SuperModelFit", model = object, input = input_prep)
 }

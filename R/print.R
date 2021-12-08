@@ -102,6 +102,34 @@ print.DiscreteVariate <- function(
 setShowDefault("DiscreteVariate")
 
 
+print.EnsembleModel <- function(
+  x, n = MachineShop::settings("print_max"), ...
+) {
+  title(x, ...)
+  level <- nesting_level(...)
+  nextlevel <- level + 1
+  trained <- is_trained(x)
+  print_modelinfo(x, trained = trained, ...)
+  if (level < 1) {
+    hline(level)
+    print_train_label("Models:")
+    newline()
+    print(x@models, n = n, level = nextlevel)
+    hline(level)
+    print(x@params@control, n = n, level = nextlevel)
+    if (trained) {
+      hline(level)
+      print(x@steps, n = n, level = nextlevel)
+    }
+  } else if (level == 1) {
+    newline()
+    print_train_label("Models:")
+    print(x@models, n = n, level = nextlevel)
+  }
+  invisible(x)
+}
+
+
 #' @rdname print-methods
 #'
 print.ListOf <- function(x, n = MachineShop::settings("print_max"), ...) {
@@ -409,94 +437,6 @@ print.SelectedInput <- function(
     newline()
     print_train_label("Selection set:")
     print(x@inputs, n = n, level = nextlevel)
-  }
-  invisible(x)
-}
-
-
-print.SelectedModel <- function(
-  x, n = MachineShop::settings("print_max"), ...
-) {
-  title(x, ...)
-  level <- nesting_level(...)
-  nextlevel <- level + 1
-  trained <- is_trained(x)
-  print_modelinfo(x, trained = trained, ...)
-  if (level < 1) {
-    hline(level)
-    print_train_label("Selection set:")
-    newline()
-    print(x@models, n = n, level = nextlevel)
-    hline(level)
-    print(x@params@control, n = n, level = nextlevel)
-    if (trained) {
-      hline(level)
-      print(x@steps, n = n, level = nextlevel)
-    }
-  } else if (level == 1) {
-    newline()
-    print_train_label("Selection set:")
-    print(x@models, n = n, level = nextlevel)
-  }
-  invisible(x)
-}
-
-
-print.StackedModel <- function(x, n = MachineShop::settings("print_max"), ...) {
-  title(x, ...)
-  level <- nesting_level(...)
-  nextlevel <- level + 1
-  trained <- is_trained(x)
-  print_modelinfo(x, trained = trained, ...)
-  if (level < 1) {
-    newline()
-    print_label("Parameters:")
-    subset <- setdiff(names(x@params), c("base_learners", "control"))
-    cat(str(x@params[subset], give.attr = FALSE, list.len = n))
-    hline(level)
-    print_train_label("Base learners:")
-    newline()
-    print(x@params$base_learners, n = n, level = nextlevel)
-    hline(level)
-    print(x@params$control, n = n, level = nextlevel)
-    if (trained) {
-      hline(level)
-      print(x@steps, n = n, level = nextlevel)
-    }
-  }
-  invisible(x)
-}
-
-
-print.SuperModel <- function(x, n = MachineShop::settings("print_max"), ...) {
-  title(x, ...)
-  level <- nesting_level(...)
-  nextlevel <- level + 1
-  trained <- is_trained(x)
-  print_modelinfo(x, trained = trained, ...)
-  if (level < 1) {
-    newline()
-    print_label("Parameters:")
-    subset <- setdiff(names(x@params), c("base_learners", "control", "model"))
-    cat(str(x@params[subset], give.attr = FALSE, list.len = n))
-    hline(level)
-    print_train_label("Super learner:")
-    newline()
-    print(x@params$model, n = n, level = nextlevel)
-    newline()
-    print_train_label("Base learners:")
-    newline()
-    print(x@params$base_learners, n = n, level = nextlevel)
-    hline(level)
-    print(x@params$control, n = n, level = nextlevel)
-    if (trained) {
-      hline(level)
-      print(x@steps, n = n, level = nextlevel)
-    }
-  } else if (level == 1) {
-    newline()
-    print_train_label("Super learner:")
-    print(x@params$model, n = n, level = nextlevel)
   }
   invisible(x)
 }
