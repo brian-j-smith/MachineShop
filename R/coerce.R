@@ -15,7 +15,7 @@ setAsS3Part("ListOf", "listof")
 
 
 as.data.frame.ModelFrame <- function(x, ...) {
-  structure(asS3(x), terms = NULL)
+  structure(asS3(S3Part(x)), terms = NULL)
 }
 
 
@@ -166,7 +166,7 @@ as.MLInput.matrix <- function(x, y, ...) {
 }
 
 
-as.MLInput.ModelFrame <- function(x, ...) {
+as.MLInput.MLInput <- function(x, ...) {
   x
 }
 
