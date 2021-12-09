@@ -174,6 +174,15 @@ ModelFrame.recipe <- function(input, ...) {
 }
 
 
+update.ModelFrame <- function(object, data = NULL, ...) {
+  if (is.data.frame(data)) {
+    attr(data, "terms") <- terms(object)
+    S3Part(object) <- data
+  }
+  object
+}
+
+
 #################### ModelFrame Formulas ####################
 
 

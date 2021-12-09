@@ -81,24 +81,6 @@ ParameterGrid.parameters <- function(object, size = 3, random = FALSE, ...) {
 }
 
 
-new_gridinfo <- function(
-  param = character(), get_values = list(), default = logical()
-) {
-  if (is_empty(default)) default <- TRUE
-
-  stopifnot(is.character(param))
-  stopifnot(is.list(get_values))
-  stopifnot(is.logical(default))
-
-  if (!all(map("logi", is.function, get_values))) {
-    get_values <- Error("Value must be a list of functions.")
-    throw(check_assignment(get_values))
-  }
-
-  as_tibble(list(param = param, get_values = get_values, default = default))
-}
-
-
 #' Tuning Grid Control
 #'
 #' Defines control parameters for a tuning grid.
@@ -135,4 +117,68 @@ TuningGrid <- function(size = 3, random = FALSE) {
   }
 
   new("TuningGrid", size = size, random = random)
+}
+
+
+get_grid <- function(object, ...) {
+  UseMethod("get_grid")
+}
+
+
+get_grid.default <- function(object, ...) {
+  make_grid(class1(object))
+}
+
+
+get_grid.SelectedInput <- function(object, ...) {
+  make_grid(
+    names(object@inputs),
+    tibble(id = map("char", slot, object@inputs, "id"))
+  )
+}
+
+
+get_grid.SelectedModel <- function(object, ...) {
+  make_grid(
+    names(object@models),
+    tibble(id = map("char", slot, object@models, "id"))
+  )
+}
+
+
+get_grid.TunedModelRecipe <- function(object, ...) {
+  make_grid("ModelRecipe", as(object@grid, "tbl_df"))
+}
+
+
+get_grid.TunedModel <- function(object, ...) {
+  make_grid(object@model@name, expand_modelgrid(object, ...))
+}
+
+
+make_grid <- function(name = character(), params = tibble()) {
+  if (is_empty(name)) name <- "Model"
+  if (is_empty(params)) params <- tibble(.rows = 1)
+  tibble(
+    name = make_unique(rep_len(name, nrow(params))),
+    params = params
+  )
+}
+
+
+new_gridinfo <- function(
+  param = character(), get_values = list(), default = logical()
+) {
+  if (is_empty(default)) default <- TRUE
+
+  stopifnot(is.character(param))
+  stopifnot(is.list(get_values))
+  stopifnot(is.logical(default))
+
+  if (!all(map("logi", is.function, get_values))) {
+    get_values <- Error("Value must be a list of functions.")
+    throw(check_assignment(get_values))
+  }
+
+  as_tibble(list(param = param, get_values = get_values, default = default))
 }

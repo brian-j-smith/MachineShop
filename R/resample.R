@@ -195,7 +195,7 @@ Resample.list <- function(object, ...) {
 
   foreach(
     i = i <- seq_along(splits),
-    .export = c("seq_boot", "subsample", "subsample_input"),
+    .export = c("seq_boot", "subsample"),
     .packages = settings("require"),
     .verbose = control@monitor$verbose,
     .options.snow = snow_opts
@@ -203,7 +203,7 @@ Resample.list <- function(object, ...) {
     progress(i)
     settings(presets)
     set.seed(seeds[i])
-    train <- subsample_input(input, rsample::analysis(splits[[i]]))
+    train <- update(input, data = rsample::analysis(splits[[i]]))
     if (is_optimism_control) {
       subs <- subsample(train, list(input, train), model, control, i)
       df <- subs[[1]]
@@ -258,7 +258,7 @@ Resample.list <- function(object, ...) {
 
   df_list <- foreach(
     i = i <- seq_along(splits),
-    .export = c("subsample", "subsample_input"),
+    .export = "subsample",
     .packages = settings("require"),
     .verbose = control@monitor$verbose,
     .options.snow = snow_opts
@@ -266,8 +266,8 @@ Resample.list <- function(object, ...) {
     progress(i)
     settings(presets)
     set.seed(seeds[i])
-    train <- subsample_input(input, rsample::analysis(splits[[i]]))
-    test <- subsample_input(input, rsample::assessment(splits[[i]]))
+    train <- update(input, data = rsample::analysis(splits[[i]]))
+    test <- update(input, data = rsample::assessment(splits[[i]]))
     if (is_optimism_control) {
       subs <- subsample(train, list(test, input), model, control, i)
       structure(subs[[1]], CV.Predicted = subs[[2]]["Predicted"])
@@ -320,7 +320,7 @@ Resample.list <- function(object, ...) {
 
   foreach(
     i = i <- seq_along(splits),
-    .export = c("subsample", "subsample_input"),
+    .export = "subsample",
     .packages = settings("require"),
     .verbose = control@monitor$verbose,
     .options.snow = snow_opts
@@ -328,8 +328,8 @@ Resample.list <- function(object, ...) {
     progress(i)
     settings(presets)
     set.seed(seeds[i])
-    train <- subsample_input(input, rsample::analysis(splits[[i]]))
-    test <- subsample_input(input, rsample::assessment(splits[[i]]))
+    train <- update(input, data = rsample::analysis(splits[[i]]))
+    test <- update(input, data = rsample::assessment(splits[[i]]))
     subsample(train, test, model, control, i)
   } %>% Resample(control = control, case_comps = attr(splits, "case_comps"))
 }
@@ -341,8 +341,8 @@ Resample.list <- function(object, ...) {
     function(...) initial_split(..., prop = control@prop),
     data = input, control = control
   )
-  train <- subsample_input(input, rsample::training(split))
-  test <- subsample_input(input, rsample::testing(split))
+  train <- update(input, data = rsample::training(split))
+  test <- update(input, data = rsample::testing(split))
   subsample(train, test, model, control) %>%
     Resample(control = control, case_comps = attr(split, "case_comps"))
 }
@@ -357,13 +357,8 @@ Resample.list <- function(object, ...) {
 #################### Utility Functions ####################
 
 
-rsample_data <- function(input, ...) UseMethod("rsample_data")
-rsample_data.ModelFrame <- function(input, ...) asS3(input)
-rsample_data.ModelRecipe <- function(input, ...) as.data.frame(input)
-
-
 rsample_split <- function(fun, data, control) {
-  df <- rsample_data(data)
+  df <- as.data.frame(data)
   formal_names <- names(formals(fun))
   df[["(groups)"]] <- if ("group" %in% formal_names) case_groups(data)
   df[["(strata)"]] <- if ("strata" %in% formal_names) {
@@ -415,50 +410,43 @@ subsample <- function(train, test, model, control, iter = 1) {
 }
 
 
-subsample_input <- function(x, ...) UseMethod("subsample_input")
-subsample_input.ModelFrame <- function(x, data, ...) as(data, class(x))
-subsample_input.ModelRecipe <- function(x, data, ...) recipe(x, data)
+resample_grid <- function(object, ...) {
 
-
-resample_selection <- function(
-  object, ..., grid = tibble(), params = TrainingParams(), id = character(),
-  name = character()
-) {
-
-  grid <- as(grid, "tbl_df")
-  metrics <- params@metrics
-  stat <- check_stat(params@stat, convert = TRUE)
+  grid <- get_grid(object, ...)
+  control <- object@params@control
+  metrics <- object@params@metrics
+  cutoff <- object@params@cutoff
+  stat <- check_stat(object@params@stat, convert = TRUE)
   throw(check_assignment(stat))
 
-  perf_list <- list()
-  perf_stats <- list()
   err_msgs <- character()
-  ind <- new_progress_index(name = name, max = nrow(grid))
-  ind_names <- make_unique(rep(training_names(object), length = max(ind)))
+  perf_list <- list()
+  perf_stats_list <- list()
+
+  ind <- new_progress_index(name = class(object), max = nrow(grid))
   while (ind < max(ind)) {
     ind <- ind + 1
-    ind_name <- ind_names[ind]
+    name <- grid$name[ind]
 
     res <- try(
-      resample(update(object, grid[as.integer(ind), ]), ...,
-               control = params@control, progress_index = ind),
+      resample(update(object, params = grid$params[as.integer(ind), ]), ...,
+               control = control, progress_index = ind),
       silent = TRUE
     )
 
     if (is(res, "try-error")) {
-      perf_list[[ind_name]] <- NA
-      perf_stats[[ind_name]] <- NA
-      err_msgs[ind_name] <- conditionMessage(attr(res, "condition"))
+      err_msgs[name] <- conditionMessage(attr(res, "condition"))
+      perf_list[[name]] <- NA
+      perf_stats_list[[name]] <- NA
       next
     }
 
     if (is.null(metrics)) {
       metrics <- get_perf_metrics(res$Observed, res$Predicted)
     }
-
-    perf <- performance(res, metrics = metrics, cutoff = params@cutoff)
-    perf_list[[ind_name]] <- perf
-    perf_stats[[ind_name]] <- apply(perf, 2, function(x) stat(na.omit(x)))
+    perf <- performance(res, metrics = metrics, cutoff = cutoff)
+    perf_list[[name]] <- perf
+    perf_stats_list[[name]] <- apply(perf, 2, function(x) stat(na.omit(x)))
   }
 
   failed <- is.na(perf_list)
@@ -469,21 +457,21 @@ resample_selection <- function(
     throw(LocalWarning("Resampling failed for some models.\n", err_msgs))
     perf[] <- NA
     perf_list[failed] <- list(perf)
-    perf_stats[failed] <- list(perf[1, ])
+    perf_stats_list[failed] <- list(perf[1, ])
   }
 
   perf <- do.call(c, perf_list)
-  perf_stats <- do.call(rbind, perf_stats)
+  perf_stats <- do.call(rbind, perf_stats_list)
   metric <- as.MLMetric(c(metrics)[[1]])
   selected <- (if (metric@maximize) which.max else which.min)(perf_stats[, 1])
 
   res <- TrainingStep(
-    id = id,
-    name = name,
+    id = object@id,
+    name = class(object),
     grid = tibble(
-      name = names(perf_list),
+      name = grid$name,
       selected = FALSE,
-      params = grid,
+      params = grid$params,
       metrics = as_tibble(perf_stats)
     ),
     performance = perf
@@ -492,10 +480,3 @@ resample_selection <- function(
   res
 
 }
-
-
-training_names <- function(x, ...) UseMethod("training_names")
-training_names.MLInput <- function(x, ...) class(x)
-training_names.MLModel <- function(x, ...) x@name
-training_names.SelectedInput <- function(x, ...) names(x@inputs)
-training_names.SelectedModel <- function(x, ...) names(x@models)

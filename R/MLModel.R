@@ -160,7 +160,11 @@ update.MLModel <- function(
   new_params <- as(object, "list")
   new_params[names(params)] <- params
   res <- do.call(object@name, new_params, quote = quote)
-  if (!new_id) res@id <- object@id
+  if (is.character(new_id)) {
+    res@id <- new_id
+  } else if (!isTRUE(new_id)) {
+    res@id <- object@id
+  }
   res
 }
 

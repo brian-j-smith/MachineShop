@@ -109,13 +109,6 @@ setAs("TrainingParams", "list",
 )
 
 
-setAs("TunedModel", "list",
-  function(from) {
-    c(list(object = from@model, grid = from@grid), as(from@params, "list"))
-  }
-)
-
-
 as.MLControl <- function(x, ...) {
   UseMethod("as.MLControl")
 }

@@ -95,18 +95,13 @@ prep.TunedInput <- function(x, ...) {
 prep_recipe_data <- function(x) {
   if (is.null(x[["(names)"]])) x[["(names)"]] <- rownames(x)
   x[c("(groups)", "(strata)")] <- NULL
-  x
+  as_tibble(x)
 }
 
 
-recipe.ModelRecipe <- function(x, data, ...) {
-  stopifnot(is(data, "data.frame"))
-  x$template <- as_tibble(prep_recipe_data(data))
-  x
-}
-
-
-update.ModelRecipe <- function(object, params = list(), new_id = FALSE, ...) {
+update.ModelRecipe <- function(
+  object, params = list(), data = NULL, new_id = FALSE, ...
+) {
   for (i in seq_along(object$steps)) {
     step <- object$steps[[i]]
     step_params <- params[[step$id]]
@@ -114,6 +109,11 @@ update.ModelRecipe <- function(object, params = list(), new_id = FALSE, ...) {
       object$steps[[i]] <- do.call(update, c(list(step), step_params))
     }
   }
-  if (new_id) object@id <- make_id()
+  if (is.data.frame(data)) object$template <- prep_recipe_data(data)
+  if (is.character(new_id)) {
+    object@id <- new_id
+  } else if (isTRUE(new_id)) {
+    object@id <- make_id()
+  }
   object
 }

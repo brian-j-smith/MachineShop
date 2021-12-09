@@ -42,7 +42,7 @@ expand_model <- function(object, ..., random = FALSE) {
 
 .expand_model.tbl_df <- function(object, model, ...) {
   models <- map(function(params) {
-    do.call(update, list(model, params, new_id = TRUE), quote = TRUE)
+    do.call(update, list(model, params = params, new_id = TRUE), quote = TRUE)
   }, split(object, seq_len(max(nrow(object), 1))))
   names(models) <- paste0(models[[1]]@name, ".", names(models))
   models
@@ -211,7 +211,6 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
     if (needs_data) {
       if (missing(input)) return(NULL)
       mf <- ModelFrame(input, ..., na.rm = FALSE)
-      model <- as.MLModel(model)
       data <- switch(model@predictor_encoding,
         "model.frame" = {
           mf_terms <- attributes(terms(mf))
@@ -234,7 +233,6 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
 
 
 .expand_modelgrid.tbl_df <- function(grid, ...) {
-  if (!nrow(grid)) grid <- tibble(.rows = 1)
   if (ncol(grid)) grid[!duplicated(grid), ] else grid
 }
 

@@ -51,7 +51,7 @@ SelectedModel <- function(
     return(models[[1]])
   }
 
-  default_names <- map("char", training_names.MLModel, models)
+  default_names <- map("char", slot, models, "name")
   names(models) <- make_names_along(models, default_names)
 
   slots <- combine_model_slots(models, settings("response_types"))
@@ -74,13 +74,7 @@ MLModelFunction(SelectedModel) <- NULL
 
 
 .fit.SelectedModel <- function(object, ...) {
-  grid <- tibble(id = map("char", slot, object@models, "id"))
-  step <- resample_selection(
-    object, ..., grid = grid, params = object@params, id = object@id,
-    name = "SelectedModel"
-  )
-  model <- update(object, grid[step@grid$selected, ])
-  push(step, fit(model, ...))
+  fit_grid(object, ...)
 }
 
 
@@ -180,7 +174,7 @@ TunedModel <- function(
     response_types <- settings("response_types")
     weights <- FALSE
   } else {
-    object <- update(as.MLModel(object), fixed)
+    object <- update(as.MLModel(object), params = fixed)
     response_types <- object@response_types
     weights <- object@weights
   }
@@ -245,11 +239,16 @@ MLModelFunction(TunedModel) <- NULL
 
 
 .fit.TunedModel <- function(object, ...) {
-  grid <- expand_modelgrid(object, ...)
-  step <- resample_selection(
-    object@model, ..., grid = grid, params = object@params, id = object@id,
-    name = "TunedModel"
-  )
-  model <- update(object@model, grid[step@grid$selected, ])
-  push(step, fit(model, ...))
+  fit_grid(object, ...)
+}
+
+
+update.TunedModel <- function(
+  object, params = NULL, ...
+) {
+  if (is.list(params)) {
+    update(object@model, params = params, new_id = object@id)
+  } else {
+    object
+  }
 }

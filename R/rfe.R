@@ -106,10 +106,6 @@ rfe.ModelFrame <- function(
 ) {
   .rfe_args <- as.list(environment())
   .rfe_args$input <- as.MLInput(input)
-  .rfe_args$update <- function(input, data) {
-    if (isS4(input)) input@.Data <- data else input[] <- data
-    input
-  }
   .rfe_args$optimize <- match.arg(optimize)
   do.call(.rfe, .rfe_args)
 }
@@ -125,7 +121,6 @@ rfe.recipe <- function(
 ) {
   .rfe_args <- as.list(environment())
   .rfe_args$input <- as.MLInput(input)
-  .rfe_args$update <- function(input, data) recipe(input, data)
   .rfe_args$optimize <- match.arg(optimize)
   do.call(.rfe, .rfe_args)
 }
@@ -146,8 +141,8 @@ rfe.MLModelFunction <- function(model, ...) {
 
 
 .rfe <- function(
-  input, update, model, control, props, sizes, random, recompute, optimize,
-  samples, metrics, stat, ...
+  input, model, control, props, sizes, random, recompute, optimize, samples,
+  metrics, stat, ...
 ) {
   data <- as.data.frame(input)
   model_fit <- fit(input, model)
@@ -229,8 +224,8 @@ rfe.MLModelFunction <- function(model, ...) {
     for (s in seq_len(samples$rfe)) {
 
       data[drop] <- data[inds[, s], drop]
-      input <- update(input, data)
-      res <- resample(input, model, control)
+      input <- update(input, data = data)
+      res <- resample(input, model = model, control = control)
       perf_samples[[s]] <- summary(
         performance(res, metrics = metrics),
         stats = stat

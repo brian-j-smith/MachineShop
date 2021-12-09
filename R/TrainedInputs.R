@@ -115,7 +115,7 @@ SelectedInput.ModelFrame <- function(
     throw(Error("ModelFrames have different response variables."))
   }
 
-  default_names <- map("char", training_names.MLInput, inputs)
+  default_names <- map("char", class, inputs)
   names(inputs) <- make_names_along(inputs, default_names)
   data <- NULL
   for (i in seq_along(inputs)) {
@@ -163,12 +163,12 @@ SelectedInput.recipe <- function(
     throw(Error("Recipes have different non-predictor variables."))
   }
 
-  default_names <- map("char", training_names.MLInput, inputs)
+  default_names <- map("char", class, inputs)
   names(inputs) <- make_names_along(inputs, default_names)
   data <- NULL
   for (i in seq_along(inputs)) {
     data <- combine_data_frames(as.data.frame(inputs[[i]]), data)
-    inputs[[i]] <- recipe(inputs[[i]], tibble(.rows = nrow(data)))
+    inputs[[i]] <- update(inputs[[i]], data = tibble(.rows = nrow(data)))
   }
 
   outcome_vars <- get_info(inputs[[1]], roles = "outcome")$variable
@@ -203,24 +203,18 @@ SelectedInput.list <- function(x, ...) {
 
 
 .fit.SelectedInput <- function(object, ...) {
-  grid <- tibble(id = map("char", slot, object@inputs, "id"))
-  step <- resample_selection(
-    object, ..., grid = grid, params = object@params, id = object@id,
-    name = "SelectedInput"
-  )
-  input <- update(object, grid[step@grid$selected, ])
-  push(step, fit(input, ...))
+  fit_grid(object, ...)
 }
 
 
-update.SelectedInput <- function(object, params = list(), new_id = FALSE, ...) {
+update.SelectedInput <- function(object, params = list(), ...) {
   object <- as(object, "SelectedInput")
   new_params <- as(object, "list")
   new_params[names(params)] <- params
   objects <- new_params$objects
   new_params[c("objects", "id")] <- NULL
   res <- do.call(SelectedInput, c(objects, new_params))
-  if (!new_id) res@id <- object@id
+  res@id <- object@id
   res
 }
 
@@ -242,7 +236,7 @@ update.SelectedModelRecipe <- function(object, params = list(), ...) {
   object <- subset_selected(object, "inputs", params$id)
   data <- as.data.frame(object)
   object@inputs <- ListOf(map(function(x) {
-    rec <- ModelRecipe(recipe(x, data[unique(summary(x)$variable)]))
+    rec <- ModelRecipe(update(x, data = data[unique(summary(x)$variable)]))
     rec@id <- x@id
     rec
   }, object@inputs))
@@ -331,16 +325,16 @@ TunedInput.recipe <- function(
 
 
 .fit.TunedModelRecipe <- function(object, ...) {
-  grid <- object@grid
-  object_input <- as(object, "ModelRecipe")
-  if (prod(size(grid)) > 0) {
-    step <- resample_selection(
-      object_input, ..., grid = grid, params = object@params, id = object@id,
-      name = "TunedInput"
-    )
-    input <- update(object_input, grid[step@grid$selected, ])
-    push(step, fit(input, ...))
+  fit_grid(object, ...)
+}
+
+
+update.TunedModelRecipe <- function(
+  object, params = NULL, ...
+) {
+  if (is.list(params)) {
+    update(as(object, "ModelRecipe"), params = params, new_id = object@id)
   } else {
-    fit(object_input, ...)
+    object
   }
 }

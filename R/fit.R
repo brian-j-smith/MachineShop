@@ -154,3 +154,10 @@ eval_fit <- function(data, formula, matrix) {
     eval(substitute(formula), envir, parent.frame())
   }
 }
+
+
+fit_grid <- function(object, ...) {
+  step <- resample_grid(object, ...)
+  object <- update(object, params = step@grid$params[step@grid$selected, ])
+  push(step, fit(object, ...))
+}
