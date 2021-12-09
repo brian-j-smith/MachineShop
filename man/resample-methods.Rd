@@ -2,6 +2,7 @@
 % Please edit documentation in R/resample.R
 \name{resample}
 \alias{resample}
+\alias{resample.default}
 \alias{resample.formula}
 \alias{resample.matrix}
 \alias{resample.ModelFrame}
@@ -12,13 +13,15 @@
 \usage{
 resample(...)
 
-\method{resample}{formula}(formula, data, model, control = MachineShop::settings("control"), ...)
+\method{resample}{default}(object, model = NULL, control = MachineShop::settings("control"), ...)
 
-\method{resample}{matrix}(x, y, model, control = MachineShop::settings("control"), ...)
+\method{resample}{formula}(formula, data, model, ...)
 
-\method{resample}{ModelFrame}(input, model = NULL, control = MachineShop::settings("control"), ...)
+\method{resample}{matrix}(x, y, model, ...)
 
-\method{resample}{recipe}(input, model = NULL, control = MachineShop::settings("control"), ...)
+\method{resample}{ModelFrame}(input, model = NULL, ...)
+
+\method{resample}{recipe}(input, model = NULL, ...)
 
 \method{resample}{MLModel}(model, ...)
 
@@ -30,8 +33,7 @@ the \code{MLModel} and \code{MLModelFunction} methods to others.  The
 first arguments of \code{resample} methods are positional and, as such,
 must be given first in calls to them.}
 
-\item{formula, data}{\link[=formula]{formula} defining the model predictor and
-response variables and a \link[=data.frame]{data frame} containing them.}
+\item{object}{model \link[=inputs]{input}.}
 
 \item{model}{\link[=models]{model} function, function name, or object; or
 another object that can be \link[=as.MLModel]{coerced} to a model.  A model
@@ -41,6 +43,9 @@ argument can be omitted altogether in the case of
 
 \item{control}{\link[=controls]{control} function, function name, or object
 defining the resampling method to be employed.}
+
+\item{formula, data}{\link[=formula]{formula} defining the model predictor and
+response variables and a \link[=data.frame]{data frame} containing them.}
 
 \item{x, y}{\link{matrix} and object containing predictor and response
 variables.}

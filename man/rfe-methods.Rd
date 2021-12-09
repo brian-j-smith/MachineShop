@@ -2,6 +2,7 @@
 % Please edit documentation in R/rfe.R
 \name{rfe}
 \alias{rfe}
+\alias{rfe.default}
 \alias{rfe.formula}
 \alias{rfe.matrix}
 \alias{rfe.ModelFrame}
@@ -12,40 +13,8 @@
 \usage{
 rfe(...)
 
-\method{rfe}{formula}(
-  formula,
-  data,
-  model,
-  control = MachineShop::settings("control"),
-  props = 4,
-  sizes = integer(),
-  random = FALSE,
-  recompute = TRUE,
-  optimize = c("global", "local"),
-  samples = c(rfe = 1, varimp = 1),
-  metrics = NULL,
-  stat = "base::mean",
-  ...
-)
-
-\method{rfe}{matrix}(
-  x,
-  y,
-  model,
-  control = MachineShop::settings("control"),
-  props = 4,
-  sizes = integer(),
-  random = FALSE,
-  recompute = TRUE,
-  optimize = c("global", "local"),
-  samples = c(rfe = 1, varimp = 1),
-  metrics = NULL,
-  stat = "base::mean",
-  ...
-)
-
-\method{rfe}{ModelFrame}(
-  input,
+\method{rfe}{default}(
+  object,
   model = NULL,
   control = MachineShop::settings("control"),
   props = 4,
@@ -59,33 +28,24 @@ rfe(...)
   ...
 )
 
-\method{rfe}{recipe}(
-  input,
-  model = NULL,
-  control = MachineShop::settings("control"),
-  props = 4,
-  sizes = integer(),
-  random = FALSE,
-  recompute = TRUE,
-  optimize = c("global", "local"),
-  samples = c(rfe = 1, varimp = 1),
-  metrics = NULL,
-  stat = "base::mean",
-  ...
-)
+\method{rfe}{formula}(formula, data, model, ...)
+
+\method{rfe}{matrix}(x, y, model, ...)
+
+\method{rfe}{ModelFrame}(input, model = NULL, ...)
+
+\method{rfe}{recipe}(input, model = NULL, ...)
 
 \method{rfe}{MLModel}(model, ...)
 
 \method{rfe}{MLModelFunction}(model, ...)
 }
 \arguments{
-\item{...}{arguments passed from the generic function to its methods and from
-the \code{MLModel} and \code{MLModelFunction} methods to others.  The
+\item{...}{arguments passed to the default method from the others.  The
 first arguments of \code{rfe} methods are positional and, as such, must be
 given first in calls to them.}
 
-\item{formula, data}{\link[=formula]{formula} defining the model predictor and
-response variables and a \link[=data.frame]{data frame} containing them.}
+\item{object}{model \link[=inputs]{input}.}
 
 \item{model}{\link[=models]{model} function, function name, or object; or
 another object that can be \link[=as.MLModel]{coerced} to a model.  A model
@@ -127,6 +87,9 @@ metrics defined in the \link{performance} functions are used.}
 
 \item{stat}{function or character string naming a function to compute a
 summary statistic on resampled metric values and permuted samples.}
+
+\item{formula, data}{\link[=formula]{formula} defining the model predictor and
+response variables and a \link[=data.frame]{data frame} containing them.}
 
 \item{x, y}{\link{matrix} and object containing predictor and response
 variables.}

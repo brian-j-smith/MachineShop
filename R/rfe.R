@@ -7,10 +7,10 @@
 #' @name rfe
 #' @rdname rfe-methods
 #'
-#' @param ... arguments passed from the generic function to its methods and from
-#'   the \code{MLModel} and \code{MLModelFunction} methods to others.  The
+#' @param ... arguments passed to the default method from the others.  The
 #'   first arguments of \code{rfe} methods are positional and, as such, must be
 #'   given first in calls to them.
+#' @param object model \link[=inputs]{input}.
 #' @param formula,data \link[=formula]{formula} defining the model predictor and
 #'   response variables and a \link[=data.frame]{data frame} containing them.
 #' @param x,y \link{matrix} and object containing predictor and response
@@ -70,83 +70,16 @@ rfe <- function(...) {
 
 #' @rdname rfe-methods
 #'
-rfe.formula <- function(
-  formula, data, model, control = MachineShop::settings("control"), props = 4,
+rfe.default <- function(
+  object, model = NULL, control = MachineShop::settings("control"), props = 4,
   sizes = integer(), random = FALSE, recompute = TRUE,
   optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
   metrics = NULL, stat = "base::mean", ...
 ) {
-  rfe_args <- c(list(input = NULL), as.list(environment()))
-  rfe_args$input <- as.MLInput(formula, data)
-  do.call(rfe, rfe_args)
-}
-
-
-#' @rdname rfe-methods
-#'
-rfe.matrix <- function(
-  x, y, model, control = MachineShop::settings("control"), props = 4,
-  sizes = integer(), random = FALSE, recompute = TRUE,
-  optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
-  metrics = NULL, stat = "base::mean", ...
-) {
-  rfe_args <- c(list(input = NULL), as.list(environment()))
-  rfe_args$input <- as.MLInput(x, y)
-  do.call(rfe, rfe_args)
-}
-
-
-#' @rdname rfe-methods
-#'
-rfe.ModelFrame <- function(
-  input, model = NULL, control = MachineShop::settings("control"), props = 4,
-  sizes = integer(), random = FALSE, recompute = TRUE,
-  optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
-  metrics = NULL, stat = "base::mean", ...
-) {
-  .rfe_args <- as.list(environment())
-  .rfe_args$input <- as.MLInput(input)
-  .rfe_args$optimize <- match.arg(optimize)
-  do.call(.rfe, .rfe_args)
-}
-
-
-#' @rdname rfe-methods
-#'
-rfe.recipe <- function(
-  input, model = NULL, control = MachineShop::settings("control"), props = 4,
-  sizes = integer(), random = FALSE, recompute = TRUE,
-  optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
-  metrics = NULL, stat = "base::mean", ...
-) {
-  .rfe_args <- as.list(environment())
-  .rfe_args$input <- as.MLInput(input)
-  .rfe_args$optimize <- match.arg(optimize)
-  do.call(.rfe, .rfe_args)
-}
-
-
-#' @rdname rfe-methods
-#'
-rfe.MLModel <- function(model, ...) {
-  rfe(..., model = model)
-}
-
-
-#' @rdname rfe-methods
-#'
-rfe.MLModelFunction <- function(model, ...) {
-  rfe(as.MLModel(model), ...)
-}
-
-
-.rfe <- function(
-  input, model, control, props, sizes, random, recompute, optimize, samples,
-  metrics, stat, ...
-) {
-  data <- as.data.frame(input)
-  model_fit <- fit(input, model)
+  data <- as.data.frame(object)
+  model_fit <- fit(object, model)
   control <- as.MLControl(control)
+  optimize <- match.arg(optimize)
 
   get_samples <- function(rfe = 1, varimp = 1) as.list(environment())
   samples <- do.call("get_samples", as.list(samples))
@@ -224,15 +157,15 @@ rfe.MLModelFunction <- function(model, ...) {
     for (s in seq_len(samples$rfe)) {
 
       data[drop] <- data[inds[, s], drop]
-      input <- update(input, data = data)
-      res <- resample(input, model = model, control = control)
+      object <- update(object, data = data)
+      res <- resample(object, model = model, control = control)
       perf_samples[[s]] <- summary(
         performance(res, metrics = metrics),
         stats = stat
       )[, 1, drop = FALSE]
 
       if (recompute && size > tail(sizes, 1)) {
-        vi <- do.call(varimp, list(fit(input, model), select = subset))
+        vi <- do.call(varimp, list(fit(object, model), select = subset))
         vi_samples[[s]] <- vi[subset]
       }
 
@@ -262,4 +195,47 @@ rfe.MLModelFunction <- function(model, ...) {
   )
   tbl$optimal[which.min(loss(perf_stats))] <- TRUE
   tbl
+}
+
+
+#' @rdname rfe-methods
+#'
+rfe.formula <- function(formula, data, model, ...) {
+  rfe(as.MLInput(formula, data), model = model, ...)
+}
+
+
+#' @rdname rfe-methods
+#'
+rfe.matrix <- function(x, y, model, ...) {
+  rfe(as.MLInput(x, y), model = model, ...)
+}
+
+
+#' @rdname rfe-methods
+#'
+rfe.ModelFrame <- function(input, model = NULL, ...) {
+  rfe.default(as.MLInput(input), model = model, ...)
+}
+
+
+#' @rdname rfe-methods
+#'
+rfe.recipe <- function(input, model = NULL, ...
+) {
+  rfe.default(as.MLInput(input), model = model, ...)
+}
+
+
+#' @rdname rfe-methods
+#'
+rfe.MLModel <- function(model, ...) {
+  rfe(..., model = model)
+}
+
+
+#' @rdname rfe-methods
+#'
+rfe.MLModelFunction <- function(model, ...) {
+  rfe(as.MLModel(model), ...)
 }
