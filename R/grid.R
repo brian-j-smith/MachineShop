@@ -182,3 +182,81 @@ new_gridinfo <- function(
 
   as_tibble(list(param = param, get_values = get_values, default = default))
 }
+
+
+random_grid <- function(x, size = integer()) {
+  stopifnot(is.list(x))
+
+  names(x) <- make_names_along(x, "value")
+  grids <- map(function(value, name) {
+    do.call(tibble, structure(list(value), names = name))
+  }, x, names(x))
+
+  max_size <- prod(map("int", nrow, grids))
+  if (is_empty(size)) size <- max_size
+  size <- min(size, max_size)
+
+  if (is_empty(grids) || size < 1) {
+    grid <- as_tibble(map(function(data) data[NULL, 1, drop = TRUE], grids))
+  } else {
+    grid <- NULL
+    iter <- 0
+    while (size(grid, 1) < size && iter < 100) {
+      iter <- iter + 1
+      grid_sample <- as_tibble(map(function(data) {
+        inds <- sample.int(nrow(data), size = size, replace = TRUE)
+        data[inds, 1, drop = TRUE]
+      }, grids))
+      grid <- unique_grid(rbind(grid, grid_sample))
+    }
+
+    grid <- head(grid, size)
+    cols <- unname(unnest(grid))
+    sortable_types <- c("character", "complex", "Date", "factor", "logical",
+                        "numeric")
+    is_sortable <- map("logi", function(col) {
+      any(map("logi", is, list(col), sortable_types))
+    }, cols)
+    if (any(is_sortable)) {
+      sort_order <- do.call(order, cols[is_sortable])
+      grid <- grid[sort_order, ]
+    }
+  }
+
+  grid
+}
+
+
+regular_grid <- function(x) {
+  stopifnot(is.list(x))
+
+  names(x) <- make_names_along(x, "value")
+  grids <- map(function(value, name) {
+    do.call(tibble, structure(list(value), names = name))
+  }, x, names(x))
+
+  ns <- map("int", nrow, grids)
+  n <- prod(ns)
+
+  if (is_empty(grids) || n == 0) {
+    repeats <- 0
+  } else {
+    ns_cumprod <- cumprod(ns)
+    grids <- map(function(data, each) {
+      inds <- rep(seq_len(nrow(data)), each = each)
+      data[inds, ]
+    }, grids, n / ns_cumprod)
+    repeats <- ns_cumprod / ns
+  }
+  grids <- map(function(data, times) {
+    inds <- rep(seq_len(nrow(data)), times = times)
+    data[inds, 1, drop = TRUE]
+  }, grids, repeats)
+
+  as_tibble(grids)
+}
+
+
+unique_grid <- function(x) {
+  if (is_empty(x)) as_tibble(x) else x[!duplicated(unnest(x)), ]
+}

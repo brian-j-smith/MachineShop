@@ -424,42 +424,6 @@ rand_int <- function(n = 1) {
 }
 
 
-sample_params <- function(x, size = integer(), replace = FALSE) {
-  stopifnot(is.list(x))
-
-  n <- length(x)
-  if (n == 0) return(tibble())
-
-  names(x) <- make_names_along(x, make_names_len(length(x), "Var"))
-
-  max_size <- prod(lengths(x))
-  if (is_empty(size)) size <- max_size
-  if (!replace) size <- min(size, max_size)
-
-  grid <- as_tibble(matrix(nrow = 0, ncol = n, dimnames = list(NULL, names(x))))
-  iter <- 0
-  while (nrow(grid) < size && iter < 100) {
-    iter <- iter + 1
-    new_grid <- as_tibble(map(sample, x, size = size, replace = TRUE))
-    grid <- rbind(grid, new_grid)
-    if (!replace) grid <- unique(grid)
-  }
-
-  grid <- head(grid, size)
-  sortable_types <- c("character", "complex", "Date", "factor", "logical",
-                      "numeric")
-  is_sortable <- map("logi", function(column) {
-    any(map("logi", is, list(column), sortable_types))
-  }, grid)
-  if (any(is_sortable)) {
-    sort_order <- do.call(order, rev(grid[is_sortable]))
-    grid <- grid[sort_order, ]
-  }
-
-  grid
-}
-
-
 sample_replace <- function(x, inds) {
   if (!is.logical(inds)) {
     old_inds <- inds

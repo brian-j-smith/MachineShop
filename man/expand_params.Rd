@@ -7,7 +7,7 @@
 expand_params(..., random = FALSE)
 }
 \arguments{
-\item{...}{named vectors or factors or a list of these containing the
+\item{...}{named data frames or vectors or a list of these containing the
 parameter values over which to create the grid.}
 
 \item{random}{number of points to be randomly sampled from the parameter grid

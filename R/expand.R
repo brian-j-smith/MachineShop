@@ -241,7 +241,7 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
 #'
 #' Create a grid of parameter values from all combinations of supplied inputs.
 #'
-#' @param ... named vectors or factors or a list of these containing the
+#' @param ... named data frames or vectors or a list of these containing the
 #'   parameter values over which to create the grid.
 #' @param random number of points to be randomly sampled from the parameter grid
 #'   or \code{FALSE} if all points are to be returned.
@@ -266,13 +266,12 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
 #' }
 #'
 expand_params <- function(..., random = FALSE) {
+  x <- list(...)
+  if (is_one_element(x, "list") && is.null(names(x))) x <- x[[1]]
   if (random) {
-    x <- list(...)
-    if (is_one_element(x, "list") && is.null(names(x))) x <- x[[1]]
-    sample_params(x, size = random)
+    random_grid(x, size = random)
   } else {
-    as_tibble(expand.grid(..., KEEP.OUT.ATTRS = FALSE,
-                          stringsAsFactors = FALSE))
+    regular_grid(x)
   }
 }
 
@@ -337,18 +336,7 @@ expand_steps <- function(..., random = FALSE) {
     throw(Error("Step names must be unique."))
   }
 
-  grid <- expand_params(unlist(steps, recursive = FALSE), random = random)
-  recipe_grid <- tibble(.rows = nrow(grid))
-
-  start <- 1
-  for (name in step_names) {
-    n <- length(steps[[name]])
-    x <- grid[seq(start, length = n)]
-    names(x) <- substring(names(x), nchar(name) + 2)
-    recipe_grid[[name]] <- x
-    start <- start + n
-  }
-
-  RecipeGrid(recipe_grid)
+  steps <- map(expand_params, steps, random = random)
+  RecipeGrid(expand_params(steps, random = random))
 
 }
