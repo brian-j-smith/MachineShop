@@ -34,13 +34,13 @@
 
 \method{print}{MLMetric}(x, ...)
 
-\method{print}{MLModel}(x, n = MachineShop::settings("print_max"), ...)
+\method{print}{MLModel}(x, n = MachineShop::settings("print_max"), id = FALSE, ...)
 
 \method{print}{MLModelFunction}(x, ...)
 
-\method{print}{ModelFrame}(x, n = MachineShop::settings("print_max"), ...)
+\method{print}{ModelFrame}(x, n = MachineShop::settings("print_max"), id = FALSE, ...)
 
-\method{print}{ModelRecipe}(x, n = MachineShop::settings("print_max"), ...)
+\method{print}{ModelRecipe}(x, n = MachineShop::settings("print_max"), id = FALSE, ...)
 
 \method{print}{Performance}(x, n = MachineShop::settings("print_max"), ...)
 
@@ -71,6 +71,8 @@ below.
   displayed decreases and increases with positive and negative levels,
   respectively.}
 }}
+
+\item{id}{logical indicating whether to show object identifiers.}
 }
 \description{
 Print methods for objects defined in the \pkg{MachineShop} package.

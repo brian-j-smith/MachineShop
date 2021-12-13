@@ -7,6 +7,7 @@
 #'
 #' @param x object to print.
 #' @param n integer number of models or data frame rows to show.
+#' @param id logical indicating whether to show object identifiers.
 #' @param ... arguments passed to other methods, including the one described
 #'   below.
 #'   \describe{
@@ -103,7 +104,7 @@ setShowDefault("DiscreteVariate")
 
 
 print.EnsembleModel <- function(
-  x, n = MachineShop::settings("print_max"), ...
+  x, n = MachineShop::settings("print_max"), id = FALSE, ...
 ) {
   title(x, ...)
   level <- nesting_level(...)
@@ -114,7 +115,7 @@ print.EnsembleModel <- function(
     hline(level)
     print_train_label("Models:")
     newline()
-    print(x@models, n = n, level = nextlevel)
+    print(x@models, n = n, level = nextlevel, id = id)
     hline(level)
     print(x@params@control, n = n, level = nextlevel)
     if (trained) {
@@ -124,7 +125,7 @@ print.EnsembleModel <- function(
   } else if (level == 1) {
     newline()
     print_train_label("Models:")
-    print(x@models, n = n, level = nextlevel)
+    print(x@models, n = n, level = nextlevel, id = id)
   }
   invisible(x)
 }
@@ -203,11 +204,13 @@ setShowDefault("MLMetric")
 
 #' @rdname print-methods
 #'
-print.MLModel <- function(x, n = MachineShop::settings("print_max"), ...) {
+print.MLModel <- function(
+  x, n = MachineShop::settings("print_max"), id = FALSE, ...
+) {
   title(x, ...)
   level <- nesting_level(...)
   trained <- is_trained(x)
-  print_modelinfo(x, trained = trained, ...)
+  print_modelinfo(x, trained = trained, id = id, ...)
   if (level < 1) {
     newline()
     print_label("Parameters:")
@@ -253,9 +256,12 @@ setShowDefault("MLModelFunction")
 
 #' @rdname print-methods
 #'
-print.ModelFrame <- function(x, n = MachineShop::settings("print_max"), ...) {
+print.ModelFrame <- function(
+  x, n = MachineShop::settings("print_max"), id = FALSE, ...
+) {
   title(x, ...)
   level <- nesting_level(...)
+  if (id) print_id(x)
   label <- if (level < 2) style_label("Terms: ")
   print_items(formula(x), n = n, label = label)
   if (level < 1) {
@@ -273,19 +279,27 @@ setShowDefault("ModelFrame")
 
 #' @rdname print-methods
 #'
-print.ModelRecipe <- function(x, n = MachineShop::settings("print_max"), ...) {
+print.ModelRecipe <- function(
+  x, n = MachineShop::settings("print_max"), id = FALSE, ...
+) {
   title(x, ...)
   level <- nesting_level(...)
+  if (id) print_id(x)
   tbl <- summary(x, original = TRUE)
   print_fields(list(
     "Outcome{?s}: " = tbl$variable[tbl$role == "outcome"],
     "Predictor{?s}: " = tbl$variable[tbl$role == "predictor"]
   ), n = n)
   if (level < 2) {
-    status <- if (is_trained(x)) "Prepared" else "Unprepared"
+    steps <- map("char", class1, x$steps)
+    step_label <- paste(if (is_trained(x)) "Prepared" else "Unprepared", "step")
+    if (id) {
+      steps <- structure(map("char", getElement, x$steps, "id"), names = steps)
+      step_label <- paste(step_label, "ID")
+    }
     print_fields(
-      list(steps = if (length(x$steps)) map("char", class1, x$steps)),
-      labels = c(steps = paste(status, "step{?s}: "))
+      list(steps = steps), labels = c(steps = paste0(step_label, "{?s}: ")),
+      add_names = TRUE, n = n
     )
   }
   if (level < 1) {
@@ -421,7 +435,7 @@ setShowDefault("Resample")
 
 
 print.SelectedInput <- function(
-  x, n = MachineShop::settings("print_max"), ...
+  x, n = MachineShop::settings("print_max"), id = FALSE, ...
 ) {
   NextMethod()
   level <- nesting_level(...)
@@ -430,13 +444,13 @@ print.SelectedInput <- function(
     hline(level)
     print_train_label("Selection set:")
     newline()
-    print(x@inputs, n = n, level = nextlevel)
+    print(x@inputs, n = n, level = nextlevel, id = id)
     hline(level)
     print(x@params@control, n = n, level = nextlevel)
   } else if (level == 1) {
     newline()
     print_train_label("Selection set:")
-    print(x@inputs, n = n, level = nextlevel)
+    print(x@inputs, n = n, level = nextlevel, id = id)
   }
   invisible(x)
 }
@@ -693,6 +707,11 @@ print_fields <- function(x, labels = character(), heading = character(), ...) {
 }
 
 
+print_id <- function(x) {
+  print_fields(list("ID: " = x@id))
+}
+
+
 print_items <- function(x, ...) {
   UseMethod("print_items")
 }
@@ -757,13 +776,13 @@ print_items.list <- function(x, n = Inf, ...) {
 }
 
 
-print_items.ListOf <- function(x, n = Inf, level = 0, ...) {
+print_items.ListOf <- function(x, n = Inf, level = 0, id = FALSE, ...) {
   inds <- head(seq_along(x), n)
   list_names <- names(x)
   if (is.null(list_names)) list_names <- make_names_len(length(x), "Component ")
   for (i in inds) {
     hline(level, label = list_names[i])
-    print(x[[i]], n = n, level = level, na.print = NULL)
+    print(x[[i]], n = n, level = level, id = id, na.print = NULL)
     if (level < 2) newline()
   }
   n_more <- max(length(x) - n, 0)
@@ -836,7 +855,7 @@ print_label <- function(...) {
 }
 
 
-print_modelinfo <- function(x, trained = FALSE, level = 0, ...) {
+print_modelinfo <- function(x, trained = FALSE, level = 0, id = FALSE, ...) {
   info_list <- modelinfo(x)
   if (is_empty(info_list)) return(NULL)
   info <- info_list[[1]]
@@ -844,6 +863,7 @@ print_modelinfo <- function(x, trained = FALSE, level = 0, ...) {
     "Model name: " =  names(info_list),
     "Label: " = paste0(if (trained) "Trained ", info$label)
   ))
+  if (id) print_id(x)
   if (level < 1) {
     print_fields(info, labels = c(
       packages = "Package{?s}: ",

@@ -230,8 +230,9 @@ is_trained.step <- function(x, ...) {
 }
 
 
-make_id <- function(n = 8) {
-  paste(sample(c(letters, 0:9), n, replace = TRUE), collapse = "")
+make_id <- function(prefix = character(), n = 4, sep = ".") {
+  suffix <- sample(c(letters, LETTERS, 0:9), n, replace = TRUE)
+  paste(c(prefix, paste(suffix, collapse = "")), collapse = sep)
 }
 
 

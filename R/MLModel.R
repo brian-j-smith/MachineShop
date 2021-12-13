@@ -135,7 +135,7 @@ MLModel <- function(
 
 
 setMethod("initialize", "MLModel",
-  function(.Object, ..., id = make_id(), input = NullInput()) {
+  function(.Object, ..., id = make_id("model"), input = NullInput()) {
     callNextMethod(.Object, ..., id = id, input = input)
   }
 )
