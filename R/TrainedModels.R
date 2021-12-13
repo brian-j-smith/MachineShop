@@ -222,7 +222,7 @@ TunedModel <- function(
 
   new("TunedModel", MLModel(
     name = "TunedModel",
-    label = "Grid Tuned Model",
+    label = paste("Grid Tuned", object@name),
     response_types = response_types,
     weights = weights,
     params = TrainingParams(
