@@ -139,14 +139,12 @@ fget <- function(x) {
 
 get0 <- function(x, mode = "any") {
   if (is.character(x) && length(x) == 1) {
-    x_expr <- str2lang(x)
-    x_name <- x
-    if (is.symbol(x_expr)) {
-      base::get0(x_name, mode = mode)
-    } else if (is.call(x_expr) && x_expr[[1]] == "::") {
-      base::get0(as.character(x_expr[[3]]),
-                 envir = asNamespace(x_expr[[2]]),
-                 mode = mode)
+    expr <- str2lang(x)
+    if (is.name(expr)) {
+      base::get0(x, mode = mode)
+    } else if (is.call(expr) && any(expr[[1]] == c("::", ":::"))) {
+      base::get0(as.character(expr[[3]]), mode = mode,
+                 envir = asNamespace(expr[[2]]))
     }
   } else if (mode %in% c("any", mode(x))) {
     x
@@ -192,7 +190,7 @@ is_counting <- function(x) {
 
 
 is_empty <- function(x) {
-  length(x) == 0
+  prod(size(x)) == 0
 }
 
 
@@ -201,12 +199,12 @@ is_one_element <- function(x, class = "ANY") {
 }
 
 
-is_response <- function(y, types) {
+is_response <- function(x, types) {
   map("logi", function(type) {
     if (type == "binary") {
-      is(y, "factor") && nlevels(y) == 2
+      is(x, "factor") && nlevels(x) == 2
     } else {
-      is(y, type)
+      is(x, type)
     }
   }, types)
 }
@@ -238,7 +236,7 @@ make_id <- function(n = 8) {
 
 
 make_names_along <- function(x, default = "..", sep = ".") {
-  if (length(default) == 1) default <- rep(default, length = length(x))
+  if (length(default) == 1) default <- rep_len(default, length(x))
   old_names <- names(x)
   names(x) <- default
   if (!is.null(old_names)) {
@@ -250,7 +248,7 @@ make_names_along <- function(x, default = "..", sep = ".") {
 
 
 make_names_len <- function(n, prefix) {
-  paste0(rep(prefix, n), seq_len(n))
+  paste0(rep_len(prefix, n), seq_len(n))
 }
 
 
@@ -320,7 +318,7 @@ missing_names <- function(x, data) {
 
 new_params <- function(envir, ...) {
   args <- c(as.list(envir), ...)
-  missing <- map("logi", function(x) is.symbol(x) && !nzchar(x), args)
+  missing <- map("logi", function(x) is.name(x) && !nzchar(x), args)
   if (any(missing)) {
     throw(Error(note_items(
       "Missing values for required argument{?s}: ", names(args)[missing], "."
@@ -613,8 +611,8 @@ vector_to_function <- function(x, type) {
     x_names <- character()
     for (i in seq_along(x)) {
       if (is(x[[i]], "character")) {
-        x_name <- x[[i]]
-        x[[i]] <- fget(x_name)
+        x_name <- gsub("^.*[:]{2}(?!.*[:]{2})", "", x[[i]], perl = TRUE)
+        x[[i]] <- fget(x[[i]])
       } else if (is(x[[i]], "MLMetric")) {
         x_name <- x[[i]]@name
       } else if (is(x[[i]], "function")) {

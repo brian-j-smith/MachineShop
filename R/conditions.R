@@ -280,7 +280,7 @@ check_numeric <- function(
     return(result)
   }
 
-  include <- rep(include, length = 2)
+  include <- rep_len(include, 2)
   ops <- paste0(c(">", "<"), ifelse(include, "=", ""))
   values <- na.omit(c(result))
   inbounds <- function(op, bound) all(do.call(op, list(values, bound)))

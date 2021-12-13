@@ -99,7 +99,7 @@ new_step_spca <- function(..., sparsity, num_var, shrinkage, max_iter,
       sparse <- "varnum"
     }
     res <- elasticnet::spca(x, K = num_comp,
-                            para = rep(para, length = num_comp),
+                            para = rep_len(para, num_comp),
                             sparse = sparse, lambda = step$shrinkage,
                             max.iter = step$max_iter, eps.conv = step$tol)
 
