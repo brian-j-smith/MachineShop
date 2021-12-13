@@ -42,6 +42,7 @@ LinkingTo: Rcpp
 Collate: 
     'classes.R'
     'MLControl.R'
+    'MLInput.R'
     'MLMetric.R'
     'MLModel.R'
     'ML_AdaBagModel.R'
@@ -66,7 +67,6 @@ Collate:
     'ML_MDAModel.R'
     'ML_NNetModel.R'
     'ML_NaiveBayesModel.R'
-    'ML_Null.R'
     'ML_ParsnipModel.R'
     'ML_PLSModel.R'
     'ML_POLRModel.R'

@@ -134,6 +134,26 @@ MLModel <- function(
 }
 
 
+setMethod("initialize", "MLModel",
+  function(.Object, ..., id = make_id(), input = NullInput()) {
+    callNextMethod(.Object, ..., id = id, input = input)
+  }
+)
+
+
+NullModel <- function() {
+  MLModel(
+    id = "null",
+    name = "NullModel",
+    label = "Null Model",
+    response_types = settings("response_types"),
+    fit = function(...) {
+      throw(Error("No specified model to fit."), call = call("fit"))
+    }
+  )
+}
+
+
 update.MLModel <- function(
   object, params = list(), quote = TRUE, new_id = FALSE, ...
 ) {

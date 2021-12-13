@@ -184,13 +184,6 @@ setClass("MLInput",
 )
 
 
-setMethod("initialize", "MLInput",
-  function(.Object, ..., id = make_id()) {
-    callNextMethod(.Object, ..., id = id)
-  }
-)
-
-
 setClass("MLModel",
   slots = c(
     id = "character",
@@ -208,13 +201,6 @@ setClass("MLModel",
     input = "MLInput",
     steps = "ListOf"
   )
-)
-
-
-setMethod("initialize", "MLModel",
-  function(.Object, ..., id = make_id(), input = NullInput()) {
-    callNextMethod(.Object, ..., id = id, input = input)
-  }
 )
 
 
