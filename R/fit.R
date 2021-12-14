@@ -15,6 +15,7 @@
 #'   variables.
 #' @param input \link[=inputs]{input} object defining and containing the model
 #'   predictor and response variables.
+#' @param object model \link[=ModelSpecification]{specification}.
 #' @param model \link[=models]{model} function, function name, or object; or
 #'   another object that can be \link[=as.MLModel]{coerced} to a model.  A model
 #'   can be given first followed by any of the variable specifications, and the
@@ -76,6 +77,17 @@ fit.ModelFrame <- function(input, model = NULL, ...) {
 #'
 fit.recipe <- function(input, model = NULL, ...) {
   .fit(as.MLInput(input), model = as.MLModel(model))
+}
+
+
+#' @rdname fit-methods
+#'
+fit.ModelSpecification <- function(object, ...) {
+  if (has_NullControl(object)) {
+    fit(as.MLInput(object), model = as.MLModel(object))
+  } else {
+    fit_grid(object)
+  }
 }
 
 

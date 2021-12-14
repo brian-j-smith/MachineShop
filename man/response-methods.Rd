@@ -4,6 +4,7 @@
 \alias{response}
 \alias{response.MLModelFit}
 \alias{response.ModelFrame}
+\alias{response.ModelSpecification}
 \alias{response.recipe}
 \title{Extract Response Variable}
 \usage{
@@ -13,11 +14,14 @@ response(object, ...)
 
 \method{response}{ModelFrame}(object, newdata = NULL, ...)
 
+\method{response}{ModelSpecification}(object, newdata = NULL, ...)
+
 \method{response}{recipe}(object, newdata = NULL, ...)
 }
 \arguments{
-\item{object}{model \link{fit} result, \code{\link{ModelFrame}}, or
-\code{\link[recipes]{recipe}}.}
+\item{object}{model \link{fit}, \link[=inputs]{input}, or
+\link[=ModelSpecification]{specification} containing predictor and response
+variables.}
 
 \item{...}{arguments passed to other methods.}
 

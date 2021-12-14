@@ -12,6 +12,7 @@
 \alias{print.MLModelFunction}
 \alias{print.ModelFrame}
 \alias{print.ModelRecipe}
+\alias{print.ModelSpecification}
 \alias{print.Performance}
 \alias{print.PerformanceCurve}
 \alias{print.RecipeGrid}
@@ -41,6 +42,8 @@
 \method{print}{ModelFrame}(x, n = MachineShop::settings("print_max"), id = FALSE, ...)
 
 \method{print}{ModelRecipe}(x, n = MachineShop::settings("print_max"), id = FALSE, ...)
+
+\method{print}{ModelSpecification}(x, n = MachineShop::settings("print_max"), ...)
 
 \method{print}{Performance}(x, n = MachineShop::settings("print_max"), ...)
 

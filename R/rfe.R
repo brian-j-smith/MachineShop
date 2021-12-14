@@ -10,7 +10,8 @@
 #' @param ... arguments passed to the default method from the others.  The
 #'   first arguments of \code{rfe} methods are positional and, as such, must be
 #'   given first in calls to them.
-#' @param object model \link[=inputs]{input}.
+#' @param object model \link[=inputs]{input} or
+#'   \link[=ModelSpecification]{specification}.
 #' @param formula,data \link[=formula]{formula} defining the model predictor and
 #'   response variables and a \link[=data.frame]{data frame} containing them.
 #' @param x,y \link{matrix} and object containing predictor and response
@@ -224,6 +225,13 @@ rfe.ModelFrame <- function(input, model = NULL, ...) {
 rfe.recipe <- function(input, model = NULL, ...
 ) {
   rfe.default(as.MLInput(input), model = model, ...)
+}
+
+
+#' @rdname rfe-methods
+#'
+rfe.ModelSpecification <- function(object, ...) {
+  rfe.default(object, ...)
 }
 
 

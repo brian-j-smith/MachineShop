@@ -6,6 +6,7 @@
 \alias{fit.matrix}
 \alias{fit.ModelFrame}
 \alias{fit.recipe}
+\alias{fit.ModelSpecification}
 \alias{fit.MLModel}
 \alias{fit.MLModelFunction}
 \title{Model Fitting}
@@ -19,6 +20,8 @@ fit(...)
 \method{fit}{ModelFrame}(input, model = NULL, ...)
 
 \method{fit}{recipe}(input, model = NULL, ...)
+
+\method{fit}{ModelSpecification}(object, ...)
 
 \method{fit}{MLModel}(model, ...)
 
@@ -44,6 +47,8 @@ variables.}
 
 \item{input}{\link[=inputs]{input} object defining and containing the model
 predictor and response variables.}
+
+\item{object}{model \link[=ModelSpecification]{specification}.}
 }
 \value{
 \code{MLModelFit} class object.

@@ -69,6 +69,7 @@ Survival: S = Surv\cr
 Models may be combined, tuned, or selected with the following meta-model
 functions.
 \tabular{ll}{
+  \code{\link{ModelSpecification}} \tab Model specification \cr
   \code{\link{StackedModel}}  \tab Stacked regression \cr
   \code{\link{SuperModel}}    \tab Super learner \cr
   \code{\link{SelectedModel}} \tab Model selection from a candidate set \cr

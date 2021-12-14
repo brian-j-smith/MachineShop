@@ -64,6 +64,7 @@
 #' Models may be combined, tuned, or selected with the following meta-model
 #' functions.
 #' \tabular{ll}{
+#'   \code{\link{ModelSpecification}} \tab Model specification \cr
 #'   \code{\link{StackedModel}}  \tab Stacked regression \cr
 #'   \code{\link{SuperModel}}    \tab Super learner \cr
 #'   \code{\link{SelectedModel}} \tab Model selection from a candidate set \cr
@@ -87,6 +88,7 @@ NULL
 #'   \code{\link{formula}}         \tab Traditional model formula \cr
 #'   \code{\link{matrix}}          \tab Design matrix of predictors \cr
 #'   \code{\link{ModelFrame}}      \tab Model frame \cr
+#'   \code{\link{ModelSpecification}} \tab Model specification \cr
 #'   \code{\link[recipes]{recipe}} \tab Preprocessing recipe roles and steps \cr
 #' }
 #' Response variable types in the input specifications are defined by the user
@@ -109,6 +111,7 @@ NULL
 #' Inputs may be combined, selected, or tuned with the following meta-input
 #' functions.
 #' \tabular{ll}{
+#'   \code{\link{ModelSpecification}} \tab Model specification \cr
 #'   \code{\link{ModeledInput}}  \tab Input with a prespecified model \cr
 #'   \code{\link{SelectedInput}} \tab Input selection from a candidate set \cr
 #'   \code{\link{TunedInput}}    \tab Input tuning over a parameter grid \cr

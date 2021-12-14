@@ -172,6 +172,11 @@ has_grid <- function(object) {
 }
 
 
+has_NullControl <- function(object) {
+  is(object@params@control, "NullControl")
+}
+
+
 has_varimp <- function(object) {
   !is.null(body(object@varimp))
 }

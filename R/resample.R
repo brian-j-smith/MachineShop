@@ -10,7 +10,8 @@
 #'   the \code{MLModel} and \code{MLModelFunction} methods to others.  The
 #'   first arguments of \code{resample} methods are positional and, as such,
 #'   must be given first in calls to them.
-#' @param object model \link[=inputs]{input}.
+#' @param object model \link[=inputs]{input} or
+#'   \link[=ModelSpecification]{specification}.
 #' @param formula,data \link[=formula]{formula} defining the model predictor and
 #'   response variables and a \link[=data.frame]{data frame} containing them.
 #' @param x,y \link{matrix} and object containing predictor and response
@@ -113,6 +114,15 @@ resample.ModelFrame <- function(input, model = NULL, ...) {
 #'
 resample.recipe <- function(input, model = NULL, ...) {
   resample.default(as.MLInput(input), model = model, ...)
+}
+
+
+#' @rdname resample-methods
+#'
+resample.ModelSpecification <- function(object, ...) {
+  args <- list(object, ...)
+  args$model <- as.MLModel(object)
+  do.call(resample.default, args)
 }
 
 
@@ -379,6 +389,7 @@ TrainingParams <- function(
 
 
 rsample_split <- function(fun, data, control) {
+  data <- as.MLInput(data)
   df <- as.data.frame(data)
   formal_names <- names(formals(fun))
   df[["(groups)"]] <- if ("group" %in% formal_names) case_groups(data)
@@ -415,7 +426,8 @@ subsample <- function(train, test, model, control, iter = 1) {
 
   f <- function(test) {
     weights <- if (control@weights) "weights"
-    comps <- case_comps(model_fit, test, c("names", weights), response = TRUE)
+    comps <- case_comps(model_fit, newdata = as.MLInput(test),
+                        types = c("names", weights), response = TRUE)
     df <- data.frame(Model = factor(model@name),
                      Iteration = as.integer(iter),
                      Case = comps$names,

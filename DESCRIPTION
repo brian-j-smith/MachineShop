@@ -84,6 +84,7 @@ Collate:
     'MachineShop-package.R'
     'ModelFrame.R'
     'ModelRecipe.R'
+    'ModelSpecification.R'
     'ModeledInput.R'
     'TrainedInputs.R'
     'TrainedModels.R'

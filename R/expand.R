@@ -71,6 +71,7 @@ expand_model <- function(object, ..., random = FALSE) {
 #'   variables.
 #' @param input \link[=inputs]{input} object defining and containing the model
 #'   predictor and response variables.
+#' @param object model \link[=ModelSpecification]{specification}.
 #' @param model \code{\link{TunedModel}} object.  Can be given first followed by
 #'   any of the variable specifications.
 #' @param info logical indicating whether to return model-defined grid
@@ -136,6 +137,51 @@ expand_modelgrid.ModelFrame <- function(input, model, info = FALSE, ...) {
 #'
 expand_modelgrid.recipe <- function(input, model, info = FALSE, ...) {
   expand_modelgrid(model, input, info = info)
+}
+
+
+#' @rdname expand_modelgrid-methods
+#'
+expand_modelgrid.ModelSpecification <- function(object, ...) {
+  grid <- object@grid
+  if (is_empty(grid)) {
+    map_slots(function(object) {
+      types <- c("ModeledInput", "SelectedInput", "SelectedModel")
+      found <- map("logi", is, list(object), types)
+      if (any(found)) {
+        throw(Error(
+          "Cannot expand the tuning grids of a ModelSpecification containing ",
+          types[found], "."
+        ))
+      }
+    }, object)
+
+    get_modelgrids <- function(input) {
+      map_slots(function(model) {
+        get_grid(model, input)$params
+      }, object, names = c("model", "models"))
+    }
+
+    make_grid <- function(grids) {
+      expand_params(grids[!map("logi", is_empty, grids)])
+    }
+
+    input_grid <- make_grid(map_slots(function(input) {
+      get_grid(input)$params
+    }, object, names = c("input", "inputs")))
+
+    if (nrow(input_grid)) {
+      grid <- NULL
+      for (i in seq_len(nrow(input_grid))) {
+        params <- input_grid[i, ]
+        input <- update_slots(object@input, params = params)
+        grid <- rbind(grid, make_grid(c(params, get_modelgrids(input))))
+      }
+    } else {
+      grid <- make_grid(get_modelgrids(object@input))
+    }
+  }
+  grid
 }
 
 

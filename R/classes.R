@@ -115,6 +115,9 @@ setClass("CVOptimismControl",
 )
 
 
+setClass("NullControl", contains = "MLControl")
+
+
 setClass("OOBControl",
   contains = "MLControl",
   slots = c(samples = "integer")
@@ -236,6 +239,17 @@ ModelFormulaTerms <- setClass("ModelFormulaTerms",
 
 setClass("ModelRecipe",
   contains = c("recipe", "MLInput")
+)
+
+
+setClass("ModelSpecification",
+  slots = c(
+    id = "character",
+    input = "MLInput",
+    model = "MLModel",
+    params = "TrainingParams",
+    grid = "tbl_df"
+  )
 )
 
 

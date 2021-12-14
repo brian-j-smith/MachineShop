@@ -6,6 +6,7 @@
 \alias{expand_modelgrid.matrix}
 \alias{expand_modelgrid.ModelFrame}
 \alias{expand_modelgrid.recipe}
+\alias{expand_modelgrid.ModelSpecification}
 \alias{expand_modelgrid.TunedModel}
 \title{Model Tuning Grid Expansion}
 \usage{
@@ -18,6 +19,8 @@ expand_modelgrid(...)
 \method{expand_modelgrid}{ModelFrame}(input, model, info = FALSE, ...)
 
 \method{expand_modelgrid}{recipe}(input, model, info = FALSE, ...)
+
+\method{expand_modelgrid}{ModelSpecification}(object, ...)
 
 \method{expand_modelgrid}{TunedModel}(model, ..., info = FALSE)
 }
@@ -41,6 +44,8 @@ variables.}
 
 \item{input}{\link[=inputs]{input} object defining and containing the model
 predictor and response variables.}
+
+\item{object}{model \link[=ModelSpecification]{specification}.}
 }
 \value{
 A data frame of parameter values or \code{NULL} if data are required

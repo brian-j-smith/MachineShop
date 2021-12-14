@@ -130,6 +130,11 @@ get_grid.default <- function(object, ...) {
 }
 
 
+get_grid.ModelSpecification <- function(object, ...) {
+  make_grid("ModelSpec", object@grid)
+}
+
+
 get_grid.SelectedInput <- function(object, ...) {
   make_grid(
     names(object@inputs),

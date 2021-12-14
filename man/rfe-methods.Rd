@@ -7,6 +7,7 @@
 \alias{rfe.matrix}
 \alias{rfe.ModelFrame}
 \alias{rfe.recipe}
+\alias{rfe.ModelSpecification}
 \alias{rfe.MLModel}
 \alias{rfe.MLModelFunction}
 \title{Recursive Feature Elimination}
@@ -36,6 +37,8 @@ rfe(...)
 
 \method{rfe}{recipe}(input, model = NULL, ...)
 
+\method{rfe}{ModelSpecification}(object, ...)
+
 \method{rfe}{MLModel}(model, ...)
 
 \method{rfe}{MLModelFunction}(model, ...)
@@ -45,7 +48,8 @@ rfe(...)
 first arguments of \code{rfe} methods are positional and, as such, must be
 given first in calls to them.}
 
-\item{object}{model \link[=inputs]{input}.}
+\item{object}{model \link[=inputs]{input} or
+\link[=ModelSpecification]{specification}.}
 
 \item{model}{\link[=models]{model} function, function name, or object; or
 another object that can be \link[=as.MLModel]{coerced} to a model.  A model

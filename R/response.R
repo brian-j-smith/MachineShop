@@ -4,8 +4,9 @@
 #'
 #' @rdname response-methods
 #'
-#' @param object model \link{fit} result, \code{\link{ModelFrame}}, or
-#'   \code{\link[recipes]{recipe}}.
+#' @param object model \link{fit}, \link[=inputs]{input}, or
+#'   \link[=ModelSpecification]{specification} containing predictor and response
+#'   variables.
 #' @param newdata \link[=data.frame]{data frame} from which to extract the
 #'   response variable values if given; otherwise, \code{object} is used.
 #' @param ... arguments passed to other methods.
@@ -68,6 +69,13 @@ response.ModelFrame <- function(object, newdata = NULL, ...) {
     y <- response(f(object), newdata, y)
   }
   y
+}
+
+
+#' @rdname response-methods
+#'
+response.ModelSpecification <- function(object, newdata = NULL, ...) {
+  response(as.MLInput(object), newdata = newdata, ...)
 }
 
 

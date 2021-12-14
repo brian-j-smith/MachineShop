@@ -164,6 +164,13 @@ print.CVControl <- function(x, ...) {
 }
 
 
+print.NullControl <- function(x, ...) {
+  title(x, ...)
+  print_fields(list("Label: " = x@label))
+  invisible(x)
+}
+
+
 print.OOBControl <- function(x, ...) {
   fields <- list("Samples: " = x@samples)
   NextMethod(fields = fields)
@@ -313,6 +320,31 @@ print.ModelRecipe <- function(
 
 
 setShowDefault("ModelRecipe")
+
+
+#' @rdname print-methods
+#'
+print.ModelSpecification <- function(
+  x, n = MachineShop::settings("print_max"), ...
+) {
+  title(x, ...)
+  level <- nesting_level(...)
+  nextlevel <- level + 1
+  show_all <- length(x@grid) && level < 1
+  print(x@input, n = n, level = nextlevel, id = show_all)
+  newline()
+  print(x@model, n = n, level = nextlevel, id = show_all)
+  if (show_all) {
+    newline()
+    heading("Grid", level = nextlevel)
+    print_items(x@grid, n = n)
+    newline()
+    print(x@params@control, n = n, level = nextlevel)
+  }
+}
+
+
+setShowDefault("ModelSpecification")
 
 
 print.ModelTerms <- function(x, n = MachineShop::settings("print_max"), ...) {

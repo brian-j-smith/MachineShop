@@ -147,6 +147,11 @@ CVOptimismControl <- function(
 }
 
 
+NullControl <- function() {
+  new("NullControl", label = "Null Control")
+}
+
+
 #' @rdname MLControl
 #'
 #' @details

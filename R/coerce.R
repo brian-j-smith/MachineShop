@@ -42,6 +42,11 @@ as.data.frame.ModelRecipe <- function(x, ...) {
 }
 
 
+as.data.frame.ModelSpecification <- function(x, ...) {
+  as.data.frame(as.MLInput(x))
+}
+
+
 as.data.frame.PerformanceDiffTest <- function(x, ...) {
   stat_names <- matrix(NA_character_, nrow(x), ncol(x))
   stat_names[upper.tri(stat_names)] <- "Mean"
@@ -159,6 +164,11 @@ as.MLControl.MLControl <- function(x, ...) {
 }
 
 
+as.MLControl.NULL <- function(x, ...) {
+  NullControl()
+}
+
+
 as.MLInput <- function(x, ...) {
   UseMethod("as.MLInput")
 }
@@ -182,6 +192,11 @@ as.MLInput.matrix <- function(x, y, ...) {
 
 as.MLInput.MLInput <- function(x, ...) {
   x
+}
+
+
+as.MLInput.ModelSpecification <- function(x, ...) {
+  x@input
 }
 
 
@@ -268,6 +283,11 @@ as.MLModel.ModeledInput <- function(x, ...) {
 #'
 as.MLModel.model_spec <- function(x, ...) {
   ParsnipModel(x)
+}
+
+
+as.MLModel.ModelSpecification <- function(x, ...) {
+  x@model
 }
 
 

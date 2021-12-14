@@ -11,6 +11,7 @@ determined by a model fit.  Input specifications supported by
   \code{\link{formula}}         \tab Traditional model formula \cr
   \code{\link{matrix}}          \tab Design matrix of predictors \cr
   \code{\link{ModelFrame}}      \tab Model frame \cr
+  \code{\link{ModelSpecification}} \tab Model specification \cr
   \code{\link[recipes]{recipe}} \tab Preprocessing recipe roles and steps \cr
 }
 Response variable types in the input specifications are defined by the user
@@ -33,6 +34,7 @@ with the functions and recipe roles:
 Inputs may be combined, selected, or tuned with the following meta-input
 functions.
 \tabular{ll}{
+  \code{\link{ModelSpecification}} \tab Model specification \cr
   \code{\link{ModeledInput}}  \tab Input with a prespecified model \cr
   \code{\link{SelectedInput}} \tab Input selection from a candidate set \cr
   \code{\link{TunedInput}}    \tab Input tuning over a parameter grid \cr

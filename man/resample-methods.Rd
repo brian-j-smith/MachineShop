@@ -7,6 +7,7 @@
 \alias{resample.matrix}
 \alias{resample.ModelFrame}
 \alias{resample.recipe}
+\alias{resample.ModelSpecification}
 \alias{resample.MLModel}
 \alias{resample.MLModelFunction}
 \title{Resample Estimation of Model Performance}
@@ -23,6 +24,8 @@ resample(...)
 
 \method{resample}{recipe}(input, model = NULL, ...)
 
+\method{resample}{ModelSpecification}(object, ...)
+
 \method{resample}{MLModel}(model, ...)
 
 \method{resample}{MLModelFunction}(model, ...)
@@ -33,7 +36,8 @@ the \code{MLModel} and \code{MLModelFunction} methods to others.  The
 first arguments of \code{resample} methods are positional and, as such,
 must be given first in calls to them.}
 
-\item{object}{model \link[=inputs]{input}.}
+\item{object}{model \link[=inputs]{input} or
+\link[=ModelSpecification]{specification}.}
 
 \item{model}{\link[=models]{model} function, function name, or object; or
 another object that can be \link[=as.MLModel]{coerced} to a model.  A model
