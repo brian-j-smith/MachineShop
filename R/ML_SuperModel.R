@@ -54,7 +54,7 @@ SuperModel <- function(
     response_types = slots$response_types,
     weights = slots$weights,
     params = TrainingParams(
-      control = as.MLControl(control),
+      control = control,
       options = list(all_vars = all_vars)
     )
   ), models = ListOf(models))

@@ -21,9 +21,9 @@
 #'   these with which to calculate performance.  If not specified, default
 #'   metrics defined in the \link{performance} functions are used.  Recipe
 #'   selection is based on the first calculated metric.
+#' @param cutoff argument passed to the \code{metrics} functions.
 #' @param stat function or character string naming a function to compute a
 #'   summary statistic on resampled metric values for recipe selection.
-#' @param cutoff argument passed to the \code{metrics} functions.
 #'
 #' @return \code{SelectedModelFrame} or \code{SelectedModelRecipe} class object
 #' that inherits from \code{SelectedInput} and \code{ModelFrame} or
@@ -60,8 +60,8 @@ SelectedInput <- function(...) {
 #'
 SelectedInput.formula <- function(
   ..., data, control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.TrainingParams"),
-  cutoff = MachineShop::settings("cutoff")
+  cutoff = MachineShop::settings("cutoff"),
+  stat = MachineShop::settings("stat.TrainingParams")
 ) {
   inputs <- list(...)
   if (!all(map("logi", is, inputs, "formula"))) {
@@ -79,8 +79,8 @@ SelectedInput.formula <- function(
 #'
 SelectedInput.matrix <- function(
   ..., y, control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.TrainingParams"),
-  cutoff = MachineShop::settings("cutoff")
+  cutoff = MachineShop::settings("cutoff"),
+  stat = MachineShop::settings("stat.TrainingParams")
 ) {
   inputs <- list(...)
   if (!all(map("logi", is, inputs, "matrix"))) {
@@ -96,8 +96,8 @@ SelectedInput.matrix <- function(
 #'
 SelectedInput.ModelFrame <- function(
   ..., control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.TrainingParams"),
-  cutoff = MachineShop::settings("cutoff")
+  cutoff = MachineShop::settings("cutoff"),
+  stat = MachineShop::settings("stat.TrainingParams")
 ) {
 
   inputs <- list(...)
@@ -125,10 +125,10 @@ SelectedInput.ModelFrame <- function(
   new("SelectedModelFrame", ModelFrame(data),
     inputs = ListOf(map(terms, inputs)),
     params = TrainingParams(
-      control = as.MLControl(control),
+      control = control,
       metrics = metrics,
-      stat = stat,
-      cutoff = cutoff
+      cutoff = cutoff,
+      stat = stat
     )
   )
 
@@ -139,8 +139,8 @@ SelectedInput.ModelFrame <- function(
 #'
 SelectedInput.recipe <- function(
   ..., control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.TrainingParams"),
-  cutoff = MachineShop::settings("cutoff")
+  cutoff = MachineShop::settings("cutoff"),
+  stat = MachineShop::settings("stat.TrainingParams")
 ) {
 
   inputs <- list(...)
@@ -185,10 +185,10 @@ SelectedInput.recipe <- function(
   new("SelectedModelRecipe", new("ModelRecipe", rec),
     inputs = ListOf(inputs),
     params = TrainingParams(
-      control = as.MLControl(control),
+      control = control,
       metrics = metrics,
-      stat = stat,
-      cutoff = cutoff
+      cutoff = cutoff,
+      stat = stat
     )
   )
 
@@ -261,9 +261,9 @@ update.SelectedModelRecipe <- function(object, params = list(), ...) {
 #'   these with which to calculate performance.  If not specified, default
 #'   metrics defined in the \link{performance} functions are used.  Recipe
 #'   selection is based on the first calculated metric.
+#' @param cutoff argument passed to the \code{metrics} functions.
 #' @param stat function or character string naming a function to compute a
 #'   summary statistic on resampled metric values for recipe tuning.
-#' @param cutoff argument passed to the \code{metrics} functions.
 #' @param ... arguments passed to other methods.
 #'
 #' @return \code{TunedModelRecipe} class object that inherits from
@@ -293,17 +293,17 @@ TunedInput <- function(object, ...) {
 #'
 TunedInput.recipe <- function(
   object, grid = expand_steps(), control = MachineShop::settings("control"),
-  metrics = NULL, stat = MachineShop::settings("stat.TrainingParams"),
-  cutoff = MachineShop::settings("cutoff"), ...
+  metrics = NULL, cutoff = MachineShop::settings("cutoff"),
+  stat = MachineShop::settings("stat.TrainingParams"), ...
 ) {
 
   object <- new("TunedModelRecipe", ModelRecipe(object),
     grid = grid,
     params = TrainingParams(
-      control = as.MLControl(control),
+      control = control,
       metrics = metrics,
-      stat = stat,
-      cutoff = cutoff
+      cutoff = cutoff,
+      stat = stat
     )
   )
 

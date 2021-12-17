@@ -13,8 +13,8 @@ TunedInput(object, ...)
   grid = expand_steps(),
   control = MachineShop::settings("control"),
   metrics = NULL,
-  stat = MachineShop::settings("stat.TrainingParams"),
   cutoff = MachineShop::settings("cutoff"),
+  stat = MachineShop::settings("stat.TrainingParams"),
   ...
 )
 }
@@ -34,10 +34,10 @@ these with which to calculate performance.  If not specified, default
 metrics defined in the \link{performance} functions are used.  Recipe
 selection is based on the first calculated metric.}
 
+\item{cutoff}{argument passed to the \code{metrics} functions.}
+
 \item{stat}{function or character string naming a function to compute a
 summary statistic on resampled metric values for recipe tuning.}
-
-\item{cutoff}{argument passed to the \code{metrics} functions.}
 }
 \value{
 \code{TunedModelRecipe} class object that inherits from

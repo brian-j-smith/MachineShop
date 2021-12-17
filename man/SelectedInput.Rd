@@ -18,8 +18,8 @@ SelectedInput(...)
   data,
   control = MachineShop::settings("control"),
   metrics = NULL,
-  stat = MachineShop::settings("stat.TrainingParams"),
-  cutoff = MachineShop::settings("cutoff")
+  cutoff = MachineShop::settings("cutoff"),
+  stat = MachineShop::settings("stat.TrainingParams")
 )
 
 \method{SelectedInput}{matrix}(
@@ -27,24 +27,24 @@ SelectedInput(...)
   y,
   control = MachineShop::settings("control"),
   metrics = NULL,
-  stat = MachineShop::settings("stat.TrainingParams"),
-  cutoff = MachineShop::settings("cutoff")
+  cutoff = MachineShop::settings("cutoff"),
+  stat = MachineShop::settings("stat.TrainingParams")
 )
 
 \method{SelectedInput}{ModelFrame}(
   ...,
   control = MachineShop::settings("control"),
   metrics = NULL,
-  stat = MachineShop::settings("stat.TrainingParams"),
-  cutoff = MachineShop::settings("cutoff")
+  cutoff = MachineShop::settings("cutoff"),
+  stat = MachineShop::settings("stat.TrainingParams")
 )
 
 \method{SelectedInput}{recipe}(
   ...,
   control = MachineShop::settings("control"),
   metrics = NULL,
-  stat = MachineShop::settings("stat.TrainingParams"),
-  cutoff = MachineShop::settings("cutoff")
+  cutoff = MachineShop::settings("cutoff"),
+  stat = MachineShop::settings("stat.TrainingParams")
 )
 
 \method{SelectedInput}{list}(x, ...)
@@ -65,10 +65,10 @@ these with which to calculate performance.  If not specified, default
 metrics defined in the \link{performance} functions are used.  Recipe
 selection is based on the first calculated metric.}
 
+\item{cutoff}{argument passed to the \code{metrics} functions.}
+
 \item{stat}{function or character string naming a function to compute a
 summary statistic on resampled metric values for recipe selection.}
-
-\item{cutoff}{argument passed to the \code{metrics} functions.}
 
 \item{y}{response variable.}
 

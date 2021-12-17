@@ -130,36 +130,6 @@ resample.MLModelFunction <- function(model, ...) {
 }
 
 
-Resample <- function(object, ...) {
-  UseMethod("Resample")
-}
-
-
-Resample.data.frame <- function(
-  object, ..., control, case_comps = NULL, .check = TRUE
-) {
-  if (.check) {
-    var_names <- c("Model", "Iteration", "Case", "Observed", "Predicted")
-    missing <- missing_names(var_names, object)
-    if (length(missing)) {
-      throw(Error(note_items("Missing resample variable{?s}: ", missing, ".")))
-    }
-    object$Model <- droplevels(object$Model)
-  }
-  rownames(object) <- NULL
-
-  case_comps <- as.data.frame(case_comps)
-  if (is_empty(case_comps$strata)) control@strata <- list()
-
-  new("Resample", object, control = control, case_comps = case_comps, ...)
-}
-
-
-Resample.list <- function(object, ...) {
-  Resample(do.call(append, object), ...)
-}
-
-
 .resample <- function(control, object, model, ...) {
   UseMethod(".resample")
 }
@@ -355,6 +325,56 @@ Resample.list <- function(object, ...) {
 }
 
 
+Resample <- function(object, ...) {
+  UseMethod("Resample")
+}
+
+
+Resample.data.frame <- function(
+  object, ..., control, case_comps = NULL, .check = TRUE
+) {
+  if (.check) {
+    var_names <- c("Model", "Iteration", "Case", "Observed", "Predicted")
+    missing <- missing_names(var_names, object)
+    if (length(missing)) {
+      throw(Error(note_items("Missing resample variable{?s}: ", missing, ".")))
+    }
+    object$Model <- droplevels(object$Model)
+  }
+  rownames(object) <- NULL
+
+  case_comps <- as.data.frame(case_comps)
+  if (is_empty(case_comps$strata)) control@strata <- list()
+
+  new("Resample", object, control = control, case_comps = case_comps, ...)
+}
+
+
+Resample.list <- function(object, ...) {
+  Resample(do.call(append, object), ...)
+}
+
+
+TrainingParams <- function(
+  object, control = NULL, cutoff = NULL, stat = NULL, ...
+) {
+  control <- as.MLControl(control)
+  if (length(cutoff)) {
+    cutoff <- check_numeric(cutoff, bounds = c(0, 1), include = FALSE, size = 1)
+    throw(check_assignment(cutoff))
+  } else {
+    cutoff <- 0.5
+  }
+  if (length(stat)) {
+    stat <- check_stat(stat, convert = TRUE)
+    throw(check_assignment(stat))
+  } else {
+    stat <- function(x) NA
+  }
+  new("TrainingParams", control = control, cutoff = cutoff, stat = stat, ...)
+}
+
+
 #################### Utility Functions ####################
 
 
@@ -417,8 +437,7 @@ resample_grid <- function(object, ...) {
   control <- object@params@control
   metrics <- object@params@metrics
   cutoff <- object@params@cutoff
-  stat <- check_stat(object@params@stat, convert = TRUE)
-  throw(check_assignment(stat))
+  stat_fun <- function(x) object@params@stat(na.omit(x))
 
   err_msgs <- character()
   perf_list <- list()
@@ -447,7 +466,7 @@ resample_grid <- function(object, ...) {
     }
     perf <- performance(res, metrics = metrics, cutoff = cutoff)
     perf_list[[name]] <- perf
-    perf_stats_list[[name]] <- apply(perf, 2, function(x) stat(na.omit(x)))
+    perf_stats_list[[name]] <- apply(perf, 2, stat_fun)
   }
 
   failed <- is.na(perf_list)

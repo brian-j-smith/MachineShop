@@ -138,12 +138,12 @@ setClass("TrainControl",
 setOldClass(c("parameters", "tbl_df"))
 
 
-TrainingParams <- setClass("TrainingParams",
+setClass("TrainingParams",
   slots = c(
     control = "MLControl",
     metrics = "ANY",
-    stat = "ANY",
     cutoff = "numeric",
+    stat = "function",
     options = "list"
   )
 )

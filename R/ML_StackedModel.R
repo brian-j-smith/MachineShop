@@ -53,7 +53,7 @@ StackedModel <- function(
     response_types = slots$response_types,
     weights = slots$weights,
     params = TrainingParams(
-      control = as.MLControl(control),
+      control = control,
       options = options
     )
   ), models = ListOf(models))

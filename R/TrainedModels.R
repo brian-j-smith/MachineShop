@@ -12,9 +12,9 @@
 #'   these with which to calculate performance.  If not specified, default
 #'   metrics defined in the \link{performance} functions are used.  Model
 #'   selection is based on the first calculated metric.
+#' @param cutoff argument passed to the \code{metrics} functions.
 #' @param stat function or character string naming a function to compute a
 #'   summary statistic on resampled metric values for model selection.
-#' @param cutoff argument passed to the \code{metrics} functions.
 #'
 #' @details
 #' \describe{
@@ -40,8 +40,8 @@
 #'
 SelectedModel <- function(
   ..., control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.TrainingParams"),
-  cutoff = MachineShop::settings("cutoff")
+  cutoff = MachineShop::settings("cutoff"),
+  stat = MachineShop::settings("stat.TrainingParams")
 ) {
 
   models <- as.list(unlist(list(...)))
@@ -61,10 +61,10 @@ SelectedModel <- function(
     response_types = slots$response_types,
     weights = slots$weights,
     params = TrainingParams(
-      control = as.MLControl(control),
+      control = control,
       metrics = metrics,
-      stat = stat,
-      cutoff = cutoff
+      cutoff = cutoff,
+      stat = stat
     )
   ), models = ListOf(models))
 
@@ -160,8 +160,8 @@ update.SelectedModel <- function(object, params = list(), ...) {
 TunedModel <- function(
   object, grid = MachineShop::settings("grid"), fixed = list(),
   control = MachineShop::settings("control"), metrics = NULL,
-  stat = MachineShop::settings("stat.TrainingParams"),
-  cutoff = MachineShop::settings("cutoff")
+  cutoff = MachineShop::settings("cutoff"),
+  stat = MachineShop::settings("stat.TrainingParams")
 ) {
 
   fixed <- as_tibble(dep_fixedarg(fixed))
@@ -226,10 +226,10 @@ TunedModel <- function(
     response_types = response_types,
     weights = weights,
     params = TrainingParams(
-      control = as.MLControl(control),
+      control = control,
       metrics = metrics,
-      stat = stat,
-      cutoff = cutoff
+      cutoff = cutoff,
+      stat = stat
     )
   ), model = object, grid = grid)
 
