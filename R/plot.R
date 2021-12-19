@@ -19,7 +19,8 @@
 #' @param se logical indicating whether to include standard error bars.
 #' @param stat function or character string naming a function to compute a
 #'   summary statistic on resampled metrics for trained \code{MLModel} line
-#'   plots and \code{Resample} model ordering.  For \code{LiftCurve} and
+#'   plots and \code{Resample} model ordering.  The original ordering is
+#'   preserved if a value of \code{NULL} is given.  For \code{LiftCurve} and
 #'   \code{PerformanceCurve} classes, plots are of resampled metrics aggregated
 #'   by the statistic if given or of resample-specific metrics if \code{NULL}.
 #' @param stats vector of numeric indexes or character names of partial
@@ -163,15 +164,16 @@ plot.MLModel <- function(
 ) {
   if (!is_trained(x)) throw(Error("No training results to plot."))
 
-  stat <- check_stat(stat, convert = TRUE)
-  throw(check_assignment(stat))
   type <- match.arg(type)
 
-  map(function(step) {
-    perf <- step@performance
-    if (type == "line") {
+  fun <- if (type == "line") {
+    stat <- check_stat(stat, convert = TRUE)
+    throw(check_assignment(stat))
+
+    function(step) {
       grid <- unnest(step@grid$params)
-      stats <- apply(perf, c(3, 2), function(x) stat(na.omit(x))) %>%
+      stats <- step@performance %>%
+        apply(c(3, 2), function(x) stat(na.omit(x))) %>%
         TabularArray %>%
         as.data.frame
       df <- data.frame(
@@ -180,11 +182,11 @@ plot.MLModel <- function(
         Metric = stats$Metric
       )
 
-      metriclevels <- levels(df$Metric)
+      metric_levels <- levels(df$Metric)
       if (is.null(metrics)) {
-        metrics <- metriclevels
+        metrics <- metric_levels
       } else {
-        metrics <- match_indices(metrics, metriclevels)
+        metrics <- match_indices(metrics, metric_levels)
         df <- df[df$Metric %in% metrics, , drop = FALSE]
       }
       df$Metric <- factor(df$Metric, metrics)
@@ -204,10 +206,13 @@ plot.MLModel <- function(
         geom_point(stat = "summary", fun = mean) +
         labs(x = names(grid)[1]) +
         facet_wrap(~ Metric, scales = "free")
-    } else {
-      plot(perf, metrics = metrics, stat = stat, type = type, ...)
     }
-  }, x@steps)
+  } else {
+    function(step) {
+      plot(step@performance, metrics = metrics, stat = stat, type = type, ...)
+    }
+  }
+  map(fun, x@steps)
 }
 
 
@@ -254,22 +259,23 @@ plot.Performance <- function(
   df <- as.data.frame(x)
   if (is.null(df$Model)) df$Model <- factor("Model")
 
-  metriclevels <- levels(df$Metric)
+  metric_levels <- levels(df$Metric)
   if (is.null(metrics)) {
-    metrics <- metriclevels
+    metrics <- metric_levels
   } else {
-    metrics <- match_indices(metrics, metriclevels)
+    metrics <- match_indices(metrics, metric_levels)
     df <- df[df$Metric %in% metrics, , drop = FALSE]
   }
   df$Metric <- factor(df$Metric, metrics)
 
+  if (is.null(stat)) stat <- function(x) 0
   stat <- check_stat(stat, convert = TRUE)
   throw(check_assignment(stat))
 
-  firstmetric <- df[df$Metric == metrics[1], , drop = FALSE]
-  sortedlevels <- tapply(firstmetric$Value, firstmetric$Model,
+  df_metric <- df[df$Metric == metrics[1], , drop = FALSE]
+  sorted_levels <- tapply(df_metric$Value, df_metric$Model,
                          function(x) stat(na.omit(x))) %>% sort %>% names
-  df$Model <- factor(df$Model, sortedlevels)
+  df$Model <- factor(df$Model, sorted_levels)
 
   p <- ggplot(df)
   switch(match.arg(type),

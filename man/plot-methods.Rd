@@ -84,7 +84,8 @@ line.}
 
 \item{stat}{function or character string naming a function to compute a
 summary statistic on resampled metrics for trained \code{MLModel} line
-plots and \code{Resample} model ordering.  For \code{LiftCurve} and
+plots and \code{Resample} model ordering.  The original ordering is
+preserved if a value of \code{NULL} is given.  For \code{LiftCurve} and
 \code{PerformanceCurve} classes, plots are of resampled metrics aggregated
 by the statistic if given or of resample-specific metrics if \code{NULL}.}
 
