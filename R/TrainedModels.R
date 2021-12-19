@@ -198,10 +198,10 @@ TunedModel <- function(
   } else {
     params <- object@gridinfo$param
     params_type <- "grid"
-    if (!grid@random) params <- params[object@gridinfo$default]
     grid_params <- names(grid@size)
     if (is.null(grid_params)) {
       if (length(grid@size) == 1) {
+        if (!grid@random) params <- params[object@gridinfo$default]
         grid_params <- params
         grid@size <- rep(grid@size, max(length(grid_params), 1))
         names(grid@size) <- grid_params
