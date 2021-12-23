@@ -509,7 +509,7 @@ print.TrainingStep <- function(x, n = MachineShop::settings("print_max"), ...) {
     print_label(x@name, " grid:")
     print_items(x@grid, n = n)
   }
-  if (size(x@performance, 3) > 1) {
+  if (ndim(x@performance) > 2) {
     newline()
     print_fields(list("Selected grid row: " = selected))
     print_fields(list(value = x@grid$metrics[[1]][selected]), labels = c(
