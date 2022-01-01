@@ -419,16 +419,3 @@ dep_fixedarg <- function(x) {
   }
   x
 }
-
-
-dep_varimpargs <- function(metric, ...) {
-  args <- list(...)
-  if (!missing(metric)) {
-    throw(DeprecatedCondition(
-      "Argument 'metric' to varimp()", "'type'",
-      expired = Sys.Date() >= "2021-12-01"
-    ), call = FALSE)
-    args$type <- metric
-  }
-  args
-}

@@ -114,8 +114,7 @@ varimp <- function(object, method = c("permute", "model"), scale = TRUE, ...) {
 
   switch(match.arg(method),
     "model" = {
-      args <- dep_varimpargs(...)
-      vi <- do.call(model@varimp, c(list(unMLModelFit(object)), args))
+      vi <- model@varimp(unMLModelFit(object), ...)
       if (is.null(vi)) vi <- varimp_permute(object)
     },
     "permute" = {
