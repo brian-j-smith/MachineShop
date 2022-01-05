@@ -27,7 +27,7 @@ importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
            t.test, terms, time, update, var, vcov, xtabs)
 importFrom(survival, concordance, is.Surv, Surv, survfit, survreg,
            survreg.distributions)
-importFrom(tibble, as_tibble, is_tibble, tibble)
+importFrom(tibble, as_tibble, as_tibble_col, is_tibble, tibble)
 importFrom(utils, capture.output, combn, head, methods, packageVersion, relist,
            stack, str, tail)
 

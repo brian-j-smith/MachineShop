@@ -197,7 +197,7 @@ resample.MLModelFunction <- function(model, ...) {
     } else {
       subsample(train, object, model, control, i)
     }
-  } %>% Resample(control = control, case_comps = attr(splits, "case_comps"))
+  } %>% Resample(control = control, vars = attr(splits, "vars"))
 }
 
 
@@ -256,8 +256,7 @@ resample.MLModelFunction <- function(model, ...) {
       subsample(train, test, model, control, i)
     }
   }
-  res <- Resample(df_list, control = control,
-                   case_comps = attr(splits, "case_comps"))
+  res <- Resample(df_list, control = control, vars = attr(splits, "vars"))
 
   if (is_optimism_control) {
     pred_list <- map(attr, df_list, "CV.Predicted")
@@ -312,7 +311,7 @@ resample.MLModelFunction <- function(model, ...) {
     train <- update(object, data = rsample::analysis(splits[[i]]))
     test <- update(object, data = rsample::assessment(splits[[i]]))
     subsample(train, test, model, control, i)
-  } %>% Resample(control = control, case_comps = attr(splits, "case_comps"))
+  } %>% Resample(control = control, vars = attr(splits, "vars"))
 }
 
 
@@ -325,7 +324,7 @@ resample.MLModelFunction <- function(model, ...) {
   train <- update(object, data = rsample::training(split))
   test <- update(object, data = rsample::testing(split))
   subsample(train, test, model, control) %>%
-    Resample(control = control, case_comps = attr(split, "case_comps"))
+    Resample(control = control, vars = attr(split, "vars"))
 }
 
 
@@ -341,7 +340,7 @@ Resample <- function(object, ...) {
 
 
 Resample.data.frame <- function(
-  object, ..., control, case_comps = NULL, .check = TRUE
+  object, ..., control, vars = NULL, .check = TRUE
 ) {
   if (.check) {
     var_names <- c("Model", "Iteration", "Case", "Observed", "Predicted")
@@ -353,10 +352,10 @@ Resample.data.frame <- function(
   }
   rownames(object) <- NULL
 
-  case_comps <- as.data.frame(case_comps)
-  if (is_empty(case_comps$strata)) control@strata <- list()
+  vars <- as_tibble(vars)
+  if (is_empty(vars[["Stratification"]])) control@strata <- list()
 
-  new("Resample", object, control = control, case_comps = case_comps, ...)
+  new("Resample", object, control = control, vars = vars, ...)
 }
 
 
@@ -386,14 +385,16 @@ rsample_split <- function(fun, data, control) {
   res <- suppressWarnings(fun(df, group = case_comp_name(df, "groups"),
                               strata = case_comp_name(df, "strata"), pool = 0))
 
-  comps <- data.frame(row.names = rownames(df))
-  for (type in c("groups", "strata")) {
+  vars <- tibble(Case = rownames(df))
+  types <- c(Grouping = "groups", Stratification = "strata")
+  for (i in seq_along(types)) {
+    type <- types[i]
     comp <- df[[paste0("(", type, ")")]]
-    comps[[type]] <- if (length(comp)) {
-      structure(data.frame(comp), names = case_comp_name(data, type))
+    vars[[names(type)]] <- if (length(comp)) {
+      as_tibble_col(comp, column_name = case_comp_name(data, type))
     }
   }
-  if (length(comps)) attr(res, "case_comps") <- comps
+  if (length(vars)) attr(res, "vars") <- vars
 
   res
 }

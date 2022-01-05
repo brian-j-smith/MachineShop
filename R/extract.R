@@ -108,7 +108,7 @@ setMethod("[", c(x = "Resample", i = "ANY", j = "ANY", drop = "ANY"),
   function(x, i, j, ..., drop = FALSE) {
     y <- as.data.frame(x)[i, j, drop = drop]
     if (identical(colnames(x), colnames(y))) {
-      Resample(y, control = x@control, case_comps = x@case_comps)
+      Resample(y, control = x@control, vars = x@vars)
     } else y
   }
 )

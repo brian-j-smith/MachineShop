@@ -480,10 +480,15 @@ print.Resample <- function(x, n = MachineShop::settings("print_max"), ...) {
   title(x, ...)
   level <- nesting_level(...)
   print_fields(list("Model{?s}: " = levels(x$Model)), n = n)
-  print_fields(map(names, x@case_comps), labels = c(
-    groups = "Grouping variable: ",
-    strata = "Stratification variable: "
-  ))
+  if (level >= 1) {
+    print_fields(list(
+      "Grouping variable: " = names(x@vars[["Grouping"]]),
+      "Stratification variable: " = names(x@vars[["Stratification"]])
+    ))
+  } else if (length(x@vars) > 1) {
+    print_label("Sampling variables:")
+    print_items(x@vars, n = n)
+  }
   newline()
   print(x@control, n = n, level = level + 1)
   invisible(x)

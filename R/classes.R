@@ -504,7 +504,7 @@ setClass("Resample",
   contains = "data.frame",
   slots = c(
     control = "MLControl",
-    case_comps = "data.frame"
+    vars = "tbl_df"
   )
 )
 
