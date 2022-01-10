@@ -1122,7 +1122,8 @@ This RFE algorithm differs from others in that variables are "eliminated" by per
 ## Recursive feature elimination
 (surv_rfe <- rfe(surv_fo, data = surv_train, model = GBMModel,
                  control = surv_means_control))
-surv_rfe$terms[surv_rfe$optimal]
+rfe_summary <- summary(surv_rfe)
+rfe_summary$terms[rfe_summary$selected]
 ```
 
 

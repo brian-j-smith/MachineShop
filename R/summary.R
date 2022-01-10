@@ -6,8 +6,8 @@
 #' @rdname summary-methods
 #'
 #' @param object \link{confusion}, \link{lift}, trained model \link{fit},
-#'   \link{performance}, \link[=curves]{performance curve}, or \link{resample}
-#'   result.
+#'   \link{performance}, \link[=curves]{performance curve}, \link{resample}, or
+#'   \link{rfe} result.
 #' @param stat function or character string naming a function to compute a
 #'   summary statistic at each cutoff value of resampled metrics in
 #'   \code{PerformanceCurve}, or \code{NULL} for resample-specific metrics.

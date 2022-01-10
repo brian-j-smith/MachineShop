@@ -25,7 +25,9 @@ rfe(...)
   optimize = c("global", "local"),
   samples = c(rfe = 1, varimp = 1),
   metrics = NULL,
-  stat = "base::mean",
+  stat = c(resample = MachineShop::settings("stat.Resample"), permute =
+    MachineShop::settings("stat.TrainingParams")),
+  progress = FALSE,
   ...
 )
 
@@ -89,8 +91,13 @@ computationally for \code{rfe} than for \code{varimp}.}
 these with which to calculate performance.  If not specified, default
 metrics defined in the \link{performance} functions are used.}
 
-\item{stat}{function or character string naming a function to compute a
-summary statistic on resampled metric values and permuted samples.}
+\item{stat}{functions or character strings naming functions to compute
+summary statistics on resampled metric values and permuted samples.  One or
+both of the values may be specified as named arguments or in the order in
+which their defaults appear.}
+
+\item{progress}{logical indicating whether to display iterative progress
+during elimination.}
 
 \item{formula, data}{\link[=formula]{formula} defining the model predictor and
 response variables and a \link[=data.frame]{data frame} containing them.}
@@ -102,10 +109,10 @@ variables.}
 predictor and response variables.}
 }
 \value{
-A data frame with columns for the numbers of predictor variables
-retained (size), their names (terms), logical indicators to identify the
-optimal model (optimal), and associated predictive performances
-(performance).
+\code{TrainingStep} class object containing a summary of the numbers
+of predictor variables retained (size), their names (terms), logical
+indicators for the optimal model selected (selected), and associated
+performance metrics (metrics).
 }
 \description{
 A wrapper method of backward feature selection in which a given model is fit
@@ -116,10 +123,14 @@ the subset whose resampled predictive performance is optimal.
 \donttest{
 ## Requires prior installation of suggested package gbm to run
 
-rfe(sale_amount ~ ., data = ICHomes, model = GBMModel)
+(res <- rfe(sale_amount ~ ., data = ICHomes, model = GBMModel))
+summary(res)
+summary(performance(res))
+plot(res, type = "line")
 }
 
 }
 \seealso{
-\code{\link{varimp}}
+\code{\link{performance}}, \code{\link{plot}},
+\code{\link{summary}}, \code{\link{varimp}}
 }

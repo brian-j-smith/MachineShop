@@ -71,11 +71,14 @@ VariableImportance.numeric <- function(object, ...) {
 #'       change to compute in comparing model predictive performances between
 #'       datasets with and without permuted values.  The choices are difference
 #'       (\code{"-"}) and ratio (\code{"/"}).}
-#'     \item{\code{stats = c(mean = "base::mean")}}{function, function name, or
-#'       vector of these with which to compute summary statistics on the set of
-#'       variable importance values from the permuted datasets.}
+#'     \item{\code{stats = MachineShop::settings("stat.TrainingParams")}}{
+#'       function, function name, or vector of these with which to compute
+#'       summary statistics on the set of variable importance values from the
+#'       permuted datasets.}
 #'     \item{\code{na.rm = TRUE}}{logical indicating whether to exclude missing
 #'       variable importance values from the calculation of summary statistics.}
+#'     \item{\code{progress = TRUE}}{logical indicating whether to display
+#'       iterative progress during computation.}
 #'   }
 #'
 #' @return \code{VariableImportance} class object.
@@ -129,7 +132,8 @@ varimp <- function(object, method = c("permute", "model"), scale = TRUE, ...) {
 varimp_permute <- function(
   object, select = NULL, samples = 1, prop = numeric(), size = integer(),
   times = numeric(), metric = NULL, compare = c("-", "/"),
-  stats = c(mean = "base::mean"), na.rm = TRUE
+  stats = MachineShop::settings("stat.TrainingParams"), na.rm = TRUE,
+  progress = TRUE
 ) {
   input <- as.MLModel(object)@input
   data <- if (is.data.frame(input)) input else as.data.frame(input)
@@ -169,18 +173,23 @@ varimp_permute <- function(
     map(function(x) stats(if (na.rm) na.omit(x) else x), as.data.frame(x))
   }
 
+  progress <- if (throw(check_logical(progress))) {
+    pb <- progress_bar$new(
+      format = "varimp permute [:bar] :percent | :eta",
+      total = samples * length(pred_names),
+      show_after = 1
+    )
+    on.exit(pb$terminate())
+    function() pb$tick()
+  } else {
+    function() NULL
+  }
+
   num_workers <- getDoParWorkers()
   work <- pred_names
   length(work) <- num_workers * ceiling(length(work) / num_workers)
   work_pred_names <- map(na.omit, split(work, seq_len(num_workers)))
   seeds <- rand_int(samples)
-
-  pb <- progress_bar$new(
-    format = "varimp permute [:bar] :percent | :eta",
-    total = samples * length(pred_names),
-    show_after = 1
-  )
-  on.exit(pb$terminate())
 
   foreach(
     pred_names = work_pred_names[lengths(work_pred_names) > 0],
@@ -212,7 +221,7 @@ varimp_permute <- function(
         pred <- predict(object, newdata, times = times, type = "prob")
         perf[s, name] <- metric(obs, pred)[1]
         newdata[[name]] <- x
-        pb$tick()
+        progress()
       }
     }
     sims <- varimp(perf, base_perf, metric@maximize)

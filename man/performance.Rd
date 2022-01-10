@@ -75,7 +75,7 @@ performance(x, ...)
 }
 \arguments{
 \item{x}{\link[=response]{observed responses}; or \link{confusion}, trained
-model \link{fit}, or \link{resample} result.}
+model \link{fit}, \link{resample}, or \link{rfe} result.}
 
 \item{...}{arguments passed from the \code{Resample} method to the response
 type-specific methods or from the method for \code{ConfusionList} to

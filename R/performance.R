@@ -6,7 +6,7 @@
 #' @rdname performance
 #'
 #' @param x \link[=response]{observed responses}; or \link{confusion}, trained
-#'   model \link{fit}, or \link{resample} result.
+#'   model \link{fit}, \link{resample}, or \link{rfe} result.
 #' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
 #' @param weights numeric vector of non-negative
 #'   \link[=case_weights]{case weights} for the observed \code{x} responses

@@ -42,8 +42,8 @@
 }
 \arguments{
 \item{object}{\link{confusion}, \link{lift}, trained model \link{fit},
-\link{performance}, \link[=curves]{performance curve}, or \link{resample}
-result.}
+\link{performance}, \link[=curves]{performance curve}, \link{resample}, or
+\link{rfe} result.}
 
 \item{...}{arguments passed to other methods.}
 

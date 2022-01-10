@@ -6,7 +6,7 @@ test_that("test ModelSpecification", {
 
     library(recipes)
 
-    test_NullControl <- function(fun) {
+    test_NullControl <- function(fun, extract = identity) {
       input <- ModelFrame(sale_amount ~ ., data = ICHomes)
       model <- GBMModel()
       modelspec <- ModelSpecification(input, model, control = NULL)
@@ -14,12 +14,12 @@ test_that("test ModelSpecification", {
       res1 <- fun(modelspec)
       set.seed(123)
       res2 <- fun(input, model)
-      expect_identical(res1, res2)
+      expect_identical(extract(res1), extract(res2))
     }
 
     test_NullControl(function(...) predict(fit(...)))
     test_NullControl(resample)
-    test_NullControl(rfe)
+    test_NullControl(rfe, function(x) summary(x)[-1])
 
     modelspec <- ModelSpecification(
       input = TunedInput(

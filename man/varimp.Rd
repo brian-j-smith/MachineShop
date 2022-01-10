@@ -46,11 +46,14 @@ values for \code{method = "permute"}.
     change to compute in comparing model predictive performances between
     datasets with and without permuted values.  The choices are difference
     (\code{"-"}) and ratio (\code{"/"}).}
-  \item{\code{stats = c(mean = "base::mean")}}{function, function name, or
-    vector of these with which to compute summary statistics on the set of
-    variable importance values from the permuted datasets.}
+  \item{\code{stats = MachineShop::settings("stat.TrainingParams")}}{
+    function, function name, or vector of these with which to compute
+    summary statistics on the set of variable importance values from the
+    permuted datasets.}
   \item{\code{na.rm = TRUE}}{logical indicating whether to exclude missing
     variable importance values from the calculation of summary statistics.}
+  \item{\code{progress = TRUE}}{logical indicating whether to display
+    iterative progress during computation.}
 }}
 }
 \value{

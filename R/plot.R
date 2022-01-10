@@ -7,7 +7,7 @@
 #'
 #' @param x \link{calibration}, \link{confusion}, \link{lift},
 #'   trained model \link{fit}, partial \link{dependence}, \link{performance},
-#'   \link[=curves]{performance curve}, \link{resample}, or
+#'   \link[=curves]{performance curve}, \link{resample}, \link{rfe}, or
 #'   \link[=varimp]{variable importance} result.
 #' @param diagonal logical indicating whether to include a diagonal reference
 #'   line.

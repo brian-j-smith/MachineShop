@@ -10,15 +10,16 @@ test_that("test rfe", {
     model <- GBMModel
 
     expect_output <- function(x, nrow = NULL) {
+      x <- summary(x)
       pass <- is.data.frame(x) &&
         nrow(x) > 0 &&
-        is.numeric(x$size) &&
-        all(diff(x$size) < 0) &&
+        is.numeric(x$params$size) &&
+        all(diff(x$params$size) < 0) &&
         is.list(x$terms) &&
         all(mapply(is.character, x$terms)) &&
-        all(lengths(x$terms) == x$size) &&
-        is.logical(x$optimal) &&
-        sum(x$optimal) == 1 &&
+        all(lengths(x$terms) == x$params$size) &&
+        is.logical(x$selected) &&
+        sum(x$selected) == 1 &&
         all(sapply(x$metrics, is.numeric))
       if (!is.null(nrow)) pass <- pass && nrow(x) == nrow
       expect_true(pass)

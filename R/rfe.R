@@ -47,21 +47,29 @@
 #' @param metrics \link[=metrics]{metric} function, function name, or vector of
 #'   these with which to calculate performance.  If not specified, default
 #'   metrics defined in the \link{performance} functions are used.
-#' @param stat function or character string naming a function to compute a
-#'   summary statistic on resampled metric values and permuted samples.
+#' @param stat functions or character strings naming functions to compute
+#'   summary statistics on resampled metric values and permuted samples.  One or
+#'   both of the values may be specified as named arguments or in the order in
+#'   which their defaults appear.
+#' @param progress logical indicating whether to display iterative progress
+#'   during elimination.
 #'
-#' @return A data frame with columns for the numbers of predictor variables
-#' retained (size), their names (terms), logical indicators to identify the
-#' optimal model (optimal), and associated predictive performances
-#' (performance).
+#' @return \code{TrainingStep} class object containing a summary of the numbers
+#' of predictor variables retained (size), their names (terms), logical
+#' indicators for the optimal model selected (selected), and associated
+#' performance metrics (metrics).
 #'
-#' @seealso \code{\link{varimp}}
+#' @seealso \code{\link{performance}}, \code{\link{plot}},
+#' \code{\link{summary}}, \code{\link{varimp}}
 #'
 #' @examples
 #' \donttest{
 #' ## Requires prior installation of suggested package gbm to run
 #'
-#' rfe(sale_amount ~ ., data = ICHomes, model = GBMModel)
+#' (res <- rfe(sale_amount ~ ., data = ICHomes, model = GBMModel))
+#' summary(res)
+#' summary(performance(res))
+#' plot(res, type = "line")
 #' }
 #'
 rfe <- function(...) {
@@ -75,15 +83,30 @@ rfe.default <- function(
   object, model = NULL, control = MachineShop::settings("control"), props = 4,
   sizes = integer(), random = FALSE, recompute = TRUE,
   optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
-  metrics = NULL, stat = "base::mean", ...
+  metrics = NULL,
+  stat = c(
+    resample = MachineShop::settings("stat.Resample"),
+    permute = MachineShop::settings("stat.TrainingParams")
+  ), progress = FALSE, ...
 ) {
+
   data <- as.data.frame(object)
   model_fit <- fit(object, model)
   control <- as.MLControl(control)
   optimize <- match.arg(optimize)
 
-  get_samples <- function(rfe = 1, varimp = 1) as.list(environment())
-  samples <- do.call("get_samples", as.list(samples))
+  method <- paste(optimize, "Recursive Feature Elimination")
+  substring(method, 1, 1) <- toupper(substring(method, 1, 1))
+  progress <- if (throw(check_logical(progress))) {
+    heading(paste(class(object), "feature selection"))
+    new_print_progress()
+  } else {
+    function(...) NULL
+  }
+
+  get_samples_args <- function() as.list(environment())
+  formals(get_samples_args) <- eval(formals(rfe.default)$samples)
+  samples <- do.call("get_samples_args", as.list(samples))
   samples$rfe <- check_integer(samples$rfe, bounds = c(1, Inf), size = 1)
   throw(check_assignment(samples$rfe))
   inds <- replicate(samples$rfe, permute_int(nrow(data))$j)
@@ -97,16 +120,25 @@ rfe.default <- function(
   metric <- check_metric(c(metrics)[[1]], convert = TRUE)
   throw(check_assignment(metrics, metric))
   loss <- function(x) if (metric@maximize) -x[, 1] else x[, 1]
-  stat <- check_stat(stat, convert = TRUE)
-  throw(check_assignment(stat))
-  apply_stat <- function(x) {
-    apply(do.call(cbind, x), 1, function(x) stat(na.omit(x)))
+
+  get_stat_args <- function() as.list(environment())
+  formals(get_stat_args) <- eval(formals(rfe.default)$stat)
+  stat <- do.call("get_stat_args", as.list(c(stat)))
+  stat$resample <- check_stat(stat$resample, convert = TRUE)
+  throw(check_assignment(stat$resample))
+  stat$permute <- check_stat(stat$permute, convert = TRUE)
+  throw(check_assignment(stat$permute))
+  apply_stat_permute <- function(x, along) {
+    x <- do.call(abind, c(x, along = along))
+    margins <- setdiff(seq_len(ndim(x)), along)
+    apply(x, margins, function(x) stat$permute(na.omit(x)))
   }
 
   varimp <- function(object, ...) {
     res <- MachineShop::varimp(
       object, scale = FALSE, method = "permute", samples = samples$varimp,
-      times = times, metric = metric, stats = stat, ...
+      times = times, metric = metric, stats = stat,
+      progress = !is.null(body(progress)), ...
     )
     structure(res[[1]], names = rownames(res))
   }
@@ -135,16 +167,14 @@ rfe.default <- function(
   }
   sizes <- sort(unique(sizes), decreasing = TRUE)
 
-  pb <- progress_bar$new(
-    format = "rfe [:bar] :percent | :eta",
-    total = length(sizes) * samples$rfe
-  )
-  on.exit(pb$terminate())
-
   subsets <- list()
+  perf_list <- list()
   perf_stats <- NULL
-  for (size in sizes) {
+  scores <- numeric()
 
+  max_iter <- length(sizes)
+  for (i in seq_len(max_iter)) {
+    size <- sizes[i]
     if (random) {
       subset <- sample(names(vi), size, prob = vi)
       subset <- subset[order(vi[subset], decreasing = TRUE)]
@@ -156,46 +186,56 @@ rfe.default <- function(
     perf_samples <- list()
     vi_samples <- list()
     for (s in seq_len(samples$rfe)) {
-
       data[drop] <- data[inds[, s], drop]
       object <- update(object, data = data)
       res <- resample(object, model = model, control = control)
-      perf_samples[[s]] <- summary(
-        performance(res, metrics = metrics),
-        stats = stat
-      )[, 1, drop = FALSE]
+      perf_samples[[s]] <- performance(res, metrics = metrics)
 
       if (recompute && size > tail(sizes, 1)) {
         vi <- do.call(varimp, list(fit(object, model), select = subset))
         vi_samples[[s]] <- vi[subset]
       }
-
-      pb$tick()
-
     }
 
     vi <- if (length(vi_samples)) {
-      scale(apply_stat(vi_samples))
+      scale(apply_stat_permute(vi_samples, 2))
     } else {
       vi[subset]
     }
 
-    subsets <- c(subsets, list(subset))
-    perf_stats <- rbind(perf_stats, apply_stat(perf_samples))
+    subsets[[i]] <- subset
+    perf <- perf_samples[[1]]
+    if (s > 1) S3Part(perf) <- apply_stat_permute(perf_samples, 3)
+    perf_list[[i]] <- perf
+    perf_stats <- rbind(
+      perf_stats,
+      t(summary(perf, stat = stat$resample)[, 1, drop = FALSE])
+    )
+    scores[i] <- ifelse(metric@maximize, 1, -1) * perf_stats[i, 1]
 
-    check_local_perfs <- optimize == "local" && nrow(perf_stats) > 1
-    if (check_local_perfs && diff(tail(loss(perf_stats), 2)) > 0) break
+    progress(
+      scores, max_iter = max_iter, method = method,
+      items = list("Term{?s}: " = subset),
+      metric = structure(perf_stats[i, 1], names = metric@label)
+    )
 
+    check_local_perfs <- optimize == "local" && i > 1
+    if (check_local_perfs && diff(tail(scores, 2)) < 0) break
   }
 
-  tbl <- tibble(
-    size = lengths(subsets),
-    terms = subsets,
-    optimal = FALSE,
-    metrics = as_tibble(perf_stats)
+  names(perf_list) <- make_unique(rep_len(class(object), length(perf_list)))
+
+  TrainingStep(
+    object,
+    method = method,
+    names = names(perf_list),
+    items = tibble(terms = subsets),
+    params = tibble(size = lengths(subsets)),
+    metrics = perf_stats,
+    selected = which.max(scores),
+    performance = do.call(c, perf_list)
   )
-  tbl$optimal[which.min(loss(perf_stats))] <- TRUE
-  tbl
+
 }
 
 
