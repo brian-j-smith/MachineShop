@@ -8,6 +8,7 @@
 \alias{summary.Performance}
 \alias{summary.PerformanceCurve}
 \alias{summary.Resample}
+\alias{summary.TrainingStep}
 \title{Model Performance Summaries}
 \usage{
 \method{summary}{ConfusionList}(object, ...)
@@ -36,6 +37,8 @@
   na.rm = TRUE,
   ...
 )
+
+\method{summary}{TrainingStep}(object, ...)
 }
 \arguments{
 \item{object}{\link{confusion}, \link{lift}, trained model \link{fit},

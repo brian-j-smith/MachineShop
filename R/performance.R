@@ -5,8 +5,8 @@
 #' @name performance
 #' @rdname performance
 #'
-#' @param x \link[=response]{observed responses}; or \link{confusion} or
-#'   \link{resample} result containing observed and predicted responses.
+#' @param x \link[=response]{observed responses}; or \link{confusion}, trained
+#'   model \link{fit}, or \link{resample} result.
 #' @param y \link[=predict]{predicted responses} if not contained in \code{x}.
 #' @param weights numeric vector of non-negative
 #'   \link[=case_weights]{case weights} for the observed \code{x} responses
@@ -143,11 +143,26 @@ performance.ConfusionMatrix <- function(
 
 #' @rdname performance
 #'
+performance.MLModel <- function(x, ...) {
+  if (!is_trained(x)) throw(Warning("No training results with performance."))
+  ListOf(map(performance, x@steps))
+}
+
+
+#' @rdname performance
+#'
 performance.Resample <- function(x, ...) {
   perf_list <- by(x, x$Model, function(resamples) {
     Performance(performance(x@control, resamples, ...), control = x@control)
   }, simplify = FALSE)
   do.call(c, perf_list)
+}
+
+
+#' @rdname performance
+#'
+performance.TrainingStep <- function(x, ...) {
+  x@performance
 }
 
 

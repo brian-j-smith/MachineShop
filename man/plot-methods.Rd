@@ -11,6 +11,7 @@
 \alias{plot.Performance}
 \alias{plot.PerformanceCurve}
 \alias{plot.Resample}
+\alias{plot.TrainingStep}
 \alias{plot.VariableImportance}
 \title{Model Performance Plots}
 \usage{
@@ -59,6 +60,14 @@
   metrics = NULL,
   stat = MachineShop::settings("stat.Resample"),
   type = c("boxplot", "density", "errorbar", "violin"),
+  ...
+)
+
+\method{plot}{TrainingStep}(
+  x,
+  metrics = NULL,
+  stat = MachineShop::settings("stat.TrainingParams"),
+  type = c("boxplot", "density", "errorbar", "line", "violin"),
   ...
 )
 
