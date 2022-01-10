@@ -551,22 +551,22 @@ iris_fit &lt;- fit(fo, data = trainset, model = GBMModel)
 (vi &lt;- varimp(iris_fit))
 #&gt; --- VariableImportance object --------------------------------------------------
 #&gt;              Permute.mean.brier
-#&gt; Petal.Length         100.000000
-#&gt; Petal.Width           18.123982
-#&gt; Sepal.Length           3.299742
-#&gt; Sepal.Width            1.445363
+#&gt; Petal.Length        100.0000000
+#&gt; Petal.Width          29.9063212
+#&gt; Sepal.Length          3.7072625
+#&gt; Sepal.Width           0.1221489
 
 plot(vi)</code></pre>
 <p><img src="example_iris_files/figure-html/ex_iris_fit-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Test set predicted probabilities
 predict(iris_fit, newdata = testset, type = &quot;prob&quot;) %&gt;% head
 #&gt;         setosa   versicolor    virginica
-#&gt; [1,] 0.9999473 5.263631e-05 6.261157e-08
-#&gt; [2,] 0.9999529 4.706413e-05 6.261192e-08
-#&gt; [3,] 0.9999529 4.706413e-05 6.261192e-08
-#&gt; [4,] 0.9999473 5.263631e-05 6.261157e-08
-#&gt; [5,] 0.9998901 1.097819e-04 7.647874e-08
-#&gt; [6,] 0.9998431 1.568416e-04 9.342402e-08
+#&gt; [1,] 0.9999432 5.669268e-05 9.008716e-08
+#&gt; [2,] 0.9999555 4.434856e-05 1.202762e-07
+#&gt; [3,] 0.9999636 3.624727e-05 1.202771e-07
+#&gt; [4,] 0.9999636 3.624727e-05 1.202771e-07
+#&gt; [5,] 0.9998665 1.333510e-04 1.110550e-07
+#&gt; [6,] 0.9998370 1.628782e-04 1.356454e-07
 
 ## Test set predicted classifications
 predict(iris_fit, newdata = testset) %&gt;% head
@@ -578,7 +578,7 @@ obs &lt;- response(iris_fit, newdata = testset)
 pred &lt;- predict(iris_fit, newdata = testset, type = &quot;prob&quot;)
 performance(obs, pred)
 #&gt;      Brier   Accuracy      Kappa 
-#&gt; 0.07906769 0.95856359 0.93722931</code></pre>
+#&gt; 0.07965035 0.96000000 0.93939394</code></pre>
 </div>
 <div id="resampling" class="section level2">
 <h2>Resampling</h2>
@@ -587,7 +587,21 @@ performance(obs, pred)
 #&gt; --- Resample object ------------------------------------------------------------
 #&gt; 
 #&gt; Model: GBMModel
-#&gt; Stratification variable: (strata)
+#&gt; Sampling variables:
+#&gt; # A tibble: 150 x 2
+#&gt;    Case  Stratification$`(strata)`
+#&gt;    &lt;chr&gt; &lt;fct&gt;                    
+#&gt;  1 1     setosa                   
+#&gt;  2 2     setosa                   
+#&gt;  3 3     setosa                   
+#&gt;  4 4     setosa                   
+#&gt;  5 5     setosa                   
+#&gt;  6 6     setosa                   
+#&gt;  7 7     setosa                   
+#&gt;  8 8     setosa                   
+#&gt;  9 9     setosa                   
+#&gt; 10 10    setosa                   
+#&gt; # ... with 140 more rows
 #&gt; 
 #&gt; === CVControl object ===
 #&gt; 
@@ -597,10 +611,10 @@ performance(obs, pred)
 
 summary(res)
 #&gt;           Statistic
-#&gt; Metric          Mean    Median         SD          Min       Max NA
-#&gt;   Brier    0.1082731 0.1245302 0.11480293 1.214171e-05 0.3536020  0
-#&gt;   Accuracy 0.9366802 0.9325665 0.06447241 8.035455e-01 0.9987989  0
-#&gt;   Kappa    0.9050202 0.8988497 0.09670862 7.053183e-01 0.9981984  0
+#&gt; Metric           Mean    Median         SD          Min       Max NA
+#&gt;   Brier    0.08267491 0.0282503 0.10161350 1.510535e-05 0.2610908  0
+#&gt;   Accuracy 0.95333333 0.9666667 0.05488484 8.666667e-01 1.0000000  0
+#&gt;   Kappa    0.93000000 0.9500000 0.08232726 8.000000e-01 1.0000000  0
 
 plot(res)</code></pre>
 <p><img src="example_iris_files/figure-html/ex_iris_resample-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -610,10 +624,10 @@ plot(res)</code></pre>
 <pre class="r"><code>## Default performance metrics
 performance(res) %&gt;% summary
 #&gt;           Statistic
-#&gt; Metric          Mean    Median         SD          Min       Max NA
-#&gt;   Brier    0.1082731 0.1245302 0.11480293 1.214171e-05 0.3536020  0
-#&gt;   Accuracy 0.9366802 0.9325665 0.06447241 8.035455e-01 0.9987989  0
-#&gt;   Kappa    0.9050202 0.8988497 0.09670862 7.053183e-01 0.9981984  0
+#&gt; Metric           Mean    Median         SD          Min       Max NA
+#&gt;   Brier    0.08267491 0.0282503 0.10161350 1.510535e-05 0.2610908  0
+#&gt;   Accuracy 0.95333333 0.9666667 0.05488484 8.666667e-01 1.0000000  0
+#&gt;   Kappa    0.93000000 0.9500000 0.08232726 8.000000e-01 1.0000000  0
 
 ## Metrics available for the resample output
 metricinfo(res) %&gt;% names
@@ -622,9 +636,9 @@ metricinfo(res) %&gt;% names
 ## User-specified metrics
 performance(res, c(accuracy, kappa2)) %&gt;% summary
 #&gt;           Statistic
-#&gt; Metric          Mean    Median         SD       Min       Max NA
-#&gt;   accuracy 0.9366802 0.9325665 0.06447241 0.8035455 0.9987989  0
-#&gt;   kappa2   0.9050202 0.8988497 0.09670862 0.7053183 0.9981984  0</code></pre>
+#&gt; Metric          Mean    Median         SD       Min Max NA
+#&gt;   accuracy 0.9533333 0.9666667 0.05488484 0.8666667   1  0
+#&gt;   kappa2   0.9300000 0.9500000 0.08232726 0.8000000   1  0</code></pre>
 </div>
 <div id="model-tuning" class="section level2">
 <h2>Model Tuning</h2>
@@ -640,10 +654,10 @@ iris_fit &lt;- TunedModel(
 varimp(iris_fit)
 #&gt; --- VariableImportance object --------------------------------------------------
 #&gt;              Permute.mean.brier
-#&gt; Petal.Length       100.00000000
-#&gt; Petal.Width         14.55427454
-#&gt; Sepal.Length         0.32749356
-#&gt; Sepal.Width          0.09096552
+#&gt; Petal.Length        100.0000000
+#&gt; Petal.Width          21.0545805
+#&gt; Sepal.Length          0.2065820
+#&gt; Sepal.Width          -0.1051643
 
 ## Plot performance over the grid points
 tuned_model &lt;- as.MLModel(iris_fit)
@@ -666,25 +680,25 @@ summary(res)
 #&gt; 
 #&gt;       Statistic
 #&gt; Model        Mean     Median         SD          Min       Max NA
-#&gt;   GBM  0.08523649 0.06568273 0.08663661 1.040849e-04 0.3417708  0
-#&gt;   RF   0.07154987 0.04810667 0.06905970 1.120000e-03 0.2627733  0
-#&gt;   NNet 0.09346566 0.08764771 0.10406789 9.703779e-74 0.3333333  0
+#&gt;   GBM  0.08613621 0.08344689 0.08098959 5.730920e-05 0.3131089  0
+#&gt;   RF   0.07230400 0.06562667 0.07035875 1.600000e-04 0.2494400  0
+#&gt;   NNet 0.08361831 0.02668369 0.10371418 4.372129e-50 0.3333333  0
 #&gt; 
 #&gt; , , Metric = Accuracy
 #&gt; 
 #&gt;       Statistic
-#&gt; Model       Mean    Median         SD       Min       Max NA
-#&gt;   GBM  0.9389887 0.9426364 0.04636882 0.7952350 0.9941856  0
-#&gt;   RF   0.9372000 0.9420000 0.03855838 0.8200000 0.9906667  0
-#&gt;   NNet 0.9413882 0.9346780 0.07262379 0.6666667 1.0000000  0
+#&gt; Model       Mean    Median         SD       Min Max NA
+#&gt;   GBM  0.9426667 0.9333333 0.05554921 0.8000000   1  0
+#&gt;   RF   0.9480000 0.9333333 0.05760134 0.8000000   1  0
+#&gt;   NNet 0.9480000 1.0000000 0.08334286 0.6666667   1  0
 #&gt; 
 #&gt; , , Metric = Kappa
 #&gt; 
 #&gt;       Statistic
-#&gt; Model       Mean    Median         SD       Min       Max NA
-#&gt;   GBM  0.9084831 0.9139546 0.06955323 0.6928526 0.9912784  0
-#&gt;   RF   0.9058000 0.9130000 0.05783756 0.7300000 0.9860000  0
-#&gt;   NNet 0.9120823 0.9020170 0.10893569 0.5000000 1.0000000  0
+#&gt; Model   Mean Median         SD Min Max NA
+#&gt;   GBM  0.914    0.9 0.08332381 0.7   1  0
+#&gt;   RF   0.922    0.9 0.08640200 0.7   1  0
+#&gt;   NNet 0.924    1.0 0.11876920 0.5   1  0
 
 plot(res)</code></pre>
 <p><img src="example_iris_files/figure-html/ex_iris_comparisons-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -694,26 +708,26 @@ summary(perfdiff)
 #&gt; , , Metric = Brier
 #&gt; 
 #&gt;             Statistic
-#&gt; Model                Mean       Median         SD         Min        Max NA
-#&gt;   GBM - RF    0.013686620 0.0007697101 0.02891279 -0.03860136 0.09894417  0
-#&gt;   GBM - NNet -0.008229177 0.0003092971 0.10331763 -0.25566803 0.21328389  0
-#&gt;   RF - NNet  -0.021915797 0.0019698522 0.09266559 -0.24186667 0.17893827  0
+#&gt; Model                Mean       Median         SD         Min       Max NA
+#&gt;   GBM - RF    0.013832206 0.0023188119 0.02824823 -0.07255256 0.0649495  0
+#&gt;   GBM - NNet  0.002517897 0.0002376294 0.11153858 -0.33279967 0.2092335  0
+#&gt;   RF - NNet  -0.011314309 0.0042158032 0.10817073 -0.33087877 0.2158933  0
 #&gt; 
 #&gt; , , Metric = Accuracy
 #&gt; 
 #&gt;             Statistic
-#&gt; Model                Mean       Median         SD         Min        Max NA
-#&gt;   GBM - RF    0.001788707  0.004083906 0.01532679 -0.03184313 0.03196185  0
-#&gt;   GBM - NNet -0.002399493 -0.005640409 0.07140407 -0.13629702 0.27230232  0
-#&gt;   RF - NNet  -0.004188200 -0.010450657 0.06721649 -0.13008697 0.26266668  0
+#&gt; Model                 Mean Median         SD        Min        Max NA
+#&gt;   GBM - RF   -5.333333e-03      0 0.02963114 -0.1333333 0.06666667  0
+#&gt;   GBM - NNet -5.333333e-03      0 0.09217946 -0.2000000 0.33333333  0
+#&gt;   RF - NNet   6.656595e-18      0 0.09331389 -0.2000000 0.33333333  0
 #&gt; 
 #&gt; , , Metric = Kappa
 #&gt; 
 #&gt;             Statistic
-#&gt; Model               Mean       Median         SD         Min        Max NA
-#&gt;   GBM - RF    0.00268306  0.006125859 0.02299019 -0.04776469 0.04794277  0
-#&gt;   GBM - NNet -0.00359924 -0.008460614 0.10710611 -0.20444553 0.40845347  0
-#&gt;   RF - NNet  -0.00628230 -0.015675985 0.10082473 -0.19513046 0.39400002  0
+#&gt; Model          Mean Median        SD  Min Max NA
+#&gt;   GBM - RF   -0.010      0 0.0462910 -0.2 0.1  0
+#&gt;   GBM - NNet -0.008      0 0.1382692 -0.3 0.5  0
+#&gt;   RF - NNet   0.002      0 0.1406835 -0.3 0.5  0
 
 t.test(perfdiff)
 #&gt; --- PerformanceDiffTest object -------------------------------------------------
@@ -726,25 +740,25 @@ t.test(perfdiff)
 #&gt; 
 #&gt;       Model2
 #&gt; Model1       GBM         RF         NNet
-#&gt;   GBM         NA 0.01368662 -0.008229177
-#&gt;   RF   0.5916025         NA -0.021915797
+#&gt;   GBM         NA 0.01383221  0.002517897
+#&gt;   RF   0.5474415         NA -0.011314309
 #&gt;   NNet 1.0000000 1.00000000           NA
 #&gt; 
 #&gt; , , Metric = Accuracy
 #&gt; 
 #&gt;       Model2
-#&gt; Model1 GBM          RF         NNet
-#&gt;   GBM   NA 0.001788707 -0.002399493
-#&gt;   RF     1          NA -0.004188200
-#&gt;   NNet   1 1.000000000           NA
+#&gt; Model1 GBM           RF          NNet
+#&gt;   GBM   NA -0.005333333 -5.333333e-03
+#&gt;   RF     1           NA  6.656595e-18
+#&gt;   NNet   1  1.000000000            NA
 #&gt; 
 #&gt; , , Metric = Kappa
 #&gt; 
 #&gt;       Model2
-#&gt; Model1 GBM         RF        NNet
-#&gt;   GBM   NA 0.00268306 -0.00359924
-#&gt;   RF     1         NA -0.00628230
-#&gt;   NNet   1 1.00000000          NA
+#&gt; Model1 GBM    RF   NNet
+#&gt;   GBM   NA -0.01 -0.008
+#&gt;   RF     1    NA  0.002
+#&gt;   NNet   1  1.00     NA
 
 plot(perfdiff)</code></pre>
 <p><img src="example_iris_files/figure-html/ex_iris_diff-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -756,20 +770,20 @@ stackedmodel &lt;- StackedModel(GBMModel, RandomForestModel, NNetModel)
 res_stacked &lt;- resample(fo, data = iris, model = stackedmodel)
 summary(res_stacked)
 #&gt;           Statistic
-#&gt; Metric           Mean     Median         SD         Min       Max NA
-#&gt;   Brier    0.07297026 0.02874666 0.07554859 0.000833543 0.1805589  0
-#&gt;   Accuracy 0.91992471 0.92933670 0.04950453 0.849508364 0.9889753  0
-#&gt;   Kappa    0.87988706 0.89400506 0.07425680 0.774262545 0.9834630  0
+#&gt; Metric           Mean     Median         SD          Min       Max NA
+#&gt;   Brier    0.07356443 0.03300204 0.08895175 1.268861e-05 0.2284539  0
+#&gt;   Accuracy 0.95333333 1.00000000 0.07062333 8.000000e-01 1.0000000  0
+#&gt;   Kappa    0.93000000 1.00000000 0.10593499 7.000000e-01 1.0000000  0
 
 ## Super learner
 supermodel &lt;- SuperModel(GBMModel, RandomForestModel, NNetModel)
 res_super &lt;- resample(fo, data = iris, model = supermodel)
 summary(res_super)
 #&gt;           Statistic
-#&gt; Metric          Mean     Median         SD          Min       Max NA
-#&gt;   Brier    0.1030482 0.07087722 0.12929867 6.228912e-06 0.3977050  0
-#&gt;   Accuracy 0.9366674 0.95182829 0.06597761 7.986199e-01 0.9989821  0
-#&gt;   Kappa    0.9050011 0.92774244 0.09896641 6.979299e-01 0.9984732  0</code></pre>
+#&gt; Metric           Mean     Median         SD          Min       Max NA
+#&gt;   Brier    0.07006886 0.01588169 0.11646206 3.850692e-10 0.3723064  0
+#&gt;   Accuracy 0.96000000 1.00000000 0.06440612 8.000000e-01 1.0000000  0
+#&gt;   Kappa    0.94000000 1.00000000 0.09660918 7.000000e-01 1.0000000  0</code></pre>
 </div>
 <div id="calibration-curves" class="section level2">
 <h2>Calibration Curves</h2>
@@ -782,29 +796,29 @@ plot(cal, se = TRUE)</code></pre>
 <pre class="r"><code>(conf &lt;- confusion(res1, cutoff = NULL))
 #&gt; --- ConfusionList object -------------------------------------------------------
 #&gt; 
-#&gt; === GBMModel ===================================================================
+#&gt; === $GBMModel ==================================================================
 #&gt; === ConfusionMatrix object ===
 #&gt;             Observed
 #&gt; Predicted          setosa   versicolor    virginica
-#&gt;   setosa     249.24884768   0.25097539   0.09037211
-#&gt;   versicolor   0.73734728 230.02713190  24.94407743
-#&gt;   virginica    0.01380504  19.72189271 224.96555046
+#&gt;   setosa     249.25175820   0.24328329   0.08927864
+#&gt;   versicolor   0.73523117 230.23887674  24.79565856
+#&gt;   virginica    0.01301063  19.51783997 225.11506280
 
 summary(conf)
-#&gt; --- GBMModel -------------------------------------------------------------------
+#&gt; --- $GBMModel ------------------------------------------------------------------
 #&gt; Number of responses: 750
-#&gt; Accuracy (SE): 0.9389887 (0.008739864)
+#&gt; Accuracy (SE): 0.9394743 (0.008707267)
 #&gt; Majority class: 0.3333333
-#&gt; Kappa: 0.9084831
+#&gt; Kappa: 0.9092114
 #&gt; 
 #&gt;                setosa versicolor virginica
 #&gt; Observed    0.3333333  0.3333333 0.3333333
-#&gt; Predicted   0.3327869  0.3409447 0.3262683
-#&gt; Agreement   0.3323318  0.3067028 0.2999541
-#&gt; Sensitivity 0.9969954  0.9201085 0.8998622
-#&gt; Specificity 0.9993173  0.9486372 0.9605286
-#&gt; PPV         0.9986324  0.8995676 0.9193478
-#&gt; NPV         0.9984989  0.9595929 0.9504561</code></pre>
+#&gt; Predicted   0.3327791  0.3410264 0.3261946
+#&gt; Agreement   0.3323357  0.3069852 0.3001534
+#&gt; Sensitivity 0.9970070  0.9209555 0.9004603
+#&gt; Specificity 0.9993349  0.9489382 0.9609383
+#&gt; PPV         0.9986675  0.9001802 0.9201669
+#&gt; NPV         0.9985048  0.9600164 0.9507574</code></pre>
 <pre class="r"><code>plot(conf)</code></pre>
 <p><img src="example_iris_files/figure-html/ex_iris_conf_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
@@ -826,17 +840,17 @@ varimp(iris_fit)
 #&gt; --- VariableImportance object --------------------------------------------------
 #&gt;              Permute.mean.brier
 #&gt; Petal.Length        100.0000000
-#&gt; Petal.Width          31.6788244
-#&gt; Sepal.Width           3.1849719
-#&gt; Sepal.Length          0.8240725
+#&gt; Petal.Width          22.3985446
+#&gt; Sepal.Width           2.3022635
+#&gt; Sepal.Length          0.5787206
 
 res &lt;- resample(rec, model = GBMModel, control = CVControl)
 summary(res)
 #&gt;           Statistic
-#&gt; Metric          Mean     Median         SD          Min       Max NA
-#&gt;   Brier    0.1071443 0.09765985 0.12092057 1.445237e-05 0.3615368  0
-#&gt;   Accuracy 0.9338789 0.93160320 0.06452068 8.102262e-01 0.9983915  0
-#&gt;   Kappa    0.9008183 0.89740480 0.09678101 7.153392e-01 0.9975873  0</code></pre>
+#&gt; Metric          Mean    Median         SD          Min      Max NA
+#&gt;   Brier    0.1150331 0.1034656 0.13143726 5.928214e-06 0.346104  0
+#&gt;   Accuracy 0.9333333 0.9333333 0.07698004 8.000000e-01 1.000000  0
+#&gt;   Kappa    0.9000000 0.9000000 0.11547005 7.000000e-01 1.000000  0</code></pre>
 </div>
 </div>
 
