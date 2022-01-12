@@ -31,8 +31,8 @@ ModelSpecification(...)
 }
 \arguments{
 \item{...}{arguments passed from the generic function to its methods.  The
-first arguments of \code{ModelSpecification} methods are positional and, as
-such, must be given first in calls to them.}
+first argument of each \code{ModelSpecification} method is positional and,
+as such, must be given first in calls to them.}
 
 \item{input}{\link[=inputs]{input} object defining and containing the model
 predictor and response variables.}

@@ -9,8 +9,8 @@
 #' @rdname ModeledInput-methods
 #'
 #' @param ... arguments passed from the generic function to its methods.  The
-#'   first arguments of \code{ModeledInput} methods are positional and, as such,
-#'   must be given first in calls to them.
+#'   first argument of each \code{ModeledInput} method is positional and, as
+#'   such, must be given first in calls to them.
 #' @param object \link[=inputs]{input} object defining and containing the model
 #'   predictor and response variables.
 #' @param formula,data \link[=formula]{formula} defining the model predictor and

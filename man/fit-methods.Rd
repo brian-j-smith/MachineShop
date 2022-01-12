@@ -30,8 +30,8 @@ fit(...)
 \arguments{
 \item{...}{arguments passed from the generic function to its methods and from
 the \code{MLModel} and \code{MLModelFunction} methods to others.  The
-first arguments of \code{fit} methods are positional and, as such, must be
-given first in calls to them.}
+first argument of each \code{fit} method is positional and, as such, must
+be given first in calls to them.}
 
 \item{formula, data}{\link[=formula]{formula} defining the model predictor and
 response variables and a \link[=data.frame]{data frame} containing them.}

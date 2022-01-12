@@ -47,8 +47,8 @@ rfe(...)
 }
 \arguments{
 \item{...}{arguments passed to the default method from the others.  The
-first arguments of \code{rfe} methods are positional and, as such, must be
-given first in calls to them.}
+first argument of each \code{rfe} method is positional and, as such, must
+be given first in calls to them.}
 
 \item{object}{model \link[=inputs]{input} or
 \link[=ModelSpecification]{specification}.}

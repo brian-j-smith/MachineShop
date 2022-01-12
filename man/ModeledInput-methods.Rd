@@ -28,8 +28,8 @@ ModeledInput(...)
 }
 \arguments{
 \item{...}{arguments passed from the generic function to its methods.  The
-first arguments of \code{ModeledInput} methods are positional and, as such,
-must be given first in calls to them.}
+first argument of each \code{ModeledInput} method is positional and, as
+such, must be given first in calls to them.}
 
 \item{formula, data}{\link[=formula]{formula} defining the model predictor and
 response variables and a \link[=data.frame]{data frame} containing them.}

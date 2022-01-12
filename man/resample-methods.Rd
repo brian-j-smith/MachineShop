@@ -33,7 +33,7 @@ resample(...)
 \arguments{
 \item{...}{arguments passed from the generic function to its methods and from
 the \code{MLModel} and \code{MLModelFunction} methods to others.  The
-first arguments of \code{resample} methods are positional and, as such,
+first argument of each \code{resample} method is positional and, as such,
 must be given first in calls to them.}
 
 \item{object}{model \link[=inputs]{input} or
