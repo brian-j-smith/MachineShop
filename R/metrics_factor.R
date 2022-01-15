@@ -398,7 +398,7 @@ setMetric_auc("roc_auc", c(tpr, fpr))
 roc_index <- function(
   observed, predicted = NULL, weights = NULL,
   cutoff = MachineShop::settings("cutoff"),
-  f = function(sensitivity, specificity) (sensitivity + specificity) / 2, ...
+  fun = function(sensitivity, specificity) (sensitivity + specificity) / 2, ...
 ) {
   call_metric_method("roc_index", environment())
 }
@@ -407,8 +407,8 @@ MLMetric(roc_index) <- list("roc_index", "ROC Index", TRUE)
 
 
 setMetric_BinaryConfusionMatrix("roc_index",
-  function(observed, predicted, f, ...) {
-    f(sensitivity(observed), specificity(observed))
+  function(observed, predicted, fun, ...) {
+    fun(sens = sensitivity(observed), spec = specificity(observed))
   }
 )
 

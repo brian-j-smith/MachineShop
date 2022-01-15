@@ -25,7 +25,7 @@
 #'   \code{"lognormal"}, \code{"rayleigh"}, \code{"t"}, or \code{"weibull"}.
 #'   Defaults to the distribution that was used in predicting mean survival
 #'   times.
-#' @param f function to calculate a desired sensitivity-specificity tradeoff.
+#' @param fun function to calculate a desired sensitivity-specificity tradeoff.
 #' @param metrics vector of two metric functions or function names that define a
 #'   curve under which to calculate area [default: ROC metrics].
 #' @param power power to which positional distances of off-diagonals from the

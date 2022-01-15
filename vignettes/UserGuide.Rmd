@@ -783,7 +783,7 @@ kable(conf,
   : [Area under an ROC curve](https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve).
 
 `r rdoc_url("roc_index()", "metrics")`
-  : A tradeoff function of sensitivity and specificity as defined by the `f` argument in this function (default: sensitivity + specificity).  The function allows for specification of tradeoffs [@perkins:2006:IOC] other than the default of Youden's J statistic [@youden:1950:IRD].
+  : A tradeoff function of sensitivity and specificity as defined by the `fun` argument in this function (default: (sensitivity + specificity) / 2).  The function allows for specification of tradeoffs [@perkins:2006:IOC] other than the default of Youden's J statistic [@youden:1950:IRD].
   
 `r rdoc_url("rpp()", "metrics")`
   : Rate of positive prediction, $RPP = \frac{TP + FP}{TP + FP + TN + FN}$.

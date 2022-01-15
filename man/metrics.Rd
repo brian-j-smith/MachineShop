@@ -131,7 +131,7 @@ roc_index(
   predicted = NULL,
   weights = NULL,
   cutoff = MachineShop::settings("cutoff"),
-  f = function(sensitivity, specificity) (sensitivity + specificity)/2,
+  fun = function(sensitivity, specificity) (sensitivity + specificity)/2,
   ...
 )
 
@@ -219,7 +219,7 @@ curves, or \code{NULL} for resample-specific metrics.}
 \item{beta}{relative importance of recall to precision in the calculation of
 \code{f_score} [default: F1 score].}
 
-\item{f}{function to calculate a desired sensitivity-specificity tradeoff.}
+\item{fun}{function to calculate a desired sensitivity-specificity tradeoff.}
 
 \item{power}{power to which positional distances of off-diagonals from the
 main diagonal in confusion matrices are raised to calculate
