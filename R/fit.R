@@ -172,8 +172,8 @@ fit_optim <- function(object, ...) {
   throw(check_packages(mloptim@packages))
   tryCatch(
     optim(mloptim@fun, object, ...),
-    error = function(e) {
-      msg <- conditionMessage(e)
+    error = function(cond) {
+      msg <- conditionMessage(cond)
       if (is(mloptim, "SequentialOptimization")) {
         object <- set_optim_grid(
           object, random = mloptim@random, progress = mloptim@monitor$progress

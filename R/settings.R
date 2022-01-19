@@ -171,11 +171,16 @@ MachineShop_global <- as.environment(list(
     control = list(
       value = "CVControl",
       check = function(x) {
-        result <- try(as.MLControl(x), silent = TRUE)
-        if (is(result, "try-error")) {
-          DomainError(x, "must be an MLControl object, function, ",
-                         "or function name")
-        } else x
+        tryCatch(
+          {
+            as.MLControl(x)
+            x
+          },
+          error = function(cond) {
+            DomainError(x, "must be an MLControl object, function, ",
+                           "or function name")
+          }
+        )
       }
     ),
 

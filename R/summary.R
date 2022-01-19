@@ -156,11 +156,10 @@ summary.PerformanceCurve <- function(
 
 
 .curve_approx <- function(...) {
-  values <- try(
-    approx(..., method = "constant", rule = 2, f = 0.5),
-    silent = TRUE
+  tryCatch(
+    approx(..., method = "constant", rule = 2, f = 0.5)$y,
+    error = function(cond) NA
   )
-  if (is(values, "try-error")) NA else values$y
 }
 
 

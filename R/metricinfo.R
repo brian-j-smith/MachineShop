@@ -62,8 +62,10 @@ metricinfo <- function(...) {
 
 
 .metricinfo.character <- function(x, ...) {
-  metric <- try(fget(x), silent = TRUE)
-  if (is(metric, "try-error")) metric <- list()
+  metric <- tryCatch(
+    fget(x),
+    error = function(cond) list()
+  )
   .metricinfo(metric, ...)
 }
 

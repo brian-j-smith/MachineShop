@@ -141,36 +141,36 @@ select_call <- function(x, parent_call = NULL, last_call = NULL) {
 check_array <- function(
   x, type, size = integer(), nonempty = TRUE, na.fail = TRUE
 ) {
-  result <- try({
-    storage.mode(x) <- type
-    x
-  }, silent = TRUE)
-
-  n <- length(size)
-  if (is(result, "try-error")) {
-    TypeError(x, type)
-  } else if (n > 0 && (ndim(x) != n || any(na.omit(size(x) != size)))) {
-    msg <- if (identical(size, 1)) {
-      "a scalar"
-    } else if (n == 1) {
-      paste("a vector of length", size)
-    } else {
-      paste(if (n == 2) "a matrix" else "an array", "of dimension",
-            paste(size, collapse = "x"))
-    }
-    DomainError(x, paste("must be", msg))
-  } else if (nonempty && is_empty(x)) {
-    DomainError(x, "must be non-empty")
-  } else if (na.fail && anyNA(result)) {
-    msg <- paste0(
-      c("", "must be ", paste("non-missing", type)),
-      if (length(result) == 1) c("", "a ", "") else c("elements ", "", "s"),
-      collapse = ""
-    )
-    DomainError(result, msg)
-  } else {
-    result
-  }
+  tryCatch(
+    {
+      storage.mode(x) <- type
+      result <- x
+      n <- length(size)
+      if (n > 0 && (ndim(x) != n || any(na.omit(size(x) != size)))) {
+        msg <- if (identical(size, 1)) {
+          "a scalar"
+        } else if (n == 1) {
+          paste("a vector of length", size)
+        } else {
+          paste(if (n == 2) "a matrix" else "an array", "of dimension",
+                paste(size, collapse = "x"))
+        }
+        DomainError(x, paste("must be", msg))
+      } else if (nonempty && is_empty(x)) {
+        DomainError(x, "must be non-empty")
+      } else if (na.fail && anyNA(result)) {
+        msg <- paste0(
+          c("", "must be ", paste("non-missing", type)),
+          if (length(result) == 1) c("", "a ", "") else c("elements ", "", "s"),
+          collapse = ""
+        )
+        DomainError(result, msg)
+      } else {
+        result
+      }
+    },
+    error = function(cond) TypeError(x, type)
+  )
 }
 
 
@@ -239,35 +239,40 @@ check_logical <- function(x, ...) {
 
 
 check_match <- function(x, choices) {
-  tryCatch(match.arg(x, choices), error = function(e) {
-    choices <- paste0("\"", choices, "\"")
-    DomainError(x, "must be one of ", as_string(choices, conj = "or"))
-  })
+  tryCatch(
+    match.arg(x, choices),
+    error = function(cond) {
+      choices <- paste0("\"", choices, "\"")
+      DomainError(x, "must be one of ", as_string(choices, conj = "or"))
+    }
+  )
 }
 
 
 check_metric <- function(x, convert = FALSE) {
-  result <- try(as.MLMetric(x), silent = TRUE)
-  if (is(result, "try-error")) {
-    DomainError(x, "must be a metrics function or function name")
-  } else if (convert) {
-    result
-  } else {
-    x
-  }
+  tryCatch(
+    {
+      result <- as.MLMetric(x)
+      if (convert) result else x
+    },
+    error = function(cond) {
+      DomainError(x, "must be a metrics function or function name")
+    }
+  )
 }
 
 
 check_metrics <- function(x, convert = FALSE) {
-  result <- try(map(as.MLMetric, c(x)), silent = TRUE)
-  if (is(result, "try-error")) {
-    DomainError(x, "must be a metrics function, function name, ",
-                   "or vector of these")
-  } else if (convert) {
-    vector_to_function(x, "metric")
-  } else {
-    x
-  }
+  tryCatch(
+    {
+      map(as.MLMetric, c(x))
+      if (convert) vector_to_function(x, "metric") else x
+    },
+    error = function(cond) {
+      DomainError(x, "must be a metrics function, function name, ",
+                     "or vector of these")
+    }
+  )
 }
 
 
