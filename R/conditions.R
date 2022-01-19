@@ -103,8 +103,8 @@ throw <- function(x, call = TRUE, ...) {
 }
 
 
-.throw.LocalWarning <- function(x, ...) {
-  warning(x$message, call. = FALSE)
+.throw.LocalWarning <- function(x, immediate = FALSE, ...) {
+  warning(x$message, call. = FALSE, immediate. = immediate)
   x$value
 }
 
