@@ -62,9 +62,9 @@ expand_model <- function(object, ..., random = FALSE) {
 #' @rdname expand_modelgrid-methods
 #'
 #' @param ... arguments passed from the generic function to its methods and from
-#'   the \code{TunedModel} method to others.  The first argument of each
-#'   \code{expand_modelgrid} method is positional and, as such, must be given
-#'   first in calls to them.
+#'   the \code{MLModel} and \code{MLModelFunction} methods to others.  The
+#'   first argument of each \code{expand_modelgrid} method is positional and, as
+#'   such, must be given first in calls to them.
 #' @param formula,data \link[=formula]{formula} defining the model predictor and
 #'   response variables and a \link[=data.frame]{data frame} containing them.
 #' @param x,y \link{matrix} and object containing predictor and response
@@ -72,8 +72,9 @@ expand_model <- function(object, ..., random = FALSE) {
 #' @param input \link[=inputs]{input} object defining and containing the model
 #'   predictor and response variables.
 #' @param object model \link[=ModelSpecification]{specification}.
-#' @param model \code{\link{TunedModel}} object.  Can be given first followed by
-#'   any of the variable specifications.
+#' @param model \link[=models]{model} function, function name, or object; or
+#'   another object that can be \link[=as.MLModel]{coerced} to a model.  A model
+#'   can be given first followed by any of the variable specifications.
 #' @param info logical indicating whether to return model-defined grid
 #'   construction information rather than the grid values.
 #'
@@ -122,21 +123,21 @@ expand_modelgrid.formula <- function(formula, data, model, info = FALSE, ...) {
 #' @rdname expand_modelgrid-methods
 #'
 expand_modelgrid.matrix <- function(x, y, model, info = FALSE, ...) {
-  expand_modelgrid(model, x, y, info = info)
+  .expand_modelgrid(as.MLModel(model), x, y, info = info)
 }
 
 
 #' @rdname expand_modelgrid-methods
 #'
 expand_modelgrid.ModelFrame <- function(input, model, info = FALSE, ...) {
-  expand_modelgrid(model, input, info = info)
+  .expand_modelgrid(as.MLModel(model), input, info = info)
 }
 
 
 #' @rdname expand_modelgrid-methods
 #'
 expand_modelgrid.recipe <- function(input, model, info = FALSE, ...) {
-  expand_modelgrid(model, input, info = info)
+  .expand_modelgrid(as.MLModel(model), input, info = info)
 }
 
 
@@ -187,27 +188,44 @@ expand_modelgrid.ModelSpecification <- function(object, ...) {
 
 #' @rdname expand_modelgrid-methods
 #'
-expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
-  if (info) {
-    model@gridinfo
-  } else {
-    random <- if (is_optim_method(model, "RandomGridSearch")) {
-      get_optim_field(model, "size")
-    } else FALSE
-    .expand_modelgrid(model@grid, ..., model = model@model, random = random)
-  }
+expand_modelgrid.MLModel <- function(model, ...) {
+  .expand_modelgrid(model, ...)
 }
 
 
-.expand_modelgrid <- function(grid, ...) {
+#' @rdname expand_modelgrid-methods
+#'
+expand_modelgrid.MLModelFunction <- function(model, ...) {
+  expand_modelgrid(as.MLModel(model), ...)
+}
+
+
+.expand_modelgrid <- function(object, ...) {
   UseMethod(".expand_modelgrid")
 }
 
 
-.expand_modelgrid.TuningGrid <- function(grid, input, ..., model, random) {
+.expand_modelgrid.MLModel <- function(object, ..., info = FALSE) {
+  if (info) object@gridinfo else tibble()
+}
+
+
+.expand_modelgrid.TunedModel <- function(object, ..., info = FALSE) {
+  if (info) {
+    NextMethod()
+  } else {
+    random <- if (is_optim_method(object, "RandomGridSearch")) {
+      get_optim_field(object, "size")
+    } else FALSE
+    .expand_modelgrid(object@grid, ..., model = object@model, random = random)
+  }
+}
+
+
+.expand_modelgrid.TuningGrid <- function(object, input, ..., model, random) {
   gridinfo <- model@gridinfo
-  size <- grid@size
-  if (grid@random) random <- grid@random
+  size <- object@size
+  if (object@random) random <- object@random
   mf <- NULL
 
   not_dup <- function(x) !duplicated(x, fromLast = TRUE)
@@ -254,9 +272,9 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
 }
 
 
-.expand_modelgrid.ParameterGrid <- function(grid, input, ..., model, random) {
-  grid <- if (nrow(grid)) {
-    needs_data <- any(dials::has_unknowns(grid$object))
+.expand_modelgrid.ParameterGrid <- function(object, input, ..., model, random) {
+  grid <- if (nrow(object)) {
+    needs_data <- any(dials::has_unknowns(object$object))
     if (needs_data) {
       if (missing(input)) return(NULL)
       mf <- ModelFrame(input, ..., na.rm = FALSE)
@@ -269,10 +287,10 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
         },
         "model.matrix" = model.matrix(mf, intercept = FALSE)
       )
-      grid <- dials::finalize(grid, x = data)
+      object <- dials::finalize(object, x = data)
     }
-    params <- map(dials::value_seq, grid$object, grid@size)
-    expand_params(params, random = if (grid@random) grid@random else random)
+    params <- map(dials::value_seq, object$object, object@size)
+    expand_params(params, random = if (object@random) object@random else random)
   } else {
     tibble()
   }
@@ -281,8 +299,8 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
 }
 
 
-.expand_modelgrid.tbl_df <- function(grid, ...) {
-  if (ncol(grid)) grid[!duplicated(grid), ] else grid
+.expand_modelgrid.tbl_df <- function(object, ...) {
+  if (ncol(object)) object[!duplicated(object), ] else object
 }
 
 

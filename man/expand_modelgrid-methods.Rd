@@ -7,7 +7,8 @@
 \alias{expand_modelgrid.ModelFrame}
 \alias{expand_modelgrid.recipe}
 \alias{expand_modelgrid.ModelSpecification}
-\alias{expand_modelgrid.TunedModel}
+\alias{expand_modelgrid.MLModel}
+\alias{expand_modelgrid.MLModelFunction}
 \title{Model Tuning Grid Expansion}
 \usage{
 expand_modelgrid(...)
@@ -22,19 +23,22 @@ expand_modelgrid(...)
 
 \method{expand_modelgrid}{ModelSpecification}(object, ...)
 
-\method{expand_modelgrid}{TunedModel}(model, ..., info = FALSE)
+\method{expand_modelgrid}{MLModel}(model, ...)
+
+\method{expand_modelgrid}{MLModelFunction}(model, ...)
 }
 \arguments{
 \item{...}{arguments passed from the generic function to its methods and from
-the \code{TunedModel} method to others.  The first argument of each
-\code{expand_modelgrid} method is positional and, as such, must be given
-first in calls to them.}
+the \code{MLModel} and \code{MLModelFunction} methods to others.  The
+first argument of each \code{expand_modelgrid} method is positional and, as
+such, must be given first in calls to them.}
 
 \item{formula, data}{\link[=formula]{formula} defining the model predictor and
 response variables and a \link[=data.frame]{data frame} containing them.}
 
-\item{model}{\code{\link{TunedModel}} object.  Can be given first followed by
-any of the variable specifications.}
+\item{model}{\link[=models]{model} function, function name, or object; or
+another object that can be \link[=as.MLModel]{coerced} to a model.  A model
+can be given first followed by any of the variable specifications.}
 
 \item{info}{logical indicating whether to return model-defined grid
 construction information rather than the grid values.}
