@@ -9,7 +9,7 @@
   object,
   newdata = NULL,
   times = numeric(),
-  type = c("response", "prob"),
+  type = c("response", "default", "numeric", "prob"),
   cutoff = MachineShop::settings("cutoff"),
   distr = character(),
   method = character(),
@@ -25,8 +25,9 @@ predictions.  If not specified, the training data will be used by default.}
 \item{times}{numeric vector of follow-up times at which to predict
 survival events/probabilities or \code{NULL} for predicted survival means.}
 
-\item{type}{specifies prediction on the original outcome scale
-(\code{"response"}) or on a probability distribution scale (\code{"prob"}).}
+\item{type}{specifies prediction on the original outcome (\code{"response"}),
+numeric (\code{"numeric"}), or probability (\code{"prob"}) scale; or
+model-specific default predictions (\code{"default"}).}
 
 \item{cutoff}{numeric (0, 1) threshold above which binary factor
 probabilities are classified as events and below which survival

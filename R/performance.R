@@ -41,7 +41,7 @@
 #' gbm_fit <- fit(Surv(time, status) ~ ., data = veteran, model = GBMModel)
 #'
 #' obs <- response(gbm_fit, newdata = veteran)
-#' pred <- predict(gbm_fit, newdata = veteran, type = "prob")
+#' pred <- predict(gbm_fit, newdata = veteran)
 #' performance(obs, pred)
 #' }
 #'

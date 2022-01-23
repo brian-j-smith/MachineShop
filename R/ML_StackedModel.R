@@ -101,7 +101,7 @@ MLModelFunction(StackedModel) <- NULL
   pred <- 0
   for (i in seq_along(model_fit$base_fits)) {
     base_pred <- predict(model_fit$base_fits[[i]], newdata = newdata,
-                         times = model_fit$times, type = "prob")
+                         times = model_fit$times, type = "default")
     pred <- pred + model_fit$weights[i] * base_pred
   }
   pred

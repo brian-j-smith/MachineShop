@@ -97,7 +97,7 @@ MLModelFunction(SuperModel) <- NULL
 
 .predict.SuperModel <- function(object, model_fit, newdata, times, ...) {
   predictors <- map(function(fit) {
-    predict(fit, newdata = newdata, times = model_fit$times, type = "prob")
+    predict(fit, newdata = newdata, times = model_fit$times, type = "default")
   }, model_fit$base_fits)
 
   df <- if (model_fit$all_vars) {
@@ -108,7 +108,7 @@ MLModelFunction(SuperModel) <- NULL
     super_df(NA, predictors)
   }
 
-  predict(model_fit$super_fit, newdata = df, times = times, type = "prob")
+  predict(model_fit$super_fit, newdata = df, times = times, type = "default")
 }
 
 

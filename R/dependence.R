@@ -87,7 +87,7 @@ dependence <- function(
   predict_stats <- function(data) {
     stats_list <- map(
       function(x) stats(if (na.rm) na.omit(x) else x),
-      as.data.frame(predict(object, newdata = data, type = "prob",
+      as.data.frame(predict(object, newdata = data, type = "default",
                             distr = distr, method = method))
     )
     x <- do.call(cbind, stats_list)

@@ -414,7 +414,7 @@ subsample <- function(train, test, model, control, iter = 1) {
                      Case = comps$names,
                      stringsAsFactors = FALSE)
     df$Observed <- comps$response
-    predict_args <- list(model_fit, as.data.frame(test), type = "prob")
+    predict_args <- list(model_fit, as.data.frame(test), type = "default")
     df$Predicted <- do.call(predict, c(predict_args, control@predict))
     df$Weight <- comps$weights
     df

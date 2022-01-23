@@ -207,7 +207,7 @@ varimp_permute <- function(
       base_perf[s] <- if (s == 1 || subset) {
         newdata <- if (subset) data[inds$i, ] else data
         obs <- response(object, newdata)
-        pred <- predict(object, newdata, times = times, type = "prob")
+        pred <- predict(object, newdata, times = times, type = "default")
         if (is.null(metric)) {
           metric <- as.MLMetric(get_perf_metrics(obs, pred)[[1]])
         }
@@ -218,7 +218,7 @@ varimp_permute <- function(
       for (name in pred_names) {
         x <- newdata[[name]]
         newdata[[name]] <- data[[name]][inds$j]
-        pred <- predict(object, newdata, times = times, type = "prob")
+        pred <- predict(object, newdata, times = times, type = "default")
         perf[s, name] <- metric(obs, pred)[1]
         newdata[[name]] <- x
         progress()

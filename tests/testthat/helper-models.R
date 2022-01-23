@@ -21,12 +21,13 @@ test_model <- function(formula, data, model, times = numeric()) {
 
   pred <- head(predict(modelfit, data))
   print(pred)
-  pred_prob <- head(predict(modelfit, data, type = "prob"))
+  pred_prob <- head(predict(modelfit, data, type = "default"))
   print(pred_prob)
 
   pred_times <- head(predict(modelfit, data, times = times))
   print(pred_times)
-  pred_times_prob <- head(predict(modelfit, data, times = times, type = "prob"))
+  pred_times_prob <- head(predict(modelfit, data, times = times,
+                                  type = "default"))
   print(pred_times_prob)
 
   perf_boot <- resample(formula, data, model, BootOptimismControl)

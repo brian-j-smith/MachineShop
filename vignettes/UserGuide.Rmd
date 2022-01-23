@@ -491,13 +491,13 @@ predict(model_fit, type = "prob") %>% head
 
 ## Numeric Vector
 
-Code univariate numerical responses as a `numeric` variable.  Predicted numeric values are of the original storage mode (integer or double) by default, and doubles if `type = "prob"`.
+Code univariate numerical responses as a `numeric` variable.  Predicted numeric values are of the original type (integer or double) by default, and doubles if `type = "numeric"`.
 
 ```{r using_responses_numeric}
 ## Iowa City housing prices
 model_fit <- fit(sale_amount ~ ., data = ICHomes, model = GBMModel)
 predict(model_fit) %>% head
-predict(model_fit, type = "prob") %>% head
+predict(model_fit, type = "numeric") %>% head
 ```
 
 

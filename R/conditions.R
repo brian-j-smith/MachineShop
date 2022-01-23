@@ -175,9 +175,11 @@ check_array <- function(
 
 
 check_assignment <- function(x, value = x) {
+  msg <- paste0(" '", deparse1(substitute(x)), "' value.\n")
   if (is(value, "error")) {
-    value$message <- paste0("Failed to assign '", deparse1(substitute(x)),
-                            "' value.\n", value$message)
+    value$message <- paste0("Failed to assign", msg, value$message)
+  } else if (is(value, "condition")) {
+    value$message <- paste0("Issue in assigning", msg, value$message)
   }
   value
 }

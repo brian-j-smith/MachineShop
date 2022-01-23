@@ -1,35 +1,49 @@
-setGeneric("convert_prob",
-  function(object, x, ...) standardGeneric("convert_prob")
+convert_numeric <- function(x, ...) {
+  result <- check_numeric(x, ..., nonempty = FALSE, na.fail = FALSE)
+  if (is(result, "error")) {
+    result$message <- paste0(
+      result$message, "\n",
+      "Call 'predict()' with 'type = \"default\"'",
+      if (is(result, "DomainError")) ", \"numeric\",",
+      " or \"response\" instead."
+    )
+  }
+  result
+}
+
+
+setGeneric("convert_predicted",
+  function(object, x, ...) standardGeneric("convert_predicted")
 )
 
 
-setMethod("convert_prob", c("ANY", "ANY"),
+setMethod("convert_predicted", c("ANY", "ANY"),
   function(object, x, ...) x
 )
 
 
-setMethod("convert_prob", c("ANY", "numeric"),
+setMethod("convert_predicted", c("ANY", "numeric"),
   function(object, x, ...) unname(x)
 )
 
 
-setMethod("convert_prob", c("BinomialVariate", "ANY"),
+setMethod("convert_predicted", c("BinomialVariate", "ANY"),
   function(object, x, ...) unname(drop(x))
 )
 
 
-setMethod("convert_prob", c("factor", "array"),
+setMethod("convert_predicted", c("factor", "array"),
   function(object, x, ...) {
-    convert_prob(object, adrop(x, ndim(x)))
+    convert_predicted(object, adrop(x, ndim(x)))
   }
 )
 
 
-setMethod("convert_prob", c("factor", "matrix"),
+setMethod("convert_predicted", c("factor", "matrix"),
   function(object, x, ...) {
     stopifnot(ncol(x) > 0)
     if (nlevels(object) == 2) {
-      convert_prob(object, x[, ncol(x)])
+      convert_predicted(object, x[, ncol(x)])
     } else {
       structure(x, dimnames = list(NULL, levels(object)))
     }
@@ -37,14 +51,14 @@ setMethod("convert_prob", c("factor", "matrix"),
 )
 
 
-setMethod("convert_prob", c("matrix", "array"),
+setMethod("convert_predicted", c("matrix", "array"),
   function(object, x, ...) {
-    convert_prob(object, adrop(x, ndim(x)))
+    convert_predicted(object, adrop(x, ndim(x)))
   }
 )
 
 
-setMethod("convert_prob", c("matrix", "matrix"),
+setMethod("convert_predicted", c("matrix", "matrix"),
   function(object, x, ...) {
     stopifnot(ncol(object) == ncol(x))
     var_names <- colnames(x)
@@ -55,19 +69,19 @@ setMethod("convert_prob", c("matrix", "matrix"),
 )
 
 
-setMethod("convert_prob", c("numeric", "array"),
+setMethod("convert_predicted", c("numeric", "array"),
   function(object, x, ...) {
     n <- ndim(x)
     x <- if (n == 1) c(x) else adrop(x, n)
-    convert_prob(object, x)
+    convert_predicted(object, x)
   }
 )
 
 
-setMethod("convert_prob", c("numeric", "matrix"),
+setMethod("convert_predicted", c("numeric", "matrix"),
   function(object, x, ...) {
     stopifnot(ncol(x) == 1)
-    convert_prob(object, x[, 1])
+    convert_predicted(object, x[, 1])
   }
 )
 

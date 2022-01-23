@@ -9,8 +9,9 @@
 #'   predictions.  If not specified, the training data will be used by default.
 #' @param times numeric vector of follow-up times at which to predict
 #'   survival events/probabilities or \code{NULL} for predicted survival means.
-#' @param type specifies prediction on the original outcome scale
-#'   (\code{"response"}) or on a probability distribution scale (\code{"prob"}).
+#' @param type specifies prediction on the original outcome (\code{"response"}),
+#'   numeric (\code{"numeric"}), or probability (\code{"prob"}) scale; or
+#'   model-specific default predictions (\code{"default"}).
 #' @param cutoff numeric (0, 1) threshold above which binary factor
 #'   probabilities are classified as events and below which survival
 #'   probabilities are classified.
@@ -39,23 +40,35 @@
 #' }
 #'
 predict.MLModelFit <- function(
-  object, newdata = NULL, times = numeric(), type = c("response", "prob"),
+  object, newdata = NULL, times = numeric(),
+  type = c("response", "default", "numeric", "prob"),
   cutoff = MachineShop::settings("cutoff"), distr = character(),
   method = character(), ...
 ) {
-  times <- check_numeric(times, bounds = c(0, Inf), include = FALSE, size = NA,
-                         nonempty = FALSE)
-  throw(check_assignment(times))
-
   model <- as.MLModel(object)
   throw(check_packages(model@packages))
+
+  times <- check_numeric(
+    times, bounds = c(0, Inf), include = FALSE, size = NA, nonempty = FALSE
+  )
+  throw(check_assignment(times))
+
   obs <- response(object)
-  pred <- .predict(model, model_fit = object, newdata = newdata, times = times,
-                   distr = distr, method = method, ...)
-  pred <- convert_prob(obs, pred)
-  if (match.arg(type) == "response") {
-    convert_response(obs, pred, cutoff = cutoff)
-  } else pred
+  pred <- convert_predicted(obs, .predict(
+    model, model_fit = object, newdata = newdata, times = times, distr = distr,
+    method = method, ...
+  ))
+
+  pred <- switch(match.arg(type),
+    "default" = pred,
+    "numeric" = convert_numeric(pred),
+    "prob" = {
+      cond <- convert_numeric(pred, bounds = c(0, 1))
+      if (is(cond, "error")) Warning(cond$message, value = pred) else pred
+    },
+    "response" = convert_response(obs, pred, cutoff = cutoff)
+  )
+  throw(check_assignment(pred))
 }
 
 
