@@ -226,8 +226,7 @@ metric_SurvMatrix <- function(
 ) {
   conf_list <- confusion(observed, predicted, weights, cutoff = cutoff)
   x <- map("num", function(conf) .fun(conf, ...), conf_list)
-  times <- predicted@times
-  if (length(times) > 1) c("mean" = survmetric_mean(x, times), x) else x[[1]]
+  survmetric_mean(x, predicted@times)
 }
 
 

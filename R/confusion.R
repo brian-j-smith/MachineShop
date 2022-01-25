@@ -169,7 +169,7 @@ setMethod(".confusion", c("Surv", "SurvEvents"),
 
       ConfusionMatrix(length(observed) * conf_tbl)
     }, seq_along(times))
-    names(conf_list) <- make_names_len(length(times), "time")
+    names(conf_list) <- colnames(predicted)
     do.call(c, conf_list)
 
   }

@@ -31,11 +31,11 @@ Predicted probabilities (distr = emp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16795423     0.07537472     0.16062520     0.20938345     0.77835364 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82155188     0.77578548     0.76261524     0.76338256     0.90690244 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78205568     0.69477073 
 
 Predicted means (distr = exp)
@@ -63,11 +63,11 @@ Predicted probabilities (distr = exp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: exponential
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16776313     0.07512325     0.16016220     0.20937964     0.77835364 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82155188     0.77578548     0.76261524     0.74755811     0.90694375 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78708715     0.66008642 
 
 Predicted means (distr = ray)
@@ -95,11 +95,11 @@ Predicted probabilities (distr = ray)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: rayleigh
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.21550209     0.09759478     0.21576571     0.26250684     0.77835364 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82155188     0.77578548     0.76261524     0.70315461     0.89710215 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.73226261     0.60811080 
 
 Predicted means (distr = wei)
@@ -127,11 +127,11 @@ Predicted probabilities (distr = wei)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: weibull
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16779907     0.07502924     0.15997392     0.20960209     0.77835364 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82155188     0.77578548     0.76261524     0.74300723     0.90202231 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.77238731     0.66177315 
 
 Predicted means (method = bre)
@@ -159,11 +159,11 @@ Predicted probabilities (method = bre)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16795403     0.07537741     0.16062322     0.20938317     0.77835364 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82155188     0.77578548     0.76261524     0.76338256     0.90690244 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78205568     0.69477073 
 
 Predicted means (method = efr)
@@ -191,11 +191,11 @@ Predicted probabilities (method = efr)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16795423     0.07537472     0.16062520     0.20938345     0.77835364 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82155188     0.77578548     0.76261524     0.76338256     0.90690244 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78205568     0.69477073 
 
 Predicted events: 
@@ -214,7 +214,7 @@ Predicted events:
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
- Accuracy.mean Accuracy.time1 Accuracy.time2 Accuracy.time3 
+ Accuracy.Mean Accuracy.Time1 Accuracy.Time2 Accuracy.Time3 
      0.7633826      0.9069024      0.7820557      0.6947707 
 
 > cat("Formula Specification", "\n")
@@ -253,11 +253,11 @@ Predicted probabilities (distr = emp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16795423     0.07537472     0.16062520     0.20938345     0.77835364 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82155188     0.77578548     0.76261524     0.76338256     0.90690244 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78205568     0.69477073 
 
 Predicted means (distr = exp)
@@ -285,11 +285,11 @@ Predicted probabilities (distr = exp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: exponential
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16776313     0.07512325     0.16016220     0.20937964     0.77835364 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82155188     0.77578548     0.76261524     0.74755811     0.90694375 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78708715     0.66008642 
 
 Predicted means (distr = ray)
@@ -317,11 +317,11 @@ Predicted probabilities (distr = ray)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: rayleigh
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.21550209     0.09759478     0.21576571     0.26250684     0.77835364 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82155188     0.77578548     0.76261524     0.70315461     0.89710215 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.73226261     0.60811080 
 
 Predicted means (distr = wei)
@@ -349,11 +349,11 @@ Predicted probabilities (distr = wei)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: weibull
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16779907     0.07502924     0.15997392     0.20960209     0.77835364 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82155188     0.77578548     0.76261524     0.74300723     0.90202231 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.77238731     0.66177315 
 
 Predicted means (method = bre)
@@ -381,11 +381,11 @@ Predicted probabilities (method = bre)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16795403     0.07537741     0.16062322     0.20938317     0.77835364 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82155188     0.77578548     0.76261524     0.76338256     0.90690244 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78205568     0.69477073 
 
 Predicted means (method = efr)
@@ -413,11 +413,11 @@ Predicted probabilities (method = efr)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16795423     0.07537472     0.16062520     0.20938345     0.77835364 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82155188     0.77578548     0.76261524     0.76338256     0.90690244 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78205568     0.69477073 
 
 Predicted events: 
@@ -436,7 +436,7 @@ Predicted events:
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
- Accuracy.mean Accuracy.time1 Accuracy.time2 Accuracy.time3 
+ Accuracy.Mean Accuracy.Time1 Accuracy.Time2 Accuracy.Time3 
      0.7633826      0.9069024      0.7820557      0.6947707 
 Model: GBMModel 
 
@@ -465,11 +465,11 @@ Predicted probabilities (distr = emp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.15679309     0.07849082     0.14973851     0.19234675     0.81337546 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.84535970     0.83037167     0.79038404     0.78502028     0.89222182 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78698781     0.74095914 
 
 Predicted means (distr = exp)
@@ -497,11 +497,11 @@ Predicted probabilities (distr = exp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: exponential
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.15646897     0.07845135     0.14968215     0.19174811     0.81337546 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.84535970     0.83037167     0.79038404     0.77980358     0.89712195 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.79600591     0.72315484 
 
 Predicted means (distr = ray)
@@ -529,11 +529,11 @@ Predicted probabilities (distr = ray)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: rayleigh
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.25331240     0.07831087     0.18336295     0.36528268     0.81337546 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.84535970     0.83037167     0.79038404     0.69532965     0.89222182 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.76350945     0.57566491 
 
 Predicted means (distr = wei)
@@ -561,11 +561,11 @@ Predicted probabilities (distr = wei)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: weibull
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.15926489     0.07848241     0.15046011     0.19686074     0.81337546 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.84535970     0.83037167     0.79038404     0.78369515     0.89712195 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.80708957     0.72428778 
 
 Predicted means (method = bre)
@@ -593,11 +593,11 @@ Predicted probabilities (method = bre)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.15679288     0.07849204     0.14973818     0.19234605     0.81337546 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.84535970     0.83037167     0.79038404     0.78502028     0.89222182 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78698781     0.74095914 
 
 Predicted means (method = efr)
@@ -625,11 +625,11 @@ Predicted probabilities (method = efr)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.15679309     0.07849082     0.14973851     0.19234675     0.81337546 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.84535970     0.83037167     0.79038404     0.78502028     0.89222182 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78698781     0.74095914 
 
 Predicted events: 
@@ -648,7 +648,7 @@ Predicted events:
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
- Accuracy.mean Accuracy.time1 Accuracy.time2 Accuracy.time3 
+ Accuracy.Mean Accuracy.Time1 Accuracy.Time2 Accuracy.Time3 
      0.7850203      0.8922218      0.7869878      0.7409591 
 Model: CForestModel 
 
@@ -677,11 +677,11 @@ Predicted probabilities (distr = emp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.11817264     0.06483697     0.12862186     0.13323737     0.89636126 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.91980037     0.88901871     0.89139114     0.82344443     0.89710215 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.82282639     0.79435216 
 
 Predicted means (distr = exp)
@@ -709,11 +709,11 @@ Predicted probabilities (distr = exp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: exponential
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.12782872     0.07752002     0.13787730     0.14192305     0.87464468 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.87913025     0.87437539     0.87301202     0.79880294     0.89067358 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.81153877     0.75441319 
 
 Predicted means (distr = ray)
@@ -741,11 +741,11 @@ Predicted probabilities (distr = ray)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: rayleigh
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.12235569     0.08968187     0.14167866     0.12383144     0.86317887 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.86540278     0.86376432     0.86193804     0.80231803     0.89067358 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78892021     0.77501450 
 
 Predicted means (distr = wei)
@@ -773,11 +773,11 @@ Predicted probabilities (distr = wei)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: weibull
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.12599760     0.07811356     0.14947193     0.13106662     0.86637403 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.90107755     0.85450761     0.85961248     0.78790299     0.88207847 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.79037882     0.74874729 
 
 Predicted means (method = bre)
@@ -805,11 +805,11 @@ Predicted probabilities (method = bre)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.11817264     0.06483697     0.12862186     0.13323737     0.89636126 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.91980037     0.88901871     0.89139114     0.82344443     0.89710215 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.82282639     0.79435216 
 
 Predicted means (method = efr)
@@ -837,11 +837,11 @@ Predicted probabilities (method = efr)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.11817264     0.06483697     0.12862186     0.13323737     0.89636126 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.91980037     0.88901871     0.89139114     0.82344443     0.89710215 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.82282639     0.79435216 
 
 Predicted events: 
@@ -860,7 +860,7 @@ Predicted events:
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: empirical
- Accuracy.mean Accuracy.time1 Accuracy.time2 Accuracy.time3 
+ Accuracy.Mean Accuracy.Time1 Accuracy.Time2 Accuracy.Time3 
      0.8234444      0.8971021      0.8228264      0.7943522 
 Model: SurvRegModel 
 
@@ -889,11 +889,11 @@ Predicted probabilities (distr = emp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: weibull
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16274844     0.07487097     0.15954889     0.19981916     0.77757858 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82244057     0.77803479     0.75936005     0.77247890     0.91180292 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78211451     0.71096794 
 
 Predicted means (distr = exp)
@@ -921,11 +921,11 @@ Predicted probabilities (distr = exp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: weibull
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16274844     0.07487097     0.15954889     0.19981916     0.77757858 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82244057     0.77803479     0.75936005     0.77247890     0.91180292 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78211451     0.71096794 
 
 Predicted means (distr = ray)
@@ -953,11 +953,11 @@ Predicted probabilities (distr = ray)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: weibull
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16274844     0.07487097     0.15954889     0.19981916     0.77757858 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82244057     0.77803479     0.75936005     0.77247890     0.91180292 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78211451     0.71096794 
 
 Predicted means (distr = wei)
@@ -985,11 +985,11 @@ Predicted probabilities (distr = wei)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: weibull
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16274844     0.07487097     0.15954889     0.19981916     0.77757858 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82244057     0.77803479     0.75936005     0.77247890     0.91180292 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78211451     0.71096794 
 
 Predicted means (method = bre)
@@ -1017,11 +1017,11 @@ Predicted probabilities (method = bre)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: weibull
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16274844     0.07487097     0.15954889     0.19981916     0.77757858 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82244057     0.77803479     0.75936005     0.77247890     0.91180292 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78211451     0.71096794 
 
 Predicted means (method = efr)
@@ -1049,11 +1049,11 @@ Predicted probabilities (method = efr)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: weibull
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16274844     0.07487097     0.15954889     0.19981916     0.77757858 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.82244057     0.77803479     0.75936005     0.77247890     0.91180292 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.78211451     0.71096794 
 
 Predicted events: 
@@ -1072,7 +1072,7 @@ Predicted events:
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: weibull
- Accuracy.mean Accuracy.time1 Accuracy.time2 Accuracy.time3 
+ Accuracy.Mean Accuracy.Time1 Accuracy.Time2 Accuracy.Time3 
      0.7724789      0.9118029      0.7821145      0.7109679 
 Model: XGBDARTModel 
 
@@ -1101,11 +1101,11 @@ Predicted probabilities (distr = emp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted means (distr = exp)
@@ -1133,11 +1133,11 @@ Predicted probabilities (distr = exp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted means (distr = ray)
@@ -1165,11 +1165,11 @@ Predicted probabilities (distr = ray)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted means (distr = wei)
@@ -1197,11 +1197,11 @@ Predicted probabilities (distr = wei)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted means (method = bre)
@@ -1229,11 +1229,11 @@ Predicted probabilities (method = bre)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted means (method = efr)
@@ -1261,11 +1261,11 @@ Predicted probabilities (method = efr)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted events: 
@@ -1284,7 +1284,7 @@ Predicted events:
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
- Accuracy.mean Accuracy.time1 Accuracy.time2 Accuracy.time3 
+ Accuracy.Mean Accuracy.Time1 Accuracy.Time2 Accuracy.Time3 
      0.9872595      0.9950954      1.0000000      0.9764808 
 Model: XGBLinearModel 
 
@@ -1313,11 +1313,11 @@ Predicted probabilities (distr = emp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16127321     0.07338674     0.16101380     0.19658345     0.77082665 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.83561020     0.78009843     0.73935016     0.77295667     0.90202231 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.76229469     0.72772760 
 
 Predicted means (distr = exp)
@@ -1345,11 +1345,11 @@ Predicted probabilities (distr = exp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16127321     0.07338674     0.16101380     0.19658345     0.77082665 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.83561020     0.78009843     0.73935016     0.77295667     0.90202231 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.76229469     0.72772760 
 
 Predicted means (distr = ray)
@@ -1377,11 +1377,11 @@ Predicted probabilities (distr = ray)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16127321     0.07338674     0.16101380     0.19658345     0.77082665 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.83561020     0.78009843     0.73935016     0.77295667     0.90202231 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.76229469     0.72772760 
 
 Predicted means (distr = wei)
@@ -1409,11 +1409,11 @@ Predicted probabilities (distr = wei)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16127321     0.07338674     0.16101380     0.19658345     0.77082665 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.83561020     0.78009843     0.73935016     0.77295667     0.90202231 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.76229469     0.72772760 
 
 Predicted means (method = bre)
@@ -1441,11 +1441,11 @@ Predicted probabilities (method = bre)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16127321     0.07338674     0.16101380     0.19658345     0.77082665 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.83561020     0.78009843     0.73935016     0.77295667     0.90202231 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.76229469     0.72772760 
 
 Predicted means (method = efr)
@@ -1473,11 +1473,11 @@ Predicted probabilities (method = efr)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.16127321     0.07338674     0.16101380     0.19658345     0.77082665 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     0.83561020     0.78009843     0.73935016     0.77295667     0.90202231 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     0.76229469     0.72772760 
 
 Predicted events: 
@@ -1496,7 +1496,7 @@ Predicted events:
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
- Accuracy.mean Accuracy.time1 Accuracy.time2 Accuracy.time3 
+ Accuracy.Mean Accuracy.Time1 Accuracy.Time2 Accuracy.Time3 
      0.7729567      0.9020223      0.7622947      0.7277276 
 Model: XGBTreeModel 
 
@@ -1525,11 +1525,11 @@ Predicted probabilities (distr = emp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted means (distr = exp)
@@ -1557,11 +1557,11 @@ Predicted probabilities (distr = exp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted means (distr = ray)
@@ -1589,11 +1589,11 @@ Predicted probabilities (distr = ray)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted means (distr = wei)
@@ -1621,11 +1621,11 @@ Predicted probabilities (distr = wei)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted means (method = bre)
@@ -1653,11 +1653,11 @@ Predicted probabilities (method = bre)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted means (method = efr)
@@ -1685,11 +1685,11 @@ Predicted probabilities (method = efr)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted events: 
@@ -1708,7 +1708,7 @@ Predicted events:
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
- Accuracy.mean Accuracy.time1 Accuracy.time2 Accuracy.time3 
+ Accuracy.Mean Accuracy.Time1 Accuracy.Time2 Accuracy.Time3 
      0.9872595      0.9950954      1.0000000      0.9764808 
 Model: XGBTreeModel 
 
@@ -1737,11 +1737,11 @@ Predicted probabilities (distr = emp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted means (distr = exp)
@@ -1769,11 +1769,11 @@ Predicted probabilities (distr = exp)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted means (distr = ray)
@@ -1801,11 +1801,11 @@ Predicted probabilities (distr = ray)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted means (distr = wei)
@@ -1833,11 +1833,11 @@ Predicted probabilities (distr = wei)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted means (method = bre)
@@ -1865,11 +1865,11 @@ Predicted probabilities (method = bre)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted means (method = efr)
@@ -1897,11 +1897,11 @@ Predicted probabilities (method = efr)
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
-    Brier.mean    Brier.time1    Brier.time2    Brier.time3   ROC AUC.mean 
+    Brier.Mean    Brier.Time1    Brier.Time2    Brier.Time3   ROC AUC.Mean 
     0.03268946     0.02797425     0.03628669     0.03241719     1.00000000 
- ROC AUC.time1  ROC AUC.time2  ROC AUC.time3  Accuracy.mean Accuracy.time1 
+ ROC AUC.Time1  ROC AUC.Time2  ROC AUC.Time3  Accuracy.Mean Accuracy.Time1 
     1.00000000     1.00000000     1.00000000     0.98725951     0.99509544 
-Accuracy.time2 Accuracy.time3 
+Accuracy.Time2 Accuracy.Time3 
     1.00000000     0.97648084 
 
 Predicted events: 
@@ -1920,7 +1920,7 @@ Predicted events:
 ... with 195 more rows
 Times: 730, 1825, 3650
 Distribution: gaussian
- Accuracy.mean Accuracy.time1 Accuracy.time2 Accuracy.time3 
+ Accuracy.Mean Accuracy.Time1 Accuracy.Time2 Accuracy.Time3 
      0.9872595      0.9950954      1.0000000      0.9764808 
 
 > models <- c(BARTModel(), BlackBoostModel(), GAMBoostModel(baselearner = "bols"),

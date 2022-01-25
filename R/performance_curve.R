@@ -242,7 +242,7 @@ setMethod(".performance_curve", c("Surv", "SurvProbs"),
         PerformanceCurve(data.frame(Cutoff = cutoffs, x = x, y = y),
                          metrics = metrics)
       }, seq_along(times)),
-      names = make_names_len(length(times), "time"),
+      names = colnames(predicted),
       class = "listof"
     )
 

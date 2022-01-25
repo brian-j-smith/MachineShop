@@ -71,14 +71,9 @@ setMetricMethod("auc", c("Resample", "NULL"),
 
 setMetricMethod("auc", c("Surv", "SurvProbs"),
   function(observed, predicted, weights, metrics, ...) {
-    x <- unname(auc(performance_curve(observed, predicted, weights,
-                                      metrics = metrics)))
-    times <- predicted@times
-    if (length(times) > 1) {
-      c("mean" = survmetric_mean(x, times), "time" = x)
-    } else {
-      x
-    }
+    x <- auc(performance_curve(observed, predicted, weights, metrics = metrics))
+    names(x) <- colnames(predicted)
+    survmetric_mean(x, predicted@times)
   }
 )
 
@@ -137,11 +132,8 @@ setMetricMethod("brier", c("Surv", "SurvProbs"),
       sum(cens_weights * (stop_after - predicted[, i, drop = TRUE])^2)
     }, seq_along(times))
 
-    if (length(times) > 1) {
-      c("mean" = survmetric_mean(x, times), "time" = x)
-    } else {
-      x
-    }
+    names(x) <- colnames(predicted)
+    survmetric_mean(x, times)
   }
 )
 

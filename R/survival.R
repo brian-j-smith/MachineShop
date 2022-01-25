@@ -357,8 +357,12 @@ surv_subset <- function(x, weights, include, time) {
 
 
 survmetric_mean <- function(x, times) {
-  weights <- diff(c(0, times)) / tail(times, 1)
-  sum(weights * x)
+  if (length(x) > 1) {
+    weights <- diff(c(0, times)) / tail(times, 1)
+    c("Mean" = sum(weights * x), x)
+  } else {
+    unname(x)
+  }
 }
 
 
