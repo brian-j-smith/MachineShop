@@ -5,6 +5,7 @@
 \alias{summary.ConfusionList}
 \alias{summary.ConfusionMatrix}
 \alias{summary.MLModel}
+\alias{summary.MLModelFit}
 \alias{summary.Performance}
 \alias{summary.PerformanceCurve}
 \alias{summary.Resample}
@@ -21,6 +22,8 @@
   na.rm = TRUE,
   ...
 )
+
+\method{summary}{MLModelFit}(object, .type = c("default", "glance", "tidy"), ...)
 
 \method{summary}{Performance}(
   object,
@@ -51,6 +54,12 @@
 compute summary statistics.}
 
 \item{na.rm}{logical indicating whether to exclude missing values.}
+
+\item{.type}{character string specifying that
+\code{\link[=unMLModelFit]{unMLModelFit(object)}} be passed to
+\code{\link[base:summary]{summary}} (\code{"default"}),
+\code{\link[generics:glance]{glance}}, or
+\code{\link[generics:tidy]{tidy}}.}
 
 \item{stat}{function or character string naming a function to compute a
 summary statistic at each cutoff value of resampled metrics in

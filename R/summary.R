@@ -14,6 +14,11 @@
 #' @param stats function, function name, or vector of these with which to
 #'   compute summary statistics.
 #' @param na.rm logical indicating whether to exclude missing values.
+#' @param .type character string specifying that
+#'   \code{\link[=unMLModelFit]{unMLModelFit(object)}} be passed to
+#'   \code{\link[base:summary]{summary}} (\code{"default"}),
+#'   \code{\link[generics:glance]{glance}}, or
+#'   \code{\link[generics:tidy]{tidy}}.
 #' @param ... arguments passed to other methods.
 #'
 #' @return An object of summmary statistics.
@@ -85,8 +90,15 @@ summary.MLModel <- function(
 }
 
 
-summary.MLModelFit <- function(object, ...) {
-  summary(unMLModelFit(object))
+#' @rdname summary-methods
+#'
+summary.MLModelFit <- function(
+  object, .type = c("default", "glance", "tidy"), ...
+) {
+  switch(match.arg(.type),
+    "default" = summary,
+    fget(.type, package = "generics")
+  )(unMLModelFit(object), ...)
 }
 
 
