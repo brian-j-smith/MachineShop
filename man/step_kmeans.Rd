@@ -24,7 +24,7 @@ step_kmeans(
 
 \method{tidy}{step_kmeans}(x, ...)
 
-tunable.step_kmeans(x, ...)
+\method{tunable}{step_kmeans}(x, ...)
 }
 \arguments{
 \item{recipe}{\link[recipes]{recipe} object to which the step will be added.}

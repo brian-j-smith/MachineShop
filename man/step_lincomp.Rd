@@ -23,7 +23,7 @@ step_lincomp(
 
 \method{tidy}{step_lincomp}(x, ...)
 
-tunable.step_lincomp(x, ...)
+\method{tunable}{step_lincomp}(x, ...)
 }
 \arguments{
 \item{recipe}{\link[recipes]{recipe} object to which the step will be added.}

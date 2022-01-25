@@ -23,7 +23,7 @@ step_kmedoids(
   id = recipes::rand_id("kmedoids")
 )
 
-tunable.step_kmedoids(x, ...)
+\method{tunable}{step_kmedoids}(x, ...)
 }
 \arguments{
 \item{recipe}{\link[recipes]{recipe} object to which the step will be added.}

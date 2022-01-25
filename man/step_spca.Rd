@@ -23,7 +23,7 @@ step_spca(
   id = recipes::rand_id("spca")
 )
 
-tunable.step_spca(x, ...)
+\method{tunable}{step_spca}(x, ...)
 }
 \arguments{
 \item{recipe}{\link[recipes]{recipe} object to which the step will be added.}
