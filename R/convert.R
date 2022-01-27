@@ -143,7 +143,7 @@ setMethod("convert_response", c("ordered", "matrix"),
 
 setMethod("convert_response", c("Surv", "SurvProbs"),
   function(object, x, cutoff, ...) {
-    events <- x <= cutoff
+    events <- x < cutoff
     storage.mode(events) <- "integer"
     SurvEvents(events, x@times, distr = x@distr)
   }
