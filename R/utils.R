@@ -558,7 +558,7 @@ unnest <- function(data) {
     x <- data[[name]]
     if (ndim(x) > 1) {
       x <- if (is.data.frame(x)) unnest(x) else as.data.frame(as(x, "matrix"))
-      name <- paste0(name, ".", names(x))
+      name <- paste0(name, "$", names(x))
     }
     df[name] <- x
   }
