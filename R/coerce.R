@@ -11,9 +11,6 @@ as.data.frame.BinomialVariate <- function(x, ...) {
 }
 
 
-setAsS3Part("ListOf", "listof")
-
-
 as.data.frame.ModelFrame <- function(x, ...) {
   structure(asS3(x), terms = NULL)
 }
@@ -27,17 +24,6 @@ setAs("ModelFrame", "data.frame",
 setAs("ModeledFrame", "data.frame",
   function(from) as.data.frame(from)
 )
-
-
-setAsS3Part("ParameterGrid", "parameters")
-
-
-setAs("recipe", "ModelRecipe",
-  function(from) ModelRecipe(from)
-)
-
-
-setAsS3Part("RecipeGrid", "tbl_df")
 
 
 setAs("SelectedModelFrame", "data.frame",
@@ -114,6 +100,9 @@ setAs("TunedModel", "list",
     c(list(object = from@model, grid = from@grid), as(from@params, "list"))
   }
 )
+
+
+setAsS3Part("ListOf", "listof")
 
 
 as.MLControl <- function(x, ...) {
@@ -262,6 +251,14 @@ as.MLModel.NULL <- function(x, ...) {
 }
 
 
+setAs("recipe", "ModelRecipe",
+  function(from) ModelRecipe(from)
+)
+
+
+setAsS3Part("ParameterGrid", "parameters")
+
+
 setAsS3Part("ModelRecipe", "recipe")
 
 
@@ -272,3 +269,6 @@ setAsS3Part("SelectedModelRecipe", "recipe")
 
 
 setAsS3Part("TunedModelRecipe", "recipe")
+
+
+setAsS3Part("RecipeGrid", "tbl_df")
