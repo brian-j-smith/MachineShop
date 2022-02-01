@@ -491,7 +491,10 @@ PerformanceDiffTest <- setClass("PerformanceDiffTest",
 
 setClass("PerformanceCurve",
   contains = "data.frame",
-  slots = c(metrics = "list")
+  slots = c(
+    metrics = "list",
+    control = "MLControl"
+  )
 )
 
 

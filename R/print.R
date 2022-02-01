@@ -416,11 +416,15 @@ print.ParsnipModel <- function(x, ...) {
 #'
 print.Performance <- function(x, n = MachineShop::settings("print_max"), ...) {
   title(x, ...)
+  level <- nesting_level(...)
   dn <- dimnames(x)
   print_fields(list("Metric{?s}: " = dn[[2]]))
   if (length(dn) > 2) {
     print_fields(list("Model{?s}: " = dn[[3]]), n = n)
   }
+  newline()
+  print(x@control, level = level + 1)
+
   invisible(x)
 }
 
@@ -431,10 +435,15 @@ print.PerformanceCurve <- function(
   x, n = MachineShop::settings("print_max"), ...
 ) {
   title(x, ...)
+  level <- nesting_level(...)
   xy_labels <- c(x@metrics$x@label, x@metrics$y@label)
   print_fields(list("Metrics: " = paste(c("x", "y"), "=", xy_labels)))
   newline()
   print_items(as(x, "data.frame"), n = n)
+  if (!is(x@control, "NullControl")) {
+    newline()
+    print(x@control, level = level + 1)
+  }
   invisible(x)
 }
 

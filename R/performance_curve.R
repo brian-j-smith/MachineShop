@@ -138,7 +138,7 @@ performance_curve.Resample <- function(
     }
   }
 
-  PerformanceCurve(curves, metrics = curve@metrics)
+  PerformanceCurve(curves, metrics = curve@metrics, control = x@control)
 }
 
 
@@ -152,7 +152,9 @@ get_curve_metrics <- function(metrics) {
 }
 
 
-PerformanceCurve <- function(object, ..., metrics, .check = TRUE) {
+PerformanceCurve <- function(
+  object, ..., metrics, control = NullControl(), .check = TRUE
+) {
   if (.check) {
     if (is.null(object$Model)) object$Model <- factor("Model")
     missing <- missing_names(c("Cutoff", "x", "y"), object)
@@ -177,7 +179,7 @@ PerformanceCurve <- function(object, ..., metrics, .check = TRUE) {
   }
 
   rownames(object) <- NULL
-  new("PerformanceCurve", object, metrics = metrics, ...)
+  new("PerformanceCurve", object, metrics = metrics, control = control, ...)
 }
 
 

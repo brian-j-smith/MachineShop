@@ -11,7 +11,6 @@ test_that("object combinations", {
 
     model <- GLMModel
 
-
     model_fit <- fit(fo, data = df, model = model)
     res <- resample(fo, data = df, model = model)
 

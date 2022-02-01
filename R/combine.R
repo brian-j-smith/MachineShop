@@ -166,8 +166,14 @@ c.PerformanceCurve <- function(...) {
       throw(Error(class, " arguments have different metrics."))
     }
 
-    df <- do.call(append, set_model_names(args))
-    do.call(class, list(df, metrics = args[[1]]@metrics, .check = FALSE))
+    if (!identical_elements(args, function(x) x@control)) {
+      throw(Error(class, " arguments have different control structures."))
+    }
+
+    do.call(class, list(
+      do.call(append, set_model_names(args)), metrics = args[[1]]@metrics,
+      control = args[[1]]@control, .check = FALSE
+    ))
 
   } else {
     NextMethod()
