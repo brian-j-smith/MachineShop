@@ -117,7 +117,7 @@ RFSRCModel <- function(
 
     fit = function(formula, data, weights, ...) {
       y <- response(data)
-      data <- as.data.frame(data)
+      data <- as.data.frame(formula, data)
       family <- switch_class(y,
         "matrix" = {
           colnames(y) <- make_names_len(ncol(y), "y")

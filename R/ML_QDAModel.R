@@ -51,7 +51,7 @@ QDAModel <- function(
     fit = function(formula, data, weights, use, ...) {
       model_fit <- eval_fit(
         data,
-        formula = MASS::qda(formula, data = as.data.frame(data), ...),
+        formula = MASS::qda(formula, data = as.data.frame(formula, data), ...),
         matrix = MASS::qda(x, y, ...)
       )
       model_fit$use <- use

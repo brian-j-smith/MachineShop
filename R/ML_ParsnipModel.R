@@ -54,7 +54,7 @@ ParsnipModel <- function(object, ...) {
     params = list(object = object),
 
     fit = function(formula, data, weights, object, ...) {
-      parsnip::fit(object, formula, data = as.data.frame(data))
+      parsnip::fit(object, formula, data = as.data.frame(formula, data))
     },
 
     predict = function(object, newdata, model, times, ...) {

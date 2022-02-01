@@ -43,8 +43,9 @@ SurvRegModel <- function(
 
     fit = function(formula, data, weights, dist, scale, parms = NULL, ...) {
       rms::psm(
-        formula, data = as.data.frame(data), weights = weights, dist = dist,
-        scale = scale, parms = parms, control = survival::survreg.control(...)
+        formula, data = as.data.frame(formula, data), weights = weights,
+        dist = dist, scale = scale, parms = parms,
+        control = survival::survreg.control(...)
       )
     },
 
@@ -125,9 +126,8 @@ SurvRegStepAICModel <- function(
       formula, data, weights, dist, scale, parms = NULL, ...,
       direction, scope = list(), k, trace, steps
     ) {
-      environment(formula) <- environment()
+      data <- as.data.frame(formula, data)
       stepargs <- stepAIC_args(formula, direction, scope)
-      data <- as.data.frame(data)
       MASS::stepAIC(
         rms::psm(
           stepargs$formula, data = data, weights = weights, dist = dist,

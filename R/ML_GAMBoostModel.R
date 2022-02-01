@@ -96,7 +96,7 @@ GAMBoostModel <- function(
         )
       }
       mboost::gamboost(
-        formula, data = as.data.frame(data), na.action = na.pass,
+        formula, data = as.data.frame(formula, data), na.action = na.pass,
         weights = weights, family = family, baselearner = baselearner,
         dfbase = dfbase, control = mboost::boost_control(...)
       )

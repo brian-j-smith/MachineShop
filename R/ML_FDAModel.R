@@ -83,7 +83,8 @@ FDAModel <- function(
     ),
 
     fit = function(formula, data, weights, ...) {
-      mda::fda(formula, data = as.data.frame(data), weights = weights, ...)
+      mda::fda(formula, data = as.data.frame(formula, data), weights = weights,
+               ...)
     },
 
     predict = function(object, newdata, prior = object$prior, ...) {

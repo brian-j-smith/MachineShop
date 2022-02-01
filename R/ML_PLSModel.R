@@ -49,7 +49,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
 
     fit = function(formula, data, weights, ...) {
       y <- response(data)
-      data <- as.data.frame(data)
+      data <- as.data.frame(formula, data)
       if (is.factor(y)) {
         mm <- model.matrix(~ y - 1)
         colnames(mm) <- levels(y)

@@ -91,7 +91,7 @@ RangerModel <- function(
 
     fit = function(formula, data, weights, ...) {
       ranger::ranger(
-        formula, data = as.data.frame(data), case.weights = weights,
+        formula, data = as.data.frame(formula, data), case.weights = weights,
         probability = is(response(data), "factor"), ...
       )
     },
