@@ -2,6 +2,10 @@
 
 ## Version Updates
 
+## 3.2.1
+* Fix 'data' argument of wrong type error in `terms.formula()`.
+* Require >= 3.1.0 version of **cli** package.
+
 ## 3.2.0
 * Add argument `distr` and `method` to `dependence()`.
 * Add function `ParsnipModel()` for model specifications (`model_spec`) from the [**parsnip**](https://parsnip.tidymodels.org/) package.
