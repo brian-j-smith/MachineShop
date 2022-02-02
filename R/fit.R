@@ -138,21 +138,20 @@ fit.MLModelFunction <- function(model, ...) {
 }
 
 
-eval_fit <- function(data, formula, matrix) {
-  use_model_matrix <- if (missing(formula)) TRUE else
-    if (missing(matrix)) FALSE else
-      is(terms(data), "ModelDesignTerms")
-
-  if (use_model_matrix) {
-    envir <- list(
-      x = model.matrix(data, intercept = FALSE),
-      y = response(data)
-    )
-    eval(substitute(matrix), envir, parent.frame())
+eval_fit <- function(data = NULL, formula, matrix) {
+  expr <- if (is(data, "ModelFrame") && is(terms(data), "ModelDesignTerms")) {
+    bquote({
+      x <- model.matrix(data, intercept = FALSE)
+      y <- response(data)
+      .(substitute(matrix))
+    })
   } else {
-    envir <- list(data = as.data.frame(data))
-    eval(substitute(formula), envir, parent.frame())
+    bquote({
+      data <- as.data.frame(formula, data)
+      .(substitute(formula))
+    })
   }
+  eval.parent(expr)
 }
 
 
