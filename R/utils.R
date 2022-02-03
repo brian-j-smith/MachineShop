@@ -123,17 +123,23 @@ deparse1 <- function(expr, collapse = " ", width.cutoff = 500L, ...) {
 }
 
 
-fget <- function(x) {
-  f <- get0(x, mode = "function")
-  if (is.null(f)) {
-    msg <- if (is.character(x)) {
-      paste0("Function '", x, "' not found.")
-    } else {
-      "Invalid function."
-    }
-    throw(Error(msg))
+fget <- function(x, package = character()) {
+  throw(check_packages(package))
+  if (is.character(x)) {
+    x <- paste(c(package, x), collapse = "::")
+    err_msg <- paste0("Function '", x, "' not found.")
+  } else {
+    err_msg <- "Invalid function."
   }
-  f
+  res <- get0(x, mode = "function")
+  if (is.null(res)) throw(Error(err_msg))
+  if (length(package)) {
+    envir <- environment(res)
+    if (!isNamespace(envir) || getNamespaceName(envir) != package) {
+      throw(Error("Function is not from the ", package, " package."))
+    }
+  }
+  res
 }
 
 
