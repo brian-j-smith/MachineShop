@@ -646,6 +646,11 @@ nesting_level <- function(level = 0, ...) {
 }
 
 
+new_print_progress <- function(start_time = Sys.time()) {
+  eval(bquote(function(...) print_progress(..., start_time = .(start_time))))
+}
+
+
 newline <- function() {
   cat("\n")
 }
@@ -723,11 +728,11 @@ print_items.default <- function(x, ...) {
 
 
 print_items.character <- function(
-  x, n = Inf, label = "", indent = 0, exdent = 0, add_names = FALSE, sep = ", ",
-  style = NULL, ...
+  x, n = Inf, label = "", indent = 0, exdent = 0, add_names = FALSE,
+  add_size = FALSE, sep = ", ", style = NULL, ...
 ) {
   lines <- ansi_strwrap(
-    note_items(label, x, add_names = add_names, sep = sep),
+    note_items(label, x, add_names = add_names, add_size = add_size, sep = sep),
     indent = indent, exdent = exdent
   )
   max_lines <- ceiling(log(n))
@@ -873,6 +878,30 @@ print_modelinfo <- function(x, trained = FALSE, level = 0, id = FALSE, ...) {
       varimp = "Variable importance: "
     ))
   }
+}
+
+
+print_progress <- function(
+  scores, max_iter = Inf, method = character(), items = list(),
+  n = MachineShop::settings("print_max"), metric = numeric(),
+  start_time = Sys.time(), pad = TRUE
+) {
+  iter <- length(scores)
+  hline(label = paste0(
+    "Iteration ", iter, if (is.finite(max_iter)) paste0(" of ", max_iter)
+  ))
+  newline()
+  selected <- which.max(scores)
+  if (selected == iter) selected <- paste0(">", selected, "<")
+  print_fields(list("Optimization method: " = method))
+  print_fields(items, add_size = TRUE, add_names = TRUE, n = n)
+  print_fields(list(
+    "Metric: " = metric,
+    "Current maximum score (iteration): " =
+      as_string(list(max(scores), " (", selected, ")"), sep = ""),
+    "Elapsed time: " = round(difftime(Sys.time(), start_time), 1)
+  ), add_names = TRUE)
+  if (pad && iter < max_iter) newline()
 }
 
 

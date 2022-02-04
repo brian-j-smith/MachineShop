@@ -348,15 +348,17 @@ new_progress_bar <- function(total, object = NULL, model = NULL, index = 0) {
     show_after = 0
   )
   if (is(index, "progress_index") && index == 1) {
-    pb$message(paste0(names(index), "(", max(index), ")"))
+    pb$message(paste0(
+      names(index), if (is.finite(max(index))) paste0("(", max(index), ")")
+    ))
   }
   pb$tick(0)
   pb
 }
 
 
-new_progress_index <- function(name, max) {
-  structure(0, names = name, max = max, class = c("progress_index", "numeric"))
+new_progress_index <- function(init = 0, max = Inf, name = character()) {
+  structure(init, max = max, names = name, class = "progress_index")
 }
 
 
@@ -380,14 +382,20 @@ nvars <- function(x, model) {
 
 
 note_items <- function(
-  begin, values, end = character(), add_names = FALSE, sep = ", ",
-  conj = character()
+  begin, values, end = character(), add_names = FALSE, add_size = FALSE,
+  sep = ", ", conj = character()
 ) {
   if (add_names && length(names(values))) {
     values <- paste(names(values), values, sep = " = ")
   }
-  qty <- "{qty(length(values))}"
-  pluralize(paste0(begin, as_string(values, sep = sep, conj = conj), end, qty))
+  size <- length(values)
+  if (add_size && size) {
+    values <- c(
+      paste0("[1", if (size > 1) paste0(":", size), "] ", values[1]), values[-1]
+    )
+  }
+  end <- paste0(end, "{qty(size)}")
+  pluralize(begin, as_string(values, sep = sep, conj = conj), end)
 }
 
 

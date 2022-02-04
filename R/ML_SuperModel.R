@@ -74,7 +74,7 @@ MLModelFunction(SuperModel) <- NULL
   all_vars <- object@params@options$all_vars
 
   predictors <- list()
-  ind <- new_progress_index(name = object@name, max = length(base_learners))
+  ind <- new_progress_index(max = length(base_learners), name = object@name)
   while (ind < max(ind)) {
     ind <- ind + 1
     res <- resample(input, model = base_learners[[ind]], control = control,
