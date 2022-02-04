@@ -900,19 +900,24 @@ print_items.ListOf <- function(x, n = Inf, level = 0, id = FALSE, ...) {
   if (is_empty(x)) {
     hline(level, label = "ListOf()")
   } else {
-    inds <- head(seq_along(x), n)
-    list_names <- names(x)
-    if (is.null(list_names)) {
-      list_names <- make_names_len(length(x), "Component ")
-    }
-    for (i in inds) {
-      hline(level, label = list_names[i])
-      print(x[[i]], n = n, level = level, id = id, na.print = NULL)
-      if (level < 2) newline()
-    }
+    labels <- map("char", function(name, i) {
+      if (nzchar(name)) {
+        prefix <- "$"
+        label <- deparse(as.name(name), backtick = TRUE)
+      } else {
+        prefix <- NULL
+        label <- paste0("[[", i, "]]")
+      }
+      if (i <= n) {
+        hline(level, label = paste0(prefix, label))
+        print(x[[i]], n = n, level = level, id = id, na.print = NULL)
+        if (level < 2) newline()
+      }
+      label
+    }, make_names_along(x, "", unique = FALSE), seq_along(x))
     n_more <- max(length(x) - n, 0)
     if (n_more) {
-      extra <- tail(list_names, n_more)
+      extra <- tail(labels, n_more)
       msg <- pluralize(
         "... with ", format_len(n_more), " more element{?s}: ", "{qty(n_more)}"
       )

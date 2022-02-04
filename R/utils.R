@@ -289,7 +289,7 @@ make_id <- function(prefix = character(), n = 4, sep = ".") {
 }
 
 
-make_names_along <- function(x, default = "..", sep = ".") {
+make_names_along <- function(x, default = "..", unique = TRUE, sep = ".") {
   if (length(default) == 1) default <- rep_len(default, length(x))
   old_names <- names(x)
   names(x) <- default
@@ -297,7 +297,7 @@ make_names_along <- function(x, default = "..", sep = ".") {
     keep <- nzchar(old_names) & !is.na(old_names)
     names(x)[keep] <- old_names[keep]
   }
-  make_unique(names(x), sep = sep)
+  if (unique) make_unique(names(x), sep = sep) else names(x)
 }
 
 
