@@ -72,8 +72,7 @@ behaviors of functions in the \pkg{MachineShop} package.
   \item{\code{print_max}}{number of models or data rows to show with print
     methods or \code{Inf} to show all [default: 10].}
   \item{\code{require}}{names of installed packages to load during parallel
-    execution of resampling algorithms [default: \code{c("MachineShop",
-    "survival", "recipes")}].}
+    execution of resampling algorithms [default: \code{"MachineShop"}].}
   \item{\code{reset}}{character names of settings to reset to their default
     values.}
   \item{\code{RHS.formula}}{non-modifiable character vector of operators and

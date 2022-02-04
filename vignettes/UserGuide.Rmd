@@ -1861,7 +1861,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
   : number of models or data rows to show with print methods or `Inf` to show all [default: 10].
 
 `require`
-  : names of installed packages to load during parallel execution of resampling algorithms [default: ``c("MachineShop", "survival", "recipes")``].
+  : names of installed packages to load during parallel execution of resampling algorithms [default: ``"MachineShop"``].
 
 `reset`
   : character names of settings to reset to their default values.

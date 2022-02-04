@@ -177,7 +177,7 @@ resample.MLModelFunction <- function(model, ...) {
   foreach(
     i = i <- seq_along(splits),
     .export = c("seq_boot", "subsample"),
-    .packages = settings("require"),
+    .packages = required_packages(object),
     .verbose = control@monitor$verbose,
     .options.snow = snow_opts
   ) %dopar% {
@@ -240,7 +240,7 @@ resample.MLModelFunction <- function(model, ...) {
   df_list <- foreach(
     i = i <- seq_along(splits),
     .export = "subsample",
-    .packages = settings("require"),
+    .packages = required_packages(object),
     .verbose = control@monitor$verbose,
     .options.snow = snow_opts
   ) %dopar% {
@@ -301,7 +301,7 @@ resample.MLModelFunction <- function(model, ...) {
   foreach(
     i = i <- seq_along(splits),
     .export = "subsample",
-    .packages = settings("require"),
+    .packages = required_packages(object),
     .verbose = control@monitor$verbose,
     .options.snow = snow_opts
   ) %dopar% {

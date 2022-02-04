@@ -62,8 +62,7 @@
 #'   \item{\code{print_max}}{number of models or data rows to show with print
 #'     methods or \code{Inf} to show all [default: 10].}
 #'   \item{\code{require}}{names of installed packages to load during parallel
-#'     execution of resampling algorithms [default: \code{c("MachineShop",
-#'     "survival", "recipes")}].}
+#'     execution of resampling algorithms [default: \code{"MachineShop"}].}
 #'   \item{\code{reset}}{character names of settings to reset to their default
 #'     values.}
 #'   \item{\code{RHS.formula}}{non-modifiable character vector of operators and
@@ -373,7 +372,7 @@ MachineShop_global <- as.environment(list(
     ),
 
     require = list(
-      value = c("MachineShop", "survival", "recipes"),
+      value = "MachineShop",
       check = function(x) {
         x <- setdiff(x, .global_defaults$require)
         unavailable <- !vapply(x, requireNamespace, logical(1), quietly = TRUE)

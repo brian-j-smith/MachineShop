@@ -486,6 +486,17 @@ rand_int <- function(n = 1) {
 }
 
 
+required_packages <- function(object) {
+  input <- as.MLInput(object)
+  require <- if (is(input, "ModelRecipe")) {
+    c("survival", "recipes")
+  } else if (is(response(input), "Surv")) {
+    "survival"
+  }
+  union(settings("require"), require)
+}
+
+
 round_int <- function(...) {
   as.integer(round(...))
 }
