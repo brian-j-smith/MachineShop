@@ -126,17 +126,18 @@ get_grid <- function(object, ...) {
 
 
 get_grid.default <- function(object, ...) {
-  make_grid(class1(object))
+  make_grid(object, class1(object))
 }
 
 
 get_grid.ModelSpecification <- function(object, ...) {
-  make_grid("ModelSpec", object@grid)
+  make_grid(object, "ModelSpec", object@grid)
 }
 
 
 get_grid.SelectedInput <- function(object, ...) {
   make_grid(
+    object,
     names(object@inputs),
     tibble(id = map("char", slot, object@inputs, "id"))
   )
@@ -145,6 +146,7 @@ get_grid.SelectedInput <- function(object, ...) {
 
 get_grid.SelectedModel <- function(object, ...) {
   make_grid(
+    object,
     names(object@models),
     tibble(id = map("char", slot, object@models, "id"))
   )
@@ -152,22 +154,27 @@ get_grid.SelectedModel <- function(object, ...) {
 
 
 get_grid.TunedModelRecipe <- function(object, ...) {
-  make_grid("ModelRecipe", as(object@grid, "tbl_df"))
+  make_grid(object, "ModelRecipe", as(object@grid, "tbl_df"))
 }
 
 
 get_grid.TunedModel <- function(object, ...) {
-  make_grid(object@model@name, expand_modelgrid(object, ...))
+  make_grid(object, object@model@name, expand_modelgrid(object, ...))
 }
 
 
-make_grid <- function(name = character(), params = tibble()) {
+make_grid <- function(object, name = character(), params = tibble()) {
   if (is_empty(name)) name <- "Model"
   if (is_empty(params)) params <- tibble(.rows = 1)
-  tibble(
-    name = make_unique(rep_len(name, nrow(params))),
-    params = params
-  )
+  name <- make_unique(rep_len(name, nrow(params)))
+  if (is_optim_method(object, "RandomGridSearch")) {
+    n <- nrow(params)
+    size <- get_optim_field(object, "size")
+    inds <- sort(sample.int(n, min(max(size, 1), n)))
+    params <- params[inds, ]
+    name <- name[inds]
+  }
+  tibble(name = name, params = params)
 }
 
 
@@ -216,7 +223,7 @@ random_grid <- function(x, size = integer()) {
     }
 
     grid <- head(grid, size)
-    cols <- unname(unnest(grid))
+    cols <- unname(unnest_params(grid))
     sortable_types <- c("character", "complex", "Date", "factor", "logical",
                         "numeric")
     is_sortable <- map("logi", function(col) {
@@ -262,6 +269,39 @@ regular_grid <- function(x) {
 }
 
 
+renest_params <-function(x, template, drop = FALSE) {
+  res <- template
+  ind <- 1
+  for (name in names(template)) {
+    node <- template[[name]]
+    res[[name]] <- if (is_tibble(node)) {
+      size <- length(unnest_params(node))
+      renest_params(x[seq(ind, length = size)], node, drop = TRUE)
+    } else {
+      size <- 1
+      x[[ind]]
+    }
+    ind <- ind + size
+  }
+  if (length(res) || !drop) res
+}
+
+
 unique_grid <- function(x) {
-  if (is_empty(x)) as_tibble(x) else x[!duplicated(unnest(x)), ]
+  if (is_empty(x)) x else x[!duplicated(unnest_params(x)), ]
+}
+
+
+unnest_params <- function(x, compact_names = FALSE) {
+  res <- tibble(.rows = nrow(x))
+  for (name in names(x)) {
+    value <- x[[name]]
+    if (is_tibble(value)) {
+      value <- unnest_params(value)
+      if (compact_names) name <- c(name, character(length(value) - 1))
+      name <- paste0(name, "$", names(value))
+    }
+    res[name] <- value
+  }
+  res
 }

@@ -294,6 +294,13 @@ check_numeric <- function(
 }
 
 
+check_optim_bounds <- function(x) {
+  if (is_empty(x)) {
+    Error("No set of bounded tuning parameters to optimize.")
+  } else x
+}
+
+
 check_packages <- function(x) {
   paren_pos <- regexpr("\\(([^)]*)\\)", x)
   paren_len <- attr(paren_pos, "match.length")

@@ -53,7 +53,9 @@ RandomForestModel <- function(
       param = c("mtry", "nodesize"),
       get_values = c(
         function(n, data, ...) seq_nvars(data, RandomForestModel, n),
-        function(n, data, ...) round(seq(1, min(20, nrow(data)), length = n))
+        function(n, data, ...) {
+          round_int(seq(1, min(20, nrow(data)), length = n))
+        }
       ),
       default = c(TRUE, FALSE)
     ),

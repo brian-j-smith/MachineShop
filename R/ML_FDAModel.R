@@ -75,7 +75,7 @@ FDAModel <- function(
         function(n, data, ...) {
           model_fit <- fit(data, model = EarthModel(pmethod = "none"))
           max_terms <- min(2 + 0.75 * nrow(model_fit$dirs), 200)
-          round(seq(2, max_terms, length = n))
+          round_int(seq(2, max_terms, length = n))
         },
         function(n, ...) head(1:2, n)
       ),

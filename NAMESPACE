@@ -23,8 +23,8 @@ importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
            delete.response, drop1, formula, get_all_vars, loess, lm, median,
            model.frame, model.matrix, model.matrix.default, model.response,
            model.weights, na.fail, na.omit, na.pass, offset, p.adjust, pchisq,
-           pnorm, predict, pt, quantile, reformulate, reshape, sd, t.test,
-           terms, time, update, var, vcov, xtabs)
+           pnorm, predict, pt, quantile, reformulate, reshape, runif, sd,
+           t.test, terms, time, update, var, vcov, xtabs)
 importFrom(survival, concordance, is.Surv, Surv, survfit, survreg,
            survreg.distributions)
 importFrom(tibble, as_tibble, is_tibble, tibble)
@@ -121,6 +121,12 @@ export(BootControl,
        SplitControl,
        TrainControl,
        set_monitor,
+       set_optim_bayes,
+       set_optim_bfgs,
+       set_optim_grid,
+       set_optim_method,
+       set_optim_pso,
+       set_optim_sann,
        set_predict,
        set_strata)
 
@@ -204,6 +210,8 @@ S3method(as.MLModel, MLModelFit)
 S3method(as.MLModel, MLModelFunction)
 S3method(as.MLModel, model_spec)
 S3method(as.MLModel, ModeledInput)
+S3method(as_string, default)
+S3method(as_string, character)
 S3method(bake, step_lincomp)
 S3method(bake, step_sbf)
 S3method(bake, ModelRecipe)
@@ -298,6 +306,7 @@ S3method(print, MLMetric)
 S3method(print, MLModel)
 S3method(print, MLModelFit)
 S3method(print, MLModelFunction)
+S3method(print, MLOptimization)
 S3method(print, ModelFrame)
 S3method(print, ModelRecipe)
 S3method(print, ModelSpecification)
@@ -311,14 +320,17 @@ S3method(print, ParsnipModel)
 S3method(print, Performance)
 S3method(print, PerformanceCurve)
 S3method(print, PerformanceDiffTest)
+S3method(print, RandomGridSearch)
 S3method(print, RecipeGrid)
 S3method(print, Resample)
 S3method(print, SelectedInput)
+S3method(print, SequentialOptimization)
 S3method(print, SplitControl)
 S3method(print, step_lincomp)
 S3method(print, step_sbf)
 S3method(print, SurvMatrix)
 S3method(print, SurvTimes)
+S3method(print, TrainingParams)
 S3method(print, TrainingStep)
 S3method(print, TunedInput)
 S3method(print, TunedModel)
@@ -347,6 +359,18 @@ S3method(SelectedInput, list)
 S3method(SelectedInput, matrix)
 S3method(SelectedInput, ModelFrame)
 S3method(SelectedInput, recipe)
+S3method(set_monitor, MLControl)
+S3method(set_monitor, MLOptimization)
+S3method(set_monitor, ModelSpecification)
+S3method(set_optim_bayes, ModelSpecification)
+S3method(set_optim_bfgs, ModelSpecification)
+S3method(set_optim_grid, TrainingParams)
+S3method(set_optim_grid, ModelSpecification)
+S3method(set_optim_grid, TunedInput)
+S3method(set_optim_grid, TunedModel)
+S3method(set_optim_method, ModelSpecification)
+S3method(set_optim_pso, ModelSpecification)
+S3method(set_optim_sann, ModelSpecification)
 S3method(summary, ConfusionList)
 S3method(summary, ConfusionMatrix)
 S3method(summary, MLModel)

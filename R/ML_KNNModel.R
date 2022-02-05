@@ -53,7 +53,7 @@ KNNModel <- function(
       param = c("k", "distance", "kernel"),
       get_values = c(
         function(n, data, ...) {
-          round(seq_range(0, 5, c(1, nrow(data) / 3), n + 1))
+          round_int(seq_range(0, 5, c(1, nrow(data) / 3), n + 1))
         },
         function(n, ...) seq_inner(0, 4, length = n),
         function(n, ...) {

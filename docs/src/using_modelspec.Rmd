@@ -1,0 +1,53 @@
+# ModelSpecification class
+
+The `r rdoc_url("ModelSpecification")` class allows response and predictor variables and a model that defines the relationship between them to be packaged together into a single container for ease of model fitting and assessment.  The inputs and models described previously can be included in a `r rdoc_url("ModelSpecification")`.  Resampling control and a method for optimizing tuning parameters are also part of the specification.  A `r rdoc_url("ModelSpecification")` object with its default or a user-specified control method has the following characteristics.
+
+1. Tuning of input and model objects is performed simultaneously over a global grid of their parameter values.
+2. The specification's control method overrides those of any included `r rdoc_url("TunedInput")` or `r rdoc_url("TunedModel")`.
+3. `r rdoc_url("ModeledInput")`, `r rdoc_url("SelectedInput")`, and `r rdoc_url("SelectedModel")` objects are not allowed in the specification.
+
+The default tuning parameter optimization method is an exhaustive grid search.  Other methods can be employed with the `r rdoc_url("set_optim")` functions.
+
+| Optimization Function              | Method                                            |
+|:-----------------------------------|:--------------------------------------------------|
+| `r rdoc_url("set_optim_bayes()")`  | Bayesian optimization with a Gaussian process model [@snoek:2012:PBO]            |
+| `r rdoc_url("set_optim_bfgs()")`   | Limited-memory modification of quasi-Newton BFGS optimization [@byrd:1994:LMA] |
+| `r rdoc_url("set_optim_grid()")`   | Exhaustive or random grid search                                                 |
+| `r rdoc_url("set_optim_method()")` | User-defined optimization function                                               |
+| `r rdoc_url("set_optim_pso()")`    | Particle swarm optimization [@bratton:2007:DSP]                |
+| `r rdoc_url("set_optim_sann()")`   | Simulated annealing [@belisle:1992:CTC]           |
+
+```{r modelspec_fit}
+## Preprocessing recipe with PCA steps
+pca_rec <- recipe(y ~ ., data = surv_train) %>%
+  role_case(stratum = y) %>%
+  step_center(all_predictors()) %>%
+  step_scale(all_predictors()) %>%
+  step_pca(all_predictors(), id = "PCA")
+
+## Tuning grid of number of PCA components
+pca_grid <- expand_steps(
+  PCA = list(num_comp = 1:3)
+)
+
+## Model specification
+(modelspec <- ModelSpecification(
+  TunedInput(pca_rec, grid = pca_grid),
+  TunedModel(GBMModel),
+  control = surv_means_control
+))
+
+## Model fit with Bayesian optimization
+bayes_fit <- modelspec %>% set_optim_bayes %>% fit
+as.MLModel(bayes_fit)
+```
+
+Alternatively, a value of `NULL` may be specified as the control method in a `r rdoc_url("ModelSpecifiction")` so that any package input or model object is allowed, object-specific control structures and training parameters are used for selection and tuning, and objects are trained sequentially with nested resampling rather than simultaneously with a global grid.  This, in essence, is how input and model objects are handled if passed separately in to the `r rdoc_url("fit()")` and `r rdoc_url("resample()")` functions apart from a `r rdoc_url("ModelSpecification")`.  Having them together in a `r rdoc_url("ModelSpecifiction")` has the advantage of simplifying the function calls to be in terms of one object instead of two.
+
+```{r modelspec_null}
+ModelSpecification(
+  TunedInput(pca_rec, grid = pca_grid),
+  TunedModel(GBMModel),
+  control = NULL
+)
+```

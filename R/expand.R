@@ -191,7 +191,10 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
   if (info) {
     model@gridinfo
   } else {
-    .expand_modelgrid(model@grid, ..., model = model@model)
+    random <- if (is_optim_method(model, "RandomGridSearch")) {
+      get_optim_field(model, "size")
+    } else FALSE
+    .expand_modelgrid(model@grid, ..., model = model@model, random = random)
   }
 }
 
@@ -201,10 +204,10 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
 }
 
 
-.expand_modelgrid.TuningGrid <- function(grid, input, ..., model) {
+.expand_modelgrid.TuningGrid <- function(grid, input, ..., model, random) {
   gridinfo <- model@gridinfo
   size <- grid@size
-  random <- grid@random
+  if (grid@random) random <- grid@random
   mf <- NULL
 
   not_dup <- function(x) !duplicated(x, fromLast = TRUE)
@@ -251,7 +254,7 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
 }
 
 
-.expand_modelgrid.ParameterGrid <- function(grid, input, ..., model) {
+.expand_modelgrid.ParameterGrid <- function(grid, input, ..., model, random) {
   grid <- if (nrow(grid)) {
     needs_data <- any(dials::has_unknowns(grid$object))
     if (needs_data) {
@@ -269,7 +272,7 @@ expand_modelgrid.TunedModel <- function(model, ..., info = FALSE) {
       grid <- dials::finalize(grid, x = data)
     }
     params <- map(dials::value_seq, grid$object, grid@size)
-    expand_params(params, random = grid@random)
+    expand_params(params, random = if (grid@random) grid@random else random)
   } else {
     tibble()
   }

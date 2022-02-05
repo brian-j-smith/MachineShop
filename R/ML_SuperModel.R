@@ -54,6 +54,7 @@ SuperModel <- function(
     response_types = slots$response_types,
     weights = slots$weights,
     params = TrainingParams(
+      optim = NullOptimization(),
       control = control,
       options = list(all_vars = all_vars)
     )

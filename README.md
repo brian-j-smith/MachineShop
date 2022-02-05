@@ -48,8 +48,10 @@ modeling strategies.
     confusion matrices, partial dependence plots, performance curves,
     lift curves, and model-specific and permutation-based variable
     importance.
--   Model tuning over automatically generated grids of parameter values
-    and randomly sampled grid points.
+-   Model tuning over automatically generated grids and with exhaustive
+    and random grid searches, Bayesian optimization, particle swarm
+    optimization, quasi-Newton BFGS optimization, simulated annealing,
+    and support for user-defined optimization functions.
 -   Model selection and comparisons for any combination of models and
     model parameter values.
 -   Recursive feature elimination.

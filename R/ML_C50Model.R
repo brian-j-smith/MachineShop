@@ -74,7 +74,7 @@ C50Model <- function(
     gridinfo = new_gridinfo(
       param = c("trials", "rules", "winnow"),
       get_values = c(
-        function(n, ...) c(1, round(seq_range(0, 10, c(2, 100), n))),
+        function(n, ...) round_int(c(1, seq_range(0, 10, c(2, 100), n))),
         function(...) c(FALSE, TRUE),
         function(...) c(FALSE, TRUE)
       )

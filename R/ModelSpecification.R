@@ -46,7 +46,8 @@
 #'
 #' @return \code{ModelSpecification} class object.
 #'
-#' @seealso \code{\link{fit}}, \code{\link{resample}}
+#' @seealso \code{\link{fit}}, \code{\link{resample}},
+#' \code{\link{set_monitor}}, \code{\link{set_optim}}
 #'
 #' @examples
 #' \donttest{
@@ -82,7 +83,7 @@ ModelSpecification.default <- function(
     grid = tibble()
   )
 
-  if (!has_NullControl(object)) {
+  if (is_optim_method(object)) {
     object@grid <- expand_modelgrid(object)
     object@input <- update_slots(object@input, params = list())
     object@model <- update_slots(object@model, params = list())
@@ -163,7 +164,7 @@ update.ModelSpecification <- function(object, params = NULL, data = NULL, ...) {
       if (length(res) || !drop) res
     }
     object@grid <- unique_grid(grid_diff(object@grid, params))
-    if (is_empty(object@grid)) object@params@control <- NullControl()
+    if (is_empty(object@grid)) object@params@optim <- NullOptimization()
   }
   object@input <- update(object@input, data = data)
   object

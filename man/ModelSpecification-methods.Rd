@@ -95,5 +95,6 @@ fit(modelspec)
 
 }
 \seealso{
-\code{\link{fit}}, \code{\link{resample}}
+\code{\link{fit}}, \code{\link{resample}},
+\code{\link{set_monitor}}, \code{\link{set_optim}}
 }

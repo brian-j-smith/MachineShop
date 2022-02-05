@@ -74,7 +74,7 @@ MLModelFunction(SelectedModel) <- NULL
 
 
 .fit.SelectedModel <- function(object, ...) {
-  fit_grid(object, ...)
+  fit_optim(object, ...)
 }
 
 
@@ -123,7 +123,7 @@ update.SelectedModel <- function(object, params = list(), ...) {
 #'
 #' @return \code{TunedModel} class object that inherits from \code{MLModel}.
 #'
-#' @seealso \code{\link{fit}}, \code{\link{resample}}
+#' @seealso \code{\link{fit}}, \code{\link{resample}}, \code{\link{set_optim}}
 #'
 #' @examples
 #' \donttest{
@@ -239,7 +239,7 @@ MLModelFunction(TunedModel) <- NULL
 
 
 .fit.TunedModel <- function(object, ...) {
-  fit_grid(object, ...)
+  fit_optim(object, ...)
 }
 
 

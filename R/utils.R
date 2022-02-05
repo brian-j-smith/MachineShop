@@ -152,6 +152,12 @@ get0 <- function(x, mode = "any") {
 }
 
 
+get_optim_field <- function(object, name = NULL) {
+  object <- object@params@optim
+  if (is.null(name)) object else slot(object, name)
+}
+
+
 get_perf_metrics <- function(x, y) {
   generic_name <- "performance"
   classes <- substring(methods(generic_name), nchar(generic_name) + 2)
@@ -168,12 +174,8 @@ get_perf_metrics <- function(x, y) {
 
 
 has_grid <- function(object) {
-  nrow(object@gridinfo) > 0
-}
-
-
-has_NullControl <- function(object) {
-  is(object@params@control, "NullControl")
+  is(object, "TunedInput") || is(object, "TunedModel") ||
+    (is(object, "MLModel") && nrow(object@gridinfo))
 }
 
 
@@ -201,6 +203,46 @@ is_empty <- function(x) {
 
 is_one_element <- function(x, class = "ANY") {
   is.vector(x) && length(x) == 1 && is(x[[1]], class)
+}
+
+
+is_optim_method <- function(x, ...) {
+  UseMethod("is_optim_method")
+}
+
+
+is_optim_method.default <- function(x, ...) {
+  FALSE
+}
+
+
+is_optim_method.MLInput <- function(x, ...) {
+  is_optim_method(x@params, ...)
+}
+
+
+is_optim_method.MLModel <- function(x, ...) {
+  is_optim_method(x@params, ...)
+}
+
+
+is_optim_method.MLOptimization <- function(x, type = "ANY", ...) {
+  is(x, type)
+}
+
+
+is_optim_method.ModelSpecification <- function(x, ...) {
+  is_optim_method(x@params, ...)
+}
+
+
+is_optim_method.NullOptimization <- function(x, ...) {
+  is_optim_method.default(x, ...)
+}
+
+
+is_optim_method.TrainingParams <- function(x, ...) {
+  is_optim_method(x@optim, ...)
 }
 
 
@@ -322,6 +364,11 @@ missing_names <- function(x, data) {
 }
 
 
+ndim <- function(x) {
+  length(size(x))
+}
+
+
 new_params <- function(envir, ...) {
   args <- c(as.list(envir), ...)
   missing <- map("logi", function(x) is.name(x) && !nzchar(x), args)
@@ -367,25 +414,6 @@ new_progress_index <- function(init = 0, max = Inf, name = character()) {
 }
 
 
-ndim <- function(x) {
-  length(size(x))
-}
-
-
-nvars <- function(x, model) {
-  stopifnot(is(x, "ModelFrame"))
-  model <- as.MLModel(model)
-  res <- switch(model@predictor_encoding,
-    "model.frame" = {
-      x_terms <- attributes(terms(x))
-      nrow(x_terms$factors) - x_terms$response - length(x_terms$offset)
-    },
-    "model.matrix" = ncol(model.matrix(x[1, , drop = FALSE], intercept = FALSE))
-  )
-  if (is.null(res)) NA else res
-}
-
-
 note_items <- function(
   begin, values, end = character(), add_names = FALSE, add_size = FALSE,
   sep = ", ", conj = character()
@@ -401,6 +429,20 @@ note_items <- function(
   }
   end <- paste0(end, "{qty(size)}")
   pluralize(begin, as_string(values, sep = sep, conj = conj), end)
+}
+
+
+nvars <- function(x, model) {
+  stopifnot(is(x, "ModelFrame"))
+  model <- as.MLModel(model)
+  res <- switch(model@predictor_encoding,
+    "model.frame" = {
+      x_terms <- attributes(terms(x))
+      nrow(x_terms$factors) - x_terms$response - length(x_terms$offset)
+    },
+    "model.matrix" = ncol(model.matrix(x[1, , drop = FALSE], intercept = FALSE))
+  )
+  if (is.null(res)) NA else res
 }
 
 
@@ -438,6 +480,11 @@ rand_int <- function(n = 1) {
 }
 
 
+round_int <- function(...) {
+  as.integer(round(...))
+}
+
+
 sample_replace <- function(x, inds) {
   if (!is.logical(inds)) {
     old_inds <- inds
@@ -466,14 +513,8 @@ seq_inner <- function(from, to, length) {
 }
 
 
-seq_range <- function(from, by, lim, length) {
-  if (length > 0) {
-    to <- min(from + by * (length - 1), lim[2])
-    x <- seq(from, to, length = length)
-    x[x >= lim[1]]
-  } else {
-    seq(from, length = length)
-  }
+seq_int <- function(...) {
+  as.integer(seq(...))
 }
 
 
@@ -489,7 +530,18 @@ seq_nvars <- function(x, model, length) {
   } else {
     numeric()
   }
-  round(vals)
+  round_int(vals)
+}
+
+
+seq_range <- function(from, by, bounds, length) {
+  if (length > 0) {
+    to <- min(from + by * (length - 1), bounds[2])
+    x <- seq(from, to, length = length)
+    x[x >= bounds[1]]
+  } else {
+    seq(from, length = length)
+  }
 }
 
 

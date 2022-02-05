@@ -19,7 +19,7 @@ test_that("ParameterGrid construction and model fitting", {
             model = TunedModel(RangerModel, grid = grid)),
         "MLModelFit"
       )
-      model_grid <- as.MLModel(model_fit)@steps[[1]]@grid$params
+      model_grid <- as.MLModel(model_fit)@steps[[1]]@log$params
       nrow(model_grid) && ncol(model_grid) == nrow(grid)
     }
 

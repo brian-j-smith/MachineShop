@@ -83,10 +83,10 @@ fit.recipe <- function(input, model = NULL, ...) {
 #' @rdname fit-methods
 #'
 fit.ModelSpecification <- function(object, ...) {
-  if (has_NullControl(object)) {
-    fit(as.MLInput(object), model = as.MLModel(object))
+  if (is_optim_method(object)) {
+    fit_optim(object)
   } else {
-    fit_grid(object)
+    fit(as.MLInput(object), model = as.MLModel(object))
   }
 }
 
@@ -167,8 +167,26 @@ eval_fit <- function(data = NULL, formula, matrix) {
 }
 
 
-fit_grid <- function(object, ...) {
-  step <- resample_grid(object, ...)
-  object <- update(object, params = step@grid$params[step@grid$selected, ])
-  push(step, fit(object, ...))
+fit_optim <- function(object, ...) {
+  mloptim <- get_optim_field(object)
+  throw(check_packages(mloptim@packages))
+  tryCatch(
+    optim(mloptim@fun, object, ...),
+    error = function(e) {
+      msg <- conditionMessage(e)
+      if (is(mloptim, "SequentialOptimization")) {
+        object <- set_optim_grid(
+          object, random = mloptim@random, progress = mloptim@monitor$progress
+        )
+        throw(LocalWarning(
+          mloptim@label, " failed: ", msg, "\n",
+          "Performing a ", tolower(get_optim_field(object, "label")),
+          " instead."
+        ), immediate = TRUE)
+        fit(object, ...)
+      } else {
+        throw(Error(msg), call = sys.call(-4))
+      }
+    }
+  )
 }

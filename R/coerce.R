@@ -126,6 +126,7 @@ setAs("TrainingParams", "list",
   function(from) {
     res <- map(function(name) slot(from, name), slotNames(from))
     options <- res$options
+    res$optim <- NULL
     res$options <- NULL
     c(new_params(res), options)
   }

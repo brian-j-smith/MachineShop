@@ -46,7 +46,7 @@ info <- modelinfo()
 * Parallel execution of resampling algorithms.
 * Choices of performance metrics: accuracy, areas under ROC and precision recall curves, Brier score, coefficient of determination (R^2^), concordance index, cross entropy, F score, Gini coefficient, unweighted and weighted Cohen's kappa, mean absolute error, mean squared error, mean squared log error, positive and negative predictive values, precision and recall, and sensitivity and specificity.
 * Graphical and tabular performance summaries: calibration curves, confusion matrices, partial dependence plots, performance curves, lift curves, and model-specific and permutation-based variable importance.
-* Model tuning over automatically generated grids of parameter values and randomly sampled grid points.
+* Model tuning over automatically generated grids and with exhaustive and random grid searches, Bayesian optimization, particle swarm optimization, quasi-Newton BFGS optimization, simulated annealing, and support for user-defined optimization functions.
 * Model selection and comparisons for any combination of models and model parameter values.
 * Recursive feature elimination.
 * User-definable models and performance metrics.
@@ -1811,7 +1811,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `stat.Curve`
   : function or character string naming a function to compute one summary statistic at each cutoff value of resampled metrics in performance curves, or `NULL` for resample-specific metrics [default: ``"base::mean"``].
 
-`stat.Resamples`
+`stat.Resample`
   : function or character string naming a function to compute one summary statistic to control the ordering of models in plots [default: ``"base::mean"``].
 
 `stat.TrainingParams`
@@ -1820,7 +1820,7 @@ Core default behaviors of functions in the package can be viewed or changed glob
 `stats.PartialDependence`
   : function, function name, or vector of these with which to compute partial dependence summary statistics [default: ``c(Mean = "base::mean")``].
 
-`stats.Resamples`
+`stats.Resample`
   : function, function name, or vector of these with which to compute summary statistics on resampled performance metrics [default: ``c(Mean = "base::mean", Median = "stats::median", SD = "stats::sd", Min = "base::min", Max = "base::max")``].
 
 A call to `r rdoc_url("settings()")` with `"reset"` will restore all package defaults and with no arguments will display the current values of all.  Settings may also be supplied as a single unnamed argument which is a named list.  Partial matching of setting names is supported.  The setting value is returned if only one is specified to view.  Otherwise, a list is returned with the values of specified settings as they existed prior to any requested changes.  Such a list can be passed as an argument to `r rdoc_url("settings()")` to restore their values.

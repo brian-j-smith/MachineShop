@@ -141,8 +141,34 @@ setClass("TrainControl",
 setOldClass(c("parameters", "tbl_df"))
 
 
+setClass("MLOptimization",
+  slots = c(
+    label = "character",
+    packages = "character",
+    params = "list",
+    monitor = "list",
+    fun = "function"
+  )
+)
+
+
+setClass("GridSearch", contains = "MLOptimization")
+setClass("NullOptimization", contains = "MLOptimization")
+
+setClass("RandomGridSearch",
+  contains = "GridSearch",
+  slots = c(size = "integer")
+)
+
+setClass("SequentialOptimization",
+  contains = "MLOptimization",
+  slots = c(random = "IntegerOrLogical")
+)
+
+
 setClass("TrainingParams",
   slots = c(
+    optim = "MLOptimization",
     control = "MLControl",
     metrics = "ANY",
     cutoff = "numeric",
@@ -184,7 +210,10 @@ setClassUnion("Grid",
 
 
 setClass("MLInput",
-  slots = c(id = "character")
+  slots = c(
+    id = "character",
+    params = "ANY"
+  )
 )
 
 
@@ -480,11 +509,12 @@ setClass("Resample",
 )
 
 
-TrainingStep <- setClass("TrainingStep",
+setClass("TrainingStep",
   slots = c(
     id = "character",
     name = "character",
-    grid = "tbl_df",
+    method = "character",
+    log = "tbl_df",
     performance = "Performance"
   )
 )

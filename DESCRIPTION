@@ -29,8 +29,9 @@ Imports: abind, cli (>= 3.1.0), dials (>= 0.0.4), foreach, ggplot2 (>= 3.3.0),
     utils
 Suggests: adabag, BART, bartMachine, C50, cluster, doParallel, e1071, earth,
     elasticnet, gbm, glmnet, gridExtra, Hmisc, kableExtra, kknn, knitr, lars,
-    MASS, mboost, mda, parsnip, partykit, pls, randomForest, randomForestSRC,
-    ranger, rmarkdown, rms, rpart, testthat, tree, xgboost
+    MASS, mboost, mda, ParBayesianOptimization, parsnip, partykit, pls, pso,
+    randomForest, randomForestSRC, ranger, rBayesianOptimization, rmarkdown,
+    rms, rpart, testthat, tree, xgboost
 LazyData: true
 License: GPL-3
 URL: https://brian-j-smith.github.io/MachineShop/
@@ -45,6 +46,7 @@ Collate:
     'MLInput.R'
     'MLMetric.R'
     'MLModel.R'
+    'MLOptimization.R'
     'ML_AdaBagModel.R'
     'ML_AdaBoostModel.R'
     'ML_BARTMachineModel.R'
@@ -88,6 +90,7 @@ Collate:
     'ModeledInput.R'
     'TrainedInputs.R'
     'TrainedModels.R'
+    'TrainingParams.R'
     'append.R'
     'calibration.R'
     'case_comps.R'

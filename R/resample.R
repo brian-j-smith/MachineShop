@@ -365,26 +365,6 @@ Resample.list <- function(object, ...) {
 }
 
 
-TrainingParams <- function(
-  object, control = NULL, cutoff = NULL, stat = NULL, ...
-) {
-  control <- as.MLControl(control)
-  if (length(cutoff)) {
-    cutoff <- check_numeric(cutoff, bounds = c(0, 1), include = FALSE, size = 1)
-    throw(check_assignment(cutoff))
-  } else {
-    cutoff <- 0.5
-  }
-  if (length(stat)) {
-    stat <- check_stat(stat, convert = TRUE)
-    throw(check_assignment(stat))
-  } else {
-    stat <- function(x) NA
-  }
-  new("TrainingParams", control = control, cutoff = cutoff, stat = stat, ...)
-}
-
-
 #################### Utility Functions ####################
 
 
@@ -440,75 +420,4 @@ subsample <- function(train, test, model, control, iter = 1) {
   }
 
   if (class1(test) == "list") map(f, test) else f(test)
-}
-
-
-resample_grid <- function(object, ...) {
-
-  grid <- get_grid(object, ...)
-  control <- object@params@control
-  metrics <- object@params@metrics
-  cutoff <- object@params@cutoff
-  stat_fun <- function(x) object@params@stat(na.omit(x))
-
-  err_msgs <- character()
-  perf_list <- list()
-  perf_stats_list <- list()
-
-  ind <- new_progress_index(name = class(object), max = nrow(grid))
-  while (ind < max(ind)) {
-    ind <- ind + 1
-    name <- grid$name[ind]
-
-    res <- try(
-      resample(update(object, params = grid$params[as.integer(ind), ]), ...,
-               control = control, progress_index = ind),
-      silent = TRUE
-    )
-
-    if (is(res, "try-error")) {
-      err_msgs[name] <- conditionMessage(attr(res, "condition"))
-      perf_list[[name]] <- NA
-      perf_stats_list[[name]] <- NA
-      next
-    }
-
-    if (is.null(metrics)) {
-      metrics <- get_perf_metrics(res$Observed, res$Predicted)
-    }
-    perf <- performance(res, metrics = metrics, cutoff = cutoff)
-    perf_list[[name]] <- perf
-    perf_stats_list[[name]] <- apply(perf, 2, stat_fun)
-  }
-
-  failed <- is.na(perf_list)
-  err_msgs <- paste0(names(err_msgs), ": ", err_msgs, collapse = "\n")
-  if (all(failed)) {
-    throw(LocalError("Resampling failed for all models.\n", err_msgs))
-  } else if (any(failed)) {
-    throw(LocalWarning("Resampling failed for some models.\n", err_msgs))
-    perf[] <- NA
-    perf_list[failed] <- list(perf)
-    perf_stats_list[failed] <- list(perf[1, ])
-  }
-
-  perf <- do.call(c, perf_list)
-  perf_stats <- do.call(rbind, perf_stats_list)
-  metric <- as.MLMetric(c(metrics)[[1]])
-  selected <- (if (metric@maximize) which.max else which.min)(perf_stats[, 1])
-
-  res <- TrainingStep(
-    id = object@id,
-    name = class(object),
-    grid = tibble(
-      name = grid$name,
-      selected = FALSE,
-      params = grid$params,
-      metrics = as_tibble(perf_stats)
-    ),
-    performance = perf
-  )
-  res@grid$selected[selected] <- TRUE
-  res
-
 }

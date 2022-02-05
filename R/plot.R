@@ -171,13 +171,13 @@ plot.MLModel <- function(
     throw(check_assignment(stat))
 
     function(step) {
-      grid <- unnest(step@grid$params)
+      params <- unnest_params(step@log$params)
       stats <- step@performance %>%
         apply(c(3, 2), function(x) stat(na.omit(x))) %>%
         TabularArray %>%
         as.data.frame
       df <- data.frame(
-        x = grid[[1]],
+        x = params[[1]],
         Value = stats$Value,
         Metric = stats$Metric
       )
@@ -191,10 +191,10 @@ plot.MLModel <- function(
       }
       df$Metric <- factor(df$Metric, metrics)
 
-      indices <- map("logi", function(x) length(unique(x)), grid[-1])
+      indices <- map("logi", function(x) length(unique(x)), params[-1])
       args <- list(~ x, ~ Value)
       if (any(indices)) {
-        df$Group <- interaction(grid[-1][indices])
+        df$Group <- interaction(params[-1][indices])
         args$color <- args$shape <- ~ Group
       } else {
         args$group <- 1
@@ -204,7 +204,7 @@ plot.MLModel <- function(
       ggplot(df, mapping) +
         geom_line(stat = "summary", fun = mean) +
         geom_point(stat = "summary", fun = mean) +
-        labs(x = names(grid)[1]) +
+        labs(x = names(params)[1]) +
         facet_wrap(~ Metric, scales = "free")
     }
   } else {

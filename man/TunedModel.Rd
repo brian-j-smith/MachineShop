@@ -93,5 +93,5 @@ fit(sale_amount ~ ., data = ICHomes,
 
 }
 \seealso{
-\code{\link{fit}}, \code{\link{resample}}
+\code{\link{fit}}, \code{\link{resample}}, \code{\link{set_optim}}
 }

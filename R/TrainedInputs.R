@@ -203,7 +203,7 @@ SelectedInput.list <- function(x, ...) {
 
 
 .fit.SelectedInput <- function(object, ...) {
-  fit_grid(object, ...)
+  fit_optim(object, ...)
 }
 
 
@@ -269,7 +269,7 @@ update.SelectedModelRecipe <- function(object, params = list(), ...) {
 #' @return \code{TunedModelRecipe} class object that inherits from
 #' \code{TunedInput} and \code{recipe}.
 #'
-#' @seealso \code{\link{fit}}, \code{\link{resample}}
+#' @seealso \code{\link{fit}}, \code{\link{resample}}, \code{\link{set_optim}}
 #'
 #' @examples
 #' library(recipes)
@@ -325,7 +325,7 @@ TunedInput.recipe <- function(
 
 
 .fit.TunedModelRecipe <- function(object, ...) {
-  fit_grid(object, ...)
+  fit_optim(object, ...)
 }
 
 

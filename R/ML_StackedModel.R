@@ -53,6 +53,7 @@ StackedModel <- function(
     response_types = slots$response_types,
     weights = slots$weights,
     params = TrainingParams(
+      optim = NullOptimization(),
       control = control,
       options = options
     )
