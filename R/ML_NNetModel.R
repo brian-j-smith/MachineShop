@@ -83,8 +83,8 @@ NNetModel <- function(
         model_fit$xlevels <- list()
         model_fit
       } else {
-        nnet::nnet(formula, data = as.data.frame(data), weights = weights,
-                   linout = linout, ...)
+        nnet::nnet(formula, data = as.data.frame(formula, data),
+                   weights = weights, linout = linout, ...)
       }
     },
 

@@ -69,8 +69,10 @@ RPartModel <- function(
         "numeric" = "anova",
         "Surv" = "exp"
       )
-      rpart::rpart(formula, data = as.data.frame(data), weights = weights,
-                   na.action = na.pass, method = method, control = list(...))
+      rpart::rpart(
+        formula, data = as.data.frame(formula, data), weights = weights,
+        na.action = na.pass, method = method, control = list(...)
+      )
     },
 
     predict = function(object, newdata, model, ...) {

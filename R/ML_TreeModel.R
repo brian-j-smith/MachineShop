@@ -54,7 +54,7 @@ TreeModel <- function(
     fit = function(
       formula, data, weights, split, k = NULL, best = NULL, method = NULL, ...
     ) {
-      model_fit <- tree::tree(formula, data = as.data.frame(data),
+      model_fit <- tree::tree(formula, data = as.data.frame(formula, data),
                               weights = weights, split = split, ...)
       if (!is.null(method)) {
         tree::prune.tree(model_fit, k = k, best = best, method = method)

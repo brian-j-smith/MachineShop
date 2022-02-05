@@ -100,7 +100,7 @@ BlackBoostModel <- function(
         )
       }
       mboost::blackboost(
-        formula, data = as.data.frame(data), na.action = na.pass,
+        formula, data = as.data.frame(formula, data), na.action = na.pass,
         weights = weights, family = family,
         control = mboost::boost_control(
           mstop = mstop, nu = nu, risk = risk, stopintern = stopintern,

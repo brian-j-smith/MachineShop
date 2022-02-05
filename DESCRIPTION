@@ -1,8 +1,8 @@
 Package: MachineShop
 Type: Package
 Title: Machine Learning Models and Tools
-Version: 3.2.0
-Date: 2021-12-06
+Version: 3.2.1
+Date: 2022-02-01
 Authors@R: person(c("Brian", "J"), "Smith",
                   email = "brian-j-smith@uiowa.edu",
                   role = c("aut", "cre"))
@@ -23,8 +23,8 @@ Description: Meta-package for statistical and machine learning with a unified
     dependence plots; confusion matrices; and ROC, lift, and other performance
     curves.
 Depends: R (>= 3.6.0)
-Imports: abind, cli, dials (>= 0.0.4), foreach, ggplot2 (>= 3.3.0), kernlab,
-    magrittr, Matrix, methods, nnet, party, polspline, progress,
+Imports: abind, cli (>= 3.1.0), dials (>= 0.0.4), foreach, ggplot2 (>= 3.3.0),
+    kernlab, magrittr, Matrix, methods, nnet, party, polspline, progress,
     recipes (>= 0.1.4), rlang, rsample (>= 0.1.0), Rsolnp, survival, tibble,
     utils
 Suggests: adabag, BART, bartMachine, C50, cluster, doParallel, e1071, earth,

@@ -74,7 +74,7 @@ MDAModel <- function(
     ),
 
     fit = function(formula, data, weights, ...) {
-      mda::mda(formula, data = as.data.frame(data), ...)
+      mda::mda(formula, data = as.data.frame(formula, data), ...)
     },
 
     predict = function(object, newdata, prior = object$prior, ...) {

@@ -48,8 +48,8 @@ POLRModel <- function(
     params = new_params(environment()),
 
     fit = function(formula, data, weights, ...) {
-      MASS::polr(formula, data = as.data.frame(data), weights = weights,
-                 Hess = TRUE, ...)
+      MASS::polr(formula, data = as.data.frame(formula, data),
+                 weights = weights, Hess = TRUE, ...)
     },
 
     predict = function(object, newdata, ...) {

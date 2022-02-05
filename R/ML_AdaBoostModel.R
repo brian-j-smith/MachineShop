@@ -73,8 +73,8 @@ AdaBoostModel <- function(
 
     fit = function(formula, data, weights, boos, mfinal, coeflearn, ...) {
       adabag::boosting(
-        formula, data = as.data.frame(data), boos = boos, mfinal = mfinal,
-        coeflearn = coeflearn, control = list(...)
+        formula, data = as.data.frame(formula, data), boos = boos,
+        mfinal = mfinal, coeflearn = coeflearn, control = list(...)
       )
     },
 
