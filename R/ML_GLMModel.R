@@ -91,8 +91,11 @@ GLMModel <- function(family = NULL, quasi = FALSE, ...) {
 
     predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
-      predict(object, newdata = newdata,
-              type = if (is(object, "multinom")) "probs" else "response")
+      if (is(object, "multinom")) {
+        rbind(predict(object, newdata = newdata, type = "probs"))
+      } else {
+        predict(object, newdata = newdata, type = "response")
+      }
     },
 
     varimp = function(object, base = exp(1), ...) {
