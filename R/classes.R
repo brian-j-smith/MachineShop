@@ -428,7 +428,7 @@ setClass("MLMetric",
 )
 
 
-Performance <- setClass("Performance",
+setClass("Performance",
   contains = "TabularArray",
   slots = c(control = "MLControl")
 )

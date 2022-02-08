@@ -207,8 +207,9 @@ performance.CVOptimismControl <- function(x, resamples, ...) {
 
 Performance <- function(...) {
   object <- new("Performance", ...)
-  names <- c("Iteration", "Metric")
-  if (ndim(object) == 3) names <- c(names, "Model")
-  names(dimnames(object)) <- names
+  ndim <- length(dimnames(object))
+  if (ndim) {
+    names(dimnames(object)) <- head(c("Iteration", "Metric", "Model"), ndim)
+  }
   object
 }
