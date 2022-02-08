@@ -93,10 +93,10 @@ MLMetric(r2) <- list("r2", "Coefficient of Determination", TRUE)
 setMetricGeneric("r2")
 
 
-setMetricMethod_BinomialMatrix_numeric("r2")
+setMetricMethod_BinomialVariate("r2")
 
 
-setMetricMethod_matrix_matrix("r2")
+setMetricMethod_matrix("r2")
 
 
 setMetricMethod("r2", c("numeric", "numeric"),

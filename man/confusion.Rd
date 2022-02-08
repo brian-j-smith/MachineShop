@@ -28,7 +28,7 @@ result containing observed and predicted responses.}
 
 \item{cutoff}{numeric (0, 1) threshold above which binary factor
 probabilities are classified as events and below which survival
-probabilities are classified.  If \code{NULL}, then binary responses are
+probabilities are classified.  If \code{NULL}, then factor responses are
 summed directly over predicted class probabilities, whereas a default
 cutoff of 0.5 is used for survival probabilities.  Class probability
 summations and survival will appear as decimal numbers that can be

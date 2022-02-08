@@ -16,7 +16,8 @@
 #'   \code{f_score} [default: F1 score].
 #' @param cutoff numeric (0, 1) threshold above which binary factor
 #'   probabilities are classified as events and below which survival
-#'   probabilities are classified.
+#'   probabilities are classified.  If \code{NULL}, then confusion matrix-based
+#'   metrics are computed on predicted class probabilities if given.
 #' @param distr character string specifying a distribution with which to
 #'   estimate the observed survival mean in the total sum of square component of
 #'   \code{r2}.  Possible values are \code{"empirical"} for the Kaplan-Meier
@@ -59,23 +60,23 @@ setMetric_auc <- function(f, metrics) {
 setMetric_BinaryConfusionMatrix <- function(f, definition) {
   setMetricGeneric(f)
   setMetricMethod(f, c("BinaryConfusionMatrix", "NULL"), definition)
-  setMetricMethod_factor_factor(f)
-  setMetricMethod_factor_numeric(f)
+  setMetricMethod_factor(f, "factor")
+  setMetricMethod_factor(f, "numeric")
   setMetricMethod_Resample(f)
-  setMetricMethod_Surv_SurvEvents(f)
-  setMetricMethod_Surv_SurvProbs(f)
+  setMetricMethod_Surv(f, "SurvEvents")
+  setMetricMethod_Surv(f, "SurvProbs")
 }
 
 
 setMetric_ConfusionMatrix <- function(f, definition) {
   setMetricGeneric(f)
   setMetricMethod(f, c("ConfusionMatrix", "NULL"), definition)
-  setMetricMethod_factor_factor(f)
-  setMetricMethod_factor_matrix(f)
-  setMetricMethod_factor_numeric(f)
+  setMetricMethod_factor(f, "factor")
+  setMetricMethod_factor(f, "matrix")
+  setMetricMethod_factor(f, "numeric")
   setMetricMethod_Resample(f)
-  setMetricMethod_Surv_SurvEvents(f)
-  setMetricMethod_Surv_SurvProbs(f)
+  setMetricMethod_Surv(f, "SurvEvents")
+  setMetricMethod_Surv(f, "SurvProbs")
 }
 
 
@@ -94,22 +95,19 @@ setMetric_OrderedConfusionMatrix <- function(f, definition) {
 setMetric_numeric <- function(f, definition) {
   setMetricGeneric(f)
   setMetricMethod(f, c("numeric", "numeric"), definition)
-  setMetricMethod_BinomialMatrix_numeric(f)
-  setMetricMethod_matrix_matrix(f)
+  setMetricMethod_BinomialVariate(f)
+  setMetricMethod_matrix(f)
   setMetricMethod_Resample(f)
-  setMetricMethod_Surv_numeric(f)
+  setMetricMethod_Surv(f, "numeric")
 }
 
 
 setMetricGeneric <- function(f) {
-
   eval(substitute(
     setGeneric(name, function(observed, predicted, ...) standardGeneric(name)),
     list(name = metric_method_name(f))
   ))
-
   setMetricMethod(f, c("ANY", "ANY"))
-
 }
 
 
@@ -120,7 +118,7 @@ setMetricMethod <- function(
 }
 
 
-setMetricMethod_BinomialMatrix_numeric <- function(f) {
+setMetricMethod_BinomialVariate <- function(f) {
   setMetricMethod(f, c("BinomialVariate", "numeric"),
     function(observed, predicted, ...) {
       get(f)(as.numeric(observed), predicted, ...)
@@ -129,26 +127,8 @@ setMetricMethod_BinomialMatrix_numeric <- function(f) {
 }
 
 
-setMetricMethod_factor_factor <- function(f) {
-  setMetricMethod(f, c("factor", "factor"),
-    function(observed, predicted, weights, ...) {
-      get(f)(confusion(observed, predicted, weights), ...)
-    }
-  )
-}
-
-
-setMetricMethod_factor_matrix <- function(f) {
-  setMetricMethod(f, c("factor", "matrix"),
-    function(observed, predicted, weights, ...) {
-      get(f)(confusion(observed, predicted, weights), ...)
-    }
-  )
-}
-
-
-setMetricMethod_factor_numeric <- function(f) {
-  setMetricMethod(f, c("factor", "numeric"),
+setMetricMethod_factor <- function(f, type) {
+  setMetricMethod(f, c("factor", type),
     function(observed, predicted, weights, cutoff, ...) {
       get(f)(confusion(observed, predicted, weights, cutoff = cutoff), ...)
     }
@@ -156,7 +136,7 @@ setMetricMethod_factor_numeric <- function(f) {
 }
 
 
-setMetricMethod_matrix_matrix <- function(f) {
+setMetricMethod_matrix <- function(f) {
   setMetricMethod(f, c("matrix", "matrix"),
     function(observed, predicted, ...) {
       metric_matrix(get(f), observed, predicted, ...)
@@ -174,30 +154,16 @@ setMetricMethod_Resample <- function(f) {
 }
 
 
-setMetricMethod_Surv_numeric <- function(f) {
-  setMetricMethod(f, c("Surv", "numeric"),
-    function(observed, predicted, ...) {
+setMetricMethod_Surv <- function(f, type) {
+  definition <- switch(type,
+    "numeric" = function(observed, predicted, ...) {
       metric_SurvTimes(get(f), observed, predicted, ...)
-    }
-  )
-}
-
-
-setMetricMethod_Surv_SurvEvents <- function(f) {
-  setMetricMethod(f, c("Surv", "SurvEvents"),
+    },
     function(observed, predicted, ...) {
       metric_SurvMatrix(get(f), observed, predicted, ...)
     }
   )
-}
-
-
-setMetricMethod_Surv_SurvProbs <- function(f) {
-  setMetricMethod(f, c("Surv", "SurvProbs"),
-    function(observed, predicted, ...) {
-      metric_SurvMatrix(get(f), observed, predicted, ...)
-    }
-  )
+  setMetricMethod(f, c("Surv", type), definition)
 }
 
 

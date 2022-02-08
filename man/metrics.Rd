@@ -205,7 +205,8 @@ equal weights].}
 
 \item{cutoff}{numeric (0, 1) threshold above which binary factor
 probabilities are classified as events and below which survival
-probabilities are classified.}
+probabilities are classified.  If \code{NULL}, then confusion matrix-based
+metrics are computed on predicted class probabilities if given.}
 
 \item{...}{arguments passed to or from other methods.}
 

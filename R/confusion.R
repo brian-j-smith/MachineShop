@@ -13,7 +13,7 @@
 #'   [default: equal weights].
 #' @param cutoff numeric (0, 1) threshold above which binary factor
 #'   probabilities are classified as events and below which survival
-#'   probabilities are classified.  If \code{NULL}, then binary responses are
+#'   probabilities are classified.  If \code{NULL}, then factor responses are
 #'   summed directly over predicted class probabilities, whereas a default
 #'   cutoff of 0.5 is used for survival probabilities.  Class probability
 #'   summations and survival will appear as decimal numbers that can be
@@ -103,13 +103,23 @@ setMethod(".confusion", c("factor", "factor"),
 
 
 setMethod(".confusion", c("factor", "matrix"),
-  function(observed, predicted, weights, ...) {
-    weights <- check_weights(weights, observed)
-    throw(check_assignment(weights))
-    df <- aggregate(weights * predicted, list(observed), sum, na.rm = TRUE)
-    conf <- as.table(t(df[, -1, drop = FALSE]))
-    dimnames(conf) <- df[c(1, 1)]
-    ConfusionMatrix(conf, ordered = is.ordered(observed))
+  function(observed, predicted, weights, cutoff = NULL, ...) {
+    if (is_empty(cutoff)) {
+      weights <- check_weights(weights, observed)
+      throw(check_assignment(weights))
+      df <- aggregate(weights * predicted, list(observed), sum, na.rm = TRUE)
+      conf <- as.table(t(df[, -1, drop = FALSE]))
+      dimnames(conf) <- df[c(1, 1)]
+      ConfusionMatrix(conf, ordered = is.ordered(observed))
+    } else {
+      throw(Warning(
+        "Construction of confusion matrices has changed to automatically ",
+        "convert factor probabilities to levels; set 'cutoff = NULL' to ",
+        "revert to the previous behavior."
+      ), call = call("confusion"), times = 3)
+      predicted <- convert_response(observed, predicted)
+      .confusion(observed, predicted, weights = weights, ...)
+    }
   }
 )
 
