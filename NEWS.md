@@ -2,6 +2,49 @@
 
 ## Version Updates
 
+## 3.3.0
+* Add argument `.type` with options `"glance"` and `"tidy"` to `summary.MLModelFit()`.
+* Add case components data (stratification and grouping variables) to `print.Resample()`.
+* Add class and methods for `ModelSpecification`.
+* Add training parameters set functions
+  * `set_monitor()`: monitoring of resampling and optimization
+  * `set_optim_bayes()`: Bayesian optimization with a Gaussian process model
+  * `set_optim_bfgs()`: low-memory quasi-Newton BFGS optimization
+  * `set_optim_grid()`: exhaustive and random grid searches
+  * `set_optim_method()`: user-defined optimization functions
+  * `set_optim_pso()`: particle swarm optimization
+  * `set_optim_sann()`: simulated annealing
+* Add `performance()` method for `MLModel` to replicate the previous behavior of `summary.MLModel()`.
+* Add `performance()`, `plot()`, and `summary()` methods for `TrainingStep`.
+* Add support for unordered plots of `Resample` performances.
+* Changes to argument `type` of `predict()`.
+  * Add option `"default"` for model-specific default predictions.
+  * Add option `"numeric"` for numeric predictions.
+  * Change option `"prob"` to be for probabilities between 0 and 1.
+* Change `confusion()` default behavior to convert factor probabilities to levels.
+* Rename argument `control` to `object` in set functions.
+* Rename argument `f` to `fun` in `roc_index()`.
+* Return a `ListOf` training step summaries from `summary.MLModel()`.
+* Return a `TrainingStep` object from `rfe()`.
+* Support tibble-convertible objects as arguments to `expand_params()`.
+* Internal changes
+  * Add class `EnsembleModel`.
+  * Add classes `MLOptimization`, `GridSearch`, `NullOptimization`, `RandomGridSearch`, and `SequentialOptimization`.
+  * Add class `NullControl`.
+  * Add slot `control` to `PerformanceCurve`.
+  * Add slot `method` to `TrainingStep`.
+  * Add slot `optim` to `TrainingParams`.
+  * Add slot `params` to `MLInput`.
+  * Inherit class `SelectedModel` from `EnsembleModel`.
+  * Inherit class `StackedModel` from `EnsembleModel`.
+  * Inherit class `SuperModel` from `StackedModel`.
+  * Rename slot `case_comps` to `vars` in `Resample`.
+  * Rename slot `grid` to `log` in `TrainingStep`.
+* Fixes
+  * error predicting single factor response in `GLMModel`
+  * 'size(x@performance, 3)' error in `print.TrainingStep()`
+  * 'Unmatched tuning parameters' error in `TunedModel()`
+
 ## 3.2.1
 * Fix 'data' argument of wrong type error in `terms.formula()`.
 * Require >= 3.1.0 version of **cli** package.
