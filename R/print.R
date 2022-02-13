@@ -762,8 +762,10 @@ nesting_level <- function(level = 0, ...) {
 }
 
 
-new_print_progress <- function(start_time = Sys.time()) {
-  eval(bquote(function(...) print_progress(..., start_time = .(start_time))))
+new_print_progress <- function() {
+  res <- function(...) NULL
+  body(res) <- bquote(print_progress(..., start_time = .(Sys.time())))
+  res
 }
 
 
