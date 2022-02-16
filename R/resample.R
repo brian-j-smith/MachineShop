@@ -151,9 +151,9 @@ resample.MLModelFunction <- function(model, ...) {
   presets <- settings()
   set.seed(control@seed)
   splits <- rsample_split(
-    function(..., strata = NULL) {
+    function(..., strata = NULL) suppressWarnings(
       bootstraps(..., times = control@samples, strata = strata)$splits
-    }, data = object, control = control
+    ), data = object, control = control
   )
   seeds <- rand_int(length(splits))
 
@@ -210,15 +210,31 @@ resample.MLModelFunction <- function(model, ...) {
     function(..., group = NULL, strata = NULL) {
       v <- control@folds
       repeats <- control@repeats
-      if (length(group)) {
-        splits <- list()
-        for (i in seq_len(repeats)) {
-          splits <- c(splits, group_vfold_cv(..., v = v, group = group)$splits)
+      res <- suppressWarnings(
+        if (length(group)) {
+          method <- "grouping"
+          splits <- list()
+          for (i in seq_len(repeats)) {
+            splits <- c(
+              splits, group_vfold_cv(..., v = v, group = group)$splits
+            )
+          }
+          splits
+        } else {
+          method <- "stratification"
+          vfold_cv(..., v = v, repeats = repeats, strata = strata)$splits
         }
-        splits
-      } else {
-        vfold_cv(..., v = v, repeats = repeats, strata = strata)$splits
+      )
+      control@folds <<- as.integer(length(res) / repeats)
+      if (control@folds < v) {
+        throw(Warning(
+          "Fewer folds constructed (", control@folds, ") than specified in ",
+          class(control), " (", v, ") due to the resample ", method, " size.  ",
+          "To address the issue, increase the size or use a ModelFrame or ",
+          "recipe to resample without ", method, "."
+        ), call = call("resample"))
       }
+      res
     }, data = object, control = control
   )
   seeds <- rand_int(length(splits))
@@ -280,9 +296,9 @@ resample.MLModelFunction <- function(model, ...) {
   presets <- settings()
   set.seed(control@seed)
   splits <- rsample_split(
-    function(..., strata = NULL) {
+    function(..., strata = NULL) suppressWarnings(
       bootstraps(..., times = control@samples, strata = strata)$splits
-    }, data = object, control = control
+    ), data = object, control = control
   )
   seeds <- rand_int(length(splits))
 
@@ -382,8 +398,8 @@ rsample_split <- function(fun, data, control) {
     ))
     df[["(groups)"]] <- NULL
   }
-  res <- suppressWarnings(fun(df, group = case_comp_name(df, "groups"),
-                              strata = case_comp_name(df, "strata"), pool = 0))
+  res <- fun(df, group = case_comp_name(df, "groups"),
+             strata = case_comp_name(df, "strata"), pool = 0)
 
   vars <- tibble(Case = rownames(df))
   types <- c(Grouping = "groups", Stratification = "strata")
