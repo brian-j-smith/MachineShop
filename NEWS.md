@@ -2,6 +2,10 @@
 
 ## Version Updates
 
+## 3.3.1
+* Fix: `SurvRegModelFit` `summary()` error.
+* Fix: incorrect number of folds recorded in `CVControl` when stratification or grouping size leads to construction of fewer than requested folds for cross-validation resampling. 
+
 ## 3.3.0
 * Add argument `.type` with options `"glance"` and `"tidy"` to `summary.MLModelFit()`.
 * Add case components data (stratification and grouping variables) to `print.Resample()`.
