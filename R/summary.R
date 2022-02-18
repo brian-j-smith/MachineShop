@@ -184,6 +184,13 @@ summary.Resample <- function(
 }
 
 
+summary.SurvRegModelFit <- function(object, ...) {
+  object$fail <- NULL
+  class(object) <- setdiff(class(object), c("psm", "rms"))
+  NextMethod()
+}
+
+
 #' @rdname summary-methods
 #'
 summary.TrainingStep <- function(object, ...) {
