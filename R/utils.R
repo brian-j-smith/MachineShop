@@ -40,12 +40,13 @@ as_string <- function(x, ...) {
 
 
 as_string.default <- function(x, ...) {
-  x <- format(x, trim = TRUE)
+  x <- format(x, trim = TRUE, justify = "none", drop0trailing = TRUE)
   as_string(structure(as.character(x), names = names(x)), ...)
 }
 
 
 as_string.character <- function(x, sep = ", ", conj = character()) {
+  x <- trimws(x)
   if (length(conj)) {
     n <- length(x)
     if (n > 1) x[n] <- paste(conj, x[n])
