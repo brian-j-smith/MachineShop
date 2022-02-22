@@ -178,10 +178,11 @@ bake.step_lincomp <- function(object, new_data, ...) {
 
 
 print.step_lincomp <- function(x, width = console_width(), ...) {
-  msg <- paste(x$prefix, "variable reduction for ")
-  width <- max(width - nchar(msg), 20)
-  cat(msg)
-  recipes::printer(rownames(x$res$weights), x$terms, x$trained, width = width)
+  title <- paste(x$prefix, "variable reduction for ")
+  recipes::print_step(
+    rownames(x$res$weights), x$terms, x$trained, title = title,
+    width = max(width - nchar(title), 20)
+  )
   invisible(x)
 }
 
