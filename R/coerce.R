@@ -133,9 +133,6 @@ setAs("TrainingParams", "list",
 )
 
 
-setAsS3Part("ListOf", "listof")
-
-
 as.MLControl <- function(x, ...) {
   UseMethod("as.MLControl")
 }

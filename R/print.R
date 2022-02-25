@@ -881,23 +881,6 @@ print_items.formula <- function(x, exdent = 2, ...) {
 }
 
 
-print_items.list <- function(x, n = Inf, ...) {
-  diff <- length(x) - n
-  if (diff > 0) {
-    print_default(head(x, n), max = n)
-    if (is.null(names(x))) names(x) <- seq_along(x)
-    extra <- tail(names(x), diff)
-    msg <- pluralize(
-      "... with ", format_len(diff), " more element{?s}: ", "{qty(diff)}"
-    )
-    print_items(extra, label = msg, n = n, style = style_extra)
-    newline()
-  } else {
-    print_default(x, max = n)
-  }
-}
-
-
 print_items.ListOf <- function(x, n = Inf, level = 0, id = FALSE, ...) {
   if (is_empty(x)) {
     hline(level, label = "ListOf()")
