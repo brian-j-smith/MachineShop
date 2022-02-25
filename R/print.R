@@ -877,7 +877,7 @@ print_items.formula <- function(x, exdent = 2, ...) {
   x <- deparse1(x)
   split <- regexpr("[+]", x)
   if (split > 0) x <- c(substring(x, 1, split - 1), substring(x, split + 1))
-  print_items(x, exdent = exdent, sep = "+", ...)
+  print_items(x, exdent = exdent, sep = " + ", ...)
 }
 
 
