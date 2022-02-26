@@ -142,7 +142,7 @@ setMethod("initialize", "MLModel",
 
 
 NullModel <- function() {
-  MLModel(
+  new("NullModel", MLModel(
     id = "null",
     name = "NullModel",
     label = "Null Model",
@@ -150,7 +150,7 @@ NullModel <- function() {
     fit = function(...) {
       throw(Error("No specified model to fit."), call = call("fit"))
     }
-  )
+  ))
 }
 
 

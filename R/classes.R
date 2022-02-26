@@ -369,6 +369,7 @@ setClass("EnsembleModel",
 )
 
 
+setClass("NullModel", contains = "MLModel")
 setClass("ParsnipModel", contains = "MLModel")
 setClass("SelectedModel", contains = "EnsembleModel")
 setClass("StackedModel", contains = "EnsembleModel")
