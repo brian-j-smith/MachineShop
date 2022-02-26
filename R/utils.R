@@ -70,15 +70,24 @@ class1 <- function(x) {
 }
 
 
-combine_data_frames <- function(x, y = NULL) {
-  if (is.null(y)) return(x)
-  common_cols <- intersect(names(x), names(y))
-  if (!identical(x[common_cols], y[common_cols])) {
-    throw(Error("Common columns in data frames differ."))
+combine_inputs <- function(x) {
+  names(x) <- make_names_along(x, map("char", class, x))
+  all_data <- NULL
+  for (i in seq_along(x)) {
+    data <- as.data.frame(x[[i]])
+    if (is.null(all_data)) all_data <- data[NULL]
+    same_cols <- intersect(names(all_data), names(data))
+    if (!identical(all_data[same_cols], data[same_cols])) {
+      throw(Error(
+        "Cannot combine ", names(x)[i], " with previous data fames due to ",
+        "differences in column values or attributes."
+      ))
+    }
+    diff_cols <- setdiff(names(data), same_cols)
+    all_data[diff_cols] <- data[diff_cols]
+    x[[i]] <- update(x[[i]], data = data[NULL, , drop = FALSE])
   }
-  diff_cols <- setdiff(names(y), common_cols)
-  x[diff_cols] <- y[diff_cols]
-  x
+  list(data = all_data, inputs = ListOf(x))
 }
 
 

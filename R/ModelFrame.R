@@ -316,21 +316,6 @@ terms.ModelTerms <- function(x, ...) {
 }
 
 
-terms.ModeledDesignTerms <- function(x, ...) {
-  as(x, "ModelDesignTerms")
-}
-
-
-terms.ModeledFormulaTerms <- function(x, ...) {
-  as(x, "ModelFormulaTerms")
-}
-
-
-terms.ModeledFrame <- function(x, ...) {
-  ModeledInput(NextMethod(), model = x@model)
-}
-
-
 terms.recipe <- function(x, original = FALSE, ...) {
   terms.recipe_info(summary(x, original = original))
 }

@@ -65,7 +65,7 @@ SelectedInput.formula <- function(
 ) {
   inputs <- list(...)
   if (!all(map("logi", is, inputs, "formula"))) {
-    throw(Error("Inputs must be formulas."))
+    throw(Error("Inputs must all be formulas."))
   }
   mf_list <- map(function(x) {
     do.call(ModelFrame, list(x, data, strata = response(x), na.rm = FALSE))
@@ -84,7 +84,7 @@ SelectedInput.matrix <- function(
 ) {
   inputs <- list(...)
   if (!all(map("logi", is, inputs, "matrix"))) {
-    throw(Error("Inputs must be matrices."))
+    throw(Error("Inputs must all be matrices."))
   }
   mf_list <- map(ModelFrame, inputs, list(y), strata = list(y), na.rm = FALSE)
   SelectedInput(mf_list, control = control, metrics = metrics, stat = stat,
@@ -100,30 +100,22 @@ SelectedInput.ModelFrame <- function(
   stat = MachineShop::settings("stat.TrainingParams")
 ) {
 
+  if (...length() == 1) return(..1)
+
   inputs <- list(...)
 
-  if (length(inputs) == 1) {
-    return(inputs[[1]])
-  }
-
-  input_classes <- map("char", function(x) class1(x), inputs)
-  if (!all(input_classes %in% c("ModelFrame", "ModeledFrame"))) {
-    throw(Error("Inputs must be ModelFrames or ModeledFrames."))
+  if (!all(map("char", class1, inputs) %in% c("ModelFrame", "ModeledFrame"))) {
+    throw(Error("Inputs must all be ModelFrames or ModeledFrames."))
   }
 
   if (!identical_elements(inputs, function(x) x[[1]])) {
     throw(Error("ModelFrames have different response variables."))
   }
 
-  default_names <- map("char", class, inputs)
-  names(inputs) <- make_names_along(inputs, default_names)
-  data <- NULL
-  for (i in seq_along(inputs)) {
-    data <- combine_data_frames(as.data.frame(inputs[[i]]), data)
-  }
+  combined <- combine_inputs(inputs)
 
-  new("SelectedModelFrame", ModelFrame(data),
-    inputs = ListOf(map(terms, inputs)),
+  new("SelectedModelFrame", ModelFrame(combined$data),
+    inputs = combined$inputs,
     params = TrainingParams(
       control = control,
       metrics = metrics,
@@ -143,47 +135,34 @@ SelectedInput.recipe <- function(
   stat = MachineShop::settings("stat.TrainingParams")
 ) {
 
+  if (...length() == 1) return(..1)
+
   inputs <- list(...)
   for (i in seq_along(inputs)) inputs[[i]] <- ModelRecipe(inputs[[i]])
 
-  if (length(inputs) == 1) {
-    return(inputs[[1]])
-  }
-
-  get_info <- function(x, roles = character(), exclude = FALSE) {
+  get_info <- function(x) {
     info <- summary(x)
-    keep <- if (length(roles)) info$role %in% roles else TRUE
-    if (exclude) keep <- !keep
-    info <- info[keep, ]
-    info_order <- do.call(order, info)
-    info[info_order, ]
+    info <- info[info$role != "predictor", ]
+    info[do.call(order, info), ]
   }
-  common_info <- function(x) get_info(x, roles = "predictor", exclude = TRUE)
-  if (!identical_elements(inputs, common_info)) {
+  if (!identical_elements(inputs, get_info)) {
     throw(Error("Recipes have different non-predictor variables."))
   }
 
-  default_names <- map("char", class, inputs)
-  names(inputs) <- make_names_along(inputs, default_names)
-  data <- NULL
-  for (i in seq_along(inputs)) {
-    data <- combine_data_frames(as.data.frame(inputs[[i]]), data)
-    inputs[[i]] <- update(inputs[[i]], data = tibble(.rows = nrow(data)))
-  }
+  combined <- combine_inputs(inputs)
 
-  outcome_vars <- get_info(inputs[[1]], roles = "outcome")$variable
-  fo <- reformulate(".", paste(outcome_vars, collapse = "+"))
-  rec <- recipe(fo, data = data)
-
-  other_vars <- get_info(inputs[[1]], roles = c("predictor", "outcome"),
-                         exclude = TRUE)$variable
-  if (length(other_vars)) {
-    args <- list(rec, other_vars, new_role = "other")
+  info <- summary(combined$inputs[[1]])
+  outcomes <- info$variable[info$role == "outcome"]
+  others <- info$variable[!(info$role %in% c("outcome", "predictor"))]
+  fo <- reformulate(".", paste(outcomes, collapse = "+"))
+  rec <- recipe(fo, data = combined$data)
+  if (length(others)) {
+    args <- list(rec, others, new_role = "other")
     rec <- do.call(recipes::update_role, args)
   }
 
   new("SelectedModelRecipe", new("ModelRecipe", rec),
-    inputs = ListOf(inputs),
+    inputs = combined$inputs,
     params = TrainingParams(
       control = control,
       metrics = metrics,
@@ -208,6 +187,13 @@ SelectedInput.list <- function(x, ...) {
 
 
 update.SelectedInput <- function(object, params = list(), ...) {
+  object <- subset_selected(object, "inputs", params$id)
+  data <- as.data.frame(object)
+  object@inputs <- ListOf(map(function(x) {
+    input <- update(x, data = data[names(as.data.frame(x))])
+    input@id <- x@id
+    input
+  }, object@inputs))
   object <- as(object, "SelectedInput")
   new_params <- as(object, "list")
   new_params[names(params)] <- params
@@ -216,31 +202,6 @@ update.SelectedInput <- function(object, params = list(), ...) {
   res <- do.call(SelectedInput, c(objects, new_params))
   res@id <- object@id
   res
-}
-
-
-update.SelectedModelFrame <- function(object, params = list(), ...) {
-  object <- subset_selected(object, "inputs", params$id)
-  mf <- as(object, "ModelFrame")
-  object@inputs <- ListOf(map(function(x) {
-    if (is(x, "ModeledTerms")) mf <- ModeledInput(mf, model = x@model)
-    mf@id <- x@id
-    attr(mf, "terms") <- terms(x)
-    mf
-  }, object@inputs))
-  NextMethod()
-}
-
-
-update.SelectedModelRecipe <- function(object, params = list(), ...) {
-  object <- subset_selected(object, "inputs", params$id)
-  data <- as.data.frame(object)
-  object@inputs <- ListOf(map(function(x) {
-    rec <- ModelRecipe(update(x, data = data[unique(summary(x)$variable)]))
-    rec@id <- x@id
-    rec
-  }, object@inputs))
-  NextMethod()
 }
 
 

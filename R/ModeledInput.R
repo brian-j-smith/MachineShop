@@ -73,22 +73,6 @@ ModeledInput.ModelFrame <- function(object, model, ...) {
 }
 
 
-ModeledInput.ModelDesignTerms <- function(object, model, ...) {
-  new("ModeledDesignTerms", object, model = model)
-}
-
-
-ModeledInput.ModelFormulaTerms <- function(object, model, ...) {
-  new("ModeledFormulaTerms", object, model = model)
-}
-
-
-ModeledInput.ModeledTerms <- function(object, model, ...) {
-  object@model <- model
-  object
-}
-
-
 #' @rdname ModeledInput-methods
 #'
 ModeledInput.recipe <- function(object, model, ...) {

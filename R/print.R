@@ -8,6 +8,7 @@
 #' @param x object to print.
 #' @param n integer number of models or data frame rows to show.
 #' @param id logical indicating whether to show object identifiers.
+#' @param data logical indicating whether to show model data.
 #' @param ... arguments passed to other methods, including the one described
 #'   below.
 #'   \describe{
@@ -283,19 +284,14 @@ setShowDefault("MLOptimization")
 #' @rdname print-methods
 #'
 print.ModelFrame <- function(
-  x, n = MachineShop::settings("print_max"), id = FALSE, ...
+  x, n = MachineShop::settings("print_max"), id = FALSE, data = TRUE, ...
 ) {
   title(x, ...)
   level <- nesting_level(...)
   if (id) print_id(x)
   label <- if (level < 2) style_label("Terms: ")
   print_items(formula(x), n = n, label = label)
-  if (level < 1) {
-    print_label("Data:")
-    print_items(within(as(x, "data.frame"), remove("(names)")), n = n)
-  } else if (level == 1) {
-    print_fields(list("Number of observations: " = nrow(x)))
-  }
+  if (data) print_data(as(x, "data.frame"), n = n, level = level)
   invisible(x)
 }
 
@@ -306,7 +302,7 @@ setShowDefault("ModelFrame")
 #' @rdname print-methods
 #'
 print.ModelRecipe <- function(
-  x, n = MachineShop::settings("print_max"), id = FALSE, ...
+  x, n = MachineShop::settings("print_max"), id = FALSE, data = TRUE, ...
 ) {
   title(x, ...)
   level <- nesting_level(...)
@@ -328,13 +324,8 @@ print.ModelRecipe <- function(
       add_names = TRUE, n = n
     )
   }
-  if (level < 1) {
-    print_fields(list("Tuning grid: " = has_grid(x)))
-    print_label("Data:")
-    print_items(within(x$template, remove("(names)")), n = n)
-  } else if (level == 1) {
-    print_fields(list("Number of observations: " = nrow(x$template)))
-  }
+  if (level < 1) print_fields(list("Tuning grid: " = has_grid(x)))
+  if (data) print_data(x$template, n = n, level = level)
   invisible(x)
 }
 
@@ -376,17 +367,6 @@ print.ModelTerms <- function(x, n = MachineShop::settings("print_max"), ...) {
 print.ModeledInput <- function(x, n = MachineShop::settings("print_max"), ...) {
   NextMethod()
   level <- nesting_level(...)
-  if (level < 2) {
-    newline()
-    print(x@model, n = n, level = level + 1)
-  }
-  invisible(x)
-}
-
-
-print.ModeledTerms <- function(x, n = MachineShop::settings("print_max"), ...) {
-  level <- nesting_level(...)
-  print_items(formula(x), n = n)
   if (level < 2) {
     newline()
     print(x@model, n = n, level = level + 1)
@@ -517,13 +497,13 @@ print.SelectedInput <- function(
     hline(level)
     print_train_label("Selection set:")
     newline()
-    print(x@inputs, n = n, level = nextlevel, id = id)
+    print(x@inputs, n = n, level = nextlevel, id = id, data = FALSE)
     hline(level)
     print(x@params, n = n, level = nextlevel)
   } else if (level == 1) {
     newline()
     print_train_label("Selection set:")
-    print(x@inputs, n = n, level = nextlevel, id = id)
+    print(x@inputs, n = -n, level = nextlevel, id = id, data = FALSE)
   }
   invisible(x)
 }
@@ -803,6 +783,16 @@ print_control <- function(x, fields = NULL, n = Inf, ...) {
 }
 
 
+print_data <- function(x, n = Inf, level = 0) {
+  if (level < 1) {
+    print_label("Data:")
+    print_items(within(x, remove("(names)")), n = n)
+  } else if (level == 1) {
+    print_fields(list("Number of observations: " = nrow(x)))
+  }
+}
+
+
 print_default <- function(x, max = NULL, ...) {
   if (identical(max, Inf)) max <- .Machine$integer.max
   print(x, max = max, ...)
@@ -881,7 +871,7 @@ print_items.formula <- function(x, exdent = 2, ...) {
 }
 
 
-print_items.ListOf <- function(x, n = Inf, level = 0, id = FALSE, ...) {
+print_items.ListOf <- function(x, n = Inf, level = 0, ...) {
   if (is_empty(x)) {
     hline(level, label = "ListOf()")
   } else {
@@ -895,7 +885,7 @@ print_items.ListOf <- function(x, n = Inf, level = 0, id = FALSE, ...) {
       }
       if (i <= n) {
         hline(level, label = paste0(prefix, label))
-        print(x[[i]], n = n, level = level, id = id, na.print = NULL)
+        print(x[[i]], n = n, level = level, na.print = NULL, ...)
         if (level < 2) newline()
       }
       label

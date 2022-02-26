@@ -288,21 +288,6 @@ setClass("ModeledInput",
 )
 
 
-setClass("ModeledTerms",
-  contains = c("ModeledInput", "ModelTerms")
-)
-
-
-setClass("ModeledDesignTerms",
-  contains = c("ModeledTerms", "ModelDesignTerms")
-)
-
-
-setClass("ModeledFormulaTerms",
-  contains = c("ModeledTerms", "ModelFormulaTerms")
-)
-
-
 setClass("ModeledFrame",
   contains = c("ModeledInput", "ModelFrame")
 )

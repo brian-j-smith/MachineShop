@@ -39,9 +39,9 @@
 
 \method{print}{MLModelFunction}(x, ...)
 
-\method{print}{ModelFrame}(x, n = MachineShop::settings("print_max"), id = FALSE, ...)
+\method{print}{ModelFrame}(x, n = MachineShop::settings("print_max"), id = FALSE, data = TRUE, ...)
 
-\method{print}{ModelRecipe}(x, n = MachineShop::settings("print_max"), id = FALSE, ...)
+\method{print}{ModelRecipe}(x, n = MachineShop::settings("print_max"), id = FALSE, data = TRUE, ...)
 
 \method{print}{ModelSpecification}(x, n = MachineShop::settings("print_max"), ...)
 
@@ -76,6 +76,8 @@ below.
 }}
 
 \item{id}{logical indicating whether to show object identifiers.}
+
+\item{data}{logical indicating whether to show model data.}
 }
 \description{
 Print methods for objects defined in the \pkg{MachineShop} package.
