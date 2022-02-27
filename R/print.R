@@ -116,7 +116,7 @@ print.EnsembleModel <- function(
     hline(level)
     print_train_label("Models:")
     newline()
-    print(x@models, n = n, level = nextlevel, id = id)
+    print(x@candidates, n = n, level = nextlevel, id = id)
     hline(level)
     print(x@params, n = n, level = nextlevel)
     if (trained) {
@@ -126,7 +126,7 @@ print.EnsembleModel <- function(
   } else if (level == 1) {
     newline()
     print_train_label("Models:")
-    print(x@models, n = n, level = nextlevel, id = id)
+    print(x@candidates, n = n, level = nextlevel, id = id)
   }
   invisible(x)
 }
@@ -497,13 +497,13 @@ print.SelectedInput <- function(
     hline(level)
     print_train_label("Selection set:")
     newline()
-    print(x@inputs, n = n, level = nextlevel, id = id, data = FALSE)
+    print(x@candidates, n = n, level = nextlevel, id = id, data = FALSE)
     hline(level)
     print(x@params, n = n, level = nextlevel)
   } else if (level == 1) {
     newline()
     print_train_label("Selection set:")
-    print(x@inputs, n = -n, level = nextlevel, id = id, data = FALSE)
+    print(x@candidates, n = -n, level = nextlevel, id = id, data = FALSE)
   }
   invisible(x)
 }

@@ -115,7 +115,7 @@ SelectedInput.ModelFrame <- function(
   combined <- combine_inputs(inputs)
 
   new("SelectedModelFrame", ModelFrame(combined$data),
-    inputs = combined$inputs,
+    candidates = combined$candidates,
     params = TrainingParams(
       control = control,
       metrics = metrics,
@@ -151,7 +151,7 @@ SelectedInput.recipe <- function(
 
   combined <- combine_inputs(inputs)
 
-  info <- summary(combined$inputs[[1]])
+  info <- summary(combined$candidates[[1]])
   outcomes <- info$variable[info$role == "outcome"]
   others <- info$variable[!(info$role %in% c("outcome", "predictor"))]
   fo <- reformulate(".", paste(outcomes, collapse = "+"))
@@ -162,7 +162,7 @@ SelectedInput.recipe <- function(
   }
 
   new("SelectedModelRecipe", new("ModelRecipe", rec),
-    inputs = combined$inputs,
+    candidates = combined$candidates,
     params = TrainingParams(
       control = control,
       metrics = metrics,
@@ -187,19 +187,19 @@ SelectedInput.list <- function(x, ...) {
 
 
 update.SelectedInput <- function(object, params = list(), ...) {
-  object <- subset_selected(object, "inputs", params$id)
+  object <- subset_selected(object, "candidates", params$id)
   data <- as.data.frame(object)
-  object@inputs <- ListOf(map(function(x) {
+  object@candidates <- ListOf(map(function(x) {
     input <- update(x, data = data[names(as.data.frame(x))])
     input@id <- x@id
     input
-  }, object@inputs))
+  }, object@candidates))
   object <- as(object, "SelectedInput")
   new_params <- as(object, "list")
   new_params[names(params)] <- params
-  objects <- new_params$objects
-  new_params[c("objects", "id")] <- NULL
-  res <- do.call(SelectedInput, c(objects, new_params))
+  candidates <- new_params$candidates
+  new_params[c("candidates", "id")] <- NULL
+  res <- do.call(SelectedInput, c(candidates, new_params))
   res@id <- object@id
   res
 }

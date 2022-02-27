@@ -64,8 +64,8 @@ ModeledInput.ModelFrame <- function(object, model, ...) {
   model <- as.MLModel(model)
   switch_class(object,
     "SelectedModelFrame" = {
-      inputs <- map(ModeledInput, object@inputs, model = list(model))
-      object@inputs <- ListOf(inputs)
+      candidates <- map(ModeledInput, object@candidates, model = list(model))
+      object@candidates <- ListOf(candidates)
       object
     },
     "default" = new("ModeledFrame", as(object, "ModelFrame"), model = model)
@@ -79,8 +79,8 @@ ModeledInput.recipe <- function(object, model, ...) {
   model <- as.MLModel(model)
   switch_class(object,
     "SelectedModelRecipe" = {
-      inputs <- map(ModeledInput, object@inputs, model = list(model))
-      object@inputs <- ListOf(inputs)
+      candidates <- map(ModeledInput, object@candidates, model = list(model))
+      object@candidates <- ListOf(candidates)
       object
     },
     "TunedModelRecipe" = new("TunedModeledRecipe", object, model = model),

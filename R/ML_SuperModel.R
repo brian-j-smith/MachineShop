@@ -58,7 +58,7 @@ SuperModel <- function(
       control = control,
       options = list(all_vars = all_vars)
     )
-  ), models = ListOf(models))
+  ), candidates = ListOf(models))
 
 }
 
@@ -69,8 +69,8 @@ MLModelFunction(SuperModel) <- NULL
   input_prep <- prep(input)
   mf <- ModelFrame(input_prep, na.rm = FALSE)
 
-  super_learner <- object@models[[1]]
-  base_learners <- object@models[-1]
+  super_learner <- object@candidates[[1]]
+  base_learners <- object@candidates[-1]
   control <- object@params@control
   all_vars <- object@params@options$all_vars
 

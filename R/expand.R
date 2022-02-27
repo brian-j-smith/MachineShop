@@ -147,7 +147,7 @@ expand_modelgrid.ModelSpecification <- function(object, ...) {
   grid <- object@grid
   if (is_empty(grid)) {
     map_slots(function(object) {
-      types <- c("ModeledInput", "SelectedInput", "SelectedModel")
+      types <- c("ModeledInput", "SelectedInputOrModel")
       found <- map("logi", is, list(object), types)
       if (any(found)) {
         throw(Error(
@@ -160,7 +160,7 @@ expand_modelgrid.ModelSpecification <- function(object, ...) {
     get_modelgrids <- function(input) {
       map_slots(function(model) {
         get_grid(model, input)$params
-      }, object, names = c("model", "models"))
+      }, object, names = c("model", "candidates"))
     }
 
     make_grid <- function(grids) {
@@ -169,7 +169,7 @@ expand_modelgrid.ModelSpecification <- function(object, ...) {
 
     input_grid <- make_grid(map_slots(function(input) {
       get_grid(input)$params
-    }, object, names = c("input", "inputs")))
+    }, object, names = c("input", "candidates")))
 
     if (nrow(input_grid)) {
       grid <- NULL

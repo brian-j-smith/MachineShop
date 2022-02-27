@@ -91,20 +91,15 @@ setAs("MLModel", "list",
 )
 
 
-setAs("SelectedInput", "list",
-  function(from) c(list(objects = from@inputs), as(from@params, "list"))
-)
-
-
-setAs("SelectedModel", "list",
-  function(from) c(list(objects = from@models), as(from@params, "list"))
+setAs("SelectedInputOrModel", "list",
+  function(from) c(list(from@candidates), as(from@params, "list"))
 )
 
 
 setAs("StackedModel", "list",
   function(from) {
     c(list(
-      objects = from@models,
+      candidates = from@candidates,
       control = from@params@control),
       from@params@options
     )
@@ -115,8 +110,8 @@ setAs("StackedModel", "list",
 setAs("SuperModel", "list",
   function(from) {
     res <- callNextMethod()
-    res$model <- res$objects[[1]]
-    res$objects[1] <- NULL
+    res$model <- res$candidates[[1]]
+    res$candidates[1] <- NULL
     res
   }
 )

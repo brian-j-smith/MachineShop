@@ -53,7 +53,7 @@ setMethod("[", c(x = "ModelFrame", i = "ANY", j = "ANY", drop = "ANY"),
       if (is(x, "ModeledInput")) {
         y <- new(class(x), y, model = x@model)
       } else if (is(x, "SelectedInput")) {
-        y <- new(class(x), y, inputs = x@inputs, params = x@params)
+        y <- new(class(x), y, candidates = x@candidates, params = x@params)
       }
     }
     y

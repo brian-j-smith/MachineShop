@@ -87,7 +87,7 @@ combine_inputs <- function(x) {
     all_data[diff_cols] <- data[diff_cols]
     x[[i]] <- update(x[[i]], data = data[NULL, , drop = FALSE])
   }
-  list(data = all_data, inputs = ListOf(x))
+  list(data = all_data, candidates = ListOf(x))
 }
 
 

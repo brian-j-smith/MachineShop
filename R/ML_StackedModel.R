@@ -57,7 +57,7 @@ StackedModel <- function(
       control = control,
       options = options
     )
-  ), models = ListOf(models))
+  ), candidates = ListOf(models))
 
 }
 
@@ -65,7 +65,7 @@ MLModelFunction(StackedModel) <- NULL
 
 
 .fit.StackedModel <- function(object, input, ...) {
-  base_learners <- object@models
+  base_learners <- object@candidates
   control <-  object@params@control
   weights <- object@params@options$weights
 

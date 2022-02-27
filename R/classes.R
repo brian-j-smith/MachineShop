@@ -237,6 +237,15 @@ setClass("MLModel",
 )
 
 
+setClass("SelectedInputOrModel",
+  contains = "VIRTUAL",
+  slots = c(
+    candidates = "ListOf",
+    params = "TrainingParams"
+  )
+)
+
+
 #################### Model Inputs ####################
 
 
@@ -304,21 +313,22 @@ setClass("NullInput",
 
 
 setClass("SelectedInput",
-  slots = c(
-    id = "character",
-    inputs = "ListOf",
-    params = "TrainingParams"
-  )
+  contains = c("SelectedInputOrModel", "MLInput")
 )
 
 
 setClass("SelectedModelFrame",
-  contains = c("SelectedInput", "ModelFrame")
+  contains = c("SelectedInput", "SelectedInputOrModel", "ModelFrame")
 )
 
 
 setClass("SelectedModelRecipe",
-  contains = c("SelectedInput", "ModelRecipe")
+  contains = c("SelectedInput", "SelectedInputOrModel", "ModelRecipe")
+)
+
+
+setClass("SelectedModelSpecification",
+  contains = c("SelectedInput", "SelectedInputOrModel", "ModelSpecification")
 )
 
 
@@ -345,15 +355,7 @@ setClass("TunedModeledRecipe",
 #################### Models ####################
 
 
-setClass("EnsembleModel",
-  contains = "MLModel",
-  slots = c(
-    models = "ListOf",
-    params = "TrainingParams"
-  )
-)
-
-
+setClass("EnsembleModel", contains = c("SelectedInputOrModel", "MLModel"))
 setClass("NullModel", contains = "MLModel")
 setClass("ParsnipModel", contains = "MLModel")
 setClass("SelectedModel", contains = "EnsembleModel")

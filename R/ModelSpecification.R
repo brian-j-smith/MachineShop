@@ -172,7 +172,7 @@ update.ModelSpecification <- function(object, params = NULL, data = NULL, ...) {
 
 
 map_slots <- function(
-  fun, object, names = c("input", "inputs", "model", "models"), update = FALSE
+  fun, object, names = c("candidates", "input", "model"), update = FALSE
 ) {
   slots_res <- NULL
   for (name in intersect(names, slotNames(object))) {

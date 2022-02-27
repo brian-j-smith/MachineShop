@@ -135,20 +135,11 @@ get_grid.ModelSpecification <- function(object, ...) {
 }
 
 
-get_grid.SelectedInput <- function(object, ...) {
+get_grid.SelectedInputOrModel <- function(object, ...) {
   make_grid(
     object,
-    names(object@inputs),
-    tibble(id = map("char", slot, object@inputs, "id"))
-  )
-}
-
-
-get_grid.SelectedModel <- function(object, ...) {
-  make_grid(
-    object,
-    names(object@models),
-    tibble(id = map("char", slot, object@models, "id"))
+    names(object@candidates),
+    tibble(id = map("char", slot, object@candidates, "id"))
   )
 }
 

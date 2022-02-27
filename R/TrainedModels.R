@@ -66,7 +66,7 @@ SelectedModel <- function(
       cutoff = cutoff,
       stat = stat
     )
-  ), models = ListOf(models))
+  ), candidates = ListOf(models))
 
 }
 
@@ -79,7 +79,7 @@ MLModelFunction(SelectedModel) <- NULL
 
 
 update.SelectedModel <- function(object, params = list(), ...) {
-  object <- subset_selected(object, "models", params$id)
+  object <- subset_selected(object, "candidates", params$id)
   params$id <- NULL
   NextMethod()
 }
