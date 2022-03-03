@@ -118,7 +118,13 @@ varimp <- function(object, method = c("permute", "model"), scale = TRUE, ...) {
   switch(match.arg(method),
     "model" = {
       vi <- model@varimp(unMLModelFit(object), ...)
-      if (is.null(vi)) vi <- varimp_permute(object)
+      if (is.null(vi)) {
+        throw(Warning(
+          "Model-specific variable importance is not available; ",
+          "computing permutation-based importance instead."
+        ))
+        vi <- varimp_permute(object)
+      }
     },
     "permute" = {
       args <- eval(substitute(alist(object, ...)))
