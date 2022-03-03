@@ -46,14 +46,14 @@ fit <- function(...) {
 #' @rdname fit-methods
 #'
 fit.formula <- function(formula, data, model, ...) {
-  fit(as.MLInput(formula, data), model = model)
+  fit(ModelSpecification(formula, data, model = model, control = NULL), ...)
 }
 
 
 #' @rdname fit-methods
 #'
 fit.matrix <- function(x, y, model, ...) {
-  fit(as.MLInput(x, y), model = model)
+  fit(ModelSpecification(x, y, model = model, control = NULL), ...)
 }
 
 
@@ -65,7 +65,7 @@ fit.matrix <- function(x, y, model, ...) {
 #' constructor.
 #'
 fit.ModelFrame <- function(input, model = NULL, ...) {
-  .fit(as.MLInput(input), model = as.MLModel(model))
+  fit(ModelSpecification(input, model = model, control = NULL), ...)
 }
 
 
@@ -76,7 +76,7 @@ fit.ModelFrame <- function(input, model = NULL, ...) {
 #' with the \code{\link{role_case}} function.
 #'
 fit.recipe <- function(input, model = NULL, ...) {
-  .fit(as.MLInput(input), model = as.MLModel(model))
+  fit(ModelSpecification(input, model = model, control = NULL), ...)
 }
 
 
@@ -84,9 +84,9 @@ fit.recipe <- function(input, model = NULL, ...) {
 #'
 fit.ModelSpecification <- function(object, ...) {
   if (is_optim_method(object)) {
-    fit_optim(object)
+    .fit_optim(object)
   } else {
-    fit(as.MLInput(object), model = as.MLModel(object))
+    .fit(as.MLInput(object), model = as.MLModel(object))
   }
 }
 
@@ -150,24 +150,7 @@ fit.MLModelFunction <- function(model, ...) {
 }
 
 
-eval_fit <- function(data = NULL, formula, matrix) {
-  expr <- if (is(data, "ModelFrame") && is(terms(data), "ModelDesignTerms")) {
-    bquote({
-      x <- model.matrix(data, intercept = FALSE)
-      y <- response(data)
-      .(substitute(matrix))
-    })
-  } else {
-    bquote({
-      data <- as.data.frame(formula, data)
-      .(substitute(formula))
-    })
-  }
-  eval.parent(expr)
-}
-
-
-fit_optim <- function(object, ...) {
+.fit_optim <- function(object, ...) {
   mloptim <- get_optim_field(object)
   throw(check_packages(mloptim@packages))
   tryCatch(
@@ -182,11 +165,28 @@ fit_optim <- function(object, ...) {
           mloptim@label, " failed: ", msg, "\n",
           "Performing a ", tolower(get_optim_field(object, "label")),
           " instead."
-        ), immediate = TRUE)
+        ))
         fit(object, ...)
       } else {
         throw(Error(msg), call = sys.call(-4))
       }
     }
   )
+}
+
+
+eval_fit <- function(data = NULL, formula, matrix) {
+  expr <- if (is(data, "ModelFrame") && is(terms(data), "ModelDesignTerms")) {
+    bquote({
+      x <- model.matrix(data, intercept = FALSE)
+      y <- response(data)
+      .(substitute(matrix))
+    })
+  } else {
+    bquote({
+      data <- as.data.frame(formula, data)
+      .(substitute(formula))
+    })
+  }
+  eval.parent(expr)
 }

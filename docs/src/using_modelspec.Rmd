@@ -8,14 +8,14 @@ The `r rdoc_url("ModelSpecification")` class allows response and predictor varia
 
 The default tuning parameter optimization method is an exhaustive grid search.  Other methods can be employed with the `r rdoc_url("set_optim")` functions.
 
-| Optimization Function              | Method                                            |
-|:-----------------------------------|:--------------------------------------------------|
-| `r rdoc_url("set_optim_bayes()")`  | Bayesian optimization with a Gaussian process model [@snoek:2012:PBO]            |
+| Optimization Function              | Method                                                                         |
+|:-----------------------------------|:-------------------------------------------------------------------------------|
+| `r rdoc_url("set_optim_bayes()")`  | Bayesian optimization with a Gaussian process model [@snoek:2012:PBO]          |
 | `r rdoc_url("set_optim_bfgs()")`   | Limited-memory modification of quasi-Newton BFGS optimization [@byrd:1994:LMA] |
-| `r rdoc_url("set_optim_grid()")`   | Exhaustive or random grid search                                                 |
-| `r rdoc_url("set_optim_method()")` | User-defined optimization function                                               |
-| `r rdoc_url("set_optim_pso()")`    | Particle swarm optimization [@bratton:2007:DSP]                |
-| `r rdoc_url("set_optim_sann()")`   | Simulated annealing [@belisle:1992:CTC]           |
+| `r rdoc_url("set_optim_grid()")`   | Exhaustive or random grid search                                               |
+| `r rdoc_url("set_optim_method()")` | User-defined optimization function                                             |
+| `r rdoc_url("set_optim_pso()")`    | Particle swarm optimization [@bratton:2007:DSP]                                |
+| `r rdoc_url("set_optim_sann()")`   | Simulated annealing [@belisle:1992:CTC]                                        |
 
 ```{r modelspec_fit}
 ## Preprocessing recipe with PCA steps

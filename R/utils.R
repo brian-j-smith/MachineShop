@@ -397,14 +397,12 @@ new_params <- function(envir, ...) {
 }
 
 
-new_progress_bar <- function(total, object = NULL, model = NULL, index = 0) {
+new_progress_bar <- function(total, object, index = 0) {
   if (getDoParName() == "doSEQ") index <- as.numeric(index)
   width <- max(round(0.25 * console_width()), 10)
-  if (!is.null(object)) object <- substr(class1(object), 1, width)
-  if (!is.null(model)) {
-    model <- substr(as.MLModel(model)@name, 1, width)
-  }
-  format <- paste(object, "|", model)
+  input <- substr(class(as.MLInput(object)), 1, width)
+  model <- substr(as.MLModel(object)@name, 1, width)
+  format <- paste(input, "|", model)
   if (index > 0) format <- paste0(index, ": ", format)
   if (getDoParName() %in% c("doSEQ", "doSNOW")) {
     format <- paste(format, "[:bar] :percent | :eta")

@@ -100,13 +100,15 @@ prep_recipe_data <- function(x) {
 
 
 update.ModelRecipe <- function(
-  object, params = list(), data = NULL, new_id = FALSE, ...
+  object, params = NULL, data = NULL, new_id = FALSE, ...
 ) {
-  for (i in seq_along(object$steps)) {
-    step <- object$steps[[i]]
-    step_params <- params[[step$id]]
-    if (length(step_params)) {
-      object$steps[[i]] <- do.call(update, c(list(step), step_params))
+  if (is.list(params)) {
+    for (i in seq_along(object$steps)) {
+      step <- object$steps[[i]]
+      step_params <- params[[step$id]]
+      if (length(step_params)) {
+        object$steps[[i]] <- do.call(update, c(list(step), step_params))
+      }
     }
   }
   if (is.data.frame(data)) object$template <- prep_recipe_data(data)

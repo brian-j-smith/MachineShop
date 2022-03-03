@@ -347,11 +347,6 @@ setClass("TunedModelRecipe",
 )
 
 
-setClass("TunedModeledRecipe",
-  contains = c("TunedModelRecipe", "ModeledRecipe")
-)
-
-
 #################### Models ####################
 
 

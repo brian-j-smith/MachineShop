@@ -3,9 +3,12 @@
 \name{deprecated}
 \alias{deprecated}
 \alias{Grid}
+\alias{ModeledInput}
 \title{Deprecated Functions}
 \usage{
 Grid(...)
+
+ModeledInput(...)
 }
 \arguments{
 \item{...}{arguments passed to non-deprecated equivalent.}
@@ -16,4 +19,7 @@ of the package.
 }
 \details{
 Use \code{\link[=TuningGrid]{TuningGrid()}} instead of \code{Grid()}.
+
+Use \code{\link[=ModelSpecification]{ModelSpecification()}} instead of
+\code{ModeledInput()}.
 }

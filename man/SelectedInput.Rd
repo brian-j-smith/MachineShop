@@ -4,10 +4,12 @@
 \alias{SelectedInput}
 \alias{SelectedModelFrame}
 \alias{SelectedModelRecipe}
+\alias{SelectedModelSpecification}
 \alias{SelectedInput.formula}
 \alias{SelectedInput.matrix}
 \alias{SelectedInput.ModelFrame}
 \alias{SelectedInput.recipe}
+\alias{SelectedInput.ModelSpecification}
 \alias{SelectedInput.list}
 \title{Selected Model Inputs}
 \usage{
@@ -47,6 +49,14 @@ SelectedInput(...)
   stat = MachineShop::settings("stat.TrainingParams")
 )
 
+\method{SelectedInput}{ModelSpecification}(
+  ...,
+  control = MachineShop::settings("control"),
+  metrics = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  stat = MachineShop::settings("stat.TrainingParams")
+)
+
 \method{SelectedInput}{list}(x, ...)
 }
 \arguments{
@@ -76,9 +86,10 @@ summary statistic on resampled metric values for recipe selection.}
 function.}
 }
 \value{
-\code{SelectedModelFrame} or \code{SelectedModelRecipe} class object
-that inherits from \code{SelectedInput} and \code{ModelFrame} or
-\code{recipe}.
+\code{SelectedModelFrame}, \code{SelectedModelRecipe}, or
+\code{SelectedModelSpecification} class object that inherits from
+\code{SelectedInput} and \code{ModelFrame}, \code{recipe}, or
+\code{ModelSpecification}, respectively.
 }
 \description{
 Formula, design matrix, model frame, or recipe selection from a candidate

@@ -145,17 +145,20 @@ expand_modelgrid.recipe <- function(input, model, info = FALSE, ...) {
 #'
 expand_modelgrid.ModelSpecification <- function(object, ...) {
   grid <- object@grid
+
   if (is_empty(grid)) {
-    map_slots(function(object) {
-      types <- c("ModeledInput", "SelectedInputOrModel")
-      found <- map("logi", is, list(object), types)
-      if (any(found)) {
-        throw(Error(
-          "Cannot expand the tuning grids of a ModelSpecification containing ",
-          types[found], "."
-        ))
-      }
-    }, object)
+
+    types <- c("ModeledInput", "SelectedInputOrModel")
+    found <- unique(unlist(map_slots(function(slot) {
+      types[map("logi", is, list(slot), types)]
+    }, object)))
+    if (length(found)) {
+      throw(Warning(
+        "Cannot expand the tuning grids of a ModelSpecification containing ",
+        as_string(found, conj = "or"), "."
+      ))
+      return(NULL)
+    }
 
     get_modelgrids <- function(input) {
       map_slots(function(model) {
@@ -181,7 +184,9 @@ expand_modelgrid.ModelSpecification <- function(object, ...) {
     } else {
       grid <- make_grid(get_modelgrids(object@input))
     }
+
   }
+
   grid
 }
 

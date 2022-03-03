@@ -84,9 +84,13 @@ ModelSpecification.default <- function(
   )
 
   if (is_optim_method(object)) {
-    object@grid <- expand_modelgrid(object)
-    object@input <- update_slots(object@input, params = list())
-    object@model <- update_slots(object@model, params = list())
+    grid <- expand_modelgrid(object)
+    object <- if (is_tibble(grid)) {
+      object@grid <- grid
+      update(object, params = list())
+    } else {
+      update(object)
+    }
   }
 
   object
@@ -114,6 +118,16 @@ ModelSpecification.ModelFrame <- function(input, model = NULL, ...) {
 }
 
 
+ModelSpecification.ModeledFrame <- function(input, ...) {
+  dep_modeledinput(input, "ModelFrame", list(...))
+}
+
+
+ModelSpecification.ModeledRecipe <- function(input, ...) {
+  dep_modeledinput(input, "ModelRecipe", list(...))
+}
+
+
 #' @rdname ModelSpecification-methods
 #'
 ModelSpecification.recipe <- function(input, model = NULL, ...) {
@@ -138,6 +152,8 @@ setMethod("initialize", "ModelSpecification",
 #' @param params list of values to update the corresponding named input and
 #'   model objects and their parameters.  See the \code{object} grid for the
 #'   names of updatable objects.
+#' @param check_grid logical indicating whether to check the tuning grid and
+#'   to set the optimization and control methods to null if empty.
 #' @param data data frame with which to update data internal to input objects.
 #'   The internal data is a processed version of the original and is not
 #'   intended to be supplied by users.
@@ -147,24 +163,17 @@ setMethod("initialize", "ModelSpecification",
 #'
 #' @noRd
 #'
-update.ModelSpecification <- function(object, params = NULL, data = NULL, ...) {
+update.ModelSpecification <- function(
+  object, params = NULL, check_grid = TRUE, data = NULL, ...
+) {
   if (is.list(params)) {
     object@input <- update_slots(object@input, params = params)
     object@model <- update_slots(object@model, params = params)
-    grid_diff <- function(x, params = NULL, drop = FALSE) {
-      res <- x
-      for (name in names(x)) {
-        node <- x[[name]]
-        if (is_tibble(node)) {
-          res[[name]] <- grid_diff(node, params[[name]], drop = TRUE)
-        } else if (name %in% names(params)) {
-          res[[name]] <- NULL
-        }
-      }
-      if (length(res) || !drop) res
-    }
     object@grid <- unique_grid(grid_diff(object@grid, params))
-    if (is_empty(object@grid)) object@params@optim <- NullOptimization()
+  }
+  if (check_grid && is_empty(object@grid)) {
+    object@params@optim <- NullOptimization()
+    object@params@control <- NullControl()
   }
   object@input <- update(object@input, data = data)
   object
@@ -176,18 +185,18 @@ map_slots <- function(
 ) {
   slots_res <- NULL
   for (name in intersect(names, slotNames(object))) {
-    slot_obj <- slot(object, name)
-    if (is(slot_obj, "ListOf")) {
+    slot <- slot(object, name)
+    if (is(slot, "ListOf")) {
       convert <- function(x) {
-        names(x) <- names(slot_obj)
+        names(x) <- names(slot)
         ListOf(x)
       }
-      slot_res <- unlist(map(function(obj) {
-        map_slots(fun, obj, names = names, update = update)
-      }, unname(slot_obj)), recursive = FALSE)
+      slot_res <- unlist(map(function(slot_item) {
+        map_slots(fun, slot_item, names = names, update = update)
+      }, unname(slot)), recursive = FALSE)
     } else {
       convert <- identity
-      slot_res <- map_slots(fun, slot_obj, names = names, update = update)
+      slot_res <- map_slots(fun, slot, names = names, update = update)
     }
     if (update) {
       slot(object, name) <- convert(slot_res)
@@ -202,7 +211,7 @@ map_slots <- function(
 
 update_slots <- function(object, params = NULL, ...) {
   convert <- if (is.null(params)) identity else as.list
-  map_slots(function(obj) {
-    update(obj, params = convert(params[[obj@id]]))
+  map_slots(function(slot) {
+    update(slot, params = convert(params[[slot@id]]))
   }, object, update = TRUE, ...)
 }

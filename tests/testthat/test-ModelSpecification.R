@@ -6,24 +6,27 @@ test_that("test ModelSpecification", {
 
     library(recipes)
 
-    test_NullControl <- function(fun, extract = identity) {
-      input <- ModelFrame(sale_amount ~ ., data = ICHomes)
-      model <- GBMModel()
-      modelspec <- ModelSpecification(input, model, control = NULL)
-      set.seed(123)
-      res1 <- fun(modelspec)
-      set.seed(123)
-      res2 <- fun(input, model)
-      expect_identical(extract(res1), extract(res2))
+    df <- ICHomes
+    fo <- sale_amount ~ .
+
+    test_modelspec <- function(...) {
+      ModelSpecification(..., model = "GLMModel") %>%
+        expect_is("ModelSpecification") %>%
+        fit %>%
+        expect_is("MLModelFit")
     }
 
-    test_NullControl(function(...) predict(fit(...)))
-    test_NullControl(resample)
-    test_NullControl(rfe, function(x) summary(x)[-1])
+    test_modelspec(fo, data = df)
+    test_modelspec(
+      x = model.matrix(fo, df)[, -1],
+      y = model.response(model.frame(fo, df))
+    )
+    test_modelspec(ModelFrame(fo, data = df))
+    test_modelspec(recipe(fo, data = df))
 
     modelspec <- ModelSpecification(
       input = TunedInput(
-        recipe(sale_amount ~ ., data = ICHomes) %>%
+        recipe(fo, data = df) %>%
           step_pca(all_numeric(), -all_outcomes(), id = "pca"),
         grid = expand_steps(pca = list(num_comp = 6:7))
       ),

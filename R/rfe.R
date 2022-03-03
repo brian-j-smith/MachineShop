@@ -7,9 +7,10 @@
 #' @name rfe
 #' @rdname rfe-methods
 #'
-#' @param ... arguments passed to the default method from the others.  The
-#'   first argument of each \code{rfe} method is positional and, as such, must
-#'   be given first in calls to them.
+#' @param ... arguments passed from the \code{MLModel} and
+#'   \code{MLModelFunction} methods to others and from the others to
+#'   \code{ModelSpecification}.  The first argument of each \code{rfe}
+#'   method is positional and, as such, must be given first in calls to them.
 #' @param object model \link[=inputs]{input} or
 #'   \link[=ModelSpecification]{specification}.
 #' @param formula,data \link[=formula]{formula} defining the model predictor and
@@ -79,8 +80,37 @@ rfe <- function(...) {
 
 #' @rdname rfe-methods
 #'
-rfe.default <- function(
-  object, model = NULL, control = MachineShop::settings("control"), props = 4,
+rfe.formula <- function(formula, data, model, ...) {
+  rfe(ModelSpecification(formula, data, model = model, control = NULL), ...)
+}
+
+
+#' @rdname rfe-methods
+#'
+rfe.matrix <- function(x, y, model, ...) {
+  rfe(ModelSpecification(x, y, model = model, control = NULL), ...)
+}
+
+
+#' @rdname rfe-methods
+#'
+rfe.ModelFrame <- function(input, model = NULL, ...) {
+  rfe(ModelSpecification(input, model = model, control = NULL), ...)
+}
+
+
+#' @rdname rfe-methods
+#'
+rfe.recipe <- function(input, model = NULL, ...
+) {
+  rfe(ModelSpecification(input, model = model, control = NULL), ...)
+}
+
+
+#' @rdname rfe-methods
+#'
+rfe.ModelSpecification <- function(
+  object, control = MachineShop::settings("control"), props = 4,
   sizes = integer(), random = FALSE, recompute = TRUE,
   optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
   metrics = NULL,
@@ -91,7 +121,7 @@ rfe.default <- function(
 ) {
 
   data <- as.data.frame(object)
-  model_fit <- fit(object, model)
+  model_fit <- fit(object)
   control <- as.MLControl(control)
   optimize <- match.arg(optimize)
 
@@ -105,7 +135,7 @@ rfe.default <- function(
   }
 
   get_samples_args <- function() as.list(environment())
-  formals(get_samples_args) <- eval(formals(rfe.default)$samples)
+  formals(get_samples_args) <- eval(formals(rfe.ModelSpecification)$samples)
   samples <- do.call("get_samples_args", as.list(samples))
   samples$rfe <- check_integer(samples$rfe, bounds = c(1, Inf), size = 1)
   throw(check_assignment(samples$rfe))
@@ -122,7 +152,7 @@ rfe.default <- function(
   loss <- function(x) if (metric@maximize) -x[, 1] else x[, 1]
 
   get_stat_args <- function() as.list(environment())
-  formals(get_stat_args) <- eval(formals(rfe.default)$stat)
+  formals(get_stat_args) <- eval(formals(rfe.ModelSpecification)$stat)
   stat <- do.call("get_stat_args", as.list(c(stat)))
   stat$resample <- check_stat(stat$resample, convert = TRUE)
   throw(check_assignment(stat$resample))
@@ -188,11 +218,11 @@ rfe.default <- function(
     for (s in seq_len(samples$rfe)) {
       data[drop] <- data[inds[, s], drop]
       object <- update(object, data = data)
-      res <- resample(object, model = model, control = control)
+      res <- resample(object, control = control)
       perf_samples[[s]] <- performance(res, metrics = metrics)
 
       if (recompute && size > tail(sizes, 1)) {
-        vi <- do.call(varimp, list(fit(object, model), select = subset))
+        vi <- do.call(varimp, list(fit(object), select = subset))
         vi_samples[[s]] <- vi[subset]
       }
     }
@@ -236,42 +266,6 @@ rfe.default <- function(
     performance = do.call(c, perf_list)
   )
 
-}
-
-
-#' @rdname rfe-methods
-#'
-rfe.formula <- function(formula, data, model, ...) {
-  rfe(as.MLInput(formula, data), model = model, ...)
-}
-
-
-#' @rdname rfe-methods
-#'
-rfe.matrix <- function(x, y, model, ...) {
-  rfe(as.MLInput(x, y), model = model, ...)
-}
-
-
-#' @rdname rfe-methods
-#'
-rfe.ModelFrame <- function(input, model = NULL, ...) {
-  rfe.default(as.MLInput(input), model = model, ...)
-}
-
-
-#' @rdname rfe-methods
-#'
-rfe.recipe <- function(input, model = NULL, ...
-) {
-  rfe.default(as.MLInput(input), model = model, ...)
-}
-
-
-#' @rdname rfe-methods
-#'
-rfe.ModelSpecification <- function(object, ...) {
-  rfe.default(object, ...)
 }
 
 

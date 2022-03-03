@@ -86,7 +86,6 @@ Collate:
     'ModelFrame.R'
     'ModelRecipe.R'
     'ModelSpecification.R'
-    'ModeledInput.R'
     'TrainedInputs.R'
     'TrainedModels.R'
     'TrainingParams.R'

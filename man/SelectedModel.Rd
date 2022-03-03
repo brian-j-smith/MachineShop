@@ -2,21 +2,37 @@
 % Please edit documentation in R/TrainedModels.R
 \name{SelectedModel}
 \alias{SelectedModel}
+\alias{SelectedModel.default}
+\alias{SelectedModel.ModelSpecification}
+\alias{SelectedModel.list}
 \title{Selected Model}
 \usage{
-SelectedModel(
+SelectedModel(...)
+
+\method{SelectedModel}{default}(
   ...,
   control = MachineShop::settings("control"),
   metrics = NULL,
   cutoff = MachineShop::settings("cutoff"),
   stat = MachineShop::settings("stat.TrainingParams")
 )
+
+\method{SelectedModel}{ModelSpecification}(
+  ...,
+  control = MachineShop::settings("control"),
+  metrics = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  stat = MachineShop::settings("stat.TrainingParams")
+)
+
+\method{SelectedModel}{list}(x, ...)
 }
 \arguments{
 \item{...}{\link[=models]{model} functions, function names, objects; other
-objects that can be \link[=as.MLModel]{coerced} to models; or vectors of
+objects that can be \link[=as.MLModel]{coerced} to models; vectors of
 these to serve as the candidate set from which to select, such as that
-returned by \code{\link{expand_model}}.}
+returned by \code{\link{expand_model}}; or model
+\link[=ModelSpecification]{specifications}.}
 
 \item{control}{\link[=controls]{control} function, function name, or object
 defining the resampling method to be employed.}
@@ -30,9 +46,14 @@ selection is based on the first calculated metric.}
 
 \item{stat}{function or character string naming a function to compute a
 summary statistic on resampled metric values for model selection.}
+
+\item{x}{list of models followed by arguments passed to their method
+function.}
 }
 \value{
-\code{SelectedModel} class object that inherits from \code{MLModel}.
+\code{SelectedModel} or \code{SelectedModelSpecification} class
+object that inherits from \code{MLModel} or \code{ModelSpecification},
+respectively.
 }
 \description{
 Model selection from a candidate set.

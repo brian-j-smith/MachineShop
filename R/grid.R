@@ -154,6 +154,20 @@ get_grid.TunedModel <- function(object, ...) {
 }
 
 
+grid_diff <- function(x, params = NULL, drop = FALSE) {
+  res <- x
+  for (name in names(x)) {
+    node <- x[[name]]
+    if (is_tibble(node)) {
+      res[[name]] <- grid_diff(node, params[[name]], drop = TRUE)
+    } else if (name %in% names(params)) {
+      res[[name]] <- NULL
+    }
+  }
+  if (length(res) || !drop) res
+}
+
+
 make_grid <- function(object, name = character(), params = tibble()) {
   if (is_empty(name)) name <- "Model"
   if (is_empty(params)) params <- tibble(.rows = 1)

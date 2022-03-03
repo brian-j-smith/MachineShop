@@ -2,7 +2,6 @@
 % Please edit documentation in R/resample.R
 \name{resample}
 \alias{resample}
-\alias{resample.default}
 \alias{resample.formula}
 \alias{resample.matrix}
 \alias{resample.ModelFrame}
@@ -14,8 +13,6 @@
 \usage{
 resample(...)
 
-\method{resample}{default}(object, model = NULL, control = MachineShop::settings("control"), ...)
-
 \method{resample}{formula}(formula, data, model, ...)
 
 \method{resample}{matrix}(x, y, model, ...)
@@ -24,20 +21,20 @@ resample(...)
 
 \method{resample}{recipe}(input, model = NULL, ...)
 
-\method{resample}{ModelSpecification}(object, ...)
+\method{resample}{ModelSpecification}(object, control = MachineShop::settings("control"), ...)
 
 \method{resample}{MLModel}(model, ...)
 
 \method{resample}{MLModelFunction}(model, ...)
 }
 \arguments{
-\item{...}{arguments passed from the generic function to its methods and from
-the \code{MLModel} and \code{MLModelFunction} methods to others.  The
-first argument of each \code{resample} method is positional and, as such,
-must be given first in calls to them.}
+\item{...}{arguments passed from the \code{MLModel} and
+\code{MLModelFunction} methods to others and from the others to
+\code{ModelSpecification}.  The first argument of each \code{resample}
+method is positional and, as such, must be given first in calls to them.}
 
-\item{object}{model \link[=inputs]{input} or
-\link[=ModelSpecification]{specification}.}
+\item{formula, data}{\link[=formula]{formula} defining the model predictor and
+response variables and a \link[=data.frame]{data frame} containing them.}
 
 \item{model}{\link[=models]{model} function, function name, or object; or
 another object that can be \link[=as.MLModel]{coerced} to a model.  A model
@@ -45,17 +42,17 @@ can be given first followed by any of the variable specifications, and the
 argument can be omitted altogether in the case of
 \link[=ModeledInput]{modeled inputs}.}
 
-\item{control}{\link[=controls]{control} function, function name, or object
-defining the resampling method to be employed.}
-
-\item{formula, data}{\link[=formula]{formula} defining the model predictor and
-response variables and a \link[=data.frame]{data frame} containing them.}
-
 \item{x, y}{\link{matrix} and object containing predictor and response
 variables.}
 
 \item{input}{\link[=inputs]{input} object defining and containing the model
 predictor and response variables.}
+
+\item{object}{model \link[=inputs]{input} or
+\link[=ModelSpecification]{specification}.}
+
+\item{control}{\link[=controls]{control} function, function name, or object
+defining the resampling method to be employed.}
 }
 \value{
 \code{Resample} class object.

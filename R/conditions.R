@@ -417,12 +417,36 @@ Grid <- function(...) {
 }
 
 
+#' @rdname deprecated
+#'
+#' @details
+#' Use \code{\link[=ModelSpecification]{ModelSpecification()}} instead of
+#' \code{ModeledInput()}.
+#'
+ModeledInput <- function(...) {
+  throw(DeprecatedCondition(
+    "ModeledInput()", "ModelSpecification()",
+    expired = Sys.Date() >= "2022-06-01"
+  ))
+  ModelSpecification(...)
+}
+
+
 dep_fixedarg <- function(x) {
   if (length(x)) {
     throw(DeprecatedCondition(
       "Argument 'fixed' to TunedModel()", "the model 'object'",
-      expired = Sys.Date() >= "2022-02-01"
+      expired = Sys.Date() >= "2022-06-01"
     ), call = FALSE)
   }
   x
+}
+
+
+dep_modeledinput <- function(x, class, dots) {
+  throw(DeprecatedCondition(
+      class(x), "a ModelSpecification", expired = Sys.Date() >= "2022-07-01"
+  ), call = FALSE)
+  dots$model <- as.MLModel(x)
+  do.call(ModelSpecification, c(list(as(x, class)), dots))
 }

@@ -2,7 +2,6 @@
 % Please edit documentation in R/rfe.R
 \name{rfe}
 \alias{rfe}
-\alias{rfe.default}
 \alias{rfe.formula}
 \alias{rfe.matrix}
 \alias{rfe.ModelFrame}
@@ -14,9 +13,16 @@
 \usage{
 rfe(...)
 
-\method{rfe}{default}(
+\method{rfe}{formula}(formula, data, model, ...)
+
+\method{rfe}{matrix}(x, y, model, ...)
+
+\method{rfe}{ModelFrame}(input, model = NULL, ...)
+
+\method{rfe}{recipe}(input, model = NULL, ...)
+
+\method{rfe}{ModelSpecification}(
   object,
-  model = NULL,
   control = MachineShop::settings("control"),
   props = 4,
   sizes = integer(),
@@ -31,33 +37,33 @@ rfe(...)
   ...
 )
 
-\method{rfe}{formula}(formula, data, model, ...)
-
-\method{rfe}{matrix}(x, y, model, ...)
-
-\method{rfe}{ModelFrame}(input, model = NULL, ...)
-
-\method{rfe}{recipe}(input, model = NULL, ...)
-
-\method{rfe}{ModelSpecification}(object, ...)
-
 \method{rfe}{MLModel}(model, ...)
 
 \method{rfe}{MLModelFunction}(model, ...)
 }
 \arguments{
-\item{...}{arguments passed to the default method from the others.  The
-first argument of each \code{rfe} method is positional and, as such, must
-be given first in calls to them.}
+\item{...}{arguments passed from the \code{MLModel} and
+\code{MLModelFunction} methods to others and from the others to
+\code{ModelSpecification}.  The first argument of each \code{rfe}
+method is positional and, as such, must be given first in calls to them.}
 
-\item{object}{model \link[=inputs]{input} or
-\link[=ModelSpecification]{specification}.}
+\item{formula, data}{\link[=formula]{formula} defining the model predictor and
+response variables and a \link[=data.frame]{data frame} containing them.}
 
 \item{model}{\link[=models]{model} function, function name, or object; or
 another object that can be \link[=as.MLModel]{coerced} to a model.  A model
 can be given first followed by any of the variable specifications, and the
 argument can be omitted altogether in the case of
 \link[=ModeledInput]{modeled inputs}.}
+
+\item{x, y}{\link{matrix} and object containing predictor and response
+variables.}
+
+\item{input}{\link[=inputs]{input} object defining and containing the model
+predictor and response variables.}
+
+\item{object}{model \link[=inputs]{input} or
+\link[=ModelSpecification]{specification}.}
 
 \item{control}{\link[=controls]{control} function, function name, or object
 defining the resampling method to be employed.}
@@ -98,15 +104,6 @@ which their defaults appear.}
 
 \item{progress}{logical indicating whether to display iterative progress
 during elimination.}
-
-\item{formula, data}{\link[=formula]{formula} defining the model predictor and
-response variables and a \link[=data.frame]{data frame} containing them.}
-
-\item{x, y}{\link{matrix} and object containing predictor and response
-variables.}
-
-\item{input}{\link[=inputs]{input} object defining and containing the model
-predictor and response variables.}
 }
 \value{
 \code{TrainingStep} class object containing a summary of the numbers

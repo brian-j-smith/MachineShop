@@ -336,15 +336,21 @@ setShowDefault("ModelRecipe")
 #' @rdname print-methods
 #'
 print.ModelSpecification <- function(
-  x, n = MachineShop::settings("print_max"), ...
+  x, n = MachineShop::settings("print_max"), id = FALSE, ...
 ) {
   title(x, ...)
   level <- nesting_level(...)
   nextlevel <- level + 1
+  if (id) {
+    print_id(x)
+    newline()
+  }
   show_all <- length(x@grid) && level < 1
   print(x@input, n = n, level = nextlevel, id = show_all)
-  newline()
-  print(x@model, n = n, level = nextlevel, id = show_all)
+  if (!is(x@model, "NullModel")) {
+    newline()
+    print(x@model, n = n, level = nextlevel, id = show_all)
+  }
   if (show_all) {
     newline()
     heading("Grid", level = nextlevel)

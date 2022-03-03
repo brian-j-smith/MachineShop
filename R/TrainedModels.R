@@ -2,10 +2,15 @@
 #'
 #' Model selection from a candidate set.
 #'
+#' @rdname SelectedModel
+#'
 #' @param ... \link[=models]{model} functions, function names, objects; other
-#'   objects that can be \link[=as.MLModel]{coerced} to models; or vectors of
+#'   objects that can be \link[=as.MLModel]{coerced} to models; vectors of
 #'   these to serve as the candidate set from which to select, such as that
-#'   returned by \code{\link{expand_model}}.
+#'   returned by \code{\link{expand_model}}; or model
+#'   \link[=ModelSpecification]{specifications}.
+#' @param x list of models followed by arguments passed to their method
+#'   function.
 #' @param control \link[=controls]{control} function, function name, or object
 #'   defining the resampling method to be employed.
 #' @param metrics \link[=metrics]{metric} function, function name, or vector of
@@ -22,7 +27,9 @@
 #'     \code{Surv}}
 #' }
 #'
-#' @return \code{SelectedModel} class object that inherits from \code{MLModel}.
+#' @return \code{SelectedModel} or \code{SelectedModelSpecification} class
+#' object that inherits from \code{MLModel} or \code{ModelSpecification},
+#' respectively.
 #'
 #' @seealso \code{\link{fit}}, \code{\link{resample}}
 #'
@@ -38,7 +45,16 @@
 #' summary(selected_model)
 #' }
 #'
-SelectedModel <- function(
+SelectedModel <- function(...) {
+  UseMethod("SelectedModel")
+}
+
+MLModelFunction(SelectedModel) <- NULL
+
+
+#' @rdname SelectedModel
+#'
+SelectedModel.default <- function(
   ..., control = MachineShop::settings("control"), metrics = NULL,
   cutoff = MachineShop::settings("cutoff"),
   stat = MachineShop::settings("stat.TrainingParams")
@@ -70,15 +86,31 @@ SelectedModel <- function(
 
 }
 
-MLModelFunction(SelectedModel) <- NULL
 
-
-.fit.SelectedModel <- function(object, ...) {
-  fit_optim(object, ...)
+#' @rdname SelectedModel
+#'
+SelectedModel.ModelSpecification <- function(
+  ..., control = MachineShop::settings("control"), metrics = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  stat = MachineShop::settings("stat.TrainingParams")
+) {
+  do.call(SelectedInput, c(list(...), as.list(environment())))
 }
 
 
-update.SelectedModel <- function(object, params = list(), ...) {
+#' @rdname SelectedModel
+#'
+SelectedModel.list <- function(x, ...) {
+  do.call(SelectedModel, c(x, list(...)))
+}
+
+
+.fit.SelectedModel <- function(object, ...) {
+  .fit_optim(object, ...)
+}
+
+
+update.SelectedModel <- function(object, params = NULL, ...) {
   object <- subset_selected(object, "candidates", params$id)
   params$id <- NULL
   NextMethod()
@@ -239,7 +271,7 @@ MLModelFunction(TunedModel) <- NULL
 
 
 .fit.TunedModel <- function(object, ...) {
-  fit_optim(object, ...)
+  .fit_optim(object, ...)
 }
 
 

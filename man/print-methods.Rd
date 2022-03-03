@@ -43,7 +43,7 @@
 
 \method{print}{ModelRecipe}(x, n = MachineShop::settings("print_max"), id = FALSE, data = TRUE, ...)
 
-\method{print}{ModelSpecification}(x, n = MachineShop::settings("print_max"), ...)
+\method{print}{ModelSpecification}(x, n = MachineShop::settings("print_max"), id = FALSE, ...)
 
 \method{print}{Performance}(x, n = MachineShop::settings("print_max"), ...)
 

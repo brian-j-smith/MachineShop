@@ -48,17 +48,6 @@ optim <- function(.fun, object, ...) {
     function(...) NULL
   }
 
-  update_object <- function(params) {
-    object <- update(object, params = params)
-    if (is_optim_method(object, "SequentialOptimization")) {
-      set_optim_grid(
-        object,
-        random = get_optim_field(object, "random"),
-        progress = get_optim_field(object, "monitor")$progress
-      )
-    } else object
-  }
-
   grid <- get_grid(object, ...)
   optim_grid <- unnest_params(grid$params)
   names(optim_grid) <- make_names_len(length(optim_grid), "param")
@@ -90,7 +79,7 @@ optim <- function(.fun, object, ...) {
     score <- tryCatch(
       {
         res <- resample(
-          update_object(model_params), ..., control = control,
+          update(object, params = model_params), ..., control = control,
           progress_index = new_progress_index(
             length(scores) + 1, max = max_iter, name = class(object)
           )
@@ -168,6 +157,6 @@ optim <- function(.fun, object, ...) {
   )
 
   model_params <- step@log$params[step@log$selected, ]
-  push(step, fit(update_object(model_params), ...))
+  push(step, fit(update(object, params = model_params), ...))
 
 }

@@ -5,6 +5,7 @@
 #'
 #' @aliases SelectedModelFrame
 #' @aliases SelectedModelRecipe
+#' @aliases SelectedModelSpecification
 #' @rdname SelectedInput
 #'
 #' @param ... \link{inputs} defining relationships between model predictor
@@ -25,9 +26,10 @@
 #' @param stat function or character string naming a function to compute a
 #'   summary statistic on resampled metric values for recipe selection.
 #'
-#' @return \code{SelectedModelFrame} or \code{SelectedModelRecipe} class object
-#' that inherits from \code{SelectedInput} and \code{ModelFrame} or
-#' \code{recipe}.
+#' @return \code{SelectedModelFrame}, \code{SelectedModelRecipe}, or
+#' \code{SelectedModelSpecification} class object that inherits from
+#' \code{SelectedInput} and \code{ModelFrame}, \code{recipe}, or
+#' \code{ModelSpecification}, respectively.
 #'
 #' @seealso \code{\link{fit}}, \code{\link{resample}}
 #'
@@ -102,6 +104,7 @@ SelectedInput.ModelFrame <- function(
 
   if (...length() == 1) return(..1)
 
+  params <- do.call(TrainingParams, as.list(environment()))
   inputs <- list(...)
 
   if (!all(map("char", class1, inputs) %in% c("ModelFrame", "ModeledFrame"))) {
@@ -116,12 +119,7 @@ SelectedInput.ModelFrame <- function(
 
   new("SelectedModelFrame", ModelFrame(combined$data),
     candidates = combined$candidates,
-    params = TrainingParams(
-      control = control,
-      metrics = metrics,
-      cutoff = cutoff,
-      stat = stat
-    )
+    params = params
   )
 
 }
@@ -137,6 +135,7 @@ SelectedInput.recipe <- function(
 
   if (...length() == 1) return(..1)
 
+  params <- do.call(TrainingParams, as.list(environment()))
   inputs <- list(...)
   for (i in seq_along(inputs)) inputs[[i]] <- ModelRecipe(inputs[[i]])
 
@@ -163,12 +162,41 @@ SelectedInput.recipe <- function(
 
   new("SelectedModelRecipe", new("ModelRecipe", rec),
     candidates = combined$candidates,
-    params = TrainingParams(
-      control = control,
-      metrics = metrics,
-      cutoff = cutoff,
-      stat = stat
-    )
+    params = params
+  )
+
+}
+
+
+#' @rdname SelectedInput
+#'
+SelectedInput.ModelSpecification <- function(
+  ..., control = MachineShop::settings("control"), metrics = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  stat = MachineShop::settings("stat.TrainingParams")
+) {
+
+  if (...length() == 1) return(..1)
+
+  params <- do.call(TrainingParams, as.list(environment()))
+  modelspecs <- list(...)
+  default_names <- map("char", class, modelspecs)
+  names(modelspecs) <- make_names_along(modelspecs, default_names)
+
+  if (any(map("char", class1, modelspecs) != "ModelSpecification")) {
+    throw(Error("Inputs must all be ModelSpecifications."))
+  }
+
+  sel_input <- SelectedInput(map(slot, modelspecs, "input"))
+  classes <- c("ModelFrame", "ModelRecipe")
+  input <- as(sel_input, classes[map("logi", is, list(sel_input), classes)])
+  modelspecs <- map(function(modelspec, input) {
+    update(modelspec, data = as.data.frame(input))
+  }, modelspecs, sel_input@candidates)
+
+  new("SelectedModelSpecification", ModelSpecification(input, NullModel()),
+    candidates = ListOf(modelspecs),
+    params = params
   )
 
 }
@@ -182,26 +210,28 @@ SelectedInput.list <- function(x, ...) {
 
 
 .fit.SelectedInput <- function(object, ...) {
-  fit_optim(object, ...)
+  .fit_optim(object, ...)
 }
 
 
-update.SelectedInput <- function(object, params = list(), ...) {
-  object <- subset_selected(object, "candidates", params$id)
-  data <- as.data.frame(object)
-  object@candidates <- ListOf(map(function(x) {
-    input <- update(x, data = data[names(as.data.frame(x))])
-    input@id <- x@id
-    input
-  }, object@candidates))
-  object <- as(object, "SelectedInput")
-  new_params <- as(object, "list")
-  new_params[names(params)] <- params
-  candidates <- new_params$candidates
-  new_params[c("candidates", "id")] <- NULL
-  res <- do.call(SelectedInput, c(candidates, new_params))
-  res@id <- object@id
-  res
+update.SelectedInput <- function(object, params = NULL, ...) {
+  if (is.list(params)) {
+    id <- object@id
+    object <- subset_selected(object, "candidates", params$id)
+    data <- as.data.frame(object)
+    object@candidates <- ListOf(map(function(input) {
+      res <- update(input, data = data[names(as.data.frame(input))])
+      res@id <- input@id
+      res
+    }, object@candidates))
+    new_params <- as(as(object, "SelectedInput"), "list")
+    new_params[names(params)] <- params
+    candidates <- new_params$candidates
+    new_params[c("candidates", "id")] <- NULL
+    object <- do.call(SelectedInput, c(candidates, new_params))
+    object@id <- id
+  }
+  NextMethod(params = NULL, check_grid = FALSE)
 }
 
 
@@ -278,21 +308,17 @@ TunedInput.recipe <- function(
     ))
   }
 
-  if (is(object, "ModeledRecipe")) {
-    new("TunedModeledRecipe", object, model = object@model)
-  } else object
+  object
 
 }
 
 
 .fit.TunedModelRecipe <- function(object, ...) {
-  fit_optim(object, ...)
+  .fit_optim(object, ...)
 }
 
 
-update.TunedModelRecipe <- function(
-  object, params = NULL, ...
-) {
+update.TunedModelRecipe <- function(object, params = NULL, ...) {
   if (is.list(params)) {
     update(as(object, "ModelRecipe"), params = params, new_id = object@id)
   } else {
