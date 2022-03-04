@@ -11,6 +11,8 @@ predict.Surv <- function(
   } else {
     match.arg(distr, c("empirical", "exponential", "rayleigh", "weibull"))
   }
+  weights <- check_weights(weights, object)
+  throw(check_assignment(weights))
   SurvPrediction(
     .predict.Surv(object, ..., times = times, distr = distr, weights = weights),
     times = times, distr = distr
@@ -72,12 +74,10 @@ EmpiricalSurv <- function(x, ...) {
 
 
 EmpiricalSurv.Surv <- function(
-  x, risks = numeric(), weights = NULL, method = c("efron", "breslow"), ...
+  x, risks = rep(1, length(x)), weights = rep(1, length(x)),
+  method = c("efron", "breslow"), ...
 ) {
   event <- as.integer(x[, "status"])
-  if (is_empty(risks)) risks <- 1
-  weights <- check_weights(weights, x)
-  throw(check_assignment(weights))
   if (is_empty(method)) method <- settings("method.EmpiricalSurv")
   method <- match.arg(method)
 
@@ -164,20 +164,23 @@ Weibull.numeric <- function(x = scale, shape, scale, ...) {
 
 
 Weibull.Surv <- function(
-  x, risks = numeric(), shape = numeric(), weights = NULL, ...
+  x, risks = rep(1, length(x)), weights = rep(1, length(x)), shape = numeric(),
+  ...
 ) {
-  if (length(shape)) {
-    nparams <- 1
-  } else {
-    shape <- Inf
-    nparams <- 2
-  }
-  params <- if (length(event_time(x)) >= nparams) {
-    fo <- if (length(risks)) { x ~ offset(-log(risks)) } else { x ~ 1 }
-    regfit <- survreg(fo, dist = "weibull", scale = 1 / shape,
-                      weights = weights)
+  x[which(time(x) <= 0)] <- NA
+  weights[which(weights == 0)] <- NA
+  data <- as.data.frame(complete_subset(
+    x = x, risks = risks, weights = weights
+  ))
+  shape <- min(shape, Inf)
+  nparams <- 1 + is.infinite(shape)
+  params <- if (length(event_time(data$x)) >= nparams) {
+    regfit <- survreg(x ~ offset(-log(risks)), data = data, dist = "weibull",
+                      scale = 1 / shape, weights = weights)
     c(1 / regfit$scale, exp(coef(regfit)[[1]]))
-  } else c(NA_real_, NA_real_)
+  } else {
+    c(NA_real_, NA_real_)
+  }
   Weibull(shape = params[1], scale = params[2]^-params[1])
 }
 
