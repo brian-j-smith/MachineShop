@@ -38,13 +38,12 @@ LMModel <- function() {
       y <- response(data)
       data <- as.data.frame(formula, data)
       if (is.factor(y)) {
-        y_name <- response(formula)
-        if (nlevels(y) == 2) {
-          data[[y_name]] <- as.numeric(y) - 1
+        data[[response(formula)]] <- if (nlevels(y) == 2) {
+          as.numeric(y) - 1
         } else {
-          mm <- model.matrix(~ y - 1)
-          colnames(mm) <- levels(y)
-          data[[y_name]] <- mm
+          mat <- model.matrix(~ y - 1)
+          colnames(mat) <- levels(y)
+          mat
         }
       }
       stats::lm(formula, data = data, weights = weights, ...)

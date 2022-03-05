@@ -75,6 +75,7 @@ GBMModel <- function(
             data[[response(formula)]] <- as.numeric(y) - 1
             "bernoulli"
           } else {
+            data[[response(formula)]] <- structure(y, class = "factor")
             "multinomial"
           },
           "numeric" = "gaussian",
@@ -82,7 +83,7 @@ GBMModel <- function(
           "Surv" = "coxph"
         )
       }
-      cnd <- NULL
+      cond <- NULL
       suppressWarnings(withCallingHandlers(
         model_fit <- eval_fit(
           data,
@@ -95,13 +96,13 @@ GBMModel <- function(
             distribution = distribution, verbose = FALSE, ...
           )
         ),
-        warning = function(cnd) cnd <<- cnd
+        warning = function(cond) cond <<- cond
       ))
-      if (is(cnd, "warning")) {
+      if (is(cond, "warning")) {
         if (distribution == "multinomial") {
-          throw(Warning(conditionMessage(cnd)), call = call("gbm"), times = 3)
+          throw(Warning(conditionMessage(cond)), call = call("gbm"), times = 3)
         } else {
-          warning(cnd)
+          warning(cond)
         }
       }
       model_fit
