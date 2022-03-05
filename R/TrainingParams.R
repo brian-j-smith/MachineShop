@@ -183,9 +183,10 @@ set_monitor.ModelSpecification <- function(
 #'   an empty vector if none are needed.  The first package in
 #'   \code{set_optim_bayes} is used unless otherwise specified by the user.
 #' @param control list of control parameters passed to
-#'   \code{\link[DiceKriging]{km}} by \code{set_optim_bayes} with package
-#'   \pkg{ParBayesianOptimization}, to \code{\link[GPfit]{GP_fit}} by
-#'   \code{set_optim_bayes} with package \pkg{rBayesianOptimization}, to
+#'   \code{\link[ParBayesianOptimization]{bayesOpt}} by \code{set_optim_bayes}
+#'   with package \code{"ParBayesianOptimization"}, to
+#'   \code{\link[rBayesianOptimization]{BayesianOptimization}} by
+#'   \code{set_optim_bayes} with package \code{"rBayesianOptimization"}, to
 #'   \code{\link[stats]{optim}} by \code{set_optim_bfgs} and
 #'   \code{set_optim_sann}, and to \code{\link[pso]{psoptim}} by
 #'   \code{set_optim_pso}.
