@@ -32,14 +32,14 @@
 #' }
 #'
 lift <- function(x, y = NULL, weights = NULL, na.rm = TRUE, ...) {
-  as(performance_curve(x, y, weights, metrics = c(tpr, rpp), na.rm = na.rm),
+  as(performance_curve(x, y, weights, metrics = c(tpr, ppr), na.rm = na.rm),
      "LiftCurve")
 }
 
 
 LiftCurve <- function(...) {
   object <- as(PerformanceCurve(...), "LiftCurve")
-  if (!all(map("logi", identical, object@metrics, c(tpr, rpp)))) {
+  if (!all(map("logi", identical, object@metrics, c(tpr, ppr)))) {
     throw(Error("Incorrect LiftCurve metrics."))
   }
   object

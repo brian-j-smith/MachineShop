@@ -306,6 +306,25 @@ setMetric_BinaryConfusionMatrix("npv",
 
 #' @rdname metrics
 #'
+ppr <- function(
+  observed, predicted = NULL, weights = NULL,
+  cutoff = MachineShop::settings("cutoff"), ...
+) {
+  call_metric_method("ppr", environment())
+}
+
+MLMetric(ppr) <- list("ppr", "Positive Prediction Rate", FALSE)
+
+
+setMetric_BinaryConfusionMatrix("ppr",
+  function(observed, predicted, ...) {
+    (observed[2, 1] + observed[2, 2]) / sum(observed)
+  }
+)
+
+
+#' @rdname metrics
+#'
 ppv <- function(
   observed, predicted = NULL, weights = NULL,
   cutoff = MachineShop::settings("cutoff"), ...
@@ -401,25 +420,6 @@ MLMetric(roc_index) <- list("roc_index", "ROC Index", TRUE)
 setMetric_BinaryConfusionMatrix("roc_index",
   function(observed, predicted, fun, ...) {
     fun(sens = sensitivity(observed), spec = specificity(observed))
-  }
-)
-
-
-#' @rdname metrics
-#'
-rpp <- function(
-  observed, predicted = NULL, weights = NULL,
-  cutoff = MachineShop::settings("cutoff"), ...
-) {
-  call_metric_method("rpp", environment())
-}
-
-MLMetric(rpp) <- list("rpp", "Rate of Positive Prediction", FALSE)
-
-
-setMetric_BinaryConfusionMatrix("rpp",
-  function(observed, predicted, ...) {
-    (observed[2, 1] + observed[2, 2]) / sum(observed)
   }
 )
 

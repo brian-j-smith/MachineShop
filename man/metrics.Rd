@@ -13,13 +13,13 @@
 \alias{fpr}
 \alias{kappa2}
 \alias{npv}
+\alias{ppr}
 \alias{ppv}
 \alias{pr_auc}
 \alias{precision}
 \alias{recall}
 \alias{roc_auc}
 \alias{roc_index}
-\alias{rpp}
 \alias{sensitivity}
 \alias{specificity}
 \alias{tnr}
@@ -98,6 +98,14 @@ npv(
   ...
 )
 
+ppr(
+  observed,
+  predicted = NULL,
+  weights = NULL,
+  cutoff = MachineShop::settings("cutoff"),
+  ...
+)
+
 ppv(
   observed,
   predicted = NULL,
@@ -132,14 +140,6 @@ roc_index(
   weights = NULL,
   cutoff = MachineShop::settings("cutoff"),
   fun = function(sensitivity, specificity) (sensitivity + specificity)/2,
-  ...
-)
-
-rpp(
-  observed,
-  predicted = NULL,
-  weights = NULL,
-  cutoff = MachineShop::settings("cutoff"),
   ...
 )
 

@@ -653,13 +653,13 @@ A named list of available metrics can be obtained interactively with the `r rdoc
 
 `label`
   : Character descriptor for the metric.
-  
+
 `maximize`
   : Logical indicating whether higher values of the metric correspond to better predictive performance.
-  
+
 `arguments`
   : Closure with the argument names and corresponding default values of the metric function.
-  
+
 `response_types`
   : Data frame of the observed and predicted response variable types supported by the metric.
 
@@ -687,7 +687,7 @@ cindex
 
 ### Type-Specific Metrics
 
-When data objects are supplied as arguments to `r rdoc_url("metricinfo()")`, information is returned on all metrics applicable to response variables of the same data types.  Observed response variable type is inferred from the first data argument and predicted type from the second, if given.  For survival responses, predicted types may be `numeric` for survival means, `r rdoc_url("SurvEvents", "SurvMatrix")` for 0-1 survival events at specified follow-up times, or `r rdoc_url("SurvProbs", "SurvMatrix")` for follow-up time survival probabilities.  If model functions are additionally supplied as arguments, information on the subset matching the data types is returned. 
+When data objects are supplied as arguments to `r rdoc_url("metricinfo()")`, information is returned on all metrics applicable to response variables of the same data types.  Observed response variable type is inferred from the first data argument and predicted type from the second, if given.  For survival responses, predicted types may be `numeric` for survival means, `r rdoc_url("SurvEvents", "SurvMatrix")` for 0-1 survival events at specified follow-up times, or `r rdoc_url("SurvProbs", "SurvMatrix")` for follow-up time survival probabilities.  If model functions are additionally supplied as arguments, information on the subset matching the data types is returned.
 
 ```{r using_metrics_metricinfo_type}
 ## Metrics for observed and predicted response variable types
@@ -725,16 +725,16 @@ Metrics applicable to multi-level factor response variables are summarized below
 
 `r rdoc_url("brier()", "metrics")`
   : [Brier score](https://en.wikipedia.org/wiki/Brier_score).
-  
+
 `r rdoc_url("cross_entropy()", "metrics")`
   : [Cross entropy](https://en.wikipedia.org/wiki/Cross_entropy) loss averaged over the number of cases.
-  
+
 `r rdoc_url("kappa2()", "metrics")`
   : [Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa) statistic measuring relative agreement between observed and predicted classifications.
 
 `r rdoc_url("weighted_kappa2()", "metrics")`
   : [Weighted Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa#Weighted_kappa) for ordered factor responses only.
-  
+
 Brier score and cross entropy loss are computed directly on predicted class probabilities.  The other metrics are computed on predicted class membership, defined as the factor level with the highest predicted probability.
 
 
@@ -773,24 +773,24 @@ kable(conf,
 `r rdoc_url("npv()", "metrics")`
   : Negative predictive value, $NPV = \frac{TN}{TN + FN}$.
 
+`r rdoc_url("ppr()", "metrics")`
+  : Positive prediction rate, $PPR = \frac{TP + FP}{TP + FP + TN + FN}$.
+
 `r rdoc_url("ppv()", "metrics")`, `r rdoc_url("precision()", "metrics")`
   : Positive predictive value, $PPV = \frac{TP}{TP + FP}$.
 
 `r rdoc_url("pr_auc()", "metrics")`, `r rdoc_url("auc()", "metrics")`
   : Area under a precision recall curve.
-  
+
 `r rdoc_url("roc_auc()", "metrics")`, `r rdoc_url("auc()", "metrics")`
   : [Area under an ROC curve](https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve).
 
 `r rdoc_url("roc_index()", "metrics")`
   : A tradeoff function of sensitivity and specificity as defined by the `fun` argument in this function (default: (sensitivity + specificity) / 2).  The function allows for specification of tradeoffs [@perkins:2006:IOC] other than the default of Youden's J statistic [@youden:1950:IRD].
-  
-`r rdoc_url("rpp()", "metrics")`
-  : Rate of positive prediction, $RPP = \frac{TP + FP}{TP + FP + TN + FN}$.
-  
+
 `r rdoc_url("sensitivity()", "metrics")`, `r rdoc_url("recall()", "metrics")`, `r rdoc_url("tpr()", "metrics")`
   : True positive rate, $TPR =\frac{TP}{TP + FN} = 1 - FNR$.
-  
+
 `r rdoc_url("specificity()", "metrics")`, `r rdoc_url("tnr()", "metrics")`
   : True negative rate, $TNR = \frac{TN}{TN + FP} = 1 - FPR$.
 
@@ -803,7 +803,7 @@ Performance metrics are defined below for numeric vector responses.  If applied 
 
 `r rdoc_url("gini()", "metrics")`
   : [Gini coefficient](https://en.wikipedia.org/wiki/Gini_coefficient).
-  
+
 `r rdoc_url("mae()", "metrics")`
   : Mean absolute error, $MAE = \frac{1}{N}\sum_{i=1}^N|y_i - \hat{y}_i|$, where $y_i$ and $\hat{y}_i$ are the $N$ observed and predicted responses.
 

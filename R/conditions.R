@@ -432,6 +432,19 @@ ModeledInput <- function(...) {
 }
 
 
+#' @rdname deprecated
+#'
+#' @details
+#' Use \code{\link[=ppr]{ppr()}} instead of \code{rpp()}.
+#'
+rpp <- function(...) {
+  throw(DeprecatedCondition(
+    "rpp()", "ppr()", expired = Sys.Date() >= "2022-06-01"
+  ))
+  ppr(...)
+}
+
+
 dep_fixedarg <- function(x) {
   if (length(x)) {
     throw(DeprecatedCondition(
