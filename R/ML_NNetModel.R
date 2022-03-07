@@ -94,30 +94,24 @@ NNetModel <- function(
     },
 
     varimp = function(object, ...) {
-      nvars <- object$n[1]
+      ninputs <- object$n[1]
       size <- object$n[2]
-      nresp <- object$n[3]
+      noutputs <- object$n[3]
 
       beta <- abs(coef(object))
-      nms <- names(beta)
 
-      idx <- expand.grid(hidden = seq_len(size), input = seq_len(nvars))
-      labels <- paste0("i", idx$input, "->h", idx$hidden)
-      i2h <- matrix(beta[match(labels, nms)], size, nvars)
+      inds <- expand.grid(input = seq_len(ninputs), hidden = seq_len(size))
+      labels <- paste0("i", inds$input, "->h", inds$hidden)
+      i2h <- matrix(beta[match(labels, names(beta))], ninputs, size)
+      rownames(i2h) <- object$coefnames
 
-      idx <- expand.grid(hidden = seq_len(size),
-                         output = if (nresp == 1) "" else seq_len(nresp))
-      labels <- paste0("h", idx$hidden, "->o", idx$output)
-      h2o <- matrix(beta[match(labels, nms)], size, nresp)
+      inds <- expand.grid(hidden = seq_len(size),
+                          output = if (noutputs == 1) "" else seq_len(noutputs))
+      labels <- paste0("h", inds$hidden, "->o", inds$output)
+      h2o <- matrix(beta[match(labels, names(beta))], size, noutputs)
+      colnames(h2o) <- colnames(object$residuals)
 
-      vi <- map("num", function(output) {
-        100 * ((i2h * h2o[, output]) %>%
-          prop.table(margin = 1) %>%
-          colSums %>%
-          prop.table)
-      }, seq_len(nresp))
-      dimnames(vi) <- list(object$coefnames, colnames(object$residuals))
-      drop(vi)
+      drop(i2h %*% h2o)
     }
 
   )
