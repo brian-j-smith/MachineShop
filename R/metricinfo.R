@@ -98,8 +98,7 @@ metricinfo <- function(...) {
     is_defined <- map("logi", function(method) {
       body(method) != .(numeric())
     }, methods)
-    types <- as.data.frame(do.call(rbind, methods@signatures[is_defined]),
-                           stringsAsFactors = FALSE)
+    types <- as.data.frame(do.call(rbind, methods@signatures[is_defined]))
     names(types) <- methods@arguments
   } else {
     types <- NULL

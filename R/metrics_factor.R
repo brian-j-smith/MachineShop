@@ -128,7 +128,7 @@ setMetricMethod("brier", c("Surv", "SurvProbs"),
       stop_after <- time(observed) > time
       known_status <- start_by & (observed[, "status"] == 0 | stop_after)
       cens <- predict(cens_fit, pmin(time, time(observed)))
-      cens_weights <- prop.table(ifelse(known_status, weights / cens, 0))
+      cens_weights <- proportions(ifelse(known_status, weights / cens, 0))
       sum(cens_weights * (stop_after - predicted[, i, drop = TRUE])^2)
     }, seq_along(times))
 
@@ -279,7 +279,7 @@ MLMetric(kappa2) <- list("kappa2", "Cohen's Kappa", TRUE)
 
 setMetric_ConfusionMatrix("kappa2",
   function(observed, predicted, ...) {
-    p <- prop.table(observed)
+    p <- proportions(observed)
     1 - (1 - sum(diag(p))) / (1 - sum(rowSums(p) * colSums(p)))
   }
 )

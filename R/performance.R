@@ -206,7 +206,7 @@ performance.CVOptimismControl <- function(x, resamples, ...) {
     f <- function(prop, pred) {
       prop * performance(resample$Observed, pred, resample$Weight, ...)
     }
-    props <- prop.table(table(resample$Iteration))
+    props <- proportions(table(resample$Iteration))
     preds <- resample[pred_names]
     Reduce("+", map(f, props, preds))
   }, resamples_split)

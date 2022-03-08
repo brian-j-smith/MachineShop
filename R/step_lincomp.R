@@ -194,7 +194,7 @@ tidy.step_lincomp <- function(x, ...) {
   if (is_trained(x)) {
     res_attrs <- res[names(res) != "weights"]
     res <- res$weights %>% as.matrix %>% as.table %>%
-      as.data.frame(responseName = "weight", stringsAsFactors = FALSE)
+      as.data.frame(responseName = "weight")
     res <- tibble(res[c("terms", "weight")], name = res$names)
     attributes(res) <- c(attributes(res), res_attrs)
   }

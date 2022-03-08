@@ -128,11 +128,6 @@ complete_subset <- function(...) {
 }
 
 
-deparse1 <- function(expr, collapse = " ", width.cutoff = 500L, ...) {
-  paste(deparse(expr, width.cutoff, ...), collapse = collapse)
-}
-
-
 fget <- function(x, package = character()) {
   throw(check_packages(package))
   if (is.character(x)) {

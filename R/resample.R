@@ -412,8 +412,7 @@ subsample <- function(train, test, control, iter = 1) {
                         types = c("names", weights), response = TRUE)
     df <- data.frame(Model = factor(as.MLModel(train)@name),
                      Iteration = as.integer(iter),
-                     Case = comps$names,
-                     stringsAsFactors = FALSE)
+                     Case = comps$names)
     df$Observed <- comps$response
     predict_args <- list(model_fit, as.data.frame(test), type = "default")
     df$Predicted <- do.call(predict, c(predict_args, control@predict))
