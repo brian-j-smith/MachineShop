@@ -47,7 +47,6 @@ export(expand_model,
        expand_modelgrid,
        expand_params,
        expand_steps,
-       Grid,
        ParameterGrid,
        TuningGrid)
 

@@ -2,13 +2,10 @@
 % Please edit documentation in R/conditions.R
 \name{deprecated}
 \alias{deprecated}
-\alias{Grid}
 \alias{ModeledInput}
 \alias{rpp}
 \title{Deprecated Functions}
 \usage{
-Grid(...)
-
 ModeledInput(...)
 
 rpp(...)
@@ -21,8 +18,6 @@ Functions that have been deprecated and will be removed in a future version
 of the package.
 }
 \details{
-Use \code{\link[=TuningGrid]{TuningGrid()}} instead of \code{Grid()}.
-
 Use \code{\link[=ModelSpecification]{ModelSpecification()}} instead of
 \code{ModeledInput()}.
 

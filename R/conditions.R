@@ -407,19 +407,6 @@ NULL
 #' @rdname deprecated
 #'
 #' @details
-#' Use \code{\link[=TuningGrid]{TuningGrid()}} instead of \code{Grid()}.
-#'
-Grid <- function(...) {
-  throw(DeprecatedCondition(
-    "Grid()", "TuningGrid()", expired = Sys.Date() >= "2022-02-01"
-  ))
-  TuningGrid(...)
-}
-
-
-#' @rdname deprecated
-#'
-#' @details
 #' Use \code{\link[=ModelSpecification]{ModelSpecification()}} instead of
 #' \code{ModeledInput()}.
 #'
@@ -442,17 +429,6 @@ rpp <- function(...) {
     "rpp()", "ppr()", expired = Sys.Date() >= "2022-06-01"
   ))
   ppr(...)
-}
-
-
-dep_fixedarg <- function(x) {
-  if (length(x)) {
-    throw(DeprecatedCondition(
-      "Argument 'fixed' to TunedModel()", "the model 'object'",
-      expired = Sys.Date() >= "2022-06-01"
-    ), call = FALSE)
-  }
-  x
 }
 
 
