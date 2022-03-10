@@ -1066,7 +1066,7 @@ modelinfo(SVMModel)[[1]]$varimp
 
 Variable importance can be computed with model-agnostic permutation methods [@fisher:2019:AMW] as an alternative to model-specific methods.  The following algorithm for permutation-based variable importance is implemented and the default method in **MachineShop**.
 
-* Fit a model to a training dataset
+* Fit a model to a training dataset.
 
 * Compute training performance.
 
@@ -1644,16 +1644,16 @@ Ensemble learning models combine $m = 1, \ldots, M$ base models as a strategy to
 $$
 \hat{f}(x) = \sum_{m=1}^M \hat{w}_m \hat{f}_m(x).
 $$
-Stacking weights $w$ are estimated by (constrained) least squares regression of case responses $y_i$ on predictions $\hat{f}^{-\kappa(i)}(x_i)$ from learners fit to data subsamples $-\kappa(i)$ not containing the corresponding cases. In particular, they are obtained as the solution
+Stacking weights $w$ are estimated by (constrained) least squares regression of case responses $y_i$ on predictions $\hat{f}_m^{-\kappa(i)}(x_i)$ from learners fit to data subsamples $-\kappa(i)$ not containing the corresponding cases. In particular, they are obtained as the solution
 $$
-\hat{w} = \underset{w}{\operatorname{argmin}} \sum_{i=1}^{N}\left(y_i - \sum_{m=1}^{M} w_m \hat{f}^{-\kappa(i)}(x_i) \right)^2
+\hat{w} = \underset{w}{\operatorname{argmin}} \sum_{i=1}^{N}\left(y_i - \sum_{m=1}^{M} w_m \hat{f}_m^{-\kappa(i)}(x_i) \right)^2
 $$
 subject to the constraints that all $w_m \ge 0$ and $\sum_m w_m = 1$.  K-fold cross-validation is the default subsampling method employed in the estimation, with the other resampling methods provided by the package available as options.  Survival outcomes are handled with a modified version of the stacked regression algorithm in which
 
 * minimization of least squares is replaced by maximization of Harrell's concordance index [-@harrell:1982:EYM] to accommodate censoring, and
 * prediction can only be performed on the same response type used for the model fit; i.e., either survival means or survival probabilities at given follow-up times.
 
-Super learners are a generalization of stacked regression that fit a specified model, such as `r rdoc_url("GBMModel")`, to case responses $y_i$, base learner predictions $\hat{f}^{-\kappa(i)}(x_i)$, and optionally also to the original predictor variables $x_i$.  Given below are examples of a stacked regression and super learner each fit with gradient boosted, random forest, and Cox regression base learners.  A separate gradient boosted model is used as the super learner in the latter.
+Super learners are a generalization of stacked regression that fit a specified model, such as `r rdoc_url("GBMModel")`, to case responses $y_i$, base learner predictions $\hat{f}_m^{-\kappa(i)}(x_i)$, and optionally also to the original predictor variables $x_i$.  Given below are examples of a stacked regression and super learner each fit with gradient boosted, random forest, and Cox regression base learners.  A separate gradient boosted model is used as the super learner in the latter.
 
 ```{r using_strategies_ensembles, eval=FALSE}
 ## Stacked regression

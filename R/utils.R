@@ -11,13 +11,20 @@ utils::globalVariables(c("x", "y"))
 #'
 #' Shorthand notation for the \code{\link[base:substitute]{quote}} function.
 #' The quote operator simply returns its argument unevaluated and can be applied
-#' to any \R expression.  Useful for calling model constructors with quoted
-#' parameter values that are defined in terms of \code{nobs}, \code{nvars}, or
-#' \code{y}.
+#' to any \R expression.
 #'
 #' @name quote
 #'
 #' @param expr any syntactically valid \R expression.
+#'
+#' @details
+#' Useful for calling \link[=models]{model functions} with quoted parameter
+#' values defined in terms of one or more of the following variables.
+#' \describe{
+#'   \item{\code{nobs}}{number of observations in data to be \link{fit}.}
+#'   \item{\code{nvars}}{number of predictor variables.}
+#'   \item{\code{y}}{the response variable.}
+#' }
 #'
 #' @return
 #' The quoted (unevaluated) expression.
