@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -67,6 +67,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -87,6 +88,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -312,7 +316,7 @@ div.tocify {
 <div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -331,7 +335,7 @@ div.tocify {
   <a href="reference.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Examples
      
     <span class="caret"></span>
@@ -382,7 +386,8 @@ div.tocify {
 
 <div id="diabetes-in-pima-indian-women" class="section level1">
 <h1>Diabetes in Pima Indian Women</h1>
-<p>Characteristics of Pima Indian women tested for diabetes are used in this example to predict their disease statuses.</p>
+<p>Characteristics of Pima Indian women tested for diabetes are used in
+this example to predict their disease statuses.</p>
 <table class="table table-striped table-condensed" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -569,23 +574,23 @@ res &lt;- resample(fo, data = Pima, model = selected_model, control = CVControl)
 summary(performance(res))
 #&gt;              Statistic
 #&gt; Metric             Mean    Median         SD       Min       Max NA
-#&gt;   Brier       0.1471519 0.1481201 0.03709852 0.0922017 0.1999718  0
-#&gt;   Accuracy    0.7777564 0.7846154 0.08855545 0.6153846 0.8750000  0
-#&gt;   Kappa       0.4883276 0.4863833 0.18684680 0.1509434 0.7206704  0
-#&gt;   ROC AUC     0.8488111 0.8646450 0.08424181 0.7204142 0.9415954  0
-#&gt;   Sensitivity 0.6153846 0.5769231 0.14044168 0.4615385 0.8461538  0
-#&gt;   Specificity 0.8582621 0.8846154 0.10293768 0.6923077 1.0000000  0
+#&gt;   Brier       0.1484646 0.1482060 0.02664981 0.1084166 0.1945760  0
+#&gt;   Accuracy    0.7783974 0.7564103 0.07401313 0.6923077 0.8974359  0
+#&gt;   Kappa       0.4811549 0.4675052 0.18616456 0.1864407 0.7600000  0
+#&gt;   ROC AUC     0.8457758 0.8517971 0.04841684 0.7378917 0.8964497  0
+#&gt;   Sensitivity 0.6076923 0.6538462 0.17181401 0.2307692 0.7692308  0
+#&gt;   Specificity 0.8622507 0.8675214 0.08187559 0.7307692 0.9615385  0
 
 ## Variable probability cutoff
 summary(performance(res, cutoff = 0.25))
 #&gt;              Statistic
 #&gt; Metric             Mean    Median         SD       Min       Max NA
-#&gt;   Brier       0.1471519 0.1481201 0.03709852 0.0922017 0.1999718  0
-#&gt;   Accuracy    0.7391667 0.7179487 0.07833139 0.6410256 0.9000000  0
-#&gt;   Kappa       0.4887158 0.4590164 0.13573391 0.3437500 0.7808219  0
-#&gt;   ROC AUC     0.8488111 0.8646450 0.08424181 0.7204142 0.9415954  0
-#&gt;   Sensitivity 0.8846154 0.9230769 0.09065472 0.6923077 1.0000000  0
-#&gt;   Specificity 0.6666667 0.6538462 0.12204245 0.5000000 0.8888889  0</code></pre>
+#&gt;   Brier       0.1484646 0.1482060 0.02664981 0.1084166 0.1945760  0
+#&gt;   Accuracy    0.7321795 0.6923077 0.08652807 0.6250000 0.8461538  0
+#&gt;   Kappa       0.4729018 0.4096774 0.15125935 0.2990654 0.6785714  0
+#&gt;   ROC AUC     0.8457758 0.8517971 0.04841684 0.7378917 0.8964497  0
+#&gt;   Sensitivity 0.8615385 0.8461538 0.07944581 0.7692308 1.0000000  0
+#&gt;   Specificity 0.6680912 0.6346154 0.12121383 0.5185185 0.8846154  0</code></pre>
 </div>
 <div id="roc-curve" class="section level2">
 <h2>ROC Curve</h2>
@@ -598,7 +603,7 @@ plot(roc, diagonal = TRUE) + coord_fixed()</code></pre>
 <pre class="r"><code>## Area under the curve
 auc(roc)
 #&gt; Model: SelectedModel
-#&gt; [1] 0.8459344</code></pre>
+#&gt; [1] 0.8417675</code></pre>
 </div>
 <div id="confusion-matrices" class="section level2">
 <h2>Confusion Matrices</h2>
@@ -609,24 +614,24 @@ auc(roc)
 #&gt; === BinaryConfusionMatrix object ===
 #&gt;          Observed
 #&gt; Predicted neg pos
-#&gt;       neg 225  50
-#&gt;       pos  37  80
+#&gt;       neg 226  51
+#&gt;       pos  36  79
 
 summary(conf)
 #&gt; --- $SelectedModel -------------------------------------------------------------
 #&gt; Number of responses: 392
 #&gt; Accuracy (SE): 0.7780612 (0.02098845)
 #&gt; Majority class: 0.6683673
-#&gt; Kappa: 0.4864165
+#&gt; Kappa: 0.4843665
 #&gt; 
 #&gt;                   neg       pos
 #&gt; Observed    0.6683673 0.3316327
-#&gt; Predicted   0.7015306 0.2984694
-#&gt; Agreement   0.5739796 0.2040816
-#&gt; Sensitivity 0.8587786 0.6153846
-#&gt; Specificity 0.6153846 0.8587786
-#&gt; PPV         0.8181818 0.6837607
-#&gt; NPV         0.6837607 0.8181818
+#&gt; Predicted   0.7066327 0.2933673
+#&gt; Agreement   0.5765306 0.2015306
+#&gt; Sensitivity 0.8625954 0.6076923
+#&gt; Specificity 0.6076923 0.8625954
+#&gt; PPV         0.8158845 0.6869565
+#&gt; NPV         0.6869565 0.8158845
 
 plot(conf)
 #&gt; $SelectedModel</code></pre>
@@ -635,18 +640,18 @@ plot(conf)
 summary(confusion(res, cutoff = 0.25))
 #&gt; --- $SelectedModel -------------------------------------------------------------
 #&gt; Number of responses: 392
-#&gt; Accuracy (SE): 0.7397959 (0.02216001)
+#&gt; Accuracy (SE): 0.7321429 (0.02236694)
 #&gt; Majority class: 0.6683673
-#&gt; Kappa: 0.4849016
+#&gt; Kappa: 0.4670327
 #&gt; 
 #&gt;                   neg       pos
 #&gt; Observed    0.6683673 0.3316327
-#&gt; Predicted   0.4846939 0.5153061
-#&gt; Agreement   0.4464286 0.2933673
-#&gt; Sensitivity 0.6679389 0.8846154
-#&gt; Specificity 0.8846154 0.6679389
-#&gt; PPV         0.9210526 0.5693069
-#&gt; NPV         0.5693069 0.9210526</code></pre>
+#&gt; Predicted   0.4923469 0.5076531
+#&gt; Agreement   0.4464286 0.2857143
+#&gt; Sensitivity 0.6679389 0.8615385
+#&gt; Specificity 0.8615385 0.6679389
+#&gt; PPV         0.9067358 0.5628141
+#&gt; NPV         0.5628141 0.9067358</code></pre>
 </div>
 <div id="calibration-curve" class="section level2">
 <h2>Calibration Curve</h2>

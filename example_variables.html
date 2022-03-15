@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -65,6 +65,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -85,6 +86,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -310,7 +314,7 @@ div.tocify {
 <div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -329,7 +333,7 @@ div.tocify {
   <a href="reference.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Examples
      
     <span class="caret"></span>
@@ -378,12 +382,23 @@ div.tocify {
 </div>
 
 
-<div id="variable-specifications-and-preprocessing" class="section level1">
+<div id="variable-specifications-and-preprocessing"
+class="section level1">
 <h1>Variable Specifications and Preprocessing</h1>
-<p>Variable specification defines the relationship between response and predictor variables as well as the data used to estimate the relationship. Four main types of specifications are supported by the <code>fit</code> and <code>resample</code> functions: traditional formula, design matrix, model frame, and preprocessing recipe.</p>
+<p>Variable specification defines the relationship between response and
+predictor variables as well as the data used to estimate the
+relationship. Four main types of specifications are supported by the
+<code>fit</code> and <code>resample</code> functions: traditional
+formula, design matrix, model frame, and preprocessing recipe.</p>
 <div id="analysis-dataset" class="section level2">
 <h2>Analysis Dataset</h2>
-<p>Different variable specifications will be illustrated with the Iowa City home prices dataset from the package. To start, a formula is defined relating sale amount to home characteristics. Two equivalent definitions are given. One in which predictors on the right hand side of the equation are explicitly included, and another in which <code>.</code> notation is used to indicate that all remaining variable not already in the model be included on the right hand side.</p>
+<p>Different variable specifications will be illustrated with the Iowa
+City home prices dataset from the package. To start, a formula is
+defined relating sale amount to home characteristics. Two equivalent
+definitions are given. One in which predictors on the right hand side of
+the equation are explicitly included, and another in which
+<code>.</code> notation is used to indicate that all remaining variable
+not already in the model be included on the right hand side.</p>
 <pre class="r"><code>## Analysis library
 library(MachineShop)
 
@@ -418,20 +433,27 @@ fo &lt;- sale_amount ~ .</code></pre>
 </div>
 <div id="traditional-formula" class="section level2">
 <h2>Traditional Formula</h2>
-<p>Traditional formula calls to the fitting functions consist of a formula and dataset pair. This specification additionally allows for crossing (<code>*</code>), interaction (<code>:</code>), and removal (<code>-</code>) of predictors in the formula; in-line functions of response variables; and some in-line functions of predictors.</p>
+<p>Traditional formula calls to the fitting functions consist of a
+formula and dataset pair. This specification additionally allows for
+crossing (<code>*</code>), interaction (<code>:</code>), and removal
+(<code>-</code>) of predictors in the formula; in-line functions of
+response variables; and some in-line functions of predictors.</p>
 <pre class="r"><code>model_fit &lt;- fit(fo, ICHomes, model = TunedModel(SVMRadialModel))
 tuned_model &lt;- as.MLModel(model_fit)
 model_res &lt;- resample(fo, ICHomes, model = tuned_model)
 summary(model_res)
 #&gt;       Statistic
 #&gt; Metric         Mean       Median           SD          Min          Max NA
-#&gt;   RMSE 5.311173e+04 5.388998e+04 1.537111e+04 35607.253426 8.369980e+04  0
-#&gt;   R2   6.431987e-01 6.343933e-01 1.041281e-01     0.493719 8.029052e-01  0
-#&gt;   MAE  2.888039e+04 2.861874e+04 4.952121e+03 22588.534427 3.969073e+04  0</code></pre>
+#&gt;   RMSE 5.209460e+04 4.388427e+04 2.121144e+04 3.083842e+04 1.039096e+05  0
+#&gt;   R2   6.583082e-01 6.542991e-01 9.039748e-02 5.081207e-01 8.134106e-01  0
+#&gt;   MAE  2.936429e+04 2.829013e+04 6.431558e+03 2.350976e+04 4.613631e+04  0</code></pre>
 </div>
 <div id="design-matrix" class="section level2">
 <h2>Design Matrix</h2>
-<p>Support is provided for calls with a numeric design matrix and response object pair. The design matrix approach has lower computational overhead than the others and can thus enable a larger number of predictors to be included in an analysis.</p>
+<p>Support is provided for calls with a numeric design matrix and
+response object pair. The design matrix approach has lower computational
+overhead than the others and can thus enable a larger number of
+predictors to be included in an analysis.</p>
 <pre class="r"><code>x &lt;- as.matrix(ICHomes[c(&quot;built&quot;, &quot;base_size&quot;, &quot;lot_size&quot;, &quot;bedrooms&quot;)])
 y &lt;- ICHomes$sale_amount
 
@@ -441,13 +463,16 @@ model_res &lt;- resample(x, y, model = tuned_model)
 summary(model_res)
 #&gt;       Statistic
 #&gt; Metric         Mean       Median           SD          Min          Max NA
-#&gt;   RMSE 6.076529e+04 62263.827988 1.524319e+04 3.588547e+04 9.153886e+04  0
-#&gt;   R2   5.473301e-01     0.535751 7.580735e-02 4.469699e-01 6.803313e-01  0
-#&gt;   MAE  3.408773e+04 33883.329923 4.278540e+03 2.570987e+04 4.144143e+04  0</code></pre>
+#&gt;   RMSE 6.027012e+04 5.474061e+04 20632.532920 3.947773e+04 1.051337e+05  0
+#&gt;   R2   5.519761e-01 5.370201e-01     0.122648 3.673874e-01 7.014934e-01  0
+#&gt;   MAE  3.442765e+04 3.154204e+04  7346.602749 2.718137e+04 5.003549e+04  0</code></pre>
 </div>
 <div id="model-frame" class="section level2">
 <h2>Model Frame</h2>
-<p>Model frames are created with the traditional formula or design matrix syntax described above and then passed to the fitting functions. They allow for the specification of variables for stratified resampling or for weighting of cases in model fitting.</p>
+<p>Model frames are created with the traditional formula or design
+matrix syntax described above and then passed to the fitting functions.
+They allow for the specification of variables for stratified resampling
+or for weighting of cases in model fitting.</p>
 <pre class="r"><code>mf &lt;- ModelFrame(fo, data = ICHomes, strata = ICHomes$sale_amount)
 
 model_fit &lt;- fit(mf, model = TunedModel(SVMRadialModel))
@@ -456,13 +481,19 @@ model_res &lt;- resample(mf, model = tuned_model)
 summary(model_res)
 #&gt;       Statistic
 #&gt; Metric         Mean       Median           SD          Min          Max NA
-#&gt;   RMSE 5.292007e+04 4.952808e+04 1.642139e+04 2.846781e+04 8.236506e+04  0
-#&gt;   R2   6.541373e-01 6.558611e-01 9.442428e-02 5.214806e-01 7.738409e-01  0
-#&gt;   MAE  2.890611e+04 2.767744e+04 5.676921e+03 2.058179e+04 4.082943e+04  0</code></pre>
+#&gt;   RMSE 5.236377e+04 4.508169e+04 1.722568e+04 36427.337133 8.808441e+04  0
+#&gt;   R2   6.673974e-01 7.021562e-01 8.656907e-02     0.486485 7.540877e-01  0
+#&gt;   MAE  2.886799e+04 2.860284e+04 5.571840e+03 22294.005540 4.189052e+04  0</code></pre>
 </div>
 <div id="preprocessing-recipe" class="section level2">
 <h2>Preprocessing Recipe</h2>
-<p>Preprocessing <a href="https://cran.r-project.org/package=recipes">recipes</a> provide a flexible framework for defining predictor and response variables as well as preprocessing steps to be applied to them prior to model fitting. Using recipes helps ensure that estimation of predictive performance accounts for all modeling step. As with model frames, the recipes approach allows for specification of case strata and weights.</p>
+<p>Preprocessing <a
+href="https://cran.r-project.org/package=recipes">recipes</a> provide a
+flexible framework for defining predictor and response variables as well
+as preprocessing steps to be applied to them prior to model fitting.
+Using recipes helps ensure that estimation of predictive performance
+accounts for all modeling step. As with model frames, the recipes
+approach allows for specification of case strata and weights.</p>
 <pre class="r"><code>library(recipes)
 
 rec &lt;- recipe(fo, data = ICHomes) %&gt;%
@@ -477,9 +508,9 @@ model_res &lt;- resample(rec, model = tuned_model)
 summary(model_res)
 #&gt;       Statistic
 #&gt; Metric         Mean       Median           SD          Min          Max NA
-#&gt;   RMSE 5.432317e+04 5.332432e+04 2.022002e+04 2.915695e+04 8.759184e+04  0
-#&gt;   R2   6.338244e-01 6.278184e-01 1.018627e-01 4.848108e-01 7.961886e-01  0
-#&gt;   MAE  3.058831e+04 3.136449e+04 6.868592e+03 2.116943e+04 4.031540e+04  0</code></pre>
+#&gt;   RMSE 5.554855e+04 6.069755e+04 1.229333e+04 3.641475e+04 7.125504e+04  0
+#&gt;   R2   6.216654e-01 6.228197e-01 7.540610e-02 5.009674e-01 7.348858e-01  0
+#&gt;   MAE  3.047418e+04 3.055201e+04 3.832277e+03 2.421069e+04 3.678451e+04  0</code></pre>
 </div>
 </div>
 

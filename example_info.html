@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -65,6 +65,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -85,6 +86,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -310,7 +314,7 @@ div.tocify {
 <div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -329,7 +333,7 @@ div.tocify {
   <a href="reference.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Examples
      
     <span class="caret"></span>
@@ -380,7 +384,16 @@ div.tocify {
 
 <div id="model-information" class="section level1">
 <h1>Model Information</h1>
-<p>A named list of package-supplied models can be obtained interactively with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.3.0/topics/modelinfo"><code>modelinfo()</code></a> function, and includes a descriptive <code>"label"</code> for each, source <code>"packages"</code> on which the models depend, supported response variable <code>"types"</code>, and <code>"arguments"</code> that can be specified in calls to the model functions. Function <code>modelinfo</code> can be called without arguments, with one or more model functions, variable types, or response variables; and will return information on all models matching the calling arguments.</p>
+<p>A named list of package-supplied models can be obtained interactively
+with the <a
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.4.0/topics/modelinfo"><code>modelinfo()</code></a>
+function, and includes a descriptive <code>"label"</code> for each,
+source <code>"packages"</code> on which the models depend, supported
+response variable <code>"types"</code>, and <code>"arguments"</code>
+that can be specified in calls to the model functions. Function
+<code>modelinfo</code> can be called without arguments, with one or more
+model functions, variable types, or response variables; and will return
+information on all models matching the calling arguments.</p>
 <pre class="r"><code>## Analysis libraries
 library(MachineShop)
 library(magrittr)
@@ -501,7 +514,17 @@ modelinfo(iris$Species) %&gt;% names
 </div>
 <div id="metric-information" class="section level1">
 <h1>Metric Information</h1>
-<p>A named list of supplied metrics can be obtained with the <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.3.0/topics/metricinfo"><code>metricinfo()</code></a> function, and includes a descriptive <code>"label"</code> for each, whether to <code>"maximize"</code> the metrics for better performance, their function <code>"arguments"</code>, and supported observed and predicted response variable <code>"types"</code>. Function <a href="https://www.rdocumentation.org/packages/MachineShop/versions/3.3.0/topics/metricinfo"><code>metricinfo()</code></a> may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.</p>
+<p>A named list of supplied metrics can be obtained with the <a
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.4.0/topics/metricinfo"><code>metricinfo()</code></a>
+function, and includes a descriptive <code>"label"</code> for each,
+whether to <code>"maximize"</code> the metrics for better performance,
+their function <code>"arguments"</code>, and supported observed and
+predicted response variable <code>"types"</code>. Function <a
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.4.0/topics/metricinfo"><code>metricinfo()</code></a>
+may be called without arguments, with one or more metric functions, an
+observed response variable, an observed and predicted response variable
+pair, response variable types, or resampled output; and will return
+information on all matching metrics.</p>
 <pre class="r"><code>## Analysis libraries
 library(MachineShop)
 library(magrittr)
@@ -511,9 +534,9 @@ metricinfo() %&gt;% names
 #&gt;  [1] &quot;accuracy&quot;        &quot;auc&quot;             &quot;brier&quot;           &quot;cindex&quot;         
 #&gt;  [5] &quot;cross_entropy&quot;   &quot;f_score&quot;         &quot;fnr&quot;             &quot;fpr&quot;            
 #&gt;  [9] &quot;gini&quot;            &quot;kappa2&quot;          &quot;mae&quot;             &quot;mse&quot;            
-#&gt; [13] &quot;msle&quot;            &quot;npv&quot;             &quot;ppv&quot;             &quot;pr_auc&quot;         
-#&gt; [17] &quot;precision&quot;       &quot;r2&quot;              &quot;recall&quot;          &quot;rmse&quot;           
-#&gt; [21] &quot;rmsle&quot;           &quot;roc_auc&quot;         &quot;roc_index&quot;       &quot;rpp&quot;            
+#&gt; [13] &quot;msle&quot;            &quot;npv&quot;             &quot;ppr&quot;             &quot;ppv&quot;            
+#&gt; [17] &quot;pr_auc&quot;          &quot;precision&quot;       &quot;r2&quot;              &quot;recall&quot;         
+#&gt; [21] &quot;rmse&quot;            &quot;rmsle&quot;           &quot;roc_auc&quot;         &quot;roc_index&quot;      
 #&gt; [25] &quot;sensitivity&quot;     &quot;specificity&quot;     &quot;tnr&quot;             &quot;tpr&quot;            
 #&gt; [29] &quot;weighted_kappa2&quot;
 
@@ -565,9 +588,9 @@ metricinfo(auc, r2)
 metricinfo(factor(0)) %&gt;% names
 #&gt;  [1] &quot;accuracy&quot;      &quot;auc&quot;           &quot;brier&quot;         &quot;cindex&quot;       
 #&gt;  [5] &quot;cross_entropy&quot; &quot;f_score&quot;       &quot;fnr&quot;           &quot;fpr&quot;          
-#&gt;  [9] &quot;kappa2&quot;        &quot;npv&quot;           &quot;ppv&quot;           &quot;pr_auc&quot;       
-#&gt; [13] &quot;precision&quot;     &quot;recall&quot;        &quot;roc_auc&quot;       &quot;roc_index&quot;    
-#&gt; [17] &quot;rpp&quot;           &quot;sensitivity&quot;   &quot;specificity&quot;   &quot;tnr&quot;          
+#&gt;  [9] &quot;kappa2&quot;        &quot;npv&quot;           &quot;ppr&quot;           &quot;ppv&quot;          
+#&gt; [13] &quot;pr_auc&quot;        &quot;precision&quot;     &quot;recall&quot;        &quot;roc_auc&quot;      
+#&gt; [17] &quot;roc_index&quot;     &quot;sensitivity&quot;   &quot;specificity&quot;   &quot;tnr&quot;          
 #&gt; [21] &quot;tpr&quot;
 
 metricinfo(factor(0), factor(0)) %&gt;% names
