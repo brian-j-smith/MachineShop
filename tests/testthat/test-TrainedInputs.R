@@ -27,13 +27,13 @@ test_that("testing of trained inputs", {
       ModelFrame(fo2, data = df)
     )
     sel_mo_mf <- SelectedInput(
-      ModeledInput(fo1, data = df, model = GLMModel),
-      ModeledInput(fo2, data = df, model = GBMModel)
+      ModelSpecification(fo1, data = df, model = GLMModel),
+      ModelSpecification(fo2, data = df, model = GBMModel)
     )
     sel_rec <- SelectedInput(rec1, rec2)
     sel_mo_rec <- SelectedInput(
-      ModeledInput(rec1, model = GLMModel),
-      ModeledInput(rec2, model = GBMModel)
+      ModelSpecification(rec1, model = GLMModel),
+      ModelSpecification(rec2, model = GBMModel)
     )
     tun_rec <- TunedInput(rec2, grid = expand_steps(pca = list(num_comp = 1:3)))
 

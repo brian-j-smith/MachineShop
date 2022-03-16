@@ -112,11 +112,6 @@ setMethod(".confusion", c("factor", "matrix"),
       dimnames(conf) <- df[c(1, 1)]
       ConfusionMatrix(conf, ordered = is.ordered(observed))
     } else {
-      throw(Warning(
-        "Construction of confusion matrices has changed to automatically ",
-        "convert factor probabilities to levels; set 'cutoff = NULL' to ",
-        "revert to the previous behavior."
-      ), call = call("confusion"), times = 3)
       predicted <- convert_response(observed, predicted)
       .confusion(observed, predicted, weights = weights, ...)
     }

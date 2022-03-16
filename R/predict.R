@@ -62,10 +62,7 @@ predict.MLModelFit <- function(
   pred <- switch(match.arg(type),
     "default" = pred,
     "numeric" = convert_numeric(pred),
-    "prob" = {
-      cond <- convert_numeric(pred, bounds = c(0, 1))
-      if (is(cond, "error")) Warning(cond$message, value = pred) else pred
-    },
+    "prob" = convert_numeric(pred, bounds = c(0, 1)),
     "response" = convert_response(obs, pred, cutoff = cutoff)
   )
   throw(check_assignment(pred))
