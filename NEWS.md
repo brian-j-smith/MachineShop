@@ -2,9 +2,25 @@
 
 ## Version Updates
 
+## 3.4.0
+* Fixes
+  * Enable prediction with survival times of 0.
+* Implement class `SelectedModelSpecification`.
+* Internal changes
+  * Deprecate classes `ModeledInput`, `ModeledFrame`, and `ModeledRecipe`.
+  * Remove unused class `TunedModeledRecipe`.
+* Expire deprecations
+  * Remove argument `fixed` from `TunedModel()`.
+  * Remove `Grid()`.
+* Rename `rpp()` to `ppr()`.
+* Replace `ModeledInput()` with `ModelSpecification()`.
+* Require R >= 4.0.0.
+* Use Olden algorithm for `NNetModel` model-specific variable importance.
+
 ## 3.3.1
-* Fix: `SurvRegModelFit` `summary()` error.
-* Fix: incorrect number of folds recorded in `CVControl` when stratification or grouping size leads to construction of fewer than requested folds for cross-validation resampling. 
+* Fixes
+  * `SurvRegModelFit` `summary()` error
+  * update number of folds recorded in `CVControl` when stratification or grouping size leads to construction of fewer than requested folds for cross-validation resampling
 
 ## 3.3.0
 * Add argument `.type` with options `"glance"` and `"tidy"` to `summary.MLModelFit()`.
@@ -125,7 +141,7 @@
 * Add permutation-based variable importance to `varimp()`.
 * Sort variable importance by first column only if not scaled.
 * Correct the estimated variances for cross-validation estimators of mean performance difference in `t.test.PerformanceDiff()`.
-* Rename argument `metric` to `type` in `varimp()` functions for `BartMachineModel`, `C50Model`,  `EarthModel`,  `RFSRCModel`, and `XGBModel`.  
+* Rename argument `metric` to `type` in `varimp()` functions for `BartMachineModel`, `C50Model`,  `EarthModel`,  `RFSRCModel`, and `XGBModel`.
 * Set argument `type` default to `"nsubsets"` in `EarthModel` `varimp()`.
 * Expand case weighted metrics support.
   * Fix weights used in survival event-specific metrics.
@@ -544,7 +560,7 @@
 * Implement linear models (``LMModel``), linear discriminant analysis (``LDAModel``), and quadratic discriminant analysis (``QDAModel``).
 * Implement confusion matrices.
 * Support matrix response variables.
-* Support user-specified stratification variables for resampling via the ``strata`` argument of ``ModelFrame`` or the role of ``"case_strata"`` for recipe variables. 
+* Support user-specified stratification variables for resampling via the ``strata`` argument of ``ModelFrame`` or the role of ``"case_strata"`` for recipe variables.
 * Support user-specified case weights for model fitting via the role of ``"case_weight"`` for recipe variables.
 * Provide fallback for models with undefined variable importance.
 * Update the importing of ``prepper`` due to its relocation from ``rsample`` to ``recipes``.
