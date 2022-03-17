@@ -130,17 +130,22 @@ get_grid.default <- function(object, ...) {
 }
 
 
-get_grid.ModelSpecification <- function(object, ...) {
-  make_grid(object, "ModelSpec", object@grid)
-}
-
-
-get_grid.SelectedInputOrModel <- function(object, ...) {
+get_grid.EnsembleInputOrModel <- function(object, ...) {
   make_grid(
     object,
     names(object@candidates),
     tibble(id = map("char", slot, object@candidates, "id"))
   )
+}
+
+
+get_grid.ModelSpecification <- function(object, ...) {
+  make_grid(object, "ModelSpec", object@grid)
+}
+
+
+get_grid.StackedModel <- function(object, ...) {
+  get_grid.default(object, ...)
 }
 
 

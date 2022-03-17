@@ -43,22 +43,18 @@ argument can be omitted altogether in the case of
 \link[=ModeledInput]{modeled inputs}.}
 
 \item{control}{\link[=controls]{control} function, function name, or object
-defining the resampling method to be employed.  Specification of a
-resampling method results in the following characteristics.
-\enumerate{
-  \item Tuning of input and model objects is performed simultaneously over
-    a global grid of their parameter values.
-  \item The specification's \code{control} method and training parameters
-    below override those of any included \code{TunedInput} or
-    \code{TunedModel}.
-  \item \code{ModeledInput}, \code{SelectedInput}, and \code{SelectedModel}
-    objects are not allowed in the \code{input} or \code{model} arguments.
-}
-Alternatively, a value of \code{NULL} may be specified so that any package
-input or model object is allowed, object-specific control structures and
-training parameters are used for selection and tuning, and objects are
-trained sequentially with nested resampling rather than simultaneously with
-a global grid.}
+defining the resampling method to be employed.  If \code{NULL} or if
+the model specification contains any \code{ModeledInput},
+\code{SelectedInput}, or \code{SelectedModel} objects, then object-specific
+control structures and training parameters are used for selection and
+tuning, as usual, and objects are trained sequentially with nested
+resampling.  Otherwise,
+\itemize{
+  \item tuning of input and model objects is performed simultaneously over
+    a global grid of their parameter values, and
+  \item the specified \code{control} method and training parameters below
+    override those of any included \code{TunedInput} or \code{TunedModel}.
+}}
 
 \item{metrics}{\link[=metrics]{metric} function, function name, or vector of
 these with which to calculate performance.  If not specified, default

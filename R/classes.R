@@ -209,6 +209,15 @@ setClassUnion("Grid",
 #################### Model Components ####################
 
 
+setClass("EnsembleInputOrModel",
+  contains = "VIRTUAL",
+  slots = c(
+    candidates = "ListOf",
+    params = "TrainingParams"
+  )
+)
+
+
 setClass("MLInput",
   slots = c(
     id = "character",
@@ -233,15 +242,6 @@ setClass("MLModel",
     varimp = "function",
     input = "MLInput",
     steps = "ListOf"
-  )
-)
-
-
-setClass("SelectedInputOrModel",
-  contains = "VIRTUAL",
-  slots = c(
-    candidates = "ListOf",
-    params = "TrainingParams"
   )
 )
 
@@ -313,22 +313,22 @@ setClass("NullInput",
 
 
 setClass("SelectedInput",
-  contains = c("SelectedInputOrModel", "MLInput")
+  contains = c("EnsembleInputOrModel", "MLInput")
 )
 
 
 setClass("SelectedModelFrame",
-  contains = c("SelectedInput", "SelectedInputOrModel", "ModelFrame")
+  contains = c("SelectedInput", "EnsembleInputOrModel", "ModelFrame")
 )
 
 
 setClass("SelectedModelRecipe",
-  contains = c("SelectedInput", "SelectedInputOrModel", "ModelRecipe")
+  contains = c("SelectedInput", "EnsembleInputOrModel", "ModelRecipe")
 )
 
 
 setClass("SelectedModelSpecification",
-  contains = c("SelectedInput", "SelectedInputOrModel", "ModelSpecification")
+  contains = c("SelectedInput", "EnsembleInputOrModel", "ModelSpecification")
 )
 
 
@@ -350,7 +350,7 @@ setClass("TunedModelRecipe",
 #################### Models ####################
 
 
-setClass("EnsembleModel", contains = c("SelectedInputOrModel", "MLModel"))
+setClass("EnsembleModel", contains = c("EnsembleInputOrModel", "MLModel"))
 setClass("NullModel", contains = "MLModel")
 setClass("ParsnipModel", contains = "MLModel")
 setClass("SelectedModel", contains = "EnsembleModel")

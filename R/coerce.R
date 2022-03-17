@@ -86,13 +86,13 @@ as.double.BinomialVariate <- function(x, ...) {
 }
 
 
-setAs("MLModel", "list",
-  function(from) as(from@params, "list")
+setAs("EnsembleInputOrModel", "list",
+  function(from) c(list(from@candidates), as(from@params, "list"))
 )
 
 
-setAs("SelectedInputOrModel", "list",
-  function(from) c(list(from@candidates), as(from@params, "list"))
+setAs("MLModel", "list",
+  function(from) as(from@params, "list")
 )
 
 
