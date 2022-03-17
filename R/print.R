@@ -1004,8 +1004,9 @@ print_progress <- function(
   print_fields(items, add_size = TRUE, add_names = TRUE, n = n)
   print_fields(list(
     "Metric: " = metric,
-    "Current maximum score (iteration): " =
-      as_string(list(max(scores), " (", selected, ")"), sep = ""),
+    "Current maximum score (iteration): " = as_string(list(
+      max(scores), paste0("(", selected, ")")
+    ), sep = " "),
     "Elapsed time: " = round(difftime(Sys.time(), start_time), 1)
   ), add_names = TRUE)
   if (pad && iter < max_iter) newline()
