@@ -165,12 +165,12 @@ set_monitor.ModelSpecification <- function(
 #'   \code{"ucb"} (upper confidence bound), \code{"ei"} (expected improvement),
 #'   \code{"eips"} (expected improvement per second), or \code{"poi"}
 #'   (probability of improvement).
-#' @param kappa upper confidence bound parameter (\code{"ucb"}) to balance
-#'   exploitation against exploration.  It multiplies the predictive standard
-#'   deviation added to the predictive mean in the acquisition function.  The
-#'   default value of 2.576 corresponds to the 99th percentile of a normal
-#'   distribution.  Larger values encourage exploration of the model parameter
-#'   space.
+#' @param kappa,conf upper confidence bound (\code{"ucb"}) quantile or its
+#'   probability to balance exploitation against exploration.  Argument
+#'   \code{kappa} takes precedence if both are given and multiplies the
+#'   predictive standard deviation added to the predictive mean in the
+#'   acquisition function.  Larger values encourage exploration of the model
+#'   parameter space.
 #' @param epsilon improvement methods (\code{"ei"}, \code{"eips"}, and
 #'   \code{"poi"}) parameter to balance exploitation against exploration.
 #'   Values should be between -0.1 and 0.1 with larger ones encouraging
@@ -293,8 +293,8 @@ set_optim_bayes <- function(object, ...) {
 #'
 set_optim_bayes.ModelSpecification <- function(
   object, num_init = 5, times = 10, each = 1,
-  acquisition = c("ucb", "ei", "eips", "poi"), kappa = 2.576, epsilon = 0,
-  control = list(),
+  acquisition = c("ucb", "ei", "eips", "poi"), kappa = stats::qnorm(conf),
+  conf = 0.995, epsilon = 0, control = list(),
   packages = c("ParBayesianOptimization", "rBayesianOptimization"),
   random = FALSE, progress = verbose, verbose = 0, ...
 ) {
@@ -372,10 +372,10 @@ set_optim_bayes.ModelSpecification <- function(
   params$acquisition <- match.arg(acquisition)
 
   if (params$acquisition == "ucb") {
-    kappa <- check_numeric(kappa, bounds = c(0, Inf), size = 1)
+    kappa <- check_numeric(kappa, bounds = c(0, Inf), include = 1:0, size = 1)
     params$kappa <- throw(check_assignment(kappa))
   } else {
-    epsilon <- check_numeric(epsilon, size = 1)
+    epsilon <- check_numeric(epsilon, include = FALSE, size = 1)
     params$epsilon <- throw(check_assignment(epsilon))
   }
 

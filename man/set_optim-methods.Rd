@@ -27,7 +27,8 @@ set_optim_bayes(object, ...)
   times = 10,
   each = 1,
   acquisition = c("ucb", "ei", "eips", "poi"),
-  kappa = 2.576,
+  kappa = stats::qnorm(conf),
+  conf = 0.995,
   epsilon = 0,
   control = list(),
   packages = c("ParBayesianOptimization", "rBayesianOptimization"),
@@ -121,12 +122,12 @@ which defaults to \code{floor(10 + 2 * sqrt(length(bounds)))}.}
 \code{"eips"} (expected improvement per second), or \code{"poi"}
 (probability of improvement).}
 
-\item{kappa}{upper confidence bound parameter (\code{"ucb"}) to balance
-exploitation against exploration.  It multiplies the predictive standard
-deviation added to the predictive mean in the acquisition function.  The
-default value of 2.576 corresponds to the 99th percentile of a normal
-distribution.  Larger values encourage exploration of the model parameter
-space.}
+\item{kappa, conf}{upper confidence bound (\code{"ucb"}) quantile or its
+probability to balance exploitation against exploration.  Argument
+\code{kappa} takes precedence if both are given and multiplies the
+predictive standard deviation added to the predictive mean in the
+acquisition function.  Larger values encourage exploration of the model
+parameter space.}
 
 \item{epsilon}{improvement methods (\code{"ei"}, \code{"eips"}, and
 \code{"poi"}) parameter to balance exploitation against exploration.
