@@ -2,6 +2,10 @@
 
 ## Version Updates
 
+## 3.4.1
+* Add argument `conf` to `set_optim_bayes()`.
+* Enable global grid expansion and tuning of `StackedModel` and `SuperModel` in `ModelSpecification()`.
+
 ## 3.4.0
 * Fixes
   * Enable prediction with survival times of 0.
