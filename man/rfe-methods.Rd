@@ -23,6 +23,7 @@ rfe(...)
 
 \method{rfe}{ModelSpecification}(
   object,
+  select = NULL,
   control = MachineShop::settings("control"),
   props = 4,
   sizes = integer(),
@@ -64,6 +65,9 @@ predictor and response variables.}
 
 \item{object}{model \link[=inputs]{input} or
 \link[=ModelSpecification]{specification}.}
+
+\item{select}{expression indicating predictor variables that can be
+eliminated (see \code{\link[base]{subset}} for syntax) [default: all].}
 
 \item{control}{\link[=controls]{control} function, function name, or object
 defining the resampling method to be employed.}

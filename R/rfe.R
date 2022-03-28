@@ -24,6 +24,8 @@
 #'   can be given first followed by any of the variable specifications, and the
 #'   argument can be omitted altogether in the case of
 #'   \link[=ModeledInput]{modeled inputs}.
+#' @param select expression indicating predictor variables that can be
+#'   eliminated (see \code{\link[base]{subset}} for syntax) [default: all].
 #' @param control \link[=controls]{control} function, function name, or object
 #'   defining the resampling method to be employed.
 #' @param props numeric vector of the proportions of most important predictor
@@ -81,21 +83,24 @@ rfe <- function(...) {
 #' @rdname rfe-methods
 #'
 rfe.formula <- function(formula, data, model, ...) {
-  rfe(ModelSpecification(formula, data, model = model, control = NULL), ...)
+  modelspec <- ModelSpecification(formula, data, model = model, control = NULL)
+  rfe(modelspec, ..., .envir = parent.frame())
 }
 
 
 #' @rdname rfe-methods
 #'
 rfe.matrix <- function(x, y, model, ...) {
-  rfe(ModelSpecification(x, y, model = model, control = NULL), ...)
+  modelspec <- ModelSpecification(x, y, model = model, control = NULL)
+  rfe(modelspec, ..., .envir = parent.frame())
 }
 
 
 #' @rdname rfe-methods
 #'
 rfe.ModelFrame <- function(input, model = NULL, ...) {
-  rfe(ModelSpecification(input, model = model, control = NULL), ...)
+  modelspec <- ModelSpecification(input, model = model, control = NULL)
+  rfe(modelspec, ..., .envir = parent.frame())
 }
 
 
@@ -103,14 +108,15 @@ rfe.ModelFrame <- function(input, model = NULL, ...) {
 #'
 rfe.recipe <- function(input, model = NULL, ...
 ) {
-  rfe(ModelSpecification(input, model = model, control = NULL), ...)
+  modelspec <- ModelSpecification(input, model = model, control = NULL)
+  rfe(modelspec, ..., .envir = parent.frame())
 }
 
 
 #' @rdname rfe-methods
 #'
 rfe.ModelSpecification <- function(
-  object, control = MachineShop::settings("control"), props = 4,
+  object, select = NULL, control = MachineShop::settings("control"), props = 4,
   sizes = integer(), random = FALSE, recompute = TRUE,
   optimize = c("global", "local"), samples = c(rfe = 1, varimp = 1),
   metrics = NULL,
@@ -164,12 +170,12 @@ rfe.ModelSpecification <- function(
     apply(x, margins, function(x) stat$permute(na.omit(x)))
   }
 
-  varimp <- function(object, ...) {
-    res <- MachineShop::varimp(
-      object, scale = FALSE, method = "permute", samples = samples$varimp,
-      times = times, metric = metric, stats = stat,
-      progress = !is.null(body(progress)), ...
-    )
+  varimp <- function(object, select = NULL) {
+    res <- do.call(MachineShop::varimp, list(
+      object, scale = FALSE, method = "permute", select = select,
+      samples = samples$varimp, times = times, metric = metric, stats = stat,
+      progress = !is.null(body(progress))
+    ))
     structure(res[[1]], names = rownames(res))
   }
   scale <- function(x) {
@@ -178,8 +184,17 @@ rfe.ModelSpecification <- function(
     pmin(pmax(sort(x, decreasing = TRUE), 0.01), 0.99)
   }
 
-  vi <- scale(varimp(model_fit))
-  superset <- names(vi)
+  keep <- character()
+  superset <- all.vars(predictors(terms(as.MLInput(object), original = TRUE)))
+  if (!missing(select)) {
+    .envir <- list(...)$.envir
+    if (is.null(.envir)) .envir <- parent.frame()
+    select <- do.call(subset_names, list(superset, substitute(select)),
+                      envir = .envir)
+    keep <- setdiff(superset, select)
+    superset <- select
+  }
+  vi <- scale(varimp(model_fit, select = superset))
 
   if (length(sizes)) {
     sizes <- check_integer(sizes, bounds = c(1, Inf), size = NA)
@@ -222,7 +237,7 @@ rfe.ModelSpecification <- function(
       perf_samples[[s]] <- performance(res, metrics = metrics)
 
       if (recompute && size > tail(sizes, 1)) {
-        vi <- do.call(varimp, list(fit(object), select = subset))
+        vi <- varimp(fit(object), select = subset)
         vi_samples[[s]] <- vi[subset]
       }
     }
@@ -233,7 +248,7 @@ rfe.ModelSpecification <- function(
       vi[subset]
     }
 
-    subsets[[i]] <- subset
+    subsets[[i]] <- c(keep, subset)
     perf <- perf_samples[[1]]
     if (s > 1) S3Part(perf) <- apply_stat_permute(perf_samples, 3)
     perf_list[[i]] <- perf
