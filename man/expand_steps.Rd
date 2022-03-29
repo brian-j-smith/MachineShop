@@ -26,8 +26,8 @@ library(recipes)
 data(Boston, package = "MASS")
 
 rec <- recipe(medv ~ ., data = Boston) \%>\%
-  step_corr(all_numeric(), -all_outcomes(), id = "corr") \%>\%
-  step_pca(all_numeric(), -all_outcomes(), id = "pca")
+  step_corr(all_numeric_predictors(), id = "corr") \%>\%
+  step_pca(all_numeric_predictors(), id = "pca")
 
 expand_steps(
   corr = list(threshold = c(0.8, 0.9),

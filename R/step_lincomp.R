@@ -55,7 +55,7 @@
 #'
 #' rec <- recipe(rating ~ ., data = attitude)
 #' lincomp_rec <- rec %>%
-#'   step_lincomp(all_numeric(), -all_outcomes(),
+#'   step_lincomp(all_numeric_predictors(),
 #'                transform = pca_mat, num_comp = 3, prefix = "PCA")
 #'
 #' lincomp_prep <- prep(lincomp_rec, training = attitude)

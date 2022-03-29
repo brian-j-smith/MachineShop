@@ -27,7 +27,7 @@ test_that("test ModelSpecification", {
     modelspec <- ModelSpecification(
       input = TunedInput(
         recipe(fo, data = df) %>%
-          step_pca(all_numeric(), -all_outcomes(), id = "pca"),
+          step_pca(all_numeric_predictors(), id = "pca"),
         grid = expand_steps(pca = list(num_comp = 6:7))
       ),
       model = TunedModel(

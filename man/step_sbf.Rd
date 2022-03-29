@@ -87,7 +87,7 @@ glm_filter <- function(x, y, step) {
 
 rec <- recipe(rating ~ ., data = attitude)
 sbf_rec <- rec \%>\%
-  step_sbf(all_numeric(), -all_outcomes(),
+  step_sbf(all_numeric_predictors(),
            filter = glm_filter, options = list(threshold = 0.05))
 
 sbf_prep <- prep(sbf_rec, training = attitude)

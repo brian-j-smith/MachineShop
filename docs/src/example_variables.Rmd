@@ -76,7 +76,7 @@ rec <- recipe(fo, data = ICHomes) %>%
   role_case(stratum = sale_amount) %>%
   step_center(base_size, add_size, garage1_size, garage2_size, lot_size) %>%
   step_pca(base_size, add_size, garage1_size, garage2_size, lot_size, num_comp = 2) %>%
-  step_dummy(all_nominal(), -all_outcomes())
+  step_dummy(all_nominal_predictors())
 
 model_Fit <- fit(rec, model = TunedModel(SVMRadialModel))
 tuned_model <- as.MLModel(model_fit)

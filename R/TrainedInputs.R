@@ -267,7 +267,7 @@ update.SelectedInput <- function(object, params = NULL, ...) {
 #' data(Boston, package = "MASS")
 #'
 #' rec <- recipe(medv ~ ., data = Boston) %>%
-#'   step_pca(all_numeric(), -all_outcomes(), id = "pca")
+#'   step_pca(all_numeric_predictors(), id = "pca")
 #'
 #' grid <- expand_steps(
 #'   pca = list(num_comp = 1:2)

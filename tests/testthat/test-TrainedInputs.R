@@ -12,9 +12,9 @@ test_that("testing of trained inputs", {
 
     rec1 <- recipe(sale_amount ~ ., data = ICHomes)
     rec2 <- rec1 %>%
-      step_center(all_numeric(), -all_outcomes()) %>%
-      step_scale(all_numeric(), -all_outcomes()) %>%
-      step_pca(all_numeric(), -all_outcomes(), id = "pca")
+      step_center(all_numeric_predictors()) %>%
+      step_scale(all_numeric_predictors()) %>%
+      step_pca(all_numeric_predictors(), id = "pca")
 
     sel_fo <- SelectedInput(fo1, fo2, data = df)
     sel_mat <- SelectedInput(
