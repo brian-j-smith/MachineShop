@@ -1,9 +1,12 @@
 #################### Constructors ####################
 
 
-DeprecatedCondition <- function(old, new, expired = FALSE, call = FALSE) {
+DeprecatedCondition <- function(
+  old, new, value = NULL, expired = FALSE, call = FALSE
+) {
   make_cond <- function(f, class) {
     f(message = paste0(old, " is deprecated; use ", new, " instead."),
+      value = value,
       call = select_call(call, sys.call(-2)),
       class = class)
   }
