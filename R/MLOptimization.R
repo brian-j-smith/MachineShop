@@ -76,6 +76,8 @@ optim <- function(.fun, object, ...) {
     model_params <- renest_params(optim_params, grid$params[1, ])
     model_params_list <<- c(model_params_list, list(model_params))
 
+    perf_stats <- NA
+    metric <- list(label = NA)
     score <- tryCatch(
       {
         res <- resample(
@@ -98,7 +100,6 @@ optim <- function(.fun, object, ...) {
       error = function(cond) {
         err_msgs <<- c(err_msgs, conditionMessage(cond))
         perf_list <<- c(perf_list, list(NA))
-        perf_stats <- NA
         perf_stats_list <<- c(perf_stats_list, list(perf_stats))
         -Inf
       }
@@ -111,7 +112,7 @@ optim <- function(.fun, object, ...) {
         "Parameter{?s}: " =
           unlist(unnest_params(model_params, compact_names = TRUE))
       ),
-      metric = structure(perf_stats[1], names = metric@label)
+      metric = structure(perf_stats[1], names = getElement(metric, "label"))
     )
 
     score
