@@ -2,6 +2,10 @@
 
 ## Version Updates
 
+## 3.4.2
+* Add argument `select` to `rfe()`.
+* Fix object `perf_stats` not found in `optim()`.
+
 ## 3.4.1
 * Add argument `conf` to `set_optim_bayes()`.
 * Enable global grid expansion and tuning of `StackedModel` and `SuperModel` in `ModelSpecification()`.
