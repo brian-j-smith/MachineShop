@@ -77,7 +77,7 @@ optim <- function(.fun, object, ...) {
     model_params_list <<- c(model_params_list, list(model_params))
 
     perf_stats <- NA
-    metric <- list(label = NA)
+    metric <- NULL
     score <- tryCatch(
       {
         res <- resample(
