@@ -439,6 +439,6 @@ dep_modeledinput <- function(x, class, dots) {
   throw(DeprecatedCondition(
       class(x), "a ModelSpecification", expired = Sys.Date() >= "2022-07-01"
   ), call = FALSE)
-  dots$model <- as.MLModel(x)
+  dots$model <- x@model
   do.call(ModelSpecification, c(list(as(x, class)), dots))
 }

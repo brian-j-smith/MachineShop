@@ -223,7 +223,7 @@ as.MLMetric.MLMetric <- function(x, ...) {
 #'
 #' Function to coerce an object to \code{MLModel}.
 #'
-#' @param x model \link{fit} result, \link[=ModeledInput]{modeled input}, or
+#' @param x model \link{fit} result or
 #'   \link[parsnip:model_spec]{model specification} from the \pkg{parsnip}
 #'   package.
 #' @param ... arguments passed to other methods.
@@ -265,10 +265,8 @@ as.MLModel.MLModelFunction <- function(x, ...) {
 }
 
 
-#' @rdname as.MLModel
-#'
 as.MLModel.ModeledInput <- function(x, ...) {
-  x@model
+  as.MLModel(ModelSpecification(x))
 }
 
 
