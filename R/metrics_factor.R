@@ -20,10 +20,11 @@ setMetric_ConfusionMatrix("accuracy",
 #' @rdname metrics
 #'
 auc <- function(
-  observed, predicted = NULL, weights = NULL,
+  observed, predicted = NULL, weights = NULL, multiclass = c("pairs", "all"),
   metrics = c(MachineShop::tpr, MachineShop::fpr),
   stat = MachineShop::settings("stat.Curve"), ...
 ) {
+  multiclass <- match.arg(multiclass)
   metrics <- map(as.MLMetric, metrics)
   call_metric_method("auc", environment())
 }
@@ -35,6 +36,40 @@ setMetricGeneric("auc")
 
 
 setMetricMethod("auc", c("factor", "factor"))
+
+
+setMetricMethod("auc", c("factor", "matrix"),
+  function(observed, predicted, weights, multiclass, ...) {
+    nzcounts <- table(observed) > 0
+    auc_all <- function(observed, predicted, weights, select) {
+      labels <- levels(observed)
+      levels(observed) <- list("0" = labels[-select], "1" = labels[select])
+      auc(observed, predicted[, select], weights, ...)
+    }
+    fun <- switch(multiclass,
+      "all" = function(i) if (nzcounts[i]) {
+        auc_all(observed, predicted, weights, i)
+      },
+      "pairs" = function(i) {
+        res <- numeric()
+        for (j in seq_len(i - 1)) {
+          if (nzcounts[i] && nzcounts[j]) {
+            subset <- observed %in% levels(observed)[c(j, i)]
+            obs <- droplevels(observed[subset])
+            pred <- predicted[subset, c(j, i)]
+            wgt <- weights[subset]
+            res <- c(res,
+              auc_all(obs, pred, wgt, 1),
+              auc_all(obs, pred, wgt, 2)
+            )
+          }
+        }
+        res
+      }
+    )
+    mean(unlist(map(fun, seq(nlevels(observed)))))
+  }
+)
 
 
 setMetricMethod("auc", c("factor", "numeric"),
@@ -344,7 +379,10 @@ setMetric_BinaryConfusionMatrix("ppv",
 
 #' @rdname metrics
 #'
-pr_auc <- function(observed, predicted = NULL, weights = NULL, ...) {
+pr_auc <- function(
+  observed, predicted = NULL, weights = NULL, multiclass = c("pairs", "all"),
+  ...
+) {
   call_metric_method("pr_auc", environment())
 }
 
@@ -394,7 +432,10 @@ setMetric_BinaryConfusionMatrix("recall",
 
 #' @rdname metrics
 #'
-roc_auc <- function(observed, predicted = NULL, weights = NULL, ...) {
+roc_auc <- function(
+  observed, predicted = NULL, weights = NULL, multiclass = c("pairs", "all"),
+  ...
+) {
   call_metric_method("roc_auc", environment())
 }
 

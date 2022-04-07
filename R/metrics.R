@@ -29,6 +29,10 @@
 #' @param fun function to calculate a desired sensitivity-specificity tradeoff.
 #' @param metrics vector of two metric functions or function names that define a
 #'   curve under which to calculate area [default: ROC metrics].
+#' @param multiclass character string specifying the method for computing
+#'   generalized area under the performance curve for multiclass factor
+#'   responses.  Options are to average over areas for each pair of classes
+#'   (\code{"pairs"}) or for each class versus all others (\code{"all"}).
 #' @param power power to which positional distances of off-diagonals from the
 #'   main diagonal in confusion matrices are raised to calculate
 #'   \code{weighted_kappa2}.
@@ -36,6 +40,11 @@
 #'   summary statistic at each cutoff value of resampled metrics in performance
 #'   curves, or \code{NULL} for resample-specific metrics.
 #' @param ... arguments passed to or from other methods.
+#'
+#' @references
+#' Hand, D. J., & Till, R. J. (2001). A simple generalisation of the area under
+#' the ROC curve for multiple class classification problems. \emph{Machine
+#' Learning}, \emph{45}, 171-186.
 #'
 #' @seealso \code{\link{metricinfo}}, \code{\link{performance}}
 #'
@@ -51,6 +60,7 @@ setMetric_auc <- function(f, metrics) {
   }
   setMetricGeneric(f)
   setMetricMethod(f, c("factor", "factor"))
+  setMetricMethod(f, c("factor", "matrix"), definition)
   setMetricMethod(f, c("factor", "numeric"), definition)
   setMetricMethod_Resample(f)
   setMetricMethod(f, c("Surv", "SurvProbs"), definition)
