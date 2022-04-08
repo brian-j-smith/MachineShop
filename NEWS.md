@@ -2,6 +2,11 @@
 
 ## Version Updates
 
+## 3.4.3
+* Fix `TypeError` in `dependence()` with numeric dummy variables from recipes.
+* Prep `ModelRecipe` with `retain = TRUE` for recipe steps that are skipped, for example, when test datasets are created.
+* Add generalized area under performance curves to `auc()`, `pr_auc()`, and `roc_auc()` for multiclass factor responses.
+
 ## 3.4.2
 * Add argument `select` to `rfe()`.
 * Fix object `perf_stats` not found in `optim()`.
