@@ -188,6 +188,11 @@ as.MLInput.MLInput <- function(x, ...) {
 }
 
 
+as.MLInput.MLModelFit <- function(x, ...) {
+  attr(update(x), ".MachineShop")$input
+}
+
+
 as.MLInput.ModelSpecification <- function(x, ...) {
   x@input
 }
@@ -256,7 +261,7 @@ as.MLModel.MLModel <- function(x, ...) {
 #' @rdname as.MLModel
 #'
 as.MLModel.MLModelFit <- function(x, ...) {
-  getElement(x, "mlmodel")
+  attr(update(x), ".MachineShop")$model
 }
 
 

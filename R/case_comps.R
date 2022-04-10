@@ -3,13 +3,8 @@ case_comps <- function(object, ...) {
 }
 
 
-case_comps.MLModel <- function(object, ...) {
-  case_comps(object@input, ...)
-}
-
-
 case_comps.MLModelFit <- function(object, ...) {
-  case_comps(as.MLModel(object), ...)
+  case_comps(as.MLInput(object), ...)
 }
 
 

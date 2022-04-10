@@ -105,12 +105,14 @@ VariableImportance.numeric <- function(object, ...) {
 #'
 varimp <- function(object, method = c("permute", "model"), scale = TRUE, ...) {
   stopifnot(is(object, "MLModelFit"))
+  object <- update(object)
   model <- as.MLModel(object)
   throw(check_packages(model@packages))
 
   switch(match.arg(method),
     "model" = {
-      vi <- model@varimp(unMLModelFit(object), ...)
+      .MachineShop <- attr(object, ".MachineShop")
+      vi <- model@varimp(unMLModelFit(object), .MachineShop = .MachineShop, ...)
       if (is.null(vi)) {
         throw(Warning(
           "Model-specific variable importance is not available; ",
@@ -134,7 +136,7 @@ varimp_permute <- function(
   stats = MachineShop::settings("stat.TrainingParams"), na.rm = TRUE,
   progress = TRUE
 ) {
-  input <- as.MLModel(object)@input
+  input <- as.MLInput(object)
   data <- if (is.data.frame(input)) input else as.data.frame(input)
   pred_names <- all.vars(predictors(terms(input, original = TRUE)))
   pred_names <- do.call(subset_names, list(pred_names, substitute(select)),

@@ -43,8 +43,8 @@ test_that("test ModelSpecification", {
 
     test_optim <- function(set, ...) {
       modelspec <- set(modelspec, ...)
-      mlmodel <- as.MLModel(fit(modelspec))
-      step <- mlmodel@steps[[1]]
+      model <- as.MLModel(fit(modelspec))
+      step <- model@steps[[1]]
       expect_true(step@method == modelspec@params@optim@label &&
         is(step@log$params, "tbl_df") &&
         length(step@log$params) &&

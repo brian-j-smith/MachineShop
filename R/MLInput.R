@@ -5,11 +5,6 @@ setMethod("initialize", "MLInput",
 )
 
 
-NullInput <- function() {
-  new("NullInput", id = "null")
-}
-
-
 update.MLInput <- function(object, ...) {
   object
 }

@@ -103,6 +103,12 @@ functions should be formatted according to the response variable types below.
 The \code{varimp} function should return a vector of importance values named
 after the predictor variables or a matrix or data frame whose rows are named
 after the predictors.
+
+The \code{predict} and \code{varimp} functions are additionally passed a list
+named \code{.MachineShop} containing the \code{\link[=inputs]{input}}
+and \code{\link[=models]{model}} from \code{\link{fit}}.  This argument may
+be included in the function definitions as needed for their implementations.
+Otherwise, it will be captured by the ellipsis.
 }
 \examples{
 ## Logistic regression model

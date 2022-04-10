@@ -479,14 +479,9 @@ push <- function(x, object, ...) {
 
 push.TrainingStep <- function(x, object, ...) {
   stopifnot(is(object, "MLModelFit"))
-  mlmodel <- if (isS4(object)) object@mlmodel else object$mlmodel
-  steps <- ListOf(c(x, mlmodel@steps))
+  steps <- ListOf(c(x, attr(object, ".MachineShop")$model@steps))
   names(steps) <- make_names_len(length(steps), class(x))
-  if (isS4(object)) {
-    object@mlmodel@steps <- steps
-  } else {
-    object$mlmodel@steps <- steps
-  }
+  attr(object, ".MachineShop")$model@steps <- steps
   object
 }
 

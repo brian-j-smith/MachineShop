@@ -240,7 +240,6 @@ setClass("MLModel",
     fit = "function",
     predict = "function",
     varimp = "function",
-    input = "MLInput",
     steps = "ListOf"
   )
 )
@@ -304,11 +303,6 @@ setClass("ModeledFrame",
 
 setClass("ModeledRecipe",
   contains = c("ModeledInput", "ModelRecipe")
-)
-
-
-setClass("NullInput",
-  contains = "MLInput"
 )
 
 
@@ -383,7 +377,7 @@ MLModelFunction <- setClass("MLModelFunction",
 
 setClass("MLModelFit",
   contains = "VIRTUAL",
-  slots = c(mlmodel = "MLModel")
+  slots = c(.MachineShop = "list")
 )
 
 

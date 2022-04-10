@@ -75,8 +75,8 @@ RPartModel <- function(
       )
     },
 
-    predict = function(object, newdata, model, ...) {
-      y <- response(model)
+    predict = function(object, newdata, .MachineShop, ...) {
+      y <- response(.MachineShop$input)
       newdata <- as.data.frame(newdata)
       if (is.Surv(y)) {
         object <- partykit::as.party(object)

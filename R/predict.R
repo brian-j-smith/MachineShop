@@ -45,6 +45,7 @@ predict.MLModelFit <- function(
   cutoff = MachineShop::settings("cutoff"), distr = character(),
   method = character(), ...
 ) {
+  object <- update(object)
   model <- as.MLModel(object)
   throw(check_packages(model@packages))
 
@@ -55,8 +56,9 @@ predict.MLModelFit <- function(
 
   obs <- response(object)
   pred <- convert_predicted(obs, .predict(
-    model, model_fit = object, newdata = newdata, times = times, distr = distr,
-    method = method, ...
+    model, model_fit = unMLModelFit(object), newdata = newdata, times = times,
+    distr = distr, method = method, .MachineShop = attr(object, ".MachineShop"),
+    ...
   ))
 
   pred <- switch(match.arg(type),
@@ -74,9 +76,9 @@ predict.MLModelFit <- function(
 }
 
 
-.predict.MLModel <- function(object, model_fit, newdata, ...) {
+.predict.MLModel <- function(object, model_fit, newdata, .MachineShop, ...) {
   object@predict(
-    unMLModelFit(model_fit), newdata = predictor_frame(object, newdata),
-    model = object, ...
+    model_fit, newdata = predictor_frame(.MachineShop$input, newdata),
+    .MachineShop = .MachineShop, ...
   )
 }

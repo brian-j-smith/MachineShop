@@ -111,12 +111,13 @@ GLMNetModel <- function(
                      family = family, nlambda = nlambda, ...)
     },
 
-    predict = function(object, newdata, model, ...) {
+    predict = function(object, newdata, .MachineShop, ...) {
+      input <- .MachineShop$input
+      y <- response(input)
       newx <- model.matrix(newdata, intercept = FALSE)
       newoffset <- model.offset(newdata)
-      y <- response(model)
       if (is.Surv(y)) {
-        data <- predictor_frame(model)
+        data <- predictor_frame(input)
         lp <- predict(
           object, newx = model.matrix(data, intercept = FALSE),
           newoffset = model.offset(data), type = "link"

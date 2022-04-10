@@ -110,12 +110,13 @@ BlackBoostModel <- function(
       )
     },
 
-    predict = function(object, newdata, model, ...) {
+    predict = function(object, newdata, .MachineShop, ...) {
+      weights <- case_weights(.MachineShop$input)
       newdata <- as.data.frame(newdata)
       if (object$family@name == "Cox Partial Likelihood") {
         lp <- drop(predict(object, type = "link"))
         new_lp <- drop(predict(object, newdata = newdata, type = "link"))
-        predict(object$response, lp, new_lp, weights = case_weights(model), ...)
+        predict(object$response, lp, new_lp, weights = weights, ...)
       } else {
         predict(object, newdata = newdata, type = "response")
       }

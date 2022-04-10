@@ -27,9 +27,7 @@ predictors.recipe <- function(object, newdata = NULL, ...) {
 }
 
 
-predictor_frame <- function(model, newdata = NULL) {
-  stopifnot(is(model, "MLModel") && !is(model@input, "NullInput"))
-  input <- model@input
+predictor_frame <- function(input, newdata = NULL) {
   ModelFrame(delete.response(terms(input)), predictors(input, newdata),
              na.rm = FALSE)
 }

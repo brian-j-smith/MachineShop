@@ -137,7 +137,7 @@ RFSRCModel <- function(
                              case.wt = weights, ...)
     },
 
-    predict = function(object, newdata, model, ...) {
+    predict = function(object, newdata, .MachineShop, ...) {
       newdata <- as.data.frame(newdata)
       pred <- randomForestSRC::predict.rfsrc(object, newdata = newdata)
       if (pred$family == "regr+") {

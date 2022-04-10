@@ -67,10 +67,10 @@ CForestModel <- function(
                      weights = weights, controls = party::cforest_control(...))
     },
 
-    predict = function(object, newdata, model, ...) {
+    predict = function(object, newdata, .MachineShop, ...) {
       newdata <- as.data.frame(newdata)
       if (object@responses@is_censored) {
-        y <- response(model)
+        y <- response(.MachineShop$input)
         fits <- predict(object, newdata = newdata, type = "prob")
         predict(y, fits, ...)
       } else {

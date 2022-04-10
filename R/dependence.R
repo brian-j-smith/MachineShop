@@ -49,7 +49,7 @@ dependence <- function(
 
   stopifnot(is(object, "MLModelFit"))
 
-  input <- as.MLModel(object)@input
+  input <- as.MLInput(object)
   if (is.null(data)) data <- input
   data <- as.data.frame(data)
   pred_names <- all.vars(predictors(terms(input, original = TRUE)))

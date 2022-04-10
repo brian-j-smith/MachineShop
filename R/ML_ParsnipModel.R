@@ -57,10 +57,11 @@ ParsnipModel <- function(object, ...) {
       parsnip::fit(object, formula, data = as.data.frame(formula, data))
     },
 
-    predict = function(object, newdata, model, times, ...) {
+    predict = function(object, newdata, times, .MachineShop, ...) {
       prsp_predict <- function(...) {
         predict(object, new_data = as.data.frame(newdata), ...)
       }
+      model <- .MachineShop$model
       mode <- model@params$object$mode
       if (mode == "censored regression") {
         distr <- model@params$dist

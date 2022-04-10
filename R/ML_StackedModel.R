@@ -93,7 +93,7 @@ MLModelFunction(StackedModel) <- NULL
                        base_learners),
        weights = weights,
        times = control@predict$times) %>%
-    MLModelFit("StackedModelFit", model = object, input = input)
+    MLModelFit("StackedModelFit", input = input, model = object)
 }
 
 

@@ -48,15 +48,10 @@ response.formula <- function(object, data = NULL, template = NULL, ...) {
 }
 
 
-response.MLModel <- function(object, newdata = NULL, ...) {
-  response(object@input, newdata)
-}
-
-
 #' @rdname response-methods
 #'
 response.MLModelFit <- function(object, newdata = NULL, ...) {
-  response(as.MLModel(object), newdata)
+  response(as.MLInput(object), newdata)
 }
 
 

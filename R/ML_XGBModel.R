@@ -174,11 +174,12 @@ XGBModel <- function(
           verbose = verbose, print_every_n = print_every_n
         )
       )
-      model_fit$levels <- y_levels
+      attr(model_fit, ".MachineShop") <- list(y_levels = y_levels)
       model_fit
     },
 
-    predict = function(object, newdata, model, times, ...) {
+    predict = function(object, newdata, times, .MachineShop, ...) {
+      input <- .MachineShop$input
       newx <- model.matrix(newdata, intercept = FALSE)
       xgb_predict <- function(newdata = newx, lp = FALSE) {
         predict(object, newdata = newdata, outputmargin = lp)
@@ -208,23 +209,25 @@ XGBModel <- function(
           }
         },
         "survival:cox" = {
-          x <- model.matrix(predictor_frame(model), intercept = FALSE)
+          x <- model.matrix(predictor_frame(input), intercept = FALSE)
           lp <- xgb_predict(x, lp = TRUE)
           new_lp <- xgb_predict(newx, lp = TRUE)
-          predict(response(model), lp, new_lp, times = times,
-                  weights = case_weights(model), ...)
+          predict(response(input), lp, new_lp, times = times,
+                  weights = case_weights(input), ...)
         },
         xgb_predict()
       )
     },
 
-    varimp = function(object, type = c("Gain", "Cover", "Frequency"), ...) {
+    varimp = function(
+      object, type = c("Gain", "Cover", "Frequency"), .MachineShop, ...
+    ) {
       vi <- xgboost::xgb.importance(model = object, ...)
       if (!is.null(vi$Weight)) {
         if (!is.null(vi$Class)) {
           vi <- reshape(
             vi, idvar = "Feature", timevar = "Class", v.names = "Weight",
-            varying = list(object$levels), direction = "wide"
+            varying = list(.MachineShop$y_levels), direction = "wide"
           )
           data.frame(vi[, -1], row.names = vi$Feature)
         } else {
