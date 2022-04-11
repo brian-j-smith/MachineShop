@@ -314,7 +314,7 @@ print.ModelRecipe <- function(
   ), n = n)
   if (level < 2) {
     steps <- map("char", class1, x$steps)
-    step_label <- paste(if (is_trained(x)) "Prepared" else "Unprepared", "step")
+    step_label <- paste(if (is_trained(x)) "Trained" else "Untrained", "step")
     if (id) {
       steps <- structure(map("char", getElement, x$steps, "id"), names = steps)
       step_label <- paste(step_label, "ID")
