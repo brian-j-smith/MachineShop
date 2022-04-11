@@ -164,6 +164,7 @@ export(MLMetric,
 
 export(.,
        "%>%",
+       as.MLInput,
        as.MLModel,
        calibration,
        case_weights,
@@ -204,11 +205,14 @@ S3method(as.MLControl, "function")
 S3method(as.MLControl, MLControl)
 S3method(as.MLMetric, character)
 S3method(as.MLMetric, MLMetric)
+S3method(as.MLInput, MLModelFit)
+S3method(as.MLInput, ModelSpecification)
 S3method(as.MLModel, character)
 S3method(as.MLModel, MLModel)
 S3method(as.MLModel, MLModelFit)
 S3method(as.MLModel, MLModelFunction)
 S3method(as.MLModel, model_spec)
+S3method(as.MLModel, ModelSpecification)
 S3method(as.MLModel, ModeledInput)
 S3method(as_string, default)
 S3method(as_string, character)

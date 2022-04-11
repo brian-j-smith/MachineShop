@@ -162,6 +162,16 @@ as.MLControl.NULL <- function(x, ...) {
 }
 
 
+#' Coerce to an MLInput
+#'
+#' Function to coerce an object to \code{MLInput}.
+#'
+#' @param x model \link{fit} result or \pkg{MachineShop}
+#'   \link[=ModelSpecification]{model specification}.
+#' @param ... arguments passed to other methods.
+#'
+#' @return \code{MLInput} class object.
+#'
 as.MLInput <- function(x, ...) {
   UseMethod("as.MLInput")
 }
@@ -188,11 +198,15 @@ as.MLInput.MLInput <- function(x, ...) {
 }
 
 
+#' @rdname as.MLInput
+#'
 as.MLInput.MLModelFit <- function(x, ...) {
   attr(update(x), ".MachineShop")$input
 }
 
 
+#' @rdname as.MLInput
+#'
 as.MLInput.ModelSpecification <- function(x, ...) {
   x@input
 }
@@ -228,9 +242,9 @@ as.MLMetric.MLMetric <- function(x, ...) {
 #'
 #' Function to coerce an object to \code{MLModel}.
 #'
-#' @param x model \link{fit} result or
-#'   \link[parsnip:model_spec]{model specification} from the \pkg{parsnip}
-#'   package.
+#' @param x model \link{fit} result, \pkg{MachineShop}
+#'   \link[=ModelSpecification]{model specification},  or
+#'   \pkg{parsnip} \link[parsnip:model_spec]{model specification}.
 #' @param ... arguments passed to other methods.
 #'
 #' @return \code{MLModel} class object.
@@ -277,13 +291,15 @@ as.MLModel.ModeledInput <- function(x, ...) {
 
 #' @rdname as.MLModel
 #'
-as.MLModel.model_spec <- function(x, ...) {
-  ParsnipModel(x)
+as.MLModel.ModelSpecification <- function(x, ...) {
+  x@model
 }
 
 
-as.MLModel.ModelSpecification <- function(x, ...) {
-  x@model
+#' @rdname as.MLModel
+#'
+as.MLModel.model_spec <- function(x, ...) {
+  ParsnipModel(x)
 }
 
 
