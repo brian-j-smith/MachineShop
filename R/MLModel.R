@@ -1,6 +1,6 @@
-#' MLModel Class Constructor
+#' MLModel and MLModelFunction Class Constructors
 #'
-#' Create a model for use with the \pkg{MachineShop} package.
+#' Create a model or model function for use with the \pkg{MachineShop} package.
 #'
 #' @param name character name of the object to which the model is assigned.
 #' @param label optional character descriptor for the model.
@@ -42,6 +42,8 @@
 #'   \code{object} returned by \code{fit}, optional arguments passed from calls
 #'   to \code{\link{varimp}}, and an ellipsis.
 #' @param ... arguments passed to other methods.
+#' @param object function that returns an \code{MLModel} object when called
+#'   without any supplied argument values.
 #'
 #' @details
 #' If supplied, the \code{grid} function should return a list whose elements are
@@ -74,7 +76,7 @@
 #' be included in the function definitions as needed for their implementations.
 #' Otherwise, it will be captured by the ellipsis.
 #'
-#' @return \code{MLModel} class object.
+#' @return An \code{MLModel} or \code{MLModelFunction} class object.
 #'
 #' @seealso \code{\link{models}}, \code{\link{fit}}, \code{\link{resample}}
 #'
@@ -175,6 +177,21 @@ update.MLModel <- function(
     object@id <- old_id
   }
   object
+}
+
+
+#' @rdname MLModel
+#'
+MLModelFunction <- function(object, ...) {
+  if (!is(try(object(), silent = TRUE), "MLModel")) {
+    Error("Call to object() does not return an MLModel.")
+  }
+  new("MLModelFunction", object, ...)
+}
+
+
+"MLModelFunction<-" <- function(object, value) {
+  do.call(MLModelFunction, c(object, value))
 }
 
 

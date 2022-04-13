@@ -2,7 +2,8 @@
 % Please edit documentation in R/MLModel.R
 \name{MLModel}
 \alias{MLModel}
-\title{MLModel Class Constructor}
+\alias{MLModelFunction}
+\title{MLModel and MLModelFunction Class Constructors}
 \usage{
 MLModel(
   name = "MLModel",
@@ -19,6 +20,8 @@ MLModel(
   varimp = function(object, ...) NULL,
   ...
 )
+
+MLModelFunction(object, ...)
 }
 \arguments{
 \item{name}{character name of the object to which the model is assigned.}
@@ -72,12 +75,15 @@ which to predict survival, and an ellipsis.}
 to \code{\link{varimp}}, and an ellipsis.}
 
 \item{...}{arguments passed to other methods.}
+
+\item{object}{function that returns an \code{MLModel} object when called
+without any supplied argument values.}
 }
 \value{
-\code{MLModel} class object.
+An \code{MLModel} or \code{MLModelFunction} class object.
 }
 \description{
-Create a model for use with the \pkg{MachineShop} package.
+Create a model or model function for use with the \pkg{MachineShop} package.
 }
 \details{
 If supplied, the \code{grid} function should return a list whose elements are

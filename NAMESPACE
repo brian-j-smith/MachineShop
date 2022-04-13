@@ -51,6 +51,7 @@ export(expand_model,
        TuningGrid)
 
 export(MLModel,
+       MLModelFunction,
        AdaBagModel,
        AdaBoostModel,
        BARTModel,

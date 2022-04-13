@@ -362,14 +362,9 @@ setClass("TunedModel",
 )
 
 
-MLModelFunction <- setClass("MLModelFunction",
+setClass("MLModelFunction",
   contains = "function"
 )
-
-
-"MLModelFunction<-" <- function(object, value) {
-  do.call(MLModelFunction, c(object, value))
-}
 
 
 #################### Model Fits ####################
