@@ -30,13 +30,14 @@ correspond to better predictive performance.}
 Create a performance metric for use with the \pkg{MachineShop} package.
 }
 \examples{
-f2_score <- function(observed, predicted, ...) {
-  f_score(observed, predicted, beta = 2, ...)
-}
-
-MLMetric(f2_score) <- list(name = "f2_score",
-                           label = "F Score (beta = 2)",
-                           maximize = TRUE)
+f2_score <- MLMetric(
+  function(observed, predicted, ...) {
+    f_score(observed, predicted, beta = 2, ...)
+  },
+  name = "f2_score",
+  label = "F Score (beta = 2)",
+  maximize = TRUE
+)
 
 }
 \seealso{
