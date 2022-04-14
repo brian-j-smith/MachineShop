@@ -41,6 +41,8 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 Collate:
     'classes.R'
+    'conditions.R'
+    'MachineShop-package.R'
     'MLControl.R'
     'MLInput.R'
     'MLMetric.R'
@@ -82,7 +84,6 @@ Collate:
     'ML_SurvRegModel.R'
     'ML_TreeModel.R'
     'ML_XGBModel.R'
-    'MachineShop-package.R'
     'ModelFrame.R'
     'ModelRecipe.R'
     'ModelSpecification.R'
@@ -94,7 +95,6 @@ Collate:
     'case_comps.R'
     'coerce.R'
     'combine.R'
-    'conditions.R'
     'confusion.R'
     'convert.R'
     'data.R'
