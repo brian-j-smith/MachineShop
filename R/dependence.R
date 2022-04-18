@@ -64,23 +64,27 @@ dependence <- function(
   throw(check_assignment(stats))
 
   select_values <- function(x) {
-    if (is.factor(x)) {
+    if (is(x, "factor")) {
       unique(x)
-    } else if (is.vector(x)) {
+    } else if (is(x, "logical")) {
+      intersect(c(FALSE, TRUE), x)
+    } else if (is(x, "numeric") || is(x, "Date")) {
       x <- sort(x)
       n <- min(n, length(x))
-      switch(intervals,
+      unique(switch(intervals,
         "quantile" = x[round(seq(1, length(x), length = n))],
         "uniform" = {
           y <- seq(x[1], x[length(x)], length = n)
           indices <- findInterval(y, x, all.inside = TRUE)
           x_lower <- x[indices]
           x_upper <- x[indices + 1]
-          unique(ifelse(y - x_lower < x_upper - y, x_lower, x_upper))
+          ifelse(y - x_lower < x_upper - y, x_lower, x_upper)
         }
-      )
+      ))
     } else {
-      throw(TypeError(x, c("factor", "vector"), "selected variable"))
+      throw(TypeError(
+        x, c("Date", "factor", "logical", "numeric"), "selected variable"
+      ))
     }
   }
 
