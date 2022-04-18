@@ -20,7 +20,7 @@ predictors.ModelFrame <- function(object, newdata = NULL, ...) {
 
 predictors.recipe <- function(object, newdata = NULL, ...) {
   object <- prep(object)
-  data <- bake(object, newdata)
+  data <- bake(object, newdata = newdata)
   info <- summary(object)
   pred_names <- info$variable[info$role %in% c("predictor", "pred_offset")]
   data[, pred_names, drop = FALSE]

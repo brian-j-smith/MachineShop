@@ -45,13 +45,15 @@ ModelRecipe.recipe <- function(object, ...) {
 }
 
 
-bake.ModelRecipe <- function(object, new_data, ...) {
-  new_data <- if (is.null(new_data)) {
-    object$template
-  } else if (is(new_data, "ModelRecipe")) {
-    new_data$template
-  } else {
-    prep_recipe_data(new_data)
+bake.ModelRecipe <- function(object, new_data, newdata = NULL, ...) {
+  if (missing(new_data)) {
+    new_data <- if (is.null(newdata)) {
+      as.data.frame(object)
+    } else if (is(newdata, "ModelRecipe")) {
+      as.data.frame(newdata)
+    } else {
+      prep_recipe_data(newdata)
+    }
   }
   bake(as(object, "recipe"), new_data)
 }
@@ -73,8 +75,8 @@ prep.ModelFrame <- function(x, ...) x
 prep.ModelRecipe <- function(x, ...) {
   if (!is_trained(x)) {
     template <- x$template
-    x <- new(class(x), prep(as(x, "recipe"), retain = FALSE))
-    x$template <- template
+    x <- new(class(x), prep(as(x, "recipe")))
+    x$orig_template <- template
     x$orig_lvls[["(names)"]] <- list(values = NA, ordered = NA)
     x$levels[["(names)"]] <- x$orig_lvls[["(names)"]]
   }
@@ -102,6 +104,7 @@ prep_recipe_data <- function(x) {
 update.ModelRecipe <- function(
   object, params = NULL, data = NULL, new_id = FALSE, ...
 ) {
+  stopifnot(!is_trained(object))
   if (is.list(params)) {
     for (i in seq_along(object$steps)) {
       step <- object$steps[[i]]

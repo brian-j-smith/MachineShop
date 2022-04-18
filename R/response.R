@@ -83,7 +83,7 @@ response.ModelSpecification <- function(object, newdata = NULL, ...) {
 #'
 response.recipe <- function(object, newdata = NULL, ...) {
   object <- prep(object)
-  response(terms(object), bake(object, newdata))
+  response(terms(object), bake(object, newdata = newdata))
 }
 
 

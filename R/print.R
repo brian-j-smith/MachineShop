@@ -325,7 +325,7 @@ print.ModelRecipe <- function(
     )
   }
   if (level < 1) print_fields(list("Tuning grid: " = has_grid(x)))
-  if (data) print_data(x$template, n = n, level = level)
+  if (data) print_data(as_tibble(as.data.frame(x)), n = n, level = level)
   invisible(x)
 }
 

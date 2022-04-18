@@ -38,7 +38,7 @@ setAs("SelectedModelFrame", "data.frame",
 
 
 as.data.frame.ModelRecipe <- function(x, ...) {
-  as.data.frame(x$template)
+  as.data.frame(x[[if (is_trained(x)) "orig_template" else "template"]])
 }
 
 
