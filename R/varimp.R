@@ -157,7 +157,7 @@ varimp_permute <- function(
     throw(check_assignment(size))
     min(size, n)
   } else {
-    throw(Error("Arguments 'prop' and 'size' cannot be specified together."))
+    throw(Error("Arguments `prop` and `size` cannot be specified together."))
   }
 
   if (!is.null(metric)) {

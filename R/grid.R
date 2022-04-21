@@ -56,7 +56,7 @@ ParameterGrid.parameters <- function(object, size = 3, random = FALSE, ...) {
   if (!is.null(names(size))) {
     if (!all(names(size) %in% object$id)) {
       throw(LocalWarning(
-        "Unmatched parameter names in ParameterGrid() argument 'size'.\n",
+        "Unmatched parameter names in ParameterGrid() argument `size`.\n",
         "x Existing data has ", note_items("parameter{?s}: ", object$id), ".\n",
         "x Assigned data has ", note_items("name{?s}: ", names(size)), "."
       ))
@@ -65,7 +65,7 @@ ParameterGrid.parameters <- function(object, size = 3, random = FALSE, ...) {
     size[is.na(size)] <- 0L
   } else if (length(size) > 1 && length(size) != nrow(object)) {
     throw(LocalError(
-      "Length of ParameterGrid() argument 'size' must equal 1 ",
+      "Length of ParameterGrid() argument `size` must equal 1 ",
       "or the number of parameters.\n",
       "x Existing data has ", nrow(object), " ",
       note_items("parameter{?s}: ", object$id), ".\n",

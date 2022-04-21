@@ -132,7 +132,7 @@ settings <- function(...) {
   settings_pmatch <- pmatch(arg_names, names(global_settings))
   valid_settings <- !is.na(settings_pmatch)
   for (name in arg_names[!valid_settings]) {
-    throw(Warning("Value '", name, "' is not a MachineShop setting."))
+    throw(Warning("Argument `", name, "` is not a MachineShop setting."))
   }
 
   presets <- global_values[settings_pmatch[valid_settings]]

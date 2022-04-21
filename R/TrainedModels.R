@@ -239,7 +239,7 @@ TunedModel <- function(
     throw(Error(
       "Unmatched tuning parameters.\n",
       note_items(begin(paste(object@name, params_type)), params, ".\n"),
-      note_items(begin("Argument 'grid'"), grid_params, ".")
+      note_items(begin("Argument `grid`"), grid_params, ".")
     ))
   }
 

@@ -3,7 +3,7 @@ convert_numeric <- function(x, ...) {
   if (is(result, "error")) {
     result$message <- paste0(
       result$message, "\n",
-      "Call 'predict()' with 'type = \"default\"'",
+      "Call `predict()` with `type = \"default\"`",
       if (is(result, "DomainError")) ", \"numeric\",",
       " or \"response\" instead."
     )

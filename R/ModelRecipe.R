@@ -84,7 +84,7 @@ prep.ModelRecipe <- function(x, retain = TRUE, ...) {
     x$retained <- FALSE
   } else if (!x$retained) {
     throw(Error(
-      "ModelRecipe prep cannot be updated from 'retain = FALSE' to 'TRUE'."
+      "ModelRecipe prep cannot be updated from `retain = FALSE` to `TRUE`."
     ))
   }
   x

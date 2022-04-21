@@ -139,7 +139,7 @@ fget <- function(x, package = character()) {
   throw(check_packages(package))
   if (is.character(x)) {
     x <- paste(c(package, x), collapse = "::")
-    err_msg <- paste0("Function '", x, "' not found.")
+    err_msg <- paste0("Function `", x, "` not found.")
   } else {
     err_msg <- "Invalid function."
   }
@@ -626,7 +626,7 @@ subset_names <- function(x, select = NULL) {
   } else if (is.numeric(select)) {
     x <- x[select]
   } else if (!is.null(select)) {
-    throw(Warning("Invalid 'select' value of class ", class1(select), "."))
+    throw(Warning("Invalid `select` value of class ", class1(select), "."))
   }
   x
 }

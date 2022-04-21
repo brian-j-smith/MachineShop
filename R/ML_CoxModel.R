@@ -24,7 +24,7 @@
 #' importance to range from 0 to 100.  To obtain unscaled importance values, set
 #' \code{scale = FALSE}.
 #'
-#' #' @return \code{MLModel} class object.
+#' @return \code{MLModel} class object.
 #'
 #' @seealso \code{\link[survival]{coxph}},
 #' \code{\link[survival]{coxph.control}}, \code{\link[MASS]{stepAIC}},

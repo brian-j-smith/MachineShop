@@ -85,7 +85,7 @@ case_strata <- function(object, ...) {
 case_strata.default <- function(object, ...) {
   types <- c("BinomialVariate", "character", "factor", "logical", "matrix",
              "numeric", "Surv")
-  throw(TypeError(object, types, "'object'"))
+  throw(TypeError(object, types, "`object`"))
 }
 
 

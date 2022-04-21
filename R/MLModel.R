@@ -200,7 +200,7 @@ MLModelFit <- function(object, class, input, model) {
     throw(Error("Cannot change MLModelFit class."))
   }
 
-  if (!is(model, "MLModel")) throw(TypeError(model, "MLModel", "'model'"))
+  if (!is(model, "MLModel")) throw(TypeError(model, "MLModel", "`model`"))
 
   if (isS4(object)) {
     object <- new(class, object)

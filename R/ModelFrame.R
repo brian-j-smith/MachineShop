@@ -121,7 +121,7 @@ ModelFrame.matrix <- function(
       data.frame(offsets)
     } else if (!is.data.frame(offsets)) {
       throw(Error(
-        "Value of 'offsets' must be a numeric vector, matrix, or data frame."
+        "Value of `offsets` must be a numeric vector, matrix, or data frame."
       ))
     }
     data <- data.frame(data, offsets)
@@ -347,8 +347,8 @@ terms.recipe_info <- function(x, ...) {
   num_roles <- sum(lengths(list(binom, surv, matrix, other)) > 0)
   if (num_roles > 1 || length(other) > 1) {
     throw(Error("Specified outcome is not a single variable, binomial ",
-                "variable with roles 'binom_x' and 'binom_size', survival ",
-                "variables with roles 'surv_time' and 'surv_event', or ",
+                "variable with roles \"binom_x\" and \"binom_size\", survival ",
+                "variables with roles \"surv_time\" and \"surv_event\", or ",
                 "multiple numeric variables."))
   }
 
@@ -360,12 +360,12 @@ terms.recipe_info <- function(x, ...) {
     as.call(c(.(Surv), args))
   } else if (length(surv)) {
     throw(Error(
-      "Survival outcome role 'surv_event' specified without 'surv_time'."
+      "Survival outcome role \"surv_event\" specified without \"surv_time\"."
     ))
   } else if (all(!is.na(binom[c("count", "size")]))) {
     call("BinomialVariate", as.name(binom["count"]), as.name(binom["size"]))
   } else if (length(binom)) {
-    throw(Error("Binomial outcome must have 'binom_x' and 'binom_size' roles."))
+    throw(Error("Binomial outcome must have \"binom_x\" and \"binom_size\" roles."))
   } else if (length(matrix)) {
     as.call(c(.(cbind), map(as.name, matrix)))
   }

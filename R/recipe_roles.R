@@ -53,7 +53,7 @@ role_binom <- function(recipe, x, size) {
     recipes::add_role(recipe, x, new_role = "binom_x") %>%
       recipes::add_role(size, new_role = "binom_size")
   } else {
-    throw(Error("Binomial 'x' and 'size' variables must be specified."))
+    throw(Error("Binomial `x` and `size` variables must be specified."))
   }
 }
 
@@ -101,6 +101,6 @@ role_surv <- function(recipe, time, event) {
     }
     recipe
   } else {
-    throw(Error("A survival 'time' variable must be specified."))
+    throw(Error("A survival `time` variable must be specified."))
   }
 }

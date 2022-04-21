@@ -39,6 +39,9 @@ process.}
 
 \item{steps}{maximum number of steps to be considered.}
 }
+\value{
+\code{MLModel} class object.
+}
 \description{
 Fits a Cox proportional hazards regression model. Time dependent variables,
 time dependent strata, multiple events per subject, and other extensions are
@@ -58,8 +61,6 @@ In calls to \code{\link{varimp}} for \code{CoxModel} and
 Transformed p-values are automatically scaled in the calculation of variable
 importance to range from 0 to 100.  To obtain unscaled importance values, set
 \code{scale = FALSE}.
-
-#' @return \code{MLModel} class object.
 }
 \examples{
 library(survival)
