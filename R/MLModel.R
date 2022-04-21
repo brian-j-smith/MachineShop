@@ -210,7 +210,7 @@ MLModelFit <- function(object, class, input, model) {
   }
 
   .MachineShop <- list(
-    input = prep(input),
+    input = prep(input, retain = FALSE),
     model = model,
     version = packageVersion("MachineShop")
   )

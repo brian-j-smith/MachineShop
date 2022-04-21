@@ -77,7 +77,7 @@ response.ModelSpecification <- function(object, newdata = NULL, ...) {
 #' @rdname response-methods
 #'
 response.recipe <- function(object, newdata = NULL, ...) {
-  object <- prep(object)
+  object <- prep(object, retain = FALSE)
   response(terms(object), bake(object, newdata = newdata))
 }
 

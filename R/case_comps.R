@@ -30,7 +30,7 @@ case_comps.recipe <- function(
   stopifnot(!original)
   names <- map(function(type) case_comp_name(object, type), types)
   data <- if (any(lengths(names)) || response) {
-    bake(prep(object), newdata = newdata)
+    bake(prep(object, retain = FALSE), newdata = newdata)
   }
   res <- map(function(type) {
     name <- names[[type]]

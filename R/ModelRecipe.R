@@ -72,13 +72,20 @@ bake.TunedInput <- function(object, ...) {
 prep.ModelFrame <- function(x, ...) x
 
 
-prep.ModelRecipe <- function(x, ...) {
+prep.ModelRecipe <- function(x, retain = TRUE, ...) {
   if (!is_trained(x)) {
     template <- x$template
-    x <- new(class(x), prep(as(x, "recipe")))
+    x <- new(class(x), prep(as(x, "recipe"), retain = retain))
     x$orig_template <- template
     x$orig_lvls[["(names)"]] <- list(values = NA, ordered = NA)
     x$levels[["(names)"]] <- x$orig_lvls[["(names)"]]
+  } else if (!retain) {
+    x$template <- x$template[NULL, ]
+    x$retained <- FALSE
+  } else if (!x$retained) {
+    throw(Error(
+      "ModelRecipe prep cannot be updated from 'retain = FALSE' to 'TRUE'."
+    ))
   }
   x
 }
