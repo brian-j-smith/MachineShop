@@ -6,26 +6,26 @@
 Model performance can be estimated with resampling methods that simulate repeated training and test set fits and predictions.  With these methods, performance metrics are computed on each resample to produce an empirical distribution for inference.  Resampling is controlled in the **MachineShop** with the functions:
 
 `r rdoc_url("BootControl()", "MLControl")`
-  : Simple bootstrap resampling [@efron:1993:IB].  Models are repeatedly fit with bootstrap resampled training sets and used to predict the full dataset.
+  : simple bootstrap resampling [@efron:1993:IB] to repeatedly fit a model to bootstrap resampled training sets and predict the full dataset.
 
 `r rdoc_url("BootOptimismControl()", "MLControl")`
-  : Optimism-corrected bootstrap resampling [@efron:1983:LLB; @harrell:1996:MPM].
+  : optimism-corrected bootstrap resampling [@efron:1983:LLB; @harrell:1996:MPM].
 
 `r rdoc_url("CVControl()", "MLControl")`
-  : Repeated K-fold cross-validation [@kohavi:1995:SCB].  The full dataset is repeatedly partitioned into K-folds.  For a given partitioning, prediction is performed on each of the K folds with models fit on all remaining folds.  10-fold cross-validation is the package default.
+  : repeated K-fold cross-validation [@kohavi:1995:SCB] to repeatedly partition the full dataset into K folds.  For a given partitioning, prediction is performed on each of the K folds with models fit on all remaining folds.  The package default is 10-fold cross-validation.
 
 `r rdoc_url("CVOptimismControl()", "MLControl")`
-  :  Optimism-corrected cross-validation [@davison:1997:BMA, eq. 6.48].
+  :  optimism-corrected cross-validation [@davison:1997:BMA, eq. 6.48].
 
 `r rdoc_url("OOBControl()", "MLControl")`
-  : Out-of-bootstrap resampling.  Models are fit with bootstrap resampled training sets and used to predict the unsampled cases.
-  
+  : out-of-bootstrap resampling to repeatedly fit a model to bootstrap resampled training sets and predict the unsampled cases.
+
 `r rdoc_url("SplitControl()", "MLControl")`
-  : Split training and test sets [@hastie:2009:ESL7].  The data are randomly partitioned into a training and test set.
-  
+  : split training and test sets [@hastie:2009:ESL7] to randomly partition the full dataset for model fitting and prediction, respectively.
+
 `r rdoc_url("TrainControl()", "MLControl")`
-  : Training resubstitution.  A model is fit on and used to predict the full training set in order to estimate training, or apparent, error [@efron:1986:HBA].
-  
+  : training resubstitution for both model fitting and prediction on the full dataset in order to estimate training, or apparent, error [@efron:1986:HBA].
+
 For the survival example, repeated cross-validation control structures are defined for the estimation of model performance in predicting survival means and 5 and 10-year survival probabilities.  In addition to arguments controlling the resampling methods, a `seed` can be set to ensure reproducibility of resampling results obtained with the structures.  The default control structure can also be set globally by users and subsequently changed back to its package default as desired.
 
 ```{r using_resample_control}

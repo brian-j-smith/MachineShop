@@ -56,9 +56,9 @@
 #' object resulting from the model fit.  Values returned by the \code{predict}
 #' functions should be formatted according to the response variable types below.
 #' \describe{
-#'   \item{factor}{vector or column matrix of probabilities for the second level
-#'     of binary factors or a matrix whose columns contain the probabilities for
-#'     factors with more than two levels.}
+#'   \item{factor}{matrix whose columns contain the probabilities for
+#'     multi-level factors or vector of probabilities for the second level of
+#'     binary factors.}
 #'   \item{matrix}{matrix of predicted responses.}
 #'   \item{numeric}{vector or column matrix of predicted responses.}
 #'   \item{Surv}{matrix whose columns contain survival probabilities at

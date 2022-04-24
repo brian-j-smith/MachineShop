@@ -165,25 +165,25 @@ surv_fo <- y ~ sex + age + year + thickness + ulcer
 Model fitting requires user specification of a **MachineShop** compatible model.  A named list of package-supplied models can be obtained interactively with the `r rdoc_url("modelinfo()")` function, and includes the following components for each.
 
 `label`
-  : Character descriptor for the model.
-  
+  : character descriptor for the model.
+
 `packages`
-  : Character vector of source packages required to use the model.  These need only be installed with the `install.packages()` function or by equivalent means; but need not be loaded with, for example, the `library()` function.
-  
+  : character vector of source packages required to use the model.  These need only be installed with the `install.packages()` function or by equivalent means; but need not be loaded with, for example, the `library()` function.
+
 `response_types`
-  : Character vector of response variable types supported by the model.
-  
+  : character vector of response variable types supported by the model.
+
 `weights`
-  : Logical value or vector of the same length as `response_types` indicating whether case weights are supported for the responses.
-  
+  : logical value or vector of the same length as `response_types` indicating whether case weights are supported for the responses.
+
 `arguments`
-  : Closure with the argument names and corresponding default values of the model function.
-  
+  : closure with the argument names and corresponding default values of the model function.
+
 `grid`
-  : Logical indicating whether automatic generation of tuning parameter grids is implemented for the model.
-  
+  : logical indicating whether automatic generation of tuning parameter grids is implemented for the model.
+
 `varimp`
-  : Logical indicating whether model-specific variable importance is defined.
+  : logical indicating whether model-specific variable importance is defined.
 
 Function `r rdoc_url("modelinfo()")` may be called without arguments, with one or more model functions, observed response variables, or vectors representing response variable types; and will return information on all matching models.
 
@@ -208,7 +208,7 @@ GBMModel
 
 ### Type-Specific Models
 
-When data objects are supplied as arguments to `r rdoc_url("modelinfo()")`, information is returned on all models applicable to response variables of the same data types.  If model functions are additionally supplied as arguments, information on the subset matching the data types is returned. 
+When data objects are supplied as arguments to `r rdoc_url("modelinfo()")`, information is returned on all models applicable to response variables of the same data types.  If model functions are additionally supplied as arguments, information on the subset matching the data types is returned.
 
 ```{r using_fit_modelinfo_type}
 ## All survival response-specific models
@@ -255,13 +255,13 @@ Model function arguments will assume their default values unless otherwise chang
 
 `nobs`
   : number of observations in `data`.
-   
+
 `nvars`
   : number of predictor variables in `data`.
 
 `y`
   : response variable.
-  
+
 In the example below, Bayesian information criterion (BIC) based stepwise variable selection is performed by creating a `r rdoc_url("CoxStepAICModel", "CoxModel")` with dynamic parameter `k` to be calculated as the log number of observations in the fitted dataset.
 
 ```{r using_fit_dynamic, results="hide"}
@@ -277,7 +277,7 @@ fit(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(length(y)))))
 
 ## Predict Function
 
-A `r rdoc_url("predict()")` function is supplied for application to model fit results to obtain predicted values on a dataset specified with its `newdata` argument or on the original dataset if not specified.  Survival means are predicted for survival outcomes by default.  Estimates of the associated survival distributions are needed to calculate the means.  For models, like `r rdoc_url("GBMModel")`, that perform semi- or non-parametric survival analysis, Weibull approximations to the survival distributions are the default for mean estimation.  Other choices of distributional approximations are exponential, Rayleigh, and empirical.  Empirical distributions are applicable to Cox proportional hazards-based models and can be calculated with the method of Breslow [-@breslow:1972:DPC] or Efron [-@efron:1977:ECL, default].  Note, however, that empirical survival means are undefined mathematically if an event does not occur at the longest follow-up time.  In such situations, a restricted survival mean is calculated by changing the longest follow-up time to an event, as suggested by Efron [-@efron:1967:PFB], which will be negatively biased.  
+A `r rdoc_url("predict()")` function is supplied for application to model fit results to obtain predicted values on a dataset specified with its `newdata` argument or on the original dataset if not specified.  Survival means are predicted for survival outcomes by default.  Estimates of the associated survival distributions are needed to calculate the means.  For models, like `r rdoc_url("GBMModel")`, that perform semi- or non-parametric survival analysis, Weibull approximations to the survival distributions are the default for mean estimation.  Other choices of distributional approximations are exponential, Rayleigh, and empirical.  Empirical distributions are applicable to Cox proportional hazards-based models and can be calculated with the method of Breslow [-@breslow:1972:DPC] or Efron [-@efron:1977:ECL, default].  Note, however, that empirical survival means are undefined mathematically if an event does not occur at the longest follow-up time.  In such situations, a restricted survival mean is calculated by changing the longest follow-up time to an event, as suggested by Efron [-@efron:1967:PFB], which will be negatively biased.
 
 ```{r using_predict_function}
 ## Predicted survival means (default: Weibull distribution)
@@ -652,16 +652,16 @@ specificity(obs, pred_probs)
 A named list of available metrics can be obtained interactively with the `r rdoc_url("metricinfo()")` function, and includes the following components for each one.
 
 `label`
-  : Character descriptor for the metric.
+  : character descriptor for the metric.
 
 `maximize`
-  : Logical indicating whether higher values of the metric correspond to better predictive performance.
+  : logical indicating whether maximization of the metric leads to better predictive performance.
 
 `arguments`
-  : Closure with the argument names and corresponding default values of the metric function.
+  : closure with the argument names and corresponding default values of the metric function.
 
 `response_types`
-  : Data frame of the observed and predicted response variable types supported by the metric.
+  : data frame of the observed and predicted response variable types supported by the metric.
 
 
 Function `r rdoc_url("metricinfo()")` may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.
@@ -721,19 +721,19 @@ metricinfo(obs, pred_probs) %>% names
 Metrics applicable to multi-level factor response variables are summarized below.
 
 `r rdoc_url("accuracy()", "metrics")`
-  : Proportion of correctly classified responses.
+  : proportion of correctly classified responses.
 
 `r rdoc_url("brier()", "metrics")`
   : [Brier score](https://en.wikipedia.org/wiki/Brier_score).
 
 `r rdoc_url("cross_entropy()", "metrics")`
-  : [Cross entropy](https://en.wikipedia.org/wiki/Cross_entropy) loss averaged over the number of cases.
+  : [cross entropy](https://en.wikipedia.org/wiki/Cross_entropy) loss averaged over the number of cases.
 
 `r rdoc_url("kappa2()", "metrics")`
   : [Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa) statistic measuring relative agreement between observed and predicted classifications.
 
 `r rdoc_url("weighted_kappa2()", "metrics")`
-  : [Weighted Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa#Weighted_kappa) for ordered factor responses only.
+  : [weighted Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa#Weighted_kappa) for ordered factor responses only.
 
 Brier score and cross entropy loss are computed directly on predicted class probabilities.  The other metrics are computed on predicted class membership, defined as the factor level with the highest predicted probability.
 
@@ -743,16 +743,16 @@ Brier score and cross entropy loss are computed directly on predicted class prob
 Metrics for binary factors include those given for multi-level factors as well as the following.
 
 `r rdoc_url("auc()", "metrics")`
-  : Area under a performance curve.
+  : area under a performance curve.
 
 `r rdoc_url("cindex()", "metrics")`
-  : Concordance index computed as rank order agreement between predicted probabilities for paired event and non-event cases.  This metric can be interpreted as the probability that a randomly selected event case will have a higher predicted value than a randomly selected non-event case, and is the same as area under the ROC curve.
+  : concordance index computed as rank order agreement between predicted probabilities for paired event and non-event cases.  This metric can be interpreted as the probability that a randomly selected event case will have a higher predicted value than a randomly selected non-event case, and is the same as area under the ROC curve.
 
 `r rdoc_url("f_score()", "metrics")`
   : [F score](https://en.wikipedia.org/wiki/Precision_and_recall#F-measure), $F_\beta = (1 + \beta^2) \frac{\text{precision} \times \text{recall}}{\beta^2 \times \text{precision} + \text{recall}}$.  F1 score $(\beta = 1)$ is the package default.
 
 `r rdoc_url("fnr()", "metrics")`
-  : False negative rate, $FNR = \frac{FN}{TP + FN} = 1 - TPR$.
+  : false negative rate, $FNR = \frac{FN}{TP + FN} = 1 - TPR$.
 
 ```{r using_metrics_conf, echo=FALSE}
 conf <- matrix(c("True Negative (TN)", "False Positive (FP)",
@@ -768,31 +768,31 @@ kable(conf,
 ```
 
 `r rdoc_url("fpr()", "metrics")`
-  : False positive rate, $FPR = \frac{FP}{TN + FP} = 1 - TNR$.
+  : false positive rate, $FPR = \frac{FP}{TN + FP} = 1 - TNR$.
 
 `r rdoc_url("npv()", "metrics")`
-  : Negative predictive value, $NPV = \frac{TN}{TN + FN}$.
+  : negative predictive value, $NPV = \frac{TN}{TN + FN}$.
 
 `r rdoc_url("ppr()", "metrics")`
-  : Positive prediction rate, $PPR = \frac{TP + FP}{TP + FP + TN + FN}$.
+  : positive prediction rate, $PPR = \frac{TP + FP}{TP + FP + TN + FN}$.
 
 `r rdoc_url("ppv()", "metrics")`, `r rdoc_url("precision()", "metrics")`
-  : Positive predictive value, $PPV = \frac{TP}{TP + FP}$.
+  : positive predictive value, $PPV = \frac{TP}{TP + FP}$.
 
 `r rdoc_url("pr_auc()", "metrics")`, `r rdoc_url("auc()", "metrics")`
-  : Area under a precision recall curve.
+  : area under a precision recall curve.
 
 `r rdoc_url("roc_auc()", "metrics")`, `r rdoc_url("auc()", "metrics")`
-  : [Area under an ROC curve](https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve).
+  : [area under an ROC curve](https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve).
 
 `r rdoc_url("roc_index()", "metrics")`
-  : A tradeoff function of sensitivity and specificity as defined by the `fun` argument in this function (default: (sensitivity + specificity) / 2).  The function allows for specification of tradeoffs [@perkins:2006:IOC] other than the default of Youden's J statistic [@youden:1950:IRD].
+  : a tradeoff function of sensitivity and specificity as defined by the `fun` argument in this function (default: (sensitivity + specificity) / 2).  The function allows for specification of tradeoffs [@perkins:2006:IOC] other than the default of Youden's J statistic [@youden:1950:IRD].
 
 `r rdoc_url("sensitivity()", "metrics")`, `r rdoc_url("recall()", "metrics")`, `r rdoc_url("tpr()", "metrics")`
-  : True positive rate, $TPR =\frac{TP}{TP + FN} = 1 - FNR$.
+  : true positive rate, $TPR =\frac{TP}{TP + FN} = 1 - FNR$.
 
 `r rdoc_url("specificity()", "metrics")`, `r rdoc_url("tnr()", "metrics")`
-  : True negative rate, $TNR = \frac{TN}{TN + FP} = 1 - FPR$.
+  : true negative rate, $TNR = \frac{TN}{TN + FP} = 1 - FPR$.
 
 Area under the ROC and precision-recall curves as well as the concordance index are computed directly on predicted class probabilities.  The other metrics are computed on predicted class membership.  Memberships are defined to be in the second factor level if predicted probabilities are greater than the function default or user-specified cutoff value.
 
@@ -805,22 +805,22 @@ Performance metrics are defined below for numeric vector responses.  If applied 
   : [Gini coefficient](https://en.wikipedia.org/wiki/Gini_coefficient).
 
 `r rdoc_url("mae()", "metrics")`
-  : Mean absolute error, $MAE = \frac{1}{N}\sum_{i=1}^N|y_i - \hat{y}_i|$, where $y_i$ and $\hat{y}_i$ are the $N$ observed and predicted responses.
+  : mean absolute error, $MAE = \frac{1}{N}\sum_{i=1}^N|y_i - \hat{y}_i|$, where $y_i$ and $\hat{y}_i$ are the $N$ observed and predicted responses.
 
 `r rdoc_url("mse()", "metrics")`
-  : Mean squared error, $MSE = \frac{1}{N}\sum_{i=1}^N(y_i - \hat{y}_i)^2$.
+  : mean squared error, $MSE = \frac{1}{N}\sum_{i=1}^N(y_i - \hat{y}_i)^2$.
 
 `r rdoc_url("msle()", "metrics")`
-  : Mean squared log error, $MSLE = \frac{1}{N}\sum_{i=1}^N(log(1 + y_i) - log(1 + \hat{y}_i))^2$.
+  : mean squared log error, $MSLE = \frac{1}{N}\sum_{i=1}^N(log(1 + y_i) - log(1 + \hat{y}_i))^2$.
 
 `r rdoc_url("r2()", "metrics")`
-  : One minus residual divided by total sums of squares, $R^2 = 1 - \sum_{i=1}^N(y_i - \hat{y}_i)^2 / \sum_{i=1}^N(y_i - \bar{y})^2$.
+  : one minus residual divided by total sums of squares, $R^2 = 1 - \sum_{i=1}^N(y_i - \hat{y}_i)^2 / \sum_{i=1}^N(y_i - \bar{y})^2$.
 
 `r rdoc_url("rmse()", "metrics")`
-  : Square root of mean squared error.
+  : square root of mean squared error.
 
 `r rdoc_url("rmsle()", "metrics")`
-  : Square root of mean squared log error.
+  : square root of mean squared log error.
 
 
 ## Survival Objects
@@ -854,26 +854,26 @@ In addition, all of the metrics described for numeric vector responses are appli
 Model performance can be estimated with resampling methods that simulate repeated training and test set fits and predictions.  With these methods, performance metrics are computed on each resample to produce an empirical distribution for inference.  Resampling is controlled in the **MachineShop** with the functions:
 
 `r rdoc_url("BootControl()", "MLControl")`
-  : Simple bootstrap resampling [@efron:1993:IB].  Models are repeatedly fit with bootstrap resampled training sets and used to predict the full dataset.
+  : simple bootstrap resampling [@efron:1993:IB] to repeatedly fit a model to bootstrap resampled training sets and predict the full dataset.
 
 `r rdoc_url("BootOptimismControl()", "MLControl")`
-  : Optimism-corrected bootstrap resampling [@efron:1983:LLB; @harrell:1996:MPM].
+  : optimism-corrected bootstrap resampling [@efron:1983:LLB; @harrell:1996:MPM].
 
 `r rdoc_url("CVControl()", "MLControl")`
-  : Repeated K-fold cross-validation [@kohavi:1995:SCB].  The full dataset is repeatedly partitioned into K-folds.  For a given partitioning, prediction is performed on each of the K folds with models fit on all remaining folds.  10-fold cross-validation is the package default.
+  : repeated K-fold cross-validation [@kohavi:1995:SCB] to repeatedly partition the full dataset into K folds.  For a given partitioning, prediction is performed on each of the K folds with models fit on all remaining folds.  The package default is 10-fold cross-validation.
 
 `r rdoc_url("CVOptimismControl()", "MLControl")`
-  :  Optimism-corrected cross-validation [@davison:1997:BMA, eq. 6.48].
+  :  optimism-corrected cross-validation [@davison:1997:BMA, eq. 6.48].
 
 `r rdoc_url("OOBControl()", "MLControl")`
-  : Out-of-bootstrap resampling.  Models are fit with bootstrap resampled training sets and used to predict the unsampled cases.
-  
+  : out-of-bootstrap resampling to repeatedly fit a model to bootstrap resampled training sets and predict the unsampled cases.
+
 `r rdoc_url("SplitControl()", "MLControl")`
-  : Split training and test sets [@hastie:2009:ESL7].  The data are randomly partitioned into a training and test set.
-  
+  : split training and test sets [@hastie:2009:ESL7] to randomly partition the full dataset for model fitting and prediction, respectively.
+
 `r rdoc_url("TrainControl()", "MLControl")`
-  : Training resubstitution.  A model is fit on and used to predict the full training set in order to estimate training, or apparent, error [@efron:1986:HBA].
-  
+  : training resubstitution for both model fitting and prediction on the full dataset in order to estimate training, or apparent, error [@efron:1986:HBA].
+
 For the survival example, repeated cross-validation control structures are defined for the estimation of model performance in predicting survival means and 5 and 10-year survival probabilities.  In addition to arguments controlling the resampling methods, a `seed` can be set to ensure reproducibility of resampling results obtained with the structures.  The default control structure can also be set globally by users and subsequently changed back to its package default as desired.
 
 ```{r using_resample_control}
@@ -1886,30 +1886,30 @@ Custom models and metrics can be defined with `r rdoc_url("MLModel()")` and `r r
 The `r rdoc_url("MLModel()")` function creates a model object that can be used with the previously described fitting functions.  It take the following arguments.
 
 `name`
-  : Character name of the object to which the model is assigned.
-  
-`label`
-  : Optional character descriptor for the model (default: `name`).
-  
-`packages`
-  : Character vector of package names upon which the model depends.  Each name may be optionally followed by a comment in parentheses specifying a version requirement.  The comment should contain a comparison operator, whitespace and a valid version number, e.g. `"xgboost (>= 1.3.0)"`.
-  
-`response_types`
-  : Character vector of response variable types to which the model can be fit.  Supported types are `"binary"`, `"factor"`, `"matrix"`, `"numeric"`, `"ordered"`, and `"Surv"`.
-  
-`fit`
-  : Model fitting function whose arguments are a `formula`, a `r rdoc_url("ModelFrame")` named `data`, case `weights`, and an ellipsis.  Argument `data` may be converted to a data frame with the `as.data.frame()` function as commonly needed.  The fit function should return the object resulting from the model fit.
-  
-`predict`
-  : Prediction function whose arguments are the `object` returned by `r rdoc_url("fit()")`, a `r rdoc_url("ModelFrame")` named `newdata` of predictor variables, optional vector of `times` at which to predict survival, and an ellipsis.  Argument `data` may be converted to a data frame with the `as.data.frame()` function as needed.  Values returned by the function should be formatted according to the response variable types below.
+  : character name of the object to which the model is assigned.
 
-* `factor` : Vector or column matrix of probabilities for the second level of binary factors or a matrix whose columns contain the probabilities for factors with more than two levels.
-* `matrix` : Matrix of predicted responses.
-* `numeric` : Vector or column matrix of predicted responses.
-* `Surv` : Matrix whose columns contain survival probabilities at `times` if supplied or a vector of predicted survival means otherwise.
-  
+`label`
+  : optional character descriptor for the model (default: `name`).
+
+`packages`
+  : character vector of packages upon which the model depends.  Each name may be optionally followed by a comment in parentheses specifying a version requirement.  The comment should contain a comparison operator, whitespace and a valid version number, e.g. `"xgboost (>= 1.3.0)"`.
+
+`response_types`
+  : character vector of response variable types to which the model can be fit.  Supported types are `"binary"`, `"BinomialVariate"`, `"DiscreteVariate"`, `"factor"`, `"matrix"`, `"NegBinomialVariate"`, `"numeric"`, `"ordered"`, `"PoissonVariate"`, and `"Surv"`.
+
+`fit`
+  : model fitting function whose arguments are a `formula`, a `r rdoc_url("ModelFrame")` named `data`, case `weights`, and an ellipsis.  Argument `data` may be converted to a data frame with the `as.data.frame()` function as is commonly needed.  The fit function should return the object resulting from the model fit.
+
+`predict`
+  : prediction function whose arguments are the `object` returned by `r rdoc_url("fit()")`, a `r rdoc_url("ModelFrame")` named `newdata` of predictor variables, optional vector of `times` at which to predict survival, and an ellipsis.  Argument `data` may be converted to a data frame with the `as.data.frame()` function as needed.  Values returned by the function should be formatted according to the response variable types below.
+
+* `factor` : matrix whose columns contain the probabilities for multi-level factors or vector of probabilities for the second level of binary factors.
+* `matrix` : matrix of predicted responses.
+* `numeric` : vector or column matrix of predicted responses.
+* `Surv` : matrix whose columns contain survival probabilities at `times` if supplied or vector of predicted survival means otherwise.
+
 `varimp`
-  : Variable importance function whose arguments are the `object` returned by `r rdoc_url("fit()")`, optional arguments passed from calls to `r rdoc_url("varimp()")`, and an ellipsis.  The function should return a vector of importance values named after the predictor variables or a matrix or data frame whose rows are named after the predictors.
+  : variable importance function whose arguments are the `object` returned by `r rdoc_url("fit()")`, optional arguments passed from calls to `r rdoc_url("varimp()")`, and an ellipsis.  The function should return a vector of importance values named after the predictor variables or a matrix or data frame whose rows are named after the predictors.
 
 ```{r using_extensions_mlmodel}
 ## Logistic regression model extension
@@ -1938,10 +1938,10 @@ The `r rdoc_url("MLMetric()")` function creates a metric object that can be used
 
 `name`
   :  Character name of the object to which the metric is assigned.
-  
+
 `label`
   : Optional character descriptor for the metric (default: `name`).
-  
+
 `maximize`
   : Logical indicating whether higher values of the metric correspond to better predictive performance.
 

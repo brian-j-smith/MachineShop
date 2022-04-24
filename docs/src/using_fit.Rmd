@@ -6,25 +6,25 @@
 Model fitting requires user specification of a **MachineShop** compatible model.  A named list of package-supplied models can be obtained interactively with the `r rdoc_url("modelinfo()")` function, and includes the following components for each.
 
 `label`
-  : Character descriptor for the model.
-  
+  : character descriptor for the model.
+
 `packages`
-  : Character vector of source packages required to use the model.  These need only be installed with the `install.packages()` function or by equivalent means; but need not be loaded with, for example, the `library()` function.
-  
+  : character vector of source packages required to use the model.  These need only be installed with the `install.packages()` function or by equivalent means; but need not be loaded with, for example, the `library()` function.
+
 `response_types`
-  : Character vector of response variable types supported by the model.
-  
+  : character vector of response variable types supported by the model.
+
 `weights`
-  : Logical value or vector of the same length as `response_types` indicating whether case weights are supported for the responses.
-  
+  : logical value or vector of the same length as `response_types` indicating whether case weights are supported for the responses.
+
 `arguments`
-  : Closure with the argument names and corresponding default values of the model function.
-  
+  : closure with the argument names and corresponding default values of the model function.
+
 `grid`
-  : Logical indicating whether automatic generation of tuning parameter grids is implemented for the model.
-  
+  : logical indicating whether automatic generation of tuning parameter grids is implemented for the model.
+
 `varimp`
-  : Logical indicating whether model-specific variable importance is defined.
+  : logical indicating whether model-specific variable importance is defined.
 
 Function `r rdoc_url("modelinfo()")` may be called without arguments, with one or more model functions, observed response variables, or vectors representing response variable types; and will return information on all matching models.
 
@@ -49,7 +49,7 @@ GBMModel
 
 ### Type-Specific Models
 
-When data objects are supplied as arguments to `r rdoc_url("modelinfo()")`, information is returned on all models applicable to response variables of the same data types.  If model functions are additionally supplied as arguments, information on the subset matching the data types is returned. 
+When data objects are supplied as arguments to `r rdoc_url("modelinfo()")`, information is returned on all models applicable to response variables of the same data types.  If model functions are additionally supplied as arguments, information on the subset matching the data types is returned.
 
 ```{r using_fit_modelinfo_type}
 ## All survival response-specific models
@@ -96,13 +96,13 @@ Model function arguments will assume their default values unless otherwise chang
 
 `nobs`
   : number of observations in `data`.
-   
+
 `nvars`
   : number of predictor variables in `data`.
 
 `y`
   : response variable.
-  
+
 In the example below, Bayesian information criterion (BIC) based stepwise variable selection is performed by creating a `r rdoc_url("CoxStepAICModel", "CoxModel")` with dynamic parameter `k` to be calculated as the log number of observations in the fitted dataset.
 
 ```{r using_fit_dynamic, results="hide"}
@@ -118,7 +118,7 @@ fit(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(length(y)))))
 
 ## Predict Function
 
-A `r rdoc_url("predict()")` function is supplied for application to model fit results to obtain predicted values on a dataset specified with its `newdata` argument or on the original dataset if not specified.  Survival means are predicted for survival outcomes by default.  Estimates of the associated survival distributions are needed to calculate the means.  For models, like `r rdoc_url("GBMModel")`, that perform semi- or non-parametric survival analysis, Weibull approximations to the survival distributions are the default for mean estimation.  Other choices of distributional approximations are exponential, Rayleigh, and empirical.  Empirical distributions are applicable to Cox proportional hazards-based models and can be calculated with the method of Breslow [-@breslow:1972:DPC] or Efron [-@efron:1977:ECL, default].  Note, however, that empirical survival means are undefined mathematically if an event does not occur at the longest follow-up time.  In such situations, a restricted survival mean is calculated by changing the longest follow-up time to an event, as suggested by Efron [-@efron:1967:PFB], which will be negatively biased.  
+A `r rdoc_url("predict()")` function is supplied for application to model fit results to obtain predicted values on a dataset specified with its `newdata` argument or on the original dataset if not specified.  Survival means are predicted for survival outcomes by default.  Estimates of the associated survival distributions are needed to calculate the means.  For models, like `r rdoc_url("GBMModel")`, that perform semi- or non-parametric survival analysis, Weibull approximations to the survival distributions are the default for mean estimation.  Other choices of distributional approximations are exponential, Rayleigh, and empirical.  Empirical distributions are applicable to Cox proportional hazards-based models and can be calculated with the method of Breslow [-@breslow:1972:DPC] or Efron [-@efron:1977:ECL, default].  Note, however, that empirical survival means are undefined mathematically if an event does not occur at the longest follow-up time.  In such situations, a restricted survival mean is calculated by changing the longest follow-up time to an event, as suggested by Efron [-@efron:1967:PFB], which will be negatively biased.
 
 ```{r using_predict_function}
 ## Predicted survival means (default: Weibull distribution)

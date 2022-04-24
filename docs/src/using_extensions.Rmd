@@ -8,30 +8,30 @@ Custom models and metrics can be defined with `r rdoc_url("MLModel()")` and `r r
 The `r rdoc_url("MLModel()")` function creates a model object that can be used with the previously described fitting functions.  It take the following arguments.
 
 `name`
-  : Character name of the object to which the model is assigned.
-  
-`label`
-  : Optional character descriptor for the model (default: `name`).
-  
-`packages`
-  : Character vector of package names upon which the model depends.  Each name may be optionally followed by a comment in parentheses specifying a version requirement.  The comment should contain a comparison operator, whitespace and a valid version number, e.g. `"xgboost (>= 1.3.0)"`.
-  
-`response_types`
-  : Character vector of response variable types to which the model can be fit.  Supported types are `"binary"`, `"factor"`, `"matrix"`, `"numeric"`, `"ordered"`, and `"Surv"`.
-  
-`fit`
-  : Model fitting function whose arguments are a `formula`, a `r rdoc_url("ModelFrame")` named `data`, case `weights`, and an ellipsis.  Argument `data` may be converted to a data frame with the `as.data.frame()` function as commonly needed.  The fit function should return the object resulting from the model fit.
-  
-`predict`
-  : Prediction function whose arguments are the `object` returned by `r rdoc_url("fit()")`, a `r rdoc_url("ModelFrame")` named `newdata` of predictor variables, optional vector of `times` at which to predict survival, and an ellipsis.  Argument `data` may be converted to a data frame with the `as.data.frame()` function as needed.  Values returned by the function should be formatted according to the response variable types below.
+  : character name of the object to which the model is assigned.
 
-* `factor` : Vector or column matrix of probabilities for the second level of binary factors or a matrix whose columns contain the probabilities for factors with more than two levels.
-* `matrix` : Matrix of predicted responses.
-* `numeric` : Vector or column matrix of predicted responses.
-* `Surv` : Matrix whose columns contain survival probabilities at `times` if supplied or a vector of predicted survival means otherwise.
-  
+`label`
+  : optional character descriptor for the model (default: `name`).
+
+`packages`
+  : character vector of packages upon which the model depends.  Each name may be optionally followed by a comment in parentheses specifying a version requirement.  The comment should contain a comparison operator, whitespace and a valid version number, e.g. `"xgboost (>= 1.3.0)"`.
+
+`response_types`
+  : character vector of response variable types to which the model can be fit.  Supported types are `"binary"`, `"BinomialVariate"`, `"DiscreteVariate"`, `"factor"`, `"matrix"`, `"NegBinomialVariate"`, `"numeric"`, `"ordered"`, `"PoissonVariate"`, and `"Surv"`.
+
+`fit`
+  : model fitting function whose arguments are a `formula`, a `r rdoc_url("ModelFrame")` named `data`, case `weights`, and an ellipsis.  Argument `data` may be converted to a data frame with the `as.data.frame()` function as is commonly needed.  The fit function should return the object resulting from the model fit.
+
+`predict`
+  : prediction function whose arguments are the `object` returned by `r rdoc_url("fit()")`, a `r rdoc_url("ModelFrame")` named `newdata` of predictor variables, optional vector of `times` at which to predict survival, and an ellipsis.  Argument `data` may be converted to a data frame with the `as.data.frame()` function as needed.  Values returned by the function should be formatted according to the response variable types below.
+
+* `factor` : matrix whose columns contain the probabilities for multi-level factors or vector of probabilities for the second level of binary factors.
+* `matrix` : matrix of predicted responses.
+* `numeric` : vector or column matrix of predicted responses.
+* `Surv` : matrix whose columns contain survival probabilities at `times` if supplied or vector of predicted survival means otherwise.
+
 `varimp`
-  : Variable importance function whose arguments are the `object` returned by `r rdoc_url("fit()")`, optional arguments passed from calls to `r rdoc_url("varimp()")`, and an ellipsis.  The function should return a vector of importance values named after the predictor variables or a matrix or data frame whose rows are named after the predictors.
+  : variable importance function whose arguments are the `object` returned by `r rdoc_url("fit()")`, optional arguments passed from calls to `r rdoc_url("varimp()")`, and an ellipsis.  The function should return a vector of importance values named after the predictor variables or a matrix or data frame whose rows are named after the predictors.
 
 ```{r using_extensions_mlmodel}
 ## Logistic regression model extension
@@ -59,13 +59,13 @@ LogisticModel <- MLModel(
 The `r rdoc_url("MLMetric()")` function creates a metric object that can be used as previously described for the model performance metrics.  Its first argument is a function to compute the metric, defined to accept `observed` and `predicted` as the first two arguments and with an ellipsis to accommodate others.  Its remaining arguments are as follows.
 
 `name`
-  :  Character name of the object to which the metric is assigned.
-  
+  :  character name of the object to which the metric is assigned.
+
 `label`
-  : Optional character descriptor for the metric (default: `name`).
-  
+  : optional character descriptor for the metric (default: `name`).
+
 `maximize`
-  : Logical indicating whether higher values of the metric correspond to better predictive performance.
+  : logical indicating whether higher values of the metric correspond to better predictive performance.
 
 ```{r using_extensions_mlmetric}
 ## F2 score metric extension

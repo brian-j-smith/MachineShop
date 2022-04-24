@@ -90,16 +90,16 @@ specificity(obs, pred_probs)
 A named list of available metrics can be obtained interactively with the `r rdoc_url("metricinfo()")` function, and includes the following components for each one.
 
 `label`
-  : Character descriptor for the metric.
+  : character descriptor for the metric.
 
 `maximize`
-  : Logical indicating whether higher values of the metric correspond to better predictive performance.
+  : logical indicating whether maximization of the metric leads to better predictive performance.
 
 `arguments`
-  : Closure with the argument names and corresponding default values of the metric function.
+  : closure with the argument names and corresponding default values of the metric function.
 
 `response_types`
-  : Data frame of the observed and predicted response variable types supported by the metric.
+  : data frame of the observed and predicted response variable types supported by the metric.
 
 
 Function `r rdoc_url("metricinfo()")` may be called without arguments, with one or more metric functions, an observed response variable, an observed and predicted response variable pair, response variable types, or resampled output; and will return information on all matching metrics.
@@ -159,19 +159,19 @@ metricinfo(obs, pred_probs) %>% names
 Metrics applicable to multi-level factor response variables are summarized below.
 
 `r rdoc_url("accuracy()", "metrics")`
-  : Proportion of correctly classified responses.
+  : proportion of correctly classified responses.
 
 `r rdoc_url("brier()", "metrics")`
   : [Brier score](https://en.wikipedia.org/wiki/Brier_score).
 
 `r rdoc_url("cross_entropy()", "metrics")`
-  : [Cross entropy](https://en.wikipedia.org/wiki/Cross_entropy) loss averaged over the number of cases.
+  : [cross entropy](https://en.wikipedia.org/wiki/Cross_entropy) loss averaged over the number of cases.
 
 `r rdoc_url("kappa2()", "metrics")`
   : [Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa) statistic measuring relative agreement between observed and predicted classifications.
 
 `r rdoc_url("weighted_kappa2()", "metrics")`
-  : [Weighted Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa#Weighted_kappa) for ordered factor responses only.
+  : [weighted Cohen's kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa#Weighted_kappa) for ordered factor responses only.
 
 Brier score and cross entropy loss are computed directly on predicted class probabilities.  The other metrics are computed on predicted class membership, defined as the factor level with the highest predicted probability.
 
@@ -181,16 +181,16 @@ Brier score and cross entropy loss are computed directly on predicted class prob
 Metrics for binary factors include those given for multi-level factors as well as the following.
 
 `r rdoc_url("auc()", "metrics")`
-  : Area under a performance curve.
+  : area under a performance curve.
 
 `r rdoc_url("cindex()", "metrics")`
-  : Concordance index computed as rank order agreement between predicted probabilities for paired event and non-event cases.  This metric can be interpreted as the probability that a randomly selected event case will have a higher predicted value than a randomly selected non-event case, and is the same as area under the ROC curve.
+  : concordance index computed as rank order agreement between predicted probabilities for paired event and non-event cases.  This metric can be interpreted as the probability that a randomly selected event case will have a higher predicted value than a randomly selected non-event case, and is the same as area under the ROC curve.
 
 `r rdoc_url("f_score()", "metrics")`
   : [F score](https://en.wikipedia.org/wiki/Precision_and_recall#F-measure), $F_\beta = (1 + \beta^2) \frac{\text{precision} \times \text{recall}}{\beta^2 \times \text{precision} + \text{recall}}$.  F1 score $(\beta = 1)$ is the package default.
 
 `r rdoc_url("fnr()", "metrics")`
-  : False negative rate, $FNR = \frac{FN}{TP + FN} = 1 - TPR$.
+  : false negative rate, $FNR = \frac{FN}{TP + FN} = 1 - TPR$.
 
 ```{r using_metrics_conf, echo=FALSE}
 conf <- matrix(c("True Negative (TN)", "False Positive (FP)",
@@ -206,31 +206,31 @@ kable(conf,
 ```
 
 `r rdoc_url("fpr()", "metrics")`
-  : False positive rate, $FPR = \frac{FP}{TN + FP} = 1 - TNR$.
+  : false positive rate, $FPR = \frac{FP}{TN + FP} = 1 - TNR$.
 
 `r rdoc_url("npv()", "metrics")`
-  : Negative predictive value, $NPV = \frac{TN}{TN + FN}$.
+  : negative predictive value, $NPV = \frac{TN}{TN + FN}$.
 
 `r rdoc_url("ppr()", "metrics")`
-  : Positive prediction rate, $PPR = \frac{TP + FP}{TP + FP + TN + FN}$.
+  : positive prediction rate, $PPR = \frac{TP + FP}{TP + FP + TN + FN}$.
 
 `r rdoc_url("ppv()", "metrics")`, `r rdoc_url("precision()", "metrics")`
-  : Positive predictive value, $PPV = \frac{TP}{TP + FP}$.
+  : positive predictive value, $PPV = \frac{TP}{TP + FP}$.
 
 `r rdoc_url("pr_auc()", "metrics")`, `r rdoc_url("auc()", "metrics")`
-  : Area under a precision recall curve.
+  : area under a precision recall curve.
 
 `r rdoc_url("roc_auc()", "metrics")`, `r rdoc_url("auc()", "metrics")`
-  : [Area under an ROC curve](https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve).
+  : [area under an ROC curve](https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve).
 
 `r rdoc_url("roc_index()", "metrics")`
-  : A tradeoff function of sensitivity and specificity as defined by the `fun` argument in this function (default: (sensitivity + specificity) / 2).  The function allows for specification of tradeoffs [@perkins:2006:IOC] other than the default of Youden's J statistic [@youden:1950:IRD].
+  : a tradeoff function of sensitivity and specificity as defined by the `fun` argument in this function (default: (sensitivity + specificity) / 2).  The function allows for specification of tradeoffs [@perkins:2006:IOC] other than the default of Youden's J statistic [@youden:1950:IRD].
 
 `r rdoc_url("sensitivity()", "metrics")`, `r rdoc_url("recall()", "metrics")`, `r rdoc_url("tpr()", "metrics")`
-  : True positive rate, $TPR =\frac{TP}{TP + FN} = 1 - FNR$.
+  : true positive rate, $TPR =\frac{TP}{TP + FN} = 1 - FNR$.
 
 `r rdoc_url("specificity()", "metrics")`, `r rdoc_url("tnr()", "metrics")`
-  : True negative rate, $TNR = \frac{TN}{TN + FP} = 1 - FPR$.
+  : true negative rate, $TNR = \frac{TN}{TN + FP} = 1 - FPR$.
 
 Area under the ROC and precision-recall curves as well as the concordance index are computed directly on predicted class probabilities.  The other metrics are computed on predicted class membership.  Memberships are defined to be in the second factor level if predicted probabilities are greater than the function default or user-specified cutoff value.
 
@@ -243,22 +243,22 @@ Performance metrics are defined below for numeric vector responses.  If applied 
   : [Gini coefficient](https://en.wikipedia.org/wiki/Gini_coefficient).
 
 `r rdoc_url("mae()", "metrics")`
-  : Mean absolute error, $MAE = \frac{1}{N}\sum_{i=1}^N|y_i - \hat{y}_i|$, where $y_i$ and $\hat{y}_i$ are the $N$ observed and predicted responses.
+  : mean absolute error, $MAE = \frac{1}{N}\sum_{i=1}^N|y_i - \hat{y}_i|$, where $y_i$ and $\hat{y}_i$ are the $N$ observed and predicted responses.
 
 `r rdoc_url("mse()", "metrics")`
-  : Mean squared error, $MSE = \frac{1}{N}\sum_{i=1}^N(y_i - \hat{y}_i)^2$.
+  : mean squared error, $MSE = \frac{1}{N}\sum_{i=1}^N(y_i - \hat{y}_i)^2$.
 
 `r rdoc_url("msle()", "metrics")`
-  : Mean squared log error, $MSLE = \frac{1}{N}\sum_{i=1}^N(log(1 + y_i) - log(1 + \hat{y}_i))^2$.
+  : mean squared log error, $MSLE = \frac{1}{N}\sum_{i=1}^N(log(1 + y_i) - log(1 + \hat{y}_i))^2$.
 
 `r rdoc_url("r2()", "metrics")`
-  : One minus residual divided by total sums of squares, $R^2 = 1 - \sum_{i=1}^N(y_i - \hat{y}_i)^2 / \sum_{i=1}^N(y_i - \bar{y})^2$.
+  : one minus residual divided by total sums of squares, $R^2 = 1 - \sum_{i=1}^N(y_i - \hat{y}_i)^2 / \sum_{i=1}^N(y_i - \bar{y})^2$.
 
 `r rdoc_url("rmse()", "metrics")`
-  : Square root of mean squared error.
+  : square root of mean squared error.
 
 `r rdoc_url("rmsle()", "metrics")`
-  : Square root of mean squared log error.
+  : square root of mean squared log error.
 
 
 ## Survival Objects
