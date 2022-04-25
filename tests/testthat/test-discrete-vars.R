@@ -33,7 +33,8 @@ test_that("discrete variate construction and model fitting", {
         perf_mse <- mean((obs - pred)^2)
       }
       startsWith(get_fit_type(model_fit), type) && class(pred) == class &&
-        length(perf) == length(metrics) && perf["mse"] == perf_mse
+        length(perf) == length(metrics) &&
+        all.equal(perf["mse"], perf_mse, check.attributes = FALSE)
     }
 
 
