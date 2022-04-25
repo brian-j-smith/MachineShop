@@ -173,10 +173,12 @@ rfe.ModelSpecification <- function(
   varimp <- function(object, select = NULL) {
     res <- do.call(MachineShop::varimp, list(
       object, scale = FALSE, method = "permute", select = select,
-      samples = samples$varimp, times = times, metric = metric, stats = stat,
-      progress = !is.null(body(progress))
+      samples = samples$varimp, times = times, metric = metric, compare = "-",
+      stats = stat, progress = !is.null(body(progress))
     ))
-    structure(res[[1]], names = rownames(res))
+    res <- structure(res[[1]], names = rownames(res))
+    res[setdiff(select, names(res))] <- 0
+    res
   }
   scale <- function(x) {
     scale <- max(x, 0)
@@ -277,7 +279,7 @@ rfe.ModelSpecification <- function(
     items = tibble(terms = subsets),
     params = tibble(size = lengths(subsets)),
     metrics = perf_stats,
-    selected = which.max(scores),
+    selected = length(scores) - which.max(rev(scores)) + 1,
     performance = do.call(c, perf_list)
   )
 
