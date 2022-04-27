@@ -3,6 +3,7 @@
 \name{predict}
 \alias{predict}
 \alias{predict.MLModelFit}
+\alias{predict,MLModelFit-method}
 \title{Model Prediction}
 \usage{
 \method{predict}{MLModelFit}(
@@ -15,6 +16,8 @@
   method = character(),
   ...
 )
+
+\S4method{predict}{MLModelFit}(object, ...)
 }
 \arguments{
 \item{object}{model \link{fit} result.}
@@ -43,7 +46,7 @@ of \code{"empirical"} for predicted survival events/probabilities and
 baseline survival curves for Cox proportional hazards-based models.
 Choices are \code{"breslow"} or \code{"efron"} (default).}
 
-\item{...}{arguments passed to model-specific prediction functions.}
+\item{...}{arguments passed from the S4 to the S3 method.}
 }
 \description{
 Predict outcomes with a fitted model.

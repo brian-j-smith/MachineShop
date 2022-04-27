@@ -23,7 +23,7 @@
 #' @param method character string specifying the empirical method of estimating
 #'   baseline survival curves for Cox proportional hazards-based models.
 #'   Choices are \code{"breslow"} or \code{"efron"} (default).
-#' @param ... arguments passed to model-specific prediction functions.
+#' @param ... arguments passed from the S4 to the S3 method.
 #'
 #' @seealso \code{\link{confusion}}, \code{\link{performance}},
 #' \code{\link{metrics}}
@@ -38,6 +38,12 @@
 #' gbm_fit <- fit(Surv(time, status) ~ ., data = veteran, model = GBMModel)
 #' predict(gbm_fit, newdata = veteran, times = c(90, 180, 360), type = "prob")
 #' }
+#'
+NULL
+
+
+#' @name predict
+#' @method predict MLModelFit
 #'
 predict.MLModelFit <- function(
   object, newdata = NULL, times = numeric(),
@@ -69,6 +75,14 @@ predict.MLModelFit <- function(
   )
   throw(check_assignment(pred))
 }
+
+
+#' @name predict
+#' @aliases predict,MLModelFit-method
+#'
+setMethod("predict", "MLModelFit",
+  function(object, ...) predict.MLModelFit(object, ...)
+)
 
 
 .predict <- function(object, ...) {

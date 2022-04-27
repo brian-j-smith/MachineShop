@@ -194,6 +194,8 @@ export(.,
        unMLModelFit,
        varimp)
 
+exportMethods(predict)
+
 S3method(as.data.frame, BinomialVariate)
 S3method(as.data.frame, ModelFrame)
 S3method(as.data.frame, PerformanceDiffTest)
