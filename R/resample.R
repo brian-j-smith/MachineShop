@@ -151,26 +151,21 @@ resample.MLModelFunction <- function(model, ...) {
     train_pred <- subsample(object, object, control)$Predicted
   }
 
-  snow_opts <- list()
-  progress <- function(n) NULL
-  if (control@monitor$progress) {
-    pb <- new_progress_bar(length(splits), object = object,
-                           index = progress_index)
-    switch(getDoParName(),
-      "doSEQ"  = progress <- function(n) pb$tick(),
-      "doSNOW" = snow_opts$progress <- function(n) pb$tick()
-    )
-    on.exit(pb$terminate())
-  }
+  monitor <- new_progress_bar(
+    control@monitor$progress * length(splits),
+    object = object,
+    index = progress_index
+  )
+  on.exit(monitor$pb$terminate())
 
   foreach(
     i = i <- seq_along(splits),
     .export = c("seq_boot", "subsample"),
     .packages = required_packages(object),
     .verbose = control@monitor$verbose,
-    .options.snow = snow_opts
+    .options.snow = monitor$snow_opts
   ) %dopar% {
-    progress(i)
+    monitor$progress()
     settings(presets)
     set.seed(seeds[i])
     train <- update(object, data = rsample::analysis(splits[[i]]))
@@ -228,26 +223,21 @@ resample.MLModelFunction <- function(model, ...) {
 
   is_optimism_control <- is(control, "CVOptimismControl")
 
-  snow_opts <- list()
-  progress <- function(n) NULL
-  if (control@monitor$progress) {
-    pb <- new_progress_bar(length(splits), object = object,
-                           index = progress_index)
-    switch(getDoParName(),
-      "doSEQ"  = progress <- function(n) pb$tick(),
-      "doSNOW" = snow_opts$progress <- function(n) pb$tick()
-    )
-    on.exit(pb$terminate())
-  }
+  monitor <- new_progress_bar(
+    control@monitor$progress * length(splits),
+    object = object,
+    index = progress_index
+  )
+  on.exit(monitor$pb$terminate())
 
   df_list <- foreach(
     i = i <- seq_along(splits),
     .export = "subsample",
     .packages = required_packages(object),
     .verbose = control@monitor$verbose,
-    .options.snow = snow_opts
+    .options.snow = monitor$snow_opts
   ) %dopar% {
-    progress(i)
+    monitor$progress()
     settings(presets)
     set.seed(seeds[i])
     train <- update(object, data = rsample::analysis(splits[[i]]))
@@ -287,26 +277,21 @@ resample.MLModelFunction <- function(model, ...) {
   )
   seeds <- rand_int(length(splits))
 
-  snow_opts <- list()
-  progress <- function(n) NULL
-  if (control@monitor$progress) {
-    pb <- new_progress_bar(length(splits), object = object,
-                           index = progress_index)
-    switch(getDoParName(),
-      "doSEQ"  = progress <- function(n) pb$tick(),
-      "doSNOW" = snow_opts$progress <- function(n) pb$tick()
-    )
-    on.exit(pb$terminate())
-  }
+  monitor <- new_progress_bar(
+    control@monitor$progress * length(splits),
+    object = object,
+    index = progress_index
+  )
+  on.exit(monitor$pb$terminate())
 
   foreach(
     i = i <- seq_along(splits),
     .export = "subsample",
     .packages = required_packages(object),
     .verbose = control@monitor$verbose,
-    .options.snow = snow_opts
+    .options.snow = monitor$snow_opts
   ) %dopar% {
-    progress(i)
+    monitor$progress()
     settings(presets)
     set.seed(seeds[i])
     train <- update(object, data = rsample::analysis(splits[[i]]))

@@ -400,13 +400,17 @@ new_params <- function(envir, ...) {
 
 
 new_progress_bar <- function(total, object, index = 0) {
-  if (getDoParName() == "doSEQ") index <- as.numeric(index)
+  backend <- getDoParName()
+  progress <- function(...) NULL
+  snow_opts <- list()
+
+  if (backend == "doSEQ") index <- as.numeric(index)
   width <- max(round(0.25 * console_width()), 10)
   input <- substr(class(as.MLInput(object)), 1, width)
   model <- substr(as.MLModel(object)@name, 1, width)
   format <- paste(input, "|", model)
   if (index > 0) format <- paste0(index, ": ", format)
-  if (getDoParName() %in% c("doSEQ", "doSNOW")) {
+  if (backend %in% c("doSEQ", "doSNOW")) {
     format <- paste(format, "[:bar] :percent | :eta")
   }
   pb <- progress_bar$new(
@@ -420,8 +424,14 @@ new_progress_bar <- function(total, object, index = 0) {
       names(index), if (is.finite(max(index))) paste0("(", max(index), ")")
     ))
   }
-  pb$tick(0)
-  pb
+
+  if (total) {
+    pb$tick(0)
+    body(progress) <- quote(pb$tick())
+    if (backend == "doSNOW") snow_opts$progress <- progress
+  }
+
+  list(pb = pb, progress = progress, snow_opts = snow_opts)
 }
 
 
