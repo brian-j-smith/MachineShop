@@ -27,6 +27,9 @@
 #'   Defaults to the distribution that was used in predicting mean survival
 #'   times.
 #' @param fun function to calculate a desired sensitivity-specificity tradeoff.
+#' @param method character string specifying whether to compute \code{r2} as
+#'   the coefficient of determination (\code{"mse"}) or as the square of
+#'   \code{"pearson"} or \code{"spearman"} correlation.
 #' @param metrics vector of two metric functions or function names that define a
 #'   curve under which to calculate area [default: ROC metrics].
 #' @param multiclass character string specifying the method for computing

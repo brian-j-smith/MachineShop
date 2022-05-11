@@ -198,7 +198,14 @@ mse(observed, predicted = NULL, weights = NULL, ...)
 
 msle(observed, predicted = NULL, weights = NULL, ...)
 
-r2(observed, predicted = NULL, weights = NULL, distr = character(), ...)
+r2(
+  observed,
+  predicted = NULL,
+  weights = NULL,
+  method = c("mse", "pearson", "spearman"),
+  distr = character(),
+  ...
+)
 
 rmse(observed, predicted = NULL, weights = NULL, ...)
 
@@ -243,6 +250,10 @@ curves, or \code{NULL} for resample-specific metrics.}
 \item{power}{power to which positional distances of off-diagonals from the
 main diagonal in confusion matrices are raised to calculate
 \code{weighted_kappa2}.}
+
+\item{method}{character string specifying whether to compute \code{r2} as
+the coefficient of determination (\code{"mse"}) or as the square of
+\code{"pearson"} or \code{"spearman"} correlation.}
 
 \item{distr}{character string specifying a distribution with which to
 estimate the observed survival mean in the total sum of square component of

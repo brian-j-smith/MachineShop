@@ -20,11 +20,11 @@ importFrom(progress, progress_bar)
 importFrom(recipes, bake, prep, recipe, tidy, tunable)
 importFrom(rsample, bootstraps, group_vfold_cv, initial_split, vfold_cv)
 importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
-           delete.response, drop1, formula, get_all_vars, loess, lm, median,
-           model.frame, model.matrix, model.matrix.default, model.response,
-           model.weights, na.fail, na.omit, na.pass, offset, p.adjust, pchisq,
-           pnorm, predict, pt, quantile, reformulate, reshape, runif, sd,
-           t.test, terms, time, update, var, vcov, xtabs)
+           cov.wt, delete.response, drop1, formula, get_all_vars, loess, lm,
+           median, model.frame, model.matrix, model.matrix.default,
+           model.response, model.weights, na.fail, na.omit, na.pass, offset,
+           p.adjust, pchisq, pnorm, predict, pt, quantile, reformulate,
+           reshape, runif, sd, t.test, terms, time, update, var, vcov, xtabs)
 importFrom(survival, concordance, is.Surv, Surv, survfit, survreg,
            survreg.distributions)
 importFrom(tibble, as_tibble, as_tibble_col, is_tibble, tibble)

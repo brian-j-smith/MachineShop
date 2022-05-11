@@ -82,8 +82,10 @@ setMetric_numeric("msle",
 #' @rdname metrics
 #'
 r2 <- function(
-  observed, predicted = NULL, weights = NULL, distr = character(), ...
+  observed, predicted = NULL, weights = NULL,
+  method = c("mse", "pearson", "spearman"), distr = character(), ...
 ) {
+  method <- match.arg(method)
   call_metric_method("r2", environment())
 }
 
@@ -100,9 +102,19 @@ setMetricMethod_matrix("r2")
 
 
 setMetricMethod("r2", c("numeric", "numeric"),
-  function(observed, predicted, weights, ...) {
-    obs_mean <- weighted_mean(observed, weights)
-    1 - mse(observed, predicted, weights) / mse(observed, obs_mean, weights)
+  function(observed, predicted, weights, method, ...) {
+    if (method == "mse") {
+      obs_mean <- weighted_mean(observed, weights)
+      1 - mse(observed, predicted, weights) / mse(observed, obs_mean, weights)
+    } else {
+      if (method == "spearman") {
+        observed <- rank(observed)
+        predicted <- rank(predicted)
+      }
+      weights <- check_weights(weights, observed)
+      throw(check_assignment(weights))
+      cov.wt(cbind(observed, predicted), wt = weights, cor = TRUE)$cor[2]^2
+    }
   }
 )
 
@@ -111,18 +123,22 @@ setMetricMethod_Resample("r2")
 
 
 setMetricMethod("r2", c("Surv", "numeric"),
-  function(observed, predicted, weights, distr, ...) {
-    distr <- get_surv_distr(distr, observed, predicted)
-    nparams <- if (distr %in% c("exponential", "rayleigh")) 1 else 2
-    obs_mean <- if (distr == "empirical") {
-      surv <- survfit(observed ~ 1, weights = weights, se.fit = FALSE)
-      rep(mean(surv), length(observed))
-    } else if (length(event_time(observed)) >= nparams) {
-      predict(survreg(observed ~ 1, weights = weights, dist = distr))
+  function(observed, predicted, weights, method, distr, ...) {
+    if (method == "mse") {
+      distr <- get_surv_distr(distr, observed, predicted)
+      nparams <- if (distr %in% c("exponential", "rayleigh")) 1 else 2
+      obs_mean <- if (distr == "empirical") {
+        surv <- survfit(observed ~ 1, weights = weights, se.fit = FALSE)
+        rep(mean(surv), length(observed))
+      } else if (length(event_time(observed)) >= nparams) {
+        predict(survreg(observed ~ 1, weights = weights, dist = distr))
+      } else {
+        rep(NA_real_, length(observed))
+      }
+      1 - mse(observed, predicted, weights) / mse(observed, obs_mean, weights)
     } else {
-      rep(NA_real_, length(observed))
+      metric_SurvTimes(r2, observed, predicted, weights, method = method)
     }
-    1 - mse(observed, predicted, weights) / mse(observed, obs_mean, weights)
   }
 )
 
