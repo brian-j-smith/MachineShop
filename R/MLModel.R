@@ -163,7 +163,7 @@ NullModel <- function() {
 
 
 update.MLModel <- function(
-  object, params = NULL, quote = TRUE, new_id = FALSE, ...
+  object, params = NULL, quote = TRUE, id = object@id, ...
 ) {
   old_id <- object@id
   if (is.list(params)) {
@@ -171,11 +171,7 @@ update.MLModel <- function(
     new_params[names(params)] <- params
     object <- do.call(object@name, new_params, quote = quote)
   }
-  if (is.character(new_id)) {
-    object@id <- new_id
-  } else if (!isTRUE(new_id)) {
-    object@id <- old_id
-  }
+  object@id <- id
   object
 }
 

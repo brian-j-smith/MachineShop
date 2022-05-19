@@ -42,7 +42,8 @@ expand_model <- function(object, ..., random = FALSE) {
 
 .expand_model.tbl_df <- function(object, model, ...) {
   models <- map(function(params) {
-    do.call(update, list(model, params = params, new_id = TRUE), quote = TRUE)
+    new_id <- make_id("model")
+    do.call(update, list(model, params = params, id = new_id), quote = TRUE)
   }, split(object, seq_len(max(nrow(object), 1))))
   names(models) <- paste0(models[[1]]@name, ".", names(models))
   models

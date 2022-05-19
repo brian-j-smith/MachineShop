@@ -270,7 +270,7 @@ update.TunedModel <- function(
   object, params = NULL, ...
 ) {
   if (is.list(params)) {
-    update(object@model, params = params, new_id = object@id)
+    update(object@model, params = params, id = object@id)
   } else {
     object
   }

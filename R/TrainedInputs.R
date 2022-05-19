@@ -320,7 +320,7 @@ TunedInput.recipe <- function(
 
 update.TunedModelRecipe <- function(object, params = NULL, ...) {
   if (is.list(params)) {
-    update(as(object, "ModelRecipe"), params = params, new_id = object@id)
+    update(as(object, "ModelRecipe"), params = params)
   } else {
     object
   }

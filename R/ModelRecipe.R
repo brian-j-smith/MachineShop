@@ -109,7 +109,7 @@ prep_recipe_data <- function(x) {
 
 
 update.ModelRecipe <- function(
-  object, params = NULL, data = NULL, new_id = FALSE, ...
+  object, params = NULL, data = NULL, id = object@id, ...
 ) {
   stopifnot(!is_trained(object))
   if (is.list(params)) {
@@ -122,10 +122,6 @@ update.ModelRecipe <- function(
     }
   }
   if (is.data.frame(data)) object$template <- prep_recipe_data(data)
-  if (is.character(new_id)) {
-    object@id <- new_id
-  } else if (isTRUE(new_id)) {
-    object@id <- make_id()
-  }
+  object@id <- id
   object
 }
