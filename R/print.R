@@ -792,7 +792,8 @@ print_control <- function(x, fields = NULL, n = Inf, ...) {
 print_data <- function(x, n = Inf, level = 0) {
   if (level < 1) {
     print_label("Data:")
-    print_items(within(x, remove("(names)")), n = n)
+    x[["(names)"]] <- NULL
+    print_items(x, n = n)
   } else if (level == 1) {
     print_fields(list("Number of observations: " = nrow(x)))
   }
