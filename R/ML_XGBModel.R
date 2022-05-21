@@ -169,13 +169,13 @@ XGBModel <- function(
       }
 
       (if (verbose) identity else capture.output)(
-        model_fit <- xgboost::xgboost(
+        res <- xgboost::xgboost(
           dmat, weight = weights, params = params, nrounds = nrounds,
           verbose = verbose, print_every_n = print_every_n
         )
       )
-      attr(model_fit, ".MachineShop") <- list(y_levels = y_levels)
-      model_fit
+      attr(res, ".MachineShop") <- list(y_levels = y_levels)
+      res
     },
 
     predict = function(object, newdata, times, .MachineShop, ...) {

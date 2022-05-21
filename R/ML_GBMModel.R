@@ -85,7 +85,7 @@ GBMModel <- function(
       }
       cond <- NULL
       suppressWarnings(withCallingHandlers(
-        model_fit <- eval_fit(
+        res <- eval_fit(
           data,
           formula = gbm::gbm(
             formula, data = data, weights = weights,
@@ -105,7 +105,7 @@ GBMModel <- function(
           warning(cond)
         }
       }
-      model_fit
+      res
     },
 
     predict = function(object, newdata, .MachineShop, ...) {

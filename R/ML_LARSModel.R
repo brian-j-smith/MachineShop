@@ -64,14 +64,14 @@ LARSModel <- function(
       x <- model.matrix(data, intercept = FALSE)
       y <- response(data)
       if (is.null(step)) {
-        model_fit <- lars::lars(x, y, ...)
-        step <- length(model_fit$df)
+        res <- lars::lars(x, y, ...)
+        step <- length(res$df)
       } else {
-        model_fit <- lars::lars(x, y, max.steps = ceiling(step), ...)
+        res <- lars::lars(x, y, max.steps = ceiling(step), ...)
         step <- step
       }
-      attr(model_fit, ".MachineShop") <- list(step = step)
-      model_fit
+      attr(res, ".MachineShop") <- list(step = step)
+      res
     },
 
     predict = function(object, newdata, .MachineShop, ...) {

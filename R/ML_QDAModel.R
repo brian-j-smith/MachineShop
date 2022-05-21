@@ -49,13 +49,13 @@ QDAModel <- function(
     params = new_params(environment()),
 
     fit = function(formula, data, weights, use, ...) {
-      model_fit <- eval_fit(
+      res <- eval_fit(
         data,
         formula = MASS::qda(formula, data = data, ...),
         matrix = MASS::qda(x, y, ...)
       )
-      attr(model_fit, ".MachineShop") <- list(use = use)
-      model_fit
+      attr(res, ".MachineShop") <- list(use = use)
+      res
     },
 
     predict = function(

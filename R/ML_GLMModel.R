@@ -80,9 +80,9 @@ GLMModel <- function(family = NULL, quasi = FALSE, ...) {
           trace = control$trace, reltol = control$epsilon
         )
       } else if (identical(family, "negbin")) {
-        model_fit <- MASS::glm.nb(formula, data = data, weights = weights,
+        res <- MASS::glm.nb(formula, data = data, weights = weights,
                                   control = control)
-        MASS::glm.convert(model_fit)
+        MASS::glm.convert(res)
       } else {
         stats::glm(formula, data = data, weights = weights, family = family,
                    control = control)
@@ -165,13 +165,13 @@ GLMStepAICModel <- function(
       stepargs <- stepAIC_args(formula, direction, scope)
       control <- stats::glm.control(...)
       if (family == "negbin") {
-        model_fit <- MASS::stepAIC(
+        res <- MASS::stepAIC(
           MASS::glm.nb(stepargs$formula, data = data, weights = weights,
                        control = control),
           direction = direction, scope = stepargs$scope, k = k, trace = trace,
           steps = steps
         )
-        MASS::glm.convert(model_fit)
+        MASS::glm.convert(res)
       } else {
         MASS::stepAIC(
           stats::glm(stepargs$formula, data = data, weights = weights,

@@ -54,11 +54,11 @@ TreeModel <- function(
     fit = function(
       formula, data, weights, split, k = NULL, best = NULL, method = NULL, ...
     ) {
-      model_fit <- tree::tree(formula, data = as.data.frame(formula, data),
-                              weights = weights, split = split, ...)
+      res <- tree::tree(formula, data = as.data.frame(formula, data),
+                        weights = weights, split = split, ...)
       if (!is.null(method)) {
-        tree::prune.tree(model_fit, k = k, best = best, method = method)
-      } else model_fit
+        tree::prune.tree(res, k = k, best = best, method = method)
+      } else res
     },
 
     predict = function(object, newdata, ...) {

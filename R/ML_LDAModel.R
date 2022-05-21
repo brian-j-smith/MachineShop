@@ -63,12 +63,12 @@ LDAModel <- function(
     ),
 
     fit = function(formula, data, weights, dimen, use, ...) {
-      model_fit <- MASS::lda(formula, data = as.data.frame(formula, data), ...)
-      attr(model_fit, ".MachineShop") <- list(
-        dimen = if (missing(dimen)) length(model_fit$svd) else dimen,
+      res <- MASS::lda(formula, data = as.data.frame(formula, data), ...)
+      attr(res, ".MachineShop") <- list(
+        dimen = if (missing(dimen)) length(res$svd) else dimen,
         use = use
       )
-      model_fit
+      res
     },
 
     predict = function(
