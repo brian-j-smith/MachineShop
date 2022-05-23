@@ -117,7 +117,7 @@ GLMNetModel <- function(
       newx <- model.matrix(newdata, intercept = FALSE)
       newoffset <- model.offset(newdata)
       if (is.Surv(y)) {
-        data <- predictor_frame(input)
+        data <- PredictorFrame(input)
         lp <- predict(
           object, newx = model.matrix(data, intercept = FALSE),
           newoffset = model.offset(data), type = "link"

@@ -114,7 +114,7 @@ GBMModel <- function(
       n <- object$n.trees
       if (object$distribution$name == "coxph") {
         y <- response(input)
-        data <- as.data.frame(predictor_frame(input))
+        data <- as.data.frame(PredictorFrame(input))
         lp <- predict(object, newdata = data, n.trees = n, type = "link")
         new_lp <- predict(object, newdata = newdata, n.trees = n, type = "link")
         predict(y, lp, new_lp, weights = case_weights(input), ...)

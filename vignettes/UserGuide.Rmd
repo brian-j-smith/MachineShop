@@ -1414,10 +1414,10 @@ as.MLModel(model_fit)
 #>   <chr>            <lgl>    <chr>                  <dbl>
 #> 1 ModelRecipe.1    FALSE    input.azpi             0.761
 #> 2 ModelRecipe.2    FALSE    input.aLHo             0.643
-#> 3 TunedModelRecipe TRUE     input.W4KN             0.804
+#> 3 TunedModelRecipe TRUE     input.W4KN             0.796
 #> 
 #> Selected row: 3
-#> Metric: C-Index = 0.8035826
+#> Metric: C-Index = 0.7960841
 #> 
 #> === $TrainingStep2 =============================================================
 #> === TrainingStep object ===
@@ -1662,7 +1662,7 @@ res_stacked <- resample(surv_fo, data = surv_train, model = stackedmodel)
 summary(res_stacked)
 #>          Statistic
 #> Metric         Mean    Median        SD       Min       Max NA
-#>   C-Index 0.7197215 0.7555556 0.1220386 0.5194805 0.8324324  0
+#>   C-Index 0.7255417 0.7703704 0.1281829 0.5064935 0.8324324  0
 
 ## Super learner
 supermodel <- SuperModel(CoxModel, CForestModel, GLMBoostModel,
@@ -1670,8 +1670,8 @@ supermodel <- SuperModel(CoxModel, CForestModel, GLMBoostModel,
 res_super <- resample(surv_fo, data = surv_train, model = supermodel)
 summary(res_super)
 #>          Statistic
-#> Metric         Mean Median        SD       Min       Max NA
-#>   C-Index 0.7590918    0.8 0.1168708 0.5726872 0.8609272  0
+#> Metric         Mean    Median        SD       Min       Max NA
+#>   C-Index 0.7448593 0.7954545 0.1094031 0.5770925 0.8543046  0
 ```
 
 
@@ -1730,12 +1730,12 @@ Nesting of resampling routines is repeated recursively when a fit involves multi
 #> # A tibble: 3 x 4
 #>   name          selected params$PCA$num_comp metrics$`C-Index`
 #>   <chr>         <lgl>                  <int>             <dbl>
-#> 1 ModelRecipe.1 TRUE                       1             0.735
-#> 2 ModelRecipe.2 FALSE                      2             0.733
-#> 3 ModelRecipe.3 FALSE                      3             0.722
+#> 1 ModelRecipe.1 TRUE                       1             0.737
+#> 2 ModelRecipe.2 FALSE                      2             0.730
+#> 3 ModelRecipe.3 FALSE                      3             0.696
 #> 
 #> Selected row: 1
-#> Metric: C-Index = 0.7347546
+#> Metric: C-Index = 0.7365799
 ```
 
 In order to identify and return a final model fitted to the entire input data, the hierarchy is traversed from top to bottom along the path determined by the choice at each node.  Steps along the path are labeled `TrainStep1` and `TrainStep2` in the output.  As seen above in `TrainStep1`, one principal component is first selected for the tuned input.  Using an input recipe with one principal component, the entire dataset is refit at `TrainStep2` to finally select `r rdoc_url("GBMModel")`.
@@ -1751,7 +1751,7 @@ In order to identify and return a final model fitted to the entire input data, t
 #>   <chr>        <lgl>    <chr>                  <dbl>
 #> 1 GBMModel     TRUE     model.1mQk             0.740
 #> 2 TunedModel   FALSE    model.hRF5             0.735
-#> 3 StackedModel FALSE    model.CYj0             0.656
+#> 3 StackedModel FALSE    model.CYj0             0.653
 #> 
 #> Selected row: 1
 #> Metric: C-Index = 0.7399641
@@ -1937,13 +1937,13 @@ LogisticModel <- MLModel(
 The `r rdoc_url("MLMetric()")` function creates a metric object that can be used as previously described for the model performance metrics.  Its first argument is a function to compute the metric, defined to accept `observed` and `predicted` as the first two arguments and with an ellipsis to accommodate others.  Its remaining arguments are as follows.
 
 `name`
-  :  Character name of the object to which the metric is assigned.
+  :  character name of the object to which the metric is assigned.
 
 `label`
-  : Optional character descriptor for the metric (default: `name`).
+  : optional character descriptor for the metric (default: `name`).
 
 `maximize`
-  : Logical indicating whether higher values of the metric correspond to better predictive performance.
+  : logical indicating whether higher values of the metric correspond to better predictive performance.
 
 ```{r using_extensions_mlmetric}
 ## F2 score metric extension

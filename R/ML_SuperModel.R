@@ -95,15 +95,12 @@ MLModelFunction(SuperModel) <- NULL
 }
 
 
-.predict.SuperModel <- function(
-  object, model_fit, newdata, times, .MachineShop, ...
-) {
+.predict.SuperModel <- function(object, model_fit, newdata, times, ...) {
   predictors <- map(function(fit) {
     predict(fit, newdata = newdata, times = model_fit$times, type = "default")
   }, model_fit$base_fits)
 
   df <- if (model_fit$all_vars) {
-    newdata <- predictor_frame(.MachineShop$input, newdata)
     newdata[["(names)"]] <- rownames(newdata)
     super_df(NA, predictors, newdata[["(names)"]], newdata)
   } else {

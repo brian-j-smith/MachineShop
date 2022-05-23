@@ -209,7 +209,7 @@ XGBModel <- function(
           }
         },
         "survival:cox" = {
-          x <- model.matrix(predictor_frame(input), intercept = FALSE)
+          x <- model.matrix(PredictorFrame(input), intercept = FALSE)
           lp <- xgb_predict(x, lp = TRUE)
           new_lp <- xgb_predict(newx, lp = TRUE)
           predict(response(input), lp, new_lp, times = times,

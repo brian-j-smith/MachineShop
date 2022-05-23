@@ -306,6 +306,9 @@ setClass("ModeledRecipe",
 )
 
 
+setClass("PredictorFrame", contains = "ModelFrame")
+
+
 setClass("SelectedInput",
   contains = c("EnsembleInputOrModel", "MLInput")
 )

@@ -61,10 +61,12 @@ predict.MLModelFit <- function(
   throw(check_assignment(times))
 
   obs <- response(object)
+  .MachineShop <- attr(object, ".MachineShop")
   pred <- convert_predicted(obs, .predict(
-    model, model_fit = unMLModelFit(object), newdata = newdata, times = times,
-    distr = distr, method = method, .MachineShop = attr(object, ".MachineShop"),
-    ...
+    model, model_fit = unMLModelFit(object),
+    newdata = PredictorFrame(.MachineShop$input, newdata),
+    times = times, distr = distr, method = method,
+    .MachineShop = .MachineShop, ...
   ))
 
   pred <- switch(match.arg(type),
@@ -90,9 +92,46 @@ setMethod("predict", "MLModelFit",
 }
 
 
-.predict.MLModel <- function(object, model_fit, newdata, .MachineShop, ...) {
-  object@predict(
-    model_fit, newdata = predictor_frame(.MachineShop$input, newdata),
-    .MachineShop = .MachineShop, ...
-  )
+.predict.MLModel <- function(object, model_fit, ...) {
+  object@predict(model_fit, ...)
+}
+
+
+PredictorFrame <- function(input, newdata = NULL) {
+  if (!is(newdata, "PredictorFrame")) {
+    new("PredictorFrame", ModelFrame(
+      delete.response(terms(input)), predictors(input, newdata), na.rm = FALSE
+    ))
+  } else {
+    newdata
+  }
+}
+
+
+predictors <- function(object, ...) {
+  UseMethod("predictors")
+}
+
+
+predictors.formula <- function(object, data = NULL, ...) {
+  if (is.null(data)) {
+    object[[length(object)]]
+  } else {
+    data[, all.vars(predictors(object)), drop = FALSE]
+  }
+}
+
+
+predictors.ModelFrame <- function(object, newdata = NULL, ...) {
+  data <- as.data.frame(if (is.null(newdata)) object else newdata)
+  predictors(terms(object), data)
+}
+
+
+predictors.recipe <- function(object, newdata = NULL, ...) {
+  object <- prep(object, retain = FALSE)
+  data <- bake(object, newdata = newdata)
+  info <- summary(object)
+  pred_names <- info$variable[info$role %in% c("predictor", "pred_offset")]
+  data[, pred_names, drop = FALSE]
 }
