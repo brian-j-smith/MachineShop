@@ -1,4 +1,4 @@
-# ModelSpecification class
+# ModelSpecification Class
 
 The `r rdoc_url("ModelSpecification")` class allows response and predictor variables and a model that defines the relationship between them to be packaged together into a single container for ease of model fitting and assessment.  The inputs and models described previously can be included in a `r rdoc_url("ModelSpecification")`.  Resampling control and a method for optimizing tuning parameters are also part of the specification.  A `r rdoc_url("ModelSpecification")` object with its default or a user-specified control method has the following characteristics.
 
