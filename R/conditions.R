@@ -389,32 +389,3 @@ check_weights <- function(x, along) {
     check_numeric(x, bounds = c(0, Inf), include = c(TRUE, FALSE), size = n)
   }
 }
-
-
-#################### Deprecations ####################
-
-
-#' Deprecated Functions
-#'
-#' Functions that have been deprecated and will be removed in a future version
-#' of the package.
-#'
-#' @name deprecated
-#' @rdname deprecated
-#'
-#' @param ... arguments passed to non-deprecated equivalent.
-#'
-NULL
-
-
-#' @rdname deprecated
-#'
-#' @details
-#' Use \code{\link[=ppr]{ppr()}} instead of \code{rpp()}.
-#'
-rpp <- function(...) {
-  throw(DeprecatedCondition(
-    "rpp()", "ppr()", expired = Sys.Date() >= "2022-06-01"
-  ))
-  ppr(...)
-}
