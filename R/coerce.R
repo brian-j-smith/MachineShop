@@ -27,11 +27,6 @@ setAs("ModelFrame", "data.frame",
 )
 
 
-setAs("ModeledFrame", "data.frame",
-  function(from) as.data.frame(from)
-)
-
-
 setAs("SelectedModelFrame", "data.frame",
   function(from) as.data.frame(from)
 )
@@ -284,11 +279,6 @@ as.MLModel.MLModelFunction <- function(x, ...) {
 }
 
 
-as.MLModel.ModeledInput <- function(x, ...) {
-  as.MLModel(ModelSpecification(x))
-}
-
-
 #' @rdname as.MLModel
 #'
 as.MLModel.ModelSpecification <- function(x, ...) {
@@ -317,9 +307,6 @@ setAsS3Part("ParameterGrid", "parameters")
 
 
 setAsS3Part("ModelRecipe", "recipe")
-
-
-setAsS3Part("ModeledRecipe", "recipe")
 
 
 setAsS3Part("SelectedModelRecipe", "recipe")

@@ -38,9 +38,7 @@ response variables and a \link[=data.frame]{data frame} containing them.}
 
 \item{model}{\link[=models]{model} function, function name, or object; or
 another object that can be \link[=as.MLModel]{coerced} to a model.  A model
-can be given first followed by any of the variable specifications, and the
-argument can be omitted altogether in the case of
-\link[=ModeledInput]{modeled inputs}.}
+can be given first followed by any of the variable specifications.}
 
 \item{x, y}{\link{matrix} and object containing predictor and response
 variables.}

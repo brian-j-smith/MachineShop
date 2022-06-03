@@ -370,17 +370,6 @@ print.ModelTerms <- function(x, n = MachineShop::settings("print_max"), ...) {
 }
 
 
-print.ModeledInput <- function(x, n = MachineShop::settings("print_max"), ...) {
-  NextMethod()
-  level <- nesting_level(...)
-  if (level < 2) {
-    newline()
-    print(x@model, n = n, level = level + 1)
-  }
-  invisible(x)
-}
-
-
 print.ParameterGrid <- function(x, ...) {
   NextMethod()
   newline()

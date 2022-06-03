@@ -107,8 +107,8 @@ SelectedInput.ModelFrame <- function(
   params <- do.call(TrainingParams, as.list(environment()))
   inputs <- list(...)
 
-  if (!all(map("char", class1, inputs) %in% c("ModelFrame", "ModeledFrame"))) {
-    throw(Error("Inputs must all be ModelFrames or ModeledFrames."))
+  if (!all(map("char", class1, inputs) == "ModelFrame")) {
+    throw(Error("Inputs must all be ModelFrames."))
   }
 
   if (!identical_elements(inputs, function(x) x[[1]])) {

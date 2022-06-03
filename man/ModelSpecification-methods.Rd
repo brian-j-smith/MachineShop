@@ -38,17 +38,14 @@ as such, must be given first in calls to them.}
 predictor and response variables.}
 
 \item{model}{\link[=models]{model} function, function name, or object; or
-another object that can be \link[=as.MLModel]{coerced} to a model.  The
-argument can be omitted altogether in the case of
-\link[=ModeledInput]{modeled inputs}.}
+another object that can be \link[=as.MLModel]{coerced} to a model.}
 
 \item{control}{\link[=controls]{control} function, function name, or object
 defining the resampling method to be employed.  If \code{NULL} or if
-the model specification contains any \code{ModeledInput},
-\code{SelectedInput}, or \code{SelectedModel} objects, then object-specific
-control structures and training parameters are used for selection and
-tuning, as usual, and objects are trained sequentially with nested
-resampling.  Otherwise,
+the model specification contains any \code{SelectedInput} or
+\code{SelectedModel} objects, then object-specific control structures and
+training parameters are used for selection and tuning, as usual, and
+objects are trained sequentially with nested resampling.  Otherwise,
 \itemize{
   \item tuning of input and model objects is performed simultaneously over
     a global grid of their parameter values, and

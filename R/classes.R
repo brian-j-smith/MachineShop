@@ -290,22 +290,6 @@ setClass("ModelSpecification",
 )
 
 
-setClass("ModeledInput",
-  contains = "VIRTUAL",
-  slots = c(model = "MLModel")
-)
-
-
-setClass("ModeledFrame",
-  contains = c("ModeledInput", "ModelFrame")
-)
-
-
-setClass("ModeledRecipe",
-  contains = c("ModeledInput", "ModelRecipe")
-)
-
-
 setClass("PredictorFrame", contains = "ModelFrame")
 
 

@@ -50,9 +50,7 @@ setMethod("[", c(x = "ModelFrame", i = "ANY", j = "ANY", drop = "ANY"),
     y <- as.data.frame(x)[i, j, drop = drop]
     if (identical(colnames(x), colnames(y))) {
       y <- ModelFrame(terms(x), y, na.rm = FALSE)
-      if (is(x, "ModeledInput")) {
-        y <- ModelSpecification(y, model = as.MLModel(x), control = NULL)
-      } else if (is(x, "SelectedInput")) {
+      if (is(x, "SelectedInput")) {
         y <- new(class(x), y, candidates = x@candidates, params = x@params)
       }
     }

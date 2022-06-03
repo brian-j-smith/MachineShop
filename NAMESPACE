@@ -109,7 +109,6 @@ export(MLModel,
 
 export(ModelFrame,
        ModelSpecification,
-       ModeledInput,
        SelectedInput,
        TunedInput)
 
@@ -216,7 +215,6 @@ S3method(as.MLModel, MLModelFit)
 S3method(as.MLModel, MLModelFunction)
 S3method(as.MLModel, model_spec)
 S3method(as.MLModel, ModelSpecification)
-S3method(as.MLModel, ModeledInput)
 S3method(as_string, default)
 S3method(as_string, character)
 S3method(bake, step_lincomp)
@@ -263,8 +261,6 @@ S3method(ModelFrame, matrix)
 S3method(ModelSpecification, formula)
 S3method(ModelSpecification, matrix)
 S3method(ModelSpecification, ModelFrame)
-S3method(ModelSpecification, ModeledFrame)
-S3method(ModelSpecification, ModeledRecipe)
 S3method(ModelSpecification, recipe)
 S3method(ParameterGrid, list)
 S3method(ParameterGrid, param)
@@ -318,7 +314,6 @@ S3method(print, ModelFrame)
 S3method(print, ModelRecipe)
 S3method(print, ModelSpecification)
 S3method(print, ModelTerms)
-S3method(print, ModeledInput)
 S3method(print, NullControl)
 S3method(print, OOBControl)
 S3method(print, ParameterGrid)

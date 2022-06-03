@@ -111,7 +111,6 @@ NULL
 #' functions.
 #' \tabular{ll}{
 #'   \code{\link{ModelSpecification}} \tab Model specification \cr
-#'   \code{\link{ModeledInput}}  \tab Input with a prespecified model \cr
 #'   \code{\link{SelectedInput}} \tab Input selection from a candidate set \cr
 #'   \code{\link{TunedInput}}    \tab Input tuning over a parameter grid \cr
 #' }

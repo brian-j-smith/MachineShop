@@ -2,12 +2,9 @@
 % Please edit documentation in R/conditions.R
 \name{deprecated}
 \alias{deprecated}
-\alias{ModeledInput}
 \alias{rpp}
 \title{Deprecated Functions}
 \usage{
-ModeledInput(...)
-
 rpp(...)
 }
 \arguments{
@@ -18,8 +15,5 @@ Functions that have been deprecated and will be removed in a future version
 of the package.
 }
 \details{
-Use \code{\link[=ModelSpecification]{ModelSpecification()}} instead of
-\code{ModeledInput()}.
-
 Use \code{\link[=ppr]{ppr()}} instead of \code{rpp()}.
 }

@@ -149,7 +149,7 @@ expand_modelgrid.ModelSpecification <- function(object, ...) {
 
   if (is_empty(grid)) {
 
-    types <- c("ModeledInput", "SelectedInput", "SelectedModel")
+    types <- c("SelectedInput", "SelectedModel")
     found <- unique(unlist(map_slots(function(slot) {
       types[map("logi", is, list(slot), types)]
     }, object)))

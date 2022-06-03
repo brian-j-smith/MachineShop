@@ -18,9 +18,7 @@
 #' @param object model \link[=ModelSpecification]{specification}.
 #' @param model \link[=models]{model} function, function name, or object; or
 #'   another object that can be \link[=as.MLModel]{coerced} to a model.  A model
-#'   can be given first followed by any of the variable specifications, and the
-#'   argument can be omitted altogether in the case of
-#'   \link[=ModeledInput]{modeled inputs}.
+#'   can be given first followed by any of the variable specifications.
 #'
 #' @return \code{MLModelFit} class object.
 #'
