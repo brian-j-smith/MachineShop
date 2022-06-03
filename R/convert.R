@@ -1,14 +1,5 @@
 convert_numeric <- function(x, ...) {
-  result <- check_numeric(x, ..., nonempty = FALSE, na.fail = FALSE)
-  if (is(result, "error")) {
-    result$message <- paste0(
-      result$message, "\n",
-      "Call `predict()` with `type = \"default\"`",
-      if (is(result, "DomainError")) ", \"numeric\",",
-      " or \"response\" instead."
-    )
-  }
-  result
+  check_numeric(x, ..., nonempty = FALSE, na.fail = FALSE)
 }
 
 
