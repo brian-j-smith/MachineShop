@@ -2,6 +2,20 @@
 
 ## Version Updates
 
+## 3.5.0
+* Add argument `method` to `r2()` for calculation of Pearson or Spearman correlation.
+* Add `predict()` S4 method for `MLModelFit`.
+* Export `MLModelFunction()`.
+* Export `as.MLInput()` methods for `MLModelFit` and `ModelSpecification`.
+* Export `as.MLModel()` method for `ModelSpecification`.
+* Improve recursive feature elimination of `SelectedInput` terms.
+* Improve speed of `StackedModel` and `SuperModel`.
+* Internal changes
+  * Add `.MachineShop` list attribute to `MLModelFit`.
+  * Move field `mlmodel` in `MLModelFit` to `model` in `.MachineShop`.
+  * Move slot `input` in `MLModel` to `.MachineShop`.
+  * Pass `.MachineShop` to the `predict` and `varimp` slot functions of `MLModel`.
+
 ## 3.4.3
 * Fix `TypeError` in `dependence()` with numeric dummy variables from recipes.
 * Prep `ModelRecipe` with `retain = TRUE` for recipe steps that are skipped, for example, when test datasets are created.
