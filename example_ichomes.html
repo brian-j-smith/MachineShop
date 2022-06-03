@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -785,7 +785,7 @@ plot(vi)</code></pre>
 #&gt; 
 #&gt; Optimization method: Grid Search
 #&gt; TunedModel log:
-#&gt; # A tibble: 25 x 4
+#&gt; # A tibble: 25 × 4
 #&gt;    name        selected params$n.trees $interaction.depth metrics$RMSE   $R2
 #&gt;    &lt;chr&gt;       &lt;lgl&gt;             &lt;int&gt;              &lt;int&gt;        &lt;dbl&gt; &lt;dbl&gt;
 #&gt;  1 GBMModel.1  FALSE                50                  1       57137. 0.583
@@ -798,7 +798,7 @@ plot(vi)</code></pre>
 #&gt;  8 GBMModel.8  FALSE               100                  3       50373. 0.677
 #&gt;  9 GBMModel.9  FALSE               100                  4       48622. 0.706
 #&gt; 10 GBMModel.10 FALSE               100                  5       48306. 0.710
-#&gt; # ... with 15 more rows, and 1 more variable: metrics$MAE &lt;dbl&gt;
+#&gt; # … with 15 more rows, and 1 more variable: metrics$MAE &lt;dbl&gt;
 #&gt; 
 #&gt; Selected row: 19
 #&gt; Metric: RMSE = 48025.48
@@ -815,7 +815,7 @@ pred &lt;- predict(model_fit, newdata = testset)
 ## Test set performance
 performance(obs, pred)
 #&gt;         RMSE           R2          MAE 
-#&gt; 4.321878e+04 7.429798e-01 2.617616e+04</code></pre>
+#&gt; 4.505705e+04 7.206507e-01 2.726249e+04</code></pre>
 </div>
 <div id="calibration-curve" class="section level2">
 <h2>Calibration Curve</h2>

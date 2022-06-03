@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -386,7 +386,7 @@ div.tocify {
 <h1>Model Information</h1>
 <p>A named list of package-supplied models can be obtained interactively
 with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.4.0/topics/modelinfo"><code>modelinfo()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/modelinfo"><code>modelinfo()</code></a>
 function, and includes a descriptive <code>"label"</code> for each,
 source <code>"packages"</code> on which the models depend, supported
 response variable <code>"types"</code>, and <code>"arguments"</code>
@@ -515,12 +515,12 @@ modelinfo(iris$Species) %&gt;% names
 <div id="metric-information" class="section level1">
 <h1>Metric Information</h1>
 <p>A named list of supplied metrics can be obtained with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.4.0/topics/metricinfo"><code>metricinfo()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metricinfo"><code>metricinfo()</code></a>
 function, and includes a descriptive <code>"label"</code> for each,
 whether to <code>"maximize"</code> the metrics for better performance,
 their function <code>"arguments"</code>, and supported observed and
 predicted response variable <code>"types"</code>. Function <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.4.0/topics/metricinfo"><code>metricinfo()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metricinfo"><code>metricinfo()</code></a>
 may be called without arguments, with one or more metric functions, an
 observed response variable, an observed and predicted response variable
 pair, response variable types, or resampled output; and will return
@@ -550,17 +550,18 @@ metricinfo(auc, r2)
 #&gt; [1] TRUE
 #&gt; 
 #&gt; $auc$arguments
-#&gt; function (observed, predicted = NULL, weights = NULL, metrics = c(MachineShop::tpr, 
-#&gt;     MachineShop::fpr), stat = MachineShop::settings(&quot;stat.Curve&quot;), 
-#&gt;     ...) 
+#&gt; function (observed, predicted = NULL, weights = NULL, multiclass = c(&quot;pairs&quot;, 
+#&gt;     &quot;all&quot;), metrics = c(MachineShop::tpr, MachineShop::fpr), 
+#&gt;     stat = MachineShop::settings(&quot;stat.Curve&quot;), ...) 
 #&gt; NULL
 #&gt; 
 #&gt; $auc$response_types
 #&gt;           observed predicted
-#&gt; 1           factor   numeric
-#&gt; 2 PerformanceCurve      NULL
-#&gt; 3         Resample      NULL
-#&gt; 4             Surv SurvProbs
+#&gt; 1           factor    matrix
+#&gt; 2           factor   numeric
+#&gt; 3 PerformanceCurve      NULL
+#&gt; 4         Resample      NULL
+#&gt; 5             Surv SurvProbs
 #&gt; 
 #&gt; 
 #&gt; $r2
@@ -571,8 +572,8 @@ metricinfo(auc, r2)
 #&gt; [1] TRUE
 #&gt; 
 #&gt; $r2$arguments
-#&gt; function (observed, predicted = NULL, weights = NULL, distr = character(), 
-#&gt;     ...) 
+#&gt; function (observed, predicted = NULL, weights = NULL, method = c(&quot;mse&quot;, 
+#&gt;     &quot;pearson&quot;, &quot;spearman&quot;), distr = character(), ...) 
 #&gt; NULL
 #&gt; 
 #&gt; $r2$response_types
@@ -597,7 +598,8 @@ metricinfo(factor(0), factor(0)) %&gt;% names
 #&gt; [1] &quot;accuracy&quot; &quot;kappa2&quot;
 
 metricinfo(factor(0), matrix(0)) %&gt;% names
-#&gt; [1] &quot;accuracy&quot;      &quot;brier&quot;         &quot;cross_entropy&quot; &quot;kappa2&quot;
+#&gt; [1] &quot;accuracy&quot;      &quot;auc&quot;           &quot;brier&quot;         &quot;cross_entropy&quot;
+#&gt; [5] &quot;kappa2&quot;        &quot;pr_auc&quot;        &quot;roc_auc&quot;
 
 ## Identify factor-specific metrics
 metricinfo(factor(0), accuracy, auc, r2) %&gt;% names
@@ -610,14 +612,16 @@ model_fit &lt;- fit(Species ~ ., data = iris, model = C50Model)
 obs &lt;- response(model_fit)
 pred &lt;- predict(model_fit, type = &quot;prob&quot;)
 metricinfo(obs, pred) %&gt;% names
-#&gt; [1] &quot;accuracy&quot;      &quot;brier&quot;         &quot;cross_entropy&quot; &quot;kappa2&quot;</code></pre>
+#&gt; [1] &quot;accuracy&quot;      &quot;auc&quot;           &quot;brier&quot;         &quot;cross_entropy&quot;
+#&gt; [5] &quot;kappa2&quot;        &quot;pr_auc&quot;        &quot;roc_auc&quot;</code></pre>
 </div>
 <div id="resample-specific" class="section level2">
 <h2>Resample-Specific</h2>
 <pre class="r"><code>## Metrics for resampled output
 model_res &lt;- resample(Species ~ ., data = iris, model = C50Model)
 metricinfo(model_res) %&gt;% names
-#&gt; [1] &quot;accuracy&quot;      &quot;brier&quot;         &quot;cross_entropy&quot; &quot;kappa2&quot;</code></pre>
+#&gt; [1] &quot;accuracy&quot;      &quot;auc&quot;           &quot;brier&quot;         &quot;cross_entropy&quot;
+#&gt; [5] &quot;kappa2&quot;        &quot;pr_auc&quot;        &quot;roc_auc&quot;</code></pre>
 </div>
 </div>
 
