@@ -260,7 +260,7 @@ as.MLMetric.MLMetric <- function(x, ...) {
 #' Function to coerce an object to \code{MLModel}.
 #'
 #' @param x model \link{fit} result, \pkg{MachineShop}
-#'   \link[=ModelSpecification]{model specification},  or
+#'   \link[=ModelSpecification]{model specification}, or
 #'   \pkg{parsnip} \link[parsnip:model_spec]{model specification}.
 #' @param ... arguments passed to other methods.
 #'

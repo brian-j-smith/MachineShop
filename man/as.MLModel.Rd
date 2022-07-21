@@ -17,7 +17,7 @@ as.MLModel(x, ...)
 }
 \arguments{
 \item{x}{model \link{fit} result, \pkg{MachineShop}
-\link[=ModelSpecification]{model specification},  or
+\link[=ModelSpecification]{model specification}, or
 \pkg{parsnip} \link[parsnip:model_spec]{model specification}.}
 
 \item{...}{arguments passed to other methods.}

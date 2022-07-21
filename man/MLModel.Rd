@@ -35,7 +35,7 @@ a comparison operator, whitespace and a valid version number, e.g.
 \code{"xgboost (>= 1.3.0)"}.}
 
 \item{response_types}{character vector of response variable types to which
-the model can be fit.  Supported types are \code{"binary"}, =
+the model can be fit.  Supported types are \code{"binary"},
 \code{"BinomialVariate"}, \code{"DiscreteVariate"}, \code{"factor"},
 \code{"matrix"}, \code{"NegBinomialVariate"}, \code{"numeric"},
 \code{"ordered"}, \code{"PoissonVariate"}, and \code{"Surv"}.}
