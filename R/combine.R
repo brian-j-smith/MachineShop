@@ -3,6 +3,7 @@
 #' Combine one or more \pkg{MachineShop} objects of the same class.
 #'
 #' @name combine
+#' @aliases c
 #' @rdname combine-methods
 #'
 #' @param ... named or unnamed \link{calibration}, \link{confusion},

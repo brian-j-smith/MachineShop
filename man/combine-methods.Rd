@@ -2,6 +2,7 @@
 % Please edit documentation in R/combine.R
 \name{combine}
 \alias{combine}
+\alias{c}
 \alias{c.Calibration}
 \alias{c.ConfusionList}
 \alias{c.ConfusionMatrix}
