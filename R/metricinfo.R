@@ -63,7 +63,7 @@ metricinfo <- function(...) {
 
 .metricinfo.character <- function(x, ...) {
   metric <- tryCatch(
-    fget(x),
+    as.MLMetric(x),
     error = function(cond) list()
   )
   .metricinfo(metric, ...)

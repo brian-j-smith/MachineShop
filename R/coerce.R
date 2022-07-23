@@ -246,6 +246,7 @@ as.MLMetric.default <- function(x, ...) {
 
 as.MLMetric.character <- function(x, ...) {
   x <- get0(x)
+  if (is.null(x)) throw(Error("Cannot coerce \"", x, "\" to an MLMetric."))
   as.MLMetric(x)
 }
 
@@ -280,6 +281,7 @@ as.MLModel.default <- function(x, ...) {
 
 as.MLModel.character <- function(x, ...) {
   x <- get0(x)
+  if (is.null(x)) throw(Error("Cannot coerce \"", x, "\" to an MLModel."))
   as.MLModel(x)
 }
 
