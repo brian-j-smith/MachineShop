@@ -6,10 +6,11 @@
 #' @name resample
 #' @rdname resample-methods
 #'
-#' @param ... arguments passed from the \code{MLModel} and
-#'   \code{MLModelFunction} methods to others and from the others to
-#'   \code{ModelSpecification}.  The first argument of each \code{resample}
-#'   method is positional and, as such, must be given first in calls to them.
+#' @param ... arguments passed from the generic function to its methods, from
+#'   the \code{MLModel} and \code{MLModelFunction} methods to first arguments of
+#'   others, and from others to the \code{ModelSpecification} method.  The
+#'   first argument of each \code{fit} method is positional and, as such, must
+#'   be given first in calls to them.
 #' @param object model \link[=inputs]{input} or
 #'   \link[=ModelSpecification]{specification}.
 #' @param formula,data \link[=formula]{formula} defining the model predictor and

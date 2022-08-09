@@ -5,8 +5,9 @@
 #' @name fit
 #' @rdname fit-methods
 #'
-#' @param ... arguments passed from the generic function to its methods and from
-#'   the \code{MLModel} and \code{MLModelFunction} methods to others.  The
+#' @param ... arguments passed from the generic function to its methods, from
+#'   the \code{MLModel} and \code{MLModelFunction} methods to first arguments of
+#'   others, and from others to the \code{ModelSpecification} method.  The
 #'   first argument of each \code{fit} method is positional and, as such, must
 #'   be given first in calls to them.
 #' @param formula,data \link[=formula]{formula} defining the model predictor and
