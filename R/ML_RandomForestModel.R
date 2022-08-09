@@ -47,6 +47,7 @@ RandomForestModel <- function(
     packages = "randomForest",
     response_types = c("factor", "numeric"),
     predictor_encoding = "model.frame",
+    na.rm = TRUE,
     params = new_params(environment()),
 
     gridinfo = new_gridinfo(
@@ -63,7 +64,9 @@ RandomForestModel <- function(
     fit = function(formula, data, weights, ...) {
       eval_fit(
         data,
-        formula = randomForest::randomForest(formula, data = data, ...),
+        formula = randomForest::randomForest(
+          formula, data = data, na.action = na.pass, ...
+        ),
         matrix = randomForest::randomForest(x, y, ...)
       )
     },

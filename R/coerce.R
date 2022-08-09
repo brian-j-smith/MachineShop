@@ -287,7 +287,7 @@ as.MLModel.character <- function(x, ...) {
 
 
 as.MLModel.MLModel <- function(x, ...) {
-  x
+  update(x)
 }
 
 

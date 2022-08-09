@@ -52,6 +52,7 @@ GBMModel <- function(
     response_types = c("factor", "numeric", "PoissonVariate", "Surv"),
     weights = TRUE,
     predictor_encoding = "model.frame",
+    na.rm = "response",
     params = new_params(environment()),
 
     gridinfo = new_gridinfo(

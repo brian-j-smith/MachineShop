@@ -51,6 +51,7 @@ GLMModel <- function(family = NULL, quasi = FALSE, ...) {
                        "NegBinomialVariate", "numeric", "PoissonVariate"),
     weights = TRUE,
     predictor_encoding = "model.matrix",
+    na.rm = TRUE,
     params = new_params(environment(), ...),
 
     fit = function(formula, data, weights, family = NULL, quasi, ...) {
@@ -76,16 +77,21 @@ GLMModel <- function(family = NULL, quasi = FALSE, ...) {
         stats::lm(formula, data = data, weights = weights)
       } else if (identical(family, "multinom")) {
         nnet::multinom(
-          formula, data = data, weights = weights, maxit = 4 * control$maxit,
-          trace = control$trace, reltol = control$epsilon
+          formula, data = data, weights = weights, na.action = na.pass,
+          maxit = 4 * control$maxit,
+          trace = control$trace, reltol = control$epsilons
         )
       } else if (identical(family, "negbin")) {
-        res <- MASS::glm.nb(formula, data = data, weights = weights,
-                                  control = control)
+        res <- MASS::glm.nb(
+          formula, data = data, weights = weights, na.action = na.pass,
+          control = control
+        )
         MASS::glm.convert(res)
       } else {
-        stats::glm(formula, data = data, weights = weights, family = family,
-                   control = control)
+        stats::glm(
+          formula, family = family, data = data, weights = weights,
+          na.action = na.pass, control = control
+        )
       }
     },
 
@@ -145,6 +151,7 @@ GLMStepAICModel <- function(
                        "numeric", "PoissonVariate"),
     weights = TRUE,
     predictor_encoding = stepmodel@predictor_encoding,
+    na.rm = stepmodel@na.rm,
     params = c(stepmodel@params, params),
 
     fit = function(
@@ -166,16 +173,20 @@ GLMStepAICModel <- function(
       control <- stats::glm.control(...)
       if (family == "negbin") {
         res <- MASS::stepAIC(
-          MASS::glm.nb(stepargs$formula, data = data, weights = weights,
-                       control = control),
+          MASS::glm.nb(
+            stepargs$formula, data = data, weights = weights,
+            na.action = na.pass, control = control
+          ),
           direction = direction, scope = stepargs$scope, k = k, trace = trace,
           steps = steps
         )
         MASS::glm.convert(res)
       } else {
         MASS::stepAIC(
-          stats::glm(stepargs$formula, data = data, weights = weights,
-                     family = family, control = control),
+          stats::glm(
+            stepargs$formula, family = family, data = data, weights = weights,
+            na.action = na.pass, control = control
+          ),
           direction = direction, scope = stepargs$scope, k = k, trace = trace,
           steps = steps
         )

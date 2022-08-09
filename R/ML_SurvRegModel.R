@@ -39,12 +39,13 @@ SurvRegModel <- function(
     response_types = "Surv",
     weights = TRUE,
     predictor_encoding = "model.matrix",
+    na.rm = TRUE,
     params = new_params(environment(), ...),
 
     fit = function(formula, data, weights, dist, scale, parms = NULL, ...) {
       rms::psm(
         formula, data = as.data.frame(formula, data), weights = weights,
-        dist = dist, scale = scale, parms = parms,
+        na.action = na.pass, dist = dist, scale = scale, parms = parms,
         control = survival::survreg.control(...)
       )
     },
@@ -120,6 +121,7 @@ SurvRegStepAICModel <- function(
     response_types = stepmodel@response_types,
     weights = stepmodel@weights,
     predictor_encoding = stepmodel@predictor_encoding,
+    na.rm = stepmodel@na.rm,
     params = c(stepmodel@params, params),
 
     fit = function(
@@ -130,8 +132,9 @@ SurvRegStepAICModel <- function(
       stepargs <- stepAIC_args(formula, direction, scope)
       MASS::stepAIC(
         rms::psm(
-          stepargs$formula, data = data, weights = weights, dist = dist,
-          scale = scale, parms = parms, control = survival::survreg.control(...)
+          stepargs$formula, data = data, weights = weights,
+          na.action = na.pass, dist = dist, scale = scale, parms = parms,
+          control = survival::survreg.control(...)
         ),
         direction = direction, scope = stepargs$scope, k = k, trace = trace,
         steps = steps

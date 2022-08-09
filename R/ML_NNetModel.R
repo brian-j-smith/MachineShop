@@ -54,6 +54,7 @@ NNetModel <- function(
     response_types = c("factor", "numeric"),
     weights = TRUE,
     predictor_encoding = "model.matrix",
+    na.rm = TRUE,
     params = new_params(environment()),
 
     gridinfo = new_gridinfo(
@@ -83,8 +84,10 @@ NNetModel <- function(
         res$xlevels <- list()
         res
       } else {
-        nnet::nnet(formula, data = as.data.frame(formula, data),
-                   weights = weights, linout = linout, ...)
+        nnet::nnet(
+          formula, data = as.data.frame(formula, data), weights = weights,
+          na.action = na.pass, linout = linout, ...
+        )
       }
     },
 

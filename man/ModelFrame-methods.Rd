@@ -51,8 +51,9 @@ when folds are constructed for \link[=controls]{cross-validation}
 \item{weights}{numeric vector of non-negative case weights for the \code{y}
 response variable [default: equal weights].}
 
-\item{na.rm}{logical indicating whether to remove cases with \code{NA} values
-for any of the model variables.}
+\item{na.rm}{character string or logical specifying removal of \code{"all"}
+(\code{TRUE}) cases with missing values, \code{"none"} (\code{FALSE}), or
+only those whose missing values are in the \code{"response"} variable.}
 
 \item{x, y}{\link{matrix} and object containing predictor and response
 variables.}

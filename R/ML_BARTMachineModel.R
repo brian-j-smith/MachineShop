@@ -67,6 +67,7 @@ BARTMachineModel <- function(
     packages = "bartMachine",
     response_types = c("binary", "numeric"),
     predictor_encoding = "model.matrix",
+    na.rm = "response",
     params = new_params(environment(), ...),
 
     gridinfo = new_gridinfo(
@@ -81,11 +82,13 @@ BARTMachineModel <- function(
       )
     ),
 
-    fit = function(formula, data, weights, ...) {
+    fit = function(formula, data, weights, use_missing_data, ...) {
       x <- model.matrix(data, intercept = FALSE)
       y <- response(data)
       if (is_response(y, "binary")) y <- factor(y, levels = rev(levels(y)))
-      bartMachine::bartMachine(as.data.frame(x), y, ...)
+      bartMachine::bartMachine(
+        as.data.frame(x), y, use_missing_data = TRUE, ...
+      )
     },
 
     predict = function(object, newdata, ...) {

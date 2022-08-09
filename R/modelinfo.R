@@ -96,6 +96,7 @@ modelinfo <- function(...) {
     packages = x@packages,
     response_types = x@response_types,
     weights = x@weights,
+    na.rm = x@na.rm,
     arguments = args(get0(x@name, mode = "function")),
     grid = has_grid(x),
     varimp = has_varimp(x)

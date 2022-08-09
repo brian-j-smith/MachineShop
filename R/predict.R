@@ -55,20 +55,23 @@ predict.MLModelFit <- function(
   model <- as.MLModel(object)
   throw(check_packages(model@packages))
 
+  newdata <- PredictorFrame(as.MLInput(object), newdata)
+  newnames <- rownames(newdata)
+  newdata <- ModelFrame(newdata, na.rm = model@na.rm)
+  subset <- newnames %in% rownames(newdata)
+
   times <- check_numeric(
     times, bounds = c(0, Inf), include = FALSE, size = NA, nonempty = FALSE
   )
   throw(check_assignment(times))
 
-  obs <- response(object)
   .MachineShop <- attr(object, ".MachineShop")
-  pred <- convert_predicted(obs, .predict(
-    model, model_fit = unMLModelFit(object),
-    newdata = PredictorFrame(.MachineShop$input, newdata),
-    times = times, distr = distr, method = method,
-    .MachineShop = .MachineShop, ...
-  ))
-
+  pred <- .predict(
+    model, model_fit = unMLModelFit(object), newdata = newdata, times = times,
+    distr = distr, method = method, .MachineShop = .MachineShop, ...
+  )
+  obs <- response(object)
+  pred <- convert_predicted(obs, pred)
   pred <- switch(match.arg(type),
     "default" = pred,
     "numeric" = convert_numeric(pred),
@@ -76,6 +79,7 @@ predict.MLModelFit <- function(
     "response" = convert_response(obs, pred, cutoff = cutoff)
   )
   throw(check_assignment(pred))
+  na.add(pred, !subset)
 }
 
 

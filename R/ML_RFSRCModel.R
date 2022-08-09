@@ -105,6 +105,7 @@ RFSRCModel <- function(
     response_types = c("factor", "matrix", "numeric", "Surv"),
     weights = TRUE,
     predictor_encoding = "model.frame",
+    na.rm = TRUE,
     params = new_params(environment()),
 
     gridinfo = new_gridinfo(
@@ -133,8 +134,9 @@ RFSRCModel <- function(
         data[y_names] <- y
         formula[[2]] <- as.call(map(as.name, c(family, y_names)))
       }
-      randomForestSRC::rfsrc(formula, data = data, na.action = "na.impute",
-                             case.wt = weights, ...)
+      randomForestSRC::rfsrc(
+        formula, data = data, case.wt = weights, ...
+      )
     },
 
     predict = function(object, newdata, .MachineShop, ...) {

@@ -27,8 +27,9 @@
 #'   \link{resample} estimation of model performance [default: none].
 #' @param weights numeric vector of non-negative case weights for the \code{y}
 #'   response variable [default: equal weights].
-#' @param na.rm logical indicating whether to remove cases with \code{NA} values
-#'   for any of the model variables.
+#' @param na.rm character string or logical specifying removal of \code{"all"}
+#'   (\code{TRUE}) cases with missing values, \code{"none"} (\code{FALSE}), or
+#'   only those whose missing values are in the \code{"response"} variable.
 #'
 #' @return \code{ModelFrame} class object that inherits from \code{data.frame}.
 #'
@@ -142,7 +143,15 @@ ModelFrame.ModelFrame <- function(input, na.rm = TRUE, ...) {
   for (type in names(comps)) {
     input[[paste0("(", type, ")")]] <- comps[[type]]
   }
-  if (na.rm) na.omit(input) else input
+  na.rm <- throw(check_na.rm(na.rm))
+  switch(na.rm,
+    "all" = input <- na.omit(input),
+    "response" = {
+      y <- response(input)
+      if (!is.null(y)) input <- input[complete.cases(y), ]
+    }
+  )
+  input
 }
 
 

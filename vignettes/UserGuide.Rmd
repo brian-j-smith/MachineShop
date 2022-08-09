@@ -176,6 +176,9 @@ Model fitting requires user specification of a **MachineShop** compatible model.
 `weights`
   : logical value or vector of the same length as `response_types` indicating whether case weights are supported for the responses.
 
+`na.rm`
+  : character sting specifying removal of `"all"` cases with missing values from model fitting, `"none"`, or only those whose missing values are in the `"response"` variable.
+
 `arguments`
   : closure with the argument names and corresponding default values of the model function.
 

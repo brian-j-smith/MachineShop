@@ -115,6 +115,7 @@ XGBModel <- function(
     response_types = c("factor", "numeric", "PoissonVariate", "Surv"),
     weights = TRUE,
     predictor_encoding = "model.matrix",
+    na.rm = "response",
     params = new_params(c(params[1], ..., params[-1])),
 
     fit = function(

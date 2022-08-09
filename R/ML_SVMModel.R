@@ -73,13 +73,18 @@ SVMModel <- function(
     packages = "kernlab",
     response_types = c("factor", "numeric"),
     predictor_encoding = "model.matrix",
+    na.rm = TRUE,
     params = new_params(environment()),
 
     fit = function(formula, data, weights, ...) {
       eval_fit(
         data,
-        formula = kernlab::ksvm(formula, data = data, prob.model = TRUE, ...),
-        matrix = kernlab::ksvm(x, y, prob.model = TRUE, ...)
+        formula = kernlab::ksvm(
+          formula, data = data, prob.model = TRUE, na.action = na.pass, ...
+        ),
+        matrix = kernlab::ksvm(
+          x, y, prob.model = TRUE, na.action = na.pass, ...
+        )
       )
     },
 

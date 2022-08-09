@@ -51,6 +51,7 @@ LDAModel <- function(
     packages = "MASS",
     response_types = "factor",
     predictor_encoding = "model.matrix",
+    na.rm = TRUE,
     params = new_params(environment()),
 
     gridinfo = new_gridinfo(
@@ -63,7 +64,9 @@ LDAModel <- function(
     ),
 
     fit = function(formula, data, weights, dimen, use, ...) {
-      res <- MASS::lda(formula, data = as.data.frame(formula, data), ...)
+      res <- MASS::lda(
+        formula, data = as.data.frame(formula, data), na.action = na.pass, ...
+      )
       attr(res, ".MachineShop") <- list(
         dimen = if (missing(dimen)) length(res$svd) else dimen,
         use = use

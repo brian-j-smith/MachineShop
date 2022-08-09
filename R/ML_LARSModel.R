@@ -51,6 +51,7 @@ LARSModel <- function(
     packages = "lars",
     response_types = "numeric",
     predictor_encoding = "model.matrix",
+    na.rm = TRUE,
     params = new_params(environment()),
 
     gridinfo = new_gridinfo(

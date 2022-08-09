@@ -12,6 +12,7 @@ MLModel(
   response_types = character(),
   weights = FALSE,
   predictor_encoding = c(NA, "model.frame", "model.matrix"),
+  na.rm = FALSE,
   params = list(),
   gridinfo = tibble::tibble(param = character(), get_values = list(), default =
     logical()),
@@ -47,6 +48,11 @@ the responses.}
 \item{predictor_encoding}{character string indicating whether the model is
 fit with predictor variables encoded as a \code{"\link{model.frame}"},
 a \code{"\link{model.matrix}"}, or unspecified (default).}
+
+\item{na.rm}{character string or logical specifying removal of \code{"all"}
+(\code{TRUE}) cases with missing values from model fitting and prediction,
+\code{"none"} (\code{FALSE}), or only those whose missing values are in the
+\code{"response"} variable.}
 
 \item{params}{list of user-specified model parameters to be passed to the
 \code{fit} function.}

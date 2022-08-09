@@ -51,6 +51,7 @@ AdaBagModel <- function(
     packages = "adabag",
     response_types = "factor",
     predictor_encoding = "model.frame",
+    na.rm = FALSE,
     params = new_params(environment()),
 
     gridinfo = new_gridinfo(
@@ -62,8 +63,10 @@ AdaBagModel <- function(
     ),
 
     fit = function(formula, data, weights, mfinal, ...) {
-      adabag::bagging(formula, data = as.data.frame(formula, data),
-                      mfinal = mfinal, control = list(...))
+      adabag::bagging(
+        formula, data = as.data.frame(formula, data), mfinal = mfinal,
+        control = list(...)
+      )
     },
 
     predict = function(object, newdata, ...) {

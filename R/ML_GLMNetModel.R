@@ -67,6 +67,7 @@ GLMNetModel <- function(
                        "PoissonVariate", "Surv"),
     weights = TRUE,
     predictor_encoding = "model.matrix",
+    na.rm = TRUE,
     params = new_params(environment()),
 
     gridinfo = new_gridinfo(
@@ -107,8 +108,10 @@ GLMNetModel <- function(
           "Surv" = "cox"
         )
       }
-      glmnet::glmnet(x, y, offset = offset, weights = weights,
-                     family = family, nlambda = nlambda, ...)
+      glmnet::glmnet(
+        x, y, family = family, weights = weights, offset = offset,
+        nlambda = nlambda, ...
+      )
     },
 
     predict = function(object, newdata, .MachineShop, ...) {

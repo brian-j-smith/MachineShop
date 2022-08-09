@@ -281,6 +281,16 @@ check_metrics <- function(x, convert = FALSE) {
 }
 
 
+check_na.rm <- function(x) {
+  if (is.logical(x)) {
+    if (x) "all" else "none"
+  } else {
+    na.rm <- check_match(x, c("none", "all", "response"))
+    check_assignment(na.rm)
+  }
+}
+
+
 check_numeric <- function(
   x, bounds = c(-Inf, Inf), include = TRUE,
   type = c("numeric", "double", "integer"), ...

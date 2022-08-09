@@ -49,13 +49,16 @@ TreeModel <- function(
     response_types = c("factor", "numeric"),
     weights = TRUE,
     predictor_encoding = "model.frame",
+    na.rm = FALSE,
     params = new_params(environment()),
 
     fit = function(
       formula, data, weights, split, k = NULL, best = NULL, method = NULL, ...
     ) {
-      res <- tree::tree(formula, data = as.data.frame(formula, data),
-                        weights = weights, split = split, ...)
+      res <- tree::tree(
+        formula, data = as.data.frame(formula, data), weights = weights,
+        split = split, ...
+      )
       if (!is.null(method)) {
         tree::prune.tree(res, k = k, best = best, method = method)
       } else res

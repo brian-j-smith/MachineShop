@@ -33,12 +33,15 @@ NaiveBayesModel <- function(laplace = 0) {
     packages = "e1071",
     response_types = "factor",
     predictor_encoding = "model.frame",
+    na.rm = FALSE,
     params = new_params(environment()),
 
     fit = function(formula, data, weights, ...) {
       eval_fit(
         data,
-        formula = e1071::naiveBayes(formula, data = data, ...),
+        formula = e1071::naiveBayes(
+          formula, data = data, na.action = na.pass, ...
+        ),
         matrix = e1071::naiveBayes(x, y, ...)
       )
     },

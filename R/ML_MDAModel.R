@@ -64,6 +64,7 @@ MDAModel <- function(
     packages = "mda",
     response_types = "factor",
     predictor_encoding = "model.matrix",
+    na.rm = TRUE,
     params = new_params(environment(), ...),
 
     gridinfo = new_gridinfo(

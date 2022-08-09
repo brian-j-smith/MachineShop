@@ -67,6 +67,7 @@ FDAModel <- function(
     response_types = "factor",
     weights = TRUE,
     predictor_encoding = "model.matrix",
+    na.rm = TRUE,
     params = new_params(environment(), ...),
 
     gridinfo = new_gridinfo(
@@ -83,8 +84,9 @@ FDAModel <- function(
     ),
 
     fit = function(formula, data, weights, ...) {
-      mda::fda(formula, data = as.data.frame(formula, data), weights = weights,
-               ...)
+      mda::fda(
+        formula, data = as.data.frame(formula, data), weights = weights, ...
+      )
     },
 
     predict = function(object, newdata, prior = object$prior, ...) {

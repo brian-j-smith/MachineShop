@@ -50,6 +50,7 @@ RPartModel <- function(
     response_types = c("factor", "numeric", "Surv"),
     weights = TRUE,
     predictor_encoding = "model.frame",
+    na.rm = "response",
     params = new_params(environment()),
 
     gridinfo = new_gridinfo(

@@ -63,6 +63,7 @@ EarthModel <- function(
     response_types = c("factor", "numeric"),
     weights = TRUE,
     predictor_encoding = "model.matrix",
+    na.rm = TRUE,
     params = new_params(environment()),
 
     gridinfo = new_gridinfo(

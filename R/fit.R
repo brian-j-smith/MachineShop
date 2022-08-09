@@ -115,7 +115,7 @@ fit.MLModelFunction <- function(model, ...) {
 
 .fit.MLModel <- function(object, input, ...) {
   input_prep <- prep(input)
-  mf <- ModelFrame(input_prep, na.rm = FALSE)
+  mf <- ModelFrame(input_prep, na.rm = object@na.rm)
   y <- response(mf)
 
   info <- data.frame(type = object@response_types, weights = object@weights)

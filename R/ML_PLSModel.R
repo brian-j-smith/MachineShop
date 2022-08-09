@@ -36,6 +36,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
     packages = "pls",
     response_types = c("factor", "numeric"),
     predictor_encoding = "model.matrix",
+    na.rm = TRUE,
     params = new_params(environment()),
 
     gridinfo = new_gridinfo(
@@ -55,7 +56,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
         colnames(mm) <- levels(y)
         data[[response(formula)]] <- mm
       }
-      pls::plsr(formula, data = data, ...)
+      pls::plsr(formula, data = data, na.action = na.pass, ...)
     },
 
     predict = function(object, newdata, ...) {

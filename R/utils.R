@@ -382,6 +382,17 @@ missing_names <- function(x, data) {
 }
 
 
+na.add <- function(object, at) {
+  if (any(at)) {
+    df <- tibble(object = object)
+    df <- df[pmax(cumsum(!at), 1), ]
+    df[at, ] <- NA
+    object <- df$object
+  }
+  object
+}
+
+
 ndim <- function(x) {
   length(size(x))
 }

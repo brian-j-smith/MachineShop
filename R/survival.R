@@ -77,36 +77,42 @@ EmpiricalSurv.Surv <- function(
   x, risks = rep(1, length(x)), weights = rep(1, length(x)),
   method = c("efron", "breslow"), ...
 ) {
-  event <- as.integer(x[, "status"])
-  if (is_empty(method)) method <- settings("method.EmpiricalSurv")
-  method <- match.arg(method)
-
-  data <- data.frame(wt = weights, wt_censor = weights * !event,
-                     wt_event = weights * event, wt_risk = weights * risks)
+  events <- as.integer(x[, "status"])
+  data <- na.omit(data.frame(
+    x = x,
+    event = events,
+    risk = risks,
+    wt = weights,
+    wt_censor = weights * !events,
+    wt_event = weights * events,
+    wt_risk = weights * risks
+  ))
   sums <- cbind(
-    rowsum(data[c("wt_censor", "wt_event")], time(x)),
-    risksum(data[c("wt", "wt_risk")], x)
+    rowsum(data[c("wt_censor", "wt_event")], time(data$x)),
+    risksum(data[c("wt", "wt_risk")], data$x)
   )
 
+  if (is_empty(method)) method <- settings("method.EmpiricalSurv")
+  method <- match.arg(method)
   cumhaz <- cumsum(switch(method,
     "breslow" = sums$wt_event / sums$wt_risk,
     "efron" = {
-      data <- data.frame(event, wt_eventrisk = data$wt_event * risks)
-      sums[names(data)] <- rowsum(data, time(x))
+      data$wt_eventrisk <- data$wt_event * data$risk
+      select <- c("event", "wt_eventrisk")
+      sums[select] <- rowsum(data[select], time(data$x))
       hazfit_efron(sums$event, sums$wt_event, sums$wt_risk, sums$wt_eventrisk)
     }
   ))
 
-  structure(
-    list(n = length(x),
-         time = sums$stop_time,
-         n.risk = sums$wt,
-         n.event = sums$wt_event,
-         n.censor = sums$wt_censor,
-         surv = exp(-cumhaz),
-         cumhaz = cumhaz),
-    class = c("EmpiricalSurv", "survfitcox", "survfit")
-  )
+  structure(list(
+    n = length(data$x),
+    time = sums$stop_time,
+    n.risk = sums$wt,
+    n.event = sums$wt_event,
+    n.censor = sums$wt_censor,
+    surv = exp(-cumhaz),
+    cumhaz = cumhaz
+  ), class = c("EmpiricalSurv", "survfitcox", "survfit"))
 }
 
 

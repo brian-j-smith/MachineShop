@@ -77,6 +77,7 @@ BARTModel <- function(
     response_types = c("factor", "numeric", "Surv"),
     weights = c(FALSE, TRUE, FALSE),
     predictor_encoding = "model.matrix",
+    na.rm = "response",
     params = new_params(environment()),
 
     fit = function(
@@ -96,13 +97,16 @@ BARTModel <- function(
           f(x.train = x, y.train = y, type = "pbart", ...)
         },
         "numeric" = {
-          BART::gbart(x.train = x, y.train = y, w = weights, sigest = sigest,
-                      sigdf = sigdf, sigquant = sigquant, lambda = lambda, ...)
+          BART::gbart(
+            x.train = x, y.train = y, w = weights, sigest = sigest,
+            sigdf = sigdf, sigquant = sigquant, lambda = lambda, ...
+          )
         },
         "Surv" = {
           throw(check_censoring(y, "right"))
-          BART::surv.bart(x.train = x, times = y[, "time"],
-                          delta = y[, "status"], K = K, ...)
+          BART::surv.bart(
+            x.train = x, times = y[, "time"], delta = y[, "status"], K = K, ...
+          )
         }
       )
     },

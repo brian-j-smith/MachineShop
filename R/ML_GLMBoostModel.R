@@ -57,6 +57,7 @@ GLMBoostModel <- function(
                        "numeric", "PoissonVariate", "Surv"),
     weights = TRUE,
     predictor_encoding = "model.frame",
+    na.rm = TRUE,
     params = new_params(environment()),
 
     gridinfo = new_gridinfo(

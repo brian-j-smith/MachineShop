@@ -69,6 +69,7 @@ C50Model <- function(
     response_types = "factor",
     weights = TRUE,
     predictor_encoding = "model.frame",
+    na.rm = FALSE,
     params = new_params(environment()),
 
     gridinfo = new_gridinfo(

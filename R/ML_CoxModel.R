@@ -47,11 +47,14 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
     response_types = "Surv",
     weights = TRUE,
     predictor_encoding = "model.matrix",
+    na.rm = TRUE,
     params = new_params(environment(), ...),
 
     fit = function(formula, data, weights, ...) {
-      survival::coxph(formula, data = as.data.frame(formula, data),
-                      weights = weights, ...)
+      survival::coxph(
+        formula, data = as.data.frame(formula, data), weights = weights,
+        na.action = na.pass, ...
+      )
     },
 
     predict = function(object, newdata, .MachineShop, ...) {
@@ -109,6 +112,7 @@ CoxStepAICModel <- function(
     response_types = stepmodel@response_types,
     weights = stepmodel@weights,
     predictor_encoding = stepmodel@predictor_encoding,
+    na.rm = stepmodel@na.rm,
     params = c(stepmodel@params, params),
 
     fit = function(
@@ -117,7 +121,10 @@ CoxStepAICModel <- function(
       data <- as.data.frame(formula, data)
       stepargs <- stepAIC_args(formula, direction, scope)
       MASS::stepAIC(
-        survival::coxph(stepargs$formula, data = data, weights = weights, ...),
+        survival::coxph(
+          stepargs$formula, data = data, weights = weights, na.action = na.pass,
+          ...
+        ),
         direction = direction, scope = stepargs$scope, k = k, trace = trace,
         steps = steps
       )

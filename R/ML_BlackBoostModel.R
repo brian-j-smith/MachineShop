@@ -75,6 +75,7 @@ BlackBoostModel <- function(
                        "numeric", "PoissonVariate", "Surv"),
     weights = TRUE,
     predictor_encoding = "model.frame",
+    na.rm = "response",
     params = new_params(environment(), ...),
 
     gridinfo = new_gridinfo(
@@ -100,8 +101,8 @@ BlackBoostModel <- function(
         )
       }
       mboost::blackboost(
-        formula, data = as.data.frame(formula, data), na.action = na.pass,
-        weights = weights, family = family,
+        formula, data = as.data.frame(formula, data), weights = weights,
+        na.action = na.pass, family = family,
         control = mboost::boost_control(
           mstop = mstop, nu = nu, risk = risk, stopintern = stopintern,
           trace = trace

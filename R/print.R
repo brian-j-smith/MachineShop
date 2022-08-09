@@ -971,6 +971,7 @@ print_modelinfo <- function(x, trained = FALSE, level = 0, id = FALSE, ...) {
       packages = "Package{?s}: ",
       response_types = "Response type{?s}: ",
       weights = "Case weights support: ",
+      na.rm = "Missing case removal: ",
       grid = "Tuning grid: ",
       varimp = "Variable importance: "
     ))

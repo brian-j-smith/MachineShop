@@ -20,6 +20,10 @@
 #' @param predictor_encoding character string indicating whether the model is
 #'   fit with predictor variables encoded as a \code{"\link{model.frame}"},
 #'   a \code{"\link{model.matrix}"}, or unspecified (default).
+#' @param na.rm character string or logical specifying removal of \code{"all"}
+#'   (\code{TRUE}) cases with missing values from model fitting and prediction,
+#'   \code{"none"} (\code{FALSE}), or only those whose missing values are in the
+#'   \code{"response"} variable.
 #' @param params list of user-specified model parameters to be passed to the
 #'   \code{fit} function.
 #' @param gridinfo tibble of information for construction of tuning grids
@@ -105,7 +109,8 @@
 MLModel <- function(
   name = "MLModel", label = name, packages = character(),
   response_types = character(), weights = FALSE,
-  predictor_encoding = c(NA, "model.frame", "model.matrix"), params = list(),
+  predictor_encoding = c(NA, "model.frame", "model.matrix"), na.rm = FALSE,
+  params = list(),
   gridinfo = tibble::tibble(
     param = character(), get_values = list(), default = logical()
   ),
@@ -117,6 +122,8 @@ MLModel <- function(
   stopifnot(!any(duplicated(response_types)))
   stopifnot(response_types %in% settings("response_types"))
   stopifnot(length(weights) %in% c(1, length(response_types)))
+
+  na.rm <- throw(check_na.rm(na.rm))
 
   stopifnot(is_tibble(gridinfo))
   gridinfo <- new_gridinfo(
@@ -132,6 +139,7 @@ MLModel <- function(
     response_types = response_types,
     weights = weights,
     predictor_encoding = match.arg(predictor_encoding),
+    na.rm = na.rm,
     params = params,
     gridinfo = gridinfo,
     fit = fit,
@@ -170,6 +178,13 @@ update.MLModel <- function(
     new_params <- as(object, "list")
     new_params[names(params)] <- params
     object <- do.call(object@name, new_params, quote = quote)
+  } else if (!.hasSlot(object, "na.rm")) {
+    info <- modelinfo(object@name)
+    object@na.rm <- if (length(info)) {
+      info[[1]]$na.rm
+    } else {
+      check_na.rm(formals(MLModel)$na.rm)
+    }
   }
   object@id <- id
   object

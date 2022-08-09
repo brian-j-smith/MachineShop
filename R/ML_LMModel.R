@@ -32,6 +32,7 @@ LMModel <- function() {
     response_types = c("factor", "matrix", "numeric"),
     weights = TRUE,
     predictor_encoding = "model.matrix",
+    na.rm = TRUE,
     params = new_params(environment()),
 
     fit = function(formula, data, weights, ...) {
@@ -46,7 +47,9 @@ LMModel <- function() {
           mat
         }
       }
-      stats::lm(formula, data = data, weights = weights, ...)
+      stats::lm(
+        formula, data = data, weights = weights, na.action = na.pass, ...
+      )
     },
 
     predict = function(object, newdata, ...) {
