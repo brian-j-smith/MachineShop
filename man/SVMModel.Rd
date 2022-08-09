@@ -21,6 +21,7 @@ SVMModel(
   C = 1,
   nu = 0.2,
   epsilon = 0.1,
+  prob.model = FALSE,
   cache = 40,
   tol = 0.001,
   shrinking = TRUE
@@ -58,6 +59,10 @@ the Lagrange formulation.}
 
 \item{epsilon}{parameter in the insensitive-loss function used for eps-svr,
 nu-svr and eps-bsvm.}
+
+\item{prob.model}{logical indicating whether to calculate the scaling
+parameter of the Laplacian distribution fitted on the residuals of numeric
+response variables.  Ignored in the case of a factor response variable.}
 
 \item{cache}{cache memory in MB.}
 

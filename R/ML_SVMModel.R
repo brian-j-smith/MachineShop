@@ -15,6 +15,9 @@
 #' @param nu parameter needed for nu-svc, one-svc, and nu-svr.
 #' @param epsilon parameter in the insensitive-loss function used for eps-svr,
 #'   nu-svr and eps-bsvm.
+#' @param prob.model logical indicating whether to calculate the scaling
+#'   parameter of the Laplacian distribution fitted on the residuals of numeric
+#'   response variables.  Ignored in the case of a factor response variable.
 #' @param cache cache memory in MB.
 #' @param tol tolerance of termination criterion.
 #' @param shrinking whether to use the shrinking-heuristics.
@@ -60,8 +63,8 @@ SVMModel <- function(
   scaled = TRUE, type = character(),
   kernel = c("rbfdot", "polydot", "vanilladot", "tanhdot", "laplacedot",
              "besseldot", "anovadot", "splinedot"),
-  kpar = "automatic", C = 1, nu = 0.2, epsilon = 0.1, cache = 40, tol = 0.001,
-  shrinking = TRUE
+  kpar = "automatic", C = 1, nu = 0.2, epsilon = 0.1, prob.model = FALSE,
+  cache = 40, tol = 0.001, shrinking = TRUE
 ) {
 
   kernel <- match.arg(kernel)
@@ -76,14 +79,16 @@ SVMModel <- function(
     na.rm = TRUE,
     params = new_params(environment()),
 
-    fit = function(formula, data, weights, ...) {
+    fit = function(formula, data, weights, prob.model, ...) {
+      if (is.factor(response(data))) prob.model <- TRUE
       eval_fit(
         data,
         formula = kernlab::ksvm(
-          formula, data = data, prob.model = TRUE, na.action = na.pass, ...
+          formula, data = data, prob.model = prob.model, na.action = na.pass,
+          ...
         ),
         matrix = kernlab::ksvm(
-          x, y, prob.model = TRUE, na.action = na.pass, ...
+          x, y, prob.model = prob.model, na.action = na.pass, ...
         )
       )
     },
