@@ -14,6 +14,7 @@
   cutoff = MachineShop::settings("cutoff"),
   distr = character(),
   method = character(),
+  verbose = FALSE,
   ...
 )
 
@@ -45,6 +46,10 @@ of \code{"empirical"} for predicted survival events/probabilities and
 \item{method}{character string specifying the empirical method of estimating
 baseline survival curves for Cox proportional hazards-based models.
 Choices are \code{"breslow"} or \code{"efron"} (default).}
+
+\item{verbose}{logical indicating whether to display printed output generated
+by some model-specific predict functions to aid in monitoring progress and
+diagnosing errors.}
 
 \item{...}{arguments passed from the S4 to the S3 method.}
 }

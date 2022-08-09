@@ -21,7 +21,7 @@ fit(...)
 
 \method{fit}{recipe}(input, model = NULL, ...)
 
-\method{fit}{ModelSpecification}(object, ...)
+\method{fit}{ModelSpecification}(object, verbose = FALSE, ...)
 
 \method{fit}{MLModel}(model, ...)
 
@@ -47,6 +47,10 @@ variables.}
 predictor and response variables.}
 
 \item{object}{model \link[=ModelSpecification]{specification}.}
+
+\item{verbose}{logical indicating whether to display printed output generated
+by some model-specific fit functions to aid in monitoring progress and
+diagnosing errors.}
 }
 \value{
 \code{MLModelFit} class object.

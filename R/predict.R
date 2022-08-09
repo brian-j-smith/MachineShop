@@ -23,6 +23,9 @@
 #' @param method character string specifying the empirical method of estimating
 #'   baseline survival curves for Cox proportional hazards-based models.
 #'   Choices are \code{"breslow"} or \code{"efron"} (default).
+#' @param verbose logical indicating whether to display printed output generated
+#'   by some model-specific predict functions to aid in monitoring progress and
+#'   diagnosing errors.
 #' @param ... arguments passed from the S4 to the S3 method.
 #'
 #' @seealso \code{\link{confusion}}, \code{\link{performance}},
@@ -49,7 +52,7 @@ predict.MLModelFit <- function(
   object, newdata = NULL, times = numeric(),
   type = c("response", "default", "numeric", "prob"),
   cutoff = MachineShop::settings("cutoff"), distr = character(),
-  method = character(), ...
+  method = character(), verbose = FALSE, ...
 ) {
   object <- update(object)
   model <- as.MLModel(object)
@@ -66,9 +69,11 @@ predict.MLModelFit <- function(
   throw(check_assignment(times))
 
   .MachineShop <- attr(object, ".MachineShop")
-  pred <- .predict(
-    model, model_fit = unMLModelFit(object), newdata = newdata, times = times,
-    distr = distr, method = method, .MachineShop = .MachineShop, ...
+  (if (verbose) identity else capture.output)(
+    pred <- .predict(
+      model, model_fit = unMLModelFit(object), newdata = newdata, times = times,
+      distr = distr, method = method, .MachineShop = .MachineShop, ...
+    )
   )
   obs <- response(object)
   pred <- convert_predicted(obs, pred)

@@ -169,11 +169,9 @@ XGBModel <- function(
         params$top_k <- NULL
       }
 
-      (if (verbose) identity else capture.output)(
-        res <- xgboost::xgboost(
-          dmat, weight = weights, params = params, nrounds = nrounds,
-          verbose = verbose, print_every_n = print_every_n
-        )
+      res <- xgboost::xgboost(
+        dmat, weight = weights, params = params, nrounds = nrounds,
+        verbose = verbose, print_every_n = print_every_n
       )
       attr(res, ".MachineShop") <- list(y_levels = y_levels)
       res

@@ -19,6 +19,9 @@
 #' @param model \link[=models]{model} function, function name, or object; or
 #'   another object that can be \link[=as.MLModel]{coerced} to a model.  A model
 #'   can be given first followed by any of the variable specifications.
+#' @param verbose logical indicating whether to display printed output generated
+#'   by some model-specific fit functions to aid in monitoring progress and
+#'   diagnosing errors.
 #'
 #' @return \code{MLModelFit} class object.
 #'
@@ -80,11 +83,14 @@ fit.recipe <- function(input, model = NULL, ...) {
 
 #' @rdname fit-methods
 #'
-fit.ModelSpecification <- function(object, ...) {
+fit.ModelSpecification <- function(object, verbose = FALSE, ...) {
   if (is_optim_method(object)) {
     .fit_optim(object)
   } else {
-    .fit(as.MLInput(object), model = as.MLModel(object))
+    (if (verbose) identity else capture.output)(
+      res <- .fit(as.MLInput(object), model = as.MLModel(object))
+    )
+    res
   }
 }
 
