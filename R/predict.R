@@ -61,6 +61,7 @@ predict.MLModelFit <- function(
   newdata <- PredictorFrame(as.MLInput(object), newdata)
   newnames <- rownames(newdata)
   newdata <- ModelFrame(newdata, na.rm = model@na.rm)
+  if (!nrow(newdata)) throw(Error("No case observations to predict."))
   subset <- newnames %in% rownames(newdata)
 
   times <- check_numeric(
