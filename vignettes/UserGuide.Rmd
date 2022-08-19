@@ -1336,6 +1336,7 @@ as.MLModel(model_fit)
 #> Package: gbm
 #> Response types: factor, numeric, PoissonVariate, Surv
 #> Case weights support: TRUE
+#> Missing case removal: response
 #> Tuning grid: TRUE
 #> Variable importance: TRUE
 #> 
@@ -1352,7 +1353,7 @@ as.MLModel(model_fit)
 #> 
 #> Optimization method: Grid Search
 #> TunedModelRecipe log:
-#> # A tibble: 3 x 4
+#> # A tibble: 3 × 4
 #>   name          selected params$PCA$num_comp metrics$`C-Index`
 #>   <chr>         <lgl>                  <int>             <dbl>
 #> 1 ModelRecipe.1 TRUE                       1             0.740
@@ -1396,6 +1397,7 @@ as.MLModel(model_fit)
 #> Package: gbm
 #> Response types: factor, numeric, PoissonVariate, Surv
 #> Case weights support: TRUE
+#> Missing case removal: response
 #> Tuning grid: TRUE
 #> Variable importance: TRUE
 #> 
@@ -1412,7 +1414,7 @@ as.MLModel(model_fit)
 #> 
 #> Optimization method: Grid Search
 #> SelectedModelRecipe log:
-#> # A tibble: 3 x 4
+#> # A tibble: 3 × 4
 #>   name             selected params$id  metrics$`C-Index`
 #>   <chr>            <lgl>    <chr>                  <dbl>
 #> 1 ModelRecipe.1    FALSE    input.azpi             0.761
@@ -1427,7 +1429,7 @@ as.MLModel(model_fit)
 #> 
 #> Optimization method: Grid Search
 #> TunedModelRecipe log:
-#> # A tibble: 3 x 4
+#> # A tibble: 3 × 4
 #>   name          selected params$PCA$num_comp metrics$`C-Index`
 #>   <chr>         <lgl>                  <int>             <dbl>
 #> 1 ModelRecipe.1 TRUE                       1             0.740
@@ -1494,6 +1496,7 @@ model_fit <- fit(surv_fo, data = surv_train,
 #> Package: gbm
 #> Response types: factor, numeric, PoissonVariate, Surv
 #> Case weights support: TRUE
+#> Missing case removal: response
 #> Tuning grid: TRUE
 #> Variable importance: TRUE
 #> 
@@ -1510,21 +1513,21 @@ model_fit <- fit(surv_fo, data = surv_train,
 #> 
 #> Optimization method: Grid Search
 #> TunedModel log:
-#> # A tibble: 9 x 4
+#> # A tibble: 9 × 4
 #>   name       selected params$n.trees $interaction.depth metrics$CIndex  $RMSE
 #>   <chr>      <lgl>             <int>              <int>          <dbl>  <dbl>
-#> 1 GBMModel.1 TRUE                 50                  1          0.751  3820.
-#> 2 GBMModel.2 FALSE                50                  2          0.740  5577.
-#> 3 GBMModel.3 FALSE                50                  3          0.733  7699.
-#> 4 GBMModel.4 FALSE               100                  1          0.730  3984.
-#> 5 GBMModel.5 FALSE               100                  2          0.719  5155.
-#> 6 GBMModel.6 FALSE               100                  3          0.715  9112.
-#> 7 GBMModel.7 FALSE               150                  1          0.731  4927.
-#> 8 GBMModel.8 FALSE               150                  2          0.711  5660.
-#> 9 GBMModel.9 FALSE               150                  3          0.700 12906.
+#> 1 GBMModel.1 TRUE                 50                  1          0.765  3869.
+#> 2 GBMModel.2 FALSE                50                  2          0.750  5450.
+#> 3 GBMModel.3 FALSE                50                  3          0.739  7877.
+#> 4 GBMModel.4 FALSE               100                  1          0.746  3919.
+#> 5 GBMModel.5 FALSE               100                  2          0.730  5262.
+#> 6 GBMModel.6 FALSE               100                  3          0.720 10596.
+#> 7 GBMModel.7 FALSE               150                  1          0.726  4167.
+#> 8 GBMModel.8 FALSE               150                  2          0.712  5428.
+#> 9 GBMModel.9 FALSE               150                  3          0.699 16942.
 #> 
 #> Selected row: 1
-#> Metric: CIndex = 0.7513153
+#> Metric: CIndex = 0.7647633
 ```
 
 Grid values may also be given as a `r rdoc_url("TuningGrid")` function, function name, or object; `r rdoc_url("ParameterGrid")` object; or data frame containing parameter values at which to evaluate the model, such as that returned by `r rdoc_url("expand_params()")`.
@@ -1553,18 +1556,18 @@ Statistics summarizing the resampled performance metrics across all tuning param
 ```{r using_strategies_tune_summary, eval=FALSE}
 summary(trained_model)
 #> --- $TrainingStep1 -------------------------------------------------------------
-#> # A tibble: 9 x 4
+#> # A tibble: 9 × 4
 #>   name       selected params$n.trees $interaction.depth metrics$CIndex  $RMSE
 #>   <chr>      <lgl>             <int>              <int>          <dbl>  <dbl>
-#> 1 GBMModel.1 TRUE                 50                  1          0.751  3820.
-#> 2 GBMModel.2 FALSE                50                  2          0.740  5577.
-#> 3 GBMModel.3 FALSE                50                  3          0.733  7699.
-#> 4 GBMModel.4 FALSE               100                  1          0.730  3984.
-#> 5 GBMModel.5 FALSE               100                  2          0.719  5155.
-#> 6 GBMModel.6 FALSE               100                  3          0.715  9112.
-#> 7 GBMModel.7 FALSE               150                  1          0.731  4927.
-#> 8 GBMModel.8 FALSE               150                  2          0.711  5660.
-#> 9 GBMModel.9 FALSE               150                  3          0.700 12906.
+#> 1 GBMModel.1 TRUE                 50                  1          0.765  3869.
+#> 2 GBMModel.2 FALSE                50                  2          0.750  5450.
+#> 3 GBMModel.3 FALSE                50                  3          0.739  7877.
+#> 4 GBMModel.4 FALSE               100                  1          0.746  3919.
+#> 5 GBMModel.5 FALSE               100                  2          0.730  5262.
+#> 6 GBMModel.6 FALSE               100                  3          0.720 10596.
+#> 7 GBMModel.7 FALSE               150                  1          0.726  4167.
+#> 8 GBMModel.8 FALSE               150                  2          0.712  5428.
+#> 9 GBMModel.9 FALSE               150                  3          0.699 16942.
 
 performance(trained_model) %>% lapply(summary)
 #> $TrainingStep1
@@ -1572,29 +1575,29 @@ performance(trained_model) %>% lapply(summary)
 #> 
 #>             Statistic
 #> Model             Mean    Median         SD       Min       Max NA
-#>   GBMModel.1 0.7513153 0.7548387 0.05260501 0.6486486 0.8261803  0
-#>   GBMModel.2 0.7396956 0.7548387 0.05221877 0.6148649 0.8025751  0
-#>   GBMModel.3 0.7329099 0.7477876 0.05461139 0.6013514 0.7896996  0
-#>   GBMModel.4 0.7299930 0.7222222 0.05449760 0.6283784 0.8207547  0
-#>   GBMModel.5 0.7187003 0.7288732 0.04911338 0.6289593 0.7843137  0
-#>   GBMModel.6 0.7151567 0.7318182 0.05737671 0.5894040 0.7870968  0
-#>   GBMModel.7 0.7313907 0.7300885 0.04459823 0.6541850 0.7863636  0
-#>   GBMModel.8 0.7107110 0.7181818 0.04722521 0.6148649 0.7745098  0
-#>   GBMModel.9 0.7003070 0.7061611 0.05647950 0.5945946 0.7889908  0
+#>   GBMModel.1 0.7647633 0.7630332 0.05151443 0.6497797 0.8632075  0
+#>   GBMModel.2 0.7502765 0.7549020 0.04636802 0.6688742 0.8349057  0
+#>   GBMModel.3 0.7388766 0.7500000 0.04594197 0.6621622 0.8197425  0
+#>   GBMModel.4 0.7463392 0.7601810 0.05087334 0.6497797 0.8160377  0
+#>   GBMModel.5 0.7301734 0.7345133 0.04361416 0.6621622 0.7847222  0
+#>   GBMModel.6 0.7199483 0.7122642 0.05168649 0.6216216 0.7889908  0
+#>   GBMModel.7 0.7263693 0.7385321 0.05069831 0.6351351 0.7896996  0
+#>   GBMModel.8 0.7121314 0.7169811 0.05331152 0.6199095 0.7847222  0
+#>   GBMModel.9 0.6994678 0.7156863 0.05314909 0.6081081 0.7639485  0
 #> 
 #> , , Metric = RMSE
 #> 
 #>             Statistic
-#> Model             Mean   Median       SD      Min       Max NA
-#>   GBMModel.1  3820.101 3922.004 1114.457 2067.702  5634.290  0
-#>   GBMModel.2  5577.329 4754.214 2760.113 1952.892 12794.955  0
-#>   GBMModel.3  7699.418 6963.495 3820.770 3525.290 19525.003  0
-#>   GBMModel.4  3983.721 3819.946 1046.342 2132.840  5731.912  0
-#>   GBMModel.5  5155.270 4156.921 2543.658 1761.762 10932.087  0
-#>   GBMModel.6  9112.486 8183.500 4469.315 4290.710 20736.130  0
-#>   GBMModel.7  4927.169 4607.758 1648.306 2913.023  8981.286  0
-#>   GBMModel.8  5659.614 4696.612 2813.594 2045.974 11673.612  0
-#>   GBMModel.9 12906.024 9741.308 8188.991 4937.101 32771.044  0
+#> Model             Mean    Median        SD      Min       Max NA
+#>   GBMModel.1  3868.629  3321.249  1431.839 2123.875  7401.789  0
+#>   GBMModel.2  5450.093  4741.129  2438.173 2385.426 11695.273  0
+#>   GBMModel.3  7877.487  5827.739  5036.837 4192.463 20009.854  0
+#>   GBMModel.4  3919.126  3535.514  1454.999 2373.413  7558.280  0
+#>   GBMModel.5  5262.122  5052.969  1900.353 2280.193  8212.727  0
+#>   GBMModel.6 10595.888  8308.733  7057.327 4996.420 28610.367  0
+#>   GBMModel.7  4167.128  3789.596  1115.371 2587.440  6701.087  0
+#>   GBMModel.8  5427.518  6129.309  2313.742 2039.894  9212.369  0
+#>   GBMModel.9 16941.696 10865.160 16841.774 4914.743 71150.177  0
 ```
 
 Line plots of tuning results display the resampled metric means, or another statistic specified with the `stat` argument, versus the first tuning parameter values and with lines grouped according to the remaining parameters, if any.
@@ -1664,8 +1667,8 @@ stackedmodel <- StackedModel(CoxModel, CForestModel, GLMBoostModel)
 res_stacked <- resample(surv_fo, data = surv_train, model = stackedmodel)
 summary(res_stacked)
 #>          Statistic
-#> Metric         Mean    Median        SD       Min       Max NA
-#>   C-Index 0.7255417 0.7703704 0.1281829 0.5064935 0.8324324  0
+#> Metric         Mean   Median        SD       Min       Max NA
+#>   C-Index 0.7294869 0.762963 0.1275484 0.5194805 0.8556701  0
 
 ## Super learner
 supermodel <- SuperModel(CoxModel, CForestModel, GLMBoostModel,
@@ -1674,7 +1677,7 @@ res_super <- resample(surv_fo, data = surv_train, model = supermodel)
 summary(res_super)
 #>          Statistic
 #> Metric         Mean    Median        SD       Min       Max NA
-#>   C-Index 0.7448593 0.7954545 0.1094031 0.5770925 0.8543046  0
+#>   C-Index 0.7534803 0.8325472 0.1243104 0.5748899 0.8454545  0
 ```
 
 
@@ -1730,15 +1733,15 @@ Nesting of resampling routines is repeated recursively when a fit involves multi
 #> 
 #> Optimization method: Grid Search
 #> TunedModelRecipe log:
-#> # A tibble: 3 x 4
+#> # A tibble: 3 × 4
 #>   name          selected params$PCA$num_comp metrics$`C-Index`
 #>   <chr>         <lgl>                  <int>             <dbl>
-#> 1 ModelRecipe.1 TRUE                       1             0.737
+#> 1 ModelRecipe.1 TRUE                       1             0.741
 #> 2 ModelRecipe.2 FALSE                      2             0.730
-#> 3 ModelRecipe.3 FALSE                      3             0.696
+#> 3 ModelRecipe.3 FALSE                      3             0.702
 #> 
 #> Selected row: 1
-#> Metric: C-Index = 0.7365799
+#> Metric: C-Index = 0.7405534
 ```
 
 In order to identify and return a final model fitted to the entire input data, the hierarchy is traversed from top to bottom along the path determined by the choice at each node.  Steps along the path are labeled `TrainStep1` and `TrainStep2` in the output.  As seen above in `TrainStep1`, one principal component is first selected for the tuned input.  Using an input recipe with one principal component, the entire dataset is refit at `TrainStep2` to finally select `r rdoc_url("GBMModel")`.
@@ -1749,7 +1752,7 @@ In order to identify and return a final model fitted to the entire input data, t
 #> 
 #> Optimization method: Grid Search
 #> SelectedModel log:
-#> # A tibble: 3 x 4
+#> # A tibble: 3 × 4
 #>   name         selected params$id  metrics$`C-Index`
 #>   <chr>        <lgl>    <chr>                  <dbl>
 #> 1 GBMModel     TRUE     model.1mQk             0.740
@@ -1770,6 +1773,7 @@ After the series of training steps reaches the bottom of its hierarchy, the fina
 #> Package: gbm
 #> Response types: factor, numeric, PoissonVariate, Surv
 #> Case weights support: TRUE
+#> Missing case removal: response
 #> Tuning grid: TRUE
 #> Variable importance: TRUE
 #> 
