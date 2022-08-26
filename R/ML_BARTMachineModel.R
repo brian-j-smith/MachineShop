@@ -83,12 +83,10 @@ BARTMachineModel <- function(
     ),
 
     fit = function(formula, data, weights, use_missing_data, ...) {
-      x <- model.matrix(data, intercept = FALSE)
+      x <- as.data.frame(model.matrix(data, intercept = FALSE))
       y <- response(data)
       if (is_response(y, "binary")) y <- factor(y, levels = rev(levels(y)))
-      bartMachine::bartMachine(
-        as.data.frame(x), y, use_missing_data = TRUE, ...
-      )
+      bartMachine::build_bart_machine(x, y, use_missing_data = TRUE, ...)
     },
 
     predict = function(object, newdata, ...) {
