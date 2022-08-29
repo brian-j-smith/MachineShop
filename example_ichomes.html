@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -148,11 +148,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -769,12 +773,13 @@ plot(vi)</code></pre>
 #&gt; Package: gbm
 #&gt; Response types: factor, numeric, PoissonVariate, Surv
 #&gt; Case weights support: TRUE
+#&gt; Missing case removal: response
 #&gt; Tuning grid: TRUE
 #&gt; Variable importance: TRUE
 #&gt; 
 #&gt; Parameters:
 #&gt; List of 5
-#&gt;  $ n.trees          : int 200
+#&gt;  $ n.trees          : int 250
 #&gt;  $ interaction.depth: int 4
 #&gt;  $ n.minobsinnode   : num 10
 #&gt;  $ shrinkage        : num 0.1
@@ -786,22 +791,22 @@ plot(vi)</code></pre>
 #&gt; Optimization method: Grid Search
 #&gt; TunedModel log:
 #&gt; # A tibble: 25 × 4
-#&gt;    name        selected params$n.trees $interaction.depth metrics$RMSE   $R2
-#&gt;    &lt;chr&gt;       &lt;lgl&gt;             &lt;int&gt;              &lt;int&gt;        &lt;dbl&gt; &lt;dbl&gt;
-#&gt;  1 GBMModel.1  FALSE                50                  1       57137. 0.583
-#&gt;  2 GBMModel.2  FALSE                50                  2       52958. 0.639
-#&gt;  3 GBMModel.3  FALSE                50                  3       51952. 0.653
-#&gt;  4 GBMModel.4  FALSE                50                  4       50246. 0.682
-#&gt;  5 GBMModel.5  FALSE                50                  5       49816. 0.687
-#&gt;  6 GBMModel.6  FALSE               100                  1       53313. 0.639
-#&gt;  7 GBMModel.7  FALSE               100                  2       50244. 0.678
-#&gt;  8 GBMModel.8  FALSE               100                  3       50373. 0.677
-#&gt;  9 GBMModel.9  FALSE               100                  4       48622. 0.706
-#&gt; 10 GBMModel.10 FALSE               100                  5       48306. 0.710
-#&gt; # … with 15 more rows, and 1 more variable: metrics$MAE &lt;dbl&gt;
+#&gt;    name        selected params$n.trees $interaction.depth metrics…¹   $R2   $MAE
+#&gt;    &lt;chr&gt;       &lt;lgl&gt;             &lt;int&gt;              &lt;int&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+#&gt;  1 GBMModel.1  FALSE                50                  1    56750. 0.592 36337.
+#&gt;  2 GBMModel.2  FALSE                50                  2    53242. 0.641 33061.
+#&gt;  3 GBMModel.3  FALSE                50                  3    51911. 0.659 31824.
+#&gt;  4 GBMModel.4  FALSE                50                  4    50832. 0.672 30828.
+#&gt;  5 GBMModel.5  FALSE                50                  5    50068. 0.685 29946.
+#&gt;  6 GBMModel.6  FALSE               100                  1    52998. 0.636 33458.
+#&gt;  7 GBMModel.7  FALSE               100                  2    50227. 0.677 31097.
+#&gt;  8 GBMModel.8  FALSE               100                  3    49925. 0.679 30182.
+#&gt;  9 GBMModel.9  FALSE               100                  4    49399. 0.691 29481.
+#&gt; 10 GBMModel.10 FALSE               100                  5    49226. 0.692 29170.
+#&gt; # … with 15 more rows, and abbreviated variable name ¹​metrics$RMSE
 #&gt; 
-#&gt; Selected row: 19
-#&gt; Metric: RMSE = 48025.48
+#&gt; Selected row: 24
+#&gt; Metric: RMSE = 48572.58
 plot(tuned_model, type = &quot;line&quot;)
 #&gt; $TrainingStep1</code></pre>
 <p><img src="example_ichomes_files/figure-html/ex_ichomes_tune_model-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -815,7 +820,7 @@ pred &lt;- predict(model_fit, newdata = testset)
 ## Test set performance
 performance(obs, pred)
 #&gt;         RMSE           R2          MAE 
-#&gt; 4.505705e+04 7.206507e-01 2.726249e+04</code></pre>
+#&gt; 4.435582e+04 7.292781e-01 2.642282e+04</code></pre>
 </div>
 <div id="calibration-curve" class="section level2">
 <h2>Calibration Curve</h2>

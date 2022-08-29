@@ -13,7 +13,7 @@
 
 <title>Using MachineShop</title>
 
-<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -170,11 +170,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -602,7 +606,7 @@ surv_fo &lt;- y ~ sex + age + year + thickness + ulcer</code></pre>
 <p>Model fitting requires user specification of a
 <strong>MachineShop</strong> compatible model. A named list of
 package-supplied models can be obtained interactively with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/modelinfo"><code>modelinfo()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/modelinfo"><code>modelinfo()</code></a>
 function, and includes the following components for each.</p>
 <dl>
 <dt><code>label</code></dt>
@@ -626,6 +630,12 @@ logical value or vector of the same length as
 <code>response_types</code> indicating whether case weights are
 supported for the responses.
 </dd>
+<dt><code>na.rm</code></dt>
+<dd>
+character sting specifying removal of <code>"all"</code> cases with
+missing values from model fitting, <code>"none"</code>, or only those
+whose missing values are in the <code>"response"</code> variable.
+</dd>
 <dt><code>arguments</code></dt>
 <dd>
 closure with the argument names and corresponding default values of the
@@ -643,7 +653,7 @@ defined.
 </dd>
 </dl>
 <p>Function <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/modelinfo"><code>modelinfo()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/modelinfo"><code>modelinfo()</code></a>
 may be called without arguments, with one or more model functions,
 observed response variables, or vectors representing response variable
 types; and will return information on all matching models.</p>
@@ -668,7 +678,7 @@ modelinfo() %&gt;% names
 #&gt; [49] &quot;TunedModel&quot;          &quot;XGBModel&quot;            &quot;XGBDARTModel&quot;       
 #&gt; [52] &quot;XGBLinearModel&quot;      &quot;XGBTreeModel&quot;</code></pre>
 <p>Information is displayed below for the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/GBMModel"><code>GBMModel()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/GBMModel"><code>GBMModel()</code></a>
 function corresponding to a generalized boosted regression model, which
 is applicable to survival outcomes.</p>
 <pre class="r"><code>## Model-specific information
@@ -685,6 +695,9 @@ modelinfo(GBMModel)
 #&gt; 
 #&gt; $GBMModel$weights
 #&gt; [1] TRUE
+#&gt; 
+#&gt; $GBMModel$na.rm
+#&gt; [1] &quot;response&quot;
 #&gt; 
 #&gt; $GBMModel$arguments
 #&gt; function (distribution = character(), n.trees = 100, interaction.depth = 1, 
@@ -706,6 +719,7 @@ information being displayed as formatted text.</p>
 #&gt; Package: gbm
 #&gt; Response types: factor, numeric, PoissonVariate, Surv
 #&gt; Case weights support: TRUE
+#&gt; Missing case removal: response
 #&gt; Tuning grid: TRUE
 #&gt; Variable importance: TRUE
 #&gt; 
@@ -716,7 +730,7 @@ information being displayed as formatted text.</p>
 <div id="type-specific-models" class="section level3">
 <h3>Type-Specific Models</h3>
 <p>When data objects are supplied as arguments to <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/modelinfo"><code>modelinfo()</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/modelinfo"><code>modelinfo()</code></a>,
 information is returned on all models applicable to response variables
 of the same data types. If model functions are additionally supplied as
 arguments, information on the subset matching the data types is
@@ -756,9 +770,9 @@ modelinfo(surv_df$y) %&gt;% names
 <div id="fit-function" class="section level2">
 <h2>Fit Function</h2>
 <p>Package models, such as <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/GBMModel"><code>GBMModel</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/GBMModel"><code>GBMModel</code></a>,
 can be specified in the <code>model</code> argument of the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/fit"><code>fit()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/fit"><code>fit()</code></a>
 function to estimate a relationship (<code>surv_fo</code>) between
 predictors and an outcome based on a set of data
 (<code>surv_train</code>). Argument specifications may be in terms of a
@@ -784,7 +798,7 @@ such, their values can change based on characteristics of the analytic
 dataset, including the number of observations or predictor variables.
 Expressions to dynamic parameters are specified within the
 package-supplied quote operator <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/quote"><code>.()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/quote"><code>.()</code></a>
 and can include the following objects:</p>
 <dl>
 <dt><code>nobs</code></dt>
@@ -802,7 +816,7 @@ response variable.
 </dl>
 <p>In the example below, Bayesian information criterion (BIC) based
 stepwise variable selection is performed by creating a <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/CoxModel"><code>CoxStepAICModel</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/CoxModel"><code>CoxStepAICModel</code></a>
 with dynamic parameter <code>k</code> to be calculated as the log number
 of observations in the fitted dataset.</p>
 <pre class="r"><code>## Dynamic model parameter k = log number of observations
@@ -816,14 +830,14 @@ fit(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(length(y)))))<
 <div id="predict-function" class="section level2">
 <h2>Predict Function</h2>
 <p>A <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/predict"><code>predict()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/predict"><code>predict()</code></a>
 function is supplied for application to model fit results to obtain
 predicted values on a dataset specified with its <code>newdata</code>
 argument or on the original dataset if not specified. Survival means are
 predicted for survival outcomes by default. Estimates of the associated
 survival distributions are needed to calculate the means. For models,
 like <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/GBMModel"><code>GBMModel</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/GBMModel"><code>GBMModel</code></a>,
 that perform semi- or non-parametric survival analysis, Weibull
 approximations to the survival distributions are the default for mean
 estimation. Other choices of distributional approximations are
@@ -840,16 +854,16 @@ negatively biased.</p>
 <pre class="r"><code>## Predicted survival means (default: Weibull distribution)
 predict(surv_fit, newdata = surv_test)
 #&gt; --- SurvMeans object -----------------------------------------------------------
-#&gt;  [1]  1009.251 10657.119 20789.329  1745.919  1903.109  7919.143  1060.348
-#&gt;  [8]   649.355  3428.405  4284.632
+#&gt;  [1]   980.6427  8355.2097 19092.0713  1657.1081  2435.7916  7423.9210
+#&gt;  [7]   980.6427   765.2302  3002.7963  3544.1334
 #&gt; ... with 59 more values
 #&gt; Distribution: weibull
 
 ## Predicted survival means (empirical distribution)
 predict(surv_fit, newdata = surv_test, distr = &quot;empirical&quot;)
 #&gt; --- SurvMeans object -----------------------------------------------------------
-#&gt;  [1] 1235.0488 4950.5191 5282.3780 2203.7458 2381.5868 4708.6058 1305.4888
-#&gt;  [8]  771.1966 3561.7763 3940.4011
+#&gt;  [1] 1237.336 4806.528 5275.550 2174.870 2982.527 4699.455 1237.336  936.588
+#&gt;  [9] 3399.671 3703.666
 #&gt; ... with 59 more values
 #&gt; Distribution: empirical</code></pre>
 <p>In addition to survival means, predicted survival probabilities
@@ -867,17 +881,17 @@ surv_times &lt;- 365 * c(5, 10)
 
 predict(surv_fit, newdata = surv_test, times = surv_times, type = &quot;prob&quot;)
 #&gt; --- SurvProbs object -----------------------------------------------------------
-#&gt;           Time1       Time2
-#&gt;  [1,] 0.1760244 0.051515094
-#&gt;  [2,] 0.9072205 0.846840034
-#&gt;  [3,] 0.9578940 0.929185729
-#&gt;  [4,] 0.4111140 0.219230664
-#&gt;  [5,] 0.4493411 0.255169336
-#&gt;  [6,] 0.8693715 0.787413442
-#&gt;  [7,] 0.1948840 0.061292150
-#&gt;  [8,] 0.0508808 0.006189343
-#&gt;  [9,] 0.6773590 0.514221145
-#&gt; [10,] 0.7433254 0.602640562
+#&gt;            Time1      Time2
+#&gt;  [1,] 0.17831449 0.05242217
+#&gt;  [2,] 0.88497752 0.81143387
+#&gt;  [3,] 0.95693579 0.92748997
+#&gt;  [4,] 0.40584818 0.21394117
+#&gt;  [5,] 0.57104030 0.38361499
+#&gt;  [6,] 0.86814014 0.78521296
+#&gt;  [7,] 0.17831449 0.05242217
+#&gt;  [8,] 0.09609059 0.01821231
+#&gt;  [9,] 0.64879179 0.47719578
+#&gt; [10,] 0.70290781 0.54725952
 #&gt; ... with 59 more rows
 #&gt; Times: 1825, 3650
 #&gt; Distribution: empirical
@@ -911,9 +925,9 @@ values at the default <code>type = "response"</code>; whereas, double
 predictor variables as well as the data used to estimate the
 relationship. Four main types of specifications are supported by the
 package’s <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/fit"><code>fit()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/fit"><code>fit()</code></a>
 and <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/resample"><code>resample()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/resample"><code>resample()</code></a>
 functions: traditional formula, design matrix, model frame, and
 recipe.</p>
 <div id="traditional-formula" class="section level2">
@@ -969,11 +983,11 @@ object of responses can be supplied to the fit functions directly.
 Fitting with design matrices has less computational overhead than
 traditional formulas and allows for greater numbers of predictor
 variables in some models, including <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/GBMModel"><code>GBMModel</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/GBMModel"><code>GBMModel</code></a>,
 <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/GLMNetModel"><code>GLMNetModel</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/GLMNetModel"><code>GLMNetModel</code></a>,
 and <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/RandomForestModel"><code>RandomForestModel</code></a>.</p>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/RandomForestModel"><code>RandomForestModel</code></a>.</p>
 <pre class="r"><code>## Example design matrix and response object
 x &lt;- model.matrix(type ~ . - 1, data = Pima.tr)
 y &lt;- Pima.tr$type
@@ -981,17 +995,17 @@ y &lt;- Pima.tr$type
 ## Design matrix specification
 model_fit &lt;- fit(x, y, model = GBMModel)
 predict(model_fit, newdata = Pima.te) %&gt;% head
-#&gt; [1] Yes No  No  No  Yes Yes
+#&gt; [1] Yes No  No  No  No  Yes
 #&gt; Levels: No Yes</code></pre>
 </div>
 <div id="model-frame" class="section level2">
 <h2>Model Frame</h2>
 <p>A <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/ModelFrame"><code>ModelFrame</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/ModelFrame"><code>ModelFrame</code></a>
 class is defined by the package for specification of predictor and
 response variables along with other attributes to control model fitting.
 Model frames can be created with calls to the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/ModelFrame"><code>ModelFrame()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/ModelFrame"><code>ModelFrame()</code></a>
 constructor function using a syntax similar to the traditional formula
 or design matrix.</p>
 <pre class="r"><code>## Model frame specification
@@ -1000,7 +1014,7 @@ or design matrix.</p>
 mf &lt;- ModelFrame(type ~ ., data = Pima.tr)
 model_fit &lt;- fit(mf, model = GBMModel)
 predict(model_fit, newdata = Pima.te) %&gt;% head
-#&gt; [1] Yes No  No  No  Yes Yes
+#&gt; [1] Yes No  No  No  No  Yes
 #&gt; Levels: No Yes
 
 ## Design matrix
@@ -1016,7 +1030,7 @@ the model frame by default. This is often desirable for models that do
 not handle missing values. Conversely, missing values can be retained in
 the model frame by setting its argument <code>na.rm = FALSE</code> for
 models, like <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/GBMModel"><code>GBMModel</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/GBMModel"><code>GBMModel</code></a>,
 that do handle them. A second advantage is that case weights can be
 included in the model frame to be passed on to the model fitting
 functions.</p>
@@ -1049,7 +1063,7 @@ predict(model_fit, newdata = Pima.te) %&gt;% head
 <p>As shown, prediction on new data with a model fit to a recipe is done
 on an unprocessed dataset. Recipe case weights and stratified resampling
 are supported with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/recipe_roles"><code>role_case()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/recipe_roles"><code>role_case()</code></a>
 function. As an example, an initial step is included in the recipe below
 to replace the original role of variable <code>weights</code> with a
 designation of case weights. That is followed by a step to convert three
@@ -1267,12 +1281,12 @@ predict(model_fit) %&gt;% head
 #&gt; Levels: setosa versicolor virginica
 predict(model_fit, type = &quot;prob&quot;) %&gt;% head
 #&gt;         setosa   versicolor    virginica
-#&gt; [1,] 0.9998347 1.652944e-04 2.210308e-08
-#&gt; [2,] 0.9999337 6.620459e-05 6.166477e-08
-#&gt; [3,] 0.9999147 8.530051e-05 4.640879e-08
-#&gt; [4,] 0.9999147 8.530051e-05 4.640879e-08
-#&gt; [5,] 0.9998347 1.652944e-04 2.210308e-08
-#&gt; [6,] 0.9998347 1.652944e-04 2.210308e-08</code></pre>
+#&gt; [1,] 0.9999529 4.704617e-05 5.999170e-08
+#&gt; [2,] 0.9999732 2.667703e-05 1.626995e-07
+#&gt; [3,] 0.9999744 2.549026e-05 7.312256e-08
+#&gt; [4,] 0.9999683 3.164919e-05 1.004487e-07
+#&gt; [5,] 0.9999529 4.704617e-05 5.999170e-08
+#&gt; [6,] 0.9999446 5.537937e-05 5.999120e-08</code></pre>
 <p>In the case of a binary factor, the second factor level is treated as
 the event and the level for which predicted probabilities are
 computed.</p>
@@ -1282,10 +1296,10 @@ data(Pima.tr, package = &quot;MASS&quot;)
 
 model_fit &lt;- fit(type ~ ., data = Pima.tr, model = GBMModel)
 predict(model_fit, newdata = Pima.te) %&gt;% head
-#&gt; [1] Yes No  No  No  Yes Yes
+#&gt; [1] Yes No  No  No  No  Yes
 #&gt; Levels: No Yes
 predict(model_fit, newdata = Pima.te, type = &quot;prob&quot;) %&gt;% head
-#&gt; [1] 0.88189211 0.09680931 0.01404337 0.04758292 0.52982760 0.70900736</code></pre>
+#&gt; [1] 0.84469494 0.05769275 0.03483727 0.03271784 0.48315264 0.74959442</code></pre>
 </div>
 <div id="ordered-factor" class="section level2">
 <h2>Ordered Factor</h2>
@@ -1308,12 +1322,12 @@ predict(model_fit) %&gt;% head
 #&gt; Levels: Low &lt; Medium &lt; High
 predict(model_fit, type = &quot;prob&quot;) %&gt;% head
 #&gt;            Low      Medium         High
-#&gt; [1,] 0.9962275 0.003745918 2.661860e-05
-#&gt; [2,] 0.9971052 0.002874523 2.026888e-05
-#&gt; [3,] 0.9870746 0.012894634 3.080882e-05
-#&gt; [4,] 0.9634014 0.036535258 6.335981e-05
-#&gt; [5,] 0.9201659 0.079734424 9.972266e-05
-#&gt; [6,] 0.9511779 0.048756153 6.593049e-05</code></pre>
+#&gt; [1,] 0.9964837 0.003459652 5.669359e-05
+#&gt; [2,] 0.9970031 0.002944093 5.276251e-05
+#&gt; [3,] 0.9852936 0.014556622 1.498127e-04
+#&gt; [4,] 0.9842968 0.015583572 1.195963e-04
+#&gt; [5,] 0.9184646 0.081327684 2.077245e-04
+#&gt; [6,] 0.8934669 0.106306241 2.268354e-04</code></pre>
 </div>
 <div id="numeric-vector" class="section level2">
 <h2>Numeric Vector</h2>
@@ -1323,9 +1337,9 @@ double) by default, and doubles if <code>type = "numeric"</code>.</p>
 <pre class="r"><code>## Iowa City housing prices
 model_fit &lt;- fit(sale_amount ~ ., data = ICHomes, model = GBMModel)
 predict(model_fit) %&gt;% head
-#&gt; [1] 106153 175550 220200 130631 223192 233459
+#&gt; [1] 105664 171728 205150 120392 218505 225576
 predict(model_fit, type = &quot;numeric&quot;) %&gt;% head
-#&gt; [1] 106153.2 175550.2 220199.6 130631.3 223191.6 233458.7</code></pre>
+#&gt; [1] 105663.7 171727.6 205149.8 120392.4 218504.6 225576.3</code></pre>
 </div>
 <div id="numeric-matrix" class="section level2">
 <h2>Numeric Matrix</h2>
@@ -1379,7 +1393,7 @@ fit(Surv(time, status) ~ ., data = veteran, model = GBMModel)</code></pre>
 <p>For recipes, survival responses may be defined with the individual
 survival time and event variables given on the left hand side of a
 recipe formula and their roles designated with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/recipe_roles"><code>role_surv()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/recipe_roles"><code>role_surv()</code></a>
 function or as a single <code>Surv</code> variable within a data
 frame.</p>
 <pre class="r"><code>## Survival response recipe
@@ -1404,10 +1418,10 @@ performances of models.</p>
 <div id="performance-function" class="section level2">
 <h2>Performance Function</h2>
 <p>Metrics can be computed with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/performance"><code>performance()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/performance"><code>performance()</code></a>
 function applied to observed responses and responses predicted with the
 <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/predict"><code>predict()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/predict"><code>predict()</code></a>
 function. In the case of observed versus predicted survival
 probabilities or events, metrics will be calculated at user-specified
 survival times and returned along with their time-integrated mean.</p>
@@ -1419,24 +1433,24 @@ obs &lt;- response(surv_fit, newdata = surv_test)
 ## Predicted survival means
 pred_means &lt;- predict(surv_fit, newdata = surv_test)
 performance(obs, pred_means)
-#&gt;   C-Index 
-#&gt; 0.6511628
+#&gt;  C-Index 
+#&gt; 0.622093
 
 ## Predicted survival probabilities
 pred_probs &lt;- predict(surv_fit, newdata = surv_test, times = surv_times, type = &quot;prob&quot;)
 performance(obs, pred_probs)
 #&gt;     Brier.Mean    Brier.Time1    Brier.Time2   ROC AUC.Mean  ROC AUC.Time1 
-#&gt;      0.2815264      0.2264043      0.3366485      0.6079506      0.6524788 
+#&gt;      0.2775278      0.2310083      0.3240473      0.6053896      0.6091172 
 #&gt;  ROC AUC.Time2  Accuracy.Mean Accuracy.Time1 Accuracy.Time2 
-#&gt;      0.5634223      0.6594589      0.7354396      0.5834782
+#&gt;      0.6016620      0.6667354      0.7207325      0.6127383
 
 ## Predicted survival events
 pred_events &lt;- predict(surv_fit, newdata = surv_test, times = surv_times)
 performance(obs, pred_events)
 #&gt;  Accuracy.Mean Accuracy.Time1 Accuracy.Time2 
-#&gt;      0.6594589      0.7354396      0.5834782</code></pre>
+#&gt;      0.6667354      0.7207325      0.6127383</code></pre>
 <p>Function <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/performance"><code>performance()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/performance"><code>performance()</code></a>
 computes a default set of metrics according to the observed and
 predicted response types, as indicated and in the order given in the
 table below.</p>
@@ -1484,7 +1498,7 @@ Error</td>
 <p>These defaults may be changed by specifying one or more
 package-supplied metric functions to the <code>metrics</code> argument
 of <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/performance"><code>performance()</code></a>.
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/performance"><code>performance()</code></a>.
 Specification of the <code>metrics</code> argument can be in terms of a
 single metric function, function name, or list of metric functions. List
 names, if specified, will be displayed as metric labels in graphical and
@@ -1509,41 +1523,41 @@ the classification cutoff probability (default:
 <pre class="r"><code>## User-specified survival probability metrics
 performance(obs, pred_probs, metrics = c(sensitivity, specificity), cutoff = 0.7)
 #&gt;  sensitivity.Mean sensitivity.Time1 sensitivity.Time2  specificity.Mean 
-#&gt;         0.4273686         0.4636436         0.3910935         0.6005775 
+#&gt;         0.4855464         0.4636436         0.5074493         0.6655982 
 #&gt; specificity.Time1 specificity.Time2 
-#&gt;         0.7487698         0.4523852</code></pre>
+#&gt;         0.7487698         0.5824266</code></pre>
 </div>
 <div id="metric-functions" class="section level2">
 <h2>Metric Functions</h2>
 <p>Whereas multiple package-supplied metrics can be calculated
 simultaneously with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/performance"><code>performance()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/performance"><code>performance()</code></a>
 function, each exists as a stand-alone function that can be called
 individually.</p>
 <pre class="r"><code>## Metric functions for survival means
 cindex(obs, pred_means)
-#&gt; [1] 0.6511628
+#&gt; [1] 0.622093
 
 rmse(obs, pred_means)
-#&gt; [1] 6277.636
+#&gt; [1] 5463.385
 
 rmsle(obs, pred_means)
-#&gt; [1] 2.074133
+#&gt; [1] 1.998432
 
 ## Metric functions for survival probabilities
 sensitivity(obs, pred_probs)
 #&gt;      Mean     Time1     Time2 
-#&gt; 0.3664206 0.3477320 0.3851091
+#&gt; 0.3588005 0.2895285 0.4280725
 
 specificity(obs, pred_probs)
 #&gt;      Mean     Time1     Time2 
-#&gt; 0.9323611 0.8647221 1.0000000</code></pre>
+#&gt; 0.9323417 0.8646834 1.0000000</code></pre>
 </div>
 <div id="metric-information" class="section level2">
 <h2>Metric Information</h2>
 <p>A named list of available metrics can be obtained interactively with
 the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metricinfo"><code>metricinfo()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metricinfo"><code>metricinfo()</code></a>
 function, and includes the following components for each one.</p>
 <dl>
 <dt><code>label</code></dt>
@@ -1567,7 +1581,7 @@ supported by the metric.
 </dd>
 </dl>
 <p>Function <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metricinfo"><code>metricinfo()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metricinfo"><code>metricinfo()</code></a>
 may be called without arguments, with one or more metric functions, an
 observed response variable, an observed and predicted response variable
 pair, response variable types, or resampled output; and will return
@@ -1583,7 +1597,7 @@ metricinfo() %&gt;% names
 #&gt; [25] &quot;sensitivity&quot;     &quot;specificity&quot;     &quot;tnr&quot;             &quot;tpr&quot;            
 #&gt; [29] &quot;weighted_kappa2&quot;</code></pre>
 <p>Information is displayed below for the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>cindex()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>cindex()</code></a>
 function corresponding to a concordance index, which is applicable to
 observed survival and predicted means.</p>
 <pre class="r"><code>## Metric-specific information
@@ -1625,15 +1639,15 @@ information being displayed as formatted text.</p>
 <div id="type-specific-metrics" class="section level3">
 <h3>Type-Specific Metrics</h3>
 <p>When data objects are supplied as arguments to <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metricinfo"><code>metricinfo()</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metricinfo"><code>metricinfo()</code></a>,
 information is returned on all metrics applicable to response variables
 of the same data types. Observed response variable type is inferred from
 the first data argument and predicted type from the second, if given.
 For survival responses, predicted types may be <code>numeric</code> for
 survival means, <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/SurvMatrix"><code>SurvEvents</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/SurvMatrix"><code>SurvEvents</code></a>
 for 0-1 survival events at specified follow-up times, or <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/SurvMatrix"><code>SurvProbs</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/SurvMatrix"><code>SurvProbs</code></a>
 for follow-up time survival probabilities. If model functions are
 additionally supplied as arguments, information on the subset matching
 the data types is returned.</p>
@@ -1667,7 +1681,7 @@ metricinfo(Surv(0), auc, cross_entropy, cindex) %&gt;% names
 <div id="response-variable-specific-metrics" class="section level3">
 <h3>Response Variable-Specific Metrics</h3>
 <p>Existing response variables observed and those obtained from the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/predict"><code>predict()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/predict"><code>predict()</code></a>
 function may be given as arguments to identify metrics that are
 applicable to them.</p>
 <pre class="r"><code>## Metrics for observed and predicted responses from model fits
@@ -1687,30 +1701,30 @@ metricinfo(obs, pred_probs) %&gt;% names
 summarized below.</p>
 <dl>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>accuracy()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>accuracy()</code></a></dt>
 <dd>
 proportion of correctly classified responses.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>brier()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>brier()</code></a></dt>
 <dd>
 <a href="https://en.wikipedia.org/wiki/Brier_score">Brier score</a>.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>cross_entropy()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>cross_entropy()</code></a></dt>
 <dd>
 <a href="https://en.wikipedia.org/wiki/Cross_entropy">cross entropy</a>
 loss averaged over the number of cases.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>kappa2()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>kappa2()</code></a></dt>
 <dd>
 <a href="https://en.wikipedia.org/wiki/Cohen%27s_kappa">Cohen’s
 kappa</a> statistic measuring relative agreement between observed and
 predicted classifications.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>weighted_kappa2()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>weighted_kappa2()</code></a></dt>
 <dd>
 <a
 href="https://en.wikipedia.org/wiki/Cohen%27s_kappa#Weighted_kappa">weighted
@@ -1728,12 +1742,12 @@ probability.</p>
 factors as well as the following.</p>
 <dl>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>auc()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>auc()</code></a></dt>
 <dd>
 area under a performance curve.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>cindex()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>cindex()</code></a></dt>
 <dd>
 concordance index computed as rank order agreement between predicted
 probabilities for paired event and non-event cases. This metric can be
@@ -1742,7 +1756,7 @@ have a higher predicted value than a randomly selected non-event case,
 and is the same as area under the ROC curve.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>f_score()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>f_score()</code></a></dt>
 <dd>
 <a href="https://en.wikipedia.org/wiki/Precision_and_recall#F-measure">F
 score</a>, <span class="math inline">\(F_\beta = (1 + \beta^2)
@@ -1751,7 +1765,7 @@ score</a>, <span class="math inline">\(F_\beta = (1 + \beta^2)
 class="math inline">\((\beta = 1)\)</span> is the package default.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>fnr()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>fnr()</code></a></dt>
 <dd>
 false negative rate, <span class="math inline">\(FNR = \frac{FN}{TP +
 FN} = 1 - TPR\)</span>.
@@ -1813,49 +1827,49 @@ True Positive (TP)
 </table>
 <dl>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>fpr()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>fpr()</code></a></dt>
 <dd>
 false positive rate, <span class="math inline">\(FPR = \frac{FP}{TN +
 FP} = 1 - TNR\)</span>.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>npv()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>npv()</code></a></dt>
 <dd>
 negative predictive value, <span class="math inline">\(NPV =
 \frac{TN}{TN + FN}\)</span>.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>ppr()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>ppr()</code></a></dt>
 <dd>
 positive prediction rate, <span class="math inline">\(PPR = \frac{TP +
 FP}{TP + FP + TN + FN}\)</span>.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>ppv()</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>ppv()</code></a>,
 <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>precision()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>precision()</code></a></dt>
 <dd>
 positive predictive value, <span class="math inline">\(PPV =
 \frac{TP}{TP + FP}\)</span>.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>pr_auc()</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>pr_auc()</code></a>,
 <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>auc()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>auc()</code></a></dt>
 <dd>
 area under a precision recall curve.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>roc_auc()</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>roc_auc()</code></a>,
 <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>auc()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>auc()</code></a></dt>
 <dd>
 <a
 href="https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve">area
 under an ROC curve</a>.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>roc_index()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>roc_index()</code></a></dt>
 <dd>
 a tradeoff function of sensitivity and specificity as defined by the
 <code>fun</code> argument in this function (default: (sensitivity +
@@ -1865,19 +1879,19 @@ the default of Youden’s J statistic <span class="citation">(Youden
 1950)</span>.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>sensitivity()</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>sensitivity()</code></a>,
 <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>recall()</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>recall()</code></a>,
 <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>tpr()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>tpr()</code></a></dt>
 <dd>
 true positive rate, <span class="math inline">\(TPR =\frac{TP}{TP + FN}
 = 1 - FNR\)</span>.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>specificity()</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>specificity()</code></a>,
 <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>tnr()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>tnr()</code></a></dt>
 <dd>
 true negative rate, <span class="math inline">\(TNR = \frac{TN}{TN + FP}
 = 1 - FPR\)</span>.
@@ -1898,13 +1912,13 @@ separately for each column and then averaged to produce a single
 value.</p>
 <dl>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>gini()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>gini()</code></a></dt>
 <dd>
 <a href="https://en.wikipedia.org/wiki/Gini_coefficient">Gini
 coefficient</a>.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>mae()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>mae()</code></a></dt>
 <dd>
 mean absolute error, <span class="math inline">\(MAE =
 \frac{1}{N}\sum_{i=1}^N|y_i - \hat{y}_i|\)</span>, where <span
@@ -1913,31 +1927,31 @@ class="math inline">\(\hat{y}_i\)</span> are the <span
 class="math inline">\(N\)</span> observed and predicted responses.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>mse()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>mse()</code></a></dt>
 <dd>
 mean squared error, <span class="math inline">\(MSE =
 \frac{1}{N}\sum_{i=1}^N(y_i - \hat{y}_i)^2\)</span>.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>msle()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>msle()</code></a></dt>
 <dd>
 mean squared log error, <span class="math inline">\(MSLE =
 \frac{1}{N}\sum_{i=1}^N(log(1 + y_i) - log(1 + \hat{y}_i))^2\)</span>.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>r2()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>r2()</code></a></dt>
 <dd>
 one minus residual divided by total sums of squares, <span
 class="math inline">\(R^2 = 1 - \sum_{i=1}^N(y_i - \hat{y}_i)^2 /
 \sum_{i=1}^N(y_i - \bar{y})^2\)</span>.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>rmse()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>rmse()</code></a></dt>
 <dd>
 square root of mean squared error.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metrics"><code>rmsle()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metrics"><code>rmsle()</code></a></dt>
 <dd>
 square root of mean squared log error.
 </dd>
@@ -2032,20 +2046,20 @@ empirical distribution for inference. Resampling is controlled in the
 <strong>MachineShop</strong> with the functions:</p>
 <dl>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/MLControl"><code>BootControl()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/MLControl"><code>BootControl()</code></a></dt>
 <dd>
 simple bootstrap resampling <span class="citation">(Efron and Tibshirani
 1993)</span> to repeatedly fit a model to bootstrap resampled training
 sets and predict the full dataset.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/MLControl"><code>BootOptimismControl()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/MLControl"><code>BootOptimismControl()</code></a></dt>
 <dd>
 optimism-corrected bootstrap resampling <span class="citation">(Efron
 and Gong 1983; Harrell, Lee, and Mark 1996)</span>.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/MLControl"><code>CVControl()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/MLControl"><code>CVControl()</code></a></dt>
 <dd>
 repeated K-fold cross-validation <span class="citation">(Kohavi
 1995)</span> to repeatedly partition the full dataset into K folds. For
@@ -2054,26 +2068,26 @@ with models fit on all remaining folds. The package default is 10-fold
 cross-validation.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/MLControl"><code>CVOptimismControl()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/MLControl"><code>CVOptimismControl()</code></a></dt>
 <dd>
 optimism-corrected cross-validation <span class="citation">(Davison and
 Hinkley 1997, eq. 6.48)</span>.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/MLControl"><code>OOBControl()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/MLControl"><code>OOBControl()</code></a></dt>
 <dd>
 out-of-bootstrap resampling to repeatedly fit a model to bootstrap
 resampled training sets and predict the unsampled cases.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/MLControl"><code>SplitControl()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/MLControl"><code>SplitControl()</code></a></dt>
 <dd>
 split training and test sets <span class="citation">(Hastie, Tibshirani,
 and Friedman 2009)</span> to randomly partition the full dataset for
 model fitting and prediction, respectively.
 </dd>
 <dt><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/MLControl"><code>TrainControl()</code></a></dt>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/MLControl"><code>TrainControl()</code></a></dt>
 <dd>
 training resubstitution for both model fitting and prediction on the
 full dataset in order to estimate training, or apparent, error <span
@@ -2120,10 +2134,10 @@ registerDoParallel(cores = 2)</code></pre>
 <div id="resample-function" class="section level2">
 <h2>Resample Function</h2>
 <p>Resampling is performed by calling the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/resample"><code>resample()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/resample"><code>resample()</code></a>
 function with a variable specification, model, and control structure.
 Like the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/fit"><code>fit()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/fit"><code>fit()</code></a>
 function, variables may be specified in terms of a traditional formula,
 design matrix, model frame, or recipe.</p>
 <pre class="r"><code>## Resample estimation for survival means and probabilities
@@ -2184,34 +2198,34 @@ design matrix, model frame, or recipe.</p>
 <div id="summary-statistics" class="section level2">
 <h2>Summary Statistics</h2>
 <p>The <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/summary"><code>summary()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/summary"><code>summary()</code></a>
 function when applied directly to output from <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/resample"><code>resample()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/resample"><code>resample()</code></a>
 computes summary statistics for the default performance metrics
 described in the <em>Performance Function</em> section.</p>
 <pre class="r"><code>## Summary of survival means metric
 summary(res_means)
 #&gt;          Statistic
-#&gt; Metric        Mean    Median        SD       Min       Max NA
-#&gt;   C-Index 0.729993 0.7222222 0.0544976 0.6283784 0.8207547  0
+#&gt; Metric         Mean   Median         SD       Min       Max NA
+#&gt;   C-Index 0.7463392 0.760181 0.05087334 0.6497797 0.8160377  0
 
 ## Summary of survival probability metrics
 summary(res_probs)
 #&gt;                 Statistic
 #&gt; Metric                Mean    Median         SD       Min       Max NA
-#&gt;   Brier.Mean     0.1854810 0.1783993 0.03819170 0.1338333 0.2696552  0
-#&gt;   Brier.Time1    0.1716919 0.1708841 0.02697760 0.1184808 0.2072244  0
-#&gt;   Brier.Time2    0.1992700 0.1652362 0.06554483 0.1273934 0.3339587  0
-#&gt;   ROC AUC.Mean   0.7789080 0.7839920 0.07814200 0.6331908 0.9282160  0
-#&gt;   ROC AUC.Time1  0.7857826 0.7731481 0.07412132 0.6591331 0.8943866  0
-#&gt;   ROC AUC.Time2  0.7720333 0.7880174 0.09201800 0.5976826 0.9620454  0
-#&gt;   Accuracy.Mean  0.7269223 0.7279678 0.06775892 0.6265693 0.8352991  0
-#&gt;   Accuracy.Time1 0.7658061 0.7650000 0.06421327 0.6607143 0.9000000  0
-#&gt;   Accuracy.Time2 0.6880385 0.6909357 0.09516973 0.5333333 0.8551587  0</code></pre>
+#&gt;   Brier.Mean     0.1840798 0.1656891 0.04219018 0.1384248 0.2799741  0
+#&gt;   Brier.Time1    0.1689041 0.1700111 0.02573429 0.1146578 0.2094401  0
+#&gt;   Brier.Time2    0.1992555 0.1646532 0.07325704 0.1107217 0.3505637  0
+#&gt;   ROC AUC.Mean   0.7923960 0.8100544 0.07409293 0.6498228 0.9059051  0
+#&gt;   ROC AUC.Time1  0.7968504 0.8109520 0.06961892 0.6698605 0.8881988  0
+#&gt;   ROC AUC.Time2  0.7879415 0.8124010 0.08943567 0.6203522 0.9438344  0
+#&gt;   Accuracy.Mean  0.7375050 0.7279678 0.05497218 0.6556134 0.8265224  0
+#&gt;   Accuracy.Time1 0.7656228 0.7650000 0.06670304 0.6607143 0.9000000  0
+#&gt;   Accuracy.Time2 0.7093872 0.7002405 0.07197984 0.6101648 0.8717949  0</code></pre>
 <p>Other relevant metrics can be identified with <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/metricinfo"><code>metricinfo()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/metricinfo"><code>metricinfo()</code></a>
 and summarized with <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/performance"><code>performance()</code></a>.</p>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/performance"><code>performance()</code></a>.</p>
 <pre class="r"><code>## Resample-specific metrics
 metricinfo(res_means) %&gt;% names
 #&gt; [1] &quot;cindex&quot; &quot;gini&quot;   &quot;mae&quot;    &quot;mse&quot;    &quot;msle&quot;   &quot;r2&quot;     &quot;rmse&quot;   &quot;rmsle&quot;
@@ -2219,30 +2233,30 @@ metricinfo(res_means) %&gt;% names
 ## User-specified survival means metrics
 summary(performance(res_means, metrics = c(cindex, rmse)))
 #&gt;         Statistic
-#&gt; Metric          Mean       Median           SD          Min          Max NA
-#&gt;   cindex    0.729993    0.7222222    0.0544976    0.6283784    0.8207547  0
-#&gt;   rmse   3983.720800 3819.9455016 1046.3418458 2132.8404344 5731.9116005  0</code></pre>
+#&gt; Metric           Mean      Median           SD          Min          Max NA
+#&gt;   cindex    0.7463392    0.760181 5.087334e-02    0.6497797    0.8160377  0
+#&gt;   rmse   3919.1261727 3535.514283 1.454999e+03 2373.4128247 7558.2801759  0</code></pre>
 <p>Furthermore, summaries can be customized with a user-defined
 statistics function or list of statistics functions passed to the
 <code>stats</code> argument of <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/summary"><code>summary()</code></a>.</p>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/summary"><code>summary()</code></a>.</p>
 <pre class="r"><code>## User-defined statistics function
 percentiles &lt;- function(x) quantile(x, probs = c(0.25, 0.50, 0.75))
 summary(res_means, stats = percentiles)
 #&gt;          Statistic
-#&gt; Metric          25%       50%       75% NA
-#&gt;   C-Index 0.6983609 0.7222222 0.7696212  0
+#&gt; Metric          25%      50%       75% NA
+#&gt;   C-Index 0.7196886 0.760181 0.7770528  0
 
 ## User-defined list of statistics functions
 summary(res_means, stats = c(Mean = mean, Percentile = percentiles))
 #&gt;          Statistic
-#&gt; Metric        Mean Percentile.25% Percentile.50% Percentile.75% NA
-#&gt;   C-Index 0.729993      0.6983609      0.7222222      0.7696212  0</code></pre>
+#&gt; Metric         Mean Percentile.25% Percentile.50% Percentile.75% NA
+#&gt;   C-Index 0.7463392      0.7196886       0.760181      0.7770528  0</code></pre>
 </div>
 <div id="plots" class="section level2">
 <h2>Plots</h2>
 <p>Summary plots of resample output can be obtained with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/plot"><code>plot()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/plot"><code>plot()</code></a>
 function. Boxplots are the default plot type; but density, errorbar, and
 violin plots are also available. Plots are generated with the
 <strong>ggplot2</strong> package <span class="citation">(Wickham
@@ -2272,9 +2286,9 @@ specification is in terms of a traditional formula or design matrix and
 will be done according to the response variable. For model frames and
 recipes, stratification variables must be defined explicitly with the
 <code>strata</code> argument to the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/ModelFrame"><code>ModelFrame()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/ModelFrame"><code>ModelFrame()</code></a>
 constructor or with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/recipe_roles"><code>role_case()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/recipe_roles"><code>role_case()</code></a>
 function. In general, strata are constructed from numeric proportions
 for <code>BinomialVariate</code>; original values for
 <code>character</code>, <code>factor</code>, <code>logical</code>, and
@@ -2309,17 +2323,17 @@ resample(surv_fo, data = surv_train, model = CoxStepAICModel(k = .(log(nobs))))<
 <h2>Model Comparisons</h2>
 <p>Resampled metrics from different models can be combined for
 comparison with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/combine"><code>c()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/combine"><code>c()</code></a>
 function. Optional names given on the left hand side of equal operators
 within <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/combine"><code>c()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/combine"><code>c()</code></a>
 calls will be used as labels in output from the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/summary"><code>summary()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/summary"><code>summary()</code></a>
 and <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/plot"><code>plot()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/plot"><code>plot()</code></a>
 functions. For comparisons of resampled output, the same control
 structure must be used in all associated calls to <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/resample"><code>resample()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/resample"><code>resample()</code></a>
 to ensure that resulting model metrics are computed on the same
 resampled training and test sets. The combined resample output can be
 summarized and plotted as usual.</p>
@@ -2363,24 +2377,24 @@ summary(res)
 #&gt; 
 #&gt;       Statistic
 #&gt; Model       Mean    Median         SD       Min       Max NA
-#&gt;   GBM1 0.7625619 0.7669683 0.05929276 0.6431718 0.8537736  0
-#&gt;   GBM2 0.7513153 0.7548387 0.05260501 0.6486486 0.8261803  0
-#&gt;   GBM3 0.7299930 0.7222222 0.05449760 0.6283784 0.8207547  0
+#&gt;   GBM1 0.7748099 0.7951389 0.04746402 0.6497797 0.8301887  0
+#&gt;   GBM2 0.7647633 0.7630332 0.05151443 0.6497797 0.8632075  0
+#&gt;   GBM3 0.7463392 0.7601810 0.05087334 0.6497797 0.8160377  0
 
 plot(res)</code></pre>
 <p><img src="using_files/figure-html/using_resample_comparisons-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Pairwise model differences for each metric can be calculated with the
 <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/diff"><code>diff()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/diff"><code>diff()</code></a>
 function applied to results from a call to <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/combine"><code>c()</code></a>.
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/combine"><code>c()</code></a>.
 Resulting differences can be summarized descriptively with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/summary"><code>summary()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/summary"><code>summary()</code></a>
 and <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/plot"><code>plot()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/plot"><code>plot()</code></a>
 functions and assessed for statistical significance with pairwise
 t-tests performed by the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/t.test"><code>t.test()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/t.test"><code>t.test()</code></a>
 function. The t-test statistic for a given set of <span
 class="math inline">\(R\)</span> resampled differences is calculated as
 <span class="math display">\[
@@ -2425,9 +2439,9 @@ summary(res_diff)
 #&gt; 
 #&gt;              Statistic
 #&gt; Model               Mean     Median         SD          Min        Max NA
-#&gt;   GBM1 - GBM2 0.01124657 0.01056338 0.02184631 -0.027896996 0.04646018  0
-#&gt;   GBM1 - GBM3 0.03256885 0.03040541 0.02744293 -0.002293578 0.09070796  0
-#&gt;   GBM2 - GBM3 0.02132228 0.01762115 0.01959371 -0.013761468 0.05882353  0
+#&gt;   GBM1 - GBM2 0.01004663 0.01388889 0.02165165 -0.033018868 0.03973510  0
+#&gt;   GBM1 - GBM3 0.02847075 0.02903226 0.02584321 -0.009803922 0.08293839  0
+#&gt;   GBM2 - GBM3 0.01842412 0.01376147 0.01974621  0.000000000 0.05743243  0
 
 plot(res_diff)</code></pre>
 <p><img src="using_files/figure-html/using_resample_diff-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -2442,9 +2456,9 @@ plot(res_diff)</code></pre>
 #&gt; 
 #&gt;       Model2
 #&gt; Model1      GBM1       GBM2       GBM3
-#&gt;   GBM1        NA 0.01124657 0.03256885
-#&gt;   GBM2 0.3757686         NA 0.02132228
-#&gt;   GBM3 0.1603145 0.16031452         NA</code></pre>
+#&gt;   GBM1        NA 0.01004663 0.02847075
+#&gt;   GBM2 0.4234417         NA 0.01842412
+#&gt;   GBM3 0.2115012 0.23906539         NA</code></pre>
 </div>
 </div>
 <div id="model-predictor-effects-and-diagnostics"
@@ -2460,40 +2474,40 @@ analysis.</p>
 <h2>Variable Importance</h2>
 <p>The importance of predictor variables in a model fit is estimated
 with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/varimp"><code>varimp()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/varimp"><code>varimp()</code></a>
 function and displayed graphically with <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/plot"><code>plot()</code></a>.
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/plot"><code>plot()</code></a>.
 Variable importance is a relative measure of the contributions of model
 predictors and is scaled by default to have a maximum value of 100,
 where higher values represent more important variables. Model-specific
 implementations of variable importance are available in many cases,
 although their definitions may differ. In the case of a <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/GBMModel"><code>GBMModel</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/GBMModel"><code>GBMModel</code></a>,
 importance of each predictor is based on the sum of squared empirical
 improvements over all internal tree nodes created by splitting on that
 variable <span class="citation">(Greenwell et al. 2019)</span>.</p>
 <pre class="r"><code>## Predictor variable importance
 (vi &lt;- varimp(surv_fit, method = &quot;model&quot;))
 #&gt; --- VariableImportance object --------------------------------------------------
-#&gt;              Overall
-#&gt; thickness 100.000000
-#&gt; age        82.950084
-#&gt; year       38.253104
-#&gt; ulcer      20.017415
-#&gt; sex         7.925788
+#&gt;             Overall
+#&gt; age       100.00000
+#&gt; thickness  78.27486
+#&gt; year       45.60724
+#&gt; ulcer      26.88075
+#&gt; sex         8.93267
 
 plot(vi)</code></pre>
 <p><img src="using_files/figure-html/using_analyses_vi-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>In contrast, importance is based on negative log-transformed p-values
 for statistical models, like <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/CoxModel"><code>CoxModel</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/CoxModel"><code>CoxModel</code></a>,
 that produce them. For other models, variable importance may be defined
 and calculated by their underlying source packages or not defined at
 all, as is the case for <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/SVMModel"><code>SVMModel</code></a>.
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/SVMModel"><code>SVMModel</code></a>.
 Logical indicators of model-specific variable importance are given in
 the information displayed by model constructors and returned by <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/modelinfo"><code>modelinfo()</code></a>.</p>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/modelinfo"><code>modelinfo()</code></a>.</p>
 <pre class="r"><code>SVMModel
 #&gt; --- MLModelFunction object -----------------------------------------------------
 #&gt; 
@@ -2502,6 +2516,7 @@ href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/
 #&gt; Package: kernlab
 #&gt; Response types: factor, numeric
 #&gt; Case weights support: FALSE
+#&gt; Missing case removal: all
 #&gt; Tuning grid: FALSE
 #&gt; Variable importance: FALSE
 #&gt; 
@@ -2509,7 +2524,8 @@ href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/
 #&gt; function (scaled = TRUE, type = character(), kernel = c(&quot;rbfdot&quot;, 
 #&gt;     &quot;polydot&quot;, &quot;vanilladot&quot;, &quot;tanhdot&quot;, &quot;laplacedot&quot;, &quot;besseldot&quot;, 
 #&gt;     &quot;anovadot&quot;, &quot;splinedot&quot;), kpar = &quot;automatic&quot;, C = 1, nu = 0.2, 
-#&gt;     epsilon = 0.1, cache = 40, tol = 0.001, shrinking = TRUE) 
+#&gt;     epsilon = 0.1, prob.model = FALSE, cache = 40, tol = 0.001, 
+#&gt;     shrinking = TRUE) 
 #&gt; NULL
 
 modelinfo(SVMModel)[[1]]$varimp
@@ -2543,11 +2559,11 @@ each variable.</p></li>
 varimp(surv_fit)
 #&gt; --- VariableImportance object --------------------------------------------------
 #&gt;           Permute.mean.cindex
-#&gt; thickness          100.000000
-#&gt; age                 89.856957
-#&gt; ulcer               57.997399
-#&gt; year                47.204161
-#&gt; sex                  4.551365</code></pre>
+#&gt; age                100.000000
+#&gt; thickness           90.837696
+#&gt; ulcer               69.371728
+#&gt; year                50.130890
+#&gt; sex                  6.151832</code></pre>
 <p>There are a number of advantages to permutation-based variable
 importance. In particular, it can be computed for any</p>
 <ol style="list-style-type: decimal">
@@ -2612,17 +2628,17 @@ example.</p>
 #&gt; # A tibble: 4 × 5
 #&gt;   name                 terms     selected params$size metrics$`C-Index`
 #&gt;   &lt;chr&gt;                &lt;list&gt;    &lt;lgl&gt;          &lt;int&gt;             &lt;dbl&gt;
-#&gt; 1 ModelSpecification.1 &lt;chr [5]&gt; FALSE              5             0.730
-#&gt; 2 ModelSpecification.2 &lt;chr [4]&gt; TRUE               4             0.742
-#&gt; 3 ModelSpecification.3 &lt;chr [2]&gt; FALSE              2             0.707
-#&gt; 4 ModelSpecification.4 &lt;chr [1]&gt; FALSE              1             0.712
+#&gt; 1 ModelSpecification.1 &lt;chr [5]&gt; FALSE              5             0.746
+#&gt; 2 ModelSpecification.2 &lt;chr [4]&gt; FALSE              4             0.736
+#&gt; 3 ModelSpecification.3 &lt;chr [2]&gt; TRUE               2             0.748
+#&gt; 4 ModelSpecification.4 &lt;chr [1]&gt; FALSE              1             0.701
 #&gt; 
-#&gt; Selected row: 2
-#&gt; Metric: C-Index = 0.7423011
+#&gt; Selected row: 3
+#&gt; Metric: C-Index = 0.7481588
 rfe_summary &lt;- summary(surv_rfe)
 rfe_summary$terms[rfe_summary$selected]
 #&gt; [[1]]
-#&gt; [1] &quot;age&quot;       &quot;thickness&quot; &quot;ulcer&quot;     &quot;year&quot;</code></pre>
+#&gt; [1] &quot;age&quot;       &quot;thickness&quot;</code></pre>
 </div>
 <div id="partial-dependence-plots" class="section level2">
 <h2>Partial Dependence Plots</h2>
@@ -2695,7 +2711,7 @@ calibrated.</p>
 <h2>Confusion Matrices</h2>
 <p>Confusion matrices of cross-classified observed and predicted
 categorical responses are available with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/confusion"><code>confusion()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/confusion"><code>confusion()</code></a>
 function. They can be constructed with predicted class membership or
 with predicted class probabilities. In the latter case, predicted class
 membership is derived from predicted probabilities according to a
@@ -2710,56 +2726,56 @@ probability for factors with more than two levels.</p>
 #&gt; === BinaryConfusionMatrix object ===
 #&gt;          Observed
 #&gt; Predicted         0         1
-#&gt;         0 224.09158  37.90842
-#&gt;         1  71.40000  74.60000
+#&gt;         0 236.02496  38.97504
+#&gt;         1  59.34328  73.65672
 #&gt; 
 #&gt; === $GBMModel.Time2 ============================================================
 #&gt; === BinaryConfusionMatrix object ===
 #&gt;          Observed
 #&gt; Predicted         0         1
-#&gt;         0 167.74794  41.25206
-#&gt;         1  83.59702 115.40298</code></pre>
+#&gt;         0 170.20031  34.79969
+#&gt;         1  82.12352 120.87648</code></pre>
 <pre class="r"><code>plot(conf)</code></pre>
 <p><img src="using_files/figure-html/using_analyses_conf_plot-1.png" width="672" style="display: block; margin: auto;" /><img src="using_files/figure-html/using_analyses_conf_plot-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Confusion matrices are the data structure upon which many of the
 performance metrics described earlier for factor predictor variables are
 based. Metrics commonly reported for confusion matrices are generated by
 the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/summary"><code>summary()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/summary"><code>summary()</code></a>
 function.</p>
 <pre class="r"><code>## Summary performance metrics
 summary(conf)
 #&gt; --- $GBMModel.Time1 ------------------------------------------------------------
 #&gt; Number of responses: 408
-#&gt; Accuracy (SE): 0.7320872 (0.02192543)
-#&gt; Majority class: 0.7242441
-#&gt; Kappa: 0.3858653
+#&gt; Accuracy (SE): 0.7590237 (0.02117311)
+#&gt; Majority class: 0.7239418
+#&gt; Kappa: 0.4290466
 #&gt; 
 #&gt;                     0         1
-#&gt; Observed    0.7242441 0.2757559
-#&gt; Predicted   0.6421569 0.3578431
-#&gt; Agreement   0.5492441 0.1828431
-#&gt; Sensitivity 0.7583688 0.6630615
-#&gt; Specificity 0.6630615 0.7583688
-#&gt; PPV         0.8553114 0.5109589
-#&gt; NPV         0.5109589 0.8553114
+#&gt; Observed    0.7239418 0.2760582
+#&gt; Predicted   0.6740196 0.3259804
+#&gt; Agreement   0.5784925 0.1805312
+#&gt; Sensitivity 0.7990871 0.6539605
+#&gt; Specificity 0.6539605 0.7990871
+#&gt; PPV         0.8582726 0.5538099
+#&gt; NPV         0.5538099 0.8582726
 #&gt; 
 #&gt; --- $GBMModel.Time2 ------------------------------------------------------------
 #&gt; Number of responses: 408
-#&gt; Accuracy (SE): 0.6939974 (0.02281452)
-#&gt; Majority class: 0.6160416
-#&gt; Kappa: 0.3844935
+#&gt; Accuracy (SE): 0.7134235 (0.02238535)
+#&gt; Majority class: 0.6184408
+#&gt; Kappa: 0.4261807
 #&gt; 
 #&gt;                     0         1
-#&gt; Observed    0.6160416 0.3839584
-#&gt; Predicted   0.5122549 0.4877451
-#&gt; Agreement   0.4111469 0.2828504
-#&gt; Sensitivity 0.6674013 0.7366694
-#&gt; Specificity 0.7366694 0.6674013
-#&gt; PPV         0.8026217 0.5799145
-#&gt; NPV         0.5799145 0.8026217</code></pre>
+#&gt; Observed    0.6184408 0.3815592
+#&gt; Predicted   0.5024510 0.4975490
+#&gt; Agreement   0.4171576 0.2962659
+#&gt; Sensitivity 0.6745312 0.7764610
+#&gt; Specificity 0.7764610 0.6745312
+#&gt; PPV         0.8302454 0.5954506
+#&gt; NPV         0.5954506 0.8302454</code></pre>
 <p>Summaries can also be obtained with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/performance"><code>performance()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/performance"><code>performance()</code></a>
 function for default or use-specified metrics.</p>
 <pre class="r"><code>## Confusion matrix-specific metrics
 metricinfo(conf) %&gt;% names
@@ -2773,11 +2789,11 @@ performance(conf, metrics = c(&quot;Accuracy&quot; = accuracy,
                               &quot;Specificity&quot; = specificity))
 #&gt; --- $GBMModel.Time1 ------------------------------------------------------------
 #&gt;    Accuracy Sensitivity Specificity 
-#&gt;   0.7320872   0.6630615   0.7583688 
+#&gt;   0.7590237   0.6539605   0.7990871 
 #&gt; 
 #&gt; --- $GBMModel.Time2 ------------------------------------------------------------
 #&gt;    Accuracy Sensitivity Specificity 
-#&gt;   0.6939974   0.7366694   0.6674013</code></pre>
+#&gt;   0.7134235   0.7764610   0.6745312</code></pre>
 </div>
 <div id="performance-curves" class="section level2">
 <h2>Performance Curves</h2>
@@ -2824,10 +2840,10 @@ chance and perfect <em>concordance</em> between predicted probabilities
 and observed responses.</p>
 <pre class="r"><code>auc(roc)
 #&gt; Model: GBMModel.Time1
-#&gt; [1] 0.7843416
+#&gt; [1] 0.7966402
 #&gt; ------------------------------------------------------------ 
 #&gt; Model: GBMModel.Time2
-#&gt; [1] 0.7698968</code></pre>
+#&gt; [1] 0.7818386</code></pre>
 </div>
 <div id="precision-recall-curves" class="section level3">
 <h3>Precision Recall Curves</h3>
@@ -2847,10 +2863,10 @@ plot(pr)</code></pre>
 <p><img src="using_files/figure-html/using_analyses_pr-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>auc(pr)
 #&gt; Model: GBMModel.Time1
-#&gt; [1] 0.5211144
+#&gt; [1] 0.562425
 #&gt; ------------------------------------------------------------ 
 #&gt; Model: GBMModel.Time2
-#&gt; [1] 0.6080139</code></pre>
+#&gt; [1] 0.6359023</code></pre>
 </div>
 <div id="lift-curves" class="section level3">
 <h3>Lift Curves</h3>
@@ -2905,19 +2921,19 @@ performance evaluation.</p>
 <tbody>
 <tr class="odd">
 <td align="left"><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedInput"><code>TunedInput()</code></a></td>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedInput"><code>TunedInput()</code></a></td>
 <td align="left"><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/SelectedInput"><code>SelectedInput()</code></a></td>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/SelectedInput"><code>SelectedInput()</code></a></td>
 <td align="left"><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/StackedModel"><code>StackedModel()</code></a></td>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/StackedModel"><code>StackedModel()</code></a></td>
 </tr>
 <tr class="even">
 <td align="left"><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedModel"><code>TunedModel()</code></a></td>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedModel"><code>TunedModel()</code></a></td>
 <td align="left"><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/SelectedModel"><code>SelectedModel()</code></a></td>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/SelectedModel"><code>SelectedModel()</code></a></td>
 <td align="left"><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/SuperModel"><code>SuperModel()</code></a></td>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/SuperModel"><code>SuperModel()</code></a></td>
 </tr>
 </tbody>
 </table>
@@ -2930,19 +2946,19 @@ recipe. The meta-input and meta-model functions themselves return input
 and model class objects, respectively. Combinations and multiple levels
 of nesting of meta-functions, inputs, and models are allowed. For
 example, <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/StackedModel"><code>StackedModel()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/StackedModel"><code>StackedModel()</code></a>
 and <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/SuperModel"><code>SuperModel()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/SuperModel"><code>SuperModel()</code></a>
 may consist of <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedModel"><code>TunedModel</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedModel"><code>TunedModel</code></a>
 and other model objects. <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/SelectedModel"><code>SelectedModel()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/SelectedModel"><code>SelectedModel()</code></a>
 can select among mixes of <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedModel"><code>TunedModel</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedModel"><code>TunedModel</code></a>,
 ensemble model, and other model objects. Likewise, <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedInput"><code>TunedInput</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedInput"><code>TunedInput</code></a>
 objects, along with other inputs, may be nested within <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/SelectedInput"><code>SelectedInput()</code></a>.
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/SelectedInput"><code>SelectedInput()</code></a>.
 Furthermore, selection and tuning of both inputs and models can be
 performed simultaneously. These and other possibilities are illustrated
 in the following sections.</p>
@@ -2960,24 +2976,24 @@ to their predictors or their preprocessing steps and parameters.</p>
 <p>Preprocessing recipes may have step with parameters that affect
 predictive performance. Steps can be tuned over a grid of parameter
 values with <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedInput"><code>TunedInput()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedInput"><code>TunedInput()</code></a>
 to select the best performing values. Calls to <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedInput"><code>TunedInput()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedInput"><code>TunedInput()</code></a>
 return an input object that may be trained on data with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/fit"><code>fit()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/fit"><code>fit()</code></a>
 function or evaluated for predictive performance with <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/resample"><code>resample()</code></a>.
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/resample"><code>resample()</code></a>.
 As an example, a principal components analysis (PCA) step could be
 included in a preprocessing recipe for tuning over the number of
 components to retain in the final model. Such a recipe is shown below
 accompanied by a call to <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/expand_steps"><code>expand_steps()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/expand_steps"><code>expand_steps()</code></a>
 to construct a tuning grid. The grid parameter <code>num_comp</code> and
 name <code>PCA</code> correspond to the argument and id of the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/step_pca"><code>step_pca()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/step_pca"><code>step_pca()</code></a>
 function to which the values <code>1:3</code> apply. The recipe and grid
 may then be passed to <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedInput"><code>TunedInput()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedInput"><code>TunedInput()</code></a>
 for model fitting.</p>
 <pre class="r"><code>## Preprocessing recipe with PCA steps
 pca_rec &lt;- recipe(y ~ ., data = surv_train) %&gt;%
@@ -2994,14 +3010,14 @@ pca_grid &lt;- expand_steps(
 ## Tuning specification
 tun_rec &lt;- TunedInput(pca_rec, grid = pca_grid)</code></pre>
 <p>From the fit, the resulting model can be extracted with <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/as.MLModel"><code>as.MLModel()</code></a>.
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/as.MLModel"><code>as.MLModel()</code></a>.
 The output shows that one principal component was selected. Resample
 estimation of predictive performance is applied to a <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedInput"><code>TunedInput</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedInput"><code>TunedInput</code></a>
 specification for the selection. The default resampling method is
 cross-validation. Other methods, performance metrics, and selection
 statistics can be supplied to the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedInput"><code>TunedInput()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedInput"><code>TunedInput()</code></a>
 arguments.</p>
 <pre class="r"><code>## Input-tuned model fit and final trained model
 model_fit &lt;- fit(tun_rec, model = GBMModel)
@@ -3013,6 +3029,7 @@ as.MLModel(model_fit)
 #&gt; Package: gbm
 #&gt; Response types: factor, numeric, PoissonVariate, Surv
 #&gt; Case weights support: TRUE
+#&gt; Missing case removal: response
 #&gt; Tuning grid: TRUE
 #&gt; Variable importance: TRUE
 #&gt; 
@@ -3029,7 +3046,7 @@ as.MLModel(model_fit)
 #&gt; 
 #&gt; Optimization method: Grid Search
 #&gt; TunedModelRecipe log:
-#&gt; # A tibble: 3 x 4
+#&gt; # A tibble: 3 × 4
 #&gt;   name          selected params$PCA$num_comp metrics$`C-Index`
 #&gt;   &lt;chr&gt;         &lt;lgl&gt;                  &lt;int&gt;             &lt;dbl&gt;
 #&gt; 1 ModelRecipe.1 TRUE                       1             0.740
@@ -3043,7 +3060,7 @@ as.MLModel(model_fit)
 <h3>Input Selection</h3>
 <p>Selection of recipes with different steps or predictors can be
 conducted with <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/SelectedInput"><code>SelectedInput()</code></a>.</p>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/SelectedInput"><code>SelectedInput()</code></a>.</p>
 <pre class="r"><code>## Preprocessing recipe without PCA steps
 rec1 &lt;- recipe(y ~ sex + age + year + thickness + ulcer, data = surv_train) %&gt;%
   role_case(stratum = y)
@@ -3067,6 +3084,7 @@ as.MLModel(model_fit)
 #&gt; Package: gbm
 #&gt; Response types: factor, numeric, PoissonVariate, Surv
 #&gt; Case weights support: TRUE
+#&gt; Missing case removal: response
 #&gt; Tuning grid: TRUE
 #&gt; Variable importance: TRUE
 #&gt; 
@@ -3083,7 +3101,7 @@ as.MLModel(model_fit)
 #&gt; 
 #&gt; Optimization method: Grid Search
 #&gt; SelectedModelRecipe log:
-#&gt; # A tibble: 3 x 4
+#&gt; # A tibble: 3 × 4
 #&gt;   name             selected params$id  metrics$`C-Index`
 #&gt;   &lt;chr&gt;            &lt;lgl&gt;    &lt;chr&gt;                  &lt;dbl&gt;
 #&gt; 1 ModelRecipe.1    FALSE    input.azpi             0.761
@@ -3098,7 +3116,7 @@ as.MLModel(model_fit)
 #&gt; 
 #&gt; Optimization method: Grid Search
 #&gt; TunedModelRecipe log:
-#&gt; # A tibble: 3 x 4
+#&gt; # A tibble: 3 × 4
 #&gt;   name          selected params$PCA$num_comp metrics$`C-Index`
 #&gt;   &lt;chr&gt;         &lt;lgl&gt;                  &lt;int&gt;             &lt;dbl&gt;
 #&gt; 1 ModelRecipe.1 TRUE                       1             0.740
@@ -3121,10 +3139,10 @@ model_fit &lt;- fit(sel_fo, model = GBMModel)
 as.MLModel(model_fit)</code></pre>
 <p>In the previous examples, selection of different inputs was performed
 with the same model (<a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/GBMModel"><code>GBMModel</code></a>).
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/GBMModel"><code>GBMModel</code></a>).
 Selection among different combinations of inputs and models is supported
 with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/ModelSpecification"><code>ModelSpecification()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/ModelSpecification"><code>ModelSpecification()</code></a>
 constructor.</p>
 <pre class="r"><code>## Different combinations of inputs and models
 sel_mfo &lt;- SelectedInput(
@@ -3146,30 +3164,30 @@ response variables from a given set of inputs.</p>
 <p>Many of the package-supplied modeling functions have arguments, or
 tuning parameters, that control aspects of their model fitting
 algorithms. For example, <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/GBMModel"><code>GBMModel</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/GBMModel"><code>GBMModel</code></a>
 parameters <code>n.trees</code> and <code>interaction.depth</code>
 control the number of decision trees to fit and the maximum tree depths.
 When called with a <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedModel"><code>TunedModel</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedModel"><code>TunedModel</code></a>,
 the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/fit"><code>fit()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/fit"><code>fit()</code></a>
 function performs model fitting over a grid of parameter values and
 returns the model with the optimal values. Optimality is determined
 based on the first performance metric of the <code>metrics</code>
 argument to <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedModel"><code>TunedModel()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedModel"><code>TunedModel()</code></a>
 if given or the first default metric of the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/performance"><code>performance()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/performance"><code>performance()</code></a>
 function otherwise. Argument <code>grid</code> additionally controls the
 construction of grid values and can be a single integer or vector of
 integers whose positions or names match the parameters in a model’s
 pre-defined tuning grid if one exists and which specify the number of
 values used to construct the grid. Pre-defined <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedModel"><code>TunedModel</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedModel"><code>TunedModel</code></a>
 grids can be extract and viewed apart from model fitting with <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/expand_modelgrid"><code>expand_modelgrid()</code></a>.
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/expand_modelgrid"><code>expand_modelgrid()</code></a>.
 As shown in the output below, <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/as.MLModel"><code>as.MLModel()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/as.MLModel"><code>as.MLModel()</code></a>
 will extract a tuned model from fit results for viewing of the tuning
 parameter grid values, the names of models fit to each, all calculated
 metrics, the final model selected, the metric upon which its selection
@@ -3190,6 +3208,7 @@ model_fit &lt;- fit(surv_fo, data = surv_train,
 #&gt; Package: gbm
 #&gt; Response types: factor, numeric, PoissonVariate, Surv
 #&gt; Case weights support: TRUE
+#&gt; Missing case removal: response
 #&gt; Tuning grid: TRUE
 #&gt; Variable importance: TRUE
 #&gt; 
@@ -3206,28 +3225,28 @@ model_fit &lt;- fit(surv_fo, data = surv_train,
 #&gt; 
 #&gt; Optimization method: Grid Search
 #&gt; TunedModel log:
-#&gt; # A tibble: 9 x 4
+#&gt; # A tibble: 9 × 4
 #&gt;   name       selected params$n.trees $interaction.depth metrics$CIndex  $RMSE
 #&gt;   &lt;chr&gt;      &lt;lgl&gt;             &lt;int&gt;              &lt;int&gt;          &lt;dbl&gt;  &lt;dbl&gt;
-#&gt; 1 GBMModel.1 TRUE                 50                  1          0.751  3820.
-#&gt; 2 GBMModel.2 FALSE                50                  2          0.740  5577.
-#&gt; 3 GBMModel.3 FALSE                50                  3          0.733  7699.
-#&gt; 4 GBMModel.4 FALSE               100                  1          0.730  3984.
-#&gt; 5 GBMModel.5 FALSE               100                  2          0.719  5155.
-#&gt; 6 GBMModel.6 FALSE               100                  3          0.715  9112.
-#&gt; 7 GBMModel.7 FALSE               150                  1          0.731  4927.
-#&gt; 8 GBMModel.8 FALSE               150                  2          0.711  5660.
-#&gt; 9 GBMModel.9 FALSE               150                  3          0.700 12906.
+#&gt; 1 GBMModel.1 TRUE                 50                  1          0.765  3869.
+#&gt; 2 GBMModel.2 FALSE                50                  2          0.750  5450.
+#&gt; 3 GBMModel.3 FALSE                50                  3          0.739  7877.
+#&gt; 4 GBMModel.4 FALSE               100                  1          0.746  3919.
+#&gt; 5 GBMModel.5 FALSE               100                  2          0.730  5262.
+#&gt; 6 GBMModel.6 FALSE               100                  3          0.720 10596.
+#&gt; 7 GBMModel.7 FALSE               150                  1          0.726  4167.
+#&gt; 8 GBMModel.8 FALSE               150                  2          0.712  5428.
+#&gt; 9 GBMModel.9 FALSE               150                  3          0.699 16942.
 #&gt; 
 #&gt; Selected row: 1
-#&gt; Metric: CIndex = 0.7513153</code></pre>
+#&gt; Metric: CIndex = 0.7647633</code></pre>
 <p>Grid values may also be given as a <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TuningGrid"><code>TuningGrid</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TuningGrid"><code>TuningGrid</code></a>
 function, function name, or object; <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/ParameterGrid"><code>ParameterGrid</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/ParameterGrid"><code>ParameterGrid</code></a>
 object; or data frame containing parameter values at which to evaluate
 the model, such as that returned by <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/expand_params"><code>expand_params()</code></a>.</p>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/expand_params"><code>expand_params()</code></a>.</p>
 <pre class="r"><code>## Tune over randomly sampled grid points
 fit(surv_fo, data = surv_train,
     model = TunedModel(
@@ -3246,23 +3265,23 @@ fit(surv_fo, data = surv_train,
     ))</code></pre>
 <p>Statistics summarizing the resampled performance metrics across all
 tuning parameter combinations can be obtained with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/summary"><code>summary()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/summary"><code>summary()</code></a>
 and <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/performance"><code>performance()</code></a>functions.</p>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/performance"><code>performance()</code></a>functions.</p>
 <pre class="r"><code>summary(trained_model)
 #&gt; --- $TrainingStep1 -------------------------------------------------------------
-#&gt; # A tibble: 9 x 4
+#&gt; # A tibble: 9 × 4
 #&gt;   name       selected params$n.trees $interaction.depth metrics$CIndex  $RMSE
 #&gt;   &lt;chr&gt;      &lt;lgl&gt;             &lt;int&gt;              &lt;int&gt;          &lt;dbl&gt;  &lt;dbl&gt;
-#&gt; 1 GBMModel.1 TRUE                 50                  1          0.751  3820.
-#&gt; 2 GBMModel.2 FALSE                50                  2          0.740  5577.
-#&gt; 3 GBMModel.3 FALSE                50                  3          0.733  7699.
-#&gt; 4 GBMModel.4 FALSE               100                  1          0.730  3984.
-#&gt; 5 GBMModel.5 FALSE               100                  2          0.719  5155.
-#&gt; 6 GBMModel.6 FALSE               100                  3          0.715  9112.
-#&gt; 7 GBMModel.7 FALSE               150                  1          0.731  4927.
-#&gt; 8 GBMModel.8 FALSE               150                  2          0.711  5660.
-#&gt; 9 GBMModel.9 FALSE               150                  3          0.700 12906.
+#&gt; 1 GBMModel.1 TRUE                 50                  1          0.765  3869.
+#&gt; 2 GBMModel.2 FALSE                50                  2          0.750  5450.
+#&gt; 3 GBMModel.3 FALSE                50                  3          0.739  7877.
+#&gt; 4 GBMModel.4 FALSE               100                  1          0.746  3919.
+#&gt; 5 GBMModel.5 FALSE               100                  2          0.730  5262.
+#&gt; 6 GBMModel.6 FALSE               100                  3          0.720 10596.
+#&gt; 7 GBMModel.7 FALSE               150                  1          0.726  4167.
+#&gt; 8 GBMModel.8 FALSE               150                  2          0.712  5428.
+#&gt; 9 GBMModel.9 FALSE               150                  3          0.699 16942.
 
 performance(trained_model) %&gt;% lapply(summary)
 #&gt; $TrainingStep1
@@ -3270,29 +3289,29 @@ performance(trained_model) %&gt;% lapply(summary)
 #&gt; 
 #&gt;             Statistic
 #&gt; Model             Mean    Median         SD       Min       Max NA
-#&gt;   GBMModel.1 0.7513153 0.7548387 0.05260501 0.6486486 0.8261803  0
-#&gt;   GBMModel.2 0.7396956 0.7548387 0.05221877 0.6148649 0.8025751  0
-#&gt;   GBMModel.3 0.7329099 0.7477876 0.05461139 0.6013514 0.7896996  0
-#&gt;   GBMModel.4 0.7299930 0.7222222 0.05449760 0.6283784 0.8207547  0
-#&gt;   GBMModel.5 0.7187003 0.7288732 0.04911338 0.6289593 0.7843137  0
-#&gt;   GBMModel.6 0.7151567 0.7318182 0.05737671 0.5894040 0.7870968  0
-#&gt;   GBMModel.7 0.7313907 0.7300885 0.04459823 0.6541850 0.7863636  0
-#&gt;   GBMModel.8 0.7107110 0.7181818 0.04722521 0.6148649 0.7745098  0
-#&gt;   GBMModel.9 0.7003070 0.7061611 0.05647950 0.5945946 0.7889908  0
+#&gt;   GBMModel.1 0.7647633 0.7630332 0.05151443 0.6497797 0.8632075  0
+#&gt;   GBMModel.2 0.7502765 0.7549020 0.04636802 0.6688742 0.8349057  0
+#&gt;   GBMModel.3 0.7388766 0.7500000 0.04594197 0.6621622 0.8197425  0
+#&gt;   GBMModel.4 0.7463392 0.7601810 0.05087334 0.6497797 0.8160377  0
+#&gt;   GBMModel.5 0.7301734 0.7345133 0.04361416 0.6621622 0.7847222  0
+#&gt;   GBMModel.6 0.7199483 0.7122642 0.05168649 0.6216216 0.7889908  0
+#&gt;   GBMModel.7 0.7263693 0.7385321 0.05069831 0.6351351 0.7896996  0
+#&gt;   GBMModel.8 0.7121314 0.7169811 0.05331152 0.6199095 0.7847222  0
+#&gt;   GBMModel.9 0.6994678 0.7156863 0.05314909 0.6081081 0.7639485  0
 #&gt; 
 #&gt; , , Metric = RMSE
 #&gt; 
 #&gt;             Statistic
-#&gt; Model             Mean   Median       SD      Min       Max NA
-#&gt;   GBMModel.1  3820.101 3922.004 1114.457 2067.702  5634.290  0
-#&gt;   GBMModel.2  5577.329 4754.214 2760.113 1952.892 12794.955  0
-#&gt;   GBMModel.3  7699.418 6963.495 3820.770 3525.290 19525.003  0
-#&gt;   GBMModel.4  3983.721 3819.946 1046.342 2132.840  5731.912  0
-#&gt;   GBMModel.5  5155.270 4156.921 2543.658 1761.762 10932.087  0
-#&gt;   GBMModel.6  9112.486 8183.500 4469.315 4290.710 20736.130  0
-#&gt;   GBMModel.7  4927.169 4607.758 1648.306 2913.023  8981.286  0
-#&gt;   GBMModel.8  5659.614 4696.612 2813.594 2045.974 11673.612  0
-#&gt;   GBMModel.9 12906.024 9741.308 8188.991 4937.101 32771.044  0</code></pre>
+#&gt; Model             Mean    Median        SD      Min       Max NA
+#&gt;   GBMModel.1  3868.629  3321.249  1431.839 2123.875  7401.789  0
+#&gt;   GBMModel.2  5450.093  4741.129  2438.173 2385.426 11695.273  0
+#&gt;   GBMModel.3  7877.487  5827.739  5036.837 4192.463 20009.854  0
+#&gt;   GBMModel.4  3919.126  3535.514  1454.999 2373.413  7558.280  0
+#&gt;   GBMModel.5  5262.122  5052.969  1900.353 2280.193  8212.727  0
+#&gt;   GBMModel.6 10595.888  8308.733  7057.327 4996.420 28610.367  0
+#&gt;   GBMModel.7  4167.128  3789.596  1115.371 2587.440  6701.087  0
+#&gt;   GBMModel.8  5427.518  6129.309  2313.742 2039.894  9212.369  0
+#&gt;   GBMModel.9 16941.696 10865.160 16841.774 4914.743 71150.177  0</code></pre>
 <p>Line plots of tuning results display the resampled metric means, or
 another statistic specified with the <code>stat</code> argument, versus
 the first tuning parameter values and with lines grouped according to
@@ -3304,16 +3323,16 @@ the remaining parameters, if any.</p>
 <div id="model-selection" class="section level3">
 <h3>Model Selection</h3>
 <p>Model selection can be conducted by calling <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/fit"><code>fit()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/fit"><code>fit()</code></a>
 with a <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/SelectedModel"><code>SelectedModel</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/SelectedModel"><code>SelectedModel</code></a>
 to automatically choose from any combination of models and model
 parameters. Selection has as a special case the just-discussed tuning of
 a single model over a grid of parameter values. Combinations of model
 functions, function names, or objects can be supplied to <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/SelectedModel"><code>SelectedModel()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/SelectedModel"><code>SelectedModel()</code></a>
 in order to define sets of candidate models from which to select. An <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/expand_model"><code>expand_model()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/expand_model"><code>expand_model()</code></a>
 helper function is additionally available to expand a model over a grid
 of tuning parameters for inclusion in the candidate set if so
 desired.</p>
@@ -3329,7 +3348,7 @@ sel_model &lt;- SelectedModel(
 fit(surv_fo, data = surv_train, model = sel_model)</code></pre>
 <p>Selection may also be performed over candidate sets that include
 tuned models. For instance, the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/SelectedModel"><code>SelectedModel()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/SelectedModel"><code>SelectedModel()</code></a>
 function is applicable to sets containing different classes of models
 each individually tuned over a grid of parameters.</p>
 <pre class="r"><code>## Model interface for selection among tuned models
@@ -3380,7 +3399,7 @@ given follow-up times.</li>
 </ul>
 <p>Super learners are a generalization of stacked regression that fit a
 specified model, such as <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/GBMModel"><code>GBMModel</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/GBMModel"><code>GBMModel</code></a>,
 to case responses <span class="math inline">\(y_i\)</span>, base learner
 predictions <span
 class="math inline">\(\hat{f}_m^{-\kappa(i)}(x_i)\)</span>, and
@@ -3394,8 +3413,8 @@ stackedmodel &lt;- StackedModel(CoxModel, CForestModel, GLMBoostModel)
 res_stacked &lt;- resample(surv_fo, data = surv_train, model = stackedmodel)
 summary(res_stacked)
 #&gt;          Statistic
-#&gt; Metric         Mean    Median        SD       Min       Max NA
-#&gt;   C-Index 0.7255417 0.7703704 0.1281829 0.5064935 0.8324324  0
+#&gt; Metric         Mean   Median        SD       Min       Max NA
+#&gt;   C-Index 0.7294869 0.762963 0.1275484 0.5194805 0.8556701  0
 
 ## Super learner
 supermodel &lt;- SuperModel(CoxModel, CForestModel, GLMBoostModel,
@@ -3404,7 +3423,7 @@ res_super &lt;- resample(surv_fo, data = surv_train, model = supermodel)
 summary(res_super)
 #&gt;          Statistic
 #&gt; Metric         Mean    Median        SD       Min       Max NA
-#&gt;   C-Index 0.7448593 0.7954545 0.1094031 0.5770925 0.8543046  0</code></pre>
+#&gt;   C-Index 0.7534803 0.8325472 0.1243104 0.5748899 0.8454545  0</code></pre>
 </div>
 <div id="methodology" class="section level2">
 <h2>Methodology</h2>
@@ -3417,11 +3436,11 @@ Consider the example below in which training involves input tuning and
 model selection. In particular, a preprocessing recipe is tuned over the
 number of predictor-derived principal components and model selection is
 of an untuned <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/GBMModel"><code>GBMModel</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/GBMModel"><code>GBMModel</code></a>,
 a tuned <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/GBMModel"><code>GBMModel</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/GBMModel"><code>GBMModel</code></a>,
 and a <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/StackedModel"><code>StackedModel</code></a>.</p>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/StackedModel"><code>StackedModel</code></a>.</p>
 <pre class="r"><code>## Preprocessing recipe with PCA steps
 pca_rec &lt;- recipe(y ~ ., data = surv_train) %&gt;%
   role_case(stratum = y) %&gt;%
@@ -3450,15 +3469,15 @@ as.MLModel(model_fit)</code></pre>
 <p>Model fitting proceeds with instances of the specified model
 selection nested within each of the input tuning grid parameter values.
 Tuning of <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/GBMModel"><code>GBMModel</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/GBMModel"><code>GBMModel</code></a>
 and construction of <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/StackedModel"><code>StackedModel</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/StackedModel"><code>StackedModel</code></a>
 are further nested within the model selection, with tuning of <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/CForestModel"><code>CForestModel</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/CForestModel"><code>CForestModel</code></a>
 and <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/GBMModel"><code>GBMModel</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/GBMModel"><code>GBMModel</code></a>
 nested within <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/StackedModel"><code>StackedModel</code></a>.
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/StackedModel"><code>StackedModel</code></a>.
 Altogether, there are four levels of meta-input and meta-model functions
 in the hierarchy.</p>
 <p><img src="img/FigModelDAG.png" width="100%" style="display: block; margin: auto;" /></p>
@@ -3470,19 +3489,19 @@ the figure below.</p>
 <p>Nesting of resampling routines is repeated recursively when a fit
 involves multiple levels of nested meta-functions. For example,
 predictive performance estimation for the training of <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedInput"><code>TunedInput(pca_rec, grid = pca_grid)</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedInput"><code>TunedInput(pca_rec, grid = pca_grid)</code></a>
 involves up to three nested meta functions: <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/SelectedModel"><code>SelectedModel(...)</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/SelectedModel"><code>SelectedModel(...)</code></a>
 → <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/StackedModel"><code>StackedModel(...)</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/StackedModel"><code>StackedModel(...)</code></a>
 → <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedModel"><code>TunedModel(CForestModel)</code></a>.
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedModel"><code>TunedModel(CForestModel)</code></a>.
 For this relationship, an outer and three nested inner resampling loops
 are executed as follows. First, <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/CForestModel"><code>CForestModel</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/CForestModel"><code>CForestModel</code></a>
 is tuned at the third inner resampling loop. Second, the tuned model is
 passed to the second inner loop for construction of <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/StackedModel"><code>StackedModel</code></a>.
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/StackedModel"><code>StackedModel</code></a>.
 Third, the constructed model is passed to the first inner loop for model
 selection from the candidate set. Finally, the selected model is passed
 to the outer loop for tuning of the preprocessing recipe. Based on
@@ -3493,15 +3512,15 @@ one principal component is selected for the <code>GBMModel</code>.</p>
 #&gt; 
 #&gt; Optimization method: Grid Search
 #&gt; TunedModelRecipe log:
-#&gt; # A tibble: 3 x 4
+#&gt; # A tibble: 3 × 4
 #&gt;   name          selected params$PCA$num_comp metrics$`C-Index`
 #&gt;   &lt;chr&gt;         &lt;lgl&gt;                  &lt;int&gt;             &lt;dbl&gt;
-#&gt; 1 ModelRecipe.1 TRUE                       1             0.737
+#&gt; 1 ModelRecipe.1 TRUE                       1             0.741
 #&gt; 2 ModelRecipe.2 FALSE                      2             0.730
-#&gt; 3 ModelRecipe.3 FALSE                      3             0.696
+#&gt; 3 ModelRecipe.3 FALSE                      3             0.702
 #&gt; 
 #&gt; Selected row: 1
-#&gt; Metric: C-Index = 0.7365799</code></pre>
+#&gt; Metric: C-Index = 0.7405534</code></pre>
 <p>In order to identify and return a final model fitted to the entire
 input data, the hierarchy is traversed from top to bottom along the path
 determined by the choice at each node. Steps along the path are labeled
@@ -3510,13 +3529,13 @@ seen above in <code>TrainStep1</code>, one principal component is first
 selected for the tuned input. Using an input recipe with one principal
 component, the entire dataset is refit at <code>TrainStep2</code> to
 finally select <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/GBMModel"><code>GBMModel</code></a>.</p>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/GBMModel"><code>GBMModel</code></a>.</p>
 <pre class="r"><code>#&gt; === $TrainingStep2 =============================================================
 #&gt; === TrainingStep object ===
 #&gt; 
 #&gt; Optimization method: Grid Search
 #&gt; SelectedModel log:
-#&gt; # A tibble: 3 x 4
+#&gt; # A tibble: 3 × 4
 #&gt;   name         selected params$id  metrics$`C-Index`
 #&gt;   &lt;chr&gt;        &lt;lgl&gt;    &lt;chr&gt;                  &lt;dbl&gt;
 #&gt; 1 GBMModel     TRUE     model.1mQk             0.740
@@ -3535,6 +3554,7 @@ returned.</p>
 #&gt; Package: gbm
 #&gt; Response types: factor, numeric, PoissonVariate, Surv
 #&gt; Case weights support: TRUE
+#&gt; Missing case removal: response
 #&gt; Tuning grid: TRUE
 #&gt; Variable importance: TRUE
 #&gt; 
@@ -3547,7 +3567,7 @@ returned.</p>
 #&gt;  $ bag.fraction     : num 0.5</code></pre>
 <p>Generalization performance of the entire process can be estimated
 with a call to <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/resample"><code>resample()</code></a>.</p>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/resample"><code>resample()</code></a>.</p>
 <pre class="r"><code>## Generalization performance of the modeling strategy
 resample(tun_rec, model = sel_model)</code></pre>
 <p>There is no conceptual limit to the number of nested inputs and
@@ -3580,15 +3600,15 @@ at each resampling level. However, the number of unique cases at level
 <div id="modelspecification-class" class="section level1">
 <h1>ModelSpecification Class</h1>
 <p>The <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/ModelSpecification"><code>ModelSpecification</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/ModelSpecification"><code>ModelSpecification</code></a>
 class allows response and predictor variables and a model that defines
 the relationship between them to be packaged together into a single
 container for ease of model fitting and assessment. The inputs and
 models described previously can be included in a <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/ModelSpecification"><code>ModelSpecification</code></a>.
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/ModelSpecification"><code>ModelSpecification</code></a>.
 Resampling control and a method for optimizing tuning parameters are
 also part of the specification. A <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/ModelSpecification"><code>ModelSpecification</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/ModelSpecification"><code>ModelSpecification</code></a>
 object with its default or a user-specified control method has the
 following characteristics.</p>
 <ol style="list-style-type: decimal">
@@ -3596,20 +3616,20 @@ following characteristics.</p>
 global grid of their parameter values.</li>
 <li>The specification’s control method overrides those of any included
 <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedInput"><code>TunedInput</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedInput"><code>TunedInput</code></a>
 or <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TunedModel"><code>TunedModel</code></a>.</li>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TunedModel"><code>TunedModel</code></a>.</li>
 <li><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/ModeledInput"><code>ModeledInput</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/ModeledInput"><code>ModeledInput</code></a>,
 <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/SelectedInput"><code>SelectedInput</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/SelectedInput"><code>SelectedInput</code></a>,
 and <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/SelectedModel"><code>SelectedModel</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/SelectedModel"><code>SelectedModel</code></a>
 objects are not allowed in the specification.</li>
 </ol>
 <p>The default tuning parameter optimization method is an exhaustive
 grid search. Other methods can be employed with the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/set_optim"><code>set_optim</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/set_optim"><code>set_optim</code></a>
 functions.</p>
 <table>
 <colgroup>
@@ -3625,35 +3645,35 @@ functions.</p>
 <tbody>
 <tr class="odd">
 <td align="left"><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/set_optim_bayes"><code>set_optim_bayes()</code></a></td>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/set_optim_bayes"><code>set_optim_bayes()</code></a></td>
 <td align="left">Bayesian optimization with a Gaussian process model
 <span class="citation">(Snoek, Larochelle, and Adams 2012)</span></td>
 </tr>
 <tr class="even">
 <td align="left"><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/set_optim_bfgs"><code>set_optim_bfgs()</code></a></td>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/set_optim_bfgs"><code>set_optim_bfgs()</code></a></td>
 <td align="left">Limited-memory modification of quasi-Newton BFGS
 optimization <span class="citation">(Byrd et al. 1995)</span></td>
 </tr>
 <tr class="odd">
 <td align="left"><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/set_optim_grid"><code>set_optim_grid()</code></a></td>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/set_optim_grid"><code>set_optim_grid()</code></a></td>
 <td align="left">Exhaustive or random grid search</td>
 </tr>
 <tr class="even">
 <td align="left"><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/set_optim_method"><code>set_optim_method()</code></a></td>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/set_optim_method"><code>set_optim_method()</code></a></td>
 <td align="left">User-defined optimization function</td>
 </tr>
 <tr class="odd">
 <td align="left"><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/set_optim_pso"><code>set_optim_pso()</code></a></td>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/set_optim_pso"><code>set_optim_pso()</code></a></td>
 <td align="left">Particle swarm optimization <span
 class="citation">(Bratton and Kennedy 2007)</span></td>
 </tr>
 <tr class="even">
 <td align="left"><a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/set_optim_sann"><code>set_optim_sann()</code></a></td>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/set_optim_sann"><code>set_optim_sann()</code></a></td>
 <td align="left">Simulated annealing <span class="citation">(Belisle
 1992)</span></td>
 </tr>
@@ -3731,6 +3751,7 @@ as.MLModel(bayes_fit)
 #&gt; Package: gbm
 #&gt; Response types: factor, numeric, PoissonVariate, Surv
 #&gt; Case weights support: TRUE
+#&gt; Missing case removal: response
 #&gt; Tuning grid: TRUE
 #&gt; Variable importance: TRUE
 #&gt; 
@@ -3748,37 +3769,39 @@ as.MLModel(bayes_fit)
 #&gt; Optimization method: Bayesian Optimization
 #&gt; ModelSpecification log:
 #&gt; # A tibble: 12 × 5
-#&gt;    name         epoch selected params$input.ICgC$PCA$num_comp metrics$`C-Index`
-#&gt;    &lt;chr&gt;        &lt;int&gt; &lt;lgl&gt;                             &lt;dbl&gt;             &lt;dbl&gt;
-#&gt;  1 ModelSpec.1      0 FALSE                                 2             0.721
-#&gt;  2 ModelSpec.2      0 FALSE                                 1             0.728
-#&gt;  3 ModelSpec.3      0 FALSE                                 3             0.742
-#&gt;  4 ModelSpec.4      0 FALSE                                 3             0.742
-#&gt;  5 ModelSpec.5      0 FALSE                                 2             0.721
-#&gt;  6 ModelSpec.6      1 FALSE                                 3             0.743
-#&gt;  7 ModelSpec.7      2 FALSE                                 3             0.741
-#&gt;  8 ModelSpec.8      3 FALSE                                 3             0.742
-#&gt;  9 ModelSpec.9      4 FALSE                                 3             0.742
-#&gt; 10 ModelSpec.10     5 FALSE                                 3             0.743
-#&gt; # … with 2 more rows, and 1 more variable: params$model.ajOO &lt;tibble[,2]&gt;
+#&gt;    name         epoch selected params$input.ICgC$PCA$num_comp $model.a…¹ metri…²
+#&gt;    &lt;chr&gt;        &lt;int&gt; &lt;lgl&gt;                             &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+#&gt;  1 ModelSpec.1      0 FALSE                                 2        108   0.721
+#&gt;  2 ModelSpec.2      0 FALSE                                 1        117   0.728
+#&gt;  3 ModelSpec.3      0 FALSE                                 3         70   0.742
+#&gt;  4 ModelSpec.4      0 FALSE                                 3        138   0.742
+#&gt;  5 ModelSpec.5      0 FALSE                                 2         80   0.721
+#&gt;  6 ModelSpec.6      1 FALSE                                 3        107   0.743
+#&gt;  7 ModelSpec.7      2 FALSE                                 3        108   0.741
+#&gt;  8 ModelSpec.8      3 FALSE                                 3         89   0.742
+#&gt;  9 ModelSpec.9      4 FALSE                                 3        100   0.742
+#&gt; 10 ModelSpec.10     5 FALSE                                 3         80   0.743
+#&gt; # … with 2 more rows, 1 more variable:
+#&gt; #   params$model.ajOO$interaction.depth &lt;dbl&gt;, and abbreviated variable names
+#&gt; #   ¹​$model.ajOO$n.trees, ²​metrics$`C-Index`
 #&gt; 
 #&gt; Selected row: 12
 #&gt; Metric: C-Index = 0.751118</code></pre>
 <p>Alternatively, a value of <code>NULL</code> may be specified as the
 control method in a <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/ModelSpecifiction"><code>ModelSpecifiction</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/ModelSpecifiction"><code>ModelSpecifiction</code></a>
 so that any package input or model object is allowed, object-specific
 control structures and training parameters are used for selection and
 tuning, and objects are trained sequentially with nested resampling
 rather than simultaneously with a global grid. This, in essence, is how
 input and model objects are handled if passed separately in to the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/fit"><code>fit()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/fit"><code>fit()</code></a>
 and <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/resample"><code>resample()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/resample"><code>resample()</code></a>
 functions apart from a <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/ModelSpecification"><code>ModelSpecification</code></a>.
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/ModelSpecification"><code>ModelSpecification</code></a>.
 Having them together in a <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/ModelSpecifiction"><code>ModelSpecifiction</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/ModelSpecifiction"><code>ModelSpecifiction</code></a>
 has the advantage of simplifying the function calls to be in terms of
 one object instead of two.</p>
 <pre class="r"><code>ModelSpecification(
@@ -3808,7 +3831,7 @@ one object instead of two.</p>
 <h1>Global Settings</h1>
 <p>Core default behaviors of functions in the package can be viewed or
 changed globally through the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/settings"><code>settings()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/settings"><code>settings()</code></a>
 function. The function accepts one or more character names of settings
 to view, <code>name = value</code> pairs giving the values of settings
 to change, or a vector of these, with available settings summarized
@@ -3844,10 +3867,10 @@ are <code>"empirical"</code> (default) for the Kaplan-Meier estimator,
 <dt><code>grid</code></dt>
 <dd>
 <code>size</code> argument to <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TuningGrid"><code>TuningGrid()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TuningGrid"><code>TuningGrid()</code></a>
 indicating the number of parameter-specific values to generate
 automatically for tuning of models that have pre-defined grids or a <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/TuningGrid"><code>TuningGrid()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/TuningGrid"><code>TuningGrid()</code></a>
 function, function name, or object [default: 3].
 </dd>
 <dt><code>method.EmpiricalSurv</code></dt>
@@ -3938,7 +3961,7 @@ summary statistics on resampled performance metrics [default:
 </dd>
 </dl>
 <p>A call to <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/settings"><code>settings()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/settings"><code>settings()</code></a>
 with <code>"reset"</code> will restore all package defaults and with no
 arguments will display the current values of all. Settings may also be
 supplied as a single unnamed argument which is a named list. Partial
@@ -3946,7 +3969,7 @@ matching of setting names is supported. The setting value is returned if
 only one is specified to view. Otherwise, a list is returned with the
 values of specified settings as they existed prior to any requested
 changes. Such a list can be passed as an argument to <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/settings"><code>settings()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/settings"><code>settings()</code></a>
 to restore their values.</p>
 <pre class="r"><code>## Change settings
 presets &lt;- settings(control = &quot;BootControl&quot;, grid = 10)
@@ -3972,15 +3995,15 @@ settings(presets)</code></pre>
 <div id="package-extensions" class="section level1">
 <h1>Package Extensions</h1>
 <p>Custom models and metrics can be defined with <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/MLModel"><code>MLModel()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/MLModel"><code>MLModel()</code></a>
 and <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/MLMetric"><code>MLMetric()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/MLMetric"><code>MLMetric()</code></a>
 for use with the model fitting, prediction, and performance assessment
 tools provided by the package.</p>
 <div id="custom-models" class="section level2">
 <h2>Custom Models</h2>
 <p>The <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/MLModel"><code>MLModel()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/MLModel"><code>MLModel()</code></a>
 function creates a model object that can be used with the previously
 described fitting functions. It take the following arguments.</p>
 <dl>
@@ -4014,7 +4037,7 @@ fit. Supported types are <code>"binary"</code>,
 <dt><code>fit</code></dt>
 <dd>
 model fitting function whose arguments are a <code>formula</code>, a <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/ModelFrame"><code>ModelFrame</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/ModelFrame"><code>ModelFrame</code></a>
 named <code>data</code>, case <code>weights</code>, and an ellipsis.
 Argument <code>data</code> may be converted to a data frame with the
 <code>as.data.frame()</code> function as is commonly needed. The fit
@@ -4024,9 +4047,9 @@ function should return the object resulting from the model fit.
 <dd>
 prediction function whose arguments are the <code>object</code> returned
 by <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/fit"><code>fit()</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/fit"><code>fit()</code></a>,
 a <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/ModelFrame"><code>ModelFrame</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/ModelFrame"><code>ModelFrame</code></a>
 named <code>newdata</code> of predictor variables, optional vector of
 <code>times</code> at which to predict survival, and an ellipsis.
 Argument <code>data</code> may be converted to a data frame with the
@@ -4051,9 +4074,9 @@ survival means otherwise.</li>
 <dd>
 variable importance function whose arguments are the <code>object</code>
 returned by <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/fit"><code>fit()</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/fit"><code>fit()</code></a>,
 optional arguments passed from calls to <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/varimp"><code>varimp()</code></a>,
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/varimp"><code>varimp()</code></a>,
 and an ellipsis. The function should return a vector of importance
 values named after the predictor variables or a matrix or data frame
 whose rows are named after the predictors.
@@ -4080,7 +4103,7 @@ LogisticModel &lt;- MLModel(
 <div id="custom-metrics" class="section level2">
 <h2>Custom Metrics</h2>
 <p>The <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.5.0/topics/MLMetric"><code>MLMetric()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/MLMetric"><code>MLMetric()</code></a>
 function creates a metric object that can be used as previously
 described for the model performance metrics. Its first argument is a
 function to compute the metric, defined to accept <code>observed</code>

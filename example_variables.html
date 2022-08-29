@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -146,11 +146,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -444,9 +448,9 @@ model_res &lt;- resample(fo, ICHomes, model = tuned_model)
 summary(model_res)
 #&gt;       Statistic
 #&gt; Metric         Mean       Median           SD          Min          Max NA
-#&gt;   RMSE 5.345651e+04 5.801569e+04 1.351341e+04 3.751789e+04 77739.420882  0
-#&gt;   R2   6.507673e-01 6.570409e-01 9.626475e-02 5.132969e-01     0.788471  0
-#&gt;   MAE  2.886833e+04 2.911697e+04 4.036665e+03 2.327116e+04 34636.486568  0</code></pre>
+#&gt;   RMSE 5.309297e+04 5.953998e+04 1.438662e+04 2.782945e+04 6.558972e+04  0
+#&gt;   R2   6.461119e-01 6.725713e-01 1.156861e-01 4.180951e-01 8.101114e-01  0
+#&gt;   MAE  2.885963e+04 3.036286e+04 4.774341e+03 2.109884e+04 3.600989e+04  0</code></pre>
 </div>
 <div id="design-matrix" class="section level2">
 <h2>Design Matrix</h2>
@@ -463,9 +467,9 @@ model_res &lt;- resample(x, y, model = tuned_model)
 summary(model_res)
 #&gt;       Statistic
 #&gt; Metric         Mean       Median           SD          Min          Max NA
-#&gt;   RMSE 6.041094e+04 5.252276e+04 1.849047e+04 3.967201e+04 8.981565e+04  0
-#&gt;   R2   5.305813e-01 5.019288e-01 9.867094e-02 4.118053e-01 7.056303e-01  0
-#&gt;   MAE  3.588526e+04 3.381439e+04 6.183880e+03 2.910430e+04 4.513378e+04  0</code></pre>
+#&gt;   RMSE 6.139280e+04 6.047216e+04 1.169974e+04 4.573839e+04 7.742124e+04  0
+#&gt;   R2   5.393985e-01 5.380906e-01 4.670476e-02 4.572501e-01 6.225863e-01  0
+#&gt;   MAE  3.439138e+04 3.436936e+04 4.772329e+03 2.789822e+04 4.225911e+04  0</code></pre>
 </div>
 <div id="model-frame" class="section level2">
 <h2>Model Frame</h2>
@@ -481,9 +485,9 @@ model_res &lt;- resample(mf, model = tuned_model)
 summary(model_res)
 #&gt;       Statistic
 #&gt; Metric         Mean       Median           SD          Min          Max NA
-#&gt;   RMSE 5.354966e+04 5.356242e+04 1.586040e+04 2.970836e+04 78052.713769  0
-#&gt;   R2   6.385141e-01 6.449881e-01 1.356965e-01 4.046108e-01     0.832883  0
-#&gt;   MAE  2.911625e+04 2.906931e+04 4.633209e+03 2.195240e+04 35871.247040  0</code></pre>
+#&gt;   RMSE 5.453330e+04 5.523876e+04 1.058467e+04 3.457570e+04 72582.433998  0
+#&gt;   R2   6.294583e-01 6.538984e-01 1.297982e-01 3.574595e-01     0.791075  0
+#&gt;   MAE  2.910045e+04 2.976941e+04 3.013686e+03 2.335728e+04 32718.650705  0</code></pre>
 </div>
 <div id="preprocessing-recipe" class="section level2">
 <h2>Preprocessing Recipe</h2>
@@ -508,9 +512,9 @@ model_res &lt;- resample(rec, model = tuned_model)
 summary(model_res)
 #&gt;       Statistic
 #&gt; Metric         Mean       Median           SD          Min          Max NA
-#&gt;   RMSE 55977.518211 5.274936e+04 1.323192e+04 3.800904e+04 7.282680e+04  0
-#&gt;   R2       0.614209 6.255084e-01 7.530197e-02 5.013474e-01 7.418896e-01  0
-#&gt;   MAE  30377.812056 2.944399e+04 3.435859e+03 2.573026e+04 3.624987e+04  0</code></pre>
+#&gt;   RMSE 5.493730e+04 4.411786e+04 1.943057e+04 3.061942e+04 8.405026e+04  0
+#&gt;   R2   6.264021e-01 6.203221e-01 1.368953e-01 3.905121e-01 8.146512e-01  0
+#&gt;   MAE  3.103498e+04 2.919259e+04 5.826028e+03 2.316113e+04 4.101513e+04  0</code></pre>
 </div>
 </div>
 
