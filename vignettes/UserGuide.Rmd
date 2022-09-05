@@ -31,7 +31,7 @@ rdoc_url <- function(names, ...) names
 
 # Features
 
-```{r overview_modelinfo, echo=FALSE}
+```{r overview_modelinfo, echo=FALSE, message=FALSE}
 library(MachineShop)
 info <- modelinfo()
 ```

@@ -2,6 +2,15 @@
 
 ## Version Updates
 
+## 3.6.0
+* Add argument `na.rm` to `MLModel()` for construction of a model that automatically removes all cases with missing values from model fitting and prediction, none, or only those whose missing values are in the response variable.  Set the `na.rm` values in supplied `MLModels` to automatically remove cases with missing values if not supported by their model fitting and prediction functions.
+* Add argument `prob.model` to `SVMModel()`.
+* Add argument `verbose` to `fit()` and `predict()`.
+* Fix `Error in as.data.frame(x) : object 'x' not found` issue when fitting a `BARTMachineModel` that started occurring with `bartMachine` package version 1.2.7.
+* Remove expired deprecations of `ModeledInput` and `rpp()`.
+* Internal changes
+  * Add slot `na.rm` to `MLModel`.
+
 ## 3.5.0
 * Add argument `method` to `r2()` for calculation of Pearson or Spearman correlation.
 * Add `predict()` S4 method for `MLModelFit`.

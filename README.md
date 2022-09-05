@@ -21,41 +21,40 @@ modeling strategies.
 
 # Features
 
--   Unified and concise interface for model fitting, prediction, and
-    performance assessment.
--   Support for 53+ models from 28 **R** packages, including model
-    specifications from the
-    [**parsnip**](https://parsnip.tidymodels.org/) package.
--   Dynamic model parameters.
--   Ensemble modeling with stacked regression and super learners.
--   Modeling of response variables types: binary factors, multi-class
-    nominal and ordinal factors, numeric vectors and matrices, and
-    censored time-to-event survival.
--   Model specification with traditional formulas, design matrices, and
-    flexible pre-processing [recipes](https://recipes.tidymodels.org/).
--   Resample estimation of predictive performance, including
-    cross-validation, bootstrap resampling, and split training-test set
-    validation.
--   Parallel execution of resampling algorithms.
--   Choices of performance metrics: accuracy, areas under ROC and
-    precision recall curves, Brier score, coefficient of determination
-    (R<sup>2</sup>), concordance index, cross entropy, F score, Gini
-    coefficient, unweighted and weighted Cohen’s kappa, mean absolute
-    error, mean squared error, mean squared log error, positive and
-    negative predictive values, precision and recall, and sensitivity
-    and specificity.
--   Graphical and tabular performance summaries: calibration curves,
-    confusion matrices, partial dependence plots, performance curves,
-    lift curves, and model-specific and permutation-based variable
-    importance.
--   Model tuning over automatically generated grids and with exhaustive
-    and random grid searches, Bayesian optimization, particle swarm
-    optimization, quasi-Newton BFGS optimization, simulated annealing,
-    and support for user-defined optimization functions.
--   Model selection and comparisons for any combination of models and
-    model parameter values.
--   Recursive feature elimination.
--   User-definable models and performance metrics.
+- Unified and concise interface for model fitting, prediction, and
+  performance assessment.
+- Support for 53+ models from 28 **R** packages, including model
+  specifications from the [**parsnip**](https://parsnip.tidymodels.org/)
+  package.
+- Dynamic model parameters.
+- Ensemble modeling with stacked regression and super learners.
+- Modeling of response variables types: binary factors, multi-class
+  nominal and ordinal factors, numeric vectors and matrices, and
+  censored time-to-event survival.
+- Model specification with traditional formulas, design matrices, and
+  flexible pre-processing [recipes](https://recipes.tidymodels.org/).
+- Resample estimation of predictive performance, including
+  cross-validation, bootstrap resampling, and split training-test set
+  validation.
+- Parallel execution of resampling algorithms.
+- Choices of performance metrics: accuracy, areas under ROC and
+  precision recall curves, Brier score, coefficient of determination
+  (R<sup>2</sup>), concordance index, cross entropy, F score, Gini
+  coefficient, unweighted and weighted Cohen’s kappa, mean absolute
+  error, mean squared error, mean squared log error, positive and
+  negative predictive values, precision and recall, and sensitivity and
+  specificity.
+- Graphical and tabular performance summaries: calibration curves,
+  confusion matrices, partial dependence plots, performance curves, lift
+  curves, and model-specific and permutation-based variable importance.
+- Model tuning over automatically generated grids and with exhaustive
+  and random grid searches, Bayesian optimization, particle swarm
+  optimization, quasi-Newton BFGS optimization, simulated annealing, and
+  support for user-defined optimization functions.
+- Model selection and comparisons for any combination of models and
+  model parameter values.
+- Recursive feature elimination.
+- User-definable models and performance metrics.
 
 # Getting Started
 

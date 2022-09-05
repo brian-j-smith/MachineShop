@@ -5,7 +5,7 @@
 
 # Features
 
-```{r overview_modelinfo, echo=FALSE}
+```{r overview_modelinfo, echo=FALSE, message=FALSE}
 library(MachineShop)
 info <- modelinfo()
 ```
