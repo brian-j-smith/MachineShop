@@ -60,8 +60,8 @@ ModelSpecification <- function(...) {
 #' @rdname ModelSpecification-methods
 #'
 ModelSpecification.default <- function(
-  input, model = NULL, control = MachineShop::settings("control"),
-  metrics = NULL, cutoff = MachineShop::settings("cutoff"),
+  input, model, control = MachineShop::settings("control"), metrics = NULL,
+  cutoff = MachineShop::settings("cutoff"),
   stat = MachineShop::settings("stat.TrainingParams"), ...
 ) {
   object <- new("ModelSpecification",
@@ -106,14 +106,14 @@ ModelSpecification.matrix <- function(x, y, model, ...) {
 
 #' @rdname ModelSpecification-methods
 #'
-ModelSpecification.ModelFrame <- function(input, model = NULL, ...) {
+ModelSpecification.ModelFrame <- function(input, model, ...) {
   ModelSpecification.default(input, model = model, ...)
 }
 
 
 #' @rdname ModelSpecification-methods
 #'
-ModelSpecification.recipe <- function(input, model = NULL, ...) {
+ModelSpecification.recipe <- function(input, model, ...) {
   ModelSpecification.default(input, model = model, ...)
 }
 

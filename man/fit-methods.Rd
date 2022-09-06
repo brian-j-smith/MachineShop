@@ -17,9 +17,9 @@ fit(...)
 
 \method{fit}{matrix}(x, y, model, ...)
 
-\method{fit}{ModelFrame}(input, model = NULL, ...)
+\method{fit}{ModelFrame}(input, model, ...)
 
-\method{fit}{recipe}(input, model = NULL, ...)
+\method{fit}{recipe}(input, model, ...)
 
 \method{fit}{ModelSpecification}(object, verbose = FALSE, ...)
 

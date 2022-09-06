@@ -97,7 +97,7 @@ rfe.matrix <- function(x, y, model, ...) {
 
 #' @rdname rfe-methods
 #'
-rfe.ModelFrame <- function(input, model = NULL, ...) {
+rfe.ModelFrame <- function(input, model, ...) {
   modelspec <- ModelSpecification(input, model = model, control = NULL)
   rfe(modelspec, ..., .envir = parent.frame())
 }
@@ -105,8 +105,7 @@ rfe.ModelFrame <- function(input, model = NULL, ...) {
 
 #' @rdname rfe-methods
 #'
-rfe.recipe <- function(input, model = NULL, ...
-) {
+rfe.recipe <- function(input, model, ...) {
   modelspec <- ModelSpecification(input, model = model, control = NULL)
   rfe(modelspec, ..., .envir = parent.frame())
 }

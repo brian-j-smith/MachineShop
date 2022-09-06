@@ -90,7 +90,7 @@ resample.matrix <- function(x, y, model, ...) {
 #' argument in their constructor.  Resampling of this class is unstratified by
 #' default.
 #'
-resample.ModelFrame <- function(input, model = NULL, ...) {
+resample.ModelFrame <- function(input, model, ...) {
   resample(ModelSpecification(input, model = model, control = NULL), ...)
 }
 
@@ -102,7 +102,7 @@ resample.ModelFrame <- function(input, model = NULL, ...) {
 #' with the \code{\link{role_case}} function.  Resampling will be unstratified
 #' otherwise.
 #'
-resample.recipe <- function(input, model = NULL, ...) {
+resample.recipe <- function(input, model, ...) {
   resample(ModelSpecification(input, model = model, control = NULL), ...)
 }
 

@@ -13,7 +13,7 @@ ModelSpecification(...)
 
 \method{ModelSpecification}{default}(
   input,
-  model = NULL,
+  model,
   control = MachineShop::settings("control"),
   metrics = NULL,
   cutoff = MachineShop::settings("cutoff"),
@@ -25,9 +25,9 @@ ModelSpecification(...)
 
 \method{ModelSpecification}{matrix}(x, y, model, ...)
 
-\method{ModelSpecification}{ModelFrame}(input, model = NULL, ...)
+\method{ModelSpecification}{ModelFrame}(input, model, ...)
 
-\method{ModelSpecification}{recipe}(input, model = NULL, ...)
+\method{ModelSpecification}{recipe}(input, model, ...)
 }
 \arguments{
 \item{...}{arguments passed from the generic function to its methods.  The

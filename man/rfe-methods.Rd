@@ -17,9 +17,9 @@ rfe(...)
 
 \method{rfe}{matrix}(x, y, model, ...)
 
-\method{rfe}{ModelFrame}(input, model = NULL, ...)
+\method{rfe}{ModelFrame}(input, model, ...)
 
-\method{rfe}{recipe}(input, model = NULL, ...)
+\method{rfe}{recipe}(input, model, ...)
 
 \method{rfe}{ModelSpecification}(
   object,
