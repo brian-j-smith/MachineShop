@@ -109,7 +109,7 @@ new_step_sbf <- function(
 
 
 prep.step_sbf <- function(x, training, info = NULL, ...) {
-  col_names <- recipes::terms_select(terms = x$terms, info = info)
+  col_names <- recipes::recipes_eval_select(x$terms, training, info)
   x_vars <- training[col_names]
   y_var <- response(terms.recipe_info(info), training)
   res <- if (x$multivariate) {

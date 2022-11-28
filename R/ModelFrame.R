@@ -335,7 +335,7 @@ terms.recipe_info <- function(x, ...) {
   first <- function(x) head(x, 1)
   get_vars <- function(roles = character(), types = character()) {
     is_match <- by(x, x$variable, function(split) {
-      valid_types <- if (length(types)) any(types %in% split$type) else TRUE
+      valid_types <- is_empty(types) || any(types %in% unlist(split$type))
       all(roles %in% split$role) && valid_types
     })
     names(is_match)[is_match]

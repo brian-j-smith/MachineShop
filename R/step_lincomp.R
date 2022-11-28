@@ -128,7 +128,7 @@ new_step_lincomp <- function(
 
 prep.step_lincomp <- function(x, training, info = NULL, ...) {
 
-  col_names <- recipes::terms_select(terms = x$terms, info = info)
+  col_names <- recipes::recipes_eval_select(x$terms, training, info)
   training <- training[col_names]
   recipes::check_type(training)
 

@@ -47,11 +47,13 @@ NULL
 #' @rdname recipe_roles
 #'
 role_binom <- function(recipe, x, size) {
-  x <- as.character(substitute(x))
-  size <- as.character(substitute(size))
-  if (nzchar(x) && nzchar(size)) {
-    recipes::add_role(recipe, x, new_role = "binom_x") %>%
-      recipes::add_role(size, new_role = "binom_size")
+  if (!(missing(x) || missing(size))) {
+    recipe <- do.call(
+      recipes::add_role, list(recipe, substitute(x), new_role = "binom_x")
+    )
+    recipe <- do.call(
+      recipes::add_role, list(recipe, substitute(size), new_role = "binom_size")
+    )
   } else {
     throw(Error("Binomial `x` and `size` variables must be specified."))
   }
@@ -61,20 +63,16 @@ role_binom <- function(recipe, x, size) {
 #' @rdname recipe_roles
 #'
 role_case <- function(recipe, group, stratum, weight, replace = FALSE) {
-  comp_names <- map(
-    as.character,
-    eval(substitute(alist(
-      group = group,
-      stratum = stratum,
-      weight = weight
-    )))
-  )
   f <- if (replace) recipes::update_role else recipes::add_role
-  for (type in names(comp_names)) {
-    name <- comp_names[[type]]
-    if (nzchar(name)) {
-      recipe <- f(recipe, name, new_role = paste0("case_", type))
-    }
+  comp_names <- eval(substitute(alist(
+    group = group,
+    stratum = stratum,
+    weight = weight
+  )))
+  for (type in names(comp_names)[nzchar(comp_names)]) {
+    recipe <- do.call(
+      f, list(recipe, comp_names[[type]], new_role = paste0("case_", type))
+    )
   }
   recipe
 }
@@ -83,21 +81,28 @@ role_case <- function(recipe, group, stratum, weight, replace = FALSE) {
 #' @rdname recipe_roles
 #'
 role_pred <- function(recipe, offset, replace = FALSE) {
-  offset <- as.character(substitute(offset))
-  f <- if (replace) recipes::update_role else recipes::add_role
-  if (nzchar(offset)) f(recipe, offset, new_role = "pred_offset") else recipe
+  if (!missing(offset)) {
+    recipe <- do.call(
+      if (replace) recipes::update_role else recipes::add_role,
+      list(recipe, substitute(offset), new_role = "pred_offset")
+    )
+  }
+  recipe
 }
 
 
 #' @rdname recipe_roles
 #'
 role_surv <- function(recipe, time, event) {
-  time <- as.character(substitute(time))
-  if (nzchar(time)) {
-    recipe <- recipes::add_role(recipe, time, new_role = "surv_time")
-    event <- as.character(substitute(event))
-    if (nzchar(event)) {
-      recipe <- recipes::add_role(recipe, event, new_role = "surv_event")
+  if (!missing(time)) {
+    recipe <- do.call(
+      recipes::add_role, list(recipe, substitute(time), new_role = "surv_time")
+    )
+    if (!missing(event)) {
+      recipe <- do.call(
+        recipes::add_role,
+        list(recipe, substitute(event), new_role = "surv_event")
+      )
     }
     recipe
   } else {
