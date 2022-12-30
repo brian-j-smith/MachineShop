@@ -1,6 +1,5 @@
 useDynLib(MachineShop, .registration = TRUE, .fixes = "C_")
 
-import(cli)
 import(methods)
 
 importClassesFrom(kernlab, ksvm)
@@ -8,7 +7,7 @@ importClassesFrom(party, RandomForest)
 
 importFrom(abind, abind, adrop)
 importFrom(cli, ansi_nchar, ansi_strtrim, ansi_strwrap, make_ansi_style,
-           console_width, pluralize, style_bold, style_reset)
+           console_width, pluralize, qty, style_bold, style_reset)
 importFrom(dials, parameters)
 importFrom(foreach, "%dopar%", foreach, getDoParName, getDoParRegistered,
            getDoParWorkers, registerDoSEQ)
