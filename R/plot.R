@@ -57,9 +57,11 @@ NULL
 plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
   type <- match.arg(type)
 
-  args <- list(~ Predicted, ~ Mean)
-  if (nlevels(x$Response) > 1) args$color <- args$fill <- ~ Response
-  mapping <- do.call(aes_, args)
+  args <- alist(.data[["Predicted"]], .data[["Mean"]])
+  if (nlevels(x$Response) > 1) {
+    args$color <- args$fill <- .(.data[["Response"]])
+  }
+  mapping <- do.call(aes, args)
 
   position <- "identity"
 
@@ -77,13 +79,18 @@ plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
       labs(title = cal$Model[1], x = "Predicted", y = "Observed Mean")
 
     if (se) if (x@smoothed) {
-      p <- p + geom_ribbon(aes_(ymin = ~ Lower, ymax = ~ Upper),
-                           linetype = "blank", alpha = 0.2, na.rm = TRUE)
+      p <- p +
+        geom_ribbon(
+          aes(ymin = .data[["Lower"]], ymax = .data[["Upper"]]),
+          linetype = "blank", alpha = 0.2, na.rm = TRUE
+        )
     } else {
       position <- position_dodge(width = 0.025 * Predicted_width)
-      p <- p + geom_errorbar(aes_(ymin = ~ Lower, ymax = ~ Upper),
-                             width = 0.05 * Predicted_width,
-                             position = position, na.rm = TRUE)
+      p <- p +
+        geom_errorbar(
+          aes(ymin = .data[["Lower"]], ymax = .data[["Upper"]]),
+          width = 0.05 * Predicted_width, position = position, na.rm = TRUE
+        )
     }
 
     switch(type,
@@ -113,7 +120,9 @@ plot.ConfusionList <- function(x, ...) {
 plot.ConfusionMatrix <- function(x, ...) {
   df <- as.data.frame(proportions(as(x, "table")), responseName = "Value")
   df$Predicted <- factor(df$Predicted, rev(levels(df$Predicted)))
-  ggplot(df, aes_(~ Observed, ~ Predicted, fill = ~ Value)) +
+  ggplot(
+    df, aes(.data[["Observed"]], .data[["Predicted"]], fill = .data[["Value"]])
+  ) +
     geom_raster() +
     labs(fill = "Probability") +
     scale_fill_gradient(trans = "reverse") +
@@ -148,8 +157,14 @@ plot.LiftCurve <- function(
     df$Iteration <- rep(dimnames(tested)$Iteration, each = size(tested, 1))
 
     p <- p +
-      geom_segment(aes_(x = ~ x, y = 0, xend = ~ x, yend = ~ y), df) +
-      geom_segment(aes_(x = 0, y = ~ y, xend = ~ x, yend = ~ y), df)
+      geom_segment(
+        aes(x = .data[["x"]], y = 0, xend = .data[["x"]], yend = .data[["y"]]),
+        df
+      ) +
+      geom_segment(
+        aes(x = 0, y = .data[["y"]], xend = .data[["x"]], yend = .data[["y"]]),
+        df
+      )
   }
 
   p
@@ -185,16 +200,17 @@ plot.PartialDependence <- function(x, stats = NULL, ...) {
 
   df <- x[c("Statistic", "Response", "Value")]
 
-  args <- list(~ Predictor, ~ Value)
-  if (nlevels(x$Response) > 1) args$color <- ~ Response
-  mapping <- do.call(aes_, args)
+  args <- alist(.data[["Predictor"]], .data[["Value"]])
+  if (nlevels(x$Response) > 1) args$color <- .(.data[["Response"]])
+  mapping <- do.call(aes, args)
 
   pl <- list()
   for (varname in names(x$Predictors)) {
     df$Predictor <- x$Predictors[[varname]]
     p <- ggplot(na.omit(df), mapping)
     p <- switch_class(df$Predictor,
-      "factor" = p + geom_crossbar(aes_(ymin = ~ ..y.., ymax = ~ ..y..)),
+      "factor" = p +
+        geom_crossbar(aes(ymin = after_stat(y), ymax = after_stat(y))),
       "numeric" = p + geom_line() + geom_point()
     ) + labs(x = varname) + facet_wrap(~ Statistic, scales = "free")
     pl[[varname]] <- p
@@ -231,21 +247,24 @@ plot.Performance <- function(
   df$Model <- factor(df$Model, sorted_levels)
 
   p <- ggplot(df)
+  mapping <- aes(.data[["Model"]], .data[["Value"]])
   switch(match.arg(type),
-    "boxplot" = p + geom_boxplot(aes_(~ Model, ~ Value)) +
-      stat_summary(aes_(~ Model, ~ Value), fun = mean, geom = "point") +
+    "boxplot" = p +
+      geom_boxplot(mapping) +
+      stat_summary(mapping, fun = mean, geom = "point") +
       labs(x = "") +
       coord_flip(),
-    "density" = p + geom_density(aes_(~ Value, color = ~ Model)) +
+    "density" = p +
+      geom_density(aes(.data[["Value"]], color = .data[["Model"]])) +
       labs(y = "Density", color = ""),
-    "errorbar" = p + stat_summary(aes_(~ Model, ~ Value),
-                                  fun.data = mean_se,
-                                  geom = "errorbar") +
-      stat_summary(aes_(~ Model, ~ Value), fun = mean, geom = "point") +
+    "errorbar" = p +
+      stat_summary(mapping, fun.data = mean_se, geom = "errorbar") +
+      stat_summary(mapping, fun = mean, geom = "point") +
       labs(x = "") +
       coord_flip(),
-    "violin" = p + geom_violin(aes_(~ Model, ~ Value)) +
-      stat_summary(aes_(~ Model, ~ Value), fun = mean, geom = "point") +
+    "violin" = p +
+      geom_violin(mapping) +
+      stat_summary(mapping, fun = mean, geom = "point") +
       labs(x = "") +
       coord_flip()
   ) + facet_wrap(~ Metric, scales = "free")
@@ -260,10 +279,12 @@ plot.PerformanceCurve <- function(
 ) {
   x <- summary(x, stat = stat)
 
-  args <- list(~ x, ~ y)
-  if (nlevels(x$Model) > 1) args$color <- ~ Model
-  if (!is.null(x$Iteration)) args$group <- ~ interaction(Model, Iteration)
-  mapping <- do.call(aes_, args)
+  args <- alist(.data[["x"]], .data[["y"]])
+  if (nlevels(x$Model) > 1) args$color <- .(.data[["Model"]])
+  if (!is.null(x$Iteration)) {
+    args$group <- .(interaction(.data[["Model"]], .data[["Iteration"]]))
+  }
+  mapping <- do.call(aes, args)
 
   labels <- c(x = x@metrics$x@label, y = x@metrics$y@label)
 
@@ -336,14 +357,14 @@ plot.TrainingStep <- function(
     df$Metric <- factor(df$Metric, metrics)
 
     indices <- map("logi", function(x) length(unique(x)), params[-1])
-    args <- list(~ x, ~ Value)
+    args <- alist(.data[["x"]], .data[["Value"]])
     if (any(indices)) {
       df$Group <- interaction(params[-1][indices], sep = ":")
-      args$color <- args$shape <- ~ Group
+      args$color <- args$shape <- .(.data[["Group"]])
     } else {
       args$group <- 1
     }
-    mapping <- do.call(aes_, args)
+    mapping <- do.call(aes, args)
 
     ggplot(df, mapping) +
       geom_line(stat = "summary", fun = mean) +
@@ -362,7 +383,7 @@ plot.VariableImportance <- function(x, n = Inf, ...) {
   x <- head(x, n)
   var_names <- rownames(x)
   df <- cbind(stack(x), variables = factor(var_names, rev(var_names)))
-  p <- ggplot(df, aes_(~ variables, ~ values)) +
+  p <- ggplot(df, aes(.data[["variables"]], .data[["values"]])) +
     geom_bar(stat = "identity") +
     labs(x = "Variable", y = "Importance") +
     coord_flip()

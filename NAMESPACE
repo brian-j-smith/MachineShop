@@ -1,7 +1,6 @@
 useDynLib(MachineShop, .registration = TRUE, .fixes = "C_")
 
 import(cli)
-import(ggplot2)
 import(methods)
 
 importClassesFrom(kernlab, ksvm)
@@ -13,6 +12,11 @@ importFrom(cli, ansi_nchar, ansi_strtrim, ansi_strwrap, make_ansi_style,
 importFrom(dials, parameters)
 importFrom(foreach, "%dopar%", foreach, getDoParName, getDoParRegistered,
            getDoParWorkers, registerDoSEQ)
+importFrom(ggplot2, aes, after_stat, coord_fixed, coord_flip, facet_wrap,
+           geom_abline, geom_bar, geom_boxplot, geom_crossbar, geom_density,
+           geom_errorbar, geom_line, geom_path, geom_point, geom_raster,
+           geom_ribbon, geom_segment, geom_violin, ggplot, labs, mean_se,
+           position_dodge, scale_fill_gradient, stat_summary)
 importFrom(graphics, plot)
 importFrom(magrittr, "%>%")
 importFrom(polspline, hare, phare)

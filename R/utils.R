@@ -1,4 +1,4 @@
-utils::globalVariables(c("x", "y"))
+utils::globalVariables(c(".data", "x", "y"))
 
 
 .onLoad <- function(libname, pkgname) {
