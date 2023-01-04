@@ -2,6 +2,9 @@
 
 ## Version Updates
 
+## 3.6.0.9000
+* Compatibility updates for **ggplot2**, **Matrix**, and **recipes** package dependencies.
+
 ## 3.6.0
 * Add argument `na.rm` to `MLModel()` for construction of a model that automatically removes all cases with missing values from model fitting and prediction, none, or only those whose missing values are in the response variable.  Set the `na.rm` values in supplied `MLModels` to automatically remove cases with missing values if not supported by their model fitting and prediction functions.
 * Add argument `prob.model` to `SVMModel()`.
