@@ -13,7 +13,7 @@
 
 <title>Using MachineShop</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -207,8 +207,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -216,16 +216,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -712,7 +705,7 @@ modelinfo(GBMModel)
 <p>Submitting the model function at the console will result in similar
 information being displayed as formatted text.</p>
 <pre class="r"><code>GBMModel
-#&gt; --- MLModelFunction object -----------------------------------------------------
+#&gt; --- MLModelFunction object -------------------------------------------------------------------------
 #&gt; 
 #&gt; Model name: GBMModel
 #&gt; Label: Generalized Boosted Regression
@@ -853,7 +846,7 @@ suggested by Efron <span class="citation">(1967)</span>, which will be
 negatively biased.</p>
 <pre class="r"><code>## Predicted survival means (default: Weibull distribution)
 predict(surv_fit, newdata = surv_test)
-#&gt; --- SurvMeans object -----------------------------------------------------------
+#&gt; --- SurvMeans object -------------------------------------------------------------------------------
 #&gt;  [1]   980.6427  8355.2097 19092.0713  1657.1081  2435.7916  7423.9210
 #&gt;  [7]   980.6427   765.2302  3002.7963  3544.1334
 #&gt; ... with 59 more values
@@ -861,7 +854,7 @@ predict(surv_fit, newdata = surv_test)
 
 ## Predicted survival means (empirical distribution)
 predict(surv_fit, newdata = surv_test, distr = &quot;empirical&quot;)
-#&gt; --- SurvMeans object -----------------------------------------------------------
+#&gt; --- SurvMeans object -------------------------------------------------------------------------------
 #&gt;  [1] 1237.336 4806.528 5275.550 2174.870 2982.527 4699.455 1237.336  936.588
 #&gt;  [9] 3399.671 3703.666
 #&gt; ... with 59 more values
@@ -880,7 +873,7 @@ empirical distribution.</p>
 surv_times &lt;- 365 * c(5, 10)
 
 predict(surv_fit, newdata = surv_test, times = surv_times, type = &quot;prob&quot;)
-#&gt; --- SurvProbs object -----------------------------------------------------------
+#&gt; --- SurvProbs object -------------------------------------------------------------------------------
 #&gt;            Time1      Time2
 #&gt;  [1,] 0.17831449 0.05242217
 #&gt;  [2,] 0.88497752 0.81143387
@@ -897,7 +890,7 @@ predict(surv_fit, newdata = surv_test, times = surv_times, type = &quot;prob&quo
 #&gt; Distribution: empirical
 
 predict(surv_fit, newdata = surv_test, times = surv_times, cutoff = 0.7)
-#&gt; --- SurvEvents object ----------------------------------------------------------
+#&gt; --- SurvEvents object ------------------------------------------------------------------------------
 #&gt;       Time1 Time2
 #&gt;  [1,]     1     1
 #&gt;  [2,]     0     0
@@ -1621,7 +1614,7 @@ metricinfo(cindex)
 <p>Submitting the metric function at the console will result in similar
 information being displayed as formatted text.</p>
 <pre class="r"><code>cindex
-#&gt; --- MLMetric object ------------------------------------------------------------
+#&gt; --- MLMetric object --------------------------------------------------------------------------------
 #&gt; 
 #&gt; Metric name: cindex
 #&gt; Label: Concordance Index
@@ -2143,7 +2136,7 @@ design matrix, model frame, or recipe.</p>
 <pre class="r"><code>## Resample estimation for survival means and probabilities
 (res_means &lt;- resample(surv_fo, data = surv_train, model = GBMModel,
                        control = surv_means_control))
-#&gt; --- Resample object ------------------------------------------------------------
+#&gt; --- Resample object --------------------------------------------------------------------------------
 #&gt; 
 #&gt; Model: GBMModel
 #&gt; Sampling variables:
@@ -2170,7 +2163,7 @@ design matrix, model frame, or recipe.</p>
 
 (res_probs &lt;- resample(surv_fo, data = surv_train, model = GBMModel,
                        control = surv_probs_control))
-#&gt; --- Resample object ------------------------------------------------------------
+#&gt; --- Resample object --------------------------------------------------------------------------------
 #&gt; 
 #&gt; Model: GBMModel
 #&gt; Sampling variables:
@@ -2347,7 +2340,7 @@ res3 &lt;- resample(surv_fo, data = surv_train, model = GBMModel(n.trees = 100),
 
 ## Combine resample output for comparison
 (res &lt;- c(GBM1 = res1, GBM2 = res2, GBM3 = res3))
-#&gt; --- Resample object ------------------------------------------------------------
+#&gt; --- Resample object --------------------------------------------------------------------------------
 #&gt; 
 #&gt; Models: GBM1, GBM2, GBM3
 #&gt; Sampling variables:
@@ -2423,7 +2416,7 @@ t-test results based on the extended correction factor for 3 repeats of
 5-fold cross-validation.</p>
 <pre class="r"><code>## Pairwise model comparisons
 (res_diff &lt;- diff(res))
-#&gt; --- PerformanceDiff object -----------------------------------------------------
+#&gt; --- PerformanceDiff object -------------------------------------------------------------------------
 #&gt; 
 #&gt; Metric: C-Index
 #&gt; Models: GBM1 - GBM2, GBM1 - GBM3, GBM2 - GBM3
@@ -2446,7 +2439,7 @@ summary(res_diff)
 plot(res_diff)</code></pre>
 <p><img src="using_files/figure-html/using_resample_diff-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>t.test(res_diff)
-#&gt; --- PerformanceDiffTest object -------------------------------------------------
+#&gt; --- PerformanceDiffTest object ---------------------------------------------------------------------
 #&gt; 
 #&gt; Upper diagonal: mean differences (Model1 - Model2)
 #&gt; Lower diagonal: p-values
@@ -2488,7 +2481,7 @@ improvements over all internal tree nodes created by splitting on that
 variable <span class="citation">(Greenwell et al. 2019)</span>.</p>
 <pre class="r"><code>## Predictor variable importance
 (vi &lt;- varimp(surv_fit, method = &quot;model&quot;))
-#&gt; --- VariableImportance object --------------------------------------------------
+#&gt; --- VariableImportance object ----------------------------------------------------------------------
 #&gt;             Overall
 #&gt; age       100.00000
 #&gt; thickness  78.27486
@@ -2509,7 +2502,7 @@ Logical indicators of model-specific variable importance are given in
 the information displayed by model constructors and returned by <a
 href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/modelinfo"><code>modelinfo()</code></a>.</p>
 <pre class="r"><code>SVMModel
-#&gt; --- MLModelFunction object -----------------------------------------------------
+#&gt; --- MLModelFunction object -------------------------------------------------------------------------
 #&gt; 
 #&gt; Model name: SVMModel
 #&gt; Label: Support Vector Machines
@@ -2557,7 +2550,7 @@ each variable.</p></li>
 </ul>
 <pre class="r"><code>## Permutation-based variable importance
 varimp(surv_fit)
-#&gt; --- VariableImportance object --------------------------------------------------
+#&gt; --- VariableImportance object ----------------------------------------------------------------------
 #&gt;           Permute.mean.cindex
 #&gt; age                100.000000
 #&gt; thickness           90.837696
@@ -2621,7 +2614,7 @@ example.</p>
 <pre class="r"><code>## Recursive feature elimination
 (surv_rfe &lt;- rfe(surv_fo, data = surv_train, model = GBMModel,
                  control = surv_means_control))
-#&gt; --- TrainingStep object --------------------------------------------------------
+#&gt; --- TrainingStep object ----------------------------------------------------------------------------
 #&gt; 
 #&gt; Optimization method: Global Recursive Feature Elimination
 #&gt; ModelSpecification log:
@@ -2720,16 +2713,16 @@ probability cutoff value for binary factors (default:
 probability for factors with more than two levels.</p>
 <pre class="r"><code>## Confusion matrices
 (conf &lt;- confusion(res_probs, cutoff = 0.7))
-#&gt; --- ConfusionList object -------------------------------------------------------
+#&gt; --- ConfusionList object ---------------------------------------------------------------------------
 #&gt; 
-#&gt; === $GBMModel.Time1 ============================================================
+#&gt; === $GBMModel.Time1 ================================================================================
 #&gt; === BinaryConfusionMatrix object ===
 #&gt;          Observed
 #&gt; Predicted         0         1
 #&gt;         0 236.02496  38.97504
 #&gt;         1  59.34328  73.65672
 #&gt; 
-#&gt; === $GBMModel.Time2 ============================================================
+#&gt; === $GBMModel.Time2 ================================================================================
 #&gt; === BinaryConfusionMatrix object ===
 #&gt;          Observed
 #&gt; Predicted         0         1
@@ -2745,7 +2738,7 @@ href="https://www.rdocumentation.org/packages/MachineShop/versions/3.6.0/topics/
 function.</p>
 <pre class="r"><code>## Summary performance metrics
 summary(conf)
-#&gt; --- $GBMModel.Time1 ------------------------------------------------------------
+#&gt; --- $GBMModel.Time1 --------------------------------------------------------------------------------
 #&gt; Number of responses: 408
 #&gt; Accuracy (SE): 0.7590237 (0.02117311)
 #&gt; Majority class: 0.7239418
@@ -2760,7 +2753,7 @@ summary(conf)
 #&gt; PPV         0.8582726 0.5538099
 #&gt; NPV         0.5538099 0.8582726
 #&gt; 
-#&gt; --- $GBMModel.Time2 ------------------------------------------------------------
+#&gt; --- $GBMModel.Time2 --------------------------------------------------------------------------------
 #&gt; Number of responses: 408
 #&gt; Accuracy (SE): 0.7134235 (0.02238535)
 #&gt; Majority class: 0.6184408
@@ -2787,11 +2780,11 @@ metricinfo(conf) %&gt;% names
 performance(conf, metrics = c(&quot;Accuracy&quot; = accuracy,
                               &quot;Sensitivity&quot; = sensitivity,
                               &quot;Specificity&quot; = specificity))
-#&gt; --- $GBMModel.Time1 ------------------------------------------------------------
+#&gt; --- $GBMModel.Time1 --------------------------------------------------------------------------------
 #&gt;    Accuracy Sensitivity Specificity 
 #&gt;   0.7590237   0.6539605   0.7990871 
 #&gt; 
-#&gt; --- $GBMModel.Time2 ------------------------------------------------------------
+#&gt; --- $GBMModel.Time2 --------------------------------------------------------------------------------
 #&gt;    Accuracy Sensitivity Specificity 
 #&gt;   0.7134235   0.7764610   0.6745312</code></pre>
 </div>
@@ -3697,15 +3690,14 @@ pca_grid &lt;- expand_steps(
   TunedModel(GBMModel),
   control = surv_means_control
 ))
-#&gt; --- ModelSpecification object --------------------------------------------------
+#&gt; --- ModelSpecification object ----------------------------------------------------------------------
 #&gt; 
 #&gt; === ModelRecipe object ===
 #&gt; 
 #&gt; ID: input.ICgC
 #&gt; Outcome: y
 #&gt; Predictors: sex, age, year, thickness, ulcer
-#&gt; Untrained step IDs: step_center = center_AisIH, step_scale = scale_yD5ZK,
-#&gt;   step_pca = PCA
+#&gt; Untrained step IDs: step_center = center_AisIH, step_scale = scale_yD5ZK, step_pca = PCA
 #&gt; Number of observations: 136
 #&gt; 
 #&gt; === MLModel object ===
@@ -3744,7 +3736,7 @@ pca_grid &lt;- expand_steps(
 ## Model fit with Bayesian optimization
 bayes_fit &lt;- modelspec %&gt;% set_optim_bayes %&gt;% fit
 as.MLModel(bayes_fit)
-#&gt; --- MLModel object -------------------------------------------------------------
+#&gt; --- MLModel object ---------------------------------------------------------------------------------
 #&gt; 
 #&gt; Model name: GBMModel
 #&gt; Label: Trained Generalized Boosted Regression
@@ -3763,7 +3755,7 @@ as.MLModel(bayes_fit)
 #&gt;  $ shrinkage        : num 0.1
 #&gt;  $ bag.fraction     : num 0.5
 #&gt; 
-#&gt; === $TrainingStep1 =============================================================
+#&gt; === $TrainingStep1 =================================================================================
 #&gt; === TrainingStep object ===
 #&gt; 
 #&gt; Optimization method: Bayesian Optimization
@@ -3809,7 +3801,7 @@ one object instead of two.</p>
   TunedModel(GBMModel),
   control = NULL
 )
-#&gt; --- ModelSpecification object --------------------------------------------------
+#&gt; --- ModelSpecification object ----------------------------------------------------------------------
 #&gt; 
 #&gt; === TunedModelRecipe object ===
 #&gt; 
@@ -3984,7 +3976,7 @@ settings(&quot;control&quot;, &quot;grid&quot;)
 #&gt; [1] &quot;BootControl&quot;
 #&gt; 
 #&gt; $grid
-#&gt; --- TuningGrid object ----------------------------------------------------------
+#&gt; --- TuningGrid object ------------------------------------------------------------------------------
 #&gt; 
 #&gt; Grid size: 10
 #&gt; Random samples: FALSE

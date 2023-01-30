@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -185,8 +185,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -194,16 +194,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -561,7 +554,7 @@ iris_fit &lt;- fit(fo, data = trainset, model = GBMModel)
 
 ## Variable importance
 (vi &lt;- varimp(iris_fit))
-#&gt; --- VariableImportance object --------------------------------------------------
+#&gt; --- VariableImportance object ----------------------------------------------------------------------
 #&gt;              Permute.mean.brier
 #&gt; Petal.Length        100.0000000
 #&gt; Petal.Width          42.4880573
@@ -596,7 +589,7 @@ performance(obs, pred)
 <h2>Resampling</h2>
 <pre class="r"><code>## Resample estimation of model performance
 (res &lt;- resample(fo, data = iris, model = GBMModel, control = CVControl))
-#&gt; --- Resample object ------------------------------------------------------------
+#&gt; --- Resample object --------------------------------------------------------------------------------
 #&gt; 
 #&gt; Model: GBMModel
 #&gt; Sampling variables:
@@ -667,7 +660,7 @@ iris_fit &lt;- TunedModel(
 
 ## Variable importance
 varimp(iris_fit)
-#&gt; --- VariableImportance object --------------------------------------------------
+#&gt; --- VariableImportance object ----------------------------------------------------------------------
 #&gt;              Permute.mean.brier
 #&gt; Petal.Length       100.00000000
 #&gt; Petal.Width         24.47878599
@@ -761,7 +754,7 @@ summary(perfdiff)
 #&gt;   RF - NNet   0.021000000      0 0.04690053 -0.06666667 0.16666667  0
 
 t.test(perfdiff)
-#&gt; --- PerformanceDiffTest object -------------------------------------------------
+#&gt; --- PerformanceDiffTest object ---------------------------------------------------------------------
 #&gt; 
 #&gt; Upper diagonal: mean differences (Model1 - Model2)
 #&gt; Lower diagonal: p-values
@@ -835,9 +828,9 @@ plot(cal, se = TRUE)</code></pre>
 <div id="confusion-matrices" class="section level2">
 <h2>Confusion Matrices</h2>
 <pre class="r"><code>(conf &lt;- confusion(res1, cutoff = NULL))
-#&gt; --- ConfusionList object -------------------------------------------------------
+#&gt; --- ConfusionList object ---------------------------------------------------------------------------
 #&gt; 
-#&gt; === $GBMModel ==================================================================
+#&gt; === $GBMModel ======================================================================================
 #&gt; === ConfusionMatrix object ===
 #&gt;             Observed
 #&gt; Predicted          setosa   versicolor    virginica
@@ -846,7 +839,7 @@ plot(cal, se = TRUE)</code></pre>
 #&gt;   virginica    0.01637160  19.53094980 225.60351367
 
 summary(conf)
-#&gt; --- $GBMModel ------------------------------------------------------------------
+#&gt; --- $GBMModel --------------------------------------------------------------------------------------
 #&gt; Number of responses: 750
 #&gt; Accuracy (SE): 0.9401729 (0.008660086)
 #&gt; Majority class: 0.3333333
@@ -878,7 +871,7 @@ rec &lt;- recipe(fo, data = iris) %&gt;%
 
 iris_fit &lt;- fit(rec, model = GBMModel)
 varimp(iris_fit)
-#&gt; --- VariableImportance object --------------------------------------------------
+#&gt; --- VariableImportance object ----------------------------------------------------------------------
 #&gt;              Permute.mean.brier
 #&gt; Petal.Length         100.000000
 #&gt; Petal.Width           26.116233

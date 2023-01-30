@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -185,8 +185,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -194,16 +194,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -612,9 +605,9 @@ auc(roc)
 <div id="confusion-matrices" class="section level2">
 <h2>Confusion Matrices</h2>
 <pre class="r"><code>(conf &lt;- confusion(res))
-#&gt; --- ConfusionList object -------------------------------------------------------
+#&gt; --- ConfusionList object ---------------------------------------------------------------------------
 #&gt; 
-#&gt; === $SelectedModel =============================================================
+#&gt; === $SelectedModel =================================================================================
 #&gt; === BinaryConfusionMatrix object ===
 #&gt;          Observed
 #&gt; Predicted neg pos
@@ -622,7 +615,7 @@ auc(roc)
 #&gt;       pos  34  80
 
 summary(conf)
-#&gt; --- $SelectedModel -------------------------------------------------------------
+#&gt; --- $SelectedModel ---------------------------------------------------------------------------------
 #&gt; Number of responses: 392
 #&gt; Accuracy (SE): 0.7857143 (0.02072459)
 #&gt; Majority class: 0.6683673
@@ -642,7 +635,7 @@ plot(conf)
 <p><img src="example_pima_files/figure-html/ex_pima_conf-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Variable probability cutoff
 summary(confusion(res, cutoff = 0.25))
-#&gt; --- $SelectedModel -------------------------------------------------------------
+#&gt; --- $SelectedModel ---------------------------------------------------------------------------------
 #&gt; Number of responses: 392
 #&gt; Accuracy (SE): 0.75 (0.02187044)
 #&gt; Majority class: 0.6683673
