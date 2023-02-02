@@ -2,7 +2,7 @@
 
 ## Version Updates
 
-## 3.6.0.9000
+## 3.6.1
 * Compatibility updates for **ggplot2**, **Matrix**, and **recipes** package dependencies.
 
 ## 3.6.0
