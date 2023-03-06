@@ -180,7 +180,7 @@ update.MLModel <- function(
     object <- do.call(object@name, new_params, quote = quote)
   } else if (!.hasSlot(object, "na.rm")) {
     info <- modelinfo(object@name)
-    object@na.rm <- if (length(info)) {
+    slot(object, "na.rm", check = FALSE) <- if (length(info)) {
       info[[1]]$na.rm
     } else {
       check_na.rm(formals(MLModel)$na.rm)
@@ -268,6 +268,8 @@ update.MLModelFit <- function(object, ...) {
     new_model@steps <- model@steps
     MLModelFit(object, class1(object), input, new_model)
   } else {
+    model <- attr(object, ".MachineShop")$model
+    attr(object, ".MachineShop")$model <- update(model)
     object
   }
 }
