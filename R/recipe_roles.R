@@ -48,12 +48,8 @@ NULL
 #'
 role_binom <- function(recipe, x, size) {
   if (!(missing(x) || missing(size))) {
-    recipe <- do.call(
-      recipes::add_role, list(recipe, substitute(x), new_role = "binom_x")
-    )
-    recipe <- do.call(
-      recipes::add_role, list(recipe, substitute(size), new_role = "binom_size")
-    )
+    recipe <- set_recipe_role(recipe, substitute(x), "binom_x")
+    recipe <- set_recipe_role(recipe, substitute(size), "binom_size")
   } else {
     throw(Error("Binomial `x` and `size` variables must be specified."))
   }
@@ -63,16 +59,14 @@ role_binom <- function(recipe, x, size) {
 #' @rdname recipe_roles
 #'
 role_case <- function(recipe, group, stratum, weight, replace = FALSE) {
-  f <- if (replace) recipes::update_role else recipes::add_role
   comp_names <- eval(substitute(alist(
     group = group,
     stratum = stratum,
     weight = weight
   )))
   for (type in names(comp_names)[nzchar(comp_names)]) {
-    recipe <- do.call(
-      f, list(recipe, comp_names[[type]], new_role = paste0("case_", type))
-    )
+    role <- paste0("case_", type)
+    recipe <- set_recipe_role(recipe, comp_names[[type]], role, replace)
   }
   recipe
 }
@@ -82,9 +76,8 @@ role_case <- function(recipe, group, stratum, weight, replace = FALSE) {
 #'
 role_pred <- function(recipe, offset, replace = FALSE) {
   if (!missing(offset)) {
-    recipe <- do.call(
-      if (replace) recipes::update_role else recipes::add_role,
-      list(recipe, substitute(offset), new_role = "pred_offset")
+    recipe <- set_recipe_role(
+      recipe, substitute(offset), "pred_offset", replace, TRUE
     )
   }
   recipe
@@ -95,17 +88,23 @@ role_pred <- function(recipe, offset, replace = FALSE) {
 #'
 role_surv <- function(recipe, time, event) {
   if (!missing(time)) {
-    recipe <- do.call(
-      recipes::add_role, list(recipe, substitute(time), new_role = "surv_time")
-    )
+    recipe <- set_recipe_role(recipe, substitute(time), "surv_time")
     if (!missing(event)) {
-      recipe <- do.call(
-        recipes::add_role,
-        list(recipe, substitute(event), new_role = "surv_event")
-      )
+      recipe <- set_recipe_role(recipe, substitute(event), "surv_event")
     }
     recipe
   } else {
     throw(Error("A survival `time` variable must be specified."))
   }
+}
+
+
+set_recipe_role <- function(
+  recipe, x, role, replace = FALSE, required = FALSE
+) {
+  set_role <- if (replace) recipes::update_role else recipes::add_role
+  recipe <- do.call(set_role, list(recipe, x, new_role = role))
+  if (!required) {
+    recipes::update_role_requirements(recipe, role = role, bake = FALSE)
+  } else recipe
 }
