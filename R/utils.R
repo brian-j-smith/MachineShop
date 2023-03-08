@@ -52,7 +52,7 @@ as_string.default <- function(x, ...) {
 }
 
 
-as_string.character <- function(x, sep = ", ", conj = character()) {
+as_string.character <- function(x, sep = ", ", conj = character(), ...) {
   x <- trimws(x)
   if (length(conj)) {
     n <- length(x)
