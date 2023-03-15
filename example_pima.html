@@ -605,9 +605,9 @@ auc(roc)
 <div id="confusion-matrices" class="section level2">
 <h2>Confusion Matrices</h2>
 <pre class="r"><code>(conf &lt;- confusion(res))
-#&gt; --- ConfusionList object ---------------------------------------------------------------------------
+#&gt; --- ConfusionList object ---------------------------------------------------------------------
 #&gt; 
-#&gt; === $SelectedModel =================================================================================
+#&gt; === $SelectedModel ===========================================================================
 #&gt; === BinaryConfusionMatrix object ===
 #&gt;          Observed
 #&gt; Predicted neg pos
@@ -615,7 +615,7 @@ auc(roc)
 #&gt;       pos  34  80
 
 summary(conf)
-#&gt; --- $SelectedModel ---------------------------------------------------------------------------------
+#&gt; --- $SelectedModel ---------------------------------------------------------------------------
 #&gt; Number of responses: 392
 #&gt; Accuracy (SE): 0.7857143 (0.02072459)
 #&gt; Majority class: 0.6683673
@@ -635,7 +635,7 @@ plot(conf)
 <p><img src="example_pima_files/figure-html/ex_pima_conf-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Variable probability cutoff
 summary(confusion(res, cutoff = 0.25))
-#&gt; --- $SelectedModel ---------------------------------------------------------------------------------
+#&gt; --- $SelectedModel ---------------------------------------------------------------------------
 #&gt; Number of responses: 392
 #&gt; Accuracy (SE): 0.75 (0.02187044)
 #&gt; Majority class: 0.6683673
