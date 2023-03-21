@@ -2,6 +2,11 @@
 
 ## Version Updates
 
+## 3.6.2
+* Add backward compatibility for older `MLModel` objects without a `na.rm` slot.
+* Fix CRAN check warning: S3 generic/method consistency.
+* Update `role_binom()`, `role_case()`, and `role_surv()` to remove the requirement that their variables be present in `newdata` supplied to `predict()`.
+
 ## 3.6.1
 * Compatibility updates for **ggplot2**, **Matrix**, and **recipes** package dependencies.
 
