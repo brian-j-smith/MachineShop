@@ -831,10 +831,10 @@ Performance metrics are defined below for numeric vector responses.  If applied 
 All previously described metrics for binary factor responses---plus accuracy, Brier score and Cohen's kappa---are applicable to survival probabilities predicted at specified follow-up times.  Metrics are evaluated separately at each follow-up time and reported along with a time-integrated mean.  The survival concordance index is computed with the method of Harrell [-@harrell:1982:EYM] and Brier score according to Graf et al. [-@graf:1999:ACP]; whereas, the others are computed according to the confusion matrix probabilities below, in which term $\hat{S}(t)$ is the predicted survival probability at follow-up time $t$ and $T$ is the survival time [@heagerty:2004:TDR].
 
 ```{r using_metrics_conf_surv, echo=FALSE}
-conf <- matrix(c("$TN = \\Pr(\\hat{S}(t) \\ge \\text{cutoff} \\cap T \\gt t)$",
-                 "$FP = \\Pr(\\hat{S}(t) \\lt \\text{cutoff} \\cap T \\gt t)$",
+conf <- matrix(c("$TN = \\Pr(\\hat{S}(t) \\ge \\text{cutoff} \\cap T >    t)$",
+                 "$FP = \\Pr(\\hat{S}(t) <    \\text{cutoff} \\cap T >    t)$",
                  "$FN = \\Pr(\\hat{S}(t) \\ge \\text{cutoff} \\cap T \\le t)$",
-                 "$TP = \\Pr(\\hat{S}(t) \\lt \\text{cutoff} \\cap T \\le t)$"),
+                 "$TP = \\Pr(\\hat{S}(t) <    \\text{cutoff} \\cap T \\le t)$"),
                2, 2,
                dimnames = list("Predicted Response" = c("Non-Event", "Event"),
                                "Observed Response" = c("Non-Event", "Event")))
