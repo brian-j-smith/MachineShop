@@ -165,13 +165,16 @@ varimp_permute <- function(
     throw(check_assignment(metric))
   }
   compare <- match.arg(compare)
-  varimp <- function(x, baseline, maximize = FALSE) {
-    do.call(compare, if (maximize) list(baseline, x) else list(x, baseline))
-  }
   stats <- check_stats(stats, convert = TRUE)
   throw(check_assignment(stats))
-  map_stats <- function(x) {
-    map(function(x) stats(if (na.rm) na.omit(x) else x), as.data.frame(x))
+
+  varimp <- function(x, baseline, maximize = FALSE) {
+    args <- if (maximize) list(baseline, x) else list(x, baseline)
+    do.call(rbind,
+      apply(do.call(compare, args), 2, function(col) {
+        stats(if (na.rm) na.omit(col) else col)
+      }, simplify = FALSE)
+    )
   }
 
   progress <- if (throw(check_logical(progress))) {
@@ -225,8 +228,7 @@ varimp_permute <- function(
         progress()
       }
     }
-    sims <- varimp(perf, base_perf, metric@maximize)
-    res <- do.call(rbind, map_stats(sims))
+    res <- varimp(perf, base_perf, metric@maximize)
     colnames(res) <- paste0("Permute.", colnames(res), ".", metric@name)
     res
   }

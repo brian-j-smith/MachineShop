@@ -28,21 +28,8 @@ setMethod(".append", c("data.frame", "data.frame"),
 )
 
 
-setMethod(".append", c("factor", "factor"),
-  function(x, y) unlist(list(x, y))
-)
-
-
 setMethod(".append", c("matrix", "matrix"),
   function(x, y) rbind(x, y)
-)
-
-
-setMethod(".append", c("ordered", "ordered"),
-  function(x, y) {
-    z <- unlist(list(x, y))
-    if (identical(levels(x), levels(y))) as.ordered(z) else z
-  }
 )
 
 
