@@ -28,13 +28,13 @@ ParsnipModel <- function(object, ...) {
 
   throw(check_packages("parsnip"))
 
-  object <- if (missing(object)) {
-    parsnip::null_model() %>%
-      parsnip::set_mode("unknown") %>%
+  if (missing(object)) {
+    object <- parsnip::null_model() %>%
       parsnip::set_engine("parsnip")
+    object$mode <- "unknown"
   } else {
     stopifnot(is(object, "model_spec"))
-    update(object, ...)
+    object <- update(object, ...)
   }
 
   modes <- list("censored regression" = "Surv",
@@ -67,7 +67,7 @@ ParsnipModel <- function(object, ...) {
         distr <- model@params$dist
         if (is(distr, "quosure")) distr <- rlang::quo_get_expr(distr)
         if (length(times)) {
-          pred_list <- prsp_predict(type = "survival", time = times)$.pred
+          pred_list <- prsp_predict(type = "survival", eval_time = times)$.pred
           pred_vector <- do.call(rbind, pred_list)$.pred_survival
           pred <- matrix(pred_vector, ncol = length(times), byrow = TRUE)
           SurvProbs(pred, times = times, distr = distr)
