@@ -49,8 +49,8 @@
 #'   }
 #' }
 #'
-#' Default values and further model details can be found in the source links
-#' below.
+#' Default argument values and further model details can be found in the source
+#' See Also links below.
 #'
 #' In calls to \code{\link{varimp}} for \code{RFSRCModel}, argument
 #' \code{type} may be specified as \code{"permute"} (default) for permutation of

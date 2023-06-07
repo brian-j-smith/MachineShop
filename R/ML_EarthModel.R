@@ -22,8 +22,8 @@
 #' }
 #' * excluded from grids by default
 #'
-#' Default values and further model details can be found in the source link
-#' below.
+#' Default argument values and further model details can be found in the source
+#' See Also link below.
 #'
 #' In calls to \code{\link{varimp}} for \code{EarthModel}, argument
 #' \code{type} may be specified as \code{"nsubsets"} (default) for the number of

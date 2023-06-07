@@ -66,8 +66,8 @@ Fit a generalized linear model via penalized maximum likelihood.
   }
 }
 
-Default values and further model details can be found in the source link
-below.
+Default argument values and further model details can be found in the source
+See Also link below.
 }
 \examples{
 \donttest{

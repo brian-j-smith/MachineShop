@@ -62,6 +62,7 @@
 #'     \code{PoissonVariate}, \code{Surv}}
 #'   \item{\link[=TunedModel]{Automatic tuning} of grid parameters:}{
 #'     \itemize{
+#'       \item XGBModel: \code{NULL}
 #'       \item XGBDARTModel: \code{nrounds}, \code{eta}*, \code{gamma}*,
 #'         \code{max_depth}, \code{min_child_weight}*, \code{subsample}*,
 #'         \code{colsample_bytree}*, \code{rate_drop}*, \code{skip_drop}*
@@ -74,8 +75,15 @@
 #' }
 #' * excluded from grids by default
 #'
-#' Default values and further model details can be found in the source link
-#' below.
+#' The booster-specific constructor functions \code{XGBDARTModel},
+#' \code{XGBLinearModel}, and \code{XGBTreeModel} are special cases of
+#' \code{XGBModel} which automatically set the XGBoost \code{booster}
+#' \href{https://xgboost.readthedocs.io/en/latest/parameter.html}{parameter}.
+#' These are called directly in typical usage unless \code{XGBModel} is needed
+#' to specify a more general model.
+#' 
+#' Default argument values and further model details can be found in the source
+#' See Also link below.
 #'
 #' In calls to \code{\link{varimp}} for \code{XGBTreeModel}, argument
 #' \code{type} may be specified as \code{"Gain"} (default) for the fractional

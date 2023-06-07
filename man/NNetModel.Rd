@@ -67,8 +67,8 @@ Fit single-hidden-layer neural network, possibly with skip-layer connections.
   }
 }
 
-Default values and further model details can be found in the source link
-below.
+Default argument values and further model details can be found in the source
+See Also link below.
 }
 \examples{
 fit(sale_amount ~ ., data = ICHomes, model = NNetModel)

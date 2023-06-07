@@ -45,8 +45,8 @@
 #'   \item{Response types:}{\code{factor}, \code{numeric}, \code{Surv}}
 #' }
 #'
-#' Default values and further model details can be found in the source links
-#' below.
+#' Default argument values and further model details can be found in the source
+#' See Also links below.
 #'
 #' @return \code{MLModel} class object.
 #'

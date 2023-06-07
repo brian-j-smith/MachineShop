@@ -36,6 +36,7 @@
 #'   \item{Response types:}{\code{factor}, \code{numeric}}
 #'   \item{\link[=TunedModel]{Automatic tuning} of grid parameters:}{
 #'     \itemize{
+#'       \item SVMModel: \code{NULL}
 #'       \item SVMANOVAModel: \code{C}, \code{degree}
 #'       \item SVMBesselModel: \code{C}, \code{order}, \code{degree}
 #'       \item SVMLaplaceModel: \code{C}, \code{sigma}
@@ -46,10 +47,16 @@
 #'   }
 #' }
 #'
-#' Arguments \code{kernel} and \code{kpar} are automatically set by the
-#' kernel-specific constructor functions.
-#' Default values and further model details can be found in the source link
-#' below.
+#' The kernel-specific constructor functions \code{SVMANOVAModel},
+#' \code{SVMBesselModel}, \code{SVMLaplaceModel}, \code{SVMLinearModel},
+#' \code{SVMPolyModel}, \code{SVMRadialModel}, \code{SVMSplineModel}, and
+#' \code{SVMTanhModel} are special cases of \code{SVMModel} which automatically
+#' set its \code{kernel} and \code{kpar} arguments.  These are called directly
+#' in typical usage unless \code{SVMModel} is needed to specify a more general
+#' model.
+#' 
+#' Default argument values and further model details can be found in the source
+#' See Also link below.
 #'
 #' @return \code{MLModel} class object.
 #'
