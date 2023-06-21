@@ -42,7 +42,7 @@ From the fit, the resulting model can be extracted with `r rdoc_url("as.MLModel(
 ## Input-tuned model fit and final trained model
 model_fit <- fit(tun_rec, model = GBMModel)
 as.MLModel(model_fit)
-#> --- MLModel object -------------------------------------------------------------
+#> --- MLModel object ----------------------------------------------------------------------
 #> 
 #> Model name: GBMModel
 #> Label: Trained Generalized Boosted Regression
@@ -61,7 +61,7 @@ as.MLModel(model_fit)
 #>  $ shrinkage        : num 0.1
 #>  $ bag.fraction     : num 0.5
 #> 
-#> === $TrainingStep1 =============================================================
+#> === $TrainingStep1 ======================================================================
 #> === TrainingStep object ===
 #> 
 #> Optimization method: Grid Search
@@ -103,7 +103,7 @@ In this case, the third recipe with PCA steps is selected.
 ## Input-selected model fit and model
 model_fit <- fit(sel_rec, model = GBMModel)
 as.MLModel(model_fit)
-#> --- MLModel object -------------------------------------------------------------
+#> --- MLModel object ----------------------------------------------------------------------
 #> 
 #> Model name: GBMModel
 #> Label: Trained Generalized Boosted Regression
@@ -122,7 +122,7 @@ as.MLModel(model_fit)
 #>  $ shrinkage        : num 0.1
 #>  $ bag.fraction     : num 0.5
 #> 
-#> === $TrainingStep1 =============================================================
+#> === $TrainingStep1 ======================================================================
 #> === TrainingStep object ===
 #> 
 #> Optimization method: Grid Search
@@ -137,7 +137,7 @@ as.MLModel(model_fit)
 #> Selected row: 3
 #> Metric: C-Index = 0.7960841
 #> 
-#> === $TrainingStep2 =============================================================
+#> === $TrainingStep2 ======================================================================
 #> === TrainingStep object ===
 #> 
 #> Optimization method: Grid Search
@@ -202,7 +202,7 @@ model_fit <- fit(surv_fo, data = surv_train,
                    metrics = c("CIndex" = cindex, "RMSE" = rmse)
                  ))
 (trained_model <- as.MLModel(model_fit))
-#> --- MLModel object -------------------------------------------------------------
+#> --- MLModel object ----------------------------------------------------------------------
 #> 
 #> Model name: GBMModel
 #> Label: Trained Generalized Boosted Regression
@@ -221,7 +221,7 @@ model_fit <- fit(surv_fo, data = surv_train,
 #>  $ shrinkage        : num 0.1
 #>  $ bag.fraction     : num 0.5
 #> 
-#> === $TrainingStep1 =============================================================
+#> === $TrainingStep1 ======================================================================
 #> === TrainingStep object ===
 #> 
 #> Optimization method: Grid Search
@@ -268,7 +268,7 @@ Statistics summarizing the resampled performance metrics across all tuning param
 
 ```{r using_strategies_tune_summary, eval=FALSE}
 summary(trained_model)
-#> --- $TrainingStep1 -------------------------------------------------------------
+#> --- $TrainingStep1 ----------------------------------------------------------------------
 #> # A tibble: 9 × 4
 #>   name       selected params$n.trees $interaction.depth metrics$CIndex  $RMSE
 #>   <chr>      <lgl>             <int>              <int>          <dbl>  <dbl>
@@ -441,7 +441,7 @@ knitr::include_graphics("img/FigNestedCV.png")
 Nesting of resampling routines is repeated recursively when a fit involves multiple levels of nested meta-functions.  For example, predictive performance estimation for the training of `r rdoc_url("TunedInput(pca_rec, grid = pca_grid)")` involves up to three nested meta functions: `r rdoc_url("SelectedModel(...)")` &rarr; `r rdoc_url("StackedModel(...)")` &rarr; `r rdoc_url("TunedModel(CForestModel)")`.  For this relationship, an outer and three nested inner resampling loops are executed as follows.  First, `r rdoc_url("CForestModel")` is tuned at the third inner resampling loop.  Second, the tuned model is passed to the second inner loop for construction of `r rdoc_url("StackedModel")`.  Third, the constructed model is passed to the first inner loop for model selection from the candidate set.  Finally, the selected model is passed to the outer loop for tuning of the preprocessing recipe.  Based on resample performance estimation of the entire input/model specification, one principal component is selected for the `GBMModel`.
 
 ```{r using_strategies_methods1, eval=FALSE}
-#> === $TrainingStep1 =============================================================
+#> === $TrainingStep1 ======================================================================
 #> === TrainingStep object ===
 #> 
 #> Optimization method: Grid Search
@@ -460,7 +460,7 @@ Nesting of resampling routines is repeated recursively when a fit involves multi
 In order to identify and return a final model fitted to the entire input data, the hierarchy is traversed from top to bottom along the path determined by the choice at each node.  Steps along the path are labeled `TrainStep1` and `TrainStep2` in the output.  As seen above in `TrainStep1`, one principal component is first selected for the tuned input.  Using an input recipe with one principal component, the entire dataset is refit at `TrainStep2` to finally select `r rdoc_url("GBMModel")`.
 
 ```{r using_strategies_methods2, eval=FALSE}
-#> === $TrainingStep2 =============================================================
+#> === $TrainingStep2 ======================================================================
 #> === TrainingStep object ===
 #> 
 #> Optimization method: Grid Search
@@ -479,7 +479,7 @@ In order to identify and return a final model fitted to the entire input data, t
 After the series of training steps reaches the bottom of its hierarchy, the final model is fitted to the entire dataset and returned.
 
 ```{r using_strategies_methods0, eval=FALSE}
-#> --- MLModel object -------------------------------------------------------------
+#> --- MLModel object ----------------------------------------------------------------------
 #> 
 #> Model name: GBMModel
 #> Label: Trained Generalized Boosted Regression
