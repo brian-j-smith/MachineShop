@@ -22,9 +22,8 @@ role_surv(recipe, time, event)
 \item{x, size}{number of counts and trials for the specification of a
 \code{\link{BinomialVariate}} outcome.}
 
-\item{group}{variable defining groupings of cases to keep together when
-folds are constructed for \link[=controls]{cross-validation}
-[default: none].}
+\item{group}{variable defining groupings of case observations, such as
+repeated measurements, to keep together during resampling [default: none].}
 
 \item{stratum}{variable to use in conducting stratified \link{resample}
 estimation of model performance.}

@@ -21,7 +21,8 @@ importFrom(magrittr, "%>%")
 importFrom(polspline, hare, phare)
 importFrom(progress, progress_bar)
 importFrom(recipes, bake, prep, recipe, tidy, tunable)
-importFrom(rsample, bootstraps, group_vfold_cv, initial_split, vfold_cv)
+importFrom(rsample, bootstraps, group_bootstraps, group_initial_split,
+           group_vfold_cv, initial_split, vfold_cv)
 importFrom(stats, aggregate, approx, coef, complete.cases, contr.helmert, cor,
            cov.wt, delete.response, drop1, formula, get_all_vars, loess, lm,
            median, model.frame, model.matrix, model.matrix.default,

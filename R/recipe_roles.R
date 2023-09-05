@@ -8,9 +8,8 @@
 #' @param recipe existing \link[recipes]{recipe} object.
 #' @param x,size number of counts and trials for the specification of a
 #'   \code{\link{BinomialVariate}} outcome.
-#' @param group variable defining groupings of cases to keep together when
-#'   folds are constructed for \link[=controls]{cross-validation}
-#'   [default: none].
+#' @param group variable defining groupings of case observations, such as
+#'   repeated measurements, to keep together during resampling [default: none].
 #' @param stratum variable to use in conducting stratified \link{resample}
 #'   estimation of model performance.
 #' @param weight numeric variable of case weights for model

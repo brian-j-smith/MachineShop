@@ -139,9 +139,16 @@ resample.MLModelFunction <- function(model, ...) {
   presets <- settings()
   set.seed(control@seed)
   splits <- rsample_split(
-    function(..., strata = NULL) suppressWarnings(
-      bootstraps(..., times = control@samples, strata = strata)$splits
-    ), data = object, control = control
+    function(data, group = NULL, strata = NULL, ...) {
+      samples <- control@samples
+      suppressWarnings(
+        if (length(group)) {
+          group_bootstraps(data, group = group, times = samples, pool = 0)
+        } else {
+          bootstraps(data, times = samples, strata = strata, pool = 0)
+        }
+      )$splits
+    }, data = object, control = control
   )
   seeds <- rand_int(length(splits))
 
@@ -188,24 +195,20 @@ resample.MLModelFunction <- function(model, ...) {
   presets <- settings()
   set.seed(control@seed)
   splits <- rsample_split(
-    function(..., group = NULL, strata = NULL) {
+    function(data, group = NULL, strata = NULL, ...) {
       v <- control@folds
       repeats <- control@repeats
       res <- suppressWarnings(
         if (length(group)) {
           method <- "grouping"
-          splits <- list()
-          for (i in seq_len(repeats)) {
-            splits <- c(
-              splits, group_vfold_cv(..., v = v, group = group)$splits
-            )
-          }
-          splits
+          group_vfold_cv(
+            data, group = group, v = v, repeats = repeats, pool = 0
+          )
         } else {
           method <- "stratification"
-          vfold_cv(..., v = v, repeats = repeats, strata = strata)$splits
+          vfold_cv(data, v = v, repeats = repeats, strata = strata, pool = 0)
         }
-      )
+      )$splits
       control@folds <<- as.integer(length(res) / repeats)
       if (control@folds < v) {
         throw(Warning(
@@ -270,9 +273,16 @@ resample.MLModelFunction <- function(model, ...) {
   presets <- settings()
   set.seed(control@seed)
   splits <- rsample_split(
-    function(..., strata = NULL) suppressWarnings(
-      bootstraps(..., times = control@samples, strata = strata)$splits
-    ), data = object, control = control
+    function(data, group = NULL, strata = NULL, ...) {
+      samples <- control@samples
+      suppressWarnings(
+        if (length(group)) {
+          group_bootstraps(data, group = group, times = samples, pool = 0)
+        } else {
+          bootstraps(data, times = samples, strata = strata, pool = 0)
+        }
+      )$splits
+    }, data = object, control = control
   )
   seeds <- rand_int(length(splits))
 
@@ -303,8 +313,14 @@ resample.MLModelFunction <- function(model, ...) {
 .resample.SplitControl <- function(control, object, ...) {
   set.seed(control@seed)
   split <- rsample_split(
-    function(...) initial_split(..., prop = control@prop),
-    data = object, control = control
+    function(data, group = NULL, strata = NULL, ...) {
+      prop <- control@prop
+      if (length(group)) {
+        group_initial_split(data, group = group, prop = prop, pool = 0)
+      } else {
+        initial_split(data, prop = prop, strata = strata, pool = 0)
+      }
+    }, data = object, control = control
   )
   train <- update(object, data = rsample::training(split))
   test <- update(object, data = rsample::testing(split))
@@ -367,8 +383,11 @@ rsample_split <- function(fun, data, control) {
     ))
     df[["(groups)"]] <- NULL
   }
-  res <- fun(df, group = case_comp_name(df, "groups"),
-             strata = case_comp_name(df, "strata"), pool = 0)
+  res <- fun(
+    df,
+    group = case_comp_name(df, "groups"),
+    strata = case_comp_name(df, "strata")
+  )
 
   vars <- tibble(Case = rownames(df))
   types <- c(Grouping = "groups", Stratification = "strata")

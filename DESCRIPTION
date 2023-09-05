@@ -25,7 +25,7 @@ Description: Meta-package for statistical and machine learning with a unified
 Depends: R (>= 4.1.0)
 Imports: abind, cli (>= 3.1.0), dials (>= 0.0.4), foreach, ggplot2 (>= 3.4.0),
     kernlab, magrittr, Matrix (>= 1.5-0), methods, nnet, party, polspline,
-    progress, recipes (>= 1.0.0), rlang, rsample (>= 0.1.0), Rsolnp, survival,
+    progress, recipes (>= 1.0.0), rlang, rsample (>= 1.1.0), Rsolnp, survival,
     tibble, utils
 Suggests: adabag, BART, bartMachine, C50, censored, cluster, doParallel, e1071,
     earth, elasticnet, generics, gbm, glmnet, gridExtra, Hmisc, kableExtra,

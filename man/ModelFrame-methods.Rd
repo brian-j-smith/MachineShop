@@ -41,9 +41,9 @@ In the associated method, arguments \code{groups}, \code{strata}, and
 for first in the accompanying \code{data} environment and, if not found
 there, next in the calling environment.}
 
-\item{groups}{vector of values defining groupings of cases to keep together
-when folds are constructed for \link[=controls]{cross-validation}
-[default: none].}
+\item{groups}{vector of values defining groupings of case observations, such
+as repeated measurements, to keep together during resampling [default:
+none].}
 
 \item{strata}{vector of values to use in conducting stratified
 \link{resample} estimation of model performance [default: none].}
