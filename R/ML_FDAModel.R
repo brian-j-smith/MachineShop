@@ -85,7 +85,8 @@ FDAModel <- function(
 
     fit = function(formula, data, weights, ...) {
       mda::fda(
-        formula, data = as.data.frame(formula, data), weights = weights, ...
+        formula, data = as.data.frame(formula, data = data), weights = weights,
+        ...
       )
     },
 

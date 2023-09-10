@@ -64,7 +64,7 @@ AdaBagModel <- function(
 
     fit = function(formula, data, weights, mfinal, ...) {
       adabag::bagging(
-        formula, data = as.data.frame(formula, data), mfinal = mfinal,
+        formula, data = as.data.frame(formula, data = data), mfinal = mfinal,
         control = list(...)
       )
     },

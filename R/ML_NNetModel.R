@@ -85,8 +85,8 @@ NNetModel <- function(
         res
       } else {
         nnet::nnet(
-          formula, data = as.data.frame(formula, data), weights = weights,
-          na.action = na.pass, linout = linout, ...
+          formula, data = as.data.frame(formula, data = data),
+          weights = weights, na.action = na.pass, linout = linout, ...
         )
       }
     },

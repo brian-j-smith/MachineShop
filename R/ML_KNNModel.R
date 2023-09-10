@@ -68,7 +68,7 @@ KNNModel <- function(
     ),
 
     fit = function(formula, data, weights, ...) {
-      list(formula = formula, train = as.data.frame(formula, data), ...)
+      list(formula = formula, train = as.data.frame(formula, data = data), ...)
     },
 
     predict = function(object, newdata, ...) {

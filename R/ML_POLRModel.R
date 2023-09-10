@@ -50,7 +50,7 @@ POLRModel <- function(
 
     fit = function(formula, data, weights, ...) {
       MASS::polr(
-        formula, data = as.data.frame(formula, data), weights = weights,
+        formula, data = as.data.frame(formula, data = data), weights = weights,
         na.action = na.pass, Hess = TRUE, ...)
     },
 

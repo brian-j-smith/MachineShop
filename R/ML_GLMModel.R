@@ -71,7 +71,7 @@ GLMModel <- function(family = NULL, quasi = FALSE, ...) {
           "PoissonVariate" = quasi_prefix("poisson")
         )
       }
-      data <- as.data.frame(formula, data)
+      data <- as.data.frame(formula, data = data)
       control <- stats::glm.control(...)
       if (identical(family, "mgaussian")) {
         stats::lm(formula, data = data, weights = weights)
@@ -168,7 +168,7 @@ GLMStepAICModel <- function(
           "PoissonVariate" = quasi_prefix("poisson")
         )
       }
-      data <- as.data.frame(formula, data)
+      data <- as.data.frame(formula, data = data)
       stepargs <- stepAIC_args(formula, direction, scope)
       control <- stats::glm.control(...)
       if (family == "negbin") {

@@ -52,7 +52,7 @@ CoxModel <- function(ties = c("efron", "breslow", "exact"), ...) {
 
     fit = function(formula, data, weights, ...) {
       survival::coxph(
-        formula, data = as.data.frame(formula, data), weights = weights,
+        formula, data = as.data.frame(formula, data = data), weights = weights,
         na.action = na.pass, ...
       )
     },
@@ -118,7 +118,7 @@ CoxStepAICModel <- function(
     fit = function(
       formula, data, weights, direction, scope = list(), k, trace, steps, ...
     ) {
-      data <- as.data.frame(formula, data)
+      data <- as.data.frame(formula, data = data)
       stepargs <- stepAIC_args(formula, direction, scope)
       MASS::stepAIC(
         survival::coxph(

@@ -65,7 +65,7 @@ CForestModel <- function(
 
     fit = function(formula, data, weights, ...) {
       party::cforest(
-        formula, data = as.data.frame(formula, data), weights = weights,
+        formula, data = as.data.frame(formula, data = data), weights = weights,
         controls = party::cforest_control(...)
       )
     },

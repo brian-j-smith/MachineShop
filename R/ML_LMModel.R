@@ -37,7 +37,7 @@ LMModel <- function() {
 
     fit = function(formula, data, weights, ...) {
       y <- response(data)
-      data <- as.data.frame(formula, data)
+      data <- as.data.frame(formula, data = data)
       if (is.factor(y)) {
         data[[response(formula)]] <- if (nlevels(y) == 2) {
           as.numeric(y) - 1

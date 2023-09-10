@@ -65,7 +65,8 @@ LDAModel <- function(
 
     fit = function(formula, data, weights, dimen, use, ...) {
       res <- MASS::lda(
-        formula, data = as.data.frame(formula, data), na.action = na.pass, ...
+        formula, data = as.data.frame(formula, data = data),
+        na.action = na.pass, ...
       )
       attr(res, ".MachineShop") <- list(
         dimen = if (missing(dimen)) length(res$svd) else dimen,

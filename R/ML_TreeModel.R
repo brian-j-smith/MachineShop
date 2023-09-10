@@ -56,7 +56,7 @@ TreeModel <- function(
       formula, data, weights, split, k = NULL, best = NULL, method = NULL, ...
     ) {
       res <- tree::tree(
-        formula, data = as.data.frame(formula, data), weights = weights,
+        formula, data = as.data.frame(formula, data = data), weights = weights,
         split = split, ...
       )
       if (!is.null(method)) {

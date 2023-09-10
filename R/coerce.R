@@ -27,7 +27,7 @@ as.data.frame.BinomialVariate <- function(x, ...) {
 }
 
 
-as.data.frame.formula <- function(x, data, ...) {
+as.data.frame.formula <- function(x, ..., data) {
   eval.parent(substitute(environment(x) <- environment()))
   as.data.frame(data, ...)
 }

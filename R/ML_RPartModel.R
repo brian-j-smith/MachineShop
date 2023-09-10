@@ -71,7 +71,7 @@ RPartModel <- function(
         "Surv" = "exp"
       )
       rpart::rpart(
-        formula, data = as.data.frame(formula, data), weights = weights,
+        formula, data = as.data.frame(formula, data = data), weights = weights,
         na.action = na.pass, method = method, control = list(...)
       )
     },

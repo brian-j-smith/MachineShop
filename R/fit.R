@@ -192,7 +192,7 @@ eval_fit <- function(data = NULL, formula, matrix) {
     })
   } else {
     bquote({
-      data <- as.data.frame(formula, data)
+      data <- as.data.frame(formula, data = data)
       .(substitute(formula))
     })
   }
