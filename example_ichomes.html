@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -29,7 +29,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
@@ -37,8 +37,8 @@
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -759,7 +759,7 @@ plot(vi)</code></pre>
 <p><img src="example_ichomes_files/figure-html/ex_ichomes_tune-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>## Performance plotted over the grid points
 (tuned_model &lt;- as.MLModel(model_fit))
-#&gt; --- MLModel object ---------------------------------------------------------------------------
+#&gt; --- MLModel object ----------------------------------------------------------------------------
 #&gt; 
 #&gt; Model name: GBMModel
 #&gt; Label: Trained Generalized Boosted Regression
@@ -778,25 +778,26 @@ plot(vi)</code></pre>
 #&gt;  $ shrinkage        : num 0.1
 #&gt;  $ bag.fraction     : num 0.5
 #&gt; 
-#&gt; === $TrainingStep1 ===========================================================================
+#&gt; === $TrainingStep1 ============================================================================
 #&gt; === TrainingStep object ===
 #&gt; 
 #&gt; Optimization method: Grid Search
 #&gt; TunedModel log:
 #&gt; # A tibble: 25 × 4
-#&gt;    name        selected params$n.trees $interaction.depth metrics…¹   $R2   $MAE
-#&gt;    &lt;chr&gt;       &lt;lgl&gt;             &lt;int&gt;              &lt;int&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
-#&gt;  1 GBMModel.1  FALSE                50                  1    56750. 0.592 36337.
-#&gt;  2 GBMModel.2  FALSE                50                  2    53242. 0.641 33061.
-#&gt;  3 GBMModel.3  FALSE                50                  3    51911. 0.659 31824.
-#&gt;  4 GBMModel.4  FALSE                50                  4    50832. 0.672 30828.
-#&gt;  5 GBMModel.5  FALSE                50                  5    50068. 0.685 29946.
-#&gt;  6 GBMModel.6  FALSE               100                  1    52998. 0.636 33458.
-#&gt;  7 GBMModel.7  FALSE               100                  2    50227. 0.677 31097.
-#&gt;  8 GBMModel.8  FALSE               100                  3    49925. 0.679 30182.
-#&gt;  9 GBMModel.9  FALSE               100                  4    49399. 0.691 29481.
-#&gt; 10 GBMModel.10 FALSE               100                  5    49226. 0.692 29170.
-#&gt; # … with 15 more rows, and abbreviated variable name ¹​metrics$RMSE
+#&gt;    name        selected params$n.trees $interaction.depth metrics$RMSE   $R2
+#&gt;    &lt;chr&gt;       &lt;lgl&gt;             &lt;int&gt;              &lt;int&gt;        &lt;dbl&gt; &lt;dbl&gt;
+#&gt;  1 GBMModel.1  FALSE                50                  1       56750. 0.592
+#&gt;  2 GBMModel.2  FALSE                50                  2       53242. 0.641
+#&gt;  3 GBMModel.3  FALSE                50                  3       51911. 0.659
+#&gt;  4 GBMModel.4  FALSE                50                  4       50832. 0.672
+#&gt;  5 GBMModel.5  FALSE                50                  5       50068. 0.685
+#&gt;  6 GBMModel.6  FALSE               100                  1       52998. 0.636
+#&gt;  7 GBMModel.7  FALSE               100                  2       50227. 0.677
+#&gt;  8 GBMModel.8  FALSE               100                  3       49925. 0.679
+#&gt;  9 GBMModel.9  FALSE               100                  4       49399. 0.691
+#&gt; 10 GBMModel.10 FALSE               100                  5       49226. 0.692
+#&gt; # ℹ 15 more rows
+#&gt; # ℹ 1 more variable: metrics$MAE &lt;dbl&gt;
 #&gt; 
 #&gt; Selected row: 24
 #&gt; Metric: RMSE = 48572.58
