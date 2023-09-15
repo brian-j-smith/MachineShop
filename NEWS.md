@@ -2,6 +2,12 @@
 
 ## Version Updates
 
+## 3.6.2.9000
+* Compatibility updates for **parsnip**.
+* Enable resampling by a grouping variable with `BootControl`, `OOBControl`, and `SplitControl`.
+* Enable resampling by a stratification variable with `SplitControl`.
+* Require **R** 4.1.0 or later.
+
 ## 3.6.2
 * Add backward compatibility for older `MLModel` objects without a `na.rm` slot.
 * Fix CRAN check warning: S3 generic/method consistency.
