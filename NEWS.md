@@ -2,7 +2,7 @@
 
 ## Version Updates
 
-## 3.6.2.9000
+## 3.7.0
 * Compatibility updates for **parsnip**.
 * Enable resampling by a grouping variable with `BootControl`, `OOBControl`, and `SplitControl`.
 * Enable resampling by a stratification variable with `SplitControl`.
