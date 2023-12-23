@@ -83,7 +83,7 @@ CForestModel <- function(
       }
     },
 
-    varimp = function(object, ...) {
+    varimp = function(object, .MachineShop, ...) {
       party::varimp(object, ...)
     }
 
