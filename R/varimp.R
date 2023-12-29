@@ -240,32 +240,23 @@ varimp_pval <- function(object, ...) {
 }
 
 
-varimp_pval.default <- function(object, ...) {
-  varimp_pval(coef(object), diag(vcov(object)), ...)
-}
-
-
-varimp_pval.glm <- function(object, base = exp(1), ...) {
-  anova <- drop1(object, test = "Chisq")
-  -log(anova[-1, "Pr(>Chi)", drop = FALSE], base = base)
-}
-
-
-varimp_pval.lm <- function(object, base = exp(1), ...) {
-  anova <- drop1(object, test = "F")
-  -log(anova[-1, "Pr(>F)", drop = FALSE], base = base)
+varimp_pval.default <- function(object, test = "Chisq", base = exp(1), ...) {
+  res <- drop1(object, test = test)[-1, , drop = FALSE]
+  structure(-log(res[[ncol(res)]], base = base), names = rownames(res))
 }
 
 
 varimp_pval.mlm <- function(object, ...) {
   check <- check_equal_weights(object$weights)
   if (is(check, "warning")) {
-    throw(LocalWarning("Model-specific variable importance not defined for ",
-                       class1(object), " with case weights."))
+    throw(LocalWarning(
+      "Model-specific variable importance not defined for ", class1(object),
+      " with case weights."
+    ))
     NULL
   } else {
     object$weights <- NULL
-    varimp_pval.default(object, ...)
+    varimp_pval(coef(object), diag(vcov(object)), ...)
   }
 }
 

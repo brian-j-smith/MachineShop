@@ -60,9 +60,7 @@ POLRModel <- function(
     },
 
     varimp = function(object, base = exp(1), ...) {
-      beta_est <- coef(object)
-      beta_var <- diag(vcov(object))[seq_along(beta_est)]
-      varimp_pval(beta_est, beta_var, base = base)
+      varimp_pval(object, base = base)
     }
 
   )

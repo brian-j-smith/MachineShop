@@ -58,7 +58,7 @@ LMModel <- function() {
     },
 
     varimp = function(object, base = exp(1), ...) {
-      varimp_pval(object, base = base)
+      varimp_pval(object, test = "F", base = base)
     }
 
   )
