@@ -3,21 +3,28 @@ VariableImportance <- function(object, ...) {
 }
 
 
-VariableImportance.default <- function(object, scale = TRUE, ...) {
+VariableImportance.data.frame <- function(
+  object, scale = TRUE, sort = "decreasing", ...
+) {
   stopifnot(nrow(object) == 0 || is.character(rownames(object)))
 
   object <- object[rownames(object) != "(Intercept)", , drop = FALSE]
-  if (scale) scale <- max(object, 0) / 100
-  if (scale > 0) {
-    object <- object / scale
-    sort_vals <- rowSums(object)
+  scale <- rep_len(scale, ncol(object))
+  if (any(scale)) {
+    scale_num <- max(object[scale], 0) / 100
+    object[scale] <- object[scale] / scale_num
+    if (!all(scale)) scale_num <- ifelse(scale, scale_num, NA_real_)
+    sort_vals <- if (scale[1]) rowSums(object[scale]) else object[[1]]
   } else {
-    scale <- 1
-    sort_vals <- object[, 1]
+    scale_num <- NA_real_
+    sort_vals <- object[[1]]
   }
-  object <- object[order(sort_vals, decreasing = TRUE), , drop = FALSE]
+  if (sort != "asis") {
+    sort_order <- order(sort_vals, decreasing = sort == "decreasing")
+    object <- object[sort_order, , drop = FALSE]
+  }
 
-  new("VariableImportance", object, scale = scale)
+  new("VariableImportance", object, scale = scale_num)
 }
 
 
@@ -38,7 +45,9 @@ VariableImportance.NULL <- function(object, ...) {
 
 #' Variable Importance
 #'
-#' Calculate measures of the relative importance of predictors in a model.
+#' Calculate measures of relative importance for model predictor variables.
+#'
+#' @rdname varimp
 #'
 #' @param object model \link{fit} result.
 #' @param method character string specifying the calculation of variable
@@ -48,8 +57,11 @@ VariableImportance.NULL <- function(object, ...) {
 #'   values (below).  Permutation-based variable importance is defined as the
 #'   relative change in model predictive performances between datasets with and
 #'   without permuted values for the associated variable (Fisher et al. 2019).
-#' @param scale logical indicating whether importance values should be scaled to
-#'   a maximum of 100.
+#' @param scale logical value or vector indicating whether importance values are
+#'   scaled to a maximum of 100.
+#' @param sort character string specifying the sort order of importance values
+#'   to be \code{"decreasing"}, \code{"increasing"}, or as predictors appear in
+#'   the model formula (\code{"asis"}).
 #' @param ... arguments passed to model-specific or permutation-based variable
 #'   importance functions.  These include the following arguments and default
 #'   values for \code{method = "permute"}.
@@ -86,6 +98,29 @@ VariableImportance.NULL <- function(object, ...) {
 #'       iterative progress during computation.}
 #'   }
 #'
+#' @details
+#' The \code{varimp} function supports calculation of variable importance with
+#' the permutation-based method of Fisher et al. (2019) or with model-based
+#' methods where defined.  Permutation-based importance is the default and has
+#' the advantages of being available for any model, any performance metric
+#' defined for the associated response variable type, and any predictor variable
+#' in the original training dataset.  Conversely, model-specific importance is
+#' not defined for some models and will fall back to the permutation method in
+#' such cases; is generally limited to metrics implemented in the source
+#' packages of models; and may be computed on derived, rather than original,
+#' predictor variables.  These disadvantages can make comparisons of
+#' model-specific importance across different classes of models infeasible.  A
+#' downside of the permutation-based approach is increased computation time.  To
+#' counter this, the permutation algorithm can be run in parallel simply by
+#' loading a parallel backend for the \pkg{foreach} package \code{\%dopar\%}
+#' function, such as \pkg{doParallel} or \pkg{doSNOW}.
+#'
+#' Permutation variable importance is interpreted as the contribution of a
+#' predictor variable to the predictive performance of a model as measured by
+#' the performance metric used in the calculation.  Importance of a predictor is
+#' conditional on and, with the default scaling, relative to the values of all
+#' other predictors in the analysis.
+#'
 #' @return \code{VariableImportance} class object.
 #'
 #' @references
@@ -108,11 +143,16 @@ VariableImportance.NULL <- function(object, ...) {
 #' plot(vi)
 #' }
 #'
-varimp <- function(object, method = c("permute", "model"), scale = TRUE, ...) {
+varimp <- function(
+  object, method = c("permute", "model"), scale = TRUE,
+  sort = c("decreasing", "increasing", "asis"), ...
+) {
   stopifnot(is(object, "MLModelFit"))
   object <- update(object)
   model <- as.MLModel(object)
   throw(check_packages(model@packages))
+
+  sort <- match.arg(sort)
 
   switch(match.arg(method),
     "model" = {
@@ -131,7 +171,7 @@ varimp <- function(object, method = c("permute", "model"), scale = TRUE, ...) {
       vi <- do.call(varimp_permute, args, envir = parent.frame())
     }
   )
-  VariableImportance(vi, scale = scale)
+  VariableImportance(vi, scale = scale, sort = sort)
 }
 
 
@@ -174,9 +214,9 @@ varimp_permute <- function(
   throw(check_assignment(stats))
 
   varimp <- function(x, baseline, maximize = FALSE) {
-    args <- if (maximize) list(baseline, x) else list(x, baseline)
+    compare_args <- if (maximize) list(baseline, x) else list(x, baseline)
     do.call(rbind,
-      apply(do.call(compare, args), 2, function(col) {
+      apply(do.call(compare, compare_args), 2, function(col) {
         stats(if (na.rm) na.omit(col) else col)
       }, simplify = FALSE)
     )
@@ -194,15 +234,17 @@ varimp_permute <- function(
     function() NULL
   }
 
-  num_workers <- getDoParWorkers()
   work <- pred_names
-  length(work) <- num_workers * ceiling(length(work) / num_workers)
-  work_pred_names <- map(na.omit, split(work, seq_len(num_workers)))
+  num_workers <- getDoParWorkers()
+  num_tasks <- ceiling(length(work) / num_workers)
+  length(work) <- num_workers * num_tasks
+  jobs <- map(na.omit, split(work, rep(1:num_workers, each = num_tasks)))
   seeds <- rand_int(samples)
 
   foreach(
-    pred_names = work_pred_names[lengths(work_pred_names) > 0],
+    pred_names = jobs[lengths(jobs) > 0],
     .combine = rbind,
+    .inorder = TRUE,
     .export = c("as.MLMetric", "get_perf_metrics", "map", "permute_int"),
     .packages = "MachineShop"
   ) %dopar% {

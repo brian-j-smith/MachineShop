@@ -380,13 +380,13 @@ plot.TrainingStep <- function(
 #' @rdname plot-methods
 #'
 plot.VariableImportance <- function(x, n = Inf, ...) {
+  scales <- if (any(is.na(x@scale))) "free" else "fixed"
   x <- head(x, n)
   var_names <- rownames(x)
   df <- cbind(stack(x), variables = factor(var_names, rev(var_names)))
-  p <- ggplot(df, aes(.data[["variables"]], .data[["values"]])) +
+  ggplot(df, aes(.data[["variables"]], .data[["values"]])) +
     geom_bar(stat = "identity") +
     labs(x = "Variable", y = "Importance") +
-    coord_flip()
-  if (nlevels(df$ind) > 1) p <- p + facet_wrap(~ ind)
-  p
+    coord_flip() +
+    facet_wrap(~ ind, scales = scales)
 }

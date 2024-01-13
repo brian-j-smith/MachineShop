@@ -4,7 +4,13 @@
 \alias{varimp}
 \title{Variable Importance}
 \usage{
-varimp(object, method = c("permute", "model"), scale = TRUE, ...)
+varimp(
+  object,
+  method = c("permute", "model"),
+  scale = TRUE,
+  sort = c("decreasing", "increasing", "asis"),
+  ...
+)
 }
 \arguments{
 \item{object}{model \link{fit} result.}
@@ -17,8 +23,12 @@ values (below).  Permutation-based variable importance is defined as the
 relative change in model predictive performances between datasets with and
 without permuted values for the associated variable (Fisher et al. 2019).}
 
-\item{scale}{logical indicating whether importance values should be scaled to
-a maximum of 100.}
+\item{scale}{logical value or vector indicating whether importance values are
+scaled to a maximum of 100.}
+
+\item{sort}{character string specifying the sort order of importance values
+to be \code{"decreasing"}, \code{"increasing"}, or as predictors appear in
+the model formula (\code{"asis"}).}
 
 \item{...}{arguments passed to model-specific or permutation-based variable
 importance functions.  These include the following arguments and default
@@ -60,7 +70,30 @@ values for \code{method = "permute"}.
 \code{VariableImportance} class object.
 }
 \description{
-Calculate measures of the relative importance of predictors in a model.
+Calculate measures of relative importance for model predictor variables.
+}
+\details{
+The \code{varimp} function supports calculation of variable importance with
+the permutation-based method of Fisher et al. (2019) or with model-based
+methods where defined.  Permutation-based importance is the default and has
+the advantages of being available for any model, any performance metric
+defined for the associated response variable type, and any predictor variable
+in the original training dataset.  Conversely, model-specific importance is
+not defined for some models and will fall back to the permutation method in
+such cases; is generally limited to metrics implemented in the source
+packages of models; and may be computed on derived, rather than original,
+predictor variables.  These disadvantages can make comparisons of
+model-specific importance across different classes of models infeasible.  A
+downside of the permutation-based approach is increased computation time.  To
+counter this, the permutation algorithm can be run in parallel simply by
+loading a parallel backend for the \pkg{foreach} package \code{\%dopar\%}
+function, such as \pkg{doParallel} or \pkg{doSNOW}.
+
+Permutation variable importance is interpreted as the contribution of a
+predictor variable to the predictive performance of a model as measured by
+the performance metric used in the calculation.  Importance of a predictor is
+conditional on and, with the default scaling, relative to the values of all
+other predictors in the analysis.
 }
 \examples{
 \donttest{
