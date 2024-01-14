@@ -680,7 +680,14 @@ setShowDefault("TuningGrid")
 print.VariableImportance <- function(
   x, n = MachineShop::settings("print_max"), ...
 ) {
+  x <- update(x)
   title(x, pad = FALSE, ...)
+  print_fields(list(
+    "Method: " = x@method,
+    "Metric: " = x@metric,
+    "Scale: " = x@scale
+  ))
+  print_label("Values:")
   print_items(as(x, "data.frame"), n = n)
   invisible(x)
 }

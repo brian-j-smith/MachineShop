@@ -102,7 +102,8 @@ C50Model <- function(
     },
 
     varimp = function(object, type = c("usage", "splits"), ...) {
-      C50::C5imp(object, metric = match.arg(type))
+      type <- match.arg(type)
+      structure(C50::C5imp(object, metric = type), metric = type)
     }
 
   )

@@ -84,7 +84,10 @@ CForestModel <- function(
     },
 
     varimp = function(object, .MachineShop, ...) {
-      party::varimp(object, ...)
+      structure(
+        party::varimp(object, ...),
+        metric = if (object@responses@is_censored) "brier" else "accuracy"
+      )
     }
 
   )

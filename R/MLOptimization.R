@@ -112,7 +112,7 @@ optim <- function(.fun, object, ...) {
         "Parameter{?s}: " =
           unlist(unnest_params(model_params, compact_names = TRUE))
       ),
-      metric = structure(perf_stats[1], names = getElement(metric, "label"))
+      metric = structure(perf_stats[1], names = getElement(metric, "name"))
     )
 
     score

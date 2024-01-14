@@ -114,7 +114,7 @@ NNetModel <- function(
       h2o <- matrix(beta[match(labels, names(beta))], size, noutputs)
       colnames(h2o) <- colnames(object$residuals)
 
-      drop(i2h %*% h2o)
+      structure(drop(i2h %*% h2o), metric = "coefficient")
     }
 
   )

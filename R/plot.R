@@ -380,6 +380,7 @@ plot.TrainingStep <- function(
 #' @rdname plot-methods
 #'
 plot.VariableImportance <- function(x, n = Inf, ...) {
+  x <- update(x)
   scales <- if (any(is.na(x@scale))) "free" else "fixed"
   x <- head(x, n)
   var_names <- rownames(x)

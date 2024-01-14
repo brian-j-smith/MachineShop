@@ -4,7 +4,8 @@ VariableImportance <- function(object, ...) {
 
 
 VariableImportance.data.frame <- function(
-  object, scale = TRUE, sort = "decreasing", ...
+  object, method = character(), metric = character(), scale = TRUE,
+  sort = "decreasing", ...
 ) {
   stopifnot(nrow(object) == 0 || is.character(rownames(object)))
 
@@ -24,7 +25,9 @@ VariableImportance.data.frame <- function(
     object <- object[sort_order, , drop = FALSE]
   }
 
-  new("VariableImportance", object, scale = scale_num)
+  new("VariableImportance",
+    object, method = method, metric = as.character(metric), scale = scale_num
+  )
 }
 
 
@@ -40,6 +43,26 @@ VariableImportance.numeric <- function(object, ...) {
 
 VariableImportance.NULL <- function(object, ...) {
   throw(Error("No variables for which to compute importance."))
+}
+
+
+update.VariableImportance <- function(object, ...) {
+  if (!.hasSlot(object, "method")) {
+    names_split <- strsplit(names(object), ".", fixed = TRUE)
+    if (names_split[[1]][1] == "Permute") {
+      method <- "permute"
+      metric <- names_split[[1]][3]
+      stats <- sapply(names_split, function(x) x[2])
+      stats[nchar(stats) == 0] <- "stat"
+      names(object) <- make_unique(stats, sep = "")
+    } else{
+      method <- "model"
+      metric <- character()
+    }
+    slot(object, "method", check = FALSE) <- method
+    slot(object, "metric", check = FALSE) <- metric
+  }
+  object
 }
 
 
@@ -152,9 +175,10 @@ varimp <- function(
   model <- as.MLModel(object)
   throw(check_packages(model@packages))
 
+  method <- match.arg(method)
   sort <- match.arg(sort)
 
-  switch(match.arg(method),
+  switch(method,
     "model" = {
       .MachineShop <- attr(object, ".MachineShop")
       vi <- model@varimp(unMLModelFit(object), .MachineShop = .MachineShop, ...)
@@ -163,6 +187,7 @@ varimp <- function(
           "Model-specific variable importance is not available; ",
           "computing permutation-based importance instead."
         ))
+        method <- "permute"
         vi <- varimp_permute(object)
       }
     },
@@ -171,7 +196,12 @@ varimp <- function(
       vi <- do.call(varimp_permute, args, envir = parent.frame())
     }
   )
-  VariableImportance(vi, scale = scale, sort = sort)
+  metric <- attr(vi, "metric")
+  attr(vi, "metric") <- NULL
+  
+  VariableImportance(
+    vi, method = method, metric = metric, scale = scale, sort = sort
+  )
 }
 
 
@@ -243,7 +273,10 @@ varimp_permute <- function(
 
   foreach(
     pred_names = jobs[lengths(jobs) > 0],
-    .combine = rbind,
+    .multicombine = TRUE,
+    .combine = function(...) {
+      structure(rbind(...), metric = attr(..1, "metric"))
+    },
     .inorder = TRUE,
     .export = c("as.MLMetric", "get_perf_metrics", "map", "permute_int"),
     .packages = "MachineShop"
@@ -275,9 +308,7 @@ varimp_permute <- function(
         progress()
       }
     }
-    res <- varimp(perf, base_perf, metric@maximize)
-    colnames(res) <- paste0("Permute.", colnames(res), ".", metric@name)
-    res
+    structure(varimp(perf, base_perf, metric@maximize), metric = metric@name)
   }
 }
 
@@ -288,8 +319,15 @@ varimp_pval <- function(object, ...) {
 
 
 varimp_pval.default <- function(object, test = "Chisq", base = exp(1), ...) {
-  res <- drop1(object, test = test)[-1, , drop = FALSE]
-  structure(-log(res[[ncol(res)]], base = base), names = rownames(res))
+  res <- rev(drop1(object, test = test))[-1, 1, drop = FALSE]
+  structure(
+    -log(res[[1]], base = base),
+    names = rownames(res),
+    metric = paste0(
+      "-log", if (base != exp(1)) paste0("(base = ", as_string(base), ")"),
+      " ", names(res)
+    )
+  )
 }
 
 
@@ -314,5 +352,11 @@ varimp_pval.multinom <- function(object, ...) {
 
 
 varimp_pval.numeric <- function(object, var, base = exp(1), ...) {
-  -log(pchisq(object^2 / var, 1, lower.tail = FALSE), base = base)
+  structure(
+    -log(pchisq(object^2 / var, 1, lower.tail = FALSE), base = base),
+    metric = paste0(
+      "-log", if (base != exp(1)) paste0("(base = ", as_string(base), ")"),
+      " Pr(>Chi)"
+    )
+  )
 }

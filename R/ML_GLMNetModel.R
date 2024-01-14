@@ -137,11 +137,14 @@ GLMNetModel <- function(
     varimp = function(object, ...) {
       convert <- function(x) abs(drop(as.matrix(x)))
       beta <- object$beta
-      if (is.list(beta)) {
-        as.data.frame(map(convert, beta), check.names = FALSE)
-      } else {
-        convert(beta)
-      }
+      structure(
+        if (is.list(beta)) {
+          as.data.frame(map(convert, beta), check.names = FALSE)
+        } else {
+          convert(beta)
+        },
+        metric = "coefficient"
+      )
     }
 
   )

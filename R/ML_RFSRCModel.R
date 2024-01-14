@@ -53,12 +53,12 @@
 #' See Also links below.
 #'
 #' In calls to \code{\link{varimp}} for \code{RFSRCModel}, argument
-#' \code{type} may be specified as \code{"permute"} (default) for permutation of
-#' OOB cases, as \code{"random"} for permutation replaced with random
-#' assignment, or as \code{"anit"} for cases assigned to the split opposite of
-#' the random assignments.  Variable importance is automatically scaled to range
-#' from 0 to 100.  To obtain unscaled importance values, set
-#' \code{scale = FALSE}.  See example below.
+#' \code{type} may be specified as \code{"anti"} (default) for cases assigned to
+#' the split opposite of the random assignments, as \code{"permute"} for
+#' permutation of OOB cases, or as \code{"random"} for permutation replaced with
+#' random assignment.  Variable importance is automatically scaled to range from
+#' 0 to 100.  To obtain unscaled importance values, set \code{scale = FALSE}.
+#' See example below.
 #'
 #' @return \code{MLModel} class object.
 #'
@@ -153,15 +153,25 @@ RFSRCModel <- function(
       }
     },
 
-    varimp = function(object, type = c("permute", "random", "anti"), ...) {
+    varimp = function(object, type = c("anti", "permute", "random"), ...) {
       vi <- randomForestSRC::vimp(object, importance = match.arg(type))
-      if (vi$family == "regr+") {
-        y_names <- vi$yvar.names
-        names(y_names) <- sub("_.*", "", y_names)
-        simplify(map(function(name) vi$regrOutput[[name]]$importance, y_names))
-      } else {
-        vi$importance
-      }
+      structure(
+        if (vi$family == "regr+") {
+          y_names <- vi$yvar.names
+          names(y_names) <- sub("_.*", "", y_names)
+          simplify(map(function(name) {
+            vi$regrOutput[[name]]$importance
+          }, y_names))
+        } else {
+          vi$importance
+        },
+        metric = switch(vi$family,
+          "class" = "accuracy",
+          "regr" = "mse",
+          "regr+" = "mse",
+          "surv" = "cindex"
+        )
+      )
     }
 
   )

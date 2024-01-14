@@ -110,7 +110,7 @@ RangerModel <- function(
     },
 
     varimp = function(object, ...) {
-      ranger::importance(object)
+      structure(ranger::importance(object), metric = object$splitrule)
     }
 
   )

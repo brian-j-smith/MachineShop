@@ -485,5 +485,9 @@ setClass("TrainingStep",
 
 setClass("VariableImportance",
   contains = "data.frame",
-  slots = c(scale = "numeric")
+  slots = c(
+    method = "character",
+    metric = "character",
+    scale = "numeric"
+  )
 )

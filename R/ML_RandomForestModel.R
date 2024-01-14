@@ -78,8 +78,13 @@ RandomForestModel <- function(
               type = if (is.factor(y)) "prob" else "response")
     },
 
-    varimp = function(object, ...) {
-      randomForest::importance(object)
+    varimp = function(object, .MachineShop, ...) {
+      y <- response(.MachineShop$input)
+      vi <- randomForest::importance(object)
+      structure(
+        vi[, 1], names = rownames(vi),
+        metric = if (is.factor(y)) "gini" else "rss/sse"
+      )
     }
 
   )

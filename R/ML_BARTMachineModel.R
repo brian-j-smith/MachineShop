@@ -97,10 +97,13 @@ BARTMachineModel <- function(
     varimp = function(
       object, type = c("splits", "trees"), num_replicates = 5, ...
     ) {
-      bartMachine::investigate_var_importance(
-        object, type = match.arg(type), num_replicates = num_replicates,
-        plot = FALSE
-      )$avg_var_props
+      type <- match.arg(type)
+      structure(
+        bartMachine::investigate_var_importance(
+          object, type = type, num_replicates = num_replicates, plot = FALSE
+        )$avg_var_props,
+        metric = type
+      )
     }
 
   )

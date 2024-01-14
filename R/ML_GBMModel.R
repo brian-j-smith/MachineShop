@@ -125,7 +125,10 @@ GBMModel <- function(
     },
 
     varimp = function(object, ...) {
-      gbm::relative.influence(object, n.trees = object$n.trees)
+      structure(
+        gbm::relative.influence(object, n.trees = object$n.trees),
+        metric = "influence"
+      )
     }
 
   )

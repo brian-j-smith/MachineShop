@@ -105,7 +105,12 @@ EarthModel <- function(
     },
 
     varimp = function(object, type = c("nsubsets", "gcv", "rss"), ...) {
-      earth::evimp(object)[, match.arg(type), drop = FALSE]
+      type <- match.arg(type)
+      vi <- earth::evimp(object)
+      structure(
+        vi[, type], names = rownames(vi),
+        metric = switch(type, "rss" = "rss/sse", type)
+      )
     }
 
   )

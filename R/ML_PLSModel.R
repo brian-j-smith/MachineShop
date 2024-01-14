@@ -74,7 +74,7 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
       }, seq_len(ncol(beta)))
       dimnames(vi) <- dimnames(beta)[1:2]
       if (ncol(vi) <= 2) vi <- vi[, 1]
-      vi
+      structure(vi, metric = "coefficient")
     }
 
   )

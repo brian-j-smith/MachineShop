@@ -75,7 +75,7 @@ AdaBagModel <- function(
     },
 
     varimp = function(object, ...) {
-      object$importance
+      structure(object$importance, metric = "gini")
     }
 
   )

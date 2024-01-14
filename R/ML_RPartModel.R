@@ -88,8 +88,16 @@ RPartModel <- function(
       }
     },
 
-    varimp = function(object, ...) {
-      object$variable.importance
+    varimp = function(object, .MachineShop, ...) {
+      y <- response(.MachineShop$input)
+      structure(
+        object$variable.importance,
+        metric = switch_class(y,
+          "factor" = "gini",
+          "numeric" = "mse",
+          "Surv" = "deviance"
+        )
+      )
     }
 
   )

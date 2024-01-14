@@ -104,7 +104,7 @@ GLMBoostModel <- function(
     },
 
     varimp = function(object, ...) {
-      structure(mboost::varimp(object), class = "numeric")
+      structure(mboost::varimp(object), class = "numeric", metric = "risk")
     }
 
   )

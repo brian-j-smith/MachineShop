@@ -230,20 +230,26 @@ XGBModel <- function(
       object, type = c("Gain", "Cover", "Frequency"), .MachineShop, ...
     ) {
       vi <- xgboost::xgb.importance(model = object, ...)
-      if (!is.null(vi$Weight)) {
-        if (!is.null(vi$Class)) {
-          vi <- reshape(
-            vi, idvar = "Feature", timevar = "Class", v.names = "Weight",
-            varying = list(.MachineShop$y_levels), direction = "wide"
-          )
-          data.frame(vi[, -1], row.names = vi$Feature)
+      structure(
+        if (!is.null(vi$Weight)) {
+          metric <- "coefficient"
+          if (!is.null(vi$Class)) {
+            vi_wide <- reshape(
+              vi, idvar = "Feature", timevar = "Class", v.names = "Weight",
+              varying = list(.MachineShop$y_levels), direction = "wide"
+            )
+            rownames(vi_wide) <- vi_wide[[1]]
+            vi_wide[-1]
+          } else {
+            structure(vi$Weight, names = vi$Feature)
+          }
         } else {
-          structure(vi$Weight, names = vi$Feature)
-        }
-      } else {
-        data.frame(vi[, match.arg(type), drop = FALSE],
-                   row.names = vi$Feature)
-      }
+          type <- match.arg(type)
+          metric <- tolower(type)
+          structure(vi[[type]], names = vi$Feature)
+        },
+        metric = metric
+      )
     }
 
   )
