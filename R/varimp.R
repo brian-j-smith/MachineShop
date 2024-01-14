@@ -31,6 +31,11 @@ VariableImportance.numeric <- function(object, ...) {
 }
 
 
+VariableImportance.NULL <- function(object, ...) {
+  throw(Error("No variables for which to compute importance."))
+}
+
+
 #' Variable Importance
 #'
 #' Calculate measures of the relative importance of predictors in a model.
