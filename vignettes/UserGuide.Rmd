@@ -831,13 +831,19 @@ Performance metrics are defined below for numeric vector responses.  If applied 
 All previously described metrics for binary factor responses---plus accuracy, Brier score and Cohen's kappa---are applicable to survival probabilities predicted at specified follow-up times.  Metrics are evaluated separately at each follow-up time and reported along with a time-integrated mean.  The survival concordance index is computed with the method of Harrell [-@harrell:1982:EYM] and Brier score according to Graf et al. [-@graf:1999:ACP]; whereas, the others are computed according to the confusion matrix probabilities below, in which term $\hat{S}(t)$ is the predicted survival probability at follow-up time $t$ and $T$ is the survival time [@heagerty:2004:TDR].
 
 ```{r using_metrics_conf_surv, echo=FALSE}
-conf <- matrix(c("$TN = \\Pr(\\hat{S}(t) \\ge \\text{cutoff} \\cap T >    t)$",
-                 "$FP = \\Pr(\\hat{S}(t) <    \\text{cutoff} \\cap T >    t)$",
-                 "$FN = \\Pr(\\hat{S}(t) \\ge \\text{cutoff} \\cap T \\le t)$",
-                 "$TP = \\Pr(\\hat{S}(t) <    \\text{cutoff} \\cap T \\le t)$"),
-               2, 2,
-               dimnames = list("Predicted Response" = c("Non-Event", "Event"),
-                               "Observed Response" = c("Non-Event", "Event")))
+conf <- matrix(
+  c(
+    "$TN = \\Pr(\\hat{S}(t) \\ge \\text{cutoff} \\cap T \\gt t)$",
+    "$FP = \\Pr(\\hat{S}(t) \\lt \\text{cutoff} \\cap T \\gt t)$",
+    "$FN = \\Pr(\\hat{S}(t) \\ge \\text{cutoff} \\cap T \\le t)$",
+    "$TP = \\Pr(\\hat{S}(t) \\lt \\text{cutoff} \\cap T \\le t)$"
+  ),
+  2, 2,
+  dimnames = list(
+    "Predicted Response" = c("Non-Event", "Event"),
+    "Observed Response" = c("Non-Event", "Event")
+  )
+)
 kable(conf,
       caption = "Table 5. Confusion matrix of observed and predicted survival response classifications.",
       align = c("c", "c"),
@@ -1329,7 +1335,7 @@ From the fit, the resulting model can be extracted with `r rdoc_url("as.MLModel(
 ## Input-tuned model fit and final trained model
 model_fit <- fit(tun_rec, model = GBMModel)
 as.MLModel(model_fit)
-#> --- MLModel object -------------------------------------------------------------
+#> --- MLModel object ----------------------------------------------------------
 #> 
 #> Model name: GBMModel
 #> Label: Trained Generalized Boosted Regression
@@ -1348,7 +1354,7 @@ as.MLModel(model_fit)
 #>  $ shrinkage        : num 0.1
 #>  $ bag.fraction     : num 0.5
 #> 
-#> === $TrainingStep1 =============================================================
+#> === $TrainingStep1 ==========================================================
 #> === TrainingStep object ===
 #> 
 #> Optimization method: Grid Search
@@ -1390,7 +1396,7 @@ In this case, the third recipe with PCA steps is selected.
 ## Input-selected model fit and model
 model_fit <- fit(sel_rec, model = GBMModel)
 as.MLModel(model_fit)
-#> --- MLModel object -------------------------------------------------------------
+#> --- MLModel object ----------------------------------------------------------
 #> 
 #> Model name: GBMModel
 #> Label: Trained Generalized Boosted Regression
@@ -1409,7 +1415,7 @@ as.MLModel(model_fit)
 #>  $ shrinkage        : num 0.1
 #>  $ bag.fraction     : num 0.5
 #> 
-#> === $TrainingStep1 =============================================================
+#> === $TrainingStep1 ==========================================================
 #> === TrainingStep object ===
 #> 
 #> Optimization method: Grid Search
@@ -1424,7 +1430,7 @@ as.MLModel(model_fit)
 #> Selected row: 3
 #> Metric: C-Index = 0.7960841
 #> 
-#> === $TrainingStep2 =============================================================
+#> === $TrainingStep2 ==========================================================
 #> === TrainingStep object ===
 #> 
 #> Optimization method: Grid Search
@@ -1489,7 +1495,7 @@ model_fit <- fit(surv_fo, data = surv_train,
                    metrics = c("CIndex" = cindex, "RMSE" = rmse)
                  ))
 (trained_model <- as.MLModel(model_fit))
-#> --- MLModel object -------------------------------------------------------------
+#> --- MLModel object ----------------------------------------------------------
 #> 
 #> Model name: GBMModel
 #> Label: Trained Generalized Boosted Regression
@@ -1508,7 +1514,7 @@ model_fit <- fit(surv_fo, data = surv_train,
 #>  $ shrinkage        : num 0.1
 #>  $ bag.fraction     : num 0.5
 #> 
-#> === $TrainingStep1 =============================================================
+#> === $TrainingStep1 ==========================================================
 #> === TrainingStep object ===
 #> 
 #> Optimization method: Grid Search
@@ -1555,7 +1561,7 @@ Statistics summarizing the resampled performance metrics across all tuning param
 
 ```{r using_strategies_tune_summary, eval=FALSE}
 summary(trained_model)
-#> --- $TrainingStep1 -------------------------------------------------------------
+#> --- $TrainingStep1 ----------------------------------------------------------
 #> # A tibble: 9 × 4
 #>   name       selected params$n.trees $interaction.depth metrics$CIndex  $RMSE
 #>   <chr>      <lgl>             <int>              <int>          <dbl>  <dbl>
@@ -1728,7 +1734,7 @@ knitr::include_graphics("img/FigNestedCV.png")
 Nesting of resampling routines is repeated recursively when a fit involves multiple levels of nested meta-functions.  For example, predictive performance estimation for the training of `r rdoc_url("TunedInput(pca_rec, grid = pca_grid)")` involves up to three nested meta functions: `r rdoc_url("SelectedModel(...)")` &rarr; `r rdoc_url("StackedModel(...)")` &rarr; `r rdoc_url("TunedModel(CForestModel)")`.  For this relationship, an outer and three nested inner resampling loops are executed as follows.  First, `r rdoc_url("CForestModel")` is tuned at the third inner resampling loop.  Second, the tuned model is passed to the second inner loop for construction of `r rdoc_url("StackedModel")`.  Third, the constructed model is passed to the first inner loop for model selection from the candidate set.  Finally, the selected model is passed to the outer loop for tuning of the preprocessing recipe.  Based on resample performance estimation of the entire input/model specification, one principal component is selected for the `GBMModel`.
 
 ```{r using_strategies_methods1, eval=FALSE}
-#> === $TrainingStep1 =============================================================
+#> === $TrainingStep1 ==========================================================
 #> === TrainingStep object ===
 #> 
 #> Optimization method: Grid Search
@@ -1747,7 +1753,7 @@ Nesting of resampling routines is repeated recursively when a fit involves multi
 In order to identify and return a final model fitted to the entire input data, the hierarchy is traversed from top to bottom along the path determined by the choice at each node.  Steps along the path are labeled `TrainStep1` and `TrainStep2` in the output.  As seen above in `TrainStep1`, one principal component is first selected for the tuned input.  Using an input recipe with one principal component, the entire dataset is refit at `TrainStep2` to finally select `r rdoc_url("GBMModel")`.
 
 ```{r using_strategies_methods2, eval=FALSE}
-#> === $TrainingStep2 =============================================================
+#> === $TrainingStep2 ==========================================================
 #> === TrainingStep object ===
 #> 
 #> Optimization method: Grid Search
@@ -1766,7 +1772,7 @@ In order to identify and return a final model fitted to the entire input data, t
 After the series of training steps reaches the bottom of its hierarchy, the final model is fitted to the entire dataset and returned.
 
 ```{r using_strategies_methods0, eval=FALSE}
-#> --- MLModel object -------------------------------------------------------------
+#> --- MLModel object ----------------------------------------------------------
 #> 
 #> Model name: GBMModel
 #> Label: Trained Generalized Boosted Regression
@@ -1916,7 +1922,7 @@ The `r rdoc_url("MLModel()")` function creates a model object that can be used w
 * `Surv` : matrix whose columns contain survival probabilities at `times` if supplied or vector of predicted survival means otherwise.
 
 `varimp`
-  : variable importance function whose arguments are the `object` returned by `r rdoc_url("fit()")`, optional arguments passed from calls to `r rdoc_url("varimp()")`, and an ellipsis.  The function should return a vector of importance values named after the predictor variables or a matrix or data frame whose rows are named after the predictors.
+  : optional variable importance function whose arguments are the `object` returned by `r rdoc_url("fit()")`, optional arguments passed from calls to `r rdoc_url("varimp()")`, and an ellipsis.  The function should return a vector of importance values named after the predictor variables or a matrix or data frame whose rows are named after the predictors.
 
 ```{r using_extensions_mlmodel}
 ## Logistic regression model extension

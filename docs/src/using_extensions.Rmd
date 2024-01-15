@@ -31,7 +31,7 @@ The `r rdoc_url("MLModel()")` function creates a model object that can be used w
 * `Surv` : matrix whose columns contain survival probabilities at `times` if supplied or vector of predicted survival means otherwise.
 
 `varimp`
-  : variable importance function whose arguments are the `object` returned by `r rdoc_url("fit()")`, optional arguments passed from calls to `r rdoc_url("varimp()")`, and an ellipsis.  The function should return a vector of importance values named after the predictor variables or a matrix or data frame whose rows are named after the predictors.
+  : optional variable importance function whose arguments are the `object` returned by `r rdoc_url("fit()")`, optional arguments passed from calls to `r rdoc_url("varimp()")`, and an ellipsis.  The function should return a vector of importance values named after the predictor variables or a matrix or data frame whose rows are named after the predictors.
 
 ```{r using_extensions_mlmodel}
 ## Logistic regression model extension

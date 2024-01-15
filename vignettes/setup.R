@@ -10,6 +10,9 @@ knitr::opts_chunk$set(
 )
 
 
+options(knitr.table.format = "html")
+
+
 library(kableExtra)
 
 
