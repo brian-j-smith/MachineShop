@@ -425,7 +425,7 @@ MachineShop_global <- as.environment(list(
     ),
 
     stat.Curve = list(
-      value = "base::mean",
+      value = c("Mean" = "base::mean"),
       check = function(x) {
         if (!is.null(x) && is(check_stat(x), "error")) {
           DomainError(x, "must be a statistics function, function name, ",
@@ -435,12 +435,12 @@ MachineShop_global <- as.environment(list(
     ),
 
     stat.Resample = list(
-      value = "base::mean",
+      value = c("Mean" = "base::mean"),
       check = check_stat
     ),
 
     stat.TrainingParams = list(
-      value = "base::mean",
+      value = c("Mean" = "base::mean"),
       check = check_stat
     ),
 
