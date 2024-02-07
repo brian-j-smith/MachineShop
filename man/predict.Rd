@@ -10,7 +10,7 @@
   object,
   newdata = NULL,
   times = numeric(),
-  type = c("response", "default", "numeric", "prob"),
+  type = c("response", "raw", "numeric", "prob", "default"),
   cutoff = MachineShop::settings("cutoff"),
   distr = character(),
   method = character(),
@@ -31,7 +31,9 @@ survival events/probabilities or \code{NULL} for predicted survival means.}
 
 \item{type}{specifies prediction on the original outcome (\code{"response"}),
 numeric (\code{"numeric"}), or probability (\code{"prob"}) scale; or
-model-specific default predictions (\code{"default"}).}
+the \code{"raw"} predictions returned by the model.  Option
+\code{"default"} is deprecated and will be removed in the future; use
+\code{"raw"} instead.}
 
 \item{cutoff}{numeric (0, 1) threshold above which binary factor
 probabilities are classified as events and below which survival

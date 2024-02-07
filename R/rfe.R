@@ -148,7 +148,7 @@ rfe.ModelSpecification <- function(
   times <- control@predict$times
   if (is.null(metrics)) {
     obs <- response(model_fit)
-    pred <- predict(model_fit, times = times, type = "default")
+    pred <- predict(model_fit, times = times, type = "raw")
     metrics <- get_perf_metrics(obs, pred)
   }
   metric <- check_metric(c(metrics)[[1]], convert = TRUE)

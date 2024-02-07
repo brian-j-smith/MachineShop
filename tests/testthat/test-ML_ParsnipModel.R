@@ -9,7 +9,7 @@ test_that("check ParsnipModel predictions", {
   compare_models <- function(fo, data, model1, model2, ...) {
     fit1 <- MachineShop::fit(fo, data, model = model1)
     fit2 <- MachineShop::fit(fo, data, model = model2)
-    for (type in c("response", "default")) {
+    for (type in c("response", "raw")) {
       expect_equal(
         S3Part(predict(fit1, type = type, ...), strictS3 = TRUE),
         S3Part(predict(fit2, type = type, ...), strictS3 = TRUE)

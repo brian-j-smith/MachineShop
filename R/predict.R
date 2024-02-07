@@ -11,7 +11,9 @@
 #'   survival events/probabilities or \code{NULL} for predicted survival means.
 #' @param type specifies prediction on the original outcome (\code{"response"}),
 #'   numeric (\code{"numeric"}), or probability (\code{"prob"}) scale; or
-#'   model-specific default predictions (\code{"default"}).
+#'   the \code{"raw"} predictions returned by the model.  Option
+#'   \code{"default"} is deprecated and will be removed in the future; use
+#'   \code{"raw"} instead.
 #' @param cutoff numeric (0, 1) threshold above which binary factor
 #'   probabilities are classified as events and below which survival
 #'   probabilities are classified.
@@ -50,7 +52,7 @@ NULL
 #'
 predict.MLModelFit <- function(
   object, newdata = NULL, times = numeric(),
-  type = c("response", "default", "numeric", "prob"),
+  type = c("response", "raw", "numeric", "prob", "default"),
   cutoff = MachineShop::settings("cutoff"), distr = character(),
   method = character(), verbose = FALSE, ...
 ) {
@@ -69,6 +71,12 @@ predict.MLModelFit <- function(
   )
   throw(check_assignment(times))
 
+  type <- match.arg(type)
+  if (type == "default") {
+    throw(DeprecatedCondition("type = \"default\"", "type = \"raw\""))
+    type <- "raw"
+  }
+
   .MachineShop <- attr(object, ".MachineShop")
   (if (verbose) identity else capture.output)(
     pred <- .predict(
@@ -78,8 +86,8 @@ predict.MLModelFit <- function(
   )
   obs <- response(object)
   pred <- convert_predicted(obs, pred)
-  pred <- switch(match.arg(type),
-    "default" = pred,
+  pred <- switch(type,
+    "raw" = pred,
     "numeric" = convert_numeric(pred),
     "prob" = convert_numeric(pred, bounds = c(0, 1)),
     "response" = convert_response(obs, pred, cutoff = cutoff)
