@@ -13,7 +13,7 @@
 
 <title>Example</title>
 
-<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -383,7 +383,7 @@ div.tocify {
 <h1>Global Settings</h1>
 <p>Core default behaviors of functions in the package can be viewed or
 changed globally through the <a
-href="https://www.rdocumentation.org/packages/MachineShop/versions/3.7.0/topics/settings"><code>settings()</code></a>
+href="https://www.rdocumentation.org/packages/MachineShop/versions/3.8.0/topics/settings"><code>settings()</code></a>
 function. The function accepts one or more character names of settings
 to view, <code>name = value</code> pairs giving the values of settings
 to change, a vector of these, or <code>"reset"</code> to restore all
@@ -413,7 +413,7 @@ settings()
 #&gt; [1] &quot;empirical&quot;
 #&gt; 
 #&gt; $grid
-#&gt; --- TuningGrid object -------------------------------------------------------------------------
+#&gt; --- TuningGrid object -------------------------------------------------------
 #&gt; 
 #&gt; Grid size: 3
 #&gt; Random samples: FALSE
@@ -502,13 +502,16 @@ settings()
 #&gt; [49] &quot;tanh&quot;     &quot;tanpi&quot;    &quot;trigamma&quot; &quot;trunc&quot;    &quot;|&quot;       
 #&gt; 
 #&gt; $stat.Curve
-#&gt; [1] &quot;base::mean&quot;
+#&gt;         Mean 
+#&gt; &quot;base::mean&quot; 
 #&gt; 
 #&gt; $stat.Resample
-#&gt; [1] &quot;base::mean&quot;
+#&gt;         Mean 
+#&gt; &quot;base::mean&quot; 
 #&gt; 
 #&gt; $stat.TrainingParams
-#&gt; [1] &quot;base::mean&quot;
+#&gt;         Mean 
+#&gt; &quot;base::mean&quot; 
 #&gt; 
 #&gt; $stats.PartialDependence
 #&gt;         Mean 
@@ -531,7 +534,7 @@ settings(&quot;control&quot;, &quot;grid&quot;)
 #&gt; [1] &quot;BootControl&quot;
 #&gt; 
 #&gt; $grid
-#&gt; --- TuningGrid object -------------------------------------------------------------------------
+#&gt; --- TuningGrid object -------------------------------------------------------
 #&gt; 
 #&gt; Grid size: 10
 #&gt; Random samples: FALSE
