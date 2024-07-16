@@ -107,8 +107,9 @@ set_monitor.MLControl <- function(
   object, progress = TRUE, verbose = FALSE, ...
 ) {
   verbose <- check_logical(verbose)
-  object@monitor <- set_monitor(object@monitor, progress = progress,
-                                verbose = verbose)
+  object@monitor <- set_monitor(
+    object@monitor, progress = progress, verbose = verbose
+  )
   object
 }
 
@@ -118,9 +119,15 @@ set_monitor.MLControl <- function(
 set_monitor.MLOptimization <- function(
   object, progress = FALSE, verbose = FALSE, ...
 ) {
-  object@monitor <- set_monitor(object@monitor, progress = progress,
-                                verbose = verbose)
+  object@monitor <- set_monitor(
+    object@monitor, progress = progress, verbose = verbose
+  )
   object
+}
+
+
+set_monitor.SplitControl <- function(object, ...) {
+  set_monitor.MLControl(object, ...)
 }
 
 

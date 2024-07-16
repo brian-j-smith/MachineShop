@@ -405,7 +405,8 @@ rsample_split <- function(fun, data, control) {
 
 
 subsample <- function(train, test, control, iter = 1) {
-  model_fit <- fit(train)
+  verbose <- control@monitor$verbose
+  model_fit <- fit(train, verbose = verbose)
   times <- time(model_fit)
   if (length(times)) control@predict$times <- times
 
@@ -417,8 +418,10 @@ subsample <- function(train, test, control, iter = 1) {
                      Iteration = as.integer(iter),
                      Case = comps$names)
     df$Observed <- comps$response
-    predict_args <- list(model_fit, as.data.frame(test), type = "raw")
-    df$Predicted <- do.call(predict, c(predict_args, control@predict))
+    df$Predicted <- do.call(predict, c(
+      list(model_fit, as.data.frame(test), type = "raw", verbose = verbose),
+      control@predict
+    ))
     df$Weight <- comps$weights
     df
   }

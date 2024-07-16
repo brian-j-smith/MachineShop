@@ -51,7 +51,7 @@ BootControl <- function(
   new_control("BootControl",
     label = "Bootstrap Resampling",
     samples = samples, weights = weights, seed = seed
-  ) %>% set_monitor %>% set_strata
+  ) %>% set_strata
 }
 
 
@@ -117,7 +117,7 @@ CVControl <- function(
   new_control("CVControl",
     label = "K-Fold Cross-Validation",
     folds = folds, repeats = repeats, weights = weights, seed = seed
-  ) %>% set_monitor %>% set_strata
+  ) %>% set_strata
 }
 
 
@@ -172,7 +172,7 @@ OOBControl <- function(
   new_control("OOBControl",
     label = "Out-of-Bootstrap Resampling",
     samples = samples, weights = weights, seed = seed
-  ) %>% set_monitor %>% set_strata
+  ) %>% set_strata
 }
 
 
@@ -236,5 +236,6 @@ new_control <- function(class, ..., weights, seed) {
   seed <- check_integer(seed, size = 1)
   throw(check_assignment(seed))
 
-  new(class, ..., weights = weights, seed = seed) %>% set_predict
+  new(class, ..., weights = weights, seed = seed) %>%
+    set_monitor %>% set_predict
 }
