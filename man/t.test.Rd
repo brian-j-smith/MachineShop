@@ -10,8 +10,8 @@
 \arguments{
 \item{x}{performance \link[=diff]{difference} result.}
 
-\item{adjust}{p-value adjustment for multiple statistical comparisons as
-implemented by \code{\link[stats]{p.adjust}}.}
+\item{adjust}{method of p-value adjustment for multiple statistical
+comparisons as implemented by \code{\link[stats]{p.adjust}}.}
 
 \item{...}{arguments passed to other methods.}
 }

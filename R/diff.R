@@ -76,8 +76,8 @@ diff.Resample <- function(x, ...) {
 #' @method t.test PerformanceDiff
 #'
 #' @param x performance \link[=diff]{difference} result.
-#' @param adjust p-value adjustment for multiple statistical comparisons as
-#'   implemented by \code{\link[stats]{p.adjust}}.
+#' @param adjust method of p-value adjustment for multiple statistical
+#'   comparisons as implemented by \code{\link[stats]{p.adjust}}.
 #' @param ... arguments passed to other methods.
 #'
 #' @details
