@@ -142,7 +142,7 @@ SelectedInput.recipe <- function(
   get_info <- function(x) {
     info <- summary(x)
     info <- info[info$role != "predictor", ]
-    info[do.call(order, info), ]
+    info[do.call(order, info[c("variable", "role", "source")]), ]
   }
   if (!identical_elements(inputs, get_info)) {
     throw(Error("Recipes have different non-predictor variables."))
