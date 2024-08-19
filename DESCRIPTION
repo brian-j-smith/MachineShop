@@ -1,8 +1,8 @@
 Package: MachineShop
 Type: Package
 Title: Machine Learning Models and Tools
-Version: 3.7.0
-Date: 2023-09-18
+Version: 3.8.0
+Date: 2024-08-19
 Authors@R: person(c("Brian", "J"), "Smith",
                   email = "brian-j-smith@uiowa.edu",
                   role = c("aut", "cre"))
@@ -37,7 +37,7 @@ LazyData: true
 License: GPL-3
 URL: https://brian-j-smith.github.io/MachineShop/
 BugReports: https://github.com/brian-j-smith/MachineShop/issues
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 Encoding: UTF-8
 Collate:

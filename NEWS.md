@@ -2,6 +2,19 @@
 
 ## Version Updates
 
+## 3.8.0
+* Changes to `varimp()` arguments.
+  * Add argument `sort`.
+  * Extend argument `scale` to vectors of logical.
+* Changes to model-based variable importance.
+  * Fix unused argument error from `CForestModel`.
+  * Use `drop1()` to compute model term-specific p-values for `CoxModel`, `POLRModel`, and `SurvRegModel` as is done for  `GLMModel` and `LMModel`.
+* Changes to `VariableImportance` class.
+  * Add slots `method` and `metric` to store the computational method (`"permute"` or `"model"`) and the performance metric used for computations.
+  * Add `update()` method to add the new slots to objects created with previous versions of the package.
+* Deprecate `type = "default"` option in `predict()` and replace it with `type = "raw"`.
+* Fix unimplemented type 'list' in 'listgreater' error from `SelectedInput.recipe()`.
+
 ## 3.7.0
 * Compatibility updates for **parsnip**.
 * Enable resampling by a grouping variable with `BootControl`, `OOBControl`, and `SplitControl`.
