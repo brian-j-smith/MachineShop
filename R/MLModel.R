@@ -173,7 +173,6 @@ NullModel <- function() {
 update.MLModel <- function(
   object, params = NULL, quote = TRUE, id = object@id, ...
 ) {
-  old_id <- object@id
   if (is.list(params)) {
     new_params <- as(object, "list")
     new_params[names(params)] <- params
