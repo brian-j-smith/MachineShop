@@ -130,6 +130,7 @@ XGBModel <- function(
       formula, data, weights, nrounds, verbose, print_every_n, ...
     ) {
       x <- model.matrix(data, intercept = FALSE)
+      offset <- model.offset(data)
       y <- response(data)
       y_levels <- levels(y)
 
@@ -151,7 +152,7 @@ XGBModel <- function(
       )
       params$objective <- match.arg(params$objective, choices)
 
-      dmat <- xgboost::xgb.DMatrix(x)
+      dmat <- xgboost::xgb.DMatrix(x, base_margin = offset)
       if (params$objective == "survival:aft") {
         y_lower <- y_upper <- y_time
         y_upper[!y_event] <- Inf
@@ -187,19 +188,22 @@ XGBModel <- function(
 
     predict = function(object, newdata, times, .MachineShop, ...) {
       input <- .MachineShop$input
-      newx <- model.matrix(newdata, intercept = FALSE)
-      xgb_predict <- function(newdata = newx, lp = FALSE) {
-        predict(object, newdata = newdata, outputmargin = lp)
+      xgb_predict <- function(newdata, outputmargin = FALSE) {
+        newdmat <- xgboost::xgb.DMatrix(
+          model.matrix(newdata, intercept = FALSE),
+          base_margin = model.offset(newdata)
+        )
+        predict(object, newdata = newdmat, outputmargin = outputmargin)
       }
       switch(object$params$objective,
         "multi:softprob" = {
-          matrix(xgb_predict(), nrow(newx), byrow = TRUE)
+          matrix(xgb_predict(newdata), nrow(newdata), byrow = TRUE)
         },
         "survival:aft" = {
           distr <- object$params$aft_loss_distribution
           if (distr == "normal") distr <- "gaussian"
           if (length(times)) {
-            pred <- xgb_predict(lp = TRUE)
+            pred <- xgb_predict(newdata, outputmargin = TRUE)
             log_times <- matrix(log(times), length(pred), length(times),
                                 byrow = TRUE)
             scale <- object$params$aft_loss_distribution_scale
@@ -212,17 +216,16 @@ XGBModel <- function(
             )
             SurvProbs(surv_probs, times = times, distr = distr)
           } else {
-            SurvTimes(xgb_predict(), distr = distr)
+            SurvTimes(xgb_predict(newdata), distr = distr)
           }
         },
         "survival:cox" = {
-          x <- model.matrix(PredictorFrame(input), intercept = FALSE)
-          lp <- xgb_predict(x, lp = TRUE)
-          new_lp <- xgb_predict(newx, lp = TRUE)
+          lp <- xgb_predict(PredictorFrame(input), outputmargin = TRUE)
+          new_lp <- xgb_predict(newdata, outputmargin = TRUE)
           predict(response(input), lp, new_lp, times = times,
                   weights = case_weights(input), ...)
         },
-        xgb_predict()
+        xgb_predict(newdata)
       )
     },
 
