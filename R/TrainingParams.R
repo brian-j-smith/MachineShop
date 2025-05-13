@@ -22,8 +22,9 @@ TrainingParams <- function(
     stat <- function(x) NA_real_
   }
 
-  new("TrainingParams", ..., control = control, optim = optim, cutoff = cutoff,
-      stat = stat)
+  new("TrainingParams",
+    ..., control = control, optim = optim, cutoff = cutoff, stat = stat
+  )
 }
 
 
@@ -689,8 +690,9 @@ set_predict <- function(
 
   predict <- list()
 
-  times <- check_numeric(times, bounds = c(0, Inf), include = FALSE, size = NA,
-                         nonempty = FALSE)
+  times <- check_numeric(
+    times, bounds = c(0, Inf), include = FALSE, size = NA, nonempty = FALSE
+  )
   predict$times <- throw(check_assignment(times))
 
   if (length(distr)) distr <- check_character(distr, size = 1)

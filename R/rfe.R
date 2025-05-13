@@ -189,8 +189,9 @@ rfe.ModelSpecification <- function(
   if (!missing(select)) {
     .envir <- list(...)$.envir
     if (is.null(.envir)) .envir <- parent.frame()
-    select <- do.call(subset_names, list(superset, substitute(select)),
-                      envir = .envir)
+    select <- do.call(
+      subset_names, list(superset, substitute(select)), envir = .envir
+    )
     keep <- setdiff(superset, select)
     superset <- select
   }

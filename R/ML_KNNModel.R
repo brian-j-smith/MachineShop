@@ -34,8 +34,10 @@
 #'
 KNNModel <- function(
   k = 7, distance = 2, scale = TRUE,
-  kernel = c("optimal", "biweight", "cos", "epanechnikov", "gaussian", "inv",
-             "rank", "rectangular", "triangular", "triweight")
+  kernel = c(
+    "optimal", "biweight", "cos", "epanechnikov", "gaussian", "inv", "rank",
+    "rectangular", "triangular", "triweight"
+  )
 ) {
 
   kernel <- match.arg(kernel)
@@ -58,9 +60,10 @@ KNNModel <- function(
         },
         function(n, ...) seq_inner(0, 4, length = n),
         function(n, ...) {
-          kernels <- c("optimal", "rectangular", "triangular", "epanechnikov",
-                       "biweight", "triweight", "cos", "inv", "gaussian",
-                       "rank")
+          kernels <- c(
+            "optimal", "rectangular", "triangular", "epanechnikov", "biweight",
+            "triweight", "cos", "inv", "gaussian", "rank"
+          )
           head(kernels, n)
         }
       ),

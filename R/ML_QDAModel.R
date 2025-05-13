@@ -63,8 +63,9 @@ QDAModel <- function(
       object, newdata, prior = object$prior, .MachineShop, ...
     ) {
       newdata <- as.data.frame(newdata)
-      predict(object, newdata = newdata, prior = prior,
-              method = .MachineShop$use)$posterior
+      predict(
+        object, newdata = newdata, prior = prior, method = .MachineShop$use
+      )$posterior
     }
 
   )

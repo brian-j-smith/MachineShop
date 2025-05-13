@@ -32,8 +32,10 @@
 #' }
 #'
 lift <- function(x, y = NULL, weights = NULL, na.rm = TRUE, ...) {
-  as(performance_curve(x, y, weights, metrics = c(tpr, ppr), na.rm = na.rm),
-     "LiftCurve")
+  as(
+    performance_curve(x, y, weights, metrics = c(tpr, ppr), na.rm = na.rm),
+    "LiftCurve"
+  )
 }
 
 
@@ -125,8 +127,9 @@ performance_curve.Resample <- function(
   for (model in unique(x$Model)) {
     for (iter in unique(x$Iteration)) {
       df <- x[x$Model == model & x$Iteration == iter, ]
-      curve <- .performance_curve(df$Observed, df$Predicted, df$Weight,
-                                  metrics = metrics)
+      curve <- .performance_curve(
+        df$Observed, df$Predicted, df$Weight, metrics = metrics
+      )
       curve <- if (is(curve, "listof")) {
         structure(curve, names = paste0(model, ".", names(curve)))
       } else {
@@ -172,9 +175,10 @@ PerformanceCurve <- function(
     metrics <- c(y = metrics[[1]], x = metrics[[2]])
 
     decreasing <- !xor(metrics$x@maximize, metrics$y@maximize)
-    sort_order <- order(object$Model, object$x, object$y,
-                        decreasing = c(FALSE, FALSE, decreasing),
-                        method = "radix")
+    sort_order <- order(
+      object$Model, object$x, object$y,
+      decreasing = c(FALSE, FALSE, decreasing), method = "radix"
+    )
     object <- object[sort_order, , drop = FALSE]
   }
 
@@ -190,8 +194,10 @@ setGeneric(".performance_curve",
 
 setMethod(".performance_curve", c("ANY", "ANY"),
   function(observed, predicted, ...) {
-    throw(Error("Performance_curve requires a predicted binary factor or ",
-                "survival probabilities."))
+    throw(Error(
+      "Performance_curve requires a predicted binary factor or survival ",
+      "probabilities."
+    ))
   }
 )
 
@@ -205,8 +211,9 @@ setMethod(".performance_curve", c("factor", "numeric"),
       x[i] <- metrics[[2]](conf)
       y[i] <- metrics[[1]](conf)
     }
-    PerformanceCurve(data.frame(Cutoff = cutoffs, x = x, y = y),
-                     metrics = metrics)
+    PerformanceCurve(
+      data.frame(Cutoff = cutoffs, x = x, y = y), metrics = metrics
+    )
   }
 )
 
@@ -241,8 +248,9 @@ setMethod(".performance_curve", c("Surv", "SurvProbs"),
           y[j] <- metrics[[1]](conf)
         }
 
-        PerformanceCurve(data.frame(Cutoff = cutoffs, x = x, y = y),
-                         metrics = metrics)
+        PerformanceCurve(
+          data.frame(Cutoff = cutoffs, x = x, y = y), metrics = metrics
+        )
       }, seq_along(times)),
       names = colnames(predicted),
       class = "listof"

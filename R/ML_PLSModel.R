@@ -61,8 +61,9 @@ PLSModel <- function(ncomp = 1, scale = FALSE) {
 
     predict = function(object, newdata, ...) {
       newdata <- as.data.frame(newdata)
-      predict(object, newdata = newdata, ncomp = object$ncomp,
-              type = "response")
+      predict(
+        object, newdata = newdata, ncomp = object$ncomp, type = "response"
+      )
     },
 
     varimp = function(object, ...) {

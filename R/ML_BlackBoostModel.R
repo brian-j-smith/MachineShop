@@ -71,8 +71,10 @@ BlackBoostModel <- function(
     name = "BlackBoostModel",
     label = "Gradient Boosting with Regression Trees",
     packages = c("mboost", "partykit"),
-    response_types = c("binary", "BinomialVariate", "NegBinomialVariate",
-                       "numeric", "PoissonVariate", "Surv"),
+    response_types = c(
+      "binary", "BinomialVariate", "NegBinomialVariate", "numeric",
+      "PoissonVariate", "Surv"
+    ),
     weights = TRUE,
     predictor_encoding = "model.frame",
     na.rm = "response",

@@ -71,12 +71,10 @@ summary.ConfusionMatrix <- function(object, ...) {
     NPV = (1 - observed - predicted + agreement) / (1 - predicted)
   )
 
-  ConfusionSummary(perf,
-                   total = total,
-                   accuracy = sum(agreement),
-                   majority = max(observed),
-                   kappa2 = 1 - (1 - sum(agreement)) /
-                     (1 - sum(observed * predicted)))
+  ConfusionSummary(
+    perf, total = total, accuracy = sum(agreement), majority = max(observed),
+    kappa2 = 1 - (1 - sum(agreement)) / (1 - sum(observed * predicted))
+  )
 }
 
 
@@ -153,9 +151,11 @@ summary.PerformanceCurve <- function(
         y_all[, j] <- .curve_approx(curve$Cutoff, curve$y, cutoffs)
       }
       do.call(object_class, list(
-        data.frame(Cutoff = cutoffs,
-                   x = apply(x_all, 1, stat_na_omit),
-                   y = apply(y_all, 1, stat_na_omit)),
+        data.frame(
+          Cutoff = cutoffs,
+          x = apply(x_all, 1, stat_na_omit),
+          y = apply(y_all, 1, stat_na_omit)
+        ),
         metrics = object@metrics
       ))
     })

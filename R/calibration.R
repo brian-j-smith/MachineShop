@@ -114,9 +114,10 @@ setMethod(".calibration", c("matrix", "matrix"),
   function(observed, predicted, weights, breaks, span, ...) {
     weights <- check_weights(weights, observed[, 1])
     throw(check_assignment(weights))
-    df <- data.frame(Response = rep(factor(colnames(predicted)),
-                                    each = nrow(predicted)),
-                     Predicted = as.numeric(predicted))
+    df <- data.frame(
+      Response = rep(factor(colnames(predicted)), each = nrow(predicted)),
+      Predicted = as.numeric(predicted)
+    )
     if (is_empty(breaks)) {
       loessfit_list <- map(function(i) {
         y <- observed[, i]
@@ -125,9 +126,11 @@ setMethod(".calibration", c("matrix", "matrix"),
       }, seq_len(ncol(predicted)))
       Mean <- c(map("num", getElement, loessfit_list, "fit"))
       SE <- c(map("num", getElement, loessfit_list, "se.fit"))
-      df$Observed <- cbind(Mean = Mean, SE = SE,
-                           Lower = Mean - SE,
-                           Upper = Mean + SE)
+      df$Observed <- cbind(
+        Mean = Mean, SE = SE,
+        Lower = Mean - SE,
+        Upper = Mean + SE
+      )
       df
     } else {
       df$Predicted <- midpoints(df$Predicted, breaks)
@@ -137,9 +140,11 @@ setMethod(".calibration", c("matrix", "matrix"),
         Mean <- weighted_mean(data$Observed, data$Weight)
         SE <- weighted_sd(data$Observed, data$Weight) / sqrt(nrow(data))
         result <- data[1, c("Response", "Predicted")]
-        result$Observed <- cbind(Mean = Mean, SE = SE,
-                                 Lower = Mean - SE,
-                                 Upper = Mean + SE)
+        result$Observed <- cbind(
+          Mean = Mean, SE = SE,
+          Lower = Mean - SE,
+          Upper = Mean + SE
+        )
         result
       }, simplify = FALSE)
       do.call(rbind, by_result)
@@ -158,8 +163,10 @@ setMethod(".calibration", c("numeric", "numeric"),
 setMethod(".calibration", c("Resample", "ANY"),
   function(observed, predicted, weights, ...) {
     cal_list <- by(observed, observed$Model, function(resample) {
-      calibration(resample$Observed, resample$Predicted, resample$Weight,
-                  na.rm = FALSE, ...)
+      calibration(
+        resample$Observed, resample$Predicted, resample$Weight, na.rm = FALSE,
+        ...
+      )
     }, simplify = FALSE)
     do.call(c, cal_list)
   }
@@ -171,9 +178,10 @@ setMethod(".calibration", c("Surv", "SurvProbs"),
     weights <- check_weights(weights, observed)
     throw(check_assignment(weights))
     times <- predicted@times
-    df <- data.frame(Response = rep(factor(colnames(predicted)),
-                                    each = nrow(predicted)),
-                     Predicted = as.numeric(predicted))
+    df <- data.frame(
+      Response = rep(factor(colnames(predicted)), each = nrow(predicted)),
+      Predicted = as.numeric(predicted)
+    )
     if (is_empty(breaks)) {
       throw(check_censoring(observed, "right"))
       throw(check_equal_weights(weights))
@@ -195,9 +203,11 @@ setMethod(".calibration", c("Surv", "SurvProbs"),
         Mean <- c(1, km$surv)[interval]
         SE <- c(0, km$std.err)[interval]
         result <- data[1, c("Response", "Predicted")]
-        result$Observed <- cbind(Mean = Mean, SE = SE,
-                                 Lower = max(Mean - SE, 0),
-                                 Upper = min(Mean + SE, 1))
+        result$Observed <- cbind(
+          Mean = Mean, SE = SE,
+          Lower = max(Mean - SE, 0),
+          Upper = min(Mean + SE, 1)
+        )
         result
       }, simplify = FALSE)
       do.call(rbind, by_results)
@@ -237,16 +247,16 @@ setMethod(".calibration", c("Surv", "numeric"),
         (1 - min_weight) * pmax((1 - (x / x_range)^3)^3, 0) + min_weight
       }
       metrics_list <- map(function(value) {
-        weights <- weights * tricubic(predicted - value, span = span,
-                                      min_weight = 0.01)
+        weights <- weights *
+          tricubic(predicted - value, span = span, min_weight = 0.01)
         est <- if (distr == "empirical") {
           survfit_est(observed, weights)
         } else {
           survreg_est(observed, distr, weights)
         }
-        with(est, c(Mean = Mean, SE = SE,
-                    Lower = max(Mean - SE, 0),
-                    Upper = Mean + SE))
+        with(est, {
+          c(Mean = Mean, SE = SE, Lower = max(Mean - SE, 0), Upper = Mean + SE)
+        })
       }, df$Predicted)
       df$Observed <- do.call(rbind, metrics_list)
       df
@@ -268,9 +278,11 @@ setMethod(".calibration", c("Surv", "numeric"),
           list(Mean = NA_real_, SE = NA_real_)
         }
         result <- data[1, c("Response", "Predicted")]
-        result$Observed <- with(est, cbind(Mean = Mean, SE = SE,
-                                           Lower = max(Mean - SE, 0),
-                                           Upper = Mean + SE))
+        result$Observed <- with(est, {
+          cbind(
+            Mean = Mean, SE = SE, Lower = max(Mean - SE, 0), Upper = Mean + SE
+          )
+        })
         result
       }, simplify = FALSE)
       do.call(rbind, by_results)

@@ -68,8 +68,10 @@
 #'
 SVMModel <- function(
   scaled = TRUE, type = character(),
-  kernel = c("rbfdot", "polydot", "vanilladot", "tanhdot", "laplacedot",
-             "besseldot", "anovadot", "splinedot"),
+  kernel = c(
+    "rbfdot", "polydot", "vanilladot", "tanhdot", "laplacedot", "besseldot",
+    "anovadot", "splinedot"
+  ),
   kpar = "automatic", C = 1, nu = 0.2, epsilon = 0.1, prob.model = FALSE,
   cache = 40, tol = 0.001, shrinking = TRUE
 ) {
@@ -119,8 +121,10 @@ MLModelFunction(SVMModel) <- NULL
 #' @rdname SVMModel
 #'
 SVMANOVAModel <- function(sigma = 1, degree = 1, ...) {
-  .SVMModel(name = "SVMANOVAModel", label = "Support Vector Machines (ANOVA)",
-            model = "anovadot", envir = environment(), ...)
+  .SVMModel(
+    name = "SVMANOVAModel", label = "Support Vector Machines (ANOVA)",
+    model = "anovadot", envir = environment(), ...
+  )
 }
 
 MLModelFunction(SVMANOVAModel) <- NULL
@@ -129,8 +133,10 @@ MLModelFunction(SVMANOVAModel) <- NULL
 #' @rdname SVMModel
 #'
 SVMBesselModel <- function(sigma = 1, order = 1, degree = 1, ...) {
-  .SVMModel(name = "SVMBesselModel", label = "Support Vector Machines (Bessel)",
-            model = "besseldot", envir = environment(), ...)
+  .SVMModel(
+    name = "SVMBesselModel", label = "Support Vector Machines (Bessel)",
+    model = "besseldot", envir = environment(), ...
+  )
 }
 
 MLModelFunction(SVMBesselModel) <- NULL
@@ -139,8 +145,10 @@ MLModelFunction(SVMBesselModel) <- NULL
 #' @rdname SVMModel
 #'
 SVMLaplaceModel <- function(sigma = numeric(), ...) {
-  .SVMModel(name = "SVMLaplaceModel", label = "Support Vector Machines (Laplace)",
-            model = "laplacedot", envir = environment(), ...)
+  .SVMModel(
+    name = "SVMLaplaceModel", label = "Support Vector Machines (Laplace)",
+    model = "laplacedot", envir = environment(), ...
+  )
 }
 
 MLModelFunction(SVMLaplaceModel) <- NULL
@@ -149,8 +157,10 @@ MLModelFunction(SVMLaplaceModel) <- NULL
 #' @rdname SVMModel
 #'
 SVMLinearModel <- function(...) {
-  .SVMModel(name = "SVMLinearModel", label = "Support Vector Machines (Linear)",
-            model = "vanilladot", envir = environment(), ...)
+  .SVMModel(
+    name = "SVMLinearModel", label = "Support Vector Machines (Linear)",
+    model = "vanilladot", envir = environment(), ...
+  )
 }
 
 MLModelFunction(SVMLinearModel) <- NULL
@@ -159,8 +169,10 @@ MLModelFunction(SVMLinearModel) <- NULL
 #' @rdname SVMModel
 #'
 SVMPolyModel <- function(degree = 1, scale = 1, offset = 1, ...) {
-  .SVMModel(name = "SVMPolyModel", label = "Support Vector Machines (Poly)",
-            model = "polydot", envir = environment(), ...)
+  .SVMModel(
+    name = "SVMPolyModel", label = "Support Vector Machines (Poly)",
+    model = "polydot", envir = environment(), ...
+  )
 }
 
 MLModelFunction(SVMPolyModel) <- NULL
@@ -169,8 +181,10 @@ MLModelFunction(SVMPolyModel) <- NULL
 #' @rdname SVMModel
 #'
 SVMRadialModel <- function(sigma = numeric(), ...) {
-  .SVMModel(name = "SVMRadialModel", label = "Support Vector Machines (Radial)",
-            model = "rbfdot", envir = environment(), ...)
+  .SVMModel(
+    name = "SVMRadialModel", label = "Support Vector Machines (Radial)",
+    model = "rbfdot", envir = environment(), ...
+  )
 }
 
 MLModelFunction(SVMRadialModel) <- NULL
@@ -179,8 +193,10 @@ MLModelFunction(SVMRadialModel) <- NULL
 #' @rdname SVMModel
 #'
 SVMSplineModel <- function(...) {
-  .SVMModel(name = "SVMSplineModel", label = "Support Vector Machines (Spline)",
-            model = "splinedot", envir = environment(), ...)
+  .SVMModel(
+    name = "SVMSplineModel", label = "Support Vector Machines (Spline)",
+    model = "splinedot", envir = environment(), ...
+  )
 }
 
 MLModelFunction(SVMSplineModel) <- NULL
@@ -189,8 +205,10 @@ MLModelFunction(SVMSplineModel) <- NULL
 #' @rdname SVMModel
 #'
 SVMTanhModel <- function(scale = 1, offset = 1, ...) {
-  .SVMModel(name = "SVMTanhModel", label = "Support Vector Machines (Tanh)",
-            model = "tanhdot", envir = environment(), ...)
+  .SVMModel(
+    name = "SVMTanhModel", label = "Support Vector Machines (Tanh)",
+    model = "tanhdot", envir = environment(), ...
+  )
 }
 
 MLModelFunction(SVMTanhModel) <- NULL
@@ -222,8 +240,9 @@ MLModelFunction(SVMTanhModel) <- NULL
       function(n, ...) seq_len(min(n, 3)),
       function(n, ...) 10^seq_range(-4, 2, c(-4, log10(2)), n),
       function(n, data, ...) {
-        sigmas <- kernlab::sigest(model.matrix(data, intercept = FALSE),
-                                  scaled = scaled)
+        sigmas <- kernlab::sigest(
+          model.matrix(data, intercept = FALSE), scaled = scaled
+        )
         exp(seq(log(min(sigmas)), log(max(sigmas)), length = n))
       }
     )

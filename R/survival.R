@@ -181,8 +181,10 @@ Weibull.Surv <- function(
   shape <- min(shape, Inf)
   nparams <- 1 + is.infinite(shape)
   params <- if (length(event_time(data$x)) >= nparams) {
-    regfit <- survreg(x ~ offset(-log(risks)), data = data, dist = "weibull",
-                      scale = 1 / shape, weights = weights)
+    regfit <- survreg(
+      x ~ offset(-log(risks)), data = data, dist = "weibull", scale = 1 / shape,
+      weights = weights
+    )
     c(1 / regfit$scale, exp(coef(regfit)[[1]]))
   } else {
     c(NA_real_, NA_real_)
@@ -210,8 +212,9 @@ Weibull.SurvProbs <- function(x, shape = numeric(), ...) {
     } else c(NA_real_, NA_real_)
   }
   coef <- apply(x, 1, function(surv) {
-    df <- surv_cases(x = log(x@times), y = log(-log(surv)),
-                     subset = diff(c(1, surv)) < 0)
+    df <- surv_cases(
+      x = log(x@times), y = log(-log(surv)), subset = diff(c(1, surv)) < 0
+    )
     weibullfit(df)
   })
   Weibull(shape = coef[2, ], scale = exp(coef[1, ]))
@@ -308,9 +311,10 @@ risksum <- function(x, group) {
   res <- if (is_counting(group)) {
     start <- group[, "start"]
     start_time <- sort(unique(start), na.last = TRUE, method = "quick")
-    unobserved <- approx(start_time, seq_along(start_time), stop_time,
-                         method = "constant", f = 1,
-                         yright = length(start_time) + 1)$y
+    unobserved <- approx(
+      start_time, seq_along(start_time), stop_time, method = "constant", f = 1,
+      yright = length(start_time) + 1
+    )$y
     map(function(num_stop, num_start) {
       rcumsum(num_stop) - c(rcumsum(num_start), 0)[unobserved]
     }, rowsum(x, stop), rowsum(x, start))

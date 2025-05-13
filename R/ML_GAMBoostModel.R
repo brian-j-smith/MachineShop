@@ -61,8 +61,10 @@ GAMBoostModel <- function(
     name = "GAMBoostModel",
     label = "Gradient Boosting with Additive Models",
     packages = "mboost",
-    response_types = c("binary", "BinomialVariate", "NegBinomialVariate",
-                       "numeric", "PoissonVariate", "Surv"),
+    response_types = c(
+      "binary", "BinomialVariate", "NegBinomialVariate", "numeric",
+      "PoissonVariate", "Surv"
+    ),
     weights = TRUE,
     predictor_encoding = "model.frame",
     na.rm = if (baselearner == "btree") "response" else "all",

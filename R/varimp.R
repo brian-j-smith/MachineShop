@@ -214,8 +214,9 @@ varimp_permute <- function(
   input <- as.MLInput(object)
   data <- if (is.data.frame(input)) input else as.data.frame(input)
   pred_names <- all.vars(predictors(terms(input, original = TRUE)))
-  pred_names <- do.call(subset_names, list(pred_names, substitute(select)),
-                        envir = parent.frame())
+  pred_names <- do.call(
+    subset_names, list(pred_names, substitute(select)), envir = parent.frame()
+  )
 
   samples <- check_integer(samples, bounds = c(1, Inf), size = 1)
   throw(check_assignment(samples))

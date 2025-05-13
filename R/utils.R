@@ -124,7 +124,8 @@ combine_model_slots <- function(models, types) {
   list(
     response_types = info$type,
     weights = switch(length(unique(info$weights)) + 1,
-                     FALSE, info$weights[1], info@weights)
+      FALSE, info$weights[1], info@weights
+    )
   )
 }
 
@@ -161,8 +162,9 @@ get0 <- function(x, mode = "any") {
     if (is.name(expr)) {
       base::get0(x, mode = mode)
     } else if (is.call(expr) && any(expr[[1]] == c("::", ":::"))) {
-      base::get0(as.character(expr[[3]]), mode = mode,
-                 envir = asNamespace(expr[[2]]))
+      base::get0(
+        as.character(expr[[3]]), mode = mode, envir = asNamespace(expr[[2]])
+      )
     }
   } else if (mode %in% c("any", mode(x))) {
     x
@@ -184,8 +186,10 @@ get_perf_metrics <- function(x, y) {
   metrics <- c(eval(formals(method)$metrics))
   is_defined <- map("logi", function(metric) {
     types <- metricinfo(metric)[[1]]$response_types
-    any(map("logi", is, list(x), types$observed) &
-          map("logi", is, list(y), types$predicted))
+    any(
+      map("logi", is, list(x), types$observed) &
+        map("logi", is, list(y), types$predicted)
+    )
   }, metrics)
   metrics[is_defined]
 }
@@ -335,8 +339,12 @@ map <- function(.object, ...) {
 
 
 map.character <- function(.object, .fun, ...) {
-  type <- match.arg(.object, c("character", "complex", "double", "integer",
-                               "list", "logical", "numeric", "raw"))
+  type <- match.arg(
+    .object, c(
+      "character", "complex", "double", "integer", "list", "logical", "numeric",
+      "raw"
+    )
+  )
   res <- simplify(map(.fun, ...))
   storage.mode(res) <- type
   res
@@ -425,10 +433,7 @@ new_progress_bar <- function(total, object, index = 0) {
     format <- paste(format, "[:bar] :percent | :eta")
   }
   pb <- progress_bar$new(
-    format = format,
-    total = total,
-    clear = TRUE,
-    show_after = 0
+    format = format, total = total, clear = TRUE, show_after = 0
   )
   if (is(index, "progress_index") && index == 1) {
     pb$message(paste0(

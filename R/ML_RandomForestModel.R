@@ -74,8 +74,10 @@ RandomForestModel <- function(
     predict = function(object, newdata, .MachineShop, ...) {
       y <- response(.MachineShop$input)
       newdata <- as.data.frame(newdata)
-      predict(object, newdata = newdata,
-              type = if (is.factor(y)) "prob" else "response")
+      predict(
+        object, newdata = newdata,
+        type = if (is.factor(y)) "prob" else "response"
+      )
     },
 
     varimp = function(object, .MachineShop, ...) {

@@ -913,8 +913,10 @@ print_items.matrix <- function(x, n = Inf, ...) {
   if (num_items) {
     print_default(x[row_inds, col_inds, drop = FALSE], max = num_items)
   } else {
-    cat("<", format_len(nrow(x)), " x ", format_len(ncol(x)), " ", class1(x),
-        ">\n", sep = "")
+    cat(
+      "<", format_len(nrow(x)), " x ", format_len(ncol(x)), " ", class1(x),
+      ">\n", sep = ""
+    )
   }
   diff_rows <- nrow(x) - length(row_inds)
   diff_cols <- ncol(x) - length(col_inds)

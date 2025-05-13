@@ -115,14 +115,17 @@ new_step_kmedoids <- function(
     k <- min(max(step$k, 1), nrow(x) - 1)
     switch(step$method,
       "pam" = {
-        res <- cluster::pam(x, k, metric = step$metric, pamonce = step$optimize,
-                            keep.diss = FALSE, keep.data = FALSE)
+        res <- cluster::pam(
+          x, k, metric = step$metric, pamonce = step$optimize,
+          keep.diss = FALSE, keep.data = FALSE
+        )
       },
       "clara" = {
         samp_size <- min(step$samp_size, nrow(x))
-        res <- cluster::clara(x, k, metric = step$metric,
-                              samples = step$num_samp, sampsize = samp_size,
-                              medoids.x = FALSE, rngR = TRUE)
+        res <- cluster::clara(
+          x, k, metric = step$metric, samples = step$num_samp,
+          sampsize = samp_size, medoids.x = FALSE, rngR = TRUE
+        )
         names(res)[names(res) == "i.med"] <- "id.med"
       }
     )
@@ -150,8 +153,9 @@ new_step_kmedoids <- function(
       options$optimize <- optimize
     },
     "clara" = {
-      options$metric <- match.arg(metric,
-                                  c("euclidean", "manhattan", "jaccard"))
+      options$metric <- match.arg(
+        metric, c("euclidean", "manhattan", "jaccard")
+      )
       options$num_samp <- num_samp
       options$samp_size <- samp_size
     },
@@ -161,8 +165,9 @@ new_step_kmedoids <- function(
     }
   )
 
-  object <- new_step_sbf(..., filter = filter, multivariate = TRUE,
-                         options = options)
+  object <- new_step_sbf(
+    ..., filter = filter, multivariate = TRUE, options = options
+  )
   object$res <- tibble(
     terms = recipes::sel2char(object$terms),
     cluster = NA_integer_,

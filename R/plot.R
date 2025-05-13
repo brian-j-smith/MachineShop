@@ -242,8 +242,9 @@ plot.Performance <- function(
   throw(check_assignment(stat))
 
   df_metric <- df[df$Metric == metrics[1], , drop = FALSE]
-  sorted_levels <- tapply(df_metric$Value, df_metric$Model,
-                         function(x) stat(na.omit(x))) %>% sort %>% names
+  sorted_levels <- tapply(
+    df_metric$Value, df_metric$Model, function(x) stat(na.omit(x))
+  ) %>% sort %>% names
   df$Model <- factor(df$Model, sorted_levels)
 
   p <- ggplot(df)
@@ -302,8 +303,10 @@ plot.PerformanceCurve <- function(
       p
     },
     "cutoffs" = {
-      df <- reshape(x, varying = c("x", "y"), v.names = "y", times = labels,
-                    timevar = "Metric", direction = "long")
+      df <- reshape(
+        x, varying = c("x", "y"), v.names = "y", times = labels,
+        timevar = "Metric", direction = "long"
+      )
       names(df)[names(df) == "Cutoff"] <- "x"
 
       ggplot(na.omit(df), mapping) +

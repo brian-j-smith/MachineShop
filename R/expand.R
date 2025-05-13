@@ -249,9 +249,7 @@ expand_modelgrid.MLModelFunction <- function(model, ...) {
   needs_data <- any(map("logi", has_data_arg, gridinfo$get_values))
   if (needs_data && has_grid(model)) {
     if (!missing(input)) mf <- ModelFrame(input, ..., na.rm = FALSE)
-    if (is.null(mf)) {
-      return(NULL)
-    }
+    if (is.null(mf)) return(NULL)
     y <- response(mf)
     if (!any(is_response(y, model@response_types))) {
       throw(LocalWarning(
@@ -265,8 +263,10 @@ expand_modelgrid.MLModelFunction <- function(model, ...) {
   }
 
   param_names <- unique(gridinfo$param)
-  params <- map(function(fun, n) unique(fun(n = n, data = mf)),
-                gridinfo$get_values, gridinfo$size)
+  params <- map(
+    function(fun, n) unique(fun(n = n, data = mf)),
+    gridinfo$get_values, gridinfo$size
+  )
   params <- map(function(name) {
     unlist(params[gridinfo$param == name], use.names = FALSE)
   }, param_names)

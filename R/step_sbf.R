@@ -132,9 +132,11 @@ prep.step_sbf <- function(x, training, info = NULL, ...) {
   x$res <- tibble(
     terms = col_names,
     as_tibble(res),
-    name = ifelse(res$selected,
-                  paste0(if (!x$replace) paste0(x$prefix, "."), col_names),
-                  NA_character_)
+    name = ifelse(
+      res$selected,
+      paste0(if (!x$replace) paste0(x$prefix, "."), col_names),
+      NA_character_
+    )
   )
   x$trained <- TRUE
   x
@@ -148,8 +150,9 @@ bake.step_sbf <- function(object, new_data, ...) {
     new_data[!(names(new_data) %in% names_drop)]
   } else {
     res <- res[res$selected, c("terms", "name")]
-    selected_vars <- recipes::check_name(new_data[res$terms], new_data, object,
-                                         newname = res$name)
+    selected_vars <- recipes::check_name(
+      new_data[res$terms], new_data, object, newname = res$name
+    )
     as_tibble(c(new_data, selected_vars))
   }
 }

@@ -117,9 +117,11 @@ setMethod("predict", "MLModelFit",
 
 PredictorFrame <- function(input, newdata = NULL) {
   if (!is(newdata, "PredictorFrame")) {
-    new("PredictorFrame", ModelFrame(
-      delete.response(terms(input)), predictors(input, newdata), na.rm = FALSE
-    ))
+    new("PredictorFrame",
+      ModelFrame(
+        delete.response(terms(input)), predictors(input, newdata), na.rm = FALSE
+      )
+    )
   } else {
     newdata
   }

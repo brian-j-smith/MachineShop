@@ -63,26 +63,27 @@ SelectedModel.default <- function(
   models <- as.list(unlist(list(...)))
   for (i in seq_along(models)) models[[i]] <- as.MLModel(models[[i]])
 
-  if (length(models) == 1) {
-    return(models[[1]])
-  }
+  if (length(models) == 1) return(models[[1]])
 
   default_names <- map("char", slot, models, "name")
   names(models) <- make_names_along(models, default_names)
 
   slots <- combine_model_slots(models, settings("response_types"))
-  new("SelectedModel", MLModel(
-    name = "SelectedModel",
-    label = "Selected Model",
-    response_types = slots$response_types,
-    weights = slots$weights,
-    params = TrainingParams(
-      control = control,
-      metrics = metrics,
-      cutoff = cutoff,
-      stat = stat
-    )
-  ), candidates = ListOf(models))
+  new("SelectedModel",
+    MLModel(
+      name = "SelectedModel",
+      label = "Selected Model",
+      response_types = slots$response_types,
+      weights = slots$weights,
+      params = TrainingParams(
+        control = control,
+        metrics = metrics,
+        cutoff = cutoff,
+        stat = stat
+      )
+    ),
+    candidates = ListOf(models)
+  )
 
 }
 
@@ -243,18 +244,22 @@ TunedModel <- function(
     ))
   }
 
-  new("TunedModel", MLModel(
-    name = "TunedModel",
-    label = paste("Grid Tuned", object@name),
-    response_types = response_types,
-    weights = weights,
-    params = TrainingParams(
-      control = control,
-      metrics = metrics,
-      cutoff = cutoff,
-      stat = stat
-    )
-  ), model = object, grid = grid)
+  new("TunedModel",
+    MLModel(
+      name = "TunedModel",
+      label = paste("Grid Tuned", object@name),
+      response_types = response_types,
+      weights = weights,
+      params = TrainingParams(
+        control = control,
+        metrics = metrics,
+        cutoff = cutoff,
+        stat = stat
+      )
+    ),
+    model = object,
+    grid = grid
+  )
 
 }
 

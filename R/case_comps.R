@@ -83,8 +83,10 @@ case_strata <- function(object, ...) {
 
 
 case_strata.default <- function(object, ...) {
-  types <- c("BinomialVariate", "character", "factor", "logical", "matrix",
-             "numeric", "Surv")
+  types <- c(
+    "BinomialVariate", "character", "factor", "logical", "matrix", "numeric",
+    "Surv"
+  )
   throw(TypeError(object, types, "`object`"))
 }
 
@@ -173,9 +175,10 @@ case_strata.Surv <- function(
 
   for (name in names(time_split)) {
     time <- time_split[[name]]
-    res <- case_strata(time, breaks = breaks, nunique = nunique,
-                       prop = prop * length(status) / length(time),
-                       size = size)
+    res <- case_strata(
+      time, breaks = breaks, nunique = nunique,
+      prop = prop * length(status) / length(time), size = size
+    )
     levels(res) <- paste(name, levels(res), sep = ":")
     strata_levels <- c(strata_levels, levels(res))
     strata_split[[name]] <- as.character(res)

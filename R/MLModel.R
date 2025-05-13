@@ -158,15 +158,17 @@ setMethod("initialize", "MLModel",
 
 
 NullModel <- function() {
-  new("NullModel", MLModel(
-    id = "null",
-    name = "NullModel",
-    label = "Null Model",
-    response_types = settings("response_types"),
-    fit = function(...) {
-      throw(Error("No specified model to fit."), call = call("fit"))
-    }
-  ))
+  new("NullModel",
+    MLModel(
+      id = "null",
+      name = "NullModel",
+      label = "Null Model",
+      response_types = settings("response_types"),
+      fit = function(...) {
+        throw(Error("No specified model to fit."), call = call("fit"))
+      }
+    )
+  )
 }
 
 

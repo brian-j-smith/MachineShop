@@ -70,8 +70,9 @@ resample <- function(...) {
 #' \code{\link{MLControl}}.
 #'
 resample.formula <- function(formula, data, model, ...) {
-  resample(ModelSpecification(formula, data, model = model, control = NULL),
-           ...)
+  resample(
+    ModelSpecification(formula, data, model = model, control = NULL), ...
+  )
 }
 
 
@@ -412,11 +413,15 @@ subsample <- function(train, test, control, iter = 1) {
 
   f <- function(test) {
     weights <- if (control@weights) "weights"
-    comps <- case_comps(model_fit, newdata = as.MLInput(test),
-                        types = c("names", weights), response = TRUE)
-    df <- data.frame(Model = factor(as.MLModel(train)@name),
-                     Iteration = as.integer(iter),
-                     Case = comps$names)
+    comps <- case_comps(
+      model_fit, newdata = as.MLInput(test), types = c("names", weights),
+      response = TRUE
+    )
+    df <- data.frame(
+      Model = factor(as.MLModel(train)@name),
+      Iteration = as.integer(iter),
+      Case = comps$names
+    )
     df$Observed <- comps$response
     df$Predicted <- do.call(predict, c(
       list(model_fit, as.data.frame(test), type = "raw", verbose = verbose),

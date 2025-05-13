@@ -77,8 +77,9 @@ setMetricMethod("auc", c("factor", "numeric"),
     if (all(map("logi", identical, metrics[1:2], c(tpr, fpr)))) {
       cindex(observed, predicted, weights)
     } else {
-      unname(auc(performance_curve(observed, predicted, weights,
-                                   metrics = metrics)))
+      unname(
+        auc(performance_curve(observed, predicted, weights, metrics = metrics))
+      )
     }
   }
 )
@@ -153,8 +154,9 @@ setMetricMethod("brier", c("Surv", "SurvProbs"),
     times <- predicted@times
 
     observed[, "status"] <- 1 - observed[, "status"]
-    cens_fit <- survfit(observed ~ 1, weights = weights, stype = 2,
-                        se.fit = FALSE)
+    cens_fit <- survfit(
+      observed ~ 1, weights = weights, stype = 2, se.fit = FALSE
+    )
 
     start_time <- function(x) if (is_counting(x)) x[, "start"] else -Inf
     x <- map("num", function(i) {

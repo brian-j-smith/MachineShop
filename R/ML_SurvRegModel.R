@@ -100,8 +100,10 @@ MLModelFunction(SurvRegModel) <- NULL
 #' }
 #'
 SurvRegStepAICModel <- function(
-  dist = c("weibull", "exponential", "gaussian", "logistic", "lognormal",
-           "logloglogistic"),
+  dist = c(
+    "weibull", "exponential", "gaussian", "logistic", "lognormal",
+    "logloglogistic"
+  ),
   scale = 0, parms = list(), ...,
   direction = c("both", "backward", "forward"), scope = list(), k = 2,
   trace = FALSE, steps = 1000

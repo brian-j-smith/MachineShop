@@ -48,17 +48,20 @@ SuperModel <- function(
   names(models)[-1] <- make_names_len(length(models) - 1, "BaseLearner")
 
   slots <- combine_model_slots(models, models[[1]]@response_types)
-  new("SuperModel", MLModel(
-    name = "SuperModel",
-    label = "Super Learner",
-    response_types = slots$response_types,
-    weights = slots$weights,
-    params = TrainingParams(
-      optim = NullOptimization(),
-      control = control,
-      options = list(all_vars = all_vars)
-    )
-  ), candidates = ListOf(models))
+  new("SuperModel",
+    MLModel(
+      name = "SuperModel",
+      label = "Super Learner",
+      response_types = slots$response_types,
+      weights = slots$weights,
+      params = TrainingParams(
+        optim = NullOptimization(),
+        control = control,
+        options = list(all_vars = all_vars)
+      )
+    ),
+    candidates = ListOf(models)
+  )
 
 }
 
@@ -78,20 +81,24 @@ MLModelFunction(SuperModel) <- NULL
   ind <- new_progress_index(max = length(base_learners), name = object@name)
   while (ind < max(ind)) {
     ind <- ind + 1
-    res <- resample(input, model = base_learners[[ind]], control = control,
-                    progress_index = ind)
+    res <- resample(
+      input, model = base_learners[[ind]], control = control,
+      progress_index = ind
+    )
     predictors[[ind]] <- res$Predicted
   }
 
   df <- super_df(res$Observed, predictors, res$Case, if (all_vars) mf)
   super_mf <- ModelFrame(formula(df), df)
 
-  list(base_fits = map(function(learner) fit(input, model = learner),
-                       base_learners),
-       super_fit = fit(super_mf, model = super_learner),
-       all_vars = all_vars,
-       times = control@predict$times) %>%
-    MLModelFit("SuperModelFit", input = input_prep, model = object)
+  list(
+    base_fits = map(
+      function(learner) fit(input, model = learner), base_learners
+    ),
+    super_fit = fit(super_mf, model = super_learner),
+    all_vars = all_vars,
+    times = control@predict$times
+  ) %>% MLModelFit("SuperModelFit", input = input_prep, model = object)
 }
 
 

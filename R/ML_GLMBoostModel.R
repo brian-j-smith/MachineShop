@@ -53,8 +53,10 @@ GLMBoostModel <- function(
     name = "GLMBoostModel",
     label = "Gradient Boosting with Linear Models",
     packages = "mboost",
-    response_types = c("binary", "BinomialVariate", "NegBinomialVariate",
-                       "numeric", "PoissonVariate", "Surv"),
+    response_types = c(
+      "binary", "BinomialVariate", "NegBinomialVariate", "numeric",
+      "PoissonVariate", "Surv"
+    ),
     weights = TRUE,
     predictor_encoding = "model.frame",
     na.rm = TRUE,

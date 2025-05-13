@@ -108,8 +108,10 @@ NNetModel <- function(
       i2h <- matrix(beta[match(labels, names(beta))], ninputs, size)
       rownames(i2h) <- object$coefnames
 
-      inds <- expand.grid(hidden = seq_len(size),
-                          output = if (noutputs == 1) "" else seq_len(noutputs))
+      inds <- expand.grid(
+        hidden = seq_len(size),
+        output = if (noutputs == 1) "" else seq_len(noutputs)
+      )
       labels <- paste0("h", inds$hidden, "->o", inds$output)
       h2o <- matrix(beta[match(labels, names(beta))], size, noutputs)
       colnames(h2o) <- colnames(object$residuals)

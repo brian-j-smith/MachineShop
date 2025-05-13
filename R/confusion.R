@@ -134,8 +134,10 @@ setMethod(".confusion", c("factor", "numeric"),
 setMethod(".confusion", c("Resample", "ANY"),
   function(observed, predicted, weights, ...) {
     conf_list <- by(observed, observed$Model, function(resample) {
-      confusion(resample$Observed, resample$Predicted, resample$Weight,
-                na.rm = FALSE, ...)
+      confusion(
+        resample$Observed, resample$Predicted, resample$Weight, na.rm = FALSE,
+        ...
+      )
     }, simplify = FALSE)
     if (all(map("logi", is, conf_list, "ConfusionList"))) {
       conf_list <- unlist(conf_list, recursive = FALSE)

@@ -234,8 +234,9 @@ random_grid <- function(x, size = integer()) {
 
     grid <- head(grid, size)
     cols <- unname(unnest_params(grid))
-    sortable_types <- c("character", "complex", "Date", "factor", "logical",
-                        "numeric")
+    sortable_types <- c(
+      "character", "complex", "Date", "factor", "logical", "numeric"
+    )
     is_sortable <- map("logi", function(col) {
       any(map("logi", is, list(col), sortable_types))
     }, cols)

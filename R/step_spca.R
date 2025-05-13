@@ -81,8 +81,7 @@ step_spca <- function(
 }
 
 
-new_step_spca <- function(..., sparsity, num_var, shrinkage, max_iter,
-                          tol) {
+new_step_spca <- function(..., sparsity, num_var, shrinkage, max_iter, tol) {
 
   throw(check_packages("elasticnet"))
 
@@ -98,10 +97,10 @@ new_step_spca <- function(..., sparsity, num_var, shrinkage, max_iter,
       para <- step$num_var
       sparse <- "varnum"
     }
-    res <- elasticnet::spca(x, K = num_comp,
-                            para = rep_len(para, num_comp),
-                            sparse = sparse, lambda = step$shrinkage,
-                            max.iter = step$max_iter, eps.conv = step$tol)
+    res <- elasticnet::spca(
+      x, K = num_comp, para = rep_len(para, num_comp), sparse = sparse,
+      lambda = step$shrinkage, max.iter = step$max_iter, eps.conv = step$tol
+    )
 
     list(weights = res$loadings, pev = res$pev)
 

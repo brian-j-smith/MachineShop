@@ -176,8 +176,9 @@ MachineShop_global <- as.environment(list(
             x
           },
           error = function(cond) {
-            DomainError(x, "must be an MLControl object, function, ",
-                           "or function name")
+            DomainError(
+              x, "must be an MLControl object, function, or function name"
+            )
           }
         )
       }
@@ -377,9 +378,9 @@ MachineShop_global <- as.environment(list(
         x <- setdiff(x, .global_defaults$require)
         unavailable <- !vapply(x, requireNamespace, logical(1), quietly = TRUE)
         if (any(unavailable)) {
-          DomainError(x, note_items(
-            "includes unavailable package{?s}: ", x[unavailable]
-          ))
+          DomainError(
+            x, note_items("includes unavailable package{?s}: ", x[unavailable])
+          )
         } else c(x, .global_defaults$require)
       }
     ),
@@ -428,8 +429,10 @@ MachineShop_global <- as.environment(list(
       value = c("Mean" = "base::mean"),
       check = function(x) {
         if (!is.null(x) && is(check_stat(x), "error")) {
-          DomainError(x, "must be a statistics function, function name, ",
-                         "vector of these, or NULL")
+          DomainError(
+            x, "must be a statistics function, function name, vector of ",
+            "these, or NULL"
+          )
         } else x
       }
     ),

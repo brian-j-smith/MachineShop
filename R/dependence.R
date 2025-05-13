@@ -53,8 +53,9 @@ dependence <- function(
   if (is.null(data)) data <- input
   data <- as.data.frame(data)
   pred_names <- all.vars(predictors(terms(input, original = TRUE)))
-  pred_names <- do.call(subset_names, list(pred_names, substitute(select)),
-                        envir = parent.frame())
+  pred_names <- do.call(
+    subset_names, list(pred_names, substitute(select)), envir = parent.frame()
+  )
 
   data_select <- data[, pred_names, drop = FALSE]
 

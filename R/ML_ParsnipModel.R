@@ -37,17 +37,21 @@ ParsnipModel <- function(object, ...) {
     object <- update(object, ...)
   }
 
-  modes <- list("censored regression" = "Surv",
-                "classification" = "factor",
-                "regression" = c("matrix", "numeric"))
+  modes <- list(
+    "censored regression" = "Surv",
+    "classification" = "factor",
+    "regression" = c("matrix", "numeric")
+  )
   modes$unknown <- sort(unlist(modes, use.names = FALSE))
   throw(check_assignment(mode, check_match(object$mode, names(modes))))
 
-  new("ParsnipModel", MLModel(
+  mlmodel <- MLModel(
 
     name = "ParsnipModel",
-    label = sprintf("%s(mode = \"%s\", engine = \"%s\")",
-                    class1(object), object$mode, object$engine),
+    label = sprintf(
+      "%s(mode = \"%s\", engine = \"%s\")", class1(object), object$mode,
+      object$engine
+    ),
     packages = parsnip::required_pkgs(object),
     response_types = modes[[object$mode]],
     predictor_encoding = "model.frame",
@@ -82,7 +86,8 @@ ParsnipModel <- function(object, ...) {
       }
     }
 
-  ))
+  )
+  new("ParsnipModel", mlmodel)
 
 }
 

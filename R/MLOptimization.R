@@ -21,9 +21,8 @@ RandomGridSearch <- function(..., size = numeric()) {
   size <- check_integer(size, bounds = c(1, Inf), size = 1)
   throw(check_assignment(size))
 
-  new("RandomGridSearch", GridSearch(...),
-    label = "Random Grid Search",
-    size = size
+  new("RandomGridSearch",
+    GridSearch(...), label = "Random Grid Search", size = size
   )
 }
 
@@ -109,8 +108,9 @@ optim <- function(.fun, object, ...) {
     progress(
       scores, max_iter = max_iter, method = method,
       items = list(
-        "Parameter{?s}: " =
-          unlist(unnest_params(model_params, compact_names = TRUE))
+        "Parameter{?s}: " = unlist(
+          unnest_params(model_params, compact_names = TRUE)
+        )
       ),
       metric = structure(perf_stats[1], names = getElement(metric, "name"))
     )

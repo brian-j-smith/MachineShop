@@ -5,10 +5,10 @@ DeprecatedCondition <- function(
   old, new, value = NULL, expired = FALSE, call = FALSE
 ) {
   make_cond <- function(f, class) {
-    f(message = paste0(old, " is deprecated; use ", new, " instead."),
-      value = value,
-      call = select_call(call, sys.call(-2)),
-      class = class)
+    f(
+      message = paste0(old, " is deprecated; use ", new, " instead."),
+      value = value, call = select_call(call, sys.call(-2)), class = class
+    )
   }
   if (expired) {
     make_cond(errorCondition, "DeprecatedError")
@@ -192,8 +192,10 @@ check_censoring <- function(x, types, ...) {
   type <- attr(x, "type")
   if (!(type %in% types)) {
     types <- paste0("\"", types, "\"")
-    Error("Expected survival data censoring type to be ",
-          as_string(types, conj = "or"), "; got \"", type, "\" instead.")
+    Error(
+      "Expected survival data censoring type to be ",
+      as_string(types, conj = "or"), "; got \"", type, "\" instead."
+    )
   } else x
 }
 
@@ -205,8 +207,9 @@ check_character <- function(x, ...) {
 
 check_const_setting <- function(x, name) {
   if (!identical(x, x <- .global_defaults[[name]])) {
-    LocalWarning("MachineShop `", name, "` setting cannot be changed.",
-                 value = x)
+    LocalWarning(
+      "MachineShop `", name, "` setting cannot be changed.", value = x
+    )
   } else x
 }
 
@@ -226,8 +229,10 @@ check_grid <- function(x) {
   } else if (is(x, "TuningGrid")) {
     x
   } else {
-    DomainError(x, "must be one or more positive integers or a ",
-                   "TuningGrid function, function name, or object")
+    DomainError(
+      x, "must be one or more positive integers or a TuningGrid function, ",
+      "TuningGrid function, function name, or object"
+    )
   }
 }
 
@@ -274,8 +279,9 @@ check_metrics <- function(x, convert = FALSE) {
       if (convert) vector_to_function(x, "metric") else x
     },
     error = function(cond) {
-      DomainError(x, "must be a metrics function, function name, ",
-                     "or vector of these")
+      DomainError(
+        x, "must be a metrics function, function name, or vector of these"
+      )
     }
   )
 }
@@ -296,17 +302,17 @@ check_numeric <- function(
   type = c("numeric", "double", "integer"), ...
 ) {
   result <- check_array(x, type = match.arg(type), ...)
-  if (is(result, "error")) {
-    return(result)
-  }
+  if (is(result, "error")) return(result)
 
   include <- rep_len(include, 2)
   ops <- paste0(c(">", "<"), ifelse(include, "=", ""))
   values <- na.omit(c(result))
   inbounds <- function(op, bound) all(do.call(op, list(values, bound)))
   if (!(inbounds(ops[1], bounds[1]) && inbounds(ops[2], bounds[2]))) {
-    msg <- paste0(if (length(result) > 1) "elements ", "must be ",
-                  paste(ops, bounds, collapse = " and "))
+    msg <- paste0(
+      if (length(result) > 1) "elements ", "must be ",
+      paste(ops, bounds, collapse = " and ")
+    )
     DomainError(result, msg)
   } else {
     result
@@ -332,15 +338,19 @@ check_packages <- function(x) {
     if (any(failures)) {
       x <- x[failures]
       pkg_names <- pkg_names[failures]
-      Error("Call ", note_items(msg, x), ".\n",
-            "To address this issue, try running ", pkgs_fun, "(",
-            deparse1(pkg_names), ").")
+      Error(
+        "Call ", note_items(msg, x), ".\n",
+        "To address this issue, try running ", pkgs_fun, "(",
+        deparse1(pkg_names), ")."
+      )
     }
   }
 
   installed <- map("logi", requireNamespace, pkg_names, quietly = TRUE)
-  result <- check(!installed, "requires prior installation of package{?s}: ",
-                  "install.packages")
+  result <- check(
+    !installed, "requires prior installation of package{?s}: ",
+    "install.packages"
+  )
   if (is(result, "error")) return(result)
 
   end_pos <- paren_pos + paren_len - 2
@@ -352,8 +362,9 @@ check_packages <- function(x) {
       eval(call(compat_version[1], version, compat_version[2]))
     } else TRUE
   }, pkg_names, compat_versions)
-  result <- check(!compatible, "requires updated package version{?s}: ",
-                  "update.packages")
+  result <- check(
+    !compatible, "requires updated package version{?s}: ", "update.packages"
+  )
   if (is(result, "error")) return(result)
 
   x
@@ -381,8 +392,9 @@ check_stats <- function(x, convert = FALSE) {
     stats(1:5)
   }, silent = TRUE)
   if (!is.numeric(result)) {
-    DomainError(x, "must be a statistics function, function name, ",
-                   "or vector of these")
+    DomainError(
+      x, "must be a statistics function, function name, or vector of these"
+    )
   } else if (convert) {
     stats
   } else {

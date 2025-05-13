@@ -61,8 +61,10 @@ ModelFrame.data.frame <- function(data, ...) {
   if (is.null(args$names)) args$names <- rownames(data)
   args$na.rm <- FALSE
 
-  model_terms <- terms(map(as.name, names(data)[-1]), names(data)[1],
-                       all_numeric = all(map("logi", is.numeric, data[-1])))
+  model_terms <- terms(
+    map(as.name, names(data)[-1]), names(data)[1],
+    all_numeric = all(map("logi", is.numeric, data[-1]))
+  )
 
   do.call(ModelFrame, c(list(model_terms, data), args))
 }
@@ -73,8 +75,9 @@ ModelFrame.data.frame <- function(data, ...) {
 ModelFrame.formula <- function(
   formula, data, groups = NULL, strata = NULL, weights = NULL, na.rm = TRUE, ...
 ) {
-  invalid_calls <- setdiff(inline_calls(predictors(formula)),
-                           settings("RHS.formula"))
+  invalid_calls <- setdiff(
+    inline_calls(predictors(formula)), settings("RHS.formula")
+  )
   if (length(invalid_calls)) {
     throw(Error(note_items(
       "Unsupported predictor variable function{?s}: ", invalid_calls,
@@ -133,8 +136,10 @@ ModelFrame.matrix <- function(
   end <- length(data)
   data <- data[c(end, seq_len(end - 1))]
 
-  ModelFrame(model_terms, data, names = rownames(data), groups = groups,
-             strata = strata, weights = weights, na.rm = na.rm, ...)
+  ModelFrame(
+    model_terms, data, names = rownames(data), groups = groups, strata = strata,
+    weights = weights, na.rm = na.rm, ...
+  )
 }
 
 
@@ -277,24 +282,28 @@ terms.list <- function(
     factors <- cbind(as.integer(var_names %in% label_names))
     rownames(factors) <- var_names
   } else {
-    factors <- matrix(0L, length(var_names), length(label_names),
-                      dimnames = list(var_names, label_names))
+    factors <- matrix(
+      0L, length(var_names), length(label_names),
+      dimnames = list(var_names, label_names)
+    )
     term_match <- match(var_names, label_names, nomatch = 0L)
     factors[cbind(var_names[term_match > 0], label_names[term_match])] <- 1L
   }
 
-  new(class, structure(
-    fo,
-    variables = as.call(c(.(list), y, x)),
-    offset = if (length(offsets)) offsets,
-    factors = factors,
-    term.labels = label_names,
-    order = rep(1L, length(label_names)),
-    intercept = as.integer(intercept),
-    response = has_y,
-    .Environment = asNamespace("MachineShop"),
-    class = c("terms", "formula")
-  ))
+  new(class,
+    structure(
+      fo,
+      variables = as.call(c(.(list), y, x)),
+      offset = if (length(offsets)) offsets,
+      factors = factors,
+      term.labels = label_names,
+      order = rep(1L, length(label_names)),
+      intercept = as.integer(intercept),
+      response = has_y,
+      .Environment = asNamespace("MachineShop"),
+      class = c("terms", "formula")
+    )
+  )
 }
 
 
@@ -355,10 +364,11 @@ terms.recipe_info <- function(x, ...) {
 
   num_roles <- sum(lengths(list(binom, surv, matrix, other)) > 0)
   if (num_roles > 1 || length(other) > 1) {
-    throw(Error("Specified outcome is not a single variable, binomial ",
-                "variable with roles \"binom_x\" and \"binom_size\", survival ",
-                "variables with roles \"surv_time\" and \"surv_event\", or ",
-                "multiple numeric variables."))
+    throw(Error(
+      "Specified outcome is not a single variable, binomial variable with ",
+      "roles \"binom_x\" and \"binom_size\", survival variables with roles ",
+      "\"surv_time\" and \"surv_event\", or multiple numeric variables."
+    ))
   }
 
   outcome <- if (length(other)) {
@@ -374,7 +384,9 @@ terms.recipe_info <- function(x, ...) {
   } else if (all(!is.na(binom[c("count", "size")]))) {
     call("BinomialVariate", as.name(binom["count"]), as.name(binom["size"]))
   } else if (length(binom)) {
-    throw(Error("Binomial outcome must have \"binom_x\" and \"binom_size\" roles."))
+    throw(Error(
+      "Binomial outcome must have \"binom_x\" and \"binom_size\" roles."
+    ))
   } else if (length(matrix)) {
     as.call(c(.(cbind), map(as.name, matrix)))
   }

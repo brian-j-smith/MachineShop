@@ -91,9 +91,11 @@ c.DiscreteVariate <- function(...) {
   x <- NextMethod()
   class <- class(args[[1]])
   if (all(map("logi", is, args, class))) {
-    new(class, x,
-        min = min(map("num", slot, args, "min")),
-        max = max(map("num", slot, args, "max")))
+    new(class,
+      x,
+      min = min(map("num", slot, args, "min")),
+      max = max(map("num", slot, args, "max"))
+    )
   } else {
     x
   }

@@ -63,8 +63,9 @@ GLMNetModel <- function(
     name = "GLMNetModel",
     label = "Lasso and Elastic-Net",
     packages = "glmnet",
-    response_types = c("BinomialVariate", "factor", "matrix", "numeric",
-                       "PoissonVariate", "Surv"),
+    response_types = c(
+      "BinomialVariate", "factor", "matrix", "numeric", "PoissonVariate", "Surv"
+    ),
     weights = TRUE,
     predictor_encoding = "model.matrix",
     na.rm = TRUE,
@@ -85,8 +86,10 @@ GLMNetModel <- function(
           if (length(lambda) >= 2) {
             exp(seq(log(min(lambda)), log(max(lambda)), length = n))
           } else {
-            throw(LocalWarning("GLMNetModel grid values for lambda could not ",
-                               "be generated automatically."))
+            throw(LocalWarning(
+              "GLMNetModel grid values for lambda could not be generated ",
+              "automatically."
+            ))
             numeric()
           }
         },
@@ -125,12 +128,15 @@ GLMNetModel <- function(
           object, newx = model.matrix(data, intercept = FALSE),
           newoffset = model.offset(data), type = "link"
         )[, 1]
-        new_lp <- predict(object, newx = newx, newoffset = newoffset,
-                          type = "link")[, 1]
+        new_lp <- predict(
+          object, newx = newx, newoffset = newoffset, type = "link"
+        )[, 1]
         predict(y, lp, new_lp, ...)
       } else {
-        predict(object, newx = newx, newoffset = newoffset,
-                s = object$lambda[1], type = "response")
+        predict(
+          object, newx = newx, newoffset = newoffset, s = object$lambda[1],
+          type = "response"
+        )
       }
     },
 

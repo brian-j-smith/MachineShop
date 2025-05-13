@@ -91,9 +91,11 @@ new_step_kmeans <- function(..., k, algorithm, max_iter, num_start) {
 
   transform <- function(x, step) {
 
-    res <- stats::kmeans(t(x), centers = min(max(step$k, 1), ncol(x) - 1),
-                         iter.max = step$max_iter, nstart = step$num_start,
-                         algorithm = step$algorithm)
+    res <- stats::kmeans(
+      t(x), centers = min(max(step$k, 1), ncol(x) - 1),
+      iter.max = step$max_iter, nstart = step$num_start,
+      algorithm = step$algorithm
+    )
 
     cluster <- res$cluster
     weights <- Matrix::t(Matrix::fac2sparse(cluster) / res$size[res$size > 0])
@@ -115,8 +117,9 @@ new_step_kmeans <- function(..., k, algorithm, max_iter, num_start) {
     num_start = num_start
   )
 
-  object <- new_step_lincomp(..., transform = transform, num_comp = NULL,
-                             options = options)
+  object <- new_step_lincomp(
+    ..., transform = transform, num_comp = NULL, options = options
+  )
   object$res <- tibble(
     terms = recipes::sel2char(object$terms),
     cluster = NA_integer_,

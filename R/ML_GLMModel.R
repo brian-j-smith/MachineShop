@@ -47,8 +47,10 @@ GLMModel <- function(family = NULL, quasi = FALSE, ...) {
     name = "GLMModel",
     label = "Generalized Linear Models",
     packages = c("MASS", "nnet", "stats"),
-    response_types = c("BinomialVariate", "factor", "matrix",
-                       "NegBinomialVariate", "numeric", "PoissonVariate"),
+    response_types = c(
+      "BinomialVariate", "factor", "matrix", "NegBinomialVariate",
+      "numeric", "PoissonVariate"
+    ),
     weights = TRUE,
     predictor_encoding = "model.matrix",
     na.rm = TRUE,
@@ -147,8 +149,10 @@ GLMStepAICModel <- function(
     name = "GLMStepAICModel",
     label = "Generalized Linear Models (Stepwise)",
     packages = stepmodel@packages,
-    response_types = c("binary", "BinomialVariate","NegBinomialVariate",
-                       "numeric", "PoissonVariate"),
+    response_types = c(
+      "binary", "BinomialVariate","NegBinomialVariate", "numeric",
+      "PoissonVariate"
+    ),
     weights = TRUE,
     predictor_encoding = stepmodel@predictor_encoding,
     na.rm = stepmodel@na.rm,

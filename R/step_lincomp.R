@@ -164,13 +164,15 @@ bake.step_lincomp <- function(object, new_data, ...) {
   weights <- object$res$weights
   is_lincomp_var <- names(new_data) %in% rownames(weights)
 
-  lincomp_data <- scale(new_data[is_lincomp_var],
-                        center = object$center, scale = object$scale)
+  lincomp_data <- scale(
+    new_data[is_lincomp_var], center = object$center, scale = object$scale
+  )
   comps <- as_tibble(as.matrix(lincomp_data %*% weights))
 
   if (object$replace) new_data <- new_data[!is_lincomp_var]
-  comps <- recipes::check_name(comps, new_data, object,
-                               newname = colnames(weights))
+  comps <- recipes::check_name(
+    comps, new_data, object, newname = colnames(weights)
+  )
 
   as_tibble(c(new_data, comps))
 

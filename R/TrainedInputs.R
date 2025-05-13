@@ -72,8 +72,9 @@ SelectedInput.formula <- function(
   mf_list <- map(function(x) {
     do.call(ModelFrame, list(x, data, strata = response(x), na.rm = FALSE))
   }, inputs)
-  SelectedInput(mf_list, control = control, metrics = metrics, stat = stat,
-                cutoff = cutoff)
+  SelectedInput(
+    mf_list, control = control, metrics = metrics, stat = stat, cutoff = cutoff
+  )
 }
 
 
@@ -89,8 +90,9 @@ SelectedInput.matrix <- function(
     throw(Error("Inputs must all be matrices."))
   }
   mf_list <- map(ModelFrame, inputs, list(y), strata = list(y), na.rm = FALSE)
-  SelectedInput(mf_list, control = control, metrics = metrics, stat = stat,
-                cutoff = cutoff)
+  SelectedInput(
+    mf_list, control = control, metrics = metrics, stat = stat, cutoff = cutoff
+  )
 }
 
 
@@ -117,9 +119,8 @@ SelectedInput.ModelFrame <- function(
 
   combined <- combine_inputs(inputs)
 
-  new("SelectedModelFrame", ModelFrame(combined$data),
-    candidates = combined$candidates,
-    params = params
+  new("SelectedModelFrame",
+    ModelFrame(combined$data), candidates = combined$candidates, params = params
   )
 
 }
@@ -160,9 +161,8 @@ SelectedInput.recipe <- function(
     rec <- do.call(recipes::update_role, args)
   }
 
-  new("SelectedModelRecipe", new("ModelRecipe", rec),
-    candidates = combined$candidates,
-    params = params
+  new("SelectedModelRecipe",
+    new("ModelRecipe", rec), candidates = combined$candidates, params = params
   )
 
 }
@@ -194,7 +194,8 @@ SelectedInput.ModelSpecification <- function(
     update(modelspec, data = as.data.frame(input))
   }, modelspecs, sel_input@candidates)
 
-  new("SelectedModelSpecification", ModelSpecification(input, NullModel()),
+  new("SelectedModelSpecification",
+    ModelSpecification(input, NullModel()),
     candidates = ListOf(modelspecs),
     params = params
   )
@@ -288,7 +289,8 @@ TunedInput.recipe <- function(
   stat = MachineShop::settings("stat.TrainingParams"), ...
 ) {
 
-  object <- new("TunedModelRecipe", ModelRecipe(object),
+  object <- new("TunedModelRecipe",
+    ModelRecipe(object),
     grid = grid,
     params = TrainingParams(
       control = control,
