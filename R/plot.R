@@ -72,7 +72,7 @@ plot.Calibration <- function(x, type = c("line", "point"), se = FALSE, ...) {
       Predicted = cal$Predicted,
       cal$Observed
     )
-    Predicted_width <- diff(range(df$Predicted, na.rm = TRUE))
+    Predicted_width <- diff(range(df$Predicted, finite = TRUE))
 
     p <- ggplot(df, mapping) +
       geom_abline(intercept = 0, slope = 1, color = "gray") +

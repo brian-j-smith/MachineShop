@@ -24,6 +24,11 @@
 #'   \code{"logistic"}, \code{"loglogistic"}, \code{"lognormal"},
 #'   \code{"rayleigh"}, \code{"t"}, or \code{"weibull"}.  Defaults to the
 #'   distribution that was used in predicting mean survival times.
+#' @param pool logical indicating whether to compute a single calibration curve
+#'   on predictions pooled over all resampling iterations or to compute them for
+#'   each iteration individually and return the mean calibration curve. Pooling
+#'   can result in large memory allocation errors when fitting smooth curves
+#'   with \code{breaks = NULL}.
 #' @param na.rm logical indicating whether to remove observed or predicted
 #'   responses that are \code{NA} when calculating metrics.
 #' @param ... arguments passed to other methods.
@@ -47,7 +52,7 @@
 #'
 calibration <- function(
   x, y = NULL, weights = NULL, breaks = 10, span = 0.75, distr = character(),
-  na.rm = TRUE, ...
+  pool = TRUE, na.rm = TRUE, ...
 ) {
   if (na.rm) {
     complete <- complete_subset(x = x, y = y, weights = weights)
@@ -56,7 +61,10 @@ calibration <- function(
     weights <- complete$weights
   }
   Calibration(
-    .calibration(x, y, weights, breaks = breaks, span = span, distr = distr),
+    .calibration(
+      x, y, weights, breaks = breaks, span = span, distr = distr, pool = pool,
+      ...
+    ),
     smoothed = is_empty(breaks)
   )
 }
@@ -111,43 +119,54 @@ setMethod(".calibration", c("factor", "numeric"),
 
 
 setMethod(".calibration", c("matrix", "matrix"),
-  function(observed, predicted, weights, breaks, span, ...) {
+  function(observed, predicted, weights, breaks, span, xlim = NULL, ...) {
     weights <- check_weights(weights, observed[, 1])
     throw(check_assignment(weights))
-    df <- data.frame(
-      Response = rep(factor(colnames(predicted)), each = nrow(predicted)),
-      Predicted = as.numeric(predicted)
-    )
     if (is_empty(breaks)) {
-      loessfit_list <- map(function(i) {
-        y <- observed[, i]
-        x <- predicted[, i]
-        predict(loess(y ~ x, weights = weights, span = span), se = TRUE)
-      }, seq_len(ncol(predicted)))
-      Mean <- c(map("num", getElement, loessfit_list, "fit"))
-      SE <- c(map("num", getElement, loessfit_list, "se.fit"))
-      df$Observed <- cbind(
-        Mean = Mean, SE = SE,
-        Lower = Mean - SE,
-        Upper = Mean + SE
+      x <- predicted
+      newx <- if (!is_empty(xlim)) {
+        matrix(seq(xlim[1], xlim[2], length = 101), 101, ncol(x))
+      } else x
+      res <- data.frame(
+        Response = rep(factor(colnames(x)), each = nrow(newx)),
+        Predicted = as.numeric(newx)
       )
-      df
+      loess_fits <- map(function(col) {
+        data <- data.frame(y = observed[, col], x = x[, col])
+        newdata <- data.frame(x = newx[, col])
+        predict(
+          loess(y ~ x, data = data, weights = weights, span = span),
+          newdata = newdata, se = TRUE
+        )
+      }, seq_len(ncol(x)))
+      Mean <- c(map("num", getElement, loess_fits, "fit"))
+      SE <- c(map("num", getElement, loess_fits, "se.fit"))
+      res$Observed <- cbind(
+        Mean = Mean, SE = SE, Lower = Mean - SE, Upper = Mean + SE
+      )
+      res
     } else {
-      df$Predicted <- midpoints(df$Predicted, breaks)
-      df$Observed <- c(observed)
-      df$Weight <- weights
-      by_result <- by(df, df[c("Predicted", "Response")], function(data) {
+      df <- data.frame(
+        Response = rep(factor(colnames(predicted)), each = nrow(predicted)),
+        Predicted = midpoints(as.numeric(predicted), breaks, xlim = xlim),
+        Observed = c(observed),
+        Weight = weights
+      )
+      res <- rev(expand.grid(
+        Predicted = levels(df$Predicted),
+        Response = unique(df$Response)
+      ))
+      res$Observed <- matrix(NA, nrow(res), 4)
+      colnames(res$Observed) <- c("Mean", "SE", "Lower", "Upper")
+      data_splits <- split(df, df[c("Response", "Predicted")], drop = TRUE)
+      for (data in data_splits) {
         Mean <- weighted_mean(data$Observed, data$Weight)
         SE <- weighted_sd(data$Observed, data$Weight) / sqrt(nrow(data))
-        result <- data[1, c("Response", "Predicted")]
-        result$Observed <- cbind(
-          Mean = Mean, SE = SE,
-          Lower = Mean - SE,
-          Upper = Mean + SE
-        )
-        result
-      }, simplify = FALSE)
-      do.call(rbind, by_result)
+        ind <- res$Response == data$Response[1] &
+          res$Predicted == data$Predicted[1]
+        res[ind, "Observed"] <- cbind(Mean, SE, Mean - SE, Mean + SE)
+      }
+      res
     }
   }
 )
@@ -161,63 +180,107 @@ setMethod(".calibration", c("numeric", "numeric"),
 
 
 setMethod(".calibration", c("Resample", "ANY"),
-  function(observed, predicted, weights, ...) {
-    cal_list <- by(observed, observed$Model, function(resample) {
-      calibration(
-        resample$Observed, resample$Predicted, resample$Weight, na.rm = FALSE,
-        ...
-      )
+  function(observed, predicted, weights, pool, ...) {
+    cal_model <- by(observed, observed$Model, function(resample) {
+      if (pool) {
+        calibration(
+          resample$Observed, resample$Predicted, resample$Weight, na.rm = FALSE,
+          ...
+        )
+      } else {
+        xlim <- range(resample$Predicted, finite = TRUE)
+        cal_iter <- by(resample, resample$Iteration, function(resample_iter) {
+          res <- calibration(
+            resample_iter$Observed, resample_iter$Predicted,
+            resample_iter$Weight, na.rm = FALSE, xlim = xlim, ...
+          )
+          res$Observed <- res$Observed[, "Mean"]
+          res
+        })
+        get_stats <- function(col, fun) {
+          num_mat <- map("num", function(x) x[, col], cal_iter)
+          apply(num_mat, 1, function(x) fun(na.omit(x)))
+        }
+        cal_iter1 <- cal_iter[[1]]
+        cal_iter1$Predicted <- get_stats("Predicted", mean)
+        Mean <- get_stats("Observed", mean)
+        SE <- get_stats("Observed", sd)
+        cal_iter1$Observed <- cbind(
+          Mean = Mean, SE = SE, Lower = Mean - SE, Upper = Mean + SE
+        )
+        cal_iter1
+      }
     }, simplify = FALSE)
-    do.call(c, cal_list)
+    do.call(c, cal_model)
   }
 )
 
 
 setMethod(".calibration", c("Surv", "SurvProbs"),
-  function(observed, predicted, weights, breaks, ...) {
+  function(observed, predicted, weights, breaks, xlim = NULL, ...) {
     weights <- check_weights(weights, observed)
     throw(check_assignment(weights))
     times <- predicted@times
-    df <- data.frame(
-      Response = rep(factor(colnames(predicted)), each = nrow(predicted)),
-      Predicted = as.numeric(predicted)
-    )
     if (is_empty(breaks)) {
       throw(check_censoring(observed, "right"))
       throw(check_equal_weights(weights))
-      Mean <- c(map("num", function(i) {
-        x <- predicted[, i]
-        harefit <- polspline::hare(observed[, "time"], observed[, "status"], x)
-        1 - polspline::phare(times[i], x, harefit)
-      }, seq_len(ncol(predicted))))
-      df$Observed <- cbind(Mean = Mean, SE = NA, Lower = NA, Upper = NA)
-      df
+      x <- predicted
+      newx <- if (!is_empty(xlim)) {
+        matrix(seq(xlim[1], xlim[2], length = 101), ncol = ncol(x))
+      } else x
+      res <- data.frame(
+        Response = rep(factor(colnames(x)), each = nrow(newx)),
+        Predicted = as.numeric(newx)
+      )
+      Mean <- c(map("num", function(col) tryCatch(
+        {
+          harefit <- polspline::hare(
+            observed[, "time"], observed[, "status"], x[, col]
+          )
+          1 - polspline::phare(times[col], newx[, col], harefit)
+        },
+        error = function(cond) {
+          throw(LocalWarning(conditionMessage(cond)))
+          rep(NA, nrow(newx))
+        }
+      ), seq_len(ncol(x))))
+      res$Observed <- cbind(Mean = Mean, SE = NA, Lower = NA, Upper = NA)
+      res
     } else {
-      df$Predicted <- midpoints(df$Predicted, breaks)
-      df$Observed <- rep(observed, times = length(times))
-      df$Weight <- weights
-      df$Time <- rep(times, each = nrow(predicted))
-      by_results <- by(df, df[c("Predicted", "Response")], function(data) {
+      df <- data.frame(
+        Response = rep(factor(colnames(predicted)), each = nrow(predicted)),
+        Predicted = midpoints(as.numeric(predicted), breaks, xlim = xlim),
+        Observed = rep(observed, times = length(times)),
+        Weight = weights,
+        Time = rep(times, each = nrow(predicted))
+      )
+      res <- rev(expand.grid(
+        Predicted = levels(df$Predicted),
+        Response = unique(df$Response)
+      ))
+      res$Observed <- matrix(NA, nrow(res), 4)
+      colnames(res$Observed) <- c("Mean", "SE", "Lower", "Upper")
+      data_splits <- split(df, df[c("Response", "Predicted")], drop = TRUE)
+      for (data in data_splits) {
         km <- survfit(Observed ~ 1, data = data, weights = data$Weight)
-        interval <- findInterval(data$Time[1], c(0, km$time))
-        Mean <- c(1, km$surv)[interval]
-        SE <- c(0, km$std.err)[interval]
-        result <- data[1, c("Response", "Predicted")]
-        result$Observed <- cbind(
-          Mean = Mean, SE = SE,
-          Lower = max(Mean - SE, 0),
-          Upper = min(Mean + SE, 1)
+        inds <- findInterval(data$Time[1], c(0, km$time))
+        Mean <- c(1, km$surv)[inds]
+        SE <- c(0, km$std.err)[inds]
+        ind <- res$Response == data$Response[1] &
+          res$Predicted == data$Predicted[1]
+        res[ind, "Observed"] <- cbind(
+          Mean, SE, max(Mean - SE, 0), min(Mean + SE, 1)
         )
-        result
-      }, simplify = FALSE)
-      do.call(rbind, by_results)
+      }
+      res
     }
   }
 )
 
 
 setMethod(".calibration", c("Surv", "numeric"),
-  function(observed, predicted, weights, breaks, distr, span, ...) {
+  function(observed, predicted, weights, breaks, distr, span, xlim = NULL, ...)
+  {
     weights <- check_weights(weights, observed)
     throw(check_assignment(weights))
     max_time <- max(time(observed))
@@ -237,16 +300,20 @@ setMethod(".calibration", c("Surv", "numeric"),
     }
 
     if (is_empty(breaks)) {
-      df <- data.frame(
+      res <- data.frame(
         Response = factor("Mean"),
-        Predicted = unique(predicted)
+        Predicted = if (is_empty(xlim)) {
+          unique(predicted)
+        } else {
+          seq(xlim[1], xlim[2], length = 101)
+        }
       )
       tricubic <- function(x, span = 1, min_weight = 0) {
         x <- abs(x)
         x_range <- span * diff(range(x))
         (1 - min_weight) * pmax((1 - (x / x_range)^3)^3, 0) + min_weight
       }
-      metrics_list <- map(function(value) {
+      surv_ests <- map(function(value) {
         weights <- weights *
           tricubic(predicted - value, span = span, min_weight = 0.01)
         est <- if (distr == "empirical") {
@@ -257,17 +324,24 @@ setMethod(".calibration", c("Surv", "numeric"),
         with(est, {
           c(Mean = Mean, SE = SE, Lower = max(Mean - SE, 0), Upper = Mean + SE)
         })
-      }, df$Predicted)
-      df$Observed <- do.call(rbind, metrics_list)
-      df
+      }, res$Predicted)
+      res$Observed <- do.call(rbind, surv_ests)
+      res
     } else {
       df <- data.frame(
         Response = factor("Mean"),
-        Predicted = midpoints(predicted, breaks),
+        Predicted = midpoints(predicted, breaks, xlim = xlim),
         Observed = observed,
         Weight = weights
       )
-      by_results <- by(df, df[c("Predicted", "Response")], function(data) {
+      res <- rev(expand.grid(
+        Predicted = levels(df$Predicted),
+        Response = unique(df$Response)
+      ))
+      res$Observed <- matrix(NA, nrow(res), 4)
+      colnames(res$Observed) <- c("Mean", "SE", "Lower", "Upper")
+      data_splits <- split(df, df[c("Response", "Predicted")], drop = TRUE)
+      for (data in data_splits) {
         observed <- data$Observed
         weights <- data$Weight
         est <- if (distr == "empirical") {
@@ -277,28 +351,29 @@ setMethod(".calibration", c("Surv", "numeric"),
         } else {
           list(Mean = NA_real_, SE = NA_real_)
         }
-        result <- data[1, c("Response", "Predicted")]
-        result$Observed <- with(est, {
-          cbind(
-            Mean = Mean, SE = SE, Lower = max(Mean - SE, 0), Upper = Mean + SE
-          )
+        ind <- res$Response == data$Response[1] &
+          res$Predicted == data$Predicted[1]
+        res[ind, "Observed"] <- with(est, {
+          cbind(Mean, SE, max(Mean - SE, 0), min(Mean + SE, 1))
         })
-        result
-      }, simplify = FALSE)
-      do.call(rbind, by_results)
+      }
+      res
     }
   }
 )
 
 
-midpoints <- function(x, breaks) {
+midpoints <- function(x, breaks, xlim = NULL) {
   breaks <- if (length(breaks) == 1) {
-    break_range <- range(x, na.rm = TRUE, finite = TRUE)
+    break_range <- if (is_empty(xlim)) range(x, finite = TRUE) else xlim
     num_breaks <- max(as.integer(breaks), 1) + 1
     seq(break_range[1], break_range[2], length = num_breaks)
   } else {
     sort(breaks)
   }
-  mids <- breaks[-length(breaks)] + diff(breaks) / 2
-  mids[.bincode(x, breaks, include.lowest = TRUE)]
+  levels <- breaks[-length(breaks)] + diff(breaks) / 2
+  structure(
+    levels[.bincode(x, breaks, include.lowest = TRUE)],
+    levels = levels
+  )
 }
