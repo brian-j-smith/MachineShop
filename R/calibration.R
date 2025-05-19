@@ -181,7 +181,7 @@ setMethod(".calibration", c("numeric", "numeric"),
 
 setMethod(".calibration", c("Resample", "ANY"),
   function(observed, predicted, weights, pool, ...) {
-    cal_model <- by(observed, observed$Model, function(resample) {
+    cal_models <- by(observed, observed$Model, function(resample) {
       if (pool) {
         calibration(
           resample$Observed, resample$Predicted, resample$Weight, na.rm = FALSE,
@@ -189,29 +189,29 @@ setMethod(".calibration", c("Resample", "ANY"),
         )
       } else {
         xlim <- range(resample$Predicted, finite = TRUE)
-        cal_iter <- by(resample, resample$Iteration, function(resample_iter) {
-          res <- calibration(
+        cal_iters <- by(resample, resample$Iteration, function(resample_iter) {
+          calibration(
             resample_iter$Observed, resample_iter$Predicted,
             resample_iter$Weight, na.rm = FALSE, xlim = xlim, ...
           )
-          res$Observed <- res$Observed[, "Mean"]
-          res
         })
-        get_stats <- function(col, fun) {
-          num_mat <- map("num", function(x) x[, col], cal_iter)
-          apply(num_mat, 1, function(x) fun(na.omit(x)))
+        cal_iter1 <- cal_iters[[1]]
+        if (length(cal_iters) > 1) {
+          get_stats <- function(fun_map, fun_stat) {
+            num_mat <- map("num", fun_map, cal_iters)
+            apply(num_mat, 1, function(x) fun_stat(na.omit(x)))
+          }
+          cal_iter1$Predicted <- get_stats(function(x) x$Predicted, mean)
+          Mean <- get_stats(function(x) x$Observed[, "Mean"], mean)
+          SE <- get_stats(function(x) x$Observed[, "Mean"], sd)
+          cal_iter1$Observed <- cbind(
+            Mean = Mean, SE = SE, Lower = Mean - SE, Upper = Mean + SE
+          )
         }
-        cal_iter1 <- cal_iter[[1]]
-        cal_iter1$Predicted <- get_stats("Predicted", mean)
-        Mean <- get_stats("Observed", mean)
-        SE <- get_stats("Observed", sd)
-        cal_iter1$Observed <- cbind(
-          Mean = Mean, SE = SE, Lower = Mean - SE, Upper = Mean + SE
-        )
         cal_iter1
       }
     }, simplify = FALSE)
-    do.call(c, cal_model)
+    do.call(c, cal_models)
   }
 )
 
