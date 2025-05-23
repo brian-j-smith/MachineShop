@@ -28,7 +28,8 @@
 #'   on predictions pooled over all resampling iterations or to compute them for
 #'   each iteration individually and return the mean calibration curve. Pooling
 #'   can result in large memory allocation errors when fitting smooth curves
-#'   with \code{breaks = NULL}.
+#'   with \code{breaks = NULL}. The current default is changed from versions
+#'   <= 3.8.0 of the package which only implemented \code{pool = TRUE}.
 #' @param na.rm logical indicating whether to remove observed or predicted
 #'   responses that are \code{NA} when calculating metrics.
 #' @param ... arguments passed to other methods.
@@ -52,7 +53,7 @@
 #'
 calibration <- function(
   x, y = NULL, weights = NULL, breaks = 10, span = 0.75, distr = character(),
-  pool = TRUE, na.rm = TRUE, ...
+  pool = FALSE, na.rm = TRUE, ...
 ) {
   if (na.rm) {
     complete <- complete_subset(x = x, y = y, weights = weights)
