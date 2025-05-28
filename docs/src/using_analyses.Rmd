@@ -125,7 +125,7 @@ As an alternative to discrete bins, curves can be smoothed by setting `breaks = 
 ```{r using_analyses_cal_smoothed, results="hide"}
 ## Smoothed calibration curves
 cal <- calibration(res_probs, breaks = NULL)
-plot(cal)
+plot(cal, se = TRUE)
 ```
 
 Calibration curves close to the 45$^\circ$ line represent agreement between observed and predicted responses and a model that is said to be well calibrated.

@@ -166,6 +166,38 @@ sel_fo <- SelectedInput(fo1, fo2, data = surv_train)
 ## Input-selected model fit and final trained model
 model_fit <- fit(sel_fo, model = GBMModel)
 as.MLModel(model_fit)
+#> --- MLModel object ----------------------------------------------------------
+#> 
+#> Model name: GBMModel
+#> Label: Trained Generalized Boosted Regression
+#> Package: gbm
+#> Response types: factor, numeric, PoissonVariate, Surv
+#> Case weights support: TRUE
+#> Missing case removal: response
+#> Tuning grid: TRUE
+#> Variable importance: TRUE
+#> 
+#> Parameters:
+#> List of 5
+#>  $ n.trees          : num 100
+#>  $ interaction.depth: num 1
+#>  $ n.minobsinnode   : num 10
+#>  $ shrinkage        : num 0.1
+#>  $ bag.fraction     : num 0.5
+#> 
+#> === $TrainingStep1 ==========================================================
+#> === TrainingStep object ===
+#> 
+#> Optimization method: Grid Search
+#> SelectedModelFrame log:
+#> # A tibble: 2 × 4
+#>   name         selected params$id  metrics$`C-Index`
+#>   <chr>        <lgl>    <chr>                  <dbl>
+#> 1 ModelFrame.1 TRUE     input.CuYF             0.745
+#> 2 ModelFrame.2 FALSE    input.W4KN             0.664
+#> 
+#> Selected row: 1
+#> Metric: C-Index = 0.7452425
 ```
 
 In the previous examples, selection of different inputs was performed with the same model (`r rdoc_url("GBMModel")`).  Selection among different combinations of inputs and models is supported with the `r rdoc_url("ModelSpecification()")` constructor.
@@ -180,6 +212,34 @@ sel_mfo <- SelectedInput(
 ## Input-selected model fit and final trained model
 model_fit <- fit(sel_mfo)
 as.MLModel(model_fit)
+#> --- MLModel object ----------------------------------------------------------
+#> 
+#> Model name: CoxModel
+#> Label: Trained Cox Regression
+#> Package: survival
+#> Response type: Surv
+#> Case weights support: TRUE
+#> Missing case removal: all
+#> Tuning grid: FALSE
+#> Variable importance: TRUE
+#> 
+#> Parameter:
+#> List of 1
+#>  $ ties: chr "efron"
+#> 
+#> === $TrainingStep1 ==========================================================
+#> === TrainingStep object ===
+#> 
+#> Optimization method: Grid Search
+#> SelectedModelSpecification log:
+#> # A tibble: 2 × 4
+#>   name                 selected params$id  metrics$`C-Index`
+#>   <chr>                <lgl>    <chr>                  <dbl>
+#> 1 ModelSpecification.1 TRUE     mspec.azpi             0.783
+#> 2 ModelSpecification.2 FALSE    mspec.80bs             0.664
+#> 
+#> Selected row: 1
+#> Metric: C-Index = 0.7829086
 ```
 
 
@@ -258,8 +318,10 @@ fit(surv_fo, data = surv_train,
 fit(surv_fo, data = surv_train,
     model = TunedModel(
       GBMModel,
-      grid = expand_params(n.trees = c(25, 50, 100),
-                           interaction.depth = 1:3),
+      grid = expand_params(
+        n.trees = c(25, 50, 100),
+        interaction.depth = 1:3
+      ),
       control = surv_means_control
     ))
 ```
@@ -450,8 +512,8 @@ Nesting of resampling routines is repeated recursively when a fit involves multi
 #>   name          selected params$PCA$num_comp metrics$`C-Index`
 #>   <chr>         <lgl>                  <int>             <dbl>
 #> 1 ModelRecipe.1 TRUE                       1             0.741
-#> 2 ModelRecipe.2 FALSE                      2             0.730
-#> 3 ModelRecipe.3 FALSE                      3             0.702
+#> 2 ModelRecipe.2 FALSE                      2             0.733
+#> 3 ModelRecipe.3 FALSE                      3             0.691
 #> 
 #> Selected row: 1
 #> Metric: C-Index = 0.7405534
