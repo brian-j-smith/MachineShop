@@ -2,10 +2,15 @@
 
 ## Version Updates
 
+## 3.8.0.9001
+
+* Return standard errors from `calibration()` with  `pool = FALSE` and one resampling iteration.
+* Set argument `pool` default to `FALSE` in `calibration()` which had only implemented `pool = TRUE` in previous versions (<= 3.8.0) of the package.
+
 ## 3.8.0.9000
 
 * Add offset support to `XGBModel`.
-* Add argument `pool` to `calibration()` to address memory error caused by `breaks = NULL` with large resampled data.
+* Add logical argument `pool` to `calibration()` indicating whether to compute a single calibration curve on predictions pooled over all resampling iterations or to compute them for each iteration individually and return the mean calibration curve. Pooling can result in large memory allocation errors when fitting smooth curves with `breaks = NULL`.
 
 ## 3.8.0
 
