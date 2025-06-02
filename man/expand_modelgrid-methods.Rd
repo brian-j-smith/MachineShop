@@ -65,8 +65,11 @@ grids created automatically when a \code{\link{TunedModel}} is fit.
 \examples{
 expand_modelgrid(TunedModel(GBMModel, grid = 5))
 
+\donttest{
+## Requires prior installation of suggested package glmnet to run
 expand_modelgrid(TunedModel(GLMNetModel, grid = c(alpha = 5, lambda = 10)),
                  sale_amount ~ ., data = ICHomes)
+}
 
 gbm_grid <- ParameterGrid(
   n.trees = dials::trees(),

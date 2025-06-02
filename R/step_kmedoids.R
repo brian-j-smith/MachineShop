@@ -53,6 +53,9 @@
 #' \code{\link[recipes]{bake}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package cluster to run
+#'
 #' library(recipes)
 #'
 #' rec <- recipe(rating ~ ., data = attitude)
@@ -65,6 +68,7 @@
 #'
 #' tidy(kmedoids_rec, number = 1)
 #' tidy(kmedoids_prep, number = 1)
+#' }
 #'
 step_kmedoids <- function(
   recipe, ..., k = 5, center = TRUE, scale = TRUE, method = c("pam", "clara"),

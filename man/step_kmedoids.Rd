@@ -97,6 +97,9 @@ dissimilarity between the variables and their assigned cluster medoids is
 minimized.  Cluster medoids are then returned as a set of k variables.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package cluster to run
+
 library(recipes)
 
 rec <- recipe(rating ~ ., data = attitude)
@@ -109,6 +112,7 @@ pairs(kmedoids_data, lower.panel = NULL)
 
 tidy(kmedoids_rec, number = 1)
 tidy(kmedoids_prep, number = 1)
+}
 
 }
 \references{

@@ -41,6 +41,9 @@
 #' \code{\link[recipes]{prep}}, \code{\link[recipes]{bake}}
 #'
 #' @examples
+#' \donttest{
+#' ## Requires prior installation of suggested package elasticnet to run
+#'
 #' library(recipes)
 #'
 #' rec <- recipe(rating ~ ., data = attitude)
@@ -53,6 +56,7 @@
 #'
 #' tidy(spca_rec, number = 1)
 #' tidy(spca_prep, number = 1)
+#' }
 #'
 step_spca <- function(
   recipe, ..., num_comp = 5, sparsity = 0, num_var = integer(),

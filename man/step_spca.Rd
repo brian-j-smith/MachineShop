@@ -91,6 +91,9 @@ the original variables may have zero loadings in the linear combinations
 that form the components.
 }
 \examples{
+\donttest{
+## Requires prior installation of suggested package elasticnet to run
+
 library(recipes)
 
 rec <- recipe(rating ~ ., data = attitude)
@@ -103,6 +106,7 @@ pairs(spca_data, lower.panel = NULL)
 
 tidy(spca_rec, number = 1)
 tidy(spca_prep, number = 1)
+}
 
 }
 \references{
