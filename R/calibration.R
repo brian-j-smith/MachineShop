@@ -55,6 +55,7 @@ calibration <- function(
   x, y = NULL, weights = NULL, breaks = 10, span = 0.75, distr = character(),
   pool = FALSE, na.rm = TRUE, ...
 ) {
+  if (pool) throw(Warning("pool = TRUE is deprecated"))
   if (na.rm) {
     complete <- complete_subset(x = x, y = y, weights = weights)
     x <- complete$x
