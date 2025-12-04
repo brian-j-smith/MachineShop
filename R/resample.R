@@ -193,7 +193,6 @@ resample.MLModelFunction <- function(model, ...) {
 
 
 .resample.CVControl <- function(control, object, progress_index = 0, ...) {
-  presets <- settings()
   set.seed(control@seed)
   splits <- rsample_split(
     function(data, group = NULL, strata = NULL, ...) {
@@ -233,6 +232,7 @@ resample.MLModelFunction <- function(model, ...) {
   )
   on.exit(monitor$pb$terminate())
 
+  presets <- settings()
   df_list <- foreach(
     i = i <- seq_along(splits),
     .export = "subsample",

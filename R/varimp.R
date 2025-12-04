@@ -272,6 +272,7 @@ varimp_permute <- function(
   jobs <- map(na.omit, split(work, rep(1:num_workers, each = num_tasks)))
   seeds <- rand_int(samples)
 
+  presets <- settings()
   foreach(
     pred_names = jobs[lengths(jobs) > 0],
     .multicombine = TRUE,
@@ -282,6 +283,7 @@ varimp_permute <- function(
     .export = c("as.MLMetric", "get_perf_metrics", "map", "permute_int"),
     .packages = "MachineShop"
   ) %dopar% {
+    settings(presets)
     subset <- size < n
     base_perf <- rep(NA_real_, samples)
     perf <- matrix(NA_real_, samples, length(pred_names))
