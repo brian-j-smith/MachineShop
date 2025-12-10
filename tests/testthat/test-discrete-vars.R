@@ -15,7 +15,7 @@ test_that("discrete variate construction and model fitting", {
                              "GLMBoostModel" = function(x) x$family@name,
                              "GLMModel" = function(x) x$family$family,
                              "GLMNetModel" = function(x) class(x)[3],
-                             "XGBModel" = function(x) x$params$objective
+                             "XGBModel" = function(x) attr(x, "params")$objective
       )
 
       model_fit <- fit(..., model = model)

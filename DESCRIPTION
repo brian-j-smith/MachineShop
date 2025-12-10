@@ -32,7 +32,7 @@ Suggests: adabag, BART, bartMachine, C50, censored, cluster, doParallel, e1071,
     kknn, knitr, lars, MASS, mboost, mda, ParBayesianOptimization,
     parsnip (>= 1.1.0), partykit, pls, pso, randomForest, randomForestSRC,
     ranger, rBayesianOptimization, rmarkdown, rms, rpart, testthat, tree,
-    xgboost
+    xgboost (>= 3.1.2)
 LazyData: true
 License: GPL-3
 URL: https://brian-j-smith.github.io/MachineShop/

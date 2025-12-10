@@ -12,7 +12,6 @@ XGBModel(
   ...,
   objective = character(),
   aft_loss_distribution = "normal",
-  aft_loss_distribution_scale = 1,
   base_score = 0.5,
   verbose = 0,
   print_every_n = 1
@@ -31,10 +30,8 @@ XGBDARTModel(
   alpha = 0,
   lambda = 1,
   tree_method = "auto",
-  sketch_eps = 0.03,
   scale_pos_weight = 1,
   refresh_leaf = 1,
-  process_type = "default",
   grow_policy = "depthwise",
   max_leaves = 0,
   max_bin = 256,
@@ -69,10 +66,8 @@ XGBTreeModel(
   alpha = 0,
   lambda = 1,
   tree_method = "auto",
-  sketch_eps = 0.03,
   scale_pos_weight = 1,
   refresh_leaf = 1,
-  process_type = "default",
   grow_policy = "depthwise",
   max_leaves = 0,
   max_bin = 256,
@@ -106,9 +101,6 @@ types.}
 the accelerated failure time objective (\code{"survival:aft"}) as
 \code{"extreme"}, \code{"logistic"}, or \code{"normal"}.}
 
-\item{aft_loss_distribution_scale}{numeric scaling parameter for the
-accelerated failure time distribution.}
-
 \item{base_score}{initial prediction score of all observations, global bias.}
 
 \item{verbose}{numeric value controlling the amount of output printed
@@ -127,7 +119,7 @@ overfitting.}
 
 \item{min_child_weight}{minimum sum of observation weights required of nodes.}
 
-\item{max_delta_step, tree_method, sketch_eps, scale_pos_weight, updater, refresh_leaf, process_type, grow_policy, max_leaves, max_bin, num_parallel_tree}{other tree booster parameters.}
+\item{max_delta_step, tree_method, scale_pos_weight, updater, refresh_leaf, grow_policy, max_leaves, max_bin, num_parallel_tree}{other tree booster parameters.}
 
 \item{subsample}{subsample ratio of the training observations.}
 
@@ -200,7 +192,9 @@ example below.
 \donttest{
 ## Requires prior installation of suggested package xgboost to run
 
-model_fit <- fit(Species ~ ., data = iris, model = XGBTreeModel)
+model_fit <- fit(
+  Species ~ ., data = iris, model = XGBTreeModel(nthread = 1)
+)
 varimp(model_fit, method = "model", type = "Frequency", scale = FALSE)
 }
 
