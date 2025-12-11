@@ -13,7 +13,7 @@
 
 <title>Using MachineShop</title>
 
-<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -69,7 +69,6 @@ if (window.hljs) {
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging div.csl-entry {
   margin-left:2em;
@@ -1965,7 +1964,7 @@ probabilities below, in which term <span
 class="math inline">\(\hat{S}(t)\)</span> is the predicted survival
 probability at follow-up time <span class="math inline">\(t\)</span> and
 <span class="math inline">\(T\)</span> is the survival time <span
-class="citation">(Heagerty, Lumley, and Pepe 2004)</span>.</p>
+class="citation">(Heagerty et al. 2004)</span>.</p>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <caption>
 Table 5. Confusion matrix of observed and predicted survival response
@@ -2050,7 +2049,7 @@ sets and predict the full dataset.
 href="https://www.rdocumentation.org/packages/MachineShop/versions/3.9.0/topics/MLControl"><code>BootOptimismControl()</code></a></dt>
 <dd>
 optimism-corrected bootstrap resampling <span class="citation">(Efron
-and Gong 1983; Harrell, Lee, and Mark 1996)</span>.
+and Gong 1983; Harrell et al. 1996)</span>.
 </dd>
 <dt><a
 href="https://www.rdocumentation.org/packages/MachineShop/versions/3.9.0/topics/MLControl"><code>CVControl()</code></a></dt>
@@ -2076,9 +2075,9 @@ resampled training sets and predict the unsampled cases.
 <dt><a
 href="https://www.rdocumentation.org/packages/MachineShop/versions/3.9.0/topics/MLControl"><code>SplitControl()</code></a></dt>
 <dd>
-split training and test sets <span class="citation">(Hastie, Tibshirani,
-and Friedman 2009)</span> to randomly partition the full dataset for
-model fitting and prediction, respectively.
+split training and test sets <span class="citation">(Hastie et al.
+2009)</span> to randomly partition the full dataset for model fitting
+and prediction, respectively.
 </dd>
 <dt><a
 href="https://www.rdocumentation.org/packages/MachineShop/versions/3.9.0/topics/MLControl"><code>TrainControl()</code></a></dt>
@@ -2118,9 +2117,9 @@ with the <strong>foreach</strong> package <span
 class="citation">(Microsoft and Weston 2019)</span> and will run in
 parallel if a compatible backend is loaded, such as that provided by the
 <strong>doParallel</strong> <span class="citation">(Microsoft
-Corporation and Weston 2019b)</span> or <strong>doSNOW</strong> package
-<span class="citation">(Microsoft Corporation and Weston
-2019a)</span>.</p>
+Corporation and Steve Weston 2019)</span> or <strong>doSNOW</strong>
+package <span class="citation">(Microsoft Corporation and Stephen Weston
+2019)</span>.</p>
 <pre class="r"><code>## Register multiple cores for parallel computations
 library(doParallel)
 registerDoParallel(cores = 2)</code></pre>
@@ -2529,8 +2528,8 @@ href="https://www.rdocumentation.org/packages/MachineShop/versions/3.9.0/topics/
 modelinfo(SVMModel)[[1]]$varimp
 #&gt; [1] FALSE</code></pre>
 <p>Variable importance can be computed with model-agnostic permutation
-methods <span class="citation">(Fisher, Rudin, and Dominici 2019)</span>
-as an alternative to model-specific methods. The following algorithm for
+methods <span class="citation">(Fisher et al. 2019)</span> as an
+alternative to model-specific methods. The following algorithm for
 permutation-based variable importance is implemented and the default
 method in <strong>MachineShop</strong>.</p>
 <ul>
@@ -3432,10 +3431,11 @@ fit(surv_fo, data = surv_train, model = sel_tun_model)</code></pre>
 \ldots, M\)</span> base models as a strategy to improve predictive
 performance. Two methods implemented in <strong>MachineShop</strong> are
 <em>stacked regression</em> <span class="citation">(Breiman 1996)</span>
-and <em>super learners</em> <span class="citation">(van der Laan,
-Polley, and Hubbard 2007)</span>. Stacked regression fits a linear
-combination of predictions from specified base learners to produce a
-prediction function of the form <span class="math display">\[
+and <em>super learners</em> <span class="citation">(<span
+class="nocase">van der Laan et al.</span> 2007)</span>. Stacked
+regression fits a linear combination of predictions from specified base
+learners to produce a prediction function of the form <span
+class="math display">\[
 \hat{f}(x) = \sum_{m=1}^M \hat{w}_m \hat{f}_m(x).
 \]</span> Stacking weights <span class="math inline">\(w\)</span> are
 estimated by (constrained) least squares regression of case responses
@@ -3711,7 +3711,7 @@ functions.</p>
 <td align="left"><a
 href="https://www.rdocumentation.org/packages/MachineShop/versions/3.9.0/topics/set_optim_bayes"><code>set_optim_bayes()</code></a></td>
 <td align="left">Bayesian optimization with a Gaussian process model
-<span class="citation">(Snoek, Larochelle, and Adams 2012)</span></td>
+<span class="citation">(Snoek et al. 2012)</span></td>
 </tr>
 <tr class="even">
 <td align="left"><a
@@ -3765,10 +3765,10 @@ pca_grid &lt;- expand_steps(
 #&gt; 
 #&gt; === ModelRecipe object ===
 #&gt; 
-#&gt; ID: input.ICgC
+#&gt; ID: input.HoL8
 #&gt; Outcome: y
 #&gt; Predictors: sex, age, year, thickness, ulcer
-#&gt; Untrained step IDs: step_center = center_AisIH, step_scale = scale_yD5ZK,
+#&gt; Untrained step IDs: step_center = center_4KNaz, step_scale = scale_CuYFW,
 #&gt;   step_pca = PCA
 #&gt; Number of observations: 136
 #&gt; 
@@ -3776,12 +3776,12 @@ pca_grid &lt;- expand_steps(
 #&gt; 
 #&gt; Model name: GBMModel
 #&gt; Label: Generalized Boosted Regression
-#&gt; ID: model.ajOO
+#&gt; ID: model.bshV
 #&gt; 
 #&gt; === Grid ===
 #&gt; 
 #&gt; # A tibble: 27 × 2
-#&gt;    input.ICgC$PCA$num_comp model.ajOO$n.trees $interaction.depth
+#&gt;    input.HoL8$PCA$num_comp model.bshV$n.trees $interaction.depth
 #&gt;                      &lt;int&gt;              &lt;int&gt;              &lt;int&gt;
 #&gt;  1                       1                 50                  1
 #&gt;  2                       1                 50                  2
@@ -3821,8 +3821,8 @@ as.MLModel(bayes_fit)
 #&gt; 
 #&gt; Parameters:
 #&gt; List of 5
-#&gt;  $ n.trees          : num 150
-#&gt;  $ interaction.depth: num 3
+#&gt;  $ n.trees          : num 50
+#&gt;  $ interaction.depth: num 1
 #&gt;  $ n.minobsinnode   : num 10
 #&gt;  $ shrinkage        : num 0.1
 #&gt;  $ bag.fraction     : num 0.5
@@ -3832,24 +3832,24 @@ as.MLModel(bayes_fit)
 #&gt; 
 #&gt; Optimization method: Bayesian Optimization
 #&gt; ModelSpecification log:
-#&gt; # A tibble: 12 × 5
-#&gt;    name         epoch selected params$input.ICgC$PCA$num_comp metrics$`C-Index`
+#&gt; # A tibble: 15 × 5
+#&gt;    name         epoch selected params$input.HoL8$PCA$num_comp metrics$`C-Index`
 #&gt;    &lt;chr&gt;        &lt;int&gt; &lt;lgl&gt;                             &lt;dbl&gt;             &lt;dbl&gt;
-#&gt;  1 ModelSpec.1      0 FALSE                                 2             0.721
-#&gt;  2 ModelSpec.2      0 FALSE                                 1             0.728
-#&gt;  3 ModelSpec.3      0 FALSE                                 3             0.742
-#&gt;  4 ModelSpec.4      0 FALSE                                 3             0.742
-#&gt;  5 ModelSpec.5      0 FALSE                                 2             0.721
-#&gt;  6 ModelSpec.6      1 FALSE                                 3             0.743
-#&gt;  7 ModelSpec.7      2 FALSE                                 3             0.741
-#&gt;  8 ModelSpec.8      3 FALSE                                 3             0.742
-#&gt;  9 ModelSpec.9      4 FALSE                                 3             0.742
-#&gt; 10 ModelSpec.10     5 FALSE                                 3             0.743
-#&gt; # ℹ 2 more rows
-#&gt; # ℹ 1 more variable: params$model.ajOO &lt;tibble[,2]&gt;
+#&gt;  1 ModelSpec.1      0 FALSE                                 2             0.714
+#&gt;  2 ModelSpec.2      0 FALSE                                 3             0.745
+#&gt;  3 ModelSpec.3      0 FALSE                                 3             0.740
+#&gt;  4 ModelSpec.4      0 FALSE                                 2             0.727
+#&gt;  5 ModelSpec.5      0 FALSE                                 1             0.723
+#&gt;  6 ModelSpec.6      1 TRUE                                  3             0.755
+#&gt;  7 ModelSpec.7      2 FALSE                                 1             0.744
+#&gt;  8 ModelSpec.8      3 FALSE                                 3             0.755
+#&gt;  9 ModelSpec.9      4 FALSE                                 3             0.754
+#&gt; 10 ModelSpec.10     5 FALSE                                 3             0.747
+#&gt; # ℹ 5 more rows
+#&gt; # ℹ 1 more variable: params$model.bshV &lt;tibble[,2]&gt;
 #&gt; 
-#&gt; Selected row: 12
-#&gt; Metric: C-Index = 0.751118</code></pre>
+#&gt; Selected row: 6
+#&gt; Metric: C-Index = 0.7549613</code></pre>
 <p>Alternatively, a value of <code>NULL</code> may be specified as the
 control method in a <a
 href="https://www.rdocumentation.org/packages/MachineShop/versions/3.9.0/topics/ModelSpecifiction"><code>ModelSpecifiction</code></a>
@@ -4214,12 +4214,10 @@ summary(performance(res, metric = f2_score))
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="unnumbered">References</h1>
-<div id="refs" class="references csl-bib-body hanging-indent"
-entry-spacing="0">
+<div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-andersen:1993:SMB" class="csl-entry">
 Andersen, Per K, Ornulf Borgan, Richard D Gill, and Niels Keiding. 1993.
-<em>Statistical Models Based on Counting Processes</em>. New York:
-Springer.
+<em>Statistical Models Based on Counting Processes</em>. Springer.
 </div>
 <div id="ref-belisle:1992:CTC" class="csl-entry">
 Belisle, Claude J. P. 1992. <span>“Convergence Theorems for a Class of
@@ -4229,12 +4227,12 @@ Probability</em> 29: 885–95.
 <div id="ref-bouckaert:2004:ERS" class="csl-entry">
 Bouckaert, Remco R, and Eibe Frank. 2004. <span>“Evaluating the
 Replicability of Significance Tests for Comparing Learning
-Algorithms.”</span> In <em>Advances in Knowledge Discovery and Data
-Mining</em>, 3–12. Berlin, Heidelberg: Springer.
+Algorithms.”</span> <em>Advances in Knowledge Discovery and Data
+Mining</em> (Berlin, Heidelberg), 3–12.
 </div>
 <div id="ref-bratton:2007:DSP" class="csl-entry">
 Bratton, Daniel, and James Kennedy. 2007. <span>“Defining a Standard for
-Particle Swarm Optimization.”</span> In <em>2007 IEEE Swarm Intelligence
+Particle Swarm Optimization.”</span> <em>2007 IEEE Swarm Intelligence
 Symposium</em>, 120–27. <a
 href="https://doi.org/10.1109/SIS.2007.368035">https://doi.org/10.1109/SIS.2007.368035</a>.
 </div>
@@ -4251,35 +4249,35 @@ Royal Statistical Society, Series B</em> 34: 216–17.
 Byrd, Richard H., Peihuang Lu, Jorge Nocedal, and Ciyou Zhu. 1995.
 <span>“A Limited Memory Algorithm for Bound Constrained
 Optimization.”</span> <em>SIAM Journal on Scientific Computing</em> 16
-(5): 1190–1208. <a
+(5): 1190–208. <a
 href="https://doi.org/10.1137/0916069">https://doi.org/10.1137/0916069</a>.
 </div>
 <div id="ref-davis:2006:RPR" class="csl-entry">
 Davis, Jesse, and Mark Goadrich. 2006. <span>“The Relationship Between
-Precision-Recall and <span>ROC</span> Curves.”</span> In <em>Proceedings
-of the 23rd International Conference on Machine Learning</em>, 233–40.
-ICML ’06. New York, NY, USA: ACM.
+Precision-Recall and <span>ROC</span> Curves.”</span> <em>Proceedings of
+the 23rd International Conference on Machine Learning</em> (New York,
+NY, USA), ICML ’06, 233–40.
 </div>
 <div id="ref-davison:1997:BMA" class="csl-entry">
 Davison, Anthony C, and David V Hinkley. 1997. <em>Bootstrap Methods and
-Their Application</em>. New York, NY, USA: Cambridge University Press.
+Their Application</em>. Cambridge University Press.
 </div>
 <div id="ref-efron:1967:PFB" class="csl-entry">
 Efron, Bradley. 1967. <span>“The Two Sample Problem with Censored
-Data.”</span> In <em>Proceedings of the Fifth Berkeley Symposium on
+Data.”</span> <em>Proceedings of the Fifth Berkeley Symposium on
 Mathematical Statistics and Probability, Volume 4: Biology and Problems
-of Health</em>, 831–53. Berkeley, California: University of California
-Press.
+of Health</em> (Berkeley, California), 831–53.
 </div>
 <div id="ref-efron:1977:ECL" class="csl-entry">
-———. 1977. <span>“The Efficiency of <span class="nocase">Cox’s</span>
-Likelihood Function for Censored Data.”</span> <em>Journal of the
-American Statistical Association</em> 72 (359): 557–65.
+Efron, Bradley. 1977. <span>“The Efficiency of <span
+class="nocase">Cox’s</span> Likelihood Function for Censored
+Data.”</span> <em>Journal of the American Statistical Association</em>
+72 (359): 557–65.
 </div>
 <div id="ref-efron:1986:HBA" class="csl-entry">
-———. 1986. <span>“How Biased Is the Apparent Error Rate of a Prediction
-Rule?”</span> <em>Journal of the American Statistical Association</em>
-81 (394): 461–70.
+Efron, Bradley. 1986. <span>“How Biased Is the Apparent Error Rate of a
+Prediction Rule?”</span> <em>Journal of the American Statistical
+Association</em> 81 (394): 461–70.
 </div>
 <div id="ref-efron:1983:LLB" class="csl-entry">
 Efron, Bradley, and Gail Gong. 1983. <span>“A Leisurely Look at the
@@ -4289,7 +4287,7 @@ Statistician</em> 37 (1): 36–48.
 <div id="ref-efron:1993:IB" class="csl-entry">
 Efron, Bradley, and Robert J Tibshirani. 1993. <em>An Introduction to
 the Bootstrap</em>. Monographs on Statistics and Applied Probability 57.
-Boca Raton, Florida, USA: Chapman &amp; Hall/CRC.
+Chapman &amp; Hall/CRC.
 </div>
 <div id="ref-fawcett:2006:IRA" class="csl-entry">
 Fawcett, Tom. 2006. <span>“An Introduction to <span>ROC</span>
@@ -4325,10 +4323,10 @@ Evaluating Assumptions and Adequacy, and Measuring and Reducing
 Errors.”</span> <em>Statistics in Medicine</em> 15 (4): 361–87.
 </div>
 <div id="ref-hastie:2009:ESL7" class="csl-entry">
-Hastie, Trevor, Robert Tibshirani, and Jerome Friedman. 2009. <span>“The
+Hastie, Trevor, Robert Tibshirani, and Jerome Friedman. 2009. <em>The
 Elements of Statistical Learning: Data Mining, Inference, and
-Prediction, Second Edition.”</span> In. Springer Series in Statistics.
-New York, NY, USA: Springer.
+Prediction, Second Edition</em>. Springer Series in Statistics.
+Springer.
 </div>
 <div id="ref-heagerty:2004:TDR" class="csl-entry">
 Heagerty, Patrick J, Thomas Lumley, and Margaret S Pepe. 2004.
@@ -4337,10 +4335,9 @@ and a Diagnostic Marker.”</span> <em>Biometrics</em> 56 (2): 337–44.
 </div>
 <div id="ref-kohavi:1995:SCB" class="csl-entry">
 Kohavi, Ron. 1995. <span>“A Study of Cross-Validation and Bootstrap for
-Accuracy Estimation and Model Selection.”</span> In <em>Proceedings of
-the 14th International Joint Conference on Artificial Intelligence -
-Volume 2</em>, 1137–43. IJCAI’95. San Francisco, CA, USA: Morgan
-Kaufmann Publishers Inc.
+Accuracy Estimation and Model Selection.”</span> <em>Proceedings of the
+14th International Joint Conference on Artificial Intelligence - Volume
+2</em> (San Francisco, CA, USA), IJCAI’95, 1137–43.
 </div>
 <div id="ref-kuhn:2020:RPT" class="csl-entry">
 Kuhn, Max, and Hadley Wickham. 2020. <em><span
@@ -4349,13 +4346,13 @@ Matrices</em>. <a
 href="https://CRAN.R-project.org/package=recipes">https://CRAN.R-project.org/package=recipes</a>.
 </div>
 <div id="ref-microsoft:2019:DFS" class="csl-entry">
-Microsoft Corporation, and Stephen Weston. 2019a. <em><span
+Microsoft Corporation, and Stephen Weston. 2019. <em><span
 class="nocase">doSNOW</span>: Foreach Parallel Adaptor for the ’Snow’
 Package</em>. <a
 href="https://CRAN.R-project.org/package=doSNOW">https://CRAN.R-project.org/package=doSNOW</a>.
 </div>
 <div id="ref-microsoft:2019:DFP" class="csl-entry">
-Microsoft Corporation, and Steve Weston. 2019b. <em><span
+Microsoft Corporation, and Steve Weston. 2019. <em><span
 class="nocase">doParallel</span>: Foreach Parallel Adaptor for the
 ’Parallel’ Package</em>. <a
 href="https://CRAN.R-project.org/package=doParallel">https://CRAN.R-project.org/package=doParallel</a>.
@@ -4377,9 +4374,9 @@ on the Receiver Operating Characteristic Curve.”</span> <em>American
 Journal of Epidemiology</em> 163 (7): 670–75.
 </div>
 <div id="ref-snoek:2012:PBO" class="csl-entry">
-Snoek, Jasper, Hugo Larochelle, and Ryan P. Adams. 2012.
-<span>“Practical <span>B</span>ayesian Optimization of Machine Learning
-Algorithms.”</span> <a
+Snoek, Jasper, Hugo Larochelle, and Ryan P. Adams. 2012. <em>Practical
+<span>B</span>ayesian Optimization of Machine Learning Algorithms</em>.
+<a
 href="https://arxiv.org/abs/1206.2944">https://arxiv.org/abs/1206.2944</a>.
 </div>
 <div id="ref-therneau:2020:SA" class="csl-entry">
@@ -4388,9 +4385,9 @@ Therneau, Terry M. 2020. <em>A Package for Survival Analysis in r</em>.
 href="https://CRAN.R-project.org/package=survival">https://CRAN.R-project.org/package=survival</a>.
 </div>
 <div id="ref-vanderLaan:2007:SL" class="csl-entry">
-van der Laan, Mark J, Eric C Polley, and Alan E Hubbard. 2007.
-<span>“Super Learner.”</span> <em>Statistical Applications in Genetics
-and Molecular Biology</em> 6 (1).
+<span class="nocase">van der Laan, Mark J, Eric C Polley, and Alan E
+Hubbard</span>. 2007. <span>“Super Learner.”</span> <em>Statistical
+Applications in Genetics and Molecular Biology</em> 6 (1).
 </div>
 <div id="ref-wickham:2016:GEG" class="csl-entry">
 Wickham, Hadley. 2016. <em><span class="nocase">ggplot2</span>: Elegant
