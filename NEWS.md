@@ -2,6 +2,11 @@
 
 ## Version Updates
 
+## 3.9.1
+
+* Ensure that global settings are applied to compute nodes when `varimp()` runs in parallel.
+* Compatibility fixes for `XGBModel` (`XGBDARTModel`, `XGBLinearModel`, `XGBTreeModel`).
+
 ## 3.9.0
 
 * Add offset support to `XGBModel`.
