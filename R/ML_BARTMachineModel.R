@@ -46,8 +46,19 @@
 #' \code{\link{resample}}
 #'
 #' @examples
-#' \donttest{
-#' ## Requires prior installation of suggested package bartMachine to run
+#' \dontrun{
+#' ## Requires prior installation of suggested package bartMachine, java, and
+#' ## setting of java options as shown below to run
+#' 
+#' if (packageVersion("bartMachine") >= "1.4") {
+#'   options(
+#'     java.parameters = c(
+#'       "-Xmx20g", "--add-modules=jdk.incubator.vector", "-XX:+UseZGC"
+#'     )
+#'   )
+#' } else {
+#'   options(java.parameters = "-Xmx20g")
+#' }
 #'
 #' model_fit <- fit(sale_amount ~ ., data = ICHomes, model = BARTMachineModel)
 #' varimp(model_fit, method = "model", type = "splits", num_replicates = 20,
