@@ -135,8 +135,8 @@ Values should be between -0.1 and 0.1 with larger ones encouraging
 exploration.}
 
 \item{control}{list of control parameters passed to
-\code{\link[ParBayesianOptimization]{bayesOpt}} by \code{set_optim_bayes}
-with package \code{"ParBayesianOptimization"}, to
+\code{bayesOpt} by \code{set_optim_bayes} with package
+\code{"ParBayesianOptimization"}, to
 \code{\link[rBayesianOptimization]{BayesianOptimization}} by
 \code{set_optim_bayes} with package \code{"rBayesianOptimization"}, to
 \code{\link[stats]{optim}} by \code{set_optim_bfgs} and
@@ -221,7 +221,7 @@ grid values.  Non-numeric parameters are optimized with grid searches.
 ModelSpecification(
   sale_amount ~ ., data = ICHomes,
   model = TunedModel(GBMModel)
-) \%>\% set_optim_bayes
+) \%>\% set_optim_bayes(package = "rBayesianOptimization")
 
 }
 \references{
@@ -246,7 +246,7 @@ In \emph{IEEE Congress on Evolutionary Computation, 2013} (pp. 2337-2344).
 }
 \seealso{
 \code{\link[rBayesianOptimization]{BayesianOptimization}},
-\code{\link[ParBayesianOptimization]{bayesOpt}}, \code{\link[stats]{optim}},
-\code{\link[pso]{psoptim}}, \code{\link{set_monitor}},
-\code{\link{set_predict}}, \code{\link{set_strata}}
+\code{bayesOpt}, \code{\link[stats]{optim}}, \code{\link[pso]{psoptim}},
+\code{\link{set_monitor}}, \code{\link{set_predict}},
+\code{\link{set_strata}}
 }

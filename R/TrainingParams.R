@@ -191,8 +191,8 @@ set_monitor.ModelSpecification <- function(
 #'   an empty vector if none are needed.  The first package in
 #'   \code{set_optim_bayes} is used unless otherwise specified by the user.
 #' @param control list of control parameters passed to
-#'   \code{\link[ParBayesianOptimization]{bayesOpt}} by \code{set_optim_bayes}
-#'   with package \code{"ParBayesianOptimization"}, to
+#'   \code{bayesOpt} by \code{set_optim_bayes} with package
+#'   \code{"ParBayesianOptimization"}, to
 #'   \code{\link[rBayesianOptimization]{BayesianOptimization}} by
 #'   \code{set_optim_bayes} with package \code{"rBayesianOptimization"}, to
 #'   \code{\link[stats]{optim}} by \code{set_optim_bfgs} and
@@ -277,15 +277,15 @@ set_monitor.ModelSpecification <- function(
 #' In \emph{IEEE Congress on Evolutionary Computation, 2013} (pp. 2337-2344).
 #'
 #' @seealso \code{\link[rBayesianOptimization]{BayesianOptimization}},
-#' \code{\link[ParBayesianOptimization]{bayesOpt}}, \code{\link[stats]{optim}},
-#' \code{\link[pso]{psoptim}}, \code{\link{set_monitor}},
-#' \code{\link{set_predict}}, \code{\link{set_strata}}
+#' \code{bayesOpt}, \code{\link[stats]{optim}}, \code{\link[pso]{psoptim}},
+#' \code{\link{set_monitor}}, \code{\link{set_predict}},
+#' \code{\link{set_strata}}
 #'
 #' @examples
 #' ModelSpecification(
 #'   sale_amount ~ ., data = ICHomes,
 #'   model = TunedModel(GBMModel)
-#' ) %>% set_optim_bayes
+#' ) %>% set_optim_bayes(package = "rBayesianOptimization")
 #'
 NULL
 
