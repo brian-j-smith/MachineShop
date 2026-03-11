@@ -1,8 +1,8 @@
 Package: MachineShop
 Type: Package
 Title: Machine Learning Models and Tools
-Version: 3.9.1
-Date: 2025-12-15
+Version: 3.9.2
+Date: 2026-01-30
 Authors@R: person(c("Brian", "J"), "Smith",
                   email = "brian-j-smith@uiowa.edu",
                   role = c("aut", "cre"))
@@ -33,6 +33,7 @@ Suggests: adabag, BART, bartMachine, C50, censored, cluster, doParallel, e1071,
     parsnip (>= 1.1.0), partykit, pls, pso, randomForest, randomForestSRC,
     ranger, rBayesianOptimization, rmarkdown, rms, rpart, testthat, tree,
     xgboost (>= 3.1.2)
+Additional_repositories: https://brian-j-smith.github.io/drat
 LazyData: true
 License: GPL-3
 URL: https://brian-j-smith.github.io/MachineShop/

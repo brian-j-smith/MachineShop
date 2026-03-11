@@ -2,6 +2,11 @@
 
 ## Version Updates
 
+## 3.9.2
+
+* Remove dead Rd links to the **ParBayesianOptimization** package.
+* Set required java parameters in the `BARTMachineModel` example.
+
 ## 3.9.1
 
 * Ensure that global settings are applied to compute nodes when `varimp()` runs in parallel.
