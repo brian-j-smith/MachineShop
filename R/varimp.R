@@ -265,11 +265,8 @@ varimp_permute <- function(
     function() NULL
   }
 
-  work <- pred_names
-  num_workers <- getDoParWorkers()
-  num_tasks <- ceiling(length(work) / num_workers)
-  length(work) <- num_workers * num_tasks
-  jobs <- map(na.omit, split(work, rep(1:num_workers, each = num_tasks)))
+  workers <- rep(1:getDoParWorkers(), length = length(pred_names))
+  jobs <- split(pred_names, sort(workers))
   seeds <- rand_int(samples)
 
   presets <- settings()
