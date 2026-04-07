@@ -218,10 +218,14 @@ parameters is performed over a hypercube defined by their minimum and maximum
 grid values.  Non-numeric parameters are optimized with grid searches.
 }
 \examples{
+## Install ParBayesianOptimization package as needed
+## pak::repo_add(smith = "https://brian-j-smith.github.io/drat")
+## pak::pak("ParBayesianOptimization")
+
 ModelSpecification(
   sale_amount ~ ., data = ICHomes,
   model = TunedModel(GBMModel)
-) \%>\% set_optim_bayes(package = "rBayesianOptimization")
+) \%>\% set_optim_bayes
 
 }
 \references{

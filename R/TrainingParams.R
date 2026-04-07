@@ -282,10 +282,14 @@ set_monitor.ModelSpecification <- function(
 #' \code{\link{set_strata}}
 #'
 #' @examples
+#' ## Install ParBayesianOptimization package as needed
+#' ## pak::repo_add(smith = "https://brian-j-smith.github.io/drat")
+#' ## pak::pak("ParBayesianOptimization")
+#' 
 #' ModelSpecification(
 #'   sale_amount ~ ., data = ICHomes,
 #'   model = TunedModel(GBMModel)
-#' ) %>% set_optim_bayes(package = "rBayesianOptimization")
+#' ) %>% set_optim_bayes
 #'
 NULL
 
@@ -314,7 +318,7 @@ set_optim_bayes.ModelSpecification <- function(
   switch(packages,
     "ParBayesianOptimization" = {
       each_upper <- Inf
-      verbose_progress <- 2 * !missing(progress)
+      verbose_progress <- FALSE
       fun <- function(optim, bounds, params, monitor, ...) {
         throw(check_optim_bounds(bounds), call = call("set_optim_bayes"))
         num_init <- max(params$num_init, length(bounds) + 1)
