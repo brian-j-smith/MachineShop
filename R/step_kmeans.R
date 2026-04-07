@@ -127,9 +127,14 @@ new_step_kmeans <- function(..., k, algorithm, max_iter, num_start) {
     name = NA_character_
   )
 
-  structure(object, class = c("step_kmeans", class(object)))
+  structure(object, class = c("step_kmeans", "step"))
 
 }
+
+
+prep.step_kmeans <- function(x, ...) prep.step_lincomp(x, ...)
+bake.step_kmeans <- function(object, ...) bake.step_lincomp(object, ...)
+print.step_kmeans <- function(x, ...) print.step_lincomp(x, ...)
 
 
 #' @rdname step_kmeans

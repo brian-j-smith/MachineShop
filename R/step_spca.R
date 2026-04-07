@@ -120,9 +120,19 @@ new_step_spca <- function(..., sparsity, num_var, shrinkage, max_iter, tol) {
 
   object <- new_step_lincomp(..., transform = transform, options = options)
 
-  structure(object, class = c("step_spca", class(object)))
+  structure(object, class = c("step_spca", "step"))
 
 }
+
+
+prep.step_spca <- function(x, ...) prep.step_lincomp(x, ...)
+bake.step_spca <- function(object, ...) bake.step_lincomp(object, ...)
+print.step_spca <- function(x, ...) print.step_lincomp(x, ...)
+
+
+#' @rdname step_spca
+#'
+tidy.step_spca <- function(x, ...) tidy.step_lincomp(x, ...)
 
 
 #' @rdname step_spca

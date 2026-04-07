@@ -180,9 +180,19 @@ new_step_kmedoids <- function(
     name = NA_character_
   )
 
-  structure(object, class = c("step_kmedoids", class(object)))
+  structure(object, class = c("step_kmedoids", "step"))
 
 }
+
+
+prep.step_kmedoids <- function(x, ...) prep.step_sbf(x, ...)
+bake.step_kmedoids <- function(object, ...) bake.step_sbf(object, ...)
+print.step_kmedoids <- function(x, ...) print.step_sbf(x, ...)
+
+
+#' @rdname step_kmedoids
+#'
+tidy.step_kmedoids <- function(x, ...) tidy.step_sbf(x, ...)
 
 
 #' @rdname step_kmedoids

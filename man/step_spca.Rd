@@ -2,6 +2,7 @@
 % Please edit documentation in R/step_spca.R
 \name{step_spca}
 \alias{step_spca}
+\alias{tidy.step_spca}
 \alias{tunable.step_spca}
 \title{Sparse Principal Components Analysis Variable Reduction}
 \usage{
@@ -22,6 +23,8 @@ step_spca(
   skip = FALSE,
   id = recipes::rand_id("spca")
 )
+
+\method{tidy}{step_spca}(x, ...)
 
 \method{tunable}{step_spca}(x, ...)
 }

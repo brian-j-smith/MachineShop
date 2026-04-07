@@ -2,6 +2,7 @@
 % Please edit documentation in R/step_kmedoids.R
 \name{step_kmedoids}
 \alias{step_kmedoids}
+\alias{tidy.step_kmedoids}
 \alias{tunable.step_kmedoids}
 \title{K-Medoids Clustering Variable Selection}
 \usage{
@@ -22,6 +23,8 @@ step_kmedoids(
   skip = FALSE,
   id = recipes::rand_id("kmedoids")
 )
+
+\method{tidy}{step_kmedoids}(x, ...)
 
 \method{tunable}{step_kmedoids}(x, ...)
 }
