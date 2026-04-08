@@ -2,6 +2,11 @@
 
 ## Version Updates
 
+## 3.9.2.9000
+
+* Add `install.packages()` repository for the `ParBayesianOptimization` package to the `set_optim` help example.
+* Fix recipes subclass check error for `step_kmeans()`, `step_kmedoids()`, and `step_spca()`.
+
 ## 3.9.2
 
 * Remove dead Rd links to the **ParBayesianOptimization** package.
