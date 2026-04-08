@@ -65,11 +65,8 @@ modeling strategies.
 install.packages("MachineShop")
 
 # Development version from GitHub
-# install.packages("devtools")
-devtools::install_github("brian-j-smith/MachineShop")
-
-# Development version with vignettes
-devtools::install_github("brian-j-smith/MachineShop", build_vignettes = TRUE)
+# install.packages("pak")
+pak::pak("brian-j-smith/MachineShop@develop")
 ```
 
 ## Documentation
@@ -84,7 +81,4 @@ library(MachineShop)
 
 # Package help summary
 ?MachineShop
-
-# Vignette
-RShowDoc("UserGuide", package = "MachineShop")
 ```
